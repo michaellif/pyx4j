@@ -19,6 +19,6 @@ import com.propertyvista.domain.communication.MessageCategory;
 public class MessageCategoryListerViewImpl extends CrmListerViewImplBase<MessageCategory> implements MessageCategoryListerView {
 
     public MessageCategoryListerViewImpl() {
-        setLister(new MessageCategoryLister());
+        setDataTablePanel(new MessageCategoryLister());
     }
 }

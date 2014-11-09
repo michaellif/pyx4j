@@ -23,7 +23,7 @@ import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
 public class DepositPolicyListerViewImpl extends CrmListerViewImplBase<DepositPolicyDTO> implements DepositPolicyListerView {
 
     public DepositPolicyListerViewImpl() {
-        setLister(new DepositPolicyLister());
+        setDataTablePanel(new DepositPolicyLister());
     }
 
     public static class DepositPolicyLister extends PolicyListerBase<DepositPolicyDTO> {

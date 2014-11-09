@@ -19,7 +19,7 @@ import com.propertyvista.domain.financial.ARCode;
 public class ARCodeListerViewImpl extends CrmListerViewImplBase<ARCode> implements ARCodeListerView {
 
     public ARCodeListerViewImpl() {
-        setLister(new ARCodeLister());
+        setDataTablePanel(new ARCodeLister());
     }
 
 }

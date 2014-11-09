@@ -19,6 +19,6 @@ import com.propertyvista.domain.property.asset.Locker;
 public class LockerListerViewImpl extends CrmListerViewImplBase<Locker> implements LockerListerView {
 
     public LockerListerViewImpl() {
-        setLister(new LockerLister());
+        setDataTablePanel(new LockerLister());
     }
 }

@@ -19,6 +19,6 @@ import com.propertyvista.dto.PaymentRecordDTO;
 public class PaymentRecordListerViewImpl extends CrmListerViewImplBase<PaymentRecordDTO> implements PaymentRecordListerView {
 
     public PaymentRecordListerViewImpl() {
-        setLister(new PaymentRecordLister());
+        setDataTablePanel(new PaymentRecordLister());
     }
 }

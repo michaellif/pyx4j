@@ -23,7 +23,7 @@ import com.propertyvista.domain.policy.dto.LeaseAgreementLegalPolicyDTO;
 public class LeaseAgreementLegalPolicyListerViewImpl extends CrmListerViewImplBase<LeaseAgreementLegalPolicyDTO> implements LeaseAgreementLegalPolicyListerView {
 
     public LeaseAgreementLegalPolicyListerViewImpl() {
-        setLister(new AgreementLegalPolicyLister());
+        setDataTablePanel(new AgreementLegalPolicyLister());
     }
 
     public static class AgreementLegalPolicyLister extends PolicyListerBase<LeaseAgreementLegalPolicyDTO> {

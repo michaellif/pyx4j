@@ -19,6 +19,6 @@ import com.propertyvista.domain.company.Portfolio;
 public class PortfolioListerViewImpl extends CrmListerViewImplBase<Portfolio> implements PortfolioListerView {
 
     public PortfolioListerViewImpl() {
-        setLister(new PortfolioLister());
+        setDataTablePanel(new PortfolioLister());
     }
 }

@@ -23,7 +23,7 @@ import com.propertyvista.domain.policy.dto.N4PolicyDTO;
 public class N4PolicyListerViewImpl extends CrmListerViewImplBase<N4PolicyDTO> implements N4PolicyListerView {
 
     public N4PolicyListerViewImpl() {
-        setLister(new N4PolicyLister());
+        setDataTablePanel(new N4PolicyLister());
     }
 
     public static class N4PolicyLister extends PolicyListerBase<N4PolicyDTO> {

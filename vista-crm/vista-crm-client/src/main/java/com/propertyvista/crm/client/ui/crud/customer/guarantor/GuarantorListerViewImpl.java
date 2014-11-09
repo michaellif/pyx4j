@@ -19,6 +19,6 @@ import com.propertyvista.dto.GuarantorDTO;
 public class GuarantorListerViewImpl extends CrmListerViewImplBase<GuarantorDTO> implements GuarantorListerView {
 
     public GuarantorListerViewImpl() {
-        setLister(new GuarantorLister());
+        setDataTablePanel(new GuarantorLister());
     }
 }

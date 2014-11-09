@@ -23,7 +23,7 @@ import com.propertyvista.domain.policy.dto.BackgroundCheckPolicyDTO;
 public class BackgroundCheckPolicyListerViewImpl extends CrmListerViewImplBase<BackgroundCheckPolicyDTO> implements BackgroundCheckPolicyListerView {
 
     public BackgroundCheckPolicyListerViewImpl() {
-        setLister(new BackgroundCheckPolicyLister());
+        setDataTablePanel(new BackgroundCheckPolicyLister());
     }
 
     public static class BackgroundCheckPolicyLister extends PolicyListerBase<BackgroundCheckPolicyDTO> {

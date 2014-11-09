@@ -19,6 +19,6 @@ import com.propertyvista.domain.property.asset.ParkingSpot;
 public class ParkingSpotListerViewImpl extends CrmListerViewImplBase<ParkingSpot> implements ParkingSpotListerView {
 
     public ParkingSpotListerViewImpl() {
-        setLister(new ParkingSpotLister());
+        setDataTablePanel(new ParkingSpotLister());
     }
 }

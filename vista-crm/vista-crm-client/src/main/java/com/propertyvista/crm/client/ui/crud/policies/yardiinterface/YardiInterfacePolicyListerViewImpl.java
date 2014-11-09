@@ -23,7 +23,7 @@ import com.propertyvista.domain.policy.dto.YardiInterfacePolicyDTO;
 public class YardiInterfacePolicyListerViewImpl extends CrmListerViewImplBase<YardiInterfacePolicyDTO> implements YardiInterfacePolicyListerView {
 
     public YardiInterfacePolicyListerViewImpl() {
-        setLister(new YardiInterfacePolicyLister());
+        setDataTablePanel(new YardiInterfacePolicyLister());
 
     }
 

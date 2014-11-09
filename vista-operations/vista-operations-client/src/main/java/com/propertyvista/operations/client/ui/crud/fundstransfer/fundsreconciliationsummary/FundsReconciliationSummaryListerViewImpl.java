@@ -20,6 +20,6 @@ public class FundsReconciliationSummaryListerViewImpl extends OperationsListerVi
         FundsReconciliationSummaryListerView {
 
     public FundsReconciliationSummaryListerViewImpl() {
-        setLister(new FundsReconciliationSummaryLister());
+        setDataTablePanel(new FundsReconciliationSummaryLister());
     }
 }

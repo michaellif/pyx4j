@@ -24,7 +24,7 @@ public class ApplicationDocumentationPolicyListerViewImpl extends CrmListerViewI
         ApplicationDocumentationPolicyListerView {
 
     public ApplicationDocumentationPolicyListerViewImpl() {
-        setLister(new ApplicationDocumentationPolicyLister());
+        setDataTablePanel(new ApplicationDocumentationPolicyLister());
     }
 
     public static class ApplicationDocumentationPolicyLister extends PolicyListerBase<ApplicationDocumentationPolicyDTO> {

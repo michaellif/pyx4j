@@ -19,6 +19,6 @@ import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
 public class CardTransactionRecordListerViewImpl extends OperationsListerViewImplBase<CardTransactionRecord> implements CardTransactionRecordListerView {
 
     public CardTransactionRecordListerViewImpl() {
-        setLister(new CardTransactionRecordLister(true));
+        setDataTablePanel(new CardTransactionRecordLister(true));
     }
 }

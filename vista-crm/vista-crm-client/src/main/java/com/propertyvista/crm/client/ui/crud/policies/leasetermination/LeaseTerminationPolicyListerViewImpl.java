@@ -23,7 +23,7 @@ import com.propertyvista.domain.policy.dto.LeaseTerminationPolicyDTO;
 public class LeaseTerminationPolicyListerViewImpl extends CrmListerViewImplBase<LeaseTerminationPolicyDTO> {
 
     public LeaseTerminationPolicyListerViewImpl() {
-        setLister(new LeaseTerminationPolicyLister());
+        setDataTablePanel(new LeaseTerminationPolicyLister());
     }
 
     public static class LeaseTerminationPolicyLister extends PolicyListerBase<LeaseTerminationPolicyDTO> {

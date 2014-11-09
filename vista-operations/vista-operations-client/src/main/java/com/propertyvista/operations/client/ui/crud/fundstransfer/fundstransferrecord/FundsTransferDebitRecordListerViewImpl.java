@@ -19,7 +19,7 @@ import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
 public class FundsTransferDebitRecordListerViewImpl extends OperationsListerViewImplBase<FundsTransferRecordDTO> implements FundsTransferDebitRecordListerView {
 
     public FundsTransferDebitRecordListerViewImpl() {
-        setLister(new FundsTransferDebitRecordLister());
+        setDataTablePanel(new FundsTransferDebitRecordLister());
     }
 
 }

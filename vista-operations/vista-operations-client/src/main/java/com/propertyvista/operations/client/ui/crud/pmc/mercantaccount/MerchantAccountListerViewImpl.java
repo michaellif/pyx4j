@@ -19,7 +19,7 @@ import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 public class MerchantAccountListerViewImpl extends OperationsListerViewImplBase<PmcMerchantAccountDTO> implements MerchantAccountListerView {
 
     public MerchantAccountListerViewImpl() {
-        setLister(new MerchantAccountLister());
+        setDataTablePanel(new MerchantAccountLister());
     }
 
 }

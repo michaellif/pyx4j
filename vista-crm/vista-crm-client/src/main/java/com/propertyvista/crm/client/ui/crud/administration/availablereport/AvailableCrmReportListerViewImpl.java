@@ -27,7 +27,7 @@ import com.propertyvista.domain.reports.AvailableCrmReport;
 public class AvailableCrmReportListerViewImpl extends CrmListerViewImplBase<AvailableCrmReport> implements AvailableCrmReportListerView {
 
     public AvailableCrmReportListerViewImpl() {
-        setLister(new CrmRoleLister());
+        setDataTablePanel(new CrmRoleLister());
     }
 
     public static class CrmRoleLister extends EntityDataTablePanel<AvailableCrmReport> {

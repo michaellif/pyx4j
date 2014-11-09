@@ -31,7 +31,7 @@ public class BuildingListerViewImpl extends CrmListerViewImplBase<BuildingDTO> i
     private Button upload;
 
     public BuildingListerViewImpl() {
-        setLister(new BuildingLister());
+        setDataTablePanel(new BuildingLister());
 
         // TODO implement Upload
         // This used to be shown when Leases was disabled.

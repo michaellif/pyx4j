@@ -19,7 +19,7 @@ import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
 public class FundsTransferFileListerViewImpl extends OperationsListerViewImplBase<FundsTransferFileDTO> implements FundsTransferFileListerView {
 
     public FundsTransferFileListerViewImpl() {
-        setLister(new FundsTransferFileLister());
+        setDataTablePanel(new FundsTransferFileLister());
     }
 
 }

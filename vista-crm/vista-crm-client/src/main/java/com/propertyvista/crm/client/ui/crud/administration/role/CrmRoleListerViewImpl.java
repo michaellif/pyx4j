@@ -27,7 +27,7 @@ import com.propertyvista.domain.security.CrmRole;
 public class CrmRoleListerViewImpl extends CrmListerViewImplBase<CrmRole> implements CrmRoleListerView {
 
     public CrmRoleListerViewImpl() {
-        setLister(new CrmRoleLister());
+        setDataTablePanel(new CrmRoleLister());
     }
 
     public static class CrmRoleLister extends EntityDataTablePanel<CrmRole> {

@@ -19,7 +19,7 @@ import com.propertyvista.dto.LeaseDTO;
 public class LeaseListerViewImpl extends CrmListerViewImplBase<LeaseDTO> implements LeaseListerView {
 
     public LeaseListerViewImpl() {
-        setLister(new LeaseLister() {
+        setDataTablePanel(new LeaseLister() {
             @Override
             public void onPadFileDownload() {
                 ((LeaseListerView.Presenter) getPresenter()).downloadPadFile();

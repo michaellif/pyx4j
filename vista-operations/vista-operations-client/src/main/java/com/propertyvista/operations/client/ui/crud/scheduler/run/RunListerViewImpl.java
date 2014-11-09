@@ -19,6 +19,6 @@ import com.propertyvista.operations.domain.scheduler.Run;
 public class RunListerViewImpl extends OperationsListerViewImplBase<Run> implements RunListerView {
 
     public RunListerViewImpl() {
-        setLister(new RunLister(false));
+        setDataTablePanel(new RunLister(false));
     }
 }

@@ -23,7 +23,7 @@ import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimRecor
 public class DirectDebitSimRecordListerViewImpl extends OperationsListerViewImplBase<DirectDebitSimRecord> implements DirectDebitSimRecordListerView {
 
     public DirectDebitSimRecordListerViewImpl() {
-        setLister(new DirectDebitSimRecordLister());
+        setDataTablePanel(new DirectDebitSimRecordLister());
     }
 
     public static class DirectDebitSimRecordLister extends EntityDataTablePanel<DirectDebitSimRecord> {

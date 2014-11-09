@@ -33,7 +33,7 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 public class PmcListerViewImpl extends OperationsListerViewImplBase<PmcDTO> implements PmcListerView {
 
     public PmcListerViewImpl() {
-        setLister(new PmcLister());
+        setDataTablePanel(new PmcLister());
 
         {
             Button downloadFull = new Button("QA Download images.csv", new Command() {

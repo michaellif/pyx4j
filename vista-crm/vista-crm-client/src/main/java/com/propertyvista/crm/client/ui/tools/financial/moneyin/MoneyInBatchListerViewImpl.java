@@ -27,7 +27,7 @@ import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 public class MoneyInBatchListerViewImpl extends CrmListerViewImplBase<MoneyInBatchDTO> {
 
     public MoneyInBatchListerViewImpl() {
-        setLister(new MoneyInBatchLister());
+        setDataTablePanel(new MoneyInBatchLister());
     }
 
     private static class MoneyInBatchLister extends EntityDataTablePanel<MoneyInBatchDTO> {

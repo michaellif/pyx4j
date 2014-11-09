@@ -19,6 +19,6 @@ import com.propertyvista.operations.rpc.dto.OperationsAlertDTO;
 public class OperationsAlertListerViewImpl extends OperationsListerViewImplBase<OperationsAlertDTO> {
 
     public OperationsAlertListerViewImpl() {
-        setLister(new OperationsAlertLister());
+        setDataTablePanel(new OperationsAlertLister());
     }
 }

@@ -19,11 +19,11 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 public class AppointmentListerViewImpl extends CrmListerViewImplBase<Appointment> implements AppointmentListerView {
 
     public AppointmentListerViewImpl() {
-        setLister(new AppointmentLister());
+        setDataTablePanel(new AppointmentLister());
     }
 
     @Override
     public void setAddNewVisible(boolean visible) {
-        getLister().getAddButton().setVisible(visible);
+        getDataTablePanel().getAddButton().setVisible(visible);
     }
 }

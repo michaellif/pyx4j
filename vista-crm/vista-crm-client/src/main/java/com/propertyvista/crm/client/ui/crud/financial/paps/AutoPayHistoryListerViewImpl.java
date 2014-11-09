@@ -19,6 +19,6 @@ import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 public class AutoPayHistoryListerViewImpl extends CrmListerViewImplBase<AutoPayHistoryDTO> implements AutoPayHistoryListerView {
 
     public AutoPayHistoryListerViewImpl() {
-        setLister(new AutoPayHistoryLister());
+        setDataTablePanel(new AutoPayHistoryLister());
     }
 }

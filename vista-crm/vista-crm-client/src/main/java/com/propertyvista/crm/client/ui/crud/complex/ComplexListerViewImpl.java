@@ -19,6 +19,6 @@ import com.propertyvista.dto.ComplexDTO;
 public class ComplexListerViewImpl extends CrmListerViewImplBase<ComplexDTO> implements ComplexListerView {
 
     public ComplexListerViewImpl() {
-        setLister(new ComplexLister());
+        setDataTablePanel(new ComplexLister());
     }
 }

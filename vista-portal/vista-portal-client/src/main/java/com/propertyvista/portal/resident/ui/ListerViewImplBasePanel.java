@@ -66,29 +66,29 @@ public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implem
     }
 
     @Override
-    public EntityDataTablePanel<E> getLister() {
+    public EntityDataTablePanel<E> getDataTablePanel() {
         assert (lister != null);
         return lister;
     }
 
     @Override
     public void setPresenter(Presenter<E> presenter) {
-        getLister().setPresenter(presenter);
+        getDataTablePanel().setPresenter(presenter);
     }
 
     @Override
     public Presenter<E> getPresenter() {
-        return getLister().getPresenter();
+        return getDataTablePanel().getPresenter();
     }
 
     @Override
     public int getPageSize() {
-        return getLister().getPageSize();
+        return getDataTablePanel().getPageSize();
     }
 
     @Override
     public int getPageNumber() {
-        return getLister().getPageNumber();
+        return getDataTablePanel().getPageNumber();
     }
 
     @Override
@@ -98,27 +98,27 @@ public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implem
 
     @Override
     public List<Criterion> getFilters() {
-        return getLister().getFilters();
+        return getDataTablePanel().getFilters();
     }
 
     @Override
     public void setFilters(List<Criterion> filterData) {
-        getLister().setFilters(filterData);
+        getDataTablePanel().setFilters(filterData);
     }
 
     @Override
     public List<Sort> getSortCriteria() {
-        return getLister().getSortCriteria();
+        return getDataTablePanel().getSortCriteria();
     }
 
     @Override
     public void setSortCriteria(List<Sort> sorts) {
-        getLister().setSortCriteria(sorts);
+        getDataTablePanel().setSortCriteria(sorts);
     }
 
     @Override
     public void discard() {
-        getLister().discard();
+        getDataTablePanel().discard();
     }
 
     @Override

@@ -19,7 +19,7 @@ import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 public class BillingCycleListerViewImpl extends CrmListerViewImplBase<BillingCycleDTO> implements BillingCycleListerView {
 
     public BillingCycleListerViewImpl() {
-        setLister(new BillingCycleLister());
+        setDataTablePanel(new BillingCycleLister());
     }
 
 }

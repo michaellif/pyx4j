@@ -19,7 +19,7 @@ import com.propertyvista.operations.rpc.dto.FundsTransferBatchDTO;
 public class FundsTransferBatchListerViewImpl extends OperationsListerViewImplBase<FundsTransferBatchDTO> implements FundsTransferBatchListerView {
 
     public FundsTransferBatchListerViewImpl() {
-        setLister(new FundsTransferBatchLister());
+        setDataTablePanel(new FundsTransferBatchLister());
     }
 
 }

@@ -19,6 +19,6 @@ import com.propertyvista.domain.property.vendor.Vendor;
 public class VendorListerViewImpl extends CrmListerViewImplBase<Vendor> implements VendorListerView {
 
     public VendorListerViewImpl() {
-        setLister(new VendorLister());
+        setDataTablePanel(new VendorLister());
     }
 }

@@ -23,7 +23,7 @@ import com.propertyvista.domain.policy.dto.LeaseAdjustmentPolicyDTO;
 public class LeaseAdjustmentPolicyListerViewImpl extends CrmListerViewImplBase<LeaseAdjustmentPolicyDTO> implements LeaseAdjustmentPolicyListerView {
 
     public LeaseAdjustmentPolicyListerViewImpl() {
-        setLister(new LeaseAdjustmentPolicyLister());
+        setDataTablePanel(new LeaseAdjustmentPolicyLister());
     }
 
     public static class LeaseAdjustmentPolicyLister extends PolicyListerBase<LeaseAdjustmentPolicyDTO> {

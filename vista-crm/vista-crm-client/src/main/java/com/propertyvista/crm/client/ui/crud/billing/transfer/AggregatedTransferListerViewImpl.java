@@ -19,7 +19,7 @@ import com.propertyvista.domain.financial.AggregatedTransfer;
 public class AggregatedTransferListerViewImpl extends CrmListerViewImplBase<AggregatedTransfer> implements AggregatedTransferListerView {
 
     public AggregatedTransferListerViewImpl() {
-        setLister(new AggregatedTransferLister() {
+        setDataTablePanel(new AggregatedTransferLister() {
             @Override
             public void onAggregateTransferDownload() {
                 ((AggregatedTransferListerView.Presenter) getPresenter()).downloadAggregatedTransferFile();

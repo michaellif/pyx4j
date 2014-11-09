@@ -73,7 +73,7 @@ public class BillLister extends EntityDataTablePanel<BillDataDTO> {
         addUpperActionItem(new Button(i18n.tr("Confirm Checked"), new Command() {
             @Override
             public void execute() {
-                if (!getLister().getDataTable().getSelectedItems().isEmpty()) {
+                if (!getDataTablePanel().getDataTable().getSelectedItems().isEmpty()) {
                     MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to Confirm checked bills?"), new ConfirmDecline() {
                         @Override
                         public void onConfirmed() {

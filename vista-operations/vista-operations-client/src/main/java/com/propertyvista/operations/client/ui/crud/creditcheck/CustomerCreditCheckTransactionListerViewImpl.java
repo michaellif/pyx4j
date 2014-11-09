@@ -20,6 +20,6 @@ public class CustomerCreditCheckTransactionListerViewImpl extends OperationsList
         CustomerCreditCheckTransactionListerView {
 
     public CustomerCreditCheckTransactionListerViewImpl() {
-        setLister(new CustomerCreditCheckTransactionLister());
+        setDataTablePanel(new CustomerCreditCheckTransactionLister());
     }
 }

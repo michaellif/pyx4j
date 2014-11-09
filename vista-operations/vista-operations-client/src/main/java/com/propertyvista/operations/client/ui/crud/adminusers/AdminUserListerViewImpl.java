@@ -27,7 +27,7 @@ import com.propertyvista.operations.rpc.dto.OperationsUserDTO;
 public class AdminUserListerViewImpl extends OperationsListerViewImplBase<OperationsUserDTO> implements AdminUserListerView {
 
     public AdminUserListerViewImpl() {
-        setLister(new AdminUserLister());
+        setDataTablePanel(new AdminUserLister());
     }
 
     public static class AdminUserLister extends EntityDataTablePanel<OperationsUserDTO> {

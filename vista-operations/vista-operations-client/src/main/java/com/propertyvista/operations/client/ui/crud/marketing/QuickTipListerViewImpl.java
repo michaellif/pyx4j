@@ -19,7 +19,7 @@ import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
 public class QuickTipListerViewImpl extends OperationsListerViewImplBase<PortalResidentMarketingTip> implements QuickTipListerView {
 
     public QuickTipListerViewImpl() {
-        setLister(new QuickTipLister());
+        setDataTablePanel(new QuickTipLister());
     }
 
 }

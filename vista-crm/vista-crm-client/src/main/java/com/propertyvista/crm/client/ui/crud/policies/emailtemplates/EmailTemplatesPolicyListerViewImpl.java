@@ -23,7 +23,7 @@ import com.propertyvista.domain.policy.dto.EmailTemplatesPolicyDTO;
 public class EmailTemplatesPolicyListerViewImpl extends CrmListerViewImplBase<EmailTemplatesPolicyDTO> implements EmailTemplatesPolicyListerView {
 
     public EmailTemplatesPolicyListerViewImpl() {
-        setLister(new EmailTemplatesPolicyLister());
+        setDataTablePanel(new EmailTemplatesPolicyLister());
     }
 
     public static class EmailTemplatesPolicyLister extends PolicyListerBase<EmailTemplatesPolicyDTO> {

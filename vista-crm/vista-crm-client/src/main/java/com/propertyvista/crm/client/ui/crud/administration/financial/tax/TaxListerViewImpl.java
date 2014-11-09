@@ -19,6 +19,6 @@ import com.propertyvista.domain.financial.tax.Tax;
 public class TaxListerViewImpl extends CrmListerViewImplBase<Tax> implements TaxListerView {
 
     public TaxListerViewImpl() {
-        setLister(new TaxLister());
+        setDataTablePanel(new TaxLister());
     }
 }

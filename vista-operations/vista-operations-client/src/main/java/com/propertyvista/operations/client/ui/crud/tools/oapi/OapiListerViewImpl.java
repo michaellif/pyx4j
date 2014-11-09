@@ -19,6 +19,6 @@ import com.propertyvista.operations.rpc.dto.OapiConversionDTO;
 public class OapiListerViewImpl extends OperationsListerViewImplBase<OapiConversionDTO> implements OapiListerView {
 
     public OapiListerViewImpl() {
-        setLister(new OapiLister());
+        setDataTablePanel(new OapiLister());
     }
 }

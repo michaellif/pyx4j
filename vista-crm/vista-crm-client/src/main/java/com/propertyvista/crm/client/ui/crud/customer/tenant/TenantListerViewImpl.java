@@ -19,7 +19,7 @@ import com.propertyvista.dto.TenantDTO;
 public class TenantListerViewImpl extends CrmListerViewImplBase<TenantDTO> implements TenantListerView {
 
     public TenantListerViewImpl() {
-        setLister(new TenantLister(true));
+        setDataTablePanel(new TenantLister(true));
     }
 
 }

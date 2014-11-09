@@ -54,7 +54,7 @@ public class CardServiceSimulationTransactionListerViewImpl extends OperationsLi
     }
 
     public CardServiceSimulationTransactionListerViewImpl() {
-        setLister(new CardServiceSimulationTransactionLister());
+        setDataTablePanel(new CardServiceSimulationTransactionLister());
     }
 
 }

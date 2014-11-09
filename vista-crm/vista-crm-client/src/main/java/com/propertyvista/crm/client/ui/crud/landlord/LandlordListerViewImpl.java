@@ -19,6 +19,6 @@ import com.propertyvista.dto.LandlordDTO;
 public class LandlordListerViewImpl extends CrmListerViewImplBase<LandlordDTO> implements LandlordListerView {
 
     public LandlordListerViewImpl() {
-        setLister(new LandlordLister());
+        setDataTablePanel(new LandlordLister());
     }
 }

@@ -19,11 +19,11 @@ import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 public class ShowingListerViewImpl extends CrmListerViewImplBase<ShowingDTO> implements ShowingListerView {
 
     public ShowingListerViewImpl() {
-        setLister(new ShowingLister());
+        setDataTablePanel(new ShowingLister());
     }
 
     @Override
     public void setAddNewVisible(boolean visible) {
-        getLister().getAddButton().setVisible(visible);
+        getDataTablePanel().getAddButton().setVisible(visible);
     }
 }

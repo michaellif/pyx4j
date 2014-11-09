@@ -19,6 +19,6 @@ import com.propertyvista.dto.LeaseDTO;
 public class FormerLeaseListerViewImpl extends CrmListerViewImplBase<LeaseDTO> implements LeaseListerView {
 
     public FormerLeaseListerViewImpl() {
-        setLister(new FormerLeaseLister());
+        setDataTablePanel(new FormerLeaseLister());
     }
 }

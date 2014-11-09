@@ -58,17 +58,17 @@ public class CardServiceSimulationReconciliationListerViewImpl extends Operation
     }
 
     public CardServiceSimulationReconciliationListerViewImpl() {
-        setLister(new CardServiceSimulationReconciliationLister());
+        setDataTablePanel(new CardServiceSimulationReconciliationLister());
 
         // Add actions:
         Button loadPadFile = new Button("Create Report", new Command() {
             @Override
             public void execute() {
-                new CardServiceSimulationReconciliationCreateDialog((CardServiceSimulationReconciliationListerView.Presenter) getLister().getPresenter())
+                new CardServiceSimulationReconciliationCreateDialog((CardServiceSimulationReconciliationListerView.Presenter) getDataTablePanel().getPresenter())
                         .show();
             }
         });
-        getLister().addUpperActionItem(loadPadFile.asWidget());
+        getDataTablePanel().addUpperActionItem(loadPadFile.asWidget());
     }
 
 }

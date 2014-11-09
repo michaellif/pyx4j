@@ -19,6 +19,6 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 public class MaintenanceRequestListerViewImpl extends CrmListerViewImplBase<MaintenanceRequestDTO> implements MaintenanceRequestListerView {
 
     public MaintenanceRequestListerViewImpl() {
-        setLister(new MaintenanceRequestLister());
+        setDataTablePanel(new MaintenanceRequestLister());
     }
 }

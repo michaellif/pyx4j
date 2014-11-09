@@ -20,7 +20,7 @@ public class FundsReconciliationDebitRecordListerViewImpl extends OperationsList
         FundsReconciliationDebitRecordListerView {
 
     public FundsReconciliationDebitRecordListerViewImpl() {
-        setLister(new FundsReconciliationDebitRecordLister());
+        setDataTablePanel(new FundsReconciliationDebitRecordLister());
     }
 
 }

@@ -23,7 +23,7 @@ import com.propertyvista.domain.policy.dto.TenantInsurancePolicyDTO;
 public class TenantInsurancePolicyListerViewImpl extends CrmListerViewImplBase<TenantInsurancePolicyDTO> implements TenantInsurancePolicyListerView {
 
     public TenantInsurancePolicyListerViewImpl() {
-        setLister(new TenantInsurancePolicyLister());
+        setDataTablePanel(new TenantInsurancePolicyLister());
     }
 
     public static class TenantInsurancePolicyLister extends PolicyListerBase<TenantInsurancePolicyDTO> {

@@ -19,7 +19,7 @@ import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
 public class FundsReconciliationFileListerViewImpl extends OperationsListerViewImplBase<FundsReconciliationFileDTO> implements FundsReconciliationFileListerView {
 
     public FundsReconciliationFileListerViewImpl() {
-        setLister(new FundsReconciliationFileLister());
+        setDataTablePanel(new FundsReconciliationFileLister());
     }
 
 }

@@ -27,7 +27,7 @@ import com.propertyvista.crm.rpc.dto.account.LoginAttemptDTO;
 public class LoginAttemptsListerViewImpl extends CrmListerViewImplBase<LoginAttemptDTO> implements LoginAttemptsListerView {
 
     public LoginAttemptsListerViewImpl() {
-        setLister(new LoginAttemptsLister());
+        setDataTablePanel(new LoginAttemptsLister());
     }
 
     public static class LoginAttemptsLister extends EntityDataTablePanel<LoginAttemptDTO> {

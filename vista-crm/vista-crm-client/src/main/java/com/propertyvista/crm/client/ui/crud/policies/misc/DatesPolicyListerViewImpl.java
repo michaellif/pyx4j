@@ -23,7 +23,7 @@ import com.propertyvista.domain.policy.dto.DatesPolicyDTO;
 public class DatesPolicyListerViewImpl extends CrmListerViewImplBase<DatesPolicyDTO> implements DatesPolicyListerView {
 
     public DatesPolicyListerViewImpl() {
-        setLister(new DatesPolicyLister());
+        setDataTablePanel(new DatesPolicyLister());
     }
 
     public static class DatesPolicyLister extends PolicyListerBase<DatesPolicyDTO> {

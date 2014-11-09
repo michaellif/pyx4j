@@ -19,6 +19,6 @@ import com.propertyvista.operations.domain.scheduler.RunData;
 public class RunDataListerViewImpl extends OperationsListerViewImplBase<RunData> implements RunDataListerView {
 
     public RunDataListerViewImpl() {
-        setLister(new RunDataLister(false));
+        setDataTablePanel(new RunDataLister(false));
     }
 }

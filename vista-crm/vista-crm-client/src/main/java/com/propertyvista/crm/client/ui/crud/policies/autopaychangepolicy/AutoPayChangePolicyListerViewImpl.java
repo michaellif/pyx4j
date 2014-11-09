@@ -23,7 +23,7 @@ import com.propertyvista.domain.policy.dto.AutoPayPolicyDTO;
 public class AutoPayChangePolicyListerViewImpl extends CrmListerViewImplBase<AutoPayPolicyDTO> {
 
     public AutoPayChangePolicyListerViewImpl() {
-        setLister(new AutoPayChangePolicyLister());
+        setDataTablePanel(new AutoPayChangePolicyLister());
     }
 
     public static class AutoPayChangePolicyLister extends PolicyListerBase<AutoPayPolicyDTO> {

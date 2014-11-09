@@ -23,7 +23,7 @@ import com.propertyvista.domain.financial.MerchantAccount;
 public class MerchantAccountListerViewImpl extends CrmListerViewImplBase<MerchantAccount> implements MerchantAccountListerView {
 
     public MerchantAccountListerViewImpl() {
-        setLister(new MerchantAccountLister());
+        setDataTablePanel(new MerchantAccountLister());
     }
 
     public static class MerchantAccountLister extends EntityDataTablePanel<MerchantAccount> {

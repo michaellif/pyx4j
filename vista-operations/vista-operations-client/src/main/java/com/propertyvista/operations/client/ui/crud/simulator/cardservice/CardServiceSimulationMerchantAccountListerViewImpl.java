@@ -38,7 +38,7 @@ public class CardServiceSimulationMerchantAccountListerViewImpl extends Operatio
     }
 
     public CardServiceSimulationMerchantAccountListerViewImpl() {
-        setLister(new CardServiceSimulationLister());
+        setDataTablePanel(new CardServiceSimulationLister());
     }
 
 }

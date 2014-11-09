@@ -23,7 +23,7 @@ import com.propertyvista.domain.policy.dto.ProspectPortalPolicyDTO;
 public class ProspectPortalPolicyListerViewImpl extends CrmListerViewImplBase<ProspectPortalPolicyDTO> implements ProspectPortalPolicyListerView {
 
     public ProspectPortalPolicyListerViewImpl() {
-        setLister(new ProspectPortalPolicyLister());
+        setDataTablePanel(new ProspectPortalPolicyLister());
     }
 
     public static class ProspectPortalPolicyLister extends PolicyListerBase<ProspectPortalPolicyDTO> {

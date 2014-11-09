@@ -23,7 +23,7 @@ import com.propertyvista.domain.policy.dto.LegalTermsPolicyDTO;
 public class LegalTermsPolicyListerViewImpl extends CrmListerViewImplBase<LegalTermsPolicyDTO> implements LegalTermsPolicyListerView {
 
     public LegalTermsPolicyListerViewImpl() {
-        setLister(new LegalDocumentationPolicyLister());
+        setDataTablePanel(new LegalDocumentationPolicyLister());
     }
 
     public static class LegalDocumentationPolicyLister extends PolicyListerBase<LegalTermsPolicyDTO> {

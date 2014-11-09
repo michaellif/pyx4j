@@ -19,7 +19,7 @@ import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 public class DirectDebitRecordListerViewImpl extends OperationsListerViewImplBase<DirectDebitRecord> implements DirectDebitRecordListerView {
 
     public DirectDebitRecordListerViewImpl() {
-        setLister(new DirectDebitRecordLister(true));
+        setDataTablePanel(new DirectDebitRecordLister(true));
     }
 
 }

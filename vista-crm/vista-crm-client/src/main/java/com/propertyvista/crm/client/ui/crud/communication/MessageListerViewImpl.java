@@ -27,7 +27,7 @@ public class MessageListerViewImpl extends CrmListerViewImplBase<MessageDTO> imp
     private static final I18n i18n = I18n.get(MessageListerViewImpl.class);
 
     public MessageListerViewImpl() {
-        setLister(new MessageLister());
+        setDataTablePanel(new MessageLister());
     }
 
     @Override

@@ -23,7 +23,7 @@ import com.propertyvista.domain.policy.dto.MaintenanceRequestPolicyDTO;
 public class MaintenanceRequestPolicyListerViewImpl extends CrmListerViewImplBase<MaintenanceRequestPolicyDTO> implements MaintenanceRequestPolicyListerView {
 
     public MaintenanceRequestPolicyListerViewImpl() {
-        setLister(new MaintenanceRequestPolicyLister());
+        setDataTablePanel(new MaintenanceRequestPolicyLister());
     }
 
     public static class MaintenanceRequestPolicyLister extends PolicyListerBase<MaintenanceRequestPolicyDTO> {

@@ -23,7 +23,7 @@ import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
 public class IdAssignmentPolicyListerViewImpl extends CrmListerViewImplBase<IdAssignmentPolicyDTO> implements IdAssignmentPolicyListerView {
 
     public IdAssignmentPolicyListerViewImpl() {
-        setLister(new IdAssignmentPolicyLister());
+        setDataTablePanel(new IdAssignmentPolicyLister());
     }
 
     public static class IdAssignmentPolicyLister extends PolicyListerBase<IdAssignmentPolicyDTO> {

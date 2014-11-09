@@ -40,7 +40,7 @@ public class CardServiceSimulationCardListerViewImpl extends OperationsListerVie
     }
 
     public CardServiceSimulationCardListerViewImpl() {
-        setLister(new CardServiceSimulationLister());
+        setDataTablePanel(new CardServiceSimulationLister());
     }
 
 }

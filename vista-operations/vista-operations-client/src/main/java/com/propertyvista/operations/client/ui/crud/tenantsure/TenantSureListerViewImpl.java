@@ -19,7 +19,7 @@ import com.propertyvista.operations.rpc.dto.TenantSureDTO;
 public class TenantSureListerViewImpl extends OperationsListerViewImplBase<TenantSureDTO> implements TenantSureListerView {
 
     public TenantSureListerViewImpl() {
-        setLister(new TenantSureLister());
+        setDataTablePanel(new TenantSureLister());
     }
 
 }

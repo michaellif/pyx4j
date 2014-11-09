@@ -23,7 +23,7 @@ import com.propertyvista.domain.policy.dto.ResidentPortalPolicyDTO;
 public class ResidentPortalPolicyListerViewImpl extends CrmListerViewImplBase<ResidentPortalPolicyDTO> implements ResidentPortalPolicyListerView {
 
     public ResidentPortalPolicyListerViewImpl() {
-        setLister(new ResidentPortalPolicyLister());
+        setDataTablePanel(new ResidentPortalPolicyLister());
     }
 
     public static class ResidentPortalPolicyLister extends PolicyListerBase<ResidentPortalPolicyDTO> {

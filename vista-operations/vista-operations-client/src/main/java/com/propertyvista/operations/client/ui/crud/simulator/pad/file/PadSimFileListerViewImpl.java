@@ -26,7 +26,7 @@ public class PadSimFileListerViewImpl extends OperationsListerViewImplBase<PadSi
     private static final I18n i18n = I18n.get(PadSimFileListerViewImpl.class);
 
     public PadSimFileListerViewImpl() {
-        setLister(new PadSimFileLister());
+        setDataTablePanel(new PadSimFileLister());
 
         // Add actions:
         Button loadPadFile = new Button(i18n.tr("Load"), new Command() {
@@ -35,6 +35,6 @@ public class PadSimFileListerViewImpl extends OperationsListerViewImplBase<PadSi
                 ((PadSimFileListerView.Presenter) getPresenter()).loadPadFile();
             }
         });
-        getLister().addUpperActionItem(loadPadFile.asWidget());
+        getDataTablePanel().addUpperActionItem(loadPadFile.asWidget());
     }
 }

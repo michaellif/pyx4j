@@ -19,6 +19,6 @@ import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 public class EmployeeListerViewImpl extends CrmListerViewImplBase<EmployeeDTO> implements EmployeeListerView {
 
     public EmployeeListerViewImpl() {
-        setLister(new EmployeeLister());
+        setDataTablePanel(new EmployeeLister());
     }
 }

@@ -19,7 +19,7 @@ import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
 public class AuditRecordListerViewImpl extends OperationsListerViewImplBase<AuditRecordOperationsDTO> {
 
     public AuditRecordListerViewImpl() {
-        setLister(new AuditRecordsLister());
+        setDataTablePanel(new AuditRecordsLister());
     }
 
 }

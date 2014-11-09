@@ -19,6 +19,6 @@ import com.propertyvista.operations.rpc.dto.TriggerDTO;
 public class TriggerListerViewImpl extends OperationsListerViewImplBase<TriggerDTO> implements TriggerListerView {
 
     public TriggerListerViewImpl() {
-        setLister(new TriggerLister());
+        setDataTablePanel(new TriggerLister());
     }
 }

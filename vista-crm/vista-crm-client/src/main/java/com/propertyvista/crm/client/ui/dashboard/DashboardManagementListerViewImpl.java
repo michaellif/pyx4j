@@ -18,6 +18,6 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class DashboardManagementListerViewImpl extends CrmListerViewImplBase<DashboardMetadata> implements DashboardManagementListerView {
     public DashboardManagementListerViewImpl() {
-        setLister(new DashboardLister());
+        setDataTablePanel(new DashboardLister());
     }
 }

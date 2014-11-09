@@ -19,7 +19,7 @@ import com.propertyvista.operations.rpc.dto.OutgoingMailQueueDTO;
 public class OutgoingMailListerViewImpl extends OperationsListerViewImplBase<OutgoingMailQueueDTO> implements OutgoingMailListerView {
 
     public OutgoingMailListerViewImpl() {
-        setLister(new OutgoingMailLister());
+        setDataTablePanel(new OutgoingMailLister());
     }
 
 }

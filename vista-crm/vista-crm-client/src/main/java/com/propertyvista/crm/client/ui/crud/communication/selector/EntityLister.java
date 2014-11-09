@@ -130,7 +130,7 @@ public class EntityLister<E extends IEntity> extends EntityDataTablePanel<E> {
 
     private void setOnTabSelected() {
         selectedOnTab.clear();
-        for (DataItem<E> dataItem : getLister().getDataTable().getDataTableModel().getSelectedRows()) {
+        for (DataItem<E> dataItem : getDataTablePanel().getDataTable().getDataTableModel().getSelectedRows()) {
             selectedOnTab.add(dataItem.getEntity());
         }
     }
@@ -139,7 +139,7 @@ public class EntityLister<E extends IEntity> extends EntityDataTablePanel<E> {
 
         if (alreadySelected == null || alreadySelected.size() == 0)
             return;
-        DataTableModel<E> model = getLister().getDataTable().getDataTableModel();
+        DataTableModel<E> model = getDataTablePanel().getDataTable().getDataTableModel();
 
         for (DataItem<E> dataItem : model.getData()) {
             if (alreadySelected.contains(dataItem.getEntity())) {
@@ -151,7 +151,7 @@ public class EntityLister<E extends IEntity> extends EntityDataTablePanel<E> {
     private void identifySelected() {
         Collection<E> changed = new ArrayList<E>();
 
-        for (DataItem<E> dataItem : getLister().getDataTable().getDataTableModel().getSelectedRows()) {
+        for (DataItem<E> dataItem : getDataTablePanel().getDataTable().getDataTableModel().getSelectedRows()) {
             changed.add(dataItem.getEntity());
         }
 

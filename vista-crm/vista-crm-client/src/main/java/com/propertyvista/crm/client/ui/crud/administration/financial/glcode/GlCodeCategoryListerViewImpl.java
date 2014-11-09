@@ -19,6 +19,6 @@ import com.propertyvista.domain.financial.GlCodeCategory;
 public class GlCodeCategoryListerViewImpl extends CrmListerViewImplBase<GlCodeCategory> implements GlCodeCategoryListerView {
 
     public GlCodeCategoryListerViewImpl() {
-        setLister(new GlCodeCategoryLister());
+        setDataTablePanel(new GlCodeCategoryLister());
     }
 }

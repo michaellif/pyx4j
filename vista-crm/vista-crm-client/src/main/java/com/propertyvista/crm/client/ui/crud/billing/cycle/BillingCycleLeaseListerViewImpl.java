@@ -19,6 +19,6 @@ import com.propertyvista.dto.LeaseDTO;
 public class BillingCycleLeaseListerViewImpl extends CrmListerViewImplBase<LeaseDTO> implements BillingCycleLeaseListerView {
 
     public BillingCycleLeaseListerViewImpl() {
-        setLister(new BillingCycleLeaseLister());
+        setDataTablePanel(new BillingCycleLeaseLister());
     }
 }

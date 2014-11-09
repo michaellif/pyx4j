@@ -19,6 +19,6 @@ import com.propertyvista.domain.tenant.lead.Lead;
 public class LeadListerViewImpl extends CrmListerViewImplBase<Lead> implements LeadListerView {
 
     public LeadListerViewImpl() {
-        setLister(new LeadLister());
+        setDataTablePanel(new LeadLister());
     }
 }

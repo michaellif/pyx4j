@@ -23,7 +23,7 @@ import com.propertyvista.domain.policy.dto.PetPolicyDTO;
 public class PetPolicyListerViewImpl extends CrmListerViewImplBase<PetPolicyDTO> implements PetPolicyListerView {
 
     public PetPolicyListerViewImpl() {
-        setLister(new PolicyListerBase<PetPolicyDTO>(PetPolicyDTO.class) {
+        setDataTablePanel(new PolicyListerBase<PetPolicyDTO>(PetPolicyDTO.class) {
             {
                 setDataTableModel(new DataTableModel<PetPolicyDTO>(// @formatter:off
                         new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),

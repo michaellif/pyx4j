@@ -23,7 +23,7 @@ import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 public class ProductTaxPolicyListerViewImpl extends CrmListerViewImplBase<ProductTaxPolicyDTO> implements ProductTaxPolicyListerView {
 
     public ProductTaxPolicyListerViewImpl() {
-        setLister(new ProductTaxPolicyLister());
+        setDataTablePanel(new ProductTaxPolicyLister());
     }
 
     public static class ProductTaxPolicyLister extends PolicyListerBase<ProductTaxPolicyDTO> {

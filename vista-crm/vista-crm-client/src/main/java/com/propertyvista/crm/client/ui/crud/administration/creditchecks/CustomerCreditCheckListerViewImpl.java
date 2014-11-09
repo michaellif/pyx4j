@@ -19,7 +19,7 @@ import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 public class CustomerCreditCheckListerViewImpl extends CrmListerViewImplBase<CustomerCreditCheckDTO> implements CustomerCreditCheckListerView {
 
     public CustomerCreditCheckListerViewImpl() {
-        setLister(new CustomerCreditCheckLister());
+        setDataTablePanel(new CustomerCreditCheckLister());
     }
 
 }

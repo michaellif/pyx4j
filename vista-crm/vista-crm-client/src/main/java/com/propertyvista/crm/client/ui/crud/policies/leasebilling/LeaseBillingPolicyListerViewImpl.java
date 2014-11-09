@@ -23,7 +23,7 @@ import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
 public class LeaseBillingPolicyListerViewImpl extends CrmListerViewImplBase<LeaseBillingPolicyDTO> implements LeaseBillingPolicyListerView {
 
     public LeaseBillingPolicyListerViewImpl() {
-        setLister(new LateFeePolicyLister());
+        setDataTablePanel(new LateFeePolicyLister());
     }
 
     public static class LateFeePolicyLister extends PolicyListerBase<LeaseBillingPolicyDTO> {
