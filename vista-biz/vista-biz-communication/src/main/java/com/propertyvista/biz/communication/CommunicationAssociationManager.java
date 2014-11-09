@@ -164,14 +164,14 @@ public class CommunicationAssociationManager {
         return null;
     }
 
-    public static CommunicationThread association2Thread(CommunicationAssociation ca, CommunicationEndpoint currentUser) {
+    public static CommunicationThread association2Thread(CommunicationAssociation ca, CommunicationEndpoint currentUser, String messageBody) {
 
         Message m = EntityFactory.create(Message.class);
         m.date().setValue(SystemDateManager.getDate());
         CommunicationMessageFacade facade = ServerSideFactory.create(CommunicationMessageFacade.class);
         m.highImportance().setValue(association2Importance(ca));
         m.sender().set(association2Sender(ca, currentUser));
-        m.text().setValue(association2Body(ca));
+        m.text().setValue(messageBody == null ? association2Body(ca) : messageBody);
         association2Recipient(m, ca, currentUser);
 
         CommunicationThread t = EntityFactory.create(CommunicationThread.class);
@@ -188,12 +188,12 @@ public class CommunicationAssociationManager {
         return t;
     }
 
-    public static Message associationChange2Message(CommunicationAssociation ca, CommunicationEndpoint currentUser) {
+    public static Message associationChange2Message(CommunicationAssociation ca, CommunicationEndpoint currentUser, String messageBody) {
         CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
         if (ca != null) {
             Message m = association2Message(ca);
             if (m == null) {
-                CommunicationThread t = association2Thread(ca, currentUser);
+                CommunicationThread t = association2Thread(ca, currentUser, null);
                 m = t.content().get(0);
             }
             MessageDTO dto = EntityFactory.create(MessageDTO.class);
@@ -202,7 +202,7 @@ public class CommunicationAssociationManager {
             dto.isRead().setValue(false);
             dto.highImportance().setValue(false);
             dto.allowedReply().setValue(true);
-            dto.text().setValue(association2Body(ca));
+            dto.text().setValue(messageBody == null ? association2Body(ca) : messageBody);
             dto.category().set(communicationFacade.getMessageCategoryFromCache(TicketType.Maintenance));
 
             Message newMessage = communicationFacade.saveMessage(dto, association2Status(ca), association2Sender(ca, currentUser), true);

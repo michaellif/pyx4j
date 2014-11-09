@@ -69,11 +69,10 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
         postRequest(request);
 
         if (isNewRequest) {
-            ServerSideFactory.create(CommunicationMessageFacade.class).association2Thread(request, requestReporter);
             // TODO: send maintenance request mail from messaging system
-
             ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCreatedPMC(request);
-            ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCreatedTenant(request);
+            MailMessage mail = ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCreatedTenant(request);
+            ServerSideFactory.create(CommunicationMessageFacade.class).association2Thread(request, requestReporter, mail.getHtmlBody());
         }
     }
 
@@ -84,9 +83,9 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
             request.status().set(status);
             postRequest(request);
 
-            ServerSideFactory.create(CommunicationMessageFacade.class).associationChange2Message(request, requestReporter);
             // TODO: send maintenance request mail from messaging system
-            ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCancelled(request);
+            MailMessage message = ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCancelled(request);
+            ServerSideFactory.create(CommunicationMessageFacade.class).associationChange2Message(request, requestReporter, extractMailBody(message));
         }
     }
 
@@ -103,19 +102,19 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
             request.workHistory().add(schedule);
             request.status().set(status);
 
-            ServerSideFactory.create(CommunicationMessageFacade.class).associationChange2Message(request, requestReporter);
             // TODO: send maintenance request mail from messaging system
-
+            MailMessage message = null;
             if (!request.unit().isNull() && request.permissionToEnter().getValue(false)) {
                 // send notice of entry if permission to access unit is granted
-                MailMessage email = ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestEntryNotice(request);
+                message = ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestEntryNotice(request);
 
-                if (email != null) {
-                    schedule.noticeOfEntry().text().setValue(email.getHtmlBody() != null ? email.getHtmlBody() : email.getTextBody());
-                    schedule.noticeOfEntry().messageId().setValue(email.getHeader("Message-ID"));
-                    schedule.noticeOfEntry().messageDate().setValue(email.getHeader("Date"));
+                if (message != null) {
+                    schedule.noticeOfEntry().text().setValue(extractMailBody(message));
+                    schedule.noticeOfEntry().messageId().setValue(message.getHeader("Message-ID"));
+                    schedule.noticeOfEntry().messageDate().setValue(message.getHeader("Date"));
                 }
             }
+            ServerSideFactory.create(CommunicationMessageFacade.class).associationChange2Message(request, requestReporter, extractMailBody(message));
 
             postRequest(request);
         }
@@ -128,10 +127,9 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
             request.status().set(status);
             postRequest(request);
 
-            ServerSideFactory.create(CommunicationMessageFacade.class).associationChange2Message(request, requestReporter);
             // TODO: send maintenance request mail from messaging system
-
-            ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCompleted(request);
+            MailMessage message = ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCompleted(request);
+            ServerSideFactory.create(CommunicationMessageFacade.class).associationChange2Message(request, requestReporter, extractMailBody(message));
         }
     }
 

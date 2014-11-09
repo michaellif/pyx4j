@@ -320,23 +320,23 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendMaintenanceRequestCreatedTenant(MaintenanceRequest request) {
-        sendMaintenanceRequestEmail(TenantAccess.getActiveEmail(request.reporter()), EmailTemplateType.MaintenanceRequestCreatedTenant, request);
+    public MailMessage sendMaintenanceRequestCreatedTenant(MaintenanceRequest request) {
+        return sendMaintenanceRequestEmail(TenantAccess.getActiveEmail(request.reporter()), EmailTemplateType.MaintenanceRequestCreatedTenant, request);
     }
 
     @Override
-    public void sendMaintenanceRequestUpdated(MaintenanceRequest request) {
-        sendMaintenanceRequestEmail(TenantAccess.getActiveEmail(request.reporter()), EmailTemplateType.MaintenanceRequestUpdated, request);
+    public MailMessage sendMaintenanceRequestUpdated(MaintenanceRequest request) {
+        return sendMaintenanceRequestEmail(TenantAccess.getActiveEmail(request.reporter()), EmailTemplateType.MaintenanceRequestUpdated, request);
     }
 
     @Override
-    public void sendMaintenanceRequestCompleted(MaintenanceRequest request) {
-        sendMaintenanceRequestEmail(TenantAccess.getActiveEmail(request.reporter()), EmailTemplateType.MaintenanceRequestCompleted, request);
+    public MailMessage sendMaintenanceRequestCompleted(MaintenanceRequest request) {
+        return sendMaintenanceRequestEmail(TenantAccess.getActiveEmail(request.reporter()), EmailTemplateType.MaintenanceRequestCompleted, request);
     }
 
     @Override
-    public void sendMaintenanceRequestCancelled(MaintenanceRequest request) {
-        sendMaintenanceRequestEmail(TenantAccess.getActiveEmail(request.reporter()), EmailTemplateType.MaintenanceRequestCancelled, request);
+    public MailMessage sendMaintenanceRequestCancelled(MaintenanceRequest request) {
+        return sendMaintenanceRequestEmail(TenantAccess.getActiveEmail(request.reporter()), EmailTemplateType.MaintenanceRequestCancelled, request);
     }
 
     @Override

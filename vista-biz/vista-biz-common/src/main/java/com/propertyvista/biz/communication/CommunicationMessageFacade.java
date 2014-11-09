@@ -81,9 +81,9 @@ public interface CommunicationMessageFacade {
     Message saveMessage(MessageDTO message, ThreadStatus threadStatus, CommunicationEndpoint currentUser, boolean updateOwner);
 
     // Communication associated entity management -------------------------------------------------------
-    CommunicationThread association2Thread(CommunicationAssociation ca, CommunicationEndpoint currentUser);
+    CommunicationThread association2Thread(CommunicationAssociation ca, CommunicationEndpoint currentUser, String messageBody);
 
     Message association2Message(CommunicationAssociation ca);
 
-    Message associationChange2Message(CommunicationAssociation ca, CommunicationEndpoint currentUser);
+    Message associationChange2Message(CommunicationAssociation ca, CommunicationEndpoint currentUser, String messageBody);
 }

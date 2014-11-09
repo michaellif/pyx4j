@@ -136,8 +136,8 @@ public class CommunicationMessageFacadeImpl implements CommunicationMessageFacad
 
     // Communication associated entity management -------------------------------------------------------
     @Override
-    public CommunicationThread association2Thread(CommunicationAssociation ca, CommunicationEndpoint currentUser) {
-        return CommunicationAssociationManager.association2Thread(ca, currentUser);
+    public CommunicationThread association2Thread(CommunicationAssociation ca, CommunicationEndpoint currentUser, String messageBody) {
+        return CommunicationAssociationManager.association2Thread(ca, currentUser, messageBody);
     }
 
     @Override
@@ -146,7 +146,7 @@ public class CommunicationMessageFacadeImpl implements CommunicationMessageFacad
     }
 
     @Override
-    public Message associationChange2Message(CommunicationAssociation ca, CommunicationEndpoint currentUser) {
-        return CommunicationAssociationManager.associationChange2Message(ca, currentUser);
+    public Message associationChange2Message(CommunicationAssociation ca, CommunicationEndpoint currentUser, String messageBody) {
+        return CommunicationAssociationManager.associationChange2Message(ca, currentUser, messageBody);
     }
 }

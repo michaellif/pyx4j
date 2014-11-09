@@ -117,13 +117,13 @@ public interface CommunicationFacade {
 
     void sendMaintenanceRequestCreatedPMC(MaintenanceRequest request);
 
-    void sendMaintenanceRequestCreatedTenant(MaintenanceRequest request);
+    MailMessage sendMaintenanceRequestCreatedTenant(MaintenanceRequest request);
 
-    void sendMaintenanceRequestUpdated(MaintenanceRequest request);
+    MailMessage sendMaintenanceRequestUpdated(MaintenanceRequest request);
 
-    void sendMaintenanceRequestCompleted(MaintenanceRequest request);
+    MailMessage sendMaintenanceRequestCompleted(MaintenanceRequest request);
 
-    void sendMaintenanceRequestCancelled(MaintenanceRequest request);
+    MailMessage sendMaintenanceRequestCancelled(MaintenanceRequest request);
 
     MailMessage sendMaintenanceRequestEntryNotice(MaintenanceRequest request);
 
