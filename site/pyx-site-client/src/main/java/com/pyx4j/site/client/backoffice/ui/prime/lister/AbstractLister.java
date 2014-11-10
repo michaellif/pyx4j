@@ -38,7 +38,6 @@ public class AbstractLister<E extends IEntity> extends AbstractPrimePane impleme
 
     public AbstractLister() {
         super();
-
     }
 
     /*
@@ -54,6 +53,7 @@ public class AbstractLister<E extends IEntity> extends AbstractPrimePane impleme
             return; // already!?.
         }
 
+        dataTablePanel.getElement().getStyle().setPadding(6, Unit.PX);
         dataTablePanel.getElement().getStyle().setPaddingBottom(40, Unit.PX);
 
         ((ScrollPanel) getContentPane()).add(this.dataTablePanel = dataTablePanel);
