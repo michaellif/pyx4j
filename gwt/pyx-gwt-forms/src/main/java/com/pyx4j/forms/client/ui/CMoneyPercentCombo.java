@@ -65,21 +65,23 @@ public class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NTex
                 return nf.format(BigDecimal.ZERO);
             }
             String result = null;
-            switch (amountType) {
-            case Monetary:
-                if (isEditable()) {
-                    result = nf.format(value.amount().getValue(BigDecimal.ZERO));
-                } else {
-                    result = mf.format(value.amount().getValue(BigDecimal.ZERO));
+            if (amountType != null) {
+                switch (amountType) {
+                case Monetary:
+                    if (isEditable()) {
+                        result = nf.format(value.amount().getValue(BigDecimal.ZERO));
+                    } else {
+                        result = mf.format(value.amount().getValue(BigDecimal.ZERO));
+                    }
+                    break;
+                case Percentage:
+                    if (isEditable()) {
+                        result = nf.format(value.percent().getValue(BigDecimal.ZERO).multiply(new BigDecimal("100")));
+                    } else {
+                        result = pf.format(value.percent().getValue(BigDecimal.ZERO));
+                    }
+                    break;
                 }
-                break;
-            case Percentage:
-                if (isEditable()) {
-                    result = nf.format(value.percent().getValue(BigDecimal.ZERO).multiply(new BigDecimal("100")));
-                } else {
-                    result = pf.format(value.percent().getValue(BigDecimal.ZERO));
-                }
-                break;
             }
             return result;
         }
