@@ -21,7 +21,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
-import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
 import com.propertyvista.crm.client.visor.communityevent.CommunityEventVisorController;
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
@@ -59,11 +58,11 @@ public interface BuildingViewerView extends IViewer<BuildingDTO> {
         void exportBuildingData();
     }
 
-    FloorplanLister getFloorplanListerView();
+    BuildingFloorplanLister getFloorplanListerView();
 
     BuildingUnitLister getUnitListerView();
 
-    ILister<ElevatorDTO> getElevatorListerView();
+    BuildingElevatorLister getElevatorListerView();
 
     ILister<BoilerDTO> getBoilerListerView();
 

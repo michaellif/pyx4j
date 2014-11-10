@@ -11,22 +11,26 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.building.mech;
+package com.propertyvista.crm.client.ui.crud.building;
 
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
+import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
 import com.propertyvista.dto.ElevatorDTO;
 
-public class ElevatorLister extends EntityDataTablePanel<ElevatorDTO> {
+public class BuildingElevatorLister extends SiteDataTablePanel<ElevatorDTO> {
 
-    public ElevatorLister() {
-        super(ElevatorDTO.class, true);
+    public BuildingElevatorLister() {
+        super(ElevatorDTO.class, GWT.<AbstractCrudService<ElevatorDTO>> create(ElevatorCrudService.class), true);
         setFilteringEnabled(false);
 
         setDataTableModel(new DataTableModel<ElevatorDTO>(//@formatter:off

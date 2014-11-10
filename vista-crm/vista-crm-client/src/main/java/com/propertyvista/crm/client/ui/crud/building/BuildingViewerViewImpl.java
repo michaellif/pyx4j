@@ -50,10 +50,8 @@ import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureLister;
 import com.propertyvista.crm.client.ui.crud.building.catalog.ServiceLister;
 import com.propertyvista.crm.client.ui.crud.building.lockers.LockerAreaLister;
 import com.propertyvista.crm.client.ui.crud.building.mech.BoilerLister;
-import com.propertyvista.crm.client.ui.crud.building.mech.ElevatorLister;
 import com.propertyvista.crm.client.ui.crud.building.mech.RoofLister;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingLister;
-import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.building.ac.CommunityEvents;
 import com.propertyvista.crm.rpc.services.building.ac.ImportExport;
@@ -66,10 +64,8 @@ import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.BuildingDTO;
-import com.propertyvista.dto.ElevatorDTO;
 import com.propertyvista.dto.LockerAreaDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.ParkingDTO;
@@ -80,11 +76,11 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     private static final I18n i18n = I18n.get(BuildingViewerViewImpl.class);
 
-    private final FloorplanLister floorplanLister;
+    private final BuildingFloorplanLister floorplanLister;
 
     private final BuildingUnitLister unitLister;
 
-    private final ILister<ElevatorDTO> elevatorLister;
+    private final BuildingElevatorLister elevatorLister;
 
     private final ILister<BoilerDTO> boilerLister;
 
@@ -106,11 +102,11 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     public BuildingViewerViewImpl() {
 
-        floorplanLister = new FloorplanLister();
+        floorplanLister = new BuildingFloorplanLister();
 
         unitLister = new BuildingUnitLister();
 
-        elevatorLister = new ElevatorLister();
+        elevatorLister = new BuildingElevatorLister();
         boilerLister = new BoilerLister();
         roofLister = new RoofLister();
 
@@ -177,7 +173,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     }
 
     @Override
-    public FloorplanLister getFloorplanListerView() {
+    public BuildingFloorplanLister getFloorplanListerView() {
         return floorplanLister;
     }
 
@@ -187,7 +183,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     }
 
     @Override
-    public ILister<ElevatorDTO> getElevatorListerView() {
+    public BuildingElevatorLister getElevatorListerView() {
         return elevatorLister;
     }
 
@@ -256,6 +252,9 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
         unitLister.getDataSource().setParentEntityId(value.getPrimaryKey());
         unitLister.populate();
+
+        elevatorLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        elevatorLister.populate();
 
         populateDashboardsMenu(value.dashboards().iterator());
     }
