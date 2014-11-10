@@ -28,7 +28,6 @@ import com.pyx4j.forms.client.ui.datatable.DataItem;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
-import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 public class EntityLister<E extends IEntity> extends SiteDataTablePanel<E> {
@@ -133,13 +132,4 @@ public class EntityLister<E extends IEntity> extends SiteDataTablePanel<E> {
         parent.removeSelected((Collection<IEntity>) removeItems, entityClass);
     }
 
-    @com.pyx4j.i18n.annotations.I18n(context = "Version Display Mode")
-    public enum VersionDisplayMode {
-        displayDraft, displayFinal;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
 }
