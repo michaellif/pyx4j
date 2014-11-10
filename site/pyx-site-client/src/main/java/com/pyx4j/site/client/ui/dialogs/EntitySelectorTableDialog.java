@@ -28,6 +28,7 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -97,6 +98,13 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         lister.setHeight("500px");
 
         setBody(createBody());
+
+    }
+
+    @Override
+    public void show() {
+        lister.populate();
+        super.show();
     }
 
     protected abstract List<ColumnDescriptor> defineColumnDescriptors();
@@ -109,10 +117,8 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
 
     protected Widget createBody() {
         getOkButton().setEnabled(!lister.getSelectedItems().isEmpty());
-        VerticalPanel vPanel = new VerticalPanel();
-        vPanel.add(lister.asWidget());
-        vPanel.setWidth("100%");
-        return vPanel;
+        ScrollPanel scrollPanel = new ScrollPanel(lister);
+        return scrollPanel;
     }
 
     protected SelectEntityLister getLister() {
