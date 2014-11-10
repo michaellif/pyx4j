@@ -16,25 +16,25 @@ package com.propertyvista.crm.client.ui.crud.building;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
-import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
+import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.dto.AptUnitDTO;
 
-public class BuildingUnitLister extends UnitLister {
+public class BuildingUnitLister extends SiteDataTablePanel<AptUnitDTO> {
+
+    private static final I18n i18n = I18n.get(BuildingUnitLister.class);
 
     public BuildingUnitLister() {
-        this(true);
-    }
+        super(AptUnitDTO.class, GWT.<AbstractCrudService<AptUnitDTO>> create(UnitCrudService.class), false);
 
-    public BuildingUnitLister(boolean allowAddNew) {
-        super(allowAddNew);
-    }
-
-    @Override
-    protected void setupColumns() {
         setDataTableModel(new DataTableModel<AptUnitDTO>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().info().floor()).build(),
                 new MemberColumnDescriptor.Builder(proto().info().number()).build(),

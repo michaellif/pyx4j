@@ -61,7 +61,7 @@ public interface BuildingViewerView extends IViewer<BuildingDTO> {
 
     FloorplanLister getFloorplanListerView();
 
-    ILister<AptUnitDTO> getUnitListerView();
+    BuildingUnitLister getUnitListerView();
 
     ILister<ElevatorDTO> getElevatorListerView();
 

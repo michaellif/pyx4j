@@ -82,7 +82,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     private final FloorplanLister floorplanLister;
 
-    private final ILister<AptUnitDTO> unitLister;
+    private final BuildingUnitLister unitLister;
 
     private final ILister<ElevatorDTO> elevatorLister;
 
@@ -108,7 +108,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
         floorplanLister = new FloorplanLister();
 
-        unitLister = new BuildingUnitLister(true);
+        unitLister = new BuildingUnitLister();
 
         elevatorLister = new ElevatorLister();
         boilerLister = new BoilerLister();
@@ -182,7 +182,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     }
 
     @Override
-    public ILister<AptUnitDTO> getUnitListerView() {
+    public BuildingUnitLister getUnitListerView() {
         return unitLister;
     }
 
@@ -253,6 +253,10 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
         floorplanLister.getDataSource().setParentEntityId(value.getPrimaryKey());
         floorplanLister.populate();
+
+        unitLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        unitLister.populate();
+
         populateDashboardsMenu(value.dashboards().iterator());
     }
 
