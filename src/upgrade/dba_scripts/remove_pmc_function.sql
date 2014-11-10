@@ -44,11 +44,11 @@ BEGIN
         DELETE FROM _admin_.scheduler_run_data WHERE pmc = v_pmc_id;
         DELETE FROM _admin_.audit_record WHERE namespace = v_namespace;
         DELETE FROM _admin_.admin_pmc_equifax_info WHERE pmc = v_pmc_id;
-        DELETE FROM _admin_.pad_reconciliation_debit_record
-        WHERE reconciliation_summary IN (SELECT id FROM _admin_.pad_reconciliation_summary 
+        DELETE FROM _admin_.funds_reconciliation_record_record
+        WHERE reconciliation_summary IN (SELECT id FROM _admin_.funds_reconciliation_summary 
                                         WHERE merchant_account IN 
                                         (SELECT id FROM _admin_.admin_pmc_merchant_account_index WHERE pmc = v_pmc_id));
-        DELETE FROM _admin_.pad_reconciliation_summary 
+        DELETE FROM _admin_.funds_reconciliation_summary 
         WHERE merchant_account IN 
                 (SELECT id FROM _admin_.admin_pmc_merchant_account_index WHERE pmc = v_pmc_id);
         DELETE FROM _admin_.admin_pmc_merchant_account_index WHERE pmc = v_pmc_id;
