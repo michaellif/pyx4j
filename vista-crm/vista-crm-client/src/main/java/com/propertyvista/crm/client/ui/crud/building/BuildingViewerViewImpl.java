@@ -48,8 +48,6 @@ import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleLister;
 import com.propertyvista.crm.client.ui.crud.building.catalog.ConcessionLister;
 import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureLister;
 import com.propertyvista.crm.client.ui.crud.building.catalog.ServiceLister;
-import com.propertyvista.crm.client.ui.crud.building.lockers.LockerAreaLister;
-import com.propertyvista.crm.client.ui.crud.building.parking.ParkingLister;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.building.ac.CommunityEvents;
 import com.propertyvista.crm.rpc.services.building.ac.ImportExport;
@@ -63,9 +61,7 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
-import com.propertyvista.dto.LockerAreaDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.dto.ParkingDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> implements BuildingViewerView {
@@ -82,9 +78,9 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     private final BuildingRoofLister roofLister;
 
-    private final ILister<ParkingDTO> parkingLister;
+    private final ParkingLister parkingLister;
 
-    private final ILister<LockerAreaDTO> lockerAreaLister;
+    private final LockerAreaLister lockerAreaLister;
 
     private final ILister<Service> serviceLister;
 
@@ -194,12 +190,12 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     }
 
     @Override
-    public ILister<ParkingDTO> getParkingListerView() {
+    public ParkingLister getParkingListerView() {
         return parkingLister;
     }
 
     @Override
-    public ILister<LockerAreaDTO> getLockerAreaListerView() {
+    public LockerAreaLister getLockerAreaListerView() {
         return lockerAreaLister;
     }
 
@@ -257,6 +253,12 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
         roofLister.getDataSource().setParentEntityId(value.getPrimaryKey());
         roofLister.populate();
+
+        parkingLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        parkingLister.populate();
+
+        lockerAreaLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        lockerAreaLister.populate();
 
         populateDashboardsMenu(value.dashboards().iterator());
     }

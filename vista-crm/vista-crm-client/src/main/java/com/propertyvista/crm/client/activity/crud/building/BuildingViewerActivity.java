@@ -50,39 +50,23 @@ import com.propertyvista.crm.rpc.dto.ImportBuildingDataParametersDTO;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
-import com.propertyvista.crm.rpc.services.building.LockerAreaCrudService;
-import com.propertyvista.crm.rpc.services.building.ParkingCrudService;
 import com.propertyvista.crm.rpc.services.building.catalog.ConcessionCrudService;
 import com.propertyvista.crm.rpc.services.building.catalog.FeatureCrudService;
 import com.propertyvista.crm.rpc.services.building.catalog.ServiceCrudService;
-import com.propertyvista.crm.rpc.services.building.mech.BoilerCrudService;
-import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
-import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
 import com.propertyvista.crm.rpc.services.importer.ExportBuildingDataDownloadService;
 import com.propertyvista.crm.rpc.services.importer.ImportBuildingDataService;
-import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.dto.AptUnitDTO;
-import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.BuildingDTO;
-import com.propertyvista.dto.ElevatorDTO;
-import com.propertyvista.dto.LockerAreaDTO;
-import com.propertyvista.dto.ParkingDTO;
-import com.propertyvista.dto.RoofDTO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> implements BuildingViewerView.BuildingViewerPresenter {
 
     private static final I18n i18n = I18n.get(BuildingViewerActivity.class);
-
-    private final Presenter<ParkingDTO> parkingLister;
-
-    private final Presenter<LockerAreaDTO> lockerAreaLister;
 
     private final Presenter<Service> serviceLister;
 
@@ -101,11 +85,6 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     public BuildingViewerActivity(CrudAppPlace place) {
         super(BuildingDTO.class, place, CrmSite.getViewFactory().getView(BuildingViewerView.class), GWT
                 .<AbstractCrudService<BuildingDTO>> create(BuildingCrudService.class));
-
-        parkingLister = ListerControllerFactory.create(ParkingDTO.class, ((BuildingViewerView) getView()).getParkingListerView(),
-                GWT.<AbstractCrudService<ParkingDTO>> create(ParkingCrudService.class));
-        lockerAreaLister = ListerControllerFactory.create(LockerAreaDTO.class, ((BuildingViewerView) getView()).getLockerAreaListerView(),
-                GWT.<AbstractCrudService<LockerAreaDTO>> create(LockerAreaCrudService.class));
 
         serviceLister = ListerControllerFactory.create(Service.class, ((BuildingViewerView) getView()).getServiceListerView(),
                 GWT.<AbstractCrudService<Service>> create(ServiceCrudService.class));
@@ -141,14 +120,6 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
         super.onPopulateSuccess(result);
 
         currentBuildingId = result.id().getValue();
-
-        // -------------------------------------------------------
-
-        parkingLister.setParent(result.getPrimaryKey());
-        parkingLister.populate();
-
-        lockerAreaLister.setParent(result.getPrimaryKey());
-        lockerAreaLister.populate();
 
         // -----------------------------------------------------------------------
 

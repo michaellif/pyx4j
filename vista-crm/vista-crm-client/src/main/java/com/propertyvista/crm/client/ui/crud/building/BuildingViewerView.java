@@ -32,8 +32,6 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
-import com.propertyvista.dto.LockerAreaDTO;
-import com.propertyvista.dto.ParkingDTO;
 
 public interface BuildingViewerView extends IViewer<BuildingDTO> {
 
@@ -64,9 +62,9 @@ public interface BuildingViewerView extends IViewer<BuildingDTO> {
 
     BuildingRoofLister getRoofListerView();
 
-    ILister<ParkingDTO> getParkingListerView();
+    ParkingLister getParkingListerView();
 
-    ILister<LockerAreaDTO> getLockerAreaListerView();
+    LockerAreaLister getLockerAreaListerView();
 
     ILister<Service> getServiceListerView();
 
