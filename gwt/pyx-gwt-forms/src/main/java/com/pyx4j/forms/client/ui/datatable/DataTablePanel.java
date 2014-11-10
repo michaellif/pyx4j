@@ -390,29 +390,32 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     @Override
     public void saveState(IMementoOutput memento) {
-        memento.write(pageNumber);
-        memento.write(getFilters());
-        memento.write(getDataTableModel().getSortCriteria());
+        if (getDataTableModel() != null) {
+            memento.write(pageNumber);
+            memento.write(getFilters());
+            memento.write(getDataTableModel().getSortCriteria());
+        }
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public void restoreState(IMementoInput memento) {
+        if (getDataTableModel() != null) {
+            List<Criterion> filters = getDefaultFilters();
+            List<Sort> sorts = getDefaultSorting();
 
-        List<Criterion> filters = getDefaultFilters();
-        List<Sort> sorts = getDefaultSorting();
+            if (externalFilters == null) {
+                Integer pageNumberInteger = (Integer) memento.read();
+                pageNumber = pageNumberInteger == null ? 0 : pageNumberInteger;
+                filters = (List<Criterion>) memento.read();
+                sorts = (List<Sort>) memento.read();
+            } else if (externalFilters != null) {
+                filters = externalFilters;
+            }
 
-        if (externalFilters == null) {
-            Integer pageNumberInteger = (Integer) memento.read();
-            pageNumber = pageNumberInteger == null ? 0 : pageNumberInteger;
-            filters = (List<Criterion>) memento.read();
-            sorts = (List<Sort>) memento.read();
-        } else if (externalFilters != null) {
-            filters = externalFilters;
+            setFilters(filters);
+            getDataTableModel().setSortCriteria(sorts);
         }
-
-        setFilters(filters);
-        getDataTableModel().setSortCriteria(sorts);
     }
 
     public List<Criterion> getDefaultFilters() {
