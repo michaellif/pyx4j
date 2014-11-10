@@ -32,7 +32,7 @@ public class SelectorDialogTenantLister extends EntityLister<Tenant> {
     private final AbstractListCrudService<Tenant> selectService;
 
     public SelectorDialogTenantLister(SelectRecipientsDialogForm parent, Collection<Tenant> alreadySelected) {
-        super(Tenant.class, false, parent, alreadySelected);
+        super(Tenant.class, parent, alreadySelected);
         this.selectService = createSelectService();
         setDataTableModel();
         setDataSource(new ListerDataSource<Tenant>(Tenant.class, this.selectService));

@@ -36,7 +36,7 @@ public class SelectorDialogPortfolioLister extends EntityLister<Portfolio> {
     }
 
     public SelectorDialogPortfolioLister(SelectRecipientsDialogForm parent, Collection<Portfolio> alreadySelected) {
-        super(Portfolio.class, false, parent, alreadySelected);
+        super(Portfolio.class, parent, alreadySelected);
         this.selectService = createSelectService();
         setDataTableModel();
         setDataSource(new ListerDataSource<Portfolio>(Portfolio.class, this.selectService));

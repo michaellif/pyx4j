@@ -36,7 +36,7 @@ public class SelectorDialogBuildingLister extends EntityLister<Building> {
     }
 
     public SelectorDialogBuildingLister(SelectRecipientsDialogForm parent, Collection<Building> alreadySelected) {
-        super(Building.class, false, parent, alreadySelected);
+        super(Building.class, parent, alreadySelected);
 
         this.selectService = createSelectService();
         setDataTableModel();

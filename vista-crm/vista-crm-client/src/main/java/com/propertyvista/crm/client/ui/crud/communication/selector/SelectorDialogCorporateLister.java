@@ -38,7 +38,7 @@ public class SelectorDialogCorporateLister extends EntityLister<Employee> {
     }
 
     public SelectorDialogCorporateLister(SelectRecipientsDialogForm parent, Collection<Employee> alreadySelected) {
-        super(Employee.class, false, parent, alreadySelected);
+        super(Employee.class, parent, alreadySelected);
 
         this.selectService = createSelectService();
         setDataTableModel();

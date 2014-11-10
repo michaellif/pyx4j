@@ -18,28 +18,19 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
-import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.datatable.DataItem;
-import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
-import com.pyx4j.widgets.client.RadioGroup.Layout;
 
 public class EntityLister<E extends IEntity> extends EntityDataTablePanel<E> {
-
-    private VersionDisplayMode versionDisplayMode = VersionDisplayMode.displayFinal;
 
     private final Collection<E> alreadySelected;
 
@@ -49,18 +40,7 @@ public class EntityLister<E extends IEntity> extends EntityDataTablePanel<E> {
 
     private final Class<E> entityClass;
 
-    private final CRadioGroupEnum<VersionDisplayMode> displayModeButton = new CRadioGroupEnum<VersionDisplayMode>(VersionDisplayMode.class, Layout.HORISONTAL);
-    {
-        displayModeButton.setValue(versionDisplayMode);
-        displayModeButton.addValueChangeHandler(new ValueChangeHandler<VersionDisplayMode>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<VersionDisplayMode> event) {
-                onVersionDisplayModeChange(event.getValue());
-            }
-        });
-    }
-
-    public EntityLister(Class<E> clazz, boolean isVersioned, SelectRecipientsDialogForm parent, Collection<E> alreadySelected) {
+    public EntityLister(Class<E> clazz, SelectRecipientsDialogForm parent, Collection<E> alreadySelected) {
         super(clazz);
         this.entityClass = clazz;
         this.parent = parent;
@@ -68,9 +48,6 @@ public class EntityLister<E extends IEntity> extends EntityDataTablePanel<E> {
         this.alreadySelected = (alreadySelected != null ? alreadySelected : new ArrayList<E>());
 
         setPageSizeOptions(Arrays.asList(new Integer[] { DataTablePanel.PAGESIZE_SMALL, DataTablePanel.PAGESIZE_MEDIUM }));
-        if (isVersioned) {
-            addUpperActionItem(displayModeButton.asWidget());
-        }
 
         addItemSelectionHandler(new ItemSelectionHandler() {
 
@@ -81,32 +58,10 @@ public class EntityLister<E extends IEntity> extends EntityDataTablePanel<E> {
         });
     }
 
-    public VersionDisplayMode getVersionDisplayMode() {
-        return versionDisplayMode;
-    }
-
     @Override
     public List<Sort> getDefaultSorting() {
         List<Sort> sort = new ArrayList<Sort>();
         return sort;
-    }
-
-    protected void onVersionDisplayModeChange(VersionDisplayMode mode) {
-        versionDisplayMode = mode;
-        populate(0);
-    }
-
-    @Override
-    protected EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
-        switch (getVersionDisplayMode()) {
-        case displayDraft:
-            criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
-            break;
-        case displayFinal:
-            criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
-            break;
-        }
-        return super.updateCriteria(criteria);
     }
 
     protected List<Criterion> createRestrictionFilterForAlreadySelected() {
