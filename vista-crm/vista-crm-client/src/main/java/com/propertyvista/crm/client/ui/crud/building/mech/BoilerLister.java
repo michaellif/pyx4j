@@ -16,17 +16,21 @@ package com.propertyvista.crm.client.ui.crud.building.mech;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
+import com.propertyvista.crm.rpc.services.building.mech.BoilerCrudService;
 import com.propertyvista.dto.BoilerDTO;
 
-public class BoilerLister extends EntityDataTablePanel<BoilerDTO> {
+public class BoilerLister extends SiteDataTablePanel<BoilerDTO> {
 
     public BoilerLister() {
-        super(BoilerDTO.class, true);
+        super(BoilerDTO.class, GWT.<AbstractCrudService<BoilerDTO>> create(BoilerCrudService.class), true);
         setFilteringEnabled(false);
 
         setDataTableModel(new DataTableModel<BoilerDTO>(//@formatter:off

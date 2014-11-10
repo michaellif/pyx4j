@@ -80,10 +80,6 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
 
     private static final I18n i18n = I18n.get(BuildingViewerActivity.class);
 
-    private final Presenter<BoilerDTO> boilerLister;
-
-    private final Presenter<RoofDTO> roofLister;
-
     private final Presenter<ParkingDTO> parkingLister;
 
     private final Presenter<LockerAreaDTO> lockerAreaLister;
@@ -105,11 +101,6 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     public BuildingViewerActivity(CrudAppPlace place) {
         super(BuildingDTO.class, place, CrmSite.getViewFactory().getView(BuildingViewerView.class), GWT
                 .<AbstractCrudService<BuildingDTO>> create(BuildingCrudService.class));
-
-        boilerLister = ListerControllerFactory.create(BoilerDTO.class, ((BuildingViewerView) getView()).getBoilerListerView(),
-                GWT.<AbstractCrudService<BoilerDTO>> create(BoilerCrudService.class));
-        roofLister = ListerControllerFactory.create(RoofDTO.class, ((BuildingViewerView) getView()).getRoofListerView(),
-                GWT.<AbstractCrudService<RoofDTO>> create(RoofCrudService.class));
 
         parkingLister = ListerControllerFactory.create(ParkingDTO.class, ((BuildingViewerView) getView()).getParkingListerView(),
                 GWT.<AbstractCrudService<ParkingDTO>> create(ParkingCrudService.class));
@@ -150,12 +141,6 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
         super.onPopulateSuccess(result);
 
         currentBuildingId = result.id().getValue();
-
-        boilerLister.setParent(result.getPrimaryKey());
-        boilerLister.populate();
-
-        roofLister.setParent(result.getPrimaryKey());
-        roofLister.populate();
 
         // -------------------------------------------------------
 

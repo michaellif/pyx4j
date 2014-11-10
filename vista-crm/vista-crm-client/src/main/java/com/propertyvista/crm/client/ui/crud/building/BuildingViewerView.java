@@ -21,6 +21,8 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
+import com.propertyvista.crm.client.ui.crud.building.mech.BoilerLister;
+import com.propertyvista.crm.client.ui.crud.building.mech.RoofLister;
 import com.propertyvista.crm.client.visor.communityevent.CommunityEventVisorController;
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
@@ -31,13 +33,9 @@ import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.dto.AptUnitDTO;
-import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.BuildingDTO;
-import com.propertyvista.dto.ElevatorDTO;
 import com.propertyvista.dto.LockerAreaDTO;
 import com.propertyvista.dto.ParkingDTO;
-import com.propertyvista.dto.RoofDTO;
 
 public interface BuildingViewerView extends IViewer<BuildingDTO> {
 
@@ -64,9 +62,9 @@ public interface BuildingViewerView extends IViewer<BuildingDTO> {
 
     BuildingElevatorLister getElevatorListerView();
 
-    ILister<BoilerDTO> getBoilerListerView();
+    BoilerLister getBoilerListerView();
 
-    ILister<RoofDTO> getRoofListerView();
+    RoofLister getRoofListerView();
 
     ILister<ParkingDTO> getParkingListerView();
 

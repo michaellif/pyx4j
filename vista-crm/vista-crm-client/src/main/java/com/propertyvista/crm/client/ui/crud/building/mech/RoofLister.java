@@ -16,17 +16,21 @@ package com.propertyvista.crm.client.ui.crud.building.mech;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
+import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
 import com.propertyvista.dto.RoofDTO;
 
-public class RoofLister extends EntityDataTablePanel<RoofDTO> {
+public class RoofLister extends SiteDataTablePanel<RoofDTO> {
 
     public RoofLister() {
-        super(RoofDTO.class, true);
+        super(RoofDTO.class, GWT.<AbstractCrudService<RoofDTO>> create(RoofCrudService.class), true);
         setFilteringEnabled(false);
 
         setDataTableModel(new DataTableModel<RoofDTO>( //@formatter:off

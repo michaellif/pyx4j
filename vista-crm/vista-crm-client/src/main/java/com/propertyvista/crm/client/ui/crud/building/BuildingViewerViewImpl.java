@@ -64,12 +64,10 @@ import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.dto.LockerAreaDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.ParkingDTO;
-import com.propertyvista.dto.RoofDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> implements BuildingViewerView {
@@ -82,9 +80,9 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     private final BuildingElevatorLister elevatorLister;
 
-    private final ILister<BoilerDTO> boilerLister;
+    private final BoilerLister boilerLister;
 
-    private final ILister<RoofDTO> roofLister;
+    private final RoofLister roofLister;
 
     private final ILister<ParkingDTO> parkingLister;
 
@@ -188,12 +186,12 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     }
 
     @Override
-    public ILister<BoilerDTO> getBoilerListerView() {
+    public BoilerLister getBoilerListerView() {
         return boilerLister;
     }
 
     @Override
-    public ILister<RoofDTO> getRoofListerView() {
+    public RoofLister getRoofListerView() {
         return roofLister;
     }
 
@@ -255,6 +253,12 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
         elevatorLister.getDataSource().setParentEntityId(value.getPrimaryKey());
         elevatorLister.populate();
+
+        boilerLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        boilerLister.populate();
+
+        roofLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        roofLister.populate();
 
         populateDashboardsMenu(value.dashboards().iterator());
     }
