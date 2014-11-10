@@ -30,11 +30,9 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.widgets.client.RadioGroup;
 
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
@@ -46,22 +44,6 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.CommunicationEndpointDTO;
 
 public class SelectRecipientsDialogForm extends HorizontalPanel {
-
-    private ScrollPanel rightScrollPanel;
-
-    private SimplePanel rightPanel;
-
-    private SimplePanel leftMenuPanel;
-
-    private ILister lister;
-
-    private SelectorDialogTenantListerController tenantListerController;
-
-    private SelectorDialogCorporateListerController corporateListerController;
-
-    private SelectorDialogBuildingListerController buildingListerController;
-
-    private SelectorDialogPortfolioListerController portfolioListerController;
 
     private Collection<Tenant> selectedTenants;
 
@@ -101,30 +83,33 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
         rg.addValueChangeHandler(new ValueChangeHandler<String>() {
             @Override
             public void onValueChange(ValueChangeEvent<String> event) {
+
                 grabSelectedItems();
                 listScrollPanel.clear();
+
+                EntityLister<?> lister;
                 if (rg.getValue().equals("Tenant")) {
                     lister = new SelectorDialogTenantLister(SelectRecipientsDialogForm.this, selectedTenants);
-                    tenantListerController = new SelectorDialogTenantListerController(lister, ((SelectorDialogTenantLister) lister).getSelectService());
-                    listScrollPanel.add(lister.asWidget());
+                    lister.populate();
+                    listScrollPanel.add(lister);
                 } else if (rg.getValue().equals("Corporate")) {
                     lister = new SelectorDialogCorporateLister(SelectRecipientsDialogForm.this, selectedEmployees);
-                    corporateListerController = new SelectorDialogCorporateListerController(lister, ((SelectorDialogCorporateLister) lister).getSelectService());
-                    listScrollPanel.add(lister.asWidget());
+                    lister.populate();
+                    listScrollPanel.add(lister);
                 } else if (rg.getValue().equals("Building")) {
                     lister = new SelectorDialogBuildingLister(SelectRecipientsDialogForm.this, selectedBuildings);
-                    buildingListerController = new SelectorDialogBuildingListerController(lister, ((SelectorDialogBuildingLister) lister).getSelectService());
-                    listScrollPanel.add(lister.asWidget());
+                    lister.populate();
+                    listScrollPanel.add(lister);
                 } else if (rg.getValue().equals("Portfolio")) {
                     lister = new SelectorDialogPortfolioLister(SelectRecipientsDialogForm.this, selectedPortfolios);
-                    portfolioListerController = new SelectorDialogPortfolioListerController(lister, ((SelectorDialogPortfolioLister) lister).getSelectService());
-                    listScrollPanel.add(lister.asWidget());
+                    lister.populate();
+                    listScrollPanel.add(lister);
                 } else if (rg.getValue().equals("Selected")) {
                     selectedForm = new SelectorDialogSelectedForm();
                     selectedForm.init();
                     selectedForm.populate(selectedAll);
                     selectedForm.asWidget().setHeight("100%");
-                    listScrollPanel.add(selectedForm.asWidget());
+                    listScrollPanel.add(selectedForm);
                 }
             }
         });

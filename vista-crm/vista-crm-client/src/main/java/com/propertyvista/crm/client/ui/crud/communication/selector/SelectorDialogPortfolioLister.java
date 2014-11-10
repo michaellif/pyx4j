@@ -17,11 +17,9 @@ import java.util.Collection;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
-import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
@@ -29,40 +27,14 @@ import com.propertyvista.domain.company.Portfolio;
 
 public class SelectorDialogPortfolioLister extends EntityLister<Portfolio> {
 
-    public AbstractListCrudService<Portfolio> selectService;
-
-    public SelectorDialogPortfolioLister(SelectRecipientsDialogForm parent) {
-        this(parent, null);
-    }
-
     public SelectorDialogPortfolioLister(SelectRecipientsDialogForm parent, Collection<Portfolio> alreadySelected) {
-        super(Portfolio.class, parent, alreadySelected);
-        this.selectService = createSelectService();
-        setDataTableModel();
-        setDataSource(new ListerDataSource<Portfolio>(Portfolio.class, this.selectService));
-
-    }
-
-    protected AbstractListCrudService<Portfolio> createSelectService() {
-        return GWT.<SelectPortfolioListService> create(SelectPortfolioListService.class);
-    }
-
-    public AbstractListCrudService<Portfolio> getSelectService() {
-        return this.selectService;
-    }
-
-    public void setDataTableModel() {
-        DataTableModel<Portfolio> dataTableModel = new DataTableModel<Portfolio>(defineColumnDescriptors());
+        super(Portfolio.class, GWT.<SelectPortfolioListService> create(SelectPortfolioListService.class), parent, alreadySelected);
+        DataTableModel<Portfolio> dataTableModel = new DataTableModel<Portfolio>(new ColumnDescriptor[] {
+                new MemberColumnDescriptor.Builder(proto().name()).build(), //
+                new MemberColumnDescriptor.Builder(proto().description()).wordWrap(true).build() });
         dataTableModel.setPageSize(DataTablePanel.PAGESIZE_SMALL);
         dataTableModel.setMultipleSelection(true);
         setDataTableModel(dataTableModel);
-    }
-
-    protected ColumnDescriptor[] defineColumnDescriptors() {
-        return new ColumnDescriptor[] {//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().name()).build(),
-                new MemberColumnDescriptor.Builder(proto().description()).wordWrap(true).build()
-        };
     }
 
 }

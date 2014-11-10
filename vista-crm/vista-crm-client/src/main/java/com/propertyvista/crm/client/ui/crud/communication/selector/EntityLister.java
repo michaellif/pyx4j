@@ -23,14 +23,15 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataItem;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
-public class EntityLister<E extends IEntity> extends EntityDataTablePanel<E> {
+public class EntityLister<E extends IEntity> extends SiteDataTablePanel<E> {
 
     private final Collection<E> alreadySelected;
 
@@ -40,8 +41,8 @@ public class EntityLister<E extends IEntity> extends EntityDataTablePanel<E> {
 
     private final Class<E> entityClass;
 
-    public EntityLister(Class<E> clazz, SelectRecipientsDialogForm parent, Collection<E> alreadySelected) {
-        super(clazz);
+    public EntityLister(Class<E> clazz, AbstractListCrudService<E> service, SelectRecipientsDialogForm parent, Collection<E> alreadySelected) {
+        super(clazz, service);
         this.entityClass = clazz;
         this.parent = parent;
         this.selectedOnTab = new ArrayList<E>();
@@ -85,7 +86,7 @@ public class EntityLister<E extends IEntity> extends EntityDataTablePanel<E> {
 
     private void setOnTabSelected() {
         selectedOnTab.clear();
-        for (DataItem<E> dataItem : getDataTablePanel().getDataTable().getDataTableModel().getSelectedRows()) {
+        for (DataItem<E> dataItem : getDataTable().getDataTableModel().getSelectedRows()) {
             selectedOnTab.add(dataItem.getEntity());
         }
     }
@@ -94,7 +95,7 @@ public class EntityLister<E extends IEntity> extends EntityDataTablePanel<E> {
 
         if (alreadySelected == null || alreadySelected.size() == 0)
             return;
-        DataTableModel<E> model = getDataTablePanel().getDataTable().getDataTableModel();
+        DataTableModel<E> model = getDataTable().getDataTableModel();
 
         for (DataItem<E> dataItem : model.getData()) {
             if (alreadySelected.contains(dataItem.getEntity())) {
@@ -106,7 +107,7 @@ public class EntityLister<E extends IEntity> extends EntityDataTablePanel<E> {
     private void identifySelected() {
         Collection<E> changed = new ArrayList<E>();
 
-        for (DataItem<E> dataItem : getDataTablePanel().getDataTable().getDataTableModel().getSelectedRows()) {
+        for (DataItem<E> dataItem : getDataTable().getDataTableModel().getSelectedRows()) {
             changed.add(dataItem.getEntity());
         }
 
