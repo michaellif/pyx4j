@@ -13,15 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation;
 
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -30,7 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
-import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
@@ -88,19 +88,10 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
         get(proto().allowedIDs()).addValueChangeHandler(new RevalidationTrigger<List<IdentificationDocumentType>>(get(proto().numberOfRequiredIDs())));
     }
 
-    private class IdentificationDocumentFolder extends VistaTableFolder<IdentificationDocumentType> {
+    private class IdentificationDocumentFolder extends VistaBoxFolder<IdentificationDocumentType> {
 
         public IdentificationDocumentFolder() {
             super(IdentificationDocumentType.class);
-        }
-
-        @Override
-        public List<FolderColumnDescriptor> columns() {
-            return Arrays.asList(//@formatter:off
-                                new FolderColumnDescriptor(proto().type(), "15em", true),
-                                new FolderColumnDescriptor(proto().name(), "30em"),
-                                new FolderColumnDescriptor(proto().importance(), "10em")
-                                );//@formatter:on
         }
 
         @Override
@@ -109,12 +100,39 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
                 @Override
                 public boolean onClickOk() {
                     IdentificationDocumentType item = EntityFactory.create(IdentificationDocumentType.class);
+
                     item.type().setValue(getSelectedType());
                     item.name().setValue(getSelectedType().toString());
+
                     addItem(item);
                     return true;
                 }
             }.show();
+        }
+
+        @Override
+        protected CForm<? extends IdentificationDocumentType> createItemForm(IObject<?> member) {
+            return new CForm<IdentificationDocumentType>(IdentificationDocumentType.class) {
+                @Override
+                protected IsWidget createContent() {
+                    FormPanel formPanel = new FormPanel(this);
+
+                    formPanel.append(Location.Left, proto().type()).decorate();
+                    formPanel.append(Location.Right, proto().importance()).decorate();
+
+                    formPanel.append(Location.Dual, proto().name()).decorate();
+                    formPanel.append(Location.Dual, proto().notes()).decorate();
+
+                    return formPanel;
+                }
+
+                @Override
+                protected void onValueSet(boolean populate) {
+                    super.onValueSet(populate);
+
+                    get(proto().notes()).setVisible(isEditable() || !getValue().notes().isNull());
+                }
+            };
         }
     }
 }
