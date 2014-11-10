@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -14,11 +14,10 @@
 package com.propertyvista.biz.tenant.lease.print;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-
-import com.sun.xml.messaging.saaj.util.ByteOutputStream;
 
 import com.pyx4j.entity.report.JasperFileFormat;
 import com.pyx4j.entity.report.JasperReportModel;
@@ -43,11 +42,11 @@ public class LeaseApplicationDocumentPdfCreatorFacadeImpl implements LeaseApplic
         }
         params.put("applicants", data.applicants());
 
-        ByteOutputStream bos = new ByteOutputStream();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
         JasperReportProcessor.createReport(new JasperReportModel(LeaseTermAgreementPdfCreatorFacadeImpl.class.getPackage().getName() + ".LeaseApplication",
                 new LinkedList<LeaseApplicationDocumentDataSectionsDTO>(data.sections()), params), JasperFileFormat.PDF, bos);
 
-        return bos.getBytes();
+        return bos.toByteArray();
     }
 
 }
