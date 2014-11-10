@@ -180,6 +180,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
                 flexTable.getColumnFormatter().getElement(colIndex).getStyle().setWidth(CHECK_MARK_COLUMN_SIZE, Unit.PX);
             }
             flexTable.getCellFormatter().setAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
+            flexTable.getCellFormatter().setStyleName(0, 0, DataTableTheme.StyleName.DataTableHeaderItem.name());
             ++colIndex;
         }
 
