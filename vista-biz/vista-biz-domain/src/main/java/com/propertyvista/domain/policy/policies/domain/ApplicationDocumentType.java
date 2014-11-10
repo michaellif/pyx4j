@@ -20,6 +20,8 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
@@ -35,6 +37,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 
+//TODO : annotate as base virtual class (no need table create)
 @ToStringFormat("{0}, {1}")
 public interface ApplicationDocumentType extends IEntity {
 
@@ -72,4 +75,7 @@ public interface ApplicationDocumentType extends IEntity {
     @NotNull
     @ToString(index = 1)
     IPrimitive<Importance> importance();
+
+    @Editor(type = EditorType.textarea)
+    IPrimitive<String> notes();
 }
