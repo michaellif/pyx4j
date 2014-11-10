@@ -33,7 +33,7 @@ public class BuildingUnitLister extends SiteDataTablePanel<AptUnitDTO> {
     private static final I18n i18n = I18n.get(BuildingUnitLister.class);
 
     public BuildingUnitLister() {
-        super(AptUnitDTO.class, GWT.<AbstractCrudService<AptUnitDTO>> create(UnitCrudService.class), false);
+        super(AptUnitDTO.class, GWT.<AbstractCrudService<AptUnitDTO>> create(UnitCrudService.class), true);
 
         setDataTableModel(new DataTableModel<AptUnitDTO>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().info().floor()).build(),
