@@ -11,25 +11,29 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.building.catalog;
+package com.propertyvista.crm.client.ui.crud.building;
 
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.common.client.ui.components.versioning.VersionedLister;
+import com.propertyvista.crm.rpc.services.building.catalog.ConcessionCrudService;
 import com.propertyvista.domain.financial.offering.Concession;
 
 public class ConcessionLister extends VersionedLister<Concession> {
 
     public ConcessionLister() {
-        super(Concession.class, true, true);
+        super(Concession.class, GWT.<AbstractCrudService<Concession>> create(ConcessionCrudService.class), true, true);
         setFilteringEnabled(false);
 
         setDataTableModel(new DataTableModel<Concession>(//@formatter:off

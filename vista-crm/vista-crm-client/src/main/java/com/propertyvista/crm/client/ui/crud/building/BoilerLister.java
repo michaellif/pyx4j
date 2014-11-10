@@ -27,9 +27,9 @@ import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.propertyvista.crm.rpc.services.building.mech.BoilerCrudService;
 import com.propertyvista.dto.BoilerDTO;
 
-public class BuildingBoilerLister extends SiteDataTablePanel<BoilerDTO> {
+public class BoilerLister extends SiteDataTablePanel<BoilerDTO> {
 
-    public BuildingBoilerLister() {
+    public BoilerLister() {
         super(BoilerDTO.class, GWT.<AbstractCrudService<BoilerDTO>> create(BoilerCrudService.class), true);
         setFilteringEnabled(false);
 

@@ -27,9 +27,9 @@ import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
 import com.propertyvista.dto.RoofDTO;
 
-public class BuildingRoofLister extends SiteDataTablePanel<RoofDTO> {
+public class RoofLister extends SiteDataTablePanel<RoofDTO> {
 
-    public BuildingRoofLister() {
+    public RoofLister() {
         super(RoofDTO.class, GWT.<AbstractCrudService<RoofDTO>> create(RoofCrudService.class), true);
         setFilteringEnabled(false);
 

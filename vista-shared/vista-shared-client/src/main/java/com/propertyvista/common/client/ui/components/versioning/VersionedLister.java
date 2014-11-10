@@ -23,13 +23,14 @@ import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.VersionedCriteria;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.widgets.client.RadioGroup.Layout;
 
-public abstract class VersionedLister<E extends IVersionedEntity<?>> extends EntityDataTablePanel<E> {
+public abstract class VersionedLister<E extends IVersionedEntity<?>> extends SiteDataTablePanel<E> {
 
     @I18n(context = "Version Display Mode")
     public enum VersionDisplayMode {
@@ -54,18 +55,18 @@ public abstract class VersionedLister<E extends IVersionedEntity<?>> extends Ent
         });
     }
 
-    public VersionedLister(Class<E> clazz) {
-        super(clazz);
+    public VersionedLister(Class<E> clazz, AbstractListCrudService<E> service) {
+        super(clazz, service);
         addUpperActionItem(displayModeButton.asWidget());
     }
 
-    public VersionedLister(Class<E> clazz, boolean allowAddNew) {
-        super(clazz, allowAddNew);
+    public VersionedLister(Class<E> clazz, AbstractListCrudService<E> service, boolean allowAddNew) {
+        super(clazz, service, allowAddNew);
         addUpperActionItem(displayModeButton.asWidget());
     }
 
-    public VersionedLister(Class<E> clazz, boolean allowAddNew, boolean allowDelete) {
-        super(clazz, allowAddNew, allowDelete);
+    public VersionedLister(Class<E> clazz, AbstractListCrudService<E> service, boolean allowAddNew, boolean allowDelete) {
+        super(clazz, service, allowAddNew, allowDelete);
         addUpperActionItem(displayModeButton.asWidget());
     }
 
@@ -75,7 +76,7 @@ public abstract class VersionedLister<E extends IVersionedEntity<?>> extends Ent
 
     protected void onVersionDisplayModeChange(VersionDisplayMode mode) {
         versionDisplayMode = mode;
-        getPresenter().populate();
+        populate();
     }
 
     @Override

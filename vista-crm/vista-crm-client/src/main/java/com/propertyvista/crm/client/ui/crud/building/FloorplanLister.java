@@ -28,9 +28,9 @@ import com.propertyvista.crm.rpc.services.building.FloorplanCrudService;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class BuildingFloorplanLister extends SiteDataTablePanel<FloorplanDTO> {
+public class FloorplanLister extends SiteDataTablePanel<FloorplanDTO> {
 
-    public BuildingFloorplanLister() {
+    public FloorplanLister() {
         super(FloorplanDTO.class, GWT.<AbstractCrudService<FloorplanDTO>> create(FloorplanCrudService.class),
                 !VistaFeatures.instance().yardiIntegration() ? true : false);
 

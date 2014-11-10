@@ -19,17 +19,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.crm.client.visor.communityevent.CommunityEventVisorController;
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
-import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.MerchantAccount;
-import com.propertyvista.domain.financial.offering.Concession;
-import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 
@@ -52,27 +47,27 @@ public interface BuildingViewerView extends IViewer<BuildingDTO> {
         void exportBuildingData();
     }
 
-    BuildingFloorplanLister getFloorplanListerView();
+    FloorplanLister getFloorplanListerView();
 
-    BuildingUnitLister getUnitListerView();
+    UnitLister getUnitListerView();
 
-    BuildingElevatorLister getElevatorListerView();
+    ElevatorLister getElevatorListerView();
 
-    BuildingBoilerLister getBoilerListerView();
+    BoilerLister getBoilerListerView();
 
-    BuildingRoofLister getRoofListerView();
+    RoofLister getRoofListerView();
 
     ParkingLister getParkingListerView();
 
     LockerAreaLister getLockerAreaListerView();
 
-    ILister<Service> getServiceListerView();
+    ServiceLister getServiceListerView();
 
-    ILister<Feature> getFeatureListerView();
+    FeatureLister getFeatureListerView();
 
-    ILister<Concession> getConcessionListerView();
+    ConcessionLister getConcessionListerView();
 
-    ILister<BillingCycleDTO> getBillingCycleListerView();
+    BillingCycleLister getBillingCycleListerView();
 
     void selectMerchantAccount();
 }

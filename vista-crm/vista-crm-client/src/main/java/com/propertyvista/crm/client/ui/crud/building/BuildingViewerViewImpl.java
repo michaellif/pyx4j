@@ -37,18 +37,12 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.ActionPermission;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleLister;
-import com.propertyvista.crm.client.ui.crud.building.catalog.ConcessionLister;
-import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureLister;
-import com.propertyvista.crm.client.ui.crud.building.catalog.ServiceLister;
-import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.building.ac.CommunityEvents;
 import com.propertyvista.crm.rpc.services.building.ac.ImportExport;
 import com.propertyvista.crm.rpc.services.lease.ac.UpdateFromYardi;
@@ -56,9 +50,6 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
-import com.propertyvista.domain.financial.offering.Concession;
-import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
@@ -68,39 +59,39 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     private static final I18n i18n = I18n.get(BuildingViewerViewImpl.class);
 
-    private final BuildingFloorplanLister floorplanLister;
+    private final FloorplanLister floorplanLister;
 
-    private final BuildingUnitLister unitLister;
+    private final UnitLister unitLister;
 
-    private final BuildingElevatorLister elevatorLister;
+    private final ElevatorLister elevatorLister;
 
-    private final BuildingBoilerLister boilerLister;
+    private final BoilerLister boilerLister;
 
-    private final BuildingRoofLister roofLister;
+    private final RoofLister roofLister;
 
     private final ParkingLister parkingLister;
 
     private final LockerAreaLister lockerAreaLister;
 
-    private final ILister<Service> serviceLister;
+    private final ServiceLister serviceLister;
 
-    private final ILister<Feature> featureLister;
+    private final FeatureLister featureLister;
 
-    private final ILister<Concession> concessionLister;
+    private final ConcessionLister concessionLister;
 
-    private final ILister<BillingCycleDTO> billingCycleLister;
+    private final BillingCycleLister billingCycleLister;
 
     private final ButtonMenuBar dashboardsMenu;
 
     public BuildingViewerViewImpl() {
 
-        floorplanLister = new BuildingFloorplanLister();
+        floorplanLister = new FloorplanLister();
 
-        unitLister = new BuildingUnitLister();
+        unitLister = new UnitLister();
 
-        elevatorLister = new BuildingElevatorLister();
-        boilerLister = new BuildingBoilerLister();
-        roofLister = new BuildingRoofLister();
+        elevatorLister = new ElevatorLister();
+        boilerLister = new BoilerLister();
+        roofLister = new RoofLister();
 
         parkingLister = new ParkingLister();
         lockerAreaLister = new LockerAreaLister();
@@ -165,27 +156,27 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     }
 
     @Override
-    public BuildingFloorplanLister getFloorplanListerView() {
+    public FloorplanLister getFloorplanListerView() {
         return floorplanLister;
     }
 
     @Override
-    public BuildingUnitLister getUnitListerView() {
+    public UnitLister getUnitListerView() {
         return unitLister;
     }
 
     @Override
-    public BuildingElevatorLister getElevatorListerView() {
+    public ElevatorLister getElevatorListerView() {
         return elevatorLister;
     }
 
     @Override
-    public BuildingBoilerLister getBoilerListerView() {
+    public BoilerLister getBoilerListerView() {
         return boilerLister;
     }
 
     @Override
-    public BuildingRoofLister getRoofListerView() {
+    public RoofLister getRoofListerView() {
         return roofLister;
     }
 
@@ -200,22 +191,22 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     }
 
     @Override
-    public ILister<Service> getServiceListerView() {
+    public ServiceLister getServiceListerView() {
         return serviceLister;
     }
 
     @Override
-    public ILister<Feature> getFeatureListerView() {
+    public FeatureLister getFeatureListerView() {
         return featureLister;
     }
 
     @Override
-    public ILister<Concession> getConcessionListerView() {
+    public ConcessionLister getConcessionListerView() {
         return concessionLister;
     }
 
     @Override
-    public ILister<BillingCycleDTO> getBillingCycleListerView() {
+    public BillingCycleLister getBillingCycleListerView() {
         return billingCycleLister;
     }
 
@@ -259,6 +250,18 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
         lockerAreaLister.getDataSource().setParentEntityId(value.getPrimaryKey());
         lockerAreaLister.populate();
+
+        serviceLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        serviceLister.populate();
+
+        featureLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        featureLister.populate();
+
+        concessionLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        concessionLister.populate();
+
+        billingCycleLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        billingCycleLister.populate();
 
         populateDashboardsMenu(value.dashboards().iterator());
     }

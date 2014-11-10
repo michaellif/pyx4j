@@ -27,9 +27,9 @@ import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
 import com.propertyvista.dto.ElevatorDTO;
 
-public class BuildingElevatorLister extends SiteDataTablePanel<ElevatorDTO> {
+public class ElevatorLister extends SiteDataTablePanel<ElevatorDTO> {
 
-    public BuildingElevatorLister() {
+    public ElevatorLister() {
         super(ElevatorDTO.class, GWT.<AbstractCrudService<ElevatorDTO>> create(ElevatorCrudService.class), true);
         setFilteringEnabled(false);
 

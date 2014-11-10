@@ -11,20 +11,25 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.building.catalog;
+package com.propertyvista.crm.client.ui.crud.building;
 
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.IPane;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
+import com.propertyvista.crm.client.ui.crud.building.catalog.ProductCodeSelectorDialog;
+import com.propertyvista.crm.rpc.services.building.catalog.ServiceCrudService;
 import com.propertyvista.crm.rpc.services.building.catalog.ServiceCrudService.ServiceInitializationdata;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
@@ -32,14 +37,15 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class ServiceLister extends EntityDataTablePanel<Service> {
+public class ServiceLister extends SiteDataTablePanel<Service> {
 
     private final static I18n i18n = I18n.get(ServiceLister.class);
 
     private final IPane parentView;
 
     public ServiceLister(IPane parentView) {
-        super(Service.class, !VistaFeatures.instance().yardiIntegration(), !VistaFeatures.instance().yardiIntegration());
+        super(Service.class, GWT.<AbstractCrudService<Service>> create(ServiceCrudService.class), !VistaFeatures.instance().yardiIntegration(), !VistaFeatures
+                .instance().yardiIntegration());
         this.parentView = parentView;
         setFilteringEnabled(false);
 
@@ -88,9 +94,9 @@ public class ServiceLister extends EntityDataTablePanel<Service> {
             @Override
             public boolean onClickOk() {
                 ServiceInitializationdata id = EntityFactory.create(ServiceInitializationdata.class);
-                id.parent().set(EntityFactory.createIdentityStub(ProductCatalog.class, getPresenter().getParent()));
+                id.parent().set(EntityFactory.createIdentityStub(ProductCatalog.class, getDataSource().getParentEntityId()));
                 id.code().set(getSelectedItem());
-                getPresenter().editNew(getItemOpenPlaceClass(), id);
+                editNew(getItemOpenPlaceClass(), id);
                 return true;
             }
         }.show();

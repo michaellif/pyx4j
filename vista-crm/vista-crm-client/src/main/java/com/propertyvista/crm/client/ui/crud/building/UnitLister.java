@@ -28,11 +28,11 @@ import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.dto.AptUnitDTO;
 
-public class BuildingUnitLister extends SiteDataTablePanel<AptUnitDTO> {
+public class UnitLister extends SiteDataTablePanel<AptUnitDTO> {
 
-    private static final I18n i18n = I18n.get(BuildingUnitLister.class);
+    private static final I18n i18n = I18n.get(UnitLister.class);
 
-    public BuildingUnitLister() {
+    public UnitLister() {
         super(AptUnitDTO.class, GWT.<AbstractCrudService<AptUnitDTO>> create(UnitCrudService.class), true);
 
         setDataTableModel(new DataTableModel<AptUnitDTO>(//@formatter:off

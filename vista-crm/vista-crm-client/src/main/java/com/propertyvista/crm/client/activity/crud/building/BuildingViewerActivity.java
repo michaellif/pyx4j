@@ -21,7 +21,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.entity.shared.IFile;
@@ -33,12 +32,10 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.ReportDialog;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.components.UploadDialogBase;
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.activity.ListerControllerFactory;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.building.BuildingViewerView;
 import com.propertyvista.crm.client.visor.communityevent.CommunityEventVisorController;
@@ -47,19 +44,11 @@ import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
 import com.propertyvista.crm.rpc.dto.DeferredProcessingStarted;
 import com.propertyvista.crm.rpc.dto.ImportBuildingDataParametersDTO;
-import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
-import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
-import com.propertyvista.crm.rpc.services.building.catalog.ConcessionCrudService;
-import com.propertyvista.crm.rpc.services.building.catalog.FeatureCrudService;
-import com.propertyvista.crm.rpc.services.building.catalog.ServiceCrudService;
 import com.propertyvista.crm.rpc.services.importer.ExportBuildingDataDownloadService;
 import com.propertyvista.crm.rpc.services.importer.ImportBuildingDataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.MerchantAccount;
-import com.propertyvista.domain.financial.offering.Concession;
-import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -67,14 +56,6 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> implements BuildingViewerView.BuildingViewerPresenter {
 
     private static final I18n i18n = I18n.get(BuildingViewerActivity.class);
-
-    private final Presenter<Service> serviceLister;
-
-    private final Presenter<Feature> featureLister;
-
-    private final Presenter<Concession> concessionLister;
-
-    private final Presenter<BillingCycleDTO> billingCycleLister;
 
     private MaintenanceRequestVisorController maintenanceRequestVisorController;
 
@@ -85,16 +66,6 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     public BuildingViewerActivity(CrudAppPlace place) {
         super(BuildingDTO.class, place, CrmSite.getViewFactory().getView(BuildingViewerView.class), GWT
                 .<AbstractCrudService<BuildingDTO>> create(BuildingCrudService.class));
-
-        serviceLister = ListerControllerFactory.create(Service.class, ((BuildingViewerView) getView()).getServiceListerView(),
-                GWT.<AbstractCrudService<Service>> create(ServiceCrudService.class));
-        featureLister = ListerControllerFactory.create(Feature.class, ((BuildingViewerView) getView()).getFeatureListerView(),
-                GWT.<AbstractCrudService<Feature>> create(FeatureCrudService.class));
-        concessionLister = ListerControllerFactory.create(Concession.class, ((BuildingViewerView) getView()).getConcessionListerView(),
-                GWT.<AbstractCrudService<Concession>> create(ConcessionCrudService.class));
-
-        billingCycleLister = ListerControllerFactory.create(BillingCycleDTO.class, ((BuildingViewerView) getView()).getBillingCycleListerView(),
-                GWT.<AbstractCrudService<BillingCycleDTO>> create(BillingCycleCrudService.class));
     }
 
     @Override
@@ -121,20 +92,6 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
 
         currentBuildingId = result.id().getValue();
 
-        // -----------------------------------------------------------------------
-
-        serviceLister.setParent(result.productCatalog().getPrimaryKey());
-        serviceLister.populate();
-
-        featureLister.setParent(result.productCatalog().getPrimaryKey());
-        featureLister.populate();
-
-        concessionLister.setParent(result.productCatalog().getPrimaryKey());
-        concessionLister.populate();
-
-        billingCycleLister.clearPreDefinedFilters();
-        billingCycleLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(BillingCycleDTO.class).building(), result));
-        billingCycleLister.populate();
     }
 
     @Override
