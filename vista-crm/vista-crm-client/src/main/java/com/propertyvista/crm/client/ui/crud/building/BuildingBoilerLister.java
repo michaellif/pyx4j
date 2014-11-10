@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.building.mech;
+package com.propertyvista.crm.client.ui.crud.building;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,9 +27,9 @@ import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.propertyvista.crm.rpc.services.building.mech.BoilerCrudService;
 import com.propertyvista.dto.BoilerDTO;
 
-public class BoilerLister extends SiteDataTablePanel<BoilerDTO> {
+public class BuildingBoilerLister extends SiteDataTablePanel<BoilerDTO> {
 
-    public BoilerLister() {
+    public BuildingBoilerLister() {
         super(BoilerDTO.class, GWT.<AbstractCrudService<BoilerDTO>> create(BoilerCrudService.class), true);
         setFilteringEnabled(false);
 

@@ -49,8 +49,6 @@ import com.propertyvista.crm.client.ui.crud.building.catalog.ConcessionLister;
 import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureLister;
 import com.propertyvista.crm.client.ui.crud.building.catalog.ServiceLister;
 import com.propertyvista.crm.client.ui.crud.building.lockers.LockerAreaLister;
-import com.propertyvista.crm.client.ui.crud.building.mech.BoilerLister;
-import com.propertyvista.crm.client.ui.crud.building.mech.RoofLister;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingLister;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.building.ac.CommunityEvents;
@@ -80,9 +78,9 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     private final BuildingElevatorLister elevatorLister;
 
-    private final BoilerLister boilerLister;
+    private final BuildingBoilerLister boilerLister;
 
-    private final RoofLister roofLister;
+    private final BuildingRoofLister roofLister;
 
     private final ILister<ParkingDTO> parkingLister;
 
@@ -105,8 +103,8 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         unitLister = new BuildingUnitLister();
 
         elevatorLister = new BuildingElevatorLister();
-        boilerLister = new BoilerLister();
-        roofLister = new RoofLister();
+        boilerLister = new BuildingBoilerLister();
+        roofLister = new BuildingRoofLister();
 
         parkingLister = new ParkingLister();
         lockerAreaLister = new LockerAreaLister();
@@ -186,12 +184,12 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     }
 
     @Override
-    public BoilerLister getBoilerListerView() {
+    public BuildingBoilerLister getBoilerListerView() {
         return boilerLister;
     }
 
     @Override
-    public RoofLister getRoofListerView() {
+    public BuildingRoofLister getRoofListerView() {
         return roofLister;
     }
 
