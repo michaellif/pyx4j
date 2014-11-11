@@ -251,13 +251,13 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         lockerAreaLister.getDataSource().setParentEntityId(value.getPrimaryKey());
         lockerAreaLister.populate();
 
-        serviceLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        serviceLister.getDataSource().setParentEntityId(value.productCatalog().getPrimaryKey());
         serviceLister.populate();
 
-        featureLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        featureLister.getDataSource().setParentEntityId(value.productCatalog().getPrimaryKey());
         featureLister.populate();
 
-        concessionLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        concessionLister.getDataSource().setParentEntityId(value.productCatalog().getPrimaryKey());
         concessionLister.populate();
 
         billingCycleLister.getDataSource().setParentEntityId(value.getPrimaryKey());
