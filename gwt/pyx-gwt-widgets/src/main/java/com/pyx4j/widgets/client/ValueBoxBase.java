@@ -193,9 +193,6 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
     }
 
     protected void updateTextBox() {
-
-        System.out.println("++++++++++++++++++++++++ watermark=" + watermark + " parsedOk=" + parsedOk + " value=" + value);
-
         if (parsedOk) {
             if (value != null) {
                 setText(getFormatter().format(value), false);

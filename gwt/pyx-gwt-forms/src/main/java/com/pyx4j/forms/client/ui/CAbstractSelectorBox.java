@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.widgets.client.IWatermarkWidget;
-import com.pyx4j.widgets.client.suggest.IOptionsGrabber;
+import com.pyx4j.widgets.client.selector.IOptionsGrabber;
 
 public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET extends INativeFocusField<DATA>> extends CFocusComponent<DATA, WIDGET> implements
         IAcceptsWatermark, HasOptionsChangeHandlers<List<TYPE>> {

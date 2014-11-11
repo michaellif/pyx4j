@@ -21,7 +21,7 @@
 package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.widgets.client.suggest.IOptionsGrabber;
+import com.pyx4j.widgets.client.selector.IOptionsGrabber;
 
 public class CSelectorTextBox<E extends IEntity> extends CAbstractSelectorBox<E, E, NSelectorTextBox<E>> {
 

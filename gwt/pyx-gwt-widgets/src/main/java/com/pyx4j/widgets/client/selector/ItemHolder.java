@@ -18,7 +18,7 @@
  * @author arminea
  * @version $Id$
  */
-package com.pyx4j.widgets.client.suggest;
+package com.pyx4j.widgets.client.selector;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;

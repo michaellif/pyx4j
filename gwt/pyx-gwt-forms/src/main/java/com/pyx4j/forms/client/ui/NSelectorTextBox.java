@@ -29,7 +29,7 @@ import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.Label;
-import com.pyx4j.widgets.client.suggest.SelectorTextBox;
+import com.pyx4j.widgets.client.selector.SelectorTextBox;
 
 public class NSelectorTextBox<E extends IEntity> extends NFocusField<E, SelectorTextBox<E>, CSelectorTextBox<E>, HTML> implements IWatermarkWidget {
 

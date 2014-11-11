@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.widgets.client.suggest;
+package com.pyx4j.widgets.client.selector;
 
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;

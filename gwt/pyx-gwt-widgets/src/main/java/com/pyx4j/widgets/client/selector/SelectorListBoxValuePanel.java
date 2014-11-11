@@ -18,7 +18,7 @@
  * @author arminea
  * @version $Id$
  */
-package com.pyx4j.widgets.client.suggest;
+package com.pyx4j.widgets.client.selector;
 
 import java.util.Collection;
 

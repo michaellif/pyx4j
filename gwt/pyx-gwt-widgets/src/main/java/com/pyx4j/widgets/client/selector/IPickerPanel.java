@@ -14,33 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 26, 2009
- * @author Michael
+ * Created on Jul 20, 2010
+ * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.widgets.client.suggest;
+package com.pyx4j.widgets.client.selector;
 
-import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.Tree.Resources;
+import java.util.Collection;
 
-public interface TreeImages extends Resources {
+import com.google.gwt.user.client.ui.IsWidget;
 
-    /**
-     * An image indicating a closed branch.
-     */
-    @Override
-    ImageResource treeClosed();
+public interface IPickerPanel<E> extends IsWidget {
 
-    /**
-     * An image indicating a leaf.
-     */
-    @Override
-    ImageResource treeLeaf();
+    void setPickerPopup(PickerPopup<E> pickerPopup);
 
-    /**
-     * An image indicating an open branch.
-     */
-    @Override
-    ImageResource treeOpen();
+    void moveSelectionDown();
+
+    void moveSelectionUp();
+
+    E getSelection();
+
+    void refreshOptions(String query, Collection<E> selected);
 
 }

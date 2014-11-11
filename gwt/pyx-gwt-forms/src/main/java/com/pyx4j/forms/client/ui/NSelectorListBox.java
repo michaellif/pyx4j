@@ -33,7 +33,7 @@ import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.Label;
-import com.pyx4j.widgets.client.suggest.SelectorListBox;
+import com.pyx4j.widgets.client.selector.SelectorListBox;
 
 public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<E>, SelectorListBox<E>, CSelectorListBox<E>, HTML> implements IWatermarkWidget {
 

@@ -14,18 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 24, 2011
+ * Created on Sep 4, 2014
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.widgets.client.suggest;
-
-import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
+package com.pyx4j.widgets.client.selector;
 
 import com.pyx4j.widgets.client.IFocusWidget;
 
-public interface ISelectorValuePanel extends IFocusWidget, HasValueChangeHandlers<String> {
+public interface ISelectorWidget<E> extends IFocusWidget {
 
-    String getQuery();
+    void setSelection(E items);
+
+    ISelectorValuePanel getViewerPanel();
+
+    void resetQuery();
 
 }

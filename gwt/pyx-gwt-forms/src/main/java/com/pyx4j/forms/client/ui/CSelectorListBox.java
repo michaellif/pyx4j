@@ -26,7 +26,7 @@ import java.util.Collection;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.widgets.client.suggest.IOptionsGrabber;
+import com.pyx4j.widgets.client.selector.IOptionsGrabber;
 
 public class CSelectorListBox<E extends IEntity> extends CAbstractSelectorBox<Collection<E>, E, NSelectorListBox<E>> {
 
