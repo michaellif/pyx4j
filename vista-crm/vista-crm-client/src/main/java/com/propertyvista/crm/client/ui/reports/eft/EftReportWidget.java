@@ -205,7 +205,7 @@ public class EftReportWidget extends HTML implements IReportWidget, IMementoAwar
 
         isTableReady = false;
         if (html == null) {
-
+            setData(null);
         } else {
             setReportTable(html, new Command() {
                 @Override
