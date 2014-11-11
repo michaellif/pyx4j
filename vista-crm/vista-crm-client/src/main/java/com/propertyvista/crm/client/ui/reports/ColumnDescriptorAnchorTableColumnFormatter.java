@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -28,24 +28,34 @@ public class ColumnDescriptorAnchorTableColumnFormatter implements ITableColumnF
 
     protected final ColumnDescriptor columnDescriptor;
 
-    private final boolean linkOptional;
+    private String styleName;
+
+    private boolean enabled = true;
 
     private final int width;
-
-    private final String styleName;
 
     private final Path placeMemberPath;
 
     public ColumnDescriptorAnchorTableColumnFormatter(int width, ColumnDescriptor columnDescriptor) {
-        this(width, null, columnDescriptor, false);
-    }
-
-    public ColumnDescriptorAnchorTableColumnFormatter(int width, String styleName, ColumnDescriptor columnDescriptor, boolean linkOptional) {
         this.width = width;
         this.columnDescriptor = columnDescriptor;
-        this.linkOptional = linkOptional;
-        this.styleName = styleName;
         this.placeMemberPath = new Path(columnDescriptor.getColumnName().replaceFirst("/$", "_/"));
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getStyleName() {
+        return styleName;
+    }
+
+    public void setStyleName(String styleName) {
+        this.styleName = styleName;
     }
 
     @Override
@@ -55,8 +65,9 @@ public class ColumnDescriptorAnchorTableColumnFormatter implements ITableColumnF
 
     @Override
     public SafeHtml formatContent(IEntity entity) {
-        if (linkOptional && entity.id().isNull()) {
-            SafeHtmlBuilder b = new SafeHtmlBuilder();
+        SafeHtmlBuilder b = new SafeHtmlBuilder();
+
+        if (!isEnabled() || entity.id().isNull()) {
             if (styleName != null) {
                 b.appendHtmlConstant("<div class='" + styleName + "'>");
             }
@@ -64,12 +75,8 @@ public class ColumnDescriptorAnchorTableColumnFormatter implements ITableColumnF
             if (styleName != null) {
                 b.appendHtmlConstant("</div>");
             }
-
-            return b.toSafeHtml();
         } else {
-
             String url = AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), false, makePlace(entity));
-            SafeHtmlBuilder b = new SafeHtmlBuilder();
             b.appendHtmlConstant("<a href=\"" + url + "\">");
             if (styleName != null) {
                 b.appendHtmlConstant("<div class='" + styleName + "'>");
@@ -81,9 +88,9 @@ public class ColumnDescriptorAnchorTableColumnFormatter implements ITableColumnF
             }
 
             b.appendHtmlConstant("</a>");
-            return b.toSafeHtml();
         }
 
+        return b.toSafeHtml();
     }
 
     @Override
