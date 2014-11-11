@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -38,7 +39,7 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
-    interface Presenter extends LeaseViewerViewBase.Presenter {
+    public interface LeaseViewerPresenter extends LeaseViewerViewBase.Presenter {
 
         void sendMail(List<LeaseTermParticipant<?>> users, EmailTemplateType emailType);
 
@@ -85,11 +86,14 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
         void legalState();
 
         List<LeaseParticipant<?>> getAllLeaseParticipants();
+
+        void confirm(Collection<BillDataDTO> selectedItems);
+
     }
 
     ILister<DepositLifecycleDTO> getDepositListerView();
 
-    ILister<BillDataDTO> getBillListerView();
+    BillLister getBillLister();
 
     ILister<LeaseAdjustment> getLeaseAdjustmentListerView();
 

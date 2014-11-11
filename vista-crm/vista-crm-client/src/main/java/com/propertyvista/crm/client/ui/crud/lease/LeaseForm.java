@@ -49,7 +49,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         adjustmentsTab = addTab(getParentView().getLeaseAdjustmentListerView().asWidget(), i18n.tr("Adjustments"),
                 DataModelPermission.permissionRead(LeaseAdjustment.class));
         chargesTab = addTab(createChargesTab(), i18n.tr("Charges"));
-        billsTab = addTab(getParentView().getBillListerView().asWidget(), i18n.tr("Bills"), DataModelPermission.permissionRead(BillDataDTO.class));
+        billsTab = addTab(getParentView().getBillLister().asWidget(), i18n.tr("Bills"), DataModelPermission.permissionRead(BillDataDTO.class));
         paymentsTab = addTab(getParentView().getPaymentListerView().asWidget(), i18n.tr("Receipts"), DataModelPermission.permissionRead(PaymentRecordDTO.class));
         financialTab = addTab(createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"),
                 DataModelPermission.permissionRead(TransactionHistoryDTO.class));

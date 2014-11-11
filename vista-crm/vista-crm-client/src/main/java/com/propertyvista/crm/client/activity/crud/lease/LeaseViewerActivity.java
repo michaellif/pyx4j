@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.activity.crud.lease;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,7 +27,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
@@ -42,7 +42,6 @@ import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.activity.crud.billing.bill.BillListerController;
 import com.propertyvista.crm.client.activity.crud.lease.agreement.LeaseAgreementDocumentSigningController;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivityBase;
 import com.propertyvista.crm.client.activity.crud.lease.legal.LeaseLegalStateController;
@@ -51,6 +50,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
+import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseTermBlankAgreementDocumentDownloadService;
@@ -75,13 +75,11 @@ import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
-public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> implements LeaseViewerView.Presenter {
+public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> implements LeaseViewerView.LeaseViewerPresenter {
 
     private static final I18n i18n = I18n.get(LeaseViewerActivity.class);
 
     private final ILister.Presenter<DepositLifecycleDTO> depositLister;
-
-    private final ILister.Presenter<BillDataDTO> billLister;
 
     private final ILister.Presenter<LeaseAdjustment> leaseAdjustmentLister;
 
@@ -94,8 +92,6 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
         depositLister = new SecureListerController<DepositLifecycleDTO>(DepositLifecycleDTO.class, ((LeaseViewerView) getView()).getDepositListerView(),
                 GWT.<DepositLifecycleCrudService> create(DepositLifecycleCrudService.class));
-
-        billLister = new BillListerController(((LeaseViewerView) getView()).getBillListerView());
 
         leaseAdjustmentLister = new SecureListerController<LeaseAdjustment>(LeaseAdjustment.class,
                 ((LeaseViewerView) getView()).getLeaseAdjustmentListerView(), GWT.<LeaseAdjustmentCrudService> create(LeaseAdjustmentCrudService.class)) {
@@ -121,7 +117,6 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
         isFormerLease = result.status().getValue().isFormer();
 
         populateDeposits(result);
-        populateBills(result);
         populateLeaseAdjustments(result);
         populateMaintenance(result);
     }
@@ -129,13 +124,6 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     protected void populateDeposits(Lease result) {
         depositLister.setParent(result.billingAccount().getPrimaryKey());
         depositLister.populate();
-    }
-
-    protected void populateBills(Lease result) {
-        EntityFiltersBuilder<BillDataDTO> filters = EntityFiltersBuilder.create(BillDataDTO.class);
-        filters.eq(filters.proto().bill().billingAccount().id(), result.billingAccount().getPrimaryKey());
-        billLister.setPreDefinedFilters(filters.getFilters());
-        billLister.populate();
     }
 
     protected void populateLeaseAdjustments(Lease result) {
@@ -161,7 +149,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
                     public void onDeferredSuccess(DeferredProcessProgressResponse result) {
                         // Navigate to created bill
                         super.onDeferredSuccess(result);
-                        populateBills(currentValue);
+                        populate();
                     }
                 };
                 d.show();
@@ -396,5 +384,15 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
             }
         }
         return allLeaseParticipants;
+    }
+
+    @Override
+    public void confirm(Collection<BillDataDTO> bills) {
+        (GWT.<BillCrudService> create(BillCrudService.class)).confirm(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                refresh();
+            }
+        }, new Vector<BillDataDTO>(bills));
     }
 }

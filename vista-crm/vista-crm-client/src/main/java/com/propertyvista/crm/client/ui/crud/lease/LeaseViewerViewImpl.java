@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.essentials.client.ConfirmCommand;
@@ -62,7 +63,6 @@ import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectionDialog;
 import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentLister;
-import com.propertyvista.crm.client.ui.crud.billing.bill.BillLister;
 import com.propertyvista.crm.client.ui.crud.communication.MessageReportDialog;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
@@ -105,7 +105,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final ILister<DepositLifecycleDTO> depositLister;
 
-    private final ILister<BillDataDTO> billLister;
+    private final BillLister billLister;
 
     private final ILister<LeaseAdjustment> adjustmentLister;
 
@@ -163,7 +163,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     public LeaseViewerViewImpl() {
         depositLister = new DepositLifecycleLister();
-        billLister = new BillLister();
+        billLister = new BillLister(this);
         adjustmentLister = new LeaseAdjustmentLister();
         maintenanceLister = new MaintenanceRequestLister();
 
@@ -177,7 +177,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         leaseAgreementDocumentMenu.addItem(new MenuItem(i18n.tr("Signing Progress/Upload..."), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).signingProgressOrUploadAgreement();
+                ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).signingProgressOrUploadAgreement();
             }
         }));
 
@@ -186,7 +186,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         leaseAgreementDocumentMenu.addItem(new MenuItem(i18n.tr("Download for Signing"), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).downloadAgreementForSigning();
+                ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).downloadAgreementForSigning();
             }
         }));
 
@@ -212,14 +212,14 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         addView(viewApplication = new SecureMenuItem(i18n.tr("View Application"), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).viewApplication();
+                ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).viewApplication();
             }
         }, DataModelPermission.permissionRead(LeaseApplicationDTO.class)));
 
         addView(deletedPapsAction = new SecureMenuItem(i18n.tr("View Deleted AutoPays"), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).viewDeletedPaps(null);
+                ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).viewDeletedPaps(null);
             }
         }, DataModelPermission.permissionRead(AutoPayHistoryDTO.class)));
 
@@ -236,7 +236,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         runBillAction = new SecureMenuItem(i18n.tr("Run Bill"), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).startBilling();
+                ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).startBilling();
             }
         }, new ActionPermission(LeaseRunBill.class));
         if (!VistaFeatures.instance().yardiIntegration()) {
@@ -246,7 +246,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         addAction(maintenanceAction = new SecureMenuItem(i18n.tr("Create Maintenance Request"), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).createMaintenanceRequest();
+                ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).createMaintenanceRequest();
             }
         }, DataModelPermission.permissionCreate(MaintenanceRequestDTO.class)));
         maintenanceAction.ensureDebugId(VistaCrmDebugId.Maintenance.ActionCreateRequest.debugId());
@@ -254,7 +254,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         addAction(legalStateAction = new SecureMenuItem(i18n.tr("Manage Legal State"), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).legalState();
+                ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).legalState();
             }
         }, DataModelPermission.permissionRead(LeaseLegalStateDTO.class)));
 
@@ -321,7 +321,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         yardiImportAction = new SecureMenuItem(i18n.tr("Update From Yardi"), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).updateFromYardi();
+                ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).updateFromYardi();
             }
         }, new ActionPermission(UpdateFromYardi.class));
 
@@ -332,7 +332,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         activateAction = new SecureMenuItem(i18n.tr("Activate"), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).activate();
+                ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).activate();
             }
         }, new ActionPermission(LeaseStateManagement.class));
         if (!VistaFeatures.instance().yardiIntegration()) {
@@ -344,7 +344,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                         + i18n.tr("Are you sure you would like to continue?"), new Command() {
                     @Override
                     public void execute() {
-                        ((LeaseViewerView.Presenter) getPresenter()).moveOut();
+                        ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).moveOut();
                     }
                 }), new ActionPermission(LeaseStateManagement.class));
         if (!VistaFeatures.instance().yardiIntegration()) {
@@ -414,7 +414,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         showCommunicationAction = new MenuItem(i18n.tr("Communication Report"), new Command() {
             @Override
             public void execute() {
-                (new MessageReportDialog(LeaseViewerViewImpl.this, ((LeaseViewerView.Presenter) getPresenter()).getAllLeaseParticipants())).show();
+                (new MessageReportDialog(LeaseViewerViewImpl.this, ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).getAllLeaseParticipants())).show();
             }
         });
         addView(showCommunicationAction);
@@ -439,13 +439,13 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     }
 
     private void sendMailActionExecuter() {
-        ((LeaseViewerView.Presenter) getPresenter()).retrieveParticipants(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
+        ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).retrieveParticipants(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
             @Override
             public void onSuccess(List<LeaseTermParticipant<?>> result) {
                 new SendMailBox(result) {
                     @Override
                     public boolean onClickOk() {
-                        ((LeaseViewerView.Presenter) getPresenter()).sendMail(getSelectedItems(), getEmailType());
+                        ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).sendMail(getSelectedItems(), getEmailType());
                         return true;
                     }
                 }.show();
@@ -460,8 +460,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 if (!isValid()) {
                     return false;
                 }
-                ((LeaseViewerView.Presenter) getPresenter()).createCompletionEvent(CompletionType.Notice, getValue().moveOutSubmissionDate().getValue(),
-                        getValue().expectedMoveOut().getValue(), null);
+                ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).createCompletionEvent(CompletionType.Notice, getValue().moveOutSubmissionDate()
+                        .getValue(), getValue().expectedMoveOut().getValue(), null);
                 return true;
             }
         }.show();
@@ -474,8 +474,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 if (!isValid()) {
                     return false;
                 }
-                ((LeaseViewerView.Presenter) getPresenter()).createCompletionEvent(CompletionType.Eviction, getValue().moveOutSubmissionDate().getValue(),
-                        getValue().expectedMoveOut().getValue(), null);
+                ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).createCompletionEvent(CompletionType.Eviction, getValue().moveOutSubmissionDate()
+                        .getValue(), getValue().expectedMoveOut().getValue(), null);
                 return true;
             }
         }.show();
@@ -488,8 +488,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 if (!isValid()) {
                     return false;
                 }
-                ((LeaseViewerView.Presenter) getPresenter()).createCompletionEvent(CompletionType.Termination, getValue().moveOutSubmissionDate().getValue(),
-                        getValue().expectedMoveOut().getValue(), getValue().terminationLeaseTo().getValue());
+                ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).createCompletionEvent(CompletionType.Termination, getValue().moveOutSubmissionDate()
+                        .getValue(), getValue().expectedMoveOut().getValue(), getValue().terminationLeaseTo().getValue());
                 return true;
             }
         }.show();
@@ -503,7 +503,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                     MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
                     return false;
                 }
-                ((LeaseViewerView.Presenter) getPresenter()).closeLease(getReason());
+                ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).closeLease(getReason());
                 return true;
             }
         }.show();
@@ -517,7 +517,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                     MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
                     return false;
                 }
-                ((LeaseViewerView.Presenter) getPresenter()).cancelLease(getReason());
+                ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).cancelLease(getReason());
                 return true;
             }
         }.show();
@@ -527,7 +527,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         new SelectEnumDialog<LeaseTerm.Type>(i18n.tr("Select Term Type"), LeaseTerm.Type.renew()) {
             @Override
             public boolean onClickOk() {
-                ((LeaseViewerView.Presenter) getPresenter()).createOffer(getSelectedType());
+                ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).createOffer(getSelectedType());
                 return true;
             }
         }.show();
@@ -543,7 +543,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             @Override
             public boolean onClickOk() {
                 if (!getSelectedItem().isNull()) {
-                    ((LeaseViewerView.Presenter) getPresenter()).viewTerm(getSelectedItem());
+                    ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).viewTerm(getSelectedItem());
                 }
                 return true;
             }
@@ -565,7 +565,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                     return false;
                 }
 
-                ((LeaseViewerView.Presenter) getPresenter()).simpleLeaseRenew(newDate);
+                ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).simpleLeaseRenew(newDate);
                 return true;
             }
         }.show();
@@ -600,6 +600,11 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     @Override
     public void populate(LeaseDTO value) {
         super.populate(value);
+
+        EntityFiltersBuilder<BillDataDTO> filters = EntityFiltersBuilder.create(BillDataDTO.class);
+        filters.eq(filters.proto().bill().billingAccount().id(), value.billingAccount().getPrimaryKey());
+        billLister.getDataSource().setPreDefinedFilters(filters.getFilters());
+        billLister.populate();
 
         viewFutureTerm.setVisible(!value.nextTerm().isNull());
         viewHistoricTerms.setVisible(value.historyPresent().getValue(false));
@@ -652,7 +657,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     }
 
     @Override
-    public ILister<BillDataDTO> getBillListerView() {
+    public BillLister getBillLister() {
         return billLister;
     }
 
@@ -851,7 +856,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     }
 
     public void cancelCmpletion(final Lease.CompletionType completionType) {
-        ((LeaseViewerView.Presenter) getPresenter()).isCancelCompletionEventAvailable(new DefaultAsyncCallback<CancelMoveOutConstraintsDTO>() {
+        ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).isCancelCompletionEventAvailable(new DefaultAsyncCallback<CancelMoveOutConstraintsDTO>() {
             @Override
             public void onSuccess(final CancelMoveOutConstraintsDTO result) {
                 if (result.reason().isNull()) {
@@ -862,7 +867,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                                 MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
                                 return false;
                             }
-                            ((LeaseViewerView.Presenter) getPresenter()).cancelCompletionEvent(getReason());
+                            ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).cancelCompletionEvent(getReason());
                             return true;
                         }
                     }.show();
@@ -919,7 +924,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             @Override
             public boolean onClickOk() {
                 if (super.onClickOk()) {
-                    ((LeaseViewerView.Presenter) getPresenter()).issueN4(getValue());
+                    ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).issueN4(getValue());
                     return true;
                 } else {
                     return false;
