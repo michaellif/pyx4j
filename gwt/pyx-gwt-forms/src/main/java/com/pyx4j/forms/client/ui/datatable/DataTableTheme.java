@@ -112,6 +112,7 @@ public class DataTableTheme extends Theme {
         style = new Style(".", StyleName.DataTableRow, " td");
         style.addProperty("border-bottom", "1px solid");
         style.addProperty("border-color", ThemeColor.foreground, 0.1);
+        style.addProperty("padding", "0 2px");
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableRow, "-", StyleDependent.even);
