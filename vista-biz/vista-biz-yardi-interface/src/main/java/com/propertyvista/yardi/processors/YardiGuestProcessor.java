@@ -320,7 +320,7 @@ public class YardiGuestProcessor {
         return quotes;
     }
 
-    public LeaseApplication getLeaseApplication(Lease lease, String tId, List<Deposit> depositCharges) {
+    public LeaseApplication getLeaseApplication(Lease lease, List<Deposit> depositCharges) {
         Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
 
         LeaseApplication app = new LeaseApplication();
@@ -329,8 +329,6 @@ public class YardiGuestProcessor {
         Tenant tenant = new Tenant();
         tenant.setResidentType(ResidentType.INDIVIDUAL);
         com.yardi.entity.leaseapp30.Identification id = new com.yardi.entity.leaseapp30.Identification();
-        id.setIDType("tenant"); // TenantID
-        id.setIDValue(tId);
         id.setIDType("thirdparty");
         id.setIDValue(lease.getPrimaryKey().toString());
         tenant.getIdentification().add(id);

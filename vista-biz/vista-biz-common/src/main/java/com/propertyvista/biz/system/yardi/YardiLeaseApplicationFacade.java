@@ -40,9 +40,8 @@ public interface YardiLeaseApplicationFacade {
 
     /**
      * Create Future Lease; set tId in Lease.leaseId
-     * Rely on External UnitOfWork
      */
-    Lease approveApplication(Lease leaseId) throws YardiServiceException;
+    void approveApplication(Lease leaseId) throws YardiServiceException;
 
     void cancelApplication(Lease leaseId) throws YardiServiceException;
 

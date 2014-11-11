@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -28,7 +28,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.system.yardi.YardiARFacade;
 import com.propertyvista.biz.system.yardi.YardiLeaseApplicationFacade;
-import com.propertyvista.biz.system.yardi.YardiProspectNotEditableException;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.biz.tenant.lease.LeaseAbstractManager;
 import com.propertyvista.domain.company.Employee;
@@ -81,20 +80,15 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
 
     @Override
     public Lease approve(Lease leaseId, Employee decidedBy, String decisionReason) {
-        // create application if not done before
+        // create application if not done before; can be called multiple times
         try {
-            try {
-                // create main applicant (prospect)
-                ServerSideFactory.create(YardiLeaseApplicationFacade.class).createApplication(leaseId);
-                // Send Participants to yardi after activation validation if we have not done so in previous attempt
-                ServerSideFactory.create(YardiLeaseApplicationFacade.class).addLeaseParticipants(leaseId);
-            } catch (YardiProspectNotEditableException ignore) {
-                // Can happen if previous approval fails after LEASE_SIGN.
-                // Ignore and try to approve again, as it may haven't been completed before.
-            }
-
-            // create Yardi Future Lease with products and deposits (reenterable)
+            // create main applicant (prospect)
+            ServerSideFactory.create(YardiLeaseApplicationFacade.class).createApplication(leaseId);
+            // Send Participants to yardi after activation validation if we have not done so in previous attempt
+            ServerSideFactory.create(YardiLeaseApplicationFacade.class).addLeaseParticipants(leaseId);
+            // create Yardi Future Lease with products and deposits
             ServerSideFactory.create(YardiLeaseApplicationFacade.class).approveApplication(leaseId);
+
             Lease lease = super.approve(leaseId, decidedBy, decisionReason);
 
             // Unit occupancy state managed by purely by Import procedure.
@@ -106,14 +100,6 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
 
             return lease;
         } catch (YardiServiceException e) {
-            // store decision info in case of:
-            Lease lease = load(leaseId, false);
-            lease.leaseApplication().approval().decidedBy().set(decidedBy);
-            lease.leaseApplication().approval().decisionReason().setValue(decisionReason);
-            lease.leaseApplication().approval().decisionDate().setValue(SystemDateManager.getLogicalDate());
-            Persistence.service().merge(lease);
-            Persistence.service().merge(createLeaseNote(lease, "Approve Application", decisionReason, decidedBy));
-
             throw new UserRuntimeException(i18n.tr("Yardi Application approval failed") + "\n" + e.getMessage(), e);
         }
     }

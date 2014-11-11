@@ -14,20 +14,18 @@
 package com.propertyvista.biz.system.yardi;
 
 import java.rmi.RemoteException;
+import java.util.Arrays;
 import java.util.Map;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.yardi.entity.guestcard40.EventTypes;
-
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.commons.Validate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
-import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
@@ -41,7 +39,6 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.yardi.services.YardiGuestManagementService;
-import com.propertyvista.yardi.services.YardiGuestManagementService.SignLeaseResults;
 
 public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl implements YardiLeaseApplicationFacade {
 
@@ -50,6 +47,7 @@ public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl imp
     @Override
     public void createApplication(final Lease leaseId) throws YardiServiceException {
         final Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+        final PmcYardiCredential yc = getPmcYardiCredential(lease);
 
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
         validateApplicationAcceptance(lease.unit().building());
@@ -59,16 +57,14 @@ public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl imp
             @Override
             public Void execute() throws YardiServiceException {
                 try {
-                    PmcYardiCredential yc = getPmcYardiCredential(lease);
-                    final Key yardiInterfaceId = yc.getPrimaryKey();
                     String pID = YardiGuestManagementService.getInstance().createNewProspect(yc, lease);
                     Validate.notNull(pID, "ApplicationId is null");
                     // save primary tenant pID as yardiApplicationId
-                    // We should not copy pID to tenant.yardiApplicantId() since this is indicator if we sent applicants to yardi or not
+                    // pID will be saved in tenant.yardiApplicantId() on the next step after we sent all applicants to yardi
                     lease.leaseApplication().yardiApplicationId().setValue(pID);
-                    lease.integrationSystemId().setValue(yardiInterfaceId);
+                    lease.integrationSystemId().setValue(yc.getPrimaryKey());
                     Persistence.service().persist(lease);
-
+                    log.info("prospect ID assigned {} for application {}", pID, lease.leaseApplication().yardiApplicationId().getValue());
                     return null;
                 } catch (RemoteException e) {
                     throw new UserRuntimeException("Yardi communication error: " + e.getMessage(), e);
@@ -142,6 +138,7 @@ public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl imp
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
         validateApplicationAcceptance(lease.unit().building());
 
+        // post lease participants, save participant ids
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
 
             @Override
@@ -149,7 +146,7 @@ public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl imp
                 try {
                     Map<Key, String> participants = YardiGuestManagementService.getInstance().addLeaseParticipants(getPmcYardiCredential(lease), lease);
 
-                    // save lease participants ids
+                    // save ids
                     for (LeaseTermParticipant<?> participant : CollectionUtils.union(lease.currentTerm().version().tenants(), lease.currentTerm().version()
                             .guarantors())) {
                         Persistence.ensureRetrieve(participant.leaseParticipant(), AttachLevel.Attached);
@@ -159,6 +156,8 @@ public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl imp
                         lp.yardiApplicantId().setValue(yardiApplicantId);
                         Persistence.service().persist(lp);
                     }
+                    log.info("lease participant IDs assigned {} for application {}", Arrays.toString(participants.values().toArray()), lease.leaseApplication()
+                            .yardiApplicationId().getValue());
                     return null;
                 } catch (RemoteException e) {
                     throw new UserRuntimeException("Yardi communication error: " + e.getMessage(), e);
@@ -168,53 +167,56 @@ public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl imp
         });
     }
 
-    private Lease saveLeaseId(final Lease leaseId, SignLeaseResults signLeaseResults) {
-        final Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, false);
-        lease.leaseId().setValue(signLeaseResults.getLeaseId());
-        Persistence.service().persist(lease);
-
-        log.info("leaseId assigned {} for {}", lease.leaseId(), lease.leaseApplication().yardiApplicationId());
-
-        Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.Attached);
-        for (LeaseTermParticipant<?> termParticipant : CollectionUtils.union(lease.currentTerm().version().tenants(), lease.currentTerm().version()
-                .guarantors())) {
-            Persistence.ensureRetrieve(termParticipant.leaseParticipant(), AttachLevel.Attached);
-            LeaseParticipant<?> participant = termParticipant.leaseParticipant();
-            // application must be updated (yardi sync) before approval
-            String participantId = signLeaseResults.getParticipants().get(participant.getPrimaryKey());
-            Validate.notNull(participantId, "ParticipantId  is null");
-            participant.participantId().setValue(participantId);
-            Persistence.service().persist(participant);
-            log.info("participantId assigned {} for {} in leaseId {}", participant.participantId(), participant.yardiApplicantId(), lease.leaseId());
-        }
-        return lease;
-    }
-
     @Override
-    public Lease approveApplication(final Lease leaseId) throws YardiServiceException {
+    public void approveApplication(final Lease leaseId) throws YardiServiceException {
         final Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, false);
 
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
         validateApplicationAcceptance(lease.unit().building());
 
-        try {
-            final SignLeaseResults signLeaseResults = YardiGuestManagementService.getInstance().signLease(getPmcYardiCredential(lease), lease);
+        // sign lease, save lease id
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
 
-            // Save even if external transaction failed
-            UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
-
-                @Override
-                public Void execute() throws RuntimeException {
-                    saveLeaseId(lease, signLeaseResults);
+            @Override
+            public Void execute() throws YardiServiceException {
+                try {
+                    lease.leaseId().setValue(YardiGuestManagementService.getInstance().signLease(getPmcYardiCredential(lease), lease));
+                    Persistence.service().persist(lease);
+                    log.info("lease ID assigned {} for application {}", lease.leaseId().getValue(), lease.leaseApplication().yardiApplicationId().getValue());
                     return null;
+                } catch (RemoteException e) {
+                    throw new UserRuntimeException("Yardi communication error: " + e.getMessage(), e);
                 }
-            });
+            }
+        });
 
-            return saveLeaseId(lease, signLeaseResults);
-        } catch (RemoteException e) {
-            throw new UserRuntimeException("Yardi communication error: " + e.getMessage(), e);
-        }
+        // save lease participant ids
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
+
+            @Override
+            public Void execute() throws YardiServiceException {
+                try {
+                    final Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, false);
+                    Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
+                    Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.Attached);
+
+                    Map<Key, String> participantIds = YardiGuestManagementService.getInstance().retrieveLeaseParticipants(getPmcYardiCredential(lease), lease);
+                    for (LeaseTermParticipant<?> termParticipant : CollectionUtils.union(lease.currentTerm().version().tenants(), lease.currentTerm().version()
+                            .guarantors())) {
+                        Persistence.ensureRetrieve(termParticipant.leaseParticipant(), AttachLevel.Attached);
+                        LeaseParticipant<?> participant = termParticipant.leaseParticipant();
+                        String participantId = participantIds.get(participant.getPrimaryKey());
+                        Validate.notNull(participantId, "ParticipantId  is null");
+                        participant.participantId().setValue(participantId);
+                        Persistence.service().persist(participant);
+                        log.info("participantId assigned {} for {} in leaseId {}", participant.participantId(), participant.yardiApplicantId(), lease.leaseId());
+                    }
+                    return null;
+                } catch (RemoteException e) {
+                    throw new UserRuntimeException("Yardi communication error: " + e.getMessage(), e);
+                }
+            }
+        });
     }
 
     @Override
@@ -223,14 +225,7 @@ public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl imp
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
         validateApplicationAcceptance(lease.unit().building());
 
-        try {
-            boolean leaseSigned = YardiGuestManagementService.getInstance().getWorkflowEvents(getPmcYardiCredential(lease), lease)
-                    .contains(EventTypes.LEASE_SIGN);
-            log.info("Lease application {} is {} editable", lease.leaseApplication().yardiApplicationId(), leaseSigned ? "not" : "still");
-            return leaseSigned;
-        } catch (RemoteException e) {
-            throw new UserRuntimeException("Yardi communication error: " + e.getMessage(), e);
-        }
+        return YardiGuestManagementService.getInstance().isLeaseSigned(getPmcYardiCredential(lease), lease);
     }
 
     @Override

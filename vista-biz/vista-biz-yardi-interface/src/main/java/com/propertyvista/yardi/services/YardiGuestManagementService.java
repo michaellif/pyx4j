@@ -39,7 +39,6 @@ import com.yardi.entity.guestcard40.LeadManagement;
 import com.yardi.entity.guestcard40.MarketingAgent;
 import com.yardi.entity.guestcard40.MarketingSource;
 import com.yardi.entity.guestcard40.MarketingSources;
-import com.yardi.entity.guestcard40.NameType;
 import com.yardi.entity.guestcard40.PropertyMarketingSources;
 import com.yardi.entity.guestcard40.Prospect;
 import com.yardi.entity.guestcard40.Prospects;
@@ -48,10 +47,6 @@ import com.yardi.entity.guestcard40.RentableItemType;
 import com.yardi.entity.guestcard40.RentableItems;
 import com.yardi.entity.leaseapp30.LeaseApplication;
 import com.yardi.entity.mits.Information;
-import com.yardi.entity.mits.Name;
-import com.yardi.entity.mits.YardiCustomer;
-import com.yardi.entity.resident.Property;
-import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
@@ -61,6 +56,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.system.yardi.YardiProspectNotEditableException;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.financial.offering.YardiChargeCode;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -69,10 +65,8 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.yardi.YardiConstants;
-import com.propertyvista.yardi.mappers.TenantMapper;
 import com.propertyvista.yardi.processors.YardiGuestProcessor;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
-import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 public class YardiGuestManagementService extends YardiAbstractService {
@@ -87,12 +81,6 @@ public class YardiGuestManagementService extends YardiAbstractService {
         private IdentityType(String id) {
             this.ID = id;
         }
-    }
-
-    public interface SignLeaseResults {
-        String getLeaseId();
-
-        Map<Key, String> getParticipants();
     }
 
     private static class SingletonHolder {
@@ -110,9 +98,12 @@ public class YardiGuestManagementService extends YardiAbstractService {
 
     public static final String ILS_SOURCE = "ILS";
 
+    /** Create new Guest and return guest ID. This method is safe to call multiple times. */
     public String createNewProspect(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
         Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
+
+        String guestId = lease.getPrimaryKey().toString();
 
         YardiGuestProcessor guestProcessor = new YardiGuestProcessor(ILS_AGENT, ILS_SOURCE);
         // create guest, preferred unit, and moveIn date
@@ -122,15 +113,20 @@ public class YardiGuestManagementService extends YardiAbstractService {
                 .addLeaseTerm(guest, lease.leaseFrom().getValue(), lease.leaseTo().getValue()) //
                 .addMoveInDate(guest, lease.expectedMoveIn().getValue()) //
                 .setEvent(guest, guestProcessor.getNewEvent(EventTypes.OTHER, true));
-        submitGuest(yc, guest);
+        try {
+            submitGuest(yc, guest);
+            log.debug("Imported New Prospect: {}", guestId);
+        } catch (YardiProspectNotEditableException e) {
+            log.warn("Could not import New Prospect: " + guestId, e);
+            // ignore since the guest may have been already imported by previous attempt; see if we can retrieve it
+        }
 
-        // do tenant search to retrieve lease id
-        String guestId = lease.getPrimaryKey().toString();
+        // do tenant search to retrieve prospect id
         String prospectId = getTenantId(yc, lease.unit().building().propertyCode().getValue(), guestId, IdentityType.Prospect);
         if (prospectId == null) {
-            throw new YardiServiceException("Prospect not found: " + guestId);
+            throw new YardiServiceException("Prospect not created: " + guestId);
         }
-        log.info("Created Prospect tenant with rentable items: " + prospectId);
+        log.info("Created New Prospect: {}", prospectId);
 
         return prospectId;
     }
@@ -242,25 +238,35 @@ public class YardiGuestManagementService extends YardiAbstractService {
         return true;
     }
 
+    /** Add lease participants to an existing Guest and return participant IDs. This method is safe to call multiple times. */
     public Map<Key, String> addLeaseParticipants(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
         Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
 
+        String guestId = lease.getPrimaryKey().toString();
+
         // create guest with co-tenants and guarantors
         YardiGuestProcessor guestProcessor = new YardiGuestProcessor(ILS_AGENT, ILS_SOURCE);
         Prospect guest = guestProcessor.getAllLeaseParticipants(lease);
-        submitGuest(yc, guest);
-        log.info("Added Lease Participants");
+        // This should update the guest and will not produce any errors if done multiple times
+        try {
+            submitGuest(yc, guest);
+            log.debug("Added Lease Participants for guest: {}", guestId);
+        } catch (YardiProspectNotEditableException e) {
+            log.warn("Could not Added Lease Participants for guest: " + guestId, e);
+            // ignore since the participants may have been already imported by previous attempt; see if we can retrieve it
+        }
 
-        // do guest search to retrieve lease id
-        return getParticipants(yc, lease, null);
+        // do guest search to retrieve lease participants
+        Map<Key, String> participants = retrieveLeaseParticipants(yc, lease);
+        log.info("Added Lease Participants: {}", Arrays.toString(participants.values().toArray()));
+
+        return participants;
     }
 
-    public SignLeaseResults signLease(final PmcYardiCredential yc, final Lease lease) throws YardiServiceException, RemoteException {
-        String prospectId = lease.leaseApplication().yardiApplicationId().getValue("");
-        if (!prospectId.startsWith("p")) {
-            throw new UserRuntimeException("Invalid Lease Application id: " + lease.leaseApplication().yardiApplicationId().getValue());
-        }
+    /** Run Lease Sign flow and return future lease id. This method is safe to call multiple times. */
+    public String signLease(final PmcYardiCredential yc, final Lease lease) throws YardiServiceException, RemoteException {
+        ensureProspectId(lease);
 
         YardiGuestProcessor guestProcessor = new YardiGuestProcessor(ILS_AGENT, ILS_SOURCE);
 
@@ -290,34 +296,96 @@ public class YardiGuestManagementService extends YardiAbstractService {
             guestProcessor.addUnit(guest, getUnitInfo(lease.unit()));
             // create/update future lease
             for (EventTypes type : Arrays.asList(EventTypes.APPLICATION, EventTypes.APPROVE, EventTypes.LEASE_SIGN)) {
-                if (currentEvents.contains(type)) {
-                    continue;
-                }
-                EventType event = guestProcessor.getNewEvent(type, false);
-                if (type == EventTypes.LEASE_SIGN) {
-                    event.setQuotes(guestProcessor.getRentQuote(getRentPrice(lease)));
-                }
-                guestProcessor.setEvent(guest, event);
+                if (!currentEvents.contains(type)) {
+                    EventType event = guestProcessor.getNewEvent(type, false);
+                    if (type == EventTypes.LEASE_SIGN) {
+                        event.setQuotes(guestProcessor.getRentQuote(getRentPrice(lease)));
+                    }
+                    guestProcessor.setEvent(guest, event);
 
-                // Ignore errors other than for LEASE_SIGN event
-                try {
                     submitGuest(yc, guest);
                     log.info("Event Submitted: {}", type.name());
-                } catch (YardiServiceException e) {
-                    log.info("Event Failed: {}", type.name());
-                    if (type == EventTypes.LEASE_SIGN) {
-                        throw e;
-                    }
+                }
+
+                if (type == EventTypes.APPLICATION) {
+                    // can post app fees now
+                    importApplicationFees(yc, lease);
                 }
             }
         }
         // do tenant search to retrieve lease id
-        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
         final String tenantId = getTenantId(yc, propertyCode, guestId, IdentityType.Tenant);
         if (tenantId == null) {
             throw new YardiServiceException("Tenant not found: " + guestId);
         }
         log.info("Created Lease: {}", tenantId);
+        return tenantId;
+    }
+
+    public Map<Key, String> retrieveLeaseParticipants(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
+
+        Key tenantId = lease.getPrimaryKey();
+        LeadManagement guestActivity = YardiStubFactory.create(YardiILSGuestCardStub.class).findGuest(yc, lease.unit().building().propertyCode().getValue(),
+                tenantId.toString());
+        Map<Key, String> participants = new HashMap<Key, String>();
+        Prospect p = guestActivity.getProspects().getProspect().get(0);
+        boolean tenantFound = false;
+        for (Customer c : p.getCustomers().getCustomer()) {
+            String tpId = null, pId = null, tId = null;
+            for (Identification id : c.getIdentification()) {
+                if (IdentityType.ThirdParty.ID.equals(id.getIDType())) {
+                    tpId = id.getIDValue();
+                } else if (IdentityType.Prospect.ID.equals(id.getIDType())) {
+                    pId = id.getIDValue();
+                } else if (IdentityType.Tenant.ID.equals(id.getIDType())) {
+                    tId = id.getIDValue();
+                }
+            }
+            if (tpId != null && pId != null) {
+                Key tpKey = new Key(tpId);
+                if (tpKey.equals(tenantId)) {
+                    participants.put(lease._applicant().getPrimaryKey(), StringUtils.isEmpty(tId) ? pId : tId);
+                    tenantFound = true;
+                } else {
+                    participants.put(tpKey, pId);
+                }
+            }
+        }
+
+        // sanity checks
+        if (!tenantFound) {
+            throw new YardiServiceException(SimpleMessageFormat.format("Main applicant is missing: {0}", tenantId));
+        }
+
+        Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.IdOnly);
+        Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.IdOnly);
+        int coApplicants = lease.currentTerm().version().tenants().size() + lease.currentTerm().version().guarantors().size();
+        if (coApplicants != participants.size()) {
+            String msg = SimpleMessageFormat.format("Missing or invalid participants: found {0} expecting {1}", participants.size(), coApplicants);
+            throw new YardiServiceException(msg);
+        }
+        return participants;
+    }
+
+    public boolean isLeaseSigned(final PmcYardiCredential yc, final Lease lease) throws YardiServiceException {
+        try {
+            boolean leaseSigned = getWorkflowEvents(yc, lease).contains(EventTypes.LEASE_SIGN);
+            log.info("Lease application {} is {} editable", lease.leaseApplication().yardiApplicationId(), leaseSigned ? "not" : "still");
+            return leaseSigned;
+        } catch (RemoteException e) {
+            throw new UserRuntimeException("Yardi communication error: " + e.getMessage(), e);
+        }
+    }
+
+    // ------------ Internals -----------
+    private void importApplicationFees(final PmcYardiCredential yc, final Lease lease) throws YardiServiceException, RemoteException {
+        String prospectId = ensureProspectId(lease);
+
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
+        String propertyCode = lease.unit().building().propertyCode().getValue();
+
+        YardiGuestProcessor guestProcessor = new YardiGuestProcessor(ILS_AGENT, ILS_SOURCE);
 
         boolean useMasterDeposit = lease.currentTerm().version().leaseProducts().serviceItem().item().yardiDepositLMR().isNull();
         List<Deposit> deposits = getLeaseDeposits(lease);
@@ -327,35 +395,17 @@ public class YardiGuestManagementService extends YardiAbstractService {
             LeaseApplication yardiApp = YardiStubFactory.create(YardiILSGuestCardStub.class).getApplication(yc, propertyCode, prospectId);
             if (yardiApp == null || guestProcessor.getApplicationCharges(yardiApp).isEmpty()) {
                 // do ImportApplication to push Deposits back to Yardi as App Fees
-                YardiStubFactory.create(YardiILSGuestCardStub.class).importApplication(yc, guestProcessor.getLeaseApplication(lease, tenantId, deposits));
+                YardiStubFactory.create(YardiILSGuestCardStub.class).importApplication(yc, guestProcessor.getLeaseApplication(lease, deposits));
                 log.info("Application Fees Submitted: {}", deposits.size());
             } else {
                 // TODO - what's the proper handling of existing application with possible app charges?
                 // Options: do nothing, add Master Deposit charges, or merge Master Deposit charges...
-                log.info("Found Application with fees - ImportApplication skipped for prospect: {}", tenantId);
+                log.info("Found Application with fees - ImportApplication skipped for prospect: {}", prospectId);
             }
+        } else {
+            log.info("No LMR deposit found to submit for lease: {}", lease.getPrimaryKey().toString());
         }
 
-        // call resident transactions to retrieve name-to-residentId mapping
-        final Map<String, String> residentIds = getLeaseResidentIds(yc, lease.unit().building().propertyCode().getValue(), tenantId);
-
-        return new SignLeaseResults() {
-
-            final String leaseId = tenantId;
-
-            final Map<Key, String> participants = YardiGuestManagementService.this.getParticipants(yc, lease, residentIds);
-
-            @Override
-            public String getLeaseId() {
-                return leaseId;
-            }
-
-            @Override
-            public Map<Key, String> getParticipants() {
-                return participants;
-            }
-
-        };
     }
 
     public RentableItems getRentableItems(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
@@ -409,6 +459,14 @@ public class YardiGuestManagementService extends YardiAbstractService {
         String guestId = lease.getPrimaryKey().toString();
 
         return getEvents(yc, propertyCode, guestId);
+    }
+
+    private String ensureProspectId(Lease lease) {
+        String prospectId = lease.leaseApplication().yardiApplicationId().getValue("");
+        if (!prospectId.startsWith("p")) {
+            throw new UserRuntimeException("Invalid Lease Application id: " + lease.leaseApplication().yardiApplicationId().getValue());
+        }
+        return prospectId;
     }
 
     /**
@@ -534,88 +592,6 @@ public class YardiGuestManagementService extends YardiAbstractService {
             result.add(c.getEventType());
         }
         return result;
-    }
-
-    private Map<Key, String> getParticipants(PmcYardiCredential yc, Lease lease, Map<String, String> residentIds) throws YardiServiceException, RemoteException {
-        Key tenantId = lease.getPrimaryKey();
-        LeadManagement guestActivity = YardiStubFactory.create(YardiILSGuestCardStub.class).findGuest(yc, lease.unit().building().propertyCode().getValue(),
-                tenantId.toString());
-        Map<Key, String> participants = new HashMap<Key, String>();
-        Prospect p = guestActivity.getProspects().getProspect().get(0);
-        boolean tenantFound = false;
-        for (Customer c : p.getCustomers().getCustomer()) {
-            String tpId = null, pId = null, tId = null;
-            for (Identification id : c.getIdentification()) {
-                if (IdentityType.ThirdParty.ID.equals(id.getIDType())) {
-                    tpId = id.getIDValue();
-                } else if (IdentityType.Prospect.ID.equals(id.getIDType())) {
-                    pId = id.getIDValue();
-                } else if (IdentityType.Tenant.ID.equals(id.getIDType())) {
-                    tId = id.getIDValue();
-                }
-            }
-            if (tpId != null && pId != null) {
-                Key tpKey = new Key(tpId);
-                if (tpKey.equals(tenantId)) {
-                    participants.put(lease._applicant().getPrimaryKey(), StringUtils.isEmpty(tId) ? pId : tId);
-                    tenantFound = true;
-                } else {
-                    if (residentIds != null) {
-                        String nameKey = getNameKey(c.getName());
-                        pId = residentIds.get(nameKey);
-                        if (pId == null) {
-                            throw new YardiServiceException(SimpleMessageFormat.format("Prospect not found: {0}", nameKey));
-                        }
-                    }
-                    participants.put(tpKey, pId);
-                }
-            }
-        }
-
-        // sanity checks
-        if (!tenantFound) {
-            throw new YardiServiceException(SimpleMessageFormat.format("Main applicant is missing: {0}", tenantId));
-        }
-
-        Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.IdOnly);
-        Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.IdOnly);
-        int coApplicants = lease.currentTerm().version().tenants().size() + lease.currentTerm().version().guarantors().size();
-        if (coApplicants != participants.size()) {
-            String msg = SimpleMessageFormat.format("Missing or invalid participants: found {0} expecting {1}", participants.size(), coApplicants);
-            throw new YardiServiceException(msg);
-        }
-        return participants;
-    }
-
-    private Map<String, String> getLeaseResidentIds(PmcYardiCredential yc, String propertyCode, String tenantId) throws YardiServiceException, RemoteException {
-        Map<String, String> result = null;
-        ResidentTransactions transaction = YardiStubFactory.create(YardiResidentTransactionsStub.class).getResidentTransactionsForTenant(yc, propertyCode,
-                tenantId);
-        if (transaction != null && !transaction.getProperty().isEmpty()) {
-            Property property = transaction.getProperty().iterator().next();
-            if (!property.getRTCustomer().isEmpty()) {
-                result = new HashMap<String, String>();
-                for (YardiCustomer customer : property.getRTCustomer().iterator().next().getCustomers().getCustomer()) {
-                    result.put(getNameKey(customer.getName()), TenantMapper.getCustomerID(customer));
-                }
-            }
-        }
-        return result;
-    }
-
-    private String getNameKey(Name name) {
-        StringBuilder key = new StringBuilder() //
-                .append(name.getFirstName() + ".") //
-                .append(name.getLastName() + ".");
-        return key.toString();
-    }
-
-    // TODO - com.yardi.entity.guestcard40.NameType is identical to com.yardi.entity.mits.Name - consider xsd or reflection mapping
-    private String getNameKey(NameType name) {
-        StringBuilder key = new StringBuilder() //
-                .append(name.getFirstName() + ".") //
-                .append(name.getLastName() + ".");
-        return key.toString();
     }
 
     private static class RentableItemKey {
