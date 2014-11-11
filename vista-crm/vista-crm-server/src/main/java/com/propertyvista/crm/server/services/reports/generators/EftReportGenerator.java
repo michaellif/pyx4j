@@ -171,6 +171,19 @@ public class EftReportGenerator implements ReportExporter {
             if (!reportProgressStatusHolder.isTerminationRequested()) {
                 int progress = 0;
                 int count = padGenerationDays.size();
+
+                if (!reportMetadata.orderBy().isNull()) {
+                    Path path = dtoBinder.getBoundBOMemberPath(new Path(reportMetadata.orderBy().memberPath().getValue()));
+                    for (PaymentRecord paymentRecord : paymentRecords) {
+                        enhancePaymentRecord(paymentRecord);
+                    }
+                    if (reportMetadata.orderBy().isDesc().getValue(false)) {
+                        Collections.sort(paymentRecords, Collections.reverseOrder(EntityComparatorFactory.createMemberComparator(path)));
+                    } else {
+                        Collections.sort(paymentRecords, EntityComparatorFactory.createMemberComparator(path));
+                    }
+                }
+
                 for (PaymentRecord paymentRecord : paymentRecords) {
                     if (reportProgressStatusHolder.isTerminationRequested()) {
                         break;
@@ -181,14 +194,6 @@ public class EftReportGenerator implements ReportExporter {
                 }
             }
 
-            if (!reportProgressStatusHolder.isTerminationRequested()) {
-                if (!reportMetadata.orderBy().isNull()) {
-                    Collections.sort(
-                            paymentRecords,
-                            EntityComparatorFactory.createMemberComparator(dtoBinder.getBoundBOMemberPath(new Path(reportMetadata.orderBy().memberPath()
-                                    .getValue()))));
-                }
-            }
         } else if (!reportProgressStatusHolder.isTerminationRequested()) {
             EntityQueryCriteria<PaymentRecord> criteria = makeCriteria(reportMetadata);
 
