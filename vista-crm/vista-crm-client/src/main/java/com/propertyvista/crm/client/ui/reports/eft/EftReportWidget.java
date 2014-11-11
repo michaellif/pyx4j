@@ -202,25 +202,29 @@ public class EftReportWidget extends HTML implements IReportWidget, IMementoAwar
         tableBodyScrollBarPositionMemento = (ScrollBarPositionMemento) memento.read();
 
         isTableReady = false;
-        setReportTable(html, new Command() {
-            @Override
-            public void execute() {
-                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                    @Override
-                    public void execute() {
-                        final Element tableBody = getElement().getElementsByTagName("tbody").getItem(0);
-                        if (reportScrollBarPositionMemento != null) {
-                            getElement().setScrollLeft(reportScrollBarPositionMemento.posX);
-                            getElement().setScrollTop(reportScrollBarPositionMemento.posY);
+        if (html == null) {
+
+        } else {
+            setReportTable(html, new Command() {
+                @Override
+                public void execute() {
+                    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                        @Override
+                        public void execute() {
+                            final Element tableBody = getElement().getElementsByTagName("tbody").getItem(0);
+                            if (reportScrollBarPositionMemento != null) {
+                                getElement().setScrollLeft(reportScrollBarPositionMemento.posX);
+                                getElement().setScrollTop(reportScrollBarPositionMemento.posY);
+                            }
+                            if (tableBodyScrollBarPositionMemento != null) {
+                                tableBody.setScrollLeft(tableBodyScrollBarPositionMemento.posX);
+                                tableBody.setScrollTop(tableBodyScrollBarPositionMemento.posY);
+                            }
                         }
-                        if (tableBodyScrollBarPositionMemento != null) {
-                            tableBody.setScrollLeft(tableBodyScrollBarPositionMemento.posX);
-                            tableBody.setScrollTop(tableBodyScrollBarPositionMemento.posY);
-                        }
-                    }
-                });
-            }
-        });
+                    });
+                }
+            });
+        }
     }
 
     private void setReportTable(String safeHtmlReportTable, final Command onSetComplete) {
