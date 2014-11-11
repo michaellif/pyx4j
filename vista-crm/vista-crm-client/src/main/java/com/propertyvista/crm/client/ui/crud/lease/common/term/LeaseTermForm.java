@@ -275,11 +275,12 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             leaseHyperlink.setNavigationCommand(new Command() {
                 @Override
                 public void execute() {
-                    if (getValue().getPrimaryKey() != null) {
+                    if (leaseHyperlink.getValue().getPrimaryKey() != null) {
                         if (leaseHyperlink.getValue().status().getValue() == Lease.Status.Application) {
-                            AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseApplication().formViewerPlace(getValue().getPrimaryKey()));
+                            AppSite.getPlaceController().goTo(
+                                    new CrmSiteMap.Tenants.LeaseApplication().formViewerPlace(leaseHyperlink.getValue().getPrimaryKey()));
                         } else {
-                            AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease().formViewerPlace(getValue().getPrimaryKey()));
+                            AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease().formViewerPlace(leaseHyperlink.getValue().getPrimaryKey()));
                         }
                     }
                 }
@@ -345,14 +346,14 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         get(proto().termFrom()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
             @Override
             public void onValueChange(ValueChangeEvent<LogicalDate> event) {
-                if (event.getValue() != null) {
-                    LogicalDate endDate = new LogicalDate(event.getValue());
-                    CalendarUtil.addMonthsToDate(endDate, 12);
-                    CalendarUtil.addDaysToDate(endDate, -1);
+                    if (event.getValue() != null) {
+                        LogicalDate endDate = new LogicalDate(event.getValue());
+                        CalendarUtil.addMonthsToDate(endDate, 12);
+                        CalendarUtil.addDaysToDate(endDate, -1);
 
-                    get(proto().termTo()).setValue(endDate);
+                        get(proto().termTo()).setValue(endDate);
+                    }
                 }
-            }
         });
 
         tenantsFolder.addValueChangeHandler(new ValueChangeHandler<IList<LeaseTermTenant>>() {
