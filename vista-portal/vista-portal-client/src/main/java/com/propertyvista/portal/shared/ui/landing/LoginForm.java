@@ -64,6 +64,13 @@ public class LoginForm extends CForm<AuthenticationRequest> {
         passwordField.setMandatoryValidationMessage(i18n.tr("Enter your password"));
         passwordField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
 
+        formPanel.append(Location.Left, proto().captcha()).decorate();
+        captchaField = (CCaptcha) get(proto().captcha());
+        captchaField.setWatermark(i18n.tr("Enter both security words above"));
+        captchaField.setMandatoryValidationMessage(i18n.tr("Captcha code is required"));
+        captchaField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
+        setCaptchaEnabled(false);
+
         formPanel.append(Location.Left, proto().rememberID(), new CCheckBox());
         CCheckBox rememberID = (CCheckBox) get(proto().rememberID());
         rememberID.setDecorator(new CheckBoxDecorator());
@@ -77,14 +84,6 @@ public class LoginForm extends CForm<AuthenticationRequest> {
             }
         });
         formPanel.append(Location.Left, resetPassword);
-
-        formPanel.append(Location.Left, proto().captcha()).decorate();
-        captchaField = (CCaptcha) get(proto().captcha());
-        captchaField.setWatermark(i18n.tr("Enter both security words above"));
-        captchaField.setMandatoryValidationMessage(i18n.tr("Captcha code is required"));
-        captchaField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
-
-        setCaptchaEnabled(false);
 
         formPanel.br();
 
