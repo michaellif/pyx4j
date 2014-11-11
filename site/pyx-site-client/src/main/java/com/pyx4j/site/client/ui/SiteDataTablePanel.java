@@ -246,6 +246,10 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
         return getDataTable().getSelectedItems();
     }
 
+    protected AbstractListCrudService<E> getService() {
+        return service;
+    }
+
     /**
      * Override in descendants to supply desired set
      * 
