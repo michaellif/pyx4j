@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -17,11 +17,15 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -36,6 +40,10 @@ public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
 
     private static final I18n i18n = I18n.get(EmergencyContactFolder.class);
 
+    private boolean isMandatory = false;
+
+    private int contactsAmount = 1;
+
     public EmergencyContactFolder() {
         this(true);
 
@@ -44,6 +52,11 @@ public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
 
     public EmergencyContactFolder(boolean modifiable) {
         super(EmergencyContact.class, i18n.tr("Emergency Contact"), modifiable);
+    }
+
+    public void setRestrictions(boolean isMandatory, int contactsAmount) {
+        this.isMandatory = isMandatory;
+        this.contactsAmount = contactsAmount;
     }
 
     @Override
@@ -57,6 +70,27 @@ public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
             @Override
             public void execute() {
                 EmergencyContactFolder.super.removeItem(item);
+            }
+        });
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
+        this.addComponentValidator(new AbstractComponentValidator<IList<EmergencyContact>>() {
+            @Override
+            public BasicValidationError isValid() {
+                if (getValue() == null) {
+                    return null;
+                }
+
+                if (isMandatory && getValue().size() < contactsAmount) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("At least {0} Emergency Contact(s) should be specified", contactsAmount));
+                }
+
+                return !EntityGraph.hasBusinessDuplicates(getValue()) ? null : new BasicValidationError(getCComponent(), i18n
+                        .tr("Duplicate Emergency Contacts specified"));
             }
         });
     }

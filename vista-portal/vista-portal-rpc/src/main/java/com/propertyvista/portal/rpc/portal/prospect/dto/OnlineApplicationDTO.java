@@ -67,6 +67,10 @@ public interface OnlineApplicationDTO extends IEntity {
 
     IPrimitive<Integer> yearsToForcingPreviousAddress();
 
+    IPrimitive<Boolean> emergencyContactsIsMandatory();
+
+    IPrimitive<Integer> emergencyContactsAmount();
+
     //--------------------------------------------
     // read and update data:
 

@@ -56,4 +56,9 @@ public interface TenantDTO extends LeaseParticipantDTO<LeaseTermTenant> {
     IPrimitive<String> nextAutopayApplicabilityMessage();
 
     IPrimitive<Boolean> isMoveOutWithinNextBillingCycle();
+
+    // Restrictions policy:
+    IPrimitive<Boolean> emergencyContactsIsMandatory();
+
+    IPrimitive<Integer> emergencyContactsAmount();
 }

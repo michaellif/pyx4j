@@ -52,6 +52,8 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
     private final Tab paymentMethodsTab, autoPaymentsTab;
 
+    private EmergencyContactFolder emergencyContactFolder;
+
     public TenantForm(IForm<TenantDTO> view) {
         super(TenantDTO.class, view);
 
@@ -95,6 +97,8 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
         updateTenantInsuranceTabControls();
 
+// TODO: currently we do not want to validate tenant data in CRM:
+//        emergencyContactFolder.setRestrictions(getValue().emergencyContactsIsMandatory().isBooleanTrue(), getValue().emergencyContactsAmount().getValue());
     }
 
     @Override
@@ -125,7 +129,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
     private IsWidget createContactsTab() {
         FormPanel formPanel = new FormPanel(this);
-        formPanel.append(Location.Dual, proto().customer().emergencyContacts(), new EmergencyContactFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().customer().emergencyContacts(), emergencyContactFolder = new EmergencyContactFolder(isEditable()));
         return formPanel;
     }
 

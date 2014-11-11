@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.CustomerPicture;
@@ -33,4 +34,9 @@ public interface ResidentProfileDTO extends IEntity {
     @Length(3)
     @Caption(name = "Emergency Contacts")
     IList<EmergencyContact> emergencyContacts();
+
+    // Restrictions policy:
+    IPrimitive<Boolean> emergencyContactsIsMandatory();
+
+    IPrimitive<Integer> emergencyContactsAmount();
 }
