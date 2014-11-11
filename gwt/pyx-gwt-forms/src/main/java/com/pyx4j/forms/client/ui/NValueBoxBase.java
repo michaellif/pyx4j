@@ -38,7 +38,7 @@ import com.pyx4j.widgets.client.IValueBoxWidget;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 
 public abstract class NValueBoxBase<DATA, WIDGET extends IValueBoxWidget<DATA>, CCOMP extends CValueBoxBase<DATA, ?>> extends
-        NFocusField<DATA, WIDGET, CCOMP, HTML> implements INativeValueBox<DATA>, IWatermarkWidget {
+        NFocusField<DATA, WIDGET, CCOMP, HTML> implements INativeValueBox<DATA> {
 
     public NValueBoxBase(CCOMP cComponent) {
         super(cComponent);
@@ -77,7 +77,10 @@ public abstract class NValueBoxBase<DATA, WIDGET extends IValueBoxWidget<DATA>, 
                 NativeValueChangeEvent.fire((CValueBoxBase) getCComponent(), getEditor().getValue());
             }
         });
-        setWatermark(getCComponent().getWatermark());
+
+        if (getEditor() instanceof IWatermarkWidget) {
+            getEditor().setWatermark(getCComponent().getWatermark());
+        }
 
         getEditor().setFormatter(new IFormatter<DATA, String>() {
 
@@ -118,22 +121,6 @@ public abstract class NValueBoxBase<DATA, WIDGET extends IValueBoxWidget<DATA>, 
             return null;
         } else {
             return getEditor().getValue();
-        }
-    }
-
-    @Override
-    public void setWatermark(String watermark) {
-        if (getEditor() instanceof IWatermarkWidget) {
-            ((IWatermarkWidget) getEditor()).setWatermark(watermark);
-        }
-    }
-
-    @Override
-    public String getWatermark() {
-        if (getEditor() instanceof IWatermarkWidget) {
-            return ((IWatermarkWidget) getEditor()).getWatermark();
-        } else {
-            return null;
         }
     }
 

@@ -23,10 +23,13 @@ package com.pyx4j.forms.client.ui;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.IWatermarkWidget;
 
 public class CCaptcha extends CFocusComponent<Pair<String, String>, NCaptcha> implements IAcceptsWatermark {
 
     private static final I18n i18n = I18n.get(CCaptcha.class);
+
+    private String watermark;
 
     public CCaptcha() {
         setMandatoryValidationMessage(i18n.tr("Captcha code is required"));
@@ -48,12 +51,15 @@ public class CCaptcha extends CFocusComponent<Pair<String, String>, NCaptcha> im
 
     @Override
     public void setWatermark(String watermark) {
-        getNativeComponent().setWatermark(watermark);
+        this.watermark = watermark;
+        if (getNativeComponent() != null && getNativeComponent().getEditor() instanceof IWatermarkWidget) {
+            ((IWatermarkWidget) getNativeComponent().getEditor()).setWatermark(watermark);
+        }
     }
 
     @Override
     public String getWatermark() {
-        return getNativeComponent().getWatermark();
+        return watermark;
     }
 
 }

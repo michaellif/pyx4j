@@ -102,8 +102,8 @@ public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET ex
     @Override
     public void setWatermark(String watermark) {
         this.watermark = watermark;
-        if (asWidget() instanceof IWatermarkWidget) {
-            ((IWatermarkWidget) asWidget()).setWatermark(watermark);
+        if (getNativeComponent() != null && getNativeComponent().getEditor() instanceof IWatermarkWidget) {
+            ((IWatermarkWidget) getNativeComponent().getEditor()).setWatermark(watermark);
         }
     }
 

@@ -23,22 +23,28 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.IWidget;
 
-public interface INativeField<E> extends INativeComponent<E>, IWidget {
+public interface INativeField<DATA> extends INativeComponent<DATA>, IWidget {
+
+    IWidget getEditor();
+
+    Widget getViewer();
 
     boolean isViewable();
 
     void setViewable(boolean editable);
 
-    void setNativeValue(E value);
+    void setNativeValue(DATA value);
 
-    E getNativeValue() throws ParseException;
+    DATA getNativeValue() throws ParseException;
 
     void setNavigationCommand(Command navigationCommand);
 
+    @Override
     void setDebugId(IDebugId debugId);
 
     void init();

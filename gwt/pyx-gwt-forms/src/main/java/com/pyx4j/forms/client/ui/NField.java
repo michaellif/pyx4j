@@ -76,10 +76,12 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
         super(cComponent);
     }
 
+    @Override
     public final EDITOR getEditor() {
         return editor;
     }
 
+    @Override
     public final VIEWER getViewer() {
         return viewer;
     }

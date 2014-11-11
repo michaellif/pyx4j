@@ -28,18 +28,17 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.widgets.client.IWatermarkWidget;
-import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.selector.SelectorTextBox;
 
-public class NSelectorTextBox<E extends IEntity> extends NFocusField<E, SelectorTextBox<E>, CSelectorTextBox<E>, HTML> implements IWatermarkWidget {
+public class NSelectorTextBox<E extends IEntity> extends NFocusField<E, SelectorTextBox<E>, CSelectorTextBox<E>, HTML> {
 
     public NSelectorTextBox(final CSelectorTextBox<E> cSuggestBox) {
         super(cSuggestBox);
     }
 
     @Override
-    protected Label createViewer() {
-        return new Label();
+    protected HTML createViewer() {
+        return new HTML();
     }
 
     @Override
@@ -57,6 +56,14 @@ public class NSelectorTextBox<E extends IEntity> extends NFocusField<E, Selector
                 return getCComponent().getOptionFormatter().format(value);
             }
         });
+    }
+
+    @Override
+    protected void onEditorCreate() {
+        super.onEditorCreate();
+        if (getEditor() instanceof IWatermarkWidget) {
+            getEditor().setWatermark(getCComponent().getWatermark());
+        }
     }
 
     @Override
@@ -82,19 +89,4 @@ public class NSelectorTextBox<E extends IEntity> extends NFocusField<E, Selector
         }
     }
 
-    @Override
-    public void setWatermark(String watermark) {
-        if (getEditor() instanceof IWatermarkWidget) {
-            ((IWatermarkWidget) getEditor()).setWatermark(watermark);
-        }
-    }
-
-    @Override
-    public String getWatermark() {
-        if (getEditor() instanceof IWatermarkWidget) {
-            return ((IWatermarkWidget) getEditor()).getWatermark();
-        } else {
-            return null;
-        }
-    }
 }
