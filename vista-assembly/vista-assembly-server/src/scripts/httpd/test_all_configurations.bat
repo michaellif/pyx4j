@@ -22,22 +22,22 @@ echo.
 echo executing 'abs -n %REQUESTS% -c %CONCURRENCY% -s %TIMEOUT%'
 
 echo launching test for: VIOLET - Old plumbing https
-REM abs.exe -n %REQUESTS% -c %CONCURRENCY% -s %TIMEOUT% https://static-88.birchwoodsoftwaregroup.com/static/net-test/%1 > "%folder%\violet-oldPlumbing-https.log"
+abs.exe -n %REQUESTS% -c %CONCURRENCY% -s %TIMEOUT% https://static-88.birchwoodsoftwaregroup.com/static/net-test/%1 > "%folder%\violet-oldPlumbing-https.log"
 
 echo launching test for: VIOLET - Old plumbing http
-REM abs.exe -n %REQUESTS% -c %CONCURRENCY% -s %TIMEOUT% http://static-88.birchwoodsoftwaregroup.com/static/net-test/%1 > "%folder%\violet-oldPlumbing-http.log"
+abs.exe -n %REQUESTS% -c %CONCURRENCY% -s %TIMEOUT% http://static-88.birchwoodsoftwaregroup.com/static/net-test/%1 > "%folder%\violet-oldPlumbing-http.log"
 
 echo launching test for: VIOLET - Old plumbing bypass tomcat
-REM abs.exe -n %REQUESTS% -c %CONCURRENCY% -s %TIMEOUT% https://env-88.birchwoodsoftwaregroup.com/net-test/net-test/%1 > "%folder%\violet-oldPlumbing-bypassTomcat.log"
+abs.exe -n %REQUESTS% -c %CONCURRENCY% -s %TIMEOUT% https://env-88.birchwoodsoftwaregroup.com/net-test/net-test/%1 > "%folder%\violet-oldPlumbing-bypassTomcat.log"
 
 echo launching test for: RED - HTTPS Complete New Plumbing
-REM abs.exe -n %REQUESTS% -c %CONCURRENCY% -s %TIMEOUT% https://static-11.devpv.com/static/net-test/%1 > "%folder%\red-newPlumbing-https.log"
+abs.exe -n %REQUESTS% -c %CONCURRENCY% -s %TIMEOUT% https://static-11.devpv.com/static/net-test/%1 > "%folder%\red-newPlumbing-https.log"
 
 echo launching test for: RED - HTTP Complete New Plumbing
-REM abs.exe -n %REQUESTS% -c %CONCURRENCY% -s %TIMEOUT% http://static-11.devpv.com/static/net-test/%1 > "%folder%\red-newPlumbing-http.log"
+abs.exe -n %REQUESTS% -c %CONCURRENCY% -s %TIMEOUT% http://static-11.devpv.com/static/net-test/%1 > "%folder%\red-newPlumbing-http.log"
 
 echo launching test for: RED - HTTPS Complete New Plumbing WITH FILTER
-REM abs.exe -n %REQUESTS% -c %CONCURRENCY% -s %TIMEOUT% https://vista-crm-11.devpv.com/net-test/%1 > "%folder%\red-newPlumbing-https_filter.log"
+abs.exe -n %REQUESTS% -c %CONCURRENCY% -s %TIMEOUT% https://vista-crm-11.devpv.com/net-test/%1 > "%folder%\red-newPlumbing-https_filter.log"
 
 echo launching test for: BLUE - Apache server on dev (no tomcat)
 abs.exe -n %REQUESTS% -c %CONCURRENCY% -s %TIMEOUT% http://dev22-net-test.pyx4j.com/files-net-test/%1 > "%folder%\blue-apache-noTomcat.log"
