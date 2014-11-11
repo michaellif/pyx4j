@@ -33,12 +33,12 @@ public class AppointmentViewerViewImpl extends CrmViewerViewImplBase<Appointment
 
     private static final I18n i18n = I18n.get(AppointmentViewerViewImpl.class);
 
-    private final ShowingListerView showingsLister;
+    private final ShowingLister showingsLister;
 
     private final MenuItem closeAction;
 
     public AppointmentViewerViewImpl() {
-        showingsLister = new ShowingListerViewImpl();
+        showingsLister = new ShowingLister();
 
         closeAction = new SecureMenuItem(i18n.tr("Close"), new Command() {
             @Override
@@ -63,7 +63,7 @@ public class AppointmentViewerViewImpl extends CrmViewerViewImplBase<Appointment
     }
 
     @Override
-    public ShowingListerView getShowingsListerView() {
+    public ShowingLister getShowingsLister() {
         return showingsLister;
     }
 
@@ -76,6 +76,9 @@ public class AppointmentViewerViewImpl extends CrmViewerViewImplBase<Appointment
     @Override
     public void populate(Appointment value) {
         super.populate(value);
+
+        showingsLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        showingsLister.populate();
 
         setEditingEnabled(value.status().getValue() != Appointment.Status.closed);
         setEditingVisible(value.lead().status().getValue() != Lead.Status.closed);

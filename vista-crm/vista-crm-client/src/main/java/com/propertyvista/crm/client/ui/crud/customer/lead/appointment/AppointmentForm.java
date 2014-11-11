@@ -60,7 +60,7 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
 
     private Widget createShowingsTab() {
         if (!isEditable()) {
-            return ((AppointmentViewerView) getParentView()).getShowingsListerView().asWidget();
+            return ((AppointmentViewerView) getParentView()).getShowingsLister().asWidget();
         }
         return new HTML(); // just stub - not necessary for editing mode!..
     }

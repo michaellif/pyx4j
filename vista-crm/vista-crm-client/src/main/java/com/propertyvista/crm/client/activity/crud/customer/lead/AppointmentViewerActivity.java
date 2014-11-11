@@ -30,21 +30,9 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 
 public class AppointmentViewerActivity extends CrmViewerActivity<Appointment> implements AppointmentViewerView.Presenter {
 
-    private final ILister.Presenter<ShowingDTO> showingsLister;
-
     public AppointmentViewerActivity(CrudAppPlace place) {
         super(Appointment.class, place, CrmSite.getViewFactory().getView(AppointmentViewerView.class), GWT
                 .<AppointmentCrudService> create(AppointmentCrudService.class));
-
-        showingsLister = new ShowingListerController(((AppointmentViewerView) getView()).getShowingsListerView());
-    }
-
-    @Override
-    protected void onPopulateSuccess(Appointment result) {
-        super.onPopulateSuccess(result);
-
-        showingsLister.setParent(result.getPrimaryKey());
-        showingsLister.populate();
     }
 
     @Override

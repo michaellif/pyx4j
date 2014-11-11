@@ -38,7 +38,7 @@ public interface LeadViewerView extends IViewer<Lead> {
         void close();
     }
 
-    AppointmentListerView getAppointmentsListerView();
+    AppointmentLister getAppointmentListerView();
 
     public void onLeaseConvertionSuccess();
 

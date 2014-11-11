@@ -19,6 +19,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.essentials.client.ConfirmCommand;
 import com.pyx4j.i18n.shared.I18n;
@@ -30,7 +31,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentListerView;
-import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentListerViewImpl;
+import com.propertyvista.crm.rpc.services.customer.lead.AppointmentCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Lead.ConvertToLeaseAppraisal;
@@ -45,9 +46,12 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
 
     private final MenuItem closeAction;
 
-    private final AppointmentListerView appointmentLister = new AppointmentListerViewImpl();
+    private final AppointmentLister appointmentLister;
 
     public LeadViewerViewImpl() {
+
+        appointmentLister = new AppointmentLister();
+
         convertAction = new SecureMenuItem(i18n.tr("Convert to Lease"), new Command() {
             @Override
             public void execute() {
@@ -120,6 +124,9 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
     public void populate(Lead value) {
         super.populate(value);
 
+        appointmentLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        appointmentLister.populate();
+
         setActionVisible(convertAction, (value.status().getValue() != Status.closed) && value.lease().isNull());
         setActionVisible(closeAction, value.status().getValue() != Status.closed);
 
@@ -143,7 +150,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
     }
 
     @Override
-    public AppointmentListerView getAppointmentsListerView() {
+    public AppointmentLister getAppointmentListerView() {
         return appointmentLister;
     }
 }

@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.customer.lead.appointment;
 
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
 
-import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingListerView;
 import com.propertyvista.domain.tenant.lead.Appointment;
 
 public interface AppointmentViewerView extends IViewer<Appointment> {
@@ -25,5 +24,5 @@ public interface AppointmentViewerView extends IViewer<Appointment> {
         void close(String reason);
     }
 
-    ShowingListerView getShowingsListerView();
+    ShowingLister getShowingsLister();
 }

@@ -76,6 +76,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
 
 
+
             @Override
             public BasicValidationError isValid() {
                 Boolean hasContact = false;
@@ -174,7 +175,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
     private Widget createAppointmentsTab() {
         if (!isEditable()) {
-            return ((LeadViewerView) getParentView()).getAppointmentsListerView().asWidget();
+            return ((LeadViewerView) getParentView()).getAppointmentListerView().asWidget();
         }
         return new HTML(); // just stub - not necessary for editing mode!..
     }
