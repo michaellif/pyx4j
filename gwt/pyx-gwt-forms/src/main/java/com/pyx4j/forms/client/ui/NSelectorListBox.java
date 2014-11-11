@@ -35,7 +35,7 @@ import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.selector.SelectorListBox;
 
-public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<E>, SelectorListBox<E>, CSelectorListBox<E>, HTML> implements IWatermarkWidget {
+public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<E>, SelectorListBox<E>, CSelectorListBox<E>, HTML> {
 
     public NSelectorListBox(final CSelectorListBox<E> cSuggestBox) {
         super(cSuggestBox);
@@ -83,6 +83,14 @@ public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<
     }
 
     @Override
+    protected void onEditorCreate() {
+        super.onEditorCreate();
+        if (getEditor() instanceof IWatermarkWidget) {
+            getEditor().setWatermark(getCComponent().getWatermark());
+        }
+    }
+
+    @Override
     public void setNativeValue(Collection<E> value) {
         if (isViewable()) {
             StringBuilder text = new StringBuilder();
@@ -109,19 +117,4 @@ public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<
         }
     }
 
-    @Override
-    public void setWatermark(String watermark) {
-        if (getEditor() instanceof IWatermarkWidget) {
-            ((IWatermarkWidget) getEditor()).setWatermark(watermark);
-        }
-    }
-
-    @Override
-    public String getWatermark() {
-        if (getEditor() instanceof IWatermarkWidget) {
-            return ((IWatermarkWidget) getEditor()).getWatermark();
-        } else {
-            return null;
-        }
-    }
 }
