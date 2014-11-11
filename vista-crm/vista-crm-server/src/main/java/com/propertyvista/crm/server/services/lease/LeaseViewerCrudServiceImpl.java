@@ -242,7 +242,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     public void activate(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease leaseId = EntityFactory.createIdentityStub(Lease.class, entityId);
 
-        ServerSideFactory.create(LeaseFacade.class).approve(leaseId, null, null);
+        ServerSideFactory.create(LeaseFacade.class).approve(leaseId, CrmAppContext.getCurrentUserEmployee(), "Existing Lease Activation");
 
         // activate actually, if it already runs:
         if (!Persistence.secureRetrieve(Lease.class, entityId).leaseFrom().getValue().after(SystemDateManager.getLogicalDate())) {
@@ -257,7 +257,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     public void closeLease(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason) {
         Lease leaseId = EntityFactory.createIdentityStub(Lease.class, entityId);
 
-        ServerSideFactory.create(LeaseFacade.class).close(leaseId);
+        ServerSideFactory.create(LeaseFacade.class).close(leaseId, CrmAppContext.getCurrentUserEmployee(), decisionReason);
 
         Persistence.service().commit();
         callback.onSuccess(null);

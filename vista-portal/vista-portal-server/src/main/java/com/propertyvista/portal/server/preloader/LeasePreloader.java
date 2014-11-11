@@ -125,7 +125,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                             Persistence.service().persist(participant.leaseParticipant().customer().personScreening().creditChecks());
                         }
 
-                        ServerSideFactory.create(LeaseFacade.class).approve(lease, null, null);
+                        ServerSideFactory.create(LeaseFacade.class).approve(lease, null, "LeasePreloader");
 
                         if (lease.leaseFrom().getValue().compareTo(trDate) <= 0) {
                             SystemDateManager.setDate(lease.leaseFrom().getValue());

@@ -259,7 +259,7 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
     }
 
     protected void closeLease() {
-        ServerSideFactory.create(LeaseFacade.class).close(getLease());
+        ServerSideFactory.create(LeaseFacade.class).close(getLease(), null, null);
     }
 
     protected void terminateLease(CompletionType reason) {

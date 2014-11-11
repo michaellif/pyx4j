@@ -349,7 +349,7 @@ public class LeaseLifecycleSimulator {
             if (debug) {
                 log.info("" + now() + " approve lease: {} {} - {}", lease.leaseId(), lease.currentTerm().termFrom(), lease.currentTerm().termTo());
             }
-            ServerSideFactory.create(LeaseFacade.class).approve(lease, null, "simulation");
+            ServerSideFactory.create(LeaseFacade.class).approve(lease, null, "LeaseLifecycleSimulator");
 
             if (debug) {
                 log.info("" + now() + " approved lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
@@ -678,7 +678,7 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            ServerSideFactory.create(LeaseFacade.class).close(lease);
+            ServerSideFactory.create(LeaseFacade.class).close(lease, null, "LeaseLifecycleSimulator");
         }
     }
 
