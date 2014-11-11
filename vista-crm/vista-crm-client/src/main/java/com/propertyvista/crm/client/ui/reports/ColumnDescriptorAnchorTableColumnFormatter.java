@@ -66,28 +66,31 @@ public class ColumnDescriptorAnchorTableColumnFormatter implements ITableColumnF
     @Override
     public SafeHtml formatContent(IEntity entity) {
         SafeHtmlBuilder b = new SafeHtmlBuilder();
+        CrudAppPlace place = makePlace(entity);
 
-        if (!isEnabled() || entity.id().isNull()) {
-            if (styleName != null) {
-                b.appendHtmlConstant("<div class='" + styleName + "'>");
-            }
-            b.appendEscaped(columnDescriptor.convert(entity));
-            if (styleName != null) {
-                b.appendHtmlConstant("</div>");
-            }
-        } else {
-            String url = AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), false, makePlace(entity));
-            b.appendHtmlConstant("<a href=\"" + url + "\">");
+        if (isEnabled() && place != null) {
+            b.appendHtmlConstant("<a href=\"" + AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), false, place) + "\">");
+
             if (styleName != null) {
                 b.appendHtmlConstant("<div class='" + styleName + "'>");
             }
 
             b.appendEscaped(columnDescriptor.convert(entity));
+
             if (styleName != null) {
                 b.appendHtmlConstant("</div>");
             }
 
             b.appendHtmlConstant("</a>");
+        } else {
+            if (styleName != null) {
+                b.appendHtmlConstant("<div class='" + styleName + "'>");
+            }
+            b.appendEscaped(columnDescriptor.convert(entity));
+
+            if (styleName != null) {
+                b.appendHtmlConstant("</div>");
+            }
         }
 
         return b.toSafeHtml();
@@ -100,6 +103,9 @@ public class ColumnDescriptorAnchorTableColumnFormatter implements ITableColumnF
 
     protected CrudAppPlace makePlace(IEntity entity) {
         IEntity placeMember = (IEntity) entity.getMember(placeMemberPath);
-        return AppPlaceEntityMapper.resolvePlace(placeMember.getInstanceValueClass(), placeMember.getPrimaryKey());
+        if (placeMember.getPrimaryKey() != null) {
+            return AppPlaceEntityMapper.resolvePlace(placeMember.getInstanceValueClass(), placeMember.getPrimaryKey());
+        }
+        return null;
     }
 }
