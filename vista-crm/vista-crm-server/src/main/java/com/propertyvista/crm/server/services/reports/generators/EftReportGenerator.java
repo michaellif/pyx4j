@@ -78,6 +78,8 @@ public class EftReportGenerator implements ReportExporter {
                 bind(toProto.leaseTo(), boProto.preauthorizedPayment().tenant().lease().leaseTo());
                 bind(toProto.expectedMoveOut(), boProto.preauthorizedPayment().tenant().lease().expectedMoveOut());
 
+                bind(toProto.comments(), boProto.preauthorizedPayment().comments());
+
                 bind(toProto.building(), boProto.preauthorizedPayment().tenant().lease().unit().building().propertyCode());
                 bind(toProto.building_(), boProto.preauthorizedPayment().tenant().lease().unit().building());
 
@@ -109,7 +111,6 @@ public class EftReportGenerator implements ReportExporter {
                 default:
                     break;
                 }
-                to.comments().setValue(paymentRecord.preauthorizedPayment().comments().getValue());
                 return to;
             }
         };

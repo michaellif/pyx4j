@@ -166,6 +166,9 @@ public class EftReportSettingsForm extends CForm<EftReportMetadata> {
         EftReportRecordDTO reportRecordProto = EntityFactory.getEntityPrototype(EftReportRecordDTO.class);
         for (String memberName : reportRecordProto.getEntityMeta().getMemberNames()) {
             if (!memberName.endsWith("_")) {
+                if (reportRecordProto.getMember(memberName).getMeta().isTransient()) {
+                    continue;
+                }
                 ReportOrderColumnMetadata c = EntityFactory.create(ReportOrderColumnMetadata.class);
                 c.memberPath().setValue(reportRecordProto.getMember(memberName).getPath().toString());
                 reportColumnOptions.add(c);

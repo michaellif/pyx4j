@@ -77,9 +77,12 @@ public interface EftReportRecordDTO extends IEntity {
 
     IPrimitive<LogicalDate> targetDate();
 
+    /* Non sortable */@Transient
     IPrimitive<String> bankId();
 
+    /* Non sortable */@Transient
     IPrimitive<String> transitNumber();
 
+    /* Non sortable */@Transient
     IPrimitive<String> accountNumber();
 }
