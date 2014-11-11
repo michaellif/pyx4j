@@ -55,7 +55,7 @@ import com.pyx4j.i18n.shared.I18n;
  * @see <a href="http://code.google.com/apis/recaptcha/docs/customization.html">Customization</a>
  * 
  */
-public class CaptchaComposite extends SimplePanel implements IFocusWidget {
+public class CaptchaComposite extends SimplePanel implements IFocusWidget, IWatermarkWidget {
 
     private static Logger log = LoggerFactory.getLogger(CaptchaComposite.class);
 
@@ -351,10 +351,12 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget {
         }
     }
 
+    @Override
     public void setWatermark(String text) {
         response.setWatermark(text);
     };
 
+    @Override
     public String getWatermark() {
         return response.getWatermark();
     };
