@@ -47,6 +47,13 @@ public abstract class CValueBoxBase<DATA, WIDGET extends INativeValueBox<DATA>> 
         addComponentValidator(new ValueBoxParserValidator<DATA>());
     }
 
+    @Override
+    protected void onNativeComponentSet() {
+        if (getNativeComponent() instanceof IWatermarkWidget) {
+            ((IWatermarkWidget) getNativeComponent()).setWatermark(watermark);
+        }
+    }
+
     public void setFormatter(IFormatter<DATA, String> formatter) {
         this.formatter = formatter;
     }
@@ -122,8 +129,8 @@ public abstract class CValueBoxBase<DATA, WIDGET extends INativeValueBox<DATA>> 
     @Override
     public void setWatermark(String watermark) {
         this.watermark = watermark;
-        if (asWidget() instanceof IWatermarkWidget) {
-            ((IWatermarkWidget) asWidget()).setWatermark(watermark);
+        if (getNativeComponent() instanceof IWatermarkWidget) {
+            ((IWatermarkWidget) getNativeComponent()).setWatermark(watermark);
         }
     }
 

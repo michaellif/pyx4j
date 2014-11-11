@@ -67,7 +67,7 @@ public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<
 
             @Override
             public SafeHtml format(E value) {
-                return getCComponent().getOptionPathFormatter().format(value);
+                return getCComponent().getOptionFormatter().format(value);
             }
         });
 

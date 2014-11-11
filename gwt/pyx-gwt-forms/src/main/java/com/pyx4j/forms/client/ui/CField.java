@@ -85,8 +85,13 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TY
         applyAccessibilityRules();
 
         nativeComponent.setNavigationCommand(navigationCommand);
+
+        onNativeComponentSet();
+    }
+
+    protected void onNativeComponentSet() {
         if (getDebugId() != null) {
-            nativeComponent.setDebugId(getDebugId());
+            getNativeComponent().setDebugId(getDebugId());
         }
     }
 

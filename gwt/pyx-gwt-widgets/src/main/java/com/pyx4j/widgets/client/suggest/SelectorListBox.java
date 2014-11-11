@@ -45,32 +45,16 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
     private final SelectorListBoxValuePanel<E> listBox;
 
-    private final IFormatter<E, String> valueFormatter;
-
-    private final IFormatter<E, SafeHtml> optionFormatter;
-
     private final IPickerPanel<E> picker;
-
-    private Command addItemCommand;
 
     public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, SafeHtml> optionFormatter) {
         this(optionsGrabber, null, valueFormatter, optionFormatter);
-        addItemCommand = new Command() {
-            @Override
-            public void execute() {
-                showEverithingPicker();
-            }
-        };
     }
 
     @SuppressWarnings("unchecked")
     public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, Command addItemCommand, IFormatter<E, String> valueFormatter,
             IFormatter<E, SafeHtml> optionFormatter) {
         super(new SelectorListBoxValuePanel<E>(valueFormatter));
-
-        this.valueFormatter = valueFormatter;
-
-        this.optionFormatter = optionFormatter;
 
         listBox = (SelectorListBoxValuePanel<E>) getViewerPanel();
         listBox.setParent(this);

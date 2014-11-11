@@ -44,7 +44,7 @@ public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET ex
 
     private final IOptionsGrabber<TYPE> optionsGrabber;
 
-    private IFormatter<TYPE, SafeHtml> optionPathFormatter;
+    private IFormatter<TYPE, SafeHtml> optionFormatter;
 
     public CAbstractSelectorBox(IOptionsGrabber<TYPE> optionsGrabber) {
         this.optionsGrabber = optionsGrabber;
@@ -57,7 +57,7 @@ public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET ex
             }
         });
 
-        setOptionPathFormatter(new IFormatter<TYPE, SafeHtml>() {
+        setOptionFormatter(new IFormatter<TYPE, SafeHtml>() {
             @Override
             public SafeHtml format(TYPE value) {
                 SafeHtmlBuilder builder = new SafeHtmlBuilder();
@@ -91,12 +91,12 @@ public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET ex
         return optionsGrabber;
     }
 
-    public IFormatter<TYPE, SafeHtml> getOptionPathFormatter() {
-        return optionPathFormatter;
+    public IFormatter<TYPE, SafeHtml> getOptionFormatter() {
+        return optionFormatter;
     }
 
-    public void setOptionPathFormatter(IFormatter<TYPE, SafeHtml> formatter) {
-        this.optionPathFormatter = formatter;
+    public void setOptionFormatter(IFormatter<TYPE, SafeHtml> formatter) {
+        this.optionFormatter = formatter;
     }
 
     @Override
