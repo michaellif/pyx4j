@@ -184,7 +184,7 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
         {
             {
                 FilterRegistration.Dynamic fc = ctx.addFilter("OAPIFilter", OAPIFilter.class);
-                fc.addMappingForUrlPatterns(appFiltersDispatcherTypes, true, "/interfaces/oapi/v1/*");
+                fc.addMappingForUrlPatterns(appFiltersDispatcherTypes, true, urlPattern(VistaApplication.interfaces, "oapi/v1/*"));
             }
 
             if (!VistaTODO.removedForProductionOAPI) {
@@ -195,12 +195,12 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
                 }
                 {
                     ServletRegistration.Dynamic sc = ctx.addServlet("OpenApiWsService", WSServlet.class);
-                    sc.addMapping("/interfaces/oapi/v1/ws/*");
+                    sc.addMapping(urlPattern(VistaApplication.interfaces, "oapi/v1/ws/*"));
                 }
 
                 {
                     ServletRegistration.Dynamic sc = ctx.addServlet("OpenApiRsService", ServletContainer.class);
-                    sc.addMapping("/interfaces/oapi/v1/rs/*");
+                    sc.addMapping(urlPattern(VistaApplication.interfaces, "oapi/v1/rs/*"));
                     sc.setInitParameter("javax.ws.rs.Application", OapiRsApplication.class.getName());
                     sc.setInitParameter(ServerProperties.WADL_GENERATOR_CONFIG, OapiWadlGeneratorConfig.class.getName());
                 }
@@ -212,7 +212,7 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
             }
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("ILSKijijiService", ServletContainer.class);
-                sc.addMapping("/interfaces/ils/kijiji/*");
+                sc.addMapping(urlPattern(VistaApplication.interfaces, "ils/kijiji/*"));
                 sc.setInitParameter("javax.ws.rs.Application", KijijiApiRsApplication.class.getName());
             }
 
@@ -250,7 +250,7 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
         {
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("CardServiceSimulationServlet", CardServiceSimulationServlet.class);
-                sc.addMapping("/" + BankingSimulatorConfiguration.cardServiceSimulatorServletMapping + "*");
+                sc.addMapping(urlPattern(VistaApplication.interfaces, BankingSimulatorConfiguration.cardServiceSimulatorServletMapping + "*"));
             }
         }
 
