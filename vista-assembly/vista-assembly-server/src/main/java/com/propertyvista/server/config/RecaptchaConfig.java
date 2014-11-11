@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -37,6 +37,7 @@ public class RecaptchaConfig {
         domainsMap.put("birchwoodsoftwaregroup.com",
                 new RecaptchaConfig("6LdzXc8SAAAAAOKyhb7lGTGWPATHH8uYjeXg5jUc", "6LdzXc8SAAAAADehmgyofUx0zjuBgghbssZCIP_X"));
         domainsMap.put("propertyvista.biz", new RecaptchaConfig("6LdNbfESAAAAADcfVUwZvMLi3Ns8tOvrErDctT9s", "6LdNbfESAAAAAPvkarQUth6EUvLEGAoZ74l3hJ4i"));
+        domainsMap.put("devpv.com", new RecaptchaConfig("6Lefgv0SAAAAAM-3nq8rwjApWZa47ZYr7qzH_8rg", "6Lefgv0SAAAAAGKiUiDi5cG-sh64QSzzIXUTDd4T"));
     }
 
     public static String getReCaptchaPublicKey() {
