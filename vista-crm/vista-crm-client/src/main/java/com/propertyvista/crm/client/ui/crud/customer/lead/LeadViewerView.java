@@ -20,7 +20,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
 
-import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentListerView;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Lead.ConvertToLeaseAppraisal;

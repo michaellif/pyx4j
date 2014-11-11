@@ -19,7 +19,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.essentials.client.ConfirmCommand;
 import com.pyx4j.i18n.shared.I18n;
@@ -30,8 +29,6 @@ import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentListerView;
-import com.propertyvista.crm.rpc.services.customer.lead.AppointmentCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Lead.ConvertToLeaseAppraisal;
