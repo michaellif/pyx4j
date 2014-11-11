@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.tools.common.selectors;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.widgets.client.suggest.SelectorListBox;
+import com.pyx4j.widgets.client.selector.SelectorListBox;
 
 import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
 

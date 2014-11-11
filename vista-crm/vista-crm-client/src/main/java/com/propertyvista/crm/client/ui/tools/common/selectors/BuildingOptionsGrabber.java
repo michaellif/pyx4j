@@ -22,7 +22,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.widgets.client.suggest.IOptionsGrabber;
+import com.pyx4j.widgets.client.selector.IOptionsGrabber;
 
 import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;

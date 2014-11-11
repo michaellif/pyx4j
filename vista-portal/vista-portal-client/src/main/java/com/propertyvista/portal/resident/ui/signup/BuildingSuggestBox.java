@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.Comparator;
 
 import com.pyx4j.forms.client.ui.CSelectorTextBox;
-import com.pyx4j.widgets.client.suggest.MultyWordSuggestOptionsGrabber;
+import com.pyx4j.widgets.client.selector.MultyWordSuggestOptionsGrabber;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
 
