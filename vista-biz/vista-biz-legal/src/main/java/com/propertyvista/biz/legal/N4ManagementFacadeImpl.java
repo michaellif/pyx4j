@@ -75,6 +75,7 @@ import com.propertyvista.domain.legal.n4.N4BatchData;
 import com.propertyvista.domain.legal.n4.N4FormFieldsData;
 import com.propertyvista.domain.legal.n4.N4LeaseData;
 import com.propertyvista.domain.legal.n4.N4LegalLetter;
+import com.propertyvista.domain.legal.n4cs.N4CSFormFieldsData;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -182,7 +183,10 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         N4LeaseData n4LeaseData = ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId, batchData.noticeDate().getValue(),
                 batchData.deliveryMethod().getValue(), relevantArCodes);
         N4FormFieldsData n4FormData = ServerSideFactory.create(N4GenerationFacade.class).prepareFormData(n4LeaseData, batchData);
+        N4CSFormFieldsData n4csFormData = ServerSideFactory.create(N4CSGenerationFacade.class).prepareN4CSData(n4FormData);
+
         byte[] n4LetterBinary = ServerSideFactory.create(N4GenerationFacade.class).generateN4Letter(n4FormData);
+        byte[] n4csLetterBinary = ServerSideFactory.create(N4CSGenerationFacade.class).generateN4CSLetter(n4csFormData);
 
         LegalLetterBlob blob = EntityFactory.create(LegalLetterBlob.class);
         blob.data().setValue(n4LetterBinary);
@@ -221,6 +225,47 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
                     n4Status,
                     Arrays.<LegalLetter>asList(n4Letter)
             );//@formatter:on
+
+        /* The same steps to write certificate stream to the database and create corresponding records for further use */
+
+        LegalLetterBlob csBlob = EntityFactory.create(LegalLetterBlob.class);
+        csBlob.data().setValue(n4csLetterBinary);
+        csBlob.contentType().setValue("application/pdf");
+        Persistence.service().persist(csBlob);
+
+        N4LegalLetter n4csLetter = EntityFactory.create(N4LegalLetter.class);
+        n4csLetter.lease().set(leaseId);
+        n4csLetter.amountOwed().setValue(n4LeaseData.totalRentOwning().getValue());
+        n4csLetter.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
+        n4csLetter.generatedOn().setValue(generationTime);
+
+        n4csLetter.file().blobKey().setValue(csBlob.getPrimaryKey());
+        n4csLetter.file().fileSize().setValue(n4csLetterBinary.length);
+        n4csLetter.file().fileName().setValue(MessageFormat.format("n4-notice-{0,date,yyyy-MM-dd}.pdf", generationTime));
+
+        Persistence.service().persist(n4csLetter);
+//TODO: Change status
+        LegalStatusN4 n4csStatus = EntityFactory.create(LegalStatusN4.class);
+        n4csStatus.status().setValue(Status.N4);// Should be changed to N4CS
+
+        N4Policy csPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit(leaseId), N4Policy.class);
+        cal = new GregorianCalendar();
+        cal.setTime(generationTime);
+        cal.add(GregorianCalendar.DAY_OF_YEAR, csPolicy.expiryDays().getValue());
+        n4csStatus.expiry().setValue(cal.getTime());
+        n4csStatus.cancellationThreshold().setValue(csPolicy.cancellationThreshold().getValue());
+        n4csStatus.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
+
+        n4csStatus.notes().setValue("created via N4 notice batch");
+        n4csStatus.setBy().set(EntityFactory.createIdentityStub(CrmUser.class, VistaContext.getCurrentUserPrimaryKey()));
+        n4csStatus.setOn().setValue(generationTime);
+
+        ServerSideFactory.create(LeaseLegalFacade.class).setLegalStatus(//@formatter:off
+                    leaseId,
+                    n4csStatus,
+                    Arrays.<LegalLetter>asList(n4csLetter)
+            );//@formatter:on
+
     }
 
     private BigDecimal amountOwed(BillingAccount billingAccount, Collection<ARCode> acceptableArCodes, LogicalDate asOf) {
