@@ -75,10 +75,10 @@ class TenantSurePayments {
 
     /**
      * Day of payment, The actual payment for days that are not present in given month will happen at the end of month.
-     * 
+     *
      * @param inceptionDate
      * @return 1-31
-     * 
+     *
      * @see TenantSureTransaction#paymentDue
      */
     static int calulatePaymentDay(LogicalDate inceptionDate) {
@@ -320,7 +320,8 @@ class TenantSurePayments {
         Persistence.service().persist(transaction);
         Persistence.service().commit();
 
-        if (transaction.status().getValue() == TenantSureTransaction.TransactionStatus.PaymentRejected) {
+        if ((transaction.status().getValue() == TenantSureTransaction.TransactionStatus.PaymentRejected)
+                && (!insuranceTenantSure.status().getValue().equals(TenantSureStatus.PendingCancellation))) {
             ServerSideFactory.create(TenantSureFacade.class).startCancellationDueToSkippedPayment(insuranceTenantSure.client().tenant());
         }
 
