@@ -19,7 +19,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.IsView;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
@@ -27,7 +26,6 @@ import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.dto.LeaseApplicationDTO;
-import com.propertyvista.dto.PaymentRecordDTO;
 
 public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApplicationDTO>, IsView {
 
@@ -56,9 +54,6 @@ public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApp
         void downloadBlankLeaseApplicationDocument(LeaseTermParticipant<?> participantId);
 
     }
-
-    @Override
-    ILister<PaymentRecordDTO> getPaymentListerView();
 
     void reportStartOnlineApplicationSuccess();
 

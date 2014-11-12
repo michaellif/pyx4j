@@ -29,7 +29,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.BasicPermission;
 import com.pyx4j.security.shared.Permission;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
@@ -56,7 +55,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
     private final MenuItem viewParticipants;
 
-    protected final ILister<PaymentRecordDTO> paymentLister;
+    protected final PaymentLister paymentLister;
 
     protected final Button termsButton;
 
@@ -180,6 +179,9 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
     public void populate(DTO value) {
         super.populate(value);
 
+        paymentLister.getDataSource().setParentEntityId(value.billingAccount().getPrimaryKey());
+        paymentLister.populate();
+
         Lease.Status status = value.status().getValue();
 
         if (status.isFormer()) { // disable noted adding/editing
@@ -223,7 +225,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
     }
 
     @Override
-    public ILister<PaymentRecordDTO> getPaymentListerView() {
+    public PaymentLister getPaymentListerView() {
         return paymentLister;
     }
 

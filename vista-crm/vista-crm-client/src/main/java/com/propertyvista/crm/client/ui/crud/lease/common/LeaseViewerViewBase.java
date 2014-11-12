@@ -18,12 +18,10 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.dto.PaymentRecordDTO;
 
 public interface LeaseViewerViewBase<DTO extends LeaseDTO> extends IViewer<DTO> {
 
@@ -44,5 +42,5 @@ public interface LeaseViewerViewBase<DTO extends LeaseDTO> extends IViewer<DTO> 
         void newPayment();
     }
 
-    ILister<PaymentRecordDTO> getPaymentListerView();
+    PaymentLister getPaymentListerView();
 }
