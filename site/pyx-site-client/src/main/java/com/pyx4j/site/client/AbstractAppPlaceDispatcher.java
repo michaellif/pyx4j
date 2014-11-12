@@ -30,7 +30,6 @@ import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.shared.meta.PublicPlace;
 
 public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
 
@@ -52,10 +51,10 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
                     @Override
                     public void execute() {
                         AppPlace current = AppSite.getPlaceController().getWhere();
-                        if ((current instanceof PublicPlace) || (!ClientContext.isAuthenticated())) {
+                        if (!ClientContext.isAuthenticated()) {
                             AppSite.getPlaceController().goTo(AppPlace.NOWHERE, false);
                         } else {
-                            if (!isPlaceNavigable(current)) {
+                            if (!current.isStable()) {
                                 AppSite.getPlaceController().goTo(AppPlace.NOWHERE, false);
                             }
                         }
