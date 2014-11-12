@@ -176,6 +176,20 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
         }
     }
 
+    @Override
+    protected void onItemNew() {
+        if (canCreateNewItem()) {
+            if (getDataSource().getParentEntityClass() != null) {
+                AppSite.getPlaceController().goTo(
+                        AppSite.getHistoryMapper().createPlace(itemOpenPlaceClass)
+                                .formNewItemPlace(getDataSource().getParentEntityId(), getDataSource().getParentEntityClass()));
+            } else {
+                AppSite.getPlaceController().goTo(
+                        AppSite.getHistoryMapper().createPlace(itemOpenPlaceClass).formNewItemPlace(getDataSource().getParentEntityId()));
+            }
+        }
+    }
+
     public void delete(final Key itemID) {
         service.delete(new AsyncCallback<Boolean>() {
 

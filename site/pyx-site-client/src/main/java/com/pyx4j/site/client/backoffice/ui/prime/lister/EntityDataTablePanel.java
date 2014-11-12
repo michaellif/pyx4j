@@ -158,9 +158,7 @@ public abstract class EntityDataTablePanel<E extends IEntity> extends DataTableP
     }
 
     protected void updateActionsState() {
-        if (getAddButton() != null) {
-            getAddButton().setEnabled(getPresenter().canCreateNewItem());
-        }
+        setAddNewActionEnabled(getPresenter().canCreateNewItem());
     }
 
 // IListerView implementation:

@@ -91,6 +91,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     private Button addButton;
 
+    private String addButtonCaption;
+
     private Button delButton;
 
     private Button filterButton;
@@ -183,7 +185,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     }
 
     public void setDeleteActionEnabled(boolean enabled) {
-        if (enabled) {
+        if (delButton == null) {
             topActionsBar.getToolbar().insertItem(delButton = new Button(FolderImages.INSTANCE.delButton().hover(), i18n.tr("Delete Checked"), new Command() {
                 @Override
                 public void execute() {
@@ -205,34 +207,40 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
             });
 
         }
+        if (delButton != null) {
+            delButton.setVisible(enabled);
+        }
     }
 
     public void setAddNewActionEnabled(boolean enabled) {
-        if (enabled) {
-            topActionsBar.getToolbar().insertItem(
-                    addButton = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New {0}", entityPrototype.getEntityMeta().getCaption()),
-                            new Command() {
-                                @Override
-                                public void execute() {
-                                    onItemNew();
-                                }
-                            }), 0);
+        if (addButton == null) {
+            if (addButtonCaption == null) {
+                addButtonCaption = i18n.tr("New {0}", entityPrototype.getEntityMeta().getCaption());
+            }
+            topActionsBar.getToolbar().insertItem(addButton = new Button(FolderImages.INSTANCE.addButton().hover(), addButtonCaption, new Command() {
+                @Override
+                public void execute() {
+                    onItemNew();
+                }
+            }), 0);
         }
+        if (addButton != null) {
+            addButton.setVisible(enabled);
+        }
+    }
 
+    public void setAddNewActionCaption(String caption) {
+        if (addButton != null) {
+            addButton.setCaption(caption);
+        } else {
+            addButtonCaption = caption;
+        }
     }
 
     protected void onItemNew() {
     }
 
     protected void onItemsDelete(Collection<E> items) {
-    }
-
-    public Button getAddButton() {
-        return addButton;
-    }
-
-    public Button getDelButton() {
-        return delButton;
     }
 
     public void setFilterApplyCommand(Command filterActionCommand) {
