@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DataModelPermission;
@@ -47,7 +48,6 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -66,7 +66,7 @@ import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentL
 import com.propertyvista.crm.client.ui.crud.communication.MessageReportDialog;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
-import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestLister;
+
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.VistaCrmDebugId;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
@@ -85,7 +85,6 @@ import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -105,9 +104,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final BillLister billLister;
 
-    private final ILister<LeaseAdjustment> adjustmentLister;
+    private final LeaseAdjustmentLister adjustmentLister;
 
-    private final ILister<MaintenanceRequestDTO> maintenanceLister;
+    private final MaintenanceRequestLister maintenanceLister;
 
     private final MenuItem viewFutureTerm;
 
@@ -607,6 +606,16 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         depositLister.getDataSource().setParentEntityId(value.billingAccount().getPrimaryKey());
         depositLister.populate();
 
+        adjustmentLister.getDataSource().setParentEntityId(value.billingAccount().getPrimaryKey());
+        adjustmentLister.populate();
+        adjustmentLister.setAddNewActionEnabled(!value.status().getValue().isFormer());
+
+        maintenanceLister.getDataSource().clearPreDefinedFilters();
+        maintenanceLister.getDataSource().addPreDefinedFilter(
+                PropertyCriterion.eq(EntityFactory.getEntityPrototype(MaintenanceRequestDTO.class).unit(), value.unit()));
+        maintenanceLister.populate();
+        maintenanceLister.setAddNewActionEnabled(!value.status().getValue().isFormer());
+
         viewFutureTerm.setVisible(!value.nextTerm().isNull());
         viewHistoricTerms.setVisible(value.historyPresent().getValue(false));
 
@@ -653,7 +662,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     }
 
     @Override
-    public DepositLifecycleLister getDepositListerView() {
+    public DepositLifecycleLister getDepositLister() {
         return depositLister;
     }
 
@@ -663,12 +672,12 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     }
 
     @Override
-    public ILister<LeaseAdjustment> getLeaseAdjustmentListerView() {
+    public LeaseAdjustmentLister getLeaseAdjustmentLister() {
         return adjustmentLister;
     }
 
     @Override
-    public ILister<MaintenanceRequestDTO> getMaintenanceListerView() {
+    public MaintenanceRequestLister getMaintenanceLister() {
         return maintenanceLister;
     }
 

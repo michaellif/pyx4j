@@ -30,8 +30,8 @@ public class LegalTermsPolicyListerViewImpl extends CrmListerViewImplBase<LegalT
 
         public LegalDocumentationPolicyLister() {
             super(LegalTermsPolicyDTO.class);
-            getAddButton().setVisible(false);
-            getDeleteButton().setVisible(false);
+            setAddNewActionEnabled(false);
+            setDeleteActionEnabled(false);
 
             setDataTableModel(new DataTableModel<LegalTermsPolicyDTO>(// @formatter:off
                     new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),

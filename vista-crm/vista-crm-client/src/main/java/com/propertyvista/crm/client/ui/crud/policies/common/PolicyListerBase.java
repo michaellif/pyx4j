@@ -23,7 +23,6 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
@@ -38,15 +37,6 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends EntityDa
     public PolicyListerBase(Class<P> clazz) {
         super(clazz, true, true);
         setFilteringEnabled(false);
-    }
-
-    @Override
-    public Button getAddButton() {
-        return super.getAddButton();
-    }
-
-    public Button getDeleteButton() {
-        return super.getDelButton();
     }
 
     @Override

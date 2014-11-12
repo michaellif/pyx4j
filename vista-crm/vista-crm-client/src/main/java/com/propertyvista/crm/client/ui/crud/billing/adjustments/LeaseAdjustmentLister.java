@@ -13,16 +13,19 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.adjustments;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
+import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
-public class LeaseAdjustmentLister extends EntityDataTablePanel<LeaseAdjustment> {
+public class LeaseAdjustmentLister extends SiteDataTablePanel<LeaseAdjustment> {
 
     public LeaseAdjustmentLister() {
-        super(LeaseAdjustment.class, true);
+        super(LeaseAdjustment.class, GWT.<LeaseAdjustmentCrudService> create(LeaseAdjustmentCrudService.class), true);
 
         setDataTableModel(new DataTableModel<LeaseAdjustment>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().code()).build(),
@@ -37,4 +40,5 @@ public class LeaseAdjustmentLister extends EntityDataTablePanel<LeaseAdjustment>
             new MemberColumnDescriptor.Builder(proto().createdBy(), false).build()
         ));//@formatter:on
     }
+
 }

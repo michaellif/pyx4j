@@ -40,11 +40,7 @@ public class UnitLister extends EntityDataTablePanel<AptUnitDTO> {
 
     public UnitLister(boolean allowAddNew) {
         super(AptUnitDTO.class, !VistaFeatures.instance().yardiIntegration() ? allowAddNew : false);
-
-        if (getAddButton() != null) {
-            getAddButton().setCaption(i18n.tr("New Unit"));
-        }
-
+        setAddNewActionCaption(i18n.tr("New Unit"));
         setupColumns();
     }
 

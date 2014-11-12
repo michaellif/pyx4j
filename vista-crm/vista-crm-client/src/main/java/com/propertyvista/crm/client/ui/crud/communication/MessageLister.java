@@ -158,7 +158,7 @@ public class MessageLister extends EntityDataTablePanel<MessageDTO> {
         if (placeCriteria == null) {
             newMessage.setVisible(true);
             newTicket.setVisible(true);
-            getAddButton().setVisible(false);
+            setAddNewActionEnabled(false);
             if (recipientScope != null) {
                 OrCriterion senderOrRecipientCriteria = new OrCriterion(PropertyCriterion.in(criteria.proto().sender(), recipientScope), PropertyCriterion.in(
                         criteria.proto().recipients().$().recipient(), recipientScope));
@@ -172,16 +172,16 @@ public class MessageLister extends EntityDataTablePanel<MessageDTO> {
         } else {
             newMessage.setVisible(false);
             newTicket.setVisible(false);
-            getAddButton().setVisible(true);
+            setAddNewActionEnabled(true);
             if (placeCriteria instanceof CategoryType) {
-                getAddButton().setCaption(i18n.tr("New") + " " + placeCriteria.toString());
+                setAddNewActionCaption(i18n.tr("New") + " " + placeCriteria.toString());
                 criteria.eq(criteria.proto().category().categoryType(), category = (CategoryType) placeCriteria);
             } else if (placeCriteria instanceof MessageCategory) {
                 MessageCategory mc = (MessageCategory) placeCriteria;
                 if (TicketType.Maintenance.equals(mc.ticketType().getValue())) {
-                    getAddButton().setVisible(false);
+                    setAddNewActionEnabled(false);
                 } else {
-                    getAddButton().setCaption(i18n.tr("New") + " " + (category = mc.categoryType().getValue()).toString());
+                    setAddNewActionCaption(i18n.tr("New") + " " + (category = mc.categoryType().getValue()).toString());
                 }
                 criteria.eq(criteria.proto().category(), mc);
             }

@@ -56,7 +56,7 @@ public class ShowingLister extends SiteDataTablePanel<ShowingDTO> {
         ((ShowingCrudService) getService()).getActiveState(new DefaultAsyncCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
-                getAddButton().setVisible(result);
+                setAddNewActionEnabled(result);
             }
         }, EntityFactory.createIdentityStub(Appointment.class, getDataSource().getParentEntityId()));
     }

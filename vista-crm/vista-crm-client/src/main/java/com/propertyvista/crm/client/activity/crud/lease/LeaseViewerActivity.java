@@ -27,7 +27,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
@@ -37,8 +36,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ReportDialog;
-import com.pyx4j.site.client.backoffice.activity.SecureListerController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -52,7 +49,6 @@ import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
-import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
@@ -61,7 +57,6 @@ import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
@@ -70,58 +65,14 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> implements LeaseViewerView.LeaseViewerPresenter {
 
     private static final I18n i18n = I18n.get(LeaseViewerActivity.class);
 
-    private final ILister.Presenter<LeaseAdjustment> leaseAdjustmentLister;
-
-    private final ILister.Presenter<MaintenanceRequestDTO> maintenanceLister;
-
-    private boolean isFormerLease = false;
-
     public LeaseViewerActivity(CrudAppPlace place) {
         super(LeaseDTO.class, place, CrmSite.getViewFactory().getView(LeaseViewerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class));
-
-        leaseAdjustmentLister = new SecureListerController<LeaseAdjustment>(LeaseAdjustment.class,
-                ((LeaseViewerView) getView()).getLeaseAdjustmentListerView(), GWT.<LeaseAdjustmentCrudService> create(LeaseAdjustmentCrudService.class)) {
-            @Override
-            public boolean canCreateNewItem() {
-                return (super.canCreateNewItem() && !isFormerLease);
-            }
-        };
-
-        maintenanceLister = new SecureListerController<MaintenanceRequestDTO>(MaintenanceRequestDTO.class,
-                ((LeaseViewerView) getView()).getMaintenanceListerView(), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class)) {
-            @Override
-            public boolean canCreateNewItem() {
-                return (super.canCreateNewItem() && !isFormerLease);
-            }
-        };
-    }
-
-    @Override
-    protected void onPopulateSuccess(LeaseDTO result) {
-        super.onPopulateSuccess(result);
-
-        isFormerLease = result.status().getValue().isFormer();
-
-        populateLeaseAdjustments(result);
-        populateMaintenance(result);
-    }
-
-    protected void populateLeaseAdjustments(Lease result) {
-        leaseAdjustmentLister.setParent(result.billingAccount().getPrimaryKey());
-        leaseAdjustmentLister.populate();
-    }
-
-    protected void populateMaintenance(Lease result) {
-        maintenanceLister.clearPreDefinedFilters();
-        maintenanceLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(MaintenanceRequestDTO.class).unit(), result.unit()));
-        maintenanceLister.populate();
     }
 
     // Actions:

@@ -44,9 +44,9 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         super(LeaseDTO.class, view);
 
         selectTab(addTab(createDetailsTab(), i18n.tr("Details")));
-        depositsTab = addTab(getParentView().getDepositListerView().asWidget(), i18n.tr("Deposits"),
+        depositsTab = addTab(getParentView().getDepositLister().asWidget(), i18n.tr("Deposits"),
                 DataModelPermission.permissionRead(DepositLifecycleDTO.class));
-        adjustmentsTab = addTab(getParentView().getLeaseAdjustmentListerView().asWidget(), i18n.tr("Adjustments"),
+        adjustmentsTab = addTab(getParentView().getLeaseAdjustmentLister().asWidget(), i18n.tr("Adjustments"),
                 DataModelPermission.permissionRead(LeaseAdjustment.class));
         chargesTab = addTab(createChargesTab(), i18n.tr("Charges"));
         billsTab = addTab(getParentView().getBillLister().asWidget(), i18n.tr("Bills"), DataModelPermission.permissionRead(BillDataDTO.class));
@@ -54,7 +54,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         financialTab = addTab(createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"),
                 DataModelPermission.permissionRead(TransactionHistoryDTO.class));
         communicationTab = addTab(createCommunicationsTab(), i18n.tr("Documents/Communication"), DataModelPermission.permissionRead(LegalLetter.class));
-        maintenanceTab = addTab(getParentView().getMaintenanceListerView().asWidget(), i18n.tr("Maintenance"),
+        maintenanceTab = addTab(getParentView().getMaintenanceLister().asWidget(), i18n.tr("Maintenance"),
                 DataModelPermission.permissionRead(MaintenanceRequestDTO.class));
     }
 

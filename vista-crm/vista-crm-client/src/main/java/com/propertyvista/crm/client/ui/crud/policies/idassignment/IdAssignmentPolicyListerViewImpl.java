@@ -30,8 +30,8 @@ public class IdAssignmentPolicyListerViewImpl extends CrmListerViewImplBase<IdAs
 
         public IdAssignmentPolicyLister() {
             super(IdAssignmentPolicyDTO.class);
-            getAddButton().setVisible(false);
-            getDeleteButton().setVisible(false);
+            setAddNewActionEnabled(false);
+            setDeleteActionEnabled(false);
 
             setDataTableModel(new DataTableModel<IdAssignmentPolicyDTO>(// @formatter:off
                     new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),

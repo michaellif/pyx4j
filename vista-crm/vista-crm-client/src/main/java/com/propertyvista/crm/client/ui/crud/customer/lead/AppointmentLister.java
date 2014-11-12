@@ -51,7 +51,7 @@ public class AppointmentLister extends SiteDataTablePanel<Appointment> {
         ((AppointmentCrudService) getService()).getActiveState(new DefaultAsyncCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
-                getAddButton().setVisible(result);
+                setAddNewActionEnabled(result);
             }
         }, EntityFactory.createIdentityStub(Lead.class, getDataSource().getParentEntityId()));
     }
