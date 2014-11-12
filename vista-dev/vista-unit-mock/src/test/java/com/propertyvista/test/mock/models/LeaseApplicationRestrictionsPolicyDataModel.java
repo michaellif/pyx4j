@@ -37,7 +37,7 @@ public class LeaseApplicationRestrictionsPolicyDataModel extends MockDataModel<R
         policy.ageOfMajority().setValue(18);
 
         policy.emergencyContactsIsMandatory().setValue(true);
-        policy.emergencyContactsAmount().setValue(1);
+        policy.emergencyContactsNumberRequired().setValue(1);
 
         policy.node().set(getDataModel(PmcDataModel.class).getOrgNode());
 

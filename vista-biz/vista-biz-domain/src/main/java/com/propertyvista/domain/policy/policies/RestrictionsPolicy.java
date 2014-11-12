@@ -57,5 +57,5 @@ public interface RestrictionsPolicy extends Policy, TenantsAccessiblePolicy {
     IPrimitive<Boolean> emergencyContactsIsMandatory();
 
     @NotNull
-    IPrimitive<Integer> emergencyContactsAmount();
+    IPrimitive<Integer> emergencyContactsNumberRequired();
 }

@@ -60,5 +60,5 @@ public interface TenantDTO extends LeaseParticipantDTO<LeaseTermTenant> {
     // Restrictions policy:
     IPrimitive<Boolean> emergencyContactsIsMandatory();
 
-    IPrimitive<Integer> emergencyContactsAmount();
+    IPrimitive<Integer> emergencyContactsNumberRequired();
 }

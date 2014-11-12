@@ -40,7 +40,7 @@ public class RestrictionsPolicyDataModel extends MockDataModel<RestrictionsPolic
         policy.noNeedGuarantors().setValue(false);
         policy.yearsToForcingPreviousAddress().setValue(3);
         policy.emergencyContactsIsMandatory().setValue(true);
-        policy.emergencyContactsAmount().setValue(1);
+        policy.emergencyContactsNumberRequired().setValue(1);
         policy.node().set(getDataModel(PmcDataModel.class).getOrgNode());
         Persistence.service().persist(policy);
         addItem(policy);

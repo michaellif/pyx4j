@@ -64,7 +64,7 @@ public class ResidentProfileCrudServiceImpl implements ResidentProfileCrudServic
             PolicyNode policyNode = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(ResidentPortalContext.getLeaseIdStub());
             RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, RestrictionsPolicy.class);
             to.emergencyContactsIsMandatory().setValue(restrictionsPolicy.emergencyContactsIsMandatory().getValue());
-            to.emergencyContactsAmount().setValue(restrictionsPolicy.emergencyContactsAmount().getValue());
+            to.emergencyContactsNumberRequired().setValue(restrictionsPolicy.emergencyContactsNumberRequired().getValue());
         }
 
         callback.onSuccess(to);

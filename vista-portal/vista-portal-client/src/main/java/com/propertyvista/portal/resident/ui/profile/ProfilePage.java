@@ -79,7 +79,8 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        emergencyContactFolder.setRestrictions(getValue().emergencyContactsIsMandatory().isBooleanTrue(), getValue().emergencyContactsAmount().getValue());
+        emergencyContactFolder.setRestrictions(getValue().emergencyContactsIsMandatory().isBooleanTrue(), getValue().emergencyContactsNumberRequired()
+                .getValue());
     }
 
     @Override

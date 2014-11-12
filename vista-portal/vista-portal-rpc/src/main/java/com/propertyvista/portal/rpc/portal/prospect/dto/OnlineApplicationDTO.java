@@ -69,7 +69,7 @@ public interface OnlineApplicationDTO extends IEntity {
 
     IPrimitive<Boolean> emergencyContactsIsMandatory();
 
-    IPrimitive<Integer> emergencyContactsAmount();
+    IPrimitive<Integer> emergencyContactsNumberRequired();
 
     //--------------------------------------------
     // read and update data:

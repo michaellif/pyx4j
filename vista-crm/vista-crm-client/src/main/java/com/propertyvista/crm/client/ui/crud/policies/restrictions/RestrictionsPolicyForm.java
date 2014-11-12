@@ -35,21 +35,23 @@ public class RestrictionsPolicyForm extends PolicyDTOTabPanelBasedForm<Restricti
     private IsWidget createMiscPoliciesTab() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().maxParkingSpots()).decorate().componentWidth(40).labelWidth(220);
-        formPanel.append(Location.Left, proto().maxLockers()).decorate().componentWidth(40).labelWidth(220);
-        formPanel.append(Location.Left, proto().maxPets()).decorate().componentWidth(40).labelWidth(220);
-        formPanel.append(Location.Left, proto().occupantsPerBedRoom()).decorate().componentWidth(40).labelWidth(220);
+        formPanel.append(Location.Dual, proto().maxParkingSpots()).decorate().componentWidth(40).labelWidth(300);
+        formPanel.append(Location.Dual, proto().maxLockers()).decorate().componentWidth(40).labelWidth(300);
+        formPanel.append(Location.Dual, proto().maxPets()).decorate().componentWidth(40).labelWidth(300);
+        formPanel.append(Location.Dual, proto().occupantsPerBedRoom()).decorate().componentWidth(40).labelWidth(300);
 
         formPanel.br();
 
-        formPanel.append(Location.Left, proto().ageOfMajority()).decorate().componentWidth(40).labelWidth(220);
-        formPanel.append(Location.Left, proto().enforceAgeOfMajority()).decorate().componentWidth(40).labelWidth(220);
-        formPanel.append(Location.Left, proto().maturedOccupantsAreApplicants()).decorate().componentWidth(40).labelWidth(220);
-        formPanel.append(Location.Left, proto().noNeedGuarantors()).decorate().componentWidth(40).labelWidth(220);
-        formPanel.append(Location.Left, proto().yearsToForcingPreviousAddress()).decorate().componentWidth(40).labelWidth(220);
+        formPanel.append(Location.Dual, proto().ageOfMajority()).decorate().componentWidth(40).labelWidth(300);
+        formPanel.append(Location.Dual, proto().enforceAgeOfMajority()).decorate().componentWidth(40).labelWidth(300);
 
-        formPanel.append(Location.Left, proto().emergencyContactsIsMandatory()).decorate().componentWidth(40).labelWidth(220);
-        formPanel.append(Location.Left, proto().emergencyContactsAmount()).decorate().componentWidth(40).labelWidth(220);
+        formPanel.append(Location.Dual, proto().maturedOccupantsAreApplicants()).decorate().componentWidth(40).labelWidth(300);
+        formPanel.append(Location.Dual, proto().noNeedGuarantors()).decorate().componentWidth(40).labelWidth(300);
+
+        formPanel.append(Location.Dual, proto().yearsToForcingPreviousAddress()).decorate().componentWidth(40).labelWidth(300);
+
+        formPanel.append(Location.Dual, proto().emergencyContactsIsMandatory()).decorate().componentWidth(40).labelWidth(300);
+        formPanel.append(Location.Dual, proto().emergencyContactsNumberRequired()).decorate().componentWidth(40).labelWidth(300);
 
         return formPanel;
     }

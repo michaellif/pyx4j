@@ -100,7 +100,7 @@ public class RestrictionsPolicyPreloader extends AbstractPolicyPreloader<Restric
         }
 
         policy.emergencyContactsIsMandatory().setValue(true);
-        policy.emergencyContactsAmount().setValue(1);
+        policy.emergencyContactsNumberRequired().setValue(1);
 
         log.append(policy.getStringView());
 
