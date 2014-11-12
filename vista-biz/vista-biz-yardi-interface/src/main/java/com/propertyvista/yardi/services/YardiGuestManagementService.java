@@ -39,6 +39,7 @@ import com.yardi.entity.guestcard40.LeadManagement;
 import com.yardi.entity.guestcard40.MarketingAgent;
 import com.yardi.entity.guestcard40.MarketingSource;
 import com.yardi.entity.guestcard40.MarketingSources;
+import com.yardi.entity.guestcard40.NameType;
 import com.yardi.entity.guestcard40.PropertyMarketingSources;
 import com.yardi.entity.guestcard40.Prospect;
 import com.yardi.entity.guestcard40.Prospects;
@@ -47,6 +48,10 @@ import com.yardi.entity.guestcard40.RentableItemType;
 import com.yardi.entity.guestcard40.RentableItems;
 import com.yardi.entity.leaseapp30.LeaseApplication;
 import com.yardi.entity.mits.Information;
+import com.yardi.entity.mits.Name;
+import com.yardi.entity.mits.YardiCustomer;
+import com.yardi.entity.resident.Property;
+import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
@@ -65,8 +70,10 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.yardi.YardiConstants;
+import com.propertyvista.yardi.mappers.TenantMapper;
 import com.propertyvista.yardi.processors.YardiGuestProcessor;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
+import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 public class YardiGuestManagementService extends YardiAbstractService {
@@ -258,7 +265,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
         }
 
         // do guest search to retrieve lease participants
-        Map<Key, String> participants = retrieveLeaseParticipants(yc, lease);
+        Map<Key, String> participants = retrieveLeaseParticipants(yc, lease, null);
         log.info("Added Lease Participants: {}", Arrays.toString(participants.values().toArray()));
 
         return participants;
@@ -322,7 +329,9 @@ public class YardiGuestManagementService extends YardiAbstractService {
         return tenantId;
     }
 
-    public Map<Key, String> retrieveLeaseParticipants(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {
+    /** Maps PV tenant PK to YARDI resident or tenant IDs */
+    public Map<Key, String> retrieveLeaseParticipants(PmcYardiCredential yc, Lease lease, Map<String, String> residentIds) throws YardiServiceException,
+            RemoteException {
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
 
         Key tenantId = lease.getPrimaryKey();
@@ -348,6 +357,13 @@ public class YardiGuestManagementService extends YardiAbstractService {
                     participants.put(lease._applicant().getPrimaryKey(), StringUtils.isEmpty(tId) ? pId : tId);
                     tenantFound = true;
                 } else {
+                    if (residentIds != null) {
+                        String nameKey = getNameKey(c.getName());
+                        pId = residentIds.get(nameKey);
+                        if (pId == null) {
+                            throw new YardiServiceException(SimpleMessageFormat.format("Prospect not found: {0}", nameKey));
+                        }
+                    }
                     participants.put(tpKey, pId);
                 }
             }
@@ -366,6 +382,30 @@ public class YardiGuestManagementService extends YardiAbstractService {
             throw new YardiServiceException(msg);
         }
         return participants;
+    }
+
+    /** Maps PV tenant to YARDI rtCustomer IDs using tenant name as intermediate key */
+    public Map<Key, String> retrieveLeaseResidentIds(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
+        Map<String, String> residentIds = getLeaseResidentIds(yc, lease.unit().building().propertyCode().getValue(), lease.leaseId().getValue());
+        return retrieveLeaseParticipants(yc, lease, residentIds);
+    }
+
+    /** Maps resident name to YARDI rtCustomer IDs retrieved from ResidentTransactions */
+    private Map<String, String> getLeaseResidentIds(PmcYardiCredential yc, String propertyCode, String tenantId) throws YardiServiceException, RemoteException {
+        Map<String, String> result = null;
+        ResidentTransactions transaction = YardiStubFactory.create(YardiResidentTransactionsStub.class).getResidentTransactionsForTenant(yc, propertyCode,
+                tenantId);
+        if (transaction != null && !transaction.getProperty().isEmpty()) {
+            Property property = transaction.getProperty().iterator().next();
+            if (!property.getRTCustomer().isEmpty()) {
+                result = new HashMap<String, String>();
+                for (YardiCustomer customer : property.getRTCustomer().iterator().next().getCustomers().getCustomer()) {
+                    result.put(getNameKey(customer.getName()), TenantMapper.getCustomerID(customer));
+                }
+            }
+        }
+        return result;
     }
 
     public boolean isLeaseSigned(final PmcYardiCredential yc, final Lease lease) throws YardiServiceException {
@@ -592,6 +632,21 @@ public class YardiGuestManagementService extends YardiAbstractService {
             result.add(c.getEventType());
         }
         return result;
+    }
+
+    private String getNameKey(Name name) {
+        StringBuilder key = new StringBuilder() //
+                .append(name.getFirstName() + ".") //
+                .append(name.getLastName() + ".");
+        return key.toString();
+    }
+
+    // TODO - com.yardi.entity.guestcard40.NameType is identical to com.yardi.entity.mits.Name - consider xsd or reflection mapping
+    private String getNameKey(NameType name) {
+        StringBuilder key = new StringBuilder() //
+                .append(name.getFirstName() + ".") //
+                .append(name.getLastName() + ".");
+        return key.toString();
     }
 
     private static class RentableItemKey {

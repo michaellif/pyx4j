@@ -200,7 +200,7 @@ public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl imp
                     Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
                     Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.Attached);
 
-                    Map<Key, String> participantIds = YardiGuestManagementService.getInstance().retrieveLeaseParticipants(getPmcYardiCredential(lease), lease);
+                    Map<Key, String> participantIds = YardiGuestManagementService.getInstance().retrieveLeaseResidentIds(getPmcYardiCredential(lease), lease);
                     for (LeaseTermParticipant<?> termParticipant : CollectionUtils.union(lease.currentTerm().version().tenants(), lease.currentTerm().version()
                             .guarantors())) {
                         Persistence.ensureRetrieve(termParticipant.leaseParticipant(), AttachLevel.Attached);
