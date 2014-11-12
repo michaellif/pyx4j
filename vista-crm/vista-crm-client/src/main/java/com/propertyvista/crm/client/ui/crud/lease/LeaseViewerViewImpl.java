@@ -66,7 +66,6 @@ import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentL
 import com.propertyvista.crm.client.ui.crud.communication.MessageReportDialog;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
-import com.propertyvista.crm.client.ui.crud.lease.financial.deposit.DepositLifecycleLister;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.VistaCrmDebugId;
@@ -91,7 +90,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseLegalStateDTO;
@@ -103,7 +101,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private static final I18n i18n = I18n.get(LeaseViewerViewImpl.class);
 
-    private final ILister<DepositLifecycleDTO> depositLister;
+    private final DepositLifecycleLister depositLister;
 
     private final BillLister billLister;
 
@@ -606,6 +604,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         billLister.getDataSource().setPreDefinedFilters(filters.getFilters());
         billLister.populate();
 
+        depositLister.getDataSource().setParentEntityId(value.billingAccount().getPrimaryKey());
+        depositLister.populate();
+
         viewFutureTerm.setVisible(!value.nextTerm().isNull());
         viewHistoricTerms.setVisible(value.historyPresent().getValue(false));
 
@@ -652,7 +653,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     }
 
     @Override
-    public ILister<DepositLifecycleDTO> getDepositListerView() {
+    public DepositLifecycleLister getDepositListerView() {
         return depositLister;
     }
 

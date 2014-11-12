@@ -11,25 +11,28 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease.financial.deposit;
+package com.propertyvista.crm.client.ui.crud.lease;
 
 import java.util.Arrays;
 import java.util.List;
+
+import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
+import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
 import com.propertyvista.dto.DepositLifecycleDTO;
 
-public class DepositLifecycleLister extends EntityDataTablePanel<DepositLifecycleDTO> {
+public class DepositLifecycleLister extends SiteDataTablePanel<DepositLifecycleDTO> {
 
     private final static I18n i18n = I18n.get(DepositLifecycleLister.class);
 
     public DepositLifecycleLister() {
-        super(DepositLifecycleDTO.class, false);
+        super(DepositLifecycleDTO.class, GWT.<DepositLifecycleCrudService> create(DepositLifecycleCrudService.class), false);
 
         setDataTableModel(new DataTableModel<DepositLifecycleDTO>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().deposit().billableItem()).searchable(false).sortable(false).columnTitle(i18n.tr("Service/Feature")).build(),

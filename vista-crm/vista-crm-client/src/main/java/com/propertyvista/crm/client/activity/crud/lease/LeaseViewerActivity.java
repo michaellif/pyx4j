@@ -55,7 +55,6 @@ import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
-import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
@@ -70,7 +69,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -78,8 +76,6 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> implements LeaseViewerView.LeaseViewerPresenter {
 
     private static final I18n i18n = I18n.get(LeaseViewerActivity.class);
-
-    private final ILister.Presenter<DepositLifecycleDTO> depositLister;
 
     private final ILister.Presenter<LeaseAdjustment> leaseAdjustmentLister;
 
@@ -89,9 +85,6 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     public LeaseViewerActivity(CrudAppPlace place) {
         super(LeaseDTO.class, place, CrmSite.getViewFactory().getView(LeaseViewerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class));
-
-        depositLister = new SecureListerController<DepositLifecycleDTO>(DepositLifecycleDTO.class, ((LeaseViewerView) getView()).getDepositListerView(),
-                GWT.<DepositLifecycleCrudService> create(DepositLifecycleCrudService.class));
 
         leaseAdjustmentLister = new SecureListerController<LeaseAdjustment>(LeaseAdjustment.class,
                 ((LeaseViewerView) getView()).getLeaseAdjustmentListerView(), GWT.<LeaseAdjustmentCrudService> create(LeaseAdjustmentCrudService.class)) {
@@ -116,14 +109,8 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
         isFormerLease = result.status().getValue().isFormer();
 
-        populateDeposits(result);
         populateLeaseAdjustments(result);
         populateMaintenance(result);
-    }
-
-    protected void populateDeposits(Lease result) {
-        depositLister.setParent(result.billingAccount().getPrimaryKey());
-        depositLister.populate();
     }
 
     protected void populateLeaseAdjustments(Lease result) {

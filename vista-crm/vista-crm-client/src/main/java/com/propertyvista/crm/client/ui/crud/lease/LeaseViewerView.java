@@ -33,7 +33,6 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
@@ -91,7 +90,7 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
     }
 
-    ILister<DepositLifecycleDTO> getDepositListerView();
+    DepositLifecycleLister getDepositListerView();
 
     BillLister getBillLister();
 
