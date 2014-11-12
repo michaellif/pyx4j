@@ -55,11 +55,11 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     protected AppPlace mandatoryActionForward(AppPlace newPlace) {
-        if (!(newPlace instanceof PublicPlace) && !ClientContext.isAuthenticated()) {
-            return new PortalSiteMap.Login();
-        }
-        if (newPlace instanceof PortalSiteMap.Logout) {
+        if (newPlace instanceof PublicPlace) {
             return newPlace;
+        }
+        if (!ClientContext.isAuthenticated()) {
+            return new PortalSiteMap.Login();
         }
         if (SecurityController.check(VistaBasicBehavior.ResidentPortalPasswordChangeRequired)) {
             return new PortalSiteMap.PasswordReset();
