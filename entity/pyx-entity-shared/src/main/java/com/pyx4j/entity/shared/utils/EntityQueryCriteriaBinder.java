@@ -105,7 +105,7 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
             boPath = binder.getBoundBOMemberPath(toPath);
         }
         if (boPath == null) {
-            throw new Error("Unsupported query property path " + boPath);
+            throw new Error("Unsupported query property path " + toPath);
         }
         return boPath;
     }
