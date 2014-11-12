@@ -21,7 +21,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.ActionPermission;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog.Type;
@@ -33,7 +32,6 @@ import com.propertyvista.crm.client.ui.crud.unit.dialogs.MakePendingDialog;
 import com.propertyvista.crm.client.ui.crud.unit.dialogs.ScopeDialog;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.crm.rpc.services.building.ac.UpdateUnitAvailability;
-import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.AptUnitDTO;
@@ -45,9 +43,9 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
 
     private final static I18n i18n = I18n.get(UnitViewerViewImpl.class);
 
-    private final ILister<AptUnitItem> unitItemsLister;
+    private final UnitItemLister unitItemsLister;
 
-    private final ILister<AptUnitOccupancySegment> occupanciesLister;
+    private final UnitOccupancyLister occupanciesLister;
 
     private final MenuItem existingLeaseAction;
 
@@ -171,16 +169,22 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
     public void populate(AptUnitDTO value) {
         super.populate(value);
 
+        unitItemsLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        unitItemsLister.populate();
+
+        occupanciesLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        occupanciesLister.populate();
+
         setActionVisible(existingLeaseAction, value.isAvailableForExistingLease().getValue(false));
     }
 
     @Override
-    public ILister<AptUnitItem> getUnitItemsListerView() {
+    public UnitItemLister getUnitItemsListerView() {
         return unitItemsLister;
     }
 
     @Override
-    public ILister<AptUnitOccupancySegment> getOccupanciesListerView() {
+    public UnitOccupancyLister getOccupanciesListerView() {
         return occupanciesLister;
     }
 

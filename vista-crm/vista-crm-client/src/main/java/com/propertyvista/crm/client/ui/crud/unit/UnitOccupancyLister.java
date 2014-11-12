@@ -13,21 +13,24 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
+import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class UnitOccupancyLister extends EntityDataTablePanel<AptUnitOccupancySegment> {
+public class UnitOccupancyLister extends SiteDataTablePanel<AptUnitOccupancySegment> {
 
     public UnitOccupancyLister() {
-        super(AptUnitOccupancySegment.class, false);
+        super(AptUnitOccupancySegment.class, GWT.<UnitOccupancyCrudService> create(UnitOccupancyCrudService.class), false);
         setFilteringEnabled(false);
         setItemZoomInCommand(new ItemZoomInCommand<AptUnitOccupancySegment>() {
             @Override

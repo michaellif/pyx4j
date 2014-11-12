@@ -15,11 +15,8 @@ package com.propertyvista.crm.client.ui.crud.unit;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
-import com.propertyvista.domain.property.asset.unit.AptUnitItem;
-import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.dto.AptUnitDTO;
 
@@ -40,9 +37,9 @@ public interface UnitViewerView extends IViewer<AptUnitDTO> {
         void updateAvailabilityFromYardi();
     }
 
-    ILister<AptUnitItem> getUnitItemsListerView();
+    UnitItemLister getUnitItemsListerView();
 
-    ILister<AptUnitOccupancySegment> getOccupanciesListerView();
+    UnitOccupancyLister getOccupanciesListerView();
 
     void setCanScopeOffMarket(boolean canScopeOffMarket);
 

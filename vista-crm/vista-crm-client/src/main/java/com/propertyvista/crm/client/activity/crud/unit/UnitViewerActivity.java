@@ -15,37 +15,26 @@ package com.propertyvista.crm.client.activity.crud.unit;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.activity.ListerControllerFactory;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
-import com.propertyvista.crm.rpc.services.unit.UnitItemCrudService;
-import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyManagerService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.property.asset.unit.AptUnitItem;
-import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements UnitViewerView.Presenter {
-
-    private final ILister.Presenter<?> unitItemsLister;
-
-    private final ILister.Presenter<?> occupanciesLister;
 
     private final UnitOccupancyManagerService occupancyManagerService;
 
@@ -54,60 +43,43 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
     public UnitViewerActivity(CrudAppPlace place) {
         super(AptUnitDTO.class, place, CrmSite.getViewFactory().getView(UnitViewerView.class), GWT.<UnitCrudService> create(UnitCrudService.class));
 
-        unitItemsLister = ListerControllerFactory.create(AptUnitItem.class, ((UnitViewerView) getView()).getUnitItemsListerView(),
-                GWT.<UnitItemCrudService> create(UnitItemCrudService.class));
-
-        occupanciesLister = ListerControllerFactory.create(AptUnitOccupancySegment.class, ((UnitViewerView) getView()).getOccupanciesListerView(),
-                GWT.<UnitOccupancyCrudService> create(UnitOccupancyCrudService.class));
-
         occupancyManagerService = GWT.create(UnitOccupancyManagerService.class);
     }
 
     @Override
     public void onPopulateSuccess(AptUnitDTO result) {
         super.onPopulateSuccess(result);
-
         currentValue = result;
 
-        unitItemsLister.setParent(result.getPrimaryKey());
-        unitItemsLister.populate();
-
-        populateOccupancy(result.getPrimaryKey());
-    }
-
-    private void populateOccupancy(Key entityId) {
-        occupanciesLister.setParent(entityId);
-        occupanciesLister.populate();
-
-        final UnitViewerView myView = (UnitViewerView) getView();
+        final UnitViewerView view = (UnitViewerView) getView();
 
         occupancyManagerService.getMakeVacantConstraints(new DefaultAsyncCallback<MakeVacantConstraintsDTO>() {
             @Override
             public void onSuccess(MakeVacantConstraintsDTO result) {
-                myView.setMakeVacantConstraints(result);
+                view.setMakeVacantConstraints(result);
             }
-        }, entityId);
+        }, result.getPrimaryKey());
 
         occupancyManagerService.canScopeAvailable(new DefaultAsyncCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
-                myView.setCanScopeAvailable(result);
+                view.setCanScopeAvailable(result);
             }
-        }, entityId);
+        }, result.getPrimaryKey());
 
         occupancyManagerService.canScopeOffMarket(new DefaultAsyncCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
-                myView.setCanScopeOffMarket(result);
+                view.setCanScopeOffMarket(result);
             }
-        }, entityId);
+        }, result.getPrimaryKey());
 
         occupancyManagerService.canScopeRenovation(new DefaultAsyncCallback<LogicalDate>() {
             @Override
             public void onSuccess(LogicalDate result) {
-                myView.setMinRenovationEndDate(result);
+                view.setMinRenovationEndDate(result);
             }
-        }, entityId);
+        }, result.getPrimaryKey());
     }
 
     @Override
