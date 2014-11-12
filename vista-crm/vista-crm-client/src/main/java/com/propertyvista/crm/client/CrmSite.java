@@ -68,7 +68,6 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
-import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.shared.services.SiteThemeServices;

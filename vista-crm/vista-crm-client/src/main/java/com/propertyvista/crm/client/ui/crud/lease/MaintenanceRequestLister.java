@@ -18,9 +18,7 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
@@ -29,8 +27,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceCrudService;
-import com.propertyvista.domain.contact.InternationalAddress;
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestLister extends SiteDataTablePanel<MaintenanceRequestDTO> {

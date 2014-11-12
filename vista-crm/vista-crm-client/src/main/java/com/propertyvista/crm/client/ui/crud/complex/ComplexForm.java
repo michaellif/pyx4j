@@ -18,8 +18,8 @@ import com.google.gwt.user.client.Window;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;

@@ -66,7 +66,6 @@ import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentL
 import com.propertyvista.crm.client.ui.crud.communication.MessageReportDialog;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
-
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.VistaCrmDebugId;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;

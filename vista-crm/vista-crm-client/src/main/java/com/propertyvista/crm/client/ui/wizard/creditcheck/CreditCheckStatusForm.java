@@ -20,8 +20,8 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 

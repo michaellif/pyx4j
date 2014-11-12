@@ -27,8 +27,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.CField;

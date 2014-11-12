@@ -28,8 +28,8 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;

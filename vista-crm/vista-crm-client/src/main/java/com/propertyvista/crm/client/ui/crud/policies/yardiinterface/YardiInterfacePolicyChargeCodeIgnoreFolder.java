@@ -18,9 +18,8 @@ import java.util.List;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;

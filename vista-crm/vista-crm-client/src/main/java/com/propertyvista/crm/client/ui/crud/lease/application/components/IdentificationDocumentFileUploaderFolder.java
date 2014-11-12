@@ -17,8 +17,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFile;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;

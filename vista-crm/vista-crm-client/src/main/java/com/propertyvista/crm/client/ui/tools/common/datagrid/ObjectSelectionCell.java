@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.tools.common.datagrid;
 
-import java.text.ParseException;
-
 import com.google.gwt.cell.client.AbstractInputCell;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;

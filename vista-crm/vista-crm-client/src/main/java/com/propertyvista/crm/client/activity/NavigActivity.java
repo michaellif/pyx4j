@@ -38,7 +38,6 @@ import com.propertyvista.crm.client.activity.login.GetSatisfaction;
 import com.propertyvista.crm.client.event.BoardUpdateEvent;
 import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.client.ui.NavigView.NavigPresenter;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.MessageCategoryCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.crm.rpc.services.reports.CrmAvailableReportService;

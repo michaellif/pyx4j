@@ -34,14 +34,13 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
-import com.pyx4j.site.client.backoffice.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;

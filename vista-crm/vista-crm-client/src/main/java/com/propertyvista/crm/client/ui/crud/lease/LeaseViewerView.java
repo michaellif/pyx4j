@@ -23,7 +23,6 @@ import com.pyx4j.commons.UserRuntimeException;
 
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentLister;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
-
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;

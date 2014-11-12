@@ -19,8 +19,8 @@ import com.pyx4j.entity.core.ICollection;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 
 public abstract class ZoomableViewForm<E extends IEntity> extends CForm<E> {
 
