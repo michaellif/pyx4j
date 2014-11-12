@@ -326,27 +326,37 @@ public class YardiMockILSGuestCardStubImpl extends YardiMockStubBase implements 
         // find lease
         Tenant tenant = leaseApp.getTenant().get(0);
         String guestId = findLeaseIdentity(tenant.getIdentification(), "thirdparty");
-        YardiLease lease = null;
+        YardiLease mockLease = null;
+        YardiTenant mockTenant = null;
         for (YardiLease _lease : building.leases()) {
-            if (YardiMockModelUtils.findGuest(_lease, guestId) != null) {
-                lease = _lease;
+            if ((mockTenant = YardiMockModelUtils.findGuest(_lease, guestId)) != null) {
+                mockLease = _lease;
                 break;
             }
         }
-        if (lease == null) {
+        if (mockLease == null) {
             Messages.throwYardiResponseException(guestId + ":Prospect Not Found");
         }
         // add fees
         if (tenant.getAccountingData() != null && tenant.getAccountingData().getChargeSet().size() > 0
                 && tenant.getAccountingData().getChargeSet().get(0).getCharge().size() > 0) {
             YardiGuestManager guestManager = YardiMock.server().getManager(YardiGuestManager.class);
-            ApplicationBuilder appBuilder = guestManager.getApplication(propertyId, lease.leaseId().getValue());
+            ApplicationBuilder appBuilder = guestManager.getApplication(propertyId, mockLease.leaseId().getValue());
             for (Charge charge : tenant.getAccountingData().getChargeSet().get(0).getCharge()) {
-                appBuilder.addFee( //
-                        charge.getAmount(), //
-                        charge.getLabel(), //
-                        charge.getIdentification().size() > 0 ? charge.getIdentification().get(0).getOrganizationName() : null //
-                        );
+                // ensure the prospect can accept charges
+                if (mockTenant.type().getValue().isApplicant() || //
+                        (mockTenant.type().getValue().isProspect() && YardiMockModelUtils.hasEvent(mockLease, YardiGuestEvent.Type.APPLICATION))) {
+                    appBuilder.addFee( //
+                            charge.getAmount(), //
+                            charge.getLabel(), //
+                            charge.getIdentification().size() > 0 ? charge.getIdentification().get(0).getOrganizationName() : null //
+                            );
+                } else if (mockTenant.type().getValue().isResident()) {
+                    Messages.throwYardiResponseException(guestId
+                            + ":Guest has moved-in. Inserting charges through the Guest Card Interface is no longer accepted.");
+                } else {
+                    Messages.throwYardiResponseException(guestId + ":Guest must have successfully executed 'Application' event to add application charges.");
+                }
             }
         }
     }

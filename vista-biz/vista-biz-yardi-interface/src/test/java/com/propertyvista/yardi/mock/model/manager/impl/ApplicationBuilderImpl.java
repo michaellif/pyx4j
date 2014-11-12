@@ -95,6 +95,7 @@ public class ApplicationBuilderImpl extends LeaseBuilderImpl implements Applicat
 
         YardiTenant tenant = EntityFactory.create(YardiTenant.class);
         tenant.guestId().setValue(guestId);
+        tenant.type().setValue(YardiTenant.Type.PROSPECT);
         lease.tenants().add(tenant);
 
         return (GuestBuilder) new GuestBuilderImpl(tenant, this).setName(name);
@@ -117,8 +118,14 @@ public class ApplicationBuilderImpl extends LeaseBuilderImpl implements Applicat
         event.type().setValue(type);
         lease.application().events().add(event);
 
-        // process event; TODO - handle lease status
-        if (Type.LEASE_SIGN.equals(type)) {
+        // process event; TODO - handle prospect/lease status
+        switch (type) {
+        case APPLICATION:
+            break;
+        case APPROVE:
+            lease.tenants().iterator().next().type().setValue(YardiTenant.Type.APPLICANT);
+            break;
+        case LEASE_SIGN:
             boolean isMainTenant = true;
             for (YardiTenant tenant : lease.tenants()) {
                 // set resident id and type; first prospect will be the main tenant
@@ -130,6 +137,10 @@ public class ApplicationBuilderImpl extends LeaseBuilderImpl implements Applicat
                 }
                 isMainTenant = false;
             }
+            lease.status().setValue(YardiLease.Status.FUTURE);
+            break;
+        default:
+            break;
         }
 
         return new GuestEventBuilderImpl(event, this);

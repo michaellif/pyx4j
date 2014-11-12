@@ -28,6 +28,8 @@ public interface YardiLease extends IEntity {
 
     IPrimitive<String> leaseId();
 
+    IPrimitive<Status> status();
+
     YardiUnit unit();
 
     IPrimitive<BigDecimal> currentRent();

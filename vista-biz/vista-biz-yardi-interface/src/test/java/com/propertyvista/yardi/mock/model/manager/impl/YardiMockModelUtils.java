@@ -24,6 +24,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.propertyvista.yardi.mock.model.YardiMock;
 import com.propertyvista.yardi.mock.model.domain.YardiBuilding;
 import com.propertyvista.yardi.mock.model.domain.YardiFloorplan;
+import com.propertyvista.yardi.mock.model.domain.YardiGuestEvent;
 import com.propertyvista.yardi.mock.model.domain.YardiLease;
 import com.propertyvista.yardi.mock.model.domain.YardiLeaseCharge;
 import com.propertyvista.yardi.mock.model.domain.YardiRentableItem;
@@ -158,6 +159,18 @@ public class YardiMockModelUtils {
             }
         }
         return null;
+    }
+
+    public static boolean hasEvent(YardiLease lease, YardiGuestEvent.Type eventType) {
+        assert lease != null : "lease cannot be null";
+        assert eventType != null : "event type cannot be null";
+
+        for (YardiGuestEvent event : lease.application().events()) {
+            if (eventType.equals(event.type().getValue())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Conversions

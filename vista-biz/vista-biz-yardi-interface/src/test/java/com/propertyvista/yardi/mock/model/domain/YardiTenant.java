@@ -13,6 +13,8 @@
  */
 package com.propertyvista.yardi.mock.model.domain;
 
+import java.util.EnumSet;
+
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
@@ -20,6 +22,18 @@ public interface YardiTenant extends IEntity {
 
     public enum Type {
         GUEST, APPLICANT, CUSTOMER, CURRENT_RESIDENT, FORMER_RESIDENT, FUTURE_RESIDENT, PROSPECT, OTHER;
+
+        public boolean isProspect() {
+            return EnumSet.of(GUEST, PROSPECT, OTHER).contains(this);
+        }
+
+        public boolean isApplicant() {
+            return EnumSet.of(APPLICANT, FUTURE_RESIDENT).contains(this);
+        }
+
+        public boolean isResident() {
+            return EnumSet.of(CUSTOMER, CURRENT_RESIDENT, FORMER_RESIDENT, FUTURE_RESIDENT).contains(this);
+        }
     }
 
     IPrimitive<String> guestId();
