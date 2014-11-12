@@ -221,7 +221,7 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
             @Override
             public void execute() {
                 for (E item : items) {
-                    //TODO
+                    delete(item.getPrimaryKey());
                 }
             }
         });
