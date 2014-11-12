@@ -89,9 +89,9 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     /**
      * Allows to map BO to id of different TO entity.
      * if changed, need to change getTOKey
-     * 
+     *
      * @experimental
-     * 
+     *
      * @param toId
      * @return primary key of BO entity
      */
@@ -101,9 +101,9 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
 
     /**
      * Default implementation does noting since the keys mapped one to one.
-     * 
+     *
      * @experimental
-     * 
+     *
      * @param bo
      * @param to
      */
@@ -125,10 +125,20 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     protected void retrievedForList(BO bo) {
     }
 
+    /**
+     *
+     * @deprecated TODO VladS switch to EntityQueryCriteriaBinder
+     */
+    @Deprecated
     protected Path convertPropertyDTOPathToDBOPath(String path, BO boProto, TO toProto) {
         throw new Error("Unsupported query property path " + path);
     }
 
+    /**
+     *
+     * @deprecated TODO VladS switch to EntityQueryCriteriaBinder
+     */
+    @Deprecated
     private Collection<Criterion> convertFilters(EntityListCriteria<BO> criteria, Collection<Criterion> toFilters) {
         Collection<Criterion> boFilters = new ArrayList<Criterion>();
         for (Criterion cr : toFilters) {
@@ -140,6 +150,11 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         return boFilters;
     }
 
+    /**
+     *
+     * @deprecated TODO VladS switch to EntityQueryCriteriaBinder
+     */
+    @Deprecated
     protected Criterion convertCriterion(EntityListCriteria<BO> criteria, Criterion cr) {
         if (cr instanceof PropertyCriterion) {
             PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
@@ -162,6 +177,11 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         }
     }
 
+    /**
+     *
+     * @deprecated TODO VladS switch to EntityQueryCriteriaBinder
+     */
+    @Deprecated
     protected Serializable convertValue(EntityListCriteria<BO> criteria, PropertyCriterion propertyCriterion) {
         Serializable value = propertyCriterion.getValue();
         if (value instanceof Path) {
@@ -177,6 +197,11 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         }
     }
 
+    /**
+     *
+     * @deprecated TODO VladS switch to EntityQueryCriteriaBinder
+     */
+    @Deprecated
     protected void enhanceListCriteria(EntityListCriteria<BO> boCriteria, EntityListCriteria<TO> toCriteria) {
         if ((toCriteria.getFilters() != null) && (!toCriteria.getFilters().isEmpty())) {
             boCriteria.addAll(convertFilters(boCriteria, toCriteria.getFilters()));
