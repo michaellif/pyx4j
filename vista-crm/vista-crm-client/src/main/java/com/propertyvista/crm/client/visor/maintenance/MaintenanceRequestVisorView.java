@@ -15,22 +15,23 @@ package com.propertyvista.crm.client.visor.maintenance;
 
 import com.google.gwt.user.client.ui.ScrollPanel;
 
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
 
-import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestLister;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestVisorView extends AbstractVisorPane {
 
     private static final I18n i18n = I18n.get(MaintenanceRequestVisorView.class);
 
-    private final ILister<MaintenanceRequestDTO> lister;
+    private final MaintenanceRequestLister lister;
 
     public MaintenanceRequestVisorView(MaintenanceRequestVisorController controller) {
         super(controller);
-        this.lister = new MaintenanceRequestLister();
+        this.lister = new MaintenanceRequestLister(this);
 
         // UI:
         setCaption(i18n.tr("Maintenance Requests"));
@@ -38,7 +39,20 @@ public class MaintenanceRequestVisorView extends AbstractVisorPane {
         getElement().getStyle().setProperty("padding", "6px");
     }
 
-    public ILister<MaintenanceRequestDTO> getLister() {
-        return lister;
+    public void populate() {
+        lister.getDataSource().setParentEntityId(getBuildingId());
+        if (getTenantId() != null) {
+            lister.getDataSource().addPreDefinedFilter(
+                    PropertyCriterion.eq(EntityFactory.getEntityPrototype(MaintenanceRequestDTO.class).reporter().id(), getTenantId()));
+        }
+        lister.populate();
+    }
+
+    public Key getBuildingId() {
+        return ((MaintenanceRequestVisorController) getController()).getBuildingId();
+    }
+
+    public Key getTenantId() {
+        return ((MaintenanceRequestVisorController) getController()).getTenantId();
     }
 }
