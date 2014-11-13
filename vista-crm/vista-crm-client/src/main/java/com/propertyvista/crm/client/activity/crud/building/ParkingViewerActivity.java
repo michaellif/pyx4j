@@ -23,7 +23,7 @@ import com.propertyvista.crm.client.ui.crud.building.parking.ParkingViewerView;
 import com.propertyvista.crm.rpc.services.building.ParkingCrudService;
 import com.propertyvista.dto.ParkingDTO;
 
-public class ParkingViewerActivity extends CrmViewerActivity<ParkingDTO> implements ParkingViewerView.Presenter {
+public class ParkingViewerActivity extends CrmViewerActivity<ParkingDTO> implements ParkingViewerView.ParkingViewerPresenter {
 
     public ParkingViewerActivity(CrudAppPlace place) {
         super(ParkingDTO.class, place, CrmSite.getViewFactory().getView(ParkingViewerView.class), GWT.<ParkingCrudService> create(ParkingCrudService.class));
