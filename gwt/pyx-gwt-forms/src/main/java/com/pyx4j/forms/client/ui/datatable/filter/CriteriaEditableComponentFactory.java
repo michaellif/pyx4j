@@ -102,7 +102,7 @@ public class CriteriaEditableComponentFactory implements IEditableComponentFacto
             return comp;
         } else if (mm.getValueClass().equals(Integer.class)) {
             CIntegerField comp = new CIntegerField();
-            if (mm.getFormat() != null) {
+            if ((mm.getFormat() != null) && (!mm.useMessageFormat())) {
                 comp.setNumberPattern(mm.getFormat());
             }
             return comp;
@@ -110,19 +110,19 @@ public class CriteriaEditableComponentFactory implements IEditableComponentFacto
             return new CKeyField();
         } else if (mm.getValueClass().equals(BigDecimal.class)) {
             CBigDecimalField comp = new CBigDecimalField();
-            if (mm.getFormat() != null) {
+            if ((mm.getFormat() != null) && (!mm.useMessageFormat())) {
                 comp.setNumberPattern(mm.getFormat());
             }
             return comp;
         } else if (mm.getValueClass().equals(Long.class)) {
             CLongField comp = new CLongField();
-            if (mm.getFormat() != null) {
+            if ((mm.getFormat() != null) && (!mm.useMessageFormat())) {
                 comp.setNumberPattern(mm.getFormat());
             }
             return comp;
         } else if (mm.getValueClass().equals(Double.class)) {
             CDoubleField comp = new CDoubleField();
-            if (mm.getFormat() != null) {
+            if ((mm.getFormat() != null) && (!mm.useMessageFormat())) {
                 comp.setNumberPattern(mm.getFormat());
             }
             return comp;
