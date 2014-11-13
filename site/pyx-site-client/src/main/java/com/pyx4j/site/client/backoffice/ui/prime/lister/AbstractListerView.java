@@ -32,11 +32,11 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
 
-public class AbstractLister<E extends IEntity> extends AbstractPrimePaneView implements IListerView<E> {
+public class AbstractListerView<E extends IEntity> extends AbstractPrimePaneView implements IListerView<E> {
 
     private EntityDataTablePanel<E> dataTablePanel = null;
 
-    public AbstractLister() {
+    public AbstractListerView() {
         super();
     }
 
