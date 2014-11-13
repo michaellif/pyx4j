@@ -20,6 +20,8 @@ import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.domain.ApplicationDocumentType.Importance;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Type;
+import com.propertyvista.domain.policy.policies.domain.ProofOfAssetDocumentType;
+import com.propertyvista.domain.policy.policies.domain.ProofOfIncomeDocumentType;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
 public class ApplicationDocumentationPolicyPreloader extends AbstractPolicyPreloader<ApplicationDocumentationPolicy> {
@@ -59,7 +61,35 @@ public class ApplicationDocumentationPolicyPreloader extends AbstractPolicyPrelo
         id.importance().setValue(Importance.Optional);
         policy.allowedIDs().add(id);
 
+        // ---------------------------------------------------------
+
         policy.mandatoryProofOfIncome().setValue(false);
+        policy.numberOfIncomeDocuments().setValue(2);
+
+        ProofOfIncomeDocumentType poi = EntityFactory.create(ProofOfIncomeDocumentType.class);
+        poi.name().setValue(i18n.tr("Letter of Employment"));
+        poi.importance().setValue(Importance.Required);
+        policy.allowedIncomeDocuments().add(poi);
+
+        poi = EntityFactory.create(ProofOfIncomeDocumentType.class);
+        poi.name().setValue(i18n.tr("Pay Stub"));
+        poi.importance().setValue(Importance.Preferred);
+        policy.allowedIncomeDocuments().add(poi);
+
+        // ---------------------------------------------------------
+
+        policy.mandatoryProofOfAsset().setValue(false);
+        policy.numberOfAssetDocuments().setValue(1);
+
+        ProofOfAssetDocumentType poa = EntityFactory.create(ProofOfAssetDocumentType.class);
+        poa.name().setValue(i18n.tr("Bank Statement"));
+        poa.importance().setValue(Importance.Preferred);
+        policy.allowedAssetDocuments().add(poa);
+
+        poa = EntityFactory.create(ProofOfAssetDocumentType.class);
+        poa.name().setValue(i18n.tr("Benefit Statement"));
+        poa.importance().setValue(Importance.Optional);
+        policy.allowedAssetDocuments().add(poa);
 
         return policy;
     }

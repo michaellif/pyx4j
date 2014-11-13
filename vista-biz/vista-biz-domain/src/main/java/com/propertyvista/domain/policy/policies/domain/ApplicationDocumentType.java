@@ -18,6 +18,7 @@ import java.util.Set;
 
 import javax.xml.bind.annotation.XmlType;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
@@ -37,7 +38,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 
-//TODO : annotate as base virtual class (no need table create)
+@AbstractEntity
 @ToStringFormat("{0}, {1}")
 public interface ApplicationDocumentType extends IEntity {
 

@@ -24,6 +24,8 @@ import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
+import com.propertyvista.domain.policy.policies.domain.ProofOfAssetDocumentType;
+import com.propertyvista.domain.policy.policies.domain.ProofOfIncomeDocumentType;
 
 @DiscriminatorValue("ApplicationDocumentationPolicy")
 public interface ApplicationDocumentationPolicy extends Policy, TenantsAccessiblePolicy {
@@ -34,18 +36,33 @@ public interface ApplicationDocumentationPolicy extends Policy, TenantsAccessibl
 
     @Owned
     @NotNull
-    @Caption(description = "IDs/Documentations that accepted as valid IDs")
+    @Caption(description = "IDs/Documents that accepted as valid IDs")
     IList<IdentificationDocumentType> allowedIDs();
 
     @NotNull
     @Editor(type = EditorType.radiogroup)
-    @Caption(description = "Is the proof of income documents are mandatory")
+    @Caption(description = "Is the proof of income is mandatory")
     IPrimitive<Boolean> mandatoryProofOfIncome();
 
-// TODO: VISTA-4538
-//
-//    @Owned
-//    @NotNull
-//    @Caption(description = "Documentations that accepted as valid financial ")
-//    IList<FinancialDocumentType> allowedFinancialDocs();
+    @NotNull
+    @Caption(description = "The number of the income documents that is required for an application")
+    IPrimitive<Integer> numberOfIncomeDocuments();
+
+    @Owned
+    @NotNull
+    @Caption(description = "Documents that accepted as valid proof of income")
+    IList<ProofOfIncomeDocumentType> allowedIncomeDocuments();
+
+    @NotNull
+    @Editor(type = EditorType.radiogroup)
+    @Caption(description = "Is the proof of asset is mandatory")
+    IPrimitive<Boolean> mandatoryProofOfAsset();
+
+    @NotNull
+    IPrimitive<Integer> numberOfAssetDocuments();
+
+    @Owned
+    @NotNull
+    @Caption(description = "Documents that accepted as valid proof of asset")
+    IList<ProofOfAssetDocumentType> allowedAssetDocuments();
 }

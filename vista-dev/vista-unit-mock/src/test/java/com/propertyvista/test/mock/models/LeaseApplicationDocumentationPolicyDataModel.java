@@ -20,6 +20,8 @@ import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.domain.ApplicationDocumentType.Importance;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Type;
+import com.propertyvista.domain.policy.policies.domain.ProofOfAssetDocumentType;
+import com.propertyvista.domain.policy.policies.domain.ProofOfIncomeDocumentType;
 import com.propertyvista.test.mock.MockDataModel;
 
 public class LeaseApplicationDocumentationPolicyDataModel extends MockDataModel<ApplicationDocumentationPolicy> {
@@ -36,13 +38,31 @@ public class LeaseApplicationDocumentationPolicyDataModel extends MockDataModel<
         id.type().setValue(Type.canadianSIN);
         policy.allowedIDs().add(id);
 
+        // ---------------------------------------------------------
+
         policy.mandatoryProofOfIncome().setValue(false);
+        policy.numberOfIncomeDocuments().setValue(1);
+
+        ProofOfIncomeDocumentType poi = EntityFactory.create(ProofOfIncomeDocumentType.class);
+        poi.name().setValue("Letter of Employment");
+        poi.importance().setValue(Importance.Required);
+        policy.allowedIncomeDocuments().add(poi);
+
+        // ---------------------------------------------------------
+
+        policy.mandatoryProofOfAsset().setValue(false);
+        policy.numberOfAssetDocuments().setValue(1);
+
+        ProofOfAssetDocumentType poa = EntityFactory.create(ProofOfAssetDocumentType.class);
+        poa.name().setValue("Bank Statement");
+        poa.importance().setValue(Importance.Preferred);
+        policy.allowedAssetDocuments().add(poa);
+
+        // ---------------------------------------------------------
 
         policy.node().set(getDataModel(PmcDataModel.class).getOrgNode());
 
         Persistence.service().persist(policy);
         addItem(policy);
-
     }
-
 }
