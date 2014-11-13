@@ -42,6 +42,8 @@ import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.forms.client.ui.CKeyField;
 import com.pyx4j.forms.client.ui.CLongField;
+import com.pyx4j.forms.client.ui.CMoneyField;
+import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.CPhoneField.PhoneType;
 import com.pyx4j.forms.client.ui.CTextField;
@@ -53,6 +55,25 @@ public class CriteriaEditableComponentFactory implements IEditableComponentFacto
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public CField<?, ?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
+        EditorType editorType = mm.getEditorType();
+        if (editorType != null) {
+            switch (editorType) {
+            case money:
+            case moneylabel:
+                return new CMoneyField();
+            case phone:
+                return new CPhoneField(PhoneType.search);
+            case percentage:
+            case percentagelabel:
+                CPercentageField comp = new CPercentageField();
+                if (mm.getFormat() != null) {
+                    comp.setPercentageFormat(mm.getFormat());
+                }
+                return comp;
+            default:
+                break;
+            }
+        }
         if (mm.isEntity()) {
             CEntityComboBox comp = new CEntityComboBox(mm.getObjectClass());
             comp.setOptionsComparator(EntityComparatorFactory.createStringViewComparator());
@@ -80,24 +101,35 @@ public class CriteriaEditableComponentFactory implements IEditableComponentFacto
             }
             return comp;
         } else if (mm.getValueClass().equals(Integer.class)) {
-            return new CIntegerField();
+            CIntegerField comp = new CIntegerField();
+            if (mm.getFormat() != null) {
+                comp.setNumberPattern(mm.getFormat());
+            }
+            return comp;
         } else if (mm.getValueClass().equals(Key.class)) {
             return new CKeyField();
         } else if (mm.getValueClass().equals(BigDecimal.class)) {
-            return new CBigDecimalField();
+            CBigDecimalField comp = new CBigDecimalField();
+            if (mm.getFormat() != null) {
+                comp.setNumberPattern(mm.getFormat());
+            }
+            return comp;
         } else if (mm.getValueClass().equals(Long.class)) {
-            return new CLongField();
+            CLongField comp = new CLongField();
+            if (mm.getFormat() != null) {
+                comp.setNumberPattern(mm.getFormat());
+            }
+            return comp;
         } else if (mm.getValueClass().equals(Double.class)) {
-            return new CDoubleField();
+            CDoubleField comp = new CDoubleField();
+            if (mm.getFormat() != null) {
+                comp.setNumberPattern(mm.getFormat());
+            }
+            return comp;
         } else if (mm.getValueClass().equals(Boolean.class)) {
             return new CComboBoxBoolean();
         } else {
-            if (EditorType.phone.equals(mm.getEditorType())) {
-                CPhoneField comp = new CPhoneField(PhoneType.search);
-                return comp;
-            } else {
-                return new CTextField();
-            }
+            return new CTextField();
         }
     }
 
