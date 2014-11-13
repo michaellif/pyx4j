@@ -38,24 +38,35 @@ public interface RestrictionsPolicy extends Policy, TenantsAccessiblePolicy {
     @Caption(description = "Maximum allowed pets quantity")
     IPrimitive<Integer> maxPets();
 
+    // Majority:
+
     @NotNull
     IPrimitive<Integer> ageOfMajority();
 
-    @NotNull
     IPrimitive<Boolean> enforceAgeOfMajority();
 
     @Caption(name = "Matured Occupants are Applicants", description = "Some landlords force all matured occupants (over 18-19) to be on LEASE and therefore anyone OVER Age of Majority MUST be Applicant/Co-Applicant and cannot be Dependent")
     IPrimitive<Boolean> maturedOccupantsAreApplicants();
 
+    // Financial:
+
     @Caption(name = "Guarantors are optional", description = "If Guarantors are not necessary")
     IPrimitive<Boolean> noNeedGuarantors();
 
     @NotNull
-    IPrimitive<Integer> yearsToForcingPreviousAddress();
+    @Caption(description = "Minimal duration of employment (in months) to forcing previous employment information")
+    IPrimitive<Integer> minEmploymentDuration();
+
+    @Caption(description = "If not set - unlimited")
+    IPrimitive<Integer> maxNumberOfEmployments();
+
+    // Miscellaneous:
 
     @NotNull
+    IPrimitive<Integer> yearsToForcingPreviousAddress();
+
     IPrimitive<Boolean> emergencyContactsIsMandatory();
 
     @NotNull
-    IPrimitive<Integer> emergencyContactsNumberRequired();
+    IPrimitive<Integer> emergencyContactsNumber();
 }

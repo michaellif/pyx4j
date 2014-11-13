@@ -29,21 +29,29 @@ public class RestrictionsPolicyDataModel extends MockDataModel<RestrictionsPolic
     @Override
     protected void generate() {
         policy = EntityFactory.create(RestrictionsPolicy.class);
+
         policy.occupantsPerBedRoom().setValue(Double.MAX_VALUE);
         policy.maxParkingSpots().setValue(Integer.MAX_VALUE);
         policy.maxLockers().setValue(Integer.MAX_VALUE);
         policy.maxPets().setValue(Integer.MAX_VALUE);
         policy.maxPets().setValue(Integer.MAX_VALUE);
+
         policy.ageOfMajority().setValue(0);
         policy.enforceAgeOfMajority().setValue(false);
+
         policy.maturedOccupantsAreApplicants().setValue(false);
+
         policy.noNeedGuarantors().setValue(false);
+        policy.minEmploymentDuration().setValue(24);
+        policy.maxNumberOfEmployments().setValue(2);
+
         policy.yearsToForcingPreviousAddress().setValue(3);
+
         policy.emergencyContactsIsMandatory().setValue(true);
-        policy.emergencyContactsNumberRequired().setValue(1);
+        policy.emergencyContactsNumber().setValue(1);
+
         policy.node().set(getDataModel(PmcDataModel.class).getOrgNode());
         Persistence.service().persist(policy);
         addItem(policy);
     }
-
 }

@@ -29,29 +29,58 @@ public class RestrictionsPolicyForm extends PolicyDTOTabPanelBasedForm<Restricti
 
     public RestrictionsPolicyForm(IFormView<RestrictionsPolicyDTO, ?> view) {
         super(RestrictionsPolicyDTO.class, view);
-        addTab(createMiscPoliciesTab(), i18n.tr("Restrictions"));
+        addTab(createOccupationTab(), i18n.tr("Occupation"));
+        addTab(createMagorityTab(), i18n.tr("Age of Majority"));
+        addTab(createFinancialTab(), i18n.tr("Financial"));
+        addTab(createMiscTab(), i18n.tr("Miscellaneous"));
     }
 
-    private IsWidget createMiscPoliciesTab() {
+    private IsWidget createOccupationTab() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Dual, proto().maxParkingSpots()).decorate().componentWidth(40).labelWidth(300);
-        formPanel.append(Location.Dual, proto().maxLockers()).decorate().componentWidth(40).labelWidth(300);
-        formPanel.append(Location.Dual, proto().maxPets()).decorate().componentWidth(40).labelWidth(300);
         formPanel.append(Location.Dual, proto().occupantsPerBedRoom()).decorate().componentWidth(40).labelWidth(300);
 
         formPanel.br();
 
+        formPanel.append(Location.Dual, proto().maxParkingSpots()).decorate().componentWidth(40).labelWidth(300);
+        formPanel.append(Location.Dual, proto().maxLockers()).decorate().componentWidth(40).labelWidth(300);
+        formPanel.append(Location.Dual, proto().maxPets()).decorate().componentWidth(40).labelWidth(300);
+
+        return formPanel;
+    }
+
+    private IsWidget createMagorityTab() {
+        FormPanel formPanel = new FormPanel(this);
+
         formPanel.append(Location.Dual, proto().ageOfMajority()).decorate().componentWidth(40).labelWidth(300);
         formPanel.append(Location.Dual, proto().enforceAgeOfMajority()).decorate().componentWidth(40).labelWidth(300);
-
         formPanel.append(Location.Dual, proto().maturedOccupantsAreApplicants()).decorate().componentWidth(40).labelWidth(300);
+
+        return formPanel;
+    }
+
+    private IsWidget createFinancialTab() {
+        FormPanel formPanel = new FormPanel(this);
+
         formPanel.append(Location.Dual, proto().noNeedGuarantors()).decorate().componentWidth(40).labelWidth(300);
+
+        formPanel.br();
+
+        formPanel.append(Location.Dual, proto().minEmploymentDuration()).decorate().componentWidth(40).labelWidth(300);
+        formPanel.append(Location.Dual, proto().maxNumberOfEmployments()).decorate().componentWidth(40).labelWidth(300);
+
+        return formPanel;
+    }
+
+    private IsWidget createMiscTab() {
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Dual, proto().yearsToForcingPreviousAddress()).decorate().componentWidth(40).labelWidth(300);
 
+        formPanel.br();
+
         formPanel.append(Location.Dual, proto().emergencyContactsIsMandatory()).decorate().componentWidth(40).labelWidth(300);
-        formPanel.append(Location.Dual, proto().emergencyContactsNumberRequired()).decorate().componentWidth(40).labelWidth(300);
+        formPanel.append(Location.Dual, proto().emergencyContactsNumber()).decorate().componentWidth(40).labelWidth(300);
 
         return formPanel;
     }

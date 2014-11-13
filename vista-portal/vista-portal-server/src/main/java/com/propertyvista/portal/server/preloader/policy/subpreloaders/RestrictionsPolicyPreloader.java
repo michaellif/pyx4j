@@ -37,7 +37,15 @@ public class RestrictionsPolicyPreloader extends AbstractPolicyPreloader<Restric
 
     private static final boolean NO_NEED_GUARANTORS = false;
 
+    private static final int AGE_OF_MAJORITY = 18;
+
+    private static final int MIN_EMPLOYMENT_DURATION = 24;
+
+    private static final int MAX_EMPLOYMENT_ENTRIES = 2;
+
     private static final int YEARS_TO_FORCING_PREVIOUS_ADDRESS = 3;
+
+    private static final int EMERGENCY_CONTACTS_NUM = 1;
 
     private Integer ageOfMajority;
 
@@ -83,9 +91,6 @@ public class RestrictionsPolicyPreloader extends AbstractPolicyPreloader<Restric
     protected RestrictionsPolicy createPolicy(StringBuilder log) {
         RestrictionsPolicy policy = EntityFactory.create(RestrictionsPolicy.class);
 
-        policy.yearsToForcingPreviousAddress().setValue(YEARS_TO_FORCING_PREVIOUS_ADDRESS);
-        policy.noNeedGuarantors().setValue(NO_NEED_GUARANTORS);
-        policy.maturedOccupantsAreApplicants().setValue(OCCUPANTS_OVER_18_ARE_APPLICANTS);
         policy.occupantsPerBedRoom().setValue(OCCUPANTS_PER_BEDROOM);
         policy.maxParkingSpots().setValue(MAX_PARKING_SPOTS);
         policy.maxLockers().setValue(MAX_LOCKERS);
@@ -96,11 +101,19 @@ public class RestrictionsPolicyPreloader extends AbstractPolicyPreloader<Restric
             policy.ageOfMajority().setValue(ageOfMajority);
         } else {
             policy.enforceAgeOfMajority().setValue(false);
-            policy.ageOfMajority().setValue(18);
+            policy.ageOfMajority().setValue(AGE_OF_MAJORITY);
         }
+        policy.maturedOccupantsAreApplicants().setValue(OCCUPANTS_OVER_18_ARE_APPLICANTS);
+
+        policy.noNeedGuarantors().setValue(NO_NEED_GUARANTORS);
+
+        policy.minEmploymentDuration().setValue(MIN_EMPLOYMENT_DURATION);
+        policy.maxNumberOfEmployments().setValue(MAX_EMPLOYMENT_ENTRIES);
+
+        policy.yearsToForcingPreviousAddress().setValue(YEARS_TO_FORCING_PREVIOUS_ADDRESS);
 
         policy.emergencyContactsIsMandatory().setValue(true);
-        policy.emergencyContactsNumberRequired().setValue(1);
+        policy.emergencyContactsNumber().setValue(EMERGENCY_CONTACTS_NUM);
 
         log.append(policy.getStringView());
 

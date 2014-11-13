@@ -25,9 +25,6 @@ public class LeaseApplicationRestrictionsPolicyDataModel extends MockDataModel<R
     protected void generate() {
         RestrictionsPolicy policy = EntityFactory.create(RestrictionsPolicy.class);
 
-        policy.yearsToForcingPreviousAddress().setValue(3);
-        policy.noNeedGuarantors().setValue(false);
-        policy.maturedOccupantsAreApplicants().setValue(false);
         policy.occupantsPerBedRoom().setValue(2d);
         policy.maxParkingSpots().setValue(1);
         policy.maxLockers().setValue(1);
@@ -35,15 +32,19 @@ public class LeaseApplicationRestrictionsPolicyDataModel extends MockDataModel<R
 
         policy.enforceAgeOfMajority().setValue(true);
         policy.ageOfMajority().setValue(18);
+        policy.maturedOccupantsAreApplicants().setValue(false);
+
+        policy.noNeedGuarantors().setValue(false);
+        policy.minEmploymentDuration().setValue(24);
+        policy.maxNumberOfEmployments().setValue(2);
+
+        policy.yearsToForcingPreviousAddress().setValue(3);
 
         policy.emergencyContactsIsMandatory().setValue(true);
-        policy.emergencyContactsNumberRequired().setValue(1);
+        policy.emergencyContactsNumber().setValue(1);
 
         policy.node().set(getDataModel(PmcDataModel.class).getOrgNode());
-
         Persistence.service().persist(policy);
         addItem(policy);
-
     }
-
 }
