@@ -6,7 +6,7 @@
 	  This is list of classes not used by pyx in RPC!
 	  If you use some of them to send application data do not inherit this module! 
 	-->
-    <extend-configuration-property name="rpc.blacklist" value="java.lang.StackTraceElement" />
+    <!-- extend-configuration-property name="rpc.blacklist" value="java.lang.StackTraceElement" /-->
     <extend-configuration-property name="rpc.blacklist" value="java.security.*" />
     <extend-configuration-property name="rpc.blacklist" value="java.io.*" />
     <extend-configuration-property name="rpc.blacklist" value="java.lang.*Exception" />
