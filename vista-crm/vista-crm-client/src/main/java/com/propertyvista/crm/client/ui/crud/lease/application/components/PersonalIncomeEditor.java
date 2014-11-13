@@ -115,6 +115,10 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
 
             if (details.getInstanceValueClass() != editor.proto().getValueClass()) {
                 details.set(EntityFactory.create(editor.proto().getValueClass()));
+
+                // TODO: currently ensure monthly period, remove it in the future:
+                details.amountPeriod().setValue(AmountPeriod.Monthly);
+                ////////////////////////////////////////////////////// VISTA-5562
             }
             if (editor != null) {
                 this.inject(proto().details(), editor);
@@ -180,7 +184,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
                 get(proto().supervisorName()).setValue("Bob");
                 get(proto().supervisorPhone()).setValue("1234567890");
                 get(proto().incomeAmount()).setValue(new BigDecimal("3000"));
-                get(proto().amountPeriod()).setValue(AmountPeriod.BiWeekly);
+                get(proto().amountPeriod()).setValue(AmountPeriod.Monthly);
             }
         };
     }

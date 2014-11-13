@@ -297,9 +297,9 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         }
 
         // TODO: calculate consolidatedIncome taking into account amount period!
-//        if (tenantFinancial.consolidatedIncome().getValue().compareTo(BigDecimal.ZERO) == 0) {
-        tenantFinancial.consolidatedIncome().set(null);
-//        }
+        if (tenantFinancial.consolidatedIncome().getValue().compareTo(BigDecimal.ZERO) == 0) {
+            tenantFinancial.consolidatedIncome().set(null);
+        }
 
         if (tenantFinancial.employer().isNull()) {
             if (!tenantFinancial.incomes().isEmpty()) {

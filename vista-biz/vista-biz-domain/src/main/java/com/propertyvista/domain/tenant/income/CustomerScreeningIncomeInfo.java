@@ -71,6 +71,7 @@ public interface CustomerScreeningIncomeInfo extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> incomeAmount();
 
+    @Editor(type = EditorType.label)
     IPrimitive<AmountPeriod> amountPeriod();
 
     /**
