@@ -25,33 +25,33 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
 import com.pyx4j.widgets.client.HasSecureConcern;
 import com.pyx4j.widgets.client.SecureConcernsHolder;
 
-public abstract class AbstractForm<E extends IEntity> extends AbstractPrimePane implements IForm<E> {
+public abstract class AbstractFormView<E extends IEntity> extends AbstractPrimePaneView implements IFormView<E> {
 
     private PrimeEntityForm<E> form;
 
-    private IForm.Presenter presenter;
+    private IFormView.IPrimePanePresenter presenter;
 
     private String captionBase;
 
     private final SecureConcernsHolder secureConcerns = new SecureConcernsHolder();
 
-    public AbstractForm() {
+    public AbstractFormView() {
         super();
         secureConcerns.addAll(secureConcerns());
     }
 
     @Override
-    public void setPresenter(IForm.Presenter presenter) {
+    public void setPresenter(IFormView.IPrimePanePresenter presenter) {
         this.presenter = presenter;
         captionBase = (presenter != null && presenter.getPlace() != null ? AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() : "");
     }
 
     @Override
-    public IForm.Presenter getPresenter() {
+    public IFormView.IPrimePanePresenter getPresenter() {
         return presenter;
     }
 

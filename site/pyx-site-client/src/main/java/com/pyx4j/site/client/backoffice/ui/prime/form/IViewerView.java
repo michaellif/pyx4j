@@ -14,38 +14,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  * 
- * Created on 2011-06-09
+ * Created on 2011-05-17
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.backoffice.ui.prime.wizard;
+package com.pyx4j.site.client.backoffice.ui.prime.form;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.site.client.backoffice.ui.IPane;
-import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
 
-public interface IWizard<E extends IEntity> extends IPrimePane {
+public interface IViewerView<E extends IEntity> extends IFormView<E> {
 
-    public interface Presenter extends IPane.Presenter {
+    public interface IViewerPresenter extends IPrimePanePresenter {
 
-        void finish();
+        boolean canEdit();
+
+        void edit();
 
         void cancel();
+
+        void view(Key entityId);
+
+        void approveFinal();
     }
 
-    void populate(E value);
-
-    void reset();
-
-    public E getValue();
-
-    public boolean isDirty();
-
-    void setPresenter(Presenter presenter);
-
-    Presenter getPresenter();
-
-    boolean onSaveFail(Throwable caught);
-
-    void onStepChange();
 }

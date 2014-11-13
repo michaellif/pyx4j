@@ -20,18 +20,18 @@
  */
 package com.pyx4j.site.client.backoffice.activity;
 
-import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
 import com.pyx4j.site.client.ui.visor.IVisor;
 
 public abstract class AbstractVisorController implements IVisor.Controller {
 
-    private final IPrimePane parentView;
+    private final IPrimePaneView parentView;
 
-    public AbstractVisorController(IPrimePane parentView) {
+    public AbstractVisorController(IPrimePaneView parentView) {
         this.parentView = parentView;
     }
 
-    public IPrimePane getParentView() {
+    public IPrimePaneView getParentView() {
         return parentView;
     }
 

@@ -26,17 +26,17 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class AbstractWizard<E extends IEntity> extends AbstractPrimePane implements IWizard<E> {
+public abstract class AbstractWizard<E extends IEntity> extends AbstractPrimePaneView implements IWizardView<E> {
 
     private static final I18n i18n = I18n.get(AbstractWizard.class);
 
     private WizardForm<E> form;
 
-    private IWizard.Presenter presenter;
+    private IWizardView.IWizardPresenter presenter;
 
     private final Button btnPrevious;
 
@@ -119,12 +119,12 @@ public abstract class AbstractWizard<E extends IEntity> extends AbstractPrimePan
     }
 
     @Override
-    public void setPresenter(IWizard.Presenter presenter) {
+    public void setPresenter(IWizardView.IWizardPresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public IWizard.Presenter getPresenter() {
+    public IWizardView.IWizardPresenter getPresenter() {
         return presenter;
     }
 

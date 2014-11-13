@@ -35,9 +35,9 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> implements IEditor<E> {
+public abstract class AbstractEditorView<E extends IEntity> extends AbstractFormView<E> implements IEditorView<E> {
 
-    private static final I18n i18n = I18n.get(AbstractEditor.class);
+    private static final I18n i18n = I18n.get(AbstractEditorView.class);
 
     private final Button btnApply;
 
@@ -47,7 +47,7 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
 
     protected EditMode mode;
 
-    public AbstractEditor() {
+    public AbstractEditorView() {
         super();
 
         btnSave = new Button(i18n.tr("Save"), new Command() {
@@ -165,8 +165,8 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
     }
 
     @Override
-    public IEditor.Presenter getPresenter() {
-        return (IEditor.Presenter) super.getPresenter();
+    public IEditorView.IEditorPresenter getPresenter() {
+        return (IEditorView.IEditorPresenter) super.getPresenter();
     }
 
     @Override

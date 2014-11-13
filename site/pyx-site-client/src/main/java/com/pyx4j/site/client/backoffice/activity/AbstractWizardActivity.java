@@ -35,14 +35,14 @@ import com.pyx4j.forms.client.ui.ReferenceDataManager;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizard;
+import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public abstract class AbstractWizardActivity<E extends IEntity> extends AbstractActivity implements IWizard.Presenter {
+public abstract class AbstractWizardActivity<E extends IEntity> extends AbstractActivity implements IWizardView.IWizardPresenter {
 
     private static final I18n i18n = I18n.get(AbstractWizardActivity.class);
 
-    private final IWizard<E> view;
+    private final IWizardView<E> view;
 
     private final AbstractCrudService<E> service;
 
@@ -50,7 +50,7 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Abstract
 
     private final Class<E> entityClass;
 
-    public AbstractWizardActivity(Class<E> entityClass, CrudAppPlace place, IWizard<E> view, AbstractCrudService<E> service) {
+    public AbstractWizardActivity(Class<E> entityClass, CrudAppPlace place, IWizardView<E> view, AbstractCrudService<E> service) {
         // development correctness checks:
         assert (entityClass != null);
         assert (view != null);
@@ -63,7 +63,7 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Abstract
 
     }
 
-    public IWizard<E> getView() {
+    public IWizardView<E> getView() {
         return view;
     }
 

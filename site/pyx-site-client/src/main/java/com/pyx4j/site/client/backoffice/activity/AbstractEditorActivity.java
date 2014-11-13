@@ -38,15 +38,15 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor.EditMode;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView.EditMode;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public abstract class AbstractEditorActivity<E extends IEntity> extends AbstractActivity implements IEditor.Presenter {
+public abstract class AbstractEditorActivity<E extends IEntity> extends AbstractActivity implements IEditorView.IEditorPresenter {
 
     private static final I18n i18n = I18n.get(AbstractEditorActivity.class);
 
-    private final IEditor<E> view;
+    private final IEditorView<E> view;
 
     private final AbstractCrudService<E> service;
 
@@ -64,7 +64,7 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
 
     private boolean mayStop;
 
-    public AbstractEditorActivity(Class<E> entityClass, CrudAppPlace place, IEditor<E> view, AbstractCrudService<E> service) {
+    public AbstractEditorActivity(Class<E> entityClass, CrudAppPlace place, IEditorView<E> view, AbstractCrudService<E> service) {
         // development correctness checks:
         assert (view != null);
         assert (service != null);
@@ -109,7 +109,7 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
         }
     }
 
-    public IEditor<E> getView() {
+    public IEditorView<E> getView() {
         return view;
     }
 

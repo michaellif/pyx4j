@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CForm;
 
-public abstract class AbstractVisorForm<E extends IEntity> extends AbstractVisorPane implements IVisorViewer<E> {
+public abstract class AbstractVisorForm<E extends IEntity> extends AbstractVisorPaneView implements IVisorViewer<E> {
 
     private CForm<E> form;
 

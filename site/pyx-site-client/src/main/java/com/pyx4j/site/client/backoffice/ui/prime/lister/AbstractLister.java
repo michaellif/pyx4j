@@ -30,9 +30,9 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
 
-public class AbstractLister<E extends IEntity> extends AbstractPrimePane implements ILister<E> {
+public class AbstractLister<E extends IEntity> extends AbstractPrimePaneView implements IListerView<E> {
 
     private EntityDataTablePanel<E> dataTablePanel = null;
 
@@ -66,13 +66,13 @@ public class AbstractLister<E extends IEntity> extends AbstractPrimePane impleme
     }
 
     @Override
-    public void setPresenter(ILister.Presenter<E> presenter) {
+    public void setPresenter(IListerView.IListerPresenter<E> presenter) {
         getDataTablePanel().setPresenter(presenter);
         setCaption(presenter != null && presenter.getPlace() != null ? AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() : "");
     }
 
     @Override
-    public ILister.Presenter<E> getPresenter() {
+    public IListerView.IListerPresenter<E> getPresenter() {
         return getDataTablePanel().getPresenter();
     }
 

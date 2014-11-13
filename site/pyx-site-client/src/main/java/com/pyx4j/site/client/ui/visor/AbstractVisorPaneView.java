@@ -30,20 +30,20 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
-import com.pyx4j.site.client.backoffice.ui.AbstractPane;
-import com.pyx4j.site.client.backoffice.ui.IPane;
+import com.pyx4j.site.client.backoffice.ui.AbstractPaneView;
+import com.pyx4j.site.client.backoffice.ui.IPaneView;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.widgets.client.ImageFactory;
 
-public abstract class AbstractVisorPane extends AbstractPane implements IVisor {
+public abstract class AbstractVisorPaneView extends AbstractPaneView implements IVisor {
 
-    private IPane parentPane;
+    private IPaneView parentPane;
 
     private final Controller controller;
 
     private final LayoutPanel contentHolder;
 
-    public AbstractVisorPane(final Controller controller) {
+    public AbstractVisorPaneView(final Controller controller) {
         super();
         this.controller = controller;
 
@@ -97,11 +97,11 @@ public abstract class AbstractVisorPane extends AbstractPane implements IVisor {
         return controller;
     }
 
-    public void setParentPane(IPane parentPane) {
+    public void setParentPane(IPaneView parentPane) {
         this.parentPane = parentPane;
     }
 
-    public IPane getParentPane() {
+    public IPaneView getParentPane() {
         return parentPane;
     }
 

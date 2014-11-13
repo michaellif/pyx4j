@@ -25,14 +25,14 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel;
 import com.pyx4j.gwt.commons.css.CssVariable;
 import com.pyx4j.gwt.commons.layout.LayoutType;
-import com.pyx4j.site.client.backoffice.ui.AbstractPane;
+import com.pyx4j.site.client.backoffice.ui.AbstractPaneView;
 import com.pyx4j.site.client.ui.visor.IVisor;
 
-public class AbstractPrimePane extends AbstractPane implements IPrimePane {
+public class AbstractPrimePaneView extends AbstractPaneView implements IPrimePaneView {
 
     private final PrimePaneContentHolder contentHolder;
 
-    public AbstractPrimePane() {
+    public AbstractPrimePaneView() {
         contentHolder = new PrimePaneContentHolder(this);
         add(contentHolder);
 

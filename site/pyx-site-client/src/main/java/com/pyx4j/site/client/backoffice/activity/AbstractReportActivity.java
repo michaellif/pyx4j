@@ -48,8 +48,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.ReportDialog;
-import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
-import com.pyx4j.site.client.backoffice.ui.prime.report.IReport;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
+import com.pyx4j.site.client.backoffice.ui.prime.report.IReportView;
 import com.pyx4j.site.client.backoffice.ui.prime.report.ReportSettingsManagementVizor;
 import com.pyx4j.site.client.memento.MementoManager;
 import com.pyx4j.site.rpc.AppPlace;
@@ -59,13 +59,13 @@ import com.pyx4j.site.rpc.customization.ICustomizationPersistenceService;
 import com.pyx4j.site.rpc.reports.IReportsService;
 import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
-public abstract class AbstractReportActivity<R extends ReportTemplate> extends AbstractActivity implements IReport.Presenter<R> {
+public abstract class AbstractReportActivity<R extends ReportTemplate> extends AbstractActivity implements IReportView.IReportPresenter<R> {
 
     public class ReportSettingsManagementVizorController extends AbstractVisorController {
 
         private final ReportSettingsManagementVizor visor;
 
-        public ReportSettingsManagementVizorController(IPrimePane parentView, final IReport.Presenter<R> presenter) {
+        public ReportSettingsManagementVizorController(IPrimePaneView parentView, final IReportView.IReportPresenter<R> presenter) {
             super(parentView);
             visor = new ReportSettingsManagementVizor(this) {
 
@@ -107,7 +107,7 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
 
     protected final ReportsAppPlace<R> place;
 
-    private final IReport<R> view;
+    private final IReportView<R> view;
 
     private final IReportsService<R> reportsService;
 
@@ -124,7 +124,7 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
     private final Class<R> reportMetadataClass;
 
     public AbstractReportActivity(Class<R> reportMetadataClass, ReportsAppPlace<R> place, IReportsService<R> reportsService,
-            ICustomizationPersistenceService<ReportTemplate> reportsSettingsPersistenceService, IReport<R> view, String dowloadServletPath) {
+            ICustomizationPersistenceService<ReportTemplate> reportsSettingsPersistenceService, IReportView<R> view, String dowloadServletPath) {
         this.reportMetadataClass = reportMetadataClass;
         this.reportsService = reportsService;
         this.reportsSettingsPersistenceService = reportsSettingsPersistenceService;
@@ -137,7 +137,7 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
         this.downloadServletPath = dowloadServletPath;
     }
 
-    public IReport<R> getView() {
+    public IReportView<R> getView() {
         return view;
     }
 

@@ -36,15 +36,15 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 import com.pyx4j.site.client.memento.MementoManager;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public abstract class AbstractViewerActivity<E extends IEntity> extends AbstractActivity implements IViewer.Presenter {
+public abstract class AbstractViewerActivity<E extends IEntity> extends AbstractActivity implements IViewerView.IViewerPresenter {
 
     protected final Class<E> entityClass;
 
-    private final IViewer<E> view;
+    private final IViewerView<E> view;
 
     private final AbstractCrudService<E> service;
 
@@ -56,7 +56,7 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
 
     private E populatedValue;
 
-    public AbstractViewerActivity(Class<E> entityClass, CrudAppPlace place, IViewer<E> view, AbstractCrudService<E> service) {
+    public AbstractViewerActivity(Class<E> entityClass, CrudAppPlace place, IViewerView<E> view, AbstractCrudService<E> service) {
         // development correctness checks:
         assert (view != null);
         assert (service != null);
@@ -80,7 +80,7 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
         assert (entityId != null);
     }
 
-    public IViewer<E> getView() {
+    public IViewerView<E> getView() {
         return view;
     }
 

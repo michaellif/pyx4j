@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.widgets.client.HasSecureConcern;
 import com.pyx4j.widgets.client.Toolbar;
 
-public abstract class AbstractPane extends DockLayoutPanel implements IPane {
+public abstract class AbstractPaneView extends DockLayoutPanel implements IPaneView {
 
     private static final double TOOLBAR_DEFAULT_HEIGHT = 34;
 
@@ -53,7 +53,7 @@ public abstract class AbstractPane extends DockLayoutPanel implements IPane {
 
     private final FlowPanel headerCaption;
 
-    public AbstractPane() {
+    public AbstractPaneView() {
         super(Unit.PX);
 
         headerCaption = new FlowPanel();

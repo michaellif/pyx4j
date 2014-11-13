@@ -32,8 +32,8 @@ import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.site.client.backoffice.ui.IPane;
-import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
+import com.pyx4j.site.client.backoffice.ui.IPaneView;
+import com.pyx4j.site.client.ui.visor.AbstractVisorPaneView;
 import com.pyx4j.site.client.ui.visor.IVisor;
 
 public class PrimePaneContentHolder extends ComplexPanel implements RequiresResize, ProvidesResize {
@@ -44,9 +44,9 @@ public class PrimePaneContentHolder extends ComplexPanel implements RequiresResi
 
     private IsWidget visorPaneWidget;
 
-    private final IPane parentPane;
+    private final IPaneView parentPane;
 
-    public PrimePaneContentHolder(IPane parentPane) {
+    public PrimePaneContentHolder(IPaneView parentPane) {
         this.parentPane = parentPane;
         setAnimationDuration(500);
         setElement(Document.get().createDivElement());
@@ -93,8 +93,8 @@ public class PrimePaneContentHolder extends ComplexPanel implements RequiresResi
         visor.asWidget().setLayoutData(layer);
 
         adopt(visor.asWidget());
-        if (visor instanceof AbstractVisorPane) {
-            ((AbstractVisorPane) visor).setParentPane(parentPane);
+        if (visor instanceof AbstractVisorPaneView) {
+            ((AbstractVisorPaneView) visor).setParentPane(parentPane);
         }
 
         new VisorShowLayoutCommand(previousVisorPaneWidget).schedule(animationDuration, null);

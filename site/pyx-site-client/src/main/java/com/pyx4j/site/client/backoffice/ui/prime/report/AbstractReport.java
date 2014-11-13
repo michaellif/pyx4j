@@ -41,7 +41,7 @@ import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
 import com.pyx4j.gwt.commons.Print;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
-import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
 import com.pyx4j.site.client.backoffice.ui.prime.form.PrimeEntityForm;
 import com.pyx4j.site.shared.domain.reports.ExportableReport;
 import com.pyx4j.site.shared.domain.reports.ReportTemplate;
@@ -50,11 +50,11 @@ import com.pyx4j.widgets.client.StringBox;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-public abstract class AbstractReport<R extends ReportTemplate> extends AbstractPrimePane implements IReport<R> {
+public abstract class AbstractReport<R extends ReportTemplate> extends AbstractPrimePaneView implements IReportView<R> {
 
     private static final I18n i18n = I18n.get(AbstractReport.class);
 
-    private IReport.Presenter<R> presenter;
+    private IReportView.IReportPresenter<R> presenter;
 
     private FlowPanel viewPanel;
 
@@ -124,7 +124,7 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
     }
 
     @Override
-    public void setPresenter(IReport.Presenter<R> presenter) {
+    public void setPresenter(IReportView.IReportPresenter<R> presenter) {
         this.presenter = presenter;
     }
 

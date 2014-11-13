@@ -14,45 +14,37 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  * 
- * Created on 2011-05-04
+ * Created on 2011-06-09
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.backoffice.ui.prime.form;
+package com.pyx4j.site.client.backoffice.ui.prime.wizard;
 
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
 
-public interface IEditor<E extends IEntity> extends IForm<E> {
+public interface IWizardView<E extends IEntity> extends IPrimePaneView {
 
-    public interface Presenter extends IForm.Presenter {
+    public interface IWizardPresenter extends IPanePresenter {
 
-        void apply();
-
-        void save();
+        void finish();
 
         void cancel();
     }
 
-    enum EditMode {
-        existingItem, newItem
-    }
+    void populate(E value);
 
-    /**
-     * Notifies view about supposed editing mode - view can select appropriate from here.
-     * 
-     * @param mode
-     */
-    void setEditMode(EditMode mode);
+    void reset();
 
     public E getValue();
 
     public boolean isDirty();
 
-    /**
-     * @param caught
-     * 
-     * @return may return TRUE in case of processed event and no need to re-throw the exception further.
-     *         FALSE - re-throws the exception (new UnrecoverableClientError(caught)).
-     */
+    void setPresenter(IWizardPresenter presenter);
+
+    IWizardPresenter getPresenter();
+
     boolean onSaveFail(Throwable caught);
+
+    void onStepChange();
 }

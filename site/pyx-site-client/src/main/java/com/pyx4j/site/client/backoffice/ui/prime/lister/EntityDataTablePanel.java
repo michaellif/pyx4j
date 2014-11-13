@@ -42,11 +42,11 @@ import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class EntityDataTablePanel<E extends IEntity> extends DataTablePanel<E> implements ILister<E> {
+public abstract class EntityDataTablePanel<E extends IEntity> extends DataTablePanel<E> implements IListerView<E> {
 
     private static final I18n i18n = I18n.get(EntityDataTablePanel.class);
 
-    private Presenter<E> presenter;
+    private IListerPresenter<E> presenter;
 
     private Class<? extends CrudAppPlace> itemOpenPlaceClass;
 
@@ -164,7 +164,7 @@ public abstract class EntityDataTablePanel<E extends IEntity> extends DataTableP
 // IListerView implementation:
 
     @Override
-    public void setPresenter(Presenter<E> presenter) {
+    public void setPresenter(IListerPresenter<E> presenter) {
         this.presenter = presenter;
         if (presenter == null) {
             setDataSource(null);
@@ -175,7 +175,7 @@ public abstract class EntityDataTablePanel<E extends IEntity> extends DataTableP
     }
 
     @Override
-    public Presenter<E> getPresenter() {
+    public IListerPresenter<E> getPresenter() {
         return presenter;
     }
 

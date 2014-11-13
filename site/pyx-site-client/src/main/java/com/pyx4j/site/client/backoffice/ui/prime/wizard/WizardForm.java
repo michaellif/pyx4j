@@ -49,9 +49,9 @@ public abstract class WizardForm<E extends IEntity> extends CForm<E> implements 
 
     private final WizardPanel wizardPanel;
 
-    private final IWizard<? extends IEntity> view;
+    private final IWizardView<? extends IEntity> view;
 
-    public WizardForm(Class<E> rootClass, final IWizard<? extends IEntity> view) {
+    public WizardForm(Class<E> rootClass, final IWizardView<? extends IEntity> view) {
         super(rootClass);
         this.view = view;
         wizardPanel = new WizardPanel();
@@ -112,7 +112,7 @@ public abstract class WizardForm<E extends IEntity> extends CForm<E> implements 
         return step;
     }
 
-    public IWizard<? extends IEntity> getView() {
+    public IWizardView<? extends IEntity> getView() {
         return view;
     }
 
