@@ -50,18 +50,19 @@ public interface IncomeInfoSelfEmployed extends IEmploymentInfo {
     @Caption(name = "Is Fully Owned")
     IPrimitive<Boolean> fullyOwned();
 
-    @Caption(name = "Monthly Revenue")
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> monthlyRevenue();
+    IPrimitive<BigDecimal> revenueAmount();
+
+    IPrimitive<AmountPeriod> revenueAmountPeriod();
 
     @NotNull
     @Override
     @ToString(index = 0)
-    @Caption(name = "Monthly Salary/Dividend")
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> monthlyAmount();
+    @Caption(name = "Salary/Dividends")
+    IPrimitive<BigDecimal> incomeAmount();
 
     @Caption(name = "Number Of Employees")
     IPrimitive<Integer> numberOfEmployees();

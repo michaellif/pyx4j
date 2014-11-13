@@ -255,7 +255,7 @@ public class EquifaxModelMapper {
                 break;
             case unemployed:
             case other:
-                if (isZero(presentPersonalIncome.details().monthlyAmount())) {
+                if (isZero(presentPersonalIncome.details().incomeAmount())) {
                     employmentStatus = EmploymentStatus.UnemployedNoIncome;
                 } else {
                     employmentStatus = EmploymentStatus.UnemployedPlusIncome;
@@ -364,8 +364,8 @@ public class EquifaxModelMapper {
     }
 
     private static void addMonthlyIncome(CustomerScreeningIncome personalIncome, Parameters parameters) {
-        if (!personalIncome.details().monthlyAmount().isNull()) {
-            XmlCreator.addParameter(new MonthlyIncome(personalIncome.details().monthlyAmount().getValue().intValue()), parameters);
+        if (!personalIncome.details().incomeAmount().isNull()) {
+            XmlCreator.addParameter(new MonthlyIncome(personalIncome.details().incomeAmount().getValue().intValue()), parameters);
         }
     }
 

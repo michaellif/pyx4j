@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -51,6 +51,7 @@ import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.CustomerScreeningLegalQuestions;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncomeInfo.AmountPeriod;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset.AssetType;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
@@ -173,7 +174,8 @@ public class ScreeningGenerator {
         employer.name().setValue(RandomUtil.random(PreloadData.EMPLOYER_NAMES));
         employer.supervisorName().setValue("Mr. " + DataGenerator.randomLastName());
         employer.supervisorPhone().setValue(RandomUtil.randomPhone());
-        employer.monthlyAmount().setValue(new BigDecimal(1000 + RandomUtil.randomInt(4000)));
+        employer.incomeAmount().setValue(new BigDecimal(1000 + RandomUtil.randomInt(4000)));
+        employer.amountPeriod().setValue(AmountPeriod.Monthly);
         employer.position().setValue(RandomUtil.random(PreloadData.OCCUPATIONS));
 
         int startYear = 1990 + RandomUtil.randomInt(20);
@@ -193,7 +195,8 @@ public class ScreeningGenerator {
         selfEmpl.name().setValue(RandomUtil.random(PreloadData.EMPLOYER_NAMES));
         selfEmpl.supervisorName().setValue("Mr. " + DataGenerator.randomLastName());
         selfEmpl.supervisorPhone().setValue(RandomUtil.randomPhone());
-        selfEmpl.monthlyAmount().setValue(new BigDecimal(1000 + RandomUtil.randomInt(4000)));
+        selfEmpl.incomeAmount().setValue(new BigDecimal(1000 + RandomUtil.randomInt(4000)));
+        selfEmpl.amountPeriod().setValue(AmountPeriod.Monthly);
         selfEmpl.position().setValue(RandomUtil.random(PreloadData.OCCUPATIONS));
 
         int startYear = 1990 + RandomUtil.randomInt(20);

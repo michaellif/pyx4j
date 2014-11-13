@@ -285,7 +285,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         tenantFinancial.consolidatedIncome().setValue(BigDecimal.ZERO);
 
         for (CustomerScreeningIncome income : tenantFinancial.incomes()) {
-            tenantFinancial.consolidatedIncome().setValue(tenantFinancial.consolidatedIncome().getValue().add(income.details().monthlyAmount().getValue()));
+            tenantFinancial.consolidatedIncome().setValue(tenantFinancial.consolidatedIncome().getValue().add(income.details().incomeAmount().getValue()));
 
             if (tenantFinancial.employer().isNull()) {
                 if (income.details().isInstanceOf(IEmploymentInfo.class)) {
@@ -296,9 +296,10 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
             }
         }
 
-        if (tenantFinancial.consolidatedIncome().getValue().compareTo(BigDecimal.ZERO) == 0) {
-            tenantFinancial.consolidatedIncome().set(null);
-        }
+        // TODO: calculate consolidatedIncome taking into account amount period!
+//        if (tenantFinancial.consolidatedIncome().getValue().compareTo(BigDecimal.ZERO) == 0) {
+        tenantFinancial.consolidatedIncome().set(null);
+//        }
 
         if (tenantFinancial.employer().isNull()) {
             if (!tenantFinancial.incomes().isEmpty()) {

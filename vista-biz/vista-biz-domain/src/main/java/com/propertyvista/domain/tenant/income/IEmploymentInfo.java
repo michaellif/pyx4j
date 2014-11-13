@@ -13,14 +13,11 @@
  */
 package com.propertyvista.domain.tenant.income;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -63,12 +60,4 @@ public interface IEmploymentInfo extends CustomerScreeningIncomeInfo {
     @ToString(index = 2)
     @Caption(name = "Position")
     IPrimitive<String> position();
-
-    @NotNull
-    @Override
-    @ToString(index = 0)
-    @Caption(name = "Monthly Salary")
-    @Format("#,##0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> monthlyAmount();
 }

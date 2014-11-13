@@ -27,6 +27,8 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 /**
  * General required information for all Income types.
@@ -36,15 +38,40 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface CustomerScreeningIncomeInfo extends IEntity {
 
+    public enum AmountPeriod {
+
+        Annually,
+
+        @Translate("Semi-Annually")
+        SemiAnnually,
+
+        Quaterly, Monthly,
+
+        @Translate("Semi-Monthly")
+        SemiMonthly,
+
+        @Translate("Bi-Weekly")
+        BiWeekly,
+
+        Weekly, Daily, Hourly;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
     @ToString(index = 1)
     @Caption(name = "Description")
     IPrimitive<String> name();
 
     @NotNull
-    @ToString(index = 0)
     @Format("#,##0.00")
+    @ToString(index = 0)
     @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> monthlyAmount();
+    IPrimitive<BigDecimal> incomeAmount();
+
+    IPrimitive<AmountPeriod> amountPeriod();
 
     /**
      * Start of income period. For employment that would be employment start date.
