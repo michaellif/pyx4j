@@ -14,9 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.building.parking;
 
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
-import com.propertyvista.domain.property.asset.ParkingSpot;
 import com.propertyvista.dto.ParkingDTO;
 
 public interface ParkingViewerView extends IViewer<ParkingDTO> {
