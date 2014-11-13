@@ -206,7 +206,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         Persistence.service().persist(n4Letter);
 
         LegalStatusN4 n4Status = EntityFactory.create(LegalStatusN4.class);
-        n4Status.status().setValue(Status.N4);
+        n4Status.status().setValue(Status.N4CS);
 
         N4Policy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit(leaseId), N4Policy.class);
         GregorianCalendar cal = new GregorianCalendar();

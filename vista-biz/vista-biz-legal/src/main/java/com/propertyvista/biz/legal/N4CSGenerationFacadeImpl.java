@@ -52,12 +52,24 @@ public class N4CSGenerationFacadeImpl implements N4CSGenerationFacade {
     @Override
     public N4CSFormFieldsData prepareN4CSData(N4FormFieldsData n4) {
         N4CSFormFieldsData n4cs = EntityFactory.create(N4CSFormFieldsData.class);
-        n4cs.document().name().setValue("N4");
-        n4cs.document().docType().setValue(DocumentType.TT);
-        n4cs.street().setValue(n4.rentalUnitAddress().streetNumber().getValue() + " " + //
-                n4.rentalUnitAddress().streetName().getValue() + " " + //
-                n4.rentalUnitAddress().streetType().getValue() + " " + //
-                n4.rentalUnitAddress().direction().getValue());//
+        n4cs.reporter().setValue(n4.landlordsContactInfo().firstName().getValue() + " " + n4.landlordsContactInfo().lastName().getValue());
+        n4cs.document().termination().setValue("N4");
+        n4cs.document().docType().setValue(DocumentType.OR);
+        StringBuilder address = new StringBuilder();
+        if (n4.rentalUnitAddress().streetNumber().getValue() != null && !n4.rentalUnitAddress().streetNumber().getValue().equals("")) {
+            address.append(n4.rentalUnitAddress().streetNumber().getValue());
+        }
+        if (n4.rentalUnitAddress().streetName().getValue() != null && !n4.rentalUnitAddress().streetName().getValue().equals("")) {
+            address.append(" " + n4.rentalUnitAddress().streetName().getValue());
+        }
+        if (n4.rentalUnitAddress().streetType().getValue() != null && !n4.rentalUnitAddress().streetType().getValue().equals("")) {
+            address.append(" " + n4.rentalUnitAddress().streetType().getValue());
+        }
+        if (n4.rentalUnitAddress().direction().getValue() != null && !n4.rentalUnitAddress().direction().getValue().equals("")) {
+            address.append(" " + n4.rentalUnitAddress().direction().getValue());
+        }
+
+        n4cs.street().setValue(address.toString());
         n4cs.unit().setValue(n4.rentalUnitAddress().unit().getValue());
         n4cs.municipality().setValue(n4.rentalUnitAddress().municipality().getValue());
         n4cs.postalCode().setValue(n4.rentalUnitAddress().postalCode().getValue());
@@ -69,7 +81,7 @@ public class N4CSGenerationFacadeImpl implements N4CSGenerationFacade {
         n4cs.signature().signature().setValue(n4.signature().signature().getValue());
         n4cs.signature().signatureDate().setValue(SystemDateManager.getLogicalDate());
         n4cs.passedTo().tpType().setValue(ToType.Tenant);
-        n4cs.passedTo().name().setValue(n4.to().getValue());
+        n4cs.passedTo().name().setValue(n4.to().getStringView());
         n4cs.service().method().setValue(ServiceMethod.H);
 
         return n4cs;

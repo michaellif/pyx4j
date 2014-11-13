@@ -24,6 +24,10 @@ public interface N4CSDocumentType extends IEntity {
 
     IPrimitive<DocumentType> docType();
 
-    IPrimitive<String> name();
+    IPrimitive<String> application();
+
+    IPrimitive<String> termination();
+
+    IPrimitive<String> other();
 
 }

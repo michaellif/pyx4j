@@ -31,6 +31,8 @@ public interface N4CSFormFieldsData extends IEntity {
 
     IPrimitive<String> postalCode();
 
+    IPrimitive<String> reporter();
+
     N4CSDocumentType document();
 
     IPrimitive<LogicalDate> issueDate();
