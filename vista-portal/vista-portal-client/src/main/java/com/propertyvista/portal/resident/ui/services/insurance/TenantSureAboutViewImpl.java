@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,26 +13,21 @@
  */
 package com.propertyvista.portal.resident.ui.services.insurance;
 
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.pyx4j.widgets.client.Label;
+import com.pyx4j.commons.css.ThemeColor;
 
-import com.propertyvista.portal.resident.resources.tenantsure.TenantSureResources;
 import com.propertyvista.portal.resident.themes.TenantSureTheme;
 
-public class TenantSureAboutViewImpl extends Composite implements TenantSureAboutView {
+public class TenantSureAboutViewImpl extends FlowPanel implements TenantSureAboutView {
 
     public TenantSureAboutViewImpl() {
-        FlowPanel panel = new FlowPanel();
 
-        Label tenantSureContactInfo = new Label();
-        tenantSureContactInfo.addStyleName(TenantSureTheme.StyleName.TenantSureAboutContactInfo.name());
-        tenantSureContactInfo.setWidth("100%");
+        setStyleName(TenantSureTheme.StyleName.TenantSureAboutContactInfo.name());
 
-        tenantSureContactInfo.setHTML(TenantSureResources.INSTANCE.contactInfo().getText());
-        panel.add(tenantSureContactInfo);
+        TenanatSureAboutGadget tenantSureContactInfo = new TenanatSureAboutGadget(this, ThemeColor.contrast3, 1);
+        tenantSureContactInfo.asWidget().setWidth("100%");
+        add(tenantSureContactInfo);
 
-        initWidget(panel);
     }
 }
