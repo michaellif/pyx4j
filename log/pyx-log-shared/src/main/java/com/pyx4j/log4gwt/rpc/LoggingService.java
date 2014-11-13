@@ -26,10 +26,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.log4gwt.shared.LogEvent;
 import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface LoggingService extends IService {
 
+    @ServiceExecution(operationType = ServiceExecution.OperationType.NonBlocking)
     public void log(AsyncCallback<VoidSerializable> callback, Vector<LogEvent> events);
 
 }
