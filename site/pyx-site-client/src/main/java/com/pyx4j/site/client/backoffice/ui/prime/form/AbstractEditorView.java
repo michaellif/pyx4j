@@ -31,11 +31,12 @@ import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView.IEditorPresenter;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class AbstractEditorView<E extends IEntity> extends AbstractFormView<E> implements IEditorView<E> {
+public abstract class AbstractEditorView<E extends IEntity> extends AbstractFormView<E, IEditorPresenter> implements IEditorView<E> {
 
     private static final I18n i18n = I18n.get(AbstractEditorView.class);
 
@@ -166,7 +167,7 @@ public abstract class AbstractEditorView<E extends IEntity> extends AbstractForm
 
     @Override
     public IEditorView.IEditorPresenter getPresenter() {
-        return (IEditorView.IEditorPresenter) super.getPresenter();
+        return super.getPresenter();
     }
 
     @Override

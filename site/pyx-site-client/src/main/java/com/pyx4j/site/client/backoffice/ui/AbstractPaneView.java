@@ -30,10 +30,11 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.site.client.backoffice.ui.IPaneView.IPanePresenter;
 import com.pyx4j.widgets.client.HasSecureConcern;
 import com.pyx4j.widgets.client.Toolbar;
 
-public abstract class AbstractPaneView extends DockLayoutPanel implements IPaneView {
+public abstract class AbstractPaneView<PRESENTER extends IPanePresenter> extends DockLayoutPanel implements IPaneView<PRESENTER> {
 
     private static final double TOOLBAR_DEFAULT_HEIGHT = 34;
 
@@ -52,6 +53,8 @@ public abstract class AbstractPaneView extends DockLayoutPanel implements IPaneV
     private final SimplePanel footerToolbarHolder;
 
     private final FlowPanel headerCaption;
+
+    private PRESENTER presenter;
 
     public AbstractPaneView() {
         super(Unit.PX);
@@ -117,4 +120,13 @@ public abstract class AbstractPaneView extends DockLayoutPanel implements IPaneV
         footerToolbar.addItem(widget);
     }
 
+    @Override
+    public PRESENTER getPresenter() {
+        return presenter;
+    }
+
+    @Override
+    public void setPresenter(PRESENTER presenter) {
+        this.presenter = presenter;
+    }
 }

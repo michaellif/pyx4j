@@ -22,10 +22,11 @@ package com.pyx4j.site.client.backoffice.ui.prime.form;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView.IViewerPresenter;
 
-public interface IViewerView<E extends IEntity> extends IFormView<E> {
+public interface IViewerView<E extends IEntity> extends IFormView<E, IViewerPresenter> {
 
-    public interface IViewerPresenter extends IPrimePanePresenter {
+    public interface IViewerPresenter extends IFormPresenter {
 
         boolean canEdit();
 

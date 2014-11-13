@@ -43,6 +43,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
 import com.pyx4j.site.client.backoffice.ui.prime.form.PrimeEntityForm;
+import com.pyx4j.site.client.backoffice.ui.prime.report.IReportView.IReportPresenter;
 import com.pyx4j.site.shared.domain.reports.ExportableReport;
 import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 import com.pyx4j.widgets.client.Button;
@@ -50,11 +51,9 @@ import com.pyx4j.widgets.client.StringBox;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-public abstract class AbstractReport<R extends ReportTemplate> extends AbstractPrimePaneView implements IReportView<R> {
+public abstract class AbstractReport<R extends ReportTemplate> extends AbstractPrimePaneView<IReportPresenter<R>> implements IReportView<R> {
 
     private static final I18n i18n = I18n.get(AbstractReport.class);
-
-    private IReportView.IReportPresenter<R> presenter;
 
     private FlowPanel viewPanel;
 
@@ -81,8 +80,6 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
             this.settingsForm.init();
         }
 
-        this.presenter = null;
-
         this.viewPanel = new FlowPanel();
         this.viewPanel.setStyleName(PaneTheme.StyleName.ReportView.name());
         this.viewPanel.setWidth("100%");
@@ -102,7 +99,7 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
         addHeaderToolbarItem(new Button(i18n.tr("Customize..."), new Command() {
             @Override
             public void execute() {
-                presenter.loadAvailableTemplates();
+                getPresenter().loadAvailableTemplates();
             }
         }));
 
@@ -116,16 +113,11 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
         addHeaderToolbarItem(exportButton = new Button(i18n.tr("Export"), new Command() {
             @Override
             public void execute() {
-                presenter.export();
+                getPresenter().export();
             }
         }));
 
         setContentPane(new ScrollPanel(viewPanel));
-    }
-
-    @Override
-    public void setPresenter(IReportView.IReportPresenter<R> presenter) {
-        this.presenter = presenter;
     }
 
     @Override
@@ -205,7 +197,7 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
         if (!CommonsStringUtils.isStringSet(reportControlPanel.getReportSettings().reportTemplateName().getValue())) {
             saveSettingsAs();
         } else {
-            presenter.saveReportMetadata();
+            getPresenter().saveReportMetadata();
         }
     }
 
@@ -221,7 +213,7 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
             public boolean onClickOk() {
                 if (!reportMetadataIdTextBox.getValue().isEmpty()) {
                     reportControlPanel.getReportSettings().reportTemplateName().setValue(reportMetadataIdTextBox.getValue());
-                    presenter.saveAsReportMetadata();
+                    getPresenter().saveAsReportMetadata();
                     return true;
                 } else {
                     return false;
@@ -242,16 +234,16 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
     }
 
     void runReportGeneration() {
-        if (presenter != null) {
+        if (getPresenter() != null) {
             if (reportControlPanel.isValid()) {
-                presenter.runReportGeneration();
+                getPresenter().runReportGeneration();
             }
         }
     }
 
     void abortReportGeneration() {
-        if (presenter != null) {
-            presenter.abortReportGeneration();
+        if (getPresenter() != null) {
+            getPresenter().abortReportGeneration();
         }
     }
 

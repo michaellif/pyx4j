@@ -29,9 +29,11 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView.IPrimePanePresenter;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView.IListerPresenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public interface IListerView<E extends IEntity> extends IPrimePaneView {
+public interface IListerView<E extends IEntity> extends IPrimePaneView<IListerPresenter<E>> {
 
     public interface IListerPresenter<E extends IEntity> extends IPrimePanePresenter {
 
@@ -68,10 +70,6 @@ public interface IListerView<E extends IEntity> extends IPrimePaneView {
 
         void delete(Key itemID);
     }
-
-    void setPresenter(IListerPresenter<E> presenter);
-
-    IListerPresenter<E> getPresenter();
 
     EntityDataTablePanel<E> getDataTablePanel();
 

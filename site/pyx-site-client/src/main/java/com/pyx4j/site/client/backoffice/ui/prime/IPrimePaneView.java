@@ -21,10 +21,11 @@
 package com.pyx4j.site.client.backoffice.ui.prime;
 
 import com.pyx4j.site.client.backoffice.ui.IPaneView;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView.IPrimePanePresenter;
 import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.site.rpc.AppPlace;
 
-public interface IPrimePaneView extends IPaneView {
+public interface IPrimePaneView<PRESENTER extends IPrimePanePresenter> extends IPaneView<PRESENTER> {
 
     public interface IPrimePanePresenter extends IPanePresenter {
 

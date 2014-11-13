@@ -31,8 +31,9 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView.IListerPresenter;
 
-public class AbstractListerView<E extends IEntity> extends AbstractPrimePaneView implements IListerView<E> {
+public class AbstractListerView<E extends IEntity> extends AbstractPrimePaneView<IListerPresenter<E>> implements IListerView<E> {
 
     private EntityDataTablePanel<E> dataTablePanel = null;
 

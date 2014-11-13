@@ -21,8 +21,9 @@
 package com.pyx4j.site.client.backoffice.ui;
 
 import com.pyx4j.site.client.IsView;
+import com.pyx4j.site.client.backoffice.ui.IPaneView.IPanePresenter;
 
-public interface IPaneView extends IsView {
+public interface IPaneView<PRESENTER extends IPanePresenter> extends IsView {
 
     public interface IPanePresenter {
 
@@ -31,4 +32,7 @@ public interface IPaneView extends IsView {
         void refresh();
     }
 
+    void setPresenter(PRESENTER presenter);
+
+    PRESENTER getPresenter();
 }

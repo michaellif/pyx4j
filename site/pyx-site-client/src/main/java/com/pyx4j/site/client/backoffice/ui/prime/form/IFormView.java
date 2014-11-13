@@ -22,8 +22,13 @@ package com.pyx4j.site.client.backoffice.ui.prime.form;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView.IFormPresenter;
 
-public interface IFormView<E extends IEntity> extends IPrimePaneView {
+public interface IFormView<E extends IEntity, PRESENTER extends IFormPresenter> extends IPrimePaneView<PRESENTER> {
+
+    public interface IFormPresenter extends IPrimePanePresenter {
+
+    }
 
     void populate(E value);
 
@@ -32,9 +37,5 @@ public interface IFormView<E extends IEntity> extends IPrimePaneView {
     void setActiveTab(int index);
 
     int getActiveTab();
-
-    void setPresenter(IPrimePanePresenter presenter);
-
-    IPrimePanePresenter getPresenter();
 
 }
