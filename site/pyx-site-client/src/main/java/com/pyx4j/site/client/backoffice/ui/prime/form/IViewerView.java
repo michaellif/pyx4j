@@ -26,7 +26,7 @@ import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView.IViewerPresent
 
 public interface IViewerView<E extends IEntity> extends IFormView<E, IViewerPresenter> {
 
-    public interface IViewerPresenter extends IFormPresenter {
+    public interface IViewerPresenter extends IFormView.IFormPresenter {
 
         boolean canEdit();
 

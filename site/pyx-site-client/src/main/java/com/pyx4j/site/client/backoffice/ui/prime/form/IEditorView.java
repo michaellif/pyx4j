@@ -25,7 +25,7 @@ import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView.IEditorPresent
 
 public interface IEditorView<E extends IEntity> extends IFormView<E, IEditorPresenter> {
 
-    public interface IEditorPresenter extends IFormPresenter {
+    public interface IEditorPresenter extends IFormView.IFormPresenter {
 
         void apply();
 

@@ -26,7 +26,7 @@ import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView.IFormPresenter;
 
 public interface IFormView<E extends IEntity, PRESENTER extends IFormPresenter> extends IPrimePaneView<PRESENTER> {
 
-    public interface IFormPresenter extends IPrimePanePresenter {
+    public interface IFormPresenter extends IPrimePaneView.IPrimePanePresenter {
 
     }
 
