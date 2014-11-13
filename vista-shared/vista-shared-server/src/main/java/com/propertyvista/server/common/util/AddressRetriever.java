@@ -69,7 +69,7 @@ public class AddressRetriever {
         legal.suiteNumber().set(address.suiteNumber());
 
         StringBuilder streetName = new StringBuilder();
-        streetName.append(address.streetName().getValue());
+        streetName.append(address.streetName().getValue(""));
         if (!address.streetType().isNull()) {
             streetName.append(" ").append(address.streetType().getValue());
         }
