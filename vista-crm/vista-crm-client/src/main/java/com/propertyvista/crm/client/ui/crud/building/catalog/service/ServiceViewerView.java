@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.domain.financial.offering.Service;
 
-public interface ServiceViewerView extends IViewer<Service> {
+public interface ServiceViewerView extends IViewerView<Service> {
 }

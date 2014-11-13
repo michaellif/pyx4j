@@ -18,13 +18,13 @@ import java.util.List;
 import com.google.gwt.view.client.Range;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
 
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.BulkEditableEntity;
 
-public interface BulkOperationToolView<Settings extends IEntity, Item extends BulkEditableEntity> extends IPrimePane {
+public interface BulkOperationToolView<Settings extends IEntity, Item extends BulkEditableEntity> extends IPrimePaneView {
 
-    interface Presenter extends IPrimePane.Presenter {
+    interface Presenter extends IPrimePaneView.IPrimePanePresenter {
 
         void search();
 

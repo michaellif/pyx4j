@@ -18,7 +18,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatch;
@@ -31,7 +31,7 @@ public class FundsTransferDebitRecordForm extends OperationsEntityForm<FundsTran
 
     private static final I18n i18n = I18n.get(FundsTransferDebitRecordForm.class);
 
-    public FundsTransferDebitRecordForm(IForm<FundsTransferRecordDTO> view) {
+    public FundsTransferDebitRecordForm(IFormView<FundsTransferRecordDTO> view) {
         super(FundsTransferRecordDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

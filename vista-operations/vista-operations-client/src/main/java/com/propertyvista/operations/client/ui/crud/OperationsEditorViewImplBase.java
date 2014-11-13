@@ -14,17 +14,17 @@
 package com.propertyvista.operations.client.ui.crud;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
-import com.pyx4j.site.client.backoffice.ui.prime.form.AbstractEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.AbstractEditorView;
 
-public class OperationsEditorViewImplBase<E extends IEntity> extends AbstractEditor<E> {
+public class OperationsEditorViewImplBase<E extends IEntity> extends AbstractEditorView<E> {
 
     public OperationsEditorViewImplBase() {
         super();
     }
 
     @Override
-    public void setPresenter(IPrimePane.Presenter presenter) {
+    public void setPresenter(IPrimePaneView.IPrimePanePresenter presenter) {
         super.setPresenter(presenter);
         if (presenter != null) {
             reset(); // initialize the view!..

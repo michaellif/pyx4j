@@ -13,12 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.parking;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.dto.ParkingDTO;
 
-public interface ParkingEditorView extends IEditor<ParkingDTO> {
+public interface ParkingEditorView extends IEditorView<ParkingDTO> {
 
-    interface Presenter extends IEditor.Presenter {
+    interface Presenter extends IEditorView.IEditorPresenter {
     }
 }

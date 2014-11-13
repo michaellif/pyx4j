@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.boxes.LocalizedContentFolderBase;
@@ -38,7 +38,7 @@ public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<Mai
 
     private final static I18n i18n = I18n.get(MaintenanceRequestPolicyForm.class);
 
-    public MaintenanceRequestPolicyForm(IForm<MaintenanceRequestPolicyDTO> view) {
+    public MaintenanceRequestPolicyForm(IFormView<MaintenanceRequestPolicyDTO> view) {
         super(MaintenanceRequestPolicyDTO.class, view);
         addTab(createGeneralPanel(), i18n.tr("General"));
     }

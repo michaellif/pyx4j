@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.validators.ClientBusinessRules;
@@ -56,7 +56,7 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
 
     private final IdUploaderFolder fileUpload = new IdUploaderFolder();
 
-    public CustomerScreeningForm(IForm<LeaseParticipantScreeningTO> view) {
+    public CustomerScreeningForm(IFormView<LeaseParticipantScreeningTO> view) {
         super(LeaseParticipantScreeningTO.class, view);
 
         selectTab(addTab(createIdentificationDocumentsTab(), i18n.tr("Identification Documents")));

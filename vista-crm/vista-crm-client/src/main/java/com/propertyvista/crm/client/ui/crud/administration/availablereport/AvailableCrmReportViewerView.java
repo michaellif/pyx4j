@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.availablereport;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.domain.reports.AvailableCrmReport;
 
-public interface AvailableCrmReportViewerView extends IViewer<AvailableCrmReport> {
+public interface AvailableCrmReportViewerView extends IViewerView<AvailableCrmReport> {
 
 }

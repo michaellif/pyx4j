@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.portfolio;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.domain.company.Portfolio;
 
-public interface PortfolioViewerView extends IViewer<Portfolio> {
+public interface PortfolioViewerView extends IViewerView<Portfolio> {
 
 }

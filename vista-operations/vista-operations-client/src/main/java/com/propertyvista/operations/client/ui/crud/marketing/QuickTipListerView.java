@@ -13,13 +13,13 @@
  */
 package com.propertyvista.operations.client.ui.crud.marketing;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 
 import com.propertyvista.domain.marketing.PortalResidentMarketingTip;
 
-public interface QuickTipListerView extends ILister<PortalResidentMarketingTip> {
+public interface QuickTipListerView extends IListerView<PortalResidentMarketingTip> {
 
-    interface Presenter extends ILister.Presenter<PortalResidentMarketingTip> {
+    interface Presenter extends IListerView.IListerPresenter<PortalResidentMarketingTip> {
 
     }
 

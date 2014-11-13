@@ -29,7 +29,7 @@ import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -91,7 +91,7 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
 
     }
 
-    public MoneyInBatchForm(IForm<MoneyInBatchDTO> view) {
+    public MoneyInBatchForm(IFormView<MoneyInBatchDTO> view) {
         super(MoneyInBatchDTO.class, view);
         selectTab(addTab(createGeneralTab(), i18n.tr("Batch Details")));
         setTabBarVisible(false);

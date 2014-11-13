@@ -19,7 +19,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.activity.ListerController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister.Presenter;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView.IListerPresenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
@@ -34,7 +34,7 @@ import com.propertyvista.operations.rpc.services.scheduler.TriggerCrudService;
 
 public class TriggerViewerActivity extends AdminViewerActivity<TriggerDTO> implements TriggerViewerView.Presenter {
 
-    private final Presenter<Run> runLister;
+    private final IListerPresenter<Run> runLister;
 
     public TriggerViewerActivity(CrudAppPlace place) {
         super(TriggerDTO.class, place, OperationsSite.getViewFactory().getView(TriggerViewerView.class), GWT

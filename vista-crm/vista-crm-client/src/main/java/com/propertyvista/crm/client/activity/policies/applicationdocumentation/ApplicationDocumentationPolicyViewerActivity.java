@@ -25,7 +25,7 @@ import com.propertyvista.crm.rpc.services.policies.policy.ApplicationDocumentati
 import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
 
 public class ApplicationDocumentationPolicyViewerActivity extends CrmViewerActivity<ApplicationDocumentationPolicyDTO> implements
-        ApplicationDocumentationPolicyViewerView.Presenter {
+        ApplicationDocumentationPolicyViewerView.IViewerPresenter {
 
     public ApplicationDocumentationPolicyViewerActivity(CrudAppPlace place) {
         // TODO take the view from pool

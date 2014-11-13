@@ -19,7 +19,7 @@ import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -29,7 +29,7 @@ public class PmcFormNewItem extends OperationsEntityForm<PmcDTO> {
 
     private static final I18n i18n = I18n.get(PmcFormNewItem.class);
 
-    public PmcFormNewItem(IForm<PmcDTO> view) {
+    public PmcFormNewItem(IFormView<PmcDTO> view) {
         super(PmcDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

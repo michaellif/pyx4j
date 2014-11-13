@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
@@ -32,7 +32,7 @@ import com.propertyvista.common.client.ui.MiscUtils;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.access.PortalAccessSecutiryCodeReportType;
 
-public class TenantSecurityViewImpl extends AbstractPrimePane implements TenantSecurityView {
+public class TenantSecurityViewImpl extends AbstractPrimePaneView implements TenantSecurityView {
 
     private static final I18n i18n = I18n.get(TenantSecurityViewImpl.class);
 

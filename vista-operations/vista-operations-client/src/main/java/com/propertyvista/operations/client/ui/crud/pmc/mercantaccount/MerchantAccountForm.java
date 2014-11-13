@@ -30,7 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.validators.EcheckAccountNumberStringValidator;
@@ -72,7 +72,7 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
 
     }
 
-    public MerchantAccountForm(IForm<PmcMerchantAccountDTO> view) {
+    public MerchantAccountForm(IFormView<PmcMerchantAccountDTO> view) {
         super(PmcMerchantAccountDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

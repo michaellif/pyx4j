@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.cardtransactio
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
@@ -25,7 +25,7 @@ public class CardTransactionRecordForm extends OperationsEntityForm<CardTransact
 
     private static final I18n i18n = I18n.get(CardTransactionRecordForm.class);
 
-    public CardTransactionRecordForm(IForm<CardTransactionRecord> view) {
+    public CardTransactionRecordForm(IFormView<CardTransactionRecord> view) {
         super(CardTransactionRecord.class, view);
 
         FormPanel formPanel = new FormPanel(this);

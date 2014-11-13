@@ -15,13 +15,13 @@ package com.propertyvista.ob.client.views;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
 
 import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
 
-public interface PmcAccountCreationRequestView extends IPrimePane {
+public interface PmcAccountCreationRequestView extends IPrimePaneView {
 
-    interface Presenter extends IPrimePane.Presenter {
+    interface Presenter extends IPrimePaneView.IPrimePanePresenter {
 
         void checkDns(AsyncCallback<Boolean> callback, String dnsName);
 

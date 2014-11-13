@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.ui.reports.residentinsurance;
 
 import com.pyx4j.site.client.IsView;
-import com.pyx4j.site.client.backoffice.ui.prime.report.IReport;
+import com.pyx4j.site.client.backoffice.ui.prime.report.IReportView;
 
 import com.propertyvista.domain.reports.ResidentInsuranceReportMetadata;
 
-public interface ResidentInsuranceReportView extends IReport<ResidentInsuranceReportMetadata>, IsView {
+public interface ResidentInsuranceReportView extends IReportView<ResidentInsuranceReportMetadata>, IsView {
 
 }

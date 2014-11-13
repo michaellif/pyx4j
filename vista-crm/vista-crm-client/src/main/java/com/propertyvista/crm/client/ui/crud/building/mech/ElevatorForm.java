@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.building.mech;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.common.client.ui.components.editors.LicenseEditor;
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
@@ -26,7 +26,7 @@ public class ElevatorForm extends MechBaseForm<ElevatorDTO> {
 
     private static final I18n i18n = I18n.get(ElevatorForm.class);
 
-    public ElevatorForm(IForm<ElevatorDTO> view) {
+    public ElevatorForm(IFormView<ElevatorDTO> view) {
         super(ElevatorDTO.class, view);
     }
 

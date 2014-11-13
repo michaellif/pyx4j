@@ -25,7 +25,7 @@ import com.propertyvista.operations.rpc.dto.FundsReconciliationRecordRecordDTO;
 import com.propertyvista.operations.rpc.services.PadReconciliationDebitRecordCrudService;
 
 public class FundsReconciliationDebitRecordViewerActivity extends AbstractViewerActivity<FundsReconciliationRecordRecordDTO> implements
-        FundsReconciliationDebitRecordViewerView.Presenter {
+        FundsReconciliationDebitRecordViewerView.IViewerPresenter {
 
     public FundsReconciliationDebitRecordViewerActivity(CrudAppPlace place) {
         super(FundsReconciliationRecordRecordDTO.class, place, OperationsSite.getViewFactory().getView(FundsReconciliationDebitRecordViewerView.class), GWT

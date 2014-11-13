@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.maintenancerequest;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 
 import com.propertyvista.domain.policy.dto.MaintenanceRequestPolicyDTO;
 
-public interface MaintenanceRequestPolicyListerView extends ILister<MaintenanceRequestPolicyDTO> {
+public interface MaintenanceRequestPolicyListerView extends IListerView<MaintenanceRequestPolicyDTO> {
 
 }

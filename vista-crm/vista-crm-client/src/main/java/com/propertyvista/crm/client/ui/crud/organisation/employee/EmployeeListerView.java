@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 
-public interface EmployeeListerView extends ILister<EmployeeDTO> {
+public interface EmployeeListerView extends IListerView<EmployeeDTO> {
 
 }

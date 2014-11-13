@@ -14,15 +14,15 @@
 package com.propertyvista.crm.client.ui.crud.customer.tenant;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.dto.TenantPortalAccessInformationDTO;
 
-public interface TenantViewerView extends IViewer<TenantDTO> {
+public interface TenantViewerView extends IViewerView<TenantDTO> {
 
-    interface Presenter extends IViewer.Presenter {
+    interface Presenter extends IViewerView.IViewerPresenter {
 
         MaintenanceRequestVisorController getMaintenanceRequestVisorController();
 

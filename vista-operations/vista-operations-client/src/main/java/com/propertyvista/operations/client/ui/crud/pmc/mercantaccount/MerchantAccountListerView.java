@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc.mercantaccount;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 
-public interface MerchantAccountListerView extends ILister<PmcMerchantAccountDTO> {
+public interface MerchantAccountListerView extends IListerView<PmcMerchantAccountDTO> {
 
 }

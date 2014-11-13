@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferrecord;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 
 import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
 
-public interface FundsTransferDebitRecordListerView extends ILister<FundsTransferRecordDTO> {
+public interface FundsTransferDebitRecordListerView extends IListerView<FundsTransferRecordDTO> {
 
 }

@@ -17,7 +17,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -25,9 +25,9 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public interface PaymentRecordEditorView extends IEditor<PaymentRecordDTO> {
+public interface PaymentRecordEditorView extends IEditorView<PaymentRecordDTO> {
 
-    interface Presenter extends IEditor.Presenter {
+    interface Presenter extends IEditorView.IEditorPresenter {
 
         void getCurrentAddress(AsyncCallback<InternationalAddress> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer);
 

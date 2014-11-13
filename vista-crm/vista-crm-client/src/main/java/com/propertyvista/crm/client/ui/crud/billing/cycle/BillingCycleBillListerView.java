@@ -15,13 +15,13 @@ package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
 import java.util.Collection;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 
-public interface BillingCycleBillListerView extends ILister<BillDataDTO> {
+public interface BillingCycleBillListerView extends IListerView<BillDataDTO> {
 
-    interface Presenter extends ILister.Presenter<BillDataDTO> {
+    interface Presenter extends IListerView.IListerPresenter<BillDataDTO> {
 
         void confirm(Collection<BillDataDTO> bills);
 

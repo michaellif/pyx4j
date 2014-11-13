@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.policies.leasetermination;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.LeaseTerminationPolicyDTO;
@@ -25,7 +25,7 @@ public class LeaseTerminationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
 
     private static final I18n i18n = I18n.get(LeaseTerminationPolicyForm.class);
 
-    public LeaseTerminationPolicyForm(IForm<LeaseTerminationPolicyDTO> view) {
+    public LeaseTerminationPolicyForm(IFormView<LeaseTerminationPolicyDTO> view) {
         super(LeaseTerminationPolicyDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

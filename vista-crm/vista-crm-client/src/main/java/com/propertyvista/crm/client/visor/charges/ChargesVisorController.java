@@ -20,7 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.site.client.backoffice.activity.AbstractVisorController;
-import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
 
 import com.propertyvista.crm.rpc.services.billing.BillPreviewService;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -32,7 +32,7 @@ public class ChargesVisorController extends AbstractVisorController {
 
     private final Key leaseId;
 
-    public ChargesVisorController(IPrimePane parentView, Key leaseId) {
+    public ChargesVisorController(IPrimePaneView parentView, Key leaseId) {
         super(parentView);
         this.leaseId = leaseId;
         visor = new ChargesVisorView(this);

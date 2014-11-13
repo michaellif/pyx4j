@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.administration.website.content.city
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.administration.website.RichTextContentFolder;
@@ -25,7 +25,7 @@ import com.propertyvista.domain.site.CityIntroPage;
 public class CityIntroPageForm extends CrmEntityForm<CityIntroPage> {
     private static final I18n i18n = I18n.get(CityIntroPageForm.class);
 
-    public CityIntroPageForm(IForm<CityIntroPage> view) {
+    public CityIntroPageForm(IFormView<CityIntroPage> view) {
         super(CityIntroPage.class, view);
 
         FormPanel formPanel = new FormPanel(this);

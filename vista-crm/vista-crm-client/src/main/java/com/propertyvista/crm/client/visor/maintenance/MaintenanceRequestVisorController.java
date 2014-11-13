@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.visor.maintenance;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.backoffice.activity.AbstractVisorController;
-import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
 
 public class MaintenanceRequestVisorController extends AbstractVisorController {
 
@@ -25,11 +25,11 @@ public class MaintenanceRequestVisorController extends AbstractVisorController {
 
     private final Key tenantId;
 
-    public MaintenanceRequestVisorController(IPrimePane parentView, Key buildingId) {
+    public MaintenanceRequestVisorController(IPrimePaneView parentView, Key buildingId) {
         this(parentView, buildingId, null);
     }
 
-    public MaintenanceRequestVisorController(IPrimePane parentView, Key buildingId, final Key tenantId) {
+    public MaintenanceRequestVisorController(IPrimePaneView parentView, Key buildingId, final Key tenantId) {
         super(parentView);
         this.buildingId = buildingId;
         this.tenantId = tenantId;

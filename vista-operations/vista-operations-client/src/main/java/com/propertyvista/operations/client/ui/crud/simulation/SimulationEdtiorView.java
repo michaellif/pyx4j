@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulation;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.operations.rpc.dto.SimulationDTO;
 
-public interface SimulationEdtiorView extends IEditor<SimulationDTO> {
+public interface SimulationEdtiorView extends IEditorView<SimulationDTO> {
 
 }

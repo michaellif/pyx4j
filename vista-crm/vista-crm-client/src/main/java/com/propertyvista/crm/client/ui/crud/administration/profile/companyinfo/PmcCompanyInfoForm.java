@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -31,7 +31,7 @@ public class PmcCompanyInfoForm extends CrmEntityForm<PmcCompanyInfoDTO> {
 
     private static final I18n i18n = I18n.get(PmcCompanyInfoForm.class);
 
-    public PmcCompanyInfoForm(IForm<PmcCompanyInfoDTO> view) {
+    public PmcCompanyInfoForm(IFormView<PmcCompanyInfoDTO> view) {
         super(PmcCompanyInfoDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

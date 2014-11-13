@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.building.locker;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.property.asset.Locker;
@@ -25,7 +25,7 @@ public class LockerForm extends CrmEntityForm<Locker> {
 
     private static final I18n i18n = I18n.get(LockerForm.class);
 
-    public LockerForm(IForm<Locker> view) {
+    public LockerForm(IFormView<Locker> view) {
         super(Locker.class, view);
 
         FormPanel formPanel = new FormPanel(this);

@@ -20,7 +20,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.backoffice.activity.ListerController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -33,11 +33,11 @@ import com.propertyvista.dto.PaymentRecordDTO;
 
 public class AggregatedTransferViewerActivity extends CrmViewerActivity<AggregatedTransfer> implements AggregatedTransferViewerView.Presenter {
 
-    private final ILister.Presenter<PaymentRecordDTO> paymentLister;
+    private final IListerView.IListerPresenter<PaymentRecordDTO> paymentLister;
 
-    private final ILister.Presenter<PaymentRecordDTO> returnedPaymentLister;
+    private final IListerView.IListerPresenter<PaymentRecordDTO> returnedPaymentLister;
 
-    private final ILister.Presenter<PaymentRecordDTO> rejectedBatchPaymentsLister;
+    private final IListerView.IListerPresenter<PaymentRecordDTO> rejectedBatchPaymentsLister;
 
     public AggregatedTransferViewerActivity(CrudAppPlace place) {
         super(AggregatedTransfer.class, place, CrmSite.getViewFactory().getView(AggregatedTransferViewerView.class), GWT

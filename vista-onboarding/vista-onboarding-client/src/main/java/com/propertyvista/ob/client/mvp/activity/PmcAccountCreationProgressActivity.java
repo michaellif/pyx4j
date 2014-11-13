@@ -41,7 +41,7 @@ import com.propertyvista.ob.rpc.dto.OnboardingCrmURL;
 import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
 import com.propertyvista.ob.rpc.services.PmcRegistrationService;
 
-public class PmcAccountCreationProgressActivity extends AbstractActivity implements PmcAccountCreationProgressView.Presenter {
+public class PmcAccountCreationProgressActivity extends AbstractActivity implements PmcAccountCreationProgressView.IPrimePanePresenter {
 
     private final static I18n i18n = I18n.get(PmcAccountCreationProgressActivity.class);
 

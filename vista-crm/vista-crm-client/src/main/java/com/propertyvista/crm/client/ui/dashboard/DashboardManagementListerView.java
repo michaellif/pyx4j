@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public interface DashboardManagementListerView extends ILister<DashboardMetadata> {
+public interface DashboardManagementListerView extends IListerView<DashboardMetadata> {
 
 }

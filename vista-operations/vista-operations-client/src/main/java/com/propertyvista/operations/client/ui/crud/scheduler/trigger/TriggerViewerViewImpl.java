@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.scheduler.trigger;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
@@ -29,7 +29,7 @@ public class TriggerViewerViewImpl extends OperationsViewerViewImplBase<TriggerD
 
     static final I18n i18n = I18n.get(TriggerEditorViewImpl.class);
 
-    private final ILister<Run> runLister;
+    private final IListerView<Run> runLister;
 
     private final Button runImmediately;
 
@@ -74,7 +74,7 @@ public class TriggerViewerViewImpl extends OperationsViewerViewImplBase<TriggerD
     }
 
     @Override
-    public ILister<Run> getRunListerView() {
+    public IListerView<Run> getRunListerView() {
         return runLister;
     }
 

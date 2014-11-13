@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.financial.glcode;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.domain.financial.GlCodeCategory;
 
-public interface GlCodeCategoryEditorView extends IEditor<GlCodeCategory> {
+public interface GlCodeCategoryEditorView extends IEditorView<GlCodeCategory> {
 
 }

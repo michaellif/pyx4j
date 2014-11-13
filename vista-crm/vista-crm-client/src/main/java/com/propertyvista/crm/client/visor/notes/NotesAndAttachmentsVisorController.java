@@ -25,7 +25,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.site.client.backoffice.activity.AbstractVisorController;
-import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
 
 import com.propertyvista.crm.rpc.services.notes.NotesAndAttachmentsCrudService;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
@@ -39,7 +39,7 @@ public class NotesAndAttachmentsVisorController extends AbstractVisorController 
 
     private final HasNotesAndAttachments notesParentId;
 
-    public NotesAndAttachmentsVisorController(IPrimePane parentView, HasNotesAndAttachments notesParentId) {
+    public NotesAndAttachmentsVisorController(IPrimePaneView parentView, HasNotesAndAttachments notesParentId) {
         super(parentView);
         service = GWT.<NotesAndAttachmentsCrudService> create(NotesAndAttachmentsCrudService.class);
         visor = new NotesAndAttachmentsVisorView(this);

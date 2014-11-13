@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.financial.deposit;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.dto.DepositLifecycleDTO;
 
-public interface DepositLifecycleViewerView extends IViewer<DepositLifecycleDTO> {
+public interface DepositLifecycleViewerView extends IViewerView<DepositLifecycleDTO> {
 
-    interface Presenter extends IViewer.Presenter {
+    interface Presenter extends IViewerView.IViewerPresenter {
 
     }
 }

@@ -24,7 +24,7 @@ import com.propertyvista.crm.rpc.services.policies.policy.AbstractPolicyCrudServ
 import com.propertyvista.crm.rpc.services.policies.policy.LegalDocumentationPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LegalTermsPolicyDTO;
 
-public class LegalTermsPolicyEditorActivity extends PolicyEditorActivityBase<LegalTermsPolicyDTO> implements LegalTermsPolicyEditorView.Presenter {
+public class LegalTermsPolicyEditorActivity extends PolicyEditorActivityBase<LegalTermsPolicyDTO> implements LegalTermsPolicyEditorView.IEditorPresenter {
 
     public LegalTermsPolicyEditorActivity(CrudAppPlace place) {
         super(LegalTermsPolicyDTO.class, place, CrmSite.getViewFactory().getView(LegalTermsPolicyEditorView.class), GWT

@@ -20,16 +20,16 @@ import com.google.gwt.view.client.ProvidesKey;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.Path;
-import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
 
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ValidationErrors;
 import com.propertyvista.crm.client.ui.tools.common.view.HasMessages;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInCandidateDTO;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInLeaseParticipantDTO;
 
-public interface MoneyInCreateBatchView extends IPrimePane, HasMessages {
+public interface MoneyInCreateBatchView extends IPrimePaneView, HasMessages {
 
-    interface Presenter extends IPrimePane.Presenter, ProvidesKey<MoneyInCandidateDTO> {
+    interface Presenter extends IPrimePaneView.IPrimePanePresenter, ProvidesKey<MoneyInCandidateDTO> {
 
         void addPayments();
 

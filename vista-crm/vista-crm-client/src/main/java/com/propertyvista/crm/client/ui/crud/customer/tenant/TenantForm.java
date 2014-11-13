@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.folders.PapFolder;
@@ -54,7 +54,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
     private EmergencyContactFolder emergencyContactFolder;
 
-    public TenantForm(IForm<TenantDTO> view) {
+    public TenantForm(IFormView<TenantDTO> view) {
         super(TenantDTO.class, view);
 
         selectTab(addTab(createDetailsTab(), i18n.tr("Details")));

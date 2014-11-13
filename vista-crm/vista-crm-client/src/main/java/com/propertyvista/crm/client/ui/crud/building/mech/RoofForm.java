@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.building.mech;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
 import com.propertyvista.dto.RoofDTO;
@@ -25,7 +25,7 @@ public class RoofForm extends MechBaseForm<RoofDTO> {
 
     private static final I18n i18n = I18n.get(RoofForm.class);
 
-    public RoofForm(IForm<RoofDTO> view) {
+    public RoofForm(IFormView<RoofDTO> view) {
         super(RoofDTO.class, view);
     }
 

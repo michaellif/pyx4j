@@ -24,7 +24,7 @@ import com.propertyvista.operations.client.ui.crud.simulation.SimulationEdtiorVi
 import com.propertyvista.operations.rpc.dto.SimulationDTO;
 import com.propertyvista.operations.rpc.services.SimulationService;
 
-public class SimulationEditorActivity extends AbstractEditorActivity<SimulationDTO> implements SimulationEdtiorView.Presenter {
+public class SimulationEditorActivity extends AbstractEditorActivity<SimulationDTO> implements SimulationEdtiorView.IEditorPresenter {
 
     public SimulationEditorActivity(CrudAppPlace place) {
         super(SimulationDTO.class, place, OperationsSite.getViewFactory().getView(SimulationEdtiorView.class), GWT

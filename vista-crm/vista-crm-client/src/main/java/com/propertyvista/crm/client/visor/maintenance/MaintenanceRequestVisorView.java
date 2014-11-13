@@ -19,11 +19,11 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
+import com.pyx4j.site.client.ui.visor.AbstractVisorPaneView;
 
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
-public class MaintenanceRequestVisorView extends AbstractVisorPane {
+public class MaintenanceRequestVisorView extends AbstractVisorPaneView {
 
     private static final I18n i18n = I18n.get(MaintenanceRequestVisorView.class);
 

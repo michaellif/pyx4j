@@ -13,12 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.website.content.gadgets;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
 
-public interface HomePageGadgetEditor extends IEditor<HomePageGadget> {
+public interface HomePageGadgetEditor extends IEditorView<HomePageGadget> {
 
-    interface Presenter extends IEditor.Presenter {
+    interface Presenter extends IEditorView.IEditorPresenter {
     }
 }

@@ -14,11 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.administration.financial.arcode;
 
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.domain.financial.ARCode;
 
-public interface ARCodeEditorView extends IEditor<ARCode>, HasYardiIntegrationMode {
+public interface ARCodeEditorView extends IEditorView<ARCode>, HasYardiIntegrationMode {
 
     void reportSaveError(UserRuntimeException caught);
 

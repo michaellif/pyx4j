@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.pad.file;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
 
-public interface PadSimFileEditorView extends IEditor<PadSimFile> {
+public interface PadSimFileEditorView extends IEditorView<PadSimFile> {
 
 }

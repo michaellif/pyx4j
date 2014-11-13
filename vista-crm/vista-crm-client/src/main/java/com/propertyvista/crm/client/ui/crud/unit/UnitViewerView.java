@@ -14,15 +14,15 @@
 package com.propertyvista.crm.client.ui.crud.unit;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.dto.AptUnitDTO;
 
-public interface UnitViewerView extends IViewer<AptUnitDTO> {
+public interface UnitViewerView extends IViewerView<AptUnitDTO> {
 
-    interface Presenter extends IViewer.Presenter {
+    interface Presenter extends IViewerView.IViewerPresenter {
 
         void scopeOffMarket(OffMarketType type);
 

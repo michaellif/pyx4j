@@ -22,13 +22,13 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.view.client.ProvidesKey;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.tools.legal.l1.datagrid.L1CandidateDataGrid;
 import com.propertyvista.crm.rpc.dto.legal.common.LegalActionCandidateDTO;
 
-public class L1DelinquentLeaseSearchViewImpl extends AbstractPrimePane implements L1DelinquentLeaseSearchView {
+public class L1DelinquentLeaseSearchViewImpl extends AbstractPrimePaneView implements L1DelinquentLeaseSearchView {
 
     static final I18n i18n = I18n.get(L1DelinquentLeaseSearchView.class);
 

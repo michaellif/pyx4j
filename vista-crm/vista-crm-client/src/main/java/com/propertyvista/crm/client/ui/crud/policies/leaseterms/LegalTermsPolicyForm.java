@@ -17,14 +17,14 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.LegalTermsPolicyDTO;
 
 public class LegalTermsPolicyForm extends PolicyDTOTabPanelBasedForm<LegalTermsPolicyDTO> {
 
-    public LegalTermsPolicyForm(IForm<LegalTermsPolicyDTO> view) {
+    public LegalTermsPolicyForm(IFormView<LegalTermsPolicyDTO> view) {
         super(LegalTermsPolicyDTO.class, view);
 
         addTab(createResidentPortalTermsAndConditionsPanel(), proto().residentPortalTermsAndConditions().getMeta().getCaption());

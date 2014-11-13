@@ -21,7 +21,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.activity.ListerController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister.Presenter;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView.IListerPresenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -35,7 +35,7 @@ import com.propertyvista.operations.rpc.services.simulator.PadSimFileCrudService
 
 public class PadSimFileViewerActivity extends AdminViewerActivity<PadSimFile> implements PadSimFileViewerView.Presenter {
 
-    private final Presenter<PadSimBatch> batchLister;
+    private final IListerPresenter<PadSimBatch> batchLister;
 
     public PadSimFileViewerActivity(CrudAppPlace place) {
         super(PadSimFile.class, place, OperationsSite.getViewFactory().getView(PadSimFileViewerView.class), GWT

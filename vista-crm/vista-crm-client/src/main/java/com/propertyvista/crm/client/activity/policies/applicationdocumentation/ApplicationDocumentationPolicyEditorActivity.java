@@ -25,7 +25,7 @@ import com.propertyvista.crm.rpc.services.policies.policy.ApplicationDocumentati
 import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
 
 public class ApplicationDocumentationPolicyEditorActivity extends PolicyEditorActivityBase<ApplicationDocumentationPolicyDTO> implements
-        ApplicationDocumentationPolicyEditorView.Presenter {
+        ApplicationDocumentationPolicyEditorView.IEditorPresenter {
 
     public ApplicationDocumentationPolicyEditorActivity(CrudAppPlace place) {
         super(ApplicationDocumentationPolicyDTO.class,  place, CrmSite.getViewFactory().getView(ApplicationDocumentationPolicyEditorView.class),

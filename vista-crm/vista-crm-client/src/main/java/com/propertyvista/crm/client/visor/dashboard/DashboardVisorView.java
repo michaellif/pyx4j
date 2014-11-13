@@ -21,7 +21,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
 
-import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
+import com.pyx4j.site.client.ui.visor.AbstractVisorPaneView;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
@@ -34,7 +34,7 @@ import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.LayoutManager
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class DashboardVisorView extends AbstractVisorPane {
+public class DashboardVisorView extends AbstractVisorPaneView {
 
     private final AbstractDashboard dashboard;
 

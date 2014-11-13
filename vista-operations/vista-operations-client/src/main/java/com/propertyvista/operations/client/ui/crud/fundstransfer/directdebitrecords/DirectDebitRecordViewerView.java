@@ -13,13 +13,13 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.directdebitrecords;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 
-public interface DirectDebitRecordViewerView extends IViewer<DirectDebitRecord> {
+public interface DirectDebitRecordViewerView extends IViewerView<DirectDebitRecord> {
 
-    interface Presenter extends IViewer.Presenter {
+    interface Presenter extends IViewerView.IViewerPresenter {
 
         void markRefunded(String operationNotes);
     }

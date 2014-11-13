@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.ils;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.dto.vista2pmc.ILSConfigDTO;
 
-public interface ILSConfigEditorView extends IEditor<ILSConfigDTO> {
+public interface ILSConfigEditorView extends IEditorView<ILSConfigDTO> {
 
 }

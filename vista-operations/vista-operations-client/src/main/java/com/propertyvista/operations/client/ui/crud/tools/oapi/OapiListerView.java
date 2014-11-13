@@ -13,13 +13,13 @@
  */
 package com.propertyvista.operations.client.ui.crud.tools.oapi;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 
 import com.propertyvista.operations.rpc.dto.OapiConversionDTO;
 
-public interface OapiListerView extends ILister<OapiConversionDTO> {
+public interface OapiListerView extends IListerView<OapiConversionDTO> {
 
-    interface Presenter extends ILister.Presenter<OapiConversionDTO> {
+    interface Presenter extends IListerView.IListerPresenter<OapiConversionDTO> {
 
     }
 

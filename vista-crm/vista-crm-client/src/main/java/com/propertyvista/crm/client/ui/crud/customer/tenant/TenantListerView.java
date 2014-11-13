@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.tenant;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 
 import com.propertyvista.dto.TenantDTO;
 
-public interface TenantListerView extends ILister<TenantDTO> {
+public interface TenantListerView extends IListerView<TenantDTO> {
 
-    interface Presenter extends ILister.Presenter<TenantDTO> {
+    interface Presenter extends IListerView.IListerPresenter<TenantDTO> {
 
     }
 

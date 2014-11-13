@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.IPane;
+import com.pyx4j.site.client.backoffice.ui.IPaneView;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
@@ -44,9 +44,9 @@ import com.propertyvista.domain.company.Portfolio;
 
 public class PortfolioFolder extends VistaTableFolder<Portfolio> {
 
-    private final IPane parentView;
+    private final IPaneView parentView;
 
-    public PortfolioFolder(IPane parentView, boolean isEditable) {
+    public PortfolioFolder(IPaneView parentView, boolean isEditable) {
         super(Portfolio.class, isEditable);
         this.parentView = parentView;
         setOrderable(false);

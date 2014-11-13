@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 import com.pyx4j.site.client.backoffice.ui.prime.form.PrimeEntityForm;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
@@ -23,7 +23,7 @@ public abstract class CrmEntityForm<E extends IEntity> extends PrimeEntityForm<E
 
     private final Class<E> rootClass;
 
-    public CrmEntityForm(Class<E> rootClass, IForm<E> view) {
+    public CrmEntityForm(Class<E> rootClass, IFormView<E> view) {
         super(rootClass, new VistaEditorsComponentFactory(), view);
         this.rootClass = rootClass;
     }

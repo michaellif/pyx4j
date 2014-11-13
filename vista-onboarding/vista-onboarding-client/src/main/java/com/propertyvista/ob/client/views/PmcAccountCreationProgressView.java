@@ -15,12 +15,12 @@ package com.propertyvista.ob.client.views;
 
 import java.util.List;
 
-import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
 
 import com.propertyvista.ob.client.forms.StepStatusIndicator.StepStatus;
 import com.propertyvista.ob.rpc.dto.OnboardingCrmURL;
 
-public interface PmcAccountCreationProgressView extends IPrimePane {
+public interface PmcAccountCreationProgressView extends IPrimePaneView {
 
     void init(List<String> stepNames);
 

@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -28,7 +28,7 @@ public class ILSConfigForm extends CrmEntityForm<ILSConfigDTO> {
 
     private final static I18n i18n = I18n.get(ILSConfigForm.class);
 
-    public ILSConfigForm(IForm<ILSConfigDTO> view) {
+    public ILSConfigForm(IFormView<ILSConfigDTO> view) {
         super(ILSConfigDTO.class, view);
 
         Tab tab = addTab(createProvidersTab(), i18n.tr("ILS Settings"));

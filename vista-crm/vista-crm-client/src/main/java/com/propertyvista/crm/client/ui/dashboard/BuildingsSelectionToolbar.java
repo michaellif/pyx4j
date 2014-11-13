@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.IPane;
+import com.pyx4j.site.client.backoffice.ui.IPaneView;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
@@ -61,9 +61,9 @@ final class BuildingsSelectionToolbar extends Composite implements IBuildingFilt
 
     private Button selectBuildingsButton;
 
-    private final IPane parentView;
+    private final IPaneView parentView;
 
-    public BuildingsSelectionToolbar(IPane parentView) {
+    public BuildingsSelectionToolbar(IPaneView parentView) {
         this.parentView = parentView;
         this.eventBus = new SimpleEventBus();
         this.buildings = new HashSet<Building>();

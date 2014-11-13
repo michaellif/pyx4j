@@ -16,14 +16,14 @@ package com.propertyvista.crm.client.ui.tools.legal.l1;
 import com.google.gwt.view.client.AbstractDataProvider;
 import com.google.gwt.view.client.SelectionModel;
 
-import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
 
 import com.propertyvista.crm.client.ui.tools.common.datagrid.SelectionPresetModel;
 import com.propertyvista.crm.rpc.dto.legal.common.LegalActionCandidateDTO;
 
-public interface L1DelinquentLeaseSearchView extends IPrimePane {
+public interface L1DelinquentLeaseSearchView extends IPrimePaneView {
 
-    interface Presenter extends IPrimePane.Presenter {
+    interface Presenter extends IPrimePaneView.IPrimePanePresenter {
 
         AbstractDataProvider<LegalActionCandidateDTO> getDataProvider();
 

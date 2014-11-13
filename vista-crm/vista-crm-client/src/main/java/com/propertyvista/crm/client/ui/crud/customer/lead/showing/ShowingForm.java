@@ -29,7 +29,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntitySelectorHyperlink;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -47,7 +47,7 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
 
     private static final I18n i18n = I18n.get(ShowingForm.class);
 
-    public ShowingForm(IForm<ShowingDTO> view) {
+    public ShowingForm(IFormView<ShowingDTO> view) {
         super(ShowingDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

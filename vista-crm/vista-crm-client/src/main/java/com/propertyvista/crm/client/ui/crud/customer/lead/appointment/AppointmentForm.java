@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.tenant.lead.Appointment;
@@ -29,7 +29,7 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
 
     private static final I18n i18n = I18n.get(AppointmentForm.class);
 
-    public AppointmentForm(IForm<Appointment> view) {
+    public AppointmentForm(IFormView<Appointment> view) {
         super(Appointment.class, view);
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));
         setTabEnabled(addTab(createShowingsTab(), i18n.tr("Showings")), !isEditable());

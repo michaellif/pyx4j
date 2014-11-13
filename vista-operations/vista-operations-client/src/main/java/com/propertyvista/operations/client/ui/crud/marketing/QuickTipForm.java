@@ -17,7 +17,7 @@ import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.domain.marketing.PortalResidentMarketingTip;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -26,7 +26,7 @@ public class QuickTipForm extends OperationsEntityForm<PortalResidentMarketingTi
 
     private final static I18n i18n = I18n.get(QuickTipForm.class);
 
-    public QuickTipForm(IForm<PortalResidentMarketingTip> view) {
+    public QuickTipForm(IFormView<PortalResidentMarketingTip> view) {
         super(PortalResidentMarketingTip.class, view);
 
         FormPanel formPanel = new FormPanel(this);

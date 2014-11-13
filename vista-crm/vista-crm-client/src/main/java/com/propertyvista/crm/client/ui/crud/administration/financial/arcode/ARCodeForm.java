@@ -18,7 +18,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntitySelectorHyperlink;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -33,7 +33,7 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
 
     private final FormPanel yardiIntegrationPanel;
 
-    public ARCodeForm(IForm<ARCode> view) {
+    public ARCodeForm(IFormView<ARCode> view) {
         super(ARCode.class, view);
 
         FormPanel formPanel = new FormPanel(this);

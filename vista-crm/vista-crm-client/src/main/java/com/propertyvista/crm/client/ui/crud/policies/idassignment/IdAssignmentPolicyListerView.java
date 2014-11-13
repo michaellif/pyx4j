@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.idassignment;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 
 import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
 
-public interface IdAssignmentPolicyListerView extends ILister<IdAssignmentPolicyDTO> {
+public interface IdAssignmentPolicyListerView extends IListerView<IdAssignmentPolicyDTO> {
 
 }

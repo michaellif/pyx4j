@@ -151,7 +151,7 @@ public class MessageLister extends EntityDataTablePanel<MessageDTO> {
 
     @Override
     protected EntityListCriteria<MessageDTO> updateCriteria(EntityListCriteria<MessageDTO> criteria) {
-        com.pyx4j.site.client.backoffice.ui.prime.IPrimePane.Presenter p = getPresenter();
+        com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView.IPrimePanePresenter p = getPresenter();
         AppPlace place = p.getPlace();
         Object placeCriteria = place instanceof Message ? ((Message) place).getCriteria() : null;
         CategoryType category = null;
@@ -229,7 +229,7 @@ public class MessageLister extends EntityDataTablePanel<MessageDTO> {
 
     @Override
     protected void onItemNew() {
-        com.pyx4j.site.client.backoffice.ui.prime.IPrimePane.Presenter p = getPresenter();
+        com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView.IPrimePanePresenter p = getPresenter();
         AppPlace place = p.getPlace();
         Object placeCriteria = place instanceof Message ? ((Message) place).getCriteria() : null;
 

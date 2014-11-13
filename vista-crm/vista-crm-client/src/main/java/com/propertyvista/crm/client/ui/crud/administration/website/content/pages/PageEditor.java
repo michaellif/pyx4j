@@ -26,13 +26,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.website.content.pages;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.domain.site.PageDescriptor;
 
-public interface PageEditor extends IEditor<PageDescriptor> {
+public interface PageEditor extends IEditorView<PageDescriptor> {
 
-    interface Presenter extends IEditor.Presenter {
+    interface Presenter extends IEditorView.IEditorPresenter {
         /**
          * used as url parameter name in Site/PageViewerActivities and PageEditorActivity
          */

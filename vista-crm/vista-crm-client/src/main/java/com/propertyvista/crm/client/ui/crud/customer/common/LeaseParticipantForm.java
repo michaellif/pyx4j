@@ -42,8 +42,8 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCollectionCrudHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCollectionCrudHyperlink.AppPlaceBuilder;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -78,7 +78,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
     private final Class<P> rootClass;
 
-    public LeaseParticipantForm(Class<P> rootClass, IForm<P> view) {
+    public LeaseParticipantForm(Class<P> rootClass, IFormView<P> view) {
         super(rootClass, view);
         this.rootClass = rootClass;
     }
@@ -211,7 +211,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
             @Override
             protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, InternationalAddress, ?, ?> comp) {
                 if (set) {
-                    ((LeaseParticipantEditorPresenter<P>) ((IEditor<P>) getParentView()).getPresenter())
+                    ((LeaseParticipantEditorPresenter<P>) ((IEditorView<P>) getParentView()).getPresenter())
                             .getCurrentAddress(new DefaultAsyncCallback<InternationalAddress>() {
                                 @Override
                                 public void onSuccess(InternationalAddress result) {
@@ -226,7 +226,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
             @SuppressWarnings("unchecked")
             @Override
             protected void getAllowedPaymentTypes(final AsyncCallback<EnumSet<PaymentType>> callback) {
-                ((LeaseParticipantEditorPresenter<P>) ((IEditor<P>) getParentView()).getPresenter())
+                ((LeaseParticipantEditorPresenter<P>) ((IEditorView<P>) getParentView()).getPresenter())
                         .getAllowedPaymentTypes(new DefaultAsyncCallback<Vector<PaymentType>>() {
                             @Override
                             public void onSuccess(Vector<PaymentType> result) {

@@ -16,12 +16,12 @@ package com.propertyvista.crm.client.activity.crud;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.backoffice.activity.AbstractWizardActivity;
-import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizard;
+import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class CrmWizardActivity<E extends IEntity> extends AbstractWizardActivity<E> {
 
-    public CrmWizardActivity(Class<E> entityClass, CrudAppPlace place, IWizard<E> view, AbstractCrudService<E> service) {
+    public CrmWizardActivity(Class<E> entityClass, CrudAppPlace place, IWizardView<E> view, AbstractCrudService<E> service) {
         super(entityClass, place, view, service);
     }
 }

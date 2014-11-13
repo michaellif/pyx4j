@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead.appointment;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.domain.tenant.lead.Appointment;
 
-public interface AppointmentEditorView extends IEditor<Appointment> {
+public interface AppointmentEditorView extends IEditorView<Appointment> {
 }

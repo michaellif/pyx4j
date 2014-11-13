@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.tools.financial.moneyin;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 
-public interface MoneyInBatchEditorView extends IEditor<MoneyInBatchDTO> {
+public interface MoneyInBatchEditorView extends IEditorView<MoneyInBatchDTO> {
 
 }

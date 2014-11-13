@@ -20,14 +20,14 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
+import com.pyx4j.site.client.ui.visor.AbstractVisorPaneView;
 import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid.MoneyInCandidateLister;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInCandidateDTO;
 
-public class MoneyInCandidateSearchVisorView extends AbstractVisorPane {
+public class MoneyInCandidateSearchVisorView extends AbstractVisorPaneView {
 
     public interface MoneyInCandidateSearchViewController extends IVisor.Controller {
 

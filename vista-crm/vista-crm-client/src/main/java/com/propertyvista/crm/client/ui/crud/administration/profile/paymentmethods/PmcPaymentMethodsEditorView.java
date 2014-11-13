@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.profile.paymentmethods;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.crm.rpc.dto.admin.PmcPaymentMethodsDTO;
 
-public interface PmcPaymentMethodsEditorView extends IEditor<PmcPaymentMethodsDTO> {
+public interface PmcPaymentMethodsEditorView extends IEditorView<PmcPaymentMethodsDTO> {
 
-    public interface Presenter extends IEditor.Presenter {
+    public interface Presenter extends IEditorView.IEditorPresenter {
     }
 
 }

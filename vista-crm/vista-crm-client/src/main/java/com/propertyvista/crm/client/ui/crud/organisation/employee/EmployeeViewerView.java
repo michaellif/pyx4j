@@ -16,14 +16,14 @@ package com.propertyvista.crm.client.ui.crud.organisation.employee;
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.domain.security.CrmUser;
 
-public interface EmployeeViewerView extends IViewer<EmployeeDTO> {
+public interface EmployeeViewerView extends IViewerView<EmployeeDTO> {
 
-    interface Presenter extends IViewer.Presenter {
+    interface Presenter extends IViewerView.IViewerPresenter {
 
         boolean canChangePassword();
 

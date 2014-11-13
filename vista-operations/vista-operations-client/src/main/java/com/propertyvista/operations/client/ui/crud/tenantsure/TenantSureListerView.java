@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.tenantsure;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 
 import com.propertyvista.operations.rpc.dto.TenantSureDTO;
 
-public interface TenantSureListerView extends ILister<TenantSureDTO> {
+public interface TenantSureListerView extends IListerView<TenantSureDTO> {
 
 }

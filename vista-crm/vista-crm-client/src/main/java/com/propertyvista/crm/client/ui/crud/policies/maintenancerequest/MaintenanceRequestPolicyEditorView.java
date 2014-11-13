@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.maintenancerequest;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.domain.policy.dto.MaintenanceRequestPolicyDTO;
 
-public interface MaintenanceRequestPolicyEditorView extends IEditor<MaintenanceRequestPolicyDTO> {
+public interface MaintenanceRequestPolicyEditorView extends IEditorView<MaintenanceRequestPolicyDTO> {
 
 }

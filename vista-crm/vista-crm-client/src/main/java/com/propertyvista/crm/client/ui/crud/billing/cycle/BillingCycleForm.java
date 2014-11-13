@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Anchor;
 
@@ -34,7 +34,7 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
 
     private static final I18n i18n = I18n.get(BillingCycleForm.class);
 
-    public BillingCycleForm(IForm<BillingCycleDTO> view) {
+    public BillingCycleForm(IFormView<BillingCycleDTO> view) {
         super(BillingCycleDTO.class, view);
         FormPanel formPanel = new FormPanel(this);
 

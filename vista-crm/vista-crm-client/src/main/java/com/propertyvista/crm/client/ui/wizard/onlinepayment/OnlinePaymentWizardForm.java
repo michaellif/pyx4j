@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizard;
+import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView;
 import com.pyx4j.site.client.backoffice.ui.prime.wizard.WizardForm;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
@@ -61,7 +61,7 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
 
     private Label companyNameLabel;
 
-    public OnlinePaymentWizardForm(IWizard<OnlinePaymentSetupDTO> view, Command onTermsOfServiceDisplayRequest) {
+    public OnlinePaymentWizardForm(IWizardView<OnlinePaymentSetupDTO> view, Command onTermsOfServiceDisplayRequest) {
         super(OnlinePaymentSetupDTO.class, view);
         this.onTermsOfServiceDisplayRequest = onTermsOfServiceDisplayRequest;
 

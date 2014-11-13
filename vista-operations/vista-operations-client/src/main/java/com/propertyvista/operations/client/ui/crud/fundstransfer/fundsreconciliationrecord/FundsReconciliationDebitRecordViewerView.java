@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationrecord;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.operations.rpc.dto.FundsReconciliationRecordRecordDTO;
 
-public interface FundsReconciliationDebitRecordViewerView extends IViewer<FundsReconciliationRecordRecordDTO> {
+public interface FundsReconciliationDebitRecordViewerView extends IViewerView<FundsReconciliationRecordRecordDTO> {
 
 }

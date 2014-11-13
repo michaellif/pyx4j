@@ -18,14 +18,14 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.dto.FloorplanDTO;
 
-public interface FloorplanEditorView extends IEditor<FloorplanDTO> {
+public interface FloorplanEditorView extends IEditorView<FloorplanDTO> {
 
-    interface Presenter extends IEditor.Presenter {
+    interface Presenter extends IEditorView.IEditorPresenter {
         void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback, Key buildingId);
     }
 }

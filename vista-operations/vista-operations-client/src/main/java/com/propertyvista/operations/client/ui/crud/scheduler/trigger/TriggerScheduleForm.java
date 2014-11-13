@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.scheduler.ScheduleType;
@@ -32,7 +32,7 @@ public class TriggerScheduleForm extends OperationsEntityForm<TriggerSchedule> {
 
     private static final I18n i18n = I18n.get(TriggerScheduleForm.class);
 
-    public TriggerScheduleForm(IForm<TriggerSchedule> view) {
+    public TriggerScheduleForm(IFormView<TriggerSchedule> view) {
         super(TriggerSchedule.class, view);
 
         FormPanel formPanel = new FormPanel(this);

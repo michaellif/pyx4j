@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.screening;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
-public interface CustomerScreeningEditorView extends IEditor<LeaseParticipantScreeningTO> {
+public interface CustomerScreeningEditorView extends IEditorView<LeaseParticipantScreeningTO> {
 
 }

@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.simulator.pad.file;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimDebitRecord;
@@ -25,7 +25,7 @@ public class PadSimDebitRecordEditor extends OperationsEntityForm<PadSimDebitRec
 
     private static final I18n i18n = I18n.get(PadSimDebitRecordEditor.class);
 
-    public PadSimDebitRecordEditor(IForm<PadSimDebitRecord> view) {
+    public PadSimDebitRecordEditor(IFormView<PadSimDebitRecord> view) {
         super(PadSimDebitRecord.class, view);
 
         FormPanel formPanel = new FormPanel(this);

@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.paymenttypeselection;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.domain.policy.dto.PaymentTypeSelectionPolicyDTO;
 
-public interface PaymentTypeSelectionPolicyViewerView extends IViewer<PaymentTypeSelectionPolicyDTO> {
+public interface PaymentTypeSelectionPolicyViewerView extends IViewerView<PaymentTypeSelectionPolicyDTO> {
 
 }

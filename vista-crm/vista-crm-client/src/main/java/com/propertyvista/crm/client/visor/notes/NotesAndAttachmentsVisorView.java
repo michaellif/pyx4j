@@ -47,7 +47,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
+import com.pyx4j.site.client.ui.visor.AbstractVisorPaneView;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Toolbar;
@@ -64,7 +64,7 @@ import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.note.NotesAndAttachmentsDTO;
 import com.propertyvista.domain.security.CrmUser;
 
-public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
+public class NotesAndAttachmentsVisorView extends AbstractVisorPaneView {
 
     private static final I18n i18n = I18n.get(NotesAndAttachmentsVisorView.class);
 

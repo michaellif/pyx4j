@@ -13,13 +13,13 @@
  */
 package com.propertyvista.operations.client.ui.crud.tools.oapi;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.operations.rpc.dto.OapiConversionDTO;
 
-public interface OapiViewerView extends IViewer<OapiConversionDTO> {
+public interface OapiViewerView extends IViewerView<OapiConversionDTO> {
 
-    interface Presenter extends IViewer.Presenter {
+    interface Presenter extends IViewerView.IViewerPresenter {
 
         void downloadXMLFile();
 

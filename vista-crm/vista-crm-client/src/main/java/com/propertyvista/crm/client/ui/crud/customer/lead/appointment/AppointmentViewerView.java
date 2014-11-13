@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead.appointment;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.domain.tenant.lead.Appointment;
 
-public interface AppointmentViewerView extends IViewer<Appointment> {
+public interface AppointmentViewerView extends IViewerView<Appointment> {
 
-    interface Presenter extends IViewer.Presenter {
+    interface Presenter extends IViewerView.IViewerPresenter {
 
         void close(String reason);
     }

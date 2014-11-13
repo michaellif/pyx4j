@@ -24,7 +24,7 @@ import com.propertyvista.operations.client.ui.crud.outgoingmail.OutgoingMailView
 import com.propertyvista.operations.rpc.dto.OutgoingMailQueueDTO;
 import com.propertyvista.operations.rpc.services.OutgoingMailCrudService;
 
-public class OutgoingMailViewerActivity extends AbstractViewerActivity<OutgoingMailQueueDTO> implements OutgoingMailViewerView.Presenter {
+public class OutgoingMailViewerActivity extends AbstractViewerActivity<OutgoingMailQueueDTO> implements OutgoingMailViewerView.IViewerPresenter {
 
     public OutgoingMailViewerActivity(CrudAppPlace place) {
         super(OutgoingMailQueueDTO.class, place, OperationsSite.getViewFactory().getView(OutgoingMailViewerView.class), GWT

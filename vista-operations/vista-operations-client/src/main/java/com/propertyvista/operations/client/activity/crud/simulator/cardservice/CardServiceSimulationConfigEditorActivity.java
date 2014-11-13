@@ -24,7 +24,7 @@ import com.propertyvista.operations.rpc.dto.CardServiceSimulatorConfigDTO;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationConfigService;
 
 public class CardServiceSimulationConfigEditorActivity extends AbstractEditorActivity<CardServiceSimulatorConfigDTO> implements
-        CardServiceSimulatorConfigEditorView.Presenter {
+        CardServiceSimulatorConfigEditorView.IEditorPresenter {
 
     public CardServiceSimulationConfigEditorActivity(CrudAppPlace place) {
         super(CardServiceSimulatorConfigDTO.class, place, OperationsSite.getViewFactory().getView(CardServiceSimulatorConfigEditorView.class), GWT

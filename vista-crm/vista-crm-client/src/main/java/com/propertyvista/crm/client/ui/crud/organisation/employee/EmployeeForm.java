@@ -39,7 +39,7 @@ import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -79,7 +79,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
     private final FormPanel buildingsAccessPanel;
 
-    public EmployeeForm(IForm<EmployeeDTO> view) {
+    public EmployeeForm(IFormView<EmployeeDTO> view) {
         super(EmployeeDTO.class, view);
         buildingsAccessPanel = new FormPanel(this);
 

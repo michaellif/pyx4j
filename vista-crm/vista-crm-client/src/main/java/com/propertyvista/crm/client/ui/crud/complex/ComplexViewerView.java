@@ -15,16 +15,16 @@ package com.propertyvista.crm.client.ui.crud.complex;
 
 import java.util.List;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.ComplexDTO;
 
-public interface ComplexViewerView extends IViewer<ComplexDTO> {
+public interface ComplexViewerView extends IViewerView<ComplexDTO> {
 
-    interface Presenter extends IViewer.Presenter {
+    interface Presenter extends IViewerView.IViewerPresenter {
 
         IDashboardVisorController getDashboardController(DashboardMetadata dashboardMetadata, List<Building> buildings);
     }

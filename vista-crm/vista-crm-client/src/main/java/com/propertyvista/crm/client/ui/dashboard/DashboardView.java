@@ -15,14 +15,14 @@ package com.propertyvista.crm.client.ui.dashboard;
 
 import java.util.Vector;
 
-import com.pyx4j.site.client.backoffice.ui.prime.dashboard.IDashboard;
+import com.pyx4j.site.client.backoffice.ui.prime.dashboard.IDashboardView;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public interface DashboardView extends IDashboard {
+public interface DashboardView extends IDashboardView {
 
-    public interface Presenter extends IDashboard.Presenter {
+    public interface Presenter extends IDashboardView.IDashboardPresenter {
 
     }
 

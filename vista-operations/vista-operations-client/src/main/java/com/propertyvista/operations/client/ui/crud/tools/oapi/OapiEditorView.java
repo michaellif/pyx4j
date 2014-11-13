@@ -13,13 +13,13 @@
  */
 package com.propertyvista.operations.client.ui.crud.tools.oapi;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.operations.rpc.dto.OapiConversionDTO;
 
-public interface OapiEditorView extends IEditor<OapiConversionDTO> {
+public interface OapiEditorView extends IEditorView<OapiConversionDTO> {
 
-    interface Presenter extends IEditor.Presenter {
+    interface Presenter extends IEditorView.IEditorPresenter {
 
     }
 

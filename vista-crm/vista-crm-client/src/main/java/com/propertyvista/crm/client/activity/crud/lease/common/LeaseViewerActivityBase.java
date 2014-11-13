@@ -22,7 +22,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
@@ -44,7 +44,7 @@ public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends CrmV
 
     protected DTO currentValue;
 
-    public LeaseViewerActivityBase(Class<DTO> entityClass, CrudAppPlace place, IViewer<DTO> view, AbstractCrudService<DTO> service) {
+    public LeaseViewerActivityBase(Class<DTO> entityClass, CrudAppPlace place, IViewerView<DTO> view, AbstractCrudService<DTO> service) {
         super(entityClass, place, view, service);
 
         if (service instanceof LeaseViewerCrudService) {

@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.operations.rpc.dto.CardServiceSimulatorConfigDTO;
 
-public interface CardServiceSimulatorConfigEditorView extends IEditor<CardServiceSimulatorConfigDTO> {
+public interface CardServiceSimulatorConfigEditorView extends IEditorView<CardServiceSimulatorConfigDTO> {
 
 }

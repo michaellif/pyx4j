@@ -27,14 +27,14 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.IsView;
-import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.BulkEditableEntity;
 
 public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item extends BulkEditableEntity, Holder extends BulkItemsHolder<Item>> extends
-        AbstractPrimePane implements BulkOperationToolView<Settings, Item>, IsView {
+        AbstractPrimePaneView implements BulkOperationToolView<Settings, Item>, IsView {
 
     public enum Styles implements IStyleName {
 

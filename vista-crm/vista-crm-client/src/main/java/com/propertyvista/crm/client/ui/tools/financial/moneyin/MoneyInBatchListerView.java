@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.tools.financial.moneyin;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 
-public interface MoneyInBatchListerView extends ILister<MoneyInBatchDTO> {
+public interface MoneyInBatchListerView extends IListerView<MoneyInBatchDTO> {
 
-    interface MoneyInBatchListerPresenter extends Presenter<MoneyInBatchDTO> {
+    interface MoneyInBatchListerPresenter extends IListerPresenter<MoneyInBatchDTO> {
 
     }
 

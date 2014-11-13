@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.maintenance;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
@@ -24,9 +24,9 @@ import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.MaintenanceRequestScheduleDTO;
 
-public interface MaintenanceRequestViewerView extends IViewer<MaintenanceRequestDTO> {
+public interface MaintenanceRequestViewerView extends IViewerView<MaintenanceRequestDTO> {
 
-    interface Presenter extends IViewer.Presenter {
+    interface Presenter extends IViewerView.IViewerPresenter {
 
         void scheduleAction(MaintenanceRequestScheduleDTO schedule);
 

@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.administration.availablereport;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.crm.client.ui.components.CrmRoleFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -26,7 +26,7 @@ public class AvailableCrmReportForm extends CrmEntityForm<AvailableCrmReport> {
 
     private static final I18n i18n = I18n.get(AvailableCrmReportForm.class);
 
-    public AvailableCrmReportForm(IForm<AvailableCrmReport> view) {
+    public AvailableCrmReportForm(IFormView<AvailableCrmReport> view) {
         super(AvailableCrmReport.class, view);
 
         FormPanel formPanel = new FormPanel(this);

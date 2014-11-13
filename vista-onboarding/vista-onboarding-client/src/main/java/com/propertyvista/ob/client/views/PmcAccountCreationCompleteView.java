@@ -13,13 +13,13 @@
  */
 package com.propertyvista.ob.client.views;
 
-import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
 
 import com.propertyvista.ob.rpc.dto.OnboardingCrmURL;
 
-public interface PmcAccountCreationCompleteView extends IPrimePane {
+public interface PmcAccountCreationCompleteView extends IPrimePaneView {
 
-    interface Presenter extends IPrimePane.Presenter {
+    interface Presenter extends IPrimePaneView.IPrimePanePresenter {
 
     }
 

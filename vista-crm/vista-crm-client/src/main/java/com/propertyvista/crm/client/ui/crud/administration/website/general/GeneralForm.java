@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
 import com.propertyvista.common.client.SiteImageResourceFileURLBuilder;
@@ -39,7 +39,7 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
 
     private final CCheckBox publicPortalSwitch = new CCheckBox();
 
-    public GeneralForm(IForm<SiteDescriptorDTO> view) {
+    public GeneralForm(IFormView<SiteDescriptorDTO> view) {
         super(SiteDescriptorDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

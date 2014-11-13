@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.concession;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.domain.financial.offering.Concession;
 
-public interface ConcessionViewerView extends IViewer<Concession> {
+public interface ConcessionViewerView extends IViewerView<Concession> {
 
 }

@@ -15,15 +15,15 @@ package com.propertyvista.crm.client.ui.crud.communication;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.dto.MessageDTO;
 
-public interface MessageEditorView extends IEditor<MessageDTO> {
+public interface MessageEditorView extends IEditorView<MessageDTO> {
 
-    interface Presenter extends IEditor.Presenter {
+    interface Presenter extends IEditorView.IEditorPresenter {
 
         void saveMessage(AsyncCallback<MessageDTO> callback, MessageDTO message);
 

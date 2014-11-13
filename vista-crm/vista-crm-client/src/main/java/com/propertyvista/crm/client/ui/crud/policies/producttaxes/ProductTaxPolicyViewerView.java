@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.producttaxes;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 
-public interface ProductTaxPolicyViewerView extends IViewer<ProductTaxPolicyDTO> {
+public interface ProductTaxPolicyViewerView extends IViewerView<ProductTaxPolicyDTO> {
 
 }

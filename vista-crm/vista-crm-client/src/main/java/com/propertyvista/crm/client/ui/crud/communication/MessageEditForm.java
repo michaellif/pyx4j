@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntitySelectorHyperlink;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.activity.crud.communication.MessageEditorActivity;
@@ -46,7 +46,7 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
 
     CommunicationEndpointSelector epSelectorNew;
 
-    public MessageEditForm(IForm<MessageDTO> view) {
+    public MessageEditForm(IFormView<MessageDTO> view) {
         super(MessageDTO.class, view);
         setTabBarVisible(false);
         selectTab(addTab(createGeneralForm(), i18n.tr("New message")));

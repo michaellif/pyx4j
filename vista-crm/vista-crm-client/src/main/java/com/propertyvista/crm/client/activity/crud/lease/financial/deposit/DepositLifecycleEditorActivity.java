@@ -24,7 +24,7 @@ import com.propertyvista.crm.client.ui.crud.lease.financial.deposit.DepositLifec
 import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
 import com.propertyvista.dto.DepositLifecycleDTO;
 
-public class DepositLifecycleEditorActivity extends CrmEditorActivity<DepositLifecycleDTO> implements DepositLifecycleEditorView.Presenter {
+public class DepositLifecycleEditorActivity extends CrmEditorActivity<DepositLifecycleDTO> implements DepositLifecycleEditorView.IEditorPresenter {
 
     public DepositLifecycleEditorActivity(CrudAppPlace place) {
         super(DepositLifecycleDTO.class,  place, CrmSite.getViewFactory().getView(DepositLifecycleEditorView.class), GWT

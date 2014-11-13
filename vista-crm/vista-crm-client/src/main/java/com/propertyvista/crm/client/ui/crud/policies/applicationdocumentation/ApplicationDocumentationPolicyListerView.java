@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 
 import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
 
-public interface ApplicationDocumentationPolicyListerView extends ILister<ApplicationDocumentationPolicyDTO> {
+public interface ApplicationDocumentationPolicyListerView extends IListerView<ApplicationDocumentationPolicyDTO> {
 
 }

@@ -13,12 +13,12 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.cardtransactionrecords;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
 
-public interface CardTransactionRecordViewerView extends IViewer<CardTransactionRecord> {
+public interface CardTransactionRecordViewerView extends IViewerView<CardTransactionRecord> {
 
-    interface Presenter extends IViewer.Presenter {
+    interface Presenter extends IViewerView.IViewerPresenter {
     }
 }

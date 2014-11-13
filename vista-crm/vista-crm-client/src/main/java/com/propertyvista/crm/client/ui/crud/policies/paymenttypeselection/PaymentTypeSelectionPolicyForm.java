@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.FieldDecoratorBuilder;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -52,7 +52,7 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
 
     private HTML convenienceNoticeHtml;
 
-    public PaymentTypeSelectionPolicyForm(IForm<PaymentTypeSelectionPolicyDTO> view) {
+    public PaymentTypeSelectionPolicyForm(IFormView<PaymentTypeSelectionPolicyDTO> view) {
         super(PaymentTypeSelectionPolicyDTO.class, view);
         addTab(createMiscPoliciesTab(), i18n.tr("General"));
 

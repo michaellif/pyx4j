@@ -25,7 +25,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.IPane;
+import com.pyx4j.site.client.backoffice.ui.IPaneView;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.client.ui.crud.building.catalog.ProductCodeSelectorDialog;
@@ -41,9 +41,9 @@ public class ServiceLister extends SiteDataTablePanel<Service> {
 
     private final static I18n i18n = I18n.get(ServiceLister.class);
 
-    private final IPane parentView;
+    private final IPaneView parentView;
 
-    public ServiceLister(IPane parentView) {
+    public ServiceLister(IPaneView parentView) {
         super(Service.class, GWT.<AbstractCrudService<Service>> create(ServiceCrudService.class), !VistaFeatures.instance().yardiIntegration(), !VistaFeatures
                 .instance().yardiIntegration());
         this.parentView = parentView;

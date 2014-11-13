@@ -14,13 +14,13 @@
 package com.propertyvista.operations.client.ui.crud.adminusers;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.operations.rpc.dto.OperationsUserDTO;
 
-public interface AdminUserViewerView extends IViewer<OperationsUserDTO> {
+public interface AdminUserViewerView extends IViewerView<OperationsUserDTO> {
 
-    interface Presenter extends IViewer.Presenter {
+    interface Presenter extends IViewerView.IViewerPresenter {
 
         void goToChangePassword(Key userId, String userName);
 

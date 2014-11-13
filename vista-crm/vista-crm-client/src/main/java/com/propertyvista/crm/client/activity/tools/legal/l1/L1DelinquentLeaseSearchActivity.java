@@ -28,8 +28,8 @@ import com.google.gwt.view.client.SelectionModel;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.site.client.backoffice.activity.AbstractVisorController;
-import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizard;
-import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizard.Presenter;
+import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView;
+import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView.IWizardPresenter;
 import com.pyx4j.site.client.ui.visor.IVisorEditor;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -97,10 +97,10 @@ public class L1DelinquentLeaseSearchActivity extends AbstractActivity implements
 
             private L1FormDataReviewVisorView visor;
 
-            private IWizard.Presenter wizardPresenter;
+            private IWizardView.IWizardPresenter wizardPresenter;
 
             {
-                wizardPresenter = new Presenter() {
+                wizardPresenter = new IWizardPresenter() {
                     @Override
                     public void populate() {
                         visor.reset();

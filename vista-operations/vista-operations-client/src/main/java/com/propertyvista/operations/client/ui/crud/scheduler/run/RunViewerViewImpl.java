@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.scheduler.run;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -30,7 +30,7 @@ public class RunViewerViewImpl extends OperationsViewerViewImplBase<Run> impleme
 
     private static final I18n i18n = I18n.get(RunViewerViewImpl.class);
 
-    private final ILister<RunData> runDataLister;
+    private final IListerView<RunData> runDataLister;
 
     private final Button stopRun;
 
@@ -63,7 +63,7 @@ public class RunViewerViewImpl extends OperationsViewerViewImplBase<Run> impleme
     }
 
     @Override
-    public ILister<RunData> getRunDataListerView() {
+    public IListerView<RunData> getRunDataListerView() {
         return runDataLister;
     }
 

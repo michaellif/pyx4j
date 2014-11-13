@@ -13,12 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.domain.communication.MessageCategory;
 
-public interface MessageCategoryViewerView extends IViewer<MessageCategory> {
+public interface MessageCategoryViewerView extends IViewerView<MessageCategory> {
 
-    interface Presenter extends IViewer.Presenter {
+    interface Presenter extends IViewerView.IViewerPresenter {
     }
 }

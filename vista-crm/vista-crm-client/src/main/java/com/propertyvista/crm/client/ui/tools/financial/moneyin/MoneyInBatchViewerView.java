@@ -14,13 +14,13 @@
 package com.propertyvista.crm.client.ui.tools.financial.moneyin;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 
-public interface MoneyInBatchViewerView extends IViewer<MoneyInBatchDTO> {
+public interface MoneyInBatchViewerView extends IViewerView<MoneyInBatchDTO> {
 
-    interface Presenter extends IViewer.Presenter {
+    interface Presenter extends IViewerView.IViewerPresenter {
 
         void showPaymentRecord(Key paymentRecordId);
 

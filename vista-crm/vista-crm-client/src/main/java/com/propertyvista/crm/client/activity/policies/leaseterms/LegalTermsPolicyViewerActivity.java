@@ -24,7 +24,7 @@ import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LegalTermsPolicy
 import com.propertyvista.crm.rpc.services.policies.policy.LegalDocumentationPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LegalTermsPolicyDTO;
 
-public class LegalTermsPolicyViewerActivity extends CrmViewerActivity<LegalTermsPolicyDTO> implements LegalTermsPolicyViewerView.Presenter {
+public class LegalTermsPolicyViewerActivity extends CrmViewerActivity<LegalTermsPolicyDTO> implements LegalTermsPolicyViewerView.IViewerPresenter {
 
     public LegalTermsPolicyViewerActivity(CrudAppPlace place) {
         // TODO take the view from pool

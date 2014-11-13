@@ -14,14 +14,14 @@
 package com.propertyvista.crm.client.ui.crud.communication;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.dto.MessageDTO;
 
-public interface MessageViewerView extends IViewer<MessageDTO> {
+public interface MessageViewerView extends IViewerView<MessageDTO> {
 
-    interface Presenter extends IViewer.Presenter {
+    interface Presenter extends IViewerView.IViewerPresenter {
 
         void saveMessage(MessageDTO message, ThreadStatus threadStatus, boolean rePopulate);
 

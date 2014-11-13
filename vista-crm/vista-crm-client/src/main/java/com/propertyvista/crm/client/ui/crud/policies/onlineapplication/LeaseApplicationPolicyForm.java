@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -32,7 +32,7 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
 
     private static final I18n i18n = I18n.get(LeaseApplicationPolicyForm.class);
 
-    public LeaseApplicationPolicyForm(IForm<LeaseApplicationPolicyDTO> view) {
+    public LeaseApplicationPolicyForm(IFormView<LeaseApplicationPolicyDTO> view) {
         super(LeaseApplicationPolicyDTO.class, view);
 
         FormPanel legalTermsFormPanel = new FormPanel(this);

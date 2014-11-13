@@ -25,7 +25,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.backoffice.activity.AbstractVisorController;
-import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
 import com.pyx4j.site.client.ui.visor.IVisorEditor;
 
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
@@ -42,7 +42,7 @@ public class PreauthorizedPaymentsVisorController extends AbstractVisorControlle
 
     private final Key tenantId;
 
-    public PreauthorizedPaymentsVisorController(IPrimePane parentView, Key tenantId) {
+    public PreauthorizedPaymentsVisorController(IPrimePaneView parentView, Key tenantId) {
         super(parentView);
         this.tenantId = tenantId;
         visor = new PreauthorizedPaymentsVisorView(this);

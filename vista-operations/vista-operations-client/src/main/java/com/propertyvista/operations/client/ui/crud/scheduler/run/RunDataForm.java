@@ -18,7 +18,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.client.ui.components.OperationsEditorsComponentFactory;
@@ -35,7 +35,7 @@ public class RunDataForm extends OperationsEntityForm<RunData> {
 
     private final ExecutionReportSectionLister reportSectionLister;
 
-    public RunDataForm(IForm<RunData> view) {
+    public RunDataForm(IFormView<RunData> view) {
         super(RunData.class, view);
 
         FormPanel formPanel = new FormPanel(this);

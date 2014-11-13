@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.website.content.cityintro;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.domain.site.CityIntroPage;
 
-public interface CityIntroPageEditor extends IEditor<CityIntroPage> {
-    interface Presenter extends IEditor.Presenter {
+public interface CityIntroPageEditor extends IEditorView<CityIntroPage> {
+    interface Presenter extends IEditorView.IEditorPresenter {
     }
 }

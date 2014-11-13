@@ -38,7 +38,7 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.form.FieldDecoratorBuilder;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -162,7 +162,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             creditCheckReport.setNavigationCommand(new Command() {
                 @Override
                 public void execute() {
-                    ((LeaseApplicationViewerView.Presenter) ((IViewer<?>) view).getPresenter())
+                    ((LeaseApplicationViewerView.Presenter) ((IViewerView<?>) view).getPresenter())
                             .isCreditCheckViewAllowed(new DefaultAsyncCallback<VoidSerializable>() {
 
                                 @Override

@@ -15,13 +15,13 @@ package com.propertyvista.operations.client.ui.crud.encryptedstorage;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageDTO;
 
-public class EncryptedStorageViewImpl extends AbstractPrimePane implements EncryptedStorageView {
+public class EncryptedStorageViewImpl extends AbstractPrimePaneView implements EncryptedStorageView {
 
     private final EnryptedStorageForm form;
 

@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.backgroundcheck;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.domain.policy.dto.BackgroundCheckPolicyDTO;
 
-public interface BackgroundCheckPolicyViewerView extends IViewer<BackgroundCheckPolicyDTO> {
+public interface BackgroundCheckPolicyViewerView extends IViewerView<BackgroundCheckPolicyDTO> {
 
 }

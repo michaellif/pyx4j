@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.activity.AbstractReportActivity;
-import com.pyx4j.site.client.backoffice.ui.prime.report.IReport;
+import com.pyx4j.site.client.backoffice.ui.prime.report.IReportView;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
@@ -28,7 +28,7 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public abstract class CrmReportsActivity<R extends ReportTemplate> extends AbstractReportActivity<R> {
 
-    public <RPlace extends ReportsAppPlace<R>> CrmReportsActivity(Class<R> reportMetadataClass, RPlace reportPlace, IReport<R> view) {
+    public <RPlace extends ReportsAppPlace<R>> CrmReportsActivity(Class<R> reportMetadataClass, RPlace reportPlace, IReportView<R> view) {
         super(//@formatter:off
                 reportMetadataClass,
                 reportPlace,                

@@ -19,7 +19,7 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.validators.EcheckAccountNumberStringValidator;
@@ -33,7 +33,7 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
 
     private static final I18n i18n = I18n.get(MerchantAccountForm.class);
 
-    public MerchantAccountForm(IForm<MerchantAccount> view) {
+    public MerchantAccountForm(IFormView<MerchantAccount> view) {
         super(MerchantAccount.class, view);
 
         FormPanel formPanel = new FormPanel(this);

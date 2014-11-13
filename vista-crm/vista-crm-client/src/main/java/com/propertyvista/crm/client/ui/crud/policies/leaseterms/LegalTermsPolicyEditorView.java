@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.domain.policy.dto.LegalTermsPolicyDTO;
 
-public interface LegalTermsPolicyEditorView extends IEditor<LegalTermsPolicyDTO> {
+public interface LegalTermsPolicyEditorView extends IEditorView<LegalTermsPolicyDTO> {
 
 }

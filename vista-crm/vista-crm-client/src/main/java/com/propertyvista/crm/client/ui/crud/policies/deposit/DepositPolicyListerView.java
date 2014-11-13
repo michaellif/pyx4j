@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.deposit;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 
 import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
 
-public interface DepositPolicyListerView extends ILister<DepositPolicyDTO> {
+public interface DepositPolicyListerView extends IListerView<DepositPolicyDTO> {
 
 }

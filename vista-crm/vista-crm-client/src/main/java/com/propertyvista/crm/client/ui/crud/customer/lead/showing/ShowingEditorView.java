@@ -13,14 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead.showing;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-public interface ShowingEditorView extends IEditor<ShowingDTO> {
+public interface ShowingEditorView extends IEditorView<ShowingDTO> {
 
-    interface Presenter extends IEditor.Presenter {
+    interface Presenter extends IEditorView.IEditorPresenter {
 
         void setSelectedUnit(AptUnit selected);
     }

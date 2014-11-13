@@ -13,15 +13,15 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.pad.file;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
 
-public interface PadSimFileViewerView extends IViewer<PadSimFile> {
+public interface PadSimFileViewerView extends IViewerView<PadSimFile> {
 
-    interface Presenter extends IViewer.Presenter {
+    interface Presenter extends IViewerView.IViewerPresenter {
 
         public void replyAcknowledgment();
 
@@ -32,5 +32,5 @@ public interface PadSimFileViewerView extends IViewer<PadSimFile> {
         public void createReturnReconciliation();
     }
 
-    ILister<PadSimBatch> getBatchListerView();
+    IListerView<PadSimBatch> getBatchListerView();
 }

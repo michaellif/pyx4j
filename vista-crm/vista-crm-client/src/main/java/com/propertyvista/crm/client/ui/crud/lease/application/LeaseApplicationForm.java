@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -56,7 +56,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
     private final Tab chargesTab;
 
-    public LeaseApplicationForm(IForm<LeaseApplicationDTO> view) {
+    public LeaseApplicationForm(IFormView<LeaseApplicationDTO> view) {
         super(LeaseApplicationDTO.class, view);
 
         selectTab(addTab(createDetailsTab(), i18n.tr("Details")));

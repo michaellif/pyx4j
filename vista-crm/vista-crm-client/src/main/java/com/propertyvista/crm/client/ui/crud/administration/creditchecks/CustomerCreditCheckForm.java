@@ -23,7 +23,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -38,7 +38,7 @@ public class CustomerCreditCheckForm extends CrmEntityForm<CustomerCreditCheckDT
 
     private static final I18n i18n = I18n.get(CustomerCreditCheckForm.class);
 
-    public CustomerCreditCheckForm(IForm<CustomerCreditCheckDTO> view) {
+    public CustomerCreditCheckForm(IFormView<CustomerCreditCheckDTO> view) {
         super(CustomerCreditCheckDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

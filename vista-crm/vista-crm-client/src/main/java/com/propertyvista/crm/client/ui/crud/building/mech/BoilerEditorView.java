@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 
 import com.propertyvista.dto.BoilerDTO;
 
-public interface BoilerEditorView extends IEditor<BoilerDTO> {
+public interface BoilerEditorView extends IEditorView<BoilerDTO> {
 
 }

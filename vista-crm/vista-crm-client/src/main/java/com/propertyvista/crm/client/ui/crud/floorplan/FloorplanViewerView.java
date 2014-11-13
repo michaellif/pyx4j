@@ -13,12 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.floorplan;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.dto.FloorplanDTO;
 
-public interface FloorplanViewerView extends IViewer<FloorplanDTO> {
+public interface FloorplanViewerView extends IViewerView<FloorplanDTO> {
 
-    interface Presenter extends IViewer.Presenter {
+    interface Presenter extends IViewerView.IViewerPresenter {
     }
 }

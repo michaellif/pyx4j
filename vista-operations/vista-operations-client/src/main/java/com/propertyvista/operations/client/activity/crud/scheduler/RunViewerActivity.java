@@ -21,7 +21,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.backoffice.activity.ListerController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister.Presenter;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView.IListerPresenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -36,7 +36,7 @@ import com.propertyvista.operations.rpc.services.scheduler.RunDataCrudService;
 
 public class RunViewerActivity extends AdminViewerActivity<Run> implements RunViewerView.Presenter {
 
-    private final Presenter<RunData> runDataLister;
+    private final IListerPresenter<RunData> runDataLister;
 
     private final AsyncCallback<ExecutionStatusUpdateDTO> actionsCallback;
 

@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 
-public interface BillingCycleView extends IViewer<BillingCycleDTO> {
+public interface BillingCycleView extends IViewerView<BillingCycleDTO> {
 
-    interface Presenter extends IViewer.Presenter {
+    interface Presenter extends IViewerView.IViewerPresenter {
 
     }
 }

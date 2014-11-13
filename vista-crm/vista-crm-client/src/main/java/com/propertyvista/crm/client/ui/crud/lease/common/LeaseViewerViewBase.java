@@ -17,15 +17,15 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseDTO;
 
-public interface LeaseViewerViewBase<DTO extends LeaseDTO> extends IViewer<DTO> {
+public interface LeaseViewerViewBase<DTO extends LeaseDTO> extends IViewerView<DTO> {
 
-    interface Presenter extends IViewer.Presenter {
+    interface Presenter extends IViewerView.IViewerPresenter {
 
         void retrieveParticipants(AsyncCallback<List<LeaseTermParticipant<?>>> callback, Boolean includeDependants);
 
