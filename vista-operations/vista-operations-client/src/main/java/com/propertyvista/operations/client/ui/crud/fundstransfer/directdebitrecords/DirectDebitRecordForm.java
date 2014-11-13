@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -37,8 +37,13 @@ public class DirectDebitRecordForm extends OperationsEntityForm<DirectDebitRecor
         formPanel.append(Location.Left, proto().customerName()).decorate();
         formPanel.append(Location.Left, proto().receivedDate()).decorate();
         formPanel.append(Location.Left, proto().processingStatus()).decorate();
-
         formPanel.append(Location.Left, proto().operationsNotes()).decorate();
+
+        formPanel.h1("File");
+
+        formPanel.append(Location.Left, proto().directDebitFile().fileName()).decorate();
+        formPanel.append(Location.Left, proto().directDebitFile().fileSerialNumber()).decorate();
+        formPanel.append(Location.Left, proto().directDebitFile().fileSerialDate()).decorate();
 
         formPanel.h1("Trace");
 

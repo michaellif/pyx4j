@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -43,6 +43,9 @@ public class DirectDebitRecordLister extends EntityDataTablePanel<DirectDebitRec
         columns.add(new MemberColumnDescriptor.Builder(proto().accountNumber()).build());
         columns.add(new MemberColumnDescriptor.Builder(proto().amount()).build());
         columns.add(new MemberColumnDescriptor.Builder(proto().paymentReferenceNumber()).build());
+        columns.add(new MemberColumnDescriptor.Builder(proto().directDebitFile().fileName()).build());
+        columns.add(new MemberColumnDescriptor.Builder(proto().directDebitFile().fileSerialNumber()).visible(false).build());
+        columns.add(new MemberColumnDescriptor.Builder(proto().directDebitFile().fileSerialDate()).visible(false).build());
         columns.add(new MemberColumnDescriptor.Builder(proto().customerName()).build());
         columns.add(new MemberColumnDescriptor.Builder(proto().receivedDate()).build());
         columns.add(new MemberColumnDescriptor.Builder(proto().processingStatus()).build());
