@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -51,6 +51,8 @@ public class LegalNoticeCandidateFolderHolderForm extends ItemsHolderForm<LegalN
         captionsPanel.add(new MiniDecorator(new HTML(i18n.tr("Amount Owed")), LegalNoticeCandidateForm.Styles.LegalNoticeCandidateDataColumn.name(),
                 LegalNoticeCandidateForm.Styles.LegalNoticeCandidateDataNumberColumn.name()));
         captionsPanel.add(new MiniDecorator(new HTML(i18n.tr("N4 Issued")), LegalNoticeCandidateForm.Styles.LegalNoticeCandidateDataColumn.name(),
+                LegalNoticeCandidateForm.Styles.LegalNoticeCandidateDataNumberColumn.name()));
+        captionsPanel.add(new MiniDecorator(new HTML(i18n.tr("Type")), LegalNoticeCandidateForm.Styles.LegalNoticeCandidateDataColumn.name(),
                 LegalNoticeCandidateForm.Styles.LegalNoticeCandidateDataNumberColumn.name()));
         return captionsPanel;
     }

@@ -84,6 +84,12 @@ public class N4CSGenerationFacadeImpl implements N4CSGenerationFacade {
         n4cs.passedTo().tpType().setValue(ToType.Tenant);
         n4cs.passedTo().name().setValue(n4.to().getStringView());
         n4cs.service().method().setValue(serviceMethod);
+        if (serviceMethod.equals(ServiceMethod.M)) {
+            StringBuilder lastAddress = new StringBuilder(n4.rentalUnitAddress().unit().getValue());
+            lastAddress.append(" - " + address);
+            n4cs.service().lastAddr().setValue(lastAddress.toString());
+
+        }
 
         return n4cs;
 

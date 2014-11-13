@@ -184,7 +184,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         N4LeaseData n4LeaseData = ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId, batchData.noticeDate().getValue(),
                 batchData.deliveryMethod().getValue(), relevantArCodes);
         N4FormFieldsData n4FormData = ServerSideFactory.create(N4GenerationFacade.class).prepareFormData(n4LeaseData, batchData);
-        N4CSFormFieldsData n4csFormData = ServerSideFactory.create(N4CSGenerationFacade.class).prepareN4CSData(n4FormData, ServiceMethod.H);
+        N4CSFormFieldsData n4csFormData = ServerSideFactory.create(N4CSGenerationFacade.class).prepareN4CSData(n4FormData, ServiceMethod.M);
 
         byte[] n4LetterBinary = ServerSideFactory.create(N4GenerationFacade.class).generateN4Letter(n4FormData);
         byte[] n4csLetterBinary = ServerSideFactory.create(N4CSGenerationFacade.class).generateN4CSLetter(n4csFormData);

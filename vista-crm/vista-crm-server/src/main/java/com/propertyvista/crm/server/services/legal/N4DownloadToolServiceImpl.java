@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -106,6 +106,9 @@ public class N4DownloadToolServiceImpl implements N4DownloadToolService {
 
         Persistence.service().retrieve(n4LegalLetter.lease().unit().building());
         legalNotice.building().setValue(n4LegalLetter.lease().unit().building().propertyCode().getValue());
+
+        Persistence.service().retrieve(n4LegalLetter.status());
+        legalNotice.documentType().setValue(n4LegalLetter.status().status().getValue().toString());
 
         return legalNotice;
     }
