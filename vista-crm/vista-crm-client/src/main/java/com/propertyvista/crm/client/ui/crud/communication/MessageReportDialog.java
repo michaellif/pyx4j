@@ -16,51 +16,39 @@ package com.propertyvista.crm.client.ui.crud.communication;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
-import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.activity.AbstractVisorController;
-import com.pyx4j.site.client.backoffice.activity.ListerController;
-import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 import com.pyx4j.site.client.ui.visor.AbstractVisorPaneView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace.Type;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.MessageDTO;
 
 public class MessageReportDialog extends AbstractVisorController {
     private static final I18n i18n = I18n.get(MessageReportDialog.class);
 
-    private final ListerController<MessageDTO> listerController;
-
-    private final MessageLister lister;
+    private final VisorMessageLister lister;
 
     private final AbstractVisorPaneView entityListVisorView;
 
-    public MessageReportDialog(IPrimePaneView parentView, List<LeaseParticipant<?>> recipientScope) {
-        this(parentView, i18n.tr("Communication Report"), recipientScope);
-    }
-
-    public MessageReportDialog(IPrimePaneView parentView, final String caption, List<LeaseParticipant<?>> recipientScope) {
+    public MessageReportDialog(IViewerView<?> parentView, List<LeaseParticipant<?>> recipientScope) {
         super(parentView);
 
-        lister = new MessageLister(recipientScope);
-        listerController = new ListerController<MessageDTO>(MessageDTO.class, lister,
-                GWT.<AbstractListCrudService<MessageDTO>> create(MessageCrudService.class));
+        lister = new VisorMessageLister(parentView.getPresenter(), recipientScope);
 
         // add control buttons
 
         entityListVisorView = new AbstractVisorPaneView(this) {
             {
                 // initialize
-                setCaption(caption);
+                setCaption(i18n.tr("Communication Report"));
                 setContentPane(new ScrollPanel(lister.asWidget()));
                 getElement().getStyle().setProperty("padding", "6px");
             }
@@ -93,7 +81,7 @@ public class MessageReportDialog extends AbstractVisorController {
 
     @Override
     public void show() {
-        listerController.populate();
+        lister.populate();
         getParentView().showVisor(entityListVisorView);
     }
 }
