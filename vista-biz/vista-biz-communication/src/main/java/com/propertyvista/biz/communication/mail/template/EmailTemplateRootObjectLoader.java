@@ -311,11 +311,15 @@ public class EmailTemplateRootObjectLoader {
             t.resolved().setValue(mr.resolvedDate().getStringView());
             t.resolution().set(mr.resolution());
             t.cancellationNote().set(mr.cancellationNote());
-            // generate url for maintenance request viewer in Resident Portal
-            String residentUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true);
-            String mrUrl = AppPlaceInfo.absoluteUrl(residentUrl, true,
+            // build URL for maintenance request viewer in Resident Portal
+            String mrUrlBase = VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true);
+            String mrUrl = AppPlaceInfo.absoluteUrl(mrUrlBase, true,
                     new ResidentPortalSiteMap.Maintenance.MaintenanceRequestPage().formPlace(mr.getPrimaryKey()));
-            t.requestViewUrl().setValue(mrUrl);
+            t.residentViewUrl().setValue(mrUrl);
+            // build URL for maintenance request viewer in CRM
+            mrUrlBase = VistaDeployment.getBaseApplicationURL(VistaApplication.crm, true);
+            mrUrl = AppPlaceInfo.absoluteUrl(mrUrlBase, true, new CrmSiteMap.Tenants.MaintenanceRequest().formViewerPlace(mr.getPrimaryKey()));
+            t.crmViewUrl().setValue(mrUrl);
         } else if (tObj instanceof MaintenanceRequestWOT) {
             MaintenanceRequestWOT t = (MaintenanceRequestWOT) tObj;
 
@@ -323,7 +327,8 @@ public class EmailTemplateRootObjectLoader {
             MaintenanceRequestSchedule wo = mr.workHistory().get(mr.workHistory().size() - 1);
             Persistence.ensureRetrieve(wo, AttachLevel.Attached);
             t.scheduledDate().setValue(wo.scheduledDate().getStringView());
-            t.scheduledTimeSlot().setValue(i18n.tr("between {0} and {1}", wo.scheduledTime().timeFrom().getStringView(), wo.scheduledTime().timeTo().getStringView()));
+            t.scheduledTimeSlot().setValue(
+                    i18n.tr("between {0} and {1}", wo.scheduledTime().timeFrom().getStringView(), wo.scheduledTime().timeTo().getStringView()));
             t.workDescription().set(wo.workDescription());
         } else if (tObj instanceof AutopayAgreementT) {
             AutopayAgreementT t = (AutopayAgreementT) tObj;

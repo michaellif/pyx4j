@@ -573,7 +573,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 EmailTemplateManager.getVarname(requestT.requestId()),
                 EmailTemplateManager.getVarname(requestT.submitted()),
                 EmailTemplateManager.getVarname(requestT.status()),
-                EmailTemplateManager.getVarname(requestT.requestViewUrl())
+                EmailTemplateManager.getVarname(requestT.crmViewUrl())
         ));//@formatter:on
         return template;
     }
@@ -651,7 +651,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 EmailTemplateManager.getVarname(requestT.requestId()),
                 EmailTemplateManager.getVarname(requestT.submitted()),
                 EmailTemplateManager.getVarname(requestT.status()),
-                EmailTemplateManager.getVarname(requestT.requestViewUrl()),
+                EmailTemplateManager.getVarname(requestT.residentViewUrl()),
                 EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                 EmailTemplateManager.getVarname(bldT.Address())
         ));//@formatter:on
@@ -712,7 +712,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 EmailTemplateManager.getVarname(requestT.requestId()),
                 EmailTemplateManager.getVarname(requestT.submitted()),
                 EmailTemplateManager.getVarname(requestT.status()),
-                EmailTemplateManager.getVarname(requestT.requestViewUrl()),
+                EmailTemplateManager.getVarname(requestT.residentViewUrl()),
                 EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                 EmailTemplateManager.getVarname(bldT.Address()),
                 EmailTemplateManager.getVarname(woT.scheduledDate()),
@@ -774,7 +774,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 EmailTemplateManager.getVarname(requestT.requestId()),
                 EmailTemplateManager.getVarname(requestT.submitted()),
                 EmailTemplateManager.getVarname(requestT.status()),
-                EmailTemplateManager.getVarname(requestT.requestViewUrl()),
+                EmailTemplateManager.getVarname(requestT.residentViewUrl()),
                 EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                 EmailTemplateManager.getVarname(bldT.Address())
         ));//@formatter:on
@@ -838,7 +838,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 EmailTemplateManager.getVarname(requestT.requestId()),
                 EmailTemplateManager.getVarname(requestT.submitted()),
                 EmailTemplateManager.getVarname(requestT.status()),
-                EmailTemplateManager.getVarname(requestT.requestViewUrl()),
+                EmailTemplateManager.getVarname(requestT.residentViewUrl()),
                 EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                 EmailTemplateManager.getVarname(bldT.Address()),
                 EmailTemplateManager.getVarname(requestT.resolved()),
@@ -900,7 +900,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 EmailTemplateManager.getVarname(requestT.requestId()),
                 EmailTemplateManager.getVarname(requestT.submitted()),
                 EmailTemplateManager.getVarname(requestT.status()),
-                EmailTemplateManager.getVarname(requestT.requestViewUrl()),
+                EmailTemplateManager.getVarname(requestT.residentViewUrl()),
                 EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                 EmailTemplateManager.getVarname(bldT.Address()),
                 EmailTemplateManager.getVarname(requestT.cancellationNote())

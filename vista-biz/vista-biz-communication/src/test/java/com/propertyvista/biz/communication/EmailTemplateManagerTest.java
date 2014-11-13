@@ -145,9 +145,13 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
     private String tenantHomeUrl;
 
+    private String crmHomeUrl;
+
     private MaintenanceRequest mr;
 
-    private String mrViewPortalUrl;
+    private String mrPortalViewUrl;
+
+    private String mrCRMViewUrl;
 
     public static synchronized void createPmc() {
         final Pmc pmc = EntityFactory.create(Pmc.class);
@@ -179,12 +183,13 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         siteHomeUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.site, false);
         tenantHomeUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true);
         ptappHomeUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true);
+        crmHomeUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.crm, true);
 
         appUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, PortalSiteMap.LoginWithToken.class,
                 AuthenticationService.AUTH_TOKEN_ARG, token);
 
-        mrViewPortalUrl = tenantHomeUrl + "?place=maintenance/maintenance_request_page";
-
+        mrPortalViewUrl = tenantHomeUrl + "?place=maintenance/maintenance_request_page";
+        mrCRMViewUrl = crmHomeUrl + "?place=tenants/maintenance_request&crud=viewer";
     }
 
     @Override
@@ -780,7 +785,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         mr.requestId().getValue(),
                         mr.submitted().getStringView(),
                         mr.status().getStringView(),
-                        mrViewPortalUrl + "&Id=" + mr.getPrimaryKey()
+                        mrCRMViewUrl + "&Id=" + mr.getPrimaryKey()
                 };
                 fmtArgs = args;
             } else {
@@ -799,7 +804,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         EmailTemplateManager.getVarname(requestT.requestId()),
                         EmailTemplateManager.getVarname(requestT.submitted()),
                         EmailTemplateManager.getVarname(requestT.status()),
-                        EmailTemplateManager.getVarname(requestT.requestViewUrl())
+                        EmailTemplateManager.getVarname(requestT.crmViewUrl())
                 };
                 fmtArgs = args;
             }
@@ -820,7 +825,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         mr.requestId().getValue(),
                         mr.submitted().getStringView(),
                         mr.status().getStringView(),
-                        mrViewPortalUrl + "&Id=" + mr.getPrimaryKey(),
+                        mrPortalViewUrl + "&Id=" + mr.getPrimaryKey(),
                         mr.building().marketing().name().getValue(),
                         mr.building().info().address().getStringView()
                 };
@@ -842,7 +847,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         EmailTemplateManager.getVarname(requestT.requestId()),
                         EmailTemplateManager.getVarname(requestT.submitted()),
                         EmailTemplateManager.getVarname(requestT.status()),
-                        EmailTemplateManager.getVarname(requestT.requestViewUrl()),
+                        EmailTemplateManager.getVarname(requestT.residentViewUrl()),
                         EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                         EmailTemplateManager.getVarname(bldT.Address())
                 };
@@ -865,7 +870,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         mr.requestId().getValue(),
                         mr.submitted().getStringView(),
                         mr.status().getStringView(),
-                        mrViewPortalUrl + "&Id=" + mr.getPrimaryKey(),
+                        mrPortalViewUrl + "&Id=" + mr.getPrimaryKey(),
                         mr.building().marketing().name().getValue(),
                         mr.building().info().address().getStringView()
                 };
@@ -887,7 +892,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         EmailTemplateManager.getVarname(requestT.requestId()),
                         EmailTemplateManager.getVarname(requestT.submitted()),
                         EmailTemplateManager.getVarname(requestT.status()),
-                        EmailTemplateManager.getVarname(requestT.requestViewUrl()),
+                        EmailTemplateManager.getVarname(requestT.residentViewUrl()),
                         EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                         EmailTemplateManager.getVarname(bldT.Address())
                 };
@@ -910,7 +915,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         mr.requestId().getValue(),
                         mr.submitted().getStringView(),
                         mr.status().getStringView(),
-                        mrViewPortalUrl + "&Id=" + mr.getPrimaryKey(),
+                        mrPortalViewUrl + "&Id=" + mr.getPrimaryKey(),
                         mr.building().marketing().name().getValue(),
                         mr.building().info().address().getStringView(),
                         mr.resolvedDate().getStringView()
@@ -933,7 +938,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         EmailTemplateManager.getVarname(requestT.requestId()),
                         EmailTemplateManager.getVarname(requestT.submitted()),
                         EmailTemplateManager.getVarname(requestT.status()),
-                        EmailTemplateManager.getVarname(requestT.requestViewUrl()),
+                        EmailTemplateManager.getVarname(requestT.residentViewUrl()),
                         EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                         EmailTemplateManager.getVarname(bldT.Address()),
                         EmailTemplateManager.getVarname(requestT.resolved()),
@@ -958,7 +963,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         mr.requestId().getValue(),
                         mr.submitted().getStringView(),
                         mr.status().getStringView(),
-                        mrViewPortalUrl + "&Id=" + mr.getPrimaryKey(),
+                        mrPortalViewUrl + "&Id=" + mr.getPrimaryKey(),
                         mr.building().marketing().name().getValue(),
                         mr.building().info().address().getStringView(),
                         mr.cancellationNote().getValue()
@@ -981,7 +986,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         EmailTemplateManager.getVarname(requestT.requestId()),
                         EmailTemplateManager.getVarname(requestT.submitted()),
                         EmailTemplateManager.getVarname(requestT.status()),
-                        EmailTemplateManager.getVarname(requestT.requestViewUrl()),
+                        EmailTemplateManager.getVarname(requestT.residentViewUrl()),
                         EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                         EmailTemplateManager.getVarname(bldT.Address()),
                         EmailTemplateManager.getVarname(requestT.cancellationNote())
@@ -1005,7 +1010,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         mr.requestId().getValue(),
                         mr.submitted().getStringView(),
                         mr.status().getStringView(),
-                        mrViewPortalUrl + "&Id=" + mr.getPrimaryKey(),
+                        mrPortalViewUrl + "&Id=" + mr.getPrimaryKey(),
                         mr.building().marketing().name().getValue(),
                         mr.building().info().address().getStringView(),
                         mr.workHistory().get(0).scheduledDate().getStringView(),
@@ -1031,7 +1036,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         EmailTemplateManager.getVarname(requestT.requestId()),
                         EmailTemplateManager.getVarname(requestT.submitted()),
                         EmailTemplateManager.getVarname(requestT.status()),
-                        EmailTemplateManager.getVarname(requestT.requestViewUrl()),
+                        EmailTemplateManager.getVarname(requestT.residentViewUrl()),
                         EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                         EmailTemplateManager.getVarname(bldT.Address()),
                         EmailTemplateManager.getVarname(woT.scheduledDate()),

@@ -63,5 +63,7 @@ public interface MaintenanceRequestT extends IEntity {
 
     IPrimitive<String> cancellationNote();
 
-    IPrimitive<String> requestViewUrl();
+    IPrimitive<String> residentViewUrl();
+
+    IPrimitive<String> crmViewUrl();
 }
