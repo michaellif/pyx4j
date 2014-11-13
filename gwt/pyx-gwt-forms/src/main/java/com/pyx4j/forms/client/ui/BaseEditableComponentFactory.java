@@ -174,11 +174,23 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
         } else if (mm.getValueClass().equals(Boolean.class)) {
             return new CCheckBox();
         } else if (mm.getValueClass().equals(Integer.class)) {
-            return new CIntegerField();
+            CIntegerField comp = new CIntegerField();
+            if (mm.getFormat() != null) {
+                comp.setNumberPattern(mm.getFormat());
+            }
+            return comp;
         } else if (mm.getValueClass().equals(BigDecimal.class)) {
-            return new CBigDecimalField();
+            CBigDecimalField comp = new CBigDecimalField();
+            if (mm.getFormat() != null) {
+                comp.setNumberPattern(mm.getFormat());
+            }
+            return comp;
         } else if (mm.getValueClass().equals(Long.class)) {
-            return new CLongField();
+            CLongField comp = new CLongField();
+            if (mm.getFormat() != null) {
+                comp.setNumberPattern(mm.getFormat());
+            }
+            return comp;
         } else if (mm.getValueClass().equals(Double.class)) {
             CDoubleField comp = new CDoubleField();
             if (mm.getFormat() != null) {
