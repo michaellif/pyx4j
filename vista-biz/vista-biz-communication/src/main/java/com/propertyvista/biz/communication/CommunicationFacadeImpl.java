@@ -24,20 +24,17 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.mail.Mail;
-import com.pyx4j.server.mail.MailAttachment;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.biz.communication.NotificationFacade.BatchErrorType;
 import com.propertyvista.biz.communication.notifications.NotificationsUtils;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
-import com.propertyvista.domain.blob.MaintenanceRequestPictureBlob;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.maintenance.MaintenanceRequestPicture;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.pmc.Pmc;
@@ -344,29 +341,10 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         return sendMaintenanceRequestEmail(TenantAccess.getActiveEmail(request.reporter()), EmailTemplateType.MaintenanceRequestEntryNotice, request);
     }
 
-    // TODO Stas, Igor : MOVE it away from class  to MaintenanceEmailManager or somthing....
     private MailMessage sendMaintenanceRequestEmail(String sendTo, EmailTemplateType emailType, MaintenanceRequest request) {
-        if (sendTo == null) {
-            return null;
-        }
         MailMessage m = MessageTemplatesCustomizable.createMaintenanceRequestEmail(emailType, request);
         m.setTo(sendTo);
-        switch (emailType) {
-        case MaintenanceRequestCreatedPMC:
-            for (MaintenanceRequestPicture picture : request.pictures()) {
-                MaintenanceRequestPictureBlob blob = Persistence.service().retrieve(MaintenanceRequestPictureBlob.class, picture.file().blobKey().getValue());
-                MailAttachment attachment = new MailAttachment(picture.file().fileName().getValue(), picture.file().contentMimeType().getValue(), blob.data()
-                        .getValue());
-                m.addAttachment(attachment);
-            }
-            break;
-        default:
-            break;
-        }
-
-        if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr(GENERIC_UNAVAIL_MESSAGE));
-        }
+        Mail.queue(m, null, null);
         return m;
     }
 

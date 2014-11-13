@@ -40,10 +40,12 @@ import com.propertyvista.biz.communication.mail.template.MessageKeywords;
 import com.propertyvista.biz.communication.mail.template.model.EmailTemplateContext;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.blob.LeaseApplicationDocumentBlob;
+import com.propertyvista.domain.blob.MaintenanceRequestPictureBlob;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.MaintenanceRequestPicture;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.PolicyNode;
@@ -69,7 +71,7 @@ class MessageTemplatesCustomizable {
 
     /**
      * Warning: can return <code>null</code> if the policy is not found.
-     *
+     * 
      * @param type
      * @param building
      * @return
@@ -411,6 +413,20 @@ class MessageTemplatesCustomizable {
         email.setSender(getSender());
         // set email subject and body from the template
         buildEmail(email, emailTemplate, context, data);
+
+        switch (emailType) {
+        case MaintenanceRequestCreatedPMC:
+            for (MaintenanceRequestPicture picture : request.pictures()) {
+                MaintenanceRequestPictureBlob blob = Persistence.service().retrieve(MaintenanceRequestPictureBlob.class, picture.file().blobKey().getValue());
+                MailAttachment attachment = new MailAttachment(picture.file().fileName().getValue(), picture.file().contentMimeType().getValue(), blob.data()
+                        .getValue());
+                email.addAttachment(attachment);
+            }
+            break;
+        default:
+            break;
+        }
+
         return email;
     }
 
