@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.ui.crud;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 
-public class CrmListerViewImplBase<E extends IEntity> extends AbstractLister<E> {
+public class CrmListerViewImplBase<E extends IEntity> extends AbstractListerView<E> {
 
     public CrmListerViewImplBase() {
     }
