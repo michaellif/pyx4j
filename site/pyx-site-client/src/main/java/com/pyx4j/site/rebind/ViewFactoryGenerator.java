@@ -46,11 +46,11 @@ public class ViewFactoryGenerator extends Generator {
         List<JClassType> classes = new ArrayList<>();
 
         for (JClassType classType : oracle.getTypes()) {
-            if (classType.isAssignableTo(instantiableType) //@formatter:off
-                    && classType.isInterface() == null 
-                    && !classType.isAbstract()
-                    && classType.getSimpleSourceName().endsWith("Impl") 
-                    && hasInterfaceWithTheSameName(oracle, classType, instantiableType)) {//@formatter:on
+            if (classType.isAssignableTo(instantiableType) //
+                    && classType.isInterface() == null // 
+                    && !classType.isAbstract() //
+                    && classType.getSimpleSourceName().endsWith("Impl") // 
+                    && hasInterfaceWithTheSameName(oracle, classType, instantiableType)) {
                 classes.add(classType);
             }
         }
@@ -60,8 +60,6 @@ public class ViewFactoryGenerator extends Generator {
 
         ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(genPackageName, genClassName);
         composer.addImplementedInterface(ViewFactory.class.getCanonicalName());
-
-        //  composer.addImport("com.package.client.*");
 
         PrintWriter printWriter = context.tryCreate(logger, genPackageName, genClassName);
 
