@@ -62,7 +62,7 @@ public class FundsReconciliationFileForm extends OperationsEntityForm<FundsRecon
 
         formPanel.br();
 
-        formPanel.append(Location.Dual, ((FundsReconciliationFileViewerView) getParentView()).getSummaryListerView().getDataTablePanel());
+        formPanel.append(Location.Dual, ((FundsReconciliationFileViewerView) getParentView()).getSummaryListerView());
 
         selectTab(addTab(formPanel, i18n.tr("General")));
         setTabBarVisible(false);

@@ -17,38 +17,20 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.backoffice.activity.AbstractViewerActivity;
-import com.pyx4j.site.client.backoffice.activity.ListerController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationfile.FundsReconciliationFileViewerView;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
-import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
-import com.propertyvista.operations.rpc.services.FundsReconciliationSummaryCrudService;
 import com.propertyvista.operations.rpc.services.PadReconciliationFileCrudService;
 
 public class FundsReconciliationFileViewerActivity extends AbstractViewerActivity<FundsReconciliationFileDTO> implements
         FundsReconciliationFileViewerView.Presenter {
 
-    private final ILister.Presenter<?> summaryLister;
-
     public FundsReconciliationFileViewerActivity(CrudAppPlace place) {
         super(FundsReconciliationFileDTO.class, place, OperationsSite.getViewFactory().getView(FundsReconciliationFileViewerView.class), GWT
                 .<AbstractCrudService<FundsReconciliationFileDTO>> create(PadReconciliationFileCrudService.class));
 
-        summaryLister = new ListerController<FundsReconciliationSummaryDTO>(FundsReconciliationSummaryDTO.class,
-                ((FundsReconciliationFileViewerView) getView()).getSummaryListerView(),
-                GWT.<FundsReconciliationSummaryCrudService> create(FundsReconciliationSummaryCrudService.class));
-
-    }
-
-    @Override
-    protected void onPopulateSuccess(FundsReconciliationFileDTO result) {
-        super.onPopulateSuccess(result);
-
-        summaryLister.setParent(result.getPrimaryKey());
-        summaryLister.populate();
     }
 
     @Override
