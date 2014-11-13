@@ -160,6 +160,8 @@ public abstract class PortalSite extends VistaSite {
             public void onSuccess(SiteDefinitionsDTO siteDefinitions) {
                 PortalSite.this.siteDefinitions = siteDefinitions;
 
+                initSiteTitle();
+
                 hideLoadingIndicator();
 
                 Palette palette;
@@ -229,5 +231,7 @@ public abstract class PortalSite extends VistaSite {
         }
 
     }
+
+    protected abstract void initSiteTitle();
 
 }

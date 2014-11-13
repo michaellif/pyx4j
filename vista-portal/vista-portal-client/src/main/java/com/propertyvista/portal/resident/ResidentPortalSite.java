@@ -14,6 +14,7 @@
 package com.propertyvista.portal.resident;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
@@ -39,6 +40,7 @@ public class ResidentPortalSite extends PortalSite {
 
     @Override
     public void onSiteLoad() {
+
         // RPC creation below, Entity needs to be compiled -> generated first
         ClientContext.setAuthenticationService(GWT.<AuthenticationService> create(ResidentAuthenticationService.class));
         super.onSiteLoad();
@@ -53,5 +55,10 @@ public class ResidentPortalSite extends PortalSite {
         NotificationAppPlace place = new PortalSiteMap.NotificationPlace();
         place.setNotification(notification);
         return place;
+    }
+
+    @Override
+    protected void initSiteTitle() {
+        Window.setTitle(PortalSite.getSiteDefinitions().siteTitles().residentPortalTitle().getValue());
     }
 }

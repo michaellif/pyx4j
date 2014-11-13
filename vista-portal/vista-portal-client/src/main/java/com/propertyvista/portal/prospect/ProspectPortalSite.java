@@ -14,6 +14,7 @@
 package com.propertyvista.portal.prospect;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
@@ -49,5 +50,10 @@ public class ProspectPortalSite extends PortalSite {
         NotificationAppPlace place = new PortalSiteMap.NotificationPlace();
         place.setNotification(notification);
         return place;
+    }
+
+    @Override
+    protected void initSiteTitle() {
+        Window.setTitle(PortalSite.getSiteDefinitions().siteTitles().prospectPortalTitle().getValue());
     }
 }
