@@ -48,7 +48,8 @@ public class N4CSFieldsMapping extends LtbFormFieldsMapping<N4CSFormFieldsData> 
             protected void configure() {
                 text(proto().application()).mapTo("appliction_form").define();
                 text(proto().termination()).mapTo("notice_of_termination_form").define();
-                field(proto().docType()).mapTo("b12c96nfdocuments_served").define();
+                text(proto().other()).mapTo("other_document").define();
+                field(proto().docType()).states("TT").mapTo("@b12c96nfdocuments_served.0").define();
             }
         });
 

@@ -15,10 +15,11 @@ package com.propertyvista.biz.legal;
 
 import com.propertyvista.domain.legal.n4.N4FormFieldsData;
 import com.propertyvista.domain.legal.n4cs.N4CSFormFieldsData;
+import com.propertyvista.domain.legal.n4cs.N4CSServiceMethod.ServiceMethod;
 
 public interface N4CSGenerationFacade {
 
     byte[] generateN4CSLetter(N4CSFormFieldsData formData);
 
-    N4CSFormFieldsData prepareN4CSData(N4FormFieldsData n4Data);
+    N4CSFormFieldsData prepareN4CSData(N4FormFieldsData n4Data, ServiceMethod serviceMethod);
 }

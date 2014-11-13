@@ -76,6 +76,7 @@ import com.propertyvista.domain.legal.n4.N4FormFieldsData;
 import com.propertyvista.domain.legal.n4.N4LeaseData;
 import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.legal.n4cs.N4CSFormFieldsData;
+import com.propertyvista.domain.legal.n4cs.N4CSServiceMethod.ServiceMethod;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -183,7 +184,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         N4LeaseData n4LeaseData = ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId, batchData.noticeDate().getValue(),
                 batchData.deliveryMethod().getValue(), relevantArCodes);
         N4FormFieldsData n4FormData = ServerSideFactory.create(N4GenerationFacade.class).prepareFormData(n4LeaseData, batchData);
-        N4CSFormFieldsData n4csFormData = ServerSideFactory.create(N4CSGenerationFacade.class).prepareN4CSData(n4FormData);
+        N4CSFormFieldsData n4csFormData = ServerSideFactory.create(N4CSGenerationFacade.class).prepareN4CSData(n4FormData, ServiceMethod.H);
 
         byte[] n4LetterBinary = ServerSideFactory.create(N4GenerationFacade.class).generateN4Letter(n4FormData);
         byte[] n4csLetterBinary = ServerSideFactory.create(N4CSGenerationFacade.class).generateN4CSLetter(n4csFormData);
@@ -206,7 +207,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         Persistence.service().persist(n4Letter);
 
         LegalStatusN4 n4Status = EntityFactory.create(LegalStatusN4.class);
-        n4Status.status().setValue(Status.N4CS);
+        n4Status.status().setValue(Status.N4);
 
         N4Policy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit(leaseId), N4Policy.class);
         GregorianCalendar cal = new GregorianCalendar();
@@ -241,12 +242,12 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
 
         n4csLetter.file().blobKey().setValue(csBlob.getPrimaryKey());
         n4csLetter.file().fileSize().setValue(n4csLetterBinary.length);
-        n4csLetter.file().fileName().setValue(MessageFormat.format("n4-notice-{0,date,yyyy-MM-dd}.pdf", generationTime));
+        n4csLetter.file().fileName().setValue(MessageFormat.format("n4-notice-certificate-{0,date,yyyy-MM-dd}.pdf", generationTime));
 
         Persistence.service().persist(n4csLetter);
 //TODO: Change status
         LegalStatusN4 n4csStatus = EntityFactory.create(LegalStatusN4.class);
-        n4csStatus.status().setValue(Status.N4);// Should be changed to N4CS
+        n4csStatus.status().setValue(Status.N4CS);// Should be changed to N4CS
 
         N4Policy csPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit(leaseId), N4Policy.class);
         cal = new GregorianCalendar();

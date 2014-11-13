@@ -50,11 +50,12 @@ public class N4CSGenerationFacadeImpl implements N4CSGenerationFacade {
     }
 
     @Override
-    public N4CSFormFieldsData prepareN4CSData(N4FormFieldsData n4) {
+    public N4CSFormFieldsData prepareN4CSData(N4FormFieldsData n4, ServiceMethod serviceMethod) {
+
         N4CSFormFieldsData n4cs = EntityFactory.create(N4CSFormFieldsData.class);
         n4cs.reporter().setValue(n4.landlordsContactInfo().firstName().getValue() + " " + n4.landlordsContactInfo().lastName().getValue());
         n4cs.document().termination().setValue("N4");
-        n4cs.document().docType().setValue(DocumentType.OR);
+        n4cs.document().docType().setValue(DocumentType.TT);
         StringBuilder address = new StringBuilder();
         if (n4.rentalUnitAddress().streetNumber().getValue() != null && !n4.rentalUnitAddress().streetNumber().getValue().equals("")) {
             address.append(n4.rentalUnitAddress().streetNumber().getValue());
@@ -82,8 +83,9 @@ public class N4CSGenerationFacadeImpl implements N4CSGenerationFacade {
         n4cs.signature().signatureDate().setValue(SystemDateManager.getLogicalDate());
         n4cs.passedTo().tpType().setValue(ToType.Tenant);
         n4cs.passedTo().name().setValue(n4.to().getStringView());
-        n4cs.service().method().setValue(ServiceMethod.H);
+        n4cs.service().method().setValue(serviceMethod);
 
         return n4cs;
+
     }
 }
