@@ -11,18 +11,22 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.operations.client.ui.crud.simulator.pad.batch;
+package com.propertyvista.operations.client.ui.crud.simulator.pad.file;
 
+import com.google.gwt.core.client.GWT;
+
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
+import com.propertyvista.operations.rpc.services.simulator.PadSimBatchCrudService;
 
-public class PadSimBatchLister extends EntityDataTablePanel<PadSimBatch> {
+public class PadSimBatchLister extends SiteDataTablePanel<PadSimBatch> {
 
     public PadSimBatchLister() {
-        super(PadSimBatch.class, true);
+        super(PadSimBatch.class, GWT.<AbstractCrudService<PadSimBatch>> create(PadSimBatchCrudService.class), true);
 
         setDataTableModel(new DataTableModel<PadSimBatch>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().batchNumber()).build(),

@@ -18,8 +18,6 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.activity.ListerController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView.IListerPresenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
@@ -29,26 +27,13 @@ import com.propertyvista.operations.client.ui.crud.scheduler.trigger.TriggerView
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.dto.TriggerDTO;
-import com.propertyvista.operations.rpc.services.scheduler.RunCrudService;
 import com.propertyvista.operations.rpc.services.scheduler.TriggerCrudService;
 
 public class TriggerViewerActivity extends AdminViewerActivity<TriggerDTO> implements TriggerViewerView.Presenter {
 
-    private final IListerPresenter<Run> runLister;
-
     public TriggerViewerActivity(CrudAppPlace place) {
         super(TriggerDTO.class, place, OperationsSite.getViewFactory().getView(TriggerViewerView.class), GWT
                 .<TriggerCrudService> create(TriggerCrudService.class));
-
-        runLister = new ListerController<Run>(Run.class, ((TriggerViewerView) getView()).getRunListerView(), GWT.<RunCrudService> create(RunCrudService.class));
-    }
-
-    @Override
-    protected void onPopulateSuccess(TriggerDTO result) {
-        super.onPopulateSuccess(result);
-
-        runLister.setParent(result.getPrimaryKey());
-        runLister.populate();
     }
 
     @Override

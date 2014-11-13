@@ -11,22 +11,25 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.operations.client.ui.crud.scheduler.run;
+package com.propertyvista.operations.client.ui.crud.scheduler.trigger;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
+
+import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.domain.scheduler.Run;
+import com.propertyvista.operations.rpc.services.scheduler.RunCrudService;
 
-public class RunLister extends EntityDataTablePanel<Run> {
+public class RunLister extends SiteDataTablePanel<Run> {
 
     private static List<ColumnDescriptor> INLINE_VIEW_COLUMN_DESCRIPTORS = createInlineViewColumnDescriptors();
 
@@ -64,7 +67,7 @@ public class RunLister extends EntityDataTablePanel<Run> {
     }
 
     public RunLister(boolean isInlineMode) {
-        super(Run.class, false);
+        super(Run.class, GWT.<RunCrudService> create(RunCrudService.class), false);
         setDataTableModel(new DataTableModel<Run>(isInlineMode ? INLINE_VIEW_COLUMN_DESCRIPTORS : VIEW_COLUMN_DESCRIPTORS));
     }
 

@@ -20,37 +20,20 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.activity.ListerController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView.IListerPresenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.operations.client.ui.crud.simulator.pad.file.PadSimFileViewerView;
-import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
-import com.propertyvista.operations.rpc.services.simulator.PadSimBatchCrudService;
 import com.propertyvista.operations.rpc.services.simulator.PadSimFileCrudService;
 
 public class PadSimFileViewerActivity extends AdminViewerActivity<PadSimFile> implements PadSimFileViewerView.Presenter {
 
-    private final IListerPresenter<PadSimBatch> batchLister;
-
     public PadSimFileViewerActivity(CrudAppPlace place) {
         super(PadSimFile.class, place, OperationsSite.getViewFactory().getView(PadSimFileViewerView.class), GWT
                 .<AbstractCrudService<PadSimFile>> create(PadSimFileCrudService.class));
-
-        batchLister = new ListerController<PadSimBatch>(PadSimBatch.class, ((PadSimFileViewerView) getView()).getBatchListerView(),
-                GWT.<AbstractCrudService<PadSimBatch>> create(PadSimBatchCrudService.class));
-    }
-
-    @Override
-    protected void onPopulateSuccess(PadSimFile result) {
-        super.onPopulateSuccess(result);
-
-        batchLister.setParent(result.getPrimaryKey());
-        batchLister.populate();
     }
 
     @Override

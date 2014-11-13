@@ -14,10 +14,8 @@
 package com.propertyvista.operations.client.ui.crud.scheduler.trigger;
 
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
-import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.rpc.dto.TriggerDTO;
 
 public interface TriggerViewerView extends IViewerView<TriggerDTO> {
@@ -29,5 +27,5 @@ public interface TriggerViewerView extends IViewerView<TriggerDTO> {
         void runForDate(ScheduleDataDTO date);
     }
 
-    IListerView<Run> getRunListerView();
+    RunLister getRunListerView();
 }

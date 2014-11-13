@@ -16,19 +16,16 @@ package com.propertyvista.operations.client.ui.crud.simulator.pad.file;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.client.ui.crud.simulator.pad.batch.PadSimBatchLister;
-import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
 
 public class PadSimFileViewerViewImpl extends OperationsViewerViewImplBase<PadSimFile> implements PadSimFileViewerView {
 
     private static final I18n i18n = I18n.get(PadSimFileEditorViewImpl.class);
 
-    private final IListerView<PadSimBatch> batchLister;
+    private final PadSimBatchLister batchLister;
 
     Button replyAcknowledgment;
 
@@ -78,13 +75,16 @@ public class PadSimFileViewerViewImpl extends OperationsViewerViewImplBase<PadSi
     }
 
     @Override
-    public IListerView<PadSimBatch> getBatchListerView() {
+    public PadSimBatchLister getBatchListerView() {
         return batchLister;
     }
 
     @Override
     public void populate(PadSimFile value) {
         super.populate(value);
+
+        batchLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        batchLister.populate();
 
         boolean returns = ((value != null) && (value.returns().getValue(Boolean.FALSE)));
 

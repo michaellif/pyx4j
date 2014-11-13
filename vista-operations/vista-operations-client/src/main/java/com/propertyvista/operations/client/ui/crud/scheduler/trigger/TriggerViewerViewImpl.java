@@ -16,20 +16,17 @@ package com.propertyvista.operations.client.ui.crud.scheduler.trigger;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.client.ui.crud.scheduler.run.RunLister;
 import com.propertyvista.operations.domain.scheduler.PmcProcessOptions;
-import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.rpc.dto.TriggerDTO;
 
 public class TriggerViewerViewImpl extends OperationsViewerViewImplBase<TriggerDTO> implements TriggerViewerView {
 
     static final I18n i18n = I18n.get(TriggerEditorViewImpl.class);
 
-    private final IListerView<Run> runLister;
+    private final RunLister runLister;
 
     private final Button runImmediately;
 
@@ -74,7 +71,7 @@ public class TriggerViewerViewImpl extends OperationsViewerViewImplBase<TriggerD
     }
 
     @Override
-    public IListerView<Run> getRunListerView() {
+    public RunLister getRunListerView() {
         return runLister;
     }
 
@@ -89,6 +86,9 @@ public class TriggerViewerViewImpl extends OperationsViewerViewImplBase<TriggerD
     @Override
     public void populate(TriggerDTO value) {
         super.populate(value);
+
+        runLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        runLister.populate();
 
         runImmediately.setVisible(true);
         runForDate.setVisible(((value != null) && (value.triggerType().getValue() != null) && (value.triggerType().getValue()

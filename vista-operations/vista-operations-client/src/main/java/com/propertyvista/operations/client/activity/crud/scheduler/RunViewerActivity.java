@@ -20,23 +20,17 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.backoffice.activity.ListerController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView.IListerPresenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.operations.client.ui.crud.scheduler.run.RunViewerView;
 import com.propertyvista.operations.domain.scheduler.Run;
-import com.propertyvista.operations.domain.scheduler.RunData;
 import com.propertyvista.operations.domain.scheduler.RunStatus;
 import com.propertyvista.operations.rpc.dto.ExecutionStatusUpdateDTO;
 import com.propertyvista.operations.rpc.services.scheduler.RunCrudService;
-import com.propertyvista.operations.rpc.services.scheduler.RunDataCrudService;
 
 public class RunViewerActivity extends AdminViewerActivity<Run> implements RunViewerView.Presenter {
-
-    private final IListerPresenter<RunData> runDataLister;
 
     private final AsyncCallback<ExecutionStatusUpdateDTO> actionsCallback;
 
@@ -44,9 +38,6 @@ public class RunViewerActivity extends AdminViewerActivity<Run> implements RunVi
 
     public RunViewerActivity(CrudAppPlace place) {
         super(Run.class, place, OperationsSite.getViewFactory().getView(RunViewerView.class), GWT.<RunCrudService> create(RunCrudService.class));
-
-        runDataLister = new ListerController<RunData>(RunData.class, ((RunViewerView) getView()).getRunDataListerView(),
-                GWT.<RunDataCrudService> create(RunDataCrudService.class));
 
         actionsCallback = new DefaultAsyncCallback<ExecutionStatusUpdateDTO>() {
             @Override
@@ -59,9 +50,6 @@ public class RunViewerActivity extends AdminViewerActivity<Run> implements RunVi
     @Override
     protected void onPopulateSuccess(Run result) {
         super.onPopulateSuccess(result);
-
-        runDataLister.setParent(result.getPrimaryKey());
-        runDataLister.populate();
 
         updateState(result.status().getValue());
     }

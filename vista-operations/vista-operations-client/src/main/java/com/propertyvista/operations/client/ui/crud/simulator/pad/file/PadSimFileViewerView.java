@@ -14,9 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.simulator.pad.file;
 
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 
-import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
 
 public interface PadSimFileViewerView extends IViewerView<PadSimFile> {
@@ -32,5 +30,5 @@ public interface PadSimFileViewerView extends IViewerView<PadSimFile> {
         public void createReturnReconciliation();
     }
 
-    IListerView<PadSimBatch> getBatchListerView();
+    PadSimBatchLister getBatchListerView();
 }

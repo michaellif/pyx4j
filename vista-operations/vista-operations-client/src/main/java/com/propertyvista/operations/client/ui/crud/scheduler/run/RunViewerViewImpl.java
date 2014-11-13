@@ -16,13 +16,11 @@ package com.propertyvista.operations.client.ui.crud.scheduler.run;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
 import com.propertyvista.operations.domain.scheduler.Run;
-import com.propertyvista.operations.domain.scheduler.RunData;
 import com.propertyvista.operations.domain.scheduler.RunStatus;
 import com.propertyvista.operations.rpc.dto.ExecutionStatusUpdateDTO;
 
@@ -30,14 +28,14 @@ public class RunViewerViewImpl extends OperationsViewerViewImplBase<Run> impleme
 
     private static final I18n i18n = I18n.get(RunViewerViewImpl.class);
 
-    private final IListerView<RunData> runDataLister;
+    private final RunViewerDataLister runDataLister;
 
     private final Button stopRun;
 
     public RunViewerViewImpl() {
         super(true);
 
-        runDataLister = new RunDataLister(true);
+        runDataLister = new RunViewerDataLister(true);
 
         setForm(new RunForm(this));
 
@@ -59,11 +57,14 @@ public class RunViewerViewImpl extends OperationsViewerViewImplBase<Run> impleme
     public void populate(Run value) {
         super.populate(value);
 
+        runDataLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        runDataLister.populate();
+
         stopRun.setVisible(value.status().getValue() == RunStatus.Running);
     }
 
     @Override
-    public IListerView<RunData> getRunDataListerView() {
+    public RunViewerDataLister getRunDataListerView() {
         return runDataLister;
     }
 
