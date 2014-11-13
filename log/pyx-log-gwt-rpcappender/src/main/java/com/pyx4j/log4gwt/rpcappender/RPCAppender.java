@@ -33,6 +33,7 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.log4gwt.client.AppenderRemote;
 import com.pyx4j.log4gwt.client.LogFormatter;
 import com.pyx4j.log4gwt.rpc.LogServices;
+import com.pyx4j.log4gwt.rpc.LoggingService;
 import com.pyx4j.log4gwt.shared.Level;
 import com.pyx4j.log4gwt.shared.LogEvent;
 import com.pyx4j.rpc.client.RPCManager;
@@ -56,6 +57,8 @@ public class RPCAppender implements AppenderRemote {
 
     private long lastDeliveryAttemptTime;
 
+    private final boolean useNewLoggingService;
+
     private static final long deliveryErrorDelayMillis = 2 * Consts.MIN2MSEC;
 
     public RPCAppender() {
@@ -63,7 +66,12 @@ public class RPCAppender implements AppenderRemote {
     }
 
     public RPCAppender(Level level) {
+        this(level, false);
+    }
+
+    public RPCAppender(Level level, boolean v2) {
         this.level = level;
+        this.useNewLoggingService = v2;
         autoFlush(10 * Consts.SEC2MILLISECONDS);
     }
 
@@ -111,7 +119,7 @@ public class RPCAppender implements AppenderRemote {
     @Override
     public void flush() {
         try {
-            // Do not change timer rate, simply wait more when errors are happening  
+            // Do not change timer rate, simply wait more when errors are happening
             if ((deliveryErrorCount > 3) && ((lastDeliveryAttemptTime + deliveryErrorDelayMillis) > System.currentTimeMillis())) {
                 return;
             }
@@ -122,6 +130,7 @@ public class RPCAppender implements AppenderRemote {
                 buffer = new Vector<LogEvent>();
 
                 for (LogEvent event : sendBuffer) {
+                    event.serialize();
                     if (event.getFormatedMessage() == null) {
                         // Create Formated  Serializable Message
                         LogFormatter.format(event, LogFormatter.FormatStyle.LINE);
@@ -146,12 +155,15 @@ public class RPCAppender implements AppenderRemote {
                     }
                 };
                 lastDeliveryAttemptTime = System.currentTimeMillis();
-                RPCManager.executeBackground(LogServices.Log.class, sendBuffer, callback);
+                if (useNewLoggingService) {
+                    GWT.<LoggingService> create(LoggingService.class).log(callback, sendBuffer);
+                } else {
+                    RPCManager.executeBackground(LogServices.Log.class, sendBuffer, callback);
+                }
             }
         } catch (Throwable t) {
             GWT.log("Execution of LogServices failed", t);
             log.error("Execution of LogServices failed", t);
         }
     }
-
 }

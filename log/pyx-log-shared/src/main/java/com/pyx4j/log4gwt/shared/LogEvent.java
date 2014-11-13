@@ -46,6 +46,8 @@ public class LogEvent implements Serializable {
 
     private String throwableMessage;
 
+    private StackTraceElement[] stackTrace;
+
     private boolean rollOverFlag;
 
     public LogEvent() {
@@ -132,6 +134,25 @@ public class LogEvent implements Serializable {
         }
     }
 
+    /**
+     * <set-property name="compiler.stackMode" value="emulated" />
+     * <set-configuration-property name="compiler.emulatedStack.recordLineNumbers" value="true" />
+     */
+
+    public void serialize() {
+        if (throwable != null) {
+            stackTrace = throwable.getStackTrace();
+        }
+    }
+
+    public void resymbolize(Throwable throwable) {
+        this.throwable = throwable;
+    }
+
+    public StackTraceElement[] getStackTrace() {
+        return stackTrace;
+    }
+
     public String getThrowableMessage() {
         if ((throwable != null) && (throwableMessage == null)) {
             prepareThrowableMessage();
@@ -150,4 +171,5 @@ public class LogEvent implements Serializable {
     public boolean isRollOverFlag() {
         return rollOverFlag;
     }
+
 }
