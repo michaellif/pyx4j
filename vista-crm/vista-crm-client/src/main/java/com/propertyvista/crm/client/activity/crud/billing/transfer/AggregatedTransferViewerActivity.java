@@ -16,65 +16,21 @@ package com.propertyvista.crm.client.activity.crud.billing.transfer;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.backoffice.activity.ListerController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.billing.transfer.AggregatedTransferViewerView;
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
-import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
 import com.propertyvista.domain.financial.AggregatedTransfer;
-import com.propertyvista.dto.PaymentRecordDTO;
 
 public class AggregatedTransferViewerActivity extends CrmViewerActivity<AggregatedTransfer> implements AggregatedTransferViewerView.Presenter {
-
-    private final IListerView.IListerPresenter<PaymentRecordDTO> paymentLister;
-
-    private final IListerView.IListerPresenter<PaymentRecordDTO> returnedPaymentLister;
-
-    private final IListerView.IListerPresenter<PaymentRecordDTO> rejectedBatchPaymentsLister;
 
     public AggregatedTransferViewerActivity(CrudAppPlace place) {
         super(AggregatedTransfer.class, place, CrmSite.getViewFactory().getView(AggregatedTransferViewerView.class), GWT
                 .<AggregatedTransferCrudService> create(AggregatedTransferCrudService.class));
-
-        paymentLister = new ListerController<PaymentRecordDTO>(PaymentRecordDTO.class, ((AggregatedTransferViewerView) getView()).getPaymentsListerView(),
-                GWT.<PaymentRecordListService> create(PaymentRecordListService.class));
-
-        returnedPaymentLister = new ListerController<PaymentRecordDTO>(PaymentRecordDTO.class,
-                ((AggregatedTransferViewerView) getView()).getReturnedPaymentsListerView(),
-                GWT.<PaymentRecordListService> create(PaymentRecordListService.class));
-
-        rejectedBatchPaymentsLister = new ListerController<PaymentRecordDTO>(PaymentRecordDTO.class,
-                ((AggregatedTransferViewerView) getView()).getRejectedBatchPaymentsListerView(),
-                GWT.<PaymentRecordListService> create(PaymentRecordListService.class));
-    }
-
-    @Override
-    protected void onPopulateSuccess(AggregatedTransfer result) {
-        super.onPopulateSuccess(result);
-
-        PaymentRecordDTO proto = EntityFactory.getEntityPrototype(PaymentRecordDTO.class);
-
-        // BO IS Polymorphic.  Also TO class != BO
-        AggregatedTransfer typeSafeParent = (AggregatedTransfer) EntityFactory.createIdentityStub(result.getEntityMeta().getBOClass(), result.getPrimaryKey());
-
-        paymentLister.clearPreDefinedFilters();
-        paymentLister.addPreDefinedFilter(PropertyCriterion.eq(proto.aggregatedTransfer(), typeSafeParent));
-        paymentLister.populate();
-
-        returnedPaymentLister.clearPreDefinedFilters();
-        returnedPaymentLister.addPreDefinedFilter(PropertyCriterion.eq(proto.aggregatedTransferReturn(), typeSafeParent));
-        returnedPaymentLister.populate();
-
-        rejectedBatchPaymentsLister.clearPreDefinedFilters();
-        rejectedBatchPaymentsLister.addPreDefinedFilter(PropertyCriterion.eq(proto.processing().$().aggregatedTransfer(), typeSafeParent));
-        rejectedBatchPaymentsLister.populate();
     }
 
     @Override

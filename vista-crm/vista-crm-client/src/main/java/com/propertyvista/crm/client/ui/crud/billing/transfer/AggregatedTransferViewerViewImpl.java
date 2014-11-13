@@ -16,13 +16,13 @@ package com.propertyvista.crm.client.ui.crud.billing.transfer;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentRecordLister;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.FundsTransferType;
@@ -32,11 +32,11 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
 
     private static final I18n i18n = I18n.get(AggregatedTransferViewerViewImpl.class);
 
-    private final IListerView<PaymentRecordDTO> paymentLister;
+    private final PaymentRecordLister paymentLister;
 
-    private final IListerView<PaymentRecordDTO> returnedPaymentLister;
+    private final PaymentRecordLister returnedPaymentLister;
 
-    private final IListerView<PaymentRecordDTO> rejectedBatchPaymentsLister;
+    private final PaymentRecordLister rejectedBatchPaymentsLister;
 
     private final MenuItem cancelAction;
 
@@ -76,22 +76,38 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
     public void populate(AggregatedTransfer value) {
         super.populate(value);
 
+        PaymentRecordDTO proto = EntityFactory.getEntityPrototype(PaymentRecordDTO.class);
+        // BO IS Polymorphic.  Also TO class != BO
+        AggregatedTransfer typeSafeParent = (AggregatedTransfer) EntityFactory.createIdentityStub(value.getEntityMeta().getBOClass(), value.getPrimaryKey());
+
+        paymentLister.getDataSource().clearPreDefinedFilters();
+        paymentLister.getDataSource().addPreDefinedFilter(PropertyCriterion.eq(proto.aggregatedTransfer(), typeSafeParent));
+        paymentLister.populate();
+
+        returnedPaymentLister.getDataSource().clearPreDefinedFilters();
+        returnedPaymentLister.getDataSource().addPreDefinedFilter(PropertyCriterion.eq(proto.aggregatedTransferReturn(), typeSafeParent));
+        returnedPaymentLister.populate();
+
+        rejectedBatchPaymentsLister.getDataSource().clearPreDefinedFilters();
+        rejectedBatchPaymentsLister.getDataSource().addPreDefinedFilter(PropertyCriterion.eq(proto.processing().$().aggregatedTransfer(), typeSafeParent));
+        rejectedBatchPaymentsLister.populate();
+
         setActionVisible(cancelAction, value.fundsTransferType().getValue() == FundsTransferType.PreAuthorizedDebit
                 && value.status().getValue() == AggregatedTransferStatus.Rejected && value.status().getValue() != AggregatedTransferStatus.Canceled);
     }
 
     @Override
-    public IListerView<PaymentRecordDTO> getPaymentsListerView() {
+    public PaymentRecordLister getPaymentsListerView() {
         return paymentLister;
     }
 
     @Override
-    public IListerView<PaymentRecordDTO> getReturnedPaymentsListerView() {
+    public PaymentRecordLister getReturnedPaymentsListerView() {
         return returnedPaymentLister;
     }
 
     @Override
-    public IListerView<PaymentRecordDTO> getRejectedBatchPaymentsListerView() {
+    public PaymentRecordLister getRejectedBatchPaymentsListerView() {
         return rejectedBatchPaymentsLister;
     }
 }

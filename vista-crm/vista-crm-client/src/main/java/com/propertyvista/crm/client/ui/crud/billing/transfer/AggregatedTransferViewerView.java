@@ -14,10 +14,8 @@
 package com.propertyvista.crm.client.ui.crud.billing.transfer;
 
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 
 import com.propertyvista.domain.financial.AggregatedTransfer;
-import com.propertyvista.dto.PaymentRecordDTO;
 
 public interface AggregatedTransferViewerView extends IViewerView<AggregatedTransfer> {
 
@@ -27,9 +25,9 @@ public interface AggregatedTransferViewerView extends IViewerView<AggregatedTran
 
     }
 
-    IListerView<PaymentRecordDTO> getPaymentsListerView();
+    PaymentRecordLister getPaymentsListerView();
 
-    IListerView<PaymentRecordDTO> getReturnedPaymentsListerView();
+    PaymentRecordLister getReturnedPaymentsListerView();
 
-    IListerView<PaymentRecordDTO> getRejectedBatchPaymentsListerView();
+    PaymentRecordLister getRejectedBatchPaymentsListerView();
 }
