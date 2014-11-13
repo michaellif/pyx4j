@@ -27,7 +27,7 @@ public class AutoPayPolicyForm extends PolicyDTOTabPanelBasedForm<AutoPayPolicyD
 
     private static final I18n i18n = I18n.get(AutoPayPolicyForm.class);
 
-    public AutoPayPolicyForm(IFormView<AutoPayPolicyDTO> view) {
+    public AutoPayPolicyForm(IFormView<AutoPayPolicyDTO, ?> view) {
         super(AutoPayPolicyDTO.class, view);
         addTab(createPolicyEditorPanel(), i18n.tr("Settings"));
     }

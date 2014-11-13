@@ -46,7 +46,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
     private ARCodeFolder arCodeFolder;
 
-    public N4PolicyForm(IFormView<N4PolicyDTO> view) {
+    public N4PolicyForm(IFormView<N4PolicyDTO, ?> view) {
         super(N4PolicyDTO.class, view);
 
         FormPanel signatureFormPanel = new FormPanel(this);

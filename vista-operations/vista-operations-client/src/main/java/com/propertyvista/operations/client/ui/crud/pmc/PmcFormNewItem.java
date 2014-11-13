@@ -29,7 +29,7 @@ public class PmcFormNewItem extends OperationsEntityForm<PmcDTO> {
 
     private static final I18n i18n = I18n.get(PmcFormNewItem.class);
 
-    public PmcFormNewItem(IFormView<PmcDTO> view) {
+    public PmcFormNewItem(IFormView<PmcDTO, ?> view) {
         super(PmcDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

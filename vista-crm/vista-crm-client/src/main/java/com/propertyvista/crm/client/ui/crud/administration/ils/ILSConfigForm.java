@@ -28,7 +28,7 @@ public class ILSConfigForm extends CrmEntityForm<ILSConfigDTO> {
 
     private final static I18n i18n = I18n.get(ILSConfigForm.class);
 
-    public ILSConfigForm(IFormView<ILSConfigDTO> view) {
+    public ILSConfigForm(IFormView<ILSConfigDTO, ?> view) {
         super(ILSConfigDTO.class, view);
 
         Tab tab = addTab(createProvidersTab(), i18n.tr("ILS Settings"));

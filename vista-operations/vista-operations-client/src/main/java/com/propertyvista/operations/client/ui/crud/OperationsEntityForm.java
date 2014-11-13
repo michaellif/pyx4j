@@ -21,7 +21,7 @@ import com.propertyvista.operations.client.ui.components.OperationsEditorsCompon
 
 public abstract class OperationsEntityForm<E extends IEntity> extends PrimeEntityForm<E> {
 
-    public OperationsEntityForm(Class<E> rootClass, IFormView<E> view) {
+    public OperationsEntityForm(Class<E> rootClass, IFormView<E, ?> view) {
         super(rootClass, new OperationsEditorsComponentFactory(), view);
     }
 }

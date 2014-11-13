@@ -25,7 +25,7 @@ public class OutgoingMailForm extends OperationsEntityForm<OutgoingMailQueueDTO>
 
     private static final I18n i18n = I18n.get(OutgoingMailForm.class);
 
-    public OutgoingMailForm(IFormView<OutgoingMailQueueDTO> view) {
+    public OutgoingMailForm(IFormView<OutgoingMailQueueDTO, ?> view) {
         super(OutgoingMailQueueDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

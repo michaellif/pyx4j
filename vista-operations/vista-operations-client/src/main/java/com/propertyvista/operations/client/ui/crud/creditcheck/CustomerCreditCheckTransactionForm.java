@@ -30,7 +30,7 @@ public class CustomerCreditCheckTransactionForm extends OperationsEntityForm<Cus
 
     private static final I18n i18n = I18n.get(CustomerCreditCheckTransactionForm.class);
 
-    public CustomerCreditCheckTransactionForm(IFormView<CustomerCreditCheckTransactionDTO> view) {
+    public CustomerCreditCheckTransactionForm(IFormView<CustomerCreditCheckTransactionDTO, ?> view) {
         super(CustomerCreditCheckTransactionDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

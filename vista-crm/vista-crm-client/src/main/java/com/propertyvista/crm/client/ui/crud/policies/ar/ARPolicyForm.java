@@ -29,7 +29,7 @@ public class ARPolicyForm extends PolicyDTOTabPanelBasedForm<ARPolicyDTO> {
 
     private static final I18n i18n = I18n.get(ARPolicyForm.class);
 
-    public ARPolicyForm(IFormView<ARPolicyDTO> view) {
+    public ARPolicyForm(IFormView<ARPolicyDTO, ?> view) {
         super(ARPolicyDTO.class, view);
         addTab(createARPoliciesTab(), i18n.tr("AR Settings"));
     }

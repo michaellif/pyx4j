@@ -33,7 +33,7 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
 
     private static final I18n i18n = I18n.get(MerchantAccountForm.class);
 
-    public MerchantAccountForm(IFormView<MerchantAccount> view) {
+    public MerchantAccountForm(IFormView<MerchantAccount, ?> view) {
         super(MerchantAccount.class, view);
 
         FormPanel formPanel = new FormPanel(this);

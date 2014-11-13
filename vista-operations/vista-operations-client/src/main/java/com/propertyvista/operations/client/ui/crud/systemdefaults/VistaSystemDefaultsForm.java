@@ -29,7 +29,7 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
 
     public static I18n i18n = I18n.get(VistaSystemDefaultsForm.class);
 
-    public VistaSystemDefaultsForm(IFormView<VistaSystemDefaultsDTO> view) {
+    public VistaSystemDefaultsForm(IFormView<VistaSystemDefaultsDTO, ?> view) {
         super(VistaSystemDefaultsDTO.class, view);
         createTabs();
     }

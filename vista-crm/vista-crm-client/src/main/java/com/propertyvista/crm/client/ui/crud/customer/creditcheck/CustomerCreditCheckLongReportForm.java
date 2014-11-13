@@ -46,7 +46,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
     private static final I18n i18n = I18n.get(CustomerCreditCheckLongReportForm.class);
 
     @SuppressWarnings("unused")
-    public CustomerCreditCheckLongReportForm(IFormView<CustomerCreditCheckLongReportDTO> view) {
+    public CustomerCreditCheckLongReportForm(IFormView<CustomerCreditCheckLongReportDTO, ?> view) {
         super(CustomerCreditCheckLongReportDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

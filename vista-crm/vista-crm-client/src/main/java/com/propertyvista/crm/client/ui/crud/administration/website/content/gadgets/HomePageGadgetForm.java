@@ -45,7 +45,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
 
     private final Map<GadgetType, CComponent<?, ?, ?, ?>> panelMap = new HashMap<GadgetType, CComponent<?, ?, ?, ?>>();
 
-    public HomePageGadgetForm(IFormView<HomePageGadget> view) {
+    public HomePageGadgetForm(IFormView<HomePageGadget, ?> view) {
         super(HomePageGadget.class, view);
         mainPanel = new SimplePanel();
         mainPanel.setSize("100%", "100%");

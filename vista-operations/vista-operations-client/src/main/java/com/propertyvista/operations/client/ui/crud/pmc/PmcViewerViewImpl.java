@@ -24,7 +24,6 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.essentials.client.ConfirmCommand;
 import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.site.client.ReportDialog;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 
@@ -176,7 +175,7 @@ public class PmcViewerViewImpl extends OperationsViewerViewImplBase<PmcDTO> impl
     }
 
     @Override
-    public void setPresenter(IFormView.IPrimePanePresenter presenter) {
+    public void setPresenter(IViewerPresenter presenter) {
         super.setPresenter(presenter);
         if (presenter != null) {
             ((PmcForm) getForm()).setOnboardingMerchantAccountsSource(((PmcViewerView.Presenter) presenter).getOnboardingMerchantAccountsSource());

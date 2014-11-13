@@ -32,7 +32,7 @@ public class MaintenanceForm extends OperationsEntityForm<VistaSystemMaintenance
 
     private static final I18n i18n = I18n.get(MaintenanceForm.class);
 
-    public MaintenanceForm(IFormView<VistaSystemMaintenanceState> view) {
+    public MaintenanceForm(IFormView<VistaSystemMaintenanceState, ?> view) {
         super(VistaSystemMaintenanceState.class, view);
 
         FormPanel formPanel = new FormPanel(this);

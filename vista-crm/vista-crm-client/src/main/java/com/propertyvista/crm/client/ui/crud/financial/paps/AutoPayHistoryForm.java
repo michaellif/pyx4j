@@ -42,7 +42,7 @@ public class AutoPayHistoryForm extends CrmEntityForm<AutoPayHistoryDTO> {
 
     private static final I18n i18n = I18n.get(AutoPayHistoryForm.class);
 
-    public AutoPayHistoryForm(IFormView<AutoPayHistoryDTO> view) {
+    public AutoPayHistoryForm(IFormView<AutoPayHistoryDTO, ?> view) {
         super(AutoPayHistoryDTO.class, view);
         createTabs();
     }

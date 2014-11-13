@@ -40,7 +40,7 @@ class CardServiceSimulationCardForm extends OperationsEntityForm<CardServiceSimu
 
     private CardServiceSimulationTransactionLister transactionLister;
 
-    public CardServiceSimulationCardForm(IFormView<CardServiceSimulationCard> view) {
+    public CardServiceSimulationCardForm(IFormView<CardServiceSimulationCard, ?> view) {
         super(CardServiceSimulationCard.class, view);
 
         transactionLister = new CardServiceSimulationTransactionListerViewImpl.CardServiceSimulationTransactionLister();

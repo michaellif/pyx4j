@@ -84,7 +84,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
     private final MessageFolder messagesFolder;
 
-    public MessageForm(IFormView<MessageDTO> view) {
+    public MessageForm(IFormView<MessageDTO, ?> view) {
         super(MessageDTO.class, view);
         setTabBarVisible(false);
         messagesFolder = new MessageFolder(this);

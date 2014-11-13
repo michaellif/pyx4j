@@ -25,7 +25,7 @@ import com.propertyvista.domain.site.CityIntroPage;
 public class CityIntroPageForm extends CrmEntityForm<CityIntroPage> {
     private static final I18n i18n = I18n.get(CityIntroPageForm.class);
 
-    public CityIntroPageForm(IFormView<CityIntroPage> view) {
+    public CityIntroPageForm(IFormView<CityIntroPage, ?> view) {
         super(CityIntroPage.class, view);
 
         FormPanel formPanel = new FormPanel(this);

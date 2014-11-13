@@ -29,7 +29,7 @@ public class FundsTransferBatchForm extends OperationsEntityForm<FundsTransferBa
 
     private static final I18n i18n = I18n.get(FundsTransferBatchForm.class);
 
-    public FundsTransferBatchForm(IFormView<FundsTransferBatchDTO> view) {
+    public FundsTransferBatchForm(IFormView<FundsTransferBatchDTO, ?> view) {
         super(FundsTransferBatchDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

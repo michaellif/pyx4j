@@ -110,7 +110,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
     private FormPanel ilsEmailProfilePanel;
 
-    public BuildingForm(IFormView<BuildingDTO> view) {
+    public BuildingForm(IFormView<BuildingDTO, ?> view) {
         super(BuildingDTO.class, view);
 
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));

@@ -34,7 +34,7 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
 
     private static final I18n i18n = I18n.get(BillingCycleForm.class);
 
-    public BillingCycleForm(IFormView<BillingCycleDTO> view) {
+    public BillingCycleForm(IFormView<BillingCycleDTO, ?> view) {
         super(BillingCycleDTO.class, view);
         FormPanel formPanel = new FormPanel(this);
 

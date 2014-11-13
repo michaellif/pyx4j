@@ -56,7 +56,7 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
 
     private final IdUploaderFolder fileUpload = new IdUploaderFolder();
 
-    public CustomerScreeningForm(IFormView<LeaseParticipantScreeningTO> view) {
+    public CustomerScreeningForm(IFormView<LeaseParticipantScreeningTO, ?> view) {
         super(LeaseParticipantScreeningTO.class, view);
 
         selectTab(addTab(createIdentificationDocumentsTab(), i18n.tr("Identification Documents")));

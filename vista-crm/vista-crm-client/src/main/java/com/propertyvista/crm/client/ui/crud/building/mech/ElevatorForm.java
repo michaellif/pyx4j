@@ -26,7 +26,7 @@ public class ElevatorForm extends MechBaseForm<ElevatorDTO> {
 
     private static final I18n i18n = I18n.get(ElevatorForm.class);
 
-    public ElevatorForm(IFormView<ElevatorDTO> view) {
+    public ElevatorForm(IFormView<ElevatorDTO, ?> view) {
         super(ElevatorDTO.class, view);
     }
 

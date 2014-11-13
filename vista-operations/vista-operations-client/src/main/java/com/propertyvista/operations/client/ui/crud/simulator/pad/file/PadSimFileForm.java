@@ -29,7 +29,7 @@ public class PadSimFileForm extends OperationsEntityForm<PadSimFile> {
 
     private static final I18n i18n = I18n.get(PadSimFileForm.class);
 
-    public PadSimFileForm(IFormView<PadSimFile> view) {
+    public PadSimFileForm(IFormView<PadSimFile, ?> view) {
         super(PadSimFile.class, view);
 
         FormPanel formPanel = new FormPanel(this);

@@ -54,7 +54,7 @@ public class DirectDebitSimFileForm extends OperationsEntityForm<DirectDebitSimF
 
     }
 
-    public DirectDebitSimFileForm(IFormView<DirectDebitSimFile> view) {
+    public DirectDebitSimFileForm(IFormView<DirectDebitSimFile, ?> view) {
         super(DirectDebitSimFile.class, view);
 
         FormPanel formPanel = new FormPanel(this);

@@ -21,7 +21,6 @@ import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.rpc.AbstractVersionDataListService;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
 import com.pyx4j.site.client.backoffice.ui.prime.form.AbstractViewerView;
 import com.pyx4j.widgets.client.Button;
 
@@ -68,7 +67,7 @@ public class OperationsViewerViewImplBase<E extends IEntity> extends AbstractVie
     }
 
     @Override
-    public void setPresenter(IPrimePaneView.IPrimePanePresenter presenter) {
+    public void setPresenter(IViewerPresenter presenter) {
         super.setPresenter(presenter);
         if (presenter != null) {
             reset(); // initialize the view!..

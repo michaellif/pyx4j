@@ -59,7 +59,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
     @SuppressWarnings("rawtypes")
     private final CComboBox<NodeType> selectPolicyScopeBox = new CComboBox<NodeType>(true);
 
-    public PolicyDTOTabPanelBasedForm(Class<POLICY_DTO> policyDTOClass, final IFormView<POLICY_DTO> view) {
+    public PolicyDTOTabPanelBasedForm(Class<POLICY_DTO> policyDTOClass, final IFormView<POLICY_DTO, ?> view) {
         super(policyDTOClass, view);
 
         selectPolicyScopeBox.setViewable(isViewable());

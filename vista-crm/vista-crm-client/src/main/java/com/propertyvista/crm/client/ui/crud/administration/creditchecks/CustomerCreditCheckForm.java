@@ -38,7 +38,7 @@ public class CustomerCreditCheckForm extends CrmEntityForm<CustomerCreditCheckDT
 
     private static final I18n i18n = I18n.get(CustomerCreditCheckForm.class);
 
-    public CustomerCreditCheckForm(IFormView<CustomerCreditCheckDTO> view) {
+    public CustomerCreditCheckForm(IFormView<CustomerCreditCheckDTO, ?> view) {
         super(CustomerCreditCheckDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

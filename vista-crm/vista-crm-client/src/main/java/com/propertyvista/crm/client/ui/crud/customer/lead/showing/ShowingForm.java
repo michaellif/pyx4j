@@ -47,7 +47,7 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
 
     private static final I18n i18n = I18n.get(ShowingForm.class);
 
-    public ShowingForm(IFormView<ShowingDTO> view) {
+    public ShowingForm(IFormView<ShowingDTO, ?> view) {
         super(ShowingDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

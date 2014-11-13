@@ -26,7 +26,7 @@ public class UnitItemForm extends CrmEntityForm<AptUnitItem> {
 
     private static final I18n i18n = I18n.get(UnitItemForm.class);
 
-    public UnitItemForm(IFormView<AptUnitItem> view) {
+    public UnitItemForm(IFormView<AptUnitItem, ?> view) {
         super(AptUnitItem.class, view);
 
         FormPanel formPanel = new FormPanel(this);

@@ -55,7 +55,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
     private static final I18n i18n = I18n.get(LeadForm.class);
 
-    public LeadForm(IFormView<Lead> view) {
+    public LeadForm(IFormView<Lead, ?> view) {
         super(Lead.class, view);
 
         Tab tab = addTab(createGuestsTab(), i18n.tr("Guests"));
@@ -73,6 +73,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
         super.addValidations();
 
         get(proto().guests()).addComponentValidator(new AbstractComponentValidator<List<Guest>>() {
+
 
 
 

@@ -25,7 +25,7 @@ public class YardiInterfacePolicyForm extends PolicyDTOTabPanelBasedForm<YardiIn
 
     private static final I18n i18n = I18n.get(YardiInterfacePolicyDTO.class);
 
-    public YardiInterfacePolicyForm(IFormView<YardiInterfacePolicyDTO> view) {
+    public YardiInterfacePolicyForm(IFormView<YardiInterfacePolicyDTO, ?> view) {
         super(YardiInterfacePolicyDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

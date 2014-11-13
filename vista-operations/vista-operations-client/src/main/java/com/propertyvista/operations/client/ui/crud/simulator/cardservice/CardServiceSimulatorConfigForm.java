@@ -16,8 +16,8 @@ package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -27,7 +27,7 @@ import com.propertyvista.operations.rpc.dto.CardServiceSimulatorConfigDTO;
 
 public class CardServiceSimulatorConfigForm extends OperationsEntityForm<CardServiceSimulatorConfigDTO> {
 
-    public CardServiceSimulatorConfigForm(IFormView<CardServiceSimulatorConfigDTO> view) {
+    public CardServiceSimulatorConfigForm(IFormView<CardServiceSimulatorConfigDTO, ?> view) {
         super(CardServiceSimulatorConfigDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

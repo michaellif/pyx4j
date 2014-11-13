@@ -38,7 +38,7 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
 
     private final static I18n i18n = I18n.get(LeaseAdjustmentPolicyForm.class);
 
-    public LeaseAdjustmentPolicyForm(IFormView<LeaseAdjustmentPolicyDTO> view) {
+    public LeaseAdjustmentPolicyForm(IFormView<LeaseAdjustmentPolicyDTO, ?> view) {
         super(LeaseAdjustmentPolicyDTO.class, view);
         addTab(createItemsPanel(), i18n.tr(i18n.tr("Items")));
 

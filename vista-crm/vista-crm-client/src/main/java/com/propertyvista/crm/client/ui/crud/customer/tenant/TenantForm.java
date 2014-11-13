@@ -54,7 +54,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
     private EmergencyContactFolder emergencyContactFolder;
 
-    public TenantForm(IFormView<TenantDTO> view) {
+    public TenantForm(IFormView<TenantDTO, ?> view) {
         super(TenantDTO.class, view);
 
         selectTab(addTab(createDetailsTab(), i18n.tr("Details")));

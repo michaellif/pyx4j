@@ -45,7 +45,7 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
 
     private static final I18n i18n = I18n.get(CrmRoleForm.class);
 
-    public CrmRoleForm(IFormView<CrmRole> view) {
+    public CrmRoleForm(IFormView<CrmRole, ?> view) {
         super(CrmRole.class, view);
 
         FormPanel formPanel = new FormPanel(this);

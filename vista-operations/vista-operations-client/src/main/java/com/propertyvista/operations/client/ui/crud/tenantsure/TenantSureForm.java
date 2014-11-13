@@ -25,7 +25,7 @@ public class TenantSureForm extends OperationsEntityForm<TenantSureDTO> {
 
     private static final I18n i18n = I18n.get(TenantSureForm.class);
 
-    public TenantSureForm(IFormView<TenantSureDTO> view) {
+    public TenantSureForm(IFormView<TenantSureDTO, ?> view) {
         super(TenantSureDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

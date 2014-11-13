@@ -25,7 +25,7 @@ public class DepositLifecycleForm extends CrmEntityForm<DepositLifecycleDTO> {
 
     private static final I18n i18n = I18n.get(DepositLifecycleForm.class);
 
-    public DepositLifecycleForm(IFormView<DepositLifecycleDTO> view) {
+    public DepositLifecycleForm(IFormView<DepositLifecycleDTO, ?> view) {
         super(DepositLifecycleDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

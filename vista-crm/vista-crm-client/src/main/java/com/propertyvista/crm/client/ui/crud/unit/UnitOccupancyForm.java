@@ -30,7 +30,7 @@ public class UnitOccupancyForm extends CrmEntityForm<AptUnitOccupancySegment> {
 
     private static final I18n i18n = I18n.get(UnitOccupancyForm.class);
 
-    public UnitOccupancyForm(IFormView<AptUnitOccupancySegment> view) {
+    public UnitOccupancyForm(IFormView<AptUnitOccupancySegment, ?> view) {
         super(AptUnitOccupancySegment.class, view);
 
         FormPanel formPanel = new FormPanel(this);

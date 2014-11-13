@@ -15,8 +15,8 @@ package com.propertyvista.operations.client.ui.crud.auditrecords;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
@@ -32,7 +32,7 @@ public class AuditRecordForm extends OperationsEntityForm<AuditRecordOperationsD
 
     private static final I18n i18n = I18n.get(AuditRecordForm.class);
 
-    public AuditRecordForm(IFormView<AuditRecordOperationsDTO> view) {
+    public AuditRecordForm(IFormView<AuditRecordOperationsDTO, ?> view) {
         super(AuditRecordOperationsDTO.class, view);
 
         setTabBarVisible(false);

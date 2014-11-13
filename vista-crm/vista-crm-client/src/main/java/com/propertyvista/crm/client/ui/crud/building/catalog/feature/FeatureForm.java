@@ -37,7 +37,7 @@ public class FeatureForm extends CrmEntityForm<Feature> {
 
     private Widget headerDeposits, headerLMR, headerMoveIn, headerSecurity;
 
-    public FeatureForm(IFormView<Feature> view) {
+    public FeatureForm(IFormView<Feature, ?> view) {
         super(Feature.class, view);
 
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));

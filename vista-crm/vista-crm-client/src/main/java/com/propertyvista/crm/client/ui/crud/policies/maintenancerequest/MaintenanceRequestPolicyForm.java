@@ -38,7 +38,7 @@ public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<Mai
 
     private final static I18n i18n = I18n.get(MaintenanceRequestPolicyForm.class);
 
-    public MaintenanceRequestPolicyForm(IFormView<MaintenanceRequestPolicyDTO> view) {
+    public MaintenanceRequestPolicyForm(IFormView<MaintenanceRequestPolicyDTO, ?> view) {
         super(MaintenanceRequestPolicyDTO.class, view);
         addTab(createGeneralPanel(), i18n.tr("General"));
     }

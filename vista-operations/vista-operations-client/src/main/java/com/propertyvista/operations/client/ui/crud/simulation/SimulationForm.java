@@ -28,7 +28,7 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
 
     private final static I18n i18n = I18n.get(SimulationForm.class);
 
-    public SimulationForm(IFormView<SimulationDTO> view) {
+    public SimulationForm(IFormView<SimulationDTO, ?> view) {
         super(SimulationDTO.class, view);
 
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));

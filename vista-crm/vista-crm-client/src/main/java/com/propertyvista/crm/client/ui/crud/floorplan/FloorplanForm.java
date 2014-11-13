@@ -65,7 +65,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
     private final Tab marketingTab;
 
-    public FloorplanForm(IFormView<FloorplanDTO> view) {
+    public FloorplanForm(IFormView<FloorplanDTO, ?> view) {
         super(FloorplanDTO.class, view);
 
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));

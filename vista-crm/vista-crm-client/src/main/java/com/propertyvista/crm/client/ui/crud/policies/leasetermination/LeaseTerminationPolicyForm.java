@@ -25,7 +25,7 @@ public class LeaseTerminationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
 
     private static final I18n i18n = I18n.get(LeaseTerminationPolicyForm.class);
 
-    public LeaseTerminationPolicyForm(IFormView<LeaseTerminationPolicyDTO> view) {
+    public LeaseTerminationPolicyForm(IFormView<LeaseTerminationPolicyDTO, ?> view) {
         super(LeaseTerminationPolicyDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

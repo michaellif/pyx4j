@@ -36,7 +36,7 @@ public class FundsTransferFileForm extends OperationsEntityForm<FundsTransferFil
 
     private static final I18n i18n = I18n.get(FundsTransferFileForm.class);
 
-    public FundsTransferFileForm(IFormView<FundsTransferFileDTO> view) {
+    public FundsTransferFileForm(IFormView<FundsTransferFileDTO, ?> view) {
         super(FundsTransferFileDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

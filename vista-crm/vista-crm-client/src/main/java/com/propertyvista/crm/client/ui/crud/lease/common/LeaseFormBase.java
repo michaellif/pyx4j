@@ -54,7 +54,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
     private TenantInLeaseFolder tenantInLeaseFolder;
 
-    protected LeaseFormBase(Class<DTO> clazz, IFormView<DTO> view) {
+    protected LeaseFormBase(Class<DTO> clazz, IFormView<DTO, ?> view) {
         super(clazz, view);
         setEditable(false);
     }

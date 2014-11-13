@@ -28,7 +28,7 @@ public class LockerAreaForm extends CrmEntityForm<LockerAreaDTO> {
 
     private static final I18n i18n = I18n.get(LockerAreaForm.class);
 
-    public LockerAreaForm(IFormView<LockerAreaDTO> view) {
+    public LockerAreaForm(IFormView<LockerAreaDTO, ?> view) {
         super(LockerAreaDTO.class, view);
 
         Tab tab = addTab(createDetailsTab(), i18n.tr("Details"));

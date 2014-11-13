@@ -35,7 +35,7 @@ public class FundsReconciliationSummaryForm extends OperationsEntityForm<FundsRe
 
     private static final I18n i18n = I18n.get(FundsReconciliationSummaryForm.class);
 
-    public FundsReconciliationSummaryForm(IFormView<FundsReconciliationSummaryDTO> view) {
+    public FundsReconciliationSummaryForm(IFormView<FundsReconciliationSummaryDTO, ?> view) {
         super(FundsReconciliationSummaryDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

@@ -48,7 +48,7 @@ public class MessageCategoryForm extends CrmEntityForm<MessageCategory> {
 
     private Widget dispatcherHeader;
 
-    public MessageCategoryForm(IFormView<MessageCategory> view) {
+    public MessageCategoryForm(IFormView<MessageCategory, ?> view) {
         super(MessageCategory.class, view);
 
         mainTab = createInfoTab();

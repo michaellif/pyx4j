@@ -78,7 +78,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
     private final Class<P> rootClass;
 
-    public LeaseParticipantForm(Class<P> rootClass, IFormView<P> view) {
+    public LeaseParticipantForm(Class<P> rootClass, IFormView<P, ?> view) {
         super(rootClass, view);
         this.rootClass = rootClass;
     }

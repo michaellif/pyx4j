@@ -28,7 +28,7 @@ public class BoilerForm extends MechBaseForm<BoilerDTO> {
 
     private static final I18n i18n = I18n.get(BoilerForm.class);
 
-    public BoilerForm(IFormView<BoilerDTO> view) {
+    public BoilerForm(IFormView<BoilerDTO, ?> view) {
         super(BoilerDTO.class, view);
     }
 

@@ -24,7 +24,7 @@ import com.propertyvista.domain.policy.dto.LegalTermsPolicyDTO;
 
 public class LegalTermsPolicyForm extends PolicyDTOTabPanelBasedForm<LegalTermsPolicyDTO> {
 
-    public LegalTermsPolicyForm(IFormView<LegalTermsPolicyDTO> view) {
+    public LegalTermsPolicyForm(IFormView<LegalTermsPolicyDTO, ?> view) {
         super(LegalTermsPolicyDTO.class, view);
 
         addTab(createResidentPortalTermsAndConditionsPanel(), proto().residentPortalTermsAndConditions().getMeta().getCaption());

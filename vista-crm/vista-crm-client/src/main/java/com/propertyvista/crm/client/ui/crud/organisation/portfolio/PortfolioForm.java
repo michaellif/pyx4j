@@ -26,7 +26,7 @@ public class PortfolioForm extends CrmEntityForm<Portfolio> {
 
     private static final I18n i18n = I18n.get(PortfolioForm.class);
 
-    public PortfolioForm(IFormView<Portfolio> view) {
+    public PortfolioForm(IFormView<Portfolio, ?> view) {
         super(Portfolio.class, view);
 
         FormPanel formPanel = new FormPanel(this);

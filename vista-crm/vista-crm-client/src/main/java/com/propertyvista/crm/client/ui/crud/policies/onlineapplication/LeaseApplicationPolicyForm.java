@@ -32,7 +32,7 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
 
     private static final I18n i18n = I18n.get(LeaseApplicationPolicyForm.class);
 
-    public LeaseApplicationPolicyForm(IFormView<LeaseApplicationPolicyDTO> view) {
+    public LeaseApplicationPolicyForm(IFormView<LeaseApplicationPolicyDTO, ?> view) {
         super(LeaseApplicationPolicyDTO.class, view);
 
         FormPanel legalTermsFormPanel = new FormPanel(this);

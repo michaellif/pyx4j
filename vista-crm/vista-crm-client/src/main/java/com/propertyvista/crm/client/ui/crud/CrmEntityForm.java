@@ -23,7 +23,7 @@ public abstract class CrmEntityForm<E extends IEntity> extends PrimeEntityForm<E
 
     private final Class<E> rootClass;
 
-    public CrmEntityForm(Class<E> rootClass, IFormView<E> view) {
+    public CrmEntityForm(Class<E> rootClass, IFormView<E, ?> view) {
         super(rootClass, new VistaEditorsComponentFactory(), view);
         this.rootClass = rootClass;
     }

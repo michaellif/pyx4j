@@ -32,7 +32,7 @@ public class BackgroundCheckPolicyForm extends PolicyDTOTabPanelBasedForm<Backgr
 
     private final static I18n i18n = I18n.get(BackgroundCheckPolicyForm.class);
 
-    public BackgroundCheckPolicyForm(IFormView<BackgroundCheckPolicyDTO> view) {
+    public BackgroundCheckPolicyForm(IFormView<BackgroundCheckPolicyDTO, ?> view) {
         super(BackgroundCheckPolicyDTO.class, view);
         addTab(createItemsPanel(), i18n.tr("Policy"));
     }

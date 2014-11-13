@@ -33,7 +33,7 @@ public class CreditCheckStatusForm extends CrmEntityForm<CreditCheckStatusDTO> {
 
     private static final I18n i18n = I18n.get(CreditCheckStatusForm.class);
 
-    public CreditCheckStatusForm(IFormView<CreditCheckStatusDTO> view) {
+    public CreditCheckStatusForm(IFormView<CreditCheckStatusDTO, ?> view) {
         super(CreditCheckStatusDTO.class, view);
         FormPanel formPanel = new FormPanel(this);
         formPanel.h1(i18n.tr("Powered By"));

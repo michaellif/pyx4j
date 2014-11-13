@@ -79,7 +79,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
     private final FormPanel buildingsAccessPanel;
 
-    public EmployeeForm(IFormView<EmployeeDTO> view) {
+    public EmployeeForm(IFormView<EmployeeDTO, ?> view) {
         super(EmployeeDTO.class, view);
         buildingsAccessPanel = new FormPanel(this);
 

@@ -29,7 +29,7 @@ public abstract class MechBaseForm<E extends LicensedWarrantedMaintained> extend
 
     private static final I18n i18n = I18n.get(MechBaseForm.class);
 
-    protected MechBaseForm(Class<E> entityClass, IFormView<E> view) {
+    protected MechBaseForm(Class<E> entityClass, IFormView<E, ?> view) {
         super(entityClass, view);
 
         Tab tab = addTab(createGeneralTab(), i18n.tr("General"));

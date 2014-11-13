@@ -129,7 +129,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     // multiple buildings that belong to the same Yardi account will share the same Meta
     private final Map<String, MaintenanceRequestMetadata> categoryMetaCache = new HashMap<String, MaintenanceRequestMetadata>();
 
-    public MaintenanceRequestForm(IFormView<MaintenanceRequestDTO> view) {
+    public MaintenanceRequestForm(IFormView<MaintenanceRequestDTO, ?> view) {
         super(MaintenanceRequestDTO.class, view);
 
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));

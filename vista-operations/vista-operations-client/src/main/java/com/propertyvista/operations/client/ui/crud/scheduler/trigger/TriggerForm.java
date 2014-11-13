@@ -33,7 +33,7 @@ public class TriggerForm extends OperationsEntityForm<TriggerDTO> {
 
     private static final I18n i18n = I18n.get(TriggerForm.class);
 
-    public TriggerForm(IFormView<TriggerDTO> view) {
+    public TriggerForm(IFormView<TriggerDTO, ?> view) {
         super(TriggerDTO.class, view);
 
         Tab tab = addTab(createDetailsTab(), i18n.tr("Details"));

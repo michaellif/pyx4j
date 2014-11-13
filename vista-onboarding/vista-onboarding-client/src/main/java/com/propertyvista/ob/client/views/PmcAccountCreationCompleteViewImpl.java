@@ -101,4 +101,16 @@ public class PmcAccountCreationCompleteViewImpl extends Composite implements Pmc
         return false;
     }
 
+    @Override
+    public void setPresenter(IPanePresenter presenter) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public IPanePresenter getPresenter() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

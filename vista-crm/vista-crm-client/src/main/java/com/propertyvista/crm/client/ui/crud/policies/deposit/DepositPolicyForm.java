@@ -27,7 +27,7 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
 
     private final static I18n i18n = I18n.get(DepositPolicyForm.class);
 
-    public DepositPolicyForm(IFormView<DepositPolicyDTO> view) {
+    public DepositPolicyForm(IFormView<DepositPolicyDTO, ?> view) {
         super(DepositPolicyDTO.class, view);
         addTab(createItemsPanel(), i18n.tr("Details"));
     }

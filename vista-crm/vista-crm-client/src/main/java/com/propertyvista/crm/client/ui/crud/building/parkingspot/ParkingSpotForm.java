@@ -25,7 +25,7 @@ public class ParkingSpotForm extends CrmEntityForm<ParkingSpot> {
 
     private static final I18n i18n = I18n.get(ParkingSpotForm.class);
 
-    public ParkingSpotForm(IFormView<ParkingSpot> view) {
+    public ParkingSpotForm(IFormView<ParkingSpot, ?> view) {
         super(ParkingSpot.class, view);
 
         FormPanel formPanel = new FormPanel(this);

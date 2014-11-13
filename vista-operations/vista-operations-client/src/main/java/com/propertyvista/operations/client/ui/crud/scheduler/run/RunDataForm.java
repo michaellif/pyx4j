@@ -35,7 +35,7 @@ public class RunDataForm extends OperationsEntityForm<RunData> {
 
     private final ExecutionReportSectionLister reportSectionLister;
 
-    public RunDataForm(IFormView<RunData> view) {
+    public RunDataForm(IFormView<RunData, ?> view) {
         super(RunData.class, view);
 
         FormPanel formPanel = new FormPanel(this);

@@ -26,7 +26,7 @@ public class DashboardManagementForm extends CrmEntityForm<DashboardMetadata> {
 
     private static final I18n i18n = I18n.get(DashboardManagementForm.class);
 
-    public DashboardManagementForm(IFormView<DashboardMetadata> view) {
+    public DashboardManagementForm(IFormView<DashboardMetadata, ?> view) {
         super(DashboardMetadata.class, view);
 
         FormPanel formPanel = new FormPanel(this);

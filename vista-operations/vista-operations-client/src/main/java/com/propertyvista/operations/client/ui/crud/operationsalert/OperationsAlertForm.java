@@ -27,7 +27,7 @@ public class OperationsAlertForm extends OperationsEntityForm<OperationsAlertDTO
 
     private static final I18n i18n = I18n.get(OperationsAlertForm.class);
 
-    public OperationsAlertForm(IFormView<OperationsAlertDTO> view) {
+    public OperationsAlertForm(IFormView<OperationsAlertDTO, ?> view) {
         super(OperationsAlertDTO.class, view);
 
         setTabBarVisible(false);

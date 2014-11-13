@@ -31,7 +31,7 @@ public class PmcCompanyInfoForm extends CrmEntityForm<PmcCompanyInfoDTO> {
 
     private static final I18n i18n = I18n.get(PmcCompanyInfoForm.class);
 
-    public PmcCompanyInfoForm(IFormView<PmcCompanyInfoDTO> view) {
+    public PmcCompanyInfoForm(IFormView<PmcCompanyInfoDTO, ?> view) {
         super(PmcCompanyInfoDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

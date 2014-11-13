@@ -40,12 +40,11 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
     private final Tab depositsTab, adjustmentsTab, chargesTab, billsTab, paymentsTab, financialTab, maintenanceTab, communicationTab;
 
-    public LeaseForm(IFormView<LeaseDTO> view) {
+    public LeaseForm(IFormView<LeaseDTO, ?> view) {
         super(LeaseDTO.class, view);
 
         selectTab(addTab(createDetailsTab(), i18n.tr("Details")));
-        depositsTab = addTab(getParentView().getDepositLister().asWidget(), i18n.tr("Deposits"),
-                DataModelPermission.permissionRead(DepositLifecycleDTO.class));
+        depositsTab = addTab(getParentView().getDepositLister().asWidget(), i18n.tr("Deposits"), DataModelPermission.permissionRead(DepositLifecycleDTO.class));
         adjustmentsTab = addTab(getParentView().getLeaseAdjustmentLister().asWidget(), i18n.tr("Adjustments"),
                 DataModelPermission.permissionRead(LeaseAdjustment.class));
         chargesTab = addTab(createChargesTab(), i18n.tr("Charges"));

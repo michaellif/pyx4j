@@ -29,7 +29,7 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
 
     private static final I18n i18n = I18n.get(AppointmentForm.class);
 
-    public AppointmentForm(IFormView<Appointment> view) {
+    public AppointmentForm(IFormView<Appointment, ?> view) {
         super(Appointment.class, view);
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));
         setTabEnabled(addTab(createShowingsTab(), i18n.tr("Showings")), !isEditable());

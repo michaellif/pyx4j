@@ -25,6 +25,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel;
 import com.pyx4j.gwt.commons.css.CssVariable;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
+import com.pyx4j.site.client.backoffice.ui.prime.dashboard.IDashboardView.IDashboardPresenter;
 
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashboard;
@@ -33,7 +34,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class DashboardViewImpl extends AbstractPrimePaneView implements DashboardView {
+public class DashboardViewImpl extends AbstractPrimePaneView<IDashboardPresenter> implements DashboardView {
 
     private final BuildingsSelectionToolbar buildingsFilterProvider;
 

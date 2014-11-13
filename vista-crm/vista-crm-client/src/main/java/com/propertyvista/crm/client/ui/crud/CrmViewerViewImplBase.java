@@ -31,7 +31,6 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.site.client.backoffice.ui.BreadcrumbsBar;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
-import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
 import com.pyx4j.site.client.backoffice.ui.prime.form.AbstractViewerView;
 import com.pyx4j.widgets.client.Button;
 
@@ -266,7 +265,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewerView
     }
 
     @Override
-    public void setPresenter(IPrimePaneView.IPrimePanePresenter presenter) {
+    public void setPresenter(IViewerPresenter presenter) {
         super.setPresenter(presenter);
         if (presenter != null) {
             reset(); // initialize the view!..

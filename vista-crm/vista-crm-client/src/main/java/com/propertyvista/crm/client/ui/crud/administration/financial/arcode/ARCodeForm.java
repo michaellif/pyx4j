@@ -33,7 +33,7 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
 
     private final FormPanel yardiIntegrationPanel;
 
-    public ARCodeForm(IFormView<ARCode> view) {
+    public ARCodeForm(IFormView<ARCode, ?> view) {
         super(ARCode.class, view);
 
         FormPanel formPanel = new FormPanel(this);

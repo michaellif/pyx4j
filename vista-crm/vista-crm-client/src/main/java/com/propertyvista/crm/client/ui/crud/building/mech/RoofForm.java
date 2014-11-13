@@ -25,7 +25,7 @@ public class RoofForm extends MechBaseForm<RoofDTO> {
 
     private static final I18n i18n = I18n.get(RoofForm.class);
 
-    public RoofForm(IFormView<RoofDTO> view) {
+    public RoofForm(IFormView<RoofDTO, ?> view) {
         super(RoofDTO.class, view);
     }
 

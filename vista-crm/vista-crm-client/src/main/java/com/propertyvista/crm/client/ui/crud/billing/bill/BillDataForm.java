@@ -28,7 +28,7 @@ public class BillDataForm extends CrmEntityForm<BillDataDTO> {
 
     private final boolean justPreviewBill;
 
-    public BillDataForm(IFormView<BillDataDTO> view, boolean justCurrentBill) {
+    public BillDataForm(IFormView<BillDataDTO, ?> view, boolean justCurrentBill) {
         super(BillDataDTO.class, view);
         setEditable(true);
         setViewable(false);

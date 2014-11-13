@@ -26,7 +26,7 @@ public class GuarantorForm extends LeaseParticipantForm<GuarantorDTO> {
 
     private static final I18n i18n = I18n.get(GuarantorForm.class);
 
-    public GuarantorForm(IFormView<GuarantorDTO> view) {
+    public GuarantorForm(IFormView<GuarantorDTO, ?> view) {
         super(GuarantorDTO.class, view);
 
         Tab tab;

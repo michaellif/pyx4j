@@ -31,7 +31,7 @@ public class VendorForm extends CrmEntityForm<Vendor> {
 
     private static final I18n i18n = I18n.get(VendorForm.class);
 
-    public VendorForm(IFormView<Vendor> view) {
+    public VendorForm(IFormView<Vendor, ?> view) {
         super(Vendor.class, view);
 
         FormPanel formPanel = new FormPanel(this);

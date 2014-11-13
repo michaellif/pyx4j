@@ -161,7 +161,7 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         }
     };
 
-    public PaymentRecordForm(IFormView<PaymentRecordDTO> view) {
+    public PaymentRecordForm(IFormView<PaymentRecordDTO, ?> view) {
         super(PaymentRecordDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

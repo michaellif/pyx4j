@@ -22,7 +22,7 @@ import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimula
 
 public class CardServiceSimulationMerchantAccountForm extends OperationsEntityForm<CardServiceSimulationMerchantAccount> {
 
-    public CardServiceSimulationMerchantAccountForm(IFormView<CardServiceSimulationMerchantAccount> view) {
+    public CardServiceSimulationMerchantAccountForm(IFormView<CardServiceSimulationMerchantAccount, ?> view) {
         super(CardServiceSimulationMerchantAccount.class, view);
 
         FormPanel formPanel = new FormPanel(this);

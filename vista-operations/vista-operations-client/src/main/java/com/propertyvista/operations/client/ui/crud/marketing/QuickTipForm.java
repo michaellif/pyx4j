@@ -26,7 +26,7 @@ public class QuickTipForm extends OperationsEntityForm<PortalResidentMarketingTi
 
     private final static I18n i18n = I18n.get(QuickTipForm.class);
 
-    public QuickTipForm(IFormView<PortalResidentMarketingTip> view) {
+    public QuickTipForm(IFormView<PortalResidentMarketingTip, ?> view) {
         super(PortalResidentMarketingTip.class, view);
 
         FormPanel formPanel = new FormPanel(this);

@@ -52,7 +52,7 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
 
     private HTML convenienceNoticeHtml;
 
-    public PaymentTypeSelectionPolicyForm(IFormView<PaymentTypeSelectionPolicyDTO> view) {
+    public PaymentTypeSelectionPolicyForm(IFormView<PaymentTypeSelectionPolicyDTO, ?> view) {
         super(PaymentTypeSelectionPolicyDTO.class, view);
         addTab(createMiscPoliciesTab(), i18n.tr("General"));
 

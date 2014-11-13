@@ -58,7 +58,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
 
     private final static I18n i18n = I18n.get(EmailTemplatesPolicyForm.class);
 
-    public EmailTemplatesPolicyForm(IFormView<EmailTemplatesPolicyDTO> view) {
+    public EmailTemplatesPolicyForm(IFormView<EmailTemplatesPolicyDTO, ?> view) {
         super(EmailTemplatesPolicyDTO.class, view);
 
         addTab(createEmailTemplatesPanel(), i18n.tr("Templates"));

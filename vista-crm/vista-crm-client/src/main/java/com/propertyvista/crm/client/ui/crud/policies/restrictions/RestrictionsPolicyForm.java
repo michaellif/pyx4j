@@ -27,7 +27,7 @@ public class RestrictionsPolicyForm extends PolicyDTOTabPanelBasedForm<Restricti
 
     private static final I18n i18n = I18n.get(RestrictionsPolicyForm.class);
 
-    public RestrictionsPolicyForm(IFormView<RestrictionsPolicyDTO> view) {
+    public RestrictionsPolicyForm(IFormView<RestrictionsPolicyDTO, ?> view) {
         super(RestrictionsPolicyDTO.class, view);
         addTab(createMiscPoliciesTab(), i18n.tr("Restrictions"));
     }

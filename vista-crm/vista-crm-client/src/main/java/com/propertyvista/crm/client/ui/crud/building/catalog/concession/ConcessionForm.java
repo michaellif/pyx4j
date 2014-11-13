@@ -34,7 +34,7 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
 
     private final CMoneyPercentCombo moneyPct = new CMoneyPercentCombo();
 
-    public ConcessionForm(IFormView<Concession> view) {
+    public ConcessionForm(IFormView<Concession, ?> view) {
         super(Concession.class, view);
 
         FormPanel formPanel = new FormPanel(this);

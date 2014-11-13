@@ -25,7 +25,7 @@ public class OapiForm extends OperationsEntityForm<OapiConversionDTO> {
 
     private static final I18n i18n = I18n.get(OapiForm.class);
 
-    public OapiForm(IFormView<OapiConversionDTO> view) {
+    public OapiForm(IFormView<OapiConversionDTO, ?> view) {
         super(OapiConversionDTO.class, view);
 
         selectTab(addTab(createDetailsTab(), i18n.tr("General")));

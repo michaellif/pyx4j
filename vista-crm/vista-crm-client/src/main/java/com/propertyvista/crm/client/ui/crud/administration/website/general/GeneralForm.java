@@ -39,7 +39,7 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
 
     private final CCheckBox publicPortalSwitch = new CCheckBox();
 
-    public GeneralForm(IFormView<SiteDescriptorDTO> view) {
+    public GeneralForm(IFormView<SiteDescriptorDTO, ?> view) {
         super(SiteDescriptorDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

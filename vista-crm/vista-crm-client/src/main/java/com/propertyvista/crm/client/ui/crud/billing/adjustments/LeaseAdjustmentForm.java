@@ -45,7 +45,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
 
     private static final I18n i18n = I18n.get(LeaseAdjustmentForm.class);
 
-    public LeaseAdjustmentForm(IFormView<LeaseAdjustment> view) {
+    public LeaseAdjustmentForm(IFormView<LeaseAdjustment, ?> view) {
         super(LeaseAdjustment.class, view);
 
         FormPanel formPanel = new FormPanel(this);

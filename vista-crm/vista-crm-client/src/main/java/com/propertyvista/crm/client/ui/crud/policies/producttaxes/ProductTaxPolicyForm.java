@@ -46,7 +46,7 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
 
     private final static I18n i18n = I18n.get(ProductTaxPolicyForm.class);
 
-    public ProductTaxPolicyForm(IFormView<ProductTaxPolicyDTO> view) {
+    public ProductTaxPolicyForm(IFormView<ProductTaxPolicyDTO, ?> view) {
         super(ProductTaxPolicyDTO.class, view);
         addTab(createItemsPanel(), i18n.tr("Items"));
 

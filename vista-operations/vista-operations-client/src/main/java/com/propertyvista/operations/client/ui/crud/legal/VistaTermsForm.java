@@ -32,7 +32,7 @@ public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
 
     private final static I18n i18n = I18n.get(VistaTermsForm.class);
 
-    public VistaTermsForm(IFormView<VistaTerms> view) {
+    public VistaTermsForm(IFormView<VistaTerms, ?> view) {
         super(VistaTerms.class, view);
 
         FormPanel formPanel = new FormPanel(this);

@@ -29,7 +29,7 @@ public class DirectDebitSimRecordForm extends OperationsEntityForm<DirectDebitSi
 
     private static final I18n i18n = I18n.get(DirectDebitSimRecordForm.class);
 
-    public DirectDebitSimRecordForm(IFormView<DirectDebitSimRecord> view) {
+    public DirectDebitSimRecordForm(IFormView<DirectDebitSimRecord, ?> view) {
         super(DirectDebitSimRecord.class, view);
 
         FormPanel formPanel = new FormPanel(this);

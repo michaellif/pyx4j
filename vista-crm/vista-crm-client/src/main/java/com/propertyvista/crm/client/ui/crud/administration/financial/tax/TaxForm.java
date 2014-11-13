@@ -25,7 +25,7 @@ public class TaxForm extends CrmEntityForm<Tax> {
 
     private static final I18n i18n = I18n.get(TaxForm.class);
 
-    public TaxForm(IFormView<Tax> view) {
+    public TaxForm(IFormView<Tax, ?> view) {
         super(Tax.class, view);
 
         FormPanel formPanel = new FormPanel(this);

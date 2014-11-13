@@ -39,7 +39,7 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
 
     private static final I18n i18n = I18n.get(ApplicationDocumentationPolicyForm.class);
 
-    public ApplicationDocumentationPolicyForm(IFormView<ApplicationDocumentationPolicyDTO> view) {
+    public ApplicationDocumentationPolicyForm(IFormView<ApplicationDocumentationPolicyDTO, ?> view) {
         super(ApplicationDocumentationPolicyDTO.class, view);
 
         addTab(createIdentificationDocsTab(), i18n.tr("Required IDs"));

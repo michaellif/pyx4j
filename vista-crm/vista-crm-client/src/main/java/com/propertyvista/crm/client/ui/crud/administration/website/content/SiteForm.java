@@ -28,7 +28,7 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
 
     private static final I18n i18n = I18n.get(SiteForm.class);
 
-    public SiteForm(IFormView<SiteDescriptorDTO> view) {
+    public SiteForm(IFormView<SiteDescriptorDTO, ?> view) {
         super(SiteDescriptorDTO.class, view);
 
         FormPanel formPanel;

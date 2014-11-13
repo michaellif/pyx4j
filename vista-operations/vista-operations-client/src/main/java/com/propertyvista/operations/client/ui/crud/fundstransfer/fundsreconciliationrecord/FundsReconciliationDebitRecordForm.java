@@ -31,7 +31,7 @@ public class FundsReconciliationDebitRecordForm extends OperationsEntityForm<Fun
 
     private static final I18n i18n = I18n.get(FundsReconciliationDebitRecordForm.class);
 
-    public FundsReconciliationDebitRecordForm(IFormView<FundsReconciliationRecordRecordDTO> view) {
+    public FundsReconciliationDebitRecordForm(IFormView<FundsReconciliationRecordRecordDTO, ?> view) {
         super(FundsReconciliationRecordRecordDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

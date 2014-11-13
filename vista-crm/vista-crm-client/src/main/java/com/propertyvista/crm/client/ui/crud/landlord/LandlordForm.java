@@ -43,7 +43,7 @@ public class LandlordForm extends CrmEntityForm<LandlordDTO> {
 
     private static final I18n i18n = I18n.get(LandlordForm.class);
 
-    public LandlordForm(IFormView<LandlordDTO> view) {
+    public LandlordForm(IFormView<LandlordDTO, ?> view) {
         super(LandlordDTO.class, view);
 
         Tab tab = addTab(createGeneralPanel(), i18n.tr("General"));

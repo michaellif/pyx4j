@@ -25,7 +25,7 @@ public class PageForm extends CrmEntityForm<PageDescriptor> {
 
     private static final I18n i18n = I18n.get(PageForm.class);
 
-    public PageForm(IFormView<PageDescriptor> view) {
+    public PageForm(IFormView<PageDescriptor, ?> view) {
         super(PageDescriptor.class, view);
 
         FormPanel formPanel = new FormPanel(this);

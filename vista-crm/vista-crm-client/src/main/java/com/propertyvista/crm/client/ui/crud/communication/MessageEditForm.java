@@ -46,7 +46,7 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
 
     CommunicationEndpointSelector epSelectorNew;
 
-    public MessageEditForm(IFormView<MessageDTO> view) {
+    public MessageEditForm(IFormView<MessageDTO, ?> view) {
         super(MessageDTO.class, view);
         setTabBarVisible(false);
         selectTab(addTab(createGeneralForm(), i18n.tr("New message")));

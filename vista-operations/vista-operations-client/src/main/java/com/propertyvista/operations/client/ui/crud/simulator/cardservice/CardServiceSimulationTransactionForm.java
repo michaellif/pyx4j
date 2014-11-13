@@ -28,7 +28,7 @@ import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimula
 
 class CardServiceSimulationTransactionForm extends OperationsEntityForm<CardServiceSimulationTransaction> {
 
-    public CardServiceSimulationTransactionForm(IFormView<CardServiceSimulationTransaction> view) {
+    public CardServiceSimulationTransactionForm(IFormView<CardServiceSimulationTransaction, ?> view) {
         super(CardServiceSimulationTransaction.class, view);
 
         FormPanel formPanel = new FormPanel(this);

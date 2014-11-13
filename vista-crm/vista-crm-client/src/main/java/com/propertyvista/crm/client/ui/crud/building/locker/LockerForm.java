@@ -25,7 +25,7 @@ public class LockerForm extends CrmEntityForm<Locker> {
 
     private static final I18n i18n = I18n.get(LockerForm.class);
 
-    public LockerForm(IFormView<Locker> view) {
+    public LockerForm(IFormView<Locker, ?> view) {
         super(Locker.class, view);
 
         FormPanel formPanel = new FormPanel(this);

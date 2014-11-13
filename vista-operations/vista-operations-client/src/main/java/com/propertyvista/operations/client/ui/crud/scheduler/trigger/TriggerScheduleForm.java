@@ -32,7 +32,7 @@ public class TriggerScheduleForm extends OperationsEntityForm<TriggerSchedule> {
 
     private static final I18n i18n = I18n.get(TriggerScheduleForm.class);
 
-    public TriggerScheduleForm(IFormView<TriggerSchedule> view) {
+    public TriggerScheduleForm(IFormView<TriggerSchedule, ?> view) {
         super(TriggerSchedule.class, view);
 
         FormPanel formPanel = new FormPanel(this);

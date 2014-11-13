@@ -48,7 +48,7 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
 
     private final static I18n i18n = I18n.get(IdAssignmentPolicyForm.class);
 
-    public IdAssignmentPolicyForm(IFormView<IdAssignmentPolicyDTO> view) {
+    public IdAssignmentPolicyForm(IFormView<IdAssignmentPolicyDTO, ?> view) {
         super(IdAssignmentPolicyDTO.class, view);
         addTab(createItemsPanel(), i18n.tr("Items"));
         if (VistaFeatures.instance().yardiIntegration()) {
@@ -82,7 +82,7 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
 
     class YardiDocumentNumberLenghtValidator extends AbstractComponentValidator<String> {
 
-        private IPrimitive<String> protoMember;
+        private final IPrimitive<String> protoMember;
 
         public YardiDocumentNumberLenghtValidator(IPrimitive<String> protoMember) {
             this.protoMember = protoMember;

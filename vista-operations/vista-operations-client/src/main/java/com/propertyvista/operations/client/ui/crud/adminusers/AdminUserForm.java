@@ -37,7 +37,7 @@ public class AdminUserForm extends OperationsEntityForm<OperationsUserDTO> {
 
     private Condition isNewUserCondition;
 
-    public AdminUserForm(IFormView<OperationsUserDTO> view) {
+    public AdminUserForm(IFormView<OperationsUserDTO, ?> view) {
         super(OperationsUserDTO.class, view);
 
         conditionalVisibilityMap = new HashMap<CComponent<?, ?, ?, ?>, Condition>();

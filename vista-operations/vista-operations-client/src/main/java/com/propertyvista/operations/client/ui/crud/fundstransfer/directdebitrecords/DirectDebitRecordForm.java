@@ -25,7 +25,7 @@ public class DirectDebitRecordForm extends OperationsEntityForm<DirectDebitRecor
 
     private static final I18n i18n = I18n.get(DirectDebitRecordForm.class);
 
-    public DirectDebitRecordForm(IFormView<DirectDebitRecord> view) {
+    public DirectDebitRecordForm(IFormView<DirectDebitRecord, ?> view) {
         super(DirectDebitRecord.class, view);
 
         FormPanel formPanel = new FormPanel(this);

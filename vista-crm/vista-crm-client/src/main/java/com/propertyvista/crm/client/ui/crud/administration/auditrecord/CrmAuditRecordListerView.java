@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.auditrecord;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 
 import com.propertyvista.dto.AuditRecordDTO;
 
-public interface CrmAuditRecordListerView extends IViewerView<AuditRecordDTO> {
+public interface CrmAuditRecordListerView extends IListerView<AuditRecordDTO> {
 
 }

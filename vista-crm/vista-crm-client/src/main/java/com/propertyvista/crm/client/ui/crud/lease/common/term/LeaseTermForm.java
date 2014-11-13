@@ -118,7 +118,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         }
     };
 
-    protected LeaseTermForm(IFormView<LeaseTermDTO> view) {
+    protected LeaseTermForm(IFormView<LeaseTermDTO, ?> view) {
         super(LeaseTermDTO.class, view);
 
         setTabBarVisible(false);
@@ -189,7 +189,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                     @Override
                     public boolean onClickOk() {
                         if (!getSelectedItem().isNull()) {
-                            ((LeaseTermEditorView.Presenter) ((IEditorView<LeaseTermDTO>) getParentView()).getPresenter()).setSelectedBuilding(getSelectedItem());
+                            ((LeaseTermEditorView.Presenter) ((IEditorView<LeaseTermDTO>) getParentView()).getPresenter())
+                                    .setSelectedBuilding(getSelectedItem());
                         }
                         return true;
                     }
@@ -346,14 +347,14 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         get(proto().termFrom()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
             @Override
             public void onValueChange(ValueChangeEvent<LogicalDate> event) {
-                    if (event.getValue() != null) {
-                        LogicalDate endDate = new LogicalDate(event.getValue());
-                        CalendarUtil.addMonthsToDate(endDate, 12);
-                        CalendarUtil.addDaysToDate(endDate, -1);
+                if (event.getValue() != null) {
+                    LogicalDate endDate = new LogicalDate(event.getValue());
+                    CalendarUtil.addMonthsToDate(endDate, 12);
+                    CalendarUtil.addDaysToDate(endDate, -1);
 
-                        get(proto().termTo()).setValue(endDate);
-                    }
+                    get(proto().termTo()).setValue(endDate);
                 }
+            }
         });
 
         tenantsFolder.addValueChangeHandler(new ValueChangeHandler<IList<LeaseTermTenant>>() {

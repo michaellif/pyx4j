@@ -25,7 +25,7 @@ public class InvoiceCreditForm extends CrmEntityForm<InvoiceCreditDTO> {
 
     private static final I18n i18n = I18n.get(InvoiceCreditForm.class);
 
-    public InvoiceCreditForm(IFormView<InvoiceCreditDTO> view) {
+    public InvoiceCreditForm(IFormView<InvoiceCreditDTO, ?> view) {
         super(InvoiceCreditDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

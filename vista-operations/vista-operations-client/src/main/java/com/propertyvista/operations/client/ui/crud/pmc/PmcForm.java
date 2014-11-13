@@ -71,7 +71,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
     private Anchor auditRecordsLink;
 
-    public PmcForm(IFormView<PmcDTO> view) {
+    public PmcForm(IFormView<PmcDTO, ?> view) {
         super(PmcDTO.class, view);
 
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));

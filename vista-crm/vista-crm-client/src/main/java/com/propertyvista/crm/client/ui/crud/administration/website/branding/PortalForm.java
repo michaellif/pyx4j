@@ -22,7 +22,7 @@ import com.propertyvista.dto.SiteDescriptorDTO;
 
 public class PortalForm extends CrmEntityForm<SiteDescriptorDTO> {
 
-    public PortalForm(IFormView<SiteDescriptorDTO> view) {
+    public PortalForm(IFormView<SiteDescriptorDTO, ?> view) {
         super(SiteDescriptorDTO.class, view);
 
         PortalBannerImageFolder imageFolder = new PortalBannerImageFolder(isEditable());

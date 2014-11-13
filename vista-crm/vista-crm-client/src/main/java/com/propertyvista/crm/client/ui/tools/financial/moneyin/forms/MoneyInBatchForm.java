@@ -91,7 +91,7 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
 
     }
 
-    public MoneyInBatchForm(IFormView<MoneyInBatchDTO> view) {
+    public MoneyInBatchForm(IFormView<MoneyInBatchDTO, ?> view) {
         super(MoneyInBatchDTO.class, view);
         selectTab(addTab(createGeneralTab(), i18n.tr("Batch Details")));
         setTabBarVisible(false);

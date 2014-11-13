@@ -25,7 +25,7 @@ public class CardTransactionRecordForm extends OperationsEntityForm<CardTransact
 
     private static final I18n i18n = I18n.get(CardTransactionRecordForm.class);
 
-    public CardTransactionRecordForm(IFormView<CardTransactionRecord> view) {
+    public CardTransactionRecordForm(IFormView<CardTransactionRecord, ?> view) {
         super(CardTransactionRecord.class, view);
 
         FormPanel formPanel = new FormPanel(this);

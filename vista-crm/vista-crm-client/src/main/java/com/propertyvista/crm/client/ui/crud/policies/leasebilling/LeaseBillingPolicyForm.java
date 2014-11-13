@@ -66,7 +66,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
     private final CMoneyPercentCombo maxTotalFee = new CMoneyPercentCombo();
 
-    public LeaseBillingPolicyForm(IFormView<LeaseBillingPolicyDTO> view) {
+    public LeaseBillingPolicyForm(IFormView<LeaseBillingPolicyDTO, ?> view) {
         super(LeaseBillingPolicyDTO.class, view);
 
         addTab(createBillingPanel(), i18n.tr("Billing"));

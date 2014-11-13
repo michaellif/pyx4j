@@ -29,7 +29,7 @@ public class PadSimBatchForm extends OperationsEntityForm<PadSimBatch> {
 
     private static final I18n i18n = I18n.get(PadSimBatchForm.class);
 
-    public PadSimBatchForm(IFormView<PadSimBatch> view) {
+    public PadSimBatchForm(IFormView<PadSimBatch, ?> view) {
         super(PadSimBatch.class, view);
 
         FormPanel formPanel = new FormPanel(this);

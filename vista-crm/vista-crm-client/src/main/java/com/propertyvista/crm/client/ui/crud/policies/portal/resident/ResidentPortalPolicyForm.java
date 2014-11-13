@@ -27,7 +27,7 @@ public class ResidentPortalPolicyForm extends PolicyDTOTabPanelBasedForm<Residen
 
     private final static I18n i18n = I18n.get(ResidentPortalPolicyForm.class);
 
-    public ResidentPortalPolicyForm(IFormView<ResidentPortalPolicyDTO> view) {
+    public ResidentPortalPolicyForm(IFormView<ResidentPortalPolicyDTO, ?> view) {
         super(ResidentPortalPolicyDTO.class, view);
         addTab(createDetailsTab(), i18n.tr("Details"));
 

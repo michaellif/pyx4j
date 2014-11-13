@@ -30,7 +30,7 @@ public class ProspectPortalPolicyForm extends PolicyDTOTabPanelBasedForm<Prospec
 
     private final static I18n i18n = I18n.get(ProspectPortalPolicyForm.class);
 
-    public ProspectPortalPolicyForm(IFormView<ProspectPortalPolicyDTO> view) {
+    public ProspectPortalPolicyForm(IFormView<ProspectPortalPolicyDTO, ?> view) {
         super(ProspectPortalPolicyDTO.class, view);
         addTab(createDetailsTab(), i18n.tr("Details"));
 

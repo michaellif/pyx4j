@@ -27,7 +27,7 @@ public class PetPolicyForm extends PolicyDTOTabPanelBasedForm<PetPolicyDTO> {
 
     private static final I18n i18n = I18n.get(PetPolicyForm.class);
 
-    public PetPolicyForm(IFormView<PetPolicyDTO> view) {
+    public PetPolicyForm(IFormView<PetPolicyDTO, ?> view) {
         super(PetPolicyDTO.class, view);
         addTab(createSettignsForm(), i18n.tr("Pet Limits"));
 

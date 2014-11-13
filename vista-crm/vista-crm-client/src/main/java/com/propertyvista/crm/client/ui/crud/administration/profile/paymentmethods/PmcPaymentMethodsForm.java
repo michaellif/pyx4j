@@ -33,7 +33,7 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
 
     private final Label noPaymentMethodsMessage;
 
-    public PmcPaymentMethodsForm(IFormView<PmcPaymentMethodsDTO> view) {
+    public PmcPaymentMethodsForm(IFormView<PmcPaymentMethodsDTO, ?> view) {
         super(PmcPaymentMethodsDTO.class, view);
         FormPanel formPanel = new FormPanel(this);
 

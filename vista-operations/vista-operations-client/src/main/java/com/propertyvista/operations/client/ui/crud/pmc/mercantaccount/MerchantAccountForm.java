@@ -72,7 +72,7 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
 
     }
 
-    public MerchantAccountForm(IFormView<PmcMerchantAccountDTO> view) {
+    public MerchantAccountForm(IFormView<PmcMerchantAccountDTO, ?> view) {
         super(PmcMerchantAccountDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

@@ -57,7 +57,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
     private final FormPanel catalogMarketPricesPanel;
 
-    public UnitForm(IFormView<AptUnitDTO> view) {
+    public UnitForm(IFormView<AptUnitDTO, ?> view) {
         super(AptUnitDTO.class, view);
 
         catalogMarketPricesPanel = new FormPanel(this);

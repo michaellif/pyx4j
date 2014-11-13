@@ -128,4 +128,15 @@ public class PmcAccountCreationRequestViewImpl extends Composite implements PmcA
         return false;
     }
 
+    @Override
+    public void setPresenter(IPanePresenter presenter) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public IPanePresenter getPresenter() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

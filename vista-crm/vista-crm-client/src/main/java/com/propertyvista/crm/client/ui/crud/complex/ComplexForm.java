@@ -32,7 +32,7 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
 
     private static final I18n i18n = I18n.get(ComplexForm.class);
 
-    public ComplexForm(IFormView<ComplexDTO> view) {
+    public ComplexForm(IFormView<ComplexDTO, ?> view) {
         super(ComplexDTO.class, view);
 
         selectTab(addTab(createGeneralPanel(), i18n.tr("General")));

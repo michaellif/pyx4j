@@ -33,7 +33,7 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
 
     private static final I18n i18n = I18n.get(TenantInsurancePolicyForm.class);
 
-    public TenantInsurancePolicyForm(IFormView<TenantInsurancePolicyDTO> view) {
+    public TenantInsurancePolicyForm(IFormView<TenantInsurancePolicyDTO, ?> view) {
         super(TenantInsurancePolicyDTO.class, view);
         addTab(createInsuranceRequirementsTab(), i18n.tr("Insurance Requirements"));
     }

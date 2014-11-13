@@ -56,7 +56,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
     private final Tab chargesTab;
 
-    public LeaseApplicationForm(IFormView<LeaseApplicationDTO> view) {
+    public LeaseApplicationForm(IFormView<LeaseApplicationDTO, ?> view) {
         super(LeaseApplicationDTO.class, view);
 
         selectTab(addTab(createDetailsTab(), i18n.tr("Details")));

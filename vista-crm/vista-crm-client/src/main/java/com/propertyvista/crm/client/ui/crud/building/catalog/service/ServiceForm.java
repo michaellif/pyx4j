@@ -36,7 +36,7 @@ public class ServiceForm extends CrmEntityForm<Service> {
 
     private Widget headerDeposits, headerLMR, headerMoveIn, headerSecurity;
 
-    public ServiceForm(IFormView<Service> view) {
+    public ServiceForm(IFormView<Service, ?> view) {
         super(Service.class, view);
 
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));

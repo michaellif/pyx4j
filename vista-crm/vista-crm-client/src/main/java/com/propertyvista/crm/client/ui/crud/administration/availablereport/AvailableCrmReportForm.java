@@ -26,7 +26,7 @@ public class AvailableCrmReportForm extends CrmEntityForm<AvailableCrmReport> {
 
     private static final I18n i18n = I18n.get(AvailableCrmReportForm.class);
 
-    public AvailableCrmReportForm(IFormView<AvailableCrmReport> view) {
+    public AvailableCrmReportForm(IFormView<AvailableCrmReport, ?> view) {
         super(AvailableCrmReport.class, view);
 
         FormPanel formPanel = new FormPanel(this);

@@ -25,7 +25,7 @@ public class GlCodeCategoryForm extends CrmEntityForm<GlCodeCategory> {
 
     private static final I18n i18n = I18n.get(GlCodeCategoryForm.class);
 
-    public GlCodeCategoryForm(IFormView<GlCodeCategory> view) {
+    public GlCodeCategoryForm(IFormView<GlCodeCategory, ?> view) {
         super(GlCodeCategory.class, view);
 
         FormPanel formPanel = new FormPanel(this);

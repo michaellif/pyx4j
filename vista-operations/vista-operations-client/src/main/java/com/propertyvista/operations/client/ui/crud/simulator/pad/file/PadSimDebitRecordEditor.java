@@ -25,7 +25,7 @@ public class PadSimDebitRecordEditor extends OperationsEntityForm<PadSimDebitRec
 
     private static final I18n i18n = I18n.get(PadSimDebitRecordEditor.class);
 
-    public PadSimDebitRecordEditor(IFormView<PadSimDebitRecord> view) {
+    public PadSimDebitRecordEditor(IFormView<PadSimDebitRecord, ?> view) {
         super(PadSimDebitRecord.class, view);
 
         FormPanel formPanel = new FormPanel(this);

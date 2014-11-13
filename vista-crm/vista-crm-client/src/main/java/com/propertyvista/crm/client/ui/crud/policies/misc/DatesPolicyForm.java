@@ -31,7 +31,7 @@ public class DatesPolicyForm extends PolicyDTOTabPanelBasedForm<DatesPolicyDTO> 
 
     private static final I18n i18n = I18n.get(DatesPolicyForm.class);
 
-    public DatesPolicyForm(IFormView<DatesPolicyDTO> view) {
+    public DatesPolicyForm(IFormView<DatesPolicyDTO, ?> view) {
         super(DatesPolicyDTO.class, view);
         addTab(createMiscPoliciesTab(), i18n.tr("Misc. Settings"));
     }
