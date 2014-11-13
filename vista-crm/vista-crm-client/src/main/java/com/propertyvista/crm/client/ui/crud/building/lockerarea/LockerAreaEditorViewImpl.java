@@ -7,16 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-05-25
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.building.parking;
+package com.propertyvista.crm.client.ui.crud.building.lockerarea;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.dto.LockerAreaDTO;
 
-import com.propertyvista.domain.property.asset.ParkingSpot;
+public class LockerAreaEditorViewImpl extends CrmEditorViewImplBase<LockerAreaDTO> implements LockerAreaEditorView {
 
-public interface ParkingSpotListerView extends ILister<ParkingSpot> {
-
+    public LockerAreaEditorViewImpl() {
+        setForm(new LockerAreaForm(this));
+    }
 }

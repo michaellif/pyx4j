@@ -7,16 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-05-24
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.building.lockers;
+package com.propertyvista.crm.client.ui.crud.building.parkingspot;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
 
-import com.propertyvista.domain.property.asset.Locker;
+import com.propertyvista.domain.property.asset.ParkingSpot;
 
-public interface LockerListerView extends ILister<Locker> {
+public interface ParkingSpotViewerView extends IViewer<ParkingSpot> {
 
 }

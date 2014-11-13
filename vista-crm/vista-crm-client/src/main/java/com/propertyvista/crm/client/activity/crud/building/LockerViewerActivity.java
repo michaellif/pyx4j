@@ -20,7 +20,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
-import com.propertyvista.crm.client.ui.crud.building.lockers.LockerViewerView;
+import com.propertyvista.crm.client.ui.crud.building.locker.LockerViewerView;
 import com.propertyvista.crm.rpc.services.building.LockerCrudService;
 import com.propertyvista.domain.property.asset.Locker;
 

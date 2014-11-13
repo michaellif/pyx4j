@@ -98,11 +98,9 @@ import com.propertyvista.crm.client.activity.crud.building.ElevatorViewerActivit
 import com.propertyvista.crm.client.activity.crud.building.LockerAreaEditorActivity;
 import com.propertyvista.crm.client.activity.crud.building.LockerAreaViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.LockerEditorActivity;
-import com.propertyvista.crm.client.activity.crud.building.LockerListerActivity;
 import com.propertyvista.crm.client.activity.crud.building.LockerViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.ParkingEditorActivity;
 import com.propertyvista.crm.client.activity.crud.building.ParkingSpotEditorActivity;
-import com.propertyvista.crm.client.activity.crud.building.ParkingSpotListerActivity;
 import com.propertyvista.crm.client.activity.crud.building.ParkingSpotViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.ParkingViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.RoofEditorActivity;
@@ -414,8 +412,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new ParkingSpotViewerActivity(crudPlace);
                             break;
-                        case lister:
-                            activity = new ParkingSpotListerActivity(crudPlace);
+                        default:
                             break;
                         }
 
@@ -439,8 +436,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new LockerViewerActivity(crudPlace);
                             break;
-                        case lister:
-                            activity = new LockerListerActivity(crudPlace);
+                        default:
                             break;
                         }
 

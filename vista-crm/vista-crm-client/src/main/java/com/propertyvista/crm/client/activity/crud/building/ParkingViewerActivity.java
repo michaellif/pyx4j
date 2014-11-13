@@ -15,35 +15,19 @@ package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.site.client.backoffice.activity.ListerController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingViewerView;
 import com.propertyvista.crm.rpc.services.building.ParkingCrudService;
-import com.propertyvista.crm.rpc.services.building.ParkingSpotCrudService;
-import com.propertyvista.domain.property.asset.ParkingSpot;
 import com.propertyvista.dto.ParkingDTO;
 
 public class ParkingViewerActivity extends CrmViewerActivity<ParkingDTO> implements ParkingViewerView.Presenter {
 
-    private final ILister.Presenter<ParkingSpot> spotLister;
-
     public ParkingViewerActivity(CrudAppPlace place) {
         super(ParkingDTO.class, place, CrmSite.getViewFactory().getView(ParkingViewerView.class), GWT.<ParkingCrudService> create(ParkingCrudService.class));
 
-        spotLister = new ListerController<ParkingSpot>(ParkingSpot.class, ((ParkingViewerView) getView()).getSpotView(),
-                GWT.<ParkingSpotCrudService> create(ParkingSpotCrudService.class));
-
     }
 
-    @Override
-    public void onPopulateSuccess(ParkingDTO result) {
-        super.onPopulateSuccess(result);
-
-        spotLister.setParent(result.getPrimaryKey());
-        spotLister.populate();
-    }
 }

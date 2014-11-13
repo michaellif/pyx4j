@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.building.lockers;
+package com.propertyvista.crm.client.ui.crud.building.lockerarea;
 
 import com.google.gwt.user.client.ui.HTML;
 

@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.building.parking;
+package com.propertyvista.crm.client.ui.crud.building.parkingspot;
 
 import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
 

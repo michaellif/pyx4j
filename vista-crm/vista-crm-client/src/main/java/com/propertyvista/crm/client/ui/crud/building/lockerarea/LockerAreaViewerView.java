@@ -11,12 +11,16 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.building.parking;
+package com.propertyvista.crm.client.ui.crud.building.lockerarea;
 
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
 
-import com.propertyvista.domain.property.asset.ParkingSpot;
+import com.propertyvista.dto.LockerAreaDTO;
 
-public interface ParkingSpotViewerView extends IViewer<ParkingSpot> {
+public interface LockerAreaViewerView extends IViewer<LockerAreaDTO> {
 
+    interface Presenter extends IViewer.Presenter {
+    }
+
+    LockerLister getLockerView();
 }

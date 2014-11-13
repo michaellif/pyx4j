@@ -11,27 +11,29 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.building.lockers;
+package com.propertyvista.crm.client.ui.crud.building.lockerarea;
 
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
+import com.propertyvista.crm.rpc.services.building.LockerCrudService;
 import com.propertyvista.domain.property.asset.Locker;
 
-public class LockerLister extends EntityDataTablePanel<Locker> {
+public class LockerLister extends SiteDataTablePanel<Locker> {
 
     public LockerLister() {
-        super(Locker.class, true);
+        super(Locker.class, GWT.<LockerCrudService> create(LockerCrudService.class), true);
 
-        setDataTableModel(new DataTableModel<Locker>(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().name()).build(), 
-                new MemberColumnDescriptor.Builder(proto().type()).build()
-        ));//@formatter:on
+        setDataTableModel(new DataTableModel<Locker>( //
+                new MemberColumnDescriptor.Builder(proto().name()).build(), //
+                new MemberColumnDescriptor.Builder(proto().type()).build()));
     }
 
     @Override

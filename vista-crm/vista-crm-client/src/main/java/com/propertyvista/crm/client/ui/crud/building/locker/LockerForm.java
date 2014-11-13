@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.building.parking;
+package com.propertyvista.crm.client.ui.crud.building.locker;
 
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
@@ -19,14 +19,14 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.domain.property.asset.ParkingSpot;
+import com.propertyvista.domain.property.asset.Locker;
 
-public class ParkingSpotForm extends CrmEntityForm<ParkingSpot> {
+public class LockerForm extends CrmEntityForm<Locker> {
 
-    private static final I18n i18n = I18n.get(ParkingSpotForm.class);
+    private static final I18n i18n = I18n.get(LockerForm.class);
 
-    public ParkingSpotForm(IForm<ParkingSpot> view) {
-        super(ParkingSpot.class, view);
+    public LockerForm(IForm<Locker> view) {
+        super(Locker.class, view);
 
         FormPanel formPanel = new FormPanel(this);
 
@@ -34,6 +34,7 @@ public class ParkingSpotForm extends CrmEntityForm<ParkingSpot> {
         formPanel.append(Location.Left, proto().type()).decorate().componentWidth(120);
 
         selectTab(addTab(formPanel, i18n.tr("General")));
+        setTabBarVisible(false);
 
     }
 }

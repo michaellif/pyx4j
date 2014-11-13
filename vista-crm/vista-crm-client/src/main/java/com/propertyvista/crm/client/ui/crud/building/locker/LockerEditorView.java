@@ -11,14 +11,12 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.building.lockers;
+package com.propertyvista.crm.client.ui.crud.building.locker;
 
 import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
 
-import com.propertyvista.dto.LockerAreaDTO;
+import com.propertyvista.domain.property.asset.Locker;
 
-public interface LockerAreaEditorView extends IEditor<LockerAreaDTO> {
+public interface LockerEditorView extends IEditor<Locker> {
 
-    interface Presenter extends IEditor.Presenter {
-    }
 }

@@ -13,15 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.parking;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
-
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.domain.property.asset.ParkingSpot;
 import com.propertyvista.dto.ParkingDTO;
 
 public class ParkingViewerViewImpl extends CrmViewerViewImplBase<ParkingDTO> implements ParkingViewerView {
 
-    private final ILister<ParkingSpot> spotLister;
+    private final ParkingSpotLister spotLister;
 
     public ParkingViewerViewImpl() {
         spotLister = new ParkingSpotLister();
@@ -31,7 +28,15 @@ public class ParkingViewerViewImpl extends CrmViewerViewImplBase<ParkingDTO> imp
     }
 
     @Override
-    public ILister<ParkingSpot> getSpotView() {
+    public void populate(ParkingDTO value) {
+        super.populate(value);
+
+        spotLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        spotLister.populate();
+    }
+
+    @Override
+    public ParkingSpotLister getSpotView() {
         return spotLister;
     }
 }

@@ -20,7 +20,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
-import com.propertyvista.crm.client.ui.crud.building.parking.ParkingSpotViewerView;
+import com.propertyvista.crm.client.ui.crud.building.parkingspot.ParkingSpotViewerView;
 import com.propertyvista.crm.rpc.services.building.ParkingSpotCrudService;
 import com.propertyvista.domain.property.asset.ParkingSpot;
 

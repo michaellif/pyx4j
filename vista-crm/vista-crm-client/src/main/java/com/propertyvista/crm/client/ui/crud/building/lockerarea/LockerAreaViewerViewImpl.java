@@ -11,17 +11,14 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.building.lockers;
-
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+package com.propertyvista.crm.client.ui.crud.building.lockerarea;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.domain.property.asset.Locker;
 import com.propertyvista.dto.LockerAreaDTO;
 
 public class LockerAreaViewerViewImpl extends CrmViewerViewImplBase<LockerAreaDTO> implements LockerAreaViewerView {
 
-    private final ILister<Locker> lockerLister;
+    private final LockerLister lockerLister;
 
     public LockerAreaViewerViewImpl() {
         lockerLister = new LockerLister();
@@ -31,7 +28,15 @@ public class LockerAreaViewerViewImpl extends CrmViewerViewImplBase<LockerAreaDT
     }
 
     @Override
-    public ILister<Locker> getLockerView() {
+    public void populate(LockerAreaDTO value) {
+        super.populate(value);
+
+        lockerLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        lockerLister.populate();
+    }
+
+    @Override
+    public LockerLister getLockerView() {
         return lockerLister;
     }
 }

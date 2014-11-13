@@ -11,13 +11,14 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.building.parking;
+package com.propertyvista.crm.client.ui.crud.building.lockerarea;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.domain.property.asset.ParkingSpot;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
 
-public class ParkingSpotEditorViewImpl extends CrmEditorViewImplBase<ParkingSpot> implements ParkingSpotEditorView {
-    public ParkingSpotEditorViewImpl() {
-        setForm(new ParkingSpotForm(this));
+import com.propertyvista.dto.LockerAreaDTO;
+
+public interface LockerAreaEditorView extends IEditor<LockerAreaDTO> {
+
+    interface Presenter extends IEditor.Presenter {
     }
 }

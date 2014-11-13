@@ -11,12 +11,13 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.building.lockers;
+package com.propertyvista.crm.client.ui.crud.building.parkingspot;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.domain.property.asset.ParkingSpot;
 
-import com.propertyvista.domain.property.asset.Locker;
-
-public interface LockerEditorView extends IEditor<Locker> {
-
+public class ParkingSpotEditorViewImpl extends CrmEditorViewImplBase<ParkingSpot> implements ParkingSpotEditorView {
+    public ParkingSpotEditorViewImpl() {
+        setForm(new ParkingSpotForm(this));
+    }
 }

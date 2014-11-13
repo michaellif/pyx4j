@@ -24,5 +24,5 @@ public interface ParkingViewerView extends IViewer<ParkingDTO> {
     interface Presenter extends IViewer.Presenter {
     }
 
-    ILister<ParkingSpot> getSpotView();
+    ParkingSpotLister getSpotView();
 }
