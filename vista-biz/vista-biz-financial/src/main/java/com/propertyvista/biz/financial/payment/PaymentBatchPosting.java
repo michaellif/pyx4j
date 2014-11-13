@@ -92,6 +92,7 @@ class PaymentBatchPosting {
                                     } else {
                                         iteratorPushBack.set(null);
                                     }
+                                    log.error("processing Payment record {}", firstPaymentRecord);
 
                                     if (canCancel && shouldBeCanceled(firstPaymentRecord, executionMonitor)) {
                                         return null;
@@ -139,6 +140,7 @@ class PaymentBatchPosting {
 
                                     while ((!paymentBatchContext.isBatchFull()) && paymentRecordIterator.hasNext()) {
                                         PaymentRecord paymentRecord = paymentRecordIterator.next();
+                                        log.error("processing Payment record {}", paymentRecord);
 
                                         if (!batchBuilding.equals(getBuilding(paymentRecord))) {
                                             iteratorPushBack.set(paymentRecord);
