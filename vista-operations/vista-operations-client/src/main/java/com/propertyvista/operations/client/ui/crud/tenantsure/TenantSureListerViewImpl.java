@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.tenantsure;
 
-import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.operations.rpc.dto.TenantSureDTO;
 
-public class TenantSureListerViewImpl extends OperationsListerViewImplBase<TenantSureDTO> implements TenantSureListerView {
+public class TenantSureListerViewImpl extends AbstractListerView<TenantSureDTO> implements TenantSureListerView {
 
     public TenantSureListerViewImpl() {
         setDataTablePanel(new TenantSureLister());

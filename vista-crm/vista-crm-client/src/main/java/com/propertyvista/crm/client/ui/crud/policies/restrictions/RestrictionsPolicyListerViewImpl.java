@@ -18,12 +18,12 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
 import com.propertyvista.crm.rpc.services.policies.policy.RestrictionsPolicyCrudService;
 import com.propertyvista.domain.policy.dto.RestrictionsPolicyDTO;
 
-public class RestrictionsPolicyListerViewImpl extends CrmListerViewImplBase<RestrictionsPolicyDTO> implements RestrictionsPolicyListerView {
+public class RestrictionsPolicyListerViewImpl extends AbstractListerView<RestrictionsPolicyDTO> implements RestrictionsPolicyListerView {
 
     public RestrictionsPolicyListerViewImpl() {
         setDataTablePanel(new RestrictionsPolicyLister());

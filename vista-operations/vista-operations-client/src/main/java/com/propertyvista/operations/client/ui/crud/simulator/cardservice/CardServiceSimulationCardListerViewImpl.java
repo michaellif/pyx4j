@@ -20,11 +20,11 @@ import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
-import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCard;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationCardCrudService;
 
-public class CardServiceSimulationCardListerViewImpl extends OperationsListerViewImplBase<CardServiceSimulationCard> implements
+public class CardServiceSimulationCardListerViewImpl extends AbstractListerView<CardServiceSimulationCard> implements
         CardServiceSimulationCardListerView {
 
     public static class CardServiceSimulationLister extends SiteDataTablePanel<CardServiceSimulationCard> {

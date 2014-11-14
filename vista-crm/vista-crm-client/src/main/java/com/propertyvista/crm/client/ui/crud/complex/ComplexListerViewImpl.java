@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.complex;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.dto.ComplexDTO;
 
-public class ComplexListerViewImpl extends CrmListerViewImplBase<ComplexDTO> implements ComplexListerView {
+public class ComplexListerViewImpl extends AbstractListerView<ComplexDTO> implements ComplexListerView {
 
     public ComplexListerViewImpl() {
         setDataTablePanel(new ComplexLister());

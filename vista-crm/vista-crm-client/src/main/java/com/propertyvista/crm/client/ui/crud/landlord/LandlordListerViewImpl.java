@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.landlord;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.dto.LandlordDTO;
 
-public class LandlordListerViewImpl extends CrmListerViewImplBase<LandlordDTO> implements LandlordListerView {
+public class LandlordListerViewImpl extends AbstractListerView<LandlordDTO> implements LandlordListerView {
 
     public LandlordListerViewImpl() {
         setDataTablePanel(new LandlordLister());

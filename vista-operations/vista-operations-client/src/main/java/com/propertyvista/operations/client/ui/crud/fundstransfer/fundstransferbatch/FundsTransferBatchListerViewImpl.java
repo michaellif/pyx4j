@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferbatch;
 
-import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.operations.rpc.dto.FundsTransferBatchDTO;
 
-public class FundsTransferBatchListerViewImpl extends OperationsListerViewImplBase<FundsTransferBatchDTO> implements FundsTransferBatchListerView {
+public class FundsTransferBatchListerViewImpl extends AbstractListerView<FundsTransferBatchDTO> implements FundsTransferBatchListerView {
 
     public FundsTransferBatchListerViewImpl() {
         setDataTablePanel(new FundsTransferBatchLister());

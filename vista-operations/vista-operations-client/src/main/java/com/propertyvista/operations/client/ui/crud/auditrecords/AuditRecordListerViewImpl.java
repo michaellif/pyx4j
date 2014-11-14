@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.auditrecords;
 
-import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
 
-public class AuditRecordListerViewImpl extends OperationsListerViewImplBase<AuditRecordOperationsDTO> {
+public class AuditRecordListerViewImpl extends AbstractListerView<AuditRecordOperationsDTO> {
 
     public AuditRecordListerViewImpl() {
         setDataTablePanel(new AuditRecordsLister());

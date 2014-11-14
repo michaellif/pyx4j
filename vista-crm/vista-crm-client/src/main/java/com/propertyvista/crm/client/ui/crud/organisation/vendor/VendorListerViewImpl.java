@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.vendor;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.domain.property.vendor.Vendor;
 
-public class VendorListerViewImpl extends CrmListerViewImplBase<Vendor> implements VendorListerView {
+public class VendorListerViewImpl extends AbstractListerView<Vendor> implements VendorListerView {
 
     public VendorListerViewImpl() {
         setDataTablePanel(new VendorLister());

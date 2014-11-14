@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.financial.glcode;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.domain.financial.GlCodeCategory;
 
-public class GlCodeCategoryListerViewImpl extends CrmListerViewImplBase<GlCodeCategory> implements GlCodeCategoryListerView {
+public class GlCodeCategoryListerViewImpl extends AbstractListerView<GlCodeCategory> implements GlCodeCategoryListerView {
 
     public GlCodeCategoryListerViewImpl() {
         setDataTablePanel(new GlCodeCategoryLister());

@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 
-public class EmployeeListerViewImpl extends CrmListerViewImplBase<EmployeeDTO> implements EmployeeListerView {
+public class EmployeeListerViewImpl extends AbstractListerView<EmployeeDTO> implements EmployeeListerView {
 
     public EmployeeListerViewImpl() {
         setDataTablePanel(new EmployeeLister());

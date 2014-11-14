@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.scheduler.trigger;
 
-import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.operations.rpc.dto.TriggerDTO;
 
-public class TriggerListerViewImpl extends OperationsListerViewImplBase<TriggerDTO> implements TriggerListerView {
+public class TriggerListerViewImpl extends AbstractListerView<TriggerDTO> implements TriggerListerView {
 
     public TriggerListerViewImpl() {
         setDataTablePanel(new TriggerLister());

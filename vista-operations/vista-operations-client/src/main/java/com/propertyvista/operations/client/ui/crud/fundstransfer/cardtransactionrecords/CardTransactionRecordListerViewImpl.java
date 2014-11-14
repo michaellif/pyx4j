@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.cardtransactionrecords;
 
-import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
 
-public class CardTransactionRecordListerViewImpl extends OperationsListerViewImplBase<CardTransactionRecord> implements CardTransactionRecordListerView {
+public class CardTransactionRecordListerViewImpl extends AbstractListerView<CardTransactionRecord> implements CardTransactionRecordListerView {
 
     public CardTransactionRecordListerViewImpl() {
         setDataTablePanel(new CardTransactionRecordLister(true));

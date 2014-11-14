@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public class DashboardManagementListerViewImpl extends CrmListerViewImplBase<DashboardMetadata> implements DashboardManagementListerView {
+public class DashboardManagementListerViewImpl extends AbstractListerView<DashboardMetadata> implements DashboardManagementListerView {
     public DashboardManagementListerViewImpl() {
         setDataTablePanel(new DashboardLister());
     }

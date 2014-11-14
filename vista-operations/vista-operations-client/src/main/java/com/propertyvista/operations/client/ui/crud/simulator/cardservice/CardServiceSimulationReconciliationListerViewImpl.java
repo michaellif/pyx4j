@@ -26,11 +26,11 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationReconciliationRecord;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationReconciliationCrudService;
 
-public class CardServiceSimulationReconciliationListerViewImpl extends OperationsListerViewImplBase<CardServiceSimulationReconciliationRecord> implements
+public class CardServiceSimulationReconciliationListerViewImpl extends AbstractListerView<CardServiceSimulationReconciliationRecord> implements
         CardServiceSimulationReconciliationListerView {
 
     public static class CardServiceSimulationReconciliationLister extends SiteDataTablePanel<CardServiceSimulationReconciliationRecord> {

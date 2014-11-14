@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.outgoingmail;
 
-import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.operations.rpc.dto.OutgoingMailQueueDTO;
 
-public class OutgoingMailListerViewImpl extends OperationsListerViewImplBase<OutgoingMailQueueDTO> implements OutgoingMailListerView {
+public class OutgoingMailListerViewImpl extends AbstractListerView<OutgoingMailQueueDTO> implements OutgoingMailListerView {
 
     public OutgoingMailListerViewImpl() {
         setDataTablePanel(new OutgoingMailLister());

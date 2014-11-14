@@ -14,9 +14,9 @@
 package com.propertyvista.operations.client.ui.crud.marketing;
 
 import com.propertyvista.domain.marketing.PortalResidentMarketingTip;
-import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 
-public class QuickTipListerViewImpl extends OperationsListerViewImplBase<PortalResidentMarketingTip> implements QuickTipListerView {
+public class QuickTipListerViewImpl extends AbstractListerView<PortalResidentMarketingTip> implements QuickTipListerView {
 
     public QuickTipListerViewImpl() {
         setDataTablePanel(new QuickTipLister());

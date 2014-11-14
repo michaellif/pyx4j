@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.creditcheck;
 
-import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.operations.rpc.dto.CustomerCreditCheckTransactionDTO;
 
-public class CustomerCreditCheckTransactionListerViewImpl extends OperationsListerViewImplBase<CustomerCreditCheckTransactionDTO> implements
+public class CustomerCreditCheckTransactionListerViewImpl extends AbstractListerView<CustomerCreditCheckTransactionDTO> implements
         CustomerCreditCheckTransactionListerView {
 
     public CustomerCreditCheckTransactionListerViewImpl() {

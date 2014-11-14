@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.directdebitrecords;
 
-import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 
-public class DirectDebitRecordListerViewImpl extends OperationsListerViewImplBase<DirectDebitRecord> implements DirectDebitRecordListerView {
+public class DirectDebitRecordListerViewImpl extends AbstractListerView<DirectDebitRecord> implements DirectDebitRecordListerView {
 
     public DirectDebitRecordListerViewImpl() {
         setDataTablePanel(new DirectDebitRecordLister(true));

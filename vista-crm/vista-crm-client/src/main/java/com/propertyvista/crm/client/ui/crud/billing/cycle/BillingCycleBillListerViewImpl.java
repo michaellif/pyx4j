@@ -21,10 +21,10 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 
-public class BillingCycleBillListerViewImpl extends CrmListerViewImplBase<BillDataDTO> implements BillingCycleBillListerView {
+public class BillingCycleBillListerViewImpl extends AbstractListerView<BillDataDTO> implements BillingCycleBillListerView {
 
     private final static I18n i18n = I18n.get(BillingCycleBillListerViewImpl.class);
 

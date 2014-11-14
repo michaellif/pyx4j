@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 
-public class BillingCycleListerViewImpl extends CrmListerViewImplBase<BillingCycleDTO> implements BillingCycleListerView {
+public class BillingCycleListerViewImpl extends AbstractListerView<BillingCycleDTO> implements BillingCycleListerView {
 
     public BillingCycleListerViewImpl() {
         setDataTablePanel(new BillingCycleLister());

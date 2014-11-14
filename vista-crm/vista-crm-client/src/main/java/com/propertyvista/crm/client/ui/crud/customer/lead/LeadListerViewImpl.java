@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.domain.tenant.lead.Lead;
 
-public class LeadListerViewImpl extends CrmListerViewImplBase<Lead> implements LeadListerView {
+public class LeadListerViewImpl extends AbstractListerView<Lead> implements LeadListerView {
 
     public LeadListerViewImpl() {
         setDataTablePanel(new LeadLister());

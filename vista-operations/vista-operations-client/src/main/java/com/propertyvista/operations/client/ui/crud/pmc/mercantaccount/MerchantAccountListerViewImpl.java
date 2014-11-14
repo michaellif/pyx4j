@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc.mercantaccount;
 
-import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 
-public class MerchantAccountListerViewImpl extends OperationsListerViewImplBase<PmcMerchantAccountDTO> implements MerchantAccountListerView {
+public class MerchantAccountListerViewImpl extends AbstractListerView<PmcMerchantAccountDTO> implements MerchantAccountListerView {
 
     public MerchantAccountListerViewImpl() {
         setDataTablePanel(new MerchantAccountLister());

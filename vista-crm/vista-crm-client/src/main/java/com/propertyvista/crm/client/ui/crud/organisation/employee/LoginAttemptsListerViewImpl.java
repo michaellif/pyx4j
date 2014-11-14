@@ -23,11 +23,11 @@ import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.crm.rpc.dto.account.LoginAttemptDTO;
 import com.propertyvista.crm.rpc.services.security.CrmLoginAttemptsListerService;
 
-public class LoginAttemptsListerViewImpl extends CrmListerViewImplBase<LoginAttemptDTO> implements LoginAttemptsListerView {
+public class LoginAttemptsListerViewImpl extends AbstractListerView<LoginAttemptDTO> implements LoginAttemptsListerView {
 
     public LoginAttemptsListerViewImpl() {
         setDataTablePanel(new LoginAttemptsLister());

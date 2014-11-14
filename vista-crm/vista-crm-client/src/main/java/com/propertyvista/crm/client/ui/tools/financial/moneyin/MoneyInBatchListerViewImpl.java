@@ -23,11 +23,11 @@ import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
 
-public class MoneyInBatchListerViewImpl extends CrmListerViewImplBase<MoneyInBatchDTO> {
+public class MoneyInBatchListerViewImpl extends AbstractListerView<MoneyInBatchDTO> {
 
     public MoneyInBatchListerViewImpl() {
         setDataTablePanel(new MoneyInBatchLister());

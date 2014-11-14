@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.operationsalert;
 
-import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.operations.rpc.dto.OperationsAlertDTO;
 
-public class OperationsAlertListerViewImpl extends OperationsListerViewImplBase<OperationsAlertDTO> {
+public class OperationsAlertListerViewImpl extends AbstractListerView<OperationsAlertDTO> {
 
     public OperationsAlertListerViewImpl() {
         setDataTablePanel(new OperationsAlertLister());

@@ -18,10 +18,10 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
 
-public class PadSimFileListerViewImpl extends OperationsListerViewImplBase<PadSimFile> implements PadSimFileListerView {
+public class PadSimFileListerViewImpl extends AbstractListerView<PadSimFile> implements PadSimFileListerView {
 
     private static final I18n i18n = I18n.get(PadSimFileListerViewImpl.class);
 

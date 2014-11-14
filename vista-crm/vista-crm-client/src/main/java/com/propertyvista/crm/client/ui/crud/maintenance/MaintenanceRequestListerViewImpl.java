@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
-public class MaintenanceRequestListerViewImpl extends CrmListerViewImplBase<MaintenanceRequestDTO> implements MaintenanceRequestListerView {
+public class MaintenanceRequestListerViewImpl extends AbstractListerView<MaintenanceRequestDTO> implements MaintenanceRequestListerView {
 
     public MaintenanceRequestListerViewImpl() {
         setDataTablePanel(new MaintenanceRequestLister());

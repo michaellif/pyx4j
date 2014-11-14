@@ -17,13 +17,13 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.crm.rpc.CrmSiteMap.Communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.dto.MessageDTO;
 
-public class MessageListerViewImpl extends CrmListerViewImplBase<MessageDTO> implements MessageListerView {
+public class MessageListerViewImpl extends AbstractListerView<MessageDTO> implements MessageListerView {
     private static final I18n i18n = I18n.get(MessageListerViewImpl.class);
 
     public MessageListerViewImpl() {

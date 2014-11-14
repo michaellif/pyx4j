@@ -20,12 +20,12 @@ import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.crm.rpc.services.admin.MerchantAccountCrudService;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class MerchantAccountListerViewImpl extends CrmListerViewImplBase<MerchantAccount> implements MerchantAccountListerView {
+public class MerchantAccountListerViewImpl extends AbstractListerView<MerchantAccount> implements MerchantAccountListerView {
 
     public MerchantAccountListerViewImpl() {
         setDataTablePanel(new MerchantAccountLister());

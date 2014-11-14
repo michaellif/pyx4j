@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.dto.AptUnitDTO;
 
-public class UnitListerViewImpl extends CrmListerViewImplBase<AptUnitDTO> implements UnitListerView {
+public class UnitListerViewImpl extends AbstractListerView<AptUnitDTO> implements UnitListerView {
 
     public UnitListerViewImpl() {
         setDataTablePanel(new UnitLister());

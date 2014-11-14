@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.financial.tax;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.domain.financial.tax.Tax;
 
-public class TaxListerViewImpl extends CrmListerViewImplBase<Tax> implements TaxListerView {
+public class TaxListerViewImpl extends AbstractListerView<Tax> implements TaxListerView {
 
     public TaxListerViewImpl() {
         setDataTablePanel(new TaxLister());

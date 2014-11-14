@@ -13,10 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.financial.arcode;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
+
 import com.propertyvista.domain.financial.ARCode;
 
-public class ARCodeListerViewImpl extends CrmListerViewImplBase<ARCode> implements ARCodeListerView {
+public class ARCodeListerViewImpl extends AbstractListerView<ARCode> implements ARCodeListerView {
 
     public ARCodeListerViewImpl() {
         setDataTablePanel(new ARCodeLister());

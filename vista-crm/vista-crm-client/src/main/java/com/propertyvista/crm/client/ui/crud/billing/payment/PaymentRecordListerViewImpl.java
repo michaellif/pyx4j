@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.payment;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentRecordListerViewImpl extends CrmListerViewImplBase<PaymentRecordDTO> implements PaymentRecordListerView {
+public class PaymentRecordListerViewImpl extends AbstractListerView<PaymentRecordDTO> implements PaymentRecordListerView {
 
     public PaymentRecordListerViewImpl() {
         setDataTablePanel(new PaymentRecordLister());

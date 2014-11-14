@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.scheduler.run;
 
-import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.operations.domain.scheduler.RunData;
 
-public class RunDataListerViewImpl extends OperationsListerViewImplBase<RunData> implements RunDataListerView {
+public class RunDataListerViewImpl extends AbstractListerView<RunData> implements RunDataListerView {
 
     public RunDataListerViewImpl() {
         setDataTablePanel(new RunDataLister(false));

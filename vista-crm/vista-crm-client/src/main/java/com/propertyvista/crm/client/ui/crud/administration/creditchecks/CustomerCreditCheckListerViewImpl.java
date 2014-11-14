@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.creditchecks;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 
-public class CustomerCreditCheckListerViewImpl extends CrmListerViewImplBase<CustomerCreditCheckDTO> implements CustomerCreditCheckListerView {
+public class CustomerCreditCheckListerViewImpl extends AbstractListerView<CustomerCreditCheckDTO> implements CustomerCreditCheckListerView {
 
     public CustomerCreditCheckListerViewImpl() {
         setDataTablePanel(new CustomerCreditCheckLister());

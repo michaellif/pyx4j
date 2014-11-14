@@ -20,11 +20,11 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.components.boxes.UpdateUploadDialog;
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.dto.BuildingDTO;
 
-public class BuildingListerViewImpl extends CrmListerViewImplBase<BuildingDTO> implements BuildingListerView {
+public class BuildingListerViewImpl extends AbstractListerView<BuildingDTO> implements BuildingListerView {
 
     private static final I18n i18n = I18n.get(BuildingListerViewImpl.class);
 

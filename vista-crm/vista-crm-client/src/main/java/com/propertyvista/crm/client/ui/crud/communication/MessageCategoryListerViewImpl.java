@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.domain.communication.MessageCategory;
 
-public class MessageCategoryListerViewImpl extends CrmListerViewImplBase<MessageCategory> implements MessageCategoryListerView {
+public class MessageCategoryListerViewImpl extends AbstractListerView<MessageCategory> implements MessageCategoryListerView {
 
     public MessageCategoryListerViewImpl() {
         setDataTablePanel(new MessageCategoryLister());

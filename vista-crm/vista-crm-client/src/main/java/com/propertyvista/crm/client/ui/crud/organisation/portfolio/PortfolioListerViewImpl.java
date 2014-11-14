@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.portfolio;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.domain.company.Portfolio;
 
-public class PortfolioListerViewImpl extends CrmListerViewImplBase<Portfolio> implements PortfolioListerView {
+public class PortfolioListerViewImpl extends AbstractListerView<Portfolio> implements PortfolioListerView {
 
     public PortfolioListerViewImpl() {
         setDataTablePanel(new PortfolioLister());
