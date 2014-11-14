@@ -43,8 +43,8 @@ public class DirectDebitRecordLister extends EntityDataTablePanel<DirectDebitRec
         columns.add(new MemberColumnDescriptor.Builder(proto().accountNumber()).build());
         columns.add(new MemberColumnDescriptor.Builder(proto().amount()).build());
         columns.add(new MemberColumnDescriptor.Builder(proto().paymentReferenceNumber()).build());
-        columns.add(new MemberColumnDescriptor.Builder(proto().directDebitFile().fileName()).build());
-        columns.add(new MemberColumnDescriptor.Builder(proto().directDebitFile().fileSerialNumber()).visible(false).build());
+        columns.add(new MemberColumnDescriptor.Builder(proto().directDebitFile().fileSerialNumber()).build());
+        columns.add(new MemberColumnDescriptor.Builder(proto().directDebitFile().fileName()).visible(false).build());
         columns.add(new MemberColumnDescriptor.Builder(proto().directDebitFile().fileSerialDate()).visible(false).build());
         columns.add(new MemberColumnDescriptor.Builder(proto().customerName()).build());
         columns.add(new MemberColumnDescriptor.Builder(proto().receivedDate()).build());
