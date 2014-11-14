@@ -18,6 +18,7 @@ import java.util.Map;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.server.mail.MailDeliveryCallback;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.biz.communication.NotificationFacade.BatchErrorType;
@@ -125,7 +126,7 @@ public interface CommunicationFacade {
 
     MailMessage sendMaintenanceRequestCancelled(MaintenanceRequest request);
 
-    MailMessage sendMaintenanceRequestEntryNotice(MaintenanceRequest request);
+    MailMessage sendMaintenanceRequestEntryNotice(MaintenanceRequest request, Class<? extends MailDeliveryCallback> callback);
 
     void sendYardiConfigurationNotification(List<String> sendTo, String message);
 

@@ -30,7 +30,6 @@ import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -78,15 +77,12 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
 
     @Override
     public void cancelMaintenanceRequest(MaintenanceRequest request, CommunicationEndpoint requestReporter) {
-        MaintenanceRequestStatus status = getMaintenanceStatus(request.building(), StatusPhase.Cancelled);
-        if (status != null) {
-            request.status().set(status);
-            postRequest(request);
+        request.status().set(getMaintenanceStatus(request.building(), StatusPhase.Cancelled));
+        postRequest(request);
 
-            // TODO: send maintenance request mail from messaging system
-            MailMessage message = ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCancelled(request);
-            ServerSideFactory.create(CommunicationMessageFacade.class).associationChange2Message(request, requestReporter, extractMailBody(message));
-        }
+        // TODO: send maintenance request mail from messaging system
+        MailMessage message = ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCancelled(request);
+        ServerSideFactory.create(CommunicationMessageFacade.class).associationChange2Message(request, requestReporter, extractMailBody(message));
     }
 
     @Override
@@ -97,40 +93,12 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
 
     @Override
     public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule, Employee requestReporter) {
-        MaintenanceRequestStatus status = getMaintenanceStatus(request.building(), StatusPhase.Scheduled);
-        if (status != null) {
-            request.workHistory().add(schedule);
-            request.status().set(status);
-
-            // TODO: send maintenance request mail from messaging system
-            MailMessage message = null;
-            if (!request.unit().isNull() && request.permissionToEnter().getValue(false)) {
-                // send notice of entry if permission to access unit is granted
-                message = ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestEntryNotice(request);
-
-                if (message != null) {
-                    schedule.noticeOfEntry().text().setValue(extractMailBody(message));
-                    schedule.noticeOfEntry().messageId().setValue(message.getHeader("Message-ID"));
-                    schedule.noticeOfEntry().messageDate().setValue(message.getHeader("Date"));
-                }
-            }
-            ServerSideFactory.create(CommunicationMessageFacade.class).associationChange2Message(request, requestReporter, extractMailBody(message));
-
-            postRequest(request);
-        }
+        super.sheduleMaintenanceRequest(request, schedule, requestReporter);
     }
 
     @Override
     public void resolveMaintenanceRequest(MaintenanceRequest request, Employee requestReporter) {
-        MaintenanceRequestStatus status = getMaintenanceStatus(request.building(), StatusPhase.Resolved);
-        if (status != null) {
-            request.status().set(status);
-            postRequest(request);
-
-            // TODO: send maintenance request mail from messaging system
-            MailMessage message = ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCompleted(request);
-            ServerSideFactory.create(CommunicationMessageFacade.class).associationChange2Message(request, requestReporter, extractMailBody(message));
-        }
+        super.resolveMaintenanceRequest(request, requestReporter);
     }
 
     @Override

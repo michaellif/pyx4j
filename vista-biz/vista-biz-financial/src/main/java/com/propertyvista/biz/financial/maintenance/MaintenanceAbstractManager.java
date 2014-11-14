@@ -28,8 +28,11 @@ import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AbstractOutgoingMailQueue.MailQueueStatus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.contexts.ServerContext;
+import com.pyx4j.server.mail.MailDeliveryCallback;
+import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
@@ -156,14 +159,13 @@ public abstract class MaintenanceAbstractManager {
 
         // TODO: send maintenance request mail from messaging system
         MailMessage email = null;
+        // send notice of entry if permission to access unit is granted
         if (!request.unit().isNull() && request.permissionToEnter().getValue(false)) {
-            // send notice of entry if permission to access unit is granted
-            email = ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestEntryNotice(request);
-
+            // send via MailQue using NoticeOfEntryDeliveryCallback that will populate schedule.noticeOfEntry()
+            email = ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestEntryNotice(request, NoticeOfEntryDeliveryCallback.class);
             if (email != null) {
-                schedule.noticeOfEntry().text().setValue(extractMailBody(email));
-                schedule.noticeOfEntry().messageId().setValue(email.getHeader("Message-ID"));
-                schedule.noticeOfEntry().messageDate().setValue(email.getHeader("Date"));
+                // save email messageID to be able to identify the schedule object in NoticeOfEntryDeliveryCallback
+                schedule.noticeOfEntry().messageId().setValue(email.getMailMessageObjectId());
             }
         }
         ServerSideFactory.create(CommunicationMessageFacade.class).associationChange2Message(request, requestReporter, extractMailBody(email));
@@ -251,10 +253,30 @@ public abstract class MaintenanceAbstractManager {
         request.phoneType().setValue(type);
     }
 
-    protected String extractMailBody(MailMessage message) {
+    protected static String extractMailBody(MailMessage message) {
         if (message == null) {
             return null;
         }
         return message.getHtmlBody() != null ? message.getHtmlBody() : message.getTextBody();
+    }
+
+    public static class NoticeOfEntryDeliveryCallback implements MailDeliveryCallback {
+
+        @Override
+        public void onDeliveryCompleted(MailMessage mailMessage, MailDeliveryStatus status, MailQueueStatus mailQueueStatus, int deliveryAttemptsMade) {
+            if (mailMessage != null && status == MailDeliveryStatus.Success) {
+                EntityQueryCriteria<MaintenanceRequestSchedule> crit = EntityQueryCriteria.create(MaintenanceRequestSchedule.class);
+                crit.eq(crit.proto().noticeOfEntry().messageId(), mailMessage.getMailMessageObjectId());
+                MaintenanceRequestSchedule schedule = Persistence.service().retrieve(crit);
+                if (schedule != null) {
+                    schedule.noticeOfEntry().text().setValue(extractMailBody(mailMessage));
+                    schedule.noticeOfEntry().messageId().setValue(mailMessage.getHeader("Message-ID"));
+                    schedule.noticeOfEntry().messageDate().setValue(mailMessage.getHeader("Date"));
+                    Persistence.service().persist(schedule);
+                } else {
+                    throw new Error("Maintenance Request Schedule not found using MailMessageObjectId: " + mailMessage.getMailMessageObjectId());
+                }
+            }
+        }
     }
 }

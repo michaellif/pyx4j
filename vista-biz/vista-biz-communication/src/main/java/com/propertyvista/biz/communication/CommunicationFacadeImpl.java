@@ -24,6 +24,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.mail.Mail;
+import com.pyx4j.server.mail.MailDeliveryCallback;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
@@ -337,14 +338,19 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public MailMessage sendMaintenanceRequestEntryNotice(MaintenanceRequest request) {
-        return sendMaintenanceRequestEmail(TenantAccess.getActiveEmail(request.reporter()), EmailTemplateType.MaintenanceRequestEntryNotice, request);
+    public MailMessage sendMaintenanceRequestEntryNotice(MaintenanceRequest request, Class<? extends MailDeliveryCallback> callback) {
+        return sendMaintenanceRequestEmail(TenantAccess.getActiveEmail(request.reporter()), EmailTemplateType.MaintenanceRequestEntryNotice, request, callback);
     }
 
     private MailMessage sendMaintenanceRequestEmail(String sendTo, EmailTemplateType emailType, MaintenanceRequest request) {
+        return sendMaintenanceRequestEmail(sendTo, emailType, request, null);
+    }
+
+    private MailMessage sendMaintenanceRequestEmail(String sendTo, EmailTemplateType emailType, MaintenanceRequest request,
+            Class<? extends MailDeliveryCallback> callback) {
         MailMessage m = MessageTemplatesCustomizable.createMaintenanceRequestEmail(emailType, request);
         m.setTo(sendTo);
-        Mail.queue(m, null, null);
+        Mail.queueUofW(m, callback, null);
         return m;
     }
 
