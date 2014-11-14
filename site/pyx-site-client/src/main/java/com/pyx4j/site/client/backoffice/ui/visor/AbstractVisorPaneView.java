@@ -31,7 +31,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
 import com.pyx4j.site.client.backoffice.ui.AbstractPaneView;
-import com.pyx4j.site.client.backoffice.ui.IPaneView;
 import com.pyx4j.site.client.backoffice.ui.IPaneView.IPanePresenter;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
@@ -99,11 +98,11 @@ public abstract class AbstractVisorPaneView extends AbstractPaneView<IPanePresen
         return controller;
     }
 
-    public void setParentPane(IPrimePaneView parentPane) {
+    public void setParentPane(IPrimePaneView<?> parentPane) {
         this.parentPane = parentPane;
     }
 
-    public IPaneView getParentPane() {
+    public IPrimePaneView<?> getParentPane() {
         return parentPane;
     }
 
