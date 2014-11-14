@@ -41,6 +41,6 @@ public abstract class CrmReportsActivity<R extends ReportTemplate> extends Abstr
 
     @Override
     protected void onReportMetadataSet(R reportMetadata) {
-        AppSite.getEventBus().fireEvent(new CrudNavigateEvent(place, place.getReportMetadata()));
+        AppSite.getEventBus().fireEvent(new CrudNavigateEvent(getPlace(), getPlace().getReportMetadata()));
     };
 }
