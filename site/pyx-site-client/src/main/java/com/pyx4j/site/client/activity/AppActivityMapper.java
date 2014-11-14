@@ -21,10 +21,11 @@
 package com.pyx4j.site.client.activity;
 
 import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.site.rpc.AppPlace;
 
 public interface AppActivityMapper {
 
-    void obtainActivity(Place place, AsyncCallback<Activity> callback);
+    void obtainActivity(AppPlace place, AsyncCallback<Activity> callback);
 }

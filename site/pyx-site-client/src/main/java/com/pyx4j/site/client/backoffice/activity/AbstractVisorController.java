@@ -25,13 +25,13 @@ import com.pyx4j.site.client.ui.visor.IVisor;
 
 public abstract class AbstractVisorController implements IVisor.Controller {
 
-    private final IPrimePaneView parentView;
+    private final IPrimePaneView<?> parentView;
 
-    public AbstractVisorController(IPrimePaneView parentView) {
+    public AbstractVisorController(IPrimePaneView<?> parentView) {
         this.parentView = parentView;
     }
 
-    public IPrimePaneView getParentView() {
+    public IPrimePaneView<?> getParentView() {
         return parentView;
     }
 

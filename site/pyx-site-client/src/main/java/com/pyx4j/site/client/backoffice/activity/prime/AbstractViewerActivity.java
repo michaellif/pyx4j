@@ -18,7 +18,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.backoffice.activity;
+package com.pyx4j.site.client.backoffice.activity.prime;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -37,10 +37,11 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView.IViewerPresenter;
 import com.pyx4j.site.client.memento.MementoManager;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public abstract class AbstractViewerActivity<E extends IEntity> extends AbstractActivity implements IViewerView.IViewerPresenter {
+public abstract class AbstractViewerActivity<E extends IEntity> extends AbstractActivity implements IViewerPresenter {
 
     protected final Class<E> entityClass;
 

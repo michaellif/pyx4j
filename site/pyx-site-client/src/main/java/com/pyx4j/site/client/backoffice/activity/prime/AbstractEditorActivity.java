@@ -18,9 +18,8 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.backoffice.activity;
+package com.pyx4j.site.client.backoffice.activity.prime;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -40,17 +39,14 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView.EditMode;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView.IEditorPresenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public abstract class AbstractEditorActivity<E extends IEntity> extends AbstractActivity implements IEditorView.IEditorPresenter {
+public abstract class AbstractEditorActivity<E extends IEntity> extends AbstractPrimeActivity<IEditorView<?>> implements IEditorPresenter {
 
     private static final I18n i18n = I18n.get(AbstractEditorActivity.class);
 
-    private final IEditorView<E> view;
-
     private final AbstractCrudService<E> service;
-
-    private final CrudAppPlace place;
 
     private final Class<E> entityClass;
 
@@ -65,13 +61,12 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
     private boolean mayStop;
 
     public AbstractEditorActivity(Class<E> entityClass, CrudAppPlace place, IEditorView<E> view, AbstractCrudService<E> service) {
+        super(view, place);
         // development correctness checks:
         assert (view != null);
         assert (service != null);
         assert (entityClass != null);
 
-        this.place = place;
-        this.view = view;
         this.service = service;
         this.entityClass = entityClass;
 
@@ -109,10 +104,6 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
         }
     }
 
-    public IEditorView<E> getView() {
-        return view;
-    }
-
     public AbstractCrudService<E> getService() {
         return service;
     }
@@ -135,22 +126,28 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
 
     @Override
     public CrudAppPlace getPlace() {
-        return place;
+        return (CrudAppPlace) super.getPlace();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public IEditorView<E> getView() {
+        return (IEditorView<E>) super.getView();
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         mayStop = false;
         // should be called first in start - some views can set appropriate form according to the current mode
-        view.setEditMode(isNewEntity() ? EditMode.newItem : EditMode.existingItem);
-        view.setPresenter(this);
+        getView().setEditMode(isNewEntity() ? EditMode.newItem : EditMode.existingItem);
+        getView().setPresenter(this);
         populate();
-        panel.setWidget(view);
+        panel.setWidget(getView());
     }
 
     protected void onDiscard() {
-        view.reset();
-        view.setPresenter(null);
+        getView().reset();
+        getView().setPresenter(null);
     }
 
     @Override
@@ -222,8 +219,8 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
      * 
      */
     protected void obtainInitializationData(AsyncCallback<InitializationData> callback) {
-        if (place.getInitializationData() != null) {
-            callback.onSuccess(place.getInitializationData());
+        if (getPlace().getInitializationData() != null) {
+            callback.onSuccess(getPlace().getInitializationData());
         } else {
             callback.onSuccess(null);
         }
@@ -240,10 +237,10 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
     protected void populateView(E result) {
         int activeTab = tabIndex;
         if (activeTab < 0) {
-            activeTab = view.getActiveTab();
+            activeTab = getView().getActiveTab();
         }
-        view.populate(result);
-        view.setActiveTab(activeTab);
+        getView().populate(result);
+        getView().setActiveTab(activeTab);
     }
 
     @Override
@@ -284,9 +281,9 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
             }
         };
         if (isNewEntity()) {
-            service.create(callback, view.getValue());
+            service.create(callback, getView().getValue());
         } else {
-            service.save(callback, view.getValue());
+            service.save(callback, getView().getValue());
         }
     }
 
@@ -305,27 +302,27 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
     }
 
     protected void onSaveFail(Throwable caught) {
-        if (!view.onSaveFail(caught)) {
+        if (!getView().onSaveFail(caught)) {
             throw new UnrecoverableClientError(caught);
         }
     }
 
     protected void goToViewer(Key entityID) {
-        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(place.getClass()).formViewerPlace(entityID, view.getActiveTab()));
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(getPlace().getClass()).formViewerPlace(entityID, getView().getActiveTab()));
     }
 
     protected void goToEditor(Key entityID) {
-        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(place.getClass()).formEditorPlace(entityID, view.getActiveTab()));
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(getPlace().getClass()).formEditorPlace(entityID, getView().getActiveTab()));
     }
 
     @Override
     public String mayStop() {
-        if (!mayStop && view.isDirty()) {
-            String entityName = view.getValue().getStringView();
+        if (!mayStop && getView().isDirty()) {
+            String entityName = getView().getValue().getStringView();
             if (CommonsStringUtils.isEmpty(entityName)) {
-                return i18n.tr("Changes to {0} were not saved", view.getValue().getEntityMeta().getCaption());
+                return i18n.tr("Changes to {0} were not saved", getView().getValue().getEntityMeta().getCaption());
             } else {
-                return i18n.tr("Changes to {0} ''{1}'' were not saved", view.getValue().getEntityMeta().getCaption(), entityName);
+                return i18n.tr("Changes to {0} ''{1}'' were not saved", getView().getValue().getEntityMeta().getCaption(), entityName);
             }
         } else {
             return null;

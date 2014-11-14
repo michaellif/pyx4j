@@ -18,7 +18,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.backoffice.activity;
+package com.pyx4j.site.client.backoffice.activity.prime;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -36,9 +36,10 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView;
+import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView.IWizardPresenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public abstract class AbstractWizardActivity<E extends IEntity> extends AbstractActivity implements IWizardView.IWizardPresenter {
+public abstract class AbstractWizardActivity<E extends IEntity> extends AbstractActivity implements IWizardPresenter {
 
     private static final I18n i18n = I18n.get(AbstractWizardActivity.class);
 

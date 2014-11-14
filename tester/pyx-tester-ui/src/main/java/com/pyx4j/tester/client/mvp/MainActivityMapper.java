@@ -23,10 +23,10 @@ package com.pyx4j.tester.client.mvp;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.activity.AppActivityMapper;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.tester.client.TesterSiteMap;
 import com.pyx4j.tester.client.activity.AddressEditorActivity;
 import com.pyx4j.tester.client.activity.FolderLayoutActivity;
@@ -42,7 +42,7 @@ public class MainActivityMapper implements AppActivityMapper {
     }
 
     @Override
-    public void obtainActivity(final Place place, final AsyncCallback<Activity> callback) {
+    public void obtainActivity(final AppPlace place, final AsyncCallback<Activity> callback) {
         GWT.runAsync(new RunAsyncCallback() {
 
             @Override

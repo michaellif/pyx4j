@@ -18,7 +18,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.pyx4j.site.client.backoffice.activity;
+package com.pyx4j.site.client.backoffice.activity.prime;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -48,8 +48,10 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.ReportDialog;
+import com.pyx4j.site.client.backoffice.activity.AbstractVisorController;
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
 import com.pyx4j.site.client.backoffice.ui.prime.report.IReportView;
+import com.pyx4j.site.client.backoffice.ui.prime.report.IReportView.IReportPresenter;
 import com.pyx4j.site.client.backoffice.ui.prime.report.ReportSettingsManagementVizor;
 import com.pyx4j.site.client.memento.MementoManager;
 import com.pyx4j.site.rpc.AppPlace;
@@ -59,47 +61,7 @@ import com.pyx4j.site.rpc.customization.ICustomizationPersistenceService;
 import com.pyx4j.site.rpc.reports.IReportsService;
 import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
-public abstract class AbstractReportActivity<R extends ReportTemplate> extends AbstractActivity implements IReportView.IReportPresenter<R> {
-
-    public class ReportSettingsManagementVizorController extends AbstractVisorController {
-
-        private final ReportSettingsManagementVizor visor;
-
-        public ReportSettingsManagementVizorController(IPrimePaneView parentView, final IReportView.IReportPresenter<R> presenter) {
-            super(parentView);
-            visor = new ReportSettingsManagementVizor(this) {
-
-                @Override
-                public void onLoadRequest(String selectedReportSettingsId) {
-                    presenter.loadReportMetadata(selectedReportSettingsId);
-                }
-
-                @Override
-                public void onDeleteRequest(String selectedReportSettingsId) {
-                    presenter.deleteReportMetadata(selectedReportSettingsId);
-                }
-            };
-            visor.setAvailableReportSettingsIds(null);
-
-        }
-
-        @Override
-        public void show() {
-            getParentView().showVisor(visor);
-        }
-
-        public void setAvailableReportSettingsIds(List<String> reportSettingsIds) {
-            visor.setAvailableReportSettingsIds(reportSettingsIds);
-        }
-
-    }
-
-    private static class CachedReportData {
-
-        ReportTemplate reportMetadata;
-
-        Object data;
-    }
+public abstract class AbstractReportActivity<R extends ReportTemplate> extends AbstractActivity implements IReportPresenter<R> {
 
     private static final I18n i18n = I18n.get(AbstractReportActivity.class);
 
@@ -349,4 +311,43 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
         return EntityFactory.create(reportMetadataClass);
     }
 
+    public class ReportSettingsManagementVizorController extends AbstractVisorController {
+
+        private final ReportSettingsManagementVizor visor;
+
+        public ReportSettingsManagementVizorController(IPrimePaneView parentView, final IReportView.IReportPresenter<R> presenter) {
+            super(parentView);
+            visor = new ReportSettingsManagementVizor(this) {
+
+                @Override
+                public void onLoadRequest(String selectedReportSettingsId) {
+                    presenter.loadReportMetadata(selectedReportSettingsId);
+                }
+
+                @Override
+                public void onDeleteRequest(String selectedReportSettingsId) {
+                    presenter.deleteReportMetadata(selectedReportSettingsId);
+                }
+            };
+            visor.setAvailableReportSettingsIds(null);
+
+        }
+
+        @Override
+        public void show() {
+            getParentView().showVisor(visor);
+        }
+
+        public void setAvailableReportSettingsIds(List<String> reportSettingsIds) {
+            visor.setAvailableReportSettingsIds(reportSettingsIds);
+        }
+
+    }
+
+    private static class CachedReportData {
+
+        ReportTemplate reportMetadata;
+
+        Object data;
+    }
 }

@@ -18,13 +18,11 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.backoffice.activity;
+package com.pyx4j.site.client.backoffice.activity.prime;
 
 import java.util.List;
 
-import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
@@ -38,39 +36,34 @@ import com.pyx4j.site.client.memento.MementoManager;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public abstract class AbstractListerActivity<E extends IEntity> implements IListerPresenter<E>, Activity {
-
-    private final IListerView<E> view;
+public abstract class AbstractListerActivity<E extends IEntity> extends AbstractPrimeActivity<IListerView<?>> implements IListerPresenter<E> {
 
     private final Class<E> entityClass;
-
-    private final AppPlace place;
 
     private List<Criterion> externalFilters;
 
     private boolean populateOnStart = true;
 
-    public AbstractListerActivity(Class<E> entityClass, Place place, IListerView<E> view) {
+    public AbstractListerActivity(Class<E> entityClass, AppPlace place, IListerView<E> view) {
+        super(view, place);
         // development correctness checks:
         assert (entityClass != null);
-        assert (view != null);
 
         this.entityClass = entityClass;
 
-        this.view = view;
         view.setPresenter(this);
 
-        this.place = (AppPlace) place;
-
         EntityFiltersBuilder<E> filters = EntityFiltersBuilder.create(entityClass);
-        parseExternalFilters((AppPlace) place, entityClass, filters);
+        parseExternalFilters(place, entityClass, filters);
         if (filters.getFilters().size() > 0) {
             externalFilters = filters.getFilters();
         }
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
     public IListerView<E> getView() {
-        return view;
+        return (IListerView<E>) super.getView();
     }
 
     public Class<E> getEntityClass() {
@@ -84,37 +77,37 @@ public abstract class AbstractListerActivity<E extends IEntity> implements IList
 
     @Override
     public void setParentKey(Key parentID, Class<? extends IEntity> parentClass) {
-        view.getDataTablePanel().getDataSource().setParentEntityId(parentID, parentClass);
+        getView().getDataTablePanel().getDataSource().setParentEntityId(parentID, parentClass);
     }
 
     @Override
     public void setPreDefinedFilters(List<Criterion> filters) {
-        view.getDataTablePanel().getDataSource().setPreDefinedFilters(filters);
+        getView().getDataTablePanel().getDataSource().setPreDefinedFilters(filters);
     }
 
     @Override
     public void addPreDefinedFilters(List<Criterion> filters) {
-        view.getDataTablePanel().getDataSource().addPreDefinedFilters(filters);
+        getView().getDataTablePanel().getDataSource().addPreDefinedFilters(filters);
     }
 
     @Override
     public void addPreDefinedFilter(Criterion filter) {
-        view.getDataTablePanel().getDataSource().addPreDefinedFilter(filter);
+        getView().getDataTablePanel().getDataSource().addPreDefinedFilter(filter);
     }
 
     @Override
     public void clearPreDefinedFilters() {
-        view.getDataTablePanel().getDataSource().clearPreDefinedFilters();
+        getView().getDataTablePanel().getDataSource().clearPreDefinedFilters();
     }
 
     @Override
     public void populate() {
-        view.getDataTablePanel().populate();
+        getView().getDataTablePanel().populate();
     }
 
     @Override
     public void refresh() {
-        view.getDataTablePanel().populate();
+        getView().getDataTablePanel().populate();
     }
 
     protected void parseExternalFilters(AppPlace place, Class<E> entityClass, EntityFiltersBuilder<E> filters) {
@@ -127,16 +120,11 @@ public abstract class AbstractListerActivity<E extends IEntity> implements IList
     }
 
     @Override
-    public AppPlace getPlace() {
-        return place;
-    }
-
-    @Override
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         getView().discard();
         getView().getDataTablePanel().setExternalFilters(externalFilters);
         getView().setPresenter(this);
-        MementoManager.restoreState(getView(), place);
+        MementoManager.restoreState(getView(), getPlace());
         if (populateOnStart) {
             populate();
         }
@@ -144,7 +132,7 @@ public abstract class AbstractListerActivity<E extends IEntity> implements IList
     }
 
     public void onDiscard() {
-        MementoManager.saveState(getView(), place);
+        MementoManager.saveState(getView(), getPlace());
         getView().discard();
         getView().setPresenter(null);
 

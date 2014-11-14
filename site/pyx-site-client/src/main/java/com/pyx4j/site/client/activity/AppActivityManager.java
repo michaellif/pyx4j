@@ -36,6 +36,7 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.rpc.AppPlace;
 
 public class AppActivityManager implements PlaceChangeEvent.Handler, PlaceChangeRequestEvent.Handler {
 
@@ -204,7 +205,7 @@ public class AppActivityManager implements PlaceChangeEvent.Handler, PlaceChange
              */
             callback.onSuccess(null);
         }
-        mapper.obtainActivity(event.getNewPlace(), callback);
+        mapper.obtainActivity((AppPlace) event.getNewPlace(), callback);
     }
 
     private void showWidget(IsWidget view) {
