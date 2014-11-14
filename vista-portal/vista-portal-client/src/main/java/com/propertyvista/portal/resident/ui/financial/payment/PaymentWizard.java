@@ -285,7 +285,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
             @Override
             public BasicValidationError isValid() {
                 if (getCComponent().getValue() != null) {
-                    return (getCComponent().getValue().compareTo(BigDecimal.ZERO) > 0 ? null : new BasicValidationError(getCComponent(), i18n
+                    return (getCComponent().getValue().signum() > 0 ? null : new BasicValidationError(getCComponent(), i18n
                             .tr("Payment amount should be greater than zero!")));
                 }
                 return null;

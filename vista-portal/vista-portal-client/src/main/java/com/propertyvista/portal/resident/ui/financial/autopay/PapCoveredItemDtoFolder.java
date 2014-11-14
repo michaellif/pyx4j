@@ -31,6 +31,8 @@ import com.pyx4j.forms.client.ui.CPercentageLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.PapBillableItemLabel;
@@ -106,6 +108,22 @@ public class PapCoveredItemDtoFolder extends PortalBoxFolder<PreauthorizedPaymen
             });
 
             return formPanel;
+        }
+
+        @Override
+        public void addValidations() {
+            super.addValidations();
+
+            get(proto().amount()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
+                @Override
+                public BasicValidationError isValid() {
+                    if (getCComponent().getValue() != null) {
+                        return (getCComponent().getValue().signum() < 0 ? new BasicValidationError(getCComponent(), i18n
+                                .tr("Payment amount should be grater than or equal to zero)")) : null);
+                    }
+                    return null;
+                }
+            });
         }
     }
 }
