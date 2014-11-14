@@ -67,11 +67,9 @@ import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.system.yardi.YardiConfigurationFacade;
-import com.propertyvista.biz.system.yardi.YardiLeaseApplicationFacade;
 import com.propertyvista.biz.system.yardi.YardiNoTenantsExistException;
 import com.propertyvista.biz.system.yardi.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
-import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.financial.ARCode;
@@ -83,8 +81,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseApplication;
-import com.propertyvista.domain.tenant.lease.LeaseApplication.Status;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.operations.domain.scheduler.CompletionType;
 import com.propertyvista.server.common.util.AddressRetriever;
@@ -428,13 +424,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
 
             if (!executionMonitor.isTerminationRequested()) {
-                // Attempt to sync application status in case approval fails
-                // TODO - may need a common way to sync Yardi state
-                // TODO - use yardiInterfaceId to select lease apps
-                syncPendingApplications(executionMonitor);
-            }
-
-            if (!executionMonitor.isTerminationRequested()) {
                 importLeases(rtd);
             }
 
@@ -597,25 +586,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     private void importLeases(final YardiResidentTransactionsData rtd) throws YardiServiceException {
         new YardiLeaseProcessor(rtd).process();
-    }
-
-    private void syncPendingApplications(ExecutionMonitor executionMonitor) {
-        EntityQueryCriteria<LeaseApplication> laQuery = EntityQueryCriteria.create(LeaseApplication.class);
-        laQuery.isNotNull(laQuery.proto().yardiApplicationId());
-        laQuery.isNull(laQuery.proto().lease().leaseId());
-        laQuery.eq(laQuery.proto().status(), Status.PendingDecision);
-        for (LeaseApplication la : Persistence.service().query(laQuery)) {
-            // check if prospect is a resident and if lease has been approved
-            try {
-                if (ServerSideFactory.create(YardiLeaseApplicationFacade.class).isLeaseSigned(la.lease())) {
-                    ServerSideFactory.create(LeaseFacade.class).approve(la.lease(), null, null);
-                    executionMonitor.addInfoEvent("LeaseApplication", "approved pending application: " + la.yardiApplicationId().getValue());
-                }
-            } catch (Throwable e) {
-                // TODO - if we fail here, a new lease will be create during import process - will need to prevent that
-                executionMonitor.addErredEvent("LeaseApplication", "Could not sync pending application: " + la.yardiApplicationId().getValue(), e);
-            }
-        }
     }
 
     private void assignLegalAddress(final AptUnit unit, final Address address, final ExecutionMonitor executionMonitor) throws YardiServiceException {
