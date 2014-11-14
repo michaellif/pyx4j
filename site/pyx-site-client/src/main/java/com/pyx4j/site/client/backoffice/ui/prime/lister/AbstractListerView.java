@@ -32,10 +32,11 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView.IListerPresenter;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 public class AbstractListerView<E extends IEntity> extends AbstractPrimePaneView<IListerPresenter<E>> implements IListerView<E> {
 
-    private EntityDataTablePanel<E> dataTablePanel = null;
+    private SiteDataTablePanel<E> dataTablePanel = null;
 
     public AbstractListerView() {
         super();
@@ -44,7 +45,7 @@ public class AbstractListerView<E extends IEntity> extends AbstractPrimePaneView
     /*
      * Should be called by descendant upon initialisation.
      */
-    protected void setDataTablePanel(EntityDataTablePanel<E> dataTablePanel) {
+    protected void setDataTablePanel(SiteDataTablePanel<E> dataTablePanel) {
         if (getContentPane() == null) { // finalise UI here:
             setContentPane(new ScrollPanel());
             setSize("100%", "100%");
@@ -61,20 +62,15 @@ public class AbstractListerView<E extends IEntity> extends AbstractPrimePaneView
     }
 
     @Override
-    public EntityDataTablePanel<E> getDataTablePanel() {
+    public SiteDataTablePanel<E> getDataTablePanel() {
         assert (dataTablePanel != null);
         return dataTablePanel;
     }
 
     @Override
     public void setPresenter(IListerView.IListerPresenter<E> presenter) {
-        getDataTablePanel().setPresenter(presenter);
+        super.setPresenter(presenter);
         setCaption(presenter != null && presenter.getPlace() != null ? AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() : "");
-    }
-
-    @Override
-    public IListerView.IListerPresenter<E> getPresenter() {
-        return getDataTablePanel().getPresenter();
     }
 
     @Override

@@ -26,26 +26,17 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
-import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
-import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView.IPrimePanePresenter;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView.IListerPresenter;
-import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 public interface IListerView<E extends IEntity> extends IPrimePaneView<IListerPresenter<E>> {
 
-    public interface IListerPresenter<E extends IEntity> extends IPrimePanePresenter {
+    public interface IListerPresenter<E extends IEntity> extends IPrimePaneView.IPrimePanePresenter {
 
-        public ListerDataSource<E> getDataSource();
+        void setParentKey(Key parentID);
 
-        Key getParent();
-
-        Class<? extends IEntity> getParentClass();
-
-        void setParent(Key parentID);
-
-        void setParent(Key parentID, Class<? extends IEntity> parentClass);
+        void setParentKey(Key parentID, Class<? extends IEntity> parentClass);
 
         void setPreDefinedFilters(List<Criterion> filters);
 
@@ -55,23 +46,9 @@ public interface IListerView<E extends IEntity> extends IPrimePaneView<IListerPr
 
         void clearPreDefinedFilters();
 
-        void view(Class<? extends CrudAppPlace> openPlaceClass, Key itemID);
-
-        void edit(Class<? extends CrudAppPlace> openPlaceClass, Key itemID);
-
-        void editNew(Class<? extends CrudAppPlace> openPlaceClass);
-
-        void editNew(Class<? extends CrudAppPlace> openPlaceClass, InitializationData initializationData);
-
-        /**
-         * Should be called after populate, return value is security feature
-         */
-        boolean canCreateNewItem();
-
-        void delete(Key itemID);
     }
 
-    EntityDataTablePanel<E> getDataTablePanel();
+    SiteDataTablePanel<E> getDataTablePanel();
 
     int getPageSize();
 
