@@ -21,7 +21,7 @@
 package com.pyx4j.site.client.backoffice.activity;
 
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
-import com.pyx4j.site.client.ui.visor.IVisor;
+import com.pyx4j.site.client.backoffice.ui.visor.IVisor;
 
 public abstract class AbstractVisorController implements IVisor.Controller {
 

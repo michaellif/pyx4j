@@ -18,18 +18,14 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.visor;
+package com.pyx4j.site.client.backoffice.ui.visor;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.entity.core.IEntity;
 
-public interface IVisor extends IsWidget {
+public interface IVisorForm<E extends IEntity> extends IVisor {
 
-    public interface Controller {
+    void populate(E value);
 
-        void show();
+    void reset();
 
-        void hide();
-    }
-
-    Controller getController();
 }

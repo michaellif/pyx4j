@@ -27,7 +27,7 @@ import com.pyx4j.gwt.commons.css.CssVariable;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.backoffice.ui.AbstractPaneView;
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView.IPrimePanePresenter;
-import com.pyx4j.site.client.ui.visor.IVisor;
+import com.pyx4j.site.client.backoffice.ui.visor.IVisor;
 
 public class AbstractPrimePaneView<PRESENTER extends IPrimePanePresenter> extends AbstractPaneView<PRESENTER> implements IPrimePaneView<PRESENTER> {
 

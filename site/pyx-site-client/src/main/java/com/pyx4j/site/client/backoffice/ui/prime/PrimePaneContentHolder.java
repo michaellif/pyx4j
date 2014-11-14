@@ -33,8 +33,8 @@ import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.backoffice.ui.IPaneView;
-import com.pyx4j.site.client.ui.visor.AbstractVisorPaneView;
-import com.pyx4j.site.client.ui.visor.IVisor;
+import com.pyx4j.site.client.backoffice.ui.visor.AbstractVisorPaneView;
+import com.pyx4j.site.client.backoffice.ui.visor.IVisor;
 
 public class PrimePaneContentHolder extends ComplexPanel implements RequiresResize, ProvidesResize {
 

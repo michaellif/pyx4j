@@ -18,14 +18,26 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.visor;
+package com.pyx4j.site.client.backoffice.ui.visor;
 
 import com.pyx4j.entity.core.IEntity;
 
-public interface IVisorForm<E extends IEntity> extends IVisor {
+public interface IVisorEditor<E extends IEntity> extends IVisorForm<E> {
 
-    void populate(E value);
+    public interface Controller extends IVisor.Controller {
 
-    void reset();
+        void apply();
 
+        void save();
+    }
+
+    public E getValue();
+
+    public boolean isDirty();
+
+//    void save(AsyncCallback<VoidSerializable> asyncCallback);
+//
+//    void apply();
+//
+//    boolean onBeforeClose(boolean saved);
 }

@@ -18,14 +18,10 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.visor;
+package com.pyx4j.site.client.backoffice.ui.visor;
 
 import com.pyx4j.entity.core.IEntity;
 
-public abstract class AbstractVisorViewer<E extends IEntity> extends AbstractVisorForm<E> implements IVisorViewer<E> {
-
-    public AbstractVisorViewer(Controller controller) {
-        super(controller);
-    }
+public interface IVisorViewer<E extends IEntity> extends IVisorForm<E> {
 
 }
