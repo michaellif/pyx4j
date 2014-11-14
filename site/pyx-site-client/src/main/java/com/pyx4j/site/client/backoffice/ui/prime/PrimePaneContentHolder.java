@@ -43,9 +43,9 @@ public class PrimePaneContentHolder extends ComplexPanel implements RequiresResi
 
     private IsWidget visorPaneWidget;
 
-    private final IPrimePaneView parentPane;
+    private final IPrimePaneView<?> parentPane;
 
-    public PrimePaneContentHolder(IPrimePaneView parentPane) {
+    public PrimePaneContentHolder(IPrimePaneView<?> parentPane) {
         this.parentPane = parentPane;
         setAnimationDuration(500);
         setElement(Document.get().createDivElement());
