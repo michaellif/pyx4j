@@ -22,12 +22,12 @@ public class LeaseListerViewImpl extends CrmListerViewImplBase<LeaseDTO> impleme
         setDataTablePanel(new LeaseLister() {
             @Override
             public void onPadFileDownload() {
-                ((LeaseListerView.Presenter) getPresenter()).downloadPadFile();
+                ((LeaseListerView.LeaseListerPresenter) getPresenter()).downloadPadFile();
             }
 
             @Override
             public void onPadFileUpload() {
-                ((LeaseListerView.Presenter) getPresenter()).uploadPadFile();
+                ((LeaseListerView.LeaseListerPresenter) getPresenter()).uploadPadFile();
             }
         });
     }

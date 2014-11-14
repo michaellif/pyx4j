@@ -19,7 +19,7 @@ import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseListerView extends IListerView<LeaseDTO> {
 
-    public interface Presenter extends IListerView.IListerPresenter<LeaseDTO> {
+    public interface LeaseListerPresenter extends IListerPresenter<LeaseDTO> {
 
         void uploadPadFile();
 
