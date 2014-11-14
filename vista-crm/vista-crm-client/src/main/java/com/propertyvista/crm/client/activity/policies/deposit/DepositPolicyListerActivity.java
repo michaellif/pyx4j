@@ -13,14 +13,14 @@
  */
 package com.propertyvista.crm.client.activity.policies.deposit;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.deposit.DepositPolicyListerView;
 import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
 
-public class DepositPolicyListerActivity extends AbstractListerActivity<DepositPolicyDTO> {
+public class DepositPolicyListerActivity extends AbstractPrimeListerActivity<DepositPolicyDTO> {
 
     public DepositPolicyListerActivity(AppPlace place) {
         super(DepositPolicyDTO.class, place, CrmSite.getViewFactory().getView(DepositPolicyListerView.class));

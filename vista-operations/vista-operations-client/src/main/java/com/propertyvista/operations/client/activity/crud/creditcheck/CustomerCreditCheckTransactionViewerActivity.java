@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.activity.crud.creditcheck;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractViewerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeViewerActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -23,7 +23,7 @@ import com.propertyvista.operations.client.ui.crud.creditcheck.CustomerCreditChe
 import com.propertyvista.operations.rpc.dto.CustomerCreditCheckTransactionDTO;
 import com.propertyvista.operations.rpc.services.CustomerCreditCheckTransactionCrudService;
 
-public class CustomerCreditCheckTransactionViewerActivity extends AbstractViewerActivity<CustomerCreditCheckTransactionDTO> {
+public class CustomerCreditCheckTransactionViewerActivity extends AbstractPrimeViewerActivity<CustomerCreditCheckTransactionDTO> {
 
     public CustomerCreditCheckTransactionViewerActivity(CrudAppPlace place) {
         super(CustomerCreditCheckTransactionDTO.class, place, OperationsSite.getViewFactory().getView(CustomerCreditCheckTransactionViewerView.class), GWT

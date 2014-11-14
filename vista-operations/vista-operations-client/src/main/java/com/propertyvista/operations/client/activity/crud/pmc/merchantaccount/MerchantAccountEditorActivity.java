@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractEditorActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.domain.pmc.Pmc;
@@ -27,7 +27,7 @@ import com.propertyvista.operations.client.ui.crud.pmc.mercantaccount.MerchantAc
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 
-public class MerchantAccountEditorActivity extends AbstractEditorActivity<PmcMerchantAccountDTO> {
+public class MerchantAccountEditorActivity extends AbstractPrimeEditorActivity<PmcMerchantAccountDTO> {
 
     public MerchantAccountEditorActivity(CrudAppPlace place) {
         super(PmcMerchantAccountDTO.class, place, OperationsSite.getViewFactory().getView(MerchantAccountEditorView.class), GWT

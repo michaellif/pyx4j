@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.activity.crud.simulator.dbp;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractEditorActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -23,7 +23,7 @@ import com.propertyvista.operations.client.ui.crud.simulator.dbp.DirectDebitSimF
 import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimFile;
 import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimFileCrudService;
 
-public class DirectDebitSimFileEditorActivity extends AbstractEditorActivity<DirectDebitSimFile> implements DirectDebitSimFileEditorView.Presenter {
+public class DirectDebitSimFileEditorActivity extends AbstractPrimeEditorActivity<DirectDebitSimFile> implements DirectDebitSimFileEditorView.Presenter {
 
     public DirectDebitSimFileEditorActivity(CrudAppPlace place) {
         super(DirectDebitSimFile.class, place, OperationsSite.getViewFactory().getView(DirectDebitSimFileEditorView.class), GWT

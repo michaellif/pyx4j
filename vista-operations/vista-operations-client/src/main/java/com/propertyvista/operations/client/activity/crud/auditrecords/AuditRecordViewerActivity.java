@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.activity.crud.auditrecords;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractViewerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeViewerActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -23,7 +23,7 @@ import com.propertyvista.operations.client.ui.crud.auditrecords.AuditRecordViewe
 import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
 import com.propertyvista.operations.rpc.services.AuditRecordCrudService;
 
-public class AuditRecordViewerActivity extends AbstractViewerActivity<AuditRecordOperationsDTO> {
+public class AuditRecordViewerActivity extends AbstractPrimeViewerActivity<AuditRecordOperationsDTO> {
 
     public AuditRecordViewerActivity(CrudAppPlace place) {
         super(AuditRecordOperationsDTO.class, place, OperationsSite.getViewFactory().getView(AuditRecordViewerView.class), GWT

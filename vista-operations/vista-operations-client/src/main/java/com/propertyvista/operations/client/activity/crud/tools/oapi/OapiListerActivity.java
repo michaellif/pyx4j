@@ -13,14 +13,14 @@
  */
 package com.propertyvista.operations.client.activity.crud.tools.oapi;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.tools.oapi.OapiListerView;
 import com.propertyvista.operations.rpc.dto.OapiConversionDTO;
 
-public class OapiListerActivity extends AbstractListerActivity<OapiConversionDTO> {//implements OapiListerView.Presenter {
+public class OapiListerActivity extends AbstractPrimeListerActivity<OapiConversionDTO> {//implements OapiListerView.Presenter {
 
     public OapiListerActivity(AppPlace place) {
         super(OapiConversionDTO.class, place, OperationsSite.getViewFactory().getView(OapiListerView.class));

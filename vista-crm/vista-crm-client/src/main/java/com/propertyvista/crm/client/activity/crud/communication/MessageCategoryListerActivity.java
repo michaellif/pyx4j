@@ -13,14 +13,14 @@
  */
 package com.propertyvista.crm.client.activity.crud.communication;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.communication.MessageCategoryListerView;
 import com.propertyvista.domain.communication.MessageCategory;
 
-public class MessageCategoryListerActivity extends AbstractListerActivity<MessageCategory> {
+public class MessageCategoryListerActivity extends AbstractPrimeListerActivity<MessageCategory> {
 
     public MessageCategoryListerActivity(AppPlace place) {
         super(MessageCategory.class, place, CrmSite.getViewFactory().getView(MessageCategoryListerView.class));

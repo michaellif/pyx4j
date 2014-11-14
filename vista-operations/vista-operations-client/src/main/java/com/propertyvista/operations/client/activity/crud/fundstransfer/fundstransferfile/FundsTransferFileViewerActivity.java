@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.activity.crud.fundstransfer.fundstra
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractViewerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeViewerActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -24,7 +24,7 @@ import com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferfi
 import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
 import com.propertyvista.operations.rpc.services.PadFileCrudService;
 
-public class FundsTransferFileViewerActivity extends AbstractViewerActivity<FundsTransferFileDTO> implements FundsTransferFileViewerView.IViewerPresenter {
+public class FundsTransferFileViewerActivity extends AbstractPrimeViewerActivity<FundsTransferFileDTO> implements FundsTransferFileViewerView.IViewerPresenter {
 
     public FundsTransferFileViewerActivity(CrudAppPlace place) {
         super(FundsTransferFileDTO.class, place, OperationsSite.getViewFactory().getView(FundsTransferFileViewerView.class), GWT

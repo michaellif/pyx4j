@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractEditorActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace.Type;
 
@@ -28,7 +28,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public class DashboardManagementEditorActivity extends AbstractEditorActivity<DashboardMetadata> {
+public class DashboardManagementEditorActivity extends AbstractPrimeEditorActivity<DashboardMetadata> {
 
     public DashboardManagementEditorActivity(CrudAppPlace place) {
         super(DashboardMetadata.class, place, CrmSite.getViewFactory().getView(DashboardManagementEditorView.class), GWT

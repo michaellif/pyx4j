@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.activity.crud.adminusers;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractEditorActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -23,7 +23,7 @@ import com.propertyvista.operations.client.ui.crud.adminusers.AdminUserEditorVie
 import com.propertyvista.operations.rpc.dto.OperationsUserDTO;
 import com.propertyvista.operations.rpc.services.AdminUserCrudService;
 
-public class AdminUserEditorActivity extends AbstractEditorActivity<OperationsUserDTO> {
+public class AdminUserEditorActivity extends AbstractPrimeEditorActivity<OperationsUserDTO> {
 
     public AdminUserEditorActivity(CrudAppPlace place) {
         super(OperationsUserDTO.class, place, OperationsSite.getViewFactory().getView(AdminUserEditorView.class),

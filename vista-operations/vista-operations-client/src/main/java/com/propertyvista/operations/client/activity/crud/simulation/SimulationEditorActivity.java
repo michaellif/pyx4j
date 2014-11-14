@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.activity.crud.simulation;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractEditorActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -24,7 +24,7 @@ import com.propertyvista.operations.client.ui.crud.simulation.SimulationEdtiorVi
 import com.propertyvista.operations.rpc.dto.SimulationDTO;
 import com.propertyvista.operations.rpc.services.SimulationService;
 
-public class SimulationEditorActivity extends AbstractEditorActivity<SimulationDTO> implements SimulationEdtiorView.IEditorPresenter {
+public class SimulationEditorActivity extends AbstractPrimeEditorActivity<SimulationDTO> implements SimulationEdtiorView.IEditorPresenter {
 
     public SimulationEditorActivity(CrudAppPlace place) {
         super(SimulationDTO.class, place, OperationsSite.getViewFactory().getView(SimulationEdtiorView.class), GWT

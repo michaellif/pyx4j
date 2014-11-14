@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.activity.crud.outgoingmail;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractViewerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeViewerActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -24,7 +24,7 @@ import com.propertyvista.operations.client.ui.crud.outgoingmail.OutgoingMailView
 import com.propertyvista.operations.rpc.dto.OutgoingMailQueueDTO;
 import com.propertyvista.operations.rpc.services.OutgoingMailCrudService;
 
-public class OutgoingMailViewerActivity extends AbstractViewerActivity<OutgoingMailQueueDTO> implements OutgoingMailViewerView.IViewerPresenter {
+public class OutgoingMailViewerActivity extends AbstractPrimeViewerActivity<OutgoingMailQueueDTO> implements OutgoingMailViewerView.IViewerPresenter {
 
     public OutgoingMailViewerActivity(CrudAppPlace place) {
         super(OutgoingMailQueueDTO.class, place, OperationsSite.getViewFactory().getView(OutgoingMailViewerView.class), GWT

@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.activity.crud.maintenance;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractEditorActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -23,7 +23,7 @@ import com.propertyvista.operations.client.ui.crud.maintenance.MaintenanceEditor
 import com.propertyvista.operations.domain.VistaSystemMaintenanceState;
 import com.propertyvista.operations.rpc.services.MaintenanceCrudService;
 
-public class MaintenanceEditorActivity extends AbstractEditorActivity<VistaSystemMaintenanceState> implements MaintenanceEditorView.IEditorPresenter {
+public class MaintenanceEditorActivity extends AbstractPrimeEditorActivity<VistaSystemMaintenanceState> implements MaintenanceEditorView.IEditorPresenter {
 
     public MaintenanceEditorActivity(CrudAppPlace place) {
         super(VistaSystemMaintenanceState.class, place, OperationsSite.getViewFactory().getView(MaintenanceEditorView.class), GWT

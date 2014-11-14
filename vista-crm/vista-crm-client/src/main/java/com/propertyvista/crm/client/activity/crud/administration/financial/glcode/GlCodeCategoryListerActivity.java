@@ -13,14 +13,14 @@
  */
 package com.propertyvista.crm.client.activity.crud.administration.financial.glcode;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.administration.financial.glcode.GlCodeCategoryListerView;
 import com.propertyvista.domain.financial.GlCodeCategory;
 
-public class GlCodeCategoryListerActivity extends AbstractListerActivity<GlCodeCategory> {
+public class GlCodeCategoryListerActivity extends AbstractPrimeListerActivity<GlCodeCategory> {
 
     public GlCodeCategoryListerActivity(AppPlace place) {
         super(GlCodeCategory.class, place, CrmSite.getViewFactory().getView(GlCodeCategoryListerView.class));

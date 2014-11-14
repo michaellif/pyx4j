@@ -13,14 +13,14 @@
  */
 package com.propertyvista.crm.client.activity.crud.unit;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.unit.UnitListerView;
 import com.propertyvista.dto.AptUnitDTO;
 
-public class UnitListerActivity extends AbstractListerActivity<AptUnitDTO> {
+public class UnitListerActivity extends AbstractPrimeListerActivity<AptUnitDTO> {
 
     public UnitListerActivity(AppPlace place) {
         super(AptUnitDTO.class, place, CrmSite.getViewFactory().getView(UnitListerView.class));

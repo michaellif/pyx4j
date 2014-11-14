@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.activity.crud.simulator.cardservice;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -26,7 +26,7 @@ import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimula
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationReconciliationCreateTO;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationReconciliationCrudService;
 
-public class CardServiceSimulationReconciliationListerActivity extends AbstractListerActivity<CardServiceSimulationReconciliationRecord> implements
+public class CardServiceSimulationReconciliationListerActivity extends AbstractPrimeListerActivity<CardServiceSimulationReconciliationRecord> implements
         CardServiceSimulationReconciliationListerView.Presenter {
 
     public CardServiceSimulationReconciliationListerActivity(AppPlace place) {

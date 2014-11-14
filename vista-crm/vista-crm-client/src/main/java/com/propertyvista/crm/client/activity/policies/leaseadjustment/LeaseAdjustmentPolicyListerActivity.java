@@ -13,14 +13,14 @@
  */
 package com.propertyvista.crm.client.activity.policies.leaseadjustment;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.leaseadjustment.LeaseAdjustmentPolicyListerView;
 import com.propertyvista.domain.policy.dto.LeaseAdjustmentPolicyDTO;
 
-public class LeaseAdjustmentPolicyListerActivity extends AbstractListerActivity<LeaseAdjustmentPolicyDTO> {
+public class LeaseAdjustmentPolicyListerActivity extends AbstractPrimeListerActivity<LeaseAdjustmentPolicyDTO> {
 
     public LeaseAdjustmentPolicyListerActivity(AppPlace place) {
         super(LeaseAdjustmentPolicyDTO.class, place, CrmSite.getViewFactory().getView(LeaseAdjustmentPolicyListerView.class));

@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.activity.crud.simulator.pad;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractEditorActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -24,7 +24,7 @@ import com.propertyvista.operations.client.ui.crud.simulator.pad.file.PadSimFile
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
 import com.propertyvista.operations.rpc.services.simulator.PadSimFileCrudService;
 
-public class PadSimFileEditorActivity extends AbstractEditorActivity<PadSimFile> {
+public class PadSimFileEditorActivity extends AbstractPrimeEditorActivity<PadSimFile> {
 
     public PadSimFileEditorActivity(CrudAppPlace place) {
         super(PadSimFile.class, place, OperationsSite.getViewFactory().getView(PadSimFileEditorView.class), GWT

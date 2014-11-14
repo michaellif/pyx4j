@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.crud.lease.financial;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractViewerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeViewerActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -24,7 +24,7 @@ import com.propertyvista.crm.client.ui.crud.lease.financial.invoice.InvoiceCredi
 import com.propertyvista.crm.rpc.dto.lease.financial.InvoiceCreditDTO;
 import com.propertyvista.crm.rpc.services.lease.financial.InvoiceCreditCrudService;
 
-public class InvoiceCreditViewerActivity extends AbstractViewerActivity<InvoiceCreditDTO> {
+public class InvoiceCreditViewerActivity extends AbstractPrimeViewerActivity<InvoiceCreditDTO> {
 
     public InvoiceCreditViewerActivity(CrudAppPlace place) {
         super(InvoiceCreditDTO.class, place, CrmSite.getViewFactory().getView(InvoiceCreditViewerView.class), GWT

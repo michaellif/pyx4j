@@ -13,14 +13,14 @@
  */
 package com.propertyvista.crm.client.activity.policies.backgroundcheck;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.backgroundcheck.BackgroundCheckPolicyListerView;
 import com.propertyvista.domain.policy.dto.BackgroundCheckPolicyDTO;
 
-public class BackgroundCheckPolicyListerActivity extends AbstractListerActivity<BackgroundCheckPolicyDTO> {
+public class BackgroundCheckPolicyListerActivity extends AbstractPrimeListerActivity<BackgroundCheckPolicyDTO> {
 
     public BackgroundCheckPolicyListerActivity(AppPlace place) {
         super(BackgroundCheckPolicyDTO.class, place, CrmSite.getViewFactory().getView(BackgroundCheckPolicyListerView.class));

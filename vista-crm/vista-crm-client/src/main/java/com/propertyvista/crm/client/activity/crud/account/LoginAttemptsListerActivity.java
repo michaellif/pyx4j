@@ -19,14 +19,14 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.LoginAttemptsListerView;
 import com.propertyvista.crm.rpc.dto.account.LoginAttemptDTO;
 
-public class LoginAttemptsListerActivity extends AbstractListerActivity<LoginAttemptDTO> {
+public class LoginAttemptsListerActivity extends AbstractPrimeListerActivity<LoginAttemptDTO> {
 
     private Key userKey;
 

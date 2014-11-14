@@ -13,14 +13,14 @@
  */
 package com.propertyvista.crm.client.activity.crud.building;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.building.BuildingListerView;
 import com.propertyvista.dto.BuildingDTO;
 
-public class BuildingListerActivity extends AbstractListerActivity<BuildingDTO> {
+public class BuildingListerActivity extends AbstractPrimeListerActivity<BuildingDTO> {
 
     public BuildingListerActivity(AppPlace place) {
         super(BuildingDTO.class, place, CrmSite.getViewFactory().getView(BuildingListerView.class));

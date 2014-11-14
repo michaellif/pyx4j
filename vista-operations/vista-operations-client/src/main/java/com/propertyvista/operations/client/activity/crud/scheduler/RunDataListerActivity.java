@@ -13,14 +13,14 @@
  */
 package com.propertyvista.operations.client.activity.crud.scheduler;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.scheduler.run.RunDataListerView;
 import com.propertyvista.operations.domain.scheduler.RunData;
 
-public class RunDataListerActivity extends AbstractListerActivity<RunData> {
+public class RunDataListerActivity extends AbstractPrimeListerActivity<RunData> {
 
     public RunDataListerActivity(AppPlace place) {
         super(RunData.class, place, OperationsSite.getViewFactory().getView(RunDataListerView.class));

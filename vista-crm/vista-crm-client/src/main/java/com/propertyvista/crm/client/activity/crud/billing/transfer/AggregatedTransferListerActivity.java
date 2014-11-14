@@ -21,7 +21,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ReportDialog;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -30,7 +30,7 @@ import com.propertyvista.crm.rpc.services.financial.AggregatedTransferDownloadSe
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
-public class AggregatedTransferListerActivity extends AbstractListerActivity<AggregatedTransfer> implements AggregatedTransferListerView.Presenter {
+public class AggregatedTransferListerActivity extends AbstractPrimeListerActivity<AggregatedTransfer> implements AggregatedTransferListerView.Presenter {
 
     private static final I18n i18n = I18n.get(AggregatedTransferListerActivity.class);
 

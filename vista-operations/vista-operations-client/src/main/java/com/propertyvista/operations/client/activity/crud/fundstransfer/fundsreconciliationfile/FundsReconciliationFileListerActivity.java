@@ -13,14 +13,14 @@
  */
 package com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationfile;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationfile.FundsReconciliationFileListerView;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
 
-public class FundsReconciliationFileListerActivity extends AbstractListerActivity<FundsReconciliationFileDTO> {
+public class FundsReconciliationFileListerActivity extends AbstractPrimeListerActivity<FundsReconciliationFileDTO> {
 
     public FundsReconciliationFileListerActivity(AppPlace place) {
         super(FundsReconciliationFileDTO.class, place, OperationsSite.getViewFactory().getView(FundsReconciliationFileListerView.class));

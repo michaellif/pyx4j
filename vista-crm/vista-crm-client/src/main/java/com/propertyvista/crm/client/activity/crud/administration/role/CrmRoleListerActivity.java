@@ -13,14 +13,14 @@
  */
 package com.propertyvista.crm.client.activity.crud.administration.role;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.administration.role.CrmRoleListerView;
 import com.propertyvista.domain.security.CrmRole;
 
-public class CrmRoleListerActivity extends AbstractListerActivity<CrmRole> {
+public class CrmRoleListerActivity extends AbstractPrimeListerActivity<CrmRole> {
 
     public CrmRoleListerActivity(AppPlace place) {
         super(CrmRole.class, place, CrmSite.getViewFactory().getView(CrmRoleListerView.class));

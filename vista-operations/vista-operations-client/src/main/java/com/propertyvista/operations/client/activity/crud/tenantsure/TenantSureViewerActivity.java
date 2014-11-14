@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.activity.crud.tenantsure;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractViewerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeViewerActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -24,7 +24,7 @@ import com.propertyvista.operations.client.ui.crud.tenantsure.TenantSureViewerVi
 import com.propertyvista.operations.rpc.dto.TenantSureDTO;
 import com.propertyvista.operations.rpc.services.TenantSureCrudService;
 
-public class TenantSureViewerActivity extends AbstractViewerActivity<TenantSureDTO> implements TenantSureViewerView.IViewerPresenter {
+public class TenantSureViewerActivity extends AbstractPrimeViewerActivity<TenantSureDTO> implements TenantSureViewerView.IViewerPresenter {
 
     public TenantSureViewerActivity(CrudAppPlace place) {
         super(TenantSureDTO.class, place, OperationsSite.getViewFactory().getView(TenantSureViewerView.class), GWT

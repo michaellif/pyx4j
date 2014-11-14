@@ -13,14 +13,14 @@
  */
 package com.propertyvista.crm.client.activity.policies.portal.resident;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.portal.resident.ResidentPortalPolicyListerView;
 import com.propertyvista.domain.policy.dto.ResidentPortalPolicyDTO;
 
-public class ResidentPortalPolicyListerActivity extends AbstractListerActivity<ResidentPortalPolicyDTO> {
+public class ResidentPortalPolicyListerActivity extends AbstractPrimeListerActivity<ResidentPortalPolicyDTO> {
 
     public ResidentPortalPolicyListerActivity(AppPlace place) {
         super(ResidentPortalPolicyDTO.class, place, CrmSite.getViewFactory().getView(ResidentPortalPolicyListerView.class));

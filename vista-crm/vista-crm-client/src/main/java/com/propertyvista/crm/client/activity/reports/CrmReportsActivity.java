@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.reports;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractReportActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeReportActivity;
 import com.pyx4j.site.client.backoffice.ui.prime.report.IReportView;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.shared.domain.reports.ReportTemplate;
@@ -26,7 +26,7 @@ import com.propertyvista.crm.rpc.services.reports.CrmReportsService;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsSettingsPersistenceService;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
-public abstract class CrmReportsActivity<R extends ReportTemplate> extends AbstractReportActivity<R> {
+public abstract class CrmReportsActivity<R extends ReportTemplate> extends AbstractPrimeReportActivity<R> {
 
     public <RPlace extends ReportsAppPlace<R>> CrmReportsActivity(Class<R> reportMetadataClass, RPlace reportPlace, IReportView<R> view) {
         super(//@formatter:off

@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.activity.crud.operationsalert;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractEditorActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -23,7 +23,7 @@ import com.propertyvista.operations.client.ui.crud.operationsalert.OperationsAle
 import com.propertyvista.operations.rpc.dto.OperationsAlertDTO;
 import com.propertyvista.operations.rpc.services.OperationsAlertCrudService;
 
-public class OperationsAlertEditorActivity extends AbstractEditorActivity<OperationsAlertDTO> {
+public class OperationsAlertEditorActivity extends AbstractPrimeEditorActivity<OperationsAlertDTO> {
 
     public OperationsAlertEditorActivity(CrudAppPlace place) {
         super(OperationsAlertDTO.class, place, OperationsSite.getViewFactory().getView(OperationsAlertEditorView.class), GWT

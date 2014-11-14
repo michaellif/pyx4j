@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.components.UploadDialogBase;
@@ -28,7 +28,7 @@ import com.propertyvista.operations.rpc.dto.PmcDTO;
 import com.propertyvista.operations.rpc.services.MerchantAccountFileUploadService;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
-public class PmcListerActivity extends AbstractListerActivity<PmcDTO> implements PmcListerView.Presenter {
+public class PmcListerActivity extends AbstractPrimeListerActivity<PmcDTO> implements PmcListerView.Presenter {
 
     private static final I18n i18n = I18n.get(PmcListerActivity.class);
 

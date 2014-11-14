@@ -13,14 +13,14 @@
  */
 package com.propertyvista.crm.client.activity.crud.billing.cycle;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleListerView;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 
-public class BillingCycleListerActivity extends AbstractListerActivity<BillingCycleDTO> {
+public class BillingCycleListerActivity extends AbstractPrimeListerActivity<BillingCycleDTO> {
 
     public BillingCycleListerActivity(AppPlace place) {
         super(BillingCycleDTO.class, place, CrmSite.getViewFactory().getView(BillingCycleListerView.class));

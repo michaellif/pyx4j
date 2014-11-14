@@ -25,7 +25,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.ReportDialog;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -37,7 +37,7 @@ import com.propertyvista.crm.rpc.services.billing.BillingCycleBillListService;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 
-public class BillingCycleBillListerActivity extends AbstractListerActivity<BillDataDTO> implements BillingCycleBillListerView.Presenter {
+public class BillingCycleBillListerActivity extends AbstractPrimeListerActivity<BillDataDTO> implements BillingCycleBillListerView.Presenter {
 
     private Key billingCycleId;
 

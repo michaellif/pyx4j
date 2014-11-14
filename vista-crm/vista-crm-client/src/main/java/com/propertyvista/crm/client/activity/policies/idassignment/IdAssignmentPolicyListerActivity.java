@@ -13,14 +13,14 @@
  */
 package com.propertyvista.crm.client.activity.policies.idassignment;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.idassignment.IdAssignmentPolicyListerView;
 import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
 
-public class IdAssignmentPolicyListerActivity extends AbstractListerActivity<IdAssignmentPolicyDTO> {
+public class IdAssignmentPolicyListerActivity extends AbstractPrimeListerActivity<IdAssignmentPolicyDTO> {
 
     public IdAssignmentPolicyListerActivity(AppPlace place) {
         super(IdAssignmentPolicyDTO.class, place, CrmSite.getViewFactory().getView(IdAssignmentPolicyListerView.class));

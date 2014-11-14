@@ -13,14 +13,14 @@
  */
 package com.propertyvista.operations.client.activity.crud.outgoingmail;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.outgoingmail.OutgoingMailListerView;
 import com.propertyvista.operations.rpc.dto.OutgoingMailQueueDTO;
 
-public class OutgoingMailListerActivity extends AbstractListerActivity<OutgoingMailQueueDTO> {
+public class OutgoingMailListerActivity extends AbstractPrimeListerActivity<OutgoingMailQueueDTO> {
 
     public OutgoingMailListerActivity(AppPlace place) {
         super(OutgoingMailQueueDTO.class, place, OperationsSite.getViewFactory().getView(OutgoingMailListerView.class));

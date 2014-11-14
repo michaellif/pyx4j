@@ -13,14 +13,14 @@
  */
 package com.propertyvista.operations.client.activity.crud.scheduler;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.scheduler.trigger.TriggerListerView;
 import com.propertyvista.operations.rpc.dto.TriggerDTO;
 
-public class TriggerListerActivity extends AbstractListerActivity<TriggerDTO> {
+public class TriggerListerActivity extends AbstractPrimeListerActivity<TriggerDTO> {
 
     public TriggerListerActivity(AppPlace place) {
         super(TriggerDTO.class, place, OperationsSite.getViewFactory().getView(TriggerListerView.class));

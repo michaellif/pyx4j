@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.activity.crud.fundstransfer.fundsrec
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractViewerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeViewerActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -23,7 +23,7 @@ import com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconcilia
 import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
 import com.propertyvista.operations.rpc.services.FundsReconciliationSummaryCrudService;
 
-public class FundsReconciliationSummaryViewerActivty extends AbstractViewerActivity<FundsReconciliationSummaryDTO> {
+public class FundsReconciliationSummaryViewerActivty extends AbstractPrimeViewerActivity<FundsReconciliationSummaryDTO> {
 
     public FundsReconciliationSummaryViewerActivty(CrudAppPlace place) {
         super(FundsReconciliationSummaryDTO.class, place, OperationsSite.getViewFactory().getView(FundsReconciliationSummaryViewerView.class), GWT

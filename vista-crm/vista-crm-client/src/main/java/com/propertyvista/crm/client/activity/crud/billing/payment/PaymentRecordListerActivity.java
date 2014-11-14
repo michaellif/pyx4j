@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.activity.crud.billing.payment;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -23,7 +23,7 @@ import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentRecordListerV
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentRecordListerActivity extends AbstractListerActivity<PaymentRecordDTO> {
+public class PaymentRecordListerActivity extends AbstractPrimeListerActivity<PaymentRecordDTO> {
 
     public PaymentRecordListerActivity(AppPlace place) {
         super(PaymentRecordDTO.class, place, CrmSite.getViewFactory().getView(PaymentRecordListerView.class));

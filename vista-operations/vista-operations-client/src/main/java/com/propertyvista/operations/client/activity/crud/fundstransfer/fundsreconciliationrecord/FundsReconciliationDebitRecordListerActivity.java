@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.activity.crud.fundstransfer.fundsrec
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -23,7 +23,7 @@ import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationrecord.FundsReconciliationDebitRecordListerView;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationRecordRecordDTO;
 
-public class FundsReconciliationDebitRecordListerActivity extends AbstractListerActivity<FundsReconciliationRecordRecordDTO> {
+public class FundsReconciliationDebitRecordListerActivity extends AbstractPrimeListerActivity<FundsReconciliationRecordRecordDTO> {
 
     public FundsReconciliationDebitRecordListerActivity(AppPlace place) {
         super(FundsReconciliationRecordRecordDTO.class, place, OperationsSite.getViewFactory().getView(FundsReconciliationDebitRecordListerView.class));

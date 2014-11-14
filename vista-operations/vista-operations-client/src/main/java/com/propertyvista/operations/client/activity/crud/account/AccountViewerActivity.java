@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractViewerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeViewerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -28,7 +28,7 @@ import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.dto.OperationsUserDTO;
 import com.propertyvista.operations.rpc.services.AdminUserService;
 
-public class AccountViewerActivity extends AbstractViewerActivity<OperationsUserDTO> implements AdminUserViewerView.Presenter {
+public class AccountViewerActivity extends AbstractPrimeViewerActivity<OperationsUserDTO> implements AdminUserViewerView.Presenter {
 
     public AccountViewerActivity(CrudAppPlace place) {
         super(OperationsUserDTO.class, place, OperationsSite.getViewFactory().getView(AdminUserViewerView.class), GWT

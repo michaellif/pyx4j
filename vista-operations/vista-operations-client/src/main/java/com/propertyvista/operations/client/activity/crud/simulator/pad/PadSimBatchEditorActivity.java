@@ -19,7 +19,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractEditorActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -30,7 +30,7 @@ import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimDebitRecord;
 import com.propertyvista.operations.rpc.services.simulator.PadSimBatchCrudService;
 
-public class PadSimBatchEditorActivity extends AbstractEditorActivity<PadSimBatch> implements PadSimBatchEditorView.Presenter {
+public class PadSimBatchEditorActivity extends AbstractPrimeEditorActivity<PadSimBatch> implements PadSimBatchEditorView.Presenter {
 
     public PadSimBatchEditorActivity(CrudAppPlace place) {
         super(PadSimBatch.class, place, OperationsSite.getViewFactory().getView(PadSimBatchEditorView.class), GWT

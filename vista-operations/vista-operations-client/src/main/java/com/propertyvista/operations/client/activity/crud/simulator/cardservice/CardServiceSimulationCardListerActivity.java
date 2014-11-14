@@ -13,14 +13,14 @@
  */
 package com.propertyvista.operations.client.activity.crud.simulator.cardservice;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationCardListerView;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCard;
 
-public class CardServiceSimulationCardListerActivity extends AbstractListerActivity<CardServiceSimulationCard> {
+public class CardServiceSimulationCardListerActivity extends AbstractPrimeListerActivity<CardServiceSimulationCard> {
 
     public CardServiceSimulationCardListerActivity(AppPlace place) {
         super(CardServiceSimulationCard.class, place, OperationsSite.getViewFactory().getView(CardServiceSimulationCardListerView.class));

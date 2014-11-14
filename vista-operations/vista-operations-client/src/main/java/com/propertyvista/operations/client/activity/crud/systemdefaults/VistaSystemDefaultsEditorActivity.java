@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.activity.crud.systemdefaults;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractEditorActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -24,7 +24,7 @@ import com.propertyvista.operations.client.ui.crud.systemdefaults.VistaSystemDef
 import com.propertyvista.operations.rpc.dto.VistaSystemDefaultsDTO;
 import com.propertyvista.operations.rpc.services.Vista2PmcService;
 
-public class VistaSystemDefaultsEditorActivity extends AbstractEditorActivity<VistaSystemDefaultsDTO> implements VistaSystemDefaultsEditorView.Presenter {
+public class VistaSystemDefaultsEditorActivity extends AbstractPrimeEditorActivity<VistaSystemDefaultsDTO> implements VistaSystemDefaultsEditorView.Presenter {
 
     public VistaSystemDefaultsEditorActivity(CrudAppPlace place) {
         super(VistaSystemDefaultsDTO.class, place, OperationsSite.getViewFactory().getView(VistaSystemDefaultsEditorView.class), GWT

@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.activity.crud.financial.paps;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -23,7 +23,7 @@ import com.propertyvista.crm.client.ui.crud.financial.paps.AutoPayHistoryListerV
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.domain.payment.AutopayAgreement;
 
-public class AutoPayHistoryListerActivity extends AbstractListerActivity<AutoPayHistoryDTO> {
+public class AutoPayHistoryListerActivity extends AbstractPrimeListerActivity<AutoPayHistoryDTO> {
 
     public AutoPayHistoryListerActivity(AppPlace place) {
         super(AutoPayHistoryDTO.class, place, CrmSite.getViewFactory().getView(AutoPayHistoryListerView.class));

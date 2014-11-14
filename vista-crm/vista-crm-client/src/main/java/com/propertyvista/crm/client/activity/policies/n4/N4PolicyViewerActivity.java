@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.activity.policies.n4;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractViewerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeViewerActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -23,7 +23,7 @@ import com.propertyvista.crm.client.ui.crud.policies.n4.N4PolicyViewerView;
 import com.propertyvista.crm.rpc.services.policies.policy.N4PolicyCrudService;
 import com.propertyvista.domain.policy.dto.N4PolicyDTO;
 
-public class N4PolicyViewerActivity extends AbstractViewerActivity<N4PolicyDTO> implements N4PolicyViewerView.IViewerPresenter {
+public class N4PolicyViewerActivity extends AbstractPrimeViewerActivity<N4PolicyDTO> implements N4PolicyViewerView.IViewerPresenter {
 
     public N4PolicyViewerActivity(CrudAppPlace place) {
         super(N4PolicyDTO.class, place, CrmSite.getViewFactory().getView(N4PolicyViewerView.class), GWT.<N4PolicyCrudService> create(N4PolicyCrudService.class));

@@ -19,7 +19,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractViewerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeViewerActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -28,7 +28,7 @@ import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimFile;
 import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimFile.DirectDebitSimFileStatus;
 import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimFileCrudService;
 
-public class DirectDebitSimFileViewerActivity extends AbstractViewerActivity<DirectDebitSimFile> implements DirectDebitSimFileViewerView.Presenter {
+public class DirectDebitSimFileViewerActivity extends AbstractPrimeViewerActivity<DirectDebitSimFile> implements DirectDebitSimFileViewerView.Presenter {
 
     private DirectDebitSimFile simFile;
 

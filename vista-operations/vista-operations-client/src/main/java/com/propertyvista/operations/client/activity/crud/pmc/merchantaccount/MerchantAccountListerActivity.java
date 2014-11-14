@@ -13,14 +13,14 @@
  */
 package com.propertyvista.operations.client.activity.crud.pmc.merchantaccount;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.pmc.mercantaccount.MerchantAccountListerView;
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 
-public class MerchantAccountListerActivity extends AbstractListerActivity<PmcMerchantAccountDTO> {
+public class MerchantAccountListerActivity extends AbstractPrimeListerActivity<PmcMerchantAccountDTO> {
 
     public MerchantAccountListerActivity(AppPlace place) {
         super(PmcMerchantAccountDTO.class, place, OperationsSite.getViewFactory().getView(MerchantAccountListerView.class));

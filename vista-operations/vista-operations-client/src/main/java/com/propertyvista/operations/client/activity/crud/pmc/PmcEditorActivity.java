@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.activity.crud.pmc;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractEditorActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -23,7 +23,7 @@ import com.propertyvista.operations.client.ui.crud.pmc.PmcEditorView;
 import com.propertyvista.operations.rpc.dto.PmcDTO;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
 
-public class PmcEditorActivity extends AbstractEditorActivity<PmcDTO> {
+public class PmcEditorActivity extends AbstractPrimeEditorActivity<PmcDTO> {
 
     public PmcEditorActivity(CrudAppPlace place) {
         super(PmcDTO.class, place, OperationsSite.getViewFactory().getView(PmcEditorView.class), GWT.<PmcCrudService> create(PmcCrudService.class));

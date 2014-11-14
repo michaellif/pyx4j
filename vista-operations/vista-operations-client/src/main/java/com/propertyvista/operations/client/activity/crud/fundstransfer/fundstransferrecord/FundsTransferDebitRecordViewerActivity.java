@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.activity.crud.fundstransfer.fundstra
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractViewerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeViewerActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -24,7 +24,7 @@ import com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferre
 import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
 import com.propertyvista.operations.rpc.services.PadDebitRecordCrudService;
 
-public class FundsTransferDebitRecordViewerActivity extends AbstractViewerActivity<FundsTransferRecordDTO> implements
+public class FundsTransferDebitRecordViewerActivity extends AbstractPrimeViewerActivity<FundsTransferRecordDTO> implements
         FundsTransferDebitRecordViewerView.IViewerPresenter {
 
     public FundsTransferDebitRecordViewerActivity(CrudAppPlace place) {

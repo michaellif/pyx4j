@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.crud.billing.cycle;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -25,7 +25,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.dto.LeaseDTO;
 
-public class BillingCycleLeaseListerActivity extends AbstractListerActivity<LeaseDTO> {
+public class BillingCycleLeaseListerActivity extends AbstractPrimeListerActivity<LeaseDTO> {
 
     private Key billingCycleId;
 

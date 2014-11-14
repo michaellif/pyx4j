@@ -13,14 +13,14 @@
  */
 package com.propertyvista.crm.client.activity.policies.producttax;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.producttaxes.ProductTaxPolicyListerView;
 import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 
-public class ProductTaxPolicyListerActivity extends AbstractListerActivity<ProductTaxPolicyDTO> {
+public class ProductTaxPolicyListerActivity extends AbstractPrimeListerActivity<ProductTaxPolicyDTO> {
 
     public ProductTaxPolicyListerActivity(AppPlace place) {
         super(ProductTaxPolicyDTO.class, place, CrmSite.getViewFactory().getView(ProductTaxPolicyListerView.class));

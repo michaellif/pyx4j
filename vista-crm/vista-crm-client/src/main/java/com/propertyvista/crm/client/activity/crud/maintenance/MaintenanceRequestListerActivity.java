@@ -13,14 +13,14 @@
  */
 package com.propertyvista.crm.client.activity.crud.maintenance;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestListerView;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
-public class MaintenanceRequestListerActivity extends AbstractListerActivity<MaintenanceRequestDTO> {
+public class MaintenanceRequestListerActivity extends AbstractPrimeListerActivity<MaintenanceRequestDTO> {
 
     public MaintenanceRequestListerActivity(AppPlace place) {
         super(MaintenanceRequestDTO.class, place, CrmSite.getViewFactory().getView(MaintenanceRequestListerView.class));

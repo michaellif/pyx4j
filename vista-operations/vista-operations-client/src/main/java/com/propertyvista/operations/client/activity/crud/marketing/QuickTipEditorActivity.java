@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.activity.crud.marketing;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractEditorActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.domain.marketing.PortalResidentMarketingTip;
@@ -23,7 +23,7 @@ import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.marketing.QuickTipEditorView;
 import com.propertyvista.operations.rpc.services.QuickTipCrudService;
 
-public class QuickTipEditorActivity extends AbstractEditorActivity<PortalResidentMarketingTip> {
+public class QuickTipEditorActivity extends AbstractPrimeEditorActivity<PortalResidentMarketingTip> {
 
     public QuickTipEditorActivity(CrudAppPlace place) {
         super(PortalResidentMarketingTip.class, place, OperationsSite.getViewFactory().getView(QuickTipEditorView.class), GWT

@@ -13,14 +13,14 @@
  */
 package com.propertyvista.crm.client.activity.crud.administration.merchantaccount;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.administration.merchantaccount.MerchantAccountListerView;
 import com.propertyvista.domain.financial.MerchantAccount;
 
-public class MerchantAccountListerActivity extends AbstractListerActivity<MerchantAccount> {
+public class MerchantAccountListerActivity extends AbstractPrimeListerActivity<MerchantAccount> {
 
     public MerchantAccountListerActivity(AppPlace place) {
         super(MerchantAccount.class, place, CrmSite.getViewFactory().getView(MerchantAccountListerView.class));

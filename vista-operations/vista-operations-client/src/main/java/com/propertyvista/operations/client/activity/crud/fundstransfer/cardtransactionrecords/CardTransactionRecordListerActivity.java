@@ -13,14 +13,14 @@
  */
 package com.propertyvista.operations.client.activity.crud.fundstransfer.cardtransactionrecords;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.cardtransactionrecords.CardTransactionRecordListerView;
 import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
 
-public class CardTransactionRecordListerActivity extends AbstractListerActivity<CardTransactionRecord> {
+public class CardTransactionRecordListerActivity extends AbstractPrimeListerActivity<CardTransactionRecord> {
 
     public CardTransactionRecordListerActivity(AppPlace place) {
         super(CardTransactionRecord.class, place, OperationsSite.getViewFactory().getView(CardTransactionRecordListerView.class));

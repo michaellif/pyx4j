@@ -15,14 +15,14 @@ package com.propertyvista.operations.client.activity.crud.fundstransfer.fundstra
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferrecord.FundsTransferDebitRecordListerView;
 import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
 
-public class FundsTransferDebitRecordListerActivity extends AbstractListerActivity<FundsTransferRecordDTO> {
+public class FundsTransferDebitRecordListerActivity extends AbstractPrimeListerActivity<FundsTransferRecordDTO> {
 
     public FundsTransferDebitRecordListerActivity(AppPlace place) {
         super(FundsTransferRecordDTO.class, place, OperationsSite.getViewFactory().getView(FundsTransferDebitRecordListerView.class));

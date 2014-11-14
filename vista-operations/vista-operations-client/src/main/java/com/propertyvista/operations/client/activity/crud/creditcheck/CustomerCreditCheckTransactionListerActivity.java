@@ -13,14 +13,14 @@
  */
 package com.propertyvista.operations.client.activity.crud.creditcheck;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.creditcheck.CustomerCreditCheckTransactionListerView;
 import com.propertyvista.operations.rpc.dto.CustomerCreditCheckTransactionDTO;
 
-public class CustomerCreditCheckTransactionListerActivity extends AbstractListerActivity<CustomerCreditCheckTransactionDTO> {
+public class CustomerCreditCheckTransactionListerActivity extends AbstractPrimeListerActivity<CustomerCreditCheckTransactionDTO> {
 
     public CustomerCreditCheckTransactionListerActivity(AppPlace place) {
         super(CustomerCreditCheckTransactionDTO.class, place, OperationsSite.getViewFactory().getView(CustomerCreditCheckTransactionListerView.class));

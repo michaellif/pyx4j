@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.activity.crud.simulator.cardservice;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractEditorActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -23,7 +23,7 @@ import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardSer
 import com.propertyvista.operations.rpc.dto.CardServiceSimulatorConfigDTO;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationConfigService;
 
-public class CardServiceSimulationConfigEditorActivity extends AbstractEditorActivity<CardServiceSimulatorConfigDTO> implements
+public class CardServiceSimulationConfigEditorActivity extends AbstractPrimeEditorActivity<CardServiceSimulatorConfigDTO> implements
         CardServiceSimulatorConfigEditorView.IEditorPresenter {
 
     public CardServiceSimulationConfigEditorActivity(CrudAppPlace place) {

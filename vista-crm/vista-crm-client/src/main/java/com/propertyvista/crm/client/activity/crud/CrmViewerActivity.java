@@ -18,7 +18,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractViewerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeViewerActivity;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -26,7 +26,7 @@ import com.propertyvista.crm.client.event.CrudNavigateEvent;
 import com.propertyvista.crm.client.visor.notes.NotesAndAttachmentsVisorController;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
 
-public class CrmViewerActivity<E extends IEntity> extends AbstractViewerActivity<E> {
+public class CrmViewerActivity<E extends IEntity> extends AbstractPrimeViewerActivity<E> {
 
     private final CrudAppPlace place;
 

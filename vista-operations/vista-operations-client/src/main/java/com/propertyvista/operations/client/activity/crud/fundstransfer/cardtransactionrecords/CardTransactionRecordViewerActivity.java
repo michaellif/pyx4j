@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.activity.crud.fundstransfer.cardtran
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractViewerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeViewerActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -24,7 +24,7 @@ import com.propertyvista.operations.client.ui.crud.fundstransfer.cardtransaction
 import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
 import com.propertyvista.operations.rpc.services.PmcCardTransactionRecordCrudService;
 
-public class CardTransactionRecordViewerActivity extends AbstractViewerActivity<CardTransactionRecord> implements CardTransactionRecordViewerView.Presenter {
+public class CardTransactionRecordViewerActivity extends AbstractPrimeViewerActivity<CardTransactionRecord> implements CardTransactionRecordViewerView.Presenter {
 
     public CardTransactionRecordViewerActivity(CrudAppPlace place) {
         super(CardTransactionRecord.class, place, OperationsSite.getViewFactory().getView(CardTransactionRecordViewerView.class), GWT

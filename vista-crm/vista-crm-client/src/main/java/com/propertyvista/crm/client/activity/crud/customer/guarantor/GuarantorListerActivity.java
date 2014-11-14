@@ -13,14 +13,14 @@
  */
 package com.propertyvista.crm.client.activity.crud.customer.guarantor;
 
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorListerView;
 import com.propertyvista.dto.GuarantorDTO;
 
-public class GuarantorListerActivity extends AbstractListerActivity<GuarantorDTO> {
+public class GuarantorListerActivity extends AbstractPrimeListerActivity<GuarantorDTO> {
 
     public GuarantorListerActivity(AppPlace place) {
         super(GuarantorDTO.class, place, CrmSite.getViewFactory().getView(GuarantorListerView.class));

@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.activity.prime.AbstractEditorActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -27,7 +27,7 @@ import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationTransactionCrudService;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationTransactionCrudService.CardServiceSimulationTransactionInitializationData;
 
-public class CardServiceSimulationTransactionEditorActivity extends AbstractEditorActivity<CardServiceSimulationTransaction> implements
+public class CardServiceSimulationTransactionEditorActivity extends AbstractPrimeEditorActivity<CardServiceSimulationTransaction> implements
         CardServiceSimulationTransactionEditorView.Presenter {
 
     public CardServiceSimulationTransactionEditorActivity(CrudAppPlace place) {
