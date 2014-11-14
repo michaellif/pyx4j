@@ -20,7 +20,6 @@
  */
 package com.pyx4j.site.client.backoffice.activity.prime;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -39,41 +38,39 @@ import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView;
 import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView.IWizardPresenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public abstract class AbstractWizardActivity<E extends IEntity> extends AbstractActivity implements IWizardPresenter {
+public abstract class AbstractWizardActivity<E extends IEntity> extends AbstractPrimeActivity<IWizardView<?>> implements IWizardPresenter {
 
     private static final I18n i18n = I18n.get(AbstractWizardActivity.class);
 
-    private final IWizardView<E> view;
-
     private final AbstractCrudService<E> service;
-
-    private final CrudAppPlace place;
 
     private final Class<E> entityClass;
 
     public AbstractWizardActivity(Class<E> entityClass, CrudAppPlace place, IWizardView<E> view, AbstractCrudService<E> service) {
+        super(view, place);
         // development correctness checks:
         assert (entityClass != null);
         assert (view != null);
         assert (service != null);
 
-        this.place = place;
-        this.view = view;
         this.service = service;
         this.entityClass = entityClass;
 
     }
 
+    @Override
+    public CrudAppPlace getPlace() {
+        return (CrudAppPlace) super.getPlace();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
     public IWizardView<E> getView() {
-        return view;
+        return (IWizardView<E>) super.getView();
     }
 
     public AbstractCrudService<E> getService() {
         return service;
-    }
-
-    public CrudAppPlace getPlace() {
-        return place;
     }
 
     public Class<E> getEntityClass() {
@@ -82,14 +79,14 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Abstract
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        view.setPresenter(this);
+        getView().setPresenter(this);
         populate();
-        panel.setWidget(view);
+        panel.setWidget(getView());
     }
 
     protected void onDiscard() {
-        view.reset();
-        view.setPresenter(null);
+        getView().reset();
+        getView().setPresenter(null);
     }
 
     @Override
@@ -124,8 +121,8 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Abstract
      * 
      */
     protected void obtainInitializationData(AsyncCallback<InitializationData> callback) {
-        if (place.getInitializationData() != null) {
-            callback.onSuccess(place.getInitializationData());
+        if (getPlace().getInitializationData() != null) {
+            callback.onSuccess(getPlace().getInitializationData());
         } else {
             callback.onSuccess(null);
         }
@@ -136,8 +133,8 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Abstract
     }
 
     protected void populateView(E result) {
-        view.reset();
-        view.populate(result);
+        getView().reset();
+        getView().populate(result);
     }
 
     @Override
@@ -162,29 +159,29 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Abstract
             public void onFailure(Throwable caught) {
                 onSaveFail(caught);
             }
-        }, view.getValue());
+        }, getView().getValue());
 
     }
 
     protected void onSaved(Key result) {
-        view.reset();
+        getView().reset();
         History.back();
     }
 
     protected void onSaveFail(Throwable caught) {
-        if (!view.onSaveFail(caught)) {
+        if (!getView().onSaveFail(caught)) {
             throw new UnrecoverableClientError(caught);
         }
     }
 
     @Override
     public String mayStop() {
-        if (view.isDirty()) {
-            String entityName = view.getValue().getStringView();
+        if (getView().isDirty()) {
+            String entityName = getView().getValue().getStringView();
             if (CommonsStringUtils.isEmpty(entityName)) {
-                return i18n.tr("Changes to {0} were not saved", view.getValue().getEntityMeta().getCaption());
+                return i18n.tr("Changes to {0} were not saved", getView().getValue().getEntityMeta().getCaption());
             } else {
-                return i18n.tr("Changes to {0} ''{1}'' were not saved", view.getValue().getEntityMeta().getCaption(), entityName);
+                return i18n.tr("Changes to {0} ''{1}'' were not saved", getView().getValue().getEntityMeta().getCaption(), entityName);
             }
         } else {
             return null;

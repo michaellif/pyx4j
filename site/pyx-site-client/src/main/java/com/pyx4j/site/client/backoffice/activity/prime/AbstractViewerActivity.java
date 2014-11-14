@@ -20,7 +20,6 @@
  */
 package com.pyx4j.site.client.backoffice.activity.prime;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -41,15 +40,11 @@ import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView.IViewerPresent
 import com.pyx4j.site.client.memento.MementoManager;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public abstract class AbstractViewerActivity<E extends IEntity> extends AbstractActivity implements IViewerPresenter {
+public abstract class AbstractViewerActivity<E extends IEntity> extends AbstractPrimeActivity<IViewerView<?>> implements IViewerPresenter {
 
     protected final Class<E> entityClass;
 
-    private final IViewerView<E> view;
-
     private final AbstractCrudService<E> service;
-
-    private final CrudAppPlace place;
 
     private Key entityId;
 
@@ -58,13 +53,12 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
     private E populatedValue;
 
     public AbstractViewerActivity(Class<E> entityClass, CrudAppPlace place, IViewerView<E> view, AbstractCrudService<E> service) {
+        super(view, place);
         // development correctness checks:
         assert (view != null);
         assert (service != null);
 
         this.entityClass = entityClass;
-        this.place = place;
-        this.view = view;
         this.service = service;
 
         entityId = null;
@@ -79,10 +73,6 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
         }
 
         assert (entityId != null);
-    }
-
-    public IViewerView<E> getView() {
-        return view;
     }
 
     public AbstractCrudService<E> getService() {
@@ -103,23 +93,29 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
 
     @Override
     public CrudAppPlace getPlace() {
-        return place;
+        return (CrudAppPlace) super.getPlace();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public IViewerView<E> getView() {
+        return (IViewerView<E>) super.getView();
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        view.setPresenter(this);
+        getView().setPresenter(this);
         populate();
-        panel.setWidget(view);
-        MementoManager.restoreState(getView(), place);
+        panel.setWidget(getView());
+        MementoManager.restoreState(getView(), getPlace());
     }
 
     protected void onDiscard() {
-        MementoManager.saveState(getView(), place);
+        MementoManager.saveState(getView(), getPlace());
         this.populatedValue = null;
-        view.reset();
-        view.setPresenter(null);
-        view.hideVisor();
+        getView().reset();
+        getView().setPresenter(null);
+        getView().hideVisor();
     }
 
     @Override
@@ -161,11 +157,11 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
     protected void populateView(E result) {
         int activeTab = tabIndex;
         if (activeTab < 0) {
-            activeTab = view.getActiveTab();
+            activeTab = getView().getActiveTab();
         }
         populatedValue = result;
-        view.populate(result);
-        view.setActiveTab(activeTab);
+        getView().populate(result);
+        getView().setActiveTab(activeTab);
     }
 
     protected E getValue() {
@@ -212,10 +208,10 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
     }
 
     protected void goToViewer(Key entityID) {
-        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(getPlace().getClass()).formViewerPlace(entityID, view.getActiveTab()));
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(getPlace().getClass()).formViewerPlace(entityID, getView().getActiveTab()));
     }
 
     protected void goToEditor(Key entityID) {
-        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(getPlace().getClass()).formEditorPlace(entityID, view.getActiveTab()));
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(getPlace().getClass()).formEditorPlace(entityID, getView().getActiveTab()));
     }
 }

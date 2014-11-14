@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -54,22 +53,17 @@ import com.pyx4j.site.client.backoffice.ui.prime.report.IReportView;
 import com.pyx4j.site.client.backoffice.ui.prime.report.IReportView.IReportPresenter;
 import com.pyx4j.site.client.backoffice.ui.prime.report.ReportSettingsManagementVizor;
 import com.pyx4j.site.client.memento.MementoManager;
-import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.rpc.customization.CustomizationOverwriteAttemptException;
 import com.pyx4j.site.rpc.customization.ICustomizationPersistenceService;
 import com.pyx4j.site.rpc.reports.IReportsService;
 import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
-public abstract class AbstractReportActivity<R extends ReportTemplate> extends AbstractActivity implements IReportPresenter<R> {
+public abstract class AbstractReportActivity<R extends ReportTemplate> extends AbstractPrimeActivity<IReportView<?>> implements IReportPresenter<R> {
 
     private static final I18n i18n = I18n.get(AbstractReportActivity.class);
 
     private static final Map<String, CachedReportData> reportDataCache = new HashMap<String, AbstractReportActivity.CachedReportData>();
-
-    protected final ReportsAppPlace<R> place;
-
-    private final IReportView<R> view;
 
     private final IReportsService<R> reportsService;
 
@@ -87,47 +81,48 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
 
     public AbstractReportActivity(Class<R> reportMetadataClass, ReportsAppPlace<R> place, IReportsService<R> reportsService,
             ICustomizationPersistenceService<ReportTemplate> reportsSettingsPersistenceService, IReportView<R> view, String dowloadServletPath) {
+        super(view, place);
         this.reportMetadataClass = reportMetadataClass;
         this.reportsService = reportsService;
         this.reportsSettingsPersistenceService = reportsSettingsPersistenceService;
         this.deferredProccessService = GWT.<DeferredProcessService> create(DeferredProcessService.class);
 
-        this.view = view;
-        this.place = place;
-
-        this.view.setPresenter(this);
+        getView().setPresenter(this);
         this.downloadServletPath = dowloadServletPath;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
     public IReportView<R> getView() {
-        return view;
+        return (IReportView<R>) super.getView();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public ReportsAppPlace<R> getPlace() {
+        return (ReportsAppPlace<R>) super.getPlace();
     }
 
     public ReportSettingsManagementVizorController getReportSettingsManagementVizorController() {
         if (reportSettingsManagementVizorController == null) {
-            reportSettingsManagementVizorController = new ReportSettingsManagementVizorController(view, this);
+            reportSettingsManagementVizorController = new ReportSettingsManagementVizorController(getView(), this);
         }
         return reportSettingsManagementVizorController;
     }
 
     @Override
-    public AppPlace getPlace() {
-        return place;
-    }
-
-    @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        panel.setWidget(view);
-        if (place.getReportMetadata() == null) {
-            if (place.getReportMetadataId() != null) {
-                loadReportMetadata(place.getReportMetadataId());
+        panel.setWidget(getView());
+        if (getPlace().getReportMetadata() == null) {
+            if (getPlace().getReportMetadataId() != null) {
+                loadReportMetadata(getPlace().getReportMetadataId());
                 return;
             } else {
-                place.define(createDefaultReportMetadata());
+                getPlace().define(createDefaultReportMetadata());
             }
         }
-        MementoManager.restoreState(getView(), place);
-        onReportMetadataSet((R) place.getReportMetadata());
+        MementoManager.restoreState(getView(), getPlace());
+        onReportMetadataSet((R) getPlace().getReportMetadata());
     }
 
     @Override
@@ -135,7 +130,7 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
         reportsService.generateReportAsync(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String deferredProcessId) {
-                view.startReportGenerationProgress(deferredProcessId, new DeferredProgressListener() {
+                getView().startReportGenerationProgress(deferredProcessId, new DeferredProgressListener() {
 
                     @Override
                     public void onDeferredSuccess(DeferredProcessProgressResponse result) {
@@ -148,9 +143,10 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
                                     public void onSuccess(Serializable result) {
                                         CachedReportData cachedReportData = new CachedReportData();
                                         cachedReportData.data = result;
-                                        cachedReportData.reportMetadata = view.getReportSettings().duplicate();
-                                        reportDataCache.put(GWTJava5Helper.getSimpleName(view.getReportSettings().getInstanceValueClass()), cachedReportData);
-                                        view.setReportData(result);
+                                        cachedReportData.reportMetadata = getView().getReportSettings().duplicate();
+                                        reportDataCache.put(GWTJava5Helper.getSimpleName(getView().getReportSettings().getInstanceValueClass()),
+                                                cachedReportData);
+                                        getView().setReportData(result);
                                     }
 
                                 });
@@ -166,11 +162,11 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
 
                     @Override
                     public void onDeferredError(DeferredProcessProgressResponse result) {
-                        view.setError(result.getMessage());
+                        getView().setError(result.getMessage());
                     }
                 });
             }
-        }, view.getReportSettings());
+        }, getView().getReportSettings());
     }
 
     @Override
@@ -188,7 +184,7 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
         final String METADATA_KEY = "METADATA";
 
         HashMap<String, Serializable> parameters = new HashMap<>();
-        parameters.put(METADATA_KEY, view.getReportSettings());
+        parameters.put(METADATA_KEY, getView().getReportSettings());
 
         request.setParameters(parameters);
         d.start(new ReportService<IEntity>() {
@@ -212,8 +208,8 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
 
             @Override
             public void onSuccess(ReportTemplate reportMetadata) {
-                place.define((R) reportMetadata);
-                view.setReportMetadata((R) reportMetadata);
+                getPlace().define((R) reportMetadata);
+                getView().setReportMetadata((R) reportMetadata);
                 onReportMetadataSet((R) reportMetadata);
             }
 
@@ -235,21 +231,22 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
 
             @Override
             public void onSuccess(VoidSerializable result) {
-                view.onReportMetadataSaveSucceed();
+                getView().onReportMetadataSaveSucceed();
             }
 
             @Override
             public void onFailure(Throwable caught) {
                 if (caught instanceof CustomizationOverwriteAttemptException) {
-                    view.onReportMetadataSaveFailed(i18n.tr("Please choose a different name: a report settings preset named \"{0}\" already exists", view
-                            .getReportSettings().reportTemplateName().getValue()));
+                    getView().onReportMetadataSaveFailed(
+                            i18n.tr("Please choose a different name: a report settings preset named \"{0}\" already exists", getView().getReportSettings()
+                                    .reportTemplateName().getValue()));
                 } else if (caught instanceof UserRuntimeException) {
-                    view.onReportMetadataSaveFailed(((UserRuntimeException) caught).getMessage());
+                    getView().onReportMetadataSaveFailed(((UserRuntimeException) caught).getMessage());
                 } else {
                     super.onFailure(caught);
                 }
             }
-        }, view.getReportSettings().reportTemplateName().getValue(), view.getReportSettings(), allowOverwrite);
+        }, getView().getReportSettings().reportTemplateName().getValue(), getView().getReportSettings(), allowOverwrite);
 
     }
 
@@ -281,7 +278,7 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
     }
 
     public void onDiscard() {
-        MementoManager.saveState(getView(), place);
+        MementoManager.saveState(getView(), getPlace());
         getView().reset();
     }
 
