@@ -261,7 +261,7 @@ class PaymentHealthMonitor {
                     PaymentRecord paymentRecord = iterator.next();
                     CardTransactionRecord cardTransactionRecord = getCardTransactionRecord(pmc, paymentRecord);
                     if (cardTransactionRecord == null) {
-                        if (!processedPaymentStatuses.contains(paymentRecord.paymentStatus().getValue())) {
+                        if (processedPaymentStatuses.contains(paymentRecord.paymentStatus().getValue())) {
                             ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord,
                                     "{0} Card Payment Record do not have TransactionRecord\n" //
                                             + "Pmc:{1}", paymentRecord.id(), pmc.name());

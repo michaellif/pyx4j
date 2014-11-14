@@ -23,9 +23,11 @@ import org.junit.Assert;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
@@ -135,5 +137,28 @@ public class PaymentHealthMonitorTest extends LeaseFinancialTestBase {
             }
         });
 
+    }
+
+    public void testVerifyCardTransactionScheduled() throws Exception {
+        setSysDate("2011-01-01");
+
+        //Make Scheduled
+        {
+            LeasePaymentMethod paymentMethod = customerDataModel.addPaymentMethod(customer, getBuilding(), PaymentType.CreditCard);
+            Persistence.service().commit();
+
+            PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), paymentMethod, "100");
+            paymentRecord.targetDate().setValue(DateUtils.monthAdd(SystemDateManager.getLogicalDate(), 3));
+            ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
+            Persistence.service().commit();
+
+            ServerSideFactory.create(PaymentFacade.class).schedulePayment(paymentRecord);
+            Persistence.service().commit();
+        }
+
+        SchedulerMock.runProcess(PmcProcessType.vistaHeathMonitor, (Date) null, 0, 0);
+
+        // 3 days later, Has missing CardsAggregatedTransfer
+        SchedulerMock.runProcess(PmcProcessType.vistaHeathMonitor, "2011-01-04", 0, 0);
     }
 }
