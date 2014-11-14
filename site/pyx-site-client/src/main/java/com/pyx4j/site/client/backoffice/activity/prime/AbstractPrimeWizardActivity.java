@@ -38,7 +38,7 @@ import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView;
 import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView.IWizardPresenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public abstract class AbstractPrimeWizardActivity<E extends IEntity> extends AbstractPrimeActivity<IWizardView<?>> implements IWizardPresenter {
+public abstract class AbstractPrimeWizardActivity<E extends IEntity> extends AbstractPrimeActivity<IWizardView<E>> implements IWizardPresenter {
 
     private static final I18n i18n = I18n.get(AbstractPrimeWizardActivity.class);
 
@@ -61,12 +61,6 @@ public abstract class AbstractPrimeWizardActivity<E extends IEntity> extends Abs
     @Override
     public CrudAppPlace getPlace() {
         return (CrudAppPlace) super.getPlace();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public IWizardView<E> getView() {
-        return (IWizardView<E>) super.getView();
     }
 
     public AbstractCrudService<E> getService() {
