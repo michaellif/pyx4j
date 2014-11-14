@@ -185,7 +185,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     }
 
     public void setDeleteActionEnabled(boolean enabled) {
-        if (delButton == null) {
+        if (delButton == null && enabled) {
             topActionsBar.getToolbar().insertItem(delButton = new Button(FolderImages.INSTANCE.delButton().hover(), i18n.tr("Delete Checked"), new Command() {
                 @Override
                 public void execute() {
@@ -213,7 +213,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     }
 
     public void setAddNewActionEnabled(boolean enabled) {
-        if (addButton == null) {
+        if (addButton == null && enabled) {
             if (addButtonCaption == null) {
                 addButtonCaption = i18n.tr("New {0}", entityPrototype.getEntityMeta().getCaption());
             }

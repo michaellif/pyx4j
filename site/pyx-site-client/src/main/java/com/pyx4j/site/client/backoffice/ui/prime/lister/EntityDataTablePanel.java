@@ -38,11 +38,12 @@ import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView.IListerPresenter;
 import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class EntityDataTablePanel<E extends IEntity> extends DataTablePanel<E> implements IListerView<E> {
+public abstract class EntityDataTablePanel<E extends IEntity> extends DataTablePanel<E> {
 
     private static final I18n i18n = I18n.get(EntityDataTablePanel.class);
 
@@ -163,7 +164,6 @@ public abstract class EntityDataTablePanel<E extends IEntity> extends DataTableP
 
 // IListerView implementation:
 
-    @Override
     public void setPresenter(IListerPresenter<E> presenter) {
         this.presenter = presenter;
         if (presenter == null) {
@@ -174,17 +174,14 @@ public abstract class EntityDataTablePanel<E extends IEntity> extends DataTableP
         }
     }
 
-    @Override
     public IListerPresenter<E> getPresenter() {
         return presenter;
     }
 
-    @Override
     public EntityDataTablePanel<E> getDataTablePanel() {
         return this;
     }
 
-    @Override
     public void onDeleted(Key itemID, boolean isSuccessful) {
         // TODO Auto-generated method stub
     }
@@ -193,19 +190,16 @@ public abstract class EntityDataTablePanel<E extends IEntity> extends DataTableP
         return itemOpenPlaceClass;
     }
 
-    @Override
     public void showVisor(IVisor visor) {
         // TODO Auto-generated method stub
 
     }
 
-    @Override
     public void hideVisor() {
         // TODO Auto-generated method stub
 
     }
 
-    @Override
     public boolean isVisorShown() {
         // TODO Auto-generated method stub
         return false;
@@ -248,7 +242,6 @@ public abstract class EntityDataTablePanel<E extends IEntity> extends DataTableP
         return null;
     }
 
-    @Override
     public List<Sort> getSortCriteria() {
         return getDataTableModel().getSortCriteria();
     }
