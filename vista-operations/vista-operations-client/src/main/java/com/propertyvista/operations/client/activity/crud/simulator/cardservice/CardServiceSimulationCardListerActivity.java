@@ -13,21 +13,17 @@
  */
 package com.propertyvista.operations.client.activity.crud.simulator.cardservice;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationCardListerView;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCard;
-import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationCardCrudService;
 
 public class CardServiceSimulationCardListerActivity extends AbstractListerActivity<CardServiceSimulationCard> {
 
     public CardServiceSimulationCardListerActivity(Place place) {
-        super(CardServiceSimulationCard.class, place, OperationsSite.getViewFactory().getView(CardServiceSimulationCardListerView.class), GWT
-                        .<AbstractCrudService<CardServiceSimulationCard>> create(CardServiceSimulationCardCrudService.class));
+        super(CardServiceSimulationCard.class, place, OperationsSite.getViewFactory().getView(CardServiceSimulationCardListerView.class));
     }
 }

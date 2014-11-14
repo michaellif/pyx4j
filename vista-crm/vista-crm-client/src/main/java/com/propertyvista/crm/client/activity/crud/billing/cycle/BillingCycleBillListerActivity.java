@@ -44,8 +44,7 @@ public class BillingCycleBillListerActivity extends AbstractListerActivity<BillD
     private Bill.BillStatus billStatusValue;
 
     public BillingCycleBillListerActivity(AppPlace place) {
-        super(BillDataDTO.class, place, CrmSite.getViewFactory().getView(BillingCycleBillListerView.class), GWT
-                        .<BillingCycleBillListService> create(BillingCycleBillListService.class));
+        super(BillDataDTO.class, place, CrmSite.getViewFactory().getView(BillingCycleBillListerView.class));
 
         String val;
         if ((val = place.getFirstArg(CrmSiteMap.Finance.BillingCycle.ARG_BC_ID)) != null) {
@@ -72,7 +71,7 @@ public class BillingCycleBillListerActivity extends AbstractListerActivity<BillD
 
     @Override
     public void confirm(Collection<BillDataDTO> bills) {
-        ((BillingCycleBillListService) getService()).confirm(new DefaultAsyncCallback<VoidSerializable>() {
+        GWT.<BillingCycleBillListService> create(BillingCycleBillListService.class).confirm(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
@@ -82,7 +81,7 @@ public class BillingCycleBillListerActivity extends AbstractListerActivity<BillD
 
     @Override
     public void reject(Collection<BillDataDTO> bills, String reason) {
-        ((BillingCycleBillListService) getService()).reject(new DefaultAsyncCallback<VoidSerializable>() {
+        GWT.<BillingCycleBillListService> create(BillingCycleBillListService.class).reject(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();

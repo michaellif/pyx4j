@@ -13,21 +13,18 @@
  */
 package com.propertyvista.crm.client.activity.policies.autopaychange;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.autopaychangepolicy.AutoPayChangePolicyListerView;
-import com.propertyvista.crm.rpc.services.policies.policy.AutoPayPolicyCrudService;
 import com.propertyvista.domain.policy.dto.AutoPayPolicyDTO;
 
 public class AutoPayPolicyListerActivity extends AbstractListerActivity<AutoPayPolicyDTO> {
 
     public AutoPayPolicyListerActivity(Place place) {
-        super(AutoPayPolicyDTO.class, place, CrmSite.getViewFactory().getView(AutoPayChangePolicyListerView.class), GWT
-                        .<AutoPayPolicyCrudService> create(AutoPayPolicyCrudService.class));
+        super(AutoPayPolicyDTO.class, place, CrmSite.getViewFactory().getView(AutoPayChangePolicyListerView.class));
     }
 
 }

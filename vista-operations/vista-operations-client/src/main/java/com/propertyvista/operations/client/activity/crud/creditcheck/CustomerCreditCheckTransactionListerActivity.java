@@ -13,7 +13,6 @@
  */
 package com.propertyvista.operations.client.activity.crud.creditcheck;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
@@ -21,12 +20,10 @@ import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.creditcheck.CustomerCreditCheckTransactionListerView;
 import com.propertyvista.operations.rpc.dto.CustomerCreditCheckTransactionDTO;
-import com.propertyvista.operations.rpc.services.CustomerCreditCheckTransactionCrudService;
 
 public class CustomerCreditCheckTransactionListerActivity extends AbstractListerActivity<CustomerCreditCheckTransactionDTO> {
 
     public CustomerCreditCheckTransactionListerActivity(Place place) {
-        super(CustomerCreditCheckTransactionDTO.class, place, OperationsSite.getViewFactory().getView(CustomerCreditCheckTransactionListerView.class), GWT
-                        .<CustomerCreditCheckTransactionCrudService> create(CustomerCreditCheckTransactionCrudService.class));
+        super(CustomerCreditCheckTransactionDTO.class, place, OperationsSite.getViewFactory().getView(CustomerCreditCheckTransactionListerView.class));
     }
 }

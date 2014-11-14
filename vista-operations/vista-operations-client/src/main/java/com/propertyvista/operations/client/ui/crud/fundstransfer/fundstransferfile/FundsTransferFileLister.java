@@ -16,36 +16,40 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferf
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
+import com.propertyvista.operations.rpc.services.PadFileCrudService;
 
-public class FundsTransferFileLister extends EntityDataTablePanel<FundsTransferFileDTO> {
+public class FundsTransferFileLister extends SiteDataTablePanel<FundsTransferFileDTO> {
 
     public FundsTransferFileLister() {
-        super(FundsTransferFileDTO.class, false, false);
+        super(FundsTransferFileDTO.class, GWT.<AbstractCrudService<FundsTransferFileDTO>> create(PadFileCrudService.class), false, false);
 
-        setDataTableModel(new DataTableModel<FundsTransferFileDTO>(//@formatter:off                
-                    new MemberColumnDescriptor.Builder(proto().fileCreationNumber()).build(),
-                    new MemberColumnDescriptor.Builder(proto().fileName()).build(),
-                    new MemberColumnDescriptor.Builder(proto().companyId()).build(),
-                    new MemberColumnDescriptor.Builder(proto().status()).build(),
-                    new MemberColumnDescriptor.Builder(proto().fundsTransferType()).build(),
-                    new MemberColumnDescriptor.Builder(proto().sent()).build(),
-                    new MemberColumnDescriptor.Builder(proto().created()).build(),
-                    new MemberColumnDescriptor.Builder(proto().updated()).build(),
-                    new MemberColumnDescriptor.Builder(proto().acknowledged()).build(),
-                    new MemberColumnDescriptor.Builder(proto().recordsCount()).build(),
-                    new MemberColumnDescriptor.Builder(proto().fileAmount()).build(),
-                    new MemberColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build(),
-                    new MemberColumnDescriptor.Builder(proto().acknowledgmentRejectReasonMessage()).build(),
-                    new MemberColumnDescriptor.Builder(proto().acknowledgmentFileName(), false).build(),
-                    new MemberColumnDescriptor.Builder(proto().acknowledgmentRemoteFileDate(), false).build(),
-                    new MemberColumnDescriptor.Builder(proto().acknowledgmentStatus()).build()
-            ));//@formatter:on
+        setDataTableModel(new DataTableModel<FundsTransferFileDTO>( //              
+                new MemberColumnDescriptor.Builder(proto().fileCreationNumber()).build(), //
+                new MemberColumnDescriptor.Builder(proto().fileName()).build(), //
+                new MemberColumnDescriptor.Builder(proto().companyId()).build(), //
+                new MemberColumnDescriptor.Builder(proto().status()).build(), //
+                new MemberColumnDescriptor.Builder(proto().fundsTransferType()).build(), //
+                new MemberColumnDescriptor.Builder(proto().sent()).build(), //
+                new MemberColumnDescriptor.Builder(proto().created()).build(), //
+                new MemberColumnDescriptor.Builder(proto().updated()).build(), //
+                new MemberColumnDescriptor.Builder(proto().acknowledged()).build(), //
+                new MemberColumnDescriptor.Builder(proto().recordsCount()).build(), //
+                new MemberColumnDescriptor.Builder(proto().fileAmount()).build(), //
+                new MemberColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build(), //
+                new MemberColumnDescriptor.Builder(proto().acknowledgmentRejectReasonMessage()).build(), //
+                new MemberColumnDescriptor.Builder(proto().acknowledgmentFileName(), false).build(), //
+                new MemberColumnDescriptor.Builder(proto().acknowledgmentRemoteFileDate(), false).build(), //
+                new MemberColumnDescriptor.Builder(proto().acknowledgmentStatus()).build() //
+        ));
     }
 
     @Override

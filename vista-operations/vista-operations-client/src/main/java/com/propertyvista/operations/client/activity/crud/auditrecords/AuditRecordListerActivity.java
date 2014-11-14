@@ -13,7 +13,6 @@
  */
 package com.propertyvista.operations.client.activity.crud.auditrecords;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.commons.Key;
@@ -26,13 +25,11 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.auditrecords.AuditRecordListerView;
 import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
-import com.propertyvista.operations.rpc.services.AuditRecordCrudService;
 
 public class AuditRecordListerActivity extends AbstractListerActivity<AuditRecordOperationsDTO> {
 
     public AuditRecordListerActivity(Place place) {
-        super(AuditRecordOperationsDTO.class, place, OperationsSite.getViewFactory().getView(AuditRecordListerView.class), GWT
-                .<AuditRecordCrudService> create(AuditRecordCrudService.class));
+        super(AuditRecordOperationsDTO.class, place, OperationsSite.getViewFactory().getView(AuditRecordListerView.class));
     }
 
     @Override

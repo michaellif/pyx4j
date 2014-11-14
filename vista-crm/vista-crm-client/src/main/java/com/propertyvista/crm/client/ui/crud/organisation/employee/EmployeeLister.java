@@ -17,25 +17,29 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.dto.company.EmployeePrivilegesDTO;
+import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.domain.company.Notification;
 
-public class EmployeeLister extends EntityDataTablePanel<EmployeeDTO> {
+public class EmployeeLister extends SiteDataTablePanel<EmployeeDTO> {
 
     private static final I18n i18n = I18n.get(EmployeeLister.class);
 
     public EmployeeLister() {
-        super(EmployeeDTO.class, true);
+        super(EmployeeDTO.class, GWT.<AbstractCrudService<EmployeeDTO>> create(EmployeeCrudService.class), true);
 
         List<ColumnDescriptor> cd = new ArrayList<>();
 

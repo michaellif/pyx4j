@@ -16,47 +16,50 @@ package com.propertyvista.crm.client.ui.crud.lease;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
+import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
 
-public class FormerLeaseLister extends EntityDataTablePanel<LeaseDTO> {
+public class FormerLeaseLister extends SiteDataTablePanel<LeaseDTO> {
 
     private final static I18n i18n = I18n.get(FormerLeaseLister.class);
 
     public FormerLeaseLister() {
-        super(LeaseDTO.class, false);
+        super(LeaseDTO.class, GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class), false);
 
-        setDataTableModel(new DataTableModel<LeaseDTO>(//@formatter:off
-            new Builder(proto().leaseId()).columnTitle(i18n.tr("Id")).build(),
-            new Builder(proto().type()).build(),
-            
-            new Builder(proto().unit().building().propertyCode()).build(),
-            new Builder(proto().unit()).searchable(false).build(),
-            new Builder(proto().unit().info().number()).columnTitle(proto().unit().getMeta().getCaption()).searchableOnly().build(),
-            
-            new Builder(proto().status()).build(),
-            new Builder(proto().completion()).build(),
-            new Builder(proto().billingAccount().accountNumber()).build(),
-            
-            new Builder(proto().leaseFrom()).build(),
-            new Builder(proto().leaseTo()).build(),
-            
-            new Builder(proto().expectedMoveIn(), false).build(),
-            new Builder(proto().expectedMoveOut(), false).build(),
-            new Builder(proto().actualMoveIn(), false).build(),
-            new Builder(proto().actualMoveOut(), false).build(),
-            new Builder(proto().moveOutSubmissionDate(), false).build(),
-            
-            new Builder(proto().approvalDate(), false).build(),
-            new Builder(proto().creationDate(), false).build()
-        ));//@formatter:on
+        setDataTableModel(new DataTableModel<LeaseDTO>( //
+                new Builder(proto().leaseId()).columnTitle(i18n.tr("Id")).build(), //
+                new Builder(proto().type()).build(), //
+
+                new Builder(proto().unit().building().propertyCode()).build(), //
+                new Builder(proto().unit()).searchable(false).build(), //
+                new Builder(proto().unit().info().number()).columnTitle(proto().unit().getMeta().getCaption()).searchableOnly().build(), //
+
+                new Builder(proto().status()).build(), //
+                new Builder(proto().completion()).build(), //
+                new Builder(proto().billingAccount().accountNumber()).build(), //
+
+                new Builder(proto().leaseFrom()).build(), //
+                new Builder(proto().leaseTo()).build(), //
+
+                new Builder(proto().expectedMoveIn(), false).build(), //
+                new Builder(proto().expectedMoveOut(), false).build(), //
+                new Builder(proto().actualMoveIn(), false).build(), //
+                new Builder(proto().actualMoveOut(), false).build(), //
+                new Builder(proto().moveOutSubmissionDate(), false).build(), //
+
+                new Builder(proto().approvalDate(), false).build(), //
+                new Builder(proto().creationDate(), false).build() //
+        ));
     }
 
     @Override

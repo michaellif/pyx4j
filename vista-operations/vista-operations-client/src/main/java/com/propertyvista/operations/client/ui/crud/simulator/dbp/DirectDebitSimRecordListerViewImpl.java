@@ -13,12 +13,16 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.dbp;
 
+import com.google.gwt.core.shared.GWT;
+
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
 import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimRecord;
+import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimRecordCrudService;
 
 public class DirectDebitSimRecordListerViewImpl extends OperationsListerViewImplBase<DirectDebitSimRecord> implements DirectDebitSimRecordListerView {
 
@@ -26,17 +30,17 @@ public class DirectDebitSimRecordListerViewImpl extends OperationsListerViewImpl
         setDataTablePanel(new DirectDebitSimRecordLister());
     }
 
-    public static class DirectDebitSimRecordLister extends EntityDataTablePanel<DirectDebitSimRecord> {
+    public static class DirectDebitSimRecordLister extends SiteDataTablePanel<DirectDebitSimRecord> {
 
         public DirectDebitSimRecordLister() {
-            super(DirectDebitSimRecord.class, true);
-            setDataTableModel(new DataTableModel<DirectDebitSimRecord>(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),
-                    new MemberColumnDescriptor.Builder(proto().amount()).build(),
-                    new MemberColumnDescriptor.Builder(proto().paymentReferenceNumber()).build(),
-                    new MemberColumnDescriptor.Builder(proto().customerName()).build(),
-                    new MemberColumnDescriptor.Builder(proto().receivedDate()).build()
-            ));//@formatter:on
+            super(DirectDebitSimRecord.class, GWT.<AbstractListCrudService<DirectDebitSimRecord>> create(DirectDebitSimRecordCrudService.class), true);
+            setDataTableModel(new DataTableModel<DirectDebitSimRecord>( //
+                    new MemberColumnDescriptor.Builder(proto().accountNumber()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().amount()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().paymentReferenceNumber()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().customerName()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().receivedDate()).build() //
+            ));
         }
     }
 

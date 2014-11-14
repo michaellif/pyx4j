@@ -13,11 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leasetermination;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
+import com.propertyvista.crm.rpc.services.policies.policy.LeaseTerminationPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LeaseTerminationPolicyDTO;
 
 public class LeaseTerminationPolicyListerViewImpl extends CrmListerViewImplBase<LeaseTerminationPolicyDTO> {
@@ -29,12 +32,12 @@ public class LeaseTerminationPolicyListerViewImpl extends CrmListerViewImplBase<
     public static class LeaseTerminationPolicyLister extends PolicyListerBase<LeaseTerminationPolicyDTO> {
 
         public LeaseTerminationPolicyLister() {
-            super(LeaseTerminationPolicyDTO.class);
+            super(LeaseTerminationPolicyDTO.class, GWT.<LeaseTerminationPolicyCrudService> create(LeaseTerminationPolicyCrudService.class));
 
-            setDataTableModel(new DataTableModel<LeaseTerminationPolicyDTO>(// @formatter:off
-                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
-            )); // @formatter:on
+            setDataTableModel(new DataTableModel<LeaseTerminationPolicyDTO>( //
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
+            ));
         }
 
     }

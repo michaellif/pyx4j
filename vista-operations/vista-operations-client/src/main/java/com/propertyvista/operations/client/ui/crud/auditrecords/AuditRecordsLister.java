@@ -16,17 +16,20 @@ package com.propertyvista.operations.client.ui.crud.auditrecords;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
+import com.propertyvista.operations.rpc.services.AuditRecordCrudService;
 
-public class AuditRecordsLister extends EntityDataTablePanel<AuditRecordOperationsDTO> {
+public class AuditRecordsLister extends SiteDataTablePanel<AuditRecordOperationsDTO> {
 
     public AuditRecordsLister() {
-        super(AuditRecordOperationsDTO.class, false, false);
+        super(AuditRecordOperationsDTO.class, GWT.<AuditRecordCrudService> create(AuditRecordCrudService.class), false, false);
 
         setDataTableModel(new DataTableModel<AuditRecordOperationsDTO>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().when()).build(),

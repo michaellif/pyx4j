@@ -13,22 +13,18 @@
  */
 package com.propertyvista.crm.client.activity.crud.organisation;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeListerView;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
-import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 
 public class EmployeeListerActivity extends AbstractListerActivity<EmployeeDTO> {
 
     public EmployeeListerActivity(Place place) {
-        super(EmployeeDTO.class, place, CrmSite.getViewFactory().getView(EmployeeListerView.class), GWT
-                .<AbstractCrudService<EmployeeDTO>> create(EmployeeCrudService.class));
+        super(EmployeeDTO.class, place, CrmSite.getViewFactory().getView(EmployeeListerView.class));
     }
 
 }

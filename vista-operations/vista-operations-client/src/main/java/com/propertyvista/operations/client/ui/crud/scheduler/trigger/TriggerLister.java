@@ -16,29 +16,33 @@ package com.propertyvista.operations.client.ui.crud.scheduler.trigger;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.rpc.dto.TriggerDTO;
+import com.propertyvista.operations.rpc.services.scheduler.TriggerCrudService;
 
-public class TriggerLister extends EntityDataTablePanel<TriggerDTO> {
+public class TriggerLister extends SiteDataTablePanel<TriggerDTO> {
 
     public TriggerLister() {
-        super(TriggerDTO.class, true);
+        super(TriggerDTO.class, GWT.<AbstractCrudService<TriggerDTO>> create(TriggerCrudService.class), true);
 
-        DataTableModel<TriggerDTO> dataTableModel = new DataTableModel<TriggerDTO>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().triggerType()).build(),
-            new MemberColumnDescriptor.Builder(proto().options()).visible(false).sortable(false).searchable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().name()).build(),
-            new MemberColumnDescriptor.Builder(proto().scheduleSuspended()).sortable(false).searchable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().schedule()).sortable(false).searchable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().nextScheduledFireTime()).sortable(false).searchable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().populationType(), false).build(),
-            new MemberColumnDescriptor.Builder(proto().created()).build()
-        );//@formatter:on
+        DataTableModel<TriggerDTO> dataTableModel = new DataTableModel<TriggerDTO>( //
+                new MemberColumnDescriptor.Builder(proto().triggerType()).build(), //
+                new MemberColumnDescriptor.Builder(proto().options()).visible(false).sortable(false).searchable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().name()).build(), //
+                new MemberColumnDescriptor.Builder(proto().scheduleSuspended()).sortable(false).searchable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().schedule()).sortable(false).searchable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().nextScheduledFireTime()).sortable(false).searchable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().populationType(), false).build(), //
+                new MemberColumnDescriptor.Builder(proto().created()).build() //
+        );
         dataTableModel.setPageSize(DataTablePanel.PAGESIZE_LARGE);
         setDataTableModel(dataTableModel);
 

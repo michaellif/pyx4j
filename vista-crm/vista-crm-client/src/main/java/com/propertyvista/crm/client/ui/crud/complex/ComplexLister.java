@@ -16,25 +16,29 @@ package com.propertyvista.crm.client.ui.crud.complex;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
+import com.propertyvista.crm.rpc.services.building.ComplexCrudService;
 import com.propertyvista.dto.ComplexDTO;
 
-public class ComplexLister extends EntityDataTablePanel<ComplexDTO> {
+public class ComplexLister extends SiteDataTablePanel<ComplexDTO> {
 
     public ComplexLister() {
-        super(ComplexDTO.class, true);
+        super(ComplexDTO.class, GWT.<AbstractCrudService<ComplexDTO>> create(ComplexCrudService.class), true);
 
-        setDataTableModel(new DataTableModel<ComplexDTO>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().name()).build(), 
-            new MemberColumnDescriptor.Builder(proto().address().city()).sortable(false).searchable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().address().province()).sortable(false).searchable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().address().country()).sortable(false).searchable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().primaryBuilding()).sortable(false).searchable(false).build()
-        ));//@formatter:on
+        setDataTableModel(new DataTableModel<ComplexDTO>( //
+                new MemberColumnDescriptor.Builder(proto().name()).build(), //
+                new MemberColumnDescriptor.Builder(proto().address().city()).sortable(false).searchable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().address().province()).sortable(false).searchable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().address().country()).sortable(false).searchable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().primaryBuilding()).sortable(false).searchable(false).build() //
+        ));
     }
 
     @Override

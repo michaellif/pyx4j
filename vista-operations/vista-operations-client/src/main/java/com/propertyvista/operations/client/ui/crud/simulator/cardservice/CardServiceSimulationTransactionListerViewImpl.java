@@ -16,35 +16,40 @@ package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction;
+import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationTransactionCrudService;
 
 public class CardServiceSimulationTransactionListerViewImpl extends OperationsListerViewImplBase<CardServiceSimulationTransaction> implements
         CardServiceSimulationTransactionListerView {
 
-    public static class CardServiceSimulationTransactionLister extends EntityDataTablePanel<CardServiceSimulationTransaction> {
+    public static class CardServiceSimulationTransactionLister extends SiteDataTablePanel<CardServiceSimulationTransaction> {
 
         public CardServiceSimulationTransactionLister() {
-            super(CardServiceSimulationTransaction.class, false, true);
-            setDataTableModel(new DataTableModel<CardServiceSimulationTransaction>(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().id()).build(),
-                    new MemberColumnDescriptor.Builder(proto().card().cardNumber()).columnTitle("Card Number").build(),
-                    new MemberColumnDescriptor.Builder(proto().merchant()).build(),
-                    new MemberColumnDescriptor.Builder(proto().merchant().company()).build(),
-                    new MemberColumnDescriptor.Builder(proto().transactionType() ).build(),
-                    new MemberColumnDescriptor.Builder(proto().amount()).build(),
-                    new MemberColumnDescriptor.Builder(proto().convenienceFee()).build(),
-                    new MemberColumnDescriptor.Builder(proto().reference()).build(),
-                    new MemberColumnDescriptor.Builder(proto().responseCode()).build(),
-                    new MemberColumnDescriptor.Builder(proto().authorizationNumber()).build(),
-                    new MemberColumnDescriptor.Builder(proto().voided()).build(),
-                    new MemberColumnDescriptor.Builder(proto().transactionDate()).build()
-            ));//@formatter:on
+            super(CardServiceSimulationTransaction.class, GWT
+                    .<AbstractCrudService<CardServiceSimulationTransaction>> create(CardServiceSimulationTransactionCrudService.class), false, true);
+            setDataTableModel(new DataTableModel<CardServiceSimulationTransaction>( //
+                    new MemberColumnDescriptor.Builder(proto().id()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().card().cardNumber()).columnTitle("Card Number").build(), //
+                    new MemberColumnDescriptor.Builder(proto().merchant()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().merchant().company()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().transactionType()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().amount()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().convenienceFee()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().reference()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().responseCode()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().authorizationNumber()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().voided()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().transactionDate()).build() //
+            ));
         }
 
         @Override

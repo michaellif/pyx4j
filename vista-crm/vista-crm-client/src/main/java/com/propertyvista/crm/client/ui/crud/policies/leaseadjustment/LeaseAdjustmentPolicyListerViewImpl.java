@@ -13,11 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leaseadjustment;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
+import com.propertyvista.crm.rpc.services.policies.policy.LeaseAdjustmentPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LeaseAdjustmentPolicyDTO;
 
 public class LeaseAdjustmentPolicyListerViewImpl extends CrmListerViewImplBase<LeaseAdjustmentPolicyDTO> implements LeaseAdjustmentPolicyListerView {
@@ -29,12 +32,12 @@ public class LeaseAdjustmentPolicyListerViewImpl extends CrmListerViewImplBase<L
     public static class LeaseAdjustmentPolicyLister extends PolicyListerBase<LeaseAdjustmentPolicyDTO> {
 
         public LeaseAdjustmentPolicyLister() {
-            super(LeaseAdjustmentPolicyDTO.class);
+            super(LeaseAdjustmentPolicyDTO.class, GWT.<LeaseAdjustmentPolicyCrudService> create(LeaseAdjustmentPolicyCrudService.class));
 
-            setDataTableModel(new DataTableModel<LeaseAdjustmentPolicyDTO>(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
-            ));//@formatter:on
+            setDataTableModel(new DataTableModel<LeaseAdjustmentPolicyDTO>( //
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
+            ));
         }
     }
 }

@@ -13,22 +13,26 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc;
 
+import com.google.gwt.core.client.GWT;
+
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
+import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 
-public class MerchantAccountsLister extends EntityDataTablePanel<PmcMerchantAccountDTO> {
+public class MerchantAccountsLister extends SiteDataTablePanel<PmcMerchantAccountDTO> {
 
     private Pmc parentPmc;
 
     public MerchantAccountsLister() {
-        super(PmcMerchantAccountDTO.class, true, true);
+        super(PmcMerchantAccountDTO.class, GWT.<AbstractListCrudService<PmcMerchantAccountDTO>> create(PmcMerchantAccountCrudService.class), true, true);
 
         setItemZoomInCommand(new ItemZoomInCommand<PmcMerchantAccountDTO>() {
             @Override

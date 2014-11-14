@@ -13,7 +13,6 @@
  */
 package com.propertyvista.operations.client.activity.crud.simulator.dbp;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
@@ -21,13 +20,11 @@ import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.dbp.DirectDebitSimFileListerView;
 import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimFile;
-import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimFileCrudService;
 
 public class DirectDebitSimFileListerActivity extends AbstractListerActivity<DirectDebitSimFile> implements DirectDebitSimFileListerView.Presenter {
 
     public DirectDebitSimFileListerActivity(Place place) {
-        super(DirectDebitSimFile.class, place, OperationsSite.getViewFactory().getView(DirectDebitSimFileListerView.class), GWT
-                        .<DirectDebitSimFileCrudService> create(DirectDebitSimFileCrudService.class));
+        super(DirectDebitSimFile.class, place, OperationsSite.getViewFactory().getView(DirectDebitSimFileListerView.class));
     }
 
 }

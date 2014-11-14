@@ -13,22 +13,18 @@
  */
 package com.propertyvista.crm.client.activity.crud.communication;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.communication.MessageListerView;
-import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.dto.MessageDTO;
 
 public class MessageListerActivity extends AbstractListerActivity<MessageDTO> {
 
     public MessageListerActivity(Place place) {
-        super(MessageDTO.class, place, CrmSite.getViewFactory().getView(MessageListerView.class), GWT
-                .<AbstractCrudService<MessageDTO>> create(MessageCrudService.class));
+        super(MessageDTO.class, place, CrmSite.getViewFactory().getView(MessageListerView.class));
     }
 
 }

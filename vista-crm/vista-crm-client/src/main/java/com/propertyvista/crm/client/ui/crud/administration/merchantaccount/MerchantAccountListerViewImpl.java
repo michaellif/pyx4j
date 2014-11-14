@@ -13,12 +13,17 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.merchantaccount;
 
+import com.google.gwt.core.client.GWT;
+
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.propertyvista.crm.rpc.services.admin.MerchantAccountCrudService;
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class MerchantAccountListerViewImpl extends CrmListerViewImplBase<MerchantAccount> implements MerchantAccountListerView {
 
@@ -26,10 +31,10 @@ public class MerchantAccountListerViewImpl extends CrmListerViewImplBase<Merchan
         setDataTablePanel(new MerchantAccountLister());
     }
 
-    public static class MerchantAccountLister extends EntityDataTablePanel<MerchantAccount> {
+    public static class MerchantAccountLister extends SiteDataTablePanel<MerchantAccount> {
 
         public MerchantAccountLister() {
-            super(MerchantAccount.class, true);
+            super(MerchantAccount.class, GWT.<AbstractListCrudService<MerchantAccount>> create(MerchantAccountCrudService.class), true);
 
             setDataTableModel(new DataTableModel<MerchantAccount>(//
                     new MemberColumnDescriptor.Builder(proto().accountName()).build(),//
@@ -38,6 +43,11 @@ public class MerchantAccountListerViewImpl extends CrmListerViewImplBase<Merchan
                     new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),//
                     new MemberColumnDescriptor.Builder(proto().paymentsStatus()).searchable(false).sortable(false).build() //
             ));
+        }
+
+        @Override
+        public boolean canCreateNewItem() {
+            return super.canCreateNewItem() && VistaFeatures.instance().yardiIntegration() && super.canCreateNewItem();
         }
     }
 }

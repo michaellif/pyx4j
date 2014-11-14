@@ -16,18 +16,22 @@ package com.propertyvista.operations.client.ui.crud.scheduler.run;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.domain.scheduler.RunData;
+import com.propertyvista.operations.rpc.services.scheduler.RunDataCrudService;
 
-public class RunDataLister extends EntityDataTablePanel<RunData> {
+public class RunDataLister extends SiteDataTablePanel<RunData> {
 
     public RunDataLister(boolean isInlineMode) {
-        super(RunData.class, false);
+        super(RunData.class, GWT.<AbstractCrudService<RunData>> create(RunDataCrudService.class), false);
         setDataTableModel(new DataTableModel<RunData>((isInlineMode) ? createInlineViewColumnDescriptors() : createViewColumnDescriptors()));
     }
 

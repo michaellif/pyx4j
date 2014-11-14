@@ -83,10 +83,6 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         setTabEnabled(addTab(createDirectDebitTab(), i18n.tr("Direct Debit Records")), !isEditable());
     }
 
-    public void setOnboardingMerchantAccountsSource(ListerDataSource<PmcMerchantAccountDTO> onboardingMerchantAccountsSource) {
-        this.onboardingMerchantAccountsLister.setDataSource(onboardingMerchantAccountsSource);
-    }
-
     public void setCardTransactionRecordsSource(ListerDataSource<CardTransactionRecord> cardTransactionRecordsDataSource) {
         this.cardTransactionRecordLister.setDataSource(cardTransactionRecordsDataSource);
     }

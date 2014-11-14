@@ -16,20 +16,23 @@ package com.propertyvista.crm.client.ui.crud.administration.creditchecks;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
+import com.propertyvista.crm.rpc.services.admin.CustomerCreditCheckCrudService;
 
-public class CustomerCreditCheckLister extends EntityDataTablePanel<CustomerCreditCheckDTO> {
+public class CustomerCreditCheckLister extends SiteDataTablePanel<CustomerCreditCheckDTO> {
 
     private static final I18n i18n = I18n.get(CustomerCreditCheckLister.class);
 
     public CustomerCreditCheckLister() {
-        super(CustomerCreditCheckDTO.class, false);
+        super(CustomerCreditCheckDTO.class, GWT.<CustomerCreditCheckCrudService> create(CustomerCreditCheckCrudService.class), false);
         setDataTableModel(new DataTableModel<CustomerCreditCheckDTO>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().screening().screene().person().name()).title(i18n.tr("Tenant")).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().screening().screene().person().name().firstName()).searchableOnly().build(),

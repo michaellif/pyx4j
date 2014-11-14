@@ -16,13 +16,16 @@ package com.propertyvista.crm.client.ui.crud.unit;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectionDialog;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
@@ -30,7 +33,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class UnitLister extends EntityDataTablePanel<AptUnitDTO> {
+public class UnitLister extends SiteDataTablePanel<AptUnitDTO> {
 
     public static final I18n i18n = I18n.get(UnitLister.class);
 
@@ -39,7 +42,8 @@ public class UnitLister extends EntityDataTablePanel<AptUnitDTO> {
     }
 
     public UnitLister(boolean allowAddNew) {
-        super(AptUnitDTO.class, !VistaFeatures.instance().yardiIntegration() ? allowAddNew : false);
+        super(AptUnitDTO.class, GWT.<AbstractCrudService<AptUnitDTO>> create(UnitCrudService.class), !VistaFeatures.instance().yardiIntegration() ? allowAddNew
+                : false);
         setAddNewActionCaption(i18n.tr("New Unit"));
         setupColumns();
     }
@@ -73,7 +77,7 @@ public class UnitLister extends EntityDataTablePanel<AptUnitDTO> {
 
     @Override
     protected void onItemNew() {
-        final Key parentBuildingPk = getPresenter().getParent();
+        final Key parentBuildingPk = getDataSource().getParentEntityId();
         final UnitCrudService.UnitInitializationdata id = EntityFactory.create(UnitCrudService.UnitInitializationdata.class);
         if (parentBuildingPk == null) {
             new BuildingSelectionDialog() {
@@ -81,14 +85,14 @@ public class UnitLister extends EntityDataTablePanel<AptUnitDTO> {
                 public boolean onClickOk() {
                     if (!getSelectedItem().isNull()) {
                         id.parent().set(getSelectedItem());
-                        getPresenter().editNew(getItemOpenPlaceClass(), id);
+                        editNew(getItemOpenPlaceClass(), id);
                     }
                     return true;
                 }
             }.show();
         } else {
             id.parent().set(EntityFactory.createIdentityStub(Building.class, parentBuildingPk));
-            getPresenter().editNew(getItemOpenPlaceClass(), id);
+            editNew(getItemOpenPlaceClass(), id);
         }
     }
 }

@@ -13,31 +13,35 @@
  */
 package com.propertyvista.operations.client.ui.crud.outgoingmail;
 
+import com.google.gwt.core.client.GWT;
+
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.rpc.dto.OutgoingMailQueueDTO;
+import com.propertyvista.operations.rpc.services.OutgoingMailCrudService;
 
-public class OutgoingMailLister extends EntityDataTablePanel<OutgoingMailQueueDTO> {
+public class OutgoingMailLister extends SiteDataTablePanel<OutgoingMailQueueDTO> {
 
     public OutgoingMailLister() {
-        super(OutgoingMailQueueDTO.class, false, false);
+        super(OutgoingMailQueueDTO.class, GWT.<AbstractCrudService<OutgoingMailQueueDTO>> create(OutgoingMailCrudService.class), false, false);
 
-        setDataTableModel(new DataTableModel<OutgoingMailQueueDTO>(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().status()).build(),
-                    new MemberColumnDescriptor.Builder(proto().namespace()).build(),
-                    new MemberColumnDescriptor.Builder(proto().configurationId()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().statusCallbackClass()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().created()).build(),
-                    new MemberColumnDescriptor.Builder(proto().updated()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().attempts()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().priority()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().lastAttemptErrorMessage()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().sendTo()).build(),
-                    new MemberColumnDescriptor.Builder(proto().sentDate()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().messageId()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().keywords()).build()
-            ));//@formatter:on
+        setDataTableModel(new DataTableModel<OutgoingMailQueueDTO>( //
+                new MemberColumnDescriptor.Builder(proto().status()).build(), //
+                new MemberColumnDescriptor.Builder(proto().namespace()).build(), //
+                new MemberColumnDescriptor.Builder(proto().configurationId()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().statusCallbackClass()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().created()).build(), //
+                new MemberColumnDescriptor.Builder(proto().updated()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().attempts()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().priority()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().lastAttemptErrorMessage()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().sendTo()).build(), //
+                new MemberColumnDescriptor.Builder(proto().sentDate()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().messageId()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().keywords()).build() //
+        ));
     }
 }

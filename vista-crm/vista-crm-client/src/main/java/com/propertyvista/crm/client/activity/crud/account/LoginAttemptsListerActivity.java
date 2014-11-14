@@ -15,8 +15,6 @@ package com.propertyvista.crm.client.activity.crud.account;
 
 import java.util.Arrays;
 
-import com.google.gwt.core.client.GWT;
-
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.Criterion;
@@ -27,15 +25,13 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.LoginAttemptsListerView;
 import com.propertyvista.crm.rpc.dto.account.LoginAttemptDTO;
-import com.propertyvista.crm.rpc.services.security.CrmLoginAttemptsListerService;
 
 public class LoginAttemptsListerActivity extends AbstractListerActivity<LoginAttemptDTO> {
 
     private Key userKey;
 
     public LoginAttemptsListerActivity(CrudAppPlace place) {
-        super(LoginAttemptDTO.class,  place, CrmSite.getViewFactory().getView(LoginAttemptsListerView.class), GWT
-                        .<CrmLoginAttemptsListerService> create(CrmLoginAttemptsListerService.class));
+        super(LoginAttemptDTO.class, place, CrmSite.getViewFactory().getView(LoginAttemptsListerView.class));
 
         String val;
         if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {

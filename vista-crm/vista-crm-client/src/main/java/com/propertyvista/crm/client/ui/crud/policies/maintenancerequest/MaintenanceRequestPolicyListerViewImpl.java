@@ -13,11 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.maintenancerequest;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
+import com.propertyvista.crm.rpc.services.policies.policy.MaintenanceRequestPolicyCrudService;
 import com.propertyvista.domain.policy.dto.MaintenanceRequestPolicyDTO;
 
 public class MaintenanceRequestPolicyListerViewImpl extends CrmListerViewImplBase<MaintenanceRequestPolicyDTO> implements MaintenanceRequestPolicyListerView {
@@ -29,12 +32,12 @@ public class MaintenanceRequestPolicyListerViewImpl extends CrmListerViewImplBas
     public static class MaintenanceRequestPolicyLister extends PolicyListerBase<MaintenanceRequestPolicyDTO> {
 
         public MaintenanceRequestPolicyLister() {
-            super(MaintenanceRequestPolicyDTO.class);
+            super(MaintenanceRequestPolicyDTO.class, GWT.<MaintenanceRequestPolicyCrudService> create(MaintenanceRequestPolicyCrudService.class));
 
-            setDataTableModel(new DataTableModel<MaintenanceRequestPolicyDTO>(// @formatter:off
-                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
-            )); // @formatter:on
+            setDataTableModel(new DataTableModel<MaintenanceRequestPolicyDTO>( //
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
+            ));
         }
     }
 }

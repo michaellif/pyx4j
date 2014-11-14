@@ -13,21 +13,17 @@
  */
 package com.propertyvista.operations.client.activity.crud.scheduler;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.scheduler.trigger.TriggerListerView;
 import com.propertyvista.operations.rpc.dto.TriggerDTO;
-import com.propertyvista.operations.rpc.services.scheduler.TriggerCrudService;
 
 public class TriggerListerActivity extends AbstractListerActivity<TriggerDTO> {
 
     public TriggerListerActivity(Place place) {
-        super(TriggerDTO.class, place, OperationsSite.getViewFactory().getView(TriggerListerView.class), GWT
-                .<AbstractCrudService<TriggerDTO>> create(TriggerCrudService.class));
+        super(TriggerDTO.class, place, OperationsSite.getViewFactory().getView(TriggerListerView.class));
     }
 }

@@ -13,21 +13,18 @@
  */
 package com.propertyvista.crm.client.activity.policies.idassignment;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.idassignment.IdAssignmentPolicyListerView;
-import com.propertyvista.crm.rpc.services.policies.policy.IdAssignmentPolicyCrudService;
 import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
 
 public class IdAssignmentPolicyListerActivity extends AbstractListerActivity<IdAssignmentPolicyDTO> {
 
     public IdAssignmentPolicyListerActivity(Place place) {
-        super(IdAssignmentPolicyDTO.class,  place, CrmSite.getViewFactory().getView(IdAssignmentPolicyListerView.class), GWT
-                        .<IdAssignmentPolicyCrudService> create(IdAssignmentPolicyCrudService.class));
+        super(IdAssignmentPolicyDTO.class, place, CrmSite.getViewFactory().getView(IdAssignmentPolicyListerView.class));
     }
 
 }

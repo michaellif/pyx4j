@@ -16,13 +16,16 @@ package com.propertyvista.crm.client.ui.tools.financial.moneyin;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
+import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
 
 public class MoneyInBatchListerViewImpl extends CrmListerViewImplBase<MoneyInBatchDTO> {
 
@@ -30,10 +33,10 @@ public class MoneyInBatchListerViewImpl extends CrmListerViewImplBase<MoneyInBat
         setDataTablePanel(new MoneyInBatchLister());
     }
 
-    private static class MoneyInBatchLister extends EntityDataTablePanel<MoneyInBatchDTO> {
+    private static class MoneyInBatchLister extends SiteDataTablePanel<MoneyInBatchDTO> {
 
         public MoneyInBatchLister() {
-            super(MoneyInBatchDTO.class, false, false);
+            super(MoneyInBatchDTO.class, GWT.<MoneyInBatchCrudService> create(MoneyInBatchCrudService.class), false, false);
 
             setDataTableModel(new DataTableModel<MoneyInBatchDTO>(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().building()).build(),

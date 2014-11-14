@@ -13,33 +13,18 @@
  */
 package com.propertyvista.crm.client.activity.dashboard;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.event.BoardUpdateEvent;
 import com.propertyvista.crm.client.ui.dashboard.DashboardManagementListerView;
-import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class DashboardManagementListerActivity extends AbstractListerActivity<DashboardMetadata> {
 
     public DashboardManagementListerActivity(Place place) {
-        super(DashboardMetadata.class, place, CrmSite.getViewFactory().getView(DashboardManagementListerView.class), GWT
-                .<AbstractCrudService<DashboardMetadata>> create(DashboardMetadataCrudService.class));
+        super(DashboardMetadata.class, place, CrmSite.getViewFactory().getView(DashboardManagementListerView.class));
     }
 
-    @Override
-    protected void onDeleted(Key itemID, boolean isSuccessful) {
-        super.onDeleted(itemID, isSuccessful);
-        if (isSuccessful) {
-            AppSite.instance();
-            AppSite.getEventBus().fireEvent(new BoardUpdateEvent(DashboardMetadata.class));
-        }
-    }
 }

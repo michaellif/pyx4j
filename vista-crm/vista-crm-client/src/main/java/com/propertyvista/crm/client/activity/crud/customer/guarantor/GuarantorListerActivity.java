@@ -13,25 +13,18 @@
  */
 package com.propertyvista.crm.client.activity.crud.customer.guarantor;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorListerView;
-import com.propertyvista.crm.rpc.services.customer.ActiveGuarantorCrudService;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorListerActivity extends AbstractListerActivity<GuarantorDTO> {
 
     public GuarantorListerActivity(Place place) {
-        super(GuarantorDTO.class, place, CrmSite.getViewFactory().getView(GuarantorListerView.class),
-                GWT.<ActiveGuarantorCrudService> create(ActiveGuarantorCrudService.class));
+        super(GuarantorDTO.class, place, CrmSite.getViewFactory().getView(GuarantorListerView.class));
     }
 
-    @Override
-    public boolean canCreateNewItem() {
-        return false; // disable creation of the new stand-alone Guarantor - just from within the Lease!..
-    }
 }

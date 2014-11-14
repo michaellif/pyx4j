@@ -13,22 +13,18 @@
  */
 package com.propertyvista.crm.client.activity.crud.building;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.building.BuildingListerView;
-import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingListerActivity extends AbstractListerActivity<BuildingDTO> {
 
     public BuildingListerActivity(Place place) {
-        super(BuildingDTO.class, place, CrmSite.getViewFactory().getView(BuildingListerView.class), GWT
-                .<AbstractCrudService<BuildingDTO>> create(BuildingCrudService.class));
+        super(BuildingDTO.class, place, CrmSite.getViewFactory().getView(BuildingListerView.class));
     }
 
 }

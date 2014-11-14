@@ -13,16 +13,20 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.pad.file;
 
+import com.google.gwt.core.client.GWT;
+
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
+import com.propertyvista.operations.rpc.services.simulator.PadSimFileCrudService;
 
-public class PadSimFileLister extends EntityDataTablePanel<PadSimFile> {
+public class PadSimFileLister extends SiteDataTablePanel<PadSimFile> {
 
     public PadSimFileLister() {
-        super(PadSimFile.class, false);
+        super(PadSimFile.class, GWT.<AbstractCrudService<PadSimFile>> create(PadSimFileCrudService.class), false);
 
         setDataTableModel(new DataTableModel<PadSimFile>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().fileName()).build(),

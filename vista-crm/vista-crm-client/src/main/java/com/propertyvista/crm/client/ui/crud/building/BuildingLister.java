@@ -16,21 +16,26 @@ package com.propertyvista.crm.client.ui.crud.building;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
+import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class BuildingLister extends EntityDataTablePanel<BuildingDTO> {
+public class BuildingLister extends SiteDataTablePanel<BuildingDTO> {
 
     private static final I18n i18n = I18n.get(BuildingLister.class);
 
     public BuildingLister() {
-        super(BuildingDTO.class, !VistaFeatures.instance().yardiIntegration() ? true : false);
+        super(BuildingDTO.class, GWT.<AbstractCrudService<BuildingDTO>> create(BuildingCrudService.class), !VistaFeatures.instance().yardiIntegration() ? true
+                : false);
 
         setDataTableModel(new DataTableModel<BuildingDTO>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().propertyCode(), true).build(),

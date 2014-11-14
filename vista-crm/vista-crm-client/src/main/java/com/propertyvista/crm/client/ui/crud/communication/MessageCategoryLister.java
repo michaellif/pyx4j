@@ -17,28 +17,35 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.crm.client.event.BoardUpdateEvent;
+import com.propertyvista.crm.rpc.services.MessageCategoryCrudService;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.misc.VistaTODO;
 
-public class MessageCategoryLister extends EntityDataTablePanel<MessageCategory> {
+public class MessageCategoryLister extends SiteDataTablePanel<MessageCategory> {
 
     private static final I18n i18n = I18n.get(MessageCategoryLister.class);
 
     public MessageCategoryLister() {
-        super(MessageCategory.class, true, true);
+        super(MessageCategory.class, GWT.<AbstractCrudService<MessageCategory>> create(MessageCategoryCrudService.class), true, true);
         addItemSelectionHandler(new ItemSelectionHandler() {
 
             @Override
@@ -78,6 +85,15 @@ public class MessageCategoryLister extends EntityDataTablePanel<MessageCategory>
         }
 
         super.onItemsDelete(items);
+    }
+
+    @Override
+    public void onDeleted(Key itemID, boolean isSuccessful) {
+        super.onDeleted(itemID, isSuccessful);
+        if (isSuccessful) {
+            AppSite.instance();
+            AppSite.getEventBus().fireEvent(new BoardUpdateEvent(MessageCategory.class));
+        }
     }
 
     @Override

@@ -178,7 +178,6 @@ public class PmcViewerViewImpl extends OperationsViewerViewImplBase<PmcDTO> impl
     public void setPresenter(IViewerPresenter presenter) {
         super.setPresenter(presenter);
         if (presenter != null) {
-            ((PmcForm) getForm()).setOnboardingMerchantAccountsSource(((PmcViewerView.Presenter) presenter).getOnboardingMerchantAccountsSource());
             ((PmcForm) getForm()).setCardTransactionRecordsSource(((PmcViewerView.Presenter) presenter).getCardTransactionRecordsSource());
             ((PmcForm) getForm()).setDirectDebitRecordsSource(((PmcViewerView.Presenter) presenter).getDirectDebitRecordsSource());
         }

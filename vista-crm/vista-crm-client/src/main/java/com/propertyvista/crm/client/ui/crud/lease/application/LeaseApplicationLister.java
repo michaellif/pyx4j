@@ -16,21 +16,24 @@ package com.propertyvista.crm.client.ui.crud.lease.application;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseDataDialog;
+import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
-public class LeaseApplicationLister extends EntityDataTablePanel<LeaseApplicationDTO> {
+public class LeaseApplicationLister extends SiteDataTablePanel<LeaseApplicationDTO> {
 
     private final static I18n i18n = I18n.get(LeaseApplicationLister.class);
 
     public LeaseApplicationLister() {
-        super(LeaseApplicationDTO.class, true);
+        super(LeaseApplicationDTO.class, GWT.<LeaseApplicationViewerCrudService> create(LeaseApplicationViewerCrudService.class), true);
 
         setDataTableModel(new DataTableModel<LeaseApplicationDTO>(  //@formatter:off
             new Builder(proto().leaseApplication().applicationId()).columnTitle(i18n.tr("Id")).build(),

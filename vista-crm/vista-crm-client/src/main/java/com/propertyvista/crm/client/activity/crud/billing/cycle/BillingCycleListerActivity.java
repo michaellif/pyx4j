@@ -13,21 +13,17 @@
  */
 package com.propertyvista.crm.client.activity.crud.billing.cycle;
 
-import com.google.gwt.core.client.GWT;
-
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleListerView;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
-import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 
 public class BillingCycleListerActivity extends AbstractListerActivity<BillingCycleDTO> {
 
     public BillingCycleListerActivity(AppPlace place) {
-        super(BillingCycleDTO.class, place, CrmSite.getViewFactory().getView(BillingCycleListerView.class),
-                GWT.<BillingCycleCrudService> create(BillingCycleCrudService.class));
+        super(BillingCycleDTO.class, place, CrmSite.getViewFactory().getView(BillingCycleListerView.class));
     }
 
 }

@@ -13,12 +13,10 @@
  */
 package com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationrecord;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -26,13 +24,11 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationrecord.FundsReconciliationDebitRecordListerView;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationRecordRecordDTO;
-import com.propertyvista.operations.rpc.services.PadReconciliationDebitRecordCrudService;
 
 public class FundsReconciliationDebitRecordListerActivity extends AbstractListerActivity<FundsReconciliationRecordRecordDTO> {
 
     public FundsReconciliationDebitRecordListerActivity(Place place) {
-        super(FundsReconciliationRecordRecordDTO.class, place, OperationsSite.getViewFactory().getView(FundsReconciliationDebitRecordListerView.class), GWT
-                .<AbstractCrudService<FundsReconciliationRecordRecordDTO>> create(PadReconciliationDebitRecordCrudService.class));
+        super(FundsReconciliationRecordRecordDTO.class, place, OperationsSite.getViewFactory().getView(FundsReconciliationDebitRecordListerView.class));
     }
 
     @Override

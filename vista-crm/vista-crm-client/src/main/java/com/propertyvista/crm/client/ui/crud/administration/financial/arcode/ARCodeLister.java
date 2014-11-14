@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
@@ -24,17 +26,18 @@ import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
+import com.propertyvista.crm.rpc.services.admin.ARCodeCrudService;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class ARCodeLister extends EntityDataTablePanel<ARCode> {
+public class ARCodeLister extends SiteDataTablePanel<ARCode> {
 
     private static final I18n i18n = I18n.get(ARCodeLister.class);
 
     public ARCodeLister() {
-        super(ARCode.class, true, true);
+        super(ARCode.class, GWT.<ARCodeCrudService> create(ARCodeCrudService.class), true, true);
 
         List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>(Arrays.asList(
         //@formatter:off

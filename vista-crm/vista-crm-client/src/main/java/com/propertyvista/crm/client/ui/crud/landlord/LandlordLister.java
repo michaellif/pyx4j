@@ -16,24 +16,28 @@ package com.propertyvista.crm.client.ui.crud.landlord;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
+import com.propertyvista.crm.rpc.services.building.LandlordCrudService;
 import com.propertyvista.dto.LandlordDTO;
 
-public class LandlordLister extends EntityDataTablePanel<LandlordDTO> {
+public class LandlordLister extends SiteDataTablePanel<LandlordDTO> {
 
     public LandlordLister() {
-        super(LandlordDTO.class, true);
+        super(LandlordDTO.class, GWT.<AbstractCrudService<LandlordDTO>> create(LandlordCrudService.class), true);
 
-        setDataTableModel(new DataTableModel<LandlordDTO>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().name()).build(), 
-            new MemberColumnDescriptor.Builder(proto().address().city()).sortable(false).searchable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().address().province()).sortable(false).searchable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().address().country()).sortable(false).searchable(false).build()
-        ));//@formatter:on
+        setDataTableModel(new DataTableModel<LandlordDTO>( //
+                new MemberColumnDescriptor.Builder(proto().name()).build(), // 
+                new MemberColumnDescriptor.Builder(proto().address().city()).sortable(false).searchable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().address().province()).sortable(false).searchable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().address().country()).sortable(false).searchable(false).build() //
+        ));
     }
 
     @Override

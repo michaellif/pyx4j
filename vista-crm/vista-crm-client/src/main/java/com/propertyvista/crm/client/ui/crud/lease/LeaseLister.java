@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
@@ -30,10 +31,11 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseDataDialog;
+import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.ac.PadFileDownload;
 import com.propertyvista.crm.rpc.services.lease.ac.PadFileUpload;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
@@ -41,12 +43,12 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class LeaseLister extends EntityDataTablePanel<LeaseDTO> {
+public class LeaseLister extends SiteDataTablePanel<LeaseDTO> {
 
     private final static I18n i18n = I18n.get(LeaseLister.class);
 
     public LeaseLister() {
-        super(LeaseDTO.class, false);
+        super(LeaseDTO.class, GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class), false);
 
         List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>(Arrays.asList(
         //@formatter:off

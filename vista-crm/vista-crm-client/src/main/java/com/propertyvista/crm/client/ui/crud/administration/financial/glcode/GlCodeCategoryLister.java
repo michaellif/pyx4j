@@ -16,17 +16,21 @@ package com.propertyvista.crm.client.ui.crud.administration.financial.glcode;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
+import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
 import com.propertyvista.domain.financial.GlCodeCategory;
 
-public class GlCodeCategoryLister extends EntityDataTablePanel<GlCodeCategory> {
+public class GlCodeCategoryLister extends SiteDataTablePanel<GlCodeCategory> {
 
     public GlCodeCategoryLister() {
-        super(GlCodeCategory.class, true, true);
+        super(GlCodeCategory.class, GWT.<AbstractListCrudService<GlCodeCategory>> create(GlCodeCategoryCrudService.class), true, true);
 
         setDataTableModel(new DataTableModel<GlCodeCategory>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().categoryId()).build(),

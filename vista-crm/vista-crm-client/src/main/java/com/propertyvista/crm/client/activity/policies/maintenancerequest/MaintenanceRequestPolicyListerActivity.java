@@ -13,21 +13,18 @@
  */
 package com.propertyvista.crm.client.activity.policies.maintenancerequest;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.maintenancerequest.MaintenanceRequestPolicyListerView;
-import com.propertyvista.crm.rpc.services.policies.policy.MaintenanceRequestPolicyCrudService;
 import com.propertyvista.domain.policy.dto.MaintenanceRequestPolicyDTO;
 
 public class MaintenanceRequestPolicyListerActivity extends AbstractListerActivity<MaintenanceRequestPolicyDTO> {
 
     public MaintenanceRequestPolicyListerActivity(Place place) {
-        super(MaintenanceRequestPolicyDTO.class, place, CrmSite.getViewFactory().getView(MaintenanceRequestPolicyListerView.class), GWT
-                        .<MaintenanceRequestPolicyCrudService> create(MaintenanceRequestPolicyCrudService.class));
+        super(MaintenanceRequestPolicyDTO.class, place, CrmSite.getViewFactory().getView(MaintenanceRequestPolicyListerView.class));
     }
 
 }

@@ -13,30 +13,34 @@
  */
 package com.propertyvista.operations.client.ui.crud.tenantsure;
 
+import com.google.gwt.core.client.GWT;
+
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.rpc.dto.TenantSureDTO;
+import com.propertyvista.operations.rpc.services.TenantSureCrudService;
 
-public class TenantSureLister extends EntityDataTablePanel<TenantSureDTO> {
+public class TenantSureLister extends SiteDataTablePanel<TenantSureDTO> {
 
     public TenantSureLister() {
-        super(TenantSureDTO.class, false, false);
+        super(TenantSureDTO.class, GWT.<AbstractCrudService<TenantSureDTO>> create(TenantSureCrudService.class), false, false);
 
-        setDataTableModel(new DataTableModel<TenantSureDTO>(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().pmc()).build(),
-                    new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(),
+        setDataTableModel(new DataTableModel<TenantSureDTO>( //
+                new MemberColumnDescriptor.Builder(proto().pmc()).build(), //
+                new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(), //
 
-                    new MemberColumnDescriptor.Builder(proto().propertyCode()).searchable(false).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().propertySuspended()).searchable(false).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().certificateNumber()).build(),
+                new MemberColumnDescriptor.Builder(proto().propertyCode()).searchable(false).sortable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().propertySuspended()).searchable(false).sortable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().certificateNumber()).build(), //
 
-                    new MemberColumnDescriptor.Builder(proto().policy().status()).searchable(false).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().policy().cancellation()).searchable(false).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().policy().cancellationDate()).searchable(false).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().policy().certificate().inceptionDate()).searchable(false).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().policy().tenant().customer().person().name()).searchable(false).sortable(false).build()
-            ));//@formatter:on
+                new MemberColumnDescriptor.Builder(proto().policy().status()).searchable(false).sortable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().policy().cancellation()).searchable(false).sortable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().policy().cancellationDate()).searchable(false).sortable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().policy().certificate().inceptionDate()).searchable(false).sortable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().policy().tenant().customer().person().name()).searchable(false).sortable(false).build() //
+        ));
     }
 }

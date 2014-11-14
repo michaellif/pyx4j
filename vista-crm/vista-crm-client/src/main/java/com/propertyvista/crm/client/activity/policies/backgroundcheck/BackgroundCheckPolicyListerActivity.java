@@ -13,21 +13,18 @@
  */
 package com.propertyvista.crm.client.activity.policies.backgroundcheck;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.backgroundcheck.BackgroundCheckPolicyListerView;
-import com.propertyvista.crm.rpc.services.policies.policy.BackgroundCheckPolicyCrudService;
 import com.propertyvista.domain.policy.dto.BackgroundCheckPolicyDTO;
 
 public class BackgroundCheckPolicyListerActivity extends AbstractListerActivity<BackgroundCheckPolicyDTO> {
 
     public BackgroundCheckPolicyListerActivity(Place place) {
-        super(BackgroundCheckPolicyDTO.class,  place, CrmSite.getViewFactory().getView(BackgroundCheckPolicyListerView.class), GWT
-                        .<BackgroundCheckPolicyCrudService> create(BackgroundCheckPolicyCrudService.class));
+        super(BackgroundCheckPolicyDTO.class, place, CrmSite.getViewFactory().getView(BackgroundCheckPolicyListerView.class));
     }
 
 }

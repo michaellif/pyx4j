@@ -13,11 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.paymenttypeselection;
 
+import com.google.gwt.core.client.GWT;
+
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
+import com.propertyvista.crm.rpc.services.policies.policy.PaymentTypeSelectionPolicyCrudService;
 import com.propertyvista.domain.policy.dto.PaymentTypeSelectionPolicyDTO;
 
 public class PaymentTypeSelectionPolicyListerViewImpl extends CrmListerViewImplBase<PaymentTypeSelectionPolicyDTO> implements
@@ -30,12 +34,13 @@ public class PaymentTypeSelectionPolicyListerViewImpl extends CrmListerViewImplB
     public static class PaymentTypeSelectionPolicyLister extends PolicyListerBase<PaymentTypeSelectionPolicyDTO> {
 
         public PaymentTypeSelectionPolicyLister() {
-            super(PaymentTypeSelectionPolicyDTO.class);
+            super(PaymentTypeSelectionPolicyDTO.class, GWT
+                    .<AbstractListCrudService<PaymentTypeSelectionPolicyDTO>> create(PaymentTypeSelectionPolicyCrudService.class));
 
-            setDataTableModel(new DataTableModel<PaymentTypeSelectionPolicyDTO>(// @formatter:off
-                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
-            )); // @formatter:on
+            setDataTableModel(new DataTableModel<PaymentTypeSelectionPolicyDTO>( //
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
+            ));
         }
     }
 }

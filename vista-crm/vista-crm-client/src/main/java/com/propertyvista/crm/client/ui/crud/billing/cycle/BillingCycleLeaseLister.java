@@ -16,20 +16,23 @@ package com.propertyvista.crm.client.ui.crud.billing.cycle;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
+import com.propertyvista.crm.rpc.services.billing.BillingCycleLeaseListService;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
 
-public class BillingCycleLeaseLister extends EntityDataTablePanel<LeaseDTO> {
+public class BillingCycleLeaseLister extends SiteDataTablePanel<LeaseDTO> {
 
     public BillingCycleLeaseLister() {
-        super(LeaseDTO.class, false);
+        super(LeaseDTO.class, GWT.<BillingCycleLeaseListService> create(BillingCycleLeaseListService.class), false);
 
         setDataTableModel(new DataTableModel<LeaseDTO>(//@formatter:off
             new Builder(proto().leaseId()).build(),

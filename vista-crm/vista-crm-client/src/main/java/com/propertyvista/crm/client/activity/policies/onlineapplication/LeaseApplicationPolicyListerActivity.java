@@ -13,20 +13,17 @@
  */
 package com.propertyvista.crm.client.activity.policies.onlineapplication;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.onlineapplication.LeaseApplicationPolicyListerView;
-import com.propertyvista.crm.rpc.services.policies.policy.LeaseApplicationPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LeaseApplicationPolicyDTO;
 
 public class LeaseApplicationPolicyListerActivity extends AbstractListerActivity<LeaseApplicationPolicyDTO> {
     public LeaseApplicationPolicyListerActivity(Place place) {
-        super(LeaseApplicationPolicyDTO.class, place, CrmSite.getViewFactory().getView(LeaseApplicationPolicyListerView.class), GWT
-                        .<LeaseApplicationPolicyCrudService> create(LeaseApplicationPolicyCrudService.class));
+        super(LeaseApplicationPolicyDTO.class, place, CrmSite.getViewFactory().getView(LeaseApplicationPolicyListerView.class));
     }
 
 }

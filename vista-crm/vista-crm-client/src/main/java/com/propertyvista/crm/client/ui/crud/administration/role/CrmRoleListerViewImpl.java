@@ -16,12 +16,16 @@ package com.propertyvista.crm.client.ui.crud.administration.role;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.propertyvista.crm.rpc.services.admin.CrmRoleCrudService;
 import com.propertyvista.domain.security.CrmRole;
 
 public class CrmRoleListerViewImpl extends CrmListerViewImplBase<CrmRole> implements CrmRoleListerView {
@@ -30,16 +34,16 @@ public class CrmRoleListerViewImpl extends CrmListerViewImplBase<CrmRole> implem
         setDataTablePanel(new CrmRoleLister());
     }
 
-    public static class CrmRoleLister extends EntityDataTablePanel<CrmRole> {
+    public static class CrmRoleLister extends SiteDataTablePanel<CrmRole> {
 
         public CrmRoleLister() {
-            super(CrmRole.class, true);
+            super(CrmRole.class, GWT.<AbstractListCrudService<CrmRole>> create(CrmRoleCrudService.class), true);
 
-            setDataTableModel(new DataTableModel<CrmRole>(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().name()).build(),
-                new MemberColumnDescriptor.Builder(proto().description()).build(),
-                new MemberColumnDescriptor.Builder(proto().behaviors()).build()
-            ));//@formatter:on
+            setDataTableModel(new DataTableModel<CrmRole>( //
+                    new MemberColumnDescriptor.Builder(proto().name()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().description()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().behaviors()).build() //
+            ));
         }
 
         @Override

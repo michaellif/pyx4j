@@ -37,8 +37,6 @@ public interface PmcViewerView extends IViewerView<PmcDTO> {
 
         void runProcess(PmcProcessType pmcProcessType, ScheduleDataDTO date);
 
-        ListerDataSource<PmcMerchantAccountDTO> getOnboardingMerchantAccountsSource();
-
         ListerDataSource<CardTransactionRecord> getCardTransactionRecordsSource();
 
         ListerDataSource<DirectDebitRecord> getDirectDebitRecordsSource();

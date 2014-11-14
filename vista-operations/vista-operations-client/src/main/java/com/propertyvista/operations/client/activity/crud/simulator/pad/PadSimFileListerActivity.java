@@ -28,13 +28,12 @@ import com.propertyvista.operations.rpc.services.simulator.PadSimFileCrudService
 public class PadSimFileListerActivity extends AbstractListerActivity<PadSimFile> implements PadSimFileListerView.Presenter {
 
     public PadSimFileListerActivity(Place place) {
-        super(PadSimFile.class, place, OperationsSite.getViewFactory().getView(PadSimFileListerView.class), GWT
-                .<AbstractCrudService<PadSimFile>> create(PadSimFileCrudService.class));
+        super(PadSimFile.class, place, OperationsSite.getViewFactory().getView(PadSimFileListerView.class));
     }
 
     @Override
     public void loadPadFile() {
-        ((PadSimFileCrudService) getService()).loadPadFile(new DefaultAsyncCallback<PadSimFile>() {
+        ((PadSimFileCrudService) GWT.<AbstractCrudService<PadSimFile>> create(PadSimFileCrudService.class)).loadPadFile(new DefaultAsyncCallback<PadSimFile>() {
             @Override
             public void onSuccess(PadSimFile result) {
                 populate();

@@ -26,7 +26,6 @@ import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.billing.transfer.AggregatedTransferListerView;
-import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferDownloadService;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -36,8 +35,7 @@ public class AggregatedTransferListerActivity extends AbstractListerActivity<Agg
     private static final I18n i18n = I18n.get(AggregatedTransferListerActivity.class);
 
     public AggregatedTransferListerActivity(Place place) {
-        super(AggregatedTransfer.class, place, CrmSite.getViewFactory().getView(AggregatedTransferListerView.class), GWT
-                .<AggregatedTransferCrudService> create(AggregatedTransferCrudService.class));
+        super(AggregatedTransfer.class, place, CrmSite.getViewFactory().getView(AggregatedTransferListerView.class));
     }
 
     @Override

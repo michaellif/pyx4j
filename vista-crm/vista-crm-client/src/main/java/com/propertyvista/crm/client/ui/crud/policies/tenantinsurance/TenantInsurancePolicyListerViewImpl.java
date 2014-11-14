@@ -13,11 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.tenantinsurance;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
+import com.propertyvista.crm.rpc.services.policies.policy.TenantInsurancePolicyCrudService;
 import com.propertyvista.domain.policy.dto.TenantInsurancePolicyDTO;
 
 public class TenantInsurancePolicyListerViewImpl extends CrmListerViewImplBase<TenantInsurancePolicyDTO> implements TenantInsurancePolicyListerView {
@@ -29,12 +32,11 @@ public class TenantInsurancePolicyListerViewImpl extends CrmListerViewImplBase<T
     public static class TenantInsurancePolicyLister extends PolicyListerBase<TenantInsurancePolicyDTO> {
 
         public TenantInsurancePolicyLister() {
-            super(TenantInsurancePolicyDTO.class);
+            super(TenantInsurancePolicyDTO.class, GWT.<TenantInsurancePolicyCrudService> create(TenantInsurancePolicyCrudService.class));
 
-            setDataTableModel(new DataTableModel<TenantInsurancePolicyDTO>(// @formatter:off
-                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
-            )); // @formatter:on
+            setDataTableModel(new DataTableModel<TenantInsurancePolicyDTO>(new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
+            ));
         }
 
     }

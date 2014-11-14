@@ -16,23 +16,26 @@ package com.propertyvista.operations.client.ui.crud.pmc;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.rpc.dto.PmcDTO;
+import com.propertyvista.operations.rpc.services.PmcCrudService;
 
-public class PmcLister extends EntityDataTablePanel<PmcDTO> {
+public class PmcLister extends SiteDataTablePanel<PmcDTO> {
 
     protected static final I18n i18n = I18n.get(PmcLister.class);
 
-    public PmcLister() {
-        super(PmcDTO.class, true);
+    public PmcLister(final PmcListerView view) {
+        super(PmcDTO.class, GWT.<AbstractCrudService<PmcDTO>> create(PmcCrudService.class), true);
 
         setDataTableModel(new DataTableModel<PmcDTO>( //@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),
@@ -56,7 +59,7 @@ public class PmcLister extends EntityDataTablePanel<PmcDTO> {
         addUpperActionItem(new Button(i18n.tr("Upload Merchant Accounts"), new Command() {
             @Override
             public void execute() {
-                ((PmcListerView.Presenter) getPresenter()).uploadMerchantAccounts();
+                ((PmcListerView.Presenter) view.getPresenter()).uploadMerchantAccounts();
             }
         }));
 

@@ -13,7 +13,6 @@
  */
 package com.propertyvista.operations.client.activity.crud.operationsalert;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
@@ -23,13 +22,11 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.operationsalert.OperationsAlertListerView;
 import com.propertyvista.operations.rpc.dto.OperationsAlertDTO;
-import com.propertyvista.operations.rpc.services.OperationsAlertCrudService;
 
 public class OperationsAlertListerActivity extends AbstractListerActivity<OperationsAlertDTO> {
 
     public OperationsAlertListerActivity(Place place) {
-        super(OperationsAlertDTO.class, place, OperationsSite.getViewFactory().getView(OperationsAlertListerView.class), GWT
-                .<OperationsAlertCrudService> create(OperationsAlertCrudService.class));
+        super(OperationsAlertDTO.class, place, OperationsSite.getViewFactory().getView(OperationsAlertListerView.class));
     }
 
     @Override

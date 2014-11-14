@@ -13,16 +13,21 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationrecord;
 
+import com.google.gwt.core.client.GWT;
+
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.rpc.dto.FundsReconciliationRecordRecordDTO;
+import com.propertyvista.operations.rpc.services.PadReconciliationDebitRecordCrudService;
 
-public class FundsReconciliationDebitRecordLister extends EntityDataTablePanel<FundsReconciliationRecordRecordDTO> {
+public class FundsReconciliationDebitRecordLister extends SiteDataTablePanel<FundsReconciliationRecordRecordDTO> {
 
     public FundsReconciliationDebitRecordLister() {
-        super(FundsReconciliationRecordRecordDTO.class, false, false);
+        super(FundsReconciliationRecordRecordDTO.class, GWT
+                .<AbstractCrudService<FundsReconciliationRecordRecordDTO>> create(PadReconciliationDebitRecordCrudService.class), false, false);
 
         setDataTableModel(new DataTableModel<FundsReconciliationRecordRecordDTO>(//@formatter:off       
                     new MemberColumnDescriptor.Builder(proto().reconciliationSummary().id()).columnTitle("Summary Id").searchableOnly().build(),    

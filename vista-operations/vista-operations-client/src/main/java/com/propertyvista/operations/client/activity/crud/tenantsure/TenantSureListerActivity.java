@@ -13,22 +13,18 @@
  */
 package com.propertyvista.operations.client.activity.crud.tenantsure;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.tenantsure.TenantSureListerView;
 import com.propertyvista.operations.rpc.dto.TenantSureDTO;
-import com.propertyvista.operations.rpc.services.TenantSureCrudService;
 
 public class TenantSureListerActivity extends AbstractListerActivity<TenantSureDTO> {
 
     public TenantSureListerActivity(Place place) {
-        super(TenantSureDTO.class, place, OperationsSite.getViewFactory().getView(TenantSureListerView.class), GWT
-                .<AbstractCrudService<TenantSureDTO>> create(TenantSureCrudService.class));
+        super(TenantSureDTO.class, place, OperationsSite.getViewFactory().getView(TenantSureListerView.class));
     }
 
 }

@@ -16,17 +16,20 @@ package com.propertyvista.crm.client.ui.crud.billing.cycle;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
+import com.propertyvista.crm.rpc.services.billing.BillingCycleBillListService;
 
-public class BillingCycleBillLister extends EntityDataTablePanel<BillDataDTO> {
+public class BillingCycleBillLister extends SiteDataTablePanel<BillDataDTO> {
 
     public BillingCycleBillLister() {
-        super(BillDataDTO.class, false);
+        super(BillDataDTO.class, GWT.<BillingCycleBillListService> create(BillingCycleBillListService.class), false);
 
         DataTableModel<BillDataDTO> dataTableModel = new DataTableModel<BillDataDTO>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().bill().billType()).build(),

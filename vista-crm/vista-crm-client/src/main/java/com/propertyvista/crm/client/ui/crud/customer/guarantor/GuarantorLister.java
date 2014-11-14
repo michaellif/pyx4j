@@ -17,39 +17,46 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.dto.GuarantorDTO;
 
-public class GuarantorLister extends EntityDataTablePanel<GuarantorDTO> {
+public class GuarantorLister extends SiteDataTablePanel<GuarantorDTO> {
 
     protected static final I18n i18n = I18n.get(GuarantorLister.class);
 
-    public GuarantorLister() {
-        super(GuarantorDTO.class, false);
+    public GuarantorLister(AbstractListCrudService<GuarantorDTO> service) {
+        super(GuarantorDTO.class, service, false);
 
-        setDataTableModel(new DataTableModel<GuarantorDTO>(//@formatter:off
-            new Builder(proto().participantId()).build(),
-            
-            new Builder(proto().customer().person().name()).searchable(false).build(),
-            new Builder(proto().customer().person().name().firstName(), false).build(),
-            new Builder(proto().customer().person().name().lastName(), false).build(),
-            new Builder(proto().customer().person().sex()).build(),
-            new Builder(proto().customer().person().birthDate()).build(),
-            
-            new Builder(proto().customer().person().homePhone()).build(),
-            new Builder(proto().customer().person().mobilePhone()).build(),
-            new Builder(proto().customer().person().workPhone()).build(),
-            new Builder(proto().customer().person().email()).build(),
-            
-            new Builder(proto().lease()).searchable(false).build(),
-            new Builder(proto().lease().leaseId()).columnTitle(i18n.tr("Lease Id")).searchableOnly().build(),
-            
-            new Builder(proto().lease().unit().info().number()).columnTitle(i18n.tr("Unit #")).searchableOnly().build()
-        ));//@formatter:on
+        setDataTableModel(new DataTableModel<GuarantorDTO>( //
+                new Builder(proto().participantId()).build(), //
+
+                new Builder(proto().customer().person().name()).searchable(false).build(), //
+                new Builder(proto().customer().person().name().firstName(), false).build(), //
+                new Builder(proto().customer().person().name().lastName(), false).build(), //
+                new Builder(proto().customer().person().sex()).build(), //
+                new Builder(proto().customer().person().birthDate()).build(), //
+
+                new Builder(proto().customer().person().homePhone()).build(), //
+                new Builder(proto().customer().person().mobilePhone()).build(), //
+                new Builder(proto().customer().person().workPhone()).build(), //
+                new Builder(proto().customer().person().email()).build(), //
+
+                new Builder(proto().lease()).searchable(false).build(), //
+                new Builder(proto().lease().leaseId()).columnTitle(i18n.tr("Lease Id")).searchableOnly().build(), //
+
+                new Builder(proto().lease().unit().info().number()).columnTitle(i18n.tr("Unit #")).searchableOnly().build() //
+        ));
+
+    }
+
+    @Override
+    public boolean canCreateNewItem() {
+        return false; // disable creation of the new stand-alone Guarantor - just from within the Lease!..
     }
 
     @Override

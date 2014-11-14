@@ -16,13 +16,16 @@ package com.propertyvista.crm.client.ui.crud.organisation.employee;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.dto.account.LoginAttemptDTO;
+import com.propertyvista.crm.rpc.services.security.CrmLoginAttemptsListerService;
 
 public class LoginAttemptsListerViewImpl extends CrmListerViewImplBase<LoginAttemptDTO> implements LoginAttemptsListerView {
 
@@ -30,15 +33,15 @@ public class LoginAttemptsListerViewImpl extends CrmListerViewImplBase<LoginAtte
         setDataTablePanel(new LoginAttemptsLister());
     }
 
-    public static class LoginAttemptsLister extends EntityDataTablePanel<LoginAttemptDTO> {
+    public static class LoginAttemptsLister extends SiteDataTablePanel<LoginAttemptDTO> {
 
         public LoginAttemptsLister() {
-            super(LoginAttemptDTO.class);
-            setDataTableModel(new DataTableModel<LoginAttemptDTO>(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().time()).build(),
-                    new MemberColumnDescriptor.Builder(proto().remoteAddress()).build(),
-                    new MemberColumnDescriptor.Builder(proto().outcome()).build()
-            ));//@formatter:on
+            super(LoginAttemptDTO.class, GWT.<CrmLoginAttemptsListerService> create(CrmLoginAttemptsListerService.class));
+            setDataTableModel(new DataTableModel<LoginAttemptDTO>( //
+                    new MemberColumnDescriptor.Builder(proto().time()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().remoteAddress()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().outcome()).build() //
+            ));
         }
 
         @Override

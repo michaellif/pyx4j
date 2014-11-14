@@ -13,23 +13,18 @@
  */
 package com.propertyvista.crm.client.activity.policies.applicationdocumentation;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyListerView;
-import com.propertyvista.crm.rpc.services.policies.policy.ApplicationDocumentationPolicyCrudService;
 import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
 
 public class ApplicationDocumentationPolicyListerActivity extends AbstractListerActivity<ApplicationDocumentationPolicyDTO> {
 
     public ApplicationDocumentationPolicyListerActivity(Place place) {
-        super(ApplicationDocumentationPolicyDTO.class, place,
-                CrmSite.getViewFactory().getView(ApplicationDocumentationPolicyListerView.class),
-                (AbstractListCrudService<ApplicationDocumentationPolicyDTO>) GWT.create(ApplicationDocumentationPolicyCrudService.class));
+        super(ApplicationDocumentationPolicyDTO.class, place, CrmSite.getViewFactory().getView(ApplicationDocumentationPolicyListerView.class));
     }
 
 }

@@ -82,6 +82,6 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
 
         // disable type change on reserved codes:
         get(proto().type()).inheritEditable(false);
-        get(proto().type()).setEditable(!getValue().reserved().isBooleanTrue());
+        get(proto().type()).setEditable(!getValue().reserved().getValue(true));
     }
 }

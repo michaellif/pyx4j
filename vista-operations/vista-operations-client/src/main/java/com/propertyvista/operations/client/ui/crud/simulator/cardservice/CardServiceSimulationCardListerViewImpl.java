@@ -13,29 +13,34 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 
+import com.google.gwt.core.client.GWT;
+
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCard;
+import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationCardCrudService;
 
 public class CardServiceSimulationCardListerViewImpl extends OperationsListerViewImplBase<CardServiceSimulationCard> implements
         CardServiceSimulationCardListerView {
 
-    public static class CardServiceSimulationLister extends EntityDataTablePanel<CardServiceSimulationCard> {
+    public static class CardServiceSimulationLister extends SiteDataTablePanel<CardServiceSimulationCard> {
 
         public CardServiceSimulationLister() {
-            super(CardServiceSimulationCard.class, true, true);
-            setDataTableModel(new DataTableModel<CardServiceSimulationCard>(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().cardType()).build(),
-                    new MemberColumnDescriptor.Builder(proto().cardNumber()).build(),
-                    new MemberColumnDescriptor.Builder(proto().expiryDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto().balance()).build(),
-                    new MemberColumnDescriptor.Builder(proto().creditLimit(), false).build(),
-                    new MemberColumnDescriptor.Builder(proto().responseCode()).build(),
-                    new MemberColumnDescriptor.Builder(proto().created()).build()
-            ));//@formatter:off
+            super(CardServiceSimulationCard.class, GWT.<AbstractCrudService<CardServiceSimulationCard>> create(CardServiceSimulationCardCrudService.class),
+                    true, true);
+            setDataTableModel(new DataTableModel<CardServiceSimulationCard>( //
+                    new MemberColumnDescriptor.Builder(proto().cardType()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().cardNumber()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().expiryDate()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().balance()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().creditLimit(), false).build(), //
+                    new MemberColumnDescriptor.Builder(proto().responseCode()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().created()).build() //
+            ));
         }
     }
 

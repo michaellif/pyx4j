@@ -13,21 +13,17 @@
  */
 package com.propertyvista.crm.client.activity.crud.administration.financial.glcode;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.administration.financial.glcode.GlCodeCategoryListerView;
-import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
 import com.propertyvista.domain.financial.GlCodeCategory;
 
 public class GlCodeCategoryListerActivity extends AbstractListerActivity<GlCodeCategory> {
 
     public GlCodeCategoryListerActivity(Place place) {
-        super(GlCodeCategory.class,  place, CrmSite.getViewFactory().getView(GlCodeCategoryListerView.class), GWT
-                        .<AbstractListCrudService<GlCodeCategory>> create(GlCodeCategoryCrudService.class));
+        super(GlCodeCategory.class, place, CrmSite.getViewFactory().getView(GlCodeCategoryListerView.class));
     }
 }

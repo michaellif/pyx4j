@@ -13,27 +13,18 @@
  */
 package com.propertyvista.crm.client.activity.policies.ar;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.ar.ARPolicyListerView;
-import com.propertyvista.crm.rpc.services.policies.policy.ARPolicyCrudService;
 import com.propertyvista.domain.policy.dto.ARPolicyDTO;
 
 public class ARPolicyListerActivity extends AbstractListerActivity<ARPolicyDTO> {
 
     public ARPolicyListerActivity(Place place) {
-        super(ARPolicyDTO.class,
-
-         place,
-
-        CrmSite.getViewFactory().getView(ARPolicyListerView.class),
-
-        GWT.<AbstractListCrudService<ARPolicyDTO>> create(ARPolicyCrudService.class));
+        super(ARPolicyDTO.class, place, CrmSite.getViewFactory().getView(ARPolicyListerView.class));
     }
 
 }

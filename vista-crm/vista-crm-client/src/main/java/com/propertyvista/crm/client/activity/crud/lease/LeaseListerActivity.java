@@ -29,7 +29,6 @@ import com.propertyvista.crm.client.ui.crud.lease.LeaseListerView;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseListerView.LeaseListerPresenter;
 import com.propertyvista.crm.rpc.services.customer.TenantPadFileDownloadService;
 import com.propertyvista.crm.rpc.services.customer.TenantPadFileUploadService;
-import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
@@ -38,7 +37,7 @@ public class LeaseListerActivity extends LeaseListerActivityBase<LeaseDTO> imple
     private static final I18n i18n = I18n.get(LeaseListerActivity.class);
 
     public LeaseListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(LeaseListerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class), LeaseDTO.class);
+        super(place, CrmSite.getViewFactory().getView(LeaseListerView.class), LeaseDTO.class);
     }
 
     @Override

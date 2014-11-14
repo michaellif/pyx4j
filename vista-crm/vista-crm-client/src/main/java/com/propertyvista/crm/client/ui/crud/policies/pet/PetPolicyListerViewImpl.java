@@ -13,22 +13,26 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.pet;
 
+import com.google.gwt.core.client.GWT;
+
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
+import com.propertyvista.crm.rpc.services.policies.policy.PetPolicyCrudService;
 import com.propertyvista.domain.policy.dto.PetPolicyDTO;
 
 public class PetPolicyListerViewImpl extends CrmListerViewImplBase<PetPolicyDTO> implements PetPolicyListerView {
 
     public PetPolicyListerViewImpl() {
-        setDataTablePanel(new PolicyListerBase<PetPolicyDTO>(PetPolicyDTO.class) {
+        setDataTablePanel(new PolicyListerBase<PetPolicyDTO>(PetPolicyDTO.class, GWT.<AbstractListCrudService<PetPolicyDTO>> create(PetPolicyCrudService.class)) {
             {
-                setDataTableModel(new DataTableModel<PetPolicyDTO>(// @formatter:off
-                        new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
-                        new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
-                )); // @formatter:on
+                setDataTableModel(new DataTableModel<PetPolicyDTO>( //
+                        new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
+                        new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
+                ));
             }
         });
     }

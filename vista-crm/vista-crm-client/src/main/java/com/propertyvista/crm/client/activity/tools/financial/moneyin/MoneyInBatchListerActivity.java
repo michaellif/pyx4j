@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.activity.tools.financial.moneyin;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
@@ -21,13 +20,11 @@ import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInBatchListerView;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
-import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
 
 public class MoneyInBatchListerActivity extends AbstractListerActivity<MoneyInBatchDTO> {
 
     public MoneyInBatchListerActivity(Place place) {
-        super(MoneyInBatchDTO.class, place, CrmSite.getViewFactory().getView(MoneyInBatchListerView.class),
-                GWT.<MoneyInBatchCrudService> create(MoneyInBatchCrudService.class));
+        super(MoneyInBatchDTO.class, place, CrmSite.getViewFactory().getView(MoneyInBatchListerView.class));
     }
 
 }

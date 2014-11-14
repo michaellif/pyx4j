@@ -13,11 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.backgroundcheck;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
+import com.propertyvista.crm.rpc.services.policies.policy.BackgroundCheckPolicyCrudService;
 import com.propertyvista.domain.policy.dto.BackgroundCheckPolicyDTO;
 
 public class BackgroundCheckPolicyListerViewImpl extends CrmListerViewImplBase<BackgroundCheckPolicyDTO> implements BackgroundCheckPolicyListerView {
@@ -29,12 +32,12 @@ public class BackgroundCheckPolicyListerViewImpl extends CrmListerViewImplBase<B
     public static class BackgroundCheckPolicyLister extends PolicyListerBase<BackgroundCheckPolicyDTO> {
 
         public BackgroundCheckPolicyLister() {
-            super(BackgroundCheckPolicyDTO.class);
+            super(BackgroundCheckPolicyDTO.class, GWT.<BackgroundCheckPolicyCrudService> create(BackgroundCheckPolicyCrudService.class));
 
-            setDataTableModel(new DataTableModel<BackgroundCheckPolicyDTO>(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
-            ));//@formatter:on
+            setDataTableModel(new DataTableModel<BackgroundCheckPolicyDTO>( //
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
+            ));
 
         }
     }

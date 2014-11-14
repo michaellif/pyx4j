@@ -16,7 +16,6 @@ package com.propertyvista.operations.client.activity.crud.simulator.cardservice;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -32,8 +31,7 @@ public class CardServiceSimulationReconciliationListerActivity extends AbstractL
 
     public CardServiceSimulationReconciliationListerActivity(Place place) {
         super(CardServiceSimulationReconciliationRecord.class, place, OperationsSite.getViewFactory().getView(
-                CardServiceSimulationReconciliationListerView.class), GWT
-                .<AbstractCrudService<CardServiceSimulationReconciliationRecord>> create(CardServiceSimulationReconciliationCrudService.class));
+                CardServiceSimulationReconciliationListerView.class));
     }
 
     @Override

@@ -121,12 +121,6 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
     }
 
     @Override
-    public ListerDataSource<PmcMerchantAccountDTO> getOnboardingMerchantAccountsSource() {
-        return new ListerDataSource<PmcMerchantAccountDTO>(PmcMerchantAccountDTO.class,
-                GWT.<AbstractListCrudService<PmcMerchantAccountDTO>> create(PmcMerchantAccountCrudService.class));
-    }
-
-    @Override
     public ListerDataSource<CardTransactionRecord> getCardTransactionRecordsSource() {
         return new ListerDataSource<CardTransactionRecord>(CardTransactionRecord.class,
                 GWT.<AbstractListCrudService<CardTransactionRecord>> create(PmcCardTransactionRecordCrudService.class));

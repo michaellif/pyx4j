@@ -13,16 +13,19 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc.mercantaccount;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
+import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 
-public class MerchantAccountLister extends EntityDataTablePanel<PmcMerchantAccountDTO> {
+public class MerchantAccountLister extends SiteDataTablePanel<PmcMerchantAccountDTO> {
 
     public MerchantAccountLister() {
-        super(PmcMerchantAccountDTO.class, false, false);
+        super(PmcMerchantAccountDTO.class, GWT.<PmcMerchantAccountCrudService> create(PmcMerchantAccountCrudService.class), false, false);
 
         setDataTableModel(new DataTableModel<PmcMerchantAccountDTO>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().pmc()).build(),

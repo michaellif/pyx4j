@@ -16,24 +16,23 @@ package com.propertyvista.crm.client.ui.crud.customer.tenant;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
+import com.propertyvista.crm.rpc.services.customer.FormerTenantCrudService;
 import com.propertyvista.dto.TenantDTO;
 
-public class TenantLister extends EntityDataTablePanel<TenantDTO> {
+public class TenantLister extends SiteDataTablePanel<TenantDTO> {
 
     protected static final I18n i18n = I18n.get(TenantLister.class);
 
-    public TenantLister() {
-        this(false);
-    }
-
     public TenantLister(boolean addDownloadListOfTenantsWithouPortalAccess) {
-        super(TenantDTO.class, false);
+        super(TenantDTO.class, GWT.<FormerTenantCrudService> create(FormerTenantCrudService.class), false);
 
         setDataTableModel(new DataTableModel<TenantDTO>(//@formatter:off
             new Builder(proto().participantId()).build(),
@@ -61,6 +60,11 @@ public class TenantLister extends EntityDataTablePanel<TenantDTO> {
             
         )); // @formatter:on
 
+    }
+
+    @Override
+    public boolean canCreateNewItem() {
+        return false; // disable creation of the new stand-alone Tenant - just from within the Lease!..
     }
 
     @Override

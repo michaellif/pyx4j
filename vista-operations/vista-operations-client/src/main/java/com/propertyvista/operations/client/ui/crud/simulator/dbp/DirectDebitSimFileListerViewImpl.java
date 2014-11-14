@@ -13,12 +13,15 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.dbp;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
 import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimFile;
+import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimFileCrudService;
 
 public class DirectDebitSimFileListerViewImpl extends OperationsListerViewImplBase<DirectDebitSimFile> implements DirectDebitSimFileListerView {
 
@@ -26,16 +29,16 @@ public class DirectDebitSimFileListerViewImpl extends OperationsListerViewImplBa
         setDataTablePanel(new DirectDebitSimFileLister());
     }
 
-    public static class DirectDebitSimFileLister extends EntityDataTablePanel<DirectDebitSimFile> {
+    public static class DirectDebitSimFileLister extends SiteDataTablePanel<DirectDebitSimFile> {
 
         public DirectDebitSimFileLister() {
-            super(DirectDebitSimFile.class, true);
-            setDataTableModel(new DataTableModel<DirectDebitSimFile>(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().serialNumber()).build(),
-                    new MemberColumnDescriptor.Builder(proto().creatationDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto().sentDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto().status()).build()
-            ));//@formatter:on
+            super(DirectDebitSimFile.class, GWT.<DirectDebitSimFileCrudService> create(DirectDebitSimFileCrudService.class), true);
+            setDataTableModel(new DataTableModel<DirectDebitSimFile>( //
+                    new MemberColumnDescriptor.Builder(proto().serialNumber()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().creatationDate()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().sentDate()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().status()).build() //
+            ));
         }
     }
 }

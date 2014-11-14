@@ -13,12 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 
+import com.google.gwt.core.client.GWT;
+
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.propertyvista.crm.rpc.services.customer.ActiveGuarantorCrudService;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorListerViewImpl extends CrmListerViewImplBase<GuarantorDTO> implements GuarantorListerView {
 
     public GuarantorListerViewImpl() {
-        setDataTablePanel(new GuarantorLister());
+        setDataTablePanel(new GuarantorLister(GWT.<ActiveGuarantorCrudService> create(ActiveGuarantorCrudService.class)));
     }
 }

@@ -16,24 +16,28 @@ package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationReconciliationRecord;
+import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationReconciliationCrudService;
 
 public class CardServiceSimulationReconciliationListerViewImpl extends OperationsListerViewImplBase<CardServiceSimulationReconciliationRecord> implements
         CardServiceSimulationReconciliationListerView {
 
-    public static class CardServiceSimulationReconciliationLister extends EntityDataTablePanel<CardServiceSimulationReconciliationRecord> {
+    public static class CardServiceSimulationReconciliationLister extends SiteDataTablePanel<CardServiceSimulationReconciliationRecord> {
 
         public CardServiceSimulationReconciliationLister() {
-            super(CardServiceSimulationReconciliationRecord.class, false, true);
+            super(CardServiceSimulationReconciliationRecord.class, GWT
+                    .<AbstractCrudService<CardServiceSimulationReconciliationRecord>> create(CardServiceSimulationReconciliationCrudService.class), false, true);
             setDataTableModel(new DataTableModel<CardServiceSimulationReconciliationRecord>(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().id()).build(),
                     new MemberColumnDescriptor.Builder(proto().fileId()).build(),
@@ -64,8 +68,7 @@ public class CardServiceSimulationReconciliationListerViewImpl extends Operation
         Button loadPadFile = new Button("Create Report", new Command() {
             @Override
             public void execute() {
-                new CardServiceSimulationReconciliationCreateDialog((CardServiceSimulationReconciliationListerView.Presenter) getDataTablePanel().getPresenter())
-                        .show();
+                new CardServiceSimulationReconciliationCreateDialog((Presenter) getPresenter()).show();
             }
         });
         getDataTablePanel().addUpperActionItem(loadPadFile.asWidget());

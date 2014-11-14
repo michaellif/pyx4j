@@ -17,24 +17,30 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.crm.client.event.BoardUpdateEvent;
+import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public class DashboardLister extends EntityDataTablePanel<DashboardMetadata> {
+public class DashboardLister extends SiteDataTablePanel<DashboardMetadata> {
 
     private static final I18n i18n = I18n.get(DashboardLister.class);
 
     public DashboardLister() {
-        super(DashboardMetadata.class, true, true);
+        super(DashboardMetadata.class, GWT.<AbstractCrudService<DashboardMetadata>> create(DashboardMetadataCrudService.class), true, true);
 
         setDataTableModel(new DataTableModel<DashboardMetadata>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().type()).build(),
@@ -57,12 +63,21 @@ public class DashboardLister extends EntityDataTablePanel<DashboardMetadata> {
             public void execute() {
                 for (DashboardMetadata item : items) {
                     if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(item.ownerUser().getPrimaryKey())) {
-                        getPresenter().delete(item.getPrimaryKey());
+                        delete(item.getPrimaryKey());
                     } else {
                         MessageDialog.info(i18n.tr("You must be owner of dashboard \"{0}\" to delete it", item.name().getValue()));
                     }
                 }
             }
         });
+    }
+
+    @Override
+    public void onDeleted(Key itemID, boolean isSuccessful) {
+        super.onDeleted(itemID, isSuccessful);
+        if (isSuccessful) {
+            AppSite.instance();
+            AppSite.getEventBus().fireEvent(new BoardUpdateEvent(DashboardMetadata.class));
+        }
     }
 }

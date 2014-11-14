@@ -13,24 +13,18 @@
  */
 package com.propertyvista.crm.client.activity.crud.customer.tenant;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.FormerTenantListerView;
-import com.propertyvista.crm.rpc.services.customer.FormerTenantCrudService;
 import com.propertyvista.dto.TenantDTO;
 
 public class FormerTenantListerActivity extends AbstractListerActivity<TenantDTO> {
 
     public FormerTenantListerActivity(Place place) {
-        super(TenantDTO.class,  place, CrmSite.getViewFactory().getView(FormerTenantListerView.class), GWT.<FormerTenantCrudService> create(FormerTenantCrudService.class));
+        super(TenantDTO.class, place, CrmSite.getViewFactory().getView(FormerTenantListerView.class));
     }
 
-    @Override
-    public boolean canCreateNewItem() {
-        return false; // disable creation of the new stand-alone Tenant - just from within the Lease!..
-    }
 }

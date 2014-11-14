@@ -20,22 +20,23 @@ import java.util.Queue;
 
 import com.google.gwt.user.client.Command;
 
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 
-public abstract class PolicyListerBase<P extends PolicyDTOBase> extends EntityDataTablePanel<P> {
+public abstract class PolicyListerBase<P extends PolicyDTOBase> extends SiteDataTablePanel<P> {
 
     private static final I18n i18n = I18n.get(PolicyListerBase.class);
 
     protected List<ColumnDescriptor> defaultColumns;
 
-    public PolicyListerBase(Class<P> clazz) {
-        super(clazz, true, true);
+    public PolicyListerBase(Class<P> clazz, AbstractListCrudService<P> service) {
+        super(clazz, service, true, true);
         setFilteringEnabled(false);
     }
 
@@ -56,7 +57,7 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends EntityDa
                 MessageDialog.info(i18n.tr("Deletion of the organization policy is forbidden"));
                 validateAndRemoveRecursively(itemsToRemove);
             } else {
-                getPresenter().delete(item.getPrimaryKey());
+                delete(item.getPrimaryKey());
                 validateAndRemoveRecursively(itemsToRemove);
             }
         }

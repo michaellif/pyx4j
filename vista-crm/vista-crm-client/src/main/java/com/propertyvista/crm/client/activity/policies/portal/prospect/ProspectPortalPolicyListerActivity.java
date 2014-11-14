@@ -13,21 +13,18 @@
  */
 package com.propertyvista.crm.client.activity.policies.portal.prospect;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.portal.prospect.ProspectPortalPolicyListerView;
-import com.propertyvista.crm.rpc.services.policies.policy.ProspectPortalPolicyCrudService;
 import com.propertyvista.domain.policy.dto.ProspectPortalPolicyDTO;
 
 public class ProspectPortalPolicyListerActivity extends AbstractListerActivity<ProspectPortalPolicyDTO> {
 
     public ProspectPortalPolicyListerActivity(Place place) {
-        super(ProspectPortalPolicyDTO.class, place, CrmSite.getViewFactory().getView(ProspectPortalPolicyListerView.class), GWT
-                        .<ProspectPortalPolicyCrudService> create(ProspectPortalPolicyCrudService.class));
+        super(ProspectPortalPolicyDTO.class, place, CrmSite.getViewFactory().getView(ProspectPortalPolicyListerView.class));
     }
 
 }

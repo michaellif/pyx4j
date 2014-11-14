@@ -13,11 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.n4;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
+import com.propertyvista.crm.rpc.services.policies.policy.N4PolicyCrudService;
 import com.propertyvista.domain.policy.dto.N4PolicyDTO;
 
 public class N4PolicyListerViewImpl extends CrmListerViewImplBase<N4PolicyDTO> implements N4PolicyListerView {
@@ -29,7 +32,7 @@ public class N4PolicyListerViewImpl extends CrmListerViewImplBase<N4PolicyDTO> i
     public static class N4PolicyLister extends PolicyListerBase<N4PolicyDTO> {
 
         public N4PolicyLister() {
-            super(N4PolicyDTO.class);
+            super(N4PolicyDTO.class, GWT.<N4PolicyCrudService> create(N4PolicyCrudService.class));
 
             setDataTableModel(new DataTableModel<N4PolicyDTO>(// @formatter:off
                     new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),

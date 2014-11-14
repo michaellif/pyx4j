@@ -13,11 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.restrictions;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
+import com.propertyvista.crm.rpc.services.policies.policy.RestrictionsPolicyCrudService;
 import com.propertyvista.domain.policy.dto.RestrictionsPolicyDTO;
 
 public class RestrictionsPolicyListerViewImpl extends CrmListerViewImplBase<RestrictionsPolicyDTO> implements RestrictionsPolicyListerView {
@@ -29,20 +32,20 @@ public class RestrictionsPolicyListerViewImpl extends CrmListerViewImplBase<Rest
     public static class RestrictionsPolicyLister extends PolicyListerBase<RestrictionsPolicyDTO> {
 
         public RestrictionsPolicyLister() {
-            super(RestrictionsPolicyDTO.class);
-            setDataTableModel(new DataTableModel<RestrictionsPolicyDTO>( // @formatter:off
-                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().occupantsPerBedRoom()).build(), 
-                    new MemberColumnDescriptor.Builder(proto().maxParkingSpots()).build(),
-                    new MemberColumnDescriptor.Builder(proto().maxLockers()).build(),
-                    new MemberColumnDescriptor.Builder(proto().maxPets()).build(),
-                    new MemberColumnDescriptor.Builder(proto().ageOfMajority()).build(),
-                    new MemberColumnDescriptor.Builder(proto().enforceAgeOfMajority()).build(), 
-                    new MemberColumnDescriptor.Builder(proto().maturedOccupantsAreApplicants()).build(),
-                    new MemberColumnDescriptor.Builder(proto().noNeedGuarantors()).build(), 
-                    new MemberColumnDescriptor.Builder(proto().yearsToForcingPreviousAddress()).build() 
-            )); // @formatter:on
+            super(RestrictionsPolicyDTO.class, GWT.<RestrictionsPolicyCrudService> create(RestrictionsPolicyCrudService.class));
+            setDataTableModel(new DataTableModel<RestrictionsPolicyDTO>( //
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build(), //
+                    new MemberColumnDescriptor.Builder(proto().occupantsPerBedRoom()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().maxParkingSpots()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().maxLockers()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().maxPets()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().ageOfMajority()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().enforceAgeOfMajority()).build(), // 
+                    new MemberColumnDescriptor.Builder(proto().maturedOccupantsAreApplicants()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().noNeedGuarantors()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().yearsToForcingPreviousAddress()).build() // 
+            ));
         }
     }
 

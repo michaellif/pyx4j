@@ -16,12 +16,16 @@ package com.propertyvista.crm.client.ui.crud.administration.availablereport;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.propertyvista.crm.rpc.services.admin.AvailableCrmReportAdminCrudService;
 import com.propertyvista.domain.reports.AvailableCrmReport;
 
 public class AvailableCrmReportListerViewImpl extends CrmListerViewImplBase<AvailableCrmReport> implements AvailableCrmReportListerView {
@@ -30,10 +34,10 @@ public class AvailableCrmReportListerViewImpl extends CrmListerViewImplBase<Avai
         setDataTablePanel(new CrmRoleLister());
     }
 
-    public static class CrmRoleLister extends EntityDataTablePanel<AvailableCrmReport> {
+    public static class CrmRoleLister extends SiteDataTablePanel<AvailableCrmReport> {
 
         public CrmRoleLister() {
-            super(AvailableCrmReport.class, false);
+            super(AvailableCrmReport.class, GWT.<AbstractListCrudService<AvailableCrmReport>> create(AvailableCrmReportAdminCrudService.class), false);
 
             setDataTableModel(new DataTableModel<AvailableCrmReport>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().reportType()).build(),

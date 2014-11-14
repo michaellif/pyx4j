@@ -13,21 +13,17 @@
  */
 package com.propertyvista.crm.client.activity.crud.administration.availablereport;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.administration.availablereport.AvailableCrmReportListerView;
-import com.propertyvista.crm.rpc.services.admin.AvailableCrmReportAdminCrudService;
 import com.propertyvista.domain.reports.AvailableCrmReport;
 
 public class AvailableCrmReportListerActivity extends AbstractListerActivity<AvailableCrmReport> {
 
     public AvailableCrmReportListerActivity(Place place) {
-        super(AvailableCrmReport.class, place, CrmSite.getViewFactory().getView(AvailableCrmReportListerView.class), GWT
-                .<AbstractListCrudService<AvailableCrmReport>> create(AvailableCrmReportAdminCrudService.class));
+        super(AvailableCrmReport.class, place, CrmSite.getViewFactory().getView(AvailableCrmReportListerView.class));
     }
 }

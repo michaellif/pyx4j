@@ -16,30 +16,33 @@ package com.propertyvista.operations.client.ui.crud.operationsalert;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.rpc.dto.OperationsAlertDTO;
+import com.propertyvista.operations.rpc.services.OperationsAlertCrudService;
 
-public class OperationsAlertLister extends EntityDataTablePanel<OperationsAlertDTO> {
+public class OperationsAlertLister extends SiteDataTablePanel<OperationsAlertDTO> {
 
     public OperationsAlertLister() {
-        super(OperationsAlertDTO.class, false, false);
+        super(OperationsAlertDTO.class, GWT.<OperationsAlertCrudService> create(OperationsAlertCrudService.class), false, false);
 
-        setDataTableModel(new DataTableModel<OperationsAlertDTO>(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().namespace()).build(),
-                new MemberColumnDescriptor.Builder(proto().remoteAddr()).build(),
-                new MemberColumnDescriptor.Builder(proto().created()).build(),
-                new MemberColumnDescriptor.Builder(proto().app()).build(),
-                new MemberColumnDescriptor.Builder(proto().entityId()).build(),
-                new MemberColumnDescriptor.Builder(proto().entityClass()).build(),
-                new MemberColumnDescriptor.Builder(proto().details()).build(),
-                new MemberColumnDescriptor.Builder(proto().user()).build(),
-                new MemberColumnDescriptor.Builder(proto().resolved()).build(),
-                new MemberColumnDescriptor.Builder(proto().operationsNotes()).build()
-        ));//@formatter:on
+        setDataTableModel(new DataTableModel<OperationsAlertDTO>( //
+                new MemberColumnDescriptor.Builder(proto().namespace()).build(), //
+                new MemberColumnDescriptor.Builder(proto().remoteAddr()).build(), //
+                new MemberColumnDescriptor.Builder(proto().created()).build(), //
+                new MemberColumnDescriptor.Builder(proto().app()).build(), //
+                new MemberColumnDescriptor.Builder(proto().entityId()).build(), //
+                new MemberColumnDescriptor.Builder(proto().entityClass()).build(), //
+                new MemberColumnDescriptor.Builder(proto().details()).build(), //
+                new MemberColumnDescriptor.Builder(proto().user()).build(), //
+                new MemberColumnDescriptor.Builder(proto().resolved()).build(), //
+                new MemberColumnDescriptor.Builder(proto().operationsNotes()).build() //
+        ));
     }
 
     @Override

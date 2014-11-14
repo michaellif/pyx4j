@@ -17,7 +17,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
@@ -27,7 +26,6 @@ import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.pmc.PmcListerView;
 import com.propertyvista.operations.rpc.dto.PmcDTO;
 import com.propertyvista.operations.rpc.services.MerchantAccountFileUploadService;
-import com.propertyvista.operations.rpc.services.PmcCrudService;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class PmcListerActivity extends AbstractListerActivity<PmcDTO> implements PmcListerView.Presenter {
@@ -35,7 +33,7 @@ public class PmcListerActivity extends AbstractListerActivity<PmcDTO> implements
     private static final I18n i18n = I18n.get(PmcListerActivity.class);
 
     public PmcListerActivity(Place place) {
-        super(PmcDTO.class, place, OperationsSite.getViewFactory().getView(PmcListerView.class), GWT.<AbstractCrudService<PmcDTO>> create(PmcCrudService.class));
+        super(PmcDTO.class, place, OperationsSite.getViewFactory().getView(PmcListerView.class));
     }
 
     @Override

@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.activity.crud.billing.payment;
 
-import com.google.gwt.core.client.GWT;
-
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
@@ -23,14 +21,12 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentRecordListerView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.billing.PaymentRecordCrudService;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public class PaymentRecordListerActivity extends AbstractListerActivity<PaymentRecordDTO> {
 
     public PaymentRecordListerActivity(AppPlace place) {
-        super(PaymentRecordDTO.class, place, CrmSite.getViewFactory().getView(PaymentRecordListerView.class),
-                GWT.<PaymentRecordCrudService> create(PaymentRecordCrudService.class));
+        super(PaymentRecordDTO.class, place, CrmSite.getViewFactory().getView(PaymentRecordListerView.class));
 
     }
 

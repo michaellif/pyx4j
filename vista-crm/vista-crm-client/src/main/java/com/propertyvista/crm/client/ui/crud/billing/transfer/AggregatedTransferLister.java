@@ -16,23 +16,25 @@ package com.propertyvista.crm.client.ui.crud.billing.transfer;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 
-public class AggregatedTransferLister extends EntityDataTablePanel<AggregatedTransfer> {
+public class AggregatedTransferLister extends SiteDataTablePanel<AggregatedTransfer> {
 
     private static final I18n i18n = I18n.get(AggregatedTransferLister.class);
 
     public AggregatedTransferLister() {
-        super(AggregatedTransfer.class, false);
+        super(AggregatedTransfer.class, GWT.<AggregatedTransferCrudService> create(AggregatedTransferCrudService.class), false);
 
         setDataTableModel(new DataTableModel<AggregatedTransfer>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().paymentDate()).build(),

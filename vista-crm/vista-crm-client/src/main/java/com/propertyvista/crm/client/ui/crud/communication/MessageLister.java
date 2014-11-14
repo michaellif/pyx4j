@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.communication;
 
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.EntityFactory;
@@ -23,13 +24,14 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Button;
 
@@ -41,7 +43,7 @@ import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.communication.MessageCategory.TicketType;
 import com.propertyvista.dto.MessageDTO;
 
-public class MessageLister extends EntityDataTablePanel<MessageDTO> {
+public class MessageLister extends SiteDataTablePanel<MessageDTO> {
     private static final I18n i18n = I18n.get(MessageLister.class);
 
     private Button newMessage;
@@ -50,13 +52,12 @@ public class MessageLister extends EntityDataTablePanel<MessageDTO> {
 
     private List<? extends CommunicationEndpoint> recipientScope;
 
-    public MessageLister(List<? extends CommunicationEndpoint> recipientScope) {
-        this();
-        this.recipientScope = recipientScope;
-    }
+    private final MessageListerView view;
 
-    public MessageLister() {
-        super(MessageDTO.class, true);
+    public MessageLister(MessageListerView view) {
+        super(MessageDTO.class, GWT.<AbstractCrudService<MessageDTO>> create(MessageCrudService.class), true);
+
+        this.view = view;
 
         setDataTableModel(new DataTableModel<MessageDTO>(createColumnDescriptors(CategoryType.Message)));
 
@@ -151,8 +152,7 @@ public class MessageLister extends EntityDataTablePanel<MessageDTO> {
 
     @Override
     protected EntityListCriteria<MessageDTO> updateCriteria(EntityListCriteria<MessageDTO> criteria) {
-        com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView.IPrimePanePresenter p = getPresenter();
-        AppPlace place = p.getPlace();
+        AppPlace place = view.getPresenter().getPlace();
         Object placeCriteria = place instanceof Message ? ((Message) place).getCriteria() : null;
         CategoryType category = null;
         if (placeCriteria == null) {
@@ -229,12 +229,9 @@ public class MessageLister extends EntityDataTablePanel<MessageDTO> {
 
     @Override
     protected void onItemNew() {
-        com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView.IPrimePanePresenter p = getPresenter();
-        AppPlace place = p.getPlace();
+        AppPlace place = view.getPresenter().getPlace();
         Object placeCriteria = place instanceof Message ? ((Message) place).getCriteria() : null;
-
         editNewEntity(placeCriteria);
-
     }
 
     private void editNewEntity(Object placeCriteria) {
@@ -249,6 +246,6 @@ public class MessageLister extends EntityDataTablePanel<MessageDTO> {
         if (recipientScope != null && recipientScope.size() > 0) {
             initData.recipients().addAll(recipientScope);
         }
-        getPresenter().editNew(Message.class, initData);
+        editNew(Message.class, initData);
     }
 }
