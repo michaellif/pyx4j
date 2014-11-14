@@ -13,9 +13,8 @@
  */
 package com.propertyvista.crm.client.activity.crud.customer.tenant;
 
-import com.google.gwt.place.shared.Place;
-
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantListerView;
@@ -23,7 +22,7 @@ import com.propertyvista.dto.TenantDTO;
 
 public class TenantListerActivity extends AbstractListerActivity<TenantDTO> implements TenantListerView.Presenter {
 
-    public TenantListerActivity(Place place) {
+    public TenantListerActivity(AppPlace place) {
         super(TenantDTO.class, place, CrmSite.getViewFactory().getView(TenantListerView.class));
     }
 

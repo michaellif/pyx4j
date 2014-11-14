@@ -16,7 +16,6 @@ package com.propertyvista.operations.client.mvp;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.shared.ApplicationMode;
@@ -121,7 +120,7 @@ public class ContentActivityMapper implements AppActivityMapper {
     }
 
     @Override
-    public void obtainActivity(final Place place, final AsyncCallback<Activity> callback) {
+    public void obtainActivity(final AppPlace place, final AsyncCallback<Activity> callback) {
         GWT.runAsync(new RunAsyncCallback() {
 
             @Override
@@ -293,7 +292,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                         }
 
                     } else if (place instanceof OperationsSiteMap.Administration.EncryptedStorage) {
-                        activity = new EncryptedStorageActivity((AppPlace) place);
+                        activity = new EncryptedStorageActivity(place);
 
                     } else if (place instanceof OperationsSiteMap.Administration.TenantSure) {
                         switch (crudPlace.getType()) {
@@ -479,7 +478,7 @@ public class ContentActivityMapper implements AppActivityMapper {
 
     }
 
-    private Activity createDevelopmentOnlyActivity(Place place) {
+    private Activity createDevelopmentOnlyActivity(AppPlace place) {
         Activity activity = null;
         if (place instanceof CrudAppPlace) {
             CrudAppPlace crudPlace = (CrudAppPlace) place;

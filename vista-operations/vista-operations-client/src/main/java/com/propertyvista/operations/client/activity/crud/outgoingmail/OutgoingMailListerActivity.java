@@ -13,9 +13,8 @@
  */
 package com.propertyvista.operations.client.activity.crud.outgoingmail;
 
-import com.google.gwt.place.shared.Place;
-
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.outgoingmail.OutgoingMailListerView;
@@ -23,7 +22,7 @@ import com.propertyvista.operations.rpc.dto.OutgoingMailQueueDTO;
 
 public class OutgoingMailListerActivity extends AbstractListerActivity<OutgoingMailQueueDTO> {
 
-    public OutgoingMailListerActivity(Place place) {
+    public OutgoingMailListerActivity(AppPlace place) {
         super(OutgoingMailQueueDTO.class, place, OperationsSite.getViewFactory().getView(OutgoingMailListerView.class));
     }
 

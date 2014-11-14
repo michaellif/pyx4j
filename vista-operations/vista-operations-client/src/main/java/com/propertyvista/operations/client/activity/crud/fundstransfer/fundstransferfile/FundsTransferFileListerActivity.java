@@ -13,9 +13,8 @@
  */
 package com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferfile;
 
-import com.google.gwt.place.shared.Place;
-
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferfile.FundsTransferFileListerView;
@@ -23,7 +22,7 @@ import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
 
 public class FundsTransferFileListerActivity extends AbstractListerActivity<FundsTransferFileDTO> {
 
-    public FundsTransferFileListerActivity(Place place) {
+    public FundsTransferFileListerActivity(AppPlace place) {
         super(FundsTransferFileDTO.class, place, OperationsSite.getViewFactory().getView(FundsTransferFileListerView.class));
     }
 }

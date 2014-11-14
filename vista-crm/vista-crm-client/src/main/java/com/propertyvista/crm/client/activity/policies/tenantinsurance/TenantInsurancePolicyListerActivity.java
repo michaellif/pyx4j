@@ -13,9 +13,8 @@
  */
 package com.propertyvista.crm.client.activity.policies.tenantinsurance;
 
-import com.google.gwt.place.shared.Place;
-
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.tenantinsurance.TenantInsurancePolicyListerView;
@@ -23,7 +22,7 @@ import com.propertyvista.domain.policy.dto.TenantInsurancePolicyDTO;
 
 public class TenantInsurancePolicyListerActivity extends AbstractListerActivity<TenantInsurancePolicyDTO> {
 
-    public TenantInsurancePolicyListerActivity(Place place) {
+    public TenantInsurancePolicyListerActivity(AppPlace place) {
         super(TenantInsurancePolicyDTO.class, place, CrmSite.getViewFactory().getView(TenantInsurancePolicyListerView.class));
     }
 

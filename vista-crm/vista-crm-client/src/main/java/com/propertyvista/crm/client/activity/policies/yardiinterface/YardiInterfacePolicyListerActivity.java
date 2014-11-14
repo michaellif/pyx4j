@@ -13,9 +13,8 @@
  */
 package com.propertyvista.crm.client.activity.policies.yardiinterface;
 
-import com.google.gwt.place.shared.Place;
-
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.yardiinterface.YardiInterfacePolicyListerView;
@@ -23,7 +22,7 @@ import com.propertyvista.domain.policy.dto.YardiInterfacePolicyDTO;
 
 public class YardiInterfacePolicyListerActivity extends AbstractListerActivity<YardiInterfacePolicyDTO> {
 
-    public YardiInterfacePolicyListerActivity(Place place) {
+    public YardiInterfacePolicyListerActivity(AppPlace place) {
         super(YardiInterfacePolicyDTO.class, place, CrmSite.getViewFactory().getView(YardiInterfacePolicyListerView.class));
     }
 

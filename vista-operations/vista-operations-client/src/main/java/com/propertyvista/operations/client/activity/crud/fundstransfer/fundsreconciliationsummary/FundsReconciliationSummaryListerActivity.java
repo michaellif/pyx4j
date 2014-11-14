@@ -13,11 +13,9 @@
  */
 package com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationsummary;
 
-import com.google.gwt.place.shared.Place;
-
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -26,7 +24,7 @@ import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
 
 public class FundsReconciliationSummaryListerActivity extends AbstractListerActivity<FundsReconciliationSummaryDTO> {
 
-    public FundsReconciliationSummaryListerActivity(Place place) {
+    public FundsReconciliationSummaryListerActivity(AppPlace place) {
         super(FundsReconciliationSummaryDTO.class, place, OperationsSite.getViewFactory().getView(FundsReconciliationSummaryListerView.class));
     }
 

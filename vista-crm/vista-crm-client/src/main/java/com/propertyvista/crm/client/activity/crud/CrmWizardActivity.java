@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.activity.crud;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.backoffice.activity.AbstractWizardActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractWizardActivity;
 import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 

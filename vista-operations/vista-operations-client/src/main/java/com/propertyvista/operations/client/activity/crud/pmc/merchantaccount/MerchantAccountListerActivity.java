@@ -13,9 +13,8 @@
  */
 package com.propertyvista.operations.client.activity.crud.pmc.merchantaccount;
 
-import com.google.gwt.place.shared.Place;
-
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.pmc.mercantaccount.MerchantAccountListerView;
@@ -23,7 +22,7 @@ import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 
 public class MerchantAccountListerActivity extends AbstractListerActivity<PmcMerchantAccountDTO> {
 
-    public MerchantAccountListerActivity(Place place) {
+    public MerchantAccountListerActivity(AppPlace place) {
         super(PmcMerchantAccountDTO.class, place, OperationsSite.getViewFactory().getView(MerchantAccountListerView.class));
     }
 }

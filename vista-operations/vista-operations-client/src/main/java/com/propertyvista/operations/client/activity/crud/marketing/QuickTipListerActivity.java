@@ -13,9 +13,8 @@
  */
 package com.propertyvista.operations.client.activity.crud.marketing;
 
-import com.google.gwt.place.shared.Place;
-
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.marketing.PortalResidentMarketingTip;
 import com.propertyvista.operations.client.OperationsSite;
@@ -23,7 +22,7 @@ import com.propertyvista.operations.client.ui.crud.marketing.QuickTipListerView;
 
 public class QuickTipListerActivity extends AbstractListerActivity<PortalResidentMarketingTip> {
 
-    public QuickTipListerActivity(Place place) {
+    public QuickTipListerActivity(AppPlace place) {
         super(PortalResidentMarketingTip.class, place, OperationsSite.getViewFactory().getView(QuickTipListerView.class));
     }
 }

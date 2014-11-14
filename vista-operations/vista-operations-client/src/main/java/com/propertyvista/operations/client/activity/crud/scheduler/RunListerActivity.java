@@ -13,9 +13,8 @@
  */
 package com.propertyvista.operations.client.activity.crud.scheduler;
 
-import com.google.gwt.place.shared.Place;
-
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.scheduler.run.RunListerView;
@@ -23,7 +22,7 @@ import com.propertyvista.operations.domain.scheduler.Run;
 
 public class RunListerActivity extends AbstractListerActivity<Run> {
 
-    public RunListerActivity(Place place) {
+    public RunListerActivity(AppPlace place) {
         super(Run.class, place, OperationsSite.getViewFactory().getView(RunListerView.class));
     }
 }

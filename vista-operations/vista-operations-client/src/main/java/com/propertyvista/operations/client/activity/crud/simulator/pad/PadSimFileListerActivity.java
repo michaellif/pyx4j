@@ -14,11 +14,11 @@
 package com.propertyvista.operations.client.activity.crud.simulator.pad;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.pad.file.PadSimFileListerView;
@@ -27,7 +27,7 @@ import com.propertyvista.operations.rpc.services.simulator.PadSimFileCrudService
 
 public class PadSimFileListerActivity extends AbstractListerActivity<PadSimFile> implements PadSimFileListerView.Presenter {
 
-    public PadSimFileListerActivity(Place place) {
+    public PadSimFileListerActivity(AppPlace place) {
         super(PadSimFile.class, place, OperationsSite.getViewFactory().getView(PadSimFileListerView.class));
     }
 

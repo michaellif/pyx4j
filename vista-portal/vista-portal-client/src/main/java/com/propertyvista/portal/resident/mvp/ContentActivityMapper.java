@@ -16,7 +16,6 @@ package com.propertyvista.portal.resident.mvp;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.activity.AppActivityMapper;
@@ -86,13 +85,13 @@ public class ContentActivityMapper implements AppActivityMapper {
     }
 
     @Override
-    public void obtainActivity(final Place place, final AsyncCallback<Activity> callback) {
+    public void obtainActivity(final AppPlace place, final AsyncCallback<Activity> callback) {
         GWT.runAsync(new RunAsyncCallback() {
 
             @Override
             public void onSuccess() {
                 if (place instanceof AppPlace) {
-                    AppPlace appPlace = (AppPlace) place;
+                    AppPlace appPlace = place;
 
                     Activity activity = null;
                     if (appPlace instanceof ResidentPortalSiteMap.Dashboard) {

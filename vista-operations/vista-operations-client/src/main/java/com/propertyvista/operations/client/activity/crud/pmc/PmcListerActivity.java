@@ -14,11 +14,11 @@
 package com.propertyvista.operations.client.activity.crud.pmc;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.components.UploadDialogBase;
 import com.propertyvista.common.client.ui.components.UploadResponseDownloadableReciver;
@@ -32,7 +32,7 @@ public class PmcListerActivity extends AbstractListerActivity<PmcDTO> implements
 
     private static final I18n i18n = I18n.get(PmcListerActivity.class);
 
-    public PmcListerActivity(Place place) {
+    public PmcListerActivity(AppPlace place) {
         super(PmcDTO.class, place, OperationsSite.getViewFactory().getView(PmcListerView.class));
     }
 

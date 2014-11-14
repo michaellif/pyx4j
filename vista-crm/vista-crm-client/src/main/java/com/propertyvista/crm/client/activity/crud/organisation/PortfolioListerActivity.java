@@ -13,9 +13,8 @@
  */
 package com.propertyvista.crm.client.activity.crud.organisation;
 
-import com.google.gwt.place.shared.Place;
-
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.organisation.portfolio.PortfolioListerView;
@@ -23,7 +22,7 @@ import com.propertyvista.domain.company.Portfolio;
 
 public class PortfolioListerActivity extends AbstractListerActivity<Portfolio> {
 
-    public PortfolioListerActivity(Place place) {
+    public PortfolioListerActivity(AppPlace place) {
         super(Portfolio.class, place, CrmSite.getViewFactory().getView(PortfolioListerView.class));
     }
 

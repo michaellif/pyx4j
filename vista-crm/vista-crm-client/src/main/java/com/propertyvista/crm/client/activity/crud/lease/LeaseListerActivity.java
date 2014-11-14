@@ -14,12 +14,12 @@
 package com.propertyvista.crm.client.activity.crud.lease;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ReportDialog;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.components.UploadDialogBase;
 import com.propertyvista.common.client.ui.components.UploadResponseDownloadableReciver;
@@ -36,7 +36,7 @@ public class LeaseListerActivity extends LeaseListerActivityBase<LeaseDTO> imple
 
     private static final I18n i18n = I18n.get(LeaseListerActivity.class);
 
-    public LeaseListerActivity(Place place) {
+    public LeaseListerActivity(AppPlace place) {
         super(place, CrmSite.getViewFactory().getView(LeaseListerView.class), LeaseDTO.class);
     }
 

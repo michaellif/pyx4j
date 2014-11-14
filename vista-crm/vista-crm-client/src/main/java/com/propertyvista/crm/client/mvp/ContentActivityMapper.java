@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.mvp;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -308,7 +307,7 @@ public class ContentActivityMapper implements AppActivityMapper {
     }
 
     @Override
-    public void obtainActivity(final Place place, final AsyncCallback<Activity> callback) {
+    public void obtainActivity(final AppPlace place, final AsyncCallback<Activity> callback) {
         GWT.runAsync(new RunAsyncCallback() {
 
             @Override
@@ -1489,11 +1488,11 @@ public class ContentActivityMapper implements AppActivityMapper {
                     }
                     // Dashboard related stuff again
                 } else if (place instanceof Dashboard.View) {
-                    activity = new DashboardActivity((Dashboard.View) place);
+                    activity = new DashboardActivity(place);
 
                     // BEGIN: Bulk Operations Tools
                 } else if (place instanceof Finance.AutoPayReview) {
-                    activity = new AutoPayReviewActivity((AppPlace) place);
+                    activity = new AutoPayReviewActivity(place);
                 } else if (place instanceof Finance.MoneyIn) {
                     activity = new MoneyInCreateBatchActivity();
 

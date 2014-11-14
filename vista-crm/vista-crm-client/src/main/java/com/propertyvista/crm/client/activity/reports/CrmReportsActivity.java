@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.reports;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.activity.AbstractReportActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractReportActivity;
 import com.pyx4j.site.client.backoffice.ui.prime.report.IReportView;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.shared.domain.reports.ReportTemplate;

@@ -13,9 +13,8 @@
  */
 package com.propertyvista.operations.client.activity.crud.simulator.dbp;
 
-import com.google.gwt.place.shared.Place;
-
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.dbp.DirectDebitSimRecordListerView;
@@ -23,7 +22,7 @@ import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimRecor
 
 public class DirectDebitSimRecordListerActivity extends AbstractListerActivity<DirectDebitSimRecord> implements DirectDebitSimRecordListerView.Presenter {
 
-    public DirectDebitSimRecordListerActivity(Place place) {
+    public DirectDebitSimRecordListerActivity(AppPlace place) {
         super(DirectDebitSimRecord.class, place, OperationsSite.getViewFactory().getView(DirectDebitSimRecordListerView.class));
     }
 

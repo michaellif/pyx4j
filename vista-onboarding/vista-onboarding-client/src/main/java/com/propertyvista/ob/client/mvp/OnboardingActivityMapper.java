@@ -16,10 +16,10 @@ package com.propertyvista.ob.client.mvp;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.activity.AppActivityMapper;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.ob.client.mvp.activity.PmcAccountCreationCompleteActivity;
 import com.propertyvista.ob.client.mvp.activity.PmcAccountCreationProgressActivity;
@@ -31,18 +31,18 @@ import com.propertyvista.ob.rpc.OnboardingSiteMap;
 public class OnboardingActivityMapper implements AppActivityMapper {
 
     @Override
-    public void obtainActivity(final Place place, final AsyncCallback<Activity> callback) {
+    public void obtainActivity(final AppPlace place, final AsyncCallback<Activity> callback) {
         GWT.runAsync(new RunAsyncCallback() {
 
             @Override
             public void onSuccess() {
                 Activity activity = null;
                 if (place instanceof OnboardingSiteMap.PmcAccountCreationRequest) {
-                    activity = new PmcAccountCreationRequestActivity((OnboardingSiteMap.PmcAccountCreationRequest) place);
+                    activity = new PmcAccountCreationRequestActivity(place);
                 } else if (place instanceof OnboardingSiteMap.PmcAccountCreationProgress) {
-                    activity = new PmcAccountCreationProgressActivity((OnboardingSiteMap.PmcAccountCreationProgress) place);
+                    activity = new PmcAccountCreationProgressActivity(place);
                 } else if (place instanceof OnboardingSiteMap.PmcAccountCreationComplete) {
-                    activity = new PmcAccountCreationCompleteActivity((OnboardingSiteMap.PmcAccountCreationComplete) place);
+                    activity = new PmcAccountCreationCompleteActivity(place);
                 } else if (place instanceof OnboardingSiteMap.PmcAccountTerms) {
                     activity = new PmcTermsActivity();
 

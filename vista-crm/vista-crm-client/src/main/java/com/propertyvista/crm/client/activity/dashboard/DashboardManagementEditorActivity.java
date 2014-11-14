@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.activity.AbstractEditorActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace.Type;
 

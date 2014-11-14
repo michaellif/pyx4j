@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.activity.crud.lease.application;
 
-import com.google.gwt.place.shared.Place;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseListerActivityBase;
@@ -22,7 +22,7 @@ import com.propertyvista.dto.LeaseApplicationDTO;
 
 public class LeaseApplicationListerActivity extends LeaseListerActivityBase<LeaseApplicationDTO> {
 
-    public LeaseApplicationListerActivity(Place place) {
+    public LeaseApplicationListerActivity(AppPlace place) {
         super(place, CrmSite.getViewFactory().getView(LeaseApplicationListerView.class), LeaseApplicationDTO.class);
     }
 

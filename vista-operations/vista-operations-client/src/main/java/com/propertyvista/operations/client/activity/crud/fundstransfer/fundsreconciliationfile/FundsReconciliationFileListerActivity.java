@@ -13,9 +13,8 @@
  */
 package com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationfile;
 
-import com.google.gwt.place.shared.Place;
-
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationfile.FundsReconciliationFileListerView;
@@ -23,7 +22,7 @@ import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
 
 public class FundsReconciliationFileListerActivity extends AbstractListerActivity<FundsReconciliationFileDTO> {
 
-    public FundsReconciliationFileListerActivity(Place place) {
+    public FundsReconciliationFileListerActivity(AppPlace place) {
         super(FundsReconciliationFileDTO.class, place, OperationsSite.getViewFactory().getView(FundsReconciliationFileListerView.class));
     }
 }

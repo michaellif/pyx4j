@@ -13,9 +13,8 @@
  */
 package com.propertyvista.crm.client.activity.dashboard;
 
-import com.google.gwt.place.shared.Place;
-
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.dashboard.DashboardManagementListerView;
@@ -23,7 +22,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class DashboardManagementListerActivity extends AbstractListerActivity<DashboardMetadata> {
 
-    public DashboardManagementListerActivity(Place place) {
+    public DashboardManagementListerActivity(AppPlace place) {
         super(DashboardMetadata.class, place, CrmSite.getViewFactory().getView(DashboardManagementListerView.class));
     }
 

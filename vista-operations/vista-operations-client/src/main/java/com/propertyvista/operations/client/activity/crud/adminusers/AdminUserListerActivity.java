@@ -13,9 +13,8 @@
  */
 package com.propertyvista.operations.client.activity.crud.adminusers;
 
-import com.google.gwt.place.shared.Place;
-
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.adminusers.AdminUserListerView;
@@ -23,7 +22,7 @@ import com.propertyvista.operations.rpc.dto.OperationsUserDTO;
 
 public class AdminUserListerActivity extends AbstractListerActivity<OperationsUserDTO> {
 
-    public AdminUserListerActivity(Place place) {
+    public AdminUserListerActivity(AppPlace place) {
         super(OperationsUserDTO.class, place, OperationsSite.getViewFactory().getView(AdminUserListerView.class));
     }
 }

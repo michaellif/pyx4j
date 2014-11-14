@@ -18,7 +18,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.activity.AbstractViewerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractViewerActivity;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 

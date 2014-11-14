@@ -13,10 +13,8 @@
  */
 package com.propertyvista.crm.client.activity.crud.lease.common;
 
-import com.google.gwt.place.shared.Place;
-
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -24,7 +22,7 @@ import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseListerActivityBase<DTO extends LeaseDTO> extends AbstractListerActivity<DTO> {
 
-    public LeaseListerActivityBase(Place place, IListerView<DTO> view, Class<DTO> entityClass) {
+    public LeaseListerActivityBase(AppPlace place, IListerView<DTO> view, Class<DTO> entityClass) {
         super(entityClass, place, view);
     }
 

@@ -13,9 +13,8 @@
  */
 package com.propertyvista.crm.client.activity.crud.administration.auditrecords;
 
-import com.google.gwt.place.shared.Place;
-
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.administration.auditrecord.CrmAuditRecordListerView;
@@ -23,7 +22,7 @@ import com.propertyvista.dto.AuditRecordDTO;
 
 public class CrmAuditRecordsListerActivity extends AbstractListerActivity<AuditRecordDTO> {
 
-    public CrmAuditRecordsListerActivity(Place place) {
+    public CrmAuditRecordsListerActivity(AppPlace place) {
         super(AuditRecordDTO.class, place, CrmSite.getViewFactory().getView(CrmAuditRecordListerView.class));
     }
 

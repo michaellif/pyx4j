@@ -13,9 +13,8 @@
  */
 package com.propertyvista.crm.client.activity.policies.portal.resident;
 
-import com.google.gwt.place.shared.Place;
-
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.portal.resident.ResidentPortalPolicyListerView;
@@ -23,7 +22,7 @@ import com.propertyvista.domain.policy.dto.ResidentPortalPolicyDTO;
 
 public class ResidentPortalPolicyListerActivity extends AbstractListerActivity<ResidentPortalPolicyDTO> {
 
-    public ResidentPortalPolicyListerActivity(Place place) {
+    public ResidentPortalPolicyListerActivity(AppPlace place) {
         super(ResidentPortalPolicyDTO.class, place, CrmSite.getViewFactory().getView(ResidentPortalPolicyListerView.class));
     }
 

@@ -13,12 +13,10 @@
  */
 package com.propertyvista.operations.client.activity.crud.auditrecords;
 
-import com.google.gwt.place.shared.Place;
-
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.pmc.Pmc;
@@ -28,7 +26,7 @@ import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
 
 public class AuditRecordListerActivity extends AbstractListerActivity<AuditRecordOperationsDTO> {
 
-    public AuditRecordListerActivity(Place place) {
+    public AuditRecordListerActivity(AppPlace place) {
         super(AuditRecordOperationsDTO.class, place, OperationsSite.getViewFactory().getView(AuditRecordListerView.class));
     }
 

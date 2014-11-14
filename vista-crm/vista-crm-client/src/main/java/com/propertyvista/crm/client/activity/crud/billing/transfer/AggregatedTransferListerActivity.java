@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.activity.crud.billing.transfer;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
@@ -22,7 +21,8 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ReportDialog;
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.billing.transfer.AggregatedTransferListerView;
@@ -34,7 +34,7 @@ public class AggregatedTransferListerActivity extends AbstractListerActivity<Agg
 
     private static final I18n i18n = I18n.get(AggregatedTransferListerActivity.class);
 
-    public AggregatedTransferListerActivity(Place place) {
+    public AggregatedTransferListerActivity(AppPlace place) {
         super(AggregatedTransfer.class, place, CrmSite.getViewFactory().getView(AggregatedTransferListerView.class));
     }
 

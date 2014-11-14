@@ -13,9 +13,8 @@
  */
 package com.propertyvista.operations.client.activity.crud.simulator.cardservice;
 
-import com.google.gwt.place.shared.Place;
-
-import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.prime.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationTransactionListerView;
@@ -23,7 +22,7 @@ import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimula
 
 public class CardServiceSimulationTransactionListerActivity extends AbstractListerActivity<CardServiceSimulationTransaction> {
 
-    public CardServiceSimulationTransactionListerActivity(Place place) {
+    public CardServiceSimulationTransactionListerActivity(AppPlace place) {
         super(CardServiceSimulationTransaction.class, place, OperationsSite.getViewFactory().getView(CardServiceSimulationTransactionListerView.class));
     }
 }
