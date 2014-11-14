@@ -205,9 +205,11 @@ public class EmailTemplateManager {
             final int urlEnd = htmlTemplate.indexOf('|', urlStart);
             if (urlEnd != -1) {
                 final String linkUrl = htmlTemplate.substring(urlStart, urlEnd);
-                if (!StringUtils.isEmpty(linkUrl)) {
-                    final int bodyStart = urlEnd + 1;
-                    final int bodyEnd = htmlTemplate.indexOf("]]", bodyStart);
+                final int bodyStart = urlEnd + 1;
+                final int bodyEnd = htmlTemplate.indexOf("]]", bodyStart);
+                if (StringUtils.isEmpty(linkUrl)) {
+                    pos = bodyEnd + 2;
+                } else {
                     if (bodyEnd != -1) {
                         pos = urlEnd + 1;
                         buffer.append("<a href=\"" + linkUrl + "\">");
