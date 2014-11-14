@@ -51,6 +51,7 @@ public class PapCoveredItemDtoFolder extends PortalBoxFolder<PreauthorizedPaymen
         super(PreauthorizedPaymentCoveredItemDTO.class, modifiable);
         setOrderable(false);
         setExpended(true);
+        setNoDataLabel(i18n.tr("There are no covered items"));
     }
 
     public void onAmontValueChange() {

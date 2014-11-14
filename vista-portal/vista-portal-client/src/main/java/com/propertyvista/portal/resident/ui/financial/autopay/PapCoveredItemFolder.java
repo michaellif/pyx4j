@@ -44,6 +44,7 @@ public class PapCoveredItemFolder extends PortalBoxFolder<AutopayAgreement.Autop
     public PapCoveredItemFolder(boolean modifiable) {
         super(AutopayAgreement.AutopayAgreementCoveredItem.class, modifiable);
         setOrderable(false);
+        setNoDataLabel(i18n.tr("There are no covered items"));
     }
 
     @Override

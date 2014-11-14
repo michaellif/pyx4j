@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -46,6 +46,7 @@ import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
@@ -260,6 +261,13 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
     public void onReset() {
         super.onReset();
 
+        get(proto().coveredItems()).setVisible(true);
+        get(proto().total()).setVisible(true);
+        get(proto().nextPaymentDate()).setVisible(true);
+        if (getDecorator() instanceof WizardDecorator) {
+            ((WizardDecorator<?>) getDecorator()).getBtnNext().setEnabled(true);
+        }
+
         switchTotal(detailsTotalHolder);
     }
 
@@ -358,7 +366,12 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
             w.setStyleName(VistaTheme.StyleName.WarningMessage.name());
             w.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
+            get(proto().coveredItems()).setVisible(false);
             get(proto().total()).setVisible(false);
+            get(proto().nextPaymentDate()).setVisible(false);
+            if (getDecorator() instanceof WizardDecorator) {
+                ((WizardDecorator<?>) getDecorator()).getBtnNext().setEnabled(false);
+            }
         }
 
         return panel;
