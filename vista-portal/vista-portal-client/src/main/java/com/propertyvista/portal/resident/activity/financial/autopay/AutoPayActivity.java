@@ -41,13 +41,11 @@ public class AutoPayActivity extends AbstractEditorActivity<AutoPayDTO> implemen
 
     @Override
     public void save() {
-        final AutoPayDTO value = getView().getValue();
-
-        if (value.total().getValue().signum() > 0) {
+        if (getView().getValue().total().getValue().signum() > 0) {
             super.save();
         } else {
-            MessageDialog.confirm(i18n.tr("Auto Pay Agreement"), i18n.tr("There are no payments set! Would you like rather to delete the Auto Pay?"),
-                    new ConfirmDecline() {
+            MessageDialog.confirm(i18n.tr("Saving Auto Pay Agreement"),
+                    i18n.tr("There are no payments set! Would you like rather to delete the Auto Pay Agreement?"), new ConfirmDecline() {
                         @Override
                         public void onConfirmed() {
                             GWT.<PaymentService> create(PaymentService.class).deleteAutoPay(new DefaultAsyncCallback<Boolean>() {
@@ -56,7 +54,7 @@ public class AutoPayActivity extends AbstractEditorActivity<AutoPayDTO> implemen
                                     getView().reset(); //  to avoid navigation out of non-saved data message...
                                     AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial());
                                 }
-                            }, EntityFactory.createIdentityStub(AutopayAgreement.class, value.getPrimaryKey()));
+                            }, EntityFactory.createIdentityStub(AutopayAgreement.class, getView().getValue().getPrimaryKey()));
                         }
 
                         @Override
