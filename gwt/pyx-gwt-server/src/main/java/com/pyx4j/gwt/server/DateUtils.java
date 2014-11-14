@@ -36,7 +36,7 @@ public class DateUtils extends TimeUtils {
 
     /**
      * Quickly create a date object
-     * 
+     *
      * @param year
      * @param month
      *            starts with 0, January == 0
@@ -110,8 +110,8 @@ public class DateUtils extends TimeUtils {
         return add(date, Calendar.YEAR, years);
     }
 
-    public static LogicalDate monthAdd(LogicalDate date, int days) {
-        return new LogicalDate(add(date, Calendar.MONTH, days));
+    public static LogicalDate monthAdd(LogicalDate date, int months) {
+        return new LogicalDate(add(date, Calendar.MONTH, months));
     }
 
     public static Date monthAdd(Date date, int months) {
