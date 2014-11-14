@@ -32,7 +32,7 @@ public class ChargesVisorController extends AbstractVisorController {
 
     private final Key leaseId;
 
-    public ChargesVisorController(IPrimePaneView parentView, Key leaseId) {
+    public ChargesVisorController(IPrimePaneView<?> parentView, Key leaseId) {
         super(parentView);
         this.leaseId = leaseId;
         visor = new ChargesVisorView(this);

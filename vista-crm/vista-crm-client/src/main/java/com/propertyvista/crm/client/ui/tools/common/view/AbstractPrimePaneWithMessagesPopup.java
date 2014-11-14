@@ -16,10 +16,11 @@ package com.propertyvista.crm.client.ui.tools.common.view;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView.IPrimePanePresenter;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog.Type;
 
-public abstract class AbstractPrimePaneWithMessagesPopup extends AbstractPrimePaneView implements HasMessages {
+public abstract class AbstractPrimePaneWithMessagesPopup extends AbstractPrimePaneView<IPrimePanePresenter> implements HasMessages {
 
     @Override
     public void displayMessage(String message, Type messageType) {

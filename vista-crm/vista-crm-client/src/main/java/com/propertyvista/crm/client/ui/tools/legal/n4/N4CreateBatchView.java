@@ -17,6 +17,7 @@ import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.ProvidesKey;
 
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView.IPrimePanePresenter;
 
 import com.propertyvista.crm.client.ui.tools.common.datagrid.SelectionPresetModel;
 import com.propertyvista.crm.client.ui.tools.common.view.HasMessages;
@@ -24,7 +25,7 @@ import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
 
 // TODO This is supposed to be a replacement for clunky N4GenerationToolView
-public interface N4CreateBatchView extends IPrimePaneView, HasMessages {
+public interface N4CreateBatchView extends IPrimePaneView<IPrimePanePresenter>, HasMessages {
 
     interface Presenter extends IPrimePaneView.IPrimePanePresenter, ProvidesKey<LegalNoticeCandidateDTO> {
 
