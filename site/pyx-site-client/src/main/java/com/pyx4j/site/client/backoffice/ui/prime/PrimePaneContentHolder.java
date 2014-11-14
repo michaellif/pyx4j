@@ -32,7 +32,6 @@ import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.site.client.backoffice.ui.IPaneView;
 import com.pyx4j.site.client.backoffice.ui.visor.AbstractVisorPaneView;
 import com.pyx4j.site.client.backoffice.ui.visor.IVisor;
 
@@ -44,9 +43,9 @@ public class PrimePaneContentHolder extends ComplexPanel implements RequiresResi
 
     private IsWidget visorPaneWidget;
 
-    private final IPaneView parentPane;
+    private final IPrimePaneView parentPane;
 
-    public PrimePaneContentHolder(IPaneView parentPane) {
+    public PrimePaneContentHolder(IPrimePaneView parentPane) {
         this.parentPane = parentPane;
         setAnimationDuration(500);
         setElement(Document.get().createDivElement());
