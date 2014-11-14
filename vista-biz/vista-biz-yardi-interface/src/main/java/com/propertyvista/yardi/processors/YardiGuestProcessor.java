@@ -379,6 +379,15 @@ public class YardiGuestProcessor {
 
     public List<Charge> getApplicationCharges(LeaseApplication la) {
         List<Charge> charges = new ArrayList<>();
+        // TODO - may need a better targeting - for now just check all tenants and leases
+        for (Tenant tenant : la.getTenant()) {
+            if (tenant == null || tenant.getAccountingData() == null) {
+                continue;
+            }
+            for (ChargeSet chargeSet : tenant.getAccountingData().getChargeSet()) {
+                charges.addAll(chargeSet.getCharge());
+            }
+        }
         for (LALease lease : la.getLALease()) {
             if (lease == null || lease.getAccountingData() == null) {
                 continue;
