@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.visor.AbstractVisorViewer;
+import com.pyx4j.site.client.backoffice.ui.visor.AbstractVisorViewer;
 
 import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;

@@ -23,7 +23,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.activity.AbstractVisorController;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
-import com.pyx4j.site.client.ui.visor.AbstractVisorPaneView;
+import com.pyx4j.site.client.backoffice.ui.visor.AbstractVisorPaneView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace.Type;
 

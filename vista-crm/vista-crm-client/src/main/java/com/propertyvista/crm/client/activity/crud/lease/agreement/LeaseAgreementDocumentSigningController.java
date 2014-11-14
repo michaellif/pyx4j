@@ -24,7 +24,7 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.ui.visor.IVisorEditor;
+import com.pyx4j.site.client.backoffice.ui.visor.IVisorEditor;
 
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.lease.agreement.LeaseAgreementDocumentSigningVisor;

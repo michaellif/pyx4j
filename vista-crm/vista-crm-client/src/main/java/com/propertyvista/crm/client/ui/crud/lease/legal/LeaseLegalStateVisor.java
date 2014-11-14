@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.visor.AbstractVisorViewer;
+import com.pyx4j.site.client.backoffice.ui.visor.AbstractVisorViewer;
 
 import com.propertyvista.crm.client.activity.crud.lease.legal.LeaseLegalStateController;
 import com.propertyvista.domain.legal.LegalStatus.Status;

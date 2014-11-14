@@ -20,7 +20,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.pyx4j.site.client.ui.visor.IVisor;
+import com.pyx4j.site.client.backoffice.ui.visor.IVisor;
 
 import com.propertyvista.ob.client.forms.StepStatusIndicator;
 import com.propertyvista.ob.client.forms.StepStatusIndicator.StepStatus;

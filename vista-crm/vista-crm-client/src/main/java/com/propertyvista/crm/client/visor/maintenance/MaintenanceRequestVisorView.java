@@ -19,7 +19,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.visor.AbstractVisorPaneView;
+import com.pyx4j.site.client.backoffice.ui.visor.AbstractVisorPaneView;
 
 import com.propertyvista.dto.MaintenanceRequestDTO;
 

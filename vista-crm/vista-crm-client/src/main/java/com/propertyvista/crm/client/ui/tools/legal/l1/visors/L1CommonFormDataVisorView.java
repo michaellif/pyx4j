@@ -19,8 +19,8 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.visor.AbstractVisorEditor;
-import com.pyx4j.site.client.ui.visor.IVisorEditor;
+import com.pyx4j.site.client.backoffice.ui.visor.AbstractVisorEditor;
+import com.pyx4j.site.client.backoffice.ui.visor.IVisorEditor;
 
 import com.propertyvista.crm.client.ui.tools.legal.l1.forms.L1LandlordsContactInfoFolder;
 import com.propertyvista.crm.client.ui.tools.legal.l1.forms.L1ScheduleAndPaymentForm;

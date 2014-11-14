@@ -30,7 +30,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.site.client.backoffice.activity.AbstractVisorController;
 import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView;
 import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView.IWizardPresenter;
-import com.pyx4j.site.client.ui.visor.IVisorEditor;
+import com.pyx4j.site.client.backoffice.ui.visor.IVisorEditor;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;

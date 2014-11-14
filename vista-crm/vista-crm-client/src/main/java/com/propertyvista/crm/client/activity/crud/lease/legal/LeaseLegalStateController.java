@@ -19,7 +19,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
-import com.pyx4j.site.client.ui.visor.IVisor;
+import com.pyx4j.site.client.backoffice.ui.visor.IVisor;
 
 import com.propertyvista.crm.client.ui.crud.lease.legal.LeaseLegalStateVisor;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;

@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.visor.IVisor;
+import com.pyx4j.site.client.backoffice.ui.visor.IVisor;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.ob.client.forms.StepStatusIndicator.StepStatus;

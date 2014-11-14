@@ -38,7 +38,7 @@ import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.visor.IVisorEditor;
+import com.pyx4j.site.client.backoffice.ui.visor.IVisorEditor;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog.Type;

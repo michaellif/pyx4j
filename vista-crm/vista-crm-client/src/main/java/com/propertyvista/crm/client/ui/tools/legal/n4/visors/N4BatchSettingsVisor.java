@@ -18,8 +18,8 @@ import java.util.List;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.visor.AbstractVisorForm;
-import com.pyx4j.site.client.ui.visor.IVisorEditor;
+import com.pyx4j.site.client.backoffice.ui.visor.AbstractVisorForm;
+import com.pyx4j.site.client.backoffice.ui.visor.IVisorEditor;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.tools.legal.n4.forms.N4BatchRequestForm;
@@ -30,7 +30,7 @@ public class N4BatchSettingsVisor extends AbstractVisorForm<N4BatchRequestDTO> {
 
     private static final I18n i18n = I18n.get(N4BatchSettingsVisor.class);
 
-    public N4BatchSettingsVisor(com.pyx4j.site.client.ui.visor.IVisorEditor.Controller controller) {
+    public N4BatchSettingsVisor(com.pyx4j.site.client.backoffice.ui.visor.IVisorEditor.Controller controller) {
         super(controller);
 
         setForm(new N4BatchRequestForm());

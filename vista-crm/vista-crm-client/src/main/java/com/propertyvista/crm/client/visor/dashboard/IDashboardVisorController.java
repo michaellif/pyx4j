@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.visor.dashboard;
 
-import com.pyx4j.site.client.ui.visor.IVisor;
+import com.pyx4j.site.client.backoffice.ui.visor.IVisor;
 
 public interface IDashboardVisorController extends IVisor.Controller {
 

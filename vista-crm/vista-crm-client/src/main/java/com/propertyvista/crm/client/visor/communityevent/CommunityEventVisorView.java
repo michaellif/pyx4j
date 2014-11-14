@@ -36,7 +36,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.visor.AbstractVisorPaneView;
+import com.pyx4j.site.client.backoffice.ui.visor.AbstractVisorPaneView;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Toolbar;

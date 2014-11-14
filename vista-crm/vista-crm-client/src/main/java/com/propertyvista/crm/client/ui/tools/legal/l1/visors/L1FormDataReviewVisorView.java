@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.tools.legal.l1.visors;
 
-import com.pyx4j.site.client.ui.visor.IVisor;
+import com.pyx4j.site.client.backoffice.ui.visor.IVisor;
 
 import com.propertyvista.crm.client.ui.tools.legal.l1.L1FormDataReviewWizardView;
 import com.propertyvista.crm.client.ui.tools.legal.l1.L1FormDataReviewWizardViewImpl;

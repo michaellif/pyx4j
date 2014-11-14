@@ -17,8 +17,8 @@ import java.util.List;
 
 import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.visor.AbstractVisorViewer;
-import com.pyx4j.site.client.ui.visor.IVisorEditor;
+import com.pyx4j.site.client.backoffice.ui.visor.AbstractVisorViewer;
+import com.pyx4j.site.client.backoffice.ui.visor.IVisorEditor;
 
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;

@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.visor.IVisor;
+import com.pyx4j.site.client.backoffice.ui.visor.IVisor;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
 

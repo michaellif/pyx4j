@@ -17,7 +17,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.visor.AbstractVisorEditor;
+import com.pyx4j.site.client.backoffice.ui.visor.AbstractVisorEditor;
 
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 

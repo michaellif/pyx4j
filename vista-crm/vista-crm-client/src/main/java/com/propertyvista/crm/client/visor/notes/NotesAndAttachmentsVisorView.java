@@ -47,7 +47,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.ui.visor.AbstractVisorPaneView;
+import com.pyx4j.site.client.backoffice.ui.visor.AbstractVisorPaneView;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Toolbar;

@@ -20,8 +20,8 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.visor.AbstractVisorPaneView;
-import com.pyx4j.site.client.ui.visor.IVisor;
+import com.pyx4j.site.client.backoffice.ui.visor.AbstractVisorPaneView;
+import com.pyx4j.site.client.backoffice.ui.visor.IVisor;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid.MoneyInCandidateLister;

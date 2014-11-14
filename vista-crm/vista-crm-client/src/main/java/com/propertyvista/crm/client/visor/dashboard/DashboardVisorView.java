@@ -21,7 +21,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
 
-import com.pyx4j.site.client.ui.visor.AbstractVisorPaneView;
+import com.pyx4j.site.client.backoffice.ui.visor.AbstractVisorPaneView;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
