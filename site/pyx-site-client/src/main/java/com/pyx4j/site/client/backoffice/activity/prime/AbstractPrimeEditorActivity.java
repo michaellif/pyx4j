@@ -52,8 +52,6 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
 
     private Key entityId;
 
-    private String parentClassName;
-
     private Key parentId;
 
     private int tabIndex;
@@ -72,7 +70,6 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
 
         entityId = null;
         parentId = null;
-        parentClassName = null;
         tabIndex = -1;
 
         String val;
@@ -95,10 +92,6 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
                 parentId = null;
             }
         }
-        if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_PARENT_CLASS)) != null) {
-            // TODO: currently we can't restore java class by it's name in GWT - so use just name instead - find the solution...
-            parentClassName = val;
-        }
         if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_TAB_IDX)) != null) {
             tabIndex = Integer.parseInt(val);
         }
@@ -114,10 +107,6 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
 
     public Key getEntityId() {
         return entityId;
-    }
-
-    public String getParentClassName() {
-        return parentClassName;
     }
 
     public final Key getParentId() {
