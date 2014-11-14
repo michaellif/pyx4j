@@ -52,12 +52,10 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
                     @Override
                     public void execute() {
                         AppPlace current = AppSite.getPlaceController().getWhere();
-                        if ((current instanceof PublicPlace) || (!ClientContext.isAuthenticated())) {
+                        if ((!(current instanceof PublicPlace) && !ClientContext.isAuthenticated()) || // Not authenticated user on non-public place
+                                !isPlaceNavigable(current) || // Place is not navigable for current user
+                                !current.isStable()) { // Place is not stable, should leave
                             AppSite.getPlaceController().goTo(AppPlace.NOWHERE, false);
-                        } else {
-                            if (!isPlaceNavigable(current)) {
-                                AppSite.getPlaceController().goTo(AppPlace.NOWHERE, false);
-                            }
                         }
                     }
                 });
