@@ -39,7 +39,6 @@ public interface ApplicationDocumentationPolicy extends Policy, TenantsAccessibl
     @Caption(description = "IDs/Documents that accepted as valid IDs")
     IList<IdentificationDocumentType> allowedIDs();
 
-    @NotNull
     @Editor(type = EditorType.radiogroup)
     @Caption(description = "Is the proof of income is mandatory")
     IPrimitive<Boolean> mandatoryProofOfIncome();
@@ -53,7 +52,6 @@ public interface ApplicationDocumentationPolicy extends Policy, TenantsAccessibl
     @Caption(description = "Documents that accepted as valid proof of income")
     IList<ProofOfIncomeDocumentType> allowedIncomeDocuments();
 
-    @NotNull
     @Editor(type = EditorType.radiogroup)
     @Caption(description = "Is the proof of asset is mandatory")
     IPrimitive<Boolean> mandatoryProofOfAsset();
