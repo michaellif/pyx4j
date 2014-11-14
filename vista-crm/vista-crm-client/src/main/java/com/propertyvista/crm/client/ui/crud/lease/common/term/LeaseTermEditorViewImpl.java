@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -46,7 +46,7 @@ public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO>
 //                setCaption(i18n.tr("Lease"));
 //            } else if (value.lease().status().getValue() == Lease.Status.ExistingLease) {
 //                setCaption(i18n.tr("Current Lease"));
-//            } else 
+//            } else
             if (value.lease().status().getValue() == Lease.Status.Application) {
                 setCaption(i18n.tr("Lease Application"));
             }
@@ -61,6 +61,9 @@ public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO>
 
         // just clear all unit-related data:
         form.get(form.proto().unit()).reset();
+        form.get(form.proto().version().utilities()).reset();
+
+        form.getValue().selectedServiceItems().clear();
 
         resetServiceData();
     }

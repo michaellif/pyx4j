@@ -417,13 +417,13 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                     LogicalDate dateToCompare = getValue().lease().creationDate().isNull() ? new LogicalDate(ClientContext.getServerDate()) : getValue()
                             .lease().creationDate().getValue();
                     if (getValue().lease().status().getValue() == Lease.Status.Application) {
-                        return new FutureDateIncludeTodayValidator(dateToCompare, i18n.tr("The Date Must Be Later Than Or Equal To Application Creation Date"))
+                        return new FutureDateIncludeTodayValidator(dateToCompare, i18n.tr("The Date must be later than or equal to Application Creation Date"))
                                 .isValid(getCComponent());
                     } else if (getValue().lease().status().getValue() == Lease.Status.NewLease) {
-                        return new FutureDateIncludeTodayValidator(dateToCompare, i18n.tr("The Date Must Be Later Than Or Equal To Lease Creation Date"))
+                        return new FutureDateIncludeTodayValidator(dateToCompare, i18n.tr("The Date must be later than or equal to Lease Creation Date"))
                                 .isValid(getCComponent());
                     } else if (getValue().lease().status().getValue() == Lease.Status.ExistingLease) {
-                        return new PastDateValidator(dateToCompare, i18n.tr("The Date Must Be Earlier Than Lease Creation Date")).isValid(getCComponent());
+                        return new PastDateValidator(dateToCompare, i18n.tr("The Date must be earlier than Lease Creation Date")).isValid(getCComponent());
                     }
                 }
                 return null;
@@ -508,7 +508,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         @Override
         protected void addItem() {
             if (LeaseTermForm.this.getValue().unit().isNull()) {
-                MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select A Unit First"));
+                MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Select the Unit first, please"));
             } else {
                 new BuildingUtilitySelectorDialog().show();
             }

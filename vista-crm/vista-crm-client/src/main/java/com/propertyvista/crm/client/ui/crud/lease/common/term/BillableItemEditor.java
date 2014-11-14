@@ -193,7 +193,8 @@ public class BillableItemEditor extends CForm<BillableItem> {
             get(proto().agreedPrice()).setMandatory(false);
         }
 
-        recalculateDeposits.setVisible(false);
+        setDepositsVisible(false);
+        adjustmentPanel.setVisible(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -337,7 +338,7 @@ public class BillableItemEditor extends CForm<BillableItem> {
                     }
                     break;
                 default:
-                    // ok - there is no extra-data for other types!.. 
+                    // ok - there is no extra-data for other types!..
                 }
             }
 
