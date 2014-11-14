@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.tools.legal.l1;
 
-import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView;
+import com.pyx4j.site.client.backoffice.ui.prime.wizard.IPrimeWizardView;
 
 import com.propertyvista.crm.rpc.dto.legal.l1.L1FormDataReviewWizardDTO;
 
-public interface L1FormDataReviewWizardView extends IWizardView<L1FormDataReviewWizardDTO> {
+public interface L1FormDataReviewWizardView extends IPrimeWizardView<L1FormDataReviewWizardDTO> {
 
 }

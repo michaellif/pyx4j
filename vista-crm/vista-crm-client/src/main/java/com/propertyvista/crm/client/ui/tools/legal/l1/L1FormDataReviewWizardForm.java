@@ -21,7 +21,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView;
+import com.pyx4j.site.client.backoffice.ui.prime.wizard.IPrimeWizardView;
 import com.pyx4j.site.client.backoffice.ui.prime.wizard.WizardForm;
 import com.pyx4j.widgets.client.Button;
 
@@ -43,7 +43,7 @@ public class L1FormDataReviewWizardForm extends WizardForm<L1FormDataReviewWizar
 
     private Button editToggleButton;
 
-    public L1FormDataReviewWizardForm(IWizardView<? extends IEntity> view) {
+    public L1FormDataReviewWizardForm(IPrimeWizardView<? extends IEntity> view) {
         super(L1FormDataReviewWizardDTO.class, view);
         addStep(createRentalUnitAddressStep().asWidget(), i18n.tr("Rental Unit Address"));
         addStep(createRelatedFilesStep().asWidget(), i18n.tr("Related Files"));

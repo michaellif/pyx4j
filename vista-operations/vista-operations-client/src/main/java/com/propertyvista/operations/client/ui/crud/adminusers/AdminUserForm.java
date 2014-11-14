@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.rpc.dto.OperationsUserDTO;
@@ -37,7 +37,7 @@ public class AdminUserForm extends OperationsEntityForm<OperationsUserDTO> {
 
     private Condition isNewUserCondition;
 
-    public AdminUserForm(IFormView<OperationsUserDTO, ?> view) {
+    public AdminUserForm(IPrimeFormView<OperationsUserDTO, ?> view) {
         super(OperationsUserDTO.class, view);
 
         conditionalVisibilityMap = new HashMap<CComponent<?, ?, ?, ?>, Condition>();

@@ -14,14 +14,14 @@
 package com.propertyvista.crm.client.ui.crud.administration.website.content;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.crm.rpc.CrmCrudAppPlace;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
-public interface SiteViewer extends IViewerView<SiteDescriptorDTO> {
+public interface SiteViewer extends IPrimeViewerView<SiteDescriptorDTO> {
 
-    interface Presenter extends IViewerView.IViewerPresenter {
+    interface Presenter extends IPrimeViewerView.IPrimeViewerPresenter {
 
         void viewChild(Key id);
 

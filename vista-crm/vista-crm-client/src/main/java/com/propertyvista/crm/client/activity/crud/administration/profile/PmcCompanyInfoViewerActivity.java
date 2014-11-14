@@ -23,7 +23,7 @@ import com.propertyvista.crm.client.ui.crud.administration.profile.companyinfo.P
 import com.propertyvista.crm.rpc.dto.admin.PmcCompanyInfoDTO;
 import com.propertyvista.crm.rpc.services.admin.PmcCompanyInfoCrudService;
 
-public class PmcCompanyInfoViewerActivity extends CrmViewerActivity<PmcCompanyInfoDTO> implements PmcCompanyInfoViewerView.IViewerPresenter {
+public class PmcCompanyInfoViewerActivity extends CrmViewerActivity<PmcCompanyInfoDTO> implements PmcCompanyInfoViewerView.IPrimeViewerPresenter {
 
     public PmcCompanyInfoViewerActivity(CrudAppPlace place) {
         super(PmcCompanyInfoDTO.class, place, CrmSite.getViewFactory().getView(PmcCompanyInfoViewerView.class), GWT

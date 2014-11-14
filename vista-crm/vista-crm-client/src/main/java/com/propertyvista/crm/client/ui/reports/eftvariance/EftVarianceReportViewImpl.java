@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.reports.eftvariance;
 
-import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractReport;
+import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractPrimeReport;
 
 import com.propertyvista.domain.reports.EftVarianceReportMetadata;
 
-public class EftVarianceReportViewImpl extends AbstractReport<EftVarianceReportMetadata> implements EftVarianceReportView {
+public class EftVarianceReportViewImpl extends AbstractPrimeReport<EftVarianceReportMetadata> implements EftVarianceReportView {
 
     public EftVarianceReportViewImpl() {
         setReportWidget(new EftVarianceReportWidget(), null, new EftVarianceReportSettingsForm());

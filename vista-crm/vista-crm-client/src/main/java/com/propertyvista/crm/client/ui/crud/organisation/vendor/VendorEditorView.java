@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.vendor;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
 
 import com.propertyvista.domain.property.vendor.Vendor;
 
-public interface VendorEditorView extends IEditorView<Vendor> {
+public interface VendorEditorView extends IPrimeEditorView<Vendor> {
 
 }

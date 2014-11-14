@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Anchor;
 
@@ -71,7 +71,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
     private Anchor auditRecordsLink;
 
-    public PmcForm(IFormView<PmcDTO, ?> view) {
+    public PmcForm(IPrimeFormView<PmcDTO, ?> view) {
         super(PmcDTO.class, view);
 
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));

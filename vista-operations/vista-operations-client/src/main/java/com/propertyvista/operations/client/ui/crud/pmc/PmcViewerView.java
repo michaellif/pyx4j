@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.pmc;
 
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
@@ -23,9 +23,9 @@ import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.rpc.dto.PmcDTO;
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 
-public interface PmcViewerView extends IViewerView<PmcDTO> {
+public interface PmcViewerView extends IPrimeViewerView<PmcDTO> {
 
-    interface Presenter extends IViewerView.IViewerPresenter {
+    interface Presenter extends IPrimeViewerView.IPrimeViewerPresenter {
 
         void resetCache();
 

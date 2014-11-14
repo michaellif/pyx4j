@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.crm.client.resources.CrmResources;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -29,7 +29,7 @@ public class ARPolicyForm extends PolicyDTOTabPanelBasedForm<ARPolicyDTO> {
 
     private static final I18n i18n = I18n.get(ARPolicyForm.class);
 
-    public ARPolicyForm(IFormView<ARPolicyDTO, ?> view) {
+    public ARPolicyForm(IPrimeFormView<ARPolicyDTO, ?> view) {
         super(ARPolicyDTO.class, view);
         addTab(createARPoliciesTab(), i18n.tr("AR Settings"));
     }

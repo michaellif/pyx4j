@@ -14,14 +14,14 @@
 package com.propertyvista.crm.client.ui.wizard.creditcheck;
 
 import com.pyx4j.site.client.IsView;
-import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView;
+import com.pyx4j.site.client.backoffice.ui.prime.wizard.IPrimeWizardView;
 
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.dto.vista2pmc.CreditCheckSetupDTO;
 
-public interface CreditCheckWizardView extends IWizardView<CreditCheckSetupDTO>, IsView {
+public interface CreditCheckWizardView extends IPrimeWizardView<CreditCheckSetupDTO>, IsView {
 
-    interface Presenter extends IWizardView.IWizardPresenter {
+    interface Presenter extends IPrimeWizardView.IPrimeWizardPresenter {
     }
 
     void setCreditCheckFees(AbstractEquifaxFee creditCheckFees);

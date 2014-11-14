@@ -14,14 +14,14 @@
 package com.propertyvista.crm.client.ui.wizard.onlinepayment;
 
 import com.pyx4j.site.client.IsView;
-import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView;
+import com.pyx4j.site.client.backoffice.ui.prime.wizard.IPrimeWizardView;
 
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
 import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
 
-public interface OnlinePaymentWizardView extends IWizardView<OnlinePaymentSetupDTO>, IsView {
+public interface OnlinePaymentWizardView extends IPrimeWizardView<OnlinePaymentSetupDTO>, IsView {
 
-    interface Persenter extends IWizardView.IWizardPresenter {
+    interface Persenter extends IPrimeWizardView.IPrimeWizardPresenter {
 
     }
 

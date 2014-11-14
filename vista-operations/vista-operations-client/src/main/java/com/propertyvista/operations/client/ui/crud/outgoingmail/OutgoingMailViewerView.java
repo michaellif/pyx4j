@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.outgoingmail;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.operations.rpc.dto.OutgoingMailQueueDTO;
 
-public interface OutgoingMailViewerView extends IViewerView<OutgoingMailQueueDTO> {
+public interface OutgoingMailViewerView extends IPrimeViewerView<OutgoingMailQueueDTO> {
 
 }

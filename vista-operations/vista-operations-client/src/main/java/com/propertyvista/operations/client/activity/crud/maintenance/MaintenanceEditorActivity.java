@@ -23,7 +23,7 @@ import com.propertyvista.operations.client.ui.crud.maintenance.MaintenanceEditor
 import com.propertyvista.operations.domain.VistaSystemMaintenanceState;
 import com.propertyvista.operations.rpc.services.MaintenanceCrudService;
 
-public class MaintenanceEditorActivity extends AbstractPrimeEditorActivity<VistaSystemMaintenanceState> implements MaintenanceEditorView.IEditorPresenter {
+public class MaintenanceEditorActivity extends AbstractPrimeEditorActivity<VistaSystemMaintenanceState> implements MaintenanceEditorView.IPrimeEditorPresenter {
 
     public MaintenanceEditorActivity(CrudAppPlace place) {
         super(VistaSystemMaintenanceState.class, place, OperationsSite.getViewFactory().getView(MaintenanceEditorView.class), GWT

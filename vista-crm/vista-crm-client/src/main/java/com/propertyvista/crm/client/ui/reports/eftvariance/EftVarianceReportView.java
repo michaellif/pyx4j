@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.ui.reports.eftvariance;
 
 import com.pyx4j.site.client.IsView;
-import com.pyx4j.site.client.backoffice.ui.prime.report.IReportView;
+import com.pyx4j.site.client.backoffice.ui.prime.report.IPrimeReportView;
 
 import com.propertyvista.domain.reports.EftVarianceReportMetadata;
 
-public interface EftVarianceReportView extends IReportView<EftVarianceReportMetadata>, IsView {
+public interface EftVarianceReportView extends IPrimeReportView<EftVarianceReportMetadata>, IsView {
 
 }

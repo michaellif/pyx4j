@@ -19,7 +19,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.rpc.dto.SimulationDTO;
@@ -28,7 +28,7 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
 
     private final static I18n i18n = I18n.get(SimulationForm.class);
 
-    public SimulationForm(IFormView<SimulationDTO, ?> view) {
+    public SimulationForm(IPrimeFormView<SimulationDTO, ?> view) {
         super(SimulationDTO.class, view);
 
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));

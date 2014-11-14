@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.reports.eft;
 
-import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractReport;
+import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractPrimeReport;
 
 import com.propertyvista.domain.reports.EftReportMetadata;
 
-public class EftReportViewImpl extends AbstractReport<EftReportMetadata> implements EftReportView {
+public class EftReportViewImpl extends AbstractPrimeReport<EftReportMetadata> implements EftReportView {
 
     public EftReportViewImpl() {
         setReportWidget(new EftReportWidget(), null, new EftReportSettingsForm());

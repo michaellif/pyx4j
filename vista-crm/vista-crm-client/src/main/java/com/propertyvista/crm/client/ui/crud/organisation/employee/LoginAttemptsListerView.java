@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView;
 
 import com.propertyvista.crm.rpc.dto.account.LoginAttemptDTO;
 
-public interface LoginAttemptsListerView extends IListerView<LoginAttemptDTO> {
+public interface LoginAttemptsListerView extends IPrimeListerView<LoginAttemptDTO> {
 }

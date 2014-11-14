@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.portal.resident;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView;
 
 import com.propertyvista.domain.policy.dto.ResidentPortalPolicyDTO;
 
-public interface ResidentPortalPolicyListerView extends IListerView<ResidentPortalPolicyDTO> {
+public interface ResidentPortalPolicyListerView extends IPrimeListerView<ResidentPortalPolicyDTO> {
 
 }

@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.pmc;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.common.client.ui.components.editors.dto.wizards.BusinessInformationForm;
 import com.propertyvista.common.client.ui.components.editors.dto.wizards.PersonalInformationForm;
@@ -27,7 +27,7 @@ public class EquifaxApprovalForm extends OperationsEntityForm<EquifaxSetupReques
 
     private static final I18n i18n = I18n.get(EquifaxApprovalForm.class);
 
-    public EquifaxApprovalForm(IFormView<EquifaxSetupRequestDTO, ?> view) {
+    public EquifaxApprovalForm(IPrimeFormView<EquifaxSetupRequestDTO, ?> view) {
         super(EquifaxSetupRequestDTO.class, view);
         this.setEditable(false);
 

@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
@@ -46,7 +46,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
     private static final I18n i18n = I18n.get(CustomerCreditCheckLongReportForm.class);
 
     @SuppressWarnings("unused")
-    public CustomerCreditCheckLongReportForm(IFormView<CustomerCreditCheckLongReportDTO, ?> view) {
+    public CustomerCreditCheckLongReportForm(IPrimeFormView<CustomerCreditCheckLongReportDTO, ?> view) {
         super(CustomerCreditCheckLongReportDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

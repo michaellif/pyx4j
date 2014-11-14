@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public interface DashboardManagementEditorView extends IEditorView<DashboardMetadata> {
+public interface DashboardManagementEditorView extends IPrimeEditorView<DashboardMetadata> {
 
     void setNewDashboardMode(boolean isNewDashboard);
 

@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -33,7 +33,7 @@ public class TriggerForm extends OperationsEntityForm<TriggerDTO> {
 
     private static final I18n i18n = I18n.get(TriggerForm.class);
 
-    public TriggerForm(IFormView<TriggerDTO, ?> view) {
+    public TriggerForm(IPrimeFormView<TriggerDTO, ?> view) {
         super(TriggerDTO.class, view);
 
         Tab tab = addTab(createDetailsTab(), i18n.tr("Details"));

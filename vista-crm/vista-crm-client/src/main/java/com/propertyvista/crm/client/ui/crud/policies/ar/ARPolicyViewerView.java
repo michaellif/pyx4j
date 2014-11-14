@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.ar;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.domain.policy.dto.ARPolicyDTO;
 
-public interface ARPolicyViewerView extends IViewerView<ARPolicyDTO> {
+public interface ARPolicyViewerView extends IPrimeViewerView<ARPolicyDTO> {
 
 }

@@ -39,7 +39,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -65,7 +65,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
     private final Tab marketingTab;
 
-    public FloorplanForm(IFormView<FloorplanDTO, ?> view) {
+    public FloorplanForm(IPrimeFormView<FloorplanDTO, ?> view) {
         super(FloorplanDTO.class, view);
 
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));

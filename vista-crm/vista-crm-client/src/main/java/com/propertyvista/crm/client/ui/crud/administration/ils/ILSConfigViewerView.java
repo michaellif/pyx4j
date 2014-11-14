@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.ils;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.dto.vista2pmc.ILSConfigDTO;
 
-public interface ILSConfigViewerView extends IViewerView<ILSConfigDTO> {
+public interface ILSConfigViewerView extends IPrimeViewerView<ILSConfigDTO> {
 
 }

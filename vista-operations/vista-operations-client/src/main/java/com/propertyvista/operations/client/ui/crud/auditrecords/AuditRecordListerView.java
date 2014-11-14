@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.auditrecords;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView;
 
 import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
 
-public interface AuditRecordListerView extends IListerView<AuditRecordOperationsDTO> {
+public interface AuditRecordListerView extends IPrimeListerView<AuditRecordOperationsDTO> {
 
 }

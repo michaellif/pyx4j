@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.financial.arcode;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.domain.financial.ARCode;
 
-public interface ARCodeViewerView extends IViewerView<ARCode>, HasYardiIntegrationMode {
+public interface ARCodeViewerView extends IPrimeViewerView<ARCode>, HasYardiIntegrationMode {
 
 }

@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.CPhoneField.PhoneType;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog.Formatter;
 
@@ -46,7 +46,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
     private ARCodeFolder arCodeFolder;
 
-    public N4PolicyForm(IFormView<N4PolicyDTO, ?> view) {
+    public N4PolicyForm(IPrimeFormView<N4PolicyDTO, ?> view) {
         super(N4PolicyDTO.class, view);
 
         FormPanel signatureFormPanel = new FormPanel(this);

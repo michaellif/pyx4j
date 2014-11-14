@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -54,7 +54,7 @@ public class DirectDebitSimFileForm extends OperationsEntityForm<DirectDebitSimF
 
     }
 
-    public DirectDebitSimFileForm(IFormView<DirectDebitSimFile, ?> view) {
+    public DirectDebitSimFileForm(IPrimeFormView<DirectDebitSimFile, ?> view) {
         super(DirectDebitSimFile.class, view);
 
         FormPanel formPanel = new FormPanel(this);

@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.reports.residentinsurance;
 
-import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractReport;
+import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractPrimeReport;
 
 import com.propertyvista.domain.reports.ResidentInsuranceReportMetadata;
 
-public class ResidentInsuranceReportViewImpl extends AbstractReport<ResidentInsuranceReportMetadata> implements ResidentInsuranceReportView {
+public class ResidentInsuranceReportViewImpl extends AbstractPrimeReport<ResidentInsuranceReportMetadata> implements ResidentInsuranceReportView {
 
     public ResidentInsuranceReportViewImpl() {
         setReportWidget(new ResidentInsuranceReportWidget(), null, new ResidentInsuranceReportSettingsForm());

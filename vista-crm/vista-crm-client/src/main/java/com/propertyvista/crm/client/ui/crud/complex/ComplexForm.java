@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.dto.ComplexDTO;
@@ -32,7 +32,7 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
 
     private static final I18n i18n = I18n.get(ComplexForm.class);
 
-    public ComplexForm(IFormView<ComplexDTO, ?> view) {
+    public ComplexForm(IPrimeFormView<ComplexDTO, ?> view) {
         super(ComplexDTO.class, view);
 
         selectTab(addTab(createGeneralPanel(), i18n.tr("General")));

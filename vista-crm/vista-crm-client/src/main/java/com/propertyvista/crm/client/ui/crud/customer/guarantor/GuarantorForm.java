@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantForm;
@@ -26,7 +26,7 @@ public class GuarantorForm extends LeaseParticipantForm<GuarantorDTO> {
 
     private static final I18n i18n = I18n.get(GuarantorForm.class);
 
-    public GuarantorForm(IFormView<GuarantorDTO, ?> view) {
+    public GuarantorForm(IPrimeFormView<GuarantorDTO, ?> view) {
         super(GuarantorDTO.class, view);
 
         Tab tab;

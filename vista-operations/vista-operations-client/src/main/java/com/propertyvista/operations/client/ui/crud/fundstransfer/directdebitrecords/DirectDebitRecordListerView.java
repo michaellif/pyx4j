@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.directdebitrecords;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView;
 
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 
-public interface DirectDebitRecordListerView extends IListerView<DirectDebitRecord> {
+public interface DirectDebitRecordListerView extends IPrimeListerView<DirectDebitRecord> {
 
 }

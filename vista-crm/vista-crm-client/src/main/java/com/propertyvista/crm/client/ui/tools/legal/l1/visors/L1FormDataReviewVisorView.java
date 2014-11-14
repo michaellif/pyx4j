@@ -22,7 +22,7 @@ public class L1FormDataReviewVisorView extends L1FormDataReviewWizardViewImpl im
 
     private final Controller controller;
 
-    public L1FormDataReviewVisorView(Controller controller, L1FormDataReviewWizardView.IWizardPresenter presenter) {
+    public L1FormDataReviewVisorView(Controller controller, L1FormDataReviewWizardView.IPrimeWizardPresenter presenter) {
         this.controller = controller;
         this.setPresenter(presenter);
         this.asWidget().addStyleName(L1VisorStyles.L1GenerationVisor.name());

@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.availablereport;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
 
 import com.propertyvista.domain.reports.AvailableCrmReport;
 
-public interface AvailableCrmReportEditorView extends IEditorView<AvailableCrmReport> {
+public interface AvailableCrmReportEditorView extends IPrimeEditorView<AvailableCrmReport> {
 
 }

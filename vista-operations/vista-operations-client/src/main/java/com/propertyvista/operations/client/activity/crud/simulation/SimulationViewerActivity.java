@@ -24,7 +24,7 @@ import com.propertyvista.operations.client.ui.crud.simulation.SimulationViewerVi
 import com.propertyvista.operations.rpc.dto.SimulationDTO;
 import com.propertyvista.operations.rpc.services.SimulationService;
 
-public class SimulationViewerActivity extends AdminViewerActivity<SimulationDTO> implements SimulationViewerView.IViewerPresenter {
+public class SimulationViewerActivity extends AdminViewerActivity<SimulationDTO> implements SimulationViewerView.IPrimeViewerPresenter {
 
     public SimulationViewerActivity(CrudAppPlace place) {
         super(SimulationDTO.class, place, OperationsSite.getViewFactory().getView(SimulationViewerView.class), GWT

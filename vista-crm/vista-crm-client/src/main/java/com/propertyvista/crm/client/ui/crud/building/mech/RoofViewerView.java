@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.dto.RoofDTO;
 
-public interface RoofViewerView extends IViewerView<RoofDTO> {
+public interface RoofViewerView extends IPrimeViewerView<RoofDTO> {
 
 }

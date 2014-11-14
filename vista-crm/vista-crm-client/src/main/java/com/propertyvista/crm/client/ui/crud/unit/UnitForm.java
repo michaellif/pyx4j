@@ -37,7 +37,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntitySelectorHyperlink;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
@@ -57,7 +57,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
     private final FormPanel catalogMarketPricesPanel;
 
-    public UnitForm(IFormView<AptUnitDTO, ?> view) {
+    public UnitForm(IPrimeFormView<AptUnitDTO, ?> view) {
         super(AptUnitDTO.class, view);
 
         catalogMarketPricesPanel = new FormPanel(this);

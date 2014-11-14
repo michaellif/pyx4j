@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.operationsalert;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.operations.rpc.dto.OperationsAlertDTO;
 
-public interface OperationsAlertViewerView extends IViewerView<OperationsAlertDTO> {
+public interface OperationsAlertViewerView extends IPrimeViewerView<OperationsAlertDTO> {
 
 }

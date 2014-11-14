@@ -55,8 +55,8 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntitySelectorHyperlink;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.pyx4j.widgets.client.images.HelperImages;
@@ -129,7 +129,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     // multiple buildings that belong to the same Yardi account will share the same Meta
     private final Map<String, MaintenanceRequestMetadata> categoryMetaCache = new HashMap<String, MaintenanceRequestMetadata>();
 
-    public MaintenanceRequestForm(IFormView<MaintenanceRequestDTO, ?> view) {
+    public MaintenanceRequestForm(IPrimeFormView<MaintenanceRequestDTO, ?> view) {
         super(MaintenanceRequestDTO.class, view);
 
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));
@@ -151,7 +151,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                     initSelectors(meta);
                 }
             };
-            if (getParentView() instanceof IEditorView) {
+            if (getParentView() instanceof IPrimeEditorView) {
                 ((MaintenanceRequestEditorView.Presenter) getParentView().getPresenter()).getCategoryMeta(callback, bld.getPrimaryKey());
             } else {
                 ((MaintenanceRequestViewerView.Presenter) getParentView().getPresenter()).getCategoryMeta(callback, bld.getPrimaryKey());

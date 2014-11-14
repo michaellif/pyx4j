@@ -14,11 +14,11 @@
 package com.propertyvista.crm.client.ui.tools.legal.l1;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.wizard.AbstractWizard;
+import com.pyx4j.site.client.backoffice.ui.prime.wizard.AbstractPrimeWizard;
 
 import com.propertyvista.crm.rpc.dto.legal.l1.L1FormDataReviewWizardDTO;
 
-public class L1FormDataReviewWizardViewImpl extends AbstractWizard<L1FormDataReviewWizardDTO> implements L1FormDataReviewWizardView {
+public class L1FormDataReviewWizardViewImpl extends AbstractPrimeWizard<L1FormDataReviewWizardDTO> implements L1FormDataReviewWizardView {
 
     private static final I18n i18n = I18n.get(L1FormDataReviewWizardViewImpl.class);
 

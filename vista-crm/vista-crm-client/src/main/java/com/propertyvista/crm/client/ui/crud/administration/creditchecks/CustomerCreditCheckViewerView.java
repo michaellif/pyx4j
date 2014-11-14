@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.creditchecks;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 
-public interface CustomerCreditCheckViewerView extends IViewerView<CustomerCreditCheckDTO> {
+public interface CustomerCreditCheckViewerView extends IPrimeViewerView<CustomerCreditCheckDTO> {
 
 }

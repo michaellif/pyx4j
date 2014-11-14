@@ -18,7 +18,7 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.crm.client.visor.communityevent.CommunityEventVisorController;
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
@@ -28,9 +28,9 @@ import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 
-public interface BuildingViewerView extends IViewerView<BuildingDTO> {
+public interface BuildingViewerView extends IPrimeViewerView<BuildingDTO> {
 
-    public interface BuildingViewerPresenter extends BuildingPresenterCommon, IViewerView.IViewerPresenter {
+    public interface BuildingViewerPresenter extends BuildingPresenterCommon, IPrimeViewerView.IPrimeViewerPresenter {
 
         void setMerchantAccount(AsyncCallback<VoidSerializable> callback, MerchantAccount merchantAccountStub);
 

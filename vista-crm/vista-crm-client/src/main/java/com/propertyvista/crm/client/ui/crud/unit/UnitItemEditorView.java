@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
 
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
-public interface UnitItemEditorView extends IEditorView<AptUnitItem> {
+public interface UnitItemEditorView extends IPrimeEditorView<AptUnitItem> {
 
 }

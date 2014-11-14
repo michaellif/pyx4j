@@ -13,13 +13,13 @@
  */
 package com.propertyvista.operations.client.ui.crud.systemdefaults;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.operations.rpc.dto.VistaSystemDefaultsDTO;
 
-public interface VistaSystemDefaultsViewerView extends IViewerView<VistaSystemDefaultsDTO> {
+public interface VistaSystemDefaultsViewerView extends IPrimeViewerView<VistaSystemDefaultsDTO> {
 
-    interface Presenter extends IViewerView.IViewerPresenter {
+    interface Presenter extends IPrimeViewerView.IPrimeViewerPresenter {
 
     }
 }

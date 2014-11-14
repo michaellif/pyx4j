@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.payment;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public interface PaymentRecordViewerView extends IViewerView<PaymentRecordDTO> {
+public interface PaymentRecordViewerView extends IPrimeViewerView<PaymentRecordDTO> {
 
-    interface Presenter extends IViewerView.IViewerPresenter {
+    interface Presenter extends IPrimeViewerView.IPrimeViewerPresenter {
 
         void schedulePayment();
 

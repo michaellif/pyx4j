@@ -41,7 +41,7 @@ import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -66,7 +66,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
     private final CMoneyPercentCombo maxTotalFee = new CMoneyPercentCombo();
 
-    public LeaseBillingPolicyForm(IFormView<LeaseBillingPolicyDTO, ?> view) {
+    public LeaseBillingPolicyForm(IPrimeFormView<LeaseBillingPolicyDTO, ?> view) {
         super(LeaseBillingPolicyDTO.class, view);
 
         addTab(createBillingPanel(), i18n.tr("Billing"));

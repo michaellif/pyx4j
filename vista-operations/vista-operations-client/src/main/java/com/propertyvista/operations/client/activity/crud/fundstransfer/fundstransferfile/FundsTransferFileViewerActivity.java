@@ -24,7 +24,7 @@ import com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferfi
 import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
 import com.propertyvista.operations.rpc.services.PadFileCrudService;
 
-public class FundsTransferFileViewerActivity extends AbstractPrimeViewerActivity<FundsTransferFileDTO> implements FundsTransferFileViewerView.IViewerPresenter {
+public class FundsTransferFileViewerActivity extends AbstractPrimeViewerActivity<FundsTransferFileDTO> implements FundsTransferFileViewerView.IPrimeViewerPresenter {
 
     public FundsTransferFileViewerActivity(CrudAppPlace place) {
         super(FundsTransferFileDTO.class, place, OperationsSite.getViewFactory().getView(FundsTransferFileViewerView.class), GWT

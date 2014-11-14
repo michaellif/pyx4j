@@ -13,14 +13,14 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView;
 
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationReconciliationRecord;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationReconciliationCreateTO;
 
-public interface CardServiceSimulationReconciliationListerView extends IListerView<CardServiceSimulationReconciliationRecord> {
+public interface CardServiceSimulationReconciliationListerView extends IPrimeListerView<CardServiceSimulationReconciliationRecord> {
 
-    public interface Presenter extends IListerView.IListerPresenter<CardServiceSimulationReconciliationRecord> {
+    public interface Presenter extends IPrimeListerView.IPrimeListerPresenter<CardServiceSimulationReconciliationRecord> {
 
         public void createReconciliations(CardServiceSimulationReconciliationCreateTO to);
 

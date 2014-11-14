@@ -30,7 +30,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntitySelectorHyperlink;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -45,7 +45,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
 
     private static final I18n i18n = I18n.get(LeaseAdjustmentForm.class);
 
-    public LeaseAdjustmentForm(IFormView<LeaseAdjustment, ?> view) {
+    public LeaseAdjustmentForm(IPrimeFormView<LeaseAdjustment, ?> view) {
         super(LeaseAdjustment.class, view);
 
         FormPanel formPanel = new FormPanel(this);

@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -40,7 +40,7 @@ class CardServiceSimulationCardForm extends OperationsEntityForm<CardServiceSimu
 
     private CardServiceSimulationTransactionLister transactionLister;
 
-    public CardServiceSimulationCardForm(IFormView<CardServiceSimulationCard, ?> view) {
+    public CardServiceSimulationCardForm(IPrimeFormView<CardServiceSimulationCard, ?> view) {
         super(CardServiceSimulationCard.class, view);
 
         transactionLister = new CardServiceSimulationTransactionListerViewImpl.CardServiceSimulationTransactionLister();

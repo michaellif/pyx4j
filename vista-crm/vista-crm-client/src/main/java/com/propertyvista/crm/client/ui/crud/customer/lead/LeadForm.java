@@ -35,7 +35,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntitySelectorHyperlink;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
@@ -55,7 +55,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
     private static final I18n i18n = I18n.get(LeadForm.class);
 
-    public LeadForm(IFormView<Lead, ?> view) {
+    public LeadForm(IPrimeFormView<Lead, ?> view) {
         super(Lead.class, view);
 
         Tab tab = addTab(createGuestsTab(), i18n.tr("Guests"));

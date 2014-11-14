@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -32,7 +32,7 @@ public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
 
     private final static I18n i18n = I18n.get(VistaTermsForm.class);
 
-    public VistaTermsForm(IFormView<VistaTerms, ?> view) {
+    public VistaTermsForm(IPrimeFormView<VistaTerms, ?> view) {
         super(VistaTerms.class, view);
 
         FormPanel formPanel = new FormPanel(this);

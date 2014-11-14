@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.financial.tax;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView;
 
 import com.propertyvista.domain.financial.tax.Tax;
 
-public interface TaxListerView extends IListerView<Tax> {
+public interface TaxListerView extends IPrimeListerView<Tax> {
 
 }

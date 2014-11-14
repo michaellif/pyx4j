@@ -17,13 +17,13 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
 
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
-public interface LeaseParticipantEditorPresenter<E extends LeaseParticipant<?>> extends IEditorView.IEditorPresenter {
+public interface LeaseParticipantEditorPresenter<E extends LeaseParticipant<?>> extends IPrimeEditorView.IPrimeEditorPresenter {
 
     void getAllowedPaymentTypes(AsyncCallback<Vector<PaymentType>> callback);
 

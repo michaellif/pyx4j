@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -28,7 +28,7 @@ public class LockerAreaForm extends CrmEntityForm<LockerAreaDTO> {
 
     private static final I18n i18n = I18n.get(LockerAreaForm.class);
 
-    public LockerAreaForm(IFormView<LockerAreaDTO, ?> view) {
+    public LockerAreaForm(IPrimeFormView<LockerAreaDTO, ?> view) {
         super(LockerAreaDTO.class, view);
 
         Tab tab = addTab(createDetailsTab(), i18n.tr("Details"));

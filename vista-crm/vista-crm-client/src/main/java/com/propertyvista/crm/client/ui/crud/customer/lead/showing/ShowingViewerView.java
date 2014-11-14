@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead.showing;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 
-public interface ShowingViewerView extends IViewerView<ShowingDTO> {
+public interface ShowingViewerView extends IPrimeViewerView<ShowingDTO> {
 
 }

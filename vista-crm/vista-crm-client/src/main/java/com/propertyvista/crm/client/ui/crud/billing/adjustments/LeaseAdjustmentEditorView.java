@@ -13,12 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.adjustments;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
 
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
-public interface LeaseAdjustmentEditorView extends IEditorView<LeaseAdjustment> {
+public interface LeaseAdjustmentEditorView extends IPrimeEditorView<LeaseAdjustment> {
 
-    interface Presenter extends IEditorView.IEditorPresenter, LeaseAdjustmentPresenter {
+    interface Presenter extends IPrimeEditorView.IPrimeEditorPresenter, LeaseAdjustmentPresenter {
     }
 }

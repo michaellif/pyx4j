@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.reports.availability;
 
-import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractReport;
+import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractPrimeReport;
 
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 
-public class AvailabilityReportViewImpl extends AbstractReport<AvailabilityReportMetadata> implements AvailabilityReportView {
+public class AvailabilityReportViewImpl extends AbstractPrimeReport<AvailabilityReportMetadata> implements AvailabilityReportView {
 
     public AvailabilityReportViewImpl() {
         setReportWidget(new AvailabilityReportWidget(), new AvailabilityReportSettingsAdvancedForm(), new AvailabilityReportSettingsSimpleForm());

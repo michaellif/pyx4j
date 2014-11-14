@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -46,7 +46,7 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
 
     private final static I18n i18n = I18n.get(ProductTaxPolicyForm.class);
 
-    public ProductTaxPolicyForm(IFormView<ProductTaxPolicyDTO, ?> view) {
+    public ProductTaxPolicyForm(IPrimeFormView<ProductTaxPolicyDTO, ?> view) {
         super(ProductTaxPolicyDTO.class, view);
         addTab(createItemsPanel(), i18n.tr("Items"));
 

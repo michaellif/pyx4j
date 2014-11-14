@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.payment;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView;
 
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public interface PaymentRecordListerView extends IListerView<PaymentRecordDTO> {
+public interface PaymentRecordListerView extends IPrimeListerView<PaymentRecordDTO> {
 
 }

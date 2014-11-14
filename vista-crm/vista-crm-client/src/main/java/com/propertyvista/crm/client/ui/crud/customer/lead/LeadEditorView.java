@@ -13,14 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
 
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.tenant.lead.Lead;
 
-public interface LeadEditorView extends IEditorView<Lead> {
+public interface LeadEditorView extends IPrimeEditorView<Lead> {
 
-    interface Presenter extends IEditorView.IEditorPresenter {
+    interface Presenter extends IPrimeEditorView.IPrimeEditorPresenter {
 
         void setSelectedFloorplan(Floorplan selected);
     }

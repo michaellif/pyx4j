@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView;
 
 import com.propertyvista.dto.GuarantorDTO;
 
-public interface FormerGuarantorListerView extends IListerView<GuarantorDTO> {
+public interface FormerGuarantorListerView extends IPrimeListerView<GuarantorDTO> {
 
 }

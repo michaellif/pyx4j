@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.reports.autopay;
 
-import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractReport;
+import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractPrimeReport;
 
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 
-public class AutoPayChangesReportViewImpl extends AbstractReport<AutoPayChangesReportMetadata> implements AutoPayChangesReportView {
+public class AutoPayChangesReportViewImpl extends AbstractPrimeReport<AutoPayChangesReportMetadata> implements AutoPayChangesReportView {
 
     public AutoPayChangesReportViewImpl() {
         setReportWidget(new AutoPayChangesReportWidget(), null, new AutoPayChangesReportSettingsForm());

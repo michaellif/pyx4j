@@ -13,14 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.security.CrmUser;
 
-public interface DashboardManagementViewerView extends IViewerView<DashboardMetadata> {
+public interface DashboardManagementViewerView extends IPrimeViewerView<DashboardMetadata> {
 
-    interface Presenter extends IViewerView.IViewerPresenter {
+    interface Presenter extends IPrimeViewerView.IPrimeViewerPresenter {
 
         void takeOwnership(DashboardMetadata dashboardMetadatStub);
 

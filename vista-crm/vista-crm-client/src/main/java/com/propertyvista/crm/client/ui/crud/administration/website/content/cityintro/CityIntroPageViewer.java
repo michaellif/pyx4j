@@ -14,13 +14,13 @@
 package com.propertyvista.crm.client.ui.crud.administration.website.content.cityintro;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.domain.site.CityIntroPage;
 
-public interface CityIntroPageViewer extends IViewerView<CityIntroPage> {
+public interface CityIntroPageViewer extends IPrimeViewerView<CityIntroPage> {
 
-    interface Presenter extends IViewerView.IViewerPresenter {
+    interface Presenter extends IPrimeViewerView.IPrimeViewerPresenter {
 
         void viewPage(Key id);
 

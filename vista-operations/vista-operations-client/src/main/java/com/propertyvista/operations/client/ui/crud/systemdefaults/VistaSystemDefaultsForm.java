@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.systemdefaults;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.operations.client.ui.components.EquifaxFeeQuoteForm;
 import com.propertyvista.operations.client.ui.components.MerchantAccountForm;
@@ -29,7 +29,7 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
 
     public static I18n i18n = I18n.get(VistaSystemDefaultsForm.class);
 
-    public VistaSystemDefaultsForm(IFormView<VistaSystemDefaultsDTO, ?> view) {
+    public VistaSystemDefaultsForm(IPrimeFormView<VistaSystemDefaultsDTO, ?> view) {
         super(VistaSystemDefaultsDTO.class, view);
         createTabs();
     }

@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
 
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermEditorActivity.ReturnBehaviour;
 import com.propertyvista.crm.rpc.dto.lease.financial.DepositListDTO;
@@ -27,9 +27,9 @@ import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.dto.LeaseTermDTO;
 
-public interface LeaseTermEditorView extends IEditorView<LeaseTermDTO> {
+public interface LeaseTermEditorView extends IPrimeEditorView<LeaseTermDTO> {
 
-    interface Presenter extends IEditorView.IEditorPresenter {
+    interface Presenter extends IPrimeEditorView.IPrimeEditorPresenter {
 
         void setSelectedBuilding(Building item);
 

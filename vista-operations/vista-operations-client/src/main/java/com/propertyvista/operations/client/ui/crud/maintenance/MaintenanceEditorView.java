@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.maintenance;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
 
 import com.propertyvista.operations.domain.VistaSystemMaintenanceState;
 
-public interface MaintenanceEditorView extends IEditorView<VistaSystemMaintenanceState> {
+public interface MaintenanceEditorView extends IPrimeEditorView<VistaSystemMaintenanceState> {
 
 }

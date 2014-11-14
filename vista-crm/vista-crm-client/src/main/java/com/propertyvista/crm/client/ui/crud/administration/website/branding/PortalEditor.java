@@ -13,12 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.website.branding;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
 
 import com.propertyvista.dto.SiteDescriptorDTO;
 
-public interface PortalEditor extends IEditorView<SiteDescriptorDTO> {
+public interface PortalEditor extends IPrimeEditorView<SiteDescriptorDTO> {
 
-    interface Presenter extends IEditorView.IEditorPresenter {
+    interface Presenter extends IPrimeEditorView.IPrimeEditorPresenter {
     }
 }

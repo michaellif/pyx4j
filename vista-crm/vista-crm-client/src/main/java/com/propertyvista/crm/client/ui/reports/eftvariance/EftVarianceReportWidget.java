@@ -37,7 +37,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractReport;
+import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractPrimeReport;
 import com.pyx4j.site.client.backoffice.ui.prime.report.IReportWidget;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.memento.IMementoAware;
@@ -237,7 +237,7 @@ public class EftVarianceReportWidget extends HTML implements IReportWidget, IMem
         if (!r.comments().isNull()) {
             String noticeIcon = CrmImages.INSTANCE.reportsInfo().getSafeUri().asString();
             return new SafeHtmlBuilder()
-                    .appendHtmlConstant("<div style='text-align:center' class='" + AbstractReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")
+                    .appendHtmlConstant("<div style='text-align:center' class='" + AbstractPrimeReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")
                     .appendHtmlConstant(
                             "<img title='" + SafeHtmlUtils.htmlEscape(r.comments().getValue()) + "'" + " src='" + noticeIcon + "'" + " border='0' "
                                     + " style='width:15px; height:15px;text-align:center'" + ">").appendHtmlConstant("</div>").toSafeHtml();
@@ -250,7 +250,7 @@ public class EftVarianceReportWidget extends HTML implements IReportWidget, IMem
         EftVarianceReportRecordDTO r = (EftVarianceReportRecordDTO) entity;
         SafeHtmlBuilder b = new SafeHtmlBuilder();
         if (CommonsStringUtils.isStringSet(r.comments().getValue())) {
-            b.appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>")
+            b.appendHtmlConstant("<span class='" + AbstractPrimeReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>")
                     .appendEscaped(r.comments().getValue()).appendHtmlConstant("</span>");
         }
         return b.toSafeHtml();

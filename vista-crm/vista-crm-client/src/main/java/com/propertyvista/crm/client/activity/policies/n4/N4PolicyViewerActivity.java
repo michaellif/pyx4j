@@ -23,7 +23,7 @@ import com.propertyvista.crm.client.ui.crud.policies.n4.N4PolicyViewerView;
 import com.propertyvista.crm.rpc.services.policies.policy.N4PolicyCrudService;
 import com.propertyvista.domain.policy.dto.N4PolicyDTO;
 
-public class N4PolicyViewerActivity extends AbstractPrimeViewerActivity<N4PolicyDTO> implements N4PolicyViewerView.IViewerPresenter {
+public class N4PolicyViewerActivity extends AbstractPrimeViewerActivity<N4PolicyDTO> implements N4PolicyViewerView.IPrimeViewerPresenter {
 
     public N4PolicyViewerActivity(CrudAppPlace place) {
         super(N4PolicyDTO.class, place, CrmSite.getViewFactory().getView(N4PolicyViewerView.class), GWT.<N4PolicyCrudService> create(N4PolicyCrudService.class));

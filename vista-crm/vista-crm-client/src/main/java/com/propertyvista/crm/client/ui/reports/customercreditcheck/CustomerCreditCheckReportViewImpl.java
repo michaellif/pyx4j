@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.reports.customercreditcheck;
 
-import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractReport;
+import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractPrimeReport;
 
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 
-public class CustomerCreditCheckReportViewImpl extends AbstractReport<CustomerCreditCheckReportMetadata> implements CustomerCreditCheckReportView {
+public class CustomerCreditCheckReportViewImpl extends AbstractPrimeReport<CustomerCreditCheckReportMetadata> implements CustomerCreditCheckReportView {
 
     public CustomerCreditCheckReportViewImpl() {
         setReportWidget(new CustomerCreditCheckReportWidget(), null, new CustomerCreditCheckReportSettingsForm());

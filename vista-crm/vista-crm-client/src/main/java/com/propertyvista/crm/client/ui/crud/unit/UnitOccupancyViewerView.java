@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 
-public interface UnitOccupancyViewerView extends IViewerView<AptUnitOccupancySegment> {
+public interface UnitOccupancyViewerView extends IPrimeViewerView<AptUnitOccupancySegment> {
 
 }

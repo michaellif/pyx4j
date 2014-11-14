@@ -13,13 +13,13 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.pad.file;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
 
-public interface PadSimFileViewerView extends IViewerView<PadSimFile> {
+public interface PadSimFileViewerView extends IPrimeViewerView<PadSimFile> {
 
-    interface Presenter extends IViewerView.IViewerPresenter {
+    interface Presenter extends IPrimeViewerView.IPrimeViewerPresenter {
 
         public void replyAcknowledgment();
 

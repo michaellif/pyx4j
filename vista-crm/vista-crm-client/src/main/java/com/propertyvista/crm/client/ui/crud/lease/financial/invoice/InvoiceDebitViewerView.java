@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.financial.invoice;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.crm.rpc.dto.lease.financial.InvoiceDebitDTO;
 
-public interface InvoiceDebitViewerView extends IViewerView<InvoiceDebitDTO> {
+public interface InvoiceDebitViewerView extends IPrimeViewerView<InvoiceDebitDTO> {
 
 }

@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.financial.arcode;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView;
 
 import com.propertyvista.domain.financial.ARCode;
 
-public interface ARCodeListerView extends IListerView<ARCode> {
+public interface ARCodeListerView extends IPrimeListerView<ARCode> {
 
-    public interface Presenter extends IListerView.IListerPresenter<ARCode> {
+    public interface Presenter extends IPrimeListerView.IPrimeListerPresenter<ARCode> {
     }
 
 }

@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.administration.website.content.page
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.site.PageDescriptor;
@@ -25,7 +25,7 @@ public class PageForm extends CrmEntityForm<PageDescriptor> {
 
     private static final I18n i18n = I18n.get(PageForm.class);
 
-    public PageForm(IFormView<PageDescriptor, ?> view) {
+    public PageForm(IPrimeFormView<PageDescriptor, ?> view) {
         super(PageDescriptor.class, view);
 
         FormPanel formPanel = new FormPanel(this);

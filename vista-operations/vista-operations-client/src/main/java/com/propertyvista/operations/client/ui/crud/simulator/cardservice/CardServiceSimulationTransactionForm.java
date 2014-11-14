@@ -18,7 +18,7 @@ import com.pyx4j.forms.client.ui.CDateTimeTextField;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.security.shared.Context;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.operations.client.ui.components.OperationsEditorsComponentFactory;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -28,7 +28,7 @@ import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimula
 
 class CardServiceSimulationTransactionForm extends OperationsEntityForm<CardServiceSimulationTransaction> {
 
-    public CardServiceSimulationTransactionForm(IFormView<CardServiceSimulationTransaction, ?> view) {
+    public CardServiceSimulationTransactionForm(IPrimeFormView<CardServiceSimulationTransaction, ?> view) {
         super(CardServiceSimulationTransaction.class, view);
 
         FormPanel formPanel = new FormPanel(this);

@@ -24,7 +24,7 @@ import com.propertyvista.operations.client.ui.crud.tenantsure.TenantSureViewerVi
 import com.propertyvista.operations.rpc.dto.TenantSureDTO;
 import com.propertyvista.operations.rpc.services.TenantSureCrudService;
 
-public class TenantSureViewerActivity extends AbstractPrimeViewerActivity<TenantSureDTO> implements TenantSureViewerView.IViewerPresenter {
+public class TenantSureViewerActivity extends AbstractPrimeViewerActivity<TenantSureDTO> implements TenantSureViewerView.IPrimeViewerPresenter {
 
     public TenantSureViewerActivity(CrudAppPlace place) {
         super(TenantSureDTO.class, place, OperationsSite.getViewFactory().getView(TenantSureViewerView.class), GWT

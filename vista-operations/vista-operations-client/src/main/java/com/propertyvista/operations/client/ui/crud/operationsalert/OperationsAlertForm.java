@@ -18,7 +18,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.rpc.dto.OperationsAlertDTO;
@@ -27,7 +27,7 @@ public class OperationsAlertForm extends OperationsEntityForm<OperationsAlertDTO
 
     private static final I18n i18n = I18n.get(OperationsAlertForm.class);
 
-    public OperationsAlertForm(IFormView<OperationsAlertDTO, ?> view) {
+    public OperationsAlertForm(IPrimeFormView<OperationsAlertDTO, ?> view) {
         super(OperationsAlertDTO.class, view);
 
         setTabBarVisible(false);

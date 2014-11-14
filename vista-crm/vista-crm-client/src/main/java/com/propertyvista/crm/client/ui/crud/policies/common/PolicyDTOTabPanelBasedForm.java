@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
@@ -59,7 +59,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
     @SuppressWarnings("rawtypes")
     private final CComboBox<NodeType> selectPolicyScopeBox = new CComboBox<NodeType>(true);
 
-    public PolicyDTOTabPanelBasedForm(Class<POLICY_DTO> policyDTOClass, final IFormView<POLICY_DTO, ?> view) {
+    public PolicyDTOTabPanelBasedForm(Class<POLICY_DTO> policyDTOClass, final IPrimeFormView<POLICY_DTO, ?> view) {
         super(policyDTOClass, view);
 
         selectPolicyScopeBox.setViewable(isViewable());

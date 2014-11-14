@@ -34,7 +34,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -48,7 +48,7 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
 
     private final static I18n i18n = I18n.get(IdAssignmentPolicyForm.class);
 
-    public IdAssignmentPolicyForm(IFormView<IdAssignmentPolicyDTO, ?> view) {
+    public IdAssignmentPolicyForm(IPrimeFormView<IdAssignmentPolicyDTO, ?> view) {
         super(IdAssignmentPolicyDTO.class, view);
         addTab(createItemsPanel(), i18n.tr("Items"));
         if (VistaFeatures.instance().yardiIntegration()) {

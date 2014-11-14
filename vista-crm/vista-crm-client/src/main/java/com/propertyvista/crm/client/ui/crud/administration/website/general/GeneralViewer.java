@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.website.general;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.dto.SiteDescriptorDTO;
 
-public interface GeneralViewer extends IViewerView<SiteDescriptorDTO> {
+public interface GeneralViewer extends IPrimeViewerView<SiteDescriptorDTO> {
 
-    interface Presenter extends IViewerView.IViewerPresenter {
+    interface Presenter extends IPrimeViewerView.IPrimeViewerPresenter {
 
     }
 }

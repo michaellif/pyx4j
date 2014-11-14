@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.parking;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.dto.ParkingDTO;
 
-public interface ParkingViewerView extends IViewerView<ParkingDTO> {
+public interface ParkingViewerView extends IPrimeViewerView<ParkingDTO> {
 
-    interface ParkingViewerPresenter extends IViewerView.IViewerPresenter {
+    interface ParkingViewerPresenter extends IPrimeViewerView.IPrimeViewerPresenter {
     }
 
     ParkingSpotLister getSpotView();

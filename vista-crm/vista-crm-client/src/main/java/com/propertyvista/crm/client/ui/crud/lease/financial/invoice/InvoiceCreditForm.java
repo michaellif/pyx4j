@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.lease.financial.invoice;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.lease.financial.InvoiceCreditDTO;
@@ -25,7 +25,7 @@ public class InvoiceCreditForm extends CrmEntityForm<InvoiceCreditDTO> {
 
     private static final I18n i18n = I18n.get(InvoiceCreditForm.class);
 
-    public InvoiceCreditForm(IFormView<InvoiceCreditDTO, ?> view) {
+    public InvoiceCreditForm(IPrimeFormView<InvoiceCreditDTO, ?> view) {
         super(InvoiceCreditDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

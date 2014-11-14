@@ -19,7 +19,7 @@ import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.TransactionHistoryViewerYardi;
@@ -40,7 +40,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
     private final Tab depositsTab, adjustmentsTab, chargesTab, billsTab, paymentsTab, financialTab, maintenanceTab, communicationTab;
 
-    public LeaseForm(IFormView<LeaseDTO, ?> view) {
+    public LeaseForm(IPrimeFormView<LeaseDTO, ?> view) {
         super(LeaseDTO.class, view);
 
         selectTab(addTab(createDetailsTab(), i18n.tr("Details")));

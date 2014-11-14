@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.landlord;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
 
 import com.propertyvista.dto.LandlordDTO;
 
-public interface LandlordEditorView extends IEditorView<LandlordDTO> {
+public interface LandlordEditorView extends IPrimeEditorView<LandlordDTO> {
 
-    interface Presenter extends IEditorView.IEditorPresenter {
+    interface Presenter extends IPrimeEditorView.IPrimeEditorPresenter {
 
     }
 

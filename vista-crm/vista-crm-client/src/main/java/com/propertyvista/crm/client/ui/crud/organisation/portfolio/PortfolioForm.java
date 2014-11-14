@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.organisation.portfolio;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.organisation.common.BuildingFolder;
@@ -26,7 +26,7 @@ public class PortfolioForm extends CrmEntityForm<Portfolio> {
 
     private static final I18n i18n = I18n.get(PortfolioForm.class);
 
-    public PortfolioForm(IFormView<Portfolio, ?> view) {
+    public PortfolioForm(IPrimeFormView<Portfolio, ?> view) {
         super(Portfolio.class, view);
 
         FormPanel formPanel = new FormPanel(this);

@@ -21,7 +21,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCollectionCrudHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCollectionCrudHyperlink.AppPlaceBuilder;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -34,7 +34,7 @@ public class FundsReconciliationFileForm extends OperationsEntityForm<FundsRecon
 
     private static final I18n i18n = I18n.get(FundsReconciliationFileForm.class);
 
-    public FundsReconciliationFileForm(IFormView<FundsReconciliationFileDTO, ?> view) {
+    public FundsReconciliationFileForm(IPrimeFormView<FundsReconciliationFileDTO, ?> view) {
         super(FundsReconciliationFileDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

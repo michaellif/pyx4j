@@ -13,12 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.complex;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
 
 import com.propertyvista.dto.ComplexDTO;
 
-public interface ComplexEditorView extends IEditorView<ComplexDTO> {
-    interface Presenter extends IEditorView.IEditorPresenter {
+public interface ComplexEditorView extends IPrimeEditorView<ComplexDTO> {
+    interface Presenter extends IPrimeEditorView.IPrimeEditorPresenter {
 
     }
 }

@@ -23,7 +23,7 @@ import com.propertyvista.operations.client.ui.crud.simulator.dbp.DirectDebitSimR
 import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimRecord;
 import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimRecordCrudService;
 
-public class DirectDebitSimRecordEditorActivity extends AbstractPrimeEditorActivity<DirectDebitSimRecord> implements DirectDebitSimRecordEditorView.IEditorPresenter {
+public class DirectDebitSimRecordEditorActivity extends AbstractPrimeEditorActivity<DirectDebitSimRecord> implements DirectDebitSimRecordEditorView.IPrimeEditorPresenter {
 
     public DirectDebitSimRecordEditorActivity(CrudAppPlace place) {
         super(DirectDebitSimRecord.class, place, OperationsSite.getViewFactory().getView(DirectDebitSimRecordEditorView.class), GWT

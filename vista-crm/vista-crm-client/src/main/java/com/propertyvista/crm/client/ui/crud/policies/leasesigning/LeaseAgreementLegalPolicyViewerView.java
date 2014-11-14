@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leasesigning;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.domain.policy.dto.LeaseAgreementLegalPolicyDTO;
 
-public interface LeaseAgreementLegalPolicyViewerView extends IViewerView<LeaseAgreementLegalPolicyDTO> {
+public interface LeaseAgreementLegalPolicyViewerView extends IPrimeViewerView<LeaseAgreementLegalPolicyDTO> {
 
 }

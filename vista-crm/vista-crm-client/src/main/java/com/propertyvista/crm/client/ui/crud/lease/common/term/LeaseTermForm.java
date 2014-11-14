@@ -58,8 +58,8 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.form.FieldDecoratorBuilder;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
@@ -118,7 +118,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         }
     };
 
-    protected LeaseTermForm(IFormView<LeaseTermDTO, ?> view) {
+    protected LeaseTermForm(IPrimeFormView<LeaseTermDTO, ?> view) {
         super(LeaseTermDTO.class, view);
 
         setTabBarVisible(false);
@@ -189,7 +189,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                     @Override
                     public boolean onClickOk() {
                         if (!getSelectedItem().isNull()) {
-                            ((LeaseTermEditorView.Presenter) ((IEditorView<LeaseTermDTO>) getParentView()).getPresenter())
+                            ((LeaseTermEditorView.Presenter) ((IPrimeEditorView<LeaseTermDTO>) getParentView()).getPresenter())
                                     .setSelectedBuilding(getSelectedItem());
                         }
                         return true;
@@ -244,7 +244,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                     @Override
                     public boolean onClickOk() {
                         if (!getSelectedItem().isNull()) {
-                            ((LeaseTermEditorView.Presenter) ((IEditorView<LeaseTermDTO>) getParentView()).getPresenter()).setSelectedUnit(getSelectedItem());
+                            ((LeaseTermEditorView.Presenter) ((IPrimeEditorView<LeaseTermDTO>) getParentView()).getPresenter()).setSelectedUnit(getSelectedItem());
                         }
                         return true;
                     }

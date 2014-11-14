@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.administration.website.RichTextContentEditor;
@@ -45,7 +45,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
 
     private final Map<GadgetType, CComponent<?, ?, ?, ?>> panelMap = new HashMap<GadgetType, CComponent<?, ?, ?, ?>>();
 
-    public HomePageGadgetForm(IFormView<HomePageGadget, ?> view) {
+    public HomePageGadgetForm(IPrimeFormView<HomePageGadget, ?> view) {
         super(HomePageGadget.class, view);
         mainPanel = new SimplePanel();
         mainPanel.setSize("100%", "100%");

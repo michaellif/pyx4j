@@ -175,7 +175,7 @@ public class PmcViewerViewImpl extends OperationsViewerViewImplBase<PmcDTO> impl
     }
 
     @Override
-    public void setPresenter(IViewerPresenter presenter) {
+    public void setPresenter(IPrimeViewerPresenter presenter) {
         super.setPresenter(presenter);
         if (presenter != null) {
             ((PmcForm) getForm()).setCardTransactionRecordsSource(((PmcViewerView.Presenter) presenter).getCardTransactionRecordsSource());

@@ -17,15 +17,15 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
 
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.dto.BuildingDTO;
 
-public interface BuildingEditorView extends IEditorView<BuildingDTO> {
+public interface BuildingEditorView extends IPrimeEditorView<BuildingDTO> {
 
-    interface Presenter extends BuildingPresenterCommon, IEditorView.IEditorPresenter {
+    interface Presenter extends BuildingPresenterCommon, IPrimeEditorView.IPrimeEditorPresenter {
 
         void retrieveEmployee(AsyncCallback<Employee> callback, Employee employeeId);
 

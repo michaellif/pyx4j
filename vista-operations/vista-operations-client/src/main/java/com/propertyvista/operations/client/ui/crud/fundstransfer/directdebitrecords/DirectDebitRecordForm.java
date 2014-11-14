@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.directdebitrec
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
@@ -25,7 +25,7 @@ public class DirectDebitRecordForm extends OperationsEntityForm<DirectDebitRecor
 
     private static final I18n i18n = I18n.get(DirectDebitRecordForm.class);
 
-    public DirectDebitRecordForm(IFormView<DirectDebitRecord, ?> view) {
+    public DirectDebitRecordForm(IPrimeFormView<DirectDebitRecord, ?> view) {
         super(DirectDebitRecord.class, view);
 
         FormPanel formPanel = new FormPanel(this);

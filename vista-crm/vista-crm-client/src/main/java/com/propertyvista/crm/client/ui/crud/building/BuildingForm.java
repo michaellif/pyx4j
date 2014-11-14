@@ -52,7 +52,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -110,7 +110,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
     private FormPanel ilsEmailProfilePanel;
 
-    public BuildingForm(IFormView<BuildingDTO, ?> view) {
+    public BuildingForm(IPrimeFormView<BuildingDTO, ?> view) {
         super(BuildingDTO.class, view);
 
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));

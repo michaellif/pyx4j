@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.ui.reports.availability;
 
 import com.pyx4j.site.client.IsView;
-import com.pyx4j.site.client.backoffice.ui.prime.report.IReportView;
+import com.pyx4j.site.client.backoffice.ui.prime.report.IPrimeReportView;
 
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 
-public interface AvailabilityReportView extends IReportView<AvailabilityReportMetadata>, IsView {
+public interface AvailabilityReportView extends IPrimeReportView<AvailabilityReportMetadata>, IsView {
 
 }

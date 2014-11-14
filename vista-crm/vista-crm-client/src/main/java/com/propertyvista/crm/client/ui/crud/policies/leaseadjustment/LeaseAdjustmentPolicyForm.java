@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.boxes.LeaseAdjustmentReasonSelectionDialog;
@@ -38,7 +38,7 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
 
     private final static I18n i18n = I18n.get(LeaseAdjustmentPolicyForm.class);
 
-    public LeaseAdjustmentPolicyForm(IFormView<LeaseAdjustmentPolicyDTO, ?> view) {
+    public LeaseAdjustmentPolicyForm(IPrimeFormView<LeaseAdjustmentPolicyDTO, ?> view) {
         super(LeaseAdjustmentPolicyDTO.class, view);
         addTab(createItemsPanel(), i18n.tr(i18n.tr("Items")));
 

@@ -17,7 +17,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.FieldDecoratorBuilder;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.lease.financial.InvoiceDebitDTO;
@@ -26,7 +26,7 @@ public class InvoiceDebitForm extends CrmEntityForm<InvoiceDebitDTO> {
 
     private static final I18n i18n = I18n.get(InvoiceCreditForm.class);
 
-    public InvoiceDebitForm(IFormView<InvoiceDebitDTO, ?> view) {
+    public InvoiceDebitForm(IPrimeFormView<InvoiceDebitDTO, ?> view) {
         super(InvoiceDebitDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

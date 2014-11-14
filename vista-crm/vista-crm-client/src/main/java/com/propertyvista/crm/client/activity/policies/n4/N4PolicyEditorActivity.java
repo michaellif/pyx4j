@@ -27,7 +27,7 @@ import com.propertyvista.crm.rpc.services.policies.policy.N4PolicyCrudService;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.dto.N4PolicyDTO;
 
-public class N4PolicyEditorActivity extends PolicyEditorActivityBase<N4PolicyDTO> implements N4PolicyEditorView.IEditorPresenter {
+public class N4PolicyEditorActivity extends PolicyEditorActivityBase<N4PolicyDTO> implements N4PolicyEditorView.IPrimeEditorPresenter {
 
     public N4PolicyEditorActivity(CrudAppPlace place) {
         super(N4PolicyDTO.class, place, CrmSite.getViewFactory().getView(N4PolicyEditorView.class),

@@ -13,14 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.crm.client.visor.charges.ChargesVisorController;
 import com.propertyvista.dto.LeaseTermDTO;
 
-public interface LeaseTermViewerView extends IViewerView<LeaseTermDTO> {
+public interface LeaseTermViewerView extends IPrimeViewerView<LeaseTermDTO> {
 
-    interface Presenter extends IViewerView.IViewerPresenter {
+    interface Presenter extends IPrimeViewerView.IPrimeViewerPresenter {
 
         ChargesVisorController getChargesVisorController();
 

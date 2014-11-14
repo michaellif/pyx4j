@@ -26,7 +26,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
@@ -42,7 +42,7 @@ public class AutoPayHistoryForm extends CrmEntityForm<AutoPayHistoryDTO> {
 
     private static final I18n i18n = I18n.get(AutoPayHistoryForm.class);
 
-    public AutoPayHistoryForm(IFormView<AutoPayHistoryDTO, ?> view) {
+    public AutoPayHistoryForm(IPrimeFormView<AutoPayHistoryDTO, ?> view) {
         super(AutoPayHistoryDTO.class, view);
         createTabs();
     }

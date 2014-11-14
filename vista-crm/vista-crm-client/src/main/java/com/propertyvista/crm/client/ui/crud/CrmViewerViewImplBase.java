@@ -31,7 +31,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.site.client.backoffice.ui.BreadcrumbsBar;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
-import com.pyx4j.site.client.backoffice.ui.prime.form.AbstractViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.AbstractPrimeViewerView;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.versioning.VersionSelectorDialog;
@@ -41,7 +41,7 @@ import com.propertyvista.crm.rpc.VistaCrmDebugId;
 import com.propertyvista.crm.rpc.services.breadcrumbs.BreadcrumbsService;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
 
-public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewerView<E> {
+public class CrmViewerViewImplBase<E extends IEntity> extends AbstractPrimeViewerView<E> {
 
     private static final I18n i18n = I18n.get(CrmViewerViewImplBase.class);
 
@@ -265,7 +265,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewerView
     }
 
     @Override
-    public void setPresenter(IViewerPresenter presenter) {
+    public void setPresenter(IPrimeViewerPresenter presenter) {
         super.setPresenter(presenter);
         if (presenter != null) {
             reset(); // initialize the view!..

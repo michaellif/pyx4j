@@ -50,7 +50,7 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntitySelectorHyperlink;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.rpc.AppPlace;
@@ -161,7 +161,7 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         }
     };
 
-    public PaymentRecordForm(IFormView<PaymentRecordDTO, ?> view) {
+    public PaymentRecordForm(IPrimeFormView<PaymentRecordDTO, ?> view) {
         super(PaymentRecordDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.activity.policies.common;
 
 import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeEditorActivity;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.rpc.services.policies.policy.AbstractPolicyCrudService;
@@ -22,7 +22,7 @@ import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 
 public abstract class PolicyEditorActivityBase<POLICY_DTO extends PolicyDTOBase> extends AbstractPrimeEditorActivity<POLICY_DTO> {
 
-    public PolicyEditorActivityBase(Class<POLICY_DTO> entityClass, CrudAppPlace place, IEditorView<POLICY_DTO> view, AbstractPolicyCrudService<POLICY_DTO> service) {
+    public PolicyEditorActivityBase(Class<POLICY_DTO> entityClass, CrudAppPlace place, IPrimeEditorView<POLICY_DTO> view, AbstractPolicyCrudService<POLICY_DTO> service) {
         super(entityClass, place, view, service);
     }
 }

@@ -43,7 +43,7 @@ import com.pyx4j.entity.shared.utils.EntityFormatUtils;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractReport;
+import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractPrimeReport;
 import com.pyx4j.site.client.backoffice.ui.prime.report.IReportWidget;
 import com.pyx4j.widgets.client.memento.IMementoAware;
 import com.pyx4j.widgets.client.memento.IMementoInput;
@@ -282,7 +282,7 @@ public class EftReportWidget extends HTML implements IReportWidget, IMementoAwar
             @Override
             public SafeHtml formatHeader() {
                 return new SafeHtmlBuilder() //
-                        .appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>") //
+                        .appendHtmlConstant("<span class='" + AbstractPrimeReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>") //
                         .appendEscaped(i18n.tr("Notice")) //
                         .appendHtmlConstant("</span>") //
                         .toSafeHtml();
@@ -299,7 +299,7 @@ public class EftReportWidget extends HTML implements IReportWidget, IMementoAwar
                     String textValue = EntityFormatUtils.nvl_concat(" ", r.notice(), r.comments());
                     return new SafeHtmlBuilder()
                             .appendHtmlConstant(
-                                    "<div style='text-align:center' class='" + AbstractReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")
+                                    "<div style='text-align:center' class='" + AbstractPrimeReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")
                             .appendHtmlConstant("<img title='" + SafeHtmlUtils.htmlEscape(textValue) + "'" //
                                     + " src='" + noticeIcon + "'" //
                                     + " border='0' " //
@@ -322,7 +322,7 @@ public class EftReportWidget extends HTML implements IReportWidget, IMementoAwar
             @Override
             public SafeHtml formatHeader() {
                 return new SafeHtmlBuilder() //
-                        .appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>") //
+                        .appendHtmlConstant("<span class='" + AbstractPrimeReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>") //
                         .appendEscaped(i18n.tr("Notice")) //
                         .appendHtmlConstant("</span>") //
                         .toSafeHtml();
@@ -333,7 +333,7 @@ public class EftReportWidget extends HTML implements IReportWidget, IMementoAwar
                 EftReportRecordDTO r = (EftReportRecordDTO) entity;
                 SafeHtmlBuilder b = new SafeHtmlBuilder();
                 if (!r.notice().isNull() || !r.comments().isNull()) {
-                    b.appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>")
+                    b.appendHtmlConstant("<span class='" + AbstractPrimeReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>")
                             .appendEscaped(EntityFormatUtils.nvl_concat(" ", r.notice(), r.comments())).appendHtmlConstant("</span>");
                 }
                 return b.toSafeHtml();

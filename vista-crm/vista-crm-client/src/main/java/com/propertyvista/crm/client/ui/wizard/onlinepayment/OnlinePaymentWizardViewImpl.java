@@ -17,12 +17,12 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.wizard.AbstractWizard;
+import com.pyx4j.site.client.backoffice.ui.prime.wizard.AbstractPrimeWizard;
 
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
 import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
 
-public class OnlinePaymentWizardViewImpl extends AbstractWizard<OnlinePaymentSetupDTO> implements OnlinePaymentWizardView {
+public class OnlinePaymentWizardViewImpl extends AbstractPrimeWizard<OnlinePaymentSetupDTO> implements OnlinePaymentWizardView {
 
     private static final I18n i18n = I18n.get(OnlinePaymentWizardViewImpl.class);
 

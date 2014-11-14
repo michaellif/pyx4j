@@ -13,14 +13,14 @@
  */
 package com.propertyvista.operations.client.ui.crud.scheduler.run;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.rpc.dto.ExecutionStatusUpdateDTO;
 
-public interface RunViewerView extends IViewerView<Run> {
+public interface RunViewerView extends IPrimeViewerView<Run> {
 
-    interface Presenter extends IViewerView.IViewerPresenter {
+    interface Presenter extends IPrimeViewerView.IPrimeViewerPresenter {
 
         void stopRun();
     }

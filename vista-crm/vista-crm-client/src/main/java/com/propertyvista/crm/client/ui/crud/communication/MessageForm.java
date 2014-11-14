@@ -52,7 +52,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntitySelectorHyperlink;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace.Type;
@@ -84,7 +84,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
     private final MessageFolder messagesFolder;
 
-    public MessageForm(IFormView<MessageDTO, ?> view) {
+    public MessageForm(IPrimeFormView<MessageDTO, ?> view) {
         super(MessageDTO.class, view);
         setTabBarVisible(false);
         messagesFolder = new MessageFolder(this);

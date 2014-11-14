@@ -25,7 +25,7 @@ import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
 import com.propertyvista.operations.rpc.services.PadReconciliationFileCrudService;
 
 public class FundsReconciliationFileViewerActivity extends AbstractPrimeViewerActivity<FundsReconciliationFileDTO> implements
-        FundsReconciliationFileViewerView.IViewerPresenter {
+        FundsReconciliationFileViewerView.IPrimeViewerPresenter {
 
     public FundsReconciliationFileViewerActivity(CrudAppPlace place) {
         super(FundsReconciliationFileDTO.class, place, OperationsSite.getViewFactory().getView(FundsReconciliationFileViewerView.class), GWT

@@ -13,12 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.lockerarea;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
 
 import com.propertyvista.dto.LockerAreaDTO;
 
-public interface LockerAreaEditorView extends IEditorView<LockerAreaDTO> {
+public interface LockerAreaEditorView extends IPrimeEditorView<LockerAreaDTO> {
 
-    interface Presenter extends IEditorView.IEditorPresenter {
+    interface Presenter extends IPrimeEditorView.IPrimeEditorPresenter {
     }
 }

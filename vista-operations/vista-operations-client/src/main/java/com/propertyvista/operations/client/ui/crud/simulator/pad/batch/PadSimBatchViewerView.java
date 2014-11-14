@@ -13,12 +13,12 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.pad.batch;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
 
-public interface PadSimBatchViewerView extends IViewerView<PadSimBatch> {
+public interface PadSimBatchViewerView extends IPrimeViewerView<PadSimBatch> {
 
-    interface Presenter extends IViewerView.IViewerPresenter {
+    interface Presenter extends IPrimeViewerView.IPrimeViewerPresenter {
     }
 }

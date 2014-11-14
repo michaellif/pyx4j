@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.lease.financial.deposit;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.dto.DepositLifecycleDTO;
@@ -25,7 +25,7 @@ public class DepositLifecycleForm extends CrmEntityForm<DepositLifecycleDTO> {
 
     private static final I18n i18n = I18n.get(DepositLifecycleForm.class);
 
-    public DepositLifecycleForm(IFormView<DepositLifecycleDTO, ?> view) {
+    public DepositLifecycleForm(IPrimeFormView<DepositLifecycleDTO, ?> view) {
         super(DepositLifecycleDTO.class, view);
 
         FormPanel formPanel = new FormPanel(this);

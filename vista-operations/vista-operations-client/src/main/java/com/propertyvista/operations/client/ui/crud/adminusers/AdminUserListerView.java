@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.adminusers;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView;
 
 import com.propertyvista.operations.rpc.dto.OperationsUserDTO;
 
-public interface AdminUserListerView extends IListerView<OperationsUserDTO> {
+public interface AdminUserListerView extends IPrimeListerView<OperationsUserDTO> {
 
 }

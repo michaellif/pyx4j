@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.admin.CreditCheckStatusDTO;
@@ -33,7 +33,7 @@ public class CreditCheckStatusForm extends CrmEntityForm<CreditCheckStatusDTO> {
 
     private static final I18n i18n = I18n.get(CreditCheckStatusForm.class);
 
-    public CreditCheckStatusForm(IFormView<CreditCheckStatusDTO, ?> view) {
+    public CreditCheckStatusForm(IPrimeFormView<CreditCheckStatusDTO, ?> view) {
         super(CreditCheckStatusDTO.class, view);
         FormPanel formPanel = new FormPanel(this);
         formPanel.h1(i18n.tr("Powered By"));

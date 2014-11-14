@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView;
 
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
-public interface MaintenanceRequestListerView extends IListerView<MaintenanceRequestDTO> {
+public interface MaintenanceRequestListerView extends IPrimeListerView<MaintenanceRequestDTO> {
 
 }

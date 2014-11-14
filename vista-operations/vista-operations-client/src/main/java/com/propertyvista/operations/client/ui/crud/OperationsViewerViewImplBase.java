@@ -21,12 +21,12 @@ import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.rpc.AbstractVersionDataListService;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.AbstractViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.AbstractPrimeViewerView;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.versioning.VersionSelectorDialog;
 
-public class OperationsViewerViewImplBase<E extends IEntity> extends AbstractViewerView<E> {
+public class OperationsViewerViewImplBase<E extends IEntity> extends AbstractPrimeViewerView<E> {
 
     private static final I18n i18n = I18n.get(OperationsViewerViewImplBase.class);
 
@@ -67,7 +67,7 @@ public class OperationsViewerViewImplBase<E extends IEntity> extends AbstractVie
     }
 
     @Override
-    public void setPresenter(IViewerPresenter presenter) {
+    public void setPresenter(IPrimeViewerPresenter presenter) {
         super.setPresenter(presenter);
         if (presenter != null) {
             reset(); // initialize the view!..

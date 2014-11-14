@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.feature;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.domain.financial.offering.Feature;
 
-public interface FeatureViewerView extends IViewerView<Feature> {
+public interface FeatureViewerView extends IPrimeViewerView<Feature> {
 
 }

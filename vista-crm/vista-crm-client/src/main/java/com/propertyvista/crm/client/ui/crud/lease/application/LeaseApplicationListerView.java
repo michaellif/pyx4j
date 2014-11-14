@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.application;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView;
 
 import com.propertyvista.dto.LeaseApplicationDTO;
 
-public interface LeaseApplicationListerView extends IListerView<LeaseApplicationDTO> {
+public interface LeaseApplicationListerView extends IPrimeListerView<LeaseApplicationDTO> {
 
 }

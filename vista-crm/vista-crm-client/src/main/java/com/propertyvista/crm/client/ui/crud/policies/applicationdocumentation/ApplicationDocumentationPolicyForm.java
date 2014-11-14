@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -42,7 +42,7 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
 
     private static final I18n i18n = I18n.get(ApplicationDocumentationPolicyForm.class);
 
-    public ApplicationDocumentationPolicyForm(IFormView<ApplicationDocumentationPolicyDTO, ?> view) {
+    public ApplicationDocumentationPolicyForm(IPrimeFormView<ApplicationDocumentationPolicyDTO, ?> view) {
         super(ApplicationDocumentationPolicyDTO.class, view);
 
         addTab(createIdentificationDocsTab(), i18n.tr("Required IDs"));

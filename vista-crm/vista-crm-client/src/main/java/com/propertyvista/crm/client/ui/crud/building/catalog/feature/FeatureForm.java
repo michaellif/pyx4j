@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.building.catalog.ProductDepositEditor;
@@ -37,7 +37,7 @@ public class FeatureForm extends CrmEntityForm<Feature> {
 
     private Widget headerDeposits, headerLMR, headerMoveIn, headerSecurity;
 
-    public FeatureForm(IFormView<Feature, ?> view) {
+    public FeatureForm(IPrimeFormView<Feature, ?> view) {
         super(Feature.class, view);
 
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));

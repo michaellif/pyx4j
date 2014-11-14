@@ -13,12 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.financial.paps;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 
-public interface AutoPayHistoryViewerView extends IViewerView<AutoPayHistoryDTO> {
+public interface AutoPayHistoryViewerView extends IPrimeViewerView<AutoPayHistoryDTO> {
 
-    interface Presenter extends IViewerView.IViewerPresenter {
+    interface Presenter extends IPrimeViewerView.IPrimeViewerPresenter {
     }
 }

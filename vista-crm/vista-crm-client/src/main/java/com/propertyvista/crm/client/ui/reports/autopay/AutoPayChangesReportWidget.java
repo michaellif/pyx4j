@@ -35,7 +35,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.utils.EntityFormatUtils;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractReport;
+import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractPrimeReport;
 import com.pyx4j.site.client.backoffice.ui.prime.report.IReportWidget;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.memento.IMementoAware;
@@ -320,7 +320,7 @@ public class AutoPayChangesReportWidget extends HTML implements IReportWidget, I
             }
             String textValue = EntityFormatUtils.nvl_concat(" ", r.notice(), r.comments());
             return new SafeHtmlBuilder()
-                    .appendHtmlConstant("<div style='text-align:center' class='" + AbstractReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")
+                    .appendHtmlConstant("<div style='text-align:center' class='" + AbstractPrimeReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")
                     .appendHtmlConstant(
                             "<img title='" + SafeHtmlUtils.htmlEscape(textValue) + "'" + " src='" + noticeIcon + "'" + " border='0' "
                                     + " style='width:15px; height:15px;text-align:center'" + ">").appendHtmlConstant("</div>").toSafeHtml();
@@ -333,7 +333,7 @@ public class AutoPayChangesReportWidget extends HTML implements IReportWidget, I
         AutoPayReviewLeaseDTO r = (AutoPayReviewLeaseDTO) entity;
         SafeHtmlBuilder b = new SafeHtmlBuilder();
         if (!r.notice().isNull() || !r.comments().isNull()) {
-            b.appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>")
+            b.appendHtmlConstant("<span class='" + AbstractPrimeReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>")
                     .appendEscaped(EntityFormatUtils.nvl_concat(" ", r.notice(), r.comments())).appendHtmlConstant("</span>");
         }
         return b.toSafeHtml();

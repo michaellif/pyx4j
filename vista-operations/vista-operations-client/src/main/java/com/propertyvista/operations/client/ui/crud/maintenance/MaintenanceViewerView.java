@@ -13,13 +13,13 @@
  */
 package com.propertyvista.operations.client.ui.crud.maintenance;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.operations.domain.VistaSystemMaintenanceState;
 
-public interface MaintenanceViewerView extends IViewerView<VistaSystemMaintenanceState> {
+public interface MaintenanceViewerView extends IPrimeViewerView<VistaSystemMaintenanceState> {
 
-    interface Presenter extends IViewerView.IViewerPresenter {
+    interface Presenter extends IPrimeViewerView.IPrimeViewerPresenter {
 
         void resetGlobalCache();
 

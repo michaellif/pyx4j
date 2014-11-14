@@ -14,14 +14,14 @@
 package com.propertyvista.operations.client.ui.crud;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.client.backoffice.ui.prime.form.PrimeEntityForm;
 
 import com.propertyvista.operations.client.ui.components.OperationsEditorsComponentFactory;
 
 public abstract class OperationsEntityForm<E extends IEntity> extends PrimeEntityForm<E> {
 
-    public OperationsEntityForm(Class<E> rootClass, IFormView<E, ?> view) {
+    public OperationsEntityForm(Class<E> rootClass, IPrimeFormView<E, ?> view) {
         super(rootClass, new OperationsEditorsComponentFactory(), view);
     }
 }

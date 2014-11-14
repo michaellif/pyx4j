@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.TenantInsurancePolicyDTO;
@@ -33,7 +33,7 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
 
     private static final I18n i18n = I18n.get(TenantInsurancePolicyForm.class);
 
-    public TenantInsurancePolicyForm(IFormView<TenantInsurancePolicyDTO, ?> view) {
+    public TenantInsurancePolicyForm(IPrimeFormView<TenantInsurancePolicyDTO, ?> view) {
         super(TenantInsurancePolicyDTO.class, view);
         addTab(createInsuranceRequirementsTab(), i18n.tr("Insurance Requirements"));
     }

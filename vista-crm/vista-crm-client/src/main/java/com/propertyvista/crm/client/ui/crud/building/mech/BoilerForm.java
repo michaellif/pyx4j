@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.common.client.ui.components.editors.LicenseEditor;
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
@@ -28,7 +28,7 @@ public class BoilerForm extends MechBaseForm<BoilerDTO> {
 
     private static final I18n i18n = I18n.get(BoilerForm.class);
 
-    public BoilerForm(IFormView<BoilerDTO, ?> view) {
+    public BoilerForm(IPrimeFormView<BoilerDTO, ?> view) {
         super(BoilerDTO.class, view);
     }
 

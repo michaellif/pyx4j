@@ -13,13 +13,13 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView;
 
 import com.propertyvista.operations.rpc.dto.PmcDTO;
 
-public interface PmcListerView extends IListerView<PmcDTO> {
+public interface PmcListerView extends IPrimeListerView<PmcDTO> {
 
-    interface Presenter extends IListerView.IListerPresenter<PmcDTO> {
+    interface Presenter extends IPrimeListerView.IPrimeListerPresenter<PmcDTO> {
 
         void uploadMerchantAccounts();
 

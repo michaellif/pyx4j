@@ -13,12 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
 
 import com.propertyvista.domain.financial.offering.Service;
 
-public interface ServiceEditorView extends IEditorView<Service> {
+public interface ServiceEditorView extends IPrimeEditorView<Service> {
 
-    interface Presenter extends IEditorView.IEditorPresenter {
+    interface Presenter extends IPrimeEditorView.IPrimeEditorPresenter {
     }
 }

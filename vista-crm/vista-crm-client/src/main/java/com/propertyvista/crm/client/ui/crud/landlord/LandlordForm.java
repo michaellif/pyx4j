@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -43,7 +43,7 @@ public class LandlordForm extends CrmEntityForm<LandlordDTO> {
 
     private static final I18n i18n = I18n.get(LandlordForm.class);
 
-    public LandlordForm(IFormView<LandlordDTO, ?> view) {
+    public LandlordForm(IPrimeFormView<LandlordDTO, ?> view) {
         super(LandlordDTO.class, view);
 
         Tab tab = addTab(createGeneralPanel(), i18n.tr("General"));

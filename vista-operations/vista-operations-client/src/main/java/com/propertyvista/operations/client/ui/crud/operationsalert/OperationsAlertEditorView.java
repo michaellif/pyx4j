@@ -13,9 +13,9 @@
  */
 package com.propertyvista.operations.client.ui.crud.operationsalert;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
 
 import com.propertyvista.operations.rpc.dto.OperationsAlertDTO;
 
-public interface OperationsAlertEditorView extends IEditorView<OperationsAlertDTO> {
+public interface OperationsAlertEditorView extends IPrimeEditorView<OperationsAlertDTO> {
 }

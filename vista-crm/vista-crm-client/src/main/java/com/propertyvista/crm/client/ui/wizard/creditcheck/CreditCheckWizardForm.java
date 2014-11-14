@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView;
+import com.pyx4j.site.client.backoffice.ui.prime.wizard.IPrimeWizardView;
 import com.pyx4j.site.client.backoffice.ui.prime.wizard.WizardForm;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
@@ -63,7 +63,7 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
 
     private final Command onDisplayTermsOfServiceRequest;
 
-    public CreditCheckWizardForm(IWizardView<CreditCheckSetupDTO> view, Command onDisplayTermsOfServiceRequest) {
+    public CreditCheckWizardForm(IPrimeWizardView<CreditCheckSetupDTO> view, Command onDisplayTermsOfServiceRequest) {
         super(CreditCheckSetupDTO.class, view);
         this.onDisplayTermsOfServiceRequest = onDisplayTermsOfServiceRequest;
         addStep(createPricingStep().asWidget(), PRICING_STEP_NAME);

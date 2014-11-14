@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.ui.reports.customercreditcheck;
 
 import com.pyx4j.site.client.IsView;
-import com.pyx4j.site.client.backoffice.ui.prime.report.IReportView;
+import com.pyx4j.site.client.backoffice.ui.prime.report.IPrimeReportView;
 
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 
-public interface CustomerCreditCheckReportView extends IReportView<CustomerCreditCheckReportMetadata>, IsView {
+public interface CustomerCreditCheckReportView extends IPrimeReportView<CustomerCreditCheckReportMetadata>, IsView {
 
 }

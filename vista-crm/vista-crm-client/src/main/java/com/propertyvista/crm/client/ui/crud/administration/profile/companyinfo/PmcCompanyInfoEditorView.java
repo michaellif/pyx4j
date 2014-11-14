@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.profile.companyinfo;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
 
 import com.propertyvista.crm.rpc.dto.admin.PmcCompanyInfoDTO;
 
-public interface PmcCompanyInfoEditorView extends IEditorView<PmcCompanyInfoDTO> {
+public interface PmcCompanyInfoEditorView extends IPrimeEditorView<PmcCompanyInfoDTO> {
 
 }

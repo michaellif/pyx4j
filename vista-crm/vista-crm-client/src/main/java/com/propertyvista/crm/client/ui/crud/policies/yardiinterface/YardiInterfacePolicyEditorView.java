@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.yardiinterface;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
 
 import com.propertyvista.domain.policy.dto.YardiInterfacePolicyDTO;
 
-public interface YardiInterfacePolicyEditorView extends IEditorView<YardiInterfacePolicyDTO> {
+public interface YardiInterfacePolicyEditorView extends IPrimeEditorView<YardiInterfacePolicyDTO> {
 
 }

@@ -40,7 +40,7 @@ import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.richtext.RichTextTemplateAction;
 
@@ -58,7 +58,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
 
     private final static I18n i18n = I18n.get(EmailTemplatesPolicyForm.class);
 
-    public EmailTemplatesPolicyForm(IFormView<EmailTemplatesPolicyDTO, ?> view) {
+    public EmailTemplatesPolicyForm(IPrimeFormView<EmailTemplatesPolicyDTO, ?> view) {
         super(EmailTemplatesPolicyDTO.class, view);
 
         addTab(createEmailTemplatesPanel(), i18n.tr("Templates"));

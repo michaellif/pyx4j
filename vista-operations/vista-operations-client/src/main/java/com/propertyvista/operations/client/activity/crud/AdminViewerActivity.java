@@ -17,7 +17,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeViewerActivity;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.event.CrudNavigateEvent;
@@ -26,7 +26,7 @@ public class AdminViewerActivity<E extends IEntity> extends AbstractPrimeViewerA
 
     private final CrudAppPlace place;
 
-    public AdminViewerActivity(Class<E> entityClass, CrudAppPlace place, IViewerView<E> view, AbstractCrudService<E> service) {
+    public AdminViewerActivity(Class<E> entityClass, CrudAppPlace place, IPrimeViewerView<E> view, AbstractCrudService<E> service) {
         super(entityClass, place, view, service);
 
         assert (place instanceof CrudAppPlace);
