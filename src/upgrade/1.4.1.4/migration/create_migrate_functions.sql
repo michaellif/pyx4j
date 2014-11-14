@@ -94,7 +94,7 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.email_template AS e '
                 ||'SET  content = t.content '
                 ||'FROM     _dba_.tmp_emails t '
-                ||'WHERE    e.template_type = ''PaymentReturned '' '
+                ||'WHERE    e.template_type =  t.template_type '
                 ||'AND      t.template_type = ''PaymentReturned'' ';
         
         -- online_application
