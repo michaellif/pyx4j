@@ -38,15 +38,15 @@ import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView;
 import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView.IWizardPresenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public abstract class AbstractWizardActivity<E extends IEntity> extends AbstractPrimeActivity<IWizardView<?>> implements IWizardPresenter {
+public abstract class AbstractPrimeWizardActivity<E extends IEntity> extends AbstractPrimeActivity<IWizardView<?>> implements IWizardPresenter {
 
-    private static final I18n i18n = I18n.get(AbstractWizardActivity.class);
+    private static final I18n i18n = I18n.get(AbstractPrimeWizardActivity.class);
 
     private final AbstractCrudService<E> service;
 
     private final Class<E> entityClass;
 
-    public AbstractWizardActivity(Class<E> entityClass, CrudAppPlace place, IWizardView<E> view, AbstractCrudService<E> service) {
+    public AbstractPrimeWizardActivity(Class<E> entityClass, CrudAppPlace place, IWizardView<E> view, AbstractCrudService<E> service) {
         super(view, place);
         // development correctness checks:
         assert (entityClass != null);

@@ -42,9 +42,9 @@ import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView.EditMode;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView.IEditorPresenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public abstract class AbstractEditorActivity<E extends IEntity> extends AbstractPrimeActivity<IEditorView<?>> implements IEditorPresenter {
+public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends AbstractPrimeActivity<IEditorView<?>> implements IEditorPresenter {
 
-    private static final I18n i18n = I18n.get(AbstractEditorActivity.class);
+    private static final I18n i18n = I18n.get(AbstractPrimeEditorActivity.class);
 
     private final AbstractCrudService<E> service;
 
@@ -60,7 +60,7 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
 
     private boolean mayStop;
 
-    public AbstractEditorActivity(Class<E> entityClass, CrudAppPlace place, IEditorView<E> view, AbstractCrudService<E> service) {
+    public AbstractPrimeEditorActivity(Class<E> entityClass, CrudAppPlace place, IEditorView<E> view, AbstractCrudService<E> service) {
         super(view, place);
         // development correctness checks:
         assert (view != null);

@@ -59,11 +59,11 @@ import com.pyx4j.site.rpc.customization.ICustomizationPersistenceService;
 import com.pyx4j.site.rpc.reports.IReportsService;
 import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
-public abstract class AbstractReportActivity<R extends ReportTemplate> extends AbstractPrimeActivity<IReportView<?>> implements IReportPresenter<R> {
+public abstract class AbstractPrimeReportActivity<R extends ReportTemplate> extends AbstractPrimeActivity<IReportView<?>> implements IReportPresenter<R> {
 
-    private static final I18n i18n = I18n.get(AbstractReportActivity.class);
+    private static final I18n i18n = I18n.get(AbstractPrimeReportActivity.class);
 
-    private static final Map<String, CachedReportData> reportDataCache = new HashMap<String, AbstractReportActivity.CachedReportData>();
+    private static final Map<String, CachedReportData> reportDataCache = new HashMap<String, AbstractPrimeReportActivity.CachedReportData>();
 
     private final IReportsService<R> reportsService;
 
@@ -79,7 +79,7 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
 
     private final Class<R> reportMetadataClass;
 
-    public AbstractReportActivity(Class<R> reportMetadataClass, ReportsAppPlace<R> place, IReportsService<R> reportsService,
+    public AbstractPrimeReportActivity(Class<R> reportMetadataClass, ReportsAppPlace<R> place, IReportsService<R> reportsService,
             ICustomizationPersistenceService<ReportTemplate> reportsSettingsPersistenceService, IReportView<R> view, String dowloadServletPath) {
         super(view, place);
         this.reportMetadataClass = reportMetadataClass;

@@ -36,7 +36,7 @@ import com.pyx4j.site.client.memento.MementoManager;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public abstract class AbstractListerActivity<E extends IEntity> extends AbstractPrimeActivity<IListerView<?>> implements IListerPresenter<E> {
+public abstract class AbstractPrimeListerActivity<E extends IEntity> extends AbstractPrimeActivity<IListerView<?>> implements IListerPresenter<E> {
 
     private final Class<E> entityClass;
 
@@ -44,7 +44,7 @@ public abstract class AbstractListerActivity<E extends IEntity> extends Abstract
 
     private boolean populateOnStart = true;
 
-    public AbstractListerActivity(Class<E> entityClass, AppPlace place, IListerView<E> view) {
+    public AbstractPrimeListerActivity(Class<E> entityClass, AppPlace place, IListerView<E> view) {
         super(view, place);
         // development correctness checks:
         assert (entityClass != null);

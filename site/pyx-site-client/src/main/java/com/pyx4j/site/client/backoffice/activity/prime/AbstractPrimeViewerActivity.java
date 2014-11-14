@@ -40,7 +40,7 @@ import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView.IViewerPresent
 import com.pyx4j.site.client.memento.MementoManager;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public abstract class AbstractViewerActivity<E extends IEntity> extends AbstractPrimeActivity<IViewerView<?>> implements IViewerPresenter {
+public abstract class AbstractPrimeViewerActivity<E extends IEntity> extends AbstractPrimeActivity<IViewerView<?>> implements IViewerPresenter {
 
     protected final Class<E> entityClass;
 
@@ -52,7 +52,7 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
 
     private E populatedValue;
 
-    public AbstractViewerActivity(Class<E> entityClass, CrudAppPlace place, IViewerView<E> view, AbstractCrudService<E> service) {
+    public AbstractPrimeViewerActivity(Class<E> entityClass, CrudAppPlace place, IViewerView<E> view, AbstractCrudService<E> service) {
         super(view, place);
         // development correctness checks:
         assert (view != null);
