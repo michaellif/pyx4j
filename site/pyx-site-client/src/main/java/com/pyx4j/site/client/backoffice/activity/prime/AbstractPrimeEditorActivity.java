@@ -37,12 +37,12 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView.EditMode;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView.IEditorPresenter;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView.EditMode;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView.IPrimeEditorPresenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends AbstractPrimeActivity<IEditorView<?>> implements IEditorPresenter {
+public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends AbstractPrimeActivity<IPrimeEditorView<?>> implements IPrimeEditorPresenter {
 
     private static final I18n i18n = I18n.get(AbstractPrimeEditorActivity.class);
 
@@ -58,7 +58,7 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
 
     private boolean mayStop;
 
-    public AbstractPrimeEditorActivity(Class<E> entityClass, CrudAppPlace place, IEditorView<E> view, AbstractCrudService<E> service) {
+    public AbstractPrimeEditorActivity(Class<E> entityClass, CrudAppPlace place, IPrimeEditorView<E> view, AbstractCrudService<E> service) {
         super(view, place);
         // development correctness checks:
         assert (view != null);
@@ -120,8 +120,8 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
 
     @SuppressWarnings("unchecked")
     @Override
-    public IEditorView<E> getView() {
-        return (IEditorView<E>) super.getView();
+    public IPrimeEditorView<E> getView() {
+        return (IPrimeEditorView<E>) super.getView();
     }
 
     @Override

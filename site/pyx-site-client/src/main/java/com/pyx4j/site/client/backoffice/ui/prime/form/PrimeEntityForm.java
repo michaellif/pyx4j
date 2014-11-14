@@ -26,24 +26,24 @@ import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 
 public abstract class PrimeEntityForm<E extends IEntity> extends CTabbedEntityForm<E> {
 
-    private IFormView<? extends IEntity, ?> view;
+    private IPrimeFormView<? extends IEntity, ?> view;
 
-    public PrimeEntityForm(Class<E> rootClass, IFormView<? extends IEntity, ?> view) {
+    public PrimeEntityForm(Class<E> rootClass, IPrimeFormView<? extends IEntity, ?> view) {
         this(rootClass, null, view);
     }
 
-    public PrimeEntityForm(Class<E> rootClass, IEditableComponentFactory factory, IFormView<? extends IEntity, ?> view) {
+    public PrimeEntityForm(Class<E> rootClass, IEditableComponentFactory factory, IPrimeFormView<? extends IEntity, ?> view) {
         super(rootClass, factory);
         this.view = view;
 
-        if (view instanceof IViewerView) {
+        if (view instanceof IPrimeViewerView) {
             setEditable(false);
             setViewable(true);
         }
 
     }
 
-    public IFormView<? extends IEntity, ?> getParentView() {
+    public IPrimeFormView<? extends IEntity, ?> getParentView() {
         assert (view != null);
         return view;
     }

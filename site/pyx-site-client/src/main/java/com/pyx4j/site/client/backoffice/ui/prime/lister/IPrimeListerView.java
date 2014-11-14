@@ -27,12 +27,13 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView.IListerPresenter;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView.IPrimePanePresenter;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView.IPrimeListerPresenter;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
-public interface IListerView<E extends IEntity> extends IPrimePaneView<IListerPresenter<E>> {
+public interface IPrimeListerView<E extends IEntity> extends IPrimePaneView<IPrimeListerPresenter<E>> {
 
-    public interface IListerPresenter<E extends IEntity> extends IPrimePaneView.IPrimePanePresenter {
+    public interface IPrimeListerPresenter<E extends IEntity> extends IPrimePanePresenter {
 
         void setParentKey(Key parentID);
 

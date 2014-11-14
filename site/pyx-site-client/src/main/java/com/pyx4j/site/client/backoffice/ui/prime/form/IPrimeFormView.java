@@ -18,33 +18,24 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.backoffice.ui.prime.wizard;
+package com.pyx4j.site.client.backoffice.ui.prime.form;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView.IPrimeFormPresenter;
 
-public interface IWizardView<E extends IEntity> extends IPrimePaneView {
+public interface IPrimeFormView<E extends IEntity, PRESENTER extends IPrimeFormPresenter> extends IPrimePaneView<PRESENTER> {
 
-    public interface IWizardPresenter extends IPanePresenter {
+    public interface IPrimeFormPresenter extends IPrimePanePresenter {
 
-        void finish();
-
-        void cancel();
     }
 
     void populate(E value);
 
     void reset();
 
-    public E getValue();
+    void setActiveTab(int index);
 
-    public boolean isDirty();
+    int getActiveTab();
 
-    void setPresenter(IWizardPresenter presenter);
-
-    IWizardPresenter getPresenter();
-
-    boolean onSaveFail(Throwable caught);
-
-    void onStepChange();
 }

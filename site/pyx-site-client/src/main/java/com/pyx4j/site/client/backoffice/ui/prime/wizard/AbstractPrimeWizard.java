@@ -27,16 +27,17 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
+import com.pyx4j.site.client.backoffice.ui.prime.wizard.IPrimeWizardView.IPrimeWizardPresenter;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class AbstractWizard<E extends IEntity> extends AbstractPrimePaneView implements IWizardView<E> {
+public abstract class AbstractPrimeWizard<E extends IEntity> extends AbstractPrimePaneView<IPrimeWizardPresenter> implements IPrimeWizardView<E> {
 
-    private static final I18n i18n = I18n.get(AbstractWizard.class);
+    private static final I18n i18n = I18n.get(AbstractPrimeWizard.class);
 
     private WizardForm<E> form;
 
-    private IWizardView.IWizardPresenter presenter;
+    private IPrimeWizardView.IPrimeWizardPresenter presenter;
 
     private final Button btnPrevious;
 
@@ -44,7 +45,7 @@ public abstract class AbstractWizard<E extends IEntity> extends AbstractPrimePan
 
     private final Button btnCancel;
 
-    public AbstractWizard(String caption) {
+    public AbstractPrimeWizard(String caption) {
         super();
         setCaption(caption);
 
@@ -119,12 +120,12 @@ public abstract class AbstractWizard<E extends IEntity> extends AbstractPrimePan
     }
 
     @Override
-    public void setPresenter(IWizardView.IWizardPresenter presenter) {
+    public void setPresenter(IPrimeWizardView.IPrimeWizardPresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public IWizardView.IWizardPresenter getPresenter() {
+    public IPrimeWizardView.IPrimeWizardPresenter getPresenter() {
         return presenter;
     }
 

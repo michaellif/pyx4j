@@ -43,7 +43,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
 import com.pyx4j.site.client.backoffice.ui.prime.form.PrimeEntityForm;
-import com.pyx4j.site.client.backoffice.ui.prime.report.IReportView.IReportPresenter;
+import com.pyx4j.site.client.backoffice.ui.prime.report.IPrimeReportView.IPrimeReportPresenter;
 import com.pyx4j.site.shared.domain.reports.ExportableReport;
 import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 import com.pyx4j.widgets.client.Button;
@@ -51,9 +51,9 @@ import com.pyx4j.widgets.client.StringBox;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-public abstract class AbstractReport<R extends ReportTemplate> extends AbstractPrimePaneView<IReportPresenter<R>> implements IReportView<R> {
+public abstract class AbstractPrimeReport<R extends ReportTemplate> extends AbstractPrimePaneView<IPrimeReportPresenter<R>> implements IPrimeReportView<R> {
 
-    private static final I18n i18n = I18n.get(AbstractReport.class);
+    private static final I18n i18n = I18n.get(AbstractPrimeReport.class);
 
     private FlowPanel viewPanel;
 
@@ -67,7 +67,7 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
 
     private CForm<R> settingsForm;
 
-    public AbstractReport() {
+    public AbstractPrimeReport() {
     }
 
     public void setReportWidget(IReportWidget reportWidget, PrimeEntityForm<R> settingsForm, CForm<R> controlPanelForm) {

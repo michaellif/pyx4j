@@ -31,10 +31,10 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView.IListerPresenter;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView.IPrimeListerPresenter;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
-public class AbstractListerView<E extends IEntity> extends AbstractPrimePaneView<IListerPresenter<E>> implements IListerView<E> {
+public class AbstractListerView<E extends IEntity> extends AbstractPrimePaneView<IPrimeListerPresenter<E>> implements IPrimeListerView<E> {
 
     private SiteDataTablePanel<E> dataTablePanel = null;
 
@@ -68,7 +68,7 @@ public class AbstractListerView<E extends IEntity> extends AbstractPrimePaneView
     }
 
     @Override
-    public void setPresenter(IListerView.IListerPresenter<E> presenter) {
+    public void setPresenter(IPrimeListerView.IPrimeListerPresenter<E> presenter) {
         super.setPresenter(presenter);
         setCaption(presenter != null && presenter.getPlace() != null ? AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() : "");
     }

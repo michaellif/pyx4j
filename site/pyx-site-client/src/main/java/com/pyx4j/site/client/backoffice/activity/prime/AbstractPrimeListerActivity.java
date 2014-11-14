@@ -30,13 +30,13 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IListerView.IListerPresenter;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView.IPrimeListerPresenter;
 import com.pyx4j.site.client.memento.MementoManager;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public abstract class AbstractPrimeListerActivity<E extends IEntity> extends AbstractPrimeActivity<IListerView<?>> implements IListerPresenter<E> {
+public abstract class AbstractPrimeListerActivity<E extends IEntity> extends AbstractPrimeActivity<IPrimeListerView<?>> implements IPrimeListerPresenter<E> {
 
     private final Class<E> entityClass;
 
@@ -44,7 +44,7 @@ public abstract class AbstractPrimeListerActivity<E extends IEntity> extends Abs
 
     private boolean populateOnStart = true;
 
-    public AbstractPrimeListerActivity(Class<E> entityClass, AppPlace place, IListerView<E> view) {
+    public AbstractPrimeListerActivity(Class<E> entityClass, AppPlace place, IPrimeListerView<E> view) {
         super(view, place);
         // development correctness checks:
         assert (entityClass != null);
@@ -62,8 +62,8 @@ public abstract class AbstractPrimeListerActivity<E extends IEntity> extends Abs
 
     @SuppressWarnings("unchecked")
     @Override
-    public IListerView<E> getView() {
-        return (IListerView<E>) super.getView();
+    public IPrimeListerView<E> getView() {
+        return (IPrimeListerView<E>) super.getView();
     }
 
     public Class<E> getEntityClass() {

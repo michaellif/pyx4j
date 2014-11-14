@@ -33,7 +33,7 @@ public class ReportControlPanel<R extends ReportTemplate> extends FlowPanel {
 
     private final CForm<R> controlPanelForm;
 
-    public ReportControlPanel(final AbstractReport<R> abstractReport, CForm<R> controlPanelForm) {
+    public ReportControlPanel(final AbstractPrimeReport<R> abstractReport, CForm<R> controlPanelForm) {
         this.controlPanelForm = controlPanelForm;
         controlPanelForm.init();
 

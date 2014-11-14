@@ -26,12 +26,12 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView.IFormPresenter;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView.IPrimeFormPresenter;
 import com.pyx4j.widgets.client.HasSecureConcern;
 import com.pyx4j.widgets.client.SecureConcernsHolder;
 
-public abstract class AbstractFormView<E extends IEntity, PRESENTER extends IFormPresenter> extends AbstractPrimePaneView<PRESENTER> implements
-        IFormView<E, PRESENTER> {
+public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends IPrimeFormPresenter> extends AbstractPrimePaneView<PRESENTER> implements
+        IPrimeFormView<E, PRESENTER> {
 
     private PrimeEntityForm<E> form;
 
@@ -41,7 +41,7 @@ public abstract class AbstractFormView<E extends IEntity, PRESENTER extends IFor
 
     private final SecureConcernsHolder secureConcerns = new SecureConcernsHolder();
 
-    public AbstractFormView() {
+    public AbstractPrimeFormView() {
         super();
         secureConcerns.addAll(secureConcerns());
     }

@@ -31,14 +31,14 @@ import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView.IEditorPresenter;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView.IPrimeEditorPresenter;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class AbstractEditorView<E extends IEntity> extends AbstractFormView<E, IEditorPresenter> implements IEditorView<E> {
+public abstract class AbstractPrimeEditorView<E extends IEntity> extends AbstractPrimeFormView<E, IPrimeEditorPresenter> implements IPrimeEditorView<E> {
 
-    private static final I18n i18n = I18n.get(AbstractEditorView.class);
+    private static final I18n i18n = I18n.get(AbstractPrimeEditorView.class);
 
     private final Button btnApply;
 
@@ -48,7 +48,7 @@ public abstract class AbstractEditorView<E extends IEntity> extends AbstractForm
 
     protected EditMode mode;
 
-    public AbstractEditorView() {
+    public AbstractPrimeEditorView() {
         super();
 
         btnSave = new Button(i18n.tr("Save"), new Command() {
@@ -166,7 +166,7 @@ public abstract class AbstractEditorView<E extends IEntity> extends AbstractForm
     }
 
     @Override
-    public IEditorView.IEditorPresenter getPresenter() {
+    public IPrimeEditorView.IPrimeEditorPresenter getPresenter() {
         return super.getPresenter();
     }
 

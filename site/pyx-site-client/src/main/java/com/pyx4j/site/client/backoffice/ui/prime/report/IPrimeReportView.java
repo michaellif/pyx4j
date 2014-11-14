@@ -23,12 +23,12 @@ package com.pyx4j.site.client.backoffice.ui.prime.report;
 import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView.IPrimePanePresenter;
-import com.pyx4j.site.client.backoffice.ui.prime.report.IReportView.IReportPresenter;
+import com.pyx4j.site.client.backoffice.ui.prime.report.IPrimeReportView.IPrimeReportPresenter;
 import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
-public interface IReportView<R extends ReportTemplate> extends IPrimePaneView<IReportPresenter<R>> {
+public interface IPrimeReportView<R extends ReportTemplate> extends IPrimePaneView<IPrimeReportPresenter<R>> {
 
-    public interface IReportPresenter<R> extends IPrimePanePresenter {
+    public interface IPrimeReportPresenter<R> extends IPrimePanePresenter {
 
         void export();
 
@@ -49,7 +49,7 @@ public interface IReportView<R extends ReportTemplate> extends IPrimePaneView<IR
     }
 
     @Override
-    void setPresenter(IReportPresenter<R> presenter);
+    void setPresenter(IPrimeReportPresenter<R> presenter);
 
     void setReportMetadata(R reportMetadtata);
 

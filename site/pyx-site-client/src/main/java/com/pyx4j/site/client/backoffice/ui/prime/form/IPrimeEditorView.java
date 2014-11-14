@@ -21,11 +21,11 @@
 package com.pyx4j.site.client.backoffice.ui.prime.form;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IEditorView.IEditorPresenter;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView.IPrimeEditorPresenter;
 
-public interface IEditorView<E extends IEntity> extends IFormView<E, IEditorPresenter> {
+public interface IPrimeEditorView<E extends IEntity> extends IPrimeFormView<E, IPrimeEditorPresenter> {
 
-    public interface IEditorPresenter extends IFormView.IFormPresenter {
+    public interface IPrimeEditorPresenter extends IPrimeFormView.IPrimeFormPresenter {
 
         void apply();
 

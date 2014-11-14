@@ -14,28 +14,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  * 
- * Created on 2011-06-09
+ * Created on 2011-05-17
  * @author Vlad
  * @version $Id$
  */
 package com.pyx4j.site.client.backoffice.ui.prime.form;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IFormView.IFormPresenter;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView.IPrimeViewerPresenter;
 
-public interface IFormView<E extends IEntity, PRESENTER extends IFormPresenter> extends IPrimePaneView<PRESENTER> {
+public interface IPrimeViewerView<E extends IEntity> extends IPrimeFormView<E, IPrimeViewerPresenter> {
 
-    public interface IFormPresenter extends IPrimePaneView.IPrimePanePresenter {
+    public interface IPrimeViewerPresenter extends IPrimeFormView.IPrimeFormPresenter {
 
+        boolean canEdit();
+
+        void edit();
+
+        void cancel();
+
+        void view(Key entityId);
+
+        void approveFinal();
     }
-
-    void populate(E value);
-
-    void reset();
-
-    void setActiveTab(int index);
-
-    int getActiveTab();
 
 }

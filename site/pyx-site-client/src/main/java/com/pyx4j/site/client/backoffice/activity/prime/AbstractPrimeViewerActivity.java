@@ -35,12 +35,12 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IViewerView.IViewerPresenter;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView.IPrimeViewerPresenter;
 import com.pyx4j.site.client.memento.MementoManager;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public abstract class AbstractPrimeViewerActivity<E extends IEntity> extends AbstractPrimeActivity<IViewerView<?>> implements IViewerPresenter {
+public abstract class AbstractPrimeViewerActivity<E extends IEntity> extends AbstractPrimeActivity<IPrimeViewerView<?>> implements IPrimeViewerPresenter {
 
     protected final Class<E> entityClass;
 
@@ -52,7 +52,7 @@ public abstract class AbstractPrimeViewerActivity<E extends IEntity> extends Abs
 
     private E populatedValue;
 
-    public AbstractPrimeViewerActivity(Class<E> entityClass, CrudAppPlace place, IViewerView<E> view, AbstractCrudService<E> service) {
+    public AbstractPrimeViewerActivity(Class<E> entityClass, CrudAppPlace place, IPrimeViewerView<E> view, AbstractCrudService<E> service) {
         super(view, place);
         // development correctness checks:
         assert (view != null);
@@ -98,8 +98,8 @@ public abstract class AbstractPrimeViewerActivity<E extends IEntity> extends Abs
 
     @SuppressWarnings("unchecked")
     @Override
-    public IViewerView<E> getView() {
-        return (IViewerView<E>) super.getView();
+    public IPrimeViewerView<E> getView() {
+        return (IPrimeViewerView<E>) super.getView();
     }
 
     @Override

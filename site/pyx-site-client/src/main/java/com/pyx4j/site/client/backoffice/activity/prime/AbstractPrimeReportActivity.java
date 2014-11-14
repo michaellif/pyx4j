@@ -49,8 +49,8 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.ReportDialog;
 import com.pyx4j.site.client.backoffice.activity.AbstractVisorController;
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
-import com.pyx4j.site.client.backoffice.ui.prime.report.IReportView;
-import com.pyx4j.site.client.backoffice.ui.prime.report.IReportView.IReportPresenter;
+import com.pyx4j.site.client.backoffice.ui.prime.report.IPrimeReportView;
+import com.pyx4j.site.client.backoffice.ui.prime.report.IPrimeReportView.IPrimeReportPresenter;
 import com.pyx4j.site.client.backoffice.ui.prime.report.ReportSettingsManagementVizor;
 import com.pyx4j.site.client.memento.MementoManager;
 import com.pyx4j.site.rpc.ReportsAppPlace;
@@ -59,7 +59,7 @@ import com.pyx4j.site.rpc.customization.ICustomizationPersistenceService;
 import com.pyx4j.site.rpc.reports.IReportsService;
 import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
-public abstract class AbstractPrimeReportActivity<R extends ReportTemplate> extends AbstractPrimeActivity<IReportView<?>> implements IReportPresenter<R> {
+public abstract class AbstractPrimeReportActivity<R extends ReportTemplate> extends AbstractPrimeActivity<IPrimeReportView<?>> implements IPrimeReportPresenter<R> {
 
     private static final I18n i18n = I18n.get(AbstractPrimeReportActivity.class);
 
@@ -80,7 +80,7 @@ public abstract class AbstractPrimeReportActivity<R extends ReportTemplate> exte
     private final Class<R> reportMetadataClass;
 
     public AbstractPrimeReportActivity(Class<R> reportMetadataClass, ReportsAppPlace<R> place, IReportsService<R> reportsService,
-            ICustomizationPersistenceService<ReportTemplate> reportsSettingsPersistenceService, IReportView<R> view, String dowloadServletPath) {
+            ICustomizationPersistenceService<ReportTemplate> reportsSettingsPersistenceService, IPrimeReportView<R> view, String dowloadServletPath) {
         super(view, place);
         this.reportMetadataClass = reportMetadataClass;
         this.reportsService = reportsService;
@@ -93,8 +93,8 @@ public abstract class AbstractPrimeReportActivity<R extends ReportTemplate> exte
 
     @SuppressWarnings("unchecked")
     @Override
-    public IReportView<R> getView() {
-        return (IReportView<R>) super.getView();
+    public IPrimeReportView<R> getView() {
+        return (IPrimeReportView<R>) super.getView();
     }
 
     @SuppressWarnings("unchecked")
@@ -312,7 +312,7 @@ public abstract class AbstractPrimeReportActivity<R extends ReportTemplate> exte
 
         private final ReportSettingsManagementVizor visor;
 
-        public ReportSettingsManagementVizorController(IPrimePaneView parentView, final IReportView.IReportPresenter<R> presenter) {
+        public ReportSettingsManagementVizorController(IPrimePaneView parentView, final IPrimeReportView.IPrimeReportPresenter<R> presenter) {
             super(parentView);
             visor = new ReportSettingsManagementVizor(this) {
 

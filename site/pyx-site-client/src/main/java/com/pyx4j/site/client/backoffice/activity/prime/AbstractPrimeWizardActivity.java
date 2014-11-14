@@ -34,11 +34,11 @@ import com.pyx4j.forms.client.ui.ReferenceDataManager;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView;
-import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizardView.IWizardPresenter;
+import com.pyx4j.site.client.backoffice.ui.prime.wizard.IPrimeWizardView;
+import com.pyx4j.site.client.backoffice.ui.prime.wizard.IPrimeWizardView.IPrimeWizardPresenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public abstract class AbstractPrimeWizardActivity<E extends IEntity> extends AbstractPrimeActivity<IWizardView<E>> implements IWizardPresenter {
+public abstract class AbstractPrimeWizardActivity<E extends IEntity> extends AbstractPrimeActivity<IPrimeWizardView<E>> implements IPrimeWizardPresenter {
 
     private static final I18n i18n = I18n.get(AbstractPrimeWizardActivity.class);
 
@@ -46,7 +46,7 @@ public abstract class AbstractPrimeWizardActivity<E extends IEntity> extends Abs
 
     private final Class<E> entityClass;
 
-    public AbstractPrimeWizardActivity(Class<E> entityClass, CrudAppPlace place, IWizardView<E> view, AbstractCrudService<E> service) {
+    public AbstractPrimeWizardActivity(Class<E> entityClass, CrudAppPlace place, IPrimeWizardView<E> view, AbstractCrudService<E> service) {
         super(view, place);
         // development correctness checks:
         assert (entityClass != null);

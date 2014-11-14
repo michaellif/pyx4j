@@ -21,13 +21,13 @@
 package com.pyx4j.site.client.backoffice.ui.prime.dashboard;
 
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
-import com.pyx4j.site.client.backoffice.ui.prime.dashboard.IDashboardView.IDashboardPresenter;
+import com.pyx4j.site.client.backoffice.ui.prime.dashboard.IPrimeDashboardView.IPrimeDashboardPresenter;
 
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView.IPrimePanePresenter;
 
-public interface IDashboardView extends IPrimePaneView<IDashboardPresenter> {
+public interface IPrimeDashboardView extends IPrimePaneView<IPrimeDashboardPresenter> {
 
-    public interface IDashboardPresenter extends IPrimePanePresenter {
+    public interface IPrimeDashboardPresenter extends IPrimePanePresenter {
 
         void save();
 
