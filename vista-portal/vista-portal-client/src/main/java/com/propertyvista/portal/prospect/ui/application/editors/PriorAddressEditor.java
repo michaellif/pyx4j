@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -52,7 +52,7 @@ public class PriorAddressEditor extends InternationalAddressEditorBase<PriorAddr
         rentedComponent.addValueChangeHandler(new ValueChangeHandler<OwnedRented>() {
             @Override
             public void onValueChange(ValueChangeEvent<OwnedRented> event) {
-                setVisibility(getValue());
+                setVisibility(event.getValue());
             }
         });
 
@@ -63,11 +63,11 @@ public class PriorAddressEditor extends InternationalAddressEditorBase<PriorAddr
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        setVisibility(getValue());
+        setVisibility(getValue().rented().getValue());
     }
 
-    private void setVisibility(PriorAddress value) {
-        boolean rented = OwnedRented.rented.equals(value.rented().getValue());
+    private void setVisibility(OwnedRented value) {
+        boolean rented = OwnedRented.rented.equals(value);
         get(proto().payment()).setVisible(rented);
         get(proto().propertyCompany()).setVisible(rented);
         get(proto().managerName()).setVisible(rented);

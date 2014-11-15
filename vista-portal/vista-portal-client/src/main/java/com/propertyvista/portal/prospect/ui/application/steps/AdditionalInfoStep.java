@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -62,6 +62,9 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
             @Override
             public void setVisible(boolean visible) {
                 get(proto().applicantData().previousAddress()).setVisible(visible);
+                if (!visible) {
+                    get(proto().applicantData().previousAddress()).reset();
+                }
                 super.setVisible(visible);
             }
         };
@@ -95,7 +98,7 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
 
         formPanel.append(Location.Left, questionsPanel);
 
-        // TODO currently removed, then rethink: 
+        // TODO currently removed, then rethink:
         if (false && !SecurityController.check(PortalProspectBehavior.Guarantor)) {
             formPanel.h3(i18n.tr("How Did You Hear About Us?"));
             formPanel.append(Location.Left, inject(proto().applicantData().refSource(), new FieldDecoratorBuilder(180).build()));
