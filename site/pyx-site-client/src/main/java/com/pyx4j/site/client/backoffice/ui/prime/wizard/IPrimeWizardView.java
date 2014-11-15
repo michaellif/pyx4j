@@ -26,7 +26,7 @@ import com.pyx4j.site.client.backoffice.ui.prime.wizard.IPrimeWizardView.IPrimeW
 
 public interface IPrimeWizardView<E extends IEntity> extends IPrimePaneView<IPrimeWizardPresenter> {
 
-    public interface IPrimeWizardPresenter extends IPrimePanePresenter {
+    public interface IPrimeWizardPresenter extends IPrimePaneView.IPrimePanePresenter {
 
         void finish();
 
