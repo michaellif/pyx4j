@@ -61,7 +61,9 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
         previousAddress = new FormPanel(getWizard()) {
             @Override
             public void setVisible(boolean visible) {
-                get(proto().applicantData().previousAddress()).reset();
+                if (visible != get(proto().applicantData().previousAddress()).isVisible()) {
+                    get(proto().applicantData().previousAddress()).reset();
+                }
                 get(proto().applicantData().previousAddress()).setVisible(visible);
                 super.setVisible(visible);
             }
