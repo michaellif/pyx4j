@@ -127,7 +127,7 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
         formPanel.append(Location.Dual, inject(proto().screening().version().currentAddress(), new PriorAddressEditor()));
 
         previousAddress.h1(proto().screening().version().previousAddress().getMeta().getCaption());
-        previousAddress.append(Location.Dual, proto().screening().version().previousAddress(), new PriorAddressEditor());
+        previousAddress.append(Location.Dual, proto().screening().version().previousAddress(), new PriorAddressEditor(true));
         formPanel.append(Location.Dual, previousAddress);
 
         return formPanel;

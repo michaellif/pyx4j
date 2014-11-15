@@ -69,7 +69,7 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
             }
         };
         previousAddress.h3(i18n.tr("Previous Address"));
-        previousAddress.append(Location.Left, proto().applicantData().previousAddress(), new PriorAddressEditor());
+        previousAddress.append(Location.Left, proto().applicantData().previousAddress(), new PriorAddressEditor(true));
         formPanel.append(Location.Left, previousAddress);
 
         formPanel.h3(i18n.tr("General Questions"));

@@ -28,8 +28,15 @@ import com.propertyvista.portal.shared.ui.util.editors.InternationalAddressEdito
 
 public class PriorAddressEditor extends InternationalAddressEditorBase<PriorAddress> {
 
+    private final boolean mandatoryMoveOutDate;
+
     public PriorAddressEditor() {
+        this(false);
+    }
+
+    public PriorAddressEditor(boolean mandatoryMoveOutDate) {
         super(PriorAddress.class);
+        this.mandatoryMoveOutDate = mandatoryMoveOutDate;
     }
 
     @Override
@@ -48,6 +55,7 @@ public class PriorAddressEditor extends InternationalAddressEditorBase<PriorAddr
         formPanel.append(Location.Left, proto().managerPhone()).decorate().componentWidth(180);
         formPanel.append(Location.Left, proto().managerEmail()).decorate().componentWidth(230);
 
+        @SuppressWarnings("unchecked")
         CField<OwnedRented, ?> rentedComponent = (CField<OwnedRented, ?>) get(proto().rented());
         rentedComponent.addValueChangeHandler(new ValueChangeHandler<OwnedRented>() {
             @Override
@@ -55,6 +63,8 @@ public class PriorAddressEditor extends InternationalAddressEditorBase<PriorAddr
                 setVisibility(event.getValue());
             }
         });
+
+        get(proto().moveOutDate()).setMandatory(mandatoryMoveOutDate);
 
         return formPanel;
     }

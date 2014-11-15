@@ -31,8 +31,15 @@ public class PriorAddressEditor extends InternationalAddressEditorBase<PriorAddr
 
     private static final I18n i18n = I18n.get(PriorAddressEditor.class);
 
+    private final boolean mandatoryMoveOutDate;
+
     public PriorAddressEditor() {
+        this(false);
+    }
+
+    public PriorAddressEditor(boolean mandatoryMoveOutDate) {
         super(PriorAddress.class);
+        this.mandatoryMoveOutDate = mandatoryMoveOutDate;
     }
 
     @Override
@@ -52,13 +59,16 @@ public class PriorAddressEditor extends InternationalAddressEditorBase<PriorAddr
         main.append(Location.Right, proto().managerEmail()).decorate().componentWidth(200);
 
         // tweaks:
+        @SuppressWarnings("unchecked")
         CField<OwnedRented, ?> rentedComponent = (CField<OwnedRented, ?>) get(proto().rented());
         rentedComponent.addValueChangeHandler(new ValueChangeHandler<OwnedRented>() {
             @Override
             public void onValueChange(ValueChangeEvent<OwnedRented> event) {
-                setVisibility(getValue());
+                setVisibility(event.getValue());
             }
         });
+
+        get(proto().moveOutDate()).setMandatory(mandatoryMoveOutDate);
 
         return main;
     }
@@ -67,7 +77,7 @@ public class PriorAddressEditor extends InternationalAddressEditorBase<PriorAddr
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        setVisibility(getValue());
+        setVisibility(getValue().rented().getValue());
     }
 
     @Override
@@ -77,8 +87,8 @@ public class PriorAddressEditor extends InternationalAddressEditorBase<PriorAddr
         new StartEndDateValidation(get(proto().moveInDate()), get(proto().moveOutDate()), i18n.tr("Move In date must be before Move Out date"));
     }
 
-    private void setVisibility(PriorAddress value) {
-        boolean rented = OwnedRented.rented.equals(value.rented().getValue());
+    private void setVisibility(OwnedRented value) {
+        boolean rented = OwnedRented.rented.equals(value);
         get(proto().payment()).setVisible(rented);
         get(proto().propertyCompany()).setVisible(rented);
         get(proto().managerName()).setVisible(rented);
