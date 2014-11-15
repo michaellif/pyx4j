@@ -49,6 +49,10 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
     private final FormPanel previousAddress = new FormPanel(this) {
         @Override
         public void setVisible(boolean visible) {
+// this will clean previous address:
+//            if (visible != get(proto().screening().version().previousAddress()).isVisible()) {
+//                get(proto().screening().version().previousAddress()).reset();
+//            }
             get(proto().screening().version().previousAddress()).setVisible(visible);
             super.setVisible(visible);
         }
