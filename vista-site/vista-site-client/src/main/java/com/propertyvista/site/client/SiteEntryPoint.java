@@ -25,7 +25,7 @@ import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.gwt.geo.GoogleAPI;
 import com.pyx4j.log4gwt.client.ClientLogger;
-import com.pyx4j.site.client.NavigationUri;
+import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.shared.config.VistaSettings;
 import com.propertyvista.site.client.ui.maps.PropertyMapController;
@@ -69,8 +69,8 @@ public class SiteEntryPoint implements EntryPoint {
             log.debug("GWT.getModuleBaseURL               {}", GWT.getModuleBaseURL());
             log.debug("GWT.getHostPageBaseURL             {}", GWT.getHostPageBaseURL());
             log.debug("GWT.getModuleBaseForStaticFiles    {}", GWT.getModuleBaseForStaticFiles());
-            log.debug("NavigationUri.getDeploymentBaseURL {}", NavigationUri.getDeploymentBaseURL());
-            log.debug("NavigationUri.getHostPageURL       {}", NavigationUri.getHostPageURL());
+            log.debug("NavigationUri.getDeploymentBaseURL {}", AppSite.getDeploymentBaseURL());
+            log.debug("NavigationUri.getHostPageURL       {}", AppSite.getHostPageURL());
         }
     }
 

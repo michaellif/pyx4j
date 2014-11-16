@@ -23,7 +23,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 
-import com.pyx4j.site.client.NavigationUri;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.Anchor;
 
@@ -48,7 +48,7 @@ public class TermsAnchor extends Anchor {
     }
 
     public void openTerm(Class<? extends Place> placeClass, ClickEvent event) {
-        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, placeClass), "_blank", null);
+        Window.open(AppPlaceInfo.absoluteUrl(AppSite.getHostPageURL(), false, placeClass), "_blank", null);
         DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
     }
 }

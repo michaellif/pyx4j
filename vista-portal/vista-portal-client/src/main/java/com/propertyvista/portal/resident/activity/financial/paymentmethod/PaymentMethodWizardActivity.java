@@ -21,7 +21,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
@@ -62,6 +61,6 @@ public class PaymentMethodWizardActivity extends AbstractWizardCrudActivity<Paym
 
     @Override
     public void showTermsOfUse() {
-        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getTermsOfUsePlace()), "_blank", null);
+        Window.open(AppPlaceInfo.absoluteUrl(AppSite.getHostPageURL(), false, getTermsOfUsePlace()), "_blank", null);
     }
 }

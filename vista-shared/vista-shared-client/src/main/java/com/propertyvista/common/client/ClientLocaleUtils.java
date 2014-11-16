@@ -22,7 +22,7 @@ import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Window;
 
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.site.client.NavigationUri;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.customizations.CountryOfOperation;
@@ -36,7 +36,7 @@ public class ClientLocaleUtils {
      * Consider http://localhost:8888/vista/ and http://localhost:8888/vista/index.html
      */
     public static String getDeploymentBaseURL() {
-        return NavigationUri.getDeploymentBaseURL();
+        return AppSite.getDeploymentBaseURL();
     }
 
     public static List<CompiledLocale> obtainAvailableLocales() {

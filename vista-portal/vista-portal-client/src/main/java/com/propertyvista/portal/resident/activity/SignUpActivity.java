@@ -26,7 +26,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationRequest;
-import com.pyx4j.site.client.NavigationUri;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
@@ -121,7 +121,7 @@ public class SignUpActivity extends AbstractActivity implements SignUpPresenter 
 
     @Override
     public void showVistaTerms() {
-        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getPortalTermsPlace()), "_blank", null);
+        Window.open(AppPlaceInfo.absoluteUrl(AppSite.getHostPageURL(), false, getPortalTermsPlace()), "_blank", null);
     }
 
     @Override
