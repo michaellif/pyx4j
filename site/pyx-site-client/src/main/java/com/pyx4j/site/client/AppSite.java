@@ -224,8 +224,8 @@ public abstract class AppSite implements EntryPoint {
             log.debug("GWT.getModuleBaseURL               {}", GWT.getModuleBaseURL());
             log.debug("GWT.getHostPageBaseURL             {}", GWT.getHostPageBaseURL());
             log.debug("GWT.getModuleBaseForStaticFiles    {}", GWT.getModuleBaseForStaticFiles());
-            log.debug("NavigationUri.getDeploymentBaseURL {}", NavigationUri.getDeploymentBaseURL());
-            log.debug("NavigationUri.getHostPageURL       {}", NavigationUri.getHostPageURL());
+            log.debug("NavigationUri.getDeploymentBaseURL {}", getDeploymentBaseURL());
+            log.debug("NavigationUri.getHostPageURL       {}", getHostPageURL());
         }
         onSiteLoad();
     }
@@ -241,5 +241,29 @@ public abstract class AppSite implements EntryPoint {
             elem.getParentElement().removeChild(elem);
         }
         DefaultUnrecoverableErrorHandler.setApplicationInitialized();
+    }
+
+    /**
+     * Used for inter-modules redirections.
+     * Consider http://localhost:8888/gwt/ and http://localhost:8888/gwt/index.html
+     */
+    public static String getDeploymentBaseURL() {
+        String url = GWT.getModuleBaseURL();
+        String module = GWT.getModuleName();
+        if (url.endsWith(module + "/")) {
+            url = url.substring(0, url.length() - (module.length() + 1));
+        }
+        return url;
+    }
+
+    public static String getHostPageURL() {
+        UrlBuilder urlBuilder = new UrlBuilder();
+        urlBuilder.setProtocol(Window.Location.getProtocol());
+        urlBuilder.setHost(Window.Location.getHost());
+        String path = Window.Location.getPath();
+        if (path != null && path.length() > 0) {
+            urlBuilder.setPath(path);
+        }
+        return urlBuilder.buildString();
     }
 }

@@ -98,7 +98,7 @@ public class ReportDialog extends DeferredProcessDialog {
 
     public ReportDialog(String title, String initialMessage) {
         super(title, initialMessage, ApplicationBackend.getBackendType() == ApplicationBackendType.GAE);
-        downloadServletPath = NavigationUri.getDeploymentBaseURL() + "download/";
+        downloadServletPath = AppSite.getDeploymentBaseURL() + "download/";
     }
 
     protected boolean useDownloadFrame() {

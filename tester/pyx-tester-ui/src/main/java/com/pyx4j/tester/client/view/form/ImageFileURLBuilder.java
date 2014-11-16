@@ -21,7 +21,7 @@
 package com.pyx4j.tester.client.view.form;
 
 import com.pyx4j.entity.shared.IFile;
-import com.pyx4j.site.client.NavigationUri;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.tester.shared.file.TFileURLBuilder;
 
 public class ImageFileURLBuilder extends TFileURLBuilder {
@@ -32,6 +32,6 @@ public class ImageFileURLBuilder extends TFileURLBuilder {
 
     @Override
     public String getUrl(IFile<?> image) {
-        return NavigationUri.getDeploymentBaseURL() + super.getUrl(image);
+        return AppSite.getDeploymentBaseURL() + super.getUrl(image);
     }
 }
