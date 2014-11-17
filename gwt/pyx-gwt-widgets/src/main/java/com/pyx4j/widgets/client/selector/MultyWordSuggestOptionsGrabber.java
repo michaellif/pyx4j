@@ -25,11 +25,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.google.gwt.safehtml.shared.SafeHtml;
+
 import com.pyx4j.commons.IFormatter;
 
 public class MultyWordSuggestOptionsGrabber<E> implements IOptionsGrabber<E> {
 
     private IFormatter<E, String> formatter;
+
+    private IFormatter<E, SafeHtml> optionFormatter;
 
     private Comparator<E> comparator = null;
 
@@ -40,6 +44,10 @@ public class MultyWordSuggestOptionsGrabber<E> implements IOptionsGrabber<E> {
 
     public void setFormatter(IFormatter<E, String> formatter) {
         this.formatter = formatter;
+    }
+
+    public void setOptionsFormatter(IFormatter<E, SafeHtml> optionFormatter) {
+        this.optionFormatter = optionFormatter;
     }
 
     public void setAllOptions(Collection<E> options) {
