@@ -49,8 +49,11 @@ public class AggregatedTransferLister extends SiteDataTablePanel<AggregatedTrans
                 new MemberColumnDescriptor.Builder(proto().grossPaymentFee()).build(),
                 new MemberColumnDescriptor.Builder(proto().grossPaymentCount()).build(),
 
-                new MemberColumnDescriptor.Builder(proto().adjustments(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().chargebacks(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().adjustments(), false).sortable(false).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().adjustments().$().adjustment()).searchableOnly().build(),
+
+                new MemberColumnDescriptor.Builder(proto().chargebacks(), false).sortable(false).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().chargebacks().$().chargeback()).searchableOnly().build(),
 
                 new MemberColumnDescriptor.Builder(proto().payments().$().id()).searchableOnly().columnTitle(i18n.tr("Payment Id")).build(),
                 new MemberColumnDescriptor.Builder(proto().returnedPayments().$().id()).searchableOnly().columnTitle(i18n.tr("Returned Payment Id")).build()
