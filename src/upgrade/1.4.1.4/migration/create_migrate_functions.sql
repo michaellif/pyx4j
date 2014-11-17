@@ -97,6 +97,16 @@ BEGIN
                 ||'WHERE    e.template_type =  t.template_type '
                 ||'AND      t.template_type = ''PaymentReturned'' ';
         
+        -- maintenance email templates changes
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.email_template  '
+                ||'SET  content = regexp_replace(content, ''requestViewUrl'', ''residentViewUrl'', ''g'') '
+                ||'WHERE    template_type ~ ''^MaintenanceRequest'' ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.email_template  '
+                ||'SET  content = regexp_replace(content, ''residentViewUrl'',''crmViewUrl'', ''g'') '
+                ||'WHERE    template_type  = ''MaintenanceRequestCreatedPMC'' ';
+        
         -- online_application
         
         EXECUTE 'UPDATE '||v_schema_name||'.online_application AS a '
