@@ -92,16 +92,6 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
     }
 
     @Override
-    public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule, Employee requestReporter) {
-        super.sheduleMaintenanceRequest(request, schedule, requestReporter);
-    }
-
-    @Override
-    public void resolveMaintenanceRequest(MaintenanceRequest request, Employee requestReporter) {
-        super.resolveMaintenanceRequest(request, requestReporter);
-    }
-
-    @Override
     public List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, Tenant reporter) {
         Persistence.ensureRetrieve(reporter.lease(), AttachLevel.Attached);
         Persistence.ensureRetrieve(reporter.lease().unit().building(), AttachLevel.Attached);

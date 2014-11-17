@@ -164,7 +164,8 @@ public abstract class MaintenanceAbstractManager {
             // send via MailQue using NoticeOfEntryDeliveryCallback that will populate schedule.noticeOfEntry()
             email = ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestEntryNotice(request, NoticeOfEntryDeliveryCallback.class);
             if (email != null) {
-                // save email messageID to be able to identify the schedule object in NoticeOfEntryDeliveryCallback
+                schedule.noticeOfEntry().text().setValue(extractMailBody(email));
+                // save email messageID to identify the schedule object in NoticeOfEntryDeliveryCallback
                 schedule.noticeOfEntry().messageId().setValue(email.getMailMessageObjectId());
             }
         }
@@ -269,12 +270,11 @@ public abstract class MaintenanceAbstractManager {
                 crit.eq(crit.proto().noticeOfEntry().messageId(), mailMessage.getMailMessageObjectId());
                 MaintenanceRequestSchedule schedule = Persistence.service().retrieve(crit);
                 if (schedule != null) {
-                    schedule.noticeOfEntry().text().setValue(extractMailBody(mailMessage));
                     schedule.noticeOfEntry().messageId().setValue(mailMessage.getHeader("Message-ID"));
                     schedule.noticeOfEntry().messageDate().setValue(mailMessage.getHeader("Date"));
                     Persistence.service().persist(schedule);
                 } else {
-                    throw new Error("Maintenance Request Schedule not found using MailMessageObjectId: " + mailMessage.getMailMessageObjectId());
+                    log.error("Maintenance Request Schedule not found using MailMessageObjectId: " + mailMessage.getMailMessageObjectId());
                 }
             }
         }
