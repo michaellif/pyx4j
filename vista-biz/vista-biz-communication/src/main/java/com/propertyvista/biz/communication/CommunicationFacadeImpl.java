@@ -348,10 +348,14 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     private MailMessage sendMaintenanceRequestEmail(String sendTo, EmailTemplateType emailType, MaintenanceRequest request,
             Class<? extends MailDeliveryCallback> callback) {
-        MailMessage m = MessageTemplatesCustomizable.createMaintenanceRequestEmail(emailType, request);
-        m.setTo(sendTo);
-        Mail.queueUofW(m, callback, null);
-        return m;
+        if (sendTo == null) {
+            return null;
+        } else {
+            MailMessage m = MessageTemplatesCustomizable.createMaintenanceRequestEmail(emailType, request);
+            m.setTo(sendTo);
+            Mail.queueUofW(m, callback, null);
+            return m;
+        }
     }
 
     @Override
