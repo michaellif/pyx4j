@@ -915,7 +915,8 @@ public abstract class LeaseAbstractManager {
         }
 
         // actual persist mechanics:
-        if (lease.currentTerm().getPrimaryKey() == null) {
+        if (lease.getPrimaryKey() == null) {
+            lease = lease.detach();
             LeaseTerm term = lease.currentTerm().detach();
 
             lease.currentTerm().set(null);
