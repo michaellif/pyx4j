@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -82,7 +82,15 @@ public class ResidentSelfRegistrationServiceImpl implements ResidentSelfRegistra
 
         SelfRegistrationBuildingDTO dto = EntityFactory.create(SelfRegistrationBuildingDTO.class);
         dto.supportPhone().setValue(dbo.contacts().supportPhone().getValue());
-        dto.address().setValue(dbo.info().address().getStringView());
+        StringBuilder sb = new StringBuilder();
+        sb.append(dbo.info().address().streetNumber().getValue()).append(" ").append(dbo.info().address().streetName().getValue());
+        dto.streetAddress().setValue(sb.toString());
+        dto.municipality().setValue(dbo.info().address().city().getValue());
+        sb = new StringBuilder();
+        sb.append(dbo.info().address().province().getValue()).append(", ").append(dbo.info().address().country().getValue()).append(", ")
+                .append(dbo.info().address().postalCode().getValue());
+        dto.region().setValue(sb.toString());
+        dto.propertyCode().setValue(dbo.propertyCode().getValue());
         dto.buildingKey().set(dbo.createIdentityStub());
 
         return dto;

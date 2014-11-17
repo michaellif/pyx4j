@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -16,6 +16,11 @@ package com.propertyvista.portal.resident.ui.signup;
 import java.util.Collection;
 import java.util.Comparator;
 
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.forms.client.ui.CSelectorTextBox;
 import com.pyx4j.widgets.client.selector.MultyWordSuggestOptionsGrabber;
 
@@ -31,6 +36,25 @@ public class BuildingSuggestBox extends CSelectorTextBox<SelfRegistrationBuildin
 
         optionsGrabber = ((MultyWordSuggestOptionsGrabber) getOptionsGrabber());
         optionsGrabber.setFormatter(getFormatter());
+
+        setFormatter(new IFormatter<SelfRegistrationBuildingDTO, String>() {
+            @Override
+            public String format(SelfRegistrationBuildingDTO value) {
+                return SimpleMessageFormat.format("{0} - {1}", value.propertyCode().getValue(), value.streetAddress().getValue());
+            }
+        });
+
+        setOptionFormatter(new IFormatter<SelfRegistrationBuildingDTO, SafeHtml>() {
+            @Override
+            public SafeHtml format(SelfRegistrationBuildingDTO value) {
+                SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                builder.appendHtmlConstant(SimpleMessageFormat
+                        .format("<div style=\"padding:3px;font-size:12px;\"><div><span style=\"font-size:12px;\">{0} - {1}</span></div><div>{2}</div><div>{3}</div></div>",
+                                value.propertyCode(), value.streetAddress().getValue(), value.streetAddress().getValue() + ", "
+                                        + value.municipality().getValue(), value.region().getValue()));
+                return builder.toSafeHtml();
+            }
+        });
         optionsGrabber.setComparator(new Comparator<SelfRegistrationBuildingDTO>() {
             @Override
             public int compare(SelfRegistrationBuildingDTO paramT1, SelfRegistrationBuildingDTO paramT2) {

@@ -16,20 +16,32 @@ package com.propertyvista.portal.rpc.portal.resident.dto;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+@ToStringFormat("{0,choice,null#|!null#{0} - }{1}, {2}, {3}")
 public interface SelfRegistrationBuildingDTO extends IEntity {
 
     Building buildingKey();
 
     @ToString(index = 0)
-    // Building Address String
-    IPrimitive<String> address();
+    IPrimitive<String> propertyCode();
+
+    @ToString(index = 1)
+    IPrimitive<String> streetAddress();
+
+    @ToString(index = 2)
+    IPrimitive<String> municipality();
+
+    @ToString(index = 3)
+    IPrimitive<String> region();
 
     @Editor(type = EditorType.phone)
     IPrimitive<String> supportPhone();
