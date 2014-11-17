@@ -160,13 +160,12 @@ public abstract class LeaseAbstractManager {
 
     public Lease setUnit(Lease lease, AptUnit unitId) {
         assert !lease.currentTerm().isNull();
-        return setUnit(lease, lease.currentTerm(), unitId, true);
+        return setUnitInternal(lease.currentTerm(), unitId, true).lease();
     }
 
     public Lease setService(Lease lease, ProductItem serviceId) {
         assert !lease.currentTerm().isNull();
-        setService(lease, lease.currentTerm(), serviceId);
-        return lease;
+        return setServiceInternal(lease.currentTerm(), serviceId).lease();
     }
 
     public Lease persist(Lease lease) {
@@ -201,21 +200,17 @@ public abstract class LeaseAbstractManager {
     // Lease term operations: -----------------------------------------------------------------------------------------
 
     public LeaseTerm setUnit(LeaseTerm leaseTerm, AptUnit unitId) {
-        assert !leaseTerm.lease().isNull();
-        setUnit(leaseTerm.lease(), leaseTerm, unitId, true);
-        return leaseTerm;
+        return setUnitInternal(leaseTerm, unitId, true);
     }
 
     public LeaseTerm setService(LeaseTerm leaseTerm, ProductItem serviceId) {
-        assert !leaseTerm.lease().isNull();
-        return setService(leaseTerm.lease(), leaseTerm, serviceId);
+        return setServiceInternal(leaseTerm, serviceId);
     }
 
     public LeaseTerm setPackage(LeaseTerm leaseTerm, AptUnit unitId, BillableItem serviceItem, List<BillableItem> featureItems) {
-        assert !leaseTerm.lease().isNull();
         assert !unitId.isNull();
 
-        setUnit(leaseTerm.lease(), leaseTerm, unitId, false);
+        setUnitInternal(leaseTerm, unitId, false);
 
         // update service/features:
         if (serviceItem != null) {
@@ -777,12 +772,12 @@ public abstract class LeaseAbstractManager {
 
     // Internals: -----------------------------------------------------------------------------------------------------
 
-    private Lease setUnit(Lease lease, LeaseTerm leaseTerm, AptUnit unitId, boolean updateTermData) {
-        Persistence.ensureRetrieve(lease, AttachLevel.Attached);
-        Persistence.ensureRetrieve(leaseTerm, AttachLevel.Attached);
+    private LeaseTerm setUnitInternal(LeaseTerm leaseTerm, AptUnit unitId, boolean updateTermData) {
+        assert !leaseTerm.lease().isNull();
+        Persistence.ensureRetrieve(leaseTerm.lease(), AttachLevel.Attached);
 
-        if (!VistaFeatures.instance().yardiIntegration() && !lease.status().getValue().isDraft()) {
-            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
+        if (!VistaFeatures.instance().yardiIntegration() && !leaseTerm.lease().status().getValue().isDraft()) {
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", leaseTerm.lease().status().getValue()));
         }
 
         AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitId.getPrimaryKey());
@@ -791,23 +786,22 @@ public abstract class LeaseAbstractManager {
         leaseTerm.unit().set(unit);
         setBuildingUtilities(leaseTerm);
 
-        if (VersionedEntityUtils.equalsIgnoreVersion(lease.currentTerm(), leaseTerm)) {
-            lease.unit().set(unit);
-            leaseTerm.lease().set(lease);
+        if (VersionedEntityUtils.equalsIgnoreVersion(leaseTerm.lease().currentTerm(), leaseTerm)) {
+            leaseTerm.lease().unit().set(unit);
 
             // set LeaseBillingPolicy offsets
             boolean policyFound = false;
             LeaseBillingPolicy billingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit.building(), LeaseBillingPolicy.class);
             for (LeaseBillingTypePolicyItem policyItem : billingPolicy.availableBillingTypes()) {
-                if (policyItem.billingPeriod().getValue().equals(lease.billingAccount().billingPeriod().getValue())) {
-                    lease.billingAccount().paymentDueDayOffset().set(policyItem.paymentDueDayOffset());
-                    lease.billingAccount().finalDueDayOffset().set(policyItem.finalDueDayOffset());
+                if (policyItem.billingPeriod().getValue().equals(leaseTerm.lease().billingAccount().billingPeriod().getValue())) {
+                    leaseTerm.lease().billingAccount().paymentDueDayOffset().set(policyItem.paymentDueDayOffset());
+                    leaseTerm.lease().billingAccount().finalDueDayOffset().set(policyItem.finalDueDayOffset());
                     policyFound = true;
                     break;
                 }
             }
             if (!policyFound) {
-                throw new IllegalArgumentException(i18n.tr("No Billing policy found for: {0}", lease.billingAccount().billingPeriod().getValue()));
+                throw new IllegalArgumentException(i18n.tr("No Billing policy found for: {0}", leaseTerm.lease().billingAccount().billingPeriod().getValue()));
             }
         }
 
@@ -815,33 +809,33 @@ public abstract class LeaseAbstractManager {
             updateTermUnitRelatedData(leaseTerm);
         }
 
-        return lease;
+        return leaseTerm;
     }
 
-    private LeaseTerm setService(Lease lease, LeaseTerm leaseTerm, ProductItem serviceId) {
-        Persistence.ensureRetrieve(lease, AttachLevel.Attached);
-        Persistence.ensureRetrieve(leaseTerm, AttachLevel.Attached);
+    private LeaseTerm setServiceInternal(LeaseTerm leaseTerm, ProductItem serviceId) {
+        assert !leaseTerm.lease().isNull();
+        Persistence.ensureRetrieve(leaseTerm.lease(), AttachLevel.Attached);
 
         // find/load all necessary ingredients:
-        assert !lease.unit().isNull();
-        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
+        assert !leaseTerm.unit().isNull();
+        Persistence.ensureRetrieve(leaseTerm.unit().building(), AttachLevel.Attached);
 
         ProductItem serviceItem = Persistence.service().retrieve(ProductItem.class, serviceId.getPrimaryKey());
         assert serviceItem != null;
         Persistence.ensureRetrieve(serviceItem.element(), AttachLevel.Attached);
 
         // double check:
-        if (!lease.unit().equals(serviceItem.element())) {
+        if (!leaseTerm.unit().equals(serviceItem.element())) {
             throw new IllegalArgumentException(i18n.tr("Invalid Unit/Service combination"));
         }
 
         // set selected service:
-        BillableItem billableItem = createBillableItem(lease, serviceItem);
+        BillableItem billableItem = createBillableItem(leaseTerm.lease(), serviceItem);
         leaseTerm.version().leaseProducts().serviceItem().set(billableItem);
 
-        if (VersionedEntityUtils.equalsIgnoreVersion(lease.currentTerm(), leaseTerm)) {
-            if (!lease.status().getValue().isDraft()) {
-                throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
+        if (VersionedEntityUtils.equalsIgnoreVersion(leaseTerm.lease().currentTerm(), leaseTerm)) {
+            if (!leaseTerm.lease().status().getValue().isDraft()) {
+                throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", leaseTerm.lease().status().getValue()));
             }
 // TODO - review deposits lifecycle management!
 //            // clear current deposits:
@@ -873,7 +867,7 @@ public abstract class LeaseAbstractManager {
                     if (feature.version().mandatory().getValue(false)) {
                         Persistence.ensureRetrieve(feature.version().items(), AttachLevel.Attached);
                         if (!feature.version().items().isEmpty()) {
-                            leaseTerm.version().leaseProducts().featureItems().add(createBillableItem(lease, feature.version().items().get(0)));
+                            leaseTerm.version().leaseProducts().featureItems().add(createBillableItem(leaseTerm.lease(), feature.version().items().get(0)));
                         }
                     }
                 }
