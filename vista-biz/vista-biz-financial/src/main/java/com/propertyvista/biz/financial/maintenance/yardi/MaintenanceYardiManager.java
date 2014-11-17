@@ -29,7 +29,6 @@ import com.propertyvista.biz.system.yardi.YardiMaintenanceFacade;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
