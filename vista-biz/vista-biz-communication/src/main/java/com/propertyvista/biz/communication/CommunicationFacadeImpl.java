@@ -353,7 +353,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         } else {
             MailMessage m = MessageTemplatesCustomizable.createMaintenanceRequestEmail(emailType, request);
             m.setTo(sendTo);
-            Mail.queueUofW(m, callback, null);
+            Mail.queue(m, callback, null);
             return m;
         }
     }
