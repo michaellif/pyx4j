@@ -265,7 +265,9 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
         criteria.eq(criteria.proto().customer().user(), customerUser);
         criteria.ne(criteria.proto().status(), OnlineApplication.Status.Cancelled);
-        criteria.ne(criteria.proto().masterOnlineApplication().status(), MasterOnlineApplication.Status.Cancelled);
+        criteria.in(criteria.proto().masterOnlineApplication().status(), MasterOnlineApplication.Status.inProgress());
+        criteria.in(criteria.proto().masterOnlineApplication().leaseApplication().status(), LeaseApplication.Status.draft());
+        criteria.eq(criteria.proto().masterOnlineApplication().leaseApplication().lease().status(), Lease.Status.Application);
 
         List<OnlineApplication> applications = Persistence.service().query(criteria);
 
