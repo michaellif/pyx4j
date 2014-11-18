@@ -25,6 +25,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.policy.policies.domain.ProofOfAssetDocumentType;
+import com.propertyvista.domain.policy.policies.domain.ProofOfEmploymentDocumentType;
 import com.propertyvista.domain.policy.policies.domain.ProofOfIncomeDocumentType;
 
 @DiscriminatorValue("ApplicationDocumentationPolicy")
@@ -39,6 +40,23 @@ public interface ApplicationDocumentationPolicy extends Policy, TenantsAccessibl
     @Caption(description = "IDs/Documents that accepted as valid IDs")
     IList<IdentificationDocumentType> allowedIDs();
 
+    // ---------------------------------------------------------------------------
+
+    @Editor(type = EditorType.radiogroup)
+    @Caption(description = "Is the proof of employment is mandatory")
+    IPrimitive<Boolean> mandatoryProofOfEmployment();
+
+    @NotNull
+    @Caption(description = "The number of the employment documents that is required for an application")
+    IPrimitive<Integer> numberOfEmploymentDocuments();
+
+    @Owned
+    @NotNull
+    @Caption(description = "Documents that accepted as valid proof of employment")
+    IList<ProofOfEmploymentDocumentType> allowedEmploymentDocuments();
+
+    // ---------------------------------------------------------------------------
+
     @Editor(type = EditorType.radiogroup)
     @Caption(description = "Is the proof of income is mandatory")
     IPrimitive<Boolean> mandatoryProofOfIncome();
@@ -51,6 +69,8 @@ public interface ApplicationDocumentationPolicy extends Policy, TenantsAccessibl
     @NotNull
     @Caption(description = "Documents that accepted as valid proof of income")
     IList<ProofOfIncomeDocumentType> allowedIncomeDocuments();
+
+    // ---------------------------------------------------------------------------
 
     @Editor(type = EditorType.radiogroup)
     @Caption(description = "Is the proof of asset is mandatory")

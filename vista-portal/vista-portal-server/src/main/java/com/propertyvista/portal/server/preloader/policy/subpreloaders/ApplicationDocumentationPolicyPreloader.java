@@ -21,6 +21,7 @@ import com.propertyvista.domain.policy.policies.domain.ApplicationDocumentType.I
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Type;
 import com.propertyvista.domain.policy.policies.domain.ProofOfAssetDocumentType;
+import com.propertyvista.domain.policy.policies.domain.ProofOfEmploymentDocumentType;
 import com.propertyvista.domain.policy.policies.domain.ProofOfIncomeDocumentType;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
@@ -63,16 +64,31 @@ public class ApplicationDocumentationPolicyPreloader extends AbstractPolicyPrelo
 
         // ---------------------------------------------------------
 
+        policy.mandatoryProofOfEmployment().setValue(true);
+        policy.numberOfEmploymentDocuments().setValue(2);
+
+        ProofOfEmploymentDocumentType poe = EntityFactory.create(ProofOfEmploymentDocumentType.class);
+        poe.name().setValue(i18n.tr("Letter of Employment"));
+        poe.importance().setValue(Importance.Required);
+        policy.allowedEmploymentDocuments().add(poe);
+
+        poe = EntityFactory.create(ProofOfEmploymentDocumentType.class);
+        poe.name().setValue(i18n.tr("Pay Stub"));
+        poe.importance().setValue(Importance.Preferred);
+        policy.allowedEmploymentDocuments().add(poe);
+
+        // ---------------------------------------------------------
+
         policy.mandatoryProofOfIncome().setValue(false);
         policy.numberOfIncomeDocuments().setValue(2);
 
         ProofOfIncomeDocumentType poi = EntityFactory.create(ProofOfIncomeDocumentType.class);
-        poi.name().setValue(i18n.tr("Letter of Employment"));
+        poi.name().setValue(i18n.tr("Pension Confirmation"));
         poi.importance().setValue(Importance.Required);
         policy.allowedIncomeDocuments().add(poi);
 
         poi = EntityFactory.create(ProofOfIncomeDocumentType.class);
-        poi.name().setValue(i18n.tr("Pay Stub"));
+        poi.name().setValue(i18n.tr("Social Assistance Confirmation"));
         poi.importance().setValue(Importance.Preferred);
         policy.allowedIncomeDocuments().add(poi);
 

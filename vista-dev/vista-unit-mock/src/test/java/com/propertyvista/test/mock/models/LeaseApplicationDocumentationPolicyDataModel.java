@@ -21,6 +21,7 @@ import com.propertyvista.domain.policy.policies.domain.ApplicationDocumentType.I
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Type;
 import com.propertyvista.domain.policy.policies.domain.ProofOfAssetDocumentType;
+import com.propertyvista.domain.policy.policies.domain.ProofOfEmploymentDocumentType;
 import com.propertyvista.domain.policy.policies.domain.ProofOfIncomeDocumentType;
 import com.propertyvista.test.mock.MockDataModel;
 
@@ -40,11 +41,21 @@ public class LeaseApplicationDocumentationPolicyDataModel extends MockDataModel<
 
         // ---------------------------------------------------------
 
+        policy.mandatoryProofOfEmployment().setValue(true);
+        policy.numberOfEmploymentDocuments().setValue(1);
+
+        ProofOfEmploymentDocumentType poe = EntityFactory.create(ProofOfEmploymentDocumentType.class);
+        poe.name().setValue("Letter of Employment");
+        poe.importance().setValue(Importance.Required);
+        policy.allowedEmploymentDocuments().add(poe);
+
+        // ---------------------------------------------------------
+
         policy.mandatoryProofOfIncome().setValue(false);
         policy.numberOfIncomeDocuments().setValue(1);
 
         ProofOfIncomeDocumentType poi = EntityFactory.create(ProofOfIncomeDocumentType.class);
-        poi.name().setValue("Letter of Employment");
+        poi.name().setValue("Social Assistance Confirmation");
         poi.importance().setValue(Importance.Required);
         policy.allowedIncomeDocuments().add(poi);
 
