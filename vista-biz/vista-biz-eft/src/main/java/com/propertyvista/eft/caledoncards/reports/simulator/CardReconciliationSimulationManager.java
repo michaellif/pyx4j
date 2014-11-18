@@ -66,7 +66,7 @@ public class CardReconciliationSimulationManager {
     private static final Logger log = LoggerFactory.getLogger(CardReconciliationSimulationManager.class);
 
     public String createReports(CardServiceSimulationCompany companyId, LogicalDate from, LogicalDate to) {
-        log.debug("create CardReconciliation Company:{} from:{} to:{}", company, from, to);
+        log.debug("create CardReconciliation Company:{} from:{} to:{}", companyId, from, to);
         EntityQueryCriteria<CardServiceSimulationTransaction> criteria = EntityQueryCriteria.create(CardServiceSimulationTransaction.class);
         criteria.in(criteria.proto().transactionType(), SimulationTransactionType.Sale, SimulationTransactionType.Completion, SimulationTransactionType.Return);
         criteria.eq(criteria.proto().merchant().company(), companyId);
