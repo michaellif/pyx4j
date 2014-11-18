@@ -33,19 +33,19 @@ public interface TenantSureTransaction extends IEntity {
 
     /**
      * Status flow:
-     * 
+     *
      * New policy
      * Draft -> AuthorizationRejected
      * Draft -> Authorized -> AuthorizationReversal; cfcApiClient.bindQuote failed
      * Draft -> Authorized -> AuthorizedPaymentRejectedRetry
      * Draft -> Authorized -> Cleared
-     * 
-     * 
+     *
+     *
      * Monthly process:
      * Draft -> Cleared
      * Draft -> PaymentError; Caledon connection error -> create a new InsuranceTenantSureTransaction next time.
      * Draft -> PaymentRejected; make insurance "PendingCancellation" and send Email
-     * 
+     *
      */
     public enum TransactionStatus {
 
@@ -86,6 +86,8 @@ public interface TenantSureTransaction extends IEntity {
     IPrimitive<TransactionStatus> status();
 
     IPrimitive<String> transactionAuthorizationNumber();
+
+    IPrimitive<String> transactionErrorMessage();
 
     IPrimitive<Date> transactionDate();
 }

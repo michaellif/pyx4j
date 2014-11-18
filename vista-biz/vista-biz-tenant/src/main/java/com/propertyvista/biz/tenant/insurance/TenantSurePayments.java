@@ -142,7 +142,7 @@ class TenantSurePayments {
             }
         });
         if (transaction.status().getValue() != TenantSureTransaction.TransactionStatus.Cleared) {
-            throw new UserRuntimeException(i18n.tr("Credit Card payment failed"));
+            throw new UserRuntimeException(i18n.tr("Payment has not been completed\nTransaction Error Message: {0}", transaction.transactionErrorMessage()));
         }
     }
 
@@ -306,9 +306,11 @@ class TenantSurePayments {
                 transaction.status().setValue(TenantSureTransaction.TransactionStatus.Cleared);
             } else if (ServerSideFactory.create(CreditCardFacade.class).isNetworkError(response.code().getValue())) {
                 transaction.transactionAuthorizationNumber().setValue(response.code().getValue());
+                transaction.transactionErrorMessage().setValue(response.message().getValue());
                 transaction.status().setValue(TenantSureTransaction.TransactionStatus.PaymentError);
             } else {
                 transaction.transactionAuthorizationNumber().setValue(response.code().getValue());
+                transaction.transactionErrorMessage().setValue(response.message().getValue());
                 transaction.status().setValue(TenantSureTransaction.TransactionStatus.PaymentRejected);
             }
 
