@@ -65,6 +65,9 @@ public class ResidentProfileCrudServiceImpl implements ResidentProfileCrudServic
             RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, RestrictionsPolicy.class);
             to.emergencyContactsIsMandatory().setValue(restrictionsPolicy.emergencyContactsIsMandatory().getValue());
             to.emergencyContactsNumberRequired().setValue(restrictionsPolicy.emergencyContactsNumber().getValue());
+        } else {
+            to.emergencyContactsIsMandatory().setValue(true);
+            to.emergencyContactsNumberRequired().setValue(1);
         }
 
         callback.onSuccess(to);

@@ -87,6 +87,9 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
             }
             to.emergencyContactsIsMandatory().setValue(restrictionsPolicy.emergencyContactsIsMandatory().getValue());
             to.emergencyContactsNumberRequired().setValue(restrictionsPolicy.emergencyContactsNumber().getValue());
+        } else {
+            to.emergencyContactsIsMandatory().setValue(true);
+            to.emergencyContactsNumberRequired().setValue(1);
         }
 
         if (VistaFeatures.instance().yardiIntegration()) {
