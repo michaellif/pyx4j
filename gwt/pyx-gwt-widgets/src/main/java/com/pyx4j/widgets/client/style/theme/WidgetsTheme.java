@@ -475,14 +475,8 @@ public class WidgetsTheme extends Theme {
         style.addProperty("cursor", "hand");
         addStyle(style);
 
-        style = new Style(".", StyleName.SelectionPickerPanelItem);
-        style.addProperty("border-color", ThemeColor.foreground, 0.2);
-        style.addProperty("border-bottom", "dashed");
-        style.addProperty("border-width", "1px");
-        addStyle(style);
-
         style = new Style(".", StyleName.SelectionPickerPanelItem, "-", WidgetsTheme.StyleDependent.hover);
-        style.addGradient(ThemeColor.foreground, 0.2, ThemeColor.foreground, 0);
+        style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.05);
         addStyle(style);
 
         style = new Style(".", StyleName.SelectedItemClose);

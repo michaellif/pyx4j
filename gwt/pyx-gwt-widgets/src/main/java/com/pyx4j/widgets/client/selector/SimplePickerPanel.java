@@ -25,6 +25,10 @@ import java.util.Collection;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -33,6 +37,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
@@ -176,6 +181,8 @@ public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E>
                 SafeHtml formattedValue = optionFormatter.format(value);
                 label = new HTML((query.equals("") ? formattedValue : OptionQueryHighlighter.highlight(formattedValue, query)));
                 label.setStyleName(WidgetsTheme.StyleName.SelectionPickerPanelItem.name());
+                label.addMouseOverHandler(new ItemMouseEventHandler());
+                label.addMouseOutHandler(new ItemMouseEventHandler());
                 setWidget(label);
             }
 
@@ -189,6 +196,27 @@ public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E>
                 return value;
             }
 
+            public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+                return addDomHandler(handler, MouseOverEvent.getType());
+            }
+
+            public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+                return addDomHandler(handler, MouseOutEvent.getType());
+            }
+
+            public class ItemMouseEventHandler implements MouseOverHandler, MouseOutHandler {
+                @Override
+                public void onMouseOver(final MouseOverEvent event) {
+                    Widget widget = (Widget) event.getSource();
+                    widget.setStyleDependentName(WidgetsTheme.StyleDependent.hover.name(), true);
+                }
+
+                @Override
+                public void onMouseOut(final MouseOutEvent event) {
+                    Widget widget = (Widget) event.getSource();
+                    widget.removeStyleDependentName(WidgetsTheme.StyleDependent.hover.name());
+                }
+            }
         }
     }
 }
