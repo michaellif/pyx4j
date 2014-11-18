@@ -263,7 +263,7 @@
 				<textElement verticalAlignment="Bottom">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/streetNumber")).getValue() + " " + $F{address}.getMember(new com.pyx4j.entity.core.Path("address/streetName")).getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.contact.InternationalAddress)$F{address}.cast()).streetNumber().getValue() + " " + ((com.propertyvista.domain.contact.InternationalAddress)$F{address}.cast()).streetName().getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="140" y="343" width="268" height="1"/>
@@ -292,7 +292,7 @@
 				<textElement verticalAlignment="Bottom">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/suiteNumber")).getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.contact.InternationalAddress)$F{address}.cast()).suiteNumber().getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="140" y="384" width="268" height="1"/>
@@ -302,7 +302,7 @@
 				<textElement verticalAlignment="Bottom">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/city")).getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.contact.InternationalAddress)$F{address}.cast()).city().getValue()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="0" y="363" width="159" height="20"/>
@@ -328,7 +328,7 @@
 				<textElement verticalAlignment="Bottom">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/postalCode")).getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.contact.InternationalAddress)$F{address}.cast()).postalCode().getValue()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="0" y="384" width="159" height="20"/>
@@ -346,7 +346,7 @@
 				<textElement verticalAlignment="Bottom">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/province")).getStringView()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.contact.InternationalAddress)$F{address}.cast()).province().getStringView()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="0" y="424" width="159" height="20"/>
@@ -364,7 +364,7 @@
 				<textElement verticalAlignment="Bottom">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/country")).getStringView()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.contact.InternationalAddress)$F{address}.cast()).country().getStringView()]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

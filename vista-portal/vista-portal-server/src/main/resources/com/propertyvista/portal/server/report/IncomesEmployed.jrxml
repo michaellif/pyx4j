@@ -15,7 +15,7 @@
 	<field name="streetType" class="com.propertyvista.common.domain.contact.IAddressFull.StreetType"/>
 	<field name="supervisorName" class="java.lang.String"/>
 	<field name="supervisorPhone" class="java.lang.String"/>
-	<field name="monthlyAmount/amount" class="java.lang.Double"/>
+	<field name="incomeAmount/amount" class="java.lang.Double"/>
 	<field name="position" class="java.lang.String"/>
 	<field name="starts" class="java.util.Date"/>
 	<field name="ends" class="java.util.Date"/>
@@ -133,7 +133,7 @@
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="288" y="212" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{monthlyAmount/amount}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{incomeAmount/amount}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="11" y="214" width="165" height="20"/>
