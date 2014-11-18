@@ -65,14 +65,16 @@ public class CardReconciliationSimulationManager {
 
     private static final Logger log = LoggerFactory.getLogger(CardReconciliationSimulationManager.class);
 
-    public String createReports(final CardServiceSimulationCompany company, LogicalDate from, LogicalDate to) {
+    public String createReports(CardServiceSimulationCompany companyId, LogicalDate from, LogicalDate to) {
         log.debug("create CardReconciliation Company:{} from:{} to:{}", company, from, to);
         EntityQueryCriteria<CardServiceSimulationTransaction> criteria = EntityQueryCriteria.create(CardServiceSimulationTransaction.class);
         criteria.in(criteria.proto().transactionType(), SimulationTransactionType.Sale, SimulationTransactionType.Completion, SimulationTransactionType.Return);
-        criteria.eq(criteria.proto().merchant().company(), company);
+        criteria.eq(criteria.proto().merchant().company(), companyId);
         criteria.eq(criteria.proto().voided(), Boolean.FALSE);
         criteria.ge(criteria.proto().transactionDate(), from);
         criteria.lt(criteria.proto().transactionDate(), DateUtils.addDays(to, +1));
+
+        final CardServiceSimulationCompany company = Persistence.service().retrieve(CardServiceSimulationCompany.class, companyId.getPrimaryKey());
 
         final List<CardServiceSimulationTransaction> transactions = Persistence.service().query(criteria);
         final Collection<CardServiceSimulationReconciliationRecord> records = createReconciliationRecord(transactions);
