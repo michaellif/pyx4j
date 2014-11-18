@@ -66,7 +66,7 @@ public class ResidentProfileCrudServiceImpl implements ResidentProfileCrudServic
             to.emergencyContactsIsMandatory().setValue(restrictionsPolicy.emergencyContactsIsMandatory().getValue());
             to.emergencyContactsNumberRequired().setValue(restrictionsPolicy.emergencyContactsNumber().getValue());
         } else {
-            to.emergencyContactsIsMandatory().setValue(true);
+            to.emergencyContactsIsMandatory().setValue(false);
             to.emergencyContactsNumberRequired().setValue(1);
         }
 
