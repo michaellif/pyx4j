@@ -250,6 +250,7 @@ class PaymentHealthMonitor {
             // This should not have TransactionRecord
             Collection<PaymentStatus> processedPaymentStatuses = new ArrayList<>(EnumSet.allOf(PaymentStatus.class));
             processedPaymentStatuses.removeAll(PaymentStatus.cancelable());
+            processedPaymentStatuses.remove(PaymentStatus.Canceled);
 
             Date reportSince = DateUtils.addMonths(forDate, -2);
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
@@ -263,8 +264,8 @@ class PaymentHealthMonitor {
                     if (cardTransactionRecord == null) {
                         if (processedPaymentStatuses.contains(paymentRecord.paymentStatus().getValue())) {
                             ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord,
-                                    "{0} Card Payment Record do not have TransactionRecord\n" //
-                                            + "Pmc:{1}", paymentRecord.id(), pmc.name());
+                                    "Card Payment Record {0} {1} do not have TransactionRecord\n" //
+                                            + "Pmc:{2}", paymentRecord.id(), paymentRecord.paymentStatus(), pmc.name());
                             executionMonitor.addFailedEvent("CardTransaction", paymentRecord.amount().getValue());
                         }
                     } else {

@@ -161,4 +161,28 @@ public class PaymentHealthMonitorTest extends LeaseFinancialTestBase {
         // 3 days later, Has missing CardsAggregatedTransfer
         SchedulerMock.runProcess(PmcProcessType.vistaHeathMonitor, "2011-01-04", 0, 0);
     }
+
+    public void testVerifyCardTransactionCanceled() throws Exception {
+        setSysDate("2011-01-01");
+
+        //Make Scheduled
+        {
+            LeasePaymentMethod paymentMethod = customerDataModel.addPaymentMethod(customer, getBuilding(), PaymentType.CreditCard);
+            Persistence.service().commit();
+
+            PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), paymentMethod, "100");
+            paymentRecord.targetDate().setValue(DateUtils.monthAdd(SystemDateManager.getLogicalDate(), 3));
+            ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
+            Persistence.service().commit();
+
+            ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
+            Persistence.service().commit();
+        }
+
+        SchedulerMock.runProcess(PmcProcessType.vistaHeathMonitor, (Date) null, 0, 0);
+
+        // 3 days later, Has missing CardsAggregatedTransfer
+        SchedulerMock.runProcess(PmcProcessType.vistaHeathMonitor, "2011-01-04", 0, 0);
+    }
+
 }
