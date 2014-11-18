@@ -65,11 +65,11 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
         setStyleName(PortalRootPaneTheme.StyleName.Comm.name());
 
-        calloutHandler = new HTML("<svg xmlns='http://www.w3.org/2000/svg' version='1.1'><polyline points='16,0 0,16 32,16' class='"
+        calloutHandler = new HTML("<svg style='width: 38px;' xmlns='http://www.w3.org/2000/svg' version='1.1'><polyline points='16,0 0,16 32,16' class='"
                 + PortalRootPaneTheme.StyleName.CommCallout.name() + "'/></svg>");
         calloutHandler.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        calloutHandler.getElement().getStyle().setProperty("right", "38px");
-        calloutHandler.getElement().getStyle().setProperty("top", "0px");
+        calloutHandler.getElement().getStyle().setProperty("right", "0");
+        calloutHandler.getElement().getStyle().setProperty("top", "0");
 
         headerHolder = new HeaderHolder();
         mainHolder = new FlowPanel();
