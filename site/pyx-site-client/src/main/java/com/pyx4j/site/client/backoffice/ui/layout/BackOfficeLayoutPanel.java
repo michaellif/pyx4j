@@ -26,6 +26,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutType;
@@ -201,9 +202,15 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
         }
     }
 
-    private void togglePopupCommVisible(Widget anchor) {
+    private void togglePopupCommVisible(final Widget anchor) {
         if (!popupCommHolder.isShowing()) {
-            popupCommHolder.showRelativeTo(anchor);
+            popupCommHolder.showRelativeTo(anchor, new PositionCallback() {
+                @Override
+                public void setPosition(int offsetWidth, int offsetHeight) {
+                    popupCommHolder.setPopupPosition(anchor.getAbsoluteLeft() + anchor.getOffsetWidth() - popupCommHolder.getOffsetWidth(),
+                            anchor.getAbsoluteTop() + anchor.getOffsetHeight());
+                }
+            });
         } else {
             popupCommHolder.hide();
         }

@@ -29,7 +29,25 @@ import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class DropDownPanel extends PopupPanel {
 
-    private Widget currentAnchor;
+    static {
+        Window.addResizeHandler(new ResizeHandler() {
+            @Override
+            public void onResize(ResizeEvent event) {
+                if (PopupPanel.getOpenPopups() != null) {
+                    for (PopupPanel panel : PopupPanel.getOpenPopups()) {
+                        assert (panel.isShowing());
+                        if (panel instanceof DropDownPanel) {
+                            ((DropDownPanel) panel).redraw();
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private Widget anchor;
+
+    private PositionCallback positionCallback;
 
     /**
      * Creates a new drop down panel.
@@ -38,32 +56,31 @@ public class DropDownPanel extends PopupPanel {
         super(true, false);
         setStyleName(WidgetsTheme.StyleName.DropDownPanel.name());
         setPreviewingAllNativeEvents(true);
-        Window.addResizeHandler(new ResizeHandler() {
-            @Override
-            public void onResize(ResizeEvent event) {
-                if (PopupPanel.getOpenPopups() != null) {
-                    for (PopupPanel panel : PopupPanel.getOpenPopups()) {
-                        assert (panel.isShowing());
-
-                        if (panel instanceof DropDownPanel && ((DropDownPanel) panel).currentAnchor != null) {
-                            panel.showRelativeTo(((DropDownPanel) panel).currentAnchor);
-                        }
-                    }
-                }
-            }
-        });
-
     }
 
     public void showRelativeTo(Widget anchor) {
-        if (currentAnchor != null) {
-            this.removeAutoHidePartner(currentAnchor.getElement());
-        }
-        if (anchor != null) {
-            this.addAutoHidePartner(anchor.getElement());
-        }
-        currentAnchor = anchor;
-        super.showRelativeTo(anchor);
+        showRelativeTo(anchor, null);
     }
 
+    public void showRelativeTo(final Widget anchor, final PositionCallback positionCallback) {
+        if (this.anchor != anchor) {
+            if (this.anchor != null) {
+                this.removeAutoHidePartner(this.anchor.getElement());
+            }
+            if (anchor != null) {
+                this.addAutoHidePartner(anchor.getElement());
+            }
+            this.anchor = anchor;
+        }
+        this.positionCallback = positionCallback;
+        redraw();
+    }
+
+    private void redraw() {
+        if (positionCallback == null) {
+            super.showRelativeTo(anchor);
+        } else {
+            setPopupPositionAndShow(positionCallback);
+        }
+    }
 }

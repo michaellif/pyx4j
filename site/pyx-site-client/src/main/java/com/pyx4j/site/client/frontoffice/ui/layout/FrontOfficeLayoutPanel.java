@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.gwt.commons.BrowserType;
@@ -324,9 +325,15 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         }
     }
 
-    private void togglePopupCommVisible(Widget anchor) {
+    private void togglePopupCommVisible(final Widget anchor) {
         if (!popupCommHolder.isShowing()) {
-            popupCommHolder.showRelativeTo(anchor);
+            popupCommHolder.showRelativeTo(anchor, new PositionCallback() {
+                @Override
+                public void setPosition(int offsetWidth, int offsetHeight) {
+                    popupCommHolder.setPopupPosition(anchor.getAbsoluteLeft() + anchor.getOffsetWidth() - popupCommHolder.getOffsetWidth(),
+                            anchor.getAbsoluteTop() + anchor.getOffsetHeight());
+                }
+            });
         } else {
             popupCommHolder.hide();
         }
