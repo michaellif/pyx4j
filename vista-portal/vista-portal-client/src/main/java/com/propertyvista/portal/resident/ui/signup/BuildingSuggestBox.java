@@ -48,10 +48,9 @@ public class BuildingSuggestBox extends CSelectorTextBox<SelfRegistrationBuildin
             @Override
             public SafeHtml format(SelfRegistrationBuildingDTO value) {
                 SafeHtmlBuilder builder = new SafeHtmlBuilder();
-                builder.appendHtmlConstant(SimpleMessageFormat
-                        .format("<div style=\"padding:3px;font-size:12px;\"><div><span style=\"font-size:12px;\">{0} - {1}</span></div><div>{2}</div><div>{3}</div></div>",
-                                value.propertyCode(), value.streetAddress().getValue(), value.streetAddress().getValue() + ", "
-                                        + value.municipality().getValue(), value.region().getValue()));
+                builder.appendHtmlConstant(SimpleMessageFormat.format("<div style=\"font-size:12px;\"><div>{0} - {1}</div><div>{2}</div><div>{3}</div></div>",
+                        value.propertyCode(), value.streetAddress().getValue(), value.streetAddress().getValue() + ", " + value.municipality().getValue(),
+                        value.region().getValue()));
                 return builder.toSafeHtml();
             }
         });

@@ -26,7 +26,7 @@ public class PortfolioSelectorOptionFormatter implements IFormatter<PortfolioFor
     @Override
     public SafeHtml format(PortfolioForSelectionDTO value) {
         SafeHtmlBuilder builder = new SafeHtmlBuilder();
-        builder.appendHtmlConstant(SimpleMessageFormat.format("<div style=\"padding:5px;\"><div>{0}</div></div>", value.name().getValue()));
+        builder.appendHtmlConstant(SimpleMessageFormat.format("<div style=\"padding:2px;\"><div>{0}</div></div>", value.name().getValue()));
         return builder.toSafeHtml();
     }
 }

@@ -27,7 +27,7 @@ public class BuildingSelectorOptionFormatter implements IFormatter<BuildingForSe
     public SafeHtml format(BuildingForSelectionDTO value) {
         SafeHtmlBuilder builder = new SafeHtmlBuilder();
         builder.appendHtmlConstant(SimpleMessageFormat.format(
-                "<div style=\"padding:5px;\"><div><span style=\"font-weight:bold;\">{0} - {1}</span></div><div>{2}</div></div>", value.propertyCode()
+                "<div style=\"padding:2px;\"><div><span style=\"font-weight:bold;\">{0} - {1}</span></div><div>{2}</div></div>", value.propertyCode()
                         .getValue(), value.name().getValue(), value.address().getValue()));
         return builder.toSafeHtml();
     }
