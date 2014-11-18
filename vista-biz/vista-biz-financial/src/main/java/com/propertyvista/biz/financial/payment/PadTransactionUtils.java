@@ -81,12 +81,21 @@ public class PadTransactionUtils {
         return TaskRunner.runInOperationsNamespace(new Callable<String>() {
             @Override
             public String call() {
+                return Integer.toString(readTestDBversionId(), 32);
+            }
+        });
+    }
+
+    public static int readTestDBversionNumberInOperations() {
+        return TaskRunner.runInOperationsNamespace(new Callable<Integer>() {
+            @Override
+            public Integer call() {
                 return readTestDBversionId();
             }
         });
     }
 
-    public static String readTestDBversionId() {
+    private static int readTestDBversionId() {
         PadTestTransactionOffset dbResetSequence = Persistence.service().retrieve(EntityQueryCriteria.create(PadTestTransactionOffset.class));
         if (dbResetSequence == null) {
             dbResetSequence = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<PadTestTransactionOffset, RuntimeException>() {
@@ -99,7 +108,7 @@ public class PadTransactionUtils {
                 }
             });
         }
-        return Integer.toString(dbResetSequence.number().getValue(), 32);
+        return dbResetSequence.number().getValue();
     }
 
     private static int readNextTestDBversionId() {
