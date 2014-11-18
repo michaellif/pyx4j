@@ -151,15 +151,18 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
 
     /**
      * A component that to choose the polymorphic PolicyNode
-     * 
+     *
      * @author ArtyomB
      */
     private class PolicyNodeEditor extends CForm<PolicyNode> {
 
         private final Map<Class<? extends PolicyNode>, CField<? extends PolicyNode, ?>> nodeTypeToComponentMap = new HashMap<>();
 
+        private CField<? extends PolicyNode, ?> currentComp = null;
+
         public PolicyNodeEditor() {
             super(PolicyNode.class);
+            setMandatory(true);
         }
 
         @Override
@@ -178,9 +181,10 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
         public void onReset() {
             super.onReset();
 
+            setCurrentComponent(null);
             for (CField<? extends PolicyNode, ?> nodeComponent : nodeTypeToComponentMap.values()) {
-                nodeComponent.reset();
                 nodeComponent.setVisible(false);
+                nodeComponent.reset();
             }
         }
 
@@ -189,31 +193,25 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
-            if (populate) {
-                CField<? extends PolicyNode, ?> comp = getCurrentComponent();
-                if (comp != null) {
-                    ((CField<PolicyNode, ?>) comp).setValue(getValue().<PolicyNode> cast(), false);
-                    comp.setVisible(true);
-                }
+            if (populate && setCurrentComponent(getValue()) != null) {
+                ((CField<PolicyNode, ?>) currentComp).populate(getValue().<PolicyNode> cast());
             }
         }
 
         @Override
         public boolean isValid() {
-            CField<? extends PolicyNode, ?> comp = getCurrentComponent();
-            if (comp != null) {
-                return (comp.isValid() && super.isValid());
+            if (currentComp != null) {
+                return (currentComp.isValid() && super.isValid());
             }
             return super.isValid();
         }
 
         @Override
-        public void setVisitedRecursive() {
-            CField<? extends PolicyNode, ?> comp = getCurrentComponent();
-            if (comp != null) {
-                comp.setVisited(true);
+        public void setVisited(boolean visited) {
+            if (currentComp != null) {
+                currentComp.setVisited(visited);
             }
-            super.setVisitedRecursive();
+            super.setVisited(visited);
         }
 
         @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -236,34 +234,44 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
                         @Override
                         public void onValueChange(ValueChangeEvent event) {
                             if (event.getValue() != null) {
-                                setValue((PolicyNode) event.getValue());
+                                setSelectedValue((PolicyNode) event.getValue());
                             }
                         }
                     });
                     comboBox.setEditable(isEditable());
                     comboBox.setViewable(isViewable());
                     comboBox.setMandatory(true);
+                    comboBox.setVisible(false);
 
                     nodeTypeToComponentMap.put(nodeType.getType(), comboBox);
                 }
             }
         }
 
-        private CField<? extends PolicyNode, ?> getCurrentComponent() {
-            CField<? extends PolicyNode, ?> comp = null;
+        private void setSelectedValue(PolicyNode value) {
+            super.setValue(value);
+        }
 
-            if (getValue() != null) {
+        private CField<? extends PolicyNode, ?> setCurrentComponent(PolicyNode value) {
+            if (currentComp != null) {
+                currentComp.setVisible(false);
+                abandon(currentComp);
+                currentComp = null;
+            }
+
+            if (value != null) {
                 @SuppressWarnings("unchecked")
-                Class<? extends PolicyNode> curType = (Class<? extends PolicyNode>) getValue().getInstanceValueClass();
+                Class<? extends PolicyNode> curType = (Class<? extends PolicyNode>) value.getInstanceValueClass();
                 for (Class<? extends PolicyNode> nodeType : nodeTypeToComponentMap.keySet()) {
                     if (nodeType.equals(curType)) {
-                        comp = nodeTypeToComponentMap.get(nodeType);
+                        adopt(currentComp = nodeTypeToComponentMap.get(nodeType));
+                        currentComp.setVisible(true);
                         break;
                     }
                 }
             }
 
-            return comp;
+            return currentComp;
         }
     }
 

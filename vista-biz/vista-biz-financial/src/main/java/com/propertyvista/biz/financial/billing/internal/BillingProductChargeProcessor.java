@@ -251,8 +251,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor<Inte
 
         InvoiceAdjustmentSubLineItem adjustment = EntityFactory.create(InvoiceAdjustmentSubLineItem.class);
 
-        BigDecimal amount = null;
-
+        BigDecimal amount = BigDecimal.ZERO;
         if (ValueType.Percentage.equals(billableItemAdjustment.type().getValue())) {
             amount = billableItemAdjustment.billableItem().agreedPrice().getValue(BigDecimal.ZERO)
                     .multiply(billableItemAdjustment.value().percent().getValue());
