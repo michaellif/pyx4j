@@ -35,7 +35,7 @@ public class PortalSiteMap implements SiteMap {
 
     public static class LoginWithToken extends AppPlace implements PublicPlace {
         {
-            //setStable(false);
+            setStable(false);
         }
     }
 
