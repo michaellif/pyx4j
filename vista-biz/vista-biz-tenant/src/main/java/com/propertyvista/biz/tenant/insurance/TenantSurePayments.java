@@ -283,6 +283,8 @@ class TenantSurePayments {
     }
 
     static TenantSureTransaction makePaymentTransaction(TenantSureInsurancePolicy insuranceTenantSure, LogicalDate dueDate) {
+        log.debug("makePaymentTransaction for TenantSureInsurance {}", insuranceTenantSure.quoteId());
+
         TenantSureTransaction transaction = EntityFactory.create(TenantSureTransaction.class);
         transaction.insurance().set(insuranceTenantSure);
         transaction.paymentMethod().set(getPaymentMethod(insuranceTenantSure.client().tenant()));
@@ -321,6 +323,8 @@ class TenantSurePayments {
 
         Persistence.service().persist(transaction);
         Persistence.service().commit();
+
+        log.debug("status PaymentTransaction for TenantSureInsurance {} is {}", insuranceTenantSure.quoteId(), transaction.status());
 
         if ((transaction.status().getValue() == TenantSureTransaction.TransactionStatus.PaymentRejected)
                 && (!insuranceTenantSure.status().getValue().equals(TenantSureStatus.PendingCancellation))) {

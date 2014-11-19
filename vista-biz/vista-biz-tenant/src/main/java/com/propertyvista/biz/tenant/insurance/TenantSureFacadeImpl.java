@@ -161,6 +161,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             Persistence.service().commit();
         }
         TenantSureInsurancePolicy insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
+        log.debug("PaymentMethod updated for TenantSureInsurance {}", insuranceTenantSure.quoteId());
         if (insuranceTenantSure.status().getValue() == TenantSureStatus.PendingCancellation) {
             TenantSurePayments.performOutstandingPayment(insuranceTenantSure);
             reverseCancellationDueToSkippedPayment(tenantId);
@@ -514,6 +515,8 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         insuranceTenantSure.cancellation().setValue(CancellationType.SkipPayment);
         Persistence.service().merge(insuranceTenantSure);
 
+        log.debug("TenantSureInsurance {} is now PendingCancellation due to SkipPayment", insuranceTenantSure.quoteId());
+
         sendPaymentNotProcessedEmail(tenantId, getGracePeriodEndDate(insuranceTenantSure), TenantSurePayments.getNextPaymentDate(insuranceTenantSure));
 
         Persistence.service().commit();
@@ -526,6 +529,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         if (insuranceTenantSure.status().getValue() != TenantSureStatus.PendingCancellation) {
             throw new Error("It's impossible to activate a tenant sure insurance which is not " + TenantSureStatus.PendingCancellation);
         }
+        log.debug("TenantSureInsurance {} resumed", insuranceTenantSure.quoteId());
 
         sendPaymentsResumedEmail(tenantId);
 
