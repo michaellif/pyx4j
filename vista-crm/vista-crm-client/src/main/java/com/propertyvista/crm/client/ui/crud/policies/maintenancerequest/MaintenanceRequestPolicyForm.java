@@ -53,6 +53,7 @@ public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<Mai
         formPanel.append(Location.Dual, proto().tenantPreferredWindows(), new PreferredWindowsFolder(isEditable()));
 
         formPanel.h1(i18n.tr("Scheduling"));
+        formPanel.append(Location.Dual, proto().minAdvanceNoticeHours()).decorate().componentWidth(40).labelWidth(200);
         formPanel.append(Location.Dual, proto().maxAllowedWindowHours()).decorate().componentWidth(40).labelWidth(200);
         formPanel.append(Location.Dual, proto().allow24HourSchedule()).decorate().labelWidth(200);
         formPanel.append(Location.Dual, proto().schedulingWindow(), new TimeWindowEditor<TimeWindow>(TimeWindow.class));

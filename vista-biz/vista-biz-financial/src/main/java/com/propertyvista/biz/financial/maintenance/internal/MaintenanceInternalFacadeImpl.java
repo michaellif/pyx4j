@@ -21,7 +21,7 @@ import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
-import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
+import com.propertyvista.domain.maintenance.MaintenanceRequestWorkOrder;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
@@ -77,7 +77,7 @@ public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
-    public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule, Employee requestReporter) {
+    public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestWorkOrder schedule, Employee requestReporter) {
         MaintenanceInternalManager.instance().sheduleMaintenanceRequest(request, schedule, requestReporter);
     }
 

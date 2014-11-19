@@ -163,7 +163,7 @@ public interface MaintenanceRequest extends IEntity, CommunicationAssociation, H
     @Owned
     @Detached
     @OrderBy(PrimaryKey.class)
-    IList<MaintenanceRequestSchedule> workHistory();
+    IList<MaintenanceRequestWorkOrder> workHistory();
 
     // --------------------------------------
 

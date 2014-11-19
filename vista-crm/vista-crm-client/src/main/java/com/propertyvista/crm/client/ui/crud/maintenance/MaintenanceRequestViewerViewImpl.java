@@ -14,15 +14,19 @@
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
 import java.sql.Time;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
@@ -47,7 +51,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.policy.policies.MaintenanceRequestPolicy;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.dto.MaintenanceRequestScheduleDTO;
+import com.propertyvista.dto.MaintenanceRequestWorkOrderDTO;
 
 public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<MaintenanceRequestDTO> implements MaintenanceRequestViewerView {
 
@@ -157,7 +161,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
     static abstract class ScheduleBox extends OkCancelDialog {
 
-        private CForm<MaintenanceRequestScheduleDTO> content;
+        private CForm<MaintenanceRequestWorkOrderDTO> content;
 
         private final MaintenanceRequestPolicy policy;
 
@@ -170,17 +174,64 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         protected Widget createBody() {
             getOkButton().setEnabled(true);
 
-            content = new CForm<MaintenanceRequestScheduleDTO>(MaintenanceRequestScheduleDTO.class) {
+            content = new CForm<MaintenanceRequestWorkOrderDTO>(MaintenanceRequestWorkOrderDTO.class) {
                 @Override
                 protected IsWidget createContent() {
                     FormPanel main = new FormPanel(this);
 
+                    main.append(Location.Dual, inject(proto().isEmergencyWork())).decorate();
                     main.append(Location.Dual, inject(proto().scheduledDate())).decorate().componentWidth(120);
                     main.append(Location.Dual, inject(proto().scheduledTime().timeFrom())).decorate().componentWidth(120);
                     main.append(Location.Dual, inject(proto().scheduledTime().timeTo())).decorate().componentWidth(120);
                     main.append(Location.Dual, inject(proto().workDescription())).decorate().componentWidth(200);
 
+                    get(proto().isEmergencyWork()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+                        @Override
+                        public void onValueChange(ValueChangeEvent<Boolean> event) {
+                            get(proto().scheduledTime().timeFrom()).revalidate();
+                            get(proto().scheduledTime().timeTo()).revalidate();
+                        }
+                    });
+
                     get(proto().scheduledDate()).addComponentValidator(new FutureDateIncludeTodayValidator());
+                    if (!policy.minAdvanceNoticeHours().isNull()) {
+                        get(proto().scheduledDate()).setTooltip(
+                                i18n.tr("Work must be scheduled at least {0} hour in advance", policy.minAdvanceNoticeHours().getValue()));
+                        get(proto().scheduledDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+
+                            @Override
+                            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
+                                get(proto().scheduledTime().timeFrom()).revalidate();
+                            }
+                        });
+                        // add Advance Notice validator
+                        get(proto().scheduledTime().timeFrom()).addComponentValidator(new AbstractComponentValidator<Time>() {
+
+                            @Override
+                            public AbstractValidationError isValid() {
+                                MaintenanceRequestWorkOrderDTO wo = (MaintenanceRequestWorkOrderDTO) getCComponent().getParent().getValue();
+                                // if not an emergency - ensure advanced notice
+                                if (!wo.isEmergencyWork().getValue(false)) {
+                                    Time from = getCComponent().getValue();
+                                    if (from != null) {
+                                        Date fromDate = get(proto().scheduledDate()).getValue();
+                                        if (fromDate == null) {
+                                            fromDate = TimeUtils.today();
+                                        }
+                                        long timeOffsetMills = from.getTime() - new Time(0, 0, 0).getTime(); // offset regardless of TZ
+                                        long fromMills = fromDate.getTime() + timeOffsetMills;
+                                        long noticeOffsetMills = 3600000 * policy.minAdvanceNoticeHours().getValue();
+                                        if (fromMills < System.currentTimeMillis() + noticeOffsetMills) {
+                                            return new BasicValidationError(getCComponent(), i18n.tr("Work must be scheduled at least {0} hour in advance",
+                                                    policy.minAdvanceNoticeHours().getValue()));
+                                        }
+                                    }
+                                }
+                                return null;
+                            }
+                        });
+                    }
 
                     if (!policy.allow24HourSchedule().getValue(false) && !policy.schedulingWindow().isEmpty()) {
                         get(proto().scheduledTime().timeFrom()).setTooltip(policy.schedulingWindow().getStringView());
@@ -189,11 +240,15 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
                             @Override
                             public AbstractValidationError isValid() {
-                                Time from = getCComponent().getValue();
-                                if (from != null && (from.before(policy.schedulingWindow().timeFrom().getValue()) || //
-                                        from.after(policy.schedulingWindow().timeTo().getValue()))) {
-                                    return new BasicValidationError(getCComponent(), i18n.tr("Time outside of allowed window {0}", policy.schedulingWindow()
-                                            .getStringView()));
+                                MaintenanceRequestWorkOrderDTO wo = (MaintenanceRequestWorkOrderDTO) getCComponent().getParent().getValue();
+                                // if not an emergency - enforce policy restrictions
+                                if (!wo.isEmergencyWork().getValue(false)) {
+                                    Time from = getCComponent().getValue();
+                                    if (from != null && (from.before(policy.schedulingWindow().timeFrom().getValue()) || //
+                                            from.after(policy.schedulingWindow().timeTo().getValue()))) {
+                                        return new BasicValidationError(getCComponent(), i18n.tr("Time outside of allowed window {0}", policy
+                                                .schedulingWindow().getStringView()));
+                                    }
                                 }
                                 return null;
                             }
@@ -203,6 +258,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
                             @Override
                             public AbstractValidationError isValid() {
+                                MaintenanceRequestWorkOrderDTO wo = (MaintenanceRequestWorkOrderDTO) getCComponent().getParent().getValue();
                                 Time to = getCComponent().getValue();
                                 Time from = get(proto().scheduledTime().timeFrom()).getValue();
                                 if (to != null && from != null && to.before(from)) {
@@ -218,12 +274,16 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
                                 @Override
                                 public AbstractValidationError isValid() {
-                                    Time to = getCComponent().getValue();
-                                    Time from = get(proto().scheduledTime().timeFrom()).getValue();
-                                    int deltaMills = policy.maxAllowedWindowHours().getValue() * 3600 * 1000;
-                                    if (to != null && from != null && to.getTime() > from.getTime() + deltaMills) {
-                                        return new BasicValidationError(getCComponent(), i18n.tr("Time window exceeds {0} hours", policy
-                                                .maxAllowedWindowHours().getValue()));
+                                    MaintenanceRequestWorkOrderDTO wo = (MaintenanceRequestWorkOrderDTO) getCComponent().getParent().getValue();
+                                    // if not an emergency - enforce policy restrictions
+                                    if (!wo.isEmergencyWork().getValue(false)) {
+                                        Time to = getCComponent().getValue();
+                                        Time from = get(proto().scheduledTime().timeFrom()).getValue();
+                                        int deltaMills = policy.maxAllowedWindowHours().getValue() * 3600 * 1000;
+                                        if (to != null && from != null && to.getTime() > from.getTime() + deltaMills) {
+                                            return new BasicValidationError(getCComponent(), i18n.tr("Time window should not exceed {0} hours", policy
+                                                    .maxAllowedWindowHours().getValue()));
+                                        }
                                     }
                                     return null;
                                 }
@@ -236,7 +296,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
             };
 
             content.init();
-            content.populate(EntityFactory.create(MaintenanceRequestScheduleDTO.class));
+            content.populate(EntityFactory.create(MaintenanceRequestWorkOrderDTO.class));
             return content.asWidget();
         }
 
@@ -250,7 +310,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
             }
         }
 
-        public MaintenanceRequestScheduleDTO getValue() {
+        public MaintenanceRequestWorkOrderDTO getValue() {
             return content.getValue();
         }
     }

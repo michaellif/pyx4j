@@ -19,18 +19,18 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
-import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
+import com.propertyvista.domain.maintenance.MaintenanceRequestWorkOrder;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.dto.MaintenanceRequestScheduleDTO;
+import com.propertyvista.dto.MaintenanceRequestWorkOrderDTO;
 
 public interface MaintenanceRequestViewerView extends IPrimeViewerView<MaintenanceRequestDTO> {
 
     interface Presenter extends IPrimeViewerView.IPrimeViewerPresenter {
 
-        void scheduleAction(MaintenanceRequestScheduleDTO schedule);
+        void scheduleAction(MaintenanceRequestWorkOrderDTO schedule);
 
-        void updateProgressAction(MaintenanceRequestSchedule schedule);
+        void updateProgressAction(MaintenanceRequestWorkOrder schedule);
 
         void resolveAction(MaintenanceRequestDTO mr);
 

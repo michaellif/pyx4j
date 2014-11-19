@@ -35,13 +35,13 @@ import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
-import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
+import com.propertyvista.domain.maintenance.MaintenanceRequestWorkOrder;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.policy.policies.MaintenanceRequestPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.dto.MaintenanceRequestScheduleDTO;
+import com.propertyvista.dto.MaintenanceRequestWorkOrderDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<MaintenanceRequest, MaintenanceRequestDTO> implements MaintenanceCrudService {
@@ -69,7 +69,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
         dto.reportedForOwnUnit().setValue(dto.unit() != null && !dto.unit().isNull() && !dto.unit().isEmpty());
         // populate latest scheduled info
         if (!dto.workHistory().isEmpty()) {
-            MaintenanceRequestSchedule latest = dto.workHistory().get(dto.workHistory().size() - 1);
+            MaintenanceRequestWorkOrder latest = dto.workHistory().get(dto.workHistory().size() - 1);
             dto.scheduledDate().set(latest.scheduledDate());
             dto.scheduledTime().set(latest.scheduledTime());
         }
@@ -104,11 +104,11 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     }
 
     @Override
-    public void sheduleAction(AsyncCallback<VoidSerializable> callback, MaintenanceRequestScheduleDTO scheduleDTO, Key entityId) {
+    public void sheduleAction(AsyncCallback<VoidSerializable> callback, MaintenanceRequestWorkOrderDTO scheduleDTO, Key entityId) {
         MaintenanceRequest request = Persistence.service().retrieve(MaintenanceRequest.class, entityId);
         MaintenanceRequestStatus oldStatus = request.status().duplicate();
         enhanceDbo(request);
-        MaintenanceRequestSchedule schedule = EntityFactory.create(MaintenanceRequestSchedule.class);
+        MaintenanceRequestWorkOrder schedule = EntityFactory.create(MaintenanceRequestWorkOrder.class);
         schedule.scheduledDate().set(scheduleDTO.scheduledDate());
         schedule.scheduledTime().timeFrom().set(scheduleDTO.scheduledTime().timeFrom());
         schedule.scheduledTime().timeTo().set(scheduleDTO.scheduledTime().timeTo());
@@ -120,7 +120,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
 
     @Override
     public void updateProgressAction(AsyncCallback<VoidSerializable> callback, String progressNote, Key scheduleId) {
-        MaintenanceRequestSchedule schedule = Persistence.service().retrieve(MaintenanceRequestSchedule.class, scheduleId);
+        MaintenanceRequestWorkOrder schedule = Persistence.service().retrieve(MaintenanceRequestWorkOrder.class, scheduleId);
         schedule.progressNote().setValue(progressNote);
         Persistence.service().persist(schedule);
         Persistence.service().commit();

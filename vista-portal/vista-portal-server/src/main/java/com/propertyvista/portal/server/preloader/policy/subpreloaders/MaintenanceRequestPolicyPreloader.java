@@ -44,6 +44,7 @@ public class MaintenanceRequestPolicyPreloader extends AbstractPolicyPreloader<M
         policy.schedulingWindow().timeFrom().setValue(Time.valueOf("08:00:00"));
         policy.schedulingWindow().timeTo().setValue(Time.valueOf("18:00:00"));
         policy.maxAllowedWindowHours().setValue(4);
+        policy.minAdvanceNoticeHours().setValue(24);
 
         return policy;
     }

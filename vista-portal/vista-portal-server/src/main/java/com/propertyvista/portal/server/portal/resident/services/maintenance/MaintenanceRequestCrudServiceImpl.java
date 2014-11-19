@@ -32,7 +32,7 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
-import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
+import com.propertyvista.domain.maintenance.MaintenanceRequestWorkOrder;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.PermissionToEnterNote;
 import com.propertyvista.domain.maintenance.SurveyResponse;
@@ -104,7 +104,7 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
 
         // populate latest scheduled info
         if (!dto.workHistory().isEmpty()) {
-            MaintenanceRequestSchedule latest = dto.workHistory().get(dto.workHistory().size() - 1);
+            MaintenanceRequestWorkOrder latest = dto.workHistory().get(dto.workHistory().size() - 1);
             dto.scheduledDate().set(latest.scheduledDate());
             dto.scheduledTimeFrom().set(latest.scheduledTime().timeFrom());
             dto.scheduledTimeTo().set(latest.scheduledTime().timeTo());

@@ -27,10 +27,10 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestViewerView;
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceCrudService;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
-import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
+import com.propertyvista.domain.maintenance.MaintenanceRequestWorkOrder;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.dto.MaintenanceRequestScheduleDTO;
+import com.propertyvista.dto.MaintenanceRequestWorkOrderDTO;
 
 public class MaintenanceRequestViewerActivity extends CrmViewerActivity<MaintenanceRequestDTO> implements MaintenanceRequestViewerView.Presenter {
 
@@ -40,7 +40,7 @@ public class MaintenanceRequestViewerActivity extends CrmViewerActivity<Maintena
     }
 
     @Override
-    public void scheduleAction(MaintenanceRequestScheduleDTO schedule) {
+    public void scheduleAction(MaintenanceRequestWorkOrderDTO schedule) {
         ((MaintenanceCrudService) getService()).sheduleAction(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
@@ -50,7 +50,7 @@ public class MaintenanceRequestViewerActivity extends CrmViewerActivity<Maintena
     }
 
     @Override
-    public void updateProgressAction(MaintenanceRequestSchedule schedule) {
+    public void updateProgressAction(MaintenanceRequestWorkOrder schedule) {
         ((MaintenanceCrudService) getService()).updateProgressAction(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {

@@ -7,29 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 26, 2013
+ * Created on Nov 19, 2014
  * @author stanp
  * @version $Id$
  */
 package com.propertyvista.domain.maintenance;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.TimeWindow;
+import com.propertyvista.domain.ILocalizedEntity;
+import com.propertyvista.domain.policy.policies.MaintenanceRequestPolicy;
 
-public interface MaintenanceRequestSchedule extends IEntity {
+public interface EntryInstructionsNote extends ILocalizedEntity {
 
     @Owner
     @NotNull
@@ -38,21 +35,13 @@ public interface MaintenanceRequestSchedule extends IEntity {
     @Detached
     @Indexed
     @JoinColumn
-    MaintenanceRequest request();
+    MaintenanceRequestPolicy policy();
 
-    @NotNull
-    IPrimitive<LogicalDate> scheduledDate();
+    IPrimitive<String> label();
 
-    @EmbeddedEntity
-    TimeWindow scheduledTime();
+    IPrimitive<String> text();
 
-    @NotNull
-    @Editor(type = EditorType.textarea)
-    IPrimitive<String> workDescription();
-
-    IPrimitive<String> progressNote();
-
-    @EmbeddedEntity
-    @ReadOnly
-    NoticeOfEntry noticeOfEntry();
+    // -------- internals: ---------
+    @OrderColumn
+    IPrimitive<Integer> orderBy();
 }

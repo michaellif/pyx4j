@@ -36,6 +36,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.images.FolderImages;
+import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityHyperlink;
@@ -77,10 +78,10 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest.ContactPhoneType;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPicture;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
-import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatusRecord;
+import com.propertyvista.domain.maintenance.MaintenanceRequestWorkOrder;
 import com.propertyvista.domain.maintenance.NoticeOfEntry;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -670,33 +671,34 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
     }
 
-    class MaintenanceRequestScheduleFolder extends VistaBoxFolder<MaintenanceRequestSchedule> {
+    class MaintenanceRequestScheduleFolder extends VistaBoxFolder<MaintenanceRequestWorkOrder> {
         public MaintenanceRequestScheduleFolder() {
-            super(MaintenanceRequestSchedule.class, false);
+            super(MaintenanceRequestWorkOrder.class, false);
         }
 
         @Override
-        protected CForm<MaintenanceRequestSchedule> createItemForm(IObject<?> member) {
+        protected CForm<MaintenanceRequestWorkOrder> createItemForm(IObject<?> member) {
             return new MaintenanceRequestScheduleViewer();
         }
 
         @Override
-        protected CFolderItem<MaintenanceRequestSchedule> createItem(boolean first) {
-            final CFolderItem<MaintenanceRequestSchedule> item = super.createItem(first);
+        protected CFolderItem<MaintenanceRequestWorkOrder> createItem(boolean first) {
+            final CFolderItem<MaintenanceRequestWorkOrder> item = super.createItem(first);
             if (!isEditable()) {
                 item.addAction(ActionType.Cust1, "Add Progress Note", HelperImages.INSTANCE.editButton(), new Command() {
                     @Override
                     public void execute() {
                         new OkCancelDialog("Enter Progress Note") {
-                            private final CForm<MaintenanceRequestSchedule> content = createContent();
+                            private final CForm<MaintenanceRequestWorkOrder> content = createContent();
 
-                            private CForm<MaintenanceRequestSchedule> createContent() {
-                                CForm<MaintenanceRequestSchedule> content = new CForm<MaintenanceRequestSchedule>(MaintenanceRequestSchedule.class) {
+                            private CForm<MaintenanceRequestWorkOrder> createContent() {
+                                CForm<MaintenanceRequestWorkOrder> content = new CForm<MaintenanceRequestWorkOrder>(MaintenanceRequestWorkOrder.class) {
 
                                     @Override
                                     protected IsWidget createContent() {
                                         FormPanel main = new FormPanel(this);
 
+                                        main.append(Location.Dual, inject(proto().isEmergencyWork(), new CBooleanLabel())).decorate();
                                         main.append(Location.Left, inject(proto().scheduledDate(), new CDateLabel())).decorate().componentWidth(120);
                                         main.append(Location.Dual, inject(proto().workDescription(), new CLabel<String>())).decorate();
                                         main.append(Location.Dual, inject(proto().progressNote())).decorate();
@@ -730,10 +732,10 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             super.onValueSet(populate);
         }
 
-        class MaintenanceRequestScheduleViewer extends CForm<MaintenanceRequestSchedule> {
+        class MaintenanceRequestScheduleViewer extends CForm<MaintenanceRequestWorkOrder> {
 
             public MaintenanceRequestScheduleViewer() {
-                super(MaintenanceRequestSchedule.class);
+                super(MaintenanceRequestWorkOrder.class);
                 setViewable(true);
                 setEditable(false);
             }
@@ -742,6 +744,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             protected IsWidget createContent() {
                 FormPanel content = new FormPanel(this);
                 content.h1(i18n.tr("Work Order"));
+                content.append(Location.Left, inject(proto().isEmergencyWork())).decorate();
                 content.append(Location.Left, inject(proto().scheduledDate())).decorate().componentWidth(120);
                 content.append(Location.Left, inject(proto().scheduledTime().timeFrom())).decorate().componentWidth(120);
                 content.append(Location.Left, inject(proto().scheduledTime().timeTo())).decorate().componentWidth(120);

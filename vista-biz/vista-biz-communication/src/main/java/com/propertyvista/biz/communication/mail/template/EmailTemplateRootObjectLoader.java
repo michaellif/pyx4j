@@ -49,7 +49,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
-import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
+import com.propertyvista.domain.maintenance.MaintenanceRequestWorkOrder;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -324,7 +324,7 @@ public class EmailTemplateRootObjectLoader {
             MaintenanceRequestWOT t = (MaintenanceRequestWOT) tObj;
 
             MaintenanceRequest mr = context.maintenanceRequest();
-            MaintenanceRequestSchedule wo = mr.workHistory().get(mr.workHistory().size() - 1);
+            MaintenanceRequestWorkOrder wo = mr.workHistory().get(mr.workHistory().size() - 1);
             Persistence.ensureRetrieve(wo, AttachLevel.Attached);
             t.scheduledDate().setValue(wo.scheduledDate().getStringView());
             t.scheduledTimeSlot().setValue(

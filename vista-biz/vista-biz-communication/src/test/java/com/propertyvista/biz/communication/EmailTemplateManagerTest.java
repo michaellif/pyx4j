@@ -58,7 +58,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority.PriorityLevel;
-import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
+import com.propertyvista.domain.maintenance.MaintenanceRequestWorkOrder;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.payment.PaymentType;
@@ -1278,7 +1278,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         status.name().setValue(status.phase().getValue().name());
         mr.status().set(status);
         // -- mr schedule
-        MaintenanceRequestSchedule schedule = EntityFactory.create(MaintenanceRequestSchedule.class);
+        MaintenanceRequestWorkOrder schedule = EntityFactory.create(MaintenanceRequestWorkOrder.class);
         schedule.scheduledDate().setValue(SystemDateManager.getLogicalDate());
         schedule.scheduledTime().timeFrom().setValue(Time.valueOf("11:00:00"));
         schedule.scheduledTime().timeTo().setValue(Time.valueOf("13:00:00"));

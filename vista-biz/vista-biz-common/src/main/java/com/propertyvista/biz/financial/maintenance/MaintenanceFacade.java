@@ -20,7 +20,7 @@ import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
-import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
+import com.propertyvista.domain.maintenance.MaintenanceRequestWorkOrder;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
@@ -52,7 +52,7 @@ public interface MaintenanceFacade {
 
     void rateMaintenanceRequest(MaintenanceRequest request, SurveyResponse rate);
 
-    void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule, Employee requestReporter);
+    void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestWorkOrder schedule, Employee requestReporter);
 
     void resolveMaintenanceRequest(MaintenanceRequest request, Employee requestReporter);
 

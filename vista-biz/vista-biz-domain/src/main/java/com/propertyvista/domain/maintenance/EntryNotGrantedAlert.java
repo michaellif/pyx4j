@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 23, 2014
+ * Created on Nov 19, 2014
  * @author stanp
  * @version $Id$
  */
@@ -26,7 +26,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.propertyvista.domain.ILocalizedEntity;
 import com.propertyvista.domain.policy.policies.MaintenanceRequestPolicy;
 
-public interface PermissionToEnterNote extends ILocalizedEntity {
+public interface EntryNotGrantedAlert extends ILocalizedEntity {
 
     @Owner
     @NotNull
@@ -37,7 +37,7 @@ public interface PermissionToEnterNote extends ILocalizedEntity {
     @JoinColumn
     MaintenanceRequestPolicy policy();
 
-    IPrimitive<String> label();
+    IPrimitive<String> title();
 
     IPrimitive<String> text();
 

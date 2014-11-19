@@ -43,7 +43,7 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequest.ContactPhoneType;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
-import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
+import com.propertyvista.domain.maintenance.MaintenanceRequestWorkOrder;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatusRecord;
@@ -153,7 +153,7 @@ public abstract class MaintenanceAbstractManager {
         Persistence.service().persist(request);
     }
 
-    public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule, Employee requestReporter) {
+    public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestWorkOrder schedule, Employee requestReporter) {
         request.workHistory().add(schedule);
         request.status().set(getMaintenanceStatus(request.building(), StatusPhase.Scheduled));
 
@@ -266,9 +266,9 @@ public abstract class MaintenanceAbstractManager {
         @Override
         public void onDeliveryCompleted(MailMessage mailMessage, MailDeliveryStatus status, MailQueueStatus mailQueueStatus, int deliveryAttemptsMade) {
             if (mailMessage != null && status == MailDeliveryStatus.Success) {
-                EntityQueryCriteria<MaintenanceRequestSchedule> crit = EntityQueryCriteria.create(MaintenanceRequestSchedule.class);
+                EntityQueryCriteria<MaintenanceRequestWorkOrder> crit = EntityQueryCriteria.create(MaintenanceRequestWorkOrder.class);
                 crit.eq(crit.proto().noticeOfEntry().messageId(), mailMessage.getMailMessageObjectId());
-                MaintenanceRequestSchedule schedule = Persistence.service().retrieve(crit);
+                MaintenanceRequestWorkOrder schedule = Persistence.service().retrieve(crit);
                 if (schedule != null) {
                     schedule.noticeOfEntry().messageId().setValue(mailMessage.getHeader("Message-ID"));
                     schedule.noticeOfEntry().messageDate().setValue(mailMessage.getHeader("Date"));

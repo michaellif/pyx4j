@@ -30,7 +30,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.dto.MaintenanceRequestScheduleDTO;
+import com.propertyvista.dto.MaintenanceRequestWorkOrderDTO;
 
 public interface MaintenanceCrudService extends AbstractCrudService<MaintenanceRequestDTO> {
 
@@ -45,7 +45,7 @@ public interface MaintenanceCrudService extends AbstractCrudService<MaintenanceR
     }
 
     @AccessControl(Schedule.class)
-    void sheduleAction(AsyncCallback<VoidSerializable> callback, MaintenanceRequestScheduleDTO schedule, Key entityId);
+    void sheduleAction(AsyncCallback<VoidSerializable> callback, MaintenanceRequestWorkOrderDTO schedule, Key entityId);
 
     void updateProgressAction(AsyncCallback<VoidSerializable> callback, String progressNote, Key scheduleId);
 
