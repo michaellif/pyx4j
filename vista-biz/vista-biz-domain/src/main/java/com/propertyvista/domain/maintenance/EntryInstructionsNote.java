@@ -37,7 +37,7 @@ public interface EntryInstructionsNote extends ILocalizedEntity {
     @JoinColumn
     MaintenanceRequestPolicy policy();
 
-    IPrimitive<String> label();
+    IPrimitive<String> caption();
 
     IPrimitive<String> text();
 

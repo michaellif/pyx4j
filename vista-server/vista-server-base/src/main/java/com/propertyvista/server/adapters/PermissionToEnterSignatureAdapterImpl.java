@@ -41,7 +41,7 @@ public class PermissionToEnterSignatureAdapterImpl implements PermissionToEnterS
         } else {
             // Erase signature since it is set to non signed
             if (newEntity.hasValues()) {
-                Validate.isTrue(newEntity.signingUser().isNull(), "Can't erase CustomerSignature");
+                Validate.isTrue(newEntity.signingUser().isNull(), "Can't erase Customer Signature");
                 newEntity.clearValues();
             }
         }
