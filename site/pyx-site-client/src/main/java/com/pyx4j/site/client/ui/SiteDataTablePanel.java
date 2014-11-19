@@ -240,6 +240,14 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
     }
 
     @Override
+    public void populate() {
+        //TODO Review permission application
+        if (true || SecurityController.check(DataModelPermission.permissionRead(getEntityClass()))) {
+            super.populate();
+        }
+    }
+
+    @Override
     public void setDataTableModel(DataTableModel<E> dataTableModel) {
         dataTableModel.setPageSize(ApplicationMode.isDevelopment() ? DataTablePanel.PAGESIZE_SMALL : DataTablePanel.PAGESIZE_MEDIUM);
         super.setDataTableModel(dataTableModel);
