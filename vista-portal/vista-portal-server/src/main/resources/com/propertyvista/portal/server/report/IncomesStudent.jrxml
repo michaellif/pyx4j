@@ -11,13 +11,13 @@
 	<field name="unitNumber" class="java.lang.String"/>
 	<field name="streetNumber" class="java.lang.String"/>
 	<field name="streetName" class="java.lang.String"/>
-	<field name="streetType" class="com.propertyvista.common.domain.contact.IAddressFull.StreetType"/>
+	<field name="streetType" class="com.propertyvista.domain.contact.AddressStructured.StreetType"/>
 	<field name="incomeAmount/amount" class="java.lang.Double"/>
 	<field name="starts" class="java.util.Date"/>
 	<field name="ends" class="java.util.Date"/>
-	<field name="program" class="com.propertyvista.portal.domain.ptapp.IncomeInfoStudentIncome.Program"/>
+	<field name="program" class="com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome.Program"/>
 	<field name="fieldOfStudy" class="java.lang.String"/>
-	<field name="fundingChoices" class="com.propertyvista.portal.domain.ptapp.IncomeInfoStudentIncome.FundingChoice"/>
+	<field name="fundingChoices" class="com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome.FundingChoice"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

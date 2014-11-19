@@ -3,7 +3,7 @@
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<field name="incomeSource" class="com.propertyvista.portal.domain.ptapp.IncomeSource"/>
+	<field name="incomeSource" class="com.propertyvista.domain.tenant.income.IncomeSource"/>
 	<field name="employer/name" class="java.lang.String"/>
 	<field name="employer/employedForYears" class="java.lang.Integer"/>
 	<field name="employer/country/name" class="java.lang.String"/>
@@ -13,7 +13,7 @@
 	<field name="employer/unitNumber" class="java.lang.String"/>
 	<field name="employer/streetNumber" class="java.lang.String"/>
 	<field name="employer/streetName" class="java.lang.String"/>
-	<field name="employer/streetType" class="com.propertyvista.common.domain.contact.IAddressFull.StreetType"/>
+	<field name="employer/streetType" class="com.propertyvista.domain.contact.AddressStructured.StreetType"/>
 	<field name="employer/supervisorName" class="java.lang.String"/>
 	<field name="employer/supervisorPhone" class="java.lang.String"/>
 	<field name="employer/incomeAmount/amount" class="java.lang.Double"/>
