@@ -29,7 +29,6 @@ import java.util.List;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
@@ -46,10 +45,10 @@ import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
-import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.site.client.ui.IShowable;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.widgets.client.RadioGroup.Layout;
 
 public abstract class EntitySelectorTableDialog<E extends IEntity> extends AbstractEntitySelectorDialog<E> implements IShowable {
@@ -59,8 +58,6 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
     private final boolean isMultiselect;
 
     private final SelectEntityLister lister;
-
-    private final ListerDataSource<E> dataSource;
 
     private final Collection<E> alreadySelected;
 
@@ -78,7 +75,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         this.entityClass = entityClass;
         this.isMultiselect = isMultiselect;
         this.alreadySelected = (alreadySelected != null ? alreadySelected : Collections.<E> emptyList());
-        this.lister = new SelectEntityLister(this.entityClass, isVersioned) {
+        this.lister = new SelectEntityLister(this.entityClass, getSelectService(), isVersioned) {
             @Override
             protected void onPopulate() {
                 super.onPopulate();
@@ -92,9 +89,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
             }
         });
 
-        dataSource = new ListerDataSource<E>(entityClass, getSelectService());
         setFilters(createRestrictionFilterForAlreadySelected());
-        lister.setDataSource(dataSource);
         lister.setHeight("500px");
 
         setBody(createBody());
@@ -154,19 +149,19 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
     }
 
     protected void setParentFiltering(Key parentID) {
-        dataSource.setParentEntityId(parentID);
+        lister.getDataSource().setParentEntityId(parentID);
     }
 
     protected void setParentFiltering(Key parentID, Class<? extends IEntity> parentClass) {
-        dataSource.setParentEntityId(parentID, parentClass);
+        lister.getDataSource().setParentEntityId(parentID, parentClass);
     }
 
     protected void addFilter(Criterion filter) {
-        dataSource.addPreDefinedFilter(filter);
+        lister.getDataSource().addPreDefinedFilter(filter);
     }
 
     protected void addFilters(List<Criterion> filters) {
-        dataSource.addPreDefinedFilters(filters);
+        lister.getDataSource().addPreDefinedFilters(filters);
     }
 
     /**
@@ -177,7 +172,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
      * @param filters
      */
     protected void setFilters(List<Criterion> filters) {
-        dataSource.setPreDefinedFilters(filters);
+        lister.getDataSource().setPreDefinedFilters(filters);
     }
 
     @I18n(context = "Version Display Mode")
@@ -190,34 +185,37 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         }
     }
 
-    protected class SelectEntityLister extends DataTablePanel<E> {
+    protected class SelectEntityLister extends SiteDataTablePanel<E> {
 
         private VersionDisplayMode versionDisplayMode = VersionDisplayMode.displayFinal;
 
-        private final CRadioGroupEnum<VersionDisplayMode> displayModeButton = new CRadioGroupEnum<VersionDisplayMode>(VersionDisplayMode.class,
-                Layout.HORISONTAL);
-        {
-            displayModeButton.setValue(versionDisplayMode);
-            displayModeButton.addValueChangeHandler(new ValueChangeHandler<VersionDisplayMode>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<VersionDisplayMode> event) {
-                    onVersionDisplayModeChange(event.getValue());
-                }
-            });
-        }
+        private CRadioGroupEnum<VersionDisplayMode> displayModeButton;
 
-        public SelectEntityLister(Class<E> clazz, boolean isVersioned) {
-            super(clazz);
+        public SelectEntityLister(Class<E> clazz, AbstractListCrudService<E> service, boolean isVersioned) {
+            super(clazz, service);
 
             setPageSizeOptions(Arrays.asList(new Integer[] { PAGESIZE_SMALL, PAGESIZE_MEDIUM }));
             if (isVersioned) {
+                displayModeButton = new CRadioGroupEnum<VersionDisplayMode>(VersionDisplayMode.class, Layout.HORISONTAL);
+                displayModeButton.setValue(versionDisplayMode);
+                displayModeButton.addValueChangeHandler(new ValueChangeHandler<VersionDisplayMode>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<VersionDisplayMode> event) {
+                        onVersionDisplayModeChange(event.getValue());
+                    }
+                });
                 addUpperActionItem(displayModeButton.asWidget());
             }
 
             DataTableModel<E> dataTableModel = new DataTableModel<E>(EntitySelectorTableDialog.this.defineColumnDescriptors());
-            dataTableModel.setPageSize(PAGESIZE_SMALL);
             dataTableModel.setMultipleSelection(EntitySelectorTableDialog.this.isMultiselect);
             setDataTableModel(dataTableModel);
+        }
+
+        @Override
+        public void setDataTableModel(DataTableModel<E> dataTableModel) {
+            dataTableModel.setPageSize(DataTablePanel.PAGESIZE_SMALL);
+            super.setDataTableModel(dataTableModel);
         }
 
         @Override
