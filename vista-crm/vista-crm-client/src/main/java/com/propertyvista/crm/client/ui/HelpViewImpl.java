@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -57,7 +58,7 @@ public class HelpViewImpl extends FlowPanel implements HelpView {
 
     @Override
     public void updateContextHelp() {
-        WalkMe.obtainWalkthrus("vista-help", new AsyncCallback<Map<Integer, String>>() {
+        WalkMe.obtainWalkthrus("vista-help", new AsyncCallback<LinkedHashMap<Integer, String>>() {
 
             @Override
             public void onFailure(Throwable caught) {
@@ -66,7 +67,7 @@ public class HelpViewImpl extends FlowPanel implements HelpView {
             }
 
             @Override
-            public void onSuccess(Map<Integer, String> result) {
+            public void onSuccess(LinkedHashMap<Integer, String> result) {
                 context.clear();
                 for (final Map.Entry<Integer, String> me : result.entrySet()) {
                     // Use this list to configure Permission
