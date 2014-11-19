@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.tenant.income;
 
+import java.util.EnumSet;
+
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -47,9 +49,12 @@ public enum IncomeSource {
 
     other;
 
+    public static EnumSet<IncomeSource> employment() {
+        return EnumSet.of(fulltime, parttime, selfemployed, seasonallyEmployed);
+    }
+
     @Override
     public String toString() {
         return I18nEnum.toString(this);
     }
-
 }

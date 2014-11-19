@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -17,6 +17,7 @@ import java.util.EnumSet;
 
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
@@ -34,8 +35,9 @@ import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
+import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
-import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
+import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.domain.tenant.income.IncomeSource;
 
 public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome> {
@@ -43,6 +45,8 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
     private static final I18n i18n = I18n.get(PersonalIncomeFolder.class);
 
     private ApplicationDocumentationPolicy documentationPolicy;
+
+    private RestrictionsPolicy restrictionsPolicy = EntityFactory.create(RestrictionsPolicy.class);
 
     public PersonalIncomeFolder(boolean modifyable) {
         super(CustomerScreeningIncome.class, modifyable);
@@ -60,6 +64,14 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
                         }
                     }
                 });
+
+        ClientPolicyManager.obtainHierarchicalEffectivePolicy(parentEntity, RestrictionsPolicy.class, new DefaultAsyncCallback<RestrictionsPolicy>() {
+            @Override
+            public void onSuccess(RestrictionsPolicy result) {
+                restrictionsPolicy = result;
+                revalidate();
+            }
+        });
     }
 
     @Override
@@ -88,27 +100,51 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
             @Override
             public AbstractValidationError isValid() {
                 if (getCComponent().getValue() != null) {
-                    if (getCComponent().getValue().size() == 1) {
-                        CustomerScreeningIncome income = getCComponent().getValue().get(0);
-                        if (!income.details().isEmpty()) {
-                            switch (income.incomeSource().getValue()) {
-                            case fulltime:
-                            case parttime:
-                                IncomeInfoEmployer employer = income.details().cast();
-                                if (!employer.ends().isNull() && !employer.starts().isNull()) {
-                                    // valid, if more than 1 year, otherwise - more employment needed! 
-                                    if (CalendarUtil.getDaysBetween(employer.starts().getValue(), employer.ends().getValue()) < 366) {
-                                        return new BasicValidationError(getCComponent(), i18n.tr("You need to enter more employment information"));
-                                    }
+                    int employmentCount = countEmployments();
+                    if (employmentCount == 1) {
+                        IEmploymentInfo employment = getFirstEmployment();
+                        if (!employment.isEmpty()) {
+                            if (!employment.ends().isNull() && !employment.starts().isNull()) {
+                                LogicalDate date = new LogicalDate(employment.starts().getValue());
+                                CalendarUtil.addMonthsToDate(date, restrictionsPolicy.minEmploymentDuration().getValue(0));
+                                if (employment.ends().getValue().before(date)) {
+                                    return new BasicValidationError(getCComponent(), i18n.tr("You need to enter more employment information"));
                                 }
                             }
                         }
-                    } else if (getCComponent().getValue().size() > 3) {
-                        return new BasicValidationError(getCComponent(), i18n.tr("No need to supply more than 3 items"));
+                    } else if (employmentCount > restrictionsPolicy.maxNumberOfEmployments().getValue(Integer.MAX_VALUE)) {
+                        return new BasicValidationError(getCComponent(), i18n.tr("No need to supply more than {0} employment items", restrictionsPolicy
+                                .maxNumberOfEmployments().getValue(Integer.MAX_VALUE)));
+                    } else if (getCComponent().getValue().size() - employmentCount > 3) {
+                        return new BasicValidationError(getCComponent(), i18n.tr("No need to supply more than 3 general income items"));
                     }
                 }
                 return null;
             }
         });
+    }
+
+    private int countEmployments() {
+        int counter = 0;
+
+        for (CustomerScreeningIncome income : getValue()) {
+            if (IncomeSource.employment().contains(income.incomeSource().getValue())) {
+                ++counter;
+            }
+        }
+
+        return counter;
+    }
+
+    private IEmploymentInfo getFirstEmployment() {
+        IEmploymentInfo employment = null;
+
+        for (CustomerScreeningIncome income : getValue()) {
+            if (IncomeSource.employment().contains(income.incomeSource().getValue())) {
+                employment = income.details().cast();
+            }
+        }
+
+        return employment;
     }
 }
