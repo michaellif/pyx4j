@@ -73,14 +73,7 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
 
         this.service = service;
 
-        setStyleName(PaneTheme.StyleName.Lister.name());
-
-        setFilterApplyCommand(new Command() {
-            @Override
-            public void execute() {
-                populate(0);
-            }
-        });
+        setStyleName(PaneTheme.StyleName.ListerListPanel.name());
 
         setFirstActionHandler(new Command() {
             @Override
@@ -125,8 +118,6 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
         showColumnSelector(true);
 
         setPageSizeOptions(Arrays.asList(new Integer[] { DataTablePanel.PAGESIZE_SMALL, DataTablePanel.PAGESIZE_MEDIUM, DataTablePanel.PAGESIZE_LARGE }));
-
-        setStyleName(PaneTheme.StyleName.ListerListPanel.name());
 
         setAddNewActionEnabled(allowAddNew);
         setDeleteActionEnabled(allowDelete);

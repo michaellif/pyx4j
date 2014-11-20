@@ -192,6 +192,8 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
     protected void apply() {
         if (filterActionCommand != null) {
             filterActionCommand.execute();
+        } else {
+            dataTablePanel.populate();
         }
     }
 

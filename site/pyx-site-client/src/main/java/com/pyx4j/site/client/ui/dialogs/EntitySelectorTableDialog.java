@@ -28,10 +28,12 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
@@ -40,15 +42,17 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
+import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.IShowable;
-import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.widgets.client.RadioGroup.Layout;
 
 public abstract class EntitySelectorTableDialog<E extends IEntity> extends AbstractEntitySelectorDialog<E> implements IShowable {
@@ -185,14 +189,14 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         }
     }
 
-    protected class SelectEntityLister extends SiteDataTablePanel<E> {
+    protected class SelectEntityLister extends DataTablePanel<E> {
 
         private VersionDisplayMode versionDisplayMode = VersionDisplayMode.displayFinal;
 
         private CRadioGroupEnum<VersionDisplayMode> displayModeButton;
 
-        public SelectEntityLister(Class<E> clazz, AbstractListCrudService<E> service, boolean isVersioned) {
-            super(clazz, service);
+        public SelectEntityLister(Class<E> entityClass, AbstractListCrudService<E> service, boolean isVersioned) {
+            super(entityClass);
 
             setPageSizeOptions(Arrays.asList(new Integer[] { PAGESIZE_SMALL, PAGESIZE_MEDIUM }));
             if (isVersioned) {
@@ -207,9 +211,66 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
                 addUpperActionItem(displayModeButton.asWidget());
             }
 
+            setFirstActionHandler(new Command() {
+                @Override
+                public void execute() {
+                    populate(0);
+                }
+            });
+            setPrevActionHandler(new Command() {
+                @Override
+                public void execute() {
+                    populate(getDataTableModel().getPageNumber() - 1);
+                }
+            });
+            setNextActionHandler(new Command() {
+                @Override
+                public void execute() {
+                    populate(getDataTableModel().getPageNumber() + 1);
+                }
+            });
+            setLastActionHandler(new Command() {
+                @Override
+                public void execute() {
+                    populate((getDataTableModel().getTotalRows() - 1) / getDataTableModel().getPageSize());
+                }
+            });
+
+            setPageSizeActionHandler(new Command() {
+                @Override
+                public void execute() {
+                    populate(0);
+                }
+            });
+
+            setDataSource(new ListerDataSource<E>(entityClass, service));
+
             DataTableModel<E> dataTableModel = new DataTableModel<E>(EntitySelectorTableDialog.this.defineColumnDescriptors());
             dataTableModel.setMultipleSelection(EntitySelectorTableDialog.this.isMultiselect);
             setDataTableModel(dataTableModel);
+        }
+
+        public void populate(final int pageNumber) {
+            if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
+                if (SecurityController.check(DataModelPermission.permissionRead(getEntityClass()))) {
+                    setPageNumber(pageNumber);
+                    super.populate();
+                }
+            } else {
+                setPageNumber(pageNumber);
+                super.populate();
+            }
+        }
+
+        @Override
+        public void populate() {
+            if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
+                if (SecurityController.check(DataModelPermission.permissionRead(getEntityClass()))) {
+                    super.populate();
+                }
+            } else {
+                super.populate();
+            }
         }
 
         @Override
