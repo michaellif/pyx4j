@@ -71,15 +71,16 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
 
         @Override
         protected IsWidget createContent() {
-            FormPanel main = new FormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
 
-            main.append(Location.Left, proto().assetType()).decorate();
-            main.append(Location.Left, proto().assetValue()).decorate().componentWidth(100);
-            main.append(Location.Left, proto().ownership()).decorate().componentWidth(50);
+            formPanel.append(Location.Left, proto().assetType()).decorate();
+            formPanel.append(Location.Left, proto().assetValue()).decorate().componentWidth(100);
+            formPanel.append(Location.Left, proto().ownership()).decorate().componentWidth(50);
 
-            main.append(Location.Dual, proto().documents(), new ProofOfAssetUploaderFolder());
+            formPanel.h3(i18n.tr("Proof Documents"));
+            formPanel.append(Location.Dual, proto().documents(), new ProofOfAssetDocumentFileFolder());
 
-            return main;
+            return formPanel;
         }
 
         @Override

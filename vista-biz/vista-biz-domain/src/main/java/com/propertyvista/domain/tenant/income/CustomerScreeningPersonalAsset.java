@@ -35,7 +35,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.media.ProofOfAssetDocumentFolder;
+import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
 import com.propertyvista.domain.tenant.CustomerScreening;
 
 @Caption(name = "Personal Asset(s)")
@@ -100,5 +100,5 @@ public interface CustomerScreeningPersonalAsset extends IEntity {
 
     @Owned
     @OrderBy(PrimaryKey.class)
-    IList<ProofOfAssetDocumentFolder> documents();
+    IList<ProofOfAssetDocumentFile> documents();
 }

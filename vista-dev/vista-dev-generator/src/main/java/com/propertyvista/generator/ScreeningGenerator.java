@@ -41,7 +41,6 @@ import com.propertyvista.domain.blob.ProofOfIncomeDocumentBlob;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
-import com.propertyvista.domain.media.ProofOfAssetDocumentFolder;
 import com.propertyvista.domain.media.ProofOfIncomeDocumentFile;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy.BjccEntry;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
@@ -289,10 +288,10 @@ public class ScreeningGenerator {
         return document;
     }
 
-    private ProofOfAssetDocumentFolder createProofOfAssetDocument() {
-        ProofOfAssetDocumentFolder document = EntityFactory.create(ProofOfAssetDocumentFolder.class);
+    private ProofOfAssetDocumentFile createProofOfAssetDocument() {
+        ProofOfAssetDocumentFile document = EntityFactory.create(ProofOfAssetDocumentFile.class);
         document.description().setValue("Proof of asset document " + RandomUtil.randomLetters(10));
-        document.files().add(createDocumentPage(ProofOfAssetDocumentFile.class, "doc-asset" + RandomUtil.randomInt(3) + ".jpg"));
+        document.file().fileName().setValue("doc-asset" + RandomUtil.randomInt(3) + ".jpg");
         return document;
     }
 
@@ -310,9 +309,7 @@ public class ScreeningGenerator {
             attachDocumentData(income);
         }
         for (CustomerScreeningPersonalAsset asset : screening.version().assets()) {
-            for (ProofOfAssetDocumentFolder document : asset.documents()) {
-                attachDocumentData(document);
-            }
+            attachDocumentData(asset);
         }
     }
 
@@ -366,8 +363,8 @@ public class ScreeningGenerator {
         }
     }
 
-    private static void attachDocumentData(ProofOfAssetDocumentFolder document) {
-        for (ProofOfAssetDocumentFile applicationDocument : document.files()) {
+    private static void attachDocumentData(CustomerScreeningPersonalAsset document) {
+        for (ProofOfAssetDocumentFile applicationDocument : document.documents()) {
             String fileName = applicationDocument.file().fileName().getValue();
             ProofOfAssetDocumentBlob applicationDocumentData;
             try {

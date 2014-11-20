@@ -84,7 +84,9 @@ public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPerson
             formPanel.append(Location.Left, proto().assetType()).decorate().componentWidth(180);
             formPanel.append(Location.Left, proto().ownership()).decorate().componentWidth(60);
             formPanel.append(Location.Left, proto().assetValue()).decorate().componentWidth(100);
-            formPanel.append(Location.Left, proto().documents(), new ProofOfAssetUploaderFolder());
+
+            formPanel.h3(i18n.tr("Proof Documents"));
+            formPanel.append(Location.Left, proto().documents(), new ProofOfAssetDocumentFileFolder());
 
             return formPanel;
         }

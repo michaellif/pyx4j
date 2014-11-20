@@ -44,7 +44,6 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
-import com.propertyvista.domain.media.ProofOfAssetDocumentFolder;
 import com.propertyvista.domain.media.ProofOfIncomeDocumentFile;
 import com.propertyvista.domain.pmc.CreditCheckReportType;
 import com.propertyvista.domain.pmc.Pmc;
@@ -319,10 +318,8 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
             }
         }
         for (CustomerScreeningPersonalAsset asset : screening.version().assets()) {
-            for (ProofOfAssetDocumentFolder document : asset.documents()) {
-                for (ProofOfAssetDocumentFile applicationDocument : document.files()) {
-                    FileUploadRegistry.register(applicationDocument.file());
-                }
+            for (ProofOfAssetDocumentFile applicationDocument : asset.documents()) {
+                FileUploadRegistry.register(applicationDocument.file());
             }
         }
     }
