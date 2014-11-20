@@ -46,6 +46,9 @@ public class VistaApplicationDispatcherFilterTestBase {
 
     @Before
     public void setUp() throws Exception {
+        // Init HSQL DB
+        VistaTestDBSetupForNamespace.init();
+
         mockChain = new MockFilterChain();
         filterUnderTest = new VistaApplicationDispatcherFilter();
         resp = new MockHttpServletResponse();
@@ -53,6 +56,8 @@ public class VistaApplicationDispatcherFilterTestBase {
 
     @After
     public void tearDown() throws Exception {
+        // Reset DB to normal
+        VistaTestDBSetupForNamespace.resetDatabase();
     }
 
     protected void testRedirect(String url, String urlRedirection) throws IOException, ServletException {
