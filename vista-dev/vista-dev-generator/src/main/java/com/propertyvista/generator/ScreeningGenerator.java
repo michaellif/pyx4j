@@ -43,7 +43,6 @@ import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
 import com.propertyvista.domain.media.ProofOfAssetDocumentFolder;
 import com.propertyvista.domain.media.ProofOfIncomeDocumentFile;
-import com.propertyvista.domain.media.ProofOfIncomeDocumentFolder;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy.BjccEntry;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
@@ -283,10 +282,10 @@ public class ScreeningGenerator {
         return document;
     }
 
-    private ProofOfIncomeDocumentFolder createProofOfIncomeDocument() {
-        ProofOfIncomeDocumentFolder document = EntityFactory.create(ProofOfIncomeDocumentFolder.class);
+    private ProofOfIncomeDocumentFile createProofOfIncomeDocument() {
+        ProofOfIncomeDocumentFile document = EntityFactory.create(ProofOfIncomeDocumentFile.class);
         document.description().setValue("Proof of income document " + RandomUtil.randomLetters(10));
-        document.files().add(createDocumentPage(ProofOfIncomeDocumentFile.class, "doc-income" + RandomUtil.randomInt(3) + ".jpg"));
+        document.file().fileName().setValue("doc-income" + RandomUtil.randomInt(3) + ".jpg");
         return document;
     }
 
@@ -308,9 +307,7 @@ public class ScreeningGenerator {
             attachDocumentData(document);
         }
         for (CustomerScreeningIncome income : screening.version().incomes()) {
-            for (ProofOfIncomeDocumentFolder document : income.documents()) {
-                attachDocumentData(document);
-            }
+            attachDocumentData(income);
         }
         for (CustomerScreeningPersonalAsset asset : screening.version().assets()) {
             for (ProofOfAssetDocumentFolder document : asset.documents()) {
@@ -344,8 +341,8 @@ public class ScreeningGenerator {
         }
     }
 
-    private static void attachDocumentData(ProofOfIncomeDocumentFolder document) {
-        for (ProofOfIncomeDocumentFile applicationDocument : document.files()) {
+    private static void attachDocumentData(CustomerScreeningIncome income) {
+        for (ProofOfIncomeDocumentFile applicationDocument : income.documents()) {
             String fileName = applicationDocument.file().fileName().getValue();
             ProofOfIncomeDocumentBlob applicationDocumentData;
             try {

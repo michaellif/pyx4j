@@ -28,7 +28,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.media.ProofOfIncomeDocumentFolder;
+import com.propertyvista.domain.media.ProofOfIncomeDocumentFile;
 import com.propertyvista.domain.tenant.CustomerScreening;
 
 @ToStringFormat("{0}{1,choice,null#|!null#, {1}}")
@@ -57,5 +57,5 @@ public interface CustomerScreeningIncome extends IEntity {
 
     @Owned
     @OrderBy(PrimaryKey.class)
-    IList<ProofOfIncomeDocumentFolder> documents();
+    IList<ProofOfIncomeDocumentFile> documents();
 }

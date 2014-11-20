@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -29,10 +30,13 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
+import com.propertyvista.domain.media.ProofOfIncomeDocumentFile;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncomeInfo;
@@ -52,15 +56,49 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
 
     private final SimplePanel detailsHolder = new SimplePanel();
 
-    private final ProofOfIncomeUploaderFolder fileUpload = new ProofOfIncomeUploaderFolder();
+    private final ProofOfIncomeDocumentFileFolder fileUpload = new ProofOfIncomeDocumentFileFolder();
 
-    public PersonalIncomeEditor(ApplicationDocumentationPolicy policy) {
+    private ApplicationDocumentationPolicy documentationPolicy;
+
+    public PersonalIncomeEditor() {
         super(CustomerScreeningIncome.class);
-        setDocumentsPolicy(policy);
     }
 
     public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {
-        fileUpload.setDocumentsPolicy(policy);
+        documentationPolicy = policy;
+        revalidate();
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
+        fileUpload.addComponentValidator(new AbstractComponentValidator<IList<ProofOfIncomeDocumentFile>>() {
+            @Override
+            public BasicValidationError isValid() {
+                if (getValue() != null && getCComponent().getValue() != null && documentationPolicy != null) {
+                    int docsCount = getCComponent().getValue().size();
+                    if (IncomeSource.employment().contains(getValue().incomeSource().getValue())) {
+                        if (documentationPolicy.mandatoryProofOfEmployment().getValue(false)
+                                && docsCount < documentationPolicy.numberOfEmploymentDocuments().getValue()) {
+                            return new BasicValidationError(getCComponent(), i18n.tr("Proof of Employment should be supplied"));
+                        } else if (docsCount > documentationPolicy.numberOfEmploymentDocuments().getValue()) {
+                            return new BasicValidationError(getCComponent(), i18n.tr("No more than {0} documents are necessary", documentationPolicy
+                                    .numberOfEmploymentDocuments().getValue()));
+                        }
+                    } else {
+                        if (documentationPolicy.mandatoryProofOfIncome().getValue(false)
+                                && docsCount < documentationPolicy.numberOfIncomeDocuments().getValue()) {
+                            return new BasicValidationError(getCComponent(), i18n.tr("Proof of Income should be supplied"));
+                        } else if (docsCount > documentationPolicy.numberOfIncomeDocuments().getValue()) {
+                            return new BasicValidationError(getCComponent(), i18n.tr("No more than {0} documents are necessary", documentationPolicy
+                                    .numberOfIncomeDocuments().getValue()));
+                        }
+                    }
+                }
+                return null;
+            }
+        });
     }
 
     @Override
@@ -69,6 +107,8 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
 
         formPanel.append(Location.Dual, proto().incomeSource(), new CEnumLabel()).decorate();
         formPanel.append(Location.Dual, detailsHolder);
+
+        formPanel.h3(i18n.tr("Proof Documents"));
         formPanel.append(Location.Dual, proto().documents(), fileUpload);
 
         return formPanel;

@@ -44,8 +44,6 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
 
     private static final I18n i18n = I18n.get(PersonalIncomeFolder.class);
 
-    private ApplicationDocumentationPolicy documentationPolicy;
-
     private RestrictionsPolicy restrictionsPolicy = EntityFactory.create(RestrictionsPolicy.class);
 
     public PersonalIncomeFolder(boolean modifyable) {
@@ -57,10 +55,8 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
                 new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
                     @Override
                     public void onSuccess(ApplicationDocumentationPolicy result) {
-                        documentationPolicy = result;
-
                         for (CComponent<?, ?, ?, ?> item : getComponents()) {
-                            ((PersonalIncomeEditor) ((CFolderItem<?>) item).getComponents().iterator().next()).setDocumentsPolicy(documentationPolicy);
+                            ((PersonalIncomeEditor) ((CFolderItem<?>) item).getComponents().iterator().next()).setDocumentsPolicy(result);
                         }
                     }
                 });
@@ -76,7 +72,7 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
 
     @Override
     protected CForm<CustomerScreeningIncome> createItemForm(IObject<?> member) {
-        return new PersonalIncomeEditor(documentationPolicy);
+        return new PersonalIncomeEditor();
     }
 
     @Override

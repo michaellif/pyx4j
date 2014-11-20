@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -63,7 +63,7 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
 
     @Override
     protected CForm<CustomerScreeningIncome> createItemForm(IObject<?> member) {
-        return new PersonalIncomeEditor(documentationPolicy);
+        return new PersonalIncomeEditor();
     }
 
     @Override
@@ -95,7 +95,7 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
                             case parttime:
                                 IncomeInfoEmployer employer = income.details().cast();
                                 if (!employer.ends().isNull() && !employer.starts().isNull()) {
-                                    // valid, if more than 1 year, otherwise - more employment needed! 
+                                    // valid, if more than 1 year, otherwise - more employment needed!
                                     if (CalendarUtil.getDaysBetween(employer.starts().getValue(), employer.ends().getValue()) < 366) {
                                         return new BasicValidationError(getCComponent(), i18n.tr("You need to enter more employment information"));
                                     }
