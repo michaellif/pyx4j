@@ -243,9 +243,8 @@ public class EftReportGenerator implements ReportExporter {
 
     private EntityQueryCriteria<PaymentRecord> makeCriteria(EftReportMetadata reportMetadata) {
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-        criteria.desc(criteria.proto().padBillingCycle().billingType());
-        criteria.desc(criteria.proto().padBillingCycle().billingCycleStartDate());
         if (reportMetadata.orderBy().isNull()) {
+            criteria.desc(criteria.proto().padBillingCycle().billingCycleStartDate());
             criteria.asc(criteria.proto().billingAccount().lease().unit().building().propertyCode());
             criteria.asc(criteria.proto().billingAccount().lease().unit().info().number());
             criteria.asc(criteria.proto().billingAccount().lease().leaseId());
@@ -255,6 +254,7 @@ public class EftReportGenerator implements ReportExporter {
             Sort orderBy = new Sort(criteria.proto().getMember(dtoBinder.getBoundBOMemberPath(new Path(reportMetadata.orderBy().memberPath().getValue()))),
                     reportMetadata.orderBy().isDesc().getValue(false));
             criteria.sort(orderBy);
+            criteria.desc(criteria.proto().padBillingCycle().billingCycleStartDate());
         }
 
         criteria.isNotNull(criteria.proto().padBillingCycle());
