@@ -19,6 +19,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.cache.CacheService;
+import com.pyx4j.server.contexts.NamespaceManager;
+
+import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.security.common.VistaApplication;
 
 public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
@@ -46,16 +50,19 @@ public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
     }
 
     /**
-     * Internal use only. To get VistaNamespace object use getVistaNamespace() instead.
+     * Calculate app based on inner HttpRequest object on initialization. Internal use preferred.
+     * To get VistaNamespace object use getVistaNamespace() instead.
      */
     @Override
     public String getNamespace(HttpServletRequest httpRequest) {
         return "";
-        //return ServerSideConfiguration.instance().getNamespaceResolver().getNamespace(httpRequest);
+        // TODO define namespace for onboarding and then use line below
+//        return ServerSideConfiguration.instance().getNamespaceResolver().getNamespace(httpRequest);
     }
 
     /**
-     * Internal use only. To get VistaApplication object use getVistaApplication() instead.
+     * Calculate app based on inner HttpRequest object on initialization. Internal use preferred.
+     * To get VistaApplication object use getVistaApplication() instead.
      */
     @Override
     public VistaApplication getApplication() {
@@ -77,18 +84,51 @@ public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
 
     protected VistaApplication getAppByRequest() {
 
+        VistaApplication app = null;
+
         String serverName = httpRequest.getServerName();
         String requestPath = httpRequest.getServletPath();
 
-        VistaApplication app = null;
+        try {
+            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
+            app = CacheService.get(getAppCacheKey());
 
-        String[] serverNameParts = serverName.split("\\.");
-        if (serverNameParts.length > 0) {
-            String appByDomain = serverNameParts[0];
-            app = getAppByDomainOrPath(appByDomain, requestPath);
+            if (app != null) {
+                return app;
+            } else {
+                String[] serverNameParts = serverName.split("\\.");
+                if (serverNameParts.length > 0) {
+                    String appByDomain = serverNameParts[0];
+                    app = getAppByDomainOrPath(appByDomain, requestPath);
+                }
+
+                CacheService.put(getAppCacheKey(), app);
+
+                return app;
+            }
+        } finally {
+            NamespaceManager.remove();
         }
 
-        return app;
+    }
+
+    private String getAppCacheKey() {
+        return httpRequest.getServerName() + "/" + getRootServletPath();
+    }
+
+    /**
+     * Get first string in request servlet path
+     *
+     * @return first String in request servlet path or empty string in case servlet path is empty
+     */
+    private String getRootServletPath() {
+        String[] appByPathTokens = httpRequest.getServletPath().split("/");
+
+        if (appByPathTokens.length >= 2) {
+            return appByPathTokens[1];
+        }
+
+        return "";
     }
 
     /**
@@ -123,12 +163,10 @@ public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
         //http://PMC-XXX-nn.birchwoodsoftwaregroup.com:8888
         if (appByDomainTokens.length >= 2) {
             if (appByDomainTokens[1].equalsIgnoreCase("portal")) {
-                String[] appByPathTokens = path.split("/");
+
                 // If request path starts with "/prospect", portal is prospect
-                if (appByPathTokens.length >= 2) {
-                    if (appByPathTokens[1].equalsIgnoreCase("prospect")) {
-                        return VistaApplication.prospect;
-                    }
+                if (getRootServletPath().equalsIgnoreCase("prospect")) {
+                    return VistaApplication.prospect;
                 }
 
                 // Default "portal" application is "resident" (no request path required)
