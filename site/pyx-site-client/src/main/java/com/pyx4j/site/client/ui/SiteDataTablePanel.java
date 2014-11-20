@@ -13,7 +13,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Created on 2011-05-03
  * @author Vlad
  * @version $Id$
@@ -34,8 +34,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.entity.shared.IntegrityConstraintUserRuntimeException;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
@@ -232,8 +232,12 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
     }
 
     public void populate(final int pageNumber) {
-        //TODO Review permission application
-        if (true || SecurityController.check(DataModelPermission.permissionRead(getEntityClass()))) {
+        if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
+            if (SecurityController.check(DataModelPermission.permissionRead(getEntityClass()))) {
+                setPageNumber(pageNumber);
+                super.populate();
+            }
+        } else {
             setPageNumber(pageNumber);
             super.populate();
         }
@@ -241,8 +245,11 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
 
     @Override
     public void populate() {
-        //TODO Review permission application
-        if (true || SecurityController.check(DataModelPermission.permissionRead(getEntityClass()))) {
+        if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
+            if (SecurityController.check(DataModelPermission.permissionRead(getEntityClass()))) {
+                super.populate();
+            }
+        } else {
             super.populate();
         }
     }
@@ -275,7 +282,7 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
 
     /**
      * Override in descendants to supply desired set
-     * 
+     *
      * @return default filter list (null);
      */
     @Override
@@ -293,7 +300,7 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
 
     /**
      * Override in descendants to supply desired set
-     * 
+     *
      * @return default sorting list (null);
      */
     @Override
