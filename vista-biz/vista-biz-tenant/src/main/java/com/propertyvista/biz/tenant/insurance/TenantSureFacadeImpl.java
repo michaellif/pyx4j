@@ -386,7 +386,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         });
     }
 
-    private void createTenantSureSubscriberRecord(final TenantSureInsurancePolicy tenantSurePolicy) {
+    void createTenantSureSubscriberRecord(final TenantSureInsurancePolicy tenantSurePolicy) {
         final Pmc pmc = VistaDeployment.getCurrentPmc();
         TaskRunner.runInOperationsNamespace(new Callable<VoidSerializable>() {
             @Override
