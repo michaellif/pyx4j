@@ -92,7 +92,7 @@ class ScreeningPayments {
 
         // Do authorization
         try {
-            String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).preAuthorization(merchantTerminalId(),
+            String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).preAuthorization2(merchantTerminalId(),
                     transaction.amount().getValue().add(transaction.tax().getValue(BigDecimal.ZERO)), ReferenceNumberPrefix.EquifaxScreening, transaction.id(),
                     (CreditCardInfo) transaction.paymentMethod().details().cast());
 

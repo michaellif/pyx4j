@@ -94,9 +94,16 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
     }
 
     @Override
-    public String preAuthorization(String merchantTerminalId, BigDecimal amount, ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber,
-            CreditCardInfo cc) {
+    public CreditCardTransactionResponse preAuthorization(String merchantTerminalId, BigDecimal amount, ReferenceNumberPrefix uniquePrefix,
+            IPrimitive<Key> referenceNumber, CreditCardInfo cc) {
         return CreditCardProcessor.preAuthorization(merchantTerminalId, amount, getTransactionreferenceNumber(uniquePrefix, referenceNumber), cc);
+    }
+
+    @Override
+    @Deprecated
+    public String preAuthorization2(String merchantTerminalId, BigDecimal amount, ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber,
+            CreditCardInfo cc) {
+        return CreditCardProcessor.preAuthorization2(merchantTerminalId, amount, getTransactionreferenceNumber(uniquePrefix, referenceNumber), cc);
     }
 
     @Override

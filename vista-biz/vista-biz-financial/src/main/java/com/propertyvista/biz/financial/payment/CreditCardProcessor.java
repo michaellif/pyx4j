@@ -284,7 +284,7 @@ class CreditCardProcessor {
         return response;
     }
 
-    static String preAuthorization(String merchantTerminalId, BigDecimal amount, String referenceNumber, CreditCardInfo cc) {
+    static CreditCardTransactionResponse preAuthorization(String merchantTerminalId, BigDecimal amount, String referenceNumber, CreditCardInfo cc) {
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(merchantTerminalId);
 
@@ -297,9 +297,18 @@ class CreditCardProcessor {
         PaymentResponse response = getPaymentProcessor().realTimePreAuthorization(merchant, request);
         if (response.success().getValue()) {
             log.debug("ccTransaction accepted {}", DataDump.xmlStringView(response));
-            return response.authorizationNumber().getValue();
         } else {
             log.debug("ccTransaction rejected {}", DataDump.xmlStringView(response));
+        }
+        return createResponse(response);
+    }
+
+    @Deprecated
+    static String preAuthorization2(String merchantTerminalId, BigDecimal amount, String referenceNumber, CreditCardInfo cc) {
+        CreditCardTransactionResponse response = preAuthorization(merchantTerminalId, amount, referenceNumber, cc);
+        if (response.success().getValue()) {
+            return response.authorizationNumber().getValue();
+        } else {
             throw new UserRuntimeException(i18n.tr("Credit Card Authorization failed {0}", response.message()));
         }
     }

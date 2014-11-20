@@ -112,12 +112,10 @@ class TenantSurePayments {
         return new LogicalDate(cal.getTime());
     }
 
-    static void preAuthorization(TenantSureTransaction transaction) {
+    static CreditCardTransactionResponse preAuthorization(TenantSureTransaction transaction) {
         BigDecimal amount = transaction.amount().getValue();
-        String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).preAuthorization(tenantSureMerchantTerminalId(), amount,
-                ReferenceNumberPrefix.TenantSure, transaction.id(), (CreditCardInfo) transaction.paymentMethod().details().cast());
-        transaction.transactionAuthorizationNumber().setValue(authorizationNumber);
-        transaction.transactionDate().setValue(SystemDateManager.getDate());
+        return ServerSideFactory.create(CreditCardFacade.class).preAuthorization(tenantSureMerchantTerminalId(), amount, ReferenceNumberPrefix.TenantSure,
+                transaction.id(), (CreditCardInfo) transaction.paymentMethod().details().cast());
     }
 
     static void preAuthorizationReversal(TenantSureTransaction transaction) {

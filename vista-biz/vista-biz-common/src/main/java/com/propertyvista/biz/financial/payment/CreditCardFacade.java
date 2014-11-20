@@ -75,11 +75,12 @@ public interface CreditCardFacade {
             BigDecimal amount, BigDecimal convenienceFee, //
             ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber, String convenienceFeeReferenceNumber);
 
-    /**
-     * @return authorizationNumber
-     */
-    public String preAuthorization(String merchantTerminalId, BigDecimal amount, ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber,
+    @Deprecated
+    public String preAuthorization2(String merchantTerminalId, BigDecimal amount, ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber,
             CreditCardInfo cc);
+
+    public CreditCardTransactionResponse preAuthorization(String merchantTerminalId, BigDecimal amount, ReferenceNumberPrefix uniquePrefix,
+            IPrimitive<Key> referenceNumber, CreditCardInfo cc);
 
     public void preAuthorizationReversal(String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber, CreditCardInfo cc);
 

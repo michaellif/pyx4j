@@ -47,6 +47,7 @@ import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.communication.OperationsNotificationFacade;
+import com.propertyvista.biz.financial.payment.CreditCardTransactionResponse;
 import com.propertyvista.biz.tenant.insurance.CfcApiAdapterFacade.ReinstatementType;
 import com.propertyvista.biz.tenant.insurance.errors.CfcApiException;
 import com.propertyvista.biz.tenant.insurance.errors.TooManyPreviousClaimsException;
@@ -268,9 +269,24 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                         }
                     });
 
-                    TenantSurePayments.preAuthorization(transaction);
-                    transaction.status().setValue(TenantSureTransaction.TransactionStatus.Authorized);
+                    CreditCardTransactionResponse response = TenantSurePayments.preAuthorization(transaction);
+                    if (response.success().getValue()) {
+                        transaction.status().setValue(TenantSureTransaction.TransactionStatus.Authorized);
+                    } else {
+                        transaction.status().setValue(TenantSureTransaction.TransactionStatus.AuthorizationRejected);
+                    }
+                    transaction.transactionAuthorizationNumber().setValue(response.authorizationNumber().getValue());
+                    transaction.transactionErrorMessage().setValue(response.message().getValue());
+                    transaction.transactionDate().setValue(SystemDateManager.getDate());
                     Persistence.service().persist(transaction);
+
+                    if (!response.success().getValue()) {
+                        tenantSurePolicy.status().setValue(TenantSureStatus.Failed);
+                        transaction.paymentMethod().isDeleted().setValue(Boolean.TRUE);
+                        Persistence.service().merge(transaction.paymentMethod());
+                        Persistence.service().persist(tenantSurePolicy);
+                    }
+
                     return null;
                 }
             });
@@ -281,6 +297,10 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             } else {
                 throw new UserRuntimeException(i18n.tr("Credit Card Authorization failed"), e);
             }
+        }
+
+        if (transaction.status().getValue() != TenantSureTransaction.TransactionStatus.Authorized) {
+            throw new UserRuntimeException(i18n.tr("Credit Card Authorization failed\nTransaction Error Message: {0}", transaction.transactionErrorMessage()));
         }
 
         try {
