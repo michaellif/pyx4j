@@ -14,6 +14,7 @@
 package com.propertyvista.common.client;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,7 +99,7 @@ public class WalkMe {
 
     public static native void hidePlayer() /*-{  $wnd.WalkMePlayerAPI.hidePlayer(); }-*/;
 
-    public static void obtainWalkthrus(final String tag, final AsyncCallback<LinkedHashMap<Integer, String>> callback) {
+    public static void obtainWalkthrus(final String tag, final AsyncCallback<Map<Integer, String>> callback) {
         load(new AsyncCallback<Void>() {
 
             @Override
@@ -128,8 +129,8 @@ public class WalkMe {
 
     private native static JsArray<WalkThru> native_getWalkthrus() /*-{  return $wnd.WalkMeAPI.getWalkthrus(true); }-*/;
 
-    private static LinkedHashMap<Integer, String> getWalkthrus(String tag) {
-        LinkedHashMap<Integer, String> walkthrus = new LinkedHashMap<>();
+    private static Map<Integer, String> getWalkthrus(String tag) {
+        Map<Integer, String> walkthrus = new LinkedHashMap<>();
         JsArray<WalkThru> nwt = native_getWalkthrus();
         for (int i = 0; i < nwt.length(); i++) {
             WalkThru wt = nwt.get(i);
