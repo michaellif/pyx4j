@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -22,6 +22,7 @@ import com.propertyvista.yardi.YardiInterface;
 import com.propertyvista.yardi.YardiInterfaceType;
 import com.propertyvista.yardi.beans.Message;
 import com.propertyvista.yardi.beans.Message.MessageType;
+import com.propertyvista.yardi.stubs.AbstractYardiStub;
 import com.propertyvista.yardi.stubs.YardiLicense;
 import com.propertyvista.yardi.stubs.YardiServiceMessageException;
 import com.propertyvista.yardi.stubs.YardiStubFactory;
@@ -31,6 +32,11 @@ public class YardiOperationsFacadeImpl implements YardiOperationsFacade {
     @Override
     public void restLicenseCache() {
         YardiLicense.restLicenseCache();
+    }
+
+    @Override
+    public void restConfiguration() {
+        AbstractYardiStub.restTestSystemsUrl();
     }
 
     @Override
@@ -103,4 +109,5 @@ public class YardiOperationsFacadeImpl implements YardiOperationsFacade {
         result.setProgressPct(processed * 100 / total);
         result.setProgressMessage(message);
     }
+
 }

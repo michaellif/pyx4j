@@ -60,9 +60,11 @@ import com.propertyvista.yardi.TransactionLog;
 import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.beans.Messages;
 
-abstract class AbstractYardiStub implements ExternalInterfaceLoggingStub {
+public abstract class AbstractYardiStub implements ExternalInterfaceLoggingStub {
 
     private final static Logger log = LoggerFactory.getLogger(AbstractYardiStub.class);
+
+    private static boolean configLoaded = false;
 
     private final static Set<String> testSystemsUrl = new HashSet<String>();
 
@@ -79,13 +81,27 @@ abstract class AbstractYardiStub implements ExternalInterfaceLoggingStub {
 
     private final List<String> recordedTracastionsLogs = new ArrayList<String>();
 
-    static {
+    public static void restTestSystemsUrl() {
+        configLoaded = false;
+        testSystemsUrl.clear();
+    }
+
+    private static void loadTestSystemsUrlConfiguration() {
+        if (configLoaded) {
+            return;
+        }
+        testSystemsUrl.clear();
         testSystemsUrl.add("http://yardi.birchwoodsoftwaregroup.com/");
         testSystemsUrl.add("http://yardi.birchwoodsoftwaregroup.com:8080/");
         testSystemsUrl.add("http://yardi2.birchwoodsoftwaregroup.com:8080/");
         testSystemsUrl.add("https://www.iyardiasp.com/8223");
         testSystemsUrl.add("https://testvyr.realstar.ca/");
         testSystemsUrl.add("http://192.168.50.10");
+
+        String urls = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getConfigProperties().getValue("yardi.testSystemsUrl");
+        if (urls != null) {
+            testSystemsUrl.addAll(Arrays.asList(urls.split(";")));
+        }
     }
 
     protected void init(PmcYardiCredential yc, Action currentAction) throws YardiServiceException {
@@ -123,6 +139,7 @@ abstract class AbstractYardiStub implements ExternalInterfaceLoggingStub {
             return;
         }
         boolean allow = false;
+        loadTestSystemsUrlConfiguration();
         for (String urlBase : testSystemsUrl) {
             if (url.startsWith(urlBase)) {
                 allow = true;

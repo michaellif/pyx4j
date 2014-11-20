@@ -71,6 +71,8 @@ public class MaintenanceCrudServiceImpl extends AdminServiceImpl implements Main
         Map<String, String> propertiesBefore = new HashMap<>();
         propertiesBefore.putAll(getPropertiesMap());
         ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).reloadProperties();
+        ServerSideFactory.create(YardiOperationsFacade.class).restConfiguration();
+
         Map<String, String> propertiesAfter = getPropertiesMap();
 
         MapDifference<String, String> differences = Maps.difference(propertiesBefore, propertiesAfter);
@@ -86,8 +88,9 @@ public class MaintenanceCrudServiceImpl extends AdminServiceImpl implements Main
         // Updated entities
         mssg += getEntriesDiffMessage("Updated Entries:", differences.entriesDiffering());
 
-        if (mssg.length() == 0)
+        if (mssg.length() == 0) {
             mssg = "No changes since last reload of properties file.";
+        }
 
         callback.onSuccess(mssg);
     }
