@@ -39,7 +39,6 @@ import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.entity.shared.IntegrityConstraintUserRuntimeException;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
-import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
@@ -75,47 +74,7 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
 
         setStyleName(PaneTheme.StyleName.ListerListPanel.name());
 
-        setFirstActionHandler(new Command() {
-            @Override
-            public void execute() {
-                populate(0);
-            }
-        });
-        setPrevActionHandler(new Command() {
-            @Override
-            public void execute() {
-                populate(getDataTableModel().getPageNumber() - 1);
-            }
-        });
-        setNextActionHandler(new Command() {
-            @Override
-            public void execute() {
-                populate(getDataTableModel().getPageNumber() + 1);
-            }
-        });
-        setLastActionHandler(new Command() {
-            @Override
-            public void execute() {
-                populate((getDataTableModel().getTotalRows() - 1) / getDataTableModel().getPageSize());
-            }
-        });
-
-        setPageSizeActionHandler(new Command() {
-            @Override
-            public void execute() {
-                populate(0);
-            }
-        });
-
         getDataTable().setHasColumnClickSorting(true);
-        getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
-            @Override
-            public void onChange() {
-                populate(getPageNumber());
-            }
-        });
-
-        showColumnSelector(true);
 
         setPageSizeOptions(Arrays.asList(new Integer[] { DataTablePanel.PAGESIZE_SMALL, DataTablePanel.PAGESIZE_MEDIUM, DataTablePanel.PAGESIZE_LARGE }));
 
@@ -133,15 +92,11 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
         setDataSource(new ListerDataSource<E>(entityClass, service));
     }
 
-    public void view(Class<? extends CrudAppPlace> openPlaceClass, Key itemID) {
+    protected void view(Class<? extends CrudAppPlace> openPlaceClass, Key itemID) {
         AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formViewerPlace(itemID));
     }
 
-    public void edit(Class<? extends CrudAppPlace> openPlaceClass, Key itemID) {
-        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formEditorPlace(itemID));
-    }
-
-    public void editNew(Class<? extends CrudAppPlace> openPlaceClass) {
+    protected void editNew(Class<? extends CrudAppPlace> openPlaceClass) {
         if (canCreateNewItem()) {
             if (getDataSource().getParentEntityClass() != null) {
                 AppSite.getPlaceController().goTo(
@@ -153,13 +108,13 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
         }
     }
 
-    public void editNew(Class<? extends CrudAppPlace> openPlaceClass, InitializationData initializationData) {
+    protected void editNew(Class<? extends CrudAppPlace> openPlaceClass, InitializationData initializationData) {
         if (canCreateNewItem()) {
             AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(initializationData));
         }
     }
 
-    public boolean canCreateNewItem() {
+    protected boolean canCreateNewItem() {
         if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
             return SecurityController.check(DataModelPermission.permissionCreate(getEntityClass()));
         } else {
@@ -220,29 +175,6 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
 
     public Class<? extends CrudAppPlace> getItemOpenPlaceClass() {
         return itemOpenPlaceClass;
-    }
-
-    public void populate(final int pageNumber) {
-        if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
-            if (SecurityController.check(DataModelPermission.permissionRead(getEntityClass()))) {
-                setPageNumber(pageNumber);
-                super.populate();
-            }
-        } else {
-            setPageNumber(pageNumber);
-            super.populate();
-        }
-    }
-
-    @Override
-    public void populate() {
-        if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
-            if (SecurityController.check(DataModelPermission.permissionRead(getEntityClass()))) {
-                super.populate();
-            }
-        } else {
-            super.populate();
-        }
     }
 
     @Override

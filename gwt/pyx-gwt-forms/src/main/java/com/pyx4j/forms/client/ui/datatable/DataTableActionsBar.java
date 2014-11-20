@@ -27,13 +27,16 @@ import com.pyx4j.widgets.client.Toolbar;
 
 public class DataTableActionsBar extends SimplePanel implements DataTableModelListener {
 
+    private final DataTablePanel<?> dataTablePanel;
+
     private DataTableModel<?> model;
 
     private final Toolbar toolbar;
 
     private final PageNavigBar pageNavigBar;
 
-    public DataTableActionsBar() {
+    public DataTableActionsBar(DataTablePanel<?> dataTablePanel) {
+        this.dataTablePanel = dataTablePanel;
         setStyleName(DataTableTheme.StyleName.DataTableActionsBar.name());
 
         FlowPanel content = new FlowPanel();
@@ -48,6 +51,10 @@ public class DataTableActionsBar extends SimplePanel implements DataTableModelLi
         pageNavigBar.addStyleName(DataTableTheme.StyleName.DataTablePageNavigBar.name());
         content.add(pageNavigBar);
 
+    }
+
+    public DataTablePanel<?> getDataTablePanel() {
+        return dataTablePanel;
     }
 
     public void setDataTableModel(DataTableModel<?> model) {

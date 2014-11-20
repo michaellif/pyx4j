@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.GWTJava5Helper;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
@@ -44,15 +45,18 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
+import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.filter.CriteriaEditableComponentFactory;
 import com.pyx4j.forms.client.ui.datatable.filter.DataTableFilterItem;
 import com.pyx4j.forms.client.ui.datatable.filter.DataTableFilterPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 import com.pyx4j.widgets.client.memento.IMementoAware;
@@ -116,7 +120,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         this.images = images;
         entityPrototype = EntityFactory.getEntityPrototype(clazz);
 
-        topActionsBar = new DataTableActionsBar();
+        topActionsBar = new DataTableActionsBar(this);
         add(topActionsBar);
 
         filterPanel = new DataTableFilterPanel<E>(this);
@@ -127,7 +131,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         dataTableScroll.setStyleName(DataTableTheme.StyleName.DataTableHolder.name());
         add(dataTableScroll);
 
-        bottomActionsBar = new DataTableActionsBar();
+        bottomActionsBar = new DataTableActionsBar(this);
         add(bottomActionsBar);
 
         filterButton = new Button(i18n.tr("Filter"), new Command() {
@@ -138,6 +142,13 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
             }
         });
         topActionsBar.getToolbar().addItem(filterButton);
+
+        getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
+            @Override
+            public void onChange() {
+                populate(getPageNumber());
+            }
+        });
 
         setAddNewActionEnabled(allowAddNew);
         setDeleteActionEnabled(allowDelete);
@@ -289,6 +300,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         return dataTable.getDataTableModel();
     }
 
+    @Deprecated
     public void populateData(List<E> entityes, int pageNumber, boolean hasMoreData, int totalRows) {
         List<DataItem<E>> dataItems = new ArrayList<DataItem<E>>();
         for (E entity : entityes) {
@@ -365,7 +377,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         return dataSource;
     }
 
-    public void populate() {
+    protected final void populateInternal() {
         assert dataSource != null : "dataSource is not installed";
 
         EntityListCriteria<E> criteria = EntityListCriteria.create(clazz);
@@ -381,12 +393,41 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
                 Scheduler.get().scheduleFinally(new ScheduledCommand() {
                     @Override
                     public void execute() {
-                        populateData(result.getData(), pageNumber, result.hasMoreData(), result.getTotalRows());
+                        List<DataItem<E>> dataItems = new ArrayList<DataItem<E>>();
+                        for (E entity : result.getData()) {
+                            dataItems.add(new DataItem<E>(entity));
+                        }
+                        getDataTableModel().populateData(dataItems, pageNumber, result.hasMoreData(), result.getTotalRows());
+                        if (delButton != null) {
+                            delButton.setEnabled(getDataTableModel().isAnyRowSelected());
+                        }
                         onPopulate();
                     }
                 });
             }
         });
+    }
+
+    public void populate(final int pageNumber) {
+        if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
+            if (SecurityController.check(DataModelPermission.permissionRead(getEntityClass()))) {
+                setPageNumber(pageNumber);
+                populateInternal();
+            }
+        } else {
+            setPageNumber(pageNumber);
+            populateInternal();
+        }
+    }
+
+    public void populate() {
+        if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
+            if (SecurityController.check(DataModelPermission.permissionRead(getEntityClass()))) {
+                populateInternal();
+            }
+        } else {
+            populateInternal();
+        }
     }
 
     protected void onPopulate() {
