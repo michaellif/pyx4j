@@ -18,22 +18,17 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.gwt.user.client.Command;
-
-import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
-import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.datatable.DataItem;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
-import com.pyx4j.security.shared.SecurityController;
 
 public class EntityLister<E extends IEntity> extends DataTablePanel<E> {
 
@@ -54,38 +49,6 @@ public class EntityLister<E extends IEntity> extends DataTablePanel<E> {
 
         setPageSizeOptions(Arrays.asList(new Integer[] { DataTablePanel.PAGESIZE_SMALL, DataTablePanel.PAGESIZE_MEDIUM }));
 
-        setFirstActionHandler(new Command() {
-            @Override
-            public void execute() {
-                populate(0);
-            }
-        });
-        setPrevActionHandler(new Command() {
-            @Override
-            public void execute() {
-                populate(getDataTableModel().getPageNumber() - 1);
-            }
-        });
-        setNextActionHandler(new Command() {
-            @Override
-            public void execute() {
-                populate(getDataTableModel().getPageNumber() + 1);
-            }
-        });
-        setLastActionHandler(new Command() {
-            @Override
-            public void execute() {
-                populate((getDataTableModel().getTotalRows() - 1) / getDataTableModel().getPageSize());
-            }
-        });
-
-        setPageSizeActionHandler(new Command() {
-            @Override
-            public void execute() {
-                populate(0);
-            }
-        });
-
         setDataSource(new ListerDataSource<E>(entityClass, service));
 
         addItemSelectionHandler(new ItemSelectionHandler() {
@@ -95,29 +58,6 @@ public class EntityLister<E extends IEntity> extends DataTablePanel<E> {
                 identifySelected();
             }
         });
-    }
-
-    public void populate(final int pageNumber) {
-        if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
-            if (SecurityController.check(DataModelPermission.permissionRead(getEntityClass()))) {
-                setPageNumber(pageNumber);
-                super.populate();
-            }
-        } else {
-            setPageNumber(pageNumber);
-            super.populate();
-        }
-    }
-
-    @Override
-    public void populate() {
-        if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
-            if (SecurityController.check(DataModelPermission.permissionRead(getEntityClass()))) {
-                super.populate();
-            }
-        } else {
-            super.populate();
-        }
     }
 
     @Override
