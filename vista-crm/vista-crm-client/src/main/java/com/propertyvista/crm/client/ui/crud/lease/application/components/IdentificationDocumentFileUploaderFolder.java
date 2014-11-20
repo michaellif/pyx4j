@@ -55,11 +55,17 @@ public class IdentificationDocumentFileUploaderFolder extends VistaBoxFolder<Ide
             CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(IdentificationDocumentCrmUploadService.class), new VistaFileURLBuilder(
                     IdentificationDocumentFile.class));
 
-            formPanel.append(Location.Left, proto().file(), cfile).decorate();
+            formPanel.append(Location.Dual, proto().file(), cfile).decorate();
             formPanel.append(Location.Dual, proto().description()).decorate();
 
             return formPanel;
         }
-    }
 
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+
+            get(proto().description()).setVisible(isEditable() || !getValue().description().isNull());
+        }
+    }
 }

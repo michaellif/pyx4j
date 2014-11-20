@@ -73,10 +73,17 @@ public class ProofOfAssetDocumentFileFolder extends VistaBoxFolder<ProofOfAssetD
             CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(ProofOfAssetDocumentCrmUploadService.class), new VistaFileURLBuilder(
                     ProofOfAssetDocumentFile.class));
 
-            formPanel.append(Location.Left, proto().file(), cfile).decorate();
+            formPanel.append(Location.Dual, proto().file(), cfile).decorate();
             formPanel.append(Location.Dual, proto().description()).decorate();
 
             return formPanel;
+        }
+
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+
+            get(proto().description()).setVisible(isEditable() || !getValue().description().isNull());
         }
     }
 }

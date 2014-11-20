@@ -55,10 +55,17 @@ public class ProofOfIncomeDocumentFileFolder extends VistaBoxFolder<ProofOfIncom
             CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(ProofOfIncomeDocumentCrmUploadService.class), new VistaFileURLBuilder(
                     ProofOfIncomeDocumentFile.class));
 
-            formPanel.append(Location.Left, proto().file(), cfile).decorate();
+            formPanel.append(Location.Dual, proto().file(), cfile).decorate();
             formPanel.append(Location.Dual, proto().description()).decorate();
 
             return formPanel;
+        }
+
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+
+            get(proto().description()).setVisible(isEditable() || !getValue().description().isNull());
         }
     }
 }

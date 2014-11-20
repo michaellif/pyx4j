@@ -63,7 +63,7 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
     public CustomerScreeningForm(IPrimeFormView<LeaseParticipantScreeningTO, ?> view) {
         super(LeaseParticipantScreeningTO.class, view);
 
-        selectTab(addTab(createIdentificationDocumentsTab(), i18n.tr("Identification Documents")));
+        selectTab(addTab(createIdentificationDocumentsTab(), i18n.tr("Identification")));
         addTab(createAddressesTab(), i18n.tr("Addresses"));
         addTab(createlegalQuestionsTab(), proto().screening().version().legalQuestions().getMeta().getCaption());
         addTab(createIncomesTab(), i18n.tr("Incomes"));

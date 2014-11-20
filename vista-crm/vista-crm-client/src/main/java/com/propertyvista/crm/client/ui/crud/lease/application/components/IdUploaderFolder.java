@@ -178,7 +178,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
                 });
             }
 
-            formPanel.h3(i18n.tr("Files"));
+            formPanel.h3(i18n.tr("Proof Documents"));
             formPanel.append(Location.Dual, proto().files(), docPagesFolder);
             return formPanel;
         }

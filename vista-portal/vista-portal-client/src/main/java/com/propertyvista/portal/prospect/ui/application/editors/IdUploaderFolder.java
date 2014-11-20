@@ -171,7 +171,7 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
             formPanel.append(Location.Left, proto().idNumber()).decorate();
             formPanel.append(Location.Left, proto().notes()).decorate();
 
-            formPanel.h3(i18n.tr("Files"));
+            formPanel.h3(i18n.tr("Proof Documents"));
             formPanel.append(Location.Left, proto().files(), new IdentificationDocumentFolderUploaderFolder());
             return formPanel;
         }
