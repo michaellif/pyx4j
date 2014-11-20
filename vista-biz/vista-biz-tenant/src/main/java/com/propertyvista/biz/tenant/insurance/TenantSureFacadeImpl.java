@@ -39,6 +39,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -232,13 +233,15 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         final TenantSureTransaction transaction = TenantSurePaymentScheduleFactory.create(tenantSurePolicy.paymentSchedule().getValue()).initFirstTransaction(
                 tenantSurePolicy, paymentMethod, SystemDateManager.getLogicalDate());
 
-        new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
             @Override
             public Void execute() throws RuntimeException {
-
+                boolean newPolicy = tenantSurePolicy.getPrimaryKey() == null;
                 Persistence.service().persist(tenantSurePolicy);
                 Persistence.service().persist(transaction);
-
+                if (newPolicy) {
+                    createTenantSureSubscriberRecord(tenantSurePolicy);
+                }
                 return null;
             }
         });
@@ -246,7 +249,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         // Like two phase commit transaction
 
         try {
-            new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
+            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
                 @Override
                 public Void execute() throws RuntimeException {
 
@@ -281,7 +284,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         }
 
         try {
-            new UnitOfWork().execute(new Executable<Void, CfcApiException>() {
+            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, CfcApiException>() {
                 @Override
                 public Void execute() throws CfcApiException {
 
@@ -309,7 +312,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
                     Persistence.service().merge(tenantSurePolicy);
 
-                    createTenantSureSubscriberRecord(tenantSureCertificateNumber);
+                    updateTenantSureSubscriberRecord(tenantSurePolicy);
 
                     TenantSureInsurancePolicyReport tsReportStatusHolder = EntityFactory.create(TenantSureInsurancePolicyReport.class);
                     tsReportStatusHolder.insurance().set(tenantSurePolicy);
@@ -336,7 +339,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         }
 
         try {
-            new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
+            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
                 @Override
                 public Void execute() throws RuntimeException {
 
@@ -369,14 +372,29 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         }
     }
 
-    private void createTenantSureSubscriberRecord(final String insuranceCertificateNumber) {
+    private void updateTenantSureSubscriberRecord(final TenantSureInsurancePolicy tenantSurePolicy) {
+        final Pmc pmc = VistaDeployment.getCurrentPmc();
+        TaskRunner.runInOperationsNamespace(new Callable<VoidSerializable>() {
+            @Override
+            public VoidSerializable call() throws Exception {
+                TenantSureSubscribers tenantSureSubscriber = Persistence.service().retrieve(TenantSureSubscribers.class, tenantSurePolicy.getPrimaryKey());
+                tenantSureSubscriber.pmc().set(pmc);
+                tenantSureSubscriber.certificateNumber().setValue(tenantSurePolicy.certificate().insuranceCertificateNumber().getValue());
+                Persistence.service().persist(tenantSureSubscriber);
+                return null;
+            }
+        });
+    }
+
+    private void createTenantSureSubscriberRecord(final TenantSureInsurancePolicy tenantSurePolicy) {
         final Pmc pmc = VistaDeployment.getCurrentPmc();
         TaskRunner.runInOperationsNamespace(new Callable<VoidSerializable>() {
             @Override
             public VoidSerializable call() throws Exception {
                 TenantSureSubscribers tenantSureSubscriber = EntityFactory.create(TenantSureSubscribers.class);
+                tenantSureSubscriber.setPrimaryKey(tenantSurePolicy.getPrimaryKey());
                 tenantSureSubscriber.pmc().set(pmc);
-                tenantSureSubscriber.certificateNumber().setValue(insuranceCertificateNumber);
+                tenantSureSubscriber.certificateNumber().setValue(tenantSurePolicy.certificate().insuranceCertificateNumber().getValue());
                 Persistence.service().persist(tenantSureSubscriber);
                 return null;
             }

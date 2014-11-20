@@ -24,12 +24,13 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 
 /**
  * Index table to find PMC subscriber belongs to.
- * 
+ *
  */
-@Table(namespace = VistaNamespace.operationsNamespace)
+@Table(namespace = VistaNamespace.operationsNamespace, primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = TenantSureInsurancePolicy.class)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface TenantSureSubscribers extends IEntity {
 
