@@ -17,6 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.yardi.entity.mits.Address;
 
@@ -69,26 +71,50 @@ public class MappingUtils {
         }
     }
 
+    /**
+     * 1. Parse Street Address (line1/linee2) to extract street number needed for InternationalAddress.
+     * The logic is based on various Yardi client business rules.
+     * 2. Check given country against ISO list
+     * 3. Check given province against ISO list
+     * 4. validate postal code
+     */
     public static InternationalAddress getAddress(Address mitsAddress, StringBuilder error) {
         // TODO instantiate address parser according to the building country
         // extract street name and number
         String address1 = mitsAddress.getAddress1() == null ? "" : mitsAddress.getAddress1();
-        String[] streetNumName = address1.split("\\s+", 2);
+        String streetNumber = "";
+        String streetName = address1;
+        boolean streetNumberFound = false;
+        try {
+            // extract max substring candidate that ends with digit
+            Matcher streetNumberMatcher = Pattern.compile("^.*\\d\\s+").matcher(address1);
+            if (streetNumberMatcher.find()) {
+                String candidate = address1.substring(streetNumberMatcher.start(), streetNumberMatcher.end()).trim();
+                // the candidate should contain only digits and word delimiters; 'and' is also allowed
+                if (candidate.matches("^(\\d+([^A-Za-z]|and\\s+)*)*\\d+")) {
+                    streetNumber = candidate;
+                    streetName = address1.substring(streetNumberMatcher.end()).trim();
+                    streetNumberFound = true;
+                }
+            }
+        } catch (IllegalStateException e) {
+            error.append("Invalid Address: " + e.getMessage());
+        }
+        if (!streetNumberFound) {
+            error.append("\n").append("Invalid Address: failed to extract street number from: " + address1);
+        }
+
         // combine address2 parts
         StringBuilder address2 = new StringBuilder();
         for (String addressPart : mitsAddress.getAddress2()) {
             if (address2.length() > 0) {
-                address2.append("\n");
+                address2.append(", ");
             }
-            address2.append(addressPart);
+            address2.append(addressPart.trim());
         }
         InternationalAddress address = EntityFactory.create(InternationalAddress.class);
-        if (streetNumName.length == 2) {
-            address.streetNumber().setValue(streetNumName[0]);
-            address.streetName().setValue(streetNumName[1]);
-        } else {
-            address.streetName().setValue(address1);
-        }
+        address.streetNumber().setValue(streetNumber);
+        address.streetName().setValue(streetName);
         address.suiteNumber().setValue(address2.toString());
 
         ISOCountry country = ISOCountry.forName(mitsAddress.getCountry());
@@ -97,8 +123,7 @@ public class MappingUtils {
             country = VistaDeployment.getCurrentPmc().features().countryOfOperation().getValue().country;
         }
         if (country == null) {
-            error.append("\n");
-            error.append("failed to find ISO Country from MITS address: " + mitsAddress.getCountry());
+            error.append("\n").append("Invalid Address: ISO Country not found: " + mitsAddress.getCountry());
         }
         address.country().setValue(country);
 
@@ -106,7 +131,7 @@ public class MappingUtils {
         if (province != null) {
             address.province().setValue(province.name);
         } else {
-            error.append("\nProvince from MITS address not found; used as is: " + mitsAddress.getState());
+            error.append("\n").append("Invalid Address: ISO Province not found; used as is: " + mitsAddress.getState());
             address.province().setValue(mitsAddress.getState());
         }
 
@@ -114,7 +139,7 @@ public class MappingUtils {
 
         CanadianPostalCodeValidator pcValidator = new CanadianPostalCodeValidator(mitsAddress.getPostalCode());
         if (!pcValidator.isValid()) {
-            error.append("\nInvalid Canadian Postal Code: " + pcValidator.original());
+            error.append("\n").append("Invalid Address: not a Canadian Postal Code: " + pcValidator.original());
         }
         address.postalCode().setValue(pcValidator.format());
 
