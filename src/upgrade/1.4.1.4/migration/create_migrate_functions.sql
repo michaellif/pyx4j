@@ -117,6 +117,23 @@ BEGIN
                 ||'FROM '||v_schema_name||'.master_online_application m '
                 ||'WHERE    a.master_online_application = m.id '
                 ||'AND      m.status = ''Cancelled'' ';
+                
+                
+        /**
+        *** =============================================================================================================
+        ***
+        ***     POPULATE _admin_.tenant_sure_subscribers 
+        ***
+        *** =============================================================================================================
+        **/
+        
+        EXECUTE 'INSERT INTO _admin_.tenant_sure_subscribers(id,pmc,certificate_number) '
+                ||'(SELECT  i.id, a.id AS pmc, c.insurance_certificate_number AS certificate_number '
+                ||'FROM '||v_schema_name||'.insurance_policy i '
+                ||'JOIN '||v_schema_name||'.insurance_certificate c ON (i.id = c.insurance_policy) '
+                ||'JOIN _admin_.admin_pmc a ON (a.namespace = '''||v_schema_name||''' ) '
+                ||'WHERE    i.id_discriminator = ''TenantSureInsurancePolicy'' ) ';
+                
         
         
         /**

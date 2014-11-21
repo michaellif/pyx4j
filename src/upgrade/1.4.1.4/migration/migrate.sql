@@ -38,10 +38,10 @@ COMMIT;
 \i insert_tmp_emails.sql
 
 -- public schema migration
---\i migrate_public_schema.sql;
+\i migrate_public_schema.sql;
 
 -- _admin_ schema migration 
---\i migrate_admin_schema.sql;
+\i migrate_admin_schema.sql;
 
 -- _expiring_ schema migration 
 --\i migrate_expiring_schema.sql;
