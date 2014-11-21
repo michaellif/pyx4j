@@ -61,6 +61,10 @@ public class PortalSiteMap implements SiteMap {
         }
     }
 
+    @PlaceProperties(navigLabel = "My Account")
+    public static class Account extends AppPlace {
+    }
+
     @PlaceProperties(caption = "Change Password")
     public static class PasswordChange extends AppPlace {
     }

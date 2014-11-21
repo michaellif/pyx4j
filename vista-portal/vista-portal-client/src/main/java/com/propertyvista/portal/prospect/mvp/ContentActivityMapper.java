@@ -33,6 +33,7 @@ import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.ApplicationContextSelection;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.Registration;
 import com.propertyvista.portal.shared.activity.NotificationPageActivity;
+import com.propertyvista.portal.shared.activity.account.AccountPageActivity;
 import com.propertyvista.portal.shared.activity.communication.MessagePageActivity;
 import com.propertyvista.portal.shared.activity.communication.MessageViewActivity;
 import com.propertyvista.portal.shared.activity.communication.MessageWizardActivity;
@@ -52,6 +53,7 @@ public class ContentActivityMapper implements AppActivityMapper {
         GWT.runAsync(new RunAsyncCallback() {
 
 
+
             @Override
             public void onSuccess() {
                 if (place instanceof AppPlace) {
@@ -60,7 +62,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                     Activity activity = null;
                     if (appPlace instanceof ProspectPortalSiteMap.Status) {
                         activity = new ApplicationStatusPageActivity(appPlace);
-
+                    } else if (appPlace instanceof PortalSiteMap.Account) {
+                        activity = new AccountPageActivity(appPlace);
 // Internals:
                     } else if (appPlace instanceof PortalSiteMap.Login) {
                         activity = new LandingActivity(appPlace);

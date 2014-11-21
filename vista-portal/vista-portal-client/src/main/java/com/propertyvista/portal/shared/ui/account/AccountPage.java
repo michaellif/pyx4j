@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.profile;
+package com.propertyvista.portal.shared.ui.account;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
@@ -27,17 +27,17 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.resident.dto.ResidentAccountDTO;
+import com.propertyvista.portal.rpc.shared.dto.CustomerAccountDTO;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
 import com.propertyvista.portal.shared.themes.NavigationAnchorTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
 
-public class AccountPage extends CPortalEntityForm<ResidentAccountDTO> {
+public class AccountPage extends CPortalEntityForm<CustomerAccountDTO> {
 
     private static final I18n i18n = I18n.get(AccountPage.class);
 
     public AccountPage(AccountPageViewImpl view) {
-        super(ResidentAccountDTO.class, view, "My Account", ThemeColor.contrast2);
+        super(CustomerAccountDTO.class, view, "My Account", ThemeColor.contrast2);
         asWidget().setStyleName(EntityViewTheme.StyleName.EntityView.name());
     }
 

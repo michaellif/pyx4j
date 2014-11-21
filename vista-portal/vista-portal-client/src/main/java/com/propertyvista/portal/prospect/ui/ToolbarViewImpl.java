@@ -65,6 +65,8 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresS
 
     private final MenuItem logoutMenu;
 
+    private final MenuItem myAccountMenu;
+
     private final Button sideMenuButton;
 
     private final Button languageButton;
@@ -108,6 +110,14 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresS
                 AppSite.getPlaceController().goTo(new ProspectPortalSiteMap.Status());
             }
         }));
+
+        myAccountMenu = new MenuItem(i18n.tr("My Account"), new Command() {
+            @Override
+            public void execute() {
+                presenter.showAccount();
+            }
+        });
+        residentButtonMenu.addItem(myAccountMenu);
 
         logoutMenu = new MenuItem(i18n.tr("Logout"), new Command() {
             @Override

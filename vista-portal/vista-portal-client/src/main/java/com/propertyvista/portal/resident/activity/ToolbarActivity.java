@@ -113,7 +113,7 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarPresente
 
     @Override
     public void showAccount() {
-        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Account());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Account());
     }
 
     @Override

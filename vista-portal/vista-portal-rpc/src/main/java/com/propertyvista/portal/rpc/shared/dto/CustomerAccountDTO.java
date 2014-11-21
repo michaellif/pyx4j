@@ -11,12 +11,12 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.resident.dto;
+package com.propertyvista.portal.rpc.shared.dto;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 
 @Transient
-public interface ResidentAccountDTO extends IEntity {
+public interface CustomerAccountDTO extends IEntity {
 
 }

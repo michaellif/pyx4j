@@ -79,7 +79,6 @@ import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseAgreeme
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseSigningCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveInWizardService;
-import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentAccountCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentPreferencesCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentProfileCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentSummaryService;
@@ -94,6 +93,7 @@ import com.propertyvista.portal.rpc.portal.shared.services.PortalPasswordResetSe
 import com.propertyvista.portal.rpc.portal.shared.services.PortalPolicyRetrieveService;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalTermsAndPoliciesService;
 import com.propertyvista.portal.rpc.portal.shared.services.SiteThemeServices;
+import com.propertyvista.portal.rpc.portal.shared.services.account.CustomerAccountCrudService;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
 import com.propertyvista.portal.server.security.access.prospect.CustomerPictureProspectDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.prospect.CustomerPreferencesDatasetAccessRule;
@@ -155,6 +155,9 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(VistaAccessGrantedBehavior.ResidentPortal, new IServiceExecutePermission(PasswordChangeUserService.class));
         grant(VistaAccessGrantedBehavior.ProspectPortal, new IServiceExecutePermission(PasswordChangeUserService.class));
 
+        grant(VistaAccessGrantedBehavior.ResidentPortal, new IServiceExecutePermission(CustomerAccountCrudService.class));
+        grant(VistaAccessGrantedBehavior.ProspectPortal, new IServiceExecutePermission(CustomerAccountCrudService.class));
+
         // Old TODO remove
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ReferenceDataService.class));
 
@@ -175,11 +178,10 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(CreditCardValidationService.class));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(ResidentProfileCrudService.class));
-        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(ResidentAccountCrudService.class));
+
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(ResidentPreferencesCrudService.class));
 
         grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(ResidentProfileCrudService.class));
-        grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(ResidentAccountCrudService.class));
 
         //========================= Resident Portal
 

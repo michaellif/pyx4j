@@ -45,7 +45,6 @@ import com.propertyvista.portal.resident.activity.maintenance.MaintenanceRequest
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceRequestWizardActivity;
 import com.propertyvista.portal.resident.activity.movein.MoveInWizardActivity;
 import com.propertyvista.portal.resident.activity.offers.dashboard.OffersDashboardActivity;
-import com.propertyvista.portal.resident.activity.profile.AccountPageActivity;
 import com.propertyvista.portal.resident.activity.profile.ProfilePageActivity;
 import com.propertyvista.portal.resident.activity.services.dashboard.ServicesDashboardActivity;
 import com.propertyvista.portal.resident.activity.services.insurance.GeneralPolicyPageActivity;
@@ -58,6 +57,7 @@ import com.propertyvista.portal.resident.activity.services.insurance.TenantSureP
 import com.propertyvista.portal.resident.activity.services.insurance.tenantsurepaymentmethod.TenantSurePaymentMethodUpdateConfirmationActivity;
 import com.propertyvista.portal.resident.activity.services.insurance.tenantsurepaymentmethod.TenantSurePaymentMethodUpdateWizardActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Account;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Login;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.LoginWithToken;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Logout;
@@ -70,6 +70,7 @@ import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.LeaseC
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.Registration;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
 import com.propertyvista.portal.shared.activity.NotificationPageActivity;
+import com.propertyvista.portal.shared.activity.account.AccountPageActivity;
 import com.propertyvista.portal.shared.activity.communication.MessagePageActivity;
 import com.propertyvista.portal.shared.activity.communication.MessageViewActivity;
 import com.propertyvista.portal.shared.activity.communication.MessageWizardActivity;
@@ -98,7 +99,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new MainDashboardActivity(appPlace);
                     } else if (appPlace instanceof ResidentPortalSiteMap.Profile) {
                         activity = new ProfilePageActivity(appPlace);
-                    } else if (appPlace instanceof ResidentPortalSiteMap.Account) {
+                    } else if (appPlace instanceof Account) {
                         activity = new AccountPageActivity(appPlace);
 
 // Financial

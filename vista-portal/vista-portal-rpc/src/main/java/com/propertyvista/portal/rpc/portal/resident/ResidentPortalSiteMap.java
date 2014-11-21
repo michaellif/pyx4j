@@ -51,10 +51,6 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
     public static class Profile extends AppPlace {
     }
 
-    @PlaceProperties(navigLabel = "My Account")
-    public static class Account extends AppPlace {
-    }
-
     @PlaceProperties(navigLabel = "Billing & Payment")
     public static class Financial extends AppPlace {
 
