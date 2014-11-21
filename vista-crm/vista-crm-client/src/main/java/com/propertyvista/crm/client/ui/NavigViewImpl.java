@@ -401,11 +401,9 @@ public class NavigViewImpl extends Composite implements NavigView {
         case phoneLandscape:
         case tabletPortrait:
             userMenuItem.setVisible(true);
-            adminMenuItem.setVisible(true);
             break;
         default:
             userMenuItem.setVisible(false);
-            adminMenuItem.setVisible(false);
             break;
         }
 
