@@ -26,6 +26,7 @@ import com.propertyvista.domain.security.VistaOperationsBehavior;
 import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
+import com.propertyvista.domain.tenant.insurance.TenantSureTransaction;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationRecordRecord;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationSummary;
@@ -95,6 +96,7 @@ import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 import com.propertyvista.operations.rpc.services.QuickTipCrudService;
 import com.propertyvista.operations.rpc.services.SimulationService;
 import com.propertyvista.operations.rpc.services.TenantSureCrudService;
+import com.propertyvista.operations.rpc.services.TenantSureTransactionListerService;
 import com.propertyvista.operations.rpc.services.Vista2PmcService;
 import com.propertyvista.operations.rpc.services.VistaTermsCrudService;
 import com.propertyvista.operations.rpc.services.dev.PmcYardiCredentialService;
@@ -244,6 +246,9 @@ public class VistaOperationsAccessControlList extends UIAclBuilder {
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(TenantSureCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(TenantSureSubscribers.class, EntityPermission.READ));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(TenantSureInsurancePolicy.class, EntityPermission.READ));
+
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(TenantSureTransactionListerService.class));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(TenantSureTransaction.class, EntityPermission.READ));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(OutgoingMailCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(OutgoingMailQueue.class, EntityPermission.READ));

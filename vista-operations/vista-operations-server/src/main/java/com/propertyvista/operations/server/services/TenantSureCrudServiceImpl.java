@@ -50,7 +50,6 @@ public class TenantSureCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant
     }
 
     private void fillPolicyData(final TenantSureDTO dto) {
-
         TaskRunner.runInTargetNamespace(dto.pmc(), new Callable<Void>() {
             @Override
             public Void call() {

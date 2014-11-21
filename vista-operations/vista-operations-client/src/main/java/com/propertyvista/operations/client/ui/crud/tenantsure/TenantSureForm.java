@@ -16,9 +16,12 @@ package com.propertyvista.operations.client.ui.crud.tenantsure;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
+import com.propertyvista.operations.domain.tenantsure.TenantSureSubscribers;
 import com.propertyvista.operations.rpc.dto.TenantSureDTO;
 
 public class TenantSureForm extends OperationsEntityForm<TenantSureDTO> {
@@ -41,6 +44,8 @@ public class TenantSureForm extends OperationsEntityForm<TenantSureDTO> {
         formPanel.append(Location.Left, proto().policy().status()).decorate();
         formPanel.append(Location.Left, proto().policy().cancellation()).decorate();
         formPanel.append(Location.Left, proto().policy().cancellationDate()).decorate();
+        formPanel.append(Location.Left, proto().policy().renewalOf(),
+                new CEntityCrudHyperlink<>(AppPlaceEntityMapper.resolvePlace(TenantSureSubscribers.class))).decorate();
 
         formPanel.h3(i18n.tr("Coverage"));
         formPanel.append(Location.Left, proto().policy().certificate().inceptionDate()).decorate();
@@ -48,14 +53,19 @@ public class TenantSureForm extends OperationsEntityForm<TenantSureDTO> {
         formPanel.append(Location.Left, proto().policy().certificate().liabilityCoverage()).decorate();
         formPanel.append(Location.Left, proto().policy().contentsCoverage()).decorate();
 
-        selectTab(addTab(formPanel, i18n.tr("General")));
-        setTabBarVisible(false);
+        selectTab(addTab(formPanel, i18n.tr("Details")));
+
+        // --------------------------------------------------------------------------------------------
+
+        addTab(((TenantSureViewerView) getParentView()).getTransactionListerView(), i18n.tr("Transactions"));
     }
 
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
+        get(proto().policy().cancellation()).setVisible(!getValue().policy().cancellation().isNull());
         get(proto().policy().cancellationDate()).setVisible(!getValue().policy().cancellationDate().isNull());
+        get(proto().policy().renewalOf()).setVisible(!getValue().policy().renewalOf().isNull());
     }
 }
