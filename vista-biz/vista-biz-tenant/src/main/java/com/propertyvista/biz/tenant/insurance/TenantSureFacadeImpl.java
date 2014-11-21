@@ -247,8 +247,6 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             }
         });
 
-        // Like two phase commit transaction
-
         try {
             new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
                 @Override
@@ -260,11 +258,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                         public Void execute() {
                             transaction.status().setValue(TenantSureTransaction.TransactionStatus.AuthorizationRejected);
                             Persistence.service().persist(transaction);
-                            tenantSurePolicy.status().setValue(TenantSureStatus.Failed);
-
-                            transaction.paymentMethod().isDeleted().setValue(Boolean.TRUE);
-                            Persistence.service().merge(transaction.paymentMethod());
-                            Persistence.service().persist(tenantSurePolicy);
+                            failInitialPurchase();
                             return null;
                         }
                     });
@@ -281,14 +275,21 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                     Persistence.service().persist(transaction);
 
                     if (!response.success().getValue()) {
+                        failInitialPurchase();
+                    }
+
+                    return null;
+                }
+
+                private void failInitialPurchase() {
+                    if (tenantSurePolicy.renewalOf().isNull()) {
                         tenantSurePolicy.status().setValue(TenantSureStatus.Failed);
                         transaction.paymentMethod().isDeleted().setValue(Boolean.TRUE);
                         Persistence.service().merge(transaction.paymentMethod());
                         Persistence.service().persist(tenantSurePolicy);
                     }
-
-                    return null;
                 }
+
             });
         } catch (Throwable e) {
             log.error("Error", e);
@@ -312,13 +313,15 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
                         @Override
                         public Void execute() {
-                            tenantSurePolicy.status().setValue(TenantSureStatus.Failed);
+                            if (tenantSurePolicy.renewalOf().isNull()) {
+                                tenantSurePolicy.status().setValue(TenantSureStatus.Failed);
+                                Persistence.service().persist(tenantSurePolicy);
+                            }
 
                             TenantSurePayments.preAuthorizationReversal(transaction);
                             transaction.status().setValue(TenantSureTransaction.TransactionStatus.AuthorizationReversal);
                             Persistence.service().persist(transaction);
 
-                            Persistence.service().persist(tenantSurePolicy);
                             return null;
                         }
                     });
@@ -342,7 +345,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                 }
             });
         } catch (Throwable e) {
-            log.error("failed to bind quote. ", e);
+            log.error("failed to bind quote", e);
             if (e instanceof UserRuntimeException) {
                 throw (UserRuntimeException) e;
             } else {

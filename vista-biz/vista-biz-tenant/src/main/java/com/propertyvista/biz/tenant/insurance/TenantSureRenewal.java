@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.tenant.insurance;
 
+import java.util.GregorianCalendar;
+
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +31,7 @@ import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.communication.CommunicationFacade;
+import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy.CancellationType;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy.TenantSureStatus;
@@ -131,7 +134,6 @@ class TenantSureRenewal {
         try {
             while (iterator.hasNext()) {
                 final TenantSureInsurancePolicy ts = iterator.next();
-                String certificateNumber = ts.certificate().insuranceCertificateNumber().getValue();
                 try {
                     new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
                         @Override
@@ -141,12 +143,12 @@ class TenantSureRenewal {
                         }
                     });
 
-                    executionMonitor.addProcessedEvent("RenewalBuy", "Participant Id " + ts.client().tenant().participantId().getValue() + "; Policy ID = "
-                            + ts.id().getValue() + "; Cert. Number = " + certificateNumber);
+                    executionMonitor.addProcessedEvent("RenewalBuy", "Participant Id " + ts.client().tenant().participantId().getValue() + "; Policy Id = "
+                            + ts.id().getValue() + "; New Cert. Number = " + ts.certificate().insuranceCertificateNumber().getValue());
                 } catch (Throwable e) {
-                    log.error("failed to Buy Renewal of TenatSure insurance certificate: (#{}) {}", certificateNumber, ts.client().tenant().participantId(), e);
-                    executionMonitor.addErredEvent("RenewalBuy", "Participant Id " + ts.client().tenant().participantId().getValue() + "Policy ID = "
-                            + ts.id().getValue() + "; Cert. Number = " + certificateNumber, e);
+                    log.error("failed to Buy Renewal of TenatSure insurance certificate: {}", ts.client().tenant().participantId(), e);
+                    executionMonitor.addErredEvent("RenewalBuy", "Participant Id " + ts.client().tenant().participantId().getValue() + "; Policy Id = "
+                            + ts.id().getValue(), e);
                 }
             }
         } finally {
@@ -155,15 +157,40 @@ class TenantSureRenewal {
     }
 
     private void buyRenewalInsurance(TenantSureInsurancePolicy insurancePolicy) {
-        Persistence.ensureRetrieve(insurancePolicy.renewalOf(), AttachLevel.Attached);
-        log.info("buy Renewal for {}, quoteId {} Participant Id {}", insurancePolicy.renewalOf().certificate().insuranceCertificateNumber(),
-                insurancePolicy.quoteId(), insurancePolicy.client().tenant().participantId());
-        ServerSideFactory.create(TenantSureFacade.class).buyInsurance(insurancePolicy);
+        GregorianCalendar gracePeriodEnd = new GregorianCalendar();
+        gracePeriodEnd.setTime(insurancePolicy.certificate().inceptionDate().getValue());
+        gracePeriodEnd.add(GregorianCalendar.DATE, TenantSureConstants.TENANTSURE_SKIPPED_PAYMENT_GRACE_PERIOD_DAYS);
+        if (gracePeriodEnd.getTime().compareTo(SystemDateManager.getLogicalDate()) < 0) {
 
-        insurancePolicy.renewalOf().status().setValue(TenantSureStatus.Cancelled);
-        insurancePolicy.renewalOf().cancellation().setValue(CancellationType.Renewed);
-        insurancePolicy.renewalOf().cancellationDate().setValue(SystemDateManager.getLogicalDate());
-        insurancePolicy.renewalOf().certificate().expiryDate().setValue(insurancePolicy.certificate().inceptionDate().getValue());
-        Persistence.service().persist(insurancePolicy.renewalOf());
+            insurancePolicy.status().setValue(TenantSureStatus.Cancelled);
+            insurancePolicy.cancellation().setValue(null);
+            Persistence.service().persist(insurancePolicy);
+
+            Persistence.ensureRetrieve(insurancePolicy.renewalOf(), AttachLevel.Attached);
+            insurancePolicy.renewalOf().status().setValue(TenantSureStatus.Cancelled);
+            insurancePolicy.renewalOf().cancellation().setValue(CancellationType.Renewed);
+            insurancePolicy.renewalOf().cancellationDate().setValue(SystemDateManager.getLogicalDate());
+            insurancePolicy.renewalOf().certificate().expiryDate().setValue(insurancePolicy.certificate().inceptionDate().getValue());
+            Persistence.service().persist(insurancePolicy.renewalOf());
+
+        } else {
+            log.info("buy Renewal for quoteId {} Participant Id {}", insurancePolicy.quoteId(), insurancePolicy.client().tenant().participantId());
+            try {
+                ServerSideFactory.create(TenantSureFacade.class).buyInsurance(insurancePolicy);
+            } finally {
+                // Handle Renewal errors
+                insurancePolicy.set(Persistence.service().retrieve(TenantSureInsurancePolicy.class, insurancePolicy.getPrimaryKey()));
+                if (insurancePolicy.status().getValue() != TenantSureStatus.Draft) {
+                    Persistence.ensureRetrieve(insurancePolicy.renewalOf(), AttachLevel.Attached);
+                    insurancePolicy.renewalOf().status().setValue(TenantSureStatus.Cancelled);
+                    insurancePolicy.renewalOf().cancellation().setValue(CancellationType.Renewed);
+                    insurancePolicy.renewalOf().cancellationDate().setValue(SystemDateManager.getLogicalDate());
+                    insurancePolicy.renewalOf().certificate().expiryDate().setValue(insurancePolicy.certificate().inceptionDate().getValue());
+                    Persistence.service().persist(insurancePolicy.renewalOf());
+                } else {
+                    //email about failure to renew
+                }
+            }
+        }
     }
 }

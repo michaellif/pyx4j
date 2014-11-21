@@ -465,6 +465,7 @@ public class CardServiceSimulationProcessor {
                     card.reserved().setValue(card.reserved().getValue(BigDecimal.ZERO).subtract(transaction.amount().getValue()));
 
                     caledonResponse.code = "0000";
+                    caledonResponse.authorizationNumber = preAuthorizationTransaction.authorizationNumber().getValue();
                     moveMoney(merchantAccount, transaction.amount().getValue());
                 } else {
                     caledonResponse.code = "1016";

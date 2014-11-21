@@ -25,6 +25,7 @@ import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
@@ -127,7 +128,9 @@ class TenantSurePayments {
         BigDecimal amount = transaction.amount().getValue();
         String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).completion(tenantSureMerchantTerminalId(), amount,
                 ReferenceNumberPrefix.TenantSure, transaction.id(), (CreditCardInfo) transaction.paymentMethod().details().cast());
-        transaction.transactionAuthorizationNumber().setValue(authorizationNumber);
+        if (CommonsStringUtils.isStringSet(authorizationNumber)) {
+            transaction.transactionAuthorizationNumber().setValue(authorizationNumber);
+        }
         transaction.transactionDate().setValue(SystemDateManager.getDate());
     }
 
