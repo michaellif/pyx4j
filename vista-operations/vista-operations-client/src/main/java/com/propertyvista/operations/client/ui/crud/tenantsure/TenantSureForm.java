@@ -44,8 +44,17 @@ public class TenantSureForm extends OperationsEntityForm<TenantSureDTO> {
         formPanel.append(Location.Left, proto().policy().status()).decorate();
         formPanel.append(Location.Left, proto().policy().cancellation()).decorate();
         formPanel.append(Location.Left, proto().policy().cancellationDate()).decorate();
+
         formPanel.append(Location.Left, proto().policy().renewalOf(),
                 new CEntityCrudHyperlink<>(AppPlaceEntityMapper.resolvePlace(TenantSureSubscribers.class))).decorate();
+        formPanel.append(Location.Left, proto().policy().renewal(), new CEntityCrudHyperlink<>(AppPlaceEntityMapper.resolvePlace(TenantSureSubscribers.class)))
+                .decorate();
+
+        formPanel.h3(i18n.tr("Operational"));
+        formPanel.append(Location.Left, proto().policy().paymentSchedule()).decorate();
+        formPanel.append(Location.Left, proto().policy().paymentDay()).decorate();
+        formPanel.append(Location.Left, proto().policy().totalMonthlyPayable()).decorate();
+        formPanel.append(Location.Left, proto().policy().annualPremium()).decorate();
 
         formPanel.h3(i18n.tr("Coverage"));
         formPanel.append(Location.Left, proto().policy().certificate().inceptionDate()).decorate();
@@ -67,5 +76,6 @@ public class TenantSureForm extends OperationsEntityForm<TenantSureDTO> {
         get(proto().policy().cancellation()).setVisible(!getValue().policy().cancellation().isNull());
         get(proto().policy().cancellationDate()).setVisible(!getValue().policy().cancellationDate().isNull());
         get(proto().policy().renewalOf()).setVisible(!getValue().policy().renewalOf().isNull());
+        get(proto().policy().renewal()).setVisible(!getValue().policy().renewal().isNull());
     }
 }

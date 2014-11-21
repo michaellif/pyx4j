@@ -58,6 +58,9 @@ public class TenantSureCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant
                 dto.policy().set(Persistence.service().retrieve(criteria));
                 assert (!dto.policy().isNull());
 
+                Persistence.ensureRetrieve(dto.policy().renewalOf(), AttachLevel.Attached);
+                Persistence.ensureRetrieve(dto.policy().renewal(), AttachLevel.Attached);
+
                 Persistence.ensureRetrieve(dto.policy().tenant().lease().unit().building(), AttachLevel.Attached);
                 dto.propertyCode().setValue(dto.policy().tenant().lease().unit().building().propertyCode().getValue());
                 dto.propertySuspended().setValue(dto.policy().tenant().lease().unit().building().suspended().getValue());
