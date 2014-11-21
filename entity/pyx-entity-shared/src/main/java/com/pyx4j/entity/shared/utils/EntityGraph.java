@@ -300,6 +300,16 @@ public class EntityGraph {
                         }
                         return false;
                     }
+                } else if (!memberMeta.isOwnedRelationships()
+                        && ((member1.getAttachLevel() != AttachLevel.Attached) || (member2.getAttachLevel() != AttachLevel.Attached))) {
+                    // Reference to other entity
+                    if (!ent1Member.equals(ent2Member)) {
+                        if (options.trace) {
+                            log.info("changes in member {} {}", memberName, member1.getPath());
+                            log.debug("changed [{}] -> [{}]", ent1Member.getDebugExceptionInfoString(), ent2Member.getDebugExceptionInfoString());
+                        }
+                        return false;
+                    }
                 } else if (options.ownedValuesOnly && !memberMeta.isOwnedRelationships()) {
                     if (!ent1Member.equals(ent2Member)) {
                         if (options.trace) {
