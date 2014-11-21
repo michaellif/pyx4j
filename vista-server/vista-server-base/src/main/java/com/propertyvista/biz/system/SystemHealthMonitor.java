@@ -19,6 +19,7 @@ import java.util.GregorianCalendar;
 
 import org.apache.commons.lang.time.DateUtils;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
@@ -52,9 +53,8 @@ class SystemHealthMonitor {
         {
             EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
             criteria.eq(criteria.proto().status(), RunStatus.Running);
-            criteria.isNotNull(criteria.proto().trigger().runTimeout());
             for (Run run : Persistence.service().query(criteria)) {
-                Date cutOffDate = DateUtils.addMinutes(run.started().getValue(), run.trigger().runTimeout().getValue());
+                Date cutOffDate = DateUtils.addSeconds(run.started().getValue(), run.trigger().runTimeout().getValue(2 * Consts.HOURS2SEC));
                 if (cutOffDate.after(SystemDateManager.getDate())) {
                     ServerSideFactory.create(OperationsAlertFacade.class).record(run, "There are Stuck Run for Trigger {0}, Terminating its execution",
                             run.trigger().name());
