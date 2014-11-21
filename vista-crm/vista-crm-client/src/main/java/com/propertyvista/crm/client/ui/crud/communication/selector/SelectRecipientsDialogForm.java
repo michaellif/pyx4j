@@ -25,6 +25,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -33,7 +36,9 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.RadioGroup;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme.StyleName;
 
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationGroup;
@@ -75,11 +80,12 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
         FlowPanel menuPanel = new FlowPanel();
         menuPanel.setHeight("500px");
 
+        Label groupTitle = new Label("Recipients");
+        groupTitle.getElement().getStyle().setPadding(5, Unit.PX);
+
         final RadioGroup<String> rg = new RadioGroup<String>(RadioGroup.Layout.VERTICAL);
 
-        rg.setOptions(Arrays.asList("Tenant", "Corporate", "Building", "Portfolio", "Selected"));
-
-        menuPanel.add(rg);
+        rg.setOptions(Arrays.asList("Tenant", "Corporate", "Building", "Portfolio"));
         rg.addValueChangeHandler(new ValueChangeHandler<String>() {
             @Override
             public void onValueChange(ValueChangeEvent<String> event) {
@@ -104,15 +110,34 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
                     lister = new SelectorDialogPortfolioLister(SelectRecipientsDialogForm.this, selectedPortfolios);
                     lister.populate();
                     listScrollPanel.add(lister);
-                } else if (rg.getValue().equals("Selected")) {
-                    selectedForm = new SelectorDialogSelectedForm();
-                    selectedForm.init();
-                    selectedForm.populate(selectedAll);
-                    selectedForm.asWidget().setHeight("100%");
-                    listScrollPanel.add(selectedForm);
                 }
             }
         });
+
+        Label allSelected = new Label("All Selected");
+        allSelected.addStyleName(StyleName.AllRecipientsLabel.name());
+
+        allSelected.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+
+                grabSelectedItems();
+                listScrollPanel.clear();
+
+                selectedForm = new SelectorDialogSelectedForm();
+                selectedForm.init();
+                selectedForm.populate(selectedAll);
+                selectedForm.asWidget().setHeight("100%");
+                listScrollPanel.add(selectedForm);
+                rg.setValue(null);
+            }
+
+        });
+
+        menuPanel.add(allSelected);
+        menuPanel.add(groupTitle);
+        menuPanel.add(rg);
 
         add(menuPanel);
         add(listScrollPanel);
