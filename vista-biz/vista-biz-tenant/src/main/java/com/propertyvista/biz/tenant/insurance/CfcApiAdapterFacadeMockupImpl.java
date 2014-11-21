@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -47,13 +47,13 @@ public class CfcApiAdapterFacadeMockupImpl implements CfcApiAdapterFacade {
     public TenantSureQuoteDTO getQuote(TenantSureInsurancePolicyClient client, TenantSureCoverageDTO coverageRequest) {
         TenantSureQuoteDTO quote = EntityFactory.create(TenantSureQuoteDTO.class);
         quote.paymentSchedule().setValue(coverageRequest.paymentSchedule().getValue());
-        quote.annualPremium().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
-        quote.underwriterFee().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
-        quote.totalAnnualTax().setValue(new BigDecimal(Math.abs(new Random().nextInt() % 50)));
-        quote.totalAnnualPayable().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
-        quote.totalFirstPayable().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
+        quote.annualPremium().setValue(new BigDecimal(150 + Math.abs(new Random().nextInt() % 50)));
+        quote.underwriterFee().setValue(new BigDecimal(20 + Math.abs(new Random().nextInt() % 5)));
+        quote.totalAnnualTax().setValue(new BigDecimal(5 + Math.abs(new Random().nextInt() % 10)));
+        quote.totalAnnualPayable().setValue(quote.annualPremium().getValue().add(quote.underwriterFee().getValue()).add(quote.totalAnnualTax().getValue()));
+        quote.totalFirstPayable().setValue(new BigDecimal(40 + Math.abs(new Random().nextInt() % 20)));
         quote.totalAnniversaryFirstMonthPayable().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
-        quote.totalMonthlyPayable().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
+        quote.totalMonthlyPayable().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 10)));
         quote.quoteId().setValue("MockupTSQuote-" + RandomStringUtils.randomAlphanumeric(10));
         quote.coverage().set(coverageRequest.duplicate(TenantSureCoverageDTO.class));
 
