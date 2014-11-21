@@ -66,7 +66,9 @@ public class WidgetsTheme extends Theme {
 
         SuggestBoxPopup, SelectionPickerPanel, SelectionPickerPanelItem,
 
-        SelectedItemClose, SelectedItemHolder, SelectorListBoxValuePanel;
+        SelectedItemClose, SelectedItemHolder, SelectorListBoxValuePanel,
+
+        AllRecipientsLabel;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -509,5 +511,9 @@ public class WidgetsTheme extends Theme {
         style.addProperty("margin", "4px");
         addStyle(style);
 
+        style = new Style(".", StyleName.AllRecipientsLabel);
+        style.addProperty("color", ThemeColor.object2, 1);
+        style.addProperty("padding", "5px");
+        addStyle(style);
     }
 }
