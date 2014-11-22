@@ -44,7 +44,7 @@ public class InlineNavigationHolder extends DockLayoutPanel {
         clear();
 
         if (parent.getDisplay(DisplayType.footer).getWidget() != null) {
-            addSouth(parent.getDisplay(DisplayType.footer), 40);
+            addSouth(parent.getDisplay(DisplayType.footer), 45);
             empty = false;
         }
 
