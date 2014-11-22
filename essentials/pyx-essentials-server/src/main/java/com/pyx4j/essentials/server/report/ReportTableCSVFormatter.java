@@ -20,6 +20,7 @@
  */
 package com.pyx4j.essentials.server.report;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -40,7 +41,9 @@ public class ReportTableCSVFormatter implements ReportTableFormatter {
 
     protected SimpleDateFormat dateTimeFormat;
 
-    protected final Charset charset;
+    protected transient Charset charset;
+
+    protected String charsetSerial;
 
     private boolean forceQuote;
 
@@ -56,9 +59,15 @@ public class ReportTableCSVFormatter implements ReportTableFormatter {
 
     public ReportTableCSVFormatter(Charset charset) {
         this.charset = charset;
+        this.charsetSerial = charset.name();
         this.dataBuilder = new DataBuilder();
         this.dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         this.dateTimeFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+    }
+
+    private void readObject(java.io.ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
+        this.charset = Charset.forName(charsetSerial);
     }
 
     public boolean isForceQuote() {
