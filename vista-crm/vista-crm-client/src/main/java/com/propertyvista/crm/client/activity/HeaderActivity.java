@@ -120,11 +120,6 @@ public class HeaderActivity extends AbstractActivity implements HeaderPresenter 
         });
     }
 
-    @Override
-    public void login() {
-        AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
-    }
-
     private void obtainAvailableLocales() {
         view.setAvailableLocales(ClientLocaleUtils.obtainAvailableLocales());
     }

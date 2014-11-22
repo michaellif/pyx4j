@@ -17,8 +17,6 @@ public interface HeaderView extends IsWidget, IsView {
 
         void logout();
 
-        void login();
-
         boolean isAdminPlace();
 
         void showAccount();
