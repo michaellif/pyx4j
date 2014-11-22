@@ -122,7 +122,7 @@
 
         <gwtVersion>2.6.1</gwtVersion>
         <gaeVersion>1.9.15</gaeVersion>
-        <gaeVersion.kindleit.deploy>1.8.6</gaeVersion.kindleit.deploy>
+        <gaeVersion.kindleit.deploy>1.8.8</gaeVersion.kindleit.deploy>
         <gae.version>${gaeVersion}</gae.version>
 
 
