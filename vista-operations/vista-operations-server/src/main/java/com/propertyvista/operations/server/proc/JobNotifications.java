@@ -73,17 +73,26 @@ public class JobNotifications {
             events.add(TriggerNotificationEvent.Failed);
         }
 
+        List<OperationsUser> targetUsers = new ArrayList<>();
+
         for (TriggerNotification notificationCfg : trigger.notifications()) {
             if (events.contains(notificationCfg.event().getValue())) {
-                sendNotification(trigger, run, notificationCfg.user());
+                if (!targetUsers.contains(notificationCfg.user())) {
+                    targetUsers.add(notificationCfg.user());
+                }
             }
+        }
+        if (targetUsers.size() > 0) {
+            sendNotification(trigger, run, targetUsers);
         }
 
     }
 
-    private static void sendNotification(Trigger trigger, Run run, OperationsUser user) {
+    private static void sendNotification(Trigger trigger, Run run, List<OperationsUser> targetUsers) {
         MailMessage m = new MailMessage();
-        m.setTo(user.email().getValue());
+        for (OperationsUser user : targetUsers) {
+            m.setTo(user.email().getValue());
+        }
         m.setSender(ServerSideConfiguration.instance().getApplicationEmailSender());
         m.setSubject(SimpleMessageFormat.format("Trigger Run notification {0} {1}", trigger.name(), run.status()));
 
