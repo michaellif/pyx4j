@@ -1050,15 +1050,19 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             assertEquals("(1)name", itemA3.name().getValue(), list.get(1).name().getValue());
 
             final ICursorIterator<ItemA> iterator = srv.query(null, criteria, AttachLevel.Attached);
-            assertTrue("first", iterator.hasNext());
-            ItemA r0 = iterator.next();
-            assertEquals("(0)name", itemA2.name().getValue(), r0.name().getValue());
-            assertTrue("second", iterator.hasNext());
+            try {
+                assertTrue("first", iterator.hasNext());
+                ItemA r0 = iterator.next();
+                assertEquals("(0)name", itemA2.name().getValue(), r0.name().getValue());
+                assertTrue("second", iterator.hasNext());
 
-            ItemA r1 = iterator.next();
-            assertEquals("(0)name", itemA3.name().getValue(), r1.name().getValue());
+                ItemA r1 = iterator.next();
+                assertEquals("(0)name", itemA3.name().getValue(), r1.name().getValue());
 
-            assertFalse("Only two items", iterator.hasNext());
+                assertFalse("Only two items", iterator.hasNext());
+            } finally {
+                iterator.close();
+            }
 
         }
     }

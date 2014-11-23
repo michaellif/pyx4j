@@ -27,11 +27,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Assert;
 
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
@@ -721,5 +723,102 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
             }
 
         });
+    }
+
+    // Verify that Open Cursor is not affected by sub stransactions
+    public void testCursorInSuppressedTransaction() {
+        final String setId = uniqueString();
+        srv.persist(createEntity(setId, "1.0"));
+        srv.persist(createEntity(setId, "2.0"));
+
+        EntityQueryCriteria<Simple1> criteria = EntityQueryCriteria.create(Simple1.class);
+        criteria.eq(criteria.proto().testId(), setId);
+        final ICursorIterator<Simple1> iterator = srv.query(null, criteria, AttachLevel.Attached);
+        try {
+            assertTrue("first", iterator.hasNext());
+            {
+                Simple1 r = iterator.next();
+
+                srv.startTransaction(TransactionScopeOption.RequiresNew, ConnectionTarget.Web);
+                {
+                    r.name().setValue(r.name().getValue() + "updated");
+                    srv.persist(r);
+                    srv.persist(createEntity(setId, "3.0"));
+                    srv.commit();
+                }
+                srv.endTransaction();
+            }
+
+            assertTrue("second", iterator.hasNext());
+
+            {
+                Simple1 r = iterator.next();
+
+                srv.startTransaction(TransactionScopeOption.RequiresNew, ConnectionTarget.Web);
+                {
+                    r.name().setValue(r.name().getValue() + "updated");
+                    srv.persist(r);
+                    srv.persist(createEntity(setId, "4.0"));
+                    srv.commit();
+                }
+                srv.endTransaction();
+            }
+
+            assertFalse("Only two items", iterator.hasNext());
+        } finally {
+            iterator.close();
+        }
+
+    }
+
+    public void testCursorInSuppressedTransactionUnitOfWork() {
+        final String setId = uniqueString();
+        srv.persist(createEntity(setId, "1.0"));
+        srv.persist(createEntity(setId, "2.0"));
+
+        EntityQueryCriteria<Simple1> criteria = EntityQueryCriteria.create(Simple1.class);
+        criteria.eq(criteria.proto().testId(), setId);
+        final ICursorIterator<Simple1> iterator = srv.query(null, criteria, AttachLevel.Attached);
+        try {
+            assertTrue("first", iterator.hasNext());
+            {
+                final Simple1 r = iterator.next();
+
+                new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+                    @Override
+                    public Void execute() {
+                        r.name().setValue(r.name().getValue() + "updated");
+                        srv.persist(r);
+                        srv.persist(createEntity(setId, "3.0"));
+                        return null;
+                    }
+
+                });
+            }
+
+            assertTrue("second", iterator.hasNext());
+
+            {
+                final Simple1 r = iterator.next();
+
+                new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+                    @Override
+                    public Void execute() {
+                        r.name().setValue(r.name().getValue() + "updated");
+                        srv.persist(r);
+                        srv.persist(createEntity(setId, "4.0"));
+                        return null;
+                    }
+
+                });
+            }
+
+            assertFalse("Only two items", iterator.hasNext());
+        } finally {
+            iterator.close();
+        }
+
     }
 }
