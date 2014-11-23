@@ -34,6 +34,7 @@ import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.insurance.TenantSureCommunicationHistory;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicyReport;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -70,6 +71,7 @@ public class InsuranceTestBase extends IntegrationTestBase {
                 List<Class<? extends IEntity>> classes = new ArrayList<Class<? extends IEntity>>();
                 classes.add(TenantSureInsurancePolicy.class);
                 classes.add(TenantSureInsurancePolicyReport.class);
+                classes.add(TenantSureCommunicationHistory.class);
                 ((IEntityPersistenceServiceRDB) Persistence.service()).ensureSchemaModel(classes);
                 return null;
             }
