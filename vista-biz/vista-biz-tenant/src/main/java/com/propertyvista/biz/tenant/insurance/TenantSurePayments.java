@@ -48,6 +48,7 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
+import com.propertyvista.domain.tenant.insurance.TenantSureCommunicationHistory.TenantSureMessageType;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy.TenantSureStatus;
 import com.propertyvista.domain.tenant.insurance.TenantSureTransaction;
@@ -173,11 +174,12 @@ class TenantSurePayments {
                 } else {
                     if (ccExpired) {
                         // send notification and set the pmntMethod.expirationNoteSent() flag
-                        ServerSideFactory.create(CommunicationFacade.class).sendTenantSureCCExpiringEmail( //
+                        String mailMessageObjectId = ServerSideFactory.create(CommunicationFacade.class).sendTenantSureCCExpiring( //
                                 policy.client().tenant().customer().person(), //
                                 ccInfo.card().obfuscatedNumber().getValue(), //
-                                ccExpiry //
-                                );
+                                ccExpiry, //
+                                TenantSureCommunicationDelivery.class);
+                        TenantSureCommunicationDelivery.recordDelivery(policy, TenantSureMessageType.ExpiringCreaditCard, mailMessageObjectId);
                         executionMonitor.addInfoEvent("CardExpiryCheck", "Notice sent to " + policy.client().tenant().customer().person().email().getValue());
                         pmntMethod.expirationNoteSent().setValue(true);
                         Persistence.service().persist(pmntMethod);
@@ -306,6 +308,7 @@ class TenantSurePayments {
 
             if (response.success().getValue()) {
                 transaction.transactionAuthorizationNumber().setValue(response.authorizationNumber().getValue());
+                transaction.transactionErrorMessage().setValue(response.message().getValue());
                 transaction.status().setValue(TenantSureTransaction.TransactionStatus.Cleared);
             } else if (ServerSideFactory.create(CreditCardFacade.class).isNetworkError(response.code().getValue())) {
                 transaction.transactionAuthorizationNumber().setValue(response.code().getValue());

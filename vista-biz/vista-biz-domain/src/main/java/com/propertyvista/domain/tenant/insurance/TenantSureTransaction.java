@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -87,6 +88,7 @@ public interface TenantSureTransaction extends IEntity {
 
     IPrimitive<String> transactionAuthorizationNumber();
 
+    @Caption(name = "Transaction Message")
     IPrimitive<String> transactionErrorMessage();
 
     IPrimitive<Date> transactionDate();

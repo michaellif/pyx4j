@@ -44,15 +44,15 @@ class MessageTemplatesTenantSure {
         return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getTenantSureEmailSender();
     }
 
-    public static MailMessage createTenantSurePaymentNotProcessedEmail(Tenant tenant, LogicalDate gracePeriodEndDate, LogicalDate cancellationDate) {
+    public static MailMessage createTenantSureNoticeOfCancellation(Tenant tenant, LogicalDate gracePeriodEndDate, LogicalDate cancellationDate) {
         MailMessage email = new MailMessage();
         email.setSender(getTenantSureSender());
         email.setSubject(i18n.tr("15 Day Notice of Cancellation for Non-Payment of Premium"));
         email.setTo(getTenantsEmail(tenant));
 
-        MessageTemplate template = new MessageTemplate("email/tenantsure/tenantsure-payment-not-processed.html");
+        MessageTemplate template = new MessageTemplate("email/tenantsure/tenantsure-notice-of-cancellation.html");
 
-        DateFormat dateFormat = new SimpleDateFormat(i18n.tr("yyyy-MM-dd"));
+        DateFormat dateFormat = new SimpleDateFormat(i18n.tr("dd-MMMM-yyyy"));
 
         template.variable("${tenantFirstName}", tenant.customer().person().name().firstName().getValue());
         template.variable("${tenantLastName}", tenant.customer().person().name().lastName().getValue());
@@ -67,7 +67,7 @@ class MessageTemplatesTenantSure {
         return email;
     }
 
-    public static MailMessage createTenantSurePaymentsResumedEmail(Tenant tenant) {
+    public static MailMessage createTenantSurePaymentsResumed(Tenant tenant) {
         MailMessage email = new MailMessage();
         email.setSender(getTenantSureSender());
         email.setSubject(i18n.tr("Payment Processing Resumed"));
@@ -91,7 +91,7 @@ class MessageTemplatesTenantSure {
 
         MessageTemplate template = new MessageTemplate("email/tenantsure/tenantsure-renewal-notice.html");
 
-        DateFormat dateFormat = new SimpleDateFormat(i18n.tr("yyyy-MM-dd"));
+        DateFormat dateFormat = new SimpleDateFormat(i18n.tr("dd-MMMM-yyyy"));
 
         template.variable("${certificateNumber}", policy.renewalOf().certificate().insuranceCertificateNumber().getValue());
         template.variable("${inceptionDate}", dateFormat.format(policy.certificate().inceptionDate().getValue()));
@@ -114,7 +114,7 @@ class MessageTemplatesTenantSure {
         return email;
     }
 
-    public static MailMessage createTenantSureCCExpiringEmail(Person tenant, String ccLastDigits, LogicalDate ccExpiry) {
+    public static MailMessage createTenantSureCCExpiring(Person tenant, String ccLastDigits, LogicalDate ccExpiry) {
         MailMessage email = new MailMessage();
         email.setSender(getTenantSureSender());
         email.setSubject(i18n.tr("TenantSure Policy: Credit Card Expiring Notice"));

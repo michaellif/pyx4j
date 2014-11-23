@@ -30,6 +30,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.essentials.server.report.ReportTableCSVFormatter;
 import com.pyx4j.essentials.server.report.ReportTableFormatter;
@@ -106,7 +107,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
                     String certificateNumber = ts.certificate().insuranceCertificateNumber().getValue();
 
                     try {
-                        new UnitOfWork().execute(new TenantSureCancellator(ts));
+                        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new TenantSureCancellator(ts));
                         executionMonitor.addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME, ("By Tenant: Policy ID = " + ts.id().getValue()
                                 + ", Cert. Number = " + certificateNumber));
                     } catch (Throwable cancellationError) {
@@ -138,12 +139,12 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
                     if (gracePeriodEnd(ts).compareTo(today) < 0) {
                         String certificateNumber = ts.certificate().insuranceCertificateNumber().getValue();
                         try {
-                            new UnitOfWork().execute(new TenantSureSkippedPaymentCancellator(ts));
+                            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new TenantSureSkippedPaymentCancellator(ts));
                             executionMonitor.addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME, "Skipped Payment: "
                                     + ("Policy ID = " + ts.id().getValue() + ", Cert. Number = " + certificateNumber));
                         } catch (Throwable cancellationError) {
                             executionMonitor.addErredEvent(//@formatter:off
-                                EXECUTION_MONITOR_SECTION_NAME,                                        
+                                EXECUTION_MONITOR_SECTION_NAME,
                                 SimpleMessageFormat.format("Failed to cancel (due to skipped payment) TenatSure insurance certificate: #{0}", certificateNumber)
                             );//@formatter:on
                             log.error("failed to cancel (due to skipped payment) TenatSure insurance certificate: (#{})", certificateNumber);

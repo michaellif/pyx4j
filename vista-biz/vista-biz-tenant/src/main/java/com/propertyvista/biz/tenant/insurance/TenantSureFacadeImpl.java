@@ -56,6 +56,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.CustomerSignature;
+import com.propertyvista.domain.tenant.insurance.TenantSureCommunicationHistory.TenantSureMessageType;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.domain.tenant.insurance.TenantSureCoverage;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsuranceCertificate;
@@ -558,7 +559,8 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
         log.debug("TenantSureInsurance {} is now PendingCancellation due to SkipPayment", insuranceTenantSure.quoteId());
 
-        sendPaymentNotProcessedEmail(tenantId, getGracePeriodEndDate(insuranceTenantSure), TenantSurePayments.getNextPaymentDate(insuranceTenantSure));
+        sendNoticeOfCancellationEmail(insuranceTenantSure, tenantId, getGracePeriodEndDate(insuranceTenantSure),
+                TenantSurePayments.getNextPaymentDate(insuranceTenantSure));
 
         Persistence.service().commit();
     }
@@ -572,7 +574,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         }
         log.debug("TenantSureInsurance {} resumed", insuranceTenantSure.quoteId());
 
-        sendPaymentsResumedEmail(tenantId);
+        sendPaymentsResumedEmail(insuranceTenantSure, tenantId);
 
         insuranceTenantSure.status().setValue(TenantSureStatus.Active);
         insuranceTenantSure.cancellation().setValue(null);
@@ -733,12 +735,27 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         return new LogicalDate(gracePeriodEnd.getTime());
     }
 
-    private void sendPaymentNotProcessedEmail(Tenant tenant, LogicalDate gracePeriodEndDate, LogicalDate cancellationDate) {
-        ServerSideFactory.create(CommunicationFacade.class).sendTenantSurePaymentNotProcessedEmail(tenant, gracePeriodEndDate, cancellationDate);
+    void sendRenewalNoticeOfCancellationEmail(TenantSureInsurancePolicy insurancePolicy) {
+        GregorianCalendar cancellationDate = new GregorianCalendar();
+        cancellationDate.setTime(insurancePolicy.certificate().inceptionDate().getValue());
+        cancellationDate.add(GregorianCalendar.DATE, TenantSureConstants.TENANTSURE_SKIPPED_PAYMENT_GRACE_PERIOD_DAYS);
+
+        sendNoticeOfCancellationEmail(insurancePolicy, insurancePolicy.client().tenant(), insurancePolicy.certificate().inceptionDate().getValue(),
+                new LogicalDate(cancellationDate.getTime()));
+
     }
 
-    private void sendPaymentsResumedEmail(Tenant tenant) {
-        ServerSideFactory.create(CommunicationFacade.class).sendTenantSurePaymentsResumedEmail(tenant);
+    private void sendNoticeOfCancellationEmail(TenantSureInsurancePolicy insuranceTenantSure, Tenant tenant, LogicalDate gracePeriodEndDate,
+            LogicalDate cancellationDate) {
+        String mailMessageObjectId = ServerSideFactory.create(CommunicationFacade.class).sendTenantSureNoticeOfCancellation(tenant, gracePeriodEndDate,
+                cancellationDate, TenantSureCommunicationDelivery.class);
+        TenantSureCommunicationDelivery.recordDelivery(insuranceTenantSure, TenantSureMessageType.NoticeOfCancellation, mailMessageObjectId);
+    }
+
+    private void sendPaymentsResumedEmail(TenantSureInsurancePolicy insuranceTenantSure, Tenant tenant) {
+        String mailMessageObjectId = ServerSideFactory.create(CommunicationFacade.class).sendTenantSurePaymentsResumed(tenant,
+                TenantSureCommunicationDelivery.class);
+        TenantSureCommunicationDelivery.recordDelivery(insuranceTenantSure, TenantSureMessageType.PaymentsResumed, mailMessageObjectId);
     }
 
     private static TenantSurePaymentItemDTO makePaymentItem(String description, BigDecimal amount, List<TenantSurePaymentItemTaxDTO> taxes) {

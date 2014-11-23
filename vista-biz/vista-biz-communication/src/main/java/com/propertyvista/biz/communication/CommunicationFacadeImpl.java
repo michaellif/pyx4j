@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.communication;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -182,28 +183,62 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendTenantSurePaymentNotProcessedEmail(Tenant tenant, LogicalDate gracePeriodEndDate, LogicalDate cancellationDate) {
-        MailMessage m = MessageTemplatesTenantSure.createTenantSurePaymentNotProcessedEmail(tenant, gracePeriodEndDate, cancellationDate);
-        Mail.queue(m, null, getTenantSureConfig());
+    public String sendTenantSurePaymentNotProcessed(Tenant tenant, BigDecimal amount, LogicalDate date, String reason, LogicalDate deadline,
+            Class<? extends MailDeliveryCallback> callback) {
+//TODO
+//
+//        Dear {1},
+//        Your payment of {1} on {2} has not been processed for the following reason: ..
+//                           {Rejected}
+//        The premium payment deadline is {today}.
+//        To resolve this issue, simply log in to your myCommunity [here] to update in your current payment information.
+//
+//Sincerely,
+
+        return null;
     }
 
     @Override
-    public void sendTenantSurePaymentsResumedEmail(Tenant tenant) {
-        MailMessage m = MessageTemplatesTenantSure.createTenantSurePaymentsResumedEmail(tenant);
-        Mail.queue(m, null, getTenantSureConfig());
+    public String sendTenantSureNoticeOfCancellation(Tenant tenant, LogicalDate gracePeriodEndDate, LogicalDate cancellationDate,
+            Class<? extends MailDeliveryCallback> callback) {
+        MailMessage m = MessageTemplatesTenantSure.createTenantSureNoticeOfCancellation(tenant, gracePeriodEndDate, cancellationDate);
+        if (Mail.queue(m, callback, getTenantSureConfig())) {
+            return m.getMailMessageObjectId();
+        } else {
+            return null;
+        }
     }
 
     @Override
-    public void sendTenantSureCCExpiringEmail(Person tenant, String ccLastDigits, LogicalDate ccExpiry) {
-        MailMessage m = MessageTemplatesTenantSure.createTenantSureCCExpiringEmail(tenant, ccLastDigits, ccExpiry);
-        Mail.queue(m, null, getTenantSureConfig());
+    public String sendTenantSurePaymentsResumed(Tenant tenant, Class<? extends MailDeliveryCallback> callback) {
+        MailMessage m = MessageTemplatesTenantSure.createTenantSurePaymentsResumed(tenant);
+        if (Mail.queue(m, callback, getTenantSureConfig())) {
+            return m.getMailMessageObjectId();
+        } else {
+            return null;
+        }
     }
 
     @Override
-    public void sendTenantSureRenewalEmail(String tenantEmail, TenantSureInsurancePolicy policy) {
+    public String sendTenantSureCCExpiring(Person tenant, String ccLastDigits, LogicalDate ccExpiry, Class<? extends MailDeliveryCallback> callback) {
+        MailMessage m = MessageTemplatesTenantSure.createTenantSureCCExpiring(tenant, ccLastDigits, ccExpiry);
+        if (Mail.queue(m, callback, getTenantSureConfig())) {
+            return m.getMailMessageObjectId();
+        } else {
+            return null;
+        }
+
+    }
+
+    @Override
+    public String sendTenantSureRenewal(String tenantEmail, TenantSureInsurancePolicy policy, Class<? extends MailDeliveryCallback> callback) {
         MailMessage m = MessageTemplatesTenantSure.createTenantSureRenewalEmail(policy);
         m.setTo(tenantEmail);
-        Mail.queue(m, null, getTenantSureConfig());
+        if (Mail.queue(m, callback, getTenantSureConfig())) {
+            return m.getMailMessageObjectId();
+        } else {
+            return null;
+        }
     }
 
     @Override

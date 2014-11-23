@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.communication;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -74,13 +75,21 @@ public interface CommunicationFacade {
 
     void sendNewPmcEmail(OnboardingUser user, Pmc pmc);
 
-    void sendTenantSurePaymentNotProcessedEmail(Tenant tenant, LogicalDate gracePeriodEndDate, LogicalDate cancellationDate);
+    // ----------
 
-    void sendTenantSurePaymentsResumedEmail(Tenant tenant);
+    String sendTenantSurePaymentNotProcessed(Tenant tenant, BigDecimal amount, LogicalDate date, String reason, LogicalDate deadline,
+            Class<? extends MailDeliveryCallback> callback);
 
-    void sendTenantSureRenewalEmail(String tenantEmail, TenantSureInsurancePolicy policy);
+    String sendTenantSureNoticeOfCancellation(Tenant tenant, LogicalDate gracePeriodEndDate, LogicalDate cancellationDate,
+            Class<? extends MailDeliveryCallback> callback);
 
-    void sendTenantSureCCExpiringEmail(Person tenant, String ccLastDigits, LogicalDate ccExpiry);
+    String sendTenantSurePaymentsResumed(Tenant tenant, Class<? extends MailDeliveryCallback> callback);
+
+    String sendTenantSureRenewal(String tenantEmail, TenantSureInsurancePolicy policy, Class<? extends MailDeliveryCallback> callback);
+
+    String sendTenantSureCCExpiring(Person tenant, String ccLastDigits, LogicalDate ccExpiry, Class<? extends MailDeliveryCallback> callback);
+
+    // -----------
 
     void sendPaymentRejectedNotification(List<String> targetEmail, PaymentRecord paymentRecord, boolean applyNSF);
 

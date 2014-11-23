@@ -27,10 +27,12 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.communication.CommunicationFacade;
+import com.propertyvista.domain.tenant.insurance.TenantSureCommunicationHistory.TenantSureMessageType;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy.CancellationType;
@@ -62,7 +64,7 @@ class TenantSureRenewal {
                 final TenantSureInsurancePolicy ts = iterator.next();
                 String certificateNumber = ts.certificate().insuranceCertificateNumber().getValue();
                 try {
-                    new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
+                    new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
                         @Override
                         public Void execute() throws RuntimeException {
                             createRenewOffer(ts);
@@ -109,8 +111,9 @@ class TenantSureRenewal {
 
         ServerSideFactory.create(TenantSureFacade.class).sendQuote(newTenantSurePolicy.tenant(), newTenantSurePolicy.quoteId().getValue());
 
-        ServerSideFactory.create(CommunicationFacade.class).sendTenantSureRenewalEmail(newTenantSurePolicy.tenant().customer().person().email().getValue(),
-                newTenantSurePolicy);
+        String mailMessageObjectId = ServerSideFactory.create(CommunicationFacade.class).sendTenantSureRenewal(
+                newTenantSurePolicy.tenant().customer().person().email().getValue(), newTenantSurePolicy, TenantSureCommunicationDelivery.class);
+        TenantSureCommunicationDelivery.recordDelivery(originalInsurancePolicy, TenantSureMessageType.AutomaticRenewal, mailMessageObjectId);
     }
 
     private TenantSureCoverageDTO restoreCoverage(TenantSureInsurancePolicy originalInsurancePolicy) {
@@ -135,7 +138,7 @@ class TenantSureRenewal {
             while (iterator.hasNext()) {
                 final TenantSureInsurancePolicy ts = iterator.next();
                 try {
-                    new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
+                    new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
                         @Override
                         public Void execute() throws RuntimeException {
                             buyRenewalInsurance(ts);
@@ -156,7 +159,7 @@ class TenantSureRenewal {
         }
     }
 
-    private void buyRenewalInsurance(TenantSureInsurancePolicy insurancePolicy) {
+    private void buyRenewalInsurance(final TenantSureInsurancePolicy insurancePolicy) {
         GregorianCalendar gracePeriodEnd = new GregorianCalendar();
         gracePeriodEnd.setTime(insurancePolicy.certificate().inceptionDate().getValue());
         gracePeriodEnd.add(GregorianCalendar.DATE, TenantSureConstants.TENANTSURE_SKIPPED_PAYMENT_GRACE_PERIOD_DAYS);
@@ -189,6 +192,16 @@ class TenantSureRenewal {
                     Persistence.service().persist(insurancePolicy.renewalOf());
                 } else {
                     //email about failure to renew
+                    new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+                        @Override
+                        public Void execute() throws RuntimeException {
+                            if (!TenantSureCommunicationDelivery.hasDelivery(insurancePolicy, TenantSureMessageType.NoticeOfCancellation, insurancePolicy
+                                    .certificate().inceptionDate().getValue())) {
+                                new TenantSureFacadeImpl().sendRenewalNoticeOfCancellationEmail(insurancePolicy);
+                            }
+                            return null;
+                        }
+                    });
                 }
             }
         }
