@@ -335,7 +335,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             for (Feature feature : selectedService.features()) {
                 if (!VistaFeatures.instance().yardiIntegration() || VistaFeatures.instance().yardiIntegration()
                         && feature.version().availableOnline().getValue(false)) {
-                    if (feature.expiredFrom().isNull() || feature.expiredFrom().getValue().before(termFrom)) {
+                    if (feature.expiredFrom().isNull() || feature.expiredFrom().getValue().after(termFrom)) {
                         Persistence.ensureRetrieve(feature.version().items(), AttachLevel.Attached);
                         for (ProductItem item : feature.version().items()) {
                             Persistence.ensureRetrieve(item.product(), AttachLevel.Attached);
@@ -371,7 +371,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         serviceCriteria.eq(serviceCriteria.proto().code().type(), currentValue.lease().type());
         serviceCriteria.eq(serviceCriteria.proto().defaultCatalogItem(), useDefaultCatalog);
         serviceCriteria.or(PropertyCriterion.isNull(serviceCriteria.proto().expiredFrom()),
-                PropertyCriterion.lt(serviceCriteria.proto().expiredFrom(), termFrom));
+                PropertyCriterion.gt(serviceCriteria.proto().expiredFrom(), termFrom));
         serviceCriteria.isCurrent(serviceCriteria.proto().version());
 
         if (VistaFeatures.instance().yardiIntegration()) {

@@ -863,7 +863,7 @@ public abstract class LeaseAbstractManager {
         for (Feature feature : service.features()) {
             if (!VistaFeatures.instance().yardiIntegration() || VistaFeatures.instance().yardiIntegration()
                     && feature.version().availableOnline().getValue(false)) {
-                if (feature.expiredFrom().isNull() || feature.expiredFrom().getValue().before(termFrom)) {
+                if (feature.expiredFrom().isNull() || feature.expiredFrom().getValue().after(termFrom)) {
                     if (feature.version().mandatory().getValue(false)) {
                         Persistence.ensureRetrieve(feature.version().items(), AttachLevel.Attached);
                         if (!feature.version().items().isEmpty()) {
@@ -1249,7 +1249,7 @@ public abstract class LeaseAbstractManager {
         serviceCriteria.eq(serviceCriteria.proto().code().type(), leaseTerm.lease().type());
         serviceCriteria.eq(serviceCriteria.proto().defaultCatalogItem(), useDefaultCatalog);
         serviceCriteria.or(PropertyCriterion.isNull(serviceCriteria.proto().expiredFrom()),
-                PropertyCriterion.lt(serviceCriteria.proto().expiredFrom(), termFrom));
+                PropertyCriterion.gt(serviceCriteria.proto().expiredFrom(), termFrom));
         serviceCriteria.isCurrent(serviceCriteria.proto().version());
 
         if (VistaFeatures.instance().yardiIntegration()) {

@@ -121,8 +121,8 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
 
     private void retrieveServicePrices(AptUnitDTO dto) {
         EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().catalog().building(), dto.building()));
-        criteria.add(PropertyCriterion.in(criteria.proto().code().type(), ARCode.Type.unitRelatedServices()));
+        criteria.eq(criteria.proto().catalog().building(), dto.building());
+        criteria.in(criteria.proto().code().type(), ARCode.Type.unitRelatedServices());
 
         for (Service service : Persistence.secureQuery(criteria)) {
             if (!service.defaultCatalogItem().getValue(false)) {
