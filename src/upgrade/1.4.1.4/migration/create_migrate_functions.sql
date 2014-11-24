@@ -66,6 +66,23 @@ BEGIN
         ***     ======================================================================================================
         **/
         
+        -- tenant_sure_communication_history
+        
+        CREATE TABLE tenant_sure_communication_history
+        (
+            id                              BIGINT              NOT NULL,
+            insurance                       BIGINT              NOT NULL,
+            insurance_discriminator         VARCHAR(50)         NOT NULL,
+            message_type                    VARCHAR(50),
+            created                         DATE,
+            sent                            BOOLEAN,
+            message_date                    VARCHAR(500),
+            message_id                      VARCHAR(500),
+                CONSTRAINT tenant_sure_communication_history_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE tenant_sure_communication_history OWNER TO vista;
+        
         -- tenant_sure_transaction
         
         ALTER TABLE tenant_sure_transaction ADD COLUMN transaction_error_message VARCHAR(500);
@@ -154,10 +171,21 @@ BEGIN
         ***     =======================================================================================================
         **/
         
+        -- foreign keys
+        
+        ALTER TABLE tenant_sure_communication_history ADD CONSTRAINT tenant_sure_communication_history_insurance_fk FOREIGN KEY(insurance) 
+            REFERENCES insurance_policy(id)  DEFERRABLE INITIALLY DEFERRED;
+
+        
         -- check constraints
         
         ALTER TABLE online_application ADD CONSTRAINT online_application_status_e_ck 
             CHECK ((status) IN ('Cancelled', 'Incomplete', 'InformationRequested', 'Invited', 'Submitted'));
+        ALTER TABLE tenant_sure_communication_history ADD CONSTRAINT tenant_sure_communication_history_insurance_discriminator_d_ck 
+            CHECK (insurance_discriminator = 'TenantSureInsurancePolicy');
+        ALTER TABLE tenant_sure_communication_history ADD CONSTRAINT tenant_sure_communication_history_message_type_e_ck 
+            CHECK ((message_type) IN ('AutomaticRenewal', 'ExpiringCreaditCard', 'NoticeOfCancellation', 'PaymentNotProcessed', 'PaymentsResumed'));
+
        
         
         /**
@@ -168,7 +196,9 @@ BEGIN
         ***     ====================================================================================================
         **/
         
-        
+        CREATE INDEX tenant_sure_communication_history_insurance_discriminator_idx ON tenant_sure_communication_history USING btree (insurance_discriminator);
+        CREATE INDEX tenant_sure_communication_history_insurance_idx ON tenant_sure_communication_history USING btree (insurance);
+
         
         -- billing_arrears_snapshot -GiST index!
         
