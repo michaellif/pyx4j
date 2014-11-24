@@ -82,6 +82,10 @@ public class CrmTheme extends VistaTheme {
         ArrearsColumnTitle, ArrearsMoneyColumnTitle, ArrearsCategoryEven, ArrearsCategoryOdd, ArrearsCategoryAll, ArrearsMoneyCell, ArrearsARCode;
     }
 
+    public static enum DialogStyleName implements IStyleName {
+        AllRecipientsLabel;
+    }
+
     public CrmTheme() {
         initStyles();
     }
@@ -196,6 +200,7 @@ public class CrmTheme extends VistaTheme {
 
         initN4GenerationToolStyles();
         initL1GenerationToolStyles();
+        initDialogStyles();
     }
 
     @Override
@@ -985,5 +990,13 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("cursor", "pointer");
         addStyle(style);
 
+    }
+
+    private void initDialogStyles() {
+
+        Style style = new Style(".", DialogStyleName.AllRecipientsLabel);
+        style.addProperty("color", ThemeColor.object2, 1);
+        style.addProperty("padding", "5px");
+        addStyle(style);
     }
 }

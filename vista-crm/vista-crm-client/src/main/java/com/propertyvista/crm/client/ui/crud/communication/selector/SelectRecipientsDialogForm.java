@@ -38,8 +38,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.RadioGroup;
-import com.pyx4j.widgets.client.style.theme.WidgetsTheme.StyleName;
 
+import com.propertyvista.crm.client.themes.CrmTheme.DialogStyleName;
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationGroup;
 import com.propertyvista.domain.company.Employee;
@@ -115,7 +115,7 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
         });
 
         Label allSelected = new Label("All Selected");
-        allSelected.addStyleName(StyleName.AllRecipientsLabel.name());
+        allSelected.addStyleName(DialogStyleName.AllRecipientsLabel.name());
 
         allSelected.addClickHandler(new ClickHandler() {
 
