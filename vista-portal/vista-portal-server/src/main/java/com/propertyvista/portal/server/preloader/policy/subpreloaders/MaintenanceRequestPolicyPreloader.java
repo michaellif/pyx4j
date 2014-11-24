@@ -16,10 +16,16 @@ package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 import java.sql.Time;
 
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 
+import com.propertyvista.config.VistaLocale;
+import com.propertyvista.domain.maintenance.EntryInstructionsNote;
+import com.propertyvista.domain.maintenance.EntryNotGrantedAlert;
 import com.propertyvista.domain.maintenance.MaintenanceRequestWindow;
+import com.propertyvista.domain.maintenance.PermissionToEnterNote;
 import com.propertyvista.domain.policy.policies.MaintenanceRequestPolicy;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class MaintenanceRequestPolicyPreloader extends AbstractPolicyPreloader<MaintenanceRequestPolicy> {
 
@@ -30,6 +36,34 @@ public class MaintenanceRequestPolicyPreloader extends AbstractPolicyPreloader<M
     @Override
     protected MaintenanceRequestPolicy createPolicy(StringBuilder log) {
         MaintenanceRequestPolicy policy = EntityFactory.create(MaintenanceRequestPolicy.class);
+        policy.permissionToEnterSignBy().setValue(SignatureFormat.AgreeBox);
+        // get English locale
+        CompiledLocale eng = VistaLocale.toCompiledLocale(VistaLocale.getPmcDefaultEnglishLocale());
+        if (eng != null) {
+            PermissionToEnterNote permissionNote = policy.permissionToEnterNote().$();
+            permissionNote.locale().setValue(eng);
+            permissionNote.caption().setValue("Permission To Enter");
+            permissionNote.text().setValue(//
+                    "By checking this box you authorize the Landlord to enter your Apartment to assess and resolve the issue." //
+            );
+            policy.permissionToEnterNote().add(permissionNote);
+
+            EntryNotGrantedAlert noEntryAlert = policy.entryNotGrantedAlert().$();
+            noEntryAlert.locale().setValue(eng);
+            noEntryAlert.title().setValue("Confirm 'No Entry'");
+            noEntryAlert.text().setValue(//
+                    "Please confirm that you do not wish to grant our staff Permission To Enter your apartment. " + //
+                            "Please note that this may delay resolution of reported issue." //
+            );
+            policy.entryNotGrantedAlert().add(noEntryAlert);
+
+            EntryInstructionsNote entryNote = policy.entryInstructionsNote().$();
+            entryNote.locale().setValue(eng);
+            entryNote.caption().setValue("Entry Instructions");
+            entryNote.text().setValue("Special instructions when entering your apartment (e.g. pet alert, etc)");
+            policy.entryInstructionsNote().add(entryNote);
+        }
+
         // add default time windows to select by tenant as preferred time
         MaintenanceRequestWindow window = policy.tenantPreferredWindows().$();
         window.timeFrom().setValue(Time.valueOf("08:00:00"));

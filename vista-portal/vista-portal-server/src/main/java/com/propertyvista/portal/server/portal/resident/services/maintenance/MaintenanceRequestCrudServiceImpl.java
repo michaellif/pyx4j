@@ -19,21 +19,25 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.communication.CommunicationMessageFacade;
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.maintenance.EntryInstructionsNote;
+import com.propertyvista.domain.maintenance.EntryNotGrantedAlert;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
-import com.propertyvista.domain.maintenance.MaintenanceRequestWorkOrder;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.maintenance.MaintenanceRequestWorkOrder;
 import com.propertyvista.domain.maintenance.PermissionToEnterNote;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.policy.policies.MaintenanceRequestPolicy;
@@ -46,10 +50,12 @@ import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceS
 import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestCrudService;
 import com.propertyvista.portal.rpc.shared.PolicyNotFoundException;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
-import com.propertyvista.shared.i18n.CompiledLocale;
+import com.propertyvista.server.common.util.LocalizedContent;
 
 public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImpl<MaintenanceRequest, MaintenanceRequestDTO> implements
         MaintenanceRequestCrudService {
+
+    private final static I18n i18n = I18n.get(MaintenanceRequestCrudServiceImpl.class);
 
     public MaintenanceRequestCrudServiceImpl() {
         super(MaintenanceRequest.class, MaintenanceRequestDTO.class);
@@ -71,17 +77,31 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
         try {
             MaintenanceRequestPolicy mrPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
                     tenant.leaseParticipant().lease().unit().building(), MaintenanceRequestPolicy.class);
-            // add PermissionToEnter wording
-            for (PermissionToEnterNote note : mrPolicy.permissionToEnterNote()) {
-                if (note.locale().lang().getValue().name().startsWith(CompiledLocale.en.name())) {
-                    dto.notePermissionToEnter().set(note.text());
-                    break;
-                }
+            // strip off unneeded notes per selected locale
+            PermissionToEnterNote permissionNote = LocalizedContent.selectFromList(mrPolicy.permissionToEnterNote());
+            if (permissionNote == null) {
+                throw new UserRuntimeException(i18n.tr("'Permission To Enter' Note not found in policy"));
             }
-            // add preferredWindowOptions
-            dto.preferredWindowOptions().addAll(mrPolicy.tenantPreferredWindows());
+            mrPolicy.permissionToEnterNote().clear();
+            mrPolicy.permissionToEnterNote().add(permissionNote);
+
+            EntryInstructionsNote entryNote = LocalizedContent.selectFromList(mrPolicy.entryInstructionsNote());
+            if (entryNote == null) {
+                throw new UserRuntimeException(i18n.tr("'Entry Instructions' Note not found in policy"));
+            }
+            mrPolicy.entryInstructionsNote().clear();
+            mrPolicy.entryInstructionsNote().add(entryNote);
+
+            EntryNotGrantedAlert alert = LocalizedContent.selectFromList(mrPolicy.entryNotGrantedAlert());
+            if (alert == null) {
+                throw new UserRuntimeException(i18n.tr("'Entry Not Granted' Alert not found in policy"));
+            }
+            mrPolicy.entryNotGrantedAlert().clear();
+            mrPolicy.entryNotGrantedAlert().add(alert);
+
+            dto.policy().set(mrPolicy);
         } catch (PolicyNotFoundException e) {
-            // ignore
+            throw new UserRuntimeException(i18n.tr("Maintenance Request Policy not found"));
         }
     }
 
@@ -106,8 +126,7 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
         if (!dto.workHistory().isEmpty()) {
             MaintenanceRequestWorkOrder latest = dto.workHistory().get(dto.workHistory().size() - 1);
             dto.scheduledDate().set(latest.scheduledDate());
-            dto.scheduledTimeFrom().set(latest.scheduledTime().timeFrom());
-            dto.scheduledTimeTo().set(latest.scheduledTime().timeTo());
+            dto.scheduledTime().set(latest.scheduledTime());
         }
 
         dto.message().set(ServerSideFactory.create(CommunicationMessageFacade.class).association2Message(bo));

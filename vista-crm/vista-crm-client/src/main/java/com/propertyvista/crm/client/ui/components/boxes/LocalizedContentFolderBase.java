@@ -29,9 +29,11 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
 import com.propertyvista.domain.ILocalizedEntity;
 import com.propertyvista.domain.site.AvailableLocale;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public abstract class LocalizedContentFolderBase<E extends ILocalizedEntity> extends VistaBoxFolder<E> {
-    private final Set<AvailableLocale> usedLocales = new HashSet<AvailableLocale>();
+
+    private final Set<CompiledLocale> usedLocales = new HashSet<>();
 
     private final Class<E> entityClass;
 
@@ -49,7 +51,7 @@ public abstract class LocalizedContentFolderBase<E extends ILocalizedEntity> ext
     private void updateUsedLocales() {
         usedLocales.clear();
         for (E content : getValue()) {
-            usedLocales.add(content.locale());
+            usedLocales.add(content.locale().getValue());
         }
     }
 
@@ -68,7 +70,7 @@ public abstract class LocalizedContentFolderBase<E extends ILocalizedEntity> ext
                 AvailableLocale locale = getSelectedLocale();
                 if (locale != null) {
                     E content = EntityFactory.create(entityClass);
-                    content.locale().set(locale);
+                    content.locale().set(locale.lang());
                     LocalizedContentFolderBase.super.addItem(content);
                 }
                 return true;

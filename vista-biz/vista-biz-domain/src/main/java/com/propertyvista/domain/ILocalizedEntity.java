@@ -16,13 +16,14 @@ package com.propertyvista.domain;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.site.AvailableLocale;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface ILocalizedEntity extends IEntity {
     @NotNull
-    AvailableLocale locale();
+    IPrimitive<CompiledLocale> locale();
 }

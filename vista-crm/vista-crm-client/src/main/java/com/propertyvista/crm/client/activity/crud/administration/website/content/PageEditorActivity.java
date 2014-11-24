@@ -34,8 +34,8 @@ public class PageEditorActivity extends CrmEditorActivity<PageDescriptor> implem
     private PageDescriptorInitializationData.PageParent pageParentArg = null;
 
     public PageEditorActivity(CrudAppPlace place) {
-        super(PageDescriptor.class, place, CrmSite.getViewFactory().getView(PageEditor.class),
-                GWT.<PageDescriptorCrudService> create(PageDescriptorCrudService.class));
+        super(PageDescriptor.class, place, CrmSite.getViewFactory().getView(PageEditor.class), GWT
+                .<PageDescriptorCrudService> create(PageDescriptorCrudService.class));
 
         String val = place.getFirstArg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT);
         if (val != null) {
@@ -45,7 +45,7 @@ public class PageEditorActivity extends CrmEditorActivity<PageDescriptor> implem
 
     @Override
     protected void obtainInitializationData(final AsyncCallback<InitializationData> callback) {
-        new AvailableLocaleSelectorDialog(null) {
+        new AvailableLocaleSelectorDialog() {
             @Override
             public boolean onClickOk() {
                 AvailableLocale locale = getSelectedLocale();

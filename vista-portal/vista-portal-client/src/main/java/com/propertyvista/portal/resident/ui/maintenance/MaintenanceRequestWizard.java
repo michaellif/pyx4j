@@ -25,7 +25,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.css.ThemeColor;
@@ -37,6 +36,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CSignature;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.CTimeLabel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -49,6 +49,8 @@ import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
 import com.propertyvista.domain.TimeWindow;
+import com.propertyvista.domain.maintenance.EntryInstructionsNote;
+import com.propertyvista.domain.maintenance.EntryNotGrantedAlert;
 import com.propertyvista.domain.maintenance.IssueElementType;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
@@ -56,6 +58,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestPicture;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
+import com.propertyvista.domain.maintenance.PermissionToEnterNote;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestPictureUploadPortalService;
@@ -98,19 +101,13 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
                 !getValue().permissionToEnter().getValue(false) && //
                 !getValue().confirmedNoPermissionToEnter().getValue(false) //
         ) {
-            MessageDialog.confirm( //
-                    i18n.tr("Confirm 'No Entry'"), //
-                    i18n.tr("Please confirm that you do not wish to grant our staff Permission To Enter your apartment. " + //
-                            "Please note that this may delay resolution of reported Issue. " + //
-                            "Also, please be sure to provide your Preferred Date/Time for our visit." //
-                    ), //
-                    new Command() {
-                        @Override
-                        public void execute() {
-                            getValue().confirmedNoPermissionToEnter().setValue(true);
-                        }
-                    } //
-                    );
+            EntryNotGrantedAlert noEntryAlert = getValue().policy().entryNotGrantedAlert().get(0);
+            MessageDialog.confirm(noEntryAlert.title().getValue(), noEntryAlert.text().getValue(), new Command() {
+                @Override
+                public void execute() {
+                    getValue().confirmedNoPermissionToEnter().setValue(true);
+                }
+            });
         } else {
             super.onFinish();
         }
@@ -185,7 +182,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         accessPanel.append(Location.Dual, schedulePanel);
 
         permissionPanel = new FormPanel(this);
-        permissionPanel.append(Location.Left, inject(proto().permissionToEnter())).decorate().componentWidth(250);
+        permissionPanel.append(Location.Left, inject(proto().permissionToEnter(), new CSignature(""))).decorate().componentWidth(250);
         permissionPanel.append(Location.Dual, accessPanel);
         content.append(Location.Dual, permissionPanel);
         content.br();
@@ -197,8 +194,8 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         statusPanel.append(Location.Left, inject(proto().submitted(), new CDateLabel())).decorate().componentWidth(100);
         statusPanel.br();
         statusPanel.append(Location.Left, inject(proto().scheduledDate(), new CDateLabel())).decorate().componentWidth(100);
-        statusPanel.append(Location.Left, inject(proto().scheduledTimeFrom(), new CTimeLabel())).decorate().componentWidth(100);
-        statusPanel.append(Location.Left, inject(proto().scheduledTimeTo(), new CTimeLabel())).decorate().componentWidth(100);
+        statusPanel.append(Location.Left, inject(proto().scheduledTime().timeFrom(), new CTimeLabel())).decorate().componentWidth(100);
+        statusPanel.append(Location.Left, inject(proto().scheduledTime().timeTo(), new CTimeLabel())).decorate().componentWidth(100);
         content.append(Location.Dual, statusPanel);
 
         content.br();
@@ -256,9 +253,6 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
             if (value.reportedForOwnUnit().isNull()) {
                 value.reportedForOwnUnit().setValue(true);
             }
-            if (value.permissionToEnter().isNull()) {
-                value.permissionToEnter().setValue(value.reportedForOwnUnit().getValue(false)); // according reportedForOwnUnit
-            }
         }
         return value;
     }
@@ -271,7 +265,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
             return;
         }
 
-        boolean hasPreferredTime = !getValue().preferredWindowOptions().isEmpty();
+        boolean hasPreferredTime = !getValue().policy().tenantPreferredWindows().isEmpty();
         get(proto().preferredDate1()).setVisible(hasPreferredTime);
         get(proto().preferredDate2()).setVisible(hasPreferredTime);
         get(proto().preferredTime1()).setVisible(hasPreferredTime);
@@ -281,23 +275,26 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
             ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.maintenance, get(proto().requestId()), getValue().getPrimaryKey());
 
             if (hasPreferredTime) {
-                preferredTimeSelector1.setOptions(getValue().preferredWindowOptions());
-                preferredTimeSelector2.setOptions(getValue().preferredWindowOptions());
+                List<TimeWindow> opts = new ArrayList<>();
+                opts.addAll(getValue().policy().tenantPreferredWindows());
+                preferredTimeSelector1.setOptions(opts);
+                preferredTimeSelector2.setOptions(opts);
             }
         }
 
         // set notes
-        String note = getValue().notePermissionToEnter().getValue();
-        if (CommonsStringUtils.isEmpty(note)) {
-            note = i18n.tr("By checking this box you authorize the Landlord to enter your Apartment to assess and resolve this Issue.");
-        }
-        get(proto().permissionToEnter()).setNote(note);
-        get(proto().petInstructions()).setNote(i18n.tr("Special instructions in case you have a pet in the apartment"));
+        PermissionToEnterNote permissionNote = getValue().policy().permissionToEnterNote().get(0);
+        get(proto().permissionToEnter()).setTitle(permissionNote.caption().getValue());
+        get(proto().permissionToEnter()).setNote(permissionNote.text().getValue());
+
+        EntryInstructionsNote entryNote = getValue().policy().entryInstructionsNote().get(0);
+        get(proto().petInstructions()).setTitle(entryNote.caption().getValue());
+        get(proto().petInstructions()).setNote(entryNote.text().getValue());
 
         StatusPhase phase = getValue().status().phase().getValue();
         get(proto().scheduledDate()).setVisible(phase == StatusPhase.Scheduled);
-        get(proto().scheduledTimeFrom()).setVisible(phase == StatusPhase.Scheduled);
-        get(proto().scheduledTimeTo()).setVisible(phase == StatusPhase.Scheduled);
+        get(proto().scheduledTime().timeFrom()).setVisible(phase == StatusPhase.Scheduled);
+        get(proto().scheduledTime().timeTo()).setVisible(phase == StatusPhase.Scheduled);
 
         get(proto().submitted()).setVisible(!getValue().submitted().isNull());
         get(proto().updated()).setVisible(!getValue().updated().isNull());

@@ -103,4 +103,29 @@ public class VistaLocale {
             return Locale.ENGLISH;
         }
     }
+
+    public static CompiledLocale toCompiledLocale(Locale cl) {
+        if (cl.equals(Locale.UK)) {
+            return CompiledLocale.en_GB;
+        } else if (cl.equals(Locale.US)) {
+            return CompiledLocale.en_US;
+        } else if (cl.equals(Locale.CANADA)) {
+            return CompiledLocale.en_CA;
+        } else if (cl.equals(Locale.ENGLISH)) {
+            return CompiledLocale.en;
+        } else if (cl.equals(Locale.FRENCH)) {
+            return CompiledLocale.fr;
+        } else if (cl.equals(RU)) {
+            return CompiledLocale.ru;
+        } else if (cl.equals(ES)) {
+            return CompiledLocale.es;
+        } else if (cl.equals(Locale.SIMPLIFIED_CHINESE)) {
+            return CompiledLocale.zh_CN;
+        } else if (cl.equals(Locale.TRADITIONAL_CHINESE)) {
+            return CompiledLocale.zh_TW;
+        } else {
+            return null;
+        }
+    }
+
 }

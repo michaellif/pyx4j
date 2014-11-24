@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.website.general;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,11 +41,27 @@ public abstract class AvailableLocaleSelectorDialog extends Dialog implements Ok
 
     private final SimplePanel panel = new SimplePanel();
 
-    private final Set<AvailableLocale> usedLocales;
+    private final Set<CompiledLocale> usedLocales;
 
     private AvailableLocale selectedLocale;
 
-    public AvailableLocaleSelectorDialog(final Set<AvailableLocale> usedLocales) {
+    private static Set<CompiledLocale> toCompiledLocale(Collection<AvailableLocale> locales) {
+        Set<CompiledLocale> result = new HashSet<>();
+        for (AvailableLocale al : locales) {
+            result.add(al.lang().getValue());
+        }
+        return result;
+    }
+
+    public AvailableLocaleSelectorDialog() {
+        this((Set<CompiledLocale>) null);
+    }
+
+    public AvailableLocaleSelectorDialog(final Collection<AvailableLocale> usedLocales) {
+        this(toCompiledLocale(usedLocales));
+    }
+
+    public AvailableLocaleSelectorDialog(final Set<CompiledLocale> usedLocales) {
         super(title);
         setDialogPixelWidth(400);
         setDialogOptions(this);
@@ -87,14 +104,10 @@ public abstract class AvailableLocaleSelectorDialog extends Dialog implements Ok
 
     private void setContentPanel(CEntityComboBox<AvailableLocale> localeSelector) {
         if (usedLocales != null) {
-            final Set<CompiledLocale> clSet = new HashSet<CompiledLocale>();
-            for (AvailableLocale al : usedLocales) {
-                clSet.add(al.lang().getValue());
-            }
             localeSelector.setOptionsFilter(new OptionsFilter<AvailableLocale>() {
                 @Override
                 public boolean acceptOption(AvailableLocale al) {
-                    return !clSet.contains(al.lang().getValue());
+                    return !usedLocales.contains(al.lang().getValue());
                 }
             });
         }
