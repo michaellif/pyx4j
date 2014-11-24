@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.RadioGroup;
 
@@ -114,8 +115,8 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
             }
         });
 
-        Label allSelected = new Label("All Selected");
-        allSelected.addStyleName(DialogStyleName.AllRecipientsLabel.name());
+        Anchor allSelected = new Anchor("All Selected");
+        allSelected.setStyleName(DialogStyleName.AllRecipientsLabel.name());
 
         allSelected.addClickHandler(new ClickHandler() {
 
