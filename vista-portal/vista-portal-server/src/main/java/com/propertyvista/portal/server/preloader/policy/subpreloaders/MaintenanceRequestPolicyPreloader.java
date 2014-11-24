@@ -16,7 +16,6 @@ package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 import java.sql.Time;
 
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 
 import com.propertyvista.config.VistaLocale;
 import com.propertyvista.domain.maintenance.EntryInstructionsNote;
@@ -36,7 +35,6 @@ public class MaintenanceRequestPolicyPreloader extends AbstractPolicyPreloader<M
     @Override
     protected MaintenanceRequestPolicy createPolicy(StringBuilder log) {
         MaintenanceRequestPolicy policy = EntityFactory.create(MaintenanceRequestPolicy.class);
-        policy.permissionToEnterSignBy().setValue(SignatureFormat.AgreeBox);
         // get English locale
         CompiledLocale eng = VistaLocale.toCompiledLocale(VistaLocale.getPmcDefaultEnglishLocale());
         if (eng != null) {

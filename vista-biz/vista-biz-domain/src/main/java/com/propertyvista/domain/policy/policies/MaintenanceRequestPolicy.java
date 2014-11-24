@@ -20,7 +20,6 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 
 import com.propertyvista.domain.TimeWindow;
 import com.propertyvista.domain.maintenance.EntryInstructionsNote;
@@ -35,13 +34,12 @@ import com.propertyvista.domain.property.asset.building.Building;
 @LowestApplicableNode(value = Building.class)
 public interface MaintenanceRequestPolicy extends Policy {
 
+    /** If true, PermissionToEnter check box will be checked by default */
+    IPrimitive<Boolean> permissionGrantedByDefault();
+
     /** Placed next to the permission check box */
     @Owned
     IList<PermissionToEnterNote> permissionToEnterNote();
-
-    /** Used in Resident Portal only to sign for Permission To Enter; use check box in CRM */
-    @NotNull
-    IPrimitive<SignatureFormat> permissionToEnterSignBy();
 
     /** Displayed when permission check box is not checked */
     @Owned

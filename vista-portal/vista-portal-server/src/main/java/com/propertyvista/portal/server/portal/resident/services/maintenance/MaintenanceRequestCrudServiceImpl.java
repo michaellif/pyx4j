@@ -92,12 +92,12 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
             mrPolicy.entryInstructionsNote().clear();
             mrPolicy.entryInstructionsNote().add(entryNote);
 
-            EntryNotGrantedAlert alert = LocalizedContent.selectFromList(mrPolicy.entryNotGrantedAlert());
-            if (alert == null) {
+            EntryNotGrantedAlert noEntryAlert = LocalizedContent.selectFromList(mrPolicy.entryNotGrantedAlert());
+            if (noEntryAlert == null) {
                 throw new UserRuntimeException(i18n.tr("'Entry Not Granted' Alert not found in policy"));
             }
             mrPolicy.entryNotGrantedAlert().clear();
-            mrPolicy.entryNotGrantedAlert().add(alert);
+            mrPolicy.entryNotGrantedAlert().add(noEntryAlert);
 
             dto.policy().set(mrPolicy);
         } catch (PolicyNotFoundException e) {

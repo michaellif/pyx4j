@@ -36,7 +36,6 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.CSignature;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.CTimeLabel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -182,7 +181,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         accessPanel.append(Location.Dual, schedulePanel);
 
         permissionPanel = new FormPanel(this);
-        permissionPanel.append(Location.Left, inject(proto().permissionToEnter(), new CSignature(""))).decorate().componentWidth(250);
+        permissionPanel.append(Location.Left, inject(proto().permissionToEnter())).decorate().componentWidth(250);
         permissionPanel.append(Location.Dual, accessPanel);
         content.append(Location.Dual, permissionPanel);
         content.br();
@@ -252,6 +251,9 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         if (value == null || value.getPrimaryKey() == null || value.getPrimaryKey().isDraft()) {
             if (value.reportedForOwnUnit().isNull()) {
                 value.reportedForOwnUnit().setValue(true);
+            }
+            if (value.permissionToEnter().isNull() && value.policy().permissionGrantedByDefault().getValue(false)) {
+                value.permissionToEnter().setValue(true);
             }
         }
         return value;

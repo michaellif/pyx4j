@@ -18,8 +18,8 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -29,10 +29,12 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.boxes.LocalizedContentFolderBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.TimeWindow;
+import com.propertyvista.domain.maintenance.EntryInstructionsNote;
+import com.propertyvista.domain.maintenance.EntryNotGrantedAlert;
 import com.propertyvista.domain.maintenance.MaintenanceRequestWindow;
 import com.propertyvista.domain.maintenance.PermissionToEnterNote;
 import com.propertyvista.domain.policy.dto.MaintenanceRequestPolicyDTO;
-import com.propertyvista.domain.site.AvailableLocale;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<MaintenanceRequestPolicyDTO> {
 
@@ -47,7 +49,14 @@ public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<Mai
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(proto().permissionToEnterNote().getMeta().getCaption());
+        formPanel.append(Location.Dual, proto().permissionGrantedByDefault()).decorate();
         formPanel.append(Location.Dual, proto().permissionToEnterNote(), new PermissionToEnterNoteFolder(isEditable()));
+
+        formPanel.h1(proto().entryInstructionsNote().getMeta().getCaption());
+        formPanel.append(Location.Dual, proto().entryInstructionsNote(), new EntryInstructionsNoteFolder(isEditable()));
+
+        formPanel.h1(proto().entryNotGrantedAlert().getMeta().getCaption());
+        formPanel.append(Location.Dual, proto().entryNotGrantedAlert(), new EntryNotGrantedAlertFolder(isEditable()));
 
         formPanel.h1(i18n.tr("Tenant Preferred Time Windows"));
         formPanel.append(Location.Dual, proto().tenantPreferredWindows(), new PreferredWindowsFolder(isEditable()));
@@ -89,8 +98,44 @@ public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<Mai
         public IsWidget createEditorContent(CForm<PermissionToEnterNote> editor) {
             FormPanel formPanel = new FormPanel(editor);
 
-            formPanel.append(Location.Left, proto().locale(), new CEntityLabel<AvailableLocale>()).decorate().componentWidth(120);
-            formPanel.append(Location.Left, proto().text()).decorate();
+            formPanel.append(Location.Dual, proto().locale(), new CLabel<CompiledLocale>()).decorate().componentWidth(120);
+            formPanel.append(Location.Dual, proto().text()).decorate();
+
+            return formPanel;
+        }
+    }
+
+    class EntryInstructionsNoteFolder extends LocalizedContentFolderBase<EntryInstructionsNote> {
+
+        public EntryInstructionsNoteFolder(boolean editable) {
+            super(EntryInstructionsNote.class, editable);
+        }
+
+        @Override
+        public IsWidget createEditorContent(CForm<EntryInstructionsNote> editor) {
+            FormPanel formPanel = new FormPanel(editor);
+
+            formPanel.append(Location.Dual, proto().locale(), new CLabel<CompiledLocale>()).decorate().componentWidth(120);
+            formPanel.append(Location.Dual, proto().caption()).decorate();
+            formPanel.append(Location.Dual, proto().text()).decorate();
+
+            return formPanel;
+        }
+    }
+
+    class EntryNotGrantedAlertFolder extends LocalizedContentFolderBase<EntryNotGrantedAlert> {
+
+        public EntryNotGrantedAlertFolder(boolean editable) {
+            super(EntryNotGrantedAlert.class, editable);
+        }
+
+        @Override
+        public IsWidget createEditorContent(CForm<EntryNotGrantedAlert> editor) {
+            FormPanel formPanel = new FormPanel(editor);
+
+            formPanel.append(Location.Dual, proto().locale(), new CLabel<CompiledLocale>()).decorate().componentWidth(120);
+            formPanel.append(Location.Dual, proto().title()).decorate();
+            formPanel.append(Location.Dual, proto().text()).decorate();
 
             return formPanel;
         }
