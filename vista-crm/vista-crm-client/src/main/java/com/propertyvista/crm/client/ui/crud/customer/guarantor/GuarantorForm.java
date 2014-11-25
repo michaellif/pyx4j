@@ -26,15 +26,17 @@ public class GuarantorForm extends LeaseParticipantForm<GuarantorDTO> {
 
     private static final I18n i18n = I18n.get(GuarantorForm.class);
 
+    private final Tab paymentMethodsTab;
+
     public GuarantorForm(IPrimeFormView<GuarantorDTO, ?> view) {
         super(GuarantorDTO.class, view);
 
-        Tab tab;
-
         selectTab(addTab(createDetailsTab(), i18n.tr("Details")));
-        tab = addTab(createPaymentMethodsTab(), i18n.tr("Payment Methods"), DataModelPermission.permissionRead(LeasePaymentMethod.class));
+        paymentMethodsTab = addTab(createPaymentMethodsTab(), i18n.tr("Payment Methods"), DataModelPermission.permissionRead(LeasePaymentMethod.class));
         if (isEditable()) {
-            tab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(LeasePaymentMethod.class));
+            paymentMethodsTab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(LeasePaymentMethod.class));
         }
+
+        addScreeningTabs();
     }
 }

@@ -68,6 +68,8 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
             autoPaymentsTab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(PreauthorizedPaymentDTO.class));
         }
         addTab(createTenantInsuranceTab(), i18n.tr("Insurance"));
+
+        addScreeningTabs();
     }
 
     @Override

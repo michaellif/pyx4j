@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -54,20 +54,19 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
 
     public LeaseParticipantCrudServiceBaseImpl(Class<BO> boClass, Class<TO> toClass) {
         super(new CrudEntityBinder<BO, TO>(boClass, toClass) {
-
             @Override
             protected void bind() {
                 bind(LeaseParticipant.class, toProto, boProto);
             }
-
         });
     }
 
     @Override
     protected void enhanceRetrieved(BO bo, TO to, RetrieveTarget retrieveTarget) {
         to.leaseTermV().set(retrieveLeaseTerm(bo));
-        to.screening().set(LeaseParticipantUtils.getCustomerScreeningPointer(to));
-        // fill/update payment methods: 
+        to.screening().set(LeaseParticipantUtils.getCustomerScreening(to, retrieveTarget == RetrieveTarget.Edit));
+
+        // fill/update payment methods:
         to.paymentMethods().clear();
         List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(bo,
                 PaymentMethodTarget.StoreInProfile, VistaApplication.crm);
@@ -109,6 +108,12 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
     protected boolean persist(BO bo, TO to) {
         ServerSideFactory.create(CustomerFacade.class).persistCustomer(bo.customer());
 
+        if (to.lease().status().getValue().isDraft()) {
+            LeaseParticipantUtils.persistScreeningAsDraft(to.screening().screening());
+        } else {
+            LeaseParticipantUtils.persistScreeningAsNewVersion(to.screening().screening());
+        }
+
         if (to.electronicPaymentsAllowed().getValue(false)) {
             persistPaymentMethods(bo, to);
         }
@@ -132,14 +137,14 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
     private LeaseTerm.LeaseTermV retrieveLeaseTerm(BO leaseParticipant) {
         LeaseTerm.LeaseTermV term = null;
 
-        // case of 'current' Tenants for applications: 
+        // case of 'current' Tenants for applications:
         if (leaseParticipant.lease().status().getValue().isDraft()) {
             EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().id(), leaseParticipant.lease().currentTerm().id()));
             criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
             term = Persistence.service().retrieve(criteria).version();
         } else {
-            // case of 'current' Tenants: 
+            // case of 'current' Tenants:
             {
                 EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().id(), leaseParticipant.lease().currentTerm().id()));
@@ -154,7 +159,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
                     term = leaseTerm.version();
                 }
             }
-            // case of 'Former' Tenants: 
+            // case of 'Former' Tenants:
             if (term == null) {
                 EntityQueryCriteria<LeaseTerm.LeaseTermV> criteria = EntityQueryCriteria.create(LeaseTerm.LeaseTermV.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().holder().lease(), leaseParticipant.lease()));

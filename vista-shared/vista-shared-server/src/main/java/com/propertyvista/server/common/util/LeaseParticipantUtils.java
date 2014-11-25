@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -17,10 +17,15 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.ScreeningFacade;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
+import com.propertyvista.domain.policy.framework.PolicyNode;
+import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
@@ -30,6 +35,68 @@ import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
 public class LeaseParticipantUtils {
 
+    public static LeaseParticipantScreeningTO getCustomerScreening(LeaseParticipant<?> participant, boolean forEdit) {
+        CustomerScreening screening;
+
+        if (forEdit) {
+            PolicyNode policyNode = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(participant.lease());
+            screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftForEdit(participant.customer(), policyNode);
+            ServerSideFactory.create(ScreeningFacade.class).registerUploadedDocuments(screening);
+        } else {
+            screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningFinalOrDraft(participant.customer(), AttachLevel.Attached);
+            if (screening == null) { // newly created tenant:
+                screening = EntityFactory.create(CustomerScreening.class);
+                screening.screene().set(participant.customer());
+            }
+        }
+
+        Persistence.ensureRetrieve(screening.version().incomes(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(screening.version().assets(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(screening.version().documents(), AttachLevel.Attached);
+        Persistence.service().retrieve(screening.screene(), AttachLevel.ToStringMembers, false);
+
+        return createScreeningTO(participant, screening);
+    }
+
+    public static LeaseParticipantScreeningTO createScreeningTO(LeaseParticipant<?> participant, CustomerScreening screening) {
+        LeaseParticipantScreeningTO to = EntityFactory.create(LeaseParticipantScreeningTO.class);
+        to.leaseParticipantId().set(participant.<LeaseParticipant<?>> createIdentityStub());
+        to.leaseStatus().setValue(participant.lease().status().getValue());
+        to.screening().set(screening);
+
+        if (to.screening().getPrimaryKey() != null) {
+            to.setPrimaryKey(new Key(participant.getPrimaryKey().asLong(), screening.getPrimaryKey().getVersion()));
+        }
+
+        loadRestrictions(to, to.leaseParticipantId());
+        return to;
+    }
+
+    public static void persistScreeningAsDraft(CustomerScreening screening) {
+        screening.saveAction().setValue(SaveAction.saveAsDraft);
+        Persistence.secureSave(screening);
+    }
+
+    public static void persistScreeningAsNewVersion(CustomerScreening screening) {
+//        screening = VersionedEntityUtils.createNextVersion(screening);/
+        screening.saveAction().setValue(SaveAction.saveAsFinal);
+        Persistence.secureSave(screening);
+    }
+
+    private static void loadRestrictions(LeaseParticipantScreeningTO to, LeaseParticipant<?> participant) {
+        PolicyNode policyNode = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(participant.lease());
+        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, RestrictionsPolicy.class);
+
+        to.yearsToForcingPreviousAddress().setValue(restrictionsPolicy.yearsToForcingPreviousAddress().getValue());
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------------
+
+    public static LeaseParticipantScreeningTO getCustomerScreeningPointer(LeaseParticipant<?> participant) {
+        return createScreeningPointer(participant,
+                ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningFinalOrDraft(participant.customer(), AttachLevel.ToStringMembers));
+    }
+
     public static LeaseParticipantScreeningTO createScreeningPointer(LeaseParticipant<?> participant, CustomerScreening screening) {
         LeaseParticipantScreeningTO to = EntityFactory.create(LeaseParticipantScreeningTO.class);
         to.screening().set(screening);
@@ -38,12 +105,6 @@ public class LeaseParticipantUtils {
             to.screening().setAttachLevel(AttachLevel.ToStringMembers);
         }
         return to;
-    }
-
-    public static LeaseParticipantScreeningTO getCustomerScreeningPointer(LeaseParticipant<?> participant) {
-        // Retrieve draft if there are no final version
-        return createScreeningPointer(participant,
-                ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningFinalOrDraft(participant.customer(), AttachLevel.ToStringMembers));
     }
 
     public static LeaseParticipantScreeningTO getLeaseTermEffectiveScreeningPointer(Lease lease, LeaseTermParticipant<?> termParticipant) {
@@ -60,6 +121,8 @@ public class LeaseParticipantUtils {
             }
         }
     }
+
+    // --------------------------------------------------------------------------------------------------------------------------------
 
     public static CustomerScreening retrieveLeaseTermEffectiveScreening(Lease lease, LeaseTermParticipant<?> termParticipant) {
         CustomerScreening screening;

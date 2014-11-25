@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -18,6 +18,8 @@ import java.util.Set;
 import java.util.Vector;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Image;
@@ -27,10 +29,13 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImage;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
@@ -41,7 +46,6 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCollectionCrudHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCollectionCrudHyperlink.AppPlaceBuilder;
-import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.rpc.AppPlace;
@@ -52,10 +56,20 @@ import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
+import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
+import com.propertyvista.common.client.ui.validators.ClientBusinessRules;
+import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValidator;
+import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
+import com.propertyvista.common.client.ui.validators.PastDateValidator;
+import com.propertyvista.common.client.ui.validators.StartEndDateWithinPeriodValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.lease.application.components.IdUploaderFolder;
+import com.propertyvista.crm.client.ui.crud.lease.application.components.PersonalAssetFolder;
+import com.propertyvista.crm.client.ui.crud.lease.application.components.PersonalIncomeFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;
 import com.propertyvista.crm.rpc.services.customer.CustomerPictureCrmUploadService;
+import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -68,8 +82,8 @@ import com.propertyvista.dto.GuarantorDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseParticipantDTO;
-import com.propertyvista.dto.LeaseParticipantScreeningTO;
 import com.propertyvista.dto.TenantDTO;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmEntityForm<P> {
@@ -78,9 +92,31 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
     private final Class<P> rootClass;
 
+    private final FormPanel previousAddress = new FormPanel(this) {
+        @Override
+        public void setVisible(boolean visible) {
+// this will clean previous address:
+//            if (visible != get(proto().screening().screening().version().previousAddress()).isVisible()) {
+//                get(proto().screening().screening().version().previousAddress()).reset();
+//            }
+            get(proto().screening().screening().version().previousAddress()).setVisible(visible);
+            super.setVisible(visible);
+        }
+    };
+
+    private final IdUploaderFolder fileUpload = new IdUploaderFolder();
+
     public LeaseParticipantForm(Class<P> rootClass, IPrimeFormView<P, ?> view) {
         super(rootClass, view);
         this.rootClass = rootClass;
+    }
+
+    protected void addScreeningTabs() {
+        addTab(createIdentificationDocumentsTab(), i18n.tr("Identification"));
+        addTab(createAddressesTab(), i18n.tr("Addresses"));
+        addTab(createlegalQuestionsTab(), proto().screening().screening().version().legalQuestions().getMeta().getCaption());
+        addTab(createIncomesTab(), i18n.tr("Incomes"));
+        addTab(createAssetsTab(), i18n.tr("Assets"));
     }
 
     @Override
@@ -90,7 +126,6 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
 
         get(proto().yardiApplicantId()).setVisible(VistaFeatures.instance().yardiIntegration());
-        get(proto().screening()).setVisible(getValue().screening().getPrimaryKey() != null);
 
         if (isEditable()) {
             IdTarget idTarget = null;
@@ -102,12 +137,17 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
                 throw new IllegalArgumentException();
             }
             ClientPolicyManager.setIdComponentEditabilityByPolicy(idTarget, get(proto().participantId()), getValue().getPrimaryKey());
+
+            fileUpload.setPolicyEntity(getValue());
+            ((PersonalIncomeFolder) (CComponent<?, ?, ?, ?>) get(proto().screening().screening().version().incomes())).setPolicyEntity(getValue());
         }
 
         if (rootClass.equals(TenantDTO.class)) {
             get(((TenantDTO) proto()).customer().registeredInPortal()).setVisible(
                     LeaseTermParticipant.Role.portalAccess().contains(((TenantDTO) getValue()).role().getValue()));
         }
+
+        enablePreviousAddress();
     }
 
     @Override
@@ -125,6 +165,30 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
                 return null;
             }
         });
+
+        // ------------------------------------------------------------------------------------------------
+        @SuppressWarnings("unchecked")
+        CForm<PriorAddress> currentAF = ((CForm<PriorAddress>) get(proto().screening().screening().version().currentAddress()));
+
+        currentAF.get(currentAF.proto().moveInDate()).addComponentValidator(new PastDateIncludeTodayValidator());
+        currentAF.get(currentAF.proto().moveOutDate()).addComponentValidator(new FutureDateIncludeTodayValidator());
+        currentAF.get(currentAF.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
+                enablePreviousAddress();
+            }
+        });
+
+        // ------------------------------------------------------------------------------------------------
+        @SuppressWarnings("unchecked")
+        CForm<PriorAddress> previousAF = ((CForm<PriorAddress>) get(proto().screening().screening().version().previousAddress()));
+
+        previousAF.get(previousAF.proto().moveInDate()).addComponentValidator(new PastDateValidator());
+        previousAF.get(previousAF.proto().moveOutDate()).addComponentValidator(new PastDateValidator());
+
+        // ------------------------------------------------------------------------------------------------
+        new StartEndDateWithinPeriodValidation(previousAF.get(previousAF.proto().moveOutDate()), currentAF.get(currentAF.proto().moveInDate()), 1, 0,
+                i18n.tr("Current Move In date should be within 1 month of previous Move Out date"));
     }
 
     protected IsWidget createDetailsTab() {
@@ -163,8 +227,6 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         formPanel.br(); // lease term / portal registration:
 
         formPanel.append(Location.Left, proto().leaseTermV(), new CLeaseTermVHyperlink()).decorate();
-        formPanel.append(Location.Left, proto().screening(),
-                new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class))).decorate();
 
         if (rootClass.equals(TenantDTO.class)) {
             formPanel.append(Location.Right, ((TenantDTO) proto()).role(), new CEnumLabel()).decorate().componentWidth(150);
@@ -284,4 +346,76 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
     protected void onPaymentMethodRemove(LeasePaymentMethod lpm) {
     }
+
+    private IsWidget createIdentificationDocumentsTab() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Dual, proto().screening().screening().version().documents(), fileUpload);
+        return formPanel;
+    }
+
+    private IsWidget createAddressesTab() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.h1(proto().screening().screening().version().currentAddress().getMeta().getCaption());
+        formPanel.append(Location.Dual, inject(proto().screening().screening().version().currentAddress(), new PriorAddressEditor()));
+
+        previousAddress.h1(proto().screening().screening().version().previousAddress().getMeta().getCaption());
+        previousAddress.append(Location.Dual, proto().screening().screening().version().previousAddress(), new PriorAddressEditor(true));
+        formPanel.append(Location.Dual, previousAddress);
+
+        return formPanel;
+    }
+
+    private IsWidget createlegalQuestionsTab() {
+        QuestionsFormPanel formPanel = new QuestionsFormPanel(this);
+        formPanel.appendQuestion(proto().screening().screening().version().legalQuestions().suedForRent());
+        formPanel.appendQuestion(proto().screening().screening().version().legalQuestions().suedForDamages());
+        formPanel.appendQuestion(proto().screening().screening().version().legalQuestions().everEvicted());
+        formPanel.appendQuestion(proto().screening().screening().version().legalQuestions().defaultedOnLease());
+        formPanel.appendQuestion(proto().screening().screening().version().legalQuestions().convictedOfFelony());
+        formPanel.appendQuestion(proto().screening().screening().version().legalQuestions().legalTroubles());
+        formPanel.appendQuestion(proto().screening().screening().version().legalQuestions().filedBankruptcy());
+
+        if (VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
+            get(proto().screening().screening().version().legalQuestions().suedForRent()).setMandatory(false);
+            get(proto().screening().screening().version().legalQuestions().suedForDamages()).setMandatory(false);
+            get(proto().screening().screening().version().legalQuestions().everEvicted()).setMandatory(false);
+            get(proto().screening().screening().version().legalQuestions().defaultedOnLease()).setMandatory(false);
+            get(proto().screening().screening().version().legalQuestions().convictedOfFelony()).setMandatory(false);
+            get(proto().screening().screening().version().legalQuestions().legalTroubles()).setMandatory(false);
+            get(proto().screening().screening().version().legalQuestions().filedBankruptcy()).setMandatory(false);
+        }
+
+        return formPanel;
+    }
+
+    private void enablePreviousAddress() {
+        previousAddress.setVisible(ClientBusinessRules.needPreviousAddress(getValue().screening().screening().version().currentAddress().moveInDate()
+                .getValue(), getValue().screening().yearsToForcingPreviousAddress().getValue()));
+    }
+
+// Financial: ------------------------------------------------------------------------------------------------
+
+    private IsWidget createIncomesTab() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Dual, proto().screening().screening().version().incomes(), new PersonalIncomeFolder(isEditable()));
+
+        return formPanel;
+    }
+
+    private IsWidget createAssetsTab() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Dual, proto().screening().screening().version().assets(), new PersonalAssetFolder(isEditable()));
+        return formPanel;
+    }
+
+    class QuestionsFormPanel extends FormPanel {
+
+        public QuestionsFormPanel(CForm<?> parent) {
+            super(parent);
+        }
+
+        public void appendQuestion(IObject<?> member) {
+            append(Location.Dual, member).decorate().labelWidth(400).labelPosition(LabelPosition.top).useLabelSemicolon(false);
+        }
+    };
 }
