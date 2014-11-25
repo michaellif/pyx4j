@@ -32,7 +32,7 @@ public abstract class UnitTestExecutionTestBase extends SeleniumTestBase {
         selenium.waitFor(UnitDebugId.JUnit_SelectAll);
         selenium.setValue(UnitDebugId.JUnit_SelectAll, true);
         selenium.click(DialogDebugId.Dialog_Ok);
-        selenium.waitForText(UnitDebugId.JUnit_StatusRunning, "Completed", waitSeconds);
+        selenium.assertText(UnitDebugId.JUnit_StatusRunning, "Completed", waitSeconds);
     }
 
     protected static class ExecutionStatus {
