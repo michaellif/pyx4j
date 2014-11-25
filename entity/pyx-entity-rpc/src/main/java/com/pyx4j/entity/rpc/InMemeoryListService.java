@@ -46,6 +46,9 @@ public class InMemeoryListService<E extends IEntity> implements AbstractListCrud
         this.values = values;
     }
 
+    protected void enhanceListRetrieved(E to) {
+    }
+
     @Override
     public void list(AsyncCallback<EntitySearchResult<E>> callback, EntityListCriteria<E> criteria) {
         try {
@@ -69,6 +72,7 @@ public class InMemeoryListService<E extends IEntity> implements AbstractListCrud
                 if (f.accept(dto)) {
                     if (cnt >= offset) {
                         if ((criteria.getPageSize() < 0) || (r.getData().size() < criteria.getPageSize())) {
+                            enhanceListRetrieved(dto);
                             r.add(dto);
                         } else {
                             r.hasMoreData(true);
