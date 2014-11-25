@@ -351,5 +351,4 @@ COMMIT;
 DROP FUNCTION _dba_.migrate_pmc_1414(text);
 DROP TABLE _dba_.tmp_emails;
 
-\i fix_ofm_billing.sql
 
