@@ -49,6 +49,7 @@ import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
+import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.domain.ref.ProvincePolicyNode;
 import com.propertyvista.generator.util.CommonsGenerator;
@@ -60,6 +61,8 @@ public class BuildingsGenerator {
     public static class BuildingsGeneratorConfig {
 
         public String provinceCode = null;
+
+        public ISOCountry country = null;
 
     }
 
@@ -86,7 +89,7 @@ public class BuildingsGenerator {
         String website = "www.property" + (counter + 1) + ".com";
 
         // address
-        InternationalAddress address = CommonsGenerator.createInternationalAddress(config.provinceCode);
+        InternationalAddress address = CommonsGenerator.createInternationalAddress(config);
 
         // email
         String email = "building" + (counter + 1) + "@propertyvista.com";

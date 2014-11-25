@@ -53,6 +53,7 @@ import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.vendor.Vendor;
+import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.generator.BuildingsGenerator;
 import com.propertyvista.generator.BuildingsGenerator.BuildingsGeneratorConfig;
 import com.propertyvista.generator.MediaGenerator;
@@ -64,6 +65,7 @@ import com.propertyvista.server.common.reference.PublicDataUpdater;
 import com.propertyvista.server.common.reference.geo.GeoLocator.Mode;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 import com.propertyvista.server.domain.FileImageThumbnailBlob;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
@@ -82,7 +84,14 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
     }
 
     private String generate() {
+        ISOCountry country = null;
+
+        if (VistaFeatures.instance().countryOfOperation() != null) {
+            country = VistaFeatures.instance().countryOfOperation().country;
+        }
+
         BuildingsGenerator buildingGenerator = new BuildingsGenerator(config().buildingsGenerationSeed);
+
         ProductCatalogGenerator productCatalogGenerator = new ProductCatalogGenerator(0);
 
         // create some complexes:
@@ -98,7 +107,8 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
         // create some portfolios:
         List<Portfolio> portfolios = new Vector<Portfolio>();
-        for (String pname : new String[] { "GTA", "East region", "West region" }) {
+
+        for (String pname : getPortfolios(country)) {
             Portfolio p = EntityFactory.create(Portfolio.class);
             p.name().setValue(pname);
             portfolios.add(p);
@@ -107,6 +117,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
         BuildingsGeneratorConfig config = new BuildingsGeneratorConfig();
         config.provinceCode = config().province;
+        config.country = country;
 
         int unitCount = 0;
         List<Building> buildings = buildingGenerator.createBuildings(config().numResidentialBuildings, config);
@@ -295,6 +306,22 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         sb.append("Created ").append(buildings.size()).append(" buildings\n");
         sb.append("Created ").append(unitCount).append(" units");
         return sb.toString();
+    }
+
+    private String[] getPortfolios(ISOCountry country) {
+        if (country != null) {
+            switch (country) {
+            case UnitedStates:
+                return new String[] { "East Coast", "Central", "West coast" };
+            case Canada:
+                return new String[] { "GTA", "East region", "West region" };
+            default:
+                //
+            }
+        }
+
+        // Default for no-country
+        return new String[] { "East region", "West region" };
     }
 
     private MerchantAccount getMerchantAccount() {

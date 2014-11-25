@@ -14,7 +14,9 @@
 package com.propertyvista.generator.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.core.EntityFactory;
@@ -32,6 +34,7 @@ import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.domain.ref.ISOProvince;
+import com.propertyvista.generator.BuildingsGenerator.BuildingsGeneratorConfig;
 import com.propertyvista.generator.PreloadData;
 
 public class CommonsGenerator {
@@ -44,7 +47,9 @@ public class CommonsGenerator {
 
     private static String[] lipsumShort;
 
-    private static List<InternationalAddress> adresses;
+    private static Map<String, List<InternationalAddress>> addresses = new HashMap<>();
+
+    private static final String DEFAULT_ADDRESSES_RESOURCE_FILE = "address-intern.csv";
 
     public static String lipsum() {
         if (lipsum == null) {
@@ -156,25 +161,52 @@ public class CommonsGenerator {
         return contact;
     }
 
-    private static void loadAddress() {
-        if (adresses == null) {
-            adresses = EntityCSVReciver.create(InternationalAddress.class).loadResourceFile(
-                    IOUtils.resourceFileName("address-intern.csv", CommonsGenerator.class));
+    private static void loadAddresses(ISOCountry country) {
+        String addressesResourceFile = DEFAULT_ADDRESSES_RESOURCE_FILE;
+
+        if (country == null) {
+            // Set default country to Canada
+            country = ISOCountry.Canada;
         }
+
+        switch (country) {
+        case UnitedStates:
+            addressesResourceFile = "address-intern-US.csv";
+            break;
+        default:
+            // do nothing
+        }
+
+        if (!addresses.containsKey(country.name)) {
+            List<InternationalAddress> countryAddresses = EntityCSVReciver.create(InternationalAddress.class).loadResourceFile(
+                    IOUtils.resourceFileName(addressesResourceFile, CommonsGenerator.class));
+            addresses.put(country.name, countryAddresses);
+        }
+
     }
 
     public static InternationalAddress createInternationalAddress() {
-        loadAddress();
-        return adresses.get(DataGenerator.nextInt(adresses.size(), "addresss", 10)).duplicate();
+        loadAddresses(null);
+        return getAddress(null);
     }
 
-    public static InternationalAddress createInternationalAddress(String provinceCode) {
-        if (provinceCode != null) {
-            ISOProvince prov = ISOProvince.forCode(provinceCode);
+    public static InternationalAddress createInternationalAddress(ISOCountry country) {
+        loadAddresses(country);
+        return getAddress(country);
+    }
+
+    private static InternationalAddress getAddress(ISOCountry country) {
+        List<InternationalAddress> countryAddresses = getCountryAddresses(country);
+        return countryAddresses.get(DataGenerator.nextInt(countryAddresses.size(), "address", 15)).duplicate();
+    }
+
+    public static InternationalAddress createInternationalAddress(BuildingsGeneratorConfig config) {
+        if (config.provinceCode != null) {
+            ISOProvince prov = ISOProvince.forCode(config.provinceCode);
             if (prov != null) {
-                loadAddress();
+                loadAddresses(config.country);
                 List<InternationalAddress> adressesFiltered = new ArrayList<>();
-                for (InternationalAddress addr : adresses) {
+                for (InternationalAddress addr : getCountryAddresses(config.country)) {
                     if (prov.name.equalsIgnoreCase(addr.province().getValue())) {
                         adressesFiltered.add(addr);
                     }
@@ -182,7 +214,15 @@ public class CommonsGenerator {
                 return adressesFiltered.get(DataGenerator.randomInt(adressesFiltered.size())).duplicate();
             }
         }
-        return createInternationalAddress();
+        return createInternationalAddress(config.country);
+    }
+
+    private static List<InternationalAddress> getCountryAddresses(ISOCountry country) {
+        if (country == null) {
+            return addresses.get(ISOCountry.Canada.name);
+        } else {
+            return addresses.get(country.name);
+        }
     }
 
     public static InternationalAddress createRandomInternationalAddress() {
