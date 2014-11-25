@@ -21,6 +21,7 @@
 package com.pyx4j.entity.shared.utils;
 
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Vector;
 
@@ -30,27 +31,39 @@ import com.pyx4j.entity.shared.IEnumWrapperTO;
 
 public class AbstractIEnumWrapperTOConverter<E extends Enum<E>, T extends IEnumWrapperTO<E>> {
 
+    protected final Class<E> elementType;
+
     protected final Class<T> entityClass;
 
-    public AbstractIEnumWrapperTOConverter(Class<T> entityClass) {
+    public AbstractIEnumWrapperTOConverter(Class<E> elementType, Class<T> entityClass) {
         this.entityClass = entityClass;
+        this.elementType = elementType;
+    }
+
+    protected void enhanceTO(T to) {
+
+    }
+
+    public List<T> allTO() {
+        return toTO(EnumSet.allOf(elementType));
     }
 
     public List<T> toTO(Collection<E> c) {
         List<T> r = new Vector<>(); // Vector to make it serializable
         for (E b : c) {
-            T dto = EntityFactory.create(entityClass);
-            dto.setPrimaryKey(new Key(b.ordinal() + 1));
-            dto.value().setValue(b);
-            r.add(dto);
+            T to = EntityFactory.create(entityClass);
+            to.setPrimaryKey(new Key(b.ordinal() + 1));
+            to.value().setValue(b);
+            enhanceTO(to);
+            r.add(to);
         }
         return r;
     }
 
     public Collection<E> toBO(Collection<T> src) {
         Collection<E> dst = new Vector<>(); // Vector to make it serializable
-        for (T dto : src) {
-            dst.add(dto.value().getValue());
+        for (T to : src) {
+            dst.add(to.value().getValue());
         }
         return dst;
     }
