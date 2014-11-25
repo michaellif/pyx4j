@@ -40,7 +40,7 @@ public class VistaDevLogin {
         selenium.type("id=password", credentials.password);
         selenium.click("class=button");
 
-        selenium.waitForText("id=signup_name", "Access Granted", 30);
+        selenium.assertText("id=signup_name", "Access Granted", 30);
 
         selenium.click("id=continue");
 
