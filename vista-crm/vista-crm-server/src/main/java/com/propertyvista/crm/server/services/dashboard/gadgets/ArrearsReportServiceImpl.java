@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -118,7 +118,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             rosterDTO.add(toSnapshotDTO(arrearsCategory, snapshot));
         }
 
-        // prepare the result 
+        // prepare the result
         EntitySearchResult<LeaseArrearsSnapshotDTO> result = new EntitySearchResult<LeaseArrearsSnapshotDTO>();
         result.setData(new Vector<LeaseArrearsSnapshotDTO>(rosterDTO));
         result.setTotalRows(roster.getTotalRows());
@@ -133,6 +133,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             throw new UserRuntimeException(i18n.tr("the value of years for comparison has to be between 0 and {0}", YOY_ANALYSIS_CHART_MAX_YEARS_AGO));
         }
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.eq(criteria.proto().suspended(), false);
         if (!buildingsFilter.isEmpty()) {
             criteria.in(criteria.proto().id(), buildingsFilter);
         }
@@ -185,7 +186,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
     private BigDecimal totalArrears(Vector<Building> buildings, LogicalDate asOf) {
         BigDecimal totalArrears = new BigDecimal("0.00");
 
-        if (!asOf.after(SystemDateManager.getLogicalDate())) { // if we asked for the future value of total arrears return 0            
+        if (!asOf.after(SystemDateManager.getLogicalDate())) { // if we asked for the future value of total arrears return 0
             for (BuildingAgingBuckets buckets : ServerSideFactory.create(ARFacade.class).getTotalAgingBuckets(buildings, asOf)) {
                 totalArrears = totalArrears.add(buckets.totalBalance().getValue());
             }

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -27,6 +27,7 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.DelinquentLeaseListS
 import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<LeaseAgingBuckets, DelinquentLeaseDTO> implements DelinquentLeaseListService {
 
@@ -78,8 +79,13 @@ public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<L
     }
 
     @Override
-    protected void enhanceListCriteria(EntityListCriteria<LeaseAgingBuckets> dbCriteria, EntityListCriteria<DelinquentLeaseDTO> dtoCriteria) {
-        dbCriteria.in(dbCriteria.proto().arrearsSnapshot().billingAccount().lease().status(), Lease.Status.active());
+    protected void enhanceListCriteria(EntityListCriteria<LeaseAgingBuckets> criteria, EntityListCriteria<DelinquentLeaseDTO> dtoCriteria) {
+        if (VistaFeatures.instance().yardiIntegration()) {
+            criteria.in(criteria.proto().arrearsSnapshot().billingAccount().lease().status(), Lease.Status.active());
+        } else {
+            criteria.ne(criteria.proto().arrearsSnapshot().billingAccount().lease().status(), Lease.Status.Closed);
+        }
+        criteria.eq(criteria.proto().arrearsSnapshot().billingAccount().lease().unit().building().suspended(), false);
 
         if (dtoCriteria.getFilters() != null) {
             java.util.Iterator<Criterion> i = dtoCriteria.getFilters().iterator();
@@ -90,11 +96,11 @@ public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<L
                     PropertyCriterion propertyCriterion = (PropertyCriterion) criterion;
 
                     if (propertyCriterion.getPropertyPath().equals(toProto.asOf().getPath().toString())) {
-                        dbCriteria.le(dbCriteria.proto().arrearsSnapshot().fromDate(), propertyCriterion.getValue());
-                        dbCriteria.ge(dbCriteria.proto().arrearsSnapshot().toDate(), propertyCriterion.getValue());
+                        criteria.le(criteria.proto().arrearsSnapshot().fromDate(), propertyCriterion.getValue());
+                        criteria.ge(criteria.proto().arrearsSnapshot().toDate(), propertyCriterion.getValue());
                         i.remove();
                     } else if (propertyCriterion.getPropertyPath().equals(toProto.building().getPath().toString())) {
-                        dbCriteria.in(dbCriteria.proto().arrearsSnapshot().billingAccount().lease().unit().building(),
+                        criteria.in(criteria.proto().arrearsSnapshot().billingAccount().lease().unit().building(),
                                 (Vector<Building>) propertyCriterion.getValue());
                         i.remove();
                     }
@@ -102,7 +108,7 @@ public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<L
             }
         }
 
-        super.enhanceListCriteria(dbCriteria, dtoCriteria);
+        super.enhanceListCriteria(criteria, dtoCriteria);
     }
 
     @Override

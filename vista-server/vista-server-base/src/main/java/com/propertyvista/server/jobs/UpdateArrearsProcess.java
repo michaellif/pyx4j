@@ -22,7 +22,6 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.UnitOfWork;
@@ -32,6 +31,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class UpdateArrearsProcess implements PmcProcess {
 
@@ -60,7 +60,13 @@ public class UpdateArrearsProcess implements PmcProcess {
         log.info("Arrears Update for billing accounts started");
 
         EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
-        criteria.add(PropertyCriterion.ne(criteria.proto().lease().status(), Lease.Status.Closed));
+        criteria.eq(criteria.proto().lease().unit().building().suspended(), false);
+
+        if (VistaFeatures.instance().yardiIntegration()) {
+            criteria.in(criteria.proto().lease().status(), Lease.Status.active());
+        } else {
+            criteria.ne(criteria.proto().lease().status(), Lease.Status.Closed);
+        }
         final Iterator<BillingAccount> billingAccounts = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
 
         long currentBillingAccount = 0L;
@@ -94,6 +100,7 @@ public class UpdateArrearsProcess implements PmcProcess {
     public void updateBuildingArrears(PmcProcessContext context) {
         log.info("Arrears Update for buildings started");
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.eq(criteria.proto().suspended(), false);
         final Iterator<Building> buildings = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
 
         long current = 0L;

@@ -94,6 +94,7 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
         aggregatedBuckets.creditAmount().setValue(BigDecimal.ZERO);
 
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.eq(criteria.proto().suspended(), false);
         if (!query.buildingsFilter().isEmpty()) {
             criteria.in(criteria.proto().id(), query.buildingsFilter());
         }

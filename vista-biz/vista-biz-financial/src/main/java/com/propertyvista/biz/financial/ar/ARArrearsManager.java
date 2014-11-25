@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -50,6 +50,7 @@ import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class ARArrearsManager {
 
@@ -250,7 +251,7 @@ public class ARArrearsManager {
         ARArreasManagerUtils.addInPlace(//@formatter:off
                         ARArreasManagerUtils.initAgingBuckets(total, null),
                         arrearsSnapshot.agingBuckets()
-        );//@formatter:on        
+        );//@formatter:on
 
         // FIXME what the hell is going on with the following two lines???
         arrearsSnapshot.fromDate().setValue(SystemDateManager.getLogicalDate());
@@ -265,9 +266,14 @@ public class ARArrearsManager {
     }
 
     private BuildingArrearsSnapshot takeArrearsSnapshot(Building building) {
-        EntityQueryCriteria<BillingAccount> billingAccountsCriteria = EntityQueryCriteria.create(BillingAccount.class);
-        billingAccountsCriteria.eq(billingAccountsCriteria.proto().lease().unit().building(), building);
-        Iterator<BillingAccount> billingAccountsIter = Persistence.service().query(null, billingAccountsCriteria, AttachLevel.IdOnly);
+        EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
+        criteria.eq(criteria.proto().lease().unit().building(), building);
+        if (VistaFeatures.instance().yardiIntegration()) {
+            criteria.in(criteria.proto().lease().status(), Lease.Status.active());
+        } else {
+            criteria.ne(criteria.proto().lease().status(), Lease.Status.Closed);
+        }
+        Iterator<BillingAccount> billingAccountsIter = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
 
         // initialize accumulators - we accumulate aging buckets for each category separately in order to increase performance
 
@@ -278,7 +284,7 @@ public class ARArrearsManager {
             agingBucketsAcc.put(arrearsCategory, ARArreasManagerUtils.createAgingBuckets(BuildingAgingBuckets.class, arrearsCategory));
         }
 
-        // accumulate        
+        // accumulate
         while (billingAccountsIter.hasNext()) {
             LeaseArrearsSnapshot arrearsSnapshot = takeArrearsSnapshot(billingAccountsIter.next());
             for (LeaseAgingBuckets agingBuckets : arrearsSnapshot.agingBuckets()) {
