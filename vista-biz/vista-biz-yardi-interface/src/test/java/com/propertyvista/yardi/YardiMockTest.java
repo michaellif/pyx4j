@@ -77,12 +77,15 @@ public class YardiMockTest extends YardiTestBase {
         YardiMock.server().addManager(YardiGuestManager.class);
         YardiMock.server().addManager(YardiConfigurationManager.class);
         // stubs
-        YardiMock.server().addStub(YardiResidentTransactionsStub.class, YardiMockResidentTransactionsStubImpl.class);
-        YardiMock.server().addStub(YardiILSGuestCardStub.class, YardiMockILSGuestCardStubImpl.class);
+        YardiMock.addStub(YardiResidentTransactionsStub.class, YardiMockResidentTransactionsStubImpl.class);
+        YardiMock.addStub(YardiILSGuestCardStub.class, YardiMockILSGuestCardStubImpl.class);
     }
 
     private void leaseSetup() {
         YardiMock.server().getManager(YardiBuildingManager.class).addDefaultBuilding();
+
+        YardiMock.server().getManager(YardiConfigurationManager.class).addProperty(YardiILSGuestCardStub.class, BuildingID);
+        YardiMock.server().getManager(YardiConfigurationManager.class).addProperty(YardiResidentTransactionsStub.class, BuildingID);
 
         YardiMock.server().getManager(YardiLeaseManager.class) //
                 .addLease(TenantID, BuildingID, UnitID) //
@@ -272,6 +275,10 @@ public class YardiMockTest extends YardiTestBase {
                 .addRentableItem("IndoorParking", "25.00", "rinpark").setDescription("Indoor Parking rent").done() //
                 .addRentableItem("SmallLocker", "10.00", "rslocker").setDescription("Small Locker rent").done() //
                 .addRentableItem("MediumLocker", "15.00", "rmlocker").setDescription("Medium Locker rent").done();
+
+        // enable property access
+        YardiMock.server().getManager(YardiConfigurationManager.class).addProperty(YardiILSGuestCardStub.class, BuildingID);
+        YardiMock.server().getManager(YardiConfigurationManager.class).addProperty(YardiResidentTransactionsStub.class, BuildingID);
 
         // Initial Import
         yardiImportAll(getYardiCredential(BuildingID));
