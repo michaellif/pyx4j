@@ -79,8 +79,8 @@ public class YardiLeaseApplicationNotApprovedTest extends YardiTestBase {
         YardiMock.server().addManager(YardiGuestManager.class);
         YardiMock.server().addManager(YardiConfigurationManager.class);
         // stubs
-        YardiMock.server().addStub(YardiResidentTransactionsStub.class, YardiMockResidentTransactionsStubImpl.class);
-        YardiMock.server().addStub(YardiILSGuestCardStub.class, YardiMockILSGuestCardStubImpl.class);
+        YardiMock.addStub(YardiResidentTransactionsStub.class, YardiMockResidentTransactionsStubImpl.class);
+        YardiMock.addStub(YardiILSGuestCardStub.class, YardiMockILSGuestCardStubImpl.class);
     }
 
     /*
@@ -97,6 +97,8 @@ public class YardiLeaseApplicationNotApprovedTest extends YardiTestBase {
         setSysDate("25-May-2013");
 
         YardiMock.server().getManager(YardiBuildingManager.class).addDefaultBuilding();
+        YardiMock.server().getManager(YardiConfigurationManager.class).addProperty(YardiILSGuestCardStub.class, BuildingID);
+        YardiMock.server().getManager(YardiConfigurationManager.class).addProperty(YardiResidentTransactionsStub.class, BuildingID);
 
         // 2. Execution: first import
         // -------------------------------

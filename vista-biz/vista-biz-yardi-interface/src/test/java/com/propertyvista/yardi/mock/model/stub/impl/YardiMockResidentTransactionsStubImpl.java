@@ -61,9 +61,6 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
     public ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
         ResidentTransactions rt = new ResidentTransactions();
         YardiBuilding building = getYardiBuilding(propertyId);
-        if (building == null) {
-            Messages.throwYardiResponseException(YardiHandledErrorMessages.errorMessage_NoAccess + ":" + propertyId);
-        }
         Property property = getProperty(building);
         // tenants
         if (building.leases().isEmpty()) {
@@ -88,9 +85,6 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
             RemoteException {
         ResidentTransactions rt = new ResidentTransactions();
         YardiBuilding building = getYardiBuilding(propertyId);
-        if (building == null) {
-            Messages.throwYardiResponseException(YardiHandledErrorMessages.errorMessage_NoAccess + ":" + propertyId);
-        }
         Property property = getProperty(building);
         YardiLease lease = YardiMockModelUtils.findLease(building, tenantId);
         if (lease == null) {
@@ -118,9 +112,6 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
     public ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyId, LogicalDate date) throws YardiServiceException, RemoteException {
         ResidentTransactions rt = new ResidentTransactions();
         YardiBuilding building = getYardiBuilding(propertyId);
-        if (building == null) {
-            Messages.throwYardiResponseException(YardiHandledErrorMessages.errorMessage_NoAccess + ":" + propertyId);
-        }
         Property property = getProperty(building);
         // tenants
         for (YardiLease lease : building.leases()) {
@@ -144,9 +135,6 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
         ResidentTransactions rt = new ResidentTransactions();
         // building
         YardiBuilding building = getYardiBuilding(propertyId);
-        if (building == null) {
-            Messages.throwYardiResponseException(YardiHandledErrorMessages.errorMessage_NoAccess + ":" + propertyId);
-        }
         Property property = getProperty(building);
         // tenant
         YardiLease lease = YardiMockModelUtils.findLease(building, tenantId);

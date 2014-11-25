@@ -13,6 +13,7 @@
  */
 package com.propertyvista.yardi.mock.model;
 
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,24 +30,20 @@ public class YardiMock {
         }
     };
 
-    private final YardiMockModel mockModel;
-
-    private YardiMock() {
-        mockModel = new YardiMockModel();
-    }
-
     public static YardiMock server() {
         return threadLocalInstance.get();
     }
 
+    private final YardiMockModel mockModel = new YardiMockModel();
+
     private final Map<Class<? extends YardiMockManager>, YardiMockManager> managers = new HashMap<>();
 
-    private final Map<Class<? extends YardiInterface>, YardiInterface> stubs = new HashMap<>();
+    private boolean simulateError;
 
     public void reset() {
         mockModel.reset();
         managers.clear();
-        stubs.clear();
+        simulateError = false;
     }
 
     public <M extends YardiMockManager> void addManager(Class<M> managerType) {
@@ -68,6 +65,10 @@ public class YardiMock {
         }
     }
 
+    public void simulateException() {
+        this.simulateError = true;
+    }
+
     @SuppressWarnings("unchecked")
     public <M extends YardiMockManager> M getManager(Class<M> managerType) {
         try {
@@ -77,7 +78,7 @@ public class YardiMock {
         }
     }
 
-    public <M extends YardiInterface> void addStub(Class<M> stubType, Class<? extends M> stubClass) {
+    public static <M extends YardiInterface> void addStub(Class<M> stubType, Class<? extends M> stubClass) {
         try {
             YardiStubFactory.register(stubType, stubClass);
         } catch (Exception e) {
@@ -87,5 +88,12 @@ public class YardiMock {
 
     public YardiMockModel getModel() {
         return mockModel;
+    }
+
+    public void validate() throws RemoteException {
+        if (simulateError) {
+            simulateError = false;
+            throw new RemoteException("Simulated RemoteException");
+        }
     }
 }
