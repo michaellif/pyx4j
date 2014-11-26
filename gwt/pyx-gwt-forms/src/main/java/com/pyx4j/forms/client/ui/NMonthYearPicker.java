@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.view.client.Range;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.i18n.annotations.I18nContext;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.MonthYearPicker;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
@@ -35,9 +36,19 @@ public class NMonthYearPicker extends NFocusField<LogicalDate, MonthYearPicker, 
 
     private static final I18n i18n = I18n.get(NMonthYearPicker.class);
 
-    public static final DateTimeFormat defaultDateFormat = DateTimeFormat.getFormat(i18n.tr("MMMM yyyy"));
+    @I18nContext(javaFormatFlag = true)
+    private static final String defaultDateFormat() {
+        return i18n.tr("MMMM yyyy");
+    }
 
-    public static final DateTimeFormat yearOnlyDateFormat = DateTimeFormat.getFormat(i18n.tr("yyyy"));
+    public static final DateTimeFormat defaultDateFormat = DateTimeFormat.getFormat(defaultDateFormat());
+
+    @I18nContext(javaFormatFlag = true)
+    private static final String yearOnlyDateFormat() {
+        return i18n.tr("yyyy");
+    }
+
+    public static final DateTimeFormat yearOnlyDateFormat = DateTimeFormat.getFormat(yearOnlyDateFormat());
 
     public NMonthYearPicker(final CMonthYearPicker cComponent) {
         super(cComponent);

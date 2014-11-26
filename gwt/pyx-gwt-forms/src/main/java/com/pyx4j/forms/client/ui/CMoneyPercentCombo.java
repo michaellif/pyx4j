@@ -32,17 +32,33 @@ import com.pyx4j.commons.IParser;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.IMoneyPercentAmount;
 import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
+import com.pyx4j.i18n.annotations.I18nContext;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NTextBox<IMoneyPercentAmount>> {
 
     static final I18n i18n = I18n.get(CMoneyPercentCombo.class);
 
-    private final NumberFormat nf = NumberFormat.getFormat(i18n.tr("#,##0.00"));
+    @I18nContext(javaFormatFlag = true)
+    private static final String defaultMoneyEditableFormat() {
+        return i18n.tr("#,##0.00");
+    }
 
-    private final NumberFormat mf = NumberFormat.getFormat(i18n.tr("$#,##0.00"));
+    private final NumberFormat nf = NumberFormat.getFormat(defaultMoneyEditableFormat());
 
-    private final NumberFormat pf = NumberFormat.getFormat(i18n.tr("#0.00%"));
+    @I18nContext(javaFormatFlag = true)
+    private static final String defaultMoneyFormat() {
+        return i18n.tr("$#,##0.00");
+    }
+
+    private final NumberFormat mf = NumberFormat.getFormat(defaultMoneyFormat());
+
+    @I18nContext(javaFormatFlag = true)
+    private static final String defaultPercent() {
+        return i18n.tr("#0.00%");
+    }
+
+    private final NumberFormat pf = NumberFormat.getFormat(defaultPercent());
 
     private ValueType amountType;
 

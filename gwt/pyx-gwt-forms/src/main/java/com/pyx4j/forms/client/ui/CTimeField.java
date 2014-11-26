@@ -29,13 +29,19 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.i18n.annotations.I18nContext;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CTimeField extends CTextFieldBase<Time, NTextBox<Time>> {
 
     private static final I18n i18n = I18n.get(CTimeField.class);
 
-    public static final String defaultTimeFormat = i18n.tr("h:mm a");
+    @I18nContext(javaFormatFlag = true)
+    private static final String defaultTimeFormat() {
+        return i18n.tr("h:mm a");
+    }
+
+    public static final String defaultTimeFormat = defaultTimeFormat();
 
     public CTimeField() {
         super();
