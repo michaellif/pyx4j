@@ -31,6 +31,6 @@ public class CustomerScreeningViewerViewImpl extends CrmViewerViewImplBase<Lease
     public void populate(LeaseParticipantScreeningTO value) {
         super.populate(value);
 
-        setCaption(value.screening().screene().getStringView() + " " + getCaption());
+        setCaption(value.data().screene().getStringView() + " " + getCaption());
     }
 }

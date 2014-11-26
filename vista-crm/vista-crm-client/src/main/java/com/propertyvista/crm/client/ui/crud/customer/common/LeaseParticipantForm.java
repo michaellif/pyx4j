@@ -30,6 +30,7 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
@@ -51,6 +52,7 @@ import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
@@ -82,6 +84,7 @@ import com.propertyvista.dto.GuarantorDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseParticipantDTO;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -99,7 +102,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 //            if (visible != get(proto().screening().screening().version().previousAddress()).isVisible()) {
 //                get(proto().screening().screening().version().previousAddress()).reset();
 //            }
-            get(proto().screening().screening().version().previousAddress()).setVisible(visible);
+            get(proto().screening().data().version().previousAddress()).setVisible(visible);
             super.setVisible(visible);
         }
     };
@@ -112,11 +115,33 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
     }
 
     protected void addScreeningTabs() {
-        addTab(createIdentificationDocumentsTab(), i18n.tr("Identification"));
-        addTab(createAddressesTab(), i18n.tr("Addresses"));
-        addTab(createlegalQuestionsTab(), proto().screening().screening().version().legalQuestions().getMeta().getCaption());
-        addTab(createIncomesTab(), i18n.tr("Incomes"));
-        addTab(createAssetsTab(), i18n.tr("Assets"));
+        Tab tab;
+
+        tab = addTab(createIdentificationDocumentsTab(), i18n.tr("Identification"), DataModelPermission.permissionRead(LeaseParticipantScreeningTO.class));
+        if (isEditable()) {
+            tab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(LeaseParticipantScreeningTO.class));
+        }
+
+        tab = addTab(createAddressesTab(), i18n.tr("Addresses"), DataModelPermission.permissionRead(LeaseParticipantScreeningTO.class));
+        if (isEditable()) {
+            tab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(LeaseParticipantScreeningTO.class));
+        }
+
+        tab = addTab(createlegalQuestionsTab(), proto().screening().data().version().legalQuestions().getMeta().getCaption(),
+                DataModelPermission.permissionRead(LeaseParticipantScreeningTO.class));
+        if (isEditable()) {
+            tab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(LeaseParticipantScreeningTO.class));
+        }
+
+        tab = addTab(createIncomesTab(), i18n.tr("Incomes"), DataModelPermission.permissionRead(LeaseParticipantScreeningTO.class));
+        if (isEditable()) {
+            tab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(LeaseParticipantScreeningTO.class));
+        }
+
+        tab = addTab(createAssetsTab(), i18n.tr("Assets"), DataModelPermission.permissionRead(LeaseParticipantScreeningTO.class));
+        if (isEditable()) {
+            tab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(LeaseParticipantScreeningTO.class));
+        }
     }
 
     @Override
@@ -139,7 +164,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
             ClientPolicyManager.setIdComponentEditabilityByPolicy(idTarget, get(proto().participantId()), getValue().getPrimaryKey());
 
             fileUpload.setPolicyEntity(getValue());
-            ((PersonalIncomeFolder) (CComponent<?, ?, ?, ?>) get(proto().screening().screening().version().incomes())).setPolicyEntity(getValue());
+            ((PersonalIncomeFolder) (CComponent<?, ?, ?, ?>) get(proto().screening().data().version().incomes())).setPolicyEntity(getValue());
         }
 
         if (rootClass.equals(TenantDTO.class)) {
@@ -168,7 +193,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
         // ------------------------------------------------------------------------------------------------
         @SuppressWarnings("unchecked")
-        CForm<PriorAddress> currentAF = ((CForm<PriorAddress>) get(proto().screening().screening().version().currentAddress()));
+        CForm<PriorAddress> currentAF = ((CForm<PriorAddress>) get(proto().screening().data().version().currentAddress()));
 
         currentAF.get(currentAF.proto().moveInDate()).addComponentValidator(new PastDateIncludeTodayValidator());
         currentAF.get(currentAF.proto().moveOutDate()).addComponentValidator(new FutureDateIncludeTodayValidator());
@@ -181,7 +206,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
         // ------------------------------------------------------------------------------------------------
         @SuppressWarnings("unchecked")
-        CForm<PriorAddress> previousAF = ((CForm<PriorAddress>) get(proto().screening().screening().version().previousAddress()));
+        CForm<PriorAddress> previousAF = ((CForm<PriorAddress>) get(proto().screening().data().version().previousAddress()));
 
         previousAF.get(previousAF.proto().moveInDate()).addComponentValidator(new PastDateValidator());
         previousAF.get(previousAF.proto().moveOutDate()).addComponentValidator(new PastDateValidator());
@@ -349,17 +374,17 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
     private IsWidget createIdentificationDocumentsTab() {
         FormPanel formPanel = new FormPanel(this);
-        formPanel.append(Location.Dual, proto().screening().screening().version().documents(), fileUpload);
+        formPanel.append(Location.Dual, proto().screening().data().version().documents(), fileUpload);
         return formPanel;
     }
 
     private IsWidget createAddressesTab() {
         FormPanel formPanel = new FormPanel(this);
-        formPanel.h1(proto().screening().screening().version().currentAddress().getMeta().getCaption());
-        formPanel.append(Location.Dual, inject(proto().screening().screening().version().currentAddress(), new PriorAddressEditor()));
+        formPanel.h1(proto().screening().data().version().currentAddress().getMeta().getCaption());
+        formPanel.append(Location.Dual, inject(proto().screening().data().version().currentAddress(), new PriorAddressEditor()));
 
-        previousAddress.h1(proto().screening().screening().version().previousAddress().getMeta().getCaption());
-        previousAddress.append(Location.Dual, proto().screening().screening().version().previousAddress(), new PriorAddressEditor(true));
+        previousAddress.h1(proto().screening().data().version().previousAddress().getMeta().getCaption());
+        previousAddress.append(Location.Dual, proto().screening().data().version().previousAddress(), new PriorAddressEditor(true));
         formPanel.append(Location.Dual, previousAddress);
 
         return formPanel;
@@ -367,44 +392,44 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
     private IsWidget createlegalQuestionsTab() {
         QuestionsFormPanel formPanel = new QuestionsFormPanel(this);
-        formPanel.appendQuestion(proto().screening().screening().version().legalQuestions().suedForRent());
-        formPanel.appendQuestion(proto().screening().screening().version().legalQuestions().suedForDamages());
-        formPanel.appendQuestion(proto().screening().screening().version().legalQuestions().everEvicted());
-        formPanel.appendQuestion(proto().screening().screening().version().legalQuestions().defaultedOnLease());
-        formPanel.appendQuestion(proto().screening().screening().version().legalQuestions().convictedOfFelony());
-        formPanel.appendQuestion(proto().screening().screening().version().legalQuestions().legalTroubles());
-        formPanel.appendQuestion(proto().screening().screening().version().legalQuestions().filedBankruptcy());
+        formPanel.appendQuestion(proto().screening().data().version().legalQuestions().suedForRent());
+        formPanel.appendQuestion(proto().screening().data().version().legalQuestions().suedForDamages());
+        formPanel.appendQuestion(proto().screening().data().version().legalQuestions().everEvicted());
+        formPanel.appendQuestion(proto().screening().data().version().legalQuestions().defaultedOnLease());
+        formPanel.appendQuestion(proto().screening().data().version().legalQuestions().convictedOfFelony());
+        formPanel.appendQuestion(proto().screening().data().version().legalQuestions().legalTroubles());
+        formPanel.appendQuestion(proto().screening().data().version().legalQuestions().filedBankruptcy());
 
         if (VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
-            get(proto().screening().screening().version().legalQuestions().suedForRent()).setMandatory(false);
-            get(proto().screening().screening().version().legalQuestions().suedForDamages()).setMandatory(false);
-            get(proto().screening().screening().version().legalQuestions().everEvicted()).setMandatory(false);
-            get(proto().screening().screening().version().legalQuestions().defaultedOnLease()).setMandatory(false);
-            get(proto().screening().screening().version().legalQuestions().convictedOfFelony()).setMandatory(false);
-            get(proto().screening().screening().version().legalQuestions().legalTroubles()).setMandatory(false);
-            get(proto().screening().screening().version().legalQuestions().filedBankruptcy()).setMandatory(false);
+            get(proto().screening().data().version().legalQuestions().suedForRent()).setMandatory(false);
+            get(proto().screening().data().version().legalQuestions().suedForDamages()).setMandatory(false);
+            get(proto().screening().data().version().legalQuestions().everEvicted()).setMandatory(false);
+            get(proto().screening().data().version().legalQuestions().defaultedOnLease()).setMandatory(false);
+            get(proto().screening().data().version().legalQuestions().convictedOfFelony()).setMandatory(false);
+            get(proto().screening().data().version().legalQuestions().legalTroubles()).setMandatory(false);
+            get(proto().screening().data().version().legalQuestions().filedBankruptcy()).setMandatory(false);
         }
 
         return formPanel;
     }
 
     private void enablePreviousAddress() {
-        previousAddress.setVisible(ClientBusinessRules.needPreviousAddress(getValue().screening().screening().version().currentAddress().moveInDate()
-                .getValue(), getValue().screening().yearsToForcingPreviousAddress().getValue()));
+        previousAddress.setVisible(ClientBusinessRules.needPreviousAddress(getValue().screening().data().version().currentAddress().moveInDate().getValue(),
+                getValue().screening().yearsToForcingPreviousAddress().getValue()));
     }
 
 // Financial: ------------------------------------------------------------------------------------------------
 
     private IsWidget createIncomesTab() {
         FormPanel formPanel = new FormPanel(this);
-        formPanel.append(Location.Dual, proto().screening().screening().version().incomes(), new PersonalIncomeFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().screening().data().version().incomes(), new PersonalIncomeFolder(isEditable()));
 
         return formPanel;
     }
 
     private IsWidget createAssetsTab() {
         FormPanel formPanel = new FormPanel(this);
-        formPanel.append(Location.Dual, proto().screening().screening().version().assets(), new PersonalAssetFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().screening().data().version().assets(), new PersonalAssetFolder(isEditable()));
         return formPanel;
     }
 

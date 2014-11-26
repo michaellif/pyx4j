@@ -109,9 +109,9 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
         ServerSideFactory.create(CustomerFacade.class).persistCustomer(bo.customer());
 
         if (to.lease().status().getValue().isDraft()) {
-            LeaseParticipantUtils.persistScreeningAsDraft(to.screening().screening());
+            LeaseParticipantUtils.persistScreeningAsDraft(to.screening().data());
         } else {
-            LeaseParticipantUtils.persistScreeningAsNewVersion(to.screening().screening());
+            LeaseParticipantUtils.persistScreeningAsNewVersion(to.screening().data());
         }
 
         if (to.electronicPaymentsAllowed().getValue(false)) {

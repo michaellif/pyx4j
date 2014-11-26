@@ -181,12 +181,11 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
 
             right.setWidget(++row, 0, new HTML("<i>" + i18n.tr("Credit Check Parameters:") + "</i>"));
             right.getWidget(row, 0).getElement().getStyle().setFontWeight(FontWeight.NORMAL);
-            right.getWidget(row, 0).getElement().getStyle().setMarginLeft(2, Unit.EM);
 
-            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().bankruptcy(), new FieldDecoratorBuilder(10, 5).build()));
-            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().judgment(), new FieldDecoratorBuilder(10, 5).build()));
-            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().collection(), new FieldDecoratorBuilder(10, 5).build()));
-            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().chargeOff(), new FieldDecoratorBuilder(10, 5).build()));
+            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().bankruptcy(), new FieldDecoratorBuilder(8, 3).build()));
+            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().judgment(), new FieldDecoratorBuilder(8, 3).build()));
+            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().collection(), new FieldDecoratorBuilder(8, 3).build()));
+            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().chargeOff(), new FieldDecoratorBuilder(8, 3).build()));
 
             // assemble main panel:
             BasicFlexFormPanel panel = new BasicFlexFormPanel();
@@ -197,7 +196,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             panel.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
             panel.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
 
-            panel.getWidget(0, 1).getElement().getStyle().setMarginLeft(3, Unit.EM);
+            panel.getWidget(0, 1).getElement().getStyle().setMarginLeft(2, Unit.EM);
 
             return panel;
         }

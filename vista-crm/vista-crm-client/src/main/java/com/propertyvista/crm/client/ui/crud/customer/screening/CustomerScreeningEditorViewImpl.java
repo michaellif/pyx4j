@@ -25,6 +25,6 @@ public class CustomerScreeningEditorViewImpl extends CrmEditorViewImplBase<Lease
     public void populate(LeaseParticipantScreeningTO value) {
         super.populate(value);
 
-        setCaption(value.screening().screene().getStringView() + " " + getCaption());
+        setCaption(value.data().screene().getStringView() + " " + getCaption());
     }
 }

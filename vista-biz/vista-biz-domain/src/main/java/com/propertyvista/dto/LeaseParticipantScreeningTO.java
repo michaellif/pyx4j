@@ -35,7 +35,7 @@ import com.propertyvista.dto.LeaseParticipantScreeningTO.LeaseParticipantScreeni
 public interface LeaseParticipantScreeningTO extends IVersionedEntity<LeaseParticipantScreeningTOV> {
 
     @ToString
-    CustomerScreening screening();
+    CustomerScreening data();
 
     LeaseParticipant<?> leaseParticipantId();
 

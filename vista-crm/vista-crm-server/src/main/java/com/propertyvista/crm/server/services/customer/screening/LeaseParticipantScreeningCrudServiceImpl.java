@@ -42,9 +42,9 @@ public class LeaseParticipantScreeningCrudServiceImpl extends AbstractVersionedC
         super(new CrudEntityBinder<CustomerScreening, LeaseParticipantScreeningTO>(CustomerScreening.class, LeaseParticipantScreeningTO.class) {
             @Override
             protected void bind() {
-                bind(toProto.screening().id(), boProto.id());
-                bind(toProto.screening().screene(), boProto.screene());
-                bind(toProto.screening().version(), boProto.version());
+                bind(toProto.data().id(), boProto.id());
+                bind(toProto.data().screene(), boProto.screene());
+                bind(toProto.data().version(), boProto.version());
 
                 bind(toProto.version().versionNumber(), boProto.version().versionNumber());
                 bind(toProto.version().fromDate(), boProto.version().fromDate());
@@ -99,9 +99,9 @@ public class LeaseParticipantScreeningCrudServiceImpl extends AbstractVersionedC
         to.leaseParticipantId().set(initData.leaseParticipantId());
         retriveSecurityAttributes(to);
 
-        to.screening().set(retrivePersonScreeningDraftForEdit(initData.leaseParticipantId()));
+        to.data().set(retrivePersonScreeningDraftForEdit(initData.leaseParticipantId()));
         if (VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
-            to.screening().version().documents().clear();
+            to.data().version().documents().clear();
         }
 
         loadRestrictions(to, to.leaseParticipantId());
@@ -124,8 +124,8 @@ public class LeaseParticipantScreeningCrudServiceImpl extends AbstractVersionedC
         retriveSecurityAttributes(to);
         // If Just created duplicate ForDraftEdit
         if (retrieveTarget == RetrieveTarget.Edit) {
-            to.screening().set(retrivePersonScreeningDraftForEdit(to.leaseParticipantId()));
-            Persistence.service().retrieve(to.screening().screene(), AttachLevel.ToStringMembers, false);
+            to.data().set(retrivePersonScreeningDraftForEdit(to.leaseParticipantId()));
+            Persistence.service().retrieve(to.data().screene(), AttachLevel.ToStringMembers, false);
         }
         loadRestrictions(to, to.leaseParticipantId());
     }

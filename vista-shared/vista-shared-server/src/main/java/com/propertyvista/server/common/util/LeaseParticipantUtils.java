@@ -62,9 +62,9 @@ public class LeaseParticipantUtils {
         LeaseParticipantScreeningTO to = EntityFactory.create(LeaseParticipantScreeningTO.class);
         to.leaseParticipantId().set(participant.<LeaseParticipant<?>> createIdentityStub());
         to.leaseStatus().setValue(participant.lease().status().getValue());
-        to.screening().set(screening);
+        to.data().set(screening);
 
-        if (to.screening().getPrimaryKey() != null) {
+        if (to.data().getPrimaryKey() != null) {
             to.setPrimaryKey(new Key(participant.getPrimaryKey().asLong(), screening.getPrimaryKey().getVersion()));
         }
 
@@ -99,10 +99,10 @@ public class LeaseParticipantUtils {
 
     public static LeaseParticipantScreeningTO createScreeningPointer(LeaseParticipant<?> participant, CustomerScreening screening) {
         LeaseParticipantScreeningTO to = EntityFactory.create(LeaseParticipantScreeningTO.class);
-        to.screening().set(screening);
-        if (to.screening().getPrimaryKey() != null) {
+        to.data().set(screening);
+        if (to.data().getPrimaryKey() != null) {
             to.setPrimaryKey(new Key(participant.getPrimaryKey().asLong(), screening.getPrimaryKey().getVersion()));
-            to.screening().setAttachLevel(AttachLevel.ToStringMembers);
+            to.data().setAttachLevel(AttachLevel.ToStringMembers);
         }
         return to;
     }
