@@ -21,7 +21,9 @@
 package com.pyx4j.forms.client.ui.datagrid;
 
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.i18n.annotations.I18n;
 
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface ITree extends IEntity {
 
 //    ITreeFolder root();
