@@ -62,7 +62,7 @@ public class CKeyField extends CTextFieldBase<Key, NTextBox<Key>> {
                 try {
                     return new Key(Double.valueOf(getNumberFormat().parse(string)).longValue());
                 } catch (NumberFormatException e) {
-                    throw new ParseException(i18n.tr("Should Be Numeric In Range From " + Long.MIN_VALUE + " to " + Long.MAX_VALUE), 0);
+                    throw new ParseException(i18n.tr("Should be Numeric in range between {0} and {1}", Long.MIN_VALUE, Long.MAX_VALUE), 0);
                 }
             }
 
