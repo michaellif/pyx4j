@@ -32,7 +32,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DataModelPermission;
@@ -67,7 +66,6 @@ import com.propertyvista.crm.client.ui.crud.communication.MessageReportDialog;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.VistaCrmDebugId;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
@@ -104,8 +102,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     private final BillLister billLister;
 
     private final LeaseAdjustmentLister adjustmentLister;
-
-    private final MaintenanceRequestLister maintenanceLister;
 
     private final MenuItem viewFutureTerm;
 
@@ -147,13 +143,13 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem deletedPapsAction;
 
+    private final MenuItem maintenanceView;
+
     private Button renewButton;
 
     private MenuItem offerAction;
 
     private MenuItem viewOfferedTerms;
-
-    private final MenuItem maintenanceAction;
 
     private final MenuItem yardiImportAction;
 
@@ -161,7 +157,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         depositLister = new DepositLifecycleLister();
         billLister = new BillLister(this);
         adjustmentLister = new LeaseAdjustmentLister();
-        maintenanceLister = new MaintenanceRequestLister();
 
         // set main form here:
         setForm(new LeaseForm(this));
@@ -219,6 +214,13 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             }
         }, DataModelPermission.permissionRead(AutoPayHistoryDTO.class)));
 
+        addView(maintenanceView = new SecureMenuItem(i18n.tr("Maintenance Requests"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).getMaintenanceRequestVisorController().show();
+            }
+        }, DataModelPermission.permissionRead(MaintenanceRequestDTO.class)));
+
         // Actions:
         setUnitReservationPermission(new ActionPermission(LeaseReserveUnit.class));
 
@@ -238,14 +240,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         if (!VistaFeatures.instance().yardiIntegration()) {
             addAction(runBillAction);
         }
-
-        addAction(maintenanceAction = new SecureMenuItem(i18n.tr("Create Maintenance Request"), new Command() {
-            @Override
-            public void execute() {
-                ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).createMaintenanceRequest();
-            }
-        }, DataModelPermission.permissionCreate(MaintenanceRequestDTO.class)));
-        maintenanceAction.ensureDebugId(VistaCrmDebugId.Maintenance.ActionCreateRequest.debugId());
 
         addAction(legalStateAction = new SecureMenuItem(i18n.tr("Manage Legal State"), new Command() {
             @Override
@@ -577,7 +571,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(sendMailAction, false);
         setActionVisible(runBillAction, false);
 
-        setActionVisible(maintenanceAction, false);
+        setActionVisible(maintenanceView, false);
 
         setActionVisible(noticeAction, false);
         setActionVisible(cancelNoticeAction, false);
@@ -609,12 +603,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         adjustmentLister.populate();
         adjustmentLister.setAddNewActionEnabled(!value.status().getValue().isFormer());
 
-        maintenanceLister.getDataSource().clearPreDefinedFilters();
-        maintenanceLister.getDataSource().addPreDefinedFilter(
-                PropertyCriterion.eq(EntityFactory.getEntityPrototype(MaintenanceRequestDTO.class).unit(), value.unit()));
-        maintenanceLister.populate();
-        maintenanceLister.setAddNewActionEnabled(!value.status().getValue().isFormer());
-
         viewFutureTerm.setVisible(!value.nextTerm().isNull());
         viewHistoricTerms.setVisible(value.historyPresent().getValue(false));
 
@@ -629,7 +617,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(runBillAction, status.isCurrent());
         setActionVisible(deletedPapsAction, status.isCurrent());
 
-        setActionVisible(maintenanceAction, !status.isFormer());
+        setActionVisible(maintenanceView, !status.isDraft());
         setActionVisible(legalStateAction, !status.isFormer());
 
         setActionVisible(noticeAction, status == Status.Active && completion == null);
@@ -673,11 +661,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     @Override
     public LeaseAdjustmentLister getLeaseAdjustmentLister() {
         return adjustmentLister;
-    }
-
-    @Override
-    public MaintenanceRequestLister getMaintenanceLister() {
-        return maintenanceLister;
     }
 
     @Override

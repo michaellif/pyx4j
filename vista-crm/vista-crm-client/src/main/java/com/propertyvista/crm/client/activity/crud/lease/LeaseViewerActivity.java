@@ -43,6 +43,7 @@ import com.propertyvista.crm.client.activity.crud.lease.agreement.LeaseAgreement
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivityBase;
 import com.propertyvista.crm.client.activity.crud.lease.legal.LeaseLegalStateController;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
+import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
@@ -70,6 +71,8 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> implements LeaseViewerView.LeaseViewerPresenter {
 
     private static final I18n i18n = I18n.get(LeaseViewerActivity.class);
+
+    private MaintenanceRequestVisorController maintenanceRequestVisorController;
 
     public LeaseViewerActivity(CrudAppPlace place) {
         super(LeaseDTO.class, place, CrmSite.getViewFactory().getView(LeaseViewerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class));
@@ -332,5 +335,20 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
                 refresh();
             }
         }, new Vector<BillDataDTO>(bills));
+    }
+
+    @Override
+    public MaintenanceRequestVisorController getMaintenanceRequestVisorController() {
+        if (maintenanceRequestVisorController == null) {
+            maintenanceRequestVisorController = new MaintenanceRequestVisorController( //
+                    getView(), currentValue.unit().building().getPrimaryKey() //
+            ) {
+                @Override
+                public boolean canCreateNewItem() {
+                    return currentValue.status().getValue().isActive();
+                }
+            }.setUnitId(currentValue.unit().getPrimaryKey()).setNewActionEnabled(!currentValue.status().getValue().isFormer());
+        }
+        return maintenanceRequestVisorController;
     }
 }

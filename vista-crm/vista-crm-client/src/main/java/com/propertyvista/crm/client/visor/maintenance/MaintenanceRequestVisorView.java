@@ -44,6 +44,10 @@ public class MaintenanceRequestVisorView extends AbstractVisorPaneView {
         if (getTenantId() != null) {
             lister.getDataSource().addPreDefinedFilter(
                     PropertyCriterion.eq(EntityFactory.getEntityPrototype(MaintenanceRequestDTO.class).reporter().id(), getTenantId()));
+        } else if (getUnitId() != null) {
+            lister.getDataSource().addPreDefinedFilter(
+                    PropertyCriterion.eq(EntityFactory.getEntityPrototype(MaintenanceRequestDTO.class).unit().id(), getUnitId()));
+            lister.setAddNewActionEnabled(((MaintenanceRequestVisorController) getController()).isNewActionEnabled());
         }
         lister.populate();
     }
@@ -54,5 +58,9 @@ public class MaintenanceRequestVisorView extends AbstractVisorPaneView {
 
     public Key getTenantId() {
         return ((MaintenanceRequestVisorController) getController()).getTenantId();
+    }
+
+    public Key getUnitId() {
+        return ((MaintenanceRequestVisorController) getController()).getUnitId();
     }
 }

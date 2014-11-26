@@ -29,6 +29,7 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
+import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectionDialog;
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceCrudService;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
@@ -111,5 +112,32 @@ public class MaintenanceRequestLister extends SiteDataTablePanel<MaintenanceRequ
         };
         desc.setSearchable(false); // do not use if for filtering!..
         return desc;
+    }
+
+    @Override
+    protected void onItemNew() {
+        new BuildingSelectionDialog() {
+            @Override
+            public boolean onClickOk() {
+                MaintenanceCrudService.MaintenanceInitializationData id = EntityFactory.create(MaintenanceCrudService.MaintenanceInitializationData.class);
+                id.building().set(getSelectedItem());
+                editNew(getItemOpenPlaceClass(), id);
+                return true;
+            }
+
+            @Override
+            protected List<ColumnDescriptor> defineColumnDescriptors() {
+                return Arrays.asList( //
+                        new MemberColumnDescriptor.Builder(proto().propertyCode()).build(), //
+                        new MemberColumnDescriptor.Builder(proto().info().name()).build(), //
+                        new MemberColumnDescriptor.Builder(proto().info().address()).width("50%").build(), //
+                        new MemberColumnDescriptor.Builder(proto().info().address().streetNumber()).searchableOnly().build(), //
+                        new MemberColumnDescriptor.Builder(proto().info().address().streetName()).searchableOnly().build(), //
+                        new MemberColumnDescriptor.Builder(proto().info().address().city()).searchableOnly().build(), //
+                        new MemberColumnDescriptor.Builder(proto().info().address().province()).searchableOnly().build(), //
+                        new MemberColumnDescriptor.Builder(proto().info().address().country()).searchableOnly().build() //
+                        );
+            }
+        }.show();
     }
 }

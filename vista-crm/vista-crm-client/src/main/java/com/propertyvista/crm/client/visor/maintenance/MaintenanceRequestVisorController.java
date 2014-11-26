@@ -25,6 +25,10 @@ public class MaintenanceRequestVisorController extends AbstractVisorController {
 
     private final Key tenantId;
 
+    private Key unitId;
+
+    private boolean newActionEnabled = true;
+
     public MaintenanceRequestVisorController(IPrimePaneView parentView, Key buildingId) {
         this(parentView, buildingId, null);
     }
@@ -52,5 +56,23 @@ public class MaintenanceRequestVisorController extends AbstractVisorController {
 
     public Key getTenantId() {
         return tenantId;
+    }
+
+    public MaintenanceRequestVisorController setUnitId(Key unitId) {
+        this.unitId = unitId;
+        return this;
+    }
+
+    public Key getUnitId() {
+        return unitId;
+    }
+
+    public MaintenanceRequestVisorController setNewActionEnabled(boolean enabled) {
+        this.newActionEnabled = enabled;
+        return this;
+    }
+
+    public boolean isNewActionEnabled() {
+        return newActionEnabled;
     }
 }

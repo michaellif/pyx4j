@@ -31,14 +31,13 @@ import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
-    private final Tab depositsTab, adjustmentsTab, chargesTab, billsTab, paymentsTab, financialTab, maintenanceTab, communicationTab;
+    private final Tab depositsTab, adjustmentsTab, chargesTab, billsTab, paymentsTab, financialTab, communicationTab;
 
     public LeaseForm(IPrimeFormView<LeaseDTO, ?> view) {
         super(LeaseDTO.class, view);
@@ -53,8 +52,6 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         financialTab = addTab(createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"),
                 DataModelPermission.permissionRead(TransactionHistoryDTO.class));
         communicationTab = addTab(createCommunicationsTab(), i18n.tr("Documents/Communication"), DataModelPermission.permissionRead(LegalLetter.class));
-        maintenanceTab = addTab(getParentView().getMaintenanceLister().asWidget(), i18n.tr("Maintenance"),
-                DataModelPermission.permissionRead(MaintenanceRequestDTO.class));
     }
 
     @Override

@@ -13,22 +13,16 @@
  */
 package com.propertyvista.crm.client.activity.crud.maintenance;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
-import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectionDialog;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestEditorView;
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceCrudService;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
@@ -51,31 +45,7 @@ public class MaintenanceRequestEditorActivity extends CrmEditorActivity<Maintena
             id.building().set(EntityFactory.createIdentityStub(Building.class, getParentId()));
             callback.onSuccess(id);
         } else {
-            BuildingSelectionDialog buildingDialog = new BuildingSelectionDialog() {
-                @Override
-                public boolean onClickOk() {
-                    MaintenanceCrudService.MaintenanceInitializationData id = EntityFactory.create(MaintenanceCrudService.MaintenanceInitializationData.class);
-                    id.building().set(getSelectedItem());
-                    callback.onSuccess(id);
-                    return true;
-                }
-
-                @Override
-                protected List<ColumnDescriptor> defineColumnDescriptors() {
-                    return Arrays.asList( //
-                            new MemberColumnDescriptor.Builder(proto().propertyCode()).build(), //
-                            new MemberColumnDescriptor.Builder(proto().info().name()).build(), //
-                            new MemberColumnDescriptor.Builder(proto().info().address()).width("50%").build(), //
-                            new MemberColumnDescriptor.Builder(proto().info().address().streetNumber()).searchableOnly().build(), //
-                            new MemberColumnDescriptor.Builder(proto().info().address().streetName()).searchableOnly().build(), //
-                            new MemberColumnDescriptor.Builder(proto().info().address().city()).searchableOnly().build(), //
-                            new MemberColumnDescriptor.Builder(proto().info().address().province()).searchableOnly().build(), //
-                            new MemberColumnDescriptor.Builder(proto().info().address().country()).searchableOnly().build() //
-                            );
-                }
-            };
-            buildingDialog.getCancelButton().setVisible(false);
-            buildingDialog.show();
+            super.obtainInitializationData(callback);
         }
     }
 

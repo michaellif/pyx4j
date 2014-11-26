@@ -26,11 +26,11 @@ import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
-import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceCrudService;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
@@ -63,17 +63,16 @@ public class MaintenanceRequestLister extends SiteDataTablePanel<MaintenanceRequ
     }
 
     @Override
-    public void editNew(final Class<? extends CrudAppPlace> openPlaceClass) {
+    protected void onItemNew() {
         MaintenanceCrudService.MaintenanceInitializationData id = EntityFactory.create(MaintenanceCrudService.MaintenanceInitializationData.class);
         if (view.getTenantId() != null) {
             id.tenant().set(EntityFactory.createIdentityStub(Tenant.class, view.getTenantId()));
-            super.editNew(openPlaceClass, id);
+        } else if (view.getUnitId() != null) {
+            id.unit().set(EntityFactory.createIdentityStub(AptUnit.class, view.getUnitId()));
         } else if (view.getBuildingId() != null) {
             id.building().set(EntityFactory.createIdentityStub(Building.class, view.getBuildingId()));
-            super.editNew(openPlaceClass, id);
-        } else {
-            super.editNew(openPlaceClass);
         }
+        super.editNew(getItemOpenPlaceClass(), id);
     }
 
     @Override
