@@ -30,8 +30,6 @@ public abstract class CrudAppPlace extends AppPlace {
 
     public static final String ARG_NAME_CRUD_TYPE = "crud";
 
-    public static final String ARG_VALUE_NEW = "new";
-
     public static final String ARG_NAME_PARENT_ID = "parentId";
 
     public static final String ARG_NAME_PARENT_CLASS = "parentClass";
@@ -107,8 +105,7 @@ public abstract class CrudAppPlace extends AppPlace {
         if (parentID != null) {
             placeArg(ARG_NAME_PARENT_ID, parentID.toString());
         }
-        placeArg(ARG_NAME_TAB_IDX, String.valueOf(0));
-        return (CrudAppPlace) placeArg(ARG_NAME_ID, ARG_VALUE_NEW);
+        return (CrudAppPlace) placeArg(ARG_NAME_TAB_IDX, String.valueOf(0));
     }
 
     public CrudAppPlace formNewItemPlace(Key parentID, Class<?> parentClass) {
@@ -122,8 +119,7 @@ public abstract class CrudAppPlace extends AppPlace {
         this.initializationData = initializationData;
         setType(Type.editor);
         setStable(false);
-        placeArg(ARG_NAME_TAB_IDX, String.valueOf(0));
-        return (CrudAppPlace) placeArg(ARG_NAME_ID, ARG_VALUE_NEW);
+        return (CrudAppPlace) placeArg(ARG_NAME_TAB_IDX, String.valueOf(0));
     }
 
     public InitializationData getInitializationData() {
