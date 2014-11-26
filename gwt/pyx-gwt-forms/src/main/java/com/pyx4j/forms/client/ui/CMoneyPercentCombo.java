@@ -35,7 +35,7 @@ import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.i18n.annotations.I18nContext;
 import com.pyx4j.i18n.shared.I18n;
 
-public class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NTextBox<IMoneyPercentAmount>> {
+public class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NMoneyPercentCombo> {
 
     static final I18n i18n = I18n.get(CMoneyPercentCombo.class);
 
@@ -65,12 +65,15 @@ public class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NTex
     public CMoneyPercentCombo() {
         setFormatter(new MoneyPercentFormat());
         setParser(new MoneyPercentParser());
-        setNativeComponent(new NTextBox<IMoneyPercentAmount>(this));
+        setNativeComponent(new NMoneyPercentCombo(this));
     }
 
     public void setAmountType(ValueType type) {
         amountType = type;
-        refresh(false);
+        // trigger validation flow
+        refresh(true);
+        // also need to call formatter
+        getNativeComponent().refresh();
     }
 
     class MoneyPercentFormat implements IFormatter<IMoneyPercentAmount, String> {
@@ -85,14 +88,16 @@ public class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NTex
                 switch (amountType) {
                 case Monetary:
                     if (isEditable()) {
-                        result = nf.format(value.amount().getValue(BigDecimal.ZERO));
+                        result = value.amount().isNull() ? "" : mf.format(value.amount().getValue(BigDecimal.ZERO));
+                        value.percent().setValue(null);
                     } else {
                         result = mf.format(value.amount().getValue(BigDecimal.ZERO));
                     }
                     break;
                 case Percentage:
                     if (isEditable()) {
-                        result = nf.format(value.percent().getValue(BigDecimal.ZERO).multiply(new BigDecimal("100")));
+                        result = value.percent().isNull() ? "" : pf.format(value.percent().getValue(BigDecimal.ZERO));
+                        value.amount().setValue(null);
                     } else {
                         result = pf.format(value.percent().getValue(BigDecimal.ZERO));
                     }
@@ -112,17 +117,31 @@ public class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NTex
                 return value;
             }
             try {
-                BigDecimal amount = new BigDecimal(nf.parse(string)).setScale(2, RoundingMode.HALF_UP);
                 if (amountType == null) {
                     throw new ParseException(i18n.tr("Invalid value. Select valid type."), 0);
                 }
+                BigDecimal amount = null;
                 switch (amountType) {
                 case Monetary:
-                    value.amount().setValue(amount);
+                    try {
+                        // in case value has been entered in monetary format
+                        amount = new BigDecimal(mf.parse(string));
+                    } catch (NumberFormatException ignore) {
+                        // parse as plain number
+                        amount = new BigDecimal(nf.parse(string));
+                    }
+                    value.amount().setValue(amount.setScale(2, RoundingMode.HALF_UP));
                     value.percent().setValue(null);
                     break;
                 case Percentage:
-                    value.percent().setValue(amount.divide(new BigDecimal("100")));
+                    try {
+                        // in case value has been entered in percentage format
+                        amount = new BigDecimal(pf.parse(string));
+                    } catch (NumberFormatException ignore) {
+                        // parse as plain number
+                        amount = new BigDecimal(nf.parse(string));
+                    }
+                    value.percent().setValue(amount.setScale(2, RoundingMode.HALF_UP).divide(new BigDecimal("100")));
                     value.amount().setValue(null);
                 }
                 return value;
