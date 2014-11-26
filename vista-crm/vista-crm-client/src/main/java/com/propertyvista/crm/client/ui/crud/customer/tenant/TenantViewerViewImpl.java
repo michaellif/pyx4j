@@ -47,8 +47,6 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
 
     private final MenuItem passwordAction;
 
-    private final MenuItem screeningAction;
-
     private final MenuItem registrationView;
 
     private final MenuItem maintenanceAction;
@@ -99,14 +97,6 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         }, TenantChangePassword.class);
         addAction(passwordAction);
 
-        screeningAction = new SecureMenuItem(i18n.tr("Create Screening"), new Command() {
-            @Override
-            public void execute() {
-                ((TenantViewerView.Presenter) getPresenter()).createScreening();
-            }
-        }, DataModelPermission.permissionCreate(LeaseParticipantScreeningTO.class));
-        addAction(screeningAction);
-
         maintenanceAction = new SecureMenuItem(i18n.tr("Create Maintenance Request"), new Command() {
             @Override
             public void execute() {
@@ -123,7 +113,6 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         setActionVisible(registrationView, false);
 
         setActionVisible(passwordAction, false);
-        setActionVisible(screeningAction, false);
         setActionVisible(maintenanceAction, false);
 
         super.reset();
@@ -131,7 +120,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
 
     @Override
     public void populate(TenantDTO value) {
-        // tweak legal naming: 
+        // tweak legal naming:
         if (value.lease().status().getValue().isDraft()) {
             setCaptionBase(i18n.tr("Applicant"));
         } else {
@@ -141,7 +130,6 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         super.populate(value);
 
         setViewVisible(screeningView, value.screening().getPrimaryKey() != null);
-        setActionVisible(screeningAction, value.screening().getPrimaryKey() == null);
 
         setActionVisible(maintenanceView, !value.lease().status().getValue().isDraft());
         setActionVisible(maintenanceAction, canCreateMaintenance(value));

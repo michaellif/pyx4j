@@ -27,7 +27,6 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorViewerView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
-import com.propertyvista.crm.rpc.services.customer.screening.LeaseParticipantScreeningCrudService;
 import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.GuarantorDTO;
@@ -46,27 +45,20 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
     @Override
     public void onPopulateSuccess(GuarantorDTO result) {
         super.onPopulateSuccess(result);
-    
+
         currentValue = result;
-    
+
         leaseParticipantId = EntityFactory.createIdentityStub(Guarantor.class, result.getPrimaryKey());
     }
 
     @Override
-    public void goToCreateScreening() {
-        LeaseParticipantScreeningCrudService.CustomerScreeningInitializationData id = EntityFactory
-                .create(LeaseParticipantScreeningCrudService.CustomerScreeningInitializationData.class);
-        id.leaseParticipantId().set(leaseParticipantId);
-        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Screening().formNewItemPlace(id));
-    }
-
-    @Override
-    public void goToChangePassword(Key guarantorPrincipalPk, String guarantorName) {
+    public void changePassword(Key guarantorPrincipalPk, String guarantorName) {
         if (guarantorPrincipalPk != null) {
             AppPlace passwordChangePlace = new CrmSiteMap.PasswordChange();
             passwordChangePlace.queryArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_PK_ARG, guarantorPrincipalPk.toString());
             passwordChangePlace.queryArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_NAME_ARG, guarantorName);
-            passwordChangePlace.queryArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_CLASS, PasswordChangeView.PasswordChangePresenter.PrincipalClass.GUARANTOR.toString());
+            passwordChangePlace.queryArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_CLASS,
+                    PasswordChangeView.PasswordChangePresenter.PrincipalClass.GUARANTOR.toString());
             AppSite.getPlaceController().goTo(passwordChangePlace);
         }
     }

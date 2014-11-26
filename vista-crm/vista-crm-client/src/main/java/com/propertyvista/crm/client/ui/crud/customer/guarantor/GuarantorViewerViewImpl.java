@@ -34,8 +34,6 @@ public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO>
 
     private final MenuItem passwordAction;
 
-    private final MenuItem screeningAction;
-
     public GuarantorViewerViewImpl() {
         setForm(new GuarantorForm(this));
 
@@ -52,26 +50,17 @@ public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO>
         passwordAction = new SecureMenuItem(i18n.tr("Change Password"), new Command() {
             @Override
             public void execute() {
-                ((GuarantorViewerView.Presenter) getPresenter()).goToChangePassword(getForm().getValue().customer().user().getPrimaryKey(), getForm()
+                ((GuarantorViewerView.Presenter) getPresenter()).changePassword(getForm().getValue().customer().user().getPrimaryKey(), getForm()
                         .getValue().customer().person().getStringView());
             }
         }, new ActionPermission(GuarantorChangePassword.class));
         addAction(passwordAction);
-
-        screeningAction = new SecureMenuItem(i18n.tr("Create Screening"), new Command() {
-            @Override
-            public void execute() {
-                ((GuarantorViewerView.Presenter) getPresenter()).goToCreateScreening();
-            }
-        }, DataModelPermission.permissionCreate(LeaseParticipantScreeningTO.class));
-        addAction(screeningAction);
     }
 
     @Override
     public void reset() {
         setActionVisible(screeningView, false);
         setActionVisible(passwordAction, false);
-        setActionVisible(screeningAction, false);
 
         super.reset();
     }
@@ -81,9 +70,6 @@ public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO>
         super.populate(value);
 
         setViewVisible(screeningView, value.screening().getPrimaryKey() != null);
-        setActionVisible(screeningAction, value.screening().getPrimaryKey() == null);
-
-        setActionVisible(screeningAction, value.screening().getPrimaryKey() == null);
 
         // Disable password change button for guarantors with no associated user principal
         if (value != null & !value.customer().user().isNull()) {

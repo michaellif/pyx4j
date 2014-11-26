@@ -22,9 +22,7 @@ public interface GuarantorViewerView extends IPrimeViewerView<GuarantorDTO> {
 
     interface Presenter extends IPrimeViewerView.IPrimeViewerPresenter {
 
-        void goToCreateScreening();
-
-        void goToChangePassword(Key guarantorPrincipalPk, String guarantorName);
+        void changePassword(Key guarantorPrincipalPk, String guarantorName);
 
         void viewScreening();
     }

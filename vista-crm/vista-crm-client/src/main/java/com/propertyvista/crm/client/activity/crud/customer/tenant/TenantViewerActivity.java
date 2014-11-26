@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -31,7 +31,6 @@ import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantViewerViewImpl
 import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
-import com.propertyvista.crm.rpc.services.customer.screening.LeaseParticipantScreeningCrudService;
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceCrudService;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -72,14 +71,6 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
             };
         }
         return maintenanceRequestVisorController;
-    }
-
-    @Override
-    public void createScreening() {
-        LeaseParticipantScreeningCrudService.CustomerScreeningInitializationData id = EntityFactory
-                .create(LeaseParticipantScreeningCrudService.CustomerScreeningInitializationData.class);
-        id.leaseParticipantId().set(EntityFactory.createIdentityStub(Tenant.class, currentTenantId));
-        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Screening().formNewItemPlace(id));
     }
 
     @Override
