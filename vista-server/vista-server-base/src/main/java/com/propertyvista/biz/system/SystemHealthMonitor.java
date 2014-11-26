@@ -55,7 +55,7 @@ class SystemHealthMonitor {
             criteria.eq(criteria.proto().status(), RunStatus.Running);
             for (Run run : Persistence.service().query(criteria)) {
                 Date cutOffDate = DateUtils.addSeconds(run.started().getValue(), run.trigger().runTimeout().getValue(2 * Consts.HOURS2SEC));
-                if (cutOffDate.after(SystemDateManager.getDate())) {
+                if (cutOffDate.before(SystemDateManager.getDate())) {
                     ServerSideFactory.create(OperationsAlertFacade.class).record(run, "There are Stuck Run for Trigger {0}, Terminating its execution",
                             run.trigger().name());
                     executionMonitor.addErredEvent("StuckTriggerRun", run.trigger().name().getStringView());
