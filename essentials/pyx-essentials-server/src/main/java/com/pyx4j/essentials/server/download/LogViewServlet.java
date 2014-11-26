@@ -115,6 +115,10 @@ public class LogViewServlet extends HttpServlet {
         }
     }
 
+    protected boolean isContainerLogsEnabled() {
+        return containerLogsEnabled;
+    }
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         authentication(request, response);
@@ -152,7 +156,7 @@ public class LogViewServlet extends HttpServlet {
     }
 
     protected File getSpecialPath(String path) {
-        if (containerLogsEnabled && (path.startsWith("/" + containerLogs))) {
+        if (isContainerLogsEnabled() && (path.startsWith("/" + containerLogs))) {
             return new File(rootDirectory.getParentFile(), path.substring(containerLogs.length() + 2));
         } else {
             return new File(rootDirectory, path);
@@ -219,7 +223,7 @@ public class LogViewServlet extends HttpServlet {
 
         Collections.sort(files, fileByNameComparator);
 
-        if (containerLogsEnabled && (path.length() == 1)) {
+        if (isContainerLogsEnabled() && (path.length() == 1)) {
             out.println("<tr><td></td><td>");
             out.print("<a href=\"");
             out.print(urlPrefix);
