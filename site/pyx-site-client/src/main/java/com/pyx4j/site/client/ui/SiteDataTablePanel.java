@@ -55,8 +55,6 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
 
     private static final I18n i18n = I18n.get(SiteDataTablePanel.class);
 
-    private Class<? extends CrudAppPlace> itemOpenPlaceClass;
-
     private AbstractListCrudService<E> service;
 
     public SiteDataTablePanel(Class<E> entityClass, AbstractListCrudService<E> service) {
@@ -81,11 +79,10 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
         setAddNewActionEnabled(allowAddNew);
         setDeleteActionEnabled(allowDelete);
 
-        this.itemOpenPlaceClass = AppPlaceEntityMapper.resolvePlaceClass(entityClass);
         setItemZoomInCommand(new ItemZoomInCommand<E>() {
             @Override
             public void execute(E item) {
-                view(itemOpenPlaceClass, item.getPrimaryKey());
+                view(getItemOpenPlaceClass(), item.getPrimaryKey());
             }
         });
 
@@ -127,11 +124,11 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
         if (canCreateNewItem()) {
             if (getDataSource().getParentEntityClass() != null) {
                 AppSite.getPlaceController().goTo(
-                        AppSite.getHistoryMapper().createPlace(itemOpenPlaceClass)
+                        AppSite.getHistoryMapper().createPlace(getItemOpenPlaceClass())
                                 .formNewItemPlace(getDataSource().getParentEntityId(), getDataSource().getParentEntityClass()));
             } else {
                 AppSite.getPlaceController().goTo(
-                        AppSite.getHistoryMapper().createPlace(itemOpenPlaceClass).formNewItemPlace(getDataSource().getParentEntityId()));
+                        AppSite.getHistoryMapper().createPlace(getItemOpenPlaceClass()).formNewItemPlace(getDataSource().getParentEntityId()));
             }
         }
     }
@@ -171,10 +168,6 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
                 }
             }
         });
-    }
-
-    public Class<? extends CrudAppPlace> getItemOpenPlaceClass() {
-        return itemOpenPlaceClass;
     }
 
     @Override
@@ -229,6 +222,10 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
     @Override
     public List<Sort> getDefaultSorting() {
         return null;
+    }
+
+    protected Class<? extends CrudAppPlace> getItemOpenPlaceClass() {
+        return AppPlaceEntityMapper.resolvePlaceClass(getEntityClass());
     }
 
 }
