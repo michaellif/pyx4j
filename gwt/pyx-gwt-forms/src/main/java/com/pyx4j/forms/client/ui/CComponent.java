@@ -40,6 +40,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ProvidesResize;
+import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -90,7 +92,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     private EventBus eventBus;
 
-    private SimplePanel holder;
+    private HolderPanel holder;
 
     private String title;
 
@@ -137,7 +139,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     public CComponent(String title) {
         this.title = title;
 
-        holder = new SimplePanel();
+        holder = new HolderPanel();
         holder.setStyleName(CComponentTheme.StyleName.ComponentHolder.name());
 
         componentAccessAdapter = new ComponentAccessAdapter();
@@ -794,6 +796,19 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         if (this instanceof IAcceptsText && isVisible() && isEditable() && isEnabled() && !isViewable() && isValueEmpty()) {
             ((IAcceptsText) this).setValueByString(value);
             setVisited(true);
+        }
+    }
+
+    class HolderPanel extends SimplePanel implements RequiresResize, ProvidesResize {
+
+        public HolderPanel() {
+        }
+
+        @Override
+        public void onResize() {
+            if (getWidget() instanceof RequiresResize) {
+                ((RequiresResize) getWidget()).onResize();
+            }
         }
     }
 
