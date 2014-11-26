@@ -63,7 +63,7 @@ import com.pyx4j.scanner.ScannerEntry;
 
 /**
  * Extracts i18n text from classes dependencies.
- * 
+ *
  */
 @Mojo(name = "extract", defaultPhase = LifecyclePhase.PREPARE_PACKAGE, requiresDependencyResolution = ResolutionScope.COMPILE, threadSafe = true)
 public class ExtractMojo extends AbstractMojo {
@@ -71,23 +71,23 @@ public class ExtractMojo extends AbstractMojo {
     /**
      * Dependencies to ignore.
      * The artifact syntax is defined by AbstractStrictPatternArtifactFilter.
-     * 
+     *
      * The artifact pattern syntax is of the form:
-     * 
+     *
      * <pre>
      * [groupId]:[artifactId]:[type]:[version]
      * </pre>
-     * 
+     *
      * <p>
      * Where each pattern segment is optional and supports full and partial <code>*</code> wildcards. An empty pattern segment is treated as an implicit
      * wildcard.
      * </p>
-     * 
+     *
      * <p>
      * For example, <code>org.apache.*</code> would match all artifacts whose group id started with <code>org.apache.</code>, and <code>:::*-SNAPSHOT</code>
      * would match all snapshot artifacts.
      * </p>
-     * 
+     *
      */
     @Parameter
     public List<String> excludes = null;
@@ -95,7 +95,7 @@ public class ExtractMojo extends AbstractMojo {
     /**
      * Dependencies to include.
      * The artifact syntax is defined by AbstractStrictPatternArtifactFilter.
-     * 
+     *
      */
     @Parameter
     public List<String> includes = null;
@@ -118,7 +118,7 @@ public class ExtractMojo extends AbstractMojo {
 
     /**
      * Corrections filename translations are equal to text
-     * 
+     *
      */
     @Parameter(defaultValue = "corrections.pot")
     public String correctionKeysFile;
@@ -140,7 +140,7 @@ public class ExtractMojo extends AbstractMojo {
 
     /**
      * Set output sorting: none, byText, byFile
-     * 
+     *
      */
     @Parameter(defaultValue = "byText")
     public Sort poSort = Sort.byText;
@@ -529,7 +529,9 @@ public class ExtractMojo extends AbstractMojo {
                 catalog.loadCatalog(translationCatalog);
             }
             POFile poTransl = po.cloneForTranslation();
-            getLog().info("Translating " + sourceLanguage + " -> " + lang);
+            getLog().info(
+                    "Translating " + sourceLanguage + " -> " + lang + " ; entries to translate " + poTransl.entries.size() + ", use Local catalog "
+                            + catalog.size());
             int translated = 0;
             int apiCalls = 0;
             for (POEntry entry : poTransl.entries) {

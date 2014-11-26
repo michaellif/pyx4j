@@ -130,6 +130,10 @@ public class POCatalog implements Translator {
         }
     }
 
+    public int size() {
+        return translations.size();
+    }
+
     public void write() {
         if (!updated) {
             if (debug) {
