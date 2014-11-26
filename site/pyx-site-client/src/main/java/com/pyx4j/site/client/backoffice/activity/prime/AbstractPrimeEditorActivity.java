@@ -75,22 +75,9 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
         String val;
         if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
             entityId = new Key(val);
-            // Validate argument
-            try {
-                entityId.asLong();
-            } catch (NumberFormatException e) {
-                entityId = null;
-            }
-
         }
         if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_PARENT_ID)) != null) {
             parentId = new Key(val);
-            // Validate argument
-            try {
-                parentId.asLong();
-            } catch (NumberFormatException e) {
-                parentId = null;
-            }
         }
         if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_TAB_IDX)) != null) {
             tabIndex = Integer.parseInt(val);

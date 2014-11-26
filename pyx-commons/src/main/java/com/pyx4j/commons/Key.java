@@ -25,7 +25,7 @@ import java.util.Date;
 /**
  * Serializable DB Reference (Primary Key) representation
  */
-public class Key implements java.io.Serializable, Comparable<Key> {
+public final class Key implements java.io.Serializable, Comparable<Key> {
 
     private static final long serialVersionUID = 7972137198592582112L;
 
