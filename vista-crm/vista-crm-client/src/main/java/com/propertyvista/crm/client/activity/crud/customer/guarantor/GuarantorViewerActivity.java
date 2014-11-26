@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.activity.crud.customer.guarantor;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -27,13 +26,9 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorViewerView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
-import com.propertyvista.domain.tenant.lease.Guarantor;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> implements GuarantorViewerView.Presenter {
-
-    private LeaseParticipant<?> leaseParticipantId;
 
     private GuarantorDTO currentValue;
 
@@ -47,8 +42,6 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
         super.onPopulateSuccess(result);
 
         currentValue = result;
-
-        leaseParticipantId = EntityFactory.createIdentityStub(Guarantor.class, result.getPrimaryKey());
     }
 
     @Override
