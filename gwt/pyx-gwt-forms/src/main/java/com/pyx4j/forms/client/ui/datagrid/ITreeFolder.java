@@ -22,7 +22,9 @@ package com.pyx4j.forms.client.ui.datagrid;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
+import com.pyx4j.i18n.annotations.I18n;
 
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface ITreeFolder<TYPE extends IEntity> extends IList<TYPE> {
 
 //    IList<ITreeFolder> folders();
