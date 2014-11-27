@@ -102,9 +102,9 @@ import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 /**
  * Implementation functionality for updating properties/units/leases/tenants basing on getResidentTransactions from YARDI api
- * 
+ *
  * @author Mykola
- * 
+ *
  */
 public class YardiResidentTransactionsService extends YardiAbstractService {
 
@@ -137,7 +137,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     /**
      * Updates/creates entities basing on data from YARDI System.
-     * 
+     *
      * @param yp
      *            the YARDI System connection parameters
      * @throws YardiServiceException
@@ -213,7 +213,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 leaseCharges = YardiStubFactory.create(YardiResidentTransactionsStub.class).getLeaseChargesForTenant(yc, propertyCode,
                         lease.leaseId().getValue(), nextCycle.billingCycleStartDate().getValue());
             } catch (YardiNoTenantsExistException e) {
-                log.warn("Can't get changes for {}; {}", lease.leaseId().getValue(), e.getMessage()); // log error and reset lease charges.
+                String msg = SimpleMessageFormat.format("Can't get changes for {0}; {1}", lease.leaseId().getValue(), e.getMessage());
+                executionMonitor.addInfoEvent("LeaseCarges", msg);
+                log.debug(msg);
             }
 
             if (!executionMonitor.isTerminationRequested() && leaseCharges != null) {
@@ -610,7 +612,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         if (addrErr.length() > 0) {
             String msg = SimpleMessageFormat.format("Unit pk={0}: got invalid address {1}", unit.getPrimaryKey(), addrErr);
             executionMonitor.addInfoEvent("ParseAddress", msg);
-            log.warn(msg);
+            log.debug(msg);
         } else if (!sameAsBuildingAddress(ia, unit.building())) {
             unit.info().legalAddress().set(AddressRetriever.toLegalAddress(ia));
             unit.info().legalAddressOverride().setValue(true);
@@ -660,7 +662,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 if (!YardiLeaseProcessor.isEligibleForProcessing(rtCustomer)) {
                     String msg = SimpleMessageFormat.format("Transactions for: {0} skipped, lease does not meet criteria.", rtCustomer.getCustomerID());
                     rtd.getExecutionMonitor().addInfoEvent("Lease", msg);
-                    log.warn(msg);
+                    log.debug(msg);
                     continue;
                 }
 
