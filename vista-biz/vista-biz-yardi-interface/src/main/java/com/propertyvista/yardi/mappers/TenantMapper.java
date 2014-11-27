@@ -209,7 +209,7 @@ public class TenantMapper {
                 criteria.eq(criteria.proto().person().email(), EmailValidator.normalizeEmailAddress(email));
                 customer = Persistence.service().retrieve(criteria);
                 if (customer != null) {
-                    log.info("Customer {} ({}) found by e-mail", yardiCustomer.getCustomerID(), customer.getStringView());
+                    log.debug("Customer {} ({}) found by e-mail", yardiCustomer.getCustomerID(), customer.getStringView());
                     return customer;
                 }
             }
@@ -226,7 +226,7 @@ public class TenantMapper {
                 customer = participant.customer();
             }
             if (customer != null) {
-                log.info("Customer {} ({}) found by participant Id", yardiCustomer.getCustomerID(), customer.getStringView());
+                log.debug("Customer {} ({}) found by participant Id", yardiCustomer.getCustomerID(), customer.getStringView());
                 return customer;
             }
         }
@@ -243,7 +243,7 @@ public class TenantMapper {
                 customer = termParticipant.leaseParticipant().customer();
             }
             if (customer != null) {
-                log.info("Customer {} ({}) found by original term participant name", yardiCustomer.getCustomerID(), customer.getStringView());
+                log.debug("Customer {} ({}) found by original term participant name", yardiCustomer.getCustomerID(), customer.getStringView());
                 return customer;
             }
         }
@@ -255,7 +255,7 @@ public class TenantMapper {
             criteria.eq(criteria.proto().person().name().lastName(), yardiCustomer.getName().getLastName());
             customer = Persistence.service().retrieve(criteria);
             if (customer != null) {
-                log.info("Customer {} ({}) found by full name", yardiCustomer.getCustomerID(), customer.getStringView());
+                log.debug("Customer {} ({}) found by full name", yardiCustomer.getCustomerID(), customer.getStringView());
                 return customer;
             }
         }
