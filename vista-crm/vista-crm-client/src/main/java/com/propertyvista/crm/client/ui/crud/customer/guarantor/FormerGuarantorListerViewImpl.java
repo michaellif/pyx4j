@@ -13,15 +13,19 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 
-import com.google.gwt.core.client.GWT;
-
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
-import com.propertyvista.crm.rpc.services.customer.FormerGuarantorCrudService;
+
 import com.propertyvista.dto.GuarantorDTO;
 
 public class FormerGuarantorListerViewImpl extends AbstractListerView<GuarantorDTO> implements GuarantorListerView {
 
     public FormerGuarantorListerViewImpl() {
-        setDataTablePanel(new GuarantorLister(GWT.<FormerGuarantorCrudService> create(FormerGuarantorCrudService.class)));
+        setDataTablePanel(new GuarantorLister() {
+            @Override
+            protected EntityListCriteria<GuarantorDTO> updateCriteria(EntityListCriteria<GuarantorDTO> criteria) {
+                return updateListCriteriaForFormerLeaseParticipants(criteria);
+            }
+        });
     }
 }

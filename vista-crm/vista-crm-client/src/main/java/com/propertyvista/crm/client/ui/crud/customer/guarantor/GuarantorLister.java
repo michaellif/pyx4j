@@ -13,24 +13,22 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 
-import java.util.Arrays;
-import java.util.List;
+import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
+import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantLister;
+import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
 import com.propertyvista.dto.GuarantorDTO;
 
-public class GuarantorLister extends SiteDataTablePanel<GuarantorDTO> {
+public class GuarantorLister extends LeaseParticipantLister<GuarantorDTO> {
 
     protected static final I18n i18n = I18n.get(GuarantorLister.class);
 
-    public GuarantorLister(AbstractListCrudService<GuarantorDTO> service) {
-        super(GuarantorDTO.class, service, false);
+    public GuarantorLister() {
+        super(GuarantorDTO.class, GWT.<GuarantorCrudService> create(GuarantorCrudService.class));
 
         setDataTableModel(new DataTableModel<GuarantorDTO>( //
                 new Builder(proto().participantId()).build(), //
@@ -51,16 +49,5 @@ public class GuarantorLister extends SiteDataTablePanel<GuarantorDTO> {
 
                 new Builder(proto().lease().unit().info().number()).columnTitle(i18n.tr("Unit #")).searchableOnly().build() //
         ));
-
-    }
-
-    @Override
-    public boolean canCreateNewItem() {
-        return false; // disable creation of the new stand-alone Guarantor - just from within the Lease!..
-    }
-
-    @Override
-    public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().lease().leaseId(), false), new Sort(proto().customer().person().name(), false));
     }
 }

@@ -13,12 +13,19 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.tenant;
 
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
+
 import com.propertyvista.dto.TenantDTO;
 
 public class FormerTenantListerViewImpl extends AbstractListerView<TenantDTO> implements FormerTenantListerView {
 
     public FormerTenantListerViewImpl() {
-        setDataTablePanel(new FormerTenantLister());
+        setDataTablePanel(new TenantLister() {
+            @Override
+            protected EntityListCriteria<TenantDTO> updateCriteria(EntityListCriteria<TenantDTO> criteria) {
+                return updateListCriteriaForFormerLeaseParticipants(criteria);
+            }
+        });
     }
 }

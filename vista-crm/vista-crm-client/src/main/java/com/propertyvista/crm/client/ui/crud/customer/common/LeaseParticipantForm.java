@@ -89,7 +89,7 @@ import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmEntityForm<P> {
+public abstract class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmEntityForm<P> {
 
     private static final I18n i18n = I18n.get(LeaseParticipantForm.class);
 

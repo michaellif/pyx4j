@@ -50,11 +50,7 @@ import com.propertyvista.crm.rpc.services.building.communityevent.CommunityEvent
 import com.propertyvista.crm.rpc.services.building.mech.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
-import com.propertyvista.crm.rpc.services.customer.ActiveGuarantorCrudService;
-import com.propertyvista.crm.rpc.services.customer.ActiveTenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.CustomerPictureCrmUploadService;
-import com.propertyvista.crm.rpc.services.customer.FormerGuarantorCrudService;
-import com.propertyvista.crm.rpc.services.customer.FormerTenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
 import com.propertyvista.crm.rpc.services.customer.InsuranceCertificateScanCrmUploadService;
 import com.propertyvista.crm.rpc.services.customer.PreauthorizedPaymentsVisorService;
@@ -180,8 +176,8 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.ref.CountryPolicyNode;
 import com.propertyvista.domain.security.VistaDataAccessBehavior;
-import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
@@ -326,14 +322,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(ShowingCrudService.class));
 
         grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(TenantCrudService.class));
-        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(ActiveTenantCrudService.class));
-        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(FormerTenantCrudService.class));
-
-        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(SelectTenantListService.class));
-
         grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(GuarantorCrudService.class));
-        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(ActiveGuarantorCrudService.class));
-        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(FormerGuarantorCrudService.class));
+        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(SelectTenantListService.class));
 
         grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(Customer.class, EntityPermission.ALL));
         grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(LeaseTermTenant.class, EntityPermission.ALL));

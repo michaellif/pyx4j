@@ -22,8 +22,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.AndCriterion;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.VersionedCriteria;
+import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.CrudEntityBinder;
@@ -208,4 +211,34 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
         return super.persist(bo, to);
     }
 
+    //
+    // Helpers for potential/current/former list participants filtering:
+    //
+    protected void enhanceListCriteriaForPotentialLeaseParticipants(EntityListCriteria<BO> boCriteria) {
+        boCriteria.in(boCriteria.proto().lease().status(), Lease.Status.draft());
+    }
+
+    protected void enhanceListCriteriaForCurrentLeaseParticipants(EntityListCriteria<BO> boCriteria) {
+        // filter out just current tenants:
+        boCriteria.in(boCriteria.proto().lease().status(), Lease.Status.current());
+        boCriteria.eq(boCriteria.proto().leaseTermParticipants().$().leaseTermV().holder(), boCriteria.proto().lease().currentTerm());
+        // and finalized e.g. last only:
+        boCriteria.isCurrent(boCriteria.proto().leaseTermParticipants().$().leaseTermV());
+    }
+
+    protected void enhanceListCriteriaForFormerLeaseParticipants(EntityListCriteria<BO> boCriteria) {
+        // filter out just former tenants:
+        OrCriterion or = boCriteria.or();
+
+        or.left().in(boCriteria.proto().lease().status(), Lease.Status.former());
+
+        AndCriterion currentTermCriterion = new AndCriterion();
+        currentTermCriterion.eq(boCriteria.proto().leaseTermParticipants().$().leaseTermV().holder(), boCriteria.proto().lease().currentTerm());
+        // and finalized e.g. last only:
+        currentTermCriterion.isCurrent(boCriteria.proto().leaseTermParticipants().$().leaseTermV());
+
+        or.right().notExists(boCriteria.proto().leaseTermParticipants(), currentTermCriterion);
+        or.right().ne(boCriteria.proto().lease().status(), Lease.Status.Application);
+        or.right().ne(boCriteria.proto().lease().status(), Lease.Status.ExistingLease);
+    }
 }
