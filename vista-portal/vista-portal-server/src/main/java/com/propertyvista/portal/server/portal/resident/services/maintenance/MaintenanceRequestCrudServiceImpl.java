@@ -149,6 +149,7 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
     protected boolean persist(MaintenanceRequest bo, MaintenanceRequestDTO to) {
         if (!to.reportedForOwnUnit().getValue(false)) {
             bo.permissionToEnter().setValue(false);
+            bo.unit().set(null);
         } else if (!to.reporter().isNull()) {
             Persistence.ensureRetrieve(to.reporter().lease(), AttachLevel.Attached);
             bo.unit().set(to.reporter().lease().unit());

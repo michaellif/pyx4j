@@ -337,14 +337,12 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         get(proto().reportedForOwnUnit()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
-                if (!event.getValue().booleanValue()) {
-                    unitSelector.setValue(null);
-                }
                 unitSelector.setVisible(event.getValue().booleanValue());
                 get(proto().permissionToEnter()).setValue(event.getValue());
                 unitAccessPanel.setVisible(event.getValue().booleanValue());
-                getValue().category().set(null);
                 accessPanel.setVisible(getValue().permissionToEnter().getValue(false) && event.getValue().booleanValue());
+                getValue().category().set(null);
+                mrCategory.setOptionsMeta(meta, event.getValue().booleanValue());
             }
         });
         panel.br();
@@ -429,7 +427,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
         if (!isViewable()) {
             // set options
-            mrCategory.setOptionsMeta(meta, getValue().reportedForOwnUnit().isNull() ? true : getValue().reportedForOwnUnit().getValue(false));
+            mrCategory.setOptionsMeta(meta, get(proto().reportedForOwnUnit()).getValue());
         }
         // re-populate after parent categories have been added
         if (getValue() != null) {

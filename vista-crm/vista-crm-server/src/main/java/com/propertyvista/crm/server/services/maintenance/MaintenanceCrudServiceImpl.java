@@ -35,8 +35,8 @@ import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
-import com.propertyvista.domain.maintenance.MaintenanceRequestWorkOrder;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.maintenance.MaintenanceRequestWorkOrder;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.policy.policies.MaintenanceRequestPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -206,6 +206,9 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
 
     @Override
     protected boolean persist(MaintenanceRequest bo, MaintenanceRequestDTO to) {
+        if (!to.reportedForOwnUnit().getValue(false)) {
+            bo.unit().set(null);
+        }
         ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(bo, CrmAppContext.getCurrentUserEmployee());
         ServerSideFactory.create(MaintenanceFacade.class).addStatusHistoryRecord(bo, null);
         to.message().set(ServerSideFactory.create(CommunicationMessageFacade.class).association2Message(bo));

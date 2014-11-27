@@ -14,6 +14,8 @@
 package com.propertyvista.common.client.ui.components;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -44,6 +46,8 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
 
     private boolean isForUnit = true;
 
+    private boolean isFilteredForUnit = false;
+
     private LoadOptionsMode optionsMode = LoadOptionsMode.EMPTY_SET;
 
     public MaintenanceRequestCategoryChoice() {
@@ -72,7 +76,7 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
     @Override
     protected void setEditorValue(MaintenanceRequestCategory value) {
         // when parent container populates children, refresh options based on given value before the value is set
-        if (isEditable() && optionsMode == LoadOptionsMode.REFRESH) {
+        if (isEditable() && optionsMode == LoadOptionsMode.REFRESH && parent != null) {
             // this is a hack to avoid clearing CComp value, that we are trying to set, from
             // NComboBox#refreshOptions() when new options are loaded
             getNativeComponent().setNativeValue(null);
@@ -197,25 +201,25 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
             if (parent != null && parent.getValue() != null) {
                 MaintenanceRequestCategory metaValue = findMetaEntry(parent.getValue(), null);
                 if (metaValue != null) {
-                    setOptions(filterCategories(metaValue.subCategories()));
-
+                    setOptions(metaValue.subCategories());
                 }
             }
             break;
         case REFRESH:
-            if (getOptions() != null && getOptions().size() > 0 && (getValue() == null || getOptions().contains(getValue()))) {
-                // if options has the value, then we are ok
-                break;
-            } else if (parent != null) {
+            if (parent == null) {
+                // see if it's been filtered already
+                if (isFilteredForUnit != isForUnit) {
+                    setOptions(meta != null ? filterCategories(meta.rootCategory().subCategories()) : null);
+                    isFilteredForUnit = isForUnit;
+                }
+            } else {
                 MaintenanceRequestCategory value = getValue();
                 if (value != null && !value.isNull() && value.parent() != null) {
                     MaintenanceRequestCategory metaValue = findMetaEntry(value.parent(), null);
                     if (metaValue != null) {
-                        setOptions(filterCategories(metaValue.subCategories()));
+                        setOptions(metaValue.subCategories());
                     }
                 }
-            } else {
-                setOptions(meta != null ? filterCategories(meta.rootCategory().subCategories()) : null);
             }
             break;
         }
@@ -228,16 +232,18 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
         if (VistaFeatures.instance().yardiIntegration()) {
             return subCategories;
         }
-        // performance optimization: filter only 1t level
-        if (parent != null && parent.parent != null) {
-            return subCategories;
-        }
         List<MaintenanceRequestCategory> categories = new ArrayList<MaintenanceRequestCategory>();
         for (MaintenanceRequestCategory c : subCategories) {
-            if ((c.elementType() == null || c.elementType().isNull() || (c.elementType().getValue().equals(IssueElementType.ApartmentUnit) && isForUnit) || (!isForUnit && !c
-                    .elementType().getValue().equals(IssueElementType.ApartmentUnit))))
+            if (c.elementType().isNull() || (c.elementType().getValue().equals(IssueElementType.ApartmentUnit) == isForUnit)) {
                 categories.add(c);
+            }
         }
+        Collections.sort(categories, new Comparator<MaintenanceRequestCategory>() {
+            @Override
+            public int compare(MaintenanceRequestCategory o1, MaintenanceRequestCategory o2) {
+                return o1.name().compareTo(o2.name());
+            }
+        });
         return categories;
     }
 

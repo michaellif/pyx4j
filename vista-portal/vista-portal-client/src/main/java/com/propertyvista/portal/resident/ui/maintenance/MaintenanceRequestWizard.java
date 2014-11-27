@@ -205,11 +205,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 permissionPanel.setVisible(event.getValue().booleanValue());
                 getValue().category().set(null);
-                if (!event.getValue().booleanValue()) {
-                    getValue().unit().set(null);
-                }
-                categoryPanel.clear();
-                initSelectors();
+                mrCategory.setOptionsMeta(meta, event.getValue().booleanValue());
             }
         });
 
