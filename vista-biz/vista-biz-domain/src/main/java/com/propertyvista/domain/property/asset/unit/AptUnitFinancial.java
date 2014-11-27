@@ -31,7 +31,7 @@ public interface AptUnitFinancial extends IEntity {
      * Should be updated when Lease for this Unit is saved.
      */
     @Format("#,##0.00")
-    @Editor(type = EditorType.money)
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> _unitRent();
 
     /**
@@ -39,6 +39,6 @@ public interface AptUnitFinancial extends IEntity {
      * Now only residentialUnit Service type is taken into account
      */
     @Format("#,##0.00")
-    @Editor(type = EditorType.money)
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> _marketRent();
 }
