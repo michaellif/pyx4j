@@ -102,9 +102,9 @@ import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 /**
  * Implementation functionality for updating properties/units/leases/tenants basing on getResidentTransactions from YARDI api
- *
+ * 
  * @author Mykola
- *
+ * 
  */
 public class YardiResidentTransactionsService extends YardiAbstractService {
 
@@ -137,7 +137,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     /**
      * Updates/creates entities basing on data from YARDI System.
-     *
+     * 
      * @param yp
      *            the YARDI System connection parameters
      * @throws YardiServiceException
@@ -771,19 +771,23 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
                 // process new availability data
                 for (ILSUnit ilsUnit : property.getILSUnit()) {
-                    AptUnit aptUnit = MappingUtils.retrieveUnit(building, UnitsMapper.getUnitNumber(ilsUnit.getUnit()));
-                    if (aptUnit == null) {
-                        aptUnit = importUnit(building, ilsUnit.getUnit(), executionMonitor);
-
-                        newAndUpdatedBuildings.add(building);
-                        log.debug("  - Building {} has been UPDATED", propertyCode);
+                    try {
+                        if (MappingUtils.retrieveUnit(building, UnitsMapper.getUnitNumber(ilsUnit.getUnit())) == null) {
+                            newAndUpdatedBuildings.add(building);
+                            log.debug("  - Building {} is being UPDATED", propertyCode);
+                        }
+                        // update unit info details availability
+                        AptUnit aptUnit = importUnit(building, ilsUnit.getUnit(), executionMonitor);
+                        if (updateAvailability(aptUnit, ilsUnit.getAvailability(), executionMonitor)) {
+                            updateAvailabilityReport(aptUnit, ilsUnit, executionMonitor);
+                        }
+                        excludedUnits.remove(aptUnit);
+                        executionMonitor.addProcessedEvent("Availability");
+                    } catch (YardiServiceException e) {
+                        executionMonitor.addFailedEvent("Unit", e);
+                    } catch (Throwable t) {
+                        executionMonitor.addErredEvent("Unit", t);
                     }
-
-                    if (updateAvailability(aptUnit, ilsUnit.getAvailability(), executionMonitor)) {
-                        updateAvailabilityReport(aptUnit, ilsUnit, executionMonitor);
-                    }
-                    excludedUnits.remove(aptUnit);
-                    executionMonitor.addProcessedEvent("Availability");
                 }
 
                 // clear unit availability for excluded units
