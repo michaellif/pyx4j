@@ -429,8 +429,8 @@ public class CrmSiteMap implements SiteMap {
             public static class OnlinePaymentSetup extends CrmCrudAppPlace {
             }
 
-            @PlaceProperties(caption = "Communication Settings")
-            public static class CommunicationSettings extends CrmCrudAppPlace {
+            @PlaceProperties(caption = "Message Category")
+            public static class MessageCategory extends CrmCrudAppPlace {
             }
 
             /**

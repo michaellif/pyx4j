@@ -72,11 +72,11 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.communication.CommunicationAssociation;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
+import com.propertyvista.domain.communication.SpecialDelivery.DeliveryMethod;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.dto.MessageDTO;
-import com.propertyvista.misc.VistaTODO;
 
 public class MessageForm extends CrmEntityForm<MessageDTO> {
 
@@ -108,14 +108,24 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         FormPanel formPanel = new FormPanel(this);
         CLabel<String> threadLabel = new CLabel<String>();
         threadLabel.asWidget().setStylePrimaryName(CommunicationCrmTheme.StyleName.CommunicationThreadName.name());
+        inject(proto().deliveryMethod());
 
         formPanel.append(Location.Dual, proto().subject(), threadLabel);
         formPanel.br();
+
+        formPanel.append(Location.Left, proto().header()).decorate().customLabel(i18n.tr("Sent"));
         formPanel.append(Location.Left, proto().allowedReply()).decorate();
         formPanel.append(Location.Right, proto().category()).decorate();
         formPanel.append(Location.Left, proto().owner().name()).decorate().customLabel(i18n.tr("Owner"));
         formPanel.append(Location.Right, proto().status()).decorate();
         formPanel.append(Location.Dual, proto().associated(), new CAssociationLabel()).decorate();
+        formPanel.append(Location.Dual, proto().deliveredText()).decorate();
+        formPanel.append(Location.Left, proto().dateFrom()).decorate().customLabel(i18n.tr("Notification Date"));
+        formPanel.append(Location.Right, proto().timeWindow().timeFrom()).decorate().customLabel(i18n.tr("Notification Time"));
+        formPanel.append(Location.Left, proto().dateTo()).decorate().customLabel(i18n.tr("Expiration Date"));
+        formPanel.append(Location.Right, proto().timeWindow().timeTo()).decorate().customLabel(i18n.tr("Expiration Time"));
+        formPanel.append(Location.Dual, proto().text(), new CRichTextArea()).decorate();
+
         formPanel.append(Location.Dual, proto().content(), messagesFolder);
         formPanel.br();
 
@@ -129,12 +139,45 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             get(proto().owner().name()).setVisible(false);
             get(proto().status()).setVisible(false);
             get(proto().associated()).setVisible(false);
+            get(proto().content()).setVisible(true);
+            get(proto().dateFrom()).setVisible(false);
+            get(proto().dateTo()).setVisible(false);
+            get(proto().deliveredText()).setVisible(false);
+            get(proto().text()).setVisible(false);
+            get(proto().header()).setVisible(false);
         } else {
             get(proto().owner().name()).setVisible(CategoryType.Ticket.equals(getValue().category().categoryType().getValue()));
             get(proto().status()).setVisible(CategoryType.Ticket.equals(getValue().category().categoryType().getValue()));
             get(proto().associated()).setVisible(
                     CategoryType.Ticket.equals(getValue().category().categoryType().getValue()) && getValue().associated() != null
                             && !getValue().associated().isNull());
+            boolean isEmpty = getValue().isNull() || getValue().isEmpty();
+            boolean isDeliveryMethodEmpty = isEmpty || getValue().deliveryMethod() == null || getValue().deliveryMethod().isNull()
+                    || getValue().deliveryMethod().isPrototype();
+            boolean isNotification = !isDeliveryMethodEmpty && DeliveryMethod.Notification.equals(getValue().deliveryMethod().getValue());
+            get(proto().content()).setVisible(isEmpty || isDeliveryMethodEmpty);
+            get(proto().subject()).setVisible(isEmpty || isDeliveryMethodEmpty || isNotification);
+            get(proto().dateFrom()).setVisible(isNotification && getValue().dateFrom() != null && !getValue().dateFrom().isNull());
+            get(proto().dateTo()).setVisible(isNotification && getValue().dateTo() != null && !getValue().dateTo().isNull());
+            get(proto().timeWindow().timeFrom()).setVisible(
+                    isNotification && getValue().timeWindow() != null && !getValue().timeWindow().isNull() && getValue().timeWindow().timeFrom() != null
+                            && !getValue().timeWindow().timeFrom().isNull());
+            get(proto().timeWindow().timeTo()).setVisible(
+                    isNotification && getValue().timeWindow() != null && !getValue().timeWindow().isNull() && getValue().timeWindow().timeTo() != null
+                            && !getValue().timeWindow().timeTo().isNull());
+            get(proto().header()).setVisible(!isEmpty && !isDeliveryMethodEmpty);
+            get(proto().allowedReply()).setVisible(isEmpty || isDeliveryMethodEmpty);
+
+            if (!isEmpty && !isDeliveryMethodEmpty) {
+                get(proto().deliveredText()).setTitle(getValue().deliveryMethod().getValue().toString());
+                get(proto().deliveredText()).setVisible(!isNotification);
+                get(proto().text()).setTitle(isNotification ? i18n.tr("Notification") : i18n.tr("Fallback"));
+                get(proto().text()).setVisible(true);
+            } else {
+                get(proto().deliveredText()).setVisible(false);
+                get(proto().text()).setVisible(false);
+                get(proto().text()).setTitle(i18n.tr("Text"));
+            }
         }
     }
 
@@ -325,11 +368,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
             formPanel.append(Location.Dual, proto().highImportance(), new CCheckBox()).decorate();
 
-            if (VistaTODO.USE_RTF_EDITOR_FOR_COMMUNICATION) {
-                formPanel.append(Location.Dual, proto().text(), new CRichTextArea()).decorate().labelWidth(0).customLabel("").useLabelSemicolon(false);
-            } else {
-                formPanel.append(Location.Dual, proto().text()).decorate().labelWidth(0).customLabel("").useLabelSemicolon(false);
-            }
+            formPanel.append(Location.Dual, proto().text(), new CRichTextArea()).decorate().labelWidth(0).customLabel("").useLabelSemicolon(false);
+
             attachmentCaption = formPanel.h3("Attachments");
             formPanel.append(Location.Dual, proto().attachments(), attachemnts = new MessageAttachmentFolder());
             formPanel.br();

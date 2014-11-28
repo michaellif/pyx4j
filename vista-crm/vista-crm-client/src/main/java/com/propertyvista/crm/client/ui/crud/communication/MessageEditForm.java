@@ -15,8 +15,11 @@ package com.propertyvista.crm.client.ui.crud.communication;
 
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CRichTextArea;
@@ -28,6 +31,7 @@ import com.pyx4j.site.client.backoffice.ui.prime.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValidator;
 import com.propertyvista.crm.client.activity.crud.communication.MessageEditorActivity;
 import com.propertyvista.crm.client.ui.components.boxes.TenantSelectionDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -35,10 +39,10 @@ import com.propertyvista.crm.client.ui.crud.communication.selector.Communication
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.communication.MessageCategory.TicketType;
+import com.propertyvista.domain.communication.SpecialDelivery.DeliveryMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.dto.MessageDTO;
-import com.propertyvista.misc.VistaTODO;
 
 public class MessageEditForm extends CrmEntityForm<MessageDTO> {
 
@@ -105,6 +109,7 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
         }).decorate();
 
         get(proto().category());
+        inject(proto().deliveryMethod());
 
         formPanel.append(Location.Left, proto().onBehalf(), new TenantSelector()).decorate();
         formPanel.append(Location.Right, proto().onBehalfVisible()).decorate().customLabel(i18n.tr("Is Visible For Tenant"));
@@ -112,11 +117,34 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
         formPanel.append(Location.Right, proto().highImportance()).decorate();
         formPanel.br();
 
-        if (VistaTODO.USE_RTF_EDITOR_FOR_COMMUNICATION) {
-            formPanel.append(Location.Dual, proto().text(), new CRichTextArea()).decorate();
-        } else {
-            formPanel.append(Location.Dual, proto().text()).decorate();
-        }
+        formPanel.append(Location.Left, proto().dateFrom()).decorate().componentWidth(120).customLabel(i18n.tr("Notification Date"));
+        formPanel.append(Location.Right, proto().timeWindow().timeFrom()).decorate().componentWidth(120).customLabel(i18n.tr("Notification Time"));
+        formPanel.append(Location.Left, proto().dateTo()).decorate().componentWidth(120).customLabel(i18n.tr("Expiration Date"));
+        formPanel.append(Location.Right, proto().timeWindow().timeTo()).decorate().componentWidth(120).customLabel(i18n.tr("Expiration Time"));
+        get(proto().timeWindow().timeFrom()).setVisible(false);
+        get(proto().timeWindow().timeTo()).setVisible(false);
+        get(proto().dateFrom()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
+                LogicalDate date = event.getValue();
+                get(proto().timeWindow().timeFrom()).setVisible(date != null);
+            }
+        });
+
+        get(proto().dateTo()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
+                LogicalDate date = event.getValue();
+                get(proto().timeWindow().timeTo()).setVisible(date != null);
+            }
+        });
+
+        get(proto().dateFrom()).addComponentValidator(new FutureDateIncludeTodayValidator());
+        get(proto().dateTo()).addComponentValidator(new FutureDateIncludeTodayValidator());
+
+        formPanel.append(Location.Dual, proto().deliveredText()).decorate();
+        formPanel.append(Location.Dual, proto().text(), new CRichTextArea()).decorate();
+
         formPanel.append(Location.Dual, proto().attachments(), new MessageAttachmentFolder());
         formPanel.br();
 
@@ -126,14 +154,46 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
     @Override
     protected MessageDTO preprocessValue(MessageDTO value, boolean fireEvent, boolean populate) {
         if (value == null || value.getPrimaryKey() == null || value.getPrimaryKey().isDraft()) {
-            MessageCategory mc = ((MessageEditorActivity) getParentView().getPresenter()).getCategory();
-            if (mc != null && !mc.isNull()) {
-                get(proto().category()).setEditable(false);
+            MessageEditorActivity presenter = ((MessageEditorActivity) getParentView().getPresenter());
+            DeliveryMethod dm = presenter.getDeliveryMethod();
+            if (dm == null) {
+                setVisibility(true, false);
+                get(proto().text()).setTitle(i18n.tr("Text"));
+                MessageCategory mc = presenter.getCategory();
+                if (mc != null && !mc.isNull()) {
+                    get(proto().category()).setEditable(false);
+                } else {
+                    get(proto().category()).setEditable(true);
+                }
             } else {
-                get(proto().category()).setEditable(true);
+                if (DeliveryMethod.Notification.equals(dm)) {
+                    setVisibility(false, true);
+                    get(proto().text()).setTitle(dm.toString());
+                } else {
+                    setVisibility(false, false);
+                    get(proto().text()).setTitle(i18n.tr("Fallback"));
+                    get(proto().deliveredText()).setTitle(dm.toString());
+                }
             }
         }
         return value;
+    }
+
+    private void setVisibility(boolean isVisible, boolean isForNotification) {
+        get(proto().subject()).setVisible(isVisible || isForNotification);
+        get(proto().onBehalf()).setVisible(isVisible);
+        get(proto().onBehalfVisible()).setVisible(isVisible);
+        get(proto().highImportance()).setVisible(isVisible);
+        get(proto().allowedReply()).setVisible(isVisible);
+        get(proto().attachments()).setVisible(isVisible);
+        get(proto().deliveredText()).setVisible(!isVisible && !isForNotification);
+        get(proto().deliveredText()).setMandatory(!isVisible && !isForNotification);
+        get(proto().dateFrom()).setVisible(isForNotification);
+        get(proto().dateTo()).setVisible(isForNotification);
+        get(proto().timeWindow().timeFrom()).setVisible(get(proto().dateFrom()).getValue() != null);
+        get(proto().timeWindow().timeTo()).setVisible(get(proto().dateTo()).getValue() != null);
+        get(proto().timeWindow().timeFrom()).setMandatory(false);
+        get(proto().timeWindow().timeTo()).setMandatory(false);
     }
 
     public void reinit() {

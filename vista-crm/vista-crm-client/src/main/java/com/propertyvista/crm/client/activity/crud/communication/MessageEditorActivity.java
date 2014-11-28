@@ -28,6 +28,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap.Communication.Message;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.crm.rpc.services.MessageCrudService.MessageInitializationData;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
+import com.propertyvista.domain.communication.SpecialDelivery.DeliveryMethod;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.dto.MessageDTO;
@@ -39,6 +40,8 @@ public class MessageEditorActivity extends CrmEditorActivity<MessageDTO> impleme
     private MessageCategory mc;
 
     private CategoryType mgc;
+
+    private DeliveryMethod dm;
 
     private IList<CommunicationEndpoint> recipients;
 
@@ -52,6 +55,7 @@ public class MessageEditorActivity extends CrmEditorActivity<MessageDTO> impleme
 
             mc = mid.messageCategory();
             mgc = mid.categoryType() == null || mid.categoryType().isNull() ? null : mid.categoryType().getValue();
+            dm = mid.deliveryMethod().getValue(null);
         } else {
             Object placeCriteria = place instanceof Message ? ((Message) place).getCriteria() : null;
 
@@ -83,12 +87,18 @@ public class MessageEditorActivity extends CrmEditorActivity<MessageDTO> impleme
         if (mc != null) {
             initData.messageCategory().set(mc);
         }
+        initData.deliveryMethod().setValue(dm);
         callback.onSuccess(initData);
     }
 
     @Override
     public MessageCategory getCategory() {
         return mc;
+    }
+
+    @Override
+    public DeliveryMethod getDeliveryMethod() {
+        return dm;
     }
 
     @Override
@@ -102,5 +112,17 @@ public class MessageEditorActivity extends CrmEditorActivity<MessageDTO> impleme
             return mgc;
         }
         return result;
+    }
+
+    @Override
+    public String getEntityName() {
+        if (dm != null) {
+            return dm.toString();
+        }
+        CategoryType ct = getCategoryType();
+        if (ct == null) {
+            return CategoryType.Message.toString();
+        }
+        return ct.toString();
     }
 }

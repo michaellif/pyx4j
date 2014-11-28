@@ -214,6 +214,6 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(MoneyInBatchDTO.class, Finance.MoneyIn.Batch.class, defaultImage);
 
         AppPlaceEntityMapper.register(MessageDTO.class, Communication.Message.class, defaultImage);
-        AppPlaceEntityMapper.register(MessageCategory.class, CrmSiteMap.Administration.Settings.CommunicationSettings.class, defaultImage);
+        AppPlaceEntityMapper.register(MessageCategory.class, CrmSiteMap.Administration.Settings.MessageCategory.class, defaultImage);
     }
 }

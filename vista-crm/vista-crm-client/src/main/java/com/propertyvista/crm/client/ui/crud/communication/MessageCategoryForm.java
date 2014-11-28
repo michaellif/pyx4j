@@ -13,16 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
-import java.util.EnumSet;
-
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
@@ -36,7 +32,6 @@ import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeFolder
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeFolder.ParentEmployeeGetter;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
-import com.propertyvista.misc.VistaTODO;
 
 public class MessageCategoryForm extends CrmEntityForm<MessageCategory> {
 
@@ -60,14 +55,8 @@ public class MessageCategoryForm extends CrmEntityForm<MessageCategory> {
     private IsWidget createInfoTab() {
         FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, proto().category()).decorate().customLabel(i18n.tr("Name"));
-        if (ApplicationMode.isDevelopment() && VistaTODO.ADDITIONAL_COMMUNICATION_FEATURES) {
-            CComboBox<CategoryType> categoryComp = new CComboBox<CategoryType>();
-            categoryComp.setOptions(EnumSet.of(CategoryType.Message, CategoryType.IVR, CategoryType.Notification, CategoryType.SMS));
+        formPanel.append(Location.Left, proto().categoryType(), new CLabel<CategoryType>()).decorate().customLabel(i18n.tr("Type"));
 
-            formPanel.append(Location.Left, proto().categoryType(), categoryComp).decorate().customLabel(i18n.tr("Type"));
-        } else {
-            formPanel.append(Location.Left, proto().categoryType(), new CLabel<CategoryType>()).decorate().customLabel(i18n.tr("Type"));
-        }
         dispatcherHeader = formPanel.h1(i18n.tr("Message Category Dispatchers"));
         formPanel.append(Location.Left, proto().dispatchers(), dispatcherFolder = new EmployeeFolder(this, new ParentEmployeeGetter() {
             @Override

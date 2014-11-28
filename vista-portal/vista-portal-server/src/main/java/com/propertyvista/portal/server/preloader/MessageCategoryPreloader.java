@@ -22,7 +22,6 @@ import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.communication.MessageCategory.TicketType;
 import com.propertyvista.domain.security.CrmRole;
-import com.propertyvista.misc.VistaTODO;
 
 public class MessageCategoryPreloader extends AbstractDataPreloader {
     private final boolean isProduction;
@@ -39,11 +38,6 @@ public class MessageCategoryPreloader extends AbstractDataPreloader {
         createCategory(CategoryType.Ticket, TicketType.Vendor, TicketType.Vendor.toString(), CrmRolesPreloader.getDefaultRole());
         createCategory(CategoryType.Ticket, TicketType.Maintenance, TicketType.Maintenance.toString(), CrmRolesPreloader.getDefaultRole());
         createCategory(CategoryType.Message, TicketType.NotTicket, "General Message", CrmRolesPreloader.getDefaultRole());
-        if (!isProduction && VistaTODO.ADDITIONAL_COMMUNICATION_FEATURES) {
-            createCategory(CategoryType.IVR, TicketType.NotTicket, "General IVR", CrmRolesPreloader.getDefaultRole());
-            createCategory(CategoryType.SMS, TicketType.NotTicket, "General SMS", CrmRolesPreloader.getDefaultRole());
-            createCategory(CategoryType.Notification, TicketType.NotTicket, "General Notification", CrmRolesPreloader.getDefaultRole());
-        }
         return null;
     }
 

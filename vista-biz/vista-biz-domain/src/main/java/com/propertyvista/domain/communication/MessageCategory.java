@@ -44,16 +44,7 @@ public interface MessageCategory extends IEntity {
         Message,
 
         @Translate("Ticket")
-        Ticket,
-
-        @Translate("IVR")
-        IVR,
-
-        @Translate("SMS")
-        SMS,
-
-        @Translate("Notification")
-        Notification;
+        Ticket;
 
         @Override
         public String toString() {

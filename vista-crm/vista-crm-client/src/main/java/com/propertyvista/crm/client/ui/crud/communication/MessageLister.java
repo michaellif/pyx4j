@@ -17,12 +17,11 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
-import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.security.DataModelPermission;
@@ -37,20 +36,26 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.rpc.CrmSiteMap.Communication.Message;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
-import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.communication.MessageCategory.TicketType;
+import com.propertyvista.domain.communication.SpecialDelivery.DeliveryMethod;
 import com.propertyvista.dto.MessageDTO;
 
 public class MessageLister extends SiteDataTablePanel<MessageDTO> {
     private static final I18n i18n = I18n.get(MessageLister.class);
 
-    private Button newMessage;
+    private Button newButton;
 
-    private Button newTicket;
+    private MenuItem newMessage;
 
-    private List<? extends CommunicationEndpoint> recipientScope;
+    private MenuItem newTicket;
+
+    private MenuItem newIVR;
+
+    private MenuItem newSMS;
+
+    private MenuItem newNotification;
 
     private final MessageListerView view;
 
@@ -64,22 +69,48 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
         setFilteringEnabled(true);
         // No sorting work for it
         getDataTable().setHasColumnClickSorting(false);
+        setAddNewActionCaption(i18n.tr("New") + " " + CategoryType.Ticket.toString());
+        setAddNewActionEnabled(false);
 
-        addUpperActionItem(newMessage = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New Message"), new Command() {
+        addUpperActionItem(newButton = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New..."), new Command() {
             @Override
             public void execute() {
-                editNewEntity(CategoryType.Message);
-            }
-        }));
-        addUpperActionItem(newTicket = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New Ticket"), new Command() {
-            @Override
-            public void execute() {
-                editNewEntity(CategoryType.Ticket);
             }
         }));
 
-        newTicket.setPermission(DataModelPermission.permissionCreate(MessageDTO.class));
-        newMessage.setPermission(DataModelPermission.permissionCreate(MessageDTO.class));
+        Button.ButtonMenuBar subMenu = new Button.ButtonMenuBar();
+        subMenu.addItem(newTicket = new MenuItem(i18n.tr("Ticket"), new Command() {
+            @Override
+            public void execute() {
+                editNewEntity(CategoryType.Ticket, null);
+            }
+        }));
+        subMenu.addItem(newMessage = new MenuItem(i18n.tr("Message"), new Command() {
+            @Override
+            public void execute() {
+                editNewEntity(CategoryType.Message, null);
+            }
+        }));
+        subMenu.addItem(newIVR = new MenuItem(i18n.tr("IVR"), new Command() {
+            @Override
+            public void execute() {
+                editNewEntity(CategoryType.Message, DeliveryMethod.IVR);
+            }
+        }));
+        subMenu.addItem(newSMS = new MenuItem(i18n.tr("SMS"), new Command() {
+            @Override
+            public void execute() {
+                editNewEntity(CategoryType.Message, DeliveryMethod.SMS);
+            }
+        }));
+        subMenu.addItem(newNotification = new MenuItem(i18n.tr("Notification"), new Command() {
+            @Override
+            public void execute() {
+                editNewEntity(CategoryType.Message, DeliveryMethod.Notification);
+            }
+        }));
+        newButton.setMenu(subMenu);
+        newButton.setPermission(DataModelPermission.permissionCreate(MessageDTO.class));
     }
 
     public static ColumnDescriptor[] createColumnDescriptors(CategoryType category) {
@@ -94,6 +125,7 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
                     new MemberColumnDescriptor.Builder(proto.senderDTO().name()).columnTitle(i18n.tr("Sender")).searchable(false).width("200px").build(),
                     new MemberColumnDescriptor.Builder(proto.date()).searchable(false).width("200px").build(),
                     new MemberColumnDescriptor.Builder(proto.subject()).searchable(false).width("1000px").build(),
+                    new MemberColumnDescriptor.Builder(proto.deliveryMethod()).searchable(true).width("300px").build(),
                     new MemberColumnDescriptor.Builder(proto.category(), false).searchable(false).width("300px").build(),
                     new MemberColumnDescriptor.Builder(proto.category().categoryType(), false).searchableOnly().columnTitle(i18n.tr("Category")).build(),
                     new MemberColumnDescriptor.Builder(proto.allowedReply()).searchable(false).width("100px").build(),
@@ -127,6 +159,7 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
                 new MemberColumnDescriptor.Builder(proto.senderDTO().name()).columnTitle(i18n.tr("Sender")).searchable(false).width("200px").build(),
                 new MemberColumnDescriptor.Builder(proto.date()).searchable(false).width("200px").build(),
                 new MemberColumnDescriptor.Builder(proto.subject()).searchable(false).width("1000px").build(),
+                new MemberColumnDescriptor.Builder(proto.deliveryMethod()).searchable(true).width("300px").build(),
                 new MemberColumnDescriptor.Builder(proto.category(), false).searchable(false).width("300px").build(),
                 new MemberColumnDescriptor.Builder(proto.category().categoryType(), false).searchableOnly().columnTitle(i18n.tr("Category")).build(),
                 new MemberColumnDescriptor.Builder(proto.allowedReply()).searchable(false).width("100px").build() };
@@ -140,6 +173,7 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
                     new MemberColumnDescriptor.Builder(proto.senderDTO().name()).columnTitle(i18n.tr("Sender")).searchable(false).width("200px").build(),
                     new MemberColumnDescriptor.Builder(proto.date()).searchable(false).width("200px").build(),
                     new MemberColumnDescriptor.Builder(proto.subject()).searchable(false).width("1000px").build(),
+                    new MemberColumnDescriptor.Builder(proto.deliveryMethod()).searchable(true).width("300px").build(),
                     new MemberColumnDescriptor.Builder(proto.category(), false).searchable(false).width("300px").build(),
                     new MemberColumnDescriptor.Builder(proto.category().categoryType(), false).searchableOnly().columnTitle(i18n.tr("Category")).build(),
                     new MemberColumnDescriptor.Builder(proto.allowedReply()).searchable(false).width("100px").build(),
@@ -155,35 +189,35 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
         AppPlace place = view.getPresenter().getPlace();
         Object placeCriteria = place instanceof Message ? ((Message) place).getCriteria() : null;
         CategoryType category = null;
+        newButton.setVisible(true);
+        setAddNewActionEnabled(false);
         if (placeCriteria == null) {
             newMessage.setVisible(true);
             newTicket.setVisible(true);
-            setAddNewActionEnabled(false);
-            if (recipientScope != null) {
-                OrCriterion senderOrRecipientCriteria = new OrCriterion(PropertyCriterion.in(criteria.proto().sender(), recipientScope), PropertyCriterion.in(
-                        criteria.proto().recipients().$().recipient(), recipientScope));
-
-                AndCriterion onBehalfCriteria = new AndCriterion(PropertyCriterion.in(criteria.proto().onBehalf(), recipientScope), PropertyCriterion.eq(
-                        criteria.proto().onBehalfVisible(), true));
-
-                criteria.or(senderOrRecipientCriteria, onBehalfCriteria);
-
-            }
+            newIVR.setVisible(true);
+            newSMS.setVisible(true);
+            newNotification.setVisible(true);
         } else {
-            newMessage.setVisible(false);
-            newTicket.setVisible(false);
-            setAddNewActionEnabled(true);
             if (placeCriteria instanceof CategoryType) {
-                setAddNewActionCaption(i18n.tr("New") + " " + placeCriteria.toString());
                 criteria.eq(criteria.proto().category().categoryType(), category = (CategoryType) placeCriteria);
             } else if (placeCriteria instanceof MessageCategory) {
                 MessageCategory mc = (MessageCategory) placeCriteria;
                 if (TicketType.Maintenance.equals(mc.ticketType().getValue())) {
-                    setAddNewActionEnabled(false);
+                    newButton.setVisible(false);
                 } else {
-                    setAddNewActionCaption(i18n.tr("New") + " " + (category = mc.categoryType().getValue()).toString());
+                    category = mc.categoryType().getValue();
                 }
                 criteria.eq(criteria.proto().category(), mc);
+            }
+
+            if (category != null) {
+                setAddNewActionEnabled(CategoryType.Message != category);
+                newButton.setVisible(CategoryType.Message == category);
+                newMessage.setVisible(CategoryType.Message == category);
+                newTicket.setVisible(false);
+                newIVR.setVisible(CategoryType.Message == category);
+                newSMS.setVisible(CategoryType.Message == category);
+                newNotification.setVisible(CategoryType.Message == category);
             }
         }
         setDataTableModel(new DataTableModel<MessageDTO>(createColumnDescriptors(category)));
@@ -231,10 +265,10 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
     protected void onItemNew() {
         AppPlace place = view.getPresenter().getPlace();
         Object placeCriteria = place instanceof Message ? ((Message) place).getCriteria() : null;
-        editNewEntity(placeCriteria);
+        editNewEntity(placeCriteria, null);
     }
 
-    private void editNewEntity(Object placeCriteria) {
+    private void editNewEntity(Object placeCriteria, DeliveryMethod deliveryMethod) {
         MessageCrudService.MessageInitializationData initData = EntityFactory.create(MessageCrudService.MessageInitializationData.class);
         if (placeCriteria == null) {
             initData.categoryType().setValue(null);
@@ -243,9 +277,7 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
         } else if (placeCriteria instanceof CategoryType) {
             initData.categoryType().setValue((CategoryType) placeCriteria);
         }
-        if (recipientScope != null && recipientScope.size() > 0) {
-            initData.recipients().addAll(recipientScope);
-        }
+        initData.deliveryMethod().setValue(deliveryMethod);
         editNew(Message.class, initData);
     }
 }

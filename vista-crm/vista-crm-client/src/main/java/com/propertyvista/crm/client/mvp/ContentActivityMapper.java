@@ -1472,7 +1472,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new OnlinePaymentWizardActivity(crudPlace);
                     }
                     // CRUD APP PLACE IF ENDS HERE
-                    else if ((crudPlace instanceof CrmSiteMap.Administration.Settings.CommunicationSettings)) {
+                    else if ((crudPlace instanceof CrmSiteMap.Administration.Settings.MessageCategory)) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new MessageCategoryEditorActivity(crudPlace);

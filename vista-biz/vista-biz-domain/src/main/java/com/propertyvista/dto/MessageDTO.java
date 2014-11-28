@@ -15,6 +15,7 @@ package com.propertyvista.dto;
 
 import java.util.Date;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.ExtendsBO;
@@ -30,10 +31,12 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.TimeWindow;
 import com.propertyvista.domain.communication.CommunicationAssociation;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
+import com.propertyvista.domain.communication.SpecialDelivery.DeliveryMethod;
 import com.propertyvista.domain.company.Employee;
 
 @Transient
@@ -84,6 +87,19 @@ public interface MessageDTO extends Message {
     @ReadOnly
     @Length(78)
     IPrimitive<String> subject();
+
+    @ReadOnly
+    IPrimitive<DeliveryMethod> deliveryMethod();
+
+    @Length(48000)
+    @Editor(type = Editor.EditorType.textarea)
+    IPrimitive<String> deliveredText();
+
+    IPrimitive<LogicalDate> dateFrom();
+
+    IPrimitive<LogicalDate> dateTo();
+
+    TimeWindow timeWindow();
 
     @NotNull
     @ReadOnly

@@ -64,7 +64,6 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
@@ -288,11 +287,8 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
             formPanel.append(Location.Left, proto().highImportance(), new CCheckBox()).decorate();
             formPanel.hr();
 
-            if (VistaTODO.USE_RTF_EDITOR_FOR_COMMUNICATION) {
-                formPanel.append(Location.Left, proto().text(), new CRichTextArea());
-            } else {
-                formPanel.append(Location.Left, proto().text());
-            }
+            formPanel.append(Location.Left, proto().text(), new CRichTextArea());
+
             attachmentBr = formPanel.br();
             attachmentCaption = formPanel.h3("Attachments");
             formPanel.append(Location.Left, proto().attachments(), attachemnts = new MessageAttachmentFolder());

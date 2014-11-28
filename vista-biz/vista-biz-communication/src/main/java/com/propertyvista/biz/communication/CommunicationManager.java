@@ -43,9 +43,12 @@ import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
+import com.propertyvista.domain.communication.IVRDelivery;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
+import com.propertyvista.domain.communication.NotificationDelivery;
+import com.propertyvista.domain.communication.SMSDelivery;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.communication.ThreadPolicyHandle;
 import com.propertyvista.domain.company.Employee;
@@ -270,6 +273,7 @@ public class CommunicationManager {
         Persistence.ensureRetrieve(bo.thread(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.thread().category(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.thread().owner(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(bo.thread().specialDelivery(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.recipients(), AttachLevel.Attached);
         if (ms != null && ms.size() > 0) {
             boolean star = false;
@@ -369,6 +373,26 @@ public class CommunicationManager {
 
         messageDTO.id().set(m.id());
         messageDTO.subject().set(thread.subject());
+        messageDTO.deliveryMethod().set(thread.deliveryMethod());
+        if (thread.specialDelivery() != null && !thread.specialDelivery().isNull()) {
+            switch (thread.deliveryMethod().getValue()) {
+            case Notification:
+                NotificationDelivery nd = thread.specialDelivery().cast();
+                messageDTO.dateFrom().set(nd.dateFrom());
+                messageDTO.dateTo().set(nd.dateTo());
+                messageDTO.timeWindow().set(nd.timeWindow());
+                messageDTO.timeWindow().set(nd.timeWindow());
+                break;
+            case SMS:
+                SMSDelivery smsd = thread.specialDelivery().cast();
+                messageDTO.deliveredText().set(smsd.deliveredText());
+                break;
+            case IVR:
+                IVRDelivery ivrd = thread.specialDelivery().cast();
+                messageDTO.deliveredText().set(ivrd.deliveredText());
+                break;
+            }
+        }
         messageDTO.allowedReply().set(thread.allowedReply());
         messageDTO.status().set(thread.status());
         Persistence.ensureRetrieve(thread.owner(), AttachLevel.Attached);

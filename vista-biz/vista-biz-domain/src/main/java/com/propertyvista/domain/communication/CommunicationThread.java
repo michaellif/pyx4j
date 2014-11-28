@@ -31,6 +31,8 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.communication.SpecialDelivery.DeliveryMethod;
+
 @DiscriminatorValue("CommunicationThread")
 @ToStringFormat("{0}")
 public interface CommunicationThread extends IEntity {
@@ -82,5 +84,13 @@ public interface CommunicationThread extends IEntity {
 
     @Detached
     CommunicationAssociation associated();
+
+    @ReadOnly
+    IPrimitive<DeliveryMethod> deliveryMethod();
+
+    @Owned
+    @Detached
+    @ReadOnly
+    SpecialDelivery specialDelivery();
 
 }

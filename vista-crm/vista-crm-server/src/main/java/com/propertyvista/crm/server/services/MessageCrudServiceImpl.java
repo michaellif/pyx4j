@@ -41,9 +41,13 @@ import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
+import com.propertyvista.domain.communication.IVRDelivery;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageAttachment;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
+import com.propertyvista.domain.communication.NotificationDelivery;
+import com.propertyvista.domain.communication.SMSDelivery;
+import com.propertyvista.domain.communication.SpecialDelivery;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.communication.ThreadPolicyHandle;
 import com.propertyvista.domain.company.Employee;
@@ -83,6 +87,9 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         if (path.equals(toProto.subject().getPath().toString())) {
             return boProto.thread().subject().getPath();
         }
+        if (path.equals(toProto.deliveryMethod().getPath().toString())) {
+            return boProto.thread().deliveryMethod().getPath();
+        }
         if (path.equals(toProto.hidden().getPath().toString())) {
             return boProto.thread().userPolicy().$().hidden().getPath();
         }
@@ -100,6 +107,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             toCriteria.getFilters().remove(recipientCiteria);
             boCriteria.eq(boCriteria.proto().recipients().$().recipient(), CrmAppContext.getCurrentUserEmployee());
         }
+
         super.enhanceListCriteria(boCriteria, toCriteria);
     }
 
@@ -174,6 +182,11 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
                 dto.category().set(data.messageCategory());
             }
 
+            if (data.deliveryMethod() != null && !data.deliveryMethod().isNull()) {
+                dto.deliveryMethod().set(data.deliveryMethod());
+                dto.allowedReply().setValue(false);
+            }
+
             if (data.recipients() != null && data.recipients().size() > 0) {
                 for (CommunicationEndpoint t : data.recipients()) {
                     dto.to().add(communicationFacade.generateEndpointDTO(t));
@@ -213,6 +226,33 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         }
         CommunicationThread t = EntityFactory.create(CommunicationThread.class);
         t.subject().set(to.subject());
+        if (to.deliveryMethod() != null && !to.deliveryMethod().isNull()) {
+            SpecialDelivery da = null;
+            switch (to.deliveryMethod().getValue()) {
+            case SMS:
+                da = EntityFactory.create(SMSDelivery.class);
+                ((SMSDelivery) da).deliveredText().set(to.deliveredText());
+                if (to.deliveredText() != null && !to.deliveredText().isNull()) {
+                    t.subject().setValue(to.deliveredText().getValue().substring(0, Math.min(77, to.deliveredText().getValue().length())));
+                }
+                break;
+            case IVR:
+                da = EntityFactory.create(IVRDelivery.class);
+                ((IVRDelivery) da).deliveredText().set(to.deliveredText());
+                if (to.deliveredText() != null && !to.deliveredText().isNull()) {
+                    t.subject().setValue(to.deliveredText().getValue().substring(0, Math.min(77, to.deliveredText().getValue().length())));
+                }
+                break;
+            case Notification:
+                da = EntityFactory.create(NotificationDelivery.class);
+                ((NotificationDelivery) da).dateFrom().set(to.dateFrom());
+                ((NotificationDelivery) da).dateTo().set(to.dateTo());
+                ((NotificationDelivery) da).timeWindow().set(to.timeWindow());
+                break;
+            }
+            t.deliveryMethod().set(to.deliveryMethod());
+            t.specialDelivery().set(da);
+        }
         t.allowedReply().set(to.allowedReply());
         t.category().set(to.category());
         if (isNew && isTicket) {

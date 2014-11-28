@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.ui.crud.communication;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.crm.rpc.CrmSiteMap.Communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
@@ -48,15 +48,6 @@ public class MessageListerViewImpl extends AbstractListerView<MessageDTO> implem
                             break;
                         case Ticket:
                             caption = i18n.tr("Tickets");
-                            break;
-                        case IVR:
-                            caption = i18n.tr("IVR");
-                            break;
-                        case Notification:
-                            caption = i18n.tr("Notifications");
-                            break;
-                        case SMS:
-                            caption = i18n.tr("SMS");
                             break;
                         }
                     }

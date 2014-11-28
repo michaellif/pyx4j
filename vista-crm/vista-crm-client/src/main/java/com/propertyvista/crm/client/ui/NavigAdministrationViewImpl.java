@@ -146,7 +146,7 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
                     .permissionRead(AuditRecordDTO.class)));
             sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new Security.UserRole(), DataModelPermission.permissionRead(CrmRole.class)));
 
-            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Settings.CommunicationSettings(), DataModelPermission
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Settings.MessageCategory(), DataModelPermission
                     .permissionRead(MessageCategory.class)));
 
             sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Security.AssignReports(), DataModelPermission

@@ -172,7 +172,8 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
         }
         setActionVisible(assignToMeAction, !invisible && !ClientContext.getUserVisit().getName().equals(value.owner().name().getValue()));
         setActionVisible(unassignAction, !invisible && !ContactType.System.equals(value.owner().type().getValue()));
-        setCaption(value.category().categoryType().getValue().toString());
+        setCaption(value.deliveryMethod() == null || value.deliveryMethod().isNull() ? value.category().categoryType().getValue().toString() : value
+                .deliveryMethod().getValue().toString());
 
         hideUnhideAction.setText(value.hidden().getValue(false) ? i18n.tr("Unhide") : i18n.tr("Hide"));
         //setActionVisible(hideUnhideAction, !CategoryType.Ticket.equals(value.category().categoryType().getValue()));
