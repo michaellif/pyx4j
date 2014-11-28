@@ -60,7 +60,9 @@ public class LeaseParticipantUtils {
 
     public static LeaseParticipantScreeningTO createScreeningTO(LeaseParticipant<?> participant, CustomerScreening screening) {
         LeaseParticipantScreeningTO to = EntityFactory.create(LeaseParticipantScreeningTO.class);
+
         to.leaseParticipantId().set(participant.<LeaseParticipant<?>> createIdentityStub());
+        Persistence.ensureRetrieve(participant.lease(), AttachLevel.Attached);
         to.leaseStatus().setValue(participant.lease().status().getValue());
         to.data().set(screening);
 
@@ -68,7 +70,7 @@ public class LeaseParticipantUtils {
             to.setPrimaryKey(new Key(participant.getPrimaryKey().asLong(), screening.getPrimaryKey().getVersion()));
         }
 
-        loadRestrictions(to, to.leaseParticipantId());
+        loadRestrictions(to, participant);
         return to;
     }
 
