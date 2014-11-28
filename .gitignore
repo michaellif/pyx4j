@@ -2,3 +2,4 @@ target/
 logs/
 war/
 .settings/
+gwt-unitCache/
