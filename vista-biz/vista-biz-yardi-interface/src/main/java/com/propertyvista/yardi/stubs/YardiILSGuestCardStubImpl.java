@@ -90,8 +90,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
         request.setPlatform(yc.platform().getValue().name());
 
         GetPropertyConfigurationsResponse response = getILSGuestCardService(yc).getPropertyConfigurations(request);
-        String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
-        return ensureResult(xml, Properties.class);
+        return ensureResult(response.getGetPropertyConfigurationsResult().getExtraElement(), Properties.class);
     }
 
     @Override
@@ -110,8 +109,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
         request.setPlatform(yc.platform().getValue().name());
 
         GetAttachmentTypesAndChargeCodesResponse response = getILSGuestCardService(yc).getAttachmentTypesAndChargeCodes(request);
-        String xml = response.getGetAttachmentTypesAndChargeCodesResult().getExtraElement().toString();
-        return ensureResult(xml, AttachmentTypesAndChargeCodes.class);
+        return ensureResult(response.getGetAttachmentTypesAndChargeCodesResult().getExtraElement(), AttachmentTypesAndChargeCodes.class);
     }
 
     @Override
@@ -132,9 +130,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
         request.setYardiPropertyId(propertyId);
 
         GetYardiRentableItems_LoginResponse response = getILSGuestCardService(yc).getYardiRentableItems_Login(request);
-        String xml = response.getGetYardiRentableItems_LoginResult().getExtraElement().toString();
-
-        return ensureResult(xml, RentableItems.class);
+        return ensureResult(response.getGetYardiRentableItems_LoginResult().getExtraElement(), RentableItems.class);
     }
 
     @Override
@@ -155,9 +151,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
         request.setYardiPropertyId(propertyId);
 
         GetYardiAgentsSourcesResults_LoginResponse response = getILSGuestCardService(yc).getYardiAgentsSourcesResults_Login(request);
-        String xml = response.getGetYardiAgentsSourcesResults_LoginResult().getExtraElement().toString();
-
-        return ensureResult(xml, MarketingSources.class);
+        return ensureResult(response.getGetYardiAgentsSourcesResults_LoginResult().getExtraElement(), MarketingSources.class);
     }
 
     @Override
@@ -178,9 +172,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
         request.setYardiPropertyId(propertyId);
 
         UnitAvailability_LoginResponse response = getILSGuestCard20Service(yc).unitAvailability_Login(request);
-        String xml = response.getUnitAvailability_LoginResult().getExtraElement().toString();
-
-        return ensureResult(xml, PhysicalProperty.class);
+        return ensureResult(response.getUnitAvailability_LoginResult().getExtraElement(), PhysicalProperty.class);
     }
 
     @Override
@@ -201,9 +193,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
         request.setYardiPropertyId(propertyId);
 
         GetYardiGuestActivity_LoginResponse response = getILSGuestCardService(yc).getYardiGuestActivity_Login(request);
-        String xml = response.getGetYardiGuestActivity_LoginResult().getExtraElement().toString();
-
-        return ensureResult(xml, LeadManagement.class);
+        return ensureResult(response.getGetYardiGuestActivity_LoginResult().getExtraElement(), LeadManagement.class);
     }
 
     @Override
@@ -225,9 +215,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
         request.setProspectID(prospectId);
 
         GetApplication_LoginResponse response = getILSGuestCardService(yc).getApplication_Login(request);
-        String xml = response.getGetApplication_LoginResult().getExtraElement().toString();
-
-        return ensureResult(xml, LeaseApplication.class);
+        return ensureResult(response.getGetApplication_LoginResult().getExtraElement(), LeaseApplication.class);
     }
 
     @Override
@@ -257,9 +245,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
         request.setFederalId("");
 
         GetYardiGuestActivity_SearchResponse response = getILSGuestCardService(yc).getYardiGuestActivity_Search(request);
-        String xml = response.getGetYardiGuestActivity_SearchResult().getExtraElement().toString();
-
-        return ensureResult(xml, LeadManagement.class);
+        return ensureResult(response.getGetYardiGuestActivity_SearchResult().getExtraElement(), LeadManagement.class);
     }
 
     @Override
@@ -292,9 +278,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
         }
 
         ImportYardiGuest_LoginResponse response = getILSGuestCardService(yc).importYardiGuest_Login(request);
-        String xml = response.getImportYardiGuest_LoginResult().getExtraElement().toString();
-
-        ensureValid(xml);
+        ensureValid(response.getImportYardiGuest_LoginResult().getExtraElement());
     }
 
     @Override
@@ -326,9 +310,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
         }
 
         ImportApplication_LoginResponse response = getILSGuestCardService(yc).importApplication_Login(request);
-        String xml = response.getImportApplication_LoginResult().getExtraElement().toString();
-
-        ensureValid(xml);
+        ensureValid(response.getImportApplication_LoginResult().getExtraElement());
     }
 
     @Override

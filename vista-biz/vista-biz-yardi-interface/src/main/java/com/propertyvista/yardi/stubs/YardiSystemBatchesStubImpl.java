@@ -102,8 +102,7 @@ class YardiSystemBatchesStubImpl extends AbstractYardiStub implements YardiSyste
             request.setTransactionXml(transactionXml);
 
             AddReceiptsToBatchResponse response = getResidentTransactionsSysBatchService(yc).addReceiptsToBatch(request);
-            String xml = response.getAddReceiptsToBatchResult().getExtraElement().toString();
-            ensureValid(xml);
+            ensureValid(response.getAddReceiptsToBatchResult().getExtraElement());
         } catch (JAXBException e) {
             throw new Error(e);
         } catch (XMLStreamException e) {
@@ -127,8 +126,7 @@ class YardiSystemBatchesStubImpl extends AbstractYardiStub implements YardiSyste
         request.setBatchId(batchId);
 
         PostReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).postReceiptBatch(request);
-        String xml = response.getPostReceiptBatchResult().getExtraElement().toString();
-        ensureValid(xml);
+        ensureValid(response.getPostReceiptBatchResult().getExtraElement());
     }
 
     @Override
@@ -147,8 +145,7 @@ class YardiSystemBatchesStubImpl extends AbstractYardiStub implements YardiSyste
         request.setBatchId(batchId);
 
         CancelReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).cancelReceiptBatch(request);
-        String xml = response.getCancelReceiptBatchResult().getExtraElement().toString();
-        ensureValid(xml);
+        ensureValid(response.getCancelReceiptBatchResult().getExtraElement());
     }
 
     @Override

@@ -29,6 +29,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.axiom.om.OMElement;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.Stub;
 import org.apache.axis2.context.MessageContext;
@@ -262,8 +263,13 @@ public abstract class AbstractYardiStub implements ExternalInterfaceLoggingStub 
     }
 
     @SuppressWarnings("unchecked")
-    protected <R> R ensureResult(String xml, Class<R> resultType) throws YardiServiceException {
+    protected <R> R ensureResult(OMElement element, Class<R> resultType) throws YardiServiceException {
+        if (element == null) {
+            throw new YardiServiceException("Empty Response received by: " + currentAction.name());
+        }
+
         final List<String> errorTags = Arrays.asList("ErrorMessage", "ErrorMessages");
+        String xml = element.toString();
         try {
             final XMLStreamReader xsr = XMLInputFactory.newFactory().createXMLStreamReader(new StringReader(xml));
             Unmarshaller um = JAXBContext.newInstance(resultType).createUnmarshaller();
@@ -274,27 +280,29 @@ public abstract class AbstractYardiStub implements ExternalInterfaceLoggingStub 
                 }
             });
             return (R) um.unmarshal(xsr);
-        } catch (JAXBException e) {
+        } catch (JAXBException | XMLStreamException e) {
             logRecordedTracastions();
-            throw new YardiResponseException(xml);
-        } catch (XMLStreamException e) {
-            logRecordedTracastions();
-            throw new YardiResponseException(xml);
+            throw new YardiResponseException(xml, "Invalid Response received by: " + currentAction.name());
         }
     }
 
-    protected void ensureValid(String xml) throws YardiServiceException {
+    protected void ensureValid(OMElement element) throws YardiServiceException {
+        if (element == null) {
+            throw new YardiServiceException("Empty Response received by: " + currentAction.name());
+        }
+
+        String xml = element.toString();
         try {
             Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
             if (messages.isError()) {
                 logRecordedTracastions();
-                throw new YardiResponseException(xml);
+                throw new YardiResponseException(xml, "Invalid Response received by: " + currentAction.name());
             } else {
                 log.debug(messages.toString());
             }
         } catch (JAXBException e) {
             logRecordedTracastions();
-            throw new YardiServiceException(e);
+            throw new YardiServiceException("Invalid Response received by: " + currentAction.name(), e);
         }
     }
 }

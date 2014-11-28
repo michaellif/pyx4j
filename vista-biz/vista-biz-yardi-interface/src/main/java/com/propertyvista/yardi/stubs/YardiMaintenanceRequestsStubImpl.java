@@ -71,8 +71,7 @@ class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implements Yard
         request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.Maintenance, yc));
 
         GetPropertyConfigurationsResponse response = getMaintenanceRequestsService(yc).getPropertyConfigurations(request);
-        String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
-        return ensureResult(xml, Properties.class);
+        return ensureResult(response.getGetPropertyConfigurationsResult().getExtraElement(), Properties.class);
     }
 
     @Override
@@ -89,9 +88,8 @@ class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implements Yard
         request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.Maintenance, yc));
 
         GetCustomValuesResponse response = getMaintenanceRequestsService(yc).getCustomValues(request);
-        String xml = response.getGetCustomValuesResult().getExtraElement().toString();
-        CustomConfig config = ensureResult(xml, CustomConfig.class);
-        return config.getCustomValues();
+        CustomConfig config = ensureResult(response.getGetCustomValuesResult().getExtraElement(), CustomConfig.class);
+        return config == null ? null : config.getCustomValues();
     }
 
     @Override
@@ -107,8 +105,7 @@ class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implements Yard
         request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.Maintenance, yc));
 
         GetServiceRequest_SearchResponse response = getMaintenanceRequestsService(yc).getServiceRequest_Search(request);
-        String xml = response.getGetServiceRequest_SearchResult().getExtraElement().toString();
-        return ensureResult(xml, ServiceRequests.class);
+        return ensureResult(response.getGetServiceRequest_SearchResult().getExtraElement(), ServiceRequests.class);
     }
 
     @Override
@@ -141,8 +138,7 @@ class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implements Yard
         }
 
         CreateOrEditServiceRequestsResponse response = getMaintenanceRequestsService(yc).createOrEditServiceRequests(request);
-        String xml = response.getCreateOrEditServiceRequestsResult().getExtraElement().toString();
-        return ensureResult(xml, ServiceRequests.class);
+        return ensureResult(response.getCreateOrEditServiceRequestsResult().getExtraElement(), ServiceRequests.class);
     }
 
     @Override
