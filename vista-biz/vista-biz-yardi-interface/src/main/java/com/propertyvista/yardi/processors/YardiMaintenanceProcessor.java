@@ -33,6 +33,7 @@ import com.yardi.entity.maintenance.meta.Status;
 import com.yardi.entity.maintenance.meta.Statuses;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
@@ -179,27 +180,32 @@ public class YardiMaintenanceProcessor {
 //                mr.reporter().set(tenant);
 //            }
 //        }
+        if (mr.reportedDate().isNull() && request.getServiceRequestDate() != null) {
+            mr.reportedDate().setValue(new LogicalDate(request.getServiceRequestDate()));
+        }
         // category
+        MaintenanceRequestCategory category = null;
         if (request.getCategory() != null) {
-            MaintenanceRequestCategory category = findCategory(request.getCategory(), meta.rootCategory());
-            if (category == null) {
+            category = findCategory(request.getCategory(), meta.rootCategory());
+            if (category == null && !metaReloaded) {
                 metaReloaded = reloadMeta(yc);
                 category = findCategory(request.getCategory(), meta.rootCategory());
-                if (category == null) {
-                    throw new YardiServiceException("Request dropped - Category not found: " + request.getCategory());
-                }
             }
-            MaintenanceRequestCategory subcat = findCategory(request.getSubCategory(), category);
-            if (subcat == null && !metaReloaded) {
-                metaReloaded = reloadMeta(yc);
-                subcat = findCategory(request.getSubCategory(), category);
+            if (category == null) {
+                log.warn("Maintenance Request Meta lookup failed for Category: " + request.getCategory());
+            } else if (request.getSubCategory() != null) {
+                MaintenanceRequestCategory subcat = findCategory(request.getSubCategory(), category);
+                if (subcat == null && !metaReloaded) {
+                    metaReloaded = reloadMeta(yc);
+                    subcat = findCategory(request.getSubCategory(), category);
+                }
                 if (subcat == null) {
-                    throw new YardiServiceException("SubCategory not found: " + request.getSubCategory());
+                    log.warn("Maintenance Request Meta lookup failed for SubCategory: " + request.getSubCategory());
+                } else {
+                    category = subcat;
                 }
             }
-            mr.category().set(subcat);
-        } else {
-            mr.category().setValue(null);
+            mr.category().set(category);
         }
         // status
         if (request.getCurrentStatus() != null) {
@@ -207,13 +213,11 @@ public class YardiMaintenanceProcessor {
             if (stat == null && !metaReloaded) {
                 metaReloaded = reloadMeta(yc);
                 stat = findStatus(request.getCurrentStatus(), meta);
-                if (stat == null) {
-                    throw new YardiServiceException("Request dropped - Status not found: " + request.getCurrentStatus());
-                }
+            }
+            if (stat == null) {
+                log.warn("Maintenance Request Meta lookup failed for Status: " + request.getCurrentStatus());
             }
             mr.status().set(stat);
-        } else {
-            mr.status().set(null);
         }
         // priority
         if (request.getPriority() != null) {
@@ -221,13 +225,11 @@ public class YardiMaintenanceProcessor {
             if (pr == null && !metaReloaded) {
                 metaReloaded = reloadMeta(yc);
                 pr = findPriority(request.getPriority(), meta);
-                if (pr == null) {
-                    throw new YardiServiceException("Request dropped - Priority not found: " + request.getPriority());
-                }
+            }
+            if (pr == null) {
+                log.warn("Maintenance Request Meta lookup failed for Priority: " + request.getPriority());
             }
             mr.priority().set(pr);
-        } else {
-            mr.priority().set(null);
         }
         // request id
         mr.requestId().setValue(request.getServiceRequestId().toString());
