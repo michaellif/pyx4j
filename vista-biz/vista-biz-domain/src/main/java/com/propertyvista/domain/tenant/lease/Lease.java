@@ -107,12 +107,12 @@ public interface Lease extends IEntity, HasNotesAndAttachments {
             return EnumSet.of(ExistingLease, NewLease, Approved, Active, Completed);
         }
 
-        public static EnumSet<Status> active() {
-            return EnumSet.of(Approved, Active);
-        }
-
         public static EnumSet<Status> current() {
             return EnumSet.of(Approved, Active, Completed);
+        }
+
+        public static EnumSet<Status> active() {
+            return EnumSet.of(Approved, Active);
         }
 
         public static EnumSet<Status> operative() {
