@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.activity.tools.financial.moneyin;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -34,8 +33,6 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
@@ -57,7 +54,6 @@ import com.propertyvista.crm.client.ui.tools.common.datagrid.ValidationErrors;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInCandidateSearchVisorView;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInCandidateSearchVisorView.MoneyInCandidateSearchViewController;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInCreateBatchView;
-import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.MoneyInCandidateSearchCriteriaModel;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInCandidateDTO;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInCandidateSearchCriteriaDTO;
@@ -65,8 +61,6 @@ import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInLeaseParticipantDT
 import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInPaymentDTO;
 import com.propertyvista.crm.rpc.dto.tools.TooManyResultsException;
 import com.propertyvista.crm.rpc.services.financial.MoneyInToolService;
-import com.propertyvista.domain.company.Portfolio;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 public class MoneyInCreateBatchActivity extends AbstractActivity implements MoneyInCreateBatchView.Presenter {
@@ -81,6 +75,10 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
 
     }
 
+    private final MoneyInCandidateDTO proto;
+
+    private final MoneyInToolService service;
+
     private final MoneyInCreateBatchView view;
 
     private final ListDataProvider<MoneyInCandidateDTO> searchResultsProvider;
@@ -88,10 +86,6 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
     private final ListDataProvider<MoneyInCandidateDTO> selectedForProcessingProvider;
 
     private final Map<Key, HashMap<Path, ValidationErrors>> validationErrorsMap;
-
-    private final MoneyInToolService service;
-
-    private final MoneyInCandidateDTO proto;
 
     private final Map<String, Comparator<MoneyInCandidateDTO>> sortComparatorsMap;
 
@@ -103,11 +97,12 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
 
     public MoneyInCreateBatchActivity() {
         proto = EntityFactory.getEntityPrototype(MoneyInCandidateDTO.class);
-        validationErrorsMap = new HashMap<Key, HashMap<Path, ValidationErrors>>();
+        service = GWT.<MoneyInToolService> create(MoneyInToolService.class);
         view = CrmSite.getViewFactory().getView(MoneyInCreateBatchView.class);
+
+        validationErrorsMap = new HashMap<Key, HashMap<Path, ValidationErrors>>();
         searchResultsProvider = new ListDataProvider<MoneyInCandidateDTO>(new LinkedList<MoneyInCandidateDTO>(), this);
         selectedForProcessingProvider = new ListDataProvider<MoneyInCandidateDTO>(new LinkedList<MoneyInCandidateDTO>(), this);
-        service = GWT.<MoneyInToolService> create(MoneyInToolService.class);
 
         sortComparatorsMap = createSortComparatorsMap();
 
@@ -371,35 +366,17 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
         }
     }
 
-    private MoneyInCandidateSearchCriteriaDTO toDto(MoneyInCandidateSearchCriteriaModel model) {
-        MoneyInCandidateSearchCriteriaDTO dto = EntityFactory.create(MoneyInCandidateSearchCriteriaDTO.class);
-        dto.portfolios().addAll(toIdStubs(Portfolio.class, model.portfolios()));
-        dto.buildings().addAll(toIdStubs(Building.class, model.buildings()));
-        dto.unit().setValue(model.unit().getValue("").toLowerCase());
-        dto.lease().setValue(model.lease().getValue("").toLowerCase());
-        dto.tenant().setValue(model.tenant().getValue("").toLowerCase());
-        return dto;
-    }
-
-    private <E extends IEntity> Collection<? extends E> toIdStubs(Class<E> identityStubClass, IList<?> entities) {
-        List<E> idStubs = new LinkedList<E>();
-        for (IEntity entity : entities) {
-            idStubs.add((EntityFactory.createIdentityStub(identityStubClass, entity.getPrimaryKey())));
-        }
-        return idStubs;
-    }
-
     private Map<String, Comparator<MoneyInCandidateDTO>> createSortComparatorsMap() {//@formatter:off
-        HashMap<String, Comparator<MoneyInCandidateDTO>> map = new HashMap<String, Comparator<MoneyInCandidateDTO>>();        
+        HashMap<String, Comparator<MoneyInCandidateDTO>> map = new HashMap<String, Comparator<MoneyInCandidateDTO>>();
         putMemberValueComparator(map, proto.building());
         putMemberValueComparator(map, proto.unit());
         putMemberValueComparator(map, proto.leaseId());
-        // TODO add comparator for tenants?        
+        // TODO add comparator for tenants?
         map.put(proto.payment().payerLeaseTermTenantIdStub().getPath().toString(), new Comparator<MoneyInCandidateDTO>() {
             @Override
             public int compare(MoneyInCandidateDTO o1, MoneyInCandidateDTO o2) {
                 LeaseTermTenant tenant1 = o1.payment().payerLeaseTermTenantIdStub();
-                LeaseTermTenant tenant2 = o2.payment().payerLeaseTermTenantIdStub();                
+                LeaseTermTenant tenant2 = o2.payment().payerLeaseTermTenantIdStub();
                 if (tenant1.isNull() || tenant2.isNull()) {
                     return tenant1.isNull() && tenant2.isNull() ? 0 : (tenant1.isNull() ? -1 : 1);
                 } else {
@@ -419,7 +396,7 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
                     }
                     return name1.compareTo(name2);
                 }
-            }           
+            }
         });
         putMemberValueComparator(map, proto.totalOutstanding());
         putMemberValueComparator(map, proto.payment().payedAmount());
@@ -427,7 +404,7 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
         putMemberValueComparator(map, proto.processPayment());
         return map;
     }//@formatter:off
-    
+
     private void putMemberValueComparator(Map<String, Comparator<MoneyInCandidateDTO>> map, IObject<?> member) {
         final Path path = member.getPath();
         map.put(path.toString(), new Comparator<MoneyInCandidateDTO>() {
@@ -439,11 +416,11 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
                     return c1 == c2 ? 0 : (c1 == null ? -1 : 1);
                 } else {
                     return c1.compareTo(c2);
-                } 
+                }
             }
         });
     }
-    
+
     private void sort(String memberPath, ListDataProvider<MoneyInCandidateDTO> provider, boolean isSortAscending) {
         Comparator<MoneyInCandidateDTO> cmp = sortComparatorsMap.get(memberPath);
         if (cmp != null) {
@@ -459,7 +436,7 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
             Collections.sort(provider.getList(), cmp);
         }
     }
-    
+
     private Vector<MoneyInPaymentDTO> createPayments(List<MoneyInCandidateDTO> candidates) {
         Vector<MoneyInPaymentDTO> payments = new Vector<MoneyInPaymentDTO>(candidates.size());
         for (MoneyInCandidateDTO candidate : candidates) {
@@ -467,7 +444,7 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
         }
         return payments;
     }
-    
+
     private void startProcessingProgress(String deferredCorrelationId) {
         DeferredProcessDialog d = new DeferredProcessDialog("", i18n.tr("Processing..."), false) {
             @Override
@@ -485,21 +462,21 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
         d.show();
         d.startProgress(deferredCorrelationId);
     }
-    
+
     private void onProccessingSuccess(DeferredProcessProgressResponse result) {
         Command displayBatches = new Command() {
             @Override
             public void execute() {
                 AppSite.getPlaceController().goTo(new CrmSiteMap.Finance.MoneyIn.Batch());
-            }            
+            }
         };
         Command refreshData = new Command() {
             @Override
             public void execute() {
-                selectedForProcessingProvider.getList().clear();                
-            }            
+                selectedForProcessingProvider.getList().clear();
+            }
         };
-        view.confirm(i18n.tr("Batch has been created successfully. Do you wish to see the created batches?"), displayBatches, refreshData);        
+        view.confirm(i18n.tr("Batch has been created successfully. Do you wish to see the created batches?"), displayBatches, refreshData);
     }
 
 }

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -74,7 +74,6 @@ public class MoneyInToolServiceImpl implements MoneyInToolService {
         Vector<MoneyInCandidateDTO> candidates = new Vector<MoneyInCandidateDTO>();
         ICursorIterator<Lease> leases = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
         try {
-
             while (leases.hasNext()) {
                 Lease lease = leases.next();
                 MoneyInCandidateDTO candidate = toCandidate(lease);
@@ -83,7 +82,7 @@ public class MoneyInToolServiceImpl implements MoneyInToolService {
                 }
             }
         } catch (Throwable e) {
-            log.error("got error during creation candiates for Money In", e);
+            log.error("got error during creation candidates for Money In", e);
             IOUtils.closeQuietly(leases);
         }
 
@@ -111,14 +110,21 @@ public class MoneyInToolServiceImpl implements MoneyInToolService {
 
     private EntityQueryCriteria<Lease> makeCriteria(MoneyInCandidateSearchCriteriaDTO criteriaEntity) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+
         criteria.in(criteria.proto().status(), Lease.Status.active());
-        buildingCriteriaNormalizer.addBuildingCriterion(criteria, criteriaEntity.portfolios(), criteriaEntity.buildings());
+
+        buildingCriteriaNormalizer.addBuildingCriterion(criteria,//@formatter:off
+                criteriaEntity.filterByPortfolio().getValue(false) ? criteriaEntity.selectedPortfolios() : null,
+                criteriaEntity.filterByBuildings().getValue(false) ? criteriaEntity.selectedBuildings() : null
+        );//@formatter:on
+
         if (!CommonsStringUtils.isEmpty(criteriaEntity.unit().getValue())) {
             criteria.like(criteria.proto().unit().info().number(), "%" + criteriaEntity.unit().getValue() + "%");
         }
         if (!CommonsStringUtils.isEmpty(criteriaEntity.lease().getValue())) {
             criteria.like(criteria.proto().leaseId(), "%" + criteriaEntity.lease().getValue() + "%");
         }
+
         return criteria;
     }
 
