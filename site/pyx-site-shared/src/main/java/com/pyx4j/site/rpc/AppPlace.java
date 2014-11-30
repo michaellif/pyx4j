@@ -51,8 +51,6 @@ public class AppPlace extends Place {
 
     public static final String ARG_NAME_ID = "Id";
 
-    private String name;
-
     private Map<String, List<String>> queryArgs;
 
     private Map<String, List<String>> placeArgs;
@@ -143,12 +141,6 @@ public class AppPlace extends Place {
         String val;
         if ((val = getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
             itemId = new Key(val);
-            // Validate argument
-            try {
-                itemId.asLong();
-            } catch (NumberFormatException e) {
-                itemId = null;
-            }
         }
         return itemId;
     }
@@ -246,21 +238,8 @@ public class AppPlace extends Place {
         return this.getClass().getName() + createQueryString(false);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public AppPlace formPlace(Key itemID) {
         return queryArg(ARG_NAME_ID, itemID.toString());
-    }
-
-    public AppPlace formPlace(Key itemID, String name) {
-        setName(name);
-        return formPlace(itemID);
     }
 
     /**
@@ -292,10 +271,6 @@ public class AppPlace extends Place {
     }
 
     public AppPlace copy(AppPlace place) {
-
-        if (place.name != null) {
-            name = new String(place.name);
-        }
         if (place.queryArgs != null) {
             queryArgs = new HashMap<String, List<String>>(place.queryArgs);
         }
