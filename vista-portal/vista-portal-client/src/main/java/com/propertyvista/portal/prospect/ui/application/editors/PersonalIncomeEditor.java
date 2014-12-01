@@ -128,6 +128,12 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
     }
 
     @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        displayProofDocsPolicy();
+    }
+
+    @Override
     protected void onValuePropagation(CustomerScreeningIncome value, boolean fireEvent, boolean populate) {
         selectDetailsEditor(value.incomeSource().getValue());
         super.onValuePropagation(value, fireEvent, populate);

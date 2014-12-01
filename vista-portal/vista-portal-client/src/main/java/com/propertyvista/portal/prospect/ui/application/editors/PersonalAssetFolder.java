@@ -159,10 +159,11 @@ public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPerson
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
+            displayProofDocsPolicy();
+
             if (getValue().ownership().isNull()) {
                 get(proto().ownership()).setValue(BigDecimal.ONE);
             }
         }
-
     }
 }
