@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -109,10 +109,10 @@ public class TenantPadProcessor {
             processLeasePads(me.getKey(), me.getValue(), counters);
         }
 
-        String message = SimpleMessageFormat.format("{0} payment methods created, {1} unchanged, {2} amounts updated", counters.imported, counters.unchanged,
-                counters.updated);
+        String message = SimpleMessageFormat.format("Payment Method(s) created: {0}, AutoPay Agreement(s) created: {1}", counters.imported, counters.updated);
+
         if (counters.invalid != 0 || counters.notFound != 0) {
-            message += SimpleMessageFormat.format(", {0} invalid records, {1} tenants not found", counters.invalid, counters.notFound);
+            message += SimpleMessageFormat.format(" | Notices: {0} invalid records, {1} tenants not found", counters.invalid, counters.notFound);
         }
         log.info(message);
         return message;
@@ -579,7 +579,7 @@ public class TenantPadProcessor {
             }
         }
 
-        // This is done because of the complexity in creation of extract from yardi 
+        // This is done because of the complexity in creation of extract from yardi
         // Eliminate uninitialized charge split in Yardi
         for (ChargeCodeRecords chargeCodeRecords : recordsByChargeCode.values()) {
             // All uninitialized
@@ -816,7 +816,7 @@ public class TenantPadProcessor {
             }
         }
 
-        // Percent rounding case of total 100% (+-.01%)  e.g. 33.3% + 66.6%  
+        // Percent rounding case of total 100% (+-.01%)  e.g. 33.3% + 66.6%
         // Make the Largest to pay fractions
         String zeroes = CommonsStringUtils.padding(PadProcessorInformation.PERCENT_SCALE - 1, '0');
         if ((percentTotal.compareTo(percentRoundTotal) != 0)
