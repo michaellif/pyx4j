@@ -103,7 +103,7 @@ class YardiResidentTransactionsStubImpl extends AbstractYardiStub implements Yar
         request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
 
         GetPropertyConfigurationsResponse response = getResidentTransactionsService(yc).getPropertyConfigurations(request);
-        return ensureResult(response.getGetPropertyConfigurationsResult().getExtraElement(), Properties.class);
+        return ensureAxisResultType(response.getGetPropertyConfigurationsResult(), Properties.class);
     }
 
     @Override
@@ -121,7 +121,7 @@ class YardiResidentTransactionsStubImpl extends AbstractYardiStub implements Yar
         request.setYardiPropertyId(propertyId);
 
         GetResidentTransactions_LoginResponse response = getResidentTransactionsService(yc).getResidentTransactions_Login(request);
-        return ensureResult(response.getGetResidentTransactions_LoginResult().getExtraElement(), ResidentTransactions.class);
+        return ensureAxisResultType(response.getGetResidentTransactions_LoginResult(), ResidentTransactions.class);
     }
 
     @Override
@@ -141,7 +141,7 @@ class YardiResidentTransactionsStubImpl extends AbstractYardiStub implements Yar
         request.setTenantId(tenantId);
 
         GetResidentTransaction_LoginResponse response = getResidentTransactionsService(yc).getResidentTransaction_Login(request);
-        return ensureResult(response.getGetResidentTransaction_LoginResult().getExtraElement(), ResidentTransactions.class);
+        return ensureAxisResultType(response.getGetResidentTransaction_LoginResult(), ResidentTransactions.class);
     }
 
     @Override
@@ -170,7 +170,7 @@ class YardiResidentTransactionsStubImpl extends AbstractYardiStub implements Yar
         }
 
         ImportResidentTransactions_LoginResponse response = getResidentTransactionsService(yc).importResidentTransactions_Login(request);
-        ensureValid(response.getImportResidentTransactions_LoginResult().getExtraElement());
+        ensureAxisResultValid(response.getImportResidentTransactions_LoginResult());
     }
 
     @Override
@@ -193,7 +193,7 @@ class YardiResidentTransactionsStubImpl extends AbstractYardiStub implements Yar
         request.setPostMonth(calendar);
 
         GetResidentsLeaseCharges_LoginResponse response = getResidentTransactionsService(yc).getResidentsLeaseCharges_Login(request);
-        return ensureResult(response.getGetResidentsLeaseCharges_LoginResult().getExtraElement(), ResidentTransactions.class);
+        return ensureAxisResultType(response.getGetResidentsLeaseCharges_LoginResult(), ResidentTransactions.class);
     }
 
     @Override
@@ -217,7 +217,7 @@ class YardiResidentTransactionsStubImpl extends AbstractYardiStub implements Yar
         request.setPostMonth(calendar);
 
         GetResidentLeaseCharges_LoginResponse response = getResidentTransactionsService(yc).getResidentLeaseCharges_Login(request);
-        return ensureResult(response.getGetResidentLeaseCharges_LoginResult().getExtraElement(), ResidentTransactions.class);
+        return ensureAxisResultType(response.getGetResidentLeaseCharges_LoginResult(), ResidentTransactions.class);
     }
 
     private ItfResidentTransactions2_0 getResidentTransactionsService(PmcYardiCredential yc) {

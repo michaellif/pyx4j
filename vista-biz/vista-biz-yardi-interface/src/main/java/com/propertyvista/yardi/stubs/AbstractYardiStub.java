@@ -14,6 +14,7 @@
 package com.propertyvista.yardi.stubs;
 
 import java.io.StringReader;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -29,11 +30,11 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.apache.axiom.om.OMElement;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.Stub;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.context.ServiceContext;
+import org.apache.axis2.databinding.ADBBean;
 import org.apache.axis2.description.MessageContextListener;
 import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.axis2.transport.http.HttpTransportProperties;
@@ -263,13 +264,9 @@ public abstract class AbstractYardiStub implements ExternalInterfaceLoggingStub 
     }
 
     @SuppressWarnings("unchecked")
-    protected <R> R ensureResult(OMElement element, Class<R> resultType) throws YardiServiceException {
-        if (element == null) {
-            throw new YardiServiceException("Empty Response received by: " + currentAction.name());
-        }
-
+    protected <R> R ensureAxisResultType(ADBBean result, Class<R> resultType) throws YardiServiceException {
         final List<String> errorTags = Arrays.asList("ErrorMessage", "ErrorMessages");
-        String xml = element.toString();
+        String xml = getAxisResponseXml(result);
         try {
             final XMLStreamReader xsr = XMLInputFactory.newFactory().createXMLStreamReader(new StringReader(xml));
             Unmarshaller um = JAXBContext.newInstance(resultType).createUnmarshaller();
@@ -286,12 +283,8 @@ public abstract class AbstractYardiStub implements ExternalInterfaceLoggingStub 
         }
     }
 
-    protected void ensureValid(OMElement element) throws YardiServiceException {
-        if (element == null) {
-            throw new YardiServiceException("Empty Response received by: " + currentAction.name());
-        }
-
-        String xml = element.toString();
+    protected void ensureAxisResultValid(ADBBean result) throws YardiServiceException {
+        String xml = getAxisResponseXml(result);
         try {
             Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
             if (messages.isError()) {
@@ -303,6 +296,22 @@ public abstract class AbstractYardiStub implements ExternalInterfaceLoggingStub 
         } catch (JAXBException e) {
             logRecordedTracastions();
             throw new YardiServiceException("Invalid Response received by: " + currentAction.name(), e);
+        }
+    }
+
+    private String getAxisResponseXml(ADBBean result) throws YardiServiceException {
+        if (result == null) {
+            throw new YardiServiceException("Empty Response received by: " + currentAction.name() + ". Possible configuration issue.");
+        }
+
+        try {
+            Method m = result.getClass().getDeclaredMethod("getExtraElement");
+            Object el = m.invoke(result);
+            return el == null ? null : el.toString();
+        } catch (Exception e) {
+            String msg = "Could not get Response XML from: " + currentAction.name();
+            log.debug(msg, e);
+            throw new YardiServiceException(msg);
         }
     }
 }

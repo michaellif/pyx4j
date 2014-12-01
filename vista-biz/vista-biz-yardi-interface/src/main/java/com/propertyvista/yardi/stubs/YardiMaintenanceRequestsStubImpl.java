@@ -71,7 +71,7 @@ class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implements Yard
         request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.Maintenance, yc));
 
         GetPropertyConfigurationsResponse response = getMaintenanceRequestsService(yc).getPropertyConfigurations(request);
-        return ensureResult(response.getGetPropertyConfigurationsResult().getExtraElement(), Properties.class);
+        return ensureAxisResultType(response.getGetPropertyConfigurationsResult(), Properties.class);
     }
 
     @Override
@@ -88,7 +88,7 @@ class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implements Yard
         request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.Maintenance, yc));
 
         GetCustomValuesResponse response = getMaintenanceRequestsService(yc).getCustomValues(request);
-        CustomConfig config = ensureResult(response.getGetCustomValuesResult().getExtraElement(), CustomConfig.class);
+        CustomConfig config = ensureAxisResultType(response.getGetCustomValuesResult(), CustomConfig.class);
         return config == null ? null : config.getCustomValues();
     }
 
@@ -105,7 +105,7 @@ class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implements Yard
         request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.Maintenance, yc));
 
         GetServiceRequest_SearchResponse response = getMaintenanceRequestsService(yc).getServiceRequest_Search(request);
-        return ensureResult(response.getGetServiceRequest_SearchResult().getExtraElement(), ServiceRequests.class);
+        return ensureAxisResultType(response.getGetServiceRequest_SearchResult(), ServiceRequests.class);
     }
 
     @Override
@@ -138,7 +138,7 @@ class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implements Yard
         }
 
         CreateOrEditServiceRequestsResponse response = getMaintenanceRequestsService(yc).createOrEditServiceRequests(request);
-        return ensureResult(response.getCreateOrEditServiceRequestsResult().getExtraElement(), ServiceRequests.class);
+        return ensureAxisResultType(response.getCreateOrEditServiceRequestsResult(), ServiceRequests.class);
     }
 
     @Override

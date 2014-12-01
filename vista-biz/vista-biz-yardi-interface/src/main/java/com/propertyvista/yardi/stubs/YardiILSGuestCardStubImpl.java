@@ -90,7 +90,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
         request.setPlatform(yc.platform().getValue().name());
 
         GetPropertyConfigurationsResponse response = getILSGuestCardService(yc).getPropertyConfigurations(request);
-        return ensureResult(response.getGetPropertyConfigurationsResult().getExtraElement(), Properties.class);
+        return ensureAxisResultType(response.getGetPropertyConfigurationsResult(), Properties.class);
     }
 
     @Override
@@ -109,7 +109,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
         request.setPlatform(yc.platform().getValue().name());
 
         GetAttachmentTypesAndChargeCodesResponse response = getILSGuestCardService(yc).getAttachmentTypesAndChargeCodes(request);
-        return ensureResult(response.getGetAttachmentTypesAndChargeCodesResult().getExtraElement(), AttachmentTypesAndChargeCodes.class);
+        return ensureAxisResultType(response.getGetAttachmentTypesAndChargeCodesResult(), AttachmentTypesAndChargeCodes.class);
     }
 
     @Override
@@ -130,7 +130,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
         request.setYardiPropertyId(propertyId);
 
         GetYardiRentableItems_LoginResponse response = getILSGuestCardService(yc).getYardiRentableItems_Login(request);
-        return ensureResult(response.getGetYardiRentableItems_LoginResult().getExtraElement(), RentableItems.class);
+        return ensureAxisResultType(response.getGetYardiRentableItems_LoginResult(), RentableItems.class);
     }
 
     @Override
@@ -151,7 +151,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
         request.setYardiPropertyId(propertyId);
 
         GetYardiAgentsSourcesResults_LoginResponse response = getILSGuestCardService(yc).getYardiAgentsSourcesResults_Login(request);
-        return ensureResult(response.getGetYardiAgentsSourcesResults_LoginResult().getExtraElement(), MarketingSources.class);
+        return ensureAxisResultType(response.getGetYardiAgentsSourcesResults_LoginResult(), MarketingSources.class);
     }
 
     @Override
@@ -172,7 +172,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
         request.setYardiPropertyId(propertyId);
 
         UnitAvailability_LoginResponse response = getILSGuestCard20Service(yc).unitAvailability_Login(request);
-        return ensureResult(response.getUnitAvailability_LoginResult().getExtraElement(), PhysicalProperty.class);
+        return ensureAxisResultType(response.getUnitAvailability_LoginResult(), PhysicalProperty.class);
     }
 
     @Override
@@ -193,7 +193,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
         request.setYardiPropertyId(propertyId);
 
         GetYardiGuestActivity_LoginResponse response = getILSGuestCardService(yc).getYardiGuestActivity_Login(request);
-        return ensureResult(response.getGetYardiGuestActivity_LoginResult().getExtraElement(), LeadManagement.class);
+        return ensureAxisResultType(response.getGetYardiGuestActivity_LoginResult(), LeadManagement.class);
     }
 
     @Override
@@ -215,7 +215,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
         request.setProspectID(prospectId);
 
         GetApplication_LoginResponse response = getILSGuestCardService(yc).getApplication_Login(request);
-        return ensureResult(response.getGetApplication_LoginResult().getExtraElement(), LeaseApplication.class);
+        return ensureAxisResultType(response.getGetApplication_LoginResult(), LeaseApplication.class);
     }
 
     @Override
@@ -245,7 +245,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
         request.setFederalId("");
 
         GetYardiGuestActivity_SearchResponse response = getILSGuestCardService(yc).getYardiGuestActivity_Search(request);
-        return ensureResult(response.getGetYardiGuestActivity_SearchResult().getExtraElement(), LeadManagement.class);
+        return ensureAxisResultType(response.getGetYardiGuestActivity_SearchResult(), LeadManagement.class);
     }
 
     @Override
@@ -278,7 +278,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
         }
 
         ImportYardiGuest_LoginResponse response = getILSGuestCardService(yc).importYardiGuest_Login(request);
-        ensureValid(response.getImportYardiGuest_LoginResult().getExtraElement());
+        ensureAxisResultValid(response.getImportYardiGuest_LoginResult());
     }
 
     @Override
@@ -310,7 +310,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
         }
 
         ImportApplication_LoginResponse response = getILSGuestCardService(yc).importApplication_Login(request);
-        ensureValid(response.getImportApplication_LoginResult().getExtraElement());
+        ensureAxisResultValid(response.getImportApplication_LoginResult());
     }
 
     @Override
