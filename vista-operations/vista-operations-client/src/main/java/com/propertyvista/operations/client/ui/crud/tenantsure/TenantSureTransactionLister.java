@@ -36,5 +36,8 @@ public class TenantSureTransactionLister extends SiteDataTablePanel<TenantSureTr
                 new MemberColumnDescriptor.Builder(proto().transactionErrorMessage()).build(),
                 new MemberColumnDescriptor.Builder(proto().transactionDate()).build()
             ));//@formatter:on
+
+        setItemZoomInCommand(null);
     }
+
 }
