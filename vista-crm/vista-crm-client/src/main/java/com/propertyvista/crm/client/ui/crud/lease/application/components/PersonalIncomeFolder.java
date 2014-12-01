@@ -55,9 +55,7 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
                 new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
                     @Override
                     public void onSuccess(ApplicationDocumentationPolicy result) {
-                        for (CComponent<?, ?, ?, ?> item : getComponents()) {
-                            ((PersonalIncomeEditor) ((CFolderItem<?>) item).getComponents().iterator().next()).setDocumentsPolicy(result);
-                        }
+                        setDocumentsPolicy(result);
                     }
                 });
 
@@ -68,6 +66,12 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
                 revalidate();
             }
         });
+    }
+
+    public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {
+        for (CComponent<?, ?, ?, ?> item : getComponents()) {
+            ((PersonalIncomeEditor) ((CFolderItem<?>) item).getComponents().iterator().next()).setDocumentsPolicy(policy);
+        }
     }
 
     @Override

@@ -30,7 +30,6 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.media.ProofOfIncomeDocumentFile;
@@ -55,8 +54,6 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
     private static final I18n i18n = I18n.get(PersonalIncomeEditor.class);
 
     private final SimplePanel detailsHolder = new SimplePanel();
-
-    private final SimplePanel policyHolder = new SimplePanel();
 
     private final ProofOfIncomeDocumentFileFolder fileUpload = new ProofOfIncomeDocumentFileFolder();
 
@@ -103,26 +100,26 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
         formPanel.append(Location.Left, detailsHolder);
 
         formPanel.h3(i18n.tr("Proof Documents"));
-        formPanel.append(Location.Left, policyHolder);
         formPanel.append(Location.Left, proto().documents(), fileUpload);
 
         return formPanel;
     }
 
     private void displayProofDocsPolicy() {
-        policyHolder.setWidget(null);
+        fileUpload.setNote(null);
+
         if (getValue() != null && documentationPolicy != null) {
             if (IncomeSource.employment().contains(getValue().incomeSource().getValue())) {
                 for (ProofOfEmploymentDocumentType item : documentationPolicy.allowedEmploymentDocuments()) {
                     if (item.incomeSource().getValue().equals(getValue().incomeSource().getValue())) {
-                        policyHolder.setWidget(new Label(item.notes().getValue()));
+                        fileUpload.setNote(item.notes().getValue());
                         break;
                     }
                 }
             } else if (IncomeSource.otherIncome().contains(getValue().incomeSource().getValue())) {
                 for (ProofOfIncomeDocumentType item : documentationPolicy.allowedIncomeDocuments()) {
                     if (item.incomeSource().getValue().equals(getValue().incomeSource().getValue())) {
-                        policyHolder.setWidget(new Label(item.notes().getValue()));
+                        fileUpload.setNote(item.notes().getValue());
                         break;
                     }
                 }

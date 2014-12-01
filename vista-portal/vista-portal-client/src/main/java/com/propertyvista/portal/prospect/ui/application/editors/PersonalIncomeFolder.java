@@ -39,8 +39,6 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
 
     private static final I18n i18n = I18n.get(PersonalIncomeFolder.class);
 
-    private ApplicationDocumentationPolicy documentationPolicy;
-
     public PersonalIncomeFolder() {
         this(true);
     }
@@ -54,10 +52,8 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
     }
 
     public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {
-        this.documentationPolicy = policy;
-
         for (CComponent<?, ?, ?, ?> item : getComponents()) {
-            ((PersonalIncomeEditor) ((CFolderItem<?>) item).getComponents().iterator().next()).setDocumentsPolicy(documentationPolicy);
+            ((PersonalIncomeEditor) ((CFolderItem<?>) item).getComponents().iterator().next()).setDocumentsPolicy(policy);
         }
     }
 

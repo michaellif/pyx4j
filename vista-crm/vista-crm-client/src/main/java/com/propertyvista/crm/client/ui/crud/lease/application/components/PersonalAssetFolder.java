@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 import java.util.EnumSet;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
@@ -34,7 +33,6 @@ import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
-import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -47,8 +45,6 @@ import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset.Ass
 public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersonalAsset> {
 
     private static final I18n i18n = I18n.get(PersonalAssetFolder.class);
-
-    private final SimplePanel policyHolder = new SimplePanel();
 
     private final ProofOfAssetDocumentFileFolder fileUpload = new ProofOfAssetDocumentFileFolder();
 
@@ -70,7 +66,6 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
 
     public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {
         this.documentationPolicy = policy;
-
         for (CComponent<?, ?, ?, ?> item : getComponents()) {
             ((PersonalAssetEditor) ((CFolderItem<?>) item).getComponents().iterator().next()).onSetDocumentsPolicy();
         }
@@ -131,18 +126,18 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
             formPanel.append(Location.Left, proto().ownership()).decorate().componentWidth(50);
 
             formPanel.h3(i18n.tr("Proof Documents"));
-            formPanel.append(Location.Left, policyHolder);
-            formPanel.append(Location.Dual, proto().documents(), new ProofOfAssetDocumentFileFolder());
+            formPanel.append(Location.Dual, proto().documents(), fileUpload);
 
             return formPanel;
         }
 
         private void displayProofDocsPolicy() {
-            policyHolder.setWidget(null);
+            fileUpload.setNote(null);
+
             if (getValue() != null && documentationPolicy != null) {
                 for (ProofOfAssetDocumentType item : documentationPolicy.allowedAssetDocuments()) {
                     if (item.assetType().getValue().equals(getValue().assetType().getValue())) {
-                        policyHolder.setWidget(new Label(item.notes().getValue()));
+                        fileUpload.setNote(item.notes().getValue());
                         break;
                     }
                 }
@@ -151,7 +146,6 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
 
         @Override
         public void addValidations() {
-
             fileUpload.addComponentValidator(new AbstractComponentValidator<IList<ProofOfAssetDocumentFile>>() {
                 @Override
                 public BasicValidationError isValid() {

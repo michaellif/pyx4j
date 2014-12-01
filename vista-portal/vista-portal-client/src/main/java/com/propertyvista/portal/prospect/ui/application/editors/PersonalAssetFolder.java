@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 import java.util.EnumSet;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
@@ -32,7 +31,6 @@ import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
-import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
@@ -44,8 +42,6 @@ import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPersonalAsset> {
 
     private static final I18n i18n = I18n.get(PersonalAssetFolder.class);
-
-    private final SimplePanel policyHolder = new SimplePanel();
 
     private final ProofOfAssetDocumentFileFolder fileUpload = new ProofOfAssetDocumentFileFolder();
 
@@ -126,18 +122,18 @@ public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPerson
             formPanel.append(Location.Left, proto().assetValue()).decorate().componentWidth(100);
 
             formPanel.h3(i18n.tr("Proof Documents"));
-            formPanel.append(Location.Left, policyHolder);
             formPanel.append(Location.Left, proto().documents(), fileUpload);
 
             return formPanel;
         }
 
         private void displayProofDocsPolicy() {
-            policyHolder.setWidget(null);
+            fileUpload.setNote(null);
+
             if (getValue() != null && documentationPolicy != null) {
                 for (ProofOfAssetDocumentType item : documentationPolicy.allowedAssetDocuments()) {
                     if (item.assetType().getValue().equals(getValue().assetType().getValue())) {
-                        policyHolder.setWidget(new Label(item.notes().getValue()));
+                        fileUpload.setNote(item.notes().getValue());
                         break;
                     }
                 }
@@ -146,7 +142,6 @@ public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPerson
 
         @Override
         public void addValidations() {
-
             fileUpload.addComponentValidator(new AbstractComponentValidator<IList<ProofOfAssetDocumentFile>>() {
                 @Override
                 public BasicValidationError isValid() {
