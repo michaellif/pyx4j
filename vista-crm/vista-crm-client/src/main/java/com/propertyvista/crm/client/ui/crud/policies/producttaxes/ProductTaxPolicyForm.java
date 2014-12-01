@@ -55,7 +55,7 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
     private IsWidget createItemsPanel() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().policyItems(), new ProductTaxPolicyItemFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().policyItems(), new ProductTaxPolicyItemFolder(isEditable()));
 
         return formPanel;
     }

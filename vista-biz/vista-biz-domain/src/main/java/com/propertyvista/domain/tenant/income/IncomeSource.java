@@ -53,6 +53,12 @@ public enum IncomeSource {
         return EnumSet.of(fulltime, parttime, selfemployed, seasonallyEmployed);
     }
 
+    public static EnumSet<IncomeSource> otherIncome() {
+        EnumSet<IncomeSource> values = EnumSet.allOf(IncomeSource.class);
+        values.removeAll(employment());
+        return values;
+    }
+
     @Override
     public String toString() {
         return I18nEnum.toString(this);

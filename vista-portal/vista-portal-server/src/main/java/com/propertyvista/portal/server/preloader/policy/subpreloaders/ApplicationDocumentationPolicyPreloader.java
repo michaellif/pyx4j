@@ -23,6 +23,8 @@ import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentTyp
 import com.propertyvista.domain.policy.policies.domain.ProofOfAssetDocumentType;
 import com.propertyvista.domain.policy.policies.domain.ProofOfEmploymentDocumentType;
 import com.propertyvista.domain.policy.policies.domain.ProofOfIncomeDocumentType;
+import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset.AssetType;
+import com.propertyvista.domain.tenant.income.IncomeSource;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
 public class ApplicationDocumentationPolicyPreloader extends AbstractPolicyPreloader<ApplicationDocumentationPolicy> {
@@ -65,48 +67,62 @@ public class ApplicationDocumentationPolicyPreloader extends AbstractPolicyPrelo
         // ---------------------------------------------------------
 
         policy.mandatoryProofOfEmployment().setValue(true);
-        policy.numberOfEmploymentDocuments().setValue(2);
+        {
+            ProofOfEmploymentDocumentType poe = EntityFactory.create(ProofOfEmploymentDocumentType.class);
+            poe.incomeSource().setValue(IncomeSource.fulltime);
+            poe.notes().setValue(i18n.tr("Letter of Employment and Pay Stub are required"));
+            policy.allowedEmploymentDocuments().add(poe);
 
-        ProofOfEmploymentDocumentType poe = EntityFactory.create(ProofOfEmploymentDocumentType.class);
-        poe.name().setValue(i18n.tr("Letter of Employment"));
-        poe.importance().setValue(Importance.Required);
-        policy.allowedEmploymentDocuments().add(poe);
+            poe = EntityFactory.create(ProofOfEmploymentDocumentType.class);
+            poe.incomeSource().setValue(IncomeSource.parttime);
+            poe.notes().setValue(i18n.tr("Letter of Employment (salary or hourly wage and hours worked per week) and Pay Stub are required"));
+            policy.allowedEmploymentDocuments().add(poe);
 
-        poe = EntityFactory.create(ProofOfEmploymentDocumentType.class);
-        poe.name().setValue(i18n.tr("Pay Stub"));
-        poe.importance().setValue(Importance.Preferred);
-        policy.allowedEmploymentDocuments().add(poe);
+            poe = EntityFactory.create(ProofOfEmploymentDocumentType.class);
+            poe.incomeSource().setValue(IncomeSource.seasonallyEmployed);
+            poe.notes().setValue(i18n.tr("Letter of Employment is required"));
+            policy.allowedEmploymentDocuments().add(poe);
+
+            poe = EntityFactory.create(ProofOfEmploymentDocumentType.class);
+            poe.incomeSource().setValue(IncomeSource.selfemployed);
+            poe.notes().setValue(i18n.tr("Most recent Tax Assessment is required"));
+            policy.allowedEmploymentDocuments().add(poe);
+        }
 
         // ---------------------------------------------------------
 
         policy.mandatoryProofOfIncome().setValue(false);
-        policy.numberOfIncomeDocuments().setValue(2);
+        {
+            ProofOfIncomeDocumentType poi = EntityFactory.create(ProofOfIncomeDocumentType.class);
+            poi.incomeSource().setValue(IncomeSource.pension);
+            poi.notes().setValue(i18n.tr("Pension Confirmation is required"));
+            policy.allowedIncomeDocuments().add(poi);
 
-        ProofOfIncomeDocumentType poi = EntityFactory.create(ProofOfIncomeDocumentType.class);
-        poi.name().setValue(i18n.tr("Pension Confirmation"));
-        poi.importance().setValue(Importance.Required);
-        policy.allowedIncomeDocuments().add(poi);
+            poi = EntityFactory.create(ProofOfIncomeDocumentType.class);
+            poi.incomeSource().setValue(IncomeSource.socialServices);
+            poi.notes().setValue(i18n.tr("Social Assistance Confirmation is required"));
+            policy.allowedIncomeDocuments().add(poi);
 
-        poi = EntityFactory.create(ProofOfIncomeDocumentType.class);
-        poi.name().setValue(i18n.tr("Social Assistance Confirmation"));
-        poi.importance().setValue(Importance.Preferred);
-        policy.allowedIncomeDocuments().add(poi);
+            poi = EntityFactory.create(ProofOfIncomeDocumentType.class);
+            poi.incomeSource().setValue(IncomeSource.student);
+            poi.notes().setValue(i18n.tr("Social Assistance Confirmation is required"));
+            policy.allowedIncomeDocuments().add(poi);
+        }
 
         // ---------------------------------------------------------
 
         policy.mandatoryProofOfAsset().setValue(false);
-        policy.numberOfAssetDocuments().setValue(1);
+        {
+            ProofOfAssetDocumentType poa = EntityFactory.create(ProofOfAssetDocumentType.class);
+            poa.assetType().setValue(AssetType.bankAccounts);
+            poa.notes().setValue(i18n.tr("Bank Statement (for every account) is required"));
+            policy.allowedAssetDocuments().add(poa);
 
-        ProofOfAssetDocumentType poa = EntityFactory.create(ProofOfAssetDocumentType.class);
-        poa.name().setValue(i18n.tr("Bank Statement"));
-        poa.importance().setValue(Importance.Preferred);
-        policy.allowedAssetDocuments().add(poa);
-
-        poa = EntityFactory.create(ProofOfAssetDocumentType.class);
-        poa.name().setValue(i18n.tr("Benefit Statement"));
-        poa.importance().setValue(Importance.Optional);
-        policy.allowedAssetDocuments().add(poa);
-
+            poa = EntityFactory.create(ProofOfAssetDocumentType.class);
+            poa.assetType().setValue(AssetType.businesses);
+            poa.notes().setValue(i18n.tr("Business registration is required"));
+            policy.allowedAssetDocuments().add(poa);
+        }
         return policy;
     }
 }

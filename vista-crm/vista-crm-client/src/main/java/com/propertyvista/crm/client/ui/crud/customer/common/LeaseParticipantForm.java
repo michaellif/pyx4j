@@ -165,6 +165,7 @@ public abstract class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> ext
 
             fileUpload.setPolicyEntity(getValue());
             ((PersonalIncomeFolder) (CComponent<?, ?, ?, ?>) get(proto().screening().data().version().incomes())).setPolicyEntity(getValue());
+            ((PersonalAssetFolder) (CComponent<?, ?, ?, ?>) get(proto().screening().data().version().assets())).setPolicyEntity(getValue());
         }
 
         if (rootClass.equals(TenantDTO.class)) {

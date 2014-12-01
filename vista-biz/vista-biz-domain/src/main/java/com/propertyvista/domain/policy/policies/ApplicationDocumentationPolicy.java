@@ -46,12 +46,7 @@ public interface ApplicationDocumentationPolicy extends Policy, TenantsAccessibl
     @Caption(description = "Is the proof of employment is mandatory")
     IPrimitive<Boolean> mandatoryProofOfEmployment();
 
-    @NotNull
-    @Caption(description = "The number of the employment documents that is required for an application")
-    IPrimitive<Integer> numberOfEmploymentDocuments();
-
     @Owned
-    @NotNull
     @Caption(description = "Documents that accepted as valid proof of employment")
     IList<ProofOfEmploymentDocumentType> allowedEmploymentDocuments();
 
@@ -61,12 +56,7 @@ public interface ApplicationDocumentationPolicy extends Policy, TenantsAccessibl
     @Caption(description = "Is the proof of income is mandatory")
     IPrimitive<Boolean> mandatoryProofOfIncome();
 
-    @NotNull
-    @Caption(description = "The number of the income documents that is required for an application")
-    IPrimitive<Integer> numberOfIncomeDocuments();
-
     @Owned
-    @NotNull
     @Caption(description = "Documents that accepted as valid proof of income")
     IList<ProofOfIncomeDocumentType> allowedIncomeDocuments();
 
@@ -76,11 +66,7 @@ public interface ApplicationDocumentationPolicy extends Policy, TenantsAccessibl
     @Caption(description = "Is the proof of asset is mandatory")
     IPrimitive<Boolean> mandatoryProofOfAsset();
 
-    @NotNull
-    IPrimitive<Integer> numberOfAssetDocuments();
-
     @Owned
-    @NotNull
     @Caption(description = "Documents that accepted as valid proof of asset")
     IList<ProofOfAssetDocumentType> allowedAssetDocuments();
 }

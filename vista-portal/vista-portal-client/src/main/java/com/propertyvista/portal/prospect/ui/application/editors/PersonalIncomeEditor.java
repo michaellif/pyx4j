@@ -30,10 +30,13 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.media.ProofOfIncomeDocumentFile;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
+import com.propertyvista.domain.policy.policies.domain.ProofOfEmploymentDocumentType;
+import com.propertyvista.domain.policy.policies.domain.ProofOfIncomeDocumentType;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncomeInfo;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncomeInfo.AmountPeriod;
@@ -53,6 +56,8 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
 
     private final SimplePanel detailsHolder = new SimplePanel();
 
+    private final SimplePanel policyHolder = new SimplePanel();
+
     private final ProofOfIncomeDocumentFileFolder fileUpload = new ProofOfIncomeDocumentFileFolder();
 
     private ApplicationDocumentationPolicy documentationPolicy;
@@ -63,6 +68,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
 
     public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {
         documentationPolicy = policy;
+        displayProofDocsPolicy();
         revalidate();
     }
 
@@ -73,23 +79,14 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
         fileUpload.addComponentValidator(new AbstractComponentValidator<IList<ProofOfIncomeDocumentFile>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getValue() != null && getCComponent().getValue() != null && documentationPolicy != null) {
-                    int docsCount = getCComponent().getValue().size();
+                if (getCComponent().getValue() != null && documentationPolicy != null) {
                     if (IncomeSource.employment().contains(getValue().incomeSource().getValue())) {
-                        if (documentationPolicy.mandatoryProofOfEmployment().getValue(false)
-                                && docsCount < documentationPolicy.numberOfEmploymentDocuments().getValue()) {
+                        if (documentationPolicy.mandatoryProofOfEmployment().getValue(false) && getCComponent().getValue().isEmpty()) {
                             return new BasicValidationError(getCComponent(), i18n.tr("Proof of Employment should be supplied"));
-                        } else if (docsCount > documentationPolicy.numberOfEmploymentDocuments().getValue()) {
-                            return new BasicValidationError(getCComponent(), i18n.tr("No more than {0} documents are necessary", documentationPolicy
-                                    .numberOfEmploymentDocuments().getValue()));
                         }
-                    } else {
-                        if (documentationPolicy.mandatoryProofOfIncome().getValue(false)
-                                && docsCount < documentationPolicy.numberOfIncomeDocuments().getValue()) {
+                    } else { // other income case:
+                        if (documentationPolicy.mandatoryProofOfIncome().getValue(false) && getCComponent().getValue().isEmpty()) {
                             return new BasicValidationError(getCComponent(), i18n.tr("Proof of Income should be supplied"));
-                        } else if (docsCount > documentationPolicy.numberOfIncomeDocuments().getValue()) {
-                            return new BasicValidationError(getCComponent(), i18n.tr("No more than {0} documents are necessary", documentationPolicy
-                                    .numberOfIncomeDocuments().getValue()));
                         }
                     }
                 }
@@ -106,9 +103,31 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
         formPanel.append(Location.Left, detailsHolder);
 
         formPanel.h3(i18n.tr("Proof Documents"));
+        formPanel.append(Location.Left, policyHolder);
         formPanel.append(Location.Left, proto().documents(), fileUpload);
 
         return formPanel;
+    }
+
+    private void displayProofDocsPolicy() {
+        policyHolder.setWidget(null);
+        if (getValue() != null && documentationPolicy != null) {
+            if (IncomeSource.employment().contains(getValue().incomeSource().getValue())) {
+                for (ProofOfEmploymentDocumentType item : documentationPolicy.allowedEmploymentDocuments()) {
+                    if (item.incomeSource().getValue().equals(getValue().incomeSource().getValue())) {
+                        policyHolder.setWidget(new Label(item.notes().getValue()));
+                        break;
+                    }
+                }
+            } else if (IncomeSource.otherIncome().contains(getValue().incomeSource().getValue())) {
+                for (ProofOfIncomeDocumentType item : documentationPolicy.allowedIncomeDocuments()) {
+                    if (item.incomeSource().getValue().equals(getValue().incomeSource().getValue())) {
+                        policyHolder.setWidget(new Label(item.notes().getValue()));
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     @Override

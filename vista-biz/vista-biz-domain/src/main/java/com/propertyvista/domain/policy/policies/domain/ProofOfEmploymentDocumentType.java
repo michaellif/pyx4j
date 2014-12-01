@@ -13,7 +13,27 @@
  */
 package com.propertyvista.domain.policy.policies.domain;
 
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.core.IPrimitive;
+
+import com.propertyvista.domain.tenant.income.IncomeSource;
 
 public interface ProofOfEmploymentDocumentType extends ApplicationDocumentType {
 
+    @NotNull
+    @ReadOnly
+    @ToString(index = 0)
+    @MemberColumn(notNull = true)
+    IPrimitive<IncomeSource> incomeSource();
+
+    @Override
+    @Caption(name = "Policy")
+    @Editor(type = EditorType.textarea)
+    public IPrimitive<String> notes();
 }

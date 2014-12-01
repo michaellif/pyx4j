@@ -85,6 +85,7 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
         if (isEditable()) {
             fileUpload.setPolicyEntity(getPolicyEntity());
             ((PersonalIncomeFolder) (CComponent<?, ?, ?, ?>) get(proto().data().version().incomes())).setPolicyEntity(getPolicyEntity());
+            ((PersonalAssetFolder) (CComponent<?, ?, ?, ?>) get(proto().data().version().assets())).setPolicyEntity(getValue());
         }
 
         enablePreviousAddress();
@@ -161,8 +162,8 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
     }
 
     private void enablePreviousAddress() {
-        previousAddress.setVisible(ClientBusinessRules.needPreviousAddress(getValue().data().version().currentAddress().moveInDate().getValue(),
-                getValue().yearsToForcingPreviousAddress().getValue()));
+        previousAddress.setVisible(ClientBusinessRules.needPreviousAddress(getValue().data().version().currentAddress().moveInDate().getValue(), getValue()
+                .yearsToForcingPreviousAddress().getValue()));
     }
 
 // Financial: ------------------------------------------------------------------------------------------------

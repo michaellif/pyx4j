@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -38,6 +39,8 @@ import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentTyp
 import com.propertyvista.domain.policy.policies.domain.ProofOfAssetDocumentType;
 import com.propertyvista.domain.policy.policies.domain.ProofOfEmploymentDocumentType;
 import com.propertyvista.domain.policy.policies.domain.ProofOfIncomeDocumentType;
+import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset.AssetType;
+import com.propertyvista.domain.tenant.income.IncomeSource;
 
 public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedForm<ApplicationDocumentationPolicyDTO> {
 
@@ -66,8 +69,7 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
     private IsWidget createEmploymentDocsTab() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().numberOfEmploymentDocuments()).decorate().labelWidth(250).componentWidth(50);
-        formPanel.append(Location.Right, proto().mandatoryProofOfEmployment()).decorate().labelWidth(250).componentWidth(110);
+        formPanel.append(Location.Left, proto().mandatoryProofOfEmployment()).decorate().labelWidth(250).componentWidth(110);
 
         formPanel.h3(proto().allowedEmploymentDocuments().getMeta().getCaption());
         formPanel.append(Location.Dual, proto().allowedEmploymentDocuments(), new EmploymentDocumentFolder());
@@ -78,8 +80,7 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
     private IsWidget createIncomeDocsTab() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().numberOfIncomeDocuments()).decorate().labelWidth(250).componentWidth(50);
-        formPanel.append(Location.Right, proto().mandatoryProofOfIncome()).decorate().labelWidth(250).componentWidth(110);
+        formPanel.append(Location.Left, proto().mandatoryProofOfIncome()).decorate().labelWidth(250).componentWidth(110);
 
         formPanel.h3(proto().allowedIncomeDocuments().getMeta().getCaption());
         formPanel.append(Location.Dual, proto().allowedIncomeDocuments(), new IncomeDocumentFolder());
@@ -90,8 +91,7 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
     private IsWidget createAssetDocsTab() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().numberOfAssetDocuments()).decorate().labelWidth(250).componentWidth(50);
-        formPanel.append(Location.Right, proto().mandatoryProofOfAsset()).decorate().labelWidth(250).componentWidth(110);
+        formPanel.append(Location.Left, proto().mandatoryProofOfAsset()).decorate().labelWidth(250).componentWidth(110);
 
         formPanel.h3(proto().allowedAssetDocuments().getMeta().getCaption());
         formPanel.append(Location.Dual, proto().allowedAssetDocuments(), new AssetDocumentFolder());
@@ -119,90 +119,6 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
                 if (getCComponent().getValue() != null) {
                     if (getCComponent().getValue().size() < getValue().numberOfRequiredIDs().getValue(0)) {
                         return new BasicValidationError(getCComponent(), i18n.tr("The number of allowed IDs can't be less then the number of required  ones"));
-                    }
-                }
-                return null;
-            }
-        });
-
-        // ------------------------------------------------------------------------------------------------------------
-
-        get(proto().mandatoryProofOfEmployment()).addValueChangeHandler(new RevalidationTrigger<Boolean>(get(proto().numberOfEmploymentDocuments())));
-        get(proto().numberOfEmploymentDocuments()).addComponentValidator(new AbstractComponentValidator<Integer>() {
-            @Override
-            public BasicValidationError isValid() {
-                if (getCComponent().getValue() != null) {
-                    if (getValue().mandatoryProofOfEmployment().getValue(false) && getCComponent().getValue() == 0) {
-                        return new BasicValidationError(getCComponent(), i18n.tr("At least one Document is required"));
-                    }
-                }
-                return null;
-            }
-        });
-        get(proto().numberOfEmploymentDocuments()).addValueChangeHandler(new RevalidationTrigger<Integer>(get(proto().allowedEmploymentDocuments())));
-        get(proto().allowedEmploymentDocuments()).addComponentValidator(new AbstractComponentValidator<List<ProofOfEmploymentDocumentType>>() {
-            @Override
-            public AbstractValidationError isValid() {
-                if (getCComponent().getValue() != null) {
-                    if (getCComponent().getValue().size() < getValue().numberOfEmploymentDocuments().getValue(0)) {
-                        return new BasicValidationError(getCComponent(), i18n
-                                .tr("The number of allowed Employment Documents can't be less then the number of Employment Documents"));
-                    }
-                }
-                return null;
-            }
-        });
-
-        // ------------------------------------------------------------------------------------------------------------
-
-        get(proto().mandatoryProofOfIncome()).addValueChangeHandler(new RevalidationTrigger<Boolean>(get(proto().numberOfIncomeDocuments())));
-        get(proto().numberOfIncomeDocuments()).addComponentValidator(new AbstractComponentValidator<Integer>() {
-            @Override
-            public BasicValidationError isValid() {
-                if (getCComponent().getValue() != null) {
-                    if (getValue().mandatoryProofOfIncome().getValue(false) && getCComponent().getValue() == 0) {
-                        return new BasicValidationError(getCComponent(), i18n.tr("At least one Document is required"));
-                    }
-                }
-                return null;
-            }
-        });
-        get(proto().numberOfIncomeDocuments()).addValueChangeHandler(new RevalidationTrigger<Integer>(get(proto().allowedIncomeDocuments())));
-        get(proto().allowedIncomeDocuments()).addComponentValidator(new AbstractComponentValidator<List<ProofOfIncomeDocumentType>>() {
-            @Override
-            public AbstractValidationError isValid() {
-                if (getCComponent().getValue() != null) {
-                    if (getCComponent().getValue().size() < getValue().numberOfIncomeDocuments().getValue(0)) {
-                        return new BasicValidationError(getCComponent(), i18n
-                                .tr("The number of allowed Income Documents can't be less then the number of Income Documents"));
-                    }
-                }
-                return null;
-            }
-        });
-
-        // ------------------------------------------------------------------------------------------------------------
-
-        get(proto().mandatoryProofOfAsset()).addValueChangeHandler(new RevalidationTrigger<Boolean>(get(proto().numberOfAssetDocuments())));
-        get(proto().numberOfAssetDocuments()).addComponentValidator(new AbstractComponentValidator<Integer>() {
-            @Override
-            public BasicValidationError isValid() {
-                if (getCComponent().getValue() != null) {
-                    if (getValue().mandatoryProofOfAsset().getValue(false) && getCComponent().getValue() == 0) {
-                        return new BasicValidationError(getCComponent(), i18n.tr("At least one Document is required"));
-                    }
-                }
-                return null;
-            }
-        });
-        get(proto().numberOfAssetDocuments()).addValueChangeHandler(new RevalidationTrigger<Integer>(get(proto().allowedAssetDocuments())));
-        get(proto().allowedAssetDocuments()).addComponentValidator(new AbstractComponentValidator<List<ProofOfAssetDocumentType>>() {
-            @Override
-            public AbstractValidationError isValid() {
-                if (getCComponent().getValue() != null) {
-                    if (getCComponent().getValue().size() < getValue().numberOfAssetDocuments().getValue(0)) {
-                        return new BasicValidationError(getCComponent(), i18n
-                                .tr("The number of allowed Asset Documents can't be less then the number of Asset Documents"));
                     }
                 }
                 return null;
@@ -265,25 +181,35 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
         }
 
         @Override
+        protected void addItem() {
+            EnumSet<IncomeSource> values = IncomeSource.employment();
+            List<IncomeSource> usedOnes = new ArrayList<IncomeSource>();
+            for (ProofOfEmploymentDocumentType item : getValue()) {
+                usedOnes.add(item.incomeSource().getValue());
+            }
+            values.removeAll(usedOnes);
+            new SelectEnumDialog<IncomeSource>(i18n.tr("Select Employment Type"), values) {
+                @Override
+                public boolean onClickOk() {
+                    ProofOfEmploymentDocumentType item = EntityFactory.create(ProofOfEmploymentDocumentType.class);
+                    item.incomeSource().setValue(getSelectedType());
+                    addItem(item);
+                    return true;
+                }
+            }.show();
+        }
+
+        @Override
         protected CForm<? extends ProofOfEmploymentDocumentType> createItemForm(IObject<?> member) {
             return new CForm<ProofOfEmploymentDocumentType>(ProofOfEmploymentDocumentType.class) {
                 @Override
                 protected IsWidget createContent() {
                     FormPanel formPanel = new FormPanel(this);
 
-                    formPanel.append(Location.Left, proto().importance()).decorate();
-
-                    formPanel.append(Location.Dual, proto().name()).decorate();
+                    formPanel.append(Location.Dual, proto().incomeSource()).decorate();
                     formPanel.append(Location.Dual, proto().notes()).decorate();
 
                     return formPanel;
-                }
-
-                @Override
-                protected void onValueSet(boolean populate) {
-                    super.onValueSet(populate);
-
-                    get(proto().notes()).setVisible(isEditable() || !getValue().notes().isNull());
                 }
             };
         }
@@ -296,25 +222,35 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
         }
 
         @Override
+        protected void addItem() {
+            EnumSet<IncomeSource> values = IncomeSource.otherIncome();
+            List<IncomeSource> usedOnes = new ArrayList<IncomeSource>();
+            for (ProofOfIncomeDocumentType item : getValue()) {
+                usedOnes.add(item.incomeSource().getValue());
+            }
+            values.removeAll(usedOnes);
+            new SelectEnumDialog<IncomeSource>(i18n.tr("Select Income Source"), values) {
+                @Override
+                public boolean onClickOk() {
+                    ProofOfIncomeDocumentType item = EntityFactory.create(ProofOfIncomeDocumentType.class);
+                    item.incomeSource().setValue(getSelectedType());
+                    addItem(item);
+                    return true;
+                }
+            }.show();
+        }
+
+        @Override
         protected CForm<? extends ProofOfIncomeDocumentType> createItemForm(IObject<?> member) {
             return new CForm<ProofOfIncomeDocumentType>(ProofOfIncomeDocumentType.class) {
                 @Override
                 protected IsWidget createContent() {
                     FormPanel formPanel = new FormPanel(this);
 
-                    formPanel.append(Location.Left, proto().importance()).decorate();
-
-                    formPanel.append(Location.Dual, proto().name()).decorate();
+                    formPanel.append(Location.Dual, proto().incomeSource()).decorate();
                     formPanel.append(Location.Dual, proto().notes()).decorate();
 
                     return formPanel;
-                }
-
-                @Override
-                protected void onValueSet(boolean populate) {
-                    super.onValueSet(populate);
-
-                    get(proto().notes()).setVisible(isEditable() || !getValue().notes().isNull());
                 }
             };
         }
@@ -327,25 +263,35 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
         }
 
         @Override
+        protected void addItem() {
+            EnumSet<AssetType> values = EnumSet.allOf(AssetType.class);
+            List<AssetType> usedOnes = new ArrayList<AssetType>();
+            for (ProofOfAssetDocumentType item : getValue()) {
+                usedOnes.add(item.assetType().getValue());
+            }
+            values.removeAll(usedOnes);
+            new SelectEnumDialog<AssetType>(i18n.tr("Select Asset Type"), values) {
+                @Override
+                public boolean onClickOk() {
+                    ProofOfAssetDocumentType item = EntityFactory.create(ProofOfAssetDocumentType.class);
+                    item.assetType().setValue(getSelectedType());
+                    addItem(item);
+                    return true;
+                }
+            }.show();
+        }
+
+        @Override
         protected CForm<? extends ProofOfAssetDocumentType> createItemForm(IObject<?> member) {
             return new CForm<ProofOfAssetDocumentType>(ProofOfAssetDocumentType.class) {
                 @Override
                 protected IsWidget createContent() {
                     FormPanel formPanel = new FormPanel(this);
 
-                    formPanel.append(Location.Left, proto().importance()).decorate();
-
-                    formPanel.append(Location.Dual, proto().name()).decorate();
+                    formPanel.append(Location.Dual, proto().assetType()).decorate();
                     formPanel.append(Location.Dual, proto().notes()).decorate();
 
                     return formPanel;
-                }
-
-                @Override
-                protected void onValueSet(boolean populate) {
-                    super.onValueSet(populate);
-
-                    get(proto().notes()).setVisible(isEditable() || !getValue().notes().isNull());
                 }
             };
         }

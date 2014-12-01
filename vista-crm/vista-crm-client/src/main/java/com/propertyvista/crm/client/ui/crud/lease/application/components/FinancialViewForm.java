@@ -76,6 +76,7 @@ public class FinancialViewForm extends CForm<TenantFinancialDTO> {
 
         if (isEditable()) {
             ((PersonalIncomeFolder) (CComponent<?, ?, ?, ?>) get(proto().incomes())).setPolicyEntity(getValue());
+            ((PersonalAssetFolder) (CComponent<?, ?, ?, ?>) get(proto().assets())).setPolicyEntity(getValue());
         }
     }
 }
