@@ -51,6 +51,12 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
     }
 
     public void setPolicyEntity(IEntity parentEntity) {
+        ClientPolicyManager.obtainHierarchicalEffectivePolicy(parentEntity, RestrictionsPolicy.class, new DefaultAsyncCallback<RestrictionsPolicy>() {
+            @Override
+            public void onSuccess(RestrictionsPolicy result) {
+                setRestrictionsPolicy(result);
+            }
+        });
         ClientPolicyManager.obtainHierarchicalEffectivePolicy(parentEntity, ApplicationDocumentationPolicy.class,
                 new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
                     @Override
@@ -58,14 +64,11 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
                         setDocumentsPolicy(result);
                     }
                 });
+    }
 
-        ClientPolicyManager.obtainHierarchicalEffectivePolicy(parentEntity, RestrictionsPolicy.class, new DefaultAsyncCallback<RestrictionsPolicy>() {
-            @Override
-            public void onSuccess(RestrictionsPolicy result) {
-                restrictionsPolicy = result;
-                revalidate();
-            }
-        });
+    public void setRestrictionsPolicy(RestrictionsPolicy policy) {
+        restrictionsPolicy = policy;
+        revalidate();
     }
 
     public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {
