@@ -15,12 +15,9 @@ package com.propertyvista.crm.client.ui.crud.lease.application.components;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
@@ -33,15 +30,9 @@ public class FinancialViewForm extends CForm<TenantFinancialDTO> {
 
     public FinancialViewForm() {
         super(TenantFinancialDTO.class, new VistaEditorsComponentFactory());
-    }
 
-    public FinancialViewForm(boolean viewMode) {
-        this();
-
-        if (viewMode) {
-            setEditable(false);
-            setViewable(true);
-        }
+        setEditable(false);
+        setViewable(true);
     }
 
     @Override
@@ -57,26 +48,5 @@ public class FinancialViewForm extends CForm<TenantFinancialDTO> {
         formPanel.append(Location.Dual, proto().assets(), new PersonalAssetFolder(isEditable()));
 
         return formPanel;
-    }
-
-    @Override
-    public void addValidations() {
-        this.addComponentValidator(new AbstractComponentValidator<TenantFinancialDTO>() {
-            @Override
-            public BasicValidationError isValid() {
-                return (getCComponent().getValue().assets().size() > 0) || (getCComponent().getValue().incomes().size() > 0) ? null : new BasicValidationError(
-                        getCComponent(), i18n.tr("At least one source of income or one asset is required"));
-            }
-        });
-    }
-
-    @Override
-    protected void onValueSet(boolean populate) {
-        super.onValueSet(populate);
-
-        if (isEditable()) {
-            ((PersonalIncomeFolder) (CComponent<?, ?, ?, ?>) get(proto().incomes())).setPolicyEntity(getValue());
-            ((PersonalAssetFolder) (CComponent<?, ?, ?, ?>) get(proto().assets())).setPolicyEntity(getValue());
-        }
     }
 }
