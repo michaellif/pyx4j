@@ -13,8 +13,10 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,13 +26,17 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.essentials.server.download.MimeMap;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.preloader.CrmRolesPreloader;
 import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.blob.EmployeeSignatureBlob;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.company.EmployeeSignature;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CrmUserCredential;
@@ -44,6 +50,8 @@ import com.propertyvista.shared.config.VistaDemo;
 public class UserPreloader extends BaseVistaDevDataPreloader {
 
     private final static Logger log = LoggerFactory.getLogger(UserPreloader.class);
+
+    private final static String IMG_SIGNATURE = "signature.png";
 
     static CustomerUser createTenantUser(String name, String email, String password) {
         if (!ApplicationMode.isDevelopment()) {
@@ -130,6 +138,15 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
 
             emp.user().set(createCrmUser(emp.name().getStringView(), email, email, defaultRole));
 
+            if (i == 1) {
+                EmployeeSignature signature = createEmployeeSignature(emp);
+                if (signature != null) {
+                    emp.signature().set(signature);
+                } else {
+                    log.warn("Could't create default signature for EMPLOYEE '{}'", emp.email().getValue());
+                }
+            }
+
             Persistence.service().persist(emp);
 
             userCount++;
@@ -166,6 +183,34 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         PmcCreator.createVistaSupportUsers();
 
         return "Created " + userCount + " Employee/Users";
+    }
+
+    private EmployeeSignature createEmployeeSignature(Employee emp) {
+
+        EmployeeSignature signature = null;
+
+        try {
+            byte bytes[] = IOUtils.getBinaryResource(IMG_SIGNATURE, this.getClass());
+            if (bytes != null) {
+                // Create Signature Blob
+                EmployeeSignatureBlob blob = EntityFactory.create(EmployeeSignatureBlob.class);
+                blob.contentType().setValue(MimeMap.getContentType(FilenameUtils.getExtension(IMG_SIGNATURE)));
+                blob.data().setValue(bytes);
+                Persistence.service().persist(blob);
+
+                // Create Employee Signature
+                signature = EntityFactory.create(EmployeeSignature.class);
+                signature.file().fileName().setValue(IMG_SIGNATURE);
+                signature.file().fileSize().setValue(bytes.length);
+                signature.file().blobKey().setValue(blob.getPrimaryKey());
+                signature.employee().set(emp);
+            }
+        } catch (IOException e) {
+            log.error("Error preloading image '{}' for signature. ", IMG_SIGNATURE, e);
+        }
+
+        return signature;
+
     }
 
     @SuppressWarnings("unchecked")
