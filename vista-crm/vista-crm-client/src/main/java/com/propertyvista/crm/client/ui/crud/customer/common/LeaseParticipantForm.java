@@ -76,6 +76,7 @@ import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -165,7 +166,16 @@ public abstract class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> ext
 
             fileUpload.setPolicyEntity(getValue());
             ((PersonalIncomeFolder) (CComponent<?, ?, ?, ?>) get(proto().screening().data().version().incomes())).setPolicyEntity(getValue());
-            ((PersonalAssetFolder) (CComponent<?, ?, ?, ?>) get(proto().screening().data().version().assets())).setPolicyEntity(getValue());
+
+            ClientPolicyManager.obtainHierarchicalEffectivePolicy(getValue(), ApplicationDocumentationPolicy.class,
+                    new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
+                        @Override
+                        public void onSuccess(ApplicationDocumentationPolicy result) {
+                            ((PersonalIncomeFolder) (CComponent<?, ?, ?, ?>) get(proto().screening().data().version().incomes())).setDocumentsPolicy(result);
+                            ((PersonalAssetFolder) (CComponent<?, ?, ?, ?>) get(proto().screening().data().version().assets())).setDocumentsPolicy(result);
+                        }
+                    });
+
         }
 
         if (rootClass.equals(TenantDTO.class)) {

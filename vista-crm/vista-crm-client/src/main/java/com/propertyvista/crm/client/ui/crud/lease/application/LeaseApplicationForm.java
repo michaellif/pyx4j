@@ -144,7 +144,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         VistaBoxFolder<TenantFinancialDTO> folder = new VistaBoxFolder<TenantFinancialDTO>(TenantFinancialDTO.class, false) {
             @Override
             protected CForm<TenantFinancialDTO> createItemForm(IObject<?> member) {
-                return new FinancialViewForm(true);
+                return new FinancialViewForm();
             }
 
             @Override
