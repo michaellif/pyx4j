@@ -46,8 +46,6 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
 
     private static final I18n i18n = I18n.get(PersonalAssetFolder.class);
 
-    private final ProofOfAssetDocumentFileFolder fileUpload = new ProofOfAssetDocumentFileFolder();
-
     private ApplicationDocumentationPolicy documentationPolicy;
 
     public PersonalAssetFolder(boolean modifyable) {
@@ -107,6 +105,8 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
     }
 
     private class PersonalAssetEditor extends CForm<CustomerScreeningPersonalAsset> {
+
+        private final ProofOfAssetDocumentFileFolder fileUpload = new ProofOfAssetDocumentFileFolder();
 
         public PersonalAssetEditor() {
             super(CustomerScreeningPersonalAsset.class);
