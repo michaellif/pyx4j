@@ -168,7 +168,7 @@ public class OpenIdFilter implements Filter {
 
         if (devSession != null) {
             String email = (String) devSession.getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE);
-            if ((email != null) && email.startsWith("tester")) {
+            if ((email != null) && email.startsWith("vista-tester")) {
                 AntiDoS.resetRequestCount(request);
             }
         }
