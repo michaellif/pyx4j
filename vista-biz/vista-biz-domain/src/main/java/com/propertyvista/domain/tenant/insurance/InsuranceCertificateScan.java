@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.IHasFile;
 
 import com.propertyvista.domain.blob.InsuranceCertificateScanBlob;
 
-@ToStringFormat("Scanned Document {0,choice,null#(No Description)|!null#({0})}")
+@ToStringFormat("{1} {0,choice,null#|!null#({0})}")
 public interface InsuranceCertificateScan extends IHasFile<InsuranceCertificateScanBlob> {
 
     @Owner
@@ -42,6 +42,6 @@ public interface InsuranceCertificateScan extends IHasFile<InsuranceCertificateS
     @Override
     @EmbeddedEntity
     @NotNull
+    @ToString(index = 1)
     IFile<InsuranceCertificateScanBlob> file();
-
 }

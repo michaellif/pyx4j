@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.shared.IFile;
@@ -28,6 +29,7 @@ import com.pyx4j.entity.shared.IHasFile;
 import com.propertyvista.domain.blob.ProofOfAssetDocumentBlob;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 
+@ToStringFormat("{1} {0,choice,null#|!null#({0})}")
 public interface ProofOfAssetDocumentFile extends IHasFile<ProofOfAssetDocumentBlob> {
 
     @Owner
@@ -41,6 +43,7 @@ public interface ProofOfAssetDocumentFile extends IHasFile<ProofOfAssetDocumentB
     @Override
     @EmbeddedEntity
     @NotNull
+    @ToString(index = 1)
     IFile<ProofOfAssetDocumentBlob> file();
 
     @ToString(index = 0)

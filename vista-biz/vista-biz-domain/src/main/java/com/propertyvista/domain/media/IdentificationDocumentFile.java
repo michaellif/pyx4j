@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.shared.IFile;
@@ -27,6 +28,7 @@ import com.pyx4j.entity.shared.IHasFile;
 
 import com.propertyvista.domain.blob.IdentificationDocumentBlob;
 
+@ToStringFormat("{1} {0,choice,null#|!null#({0})}")
 public interface IdentificationDocumentFile extends IHasFile<IdentificationDocumentBlob> {
 
     @Owner
@@ -41,9 +43,9 @@ public interface IdentificationDocumentFile extends IHasFile<IdentificationDocum
     @Override
     @EmbeddedEntity
     @NotNull
+    @ToString(index = 1)
     IFile<IdentificationDocumentBlob> file();
 
     @ToString(index = 0)
     IPrimitive<String> description();
-
 }
