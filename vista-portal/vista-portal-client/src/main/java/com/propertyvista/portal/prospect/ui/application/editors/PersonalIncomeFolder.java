@@ -43,6 +43,8 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
 
     private RestrictionsPolicy restrictionsPolicy = EntityFactory.create(RestrictionsPolicy.class);
 
+    private ApplicationDocumentationPolicy documentationPolicy;
+
     public PersonalIncomeFolder() {
         this(true);
     }
@@ -60,15 +62,20 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
         revalidate();
     }
 
-    public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {
+    public void setDocumentationPolicy(ApplicationDocumentationPolicy policy) {
+        documentationPolicy = policy;
         for (CComponent<?, ?, ?, ?> item : getComponents()) {
-            ((PersonalIncomeEditor) ((CFolderItem<?>) item).getComponents().iterator().next()).setDocumentsPolicy(policy);
+            ((PersonalIncomeEditor) ((CFolderItem<?>) item).getComponents().iterator().next()).onSetDocumentationPolicy();
         }
+    }
+
+    public ApplicationDocumentationPolicy getDocumentationPolicy() {
+        return documentationPolicy;
     }
 
     @Override
     protected CForm<CustomerScreeningIncome> createItemForm(IObject<?> member) {
-        return new PersonalIncomeEditor();
+        return new PersonalIncomeEditor(this);
     }
 
     @Override

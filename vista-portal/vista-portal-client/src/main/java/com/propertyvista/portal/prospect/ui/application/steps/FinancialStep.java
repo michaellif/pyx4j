@@ -73,9 +73,11 @@ public class FinancialStep extends ApplicationWizardStep {
         }
 
         if (getWizard().isEditable()) {
-            ((PersonalIncomeFolder) (CComponent<?, ?, ?, ?>) get(proto().applicantData().incomes())).setDocumentsPolicy(getValue().applicantData()
+            ((PersonalIncomeFolder) (CComponent<?, ?, ?, ?>) get(proto().applicantData().incomes())).setRestrictionsPolicy(getValue().applicantData()
+                    .restrictionsPolicy());
+            ((PersonalIncomeFolder) (CComponent<?, ?, ?, ?>) get(proto().applicantData().incomes())).setDocumentationPolicy(getValue().applicantData()
                     .documentsPolicy());
-            ((PersonalAssetFolder) (CComponent<?, ?, ?, ?>) get(proto().applicantData().incomes())).setDocumentsPolicy(getValue().applicantData()
+            ((PersonalAssetFolder) (CComponent<?, ?, ?, ?>) get(proto().applicantData().assets())).setDocumentationPolicy(getValue().applicantData()
                     .documentsPolicy());
         }
     }

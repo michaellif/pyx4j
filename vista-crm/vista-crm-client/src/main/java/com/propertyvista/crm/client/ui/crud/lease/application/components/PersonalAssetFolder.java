@@ -57,15 +57,15 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
                 new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
                     @Override
                     public void onSuccess(ApplicationDocumentationPolicy result) {
-                        setDocumentsPolicy(result);
+                        setDocumentationPolicy(result);
                     }
                 });
     }
 
-    public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {
+    public void setDocumentationPolicy(ApplicationDocumentationPolicy policy) {
         this.documentationPolicy = policy;
         for (CComponent<?, ?, ?, ?> item : getComponents()) {
-            ((PersonalAssetEditor) ((CFolderItem<?>) item).getComponents().iterator().next()).onSetDocumentsPolicy();
+            ((PersonalAssetEditor) ((CFolderItem<?>) item).getComponents().iterator().next()).onSetDocumentationPolicy();
         }
     }
 
@@ -112,7 +112,7 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
             super(CustomerScreeningPersonalAsset.class);
         }
 
-        public void onSetDocumentsPolicy() {
+        public void onSetDocumentationPolicy() {
             displayProofDocsPolicy();
             revalidate();
         }

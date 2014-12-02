@@ -37,7 +37,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.media.ProofOfIncomeDocumentFile;
-import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.domain.ProofOfEmploymentDocumentType;
 import com.propertyvista.domain.policy.policies.domain.ProofOfIncomeDocumentType;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
@@ -60,14 +59,16 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
 
     private final ProofOfIncomeDocumentFileFolder fileUpload = new ProofOfIncomeDocumentFileFolder();
 
-    private ApplicationDocumentationPolicy documentationPolicy;
+    private final PersonalIncomeFolder parent;
 
-    public PersonalIncomeEditor() {
+    public PersonalIncomeEditor(PersonalIncomeFolder parent) {
         super(CustomerScreeningIncome.class);
+
+        assert (parent != null);
+        this.parent = parent;
     }
 
-    public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {
-        documentationPolicy = policy;
+    public void onSetDocumentationPolicy() {
         displayProofDocsPolicy();
         revalidate();
     }
@@ -79,13 +80,13 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
         fileUpload.addComponentValidator(new AbstractComponentValidator<IList<ProofOfIncomeDocumentFile>>() {
             @Override
             public BasicValidationError isValid() {
-                if (!getCComponent().getValue().isNull() && documentationPolicy != null) {
+                if (!getCComponent().getValue().isNull() && parent.getDocumentationPolicy() != null) {
                     if (IncomeSource.employment().contains(getValue().incomeSource().getValue())) {
-                        if (documentationPolicy.mandatoryProofOfEmployment().getValue(false) && getCComponent().getValue().isEmpty()) {
+                        if (parent.getDocumentationPolicy().mandatoryProofOfEmployment().getValue(false) && getCComponent().getValue().isEmpty()) {
                             return new BasicValidationError(getCComponent(), i18n.tr("Proof of Employment should be supplied"));
                         }
                     } else if (IncomeSource.otherIncome().contains(getValue().incomeSource().getValue())) {
-                        if (documentationPolicy.mandatoryProofOfIncome().getValue(false) && getCComponent().getValue().isEmpty()) {
+                        if (parent.getDocumentationPolicy().mandatoryProofOfIncome().getValue(false) && getCComponent().getValue().isEmpty()) {
                             return new BasicValidationError(getCComponent(), i18n.tr("Proof of Income should be supplied"));
                         }
                     }
@@ -111,16 +112,16 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
     private void displayProofDocsPolicy() {
         fileUpload.setNote(null);
 
-        if (getValue() != null && documentationPolicy != null) {
+        if (getValue() != null && parent.getDocumentationPolicy() != null) {
             if (IncomeSource.employment().contains(getValue().incomeSource().getValue())) {
-                for (ProofOfEmploymentDocumentType item : documentationPolicy.allowedEmploymentDocuments()) {
+                for (ProofOfEmploymentDocumentType item : parent.getDocumentationPolicy().allowedEmploymentDocuments()) {
                     if (item.incomeSource().getValue().equals(getValue().incomeSource().getValue())) {
                         fileUpload.setNote(item.notes().getValue());
                         break;
                     }
                 }
             } else if (IncomeSource.otherIncome().contains(getValue().incomeSource().getValue())) {
-                for (ProofOfIncomeDocumentType item : documentationPolicy.allowedIncomeDocuments()) {
+                for (ProofOfIncomeDocumentType item : parent.getDocumentationPolicy().allowedIncomeDocuments()) {
                     if (item.incomeSource().getValue().equals(getValue().incomeSource().getValue())) {
                         fileUpload.setNote(item.notes().getValue());
                         break;

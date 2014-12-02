@@ -347,6 +347,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.applicantData().set(to.applicantData().documentsPolicy(),
                 ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(to.policyNode(), ApplicationDocumentationPolicy.class));
 
+        to.applicantData().set(to.applicantData().restrictionsPolicy(),
+                ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(to.policyNode(), RestrictionsPolicy.class));
+
         to.applicantData().set(to.applicantData().legalQuestions(), screening.version().legalQuestions());
 
         to.applicantData().set(to.applicantData().incomes(), screening.version().incomes());

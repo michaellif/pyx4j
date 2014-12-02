@@ -46,6 +46,8 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
 
     private RestrictionsPolicy restrictionsPolicy = EntityFactory.create(RestrictionsPolicy.class);
 
+    private ApplicationDocumentationPolicy documentationPolicy;
+
     public PersonalIncomeFolder(boolean modifyable) {
         super(CustomerScreeningIncome.class, modifyable);
     }
@@ -61,7 +63,7 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
                 new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
                     @Override
                     public void onSuccess(ApplicationDocumentationPolicy result) {
-                        setDocumentsPolicy(result);
+                        setDocumentationPolicy(result);
                     }
                 });
     }
@@ -71,15 +73,20 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
         revalidate();
     }
 
-    public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {
+    public void setDocumentationPolicy(ApplicationDocumentationPolicy policy) {
+        documentationPolicy = policy;
         for (CComponent<?, ?, ?, ?> item : getComponents()) {
-            ((PersonalIncomeEditor) ((CFolderItem<?>) item).getComponents().iterator().next()).setDocumentsPolicy(policy);
+            ((PersonalIncomeEditor) ((CFolderItem<?>) item).getComponents().iterator().next()).onSetDocumentationPolicy();
         }
+    }
+
+    public ApplicationDocumentationPolicy getDocumentationPolicy() {
+        return documentationPolicy;
     }
 
     @Override
     protected CForm<CustomerScreeningIncome> createItemForm(IObject<?> member) {
-        return new PersonalIncomeEditor();
+        return new PersonalIncomeEditor(this);
     }
 
     @Override
