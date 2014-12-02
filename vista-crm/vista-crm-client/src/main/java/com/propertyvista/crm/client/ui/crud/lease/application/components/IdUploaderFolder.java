@@ -164,7 +164,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
             formPanel.append(Location.Dual, proto().idNumber()).decorate();
             formPanel.append(Location.Dual, proto().notes()).decorate();
 
-            IdentificationDocumentFileUploaderFolder docPagesFolder = new IdentificationDocumentFileUploaderFolder();
+            IdFileUploaderFolder docPagesFolder = new IdFileUploaderFolder();
             if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
                 docPagesFolder.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFile>>() {
                     @Override

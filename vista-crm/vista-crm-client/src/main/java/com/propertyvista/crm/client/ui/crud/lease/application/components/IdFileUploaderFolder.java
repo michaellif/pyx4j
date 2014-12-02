@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.lease.application.components;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
@@ -26,15 +27,24 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.rpc.services.lease.IdentificationDocumentCrmUploadService;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
 
-public class IdentificationDocumentFileUploaderFolder extends VistaBoxFolder<IdentificationDocumentFile> {
+public class IdFileUploaderFolder extends VistaBoxFolder<IdentificationDocumentFile> {
 
-    private static final I18n i18n = I18n.get(IdentificationDocumentFileUploaderFolder.class);
+    private static final I18n i18n = I18n.get(IdFileUploaderFolder.class);
 
-    public IdentificationDocumentFileUploaderFolder() {
+    public IdFileUploaderFolder() {
         super(IdentificationDocumentFile.class, i18n.tr("File"));
+    }
+
+    @Override
+    public VistaBoxFolderItemDecorator<IdentificationDocumentFile> createItemDecorator() {
+        VistaBoxFolderItemDecorator<IdentificationDocumentFile> decor = super.createItemDecorator();
+        decor.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
+        decor.setExpended(false);
+        return decor;
     }
 
     @Override
