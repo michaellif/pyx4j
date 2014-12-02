@@ -85,7 +85,9 @@ public interface CustomerScreeningPersonalAsset extends IEntity {
     IPrimitive<Integer> seq();
 
     @NotNull
+    @ReadOnly
     @ToString(index = 0)
+    @MemberColumn(notNull = true)
     IPrimitive<AssetType> assetType();
 
     @NotNull

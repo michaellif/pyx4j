@@ -43,6 +43,7 @@ public interface CustomerScreeningIncome extends IEntity {
     CustomerScreening.CustomerScreeningV owner();
 
     @NotNull
+    @ReadOnly
     @ToString(index = 0)
     @MemberColumn(notNull = true)
     IPrimitive<IncomeSource> incomeSource();

@@ -15,7 +15,6 @@ package com.propertyvista.portal.prospect.ui.application.editors;
 
 import java.math.BigDecimal;
 
-import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -23,10 +22,8 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -99,7 +96,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
     protected IsWidget createContent() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().incomeSource(), new CEnumLabel()).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().incomeSource()).decorate().componentWidth(250);
         formPanel.append(Location.Left, detailsHolder);
 
         formPanel.h3(i18n.tr("Proof Documents"));

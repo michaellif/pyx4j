@@ -25,7 +25,6 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -100,7 +99,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
     protected IsWidget createContent() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Dual, proto().incomeSource(), new CEnumLabel()).decorate();
+        formPanel.append(Location.Dual, proto().incomeSource()).decorate();
         formPanel.append(Location.Dual, detailsHolder);
 
         formPanel.h3(i18n.tr("Proof Documents"));
