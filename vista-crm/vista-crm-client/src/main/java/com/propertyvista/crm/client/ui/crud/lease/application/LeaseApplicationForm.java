@@ -20,15 +20,14 @@ import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolder;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.lease.application.components.ApplicationStatusFolder;
 import com.propertyvista.crm.client.ui.crud.lease.application.components.FinancialViewForm;
 import com.propertyvista.crm.client.ui.crud.lease.application.components.LeaseApplicationDocumentFolder;
@@ -130,8 +129,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
             }
 
             @Override
-            public IFolderItemDecorator<TenantInfoDTO> createItemDecorator() {
-                BoxFolderItemDecorator<TenantInfoDTO> decor = (BoxFolderItemDecorator<TenantInfoDTO>) super.createItemDecorator();
+            public VistaBoxFolderItemDecorator<TenantInfoDTO> createItemDecorator() {
+                VistaBoxFolderItemDecorator<TenantInfoDTO> decor = super.createItemDecorator();
                 decor.setExpended(false);
                 return decor;
             }
@@ -148,8 +147,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
             }
 
             @Override
-            public IFolderItemDecorator<TenantFinancialDTO> createItemDecorator() {
-                BoxFolderItemDecorator<TenantFinancialDTO> decor = (BoxFolderItemDecorator<TenantFinancialDTO>) super.createItemDecorator();
+            public VistaBoxFolderItemDecorator<TenantFinancialDTO> createItemDecorator() {
+                VistaBoxFolderItemDecorator<TenantFinancialDTO> decor = super.createItemDecorator();
                 decor.setExpended(false);
                 return decor;
             }

@@ -61,6 +61,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
@@ -150,8 +151,8 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
         }
 
         @Override
-        public BoxFolderItemDecorator<MessageDTO> createItemDecorator() {
-            BoxFolderItemDecorator<MessageDTO> decor = (BoxFolderItemDecorator<MessageDTO>) super.createItemDecorator();
+        public VistaBoxFolderItemDecorator<MessageDTO> createItemDecorator() {
+            VistaBoxFolderItemDecorator<MessageDTO> decor = super.createItemDecorator();
             decor.setCaptionFormatter(new IFormatter<MessageDTO, SafeHtml>() {
                 @Override
                 public SafeHtml format(MessageDTO value) {

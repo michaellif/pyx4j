@@ -43,7 +43,6 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -62,6 +61,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.activity.crud.communication.MessageViewerActivity;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.CommunicationCrmTheme;
@@ -230,8 +230,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         }
 
         @Override
-        public IFolderItemDecorator<MessageDTO> createItemDecorator() {
-            BoxFolderItemDecorator<MessageDTO> decor = (BoxFolderItemDecorator<MessageDTO>) super.createItemDecorator();
+        public VistaBoxFolderItemDecorator<MessageDTO> createItemDecorator() {
+            VistaBoxFolderItemDecorator<MessageDTO> decor = super.createItemDecorator();
             decor.setCaptionFormatter(new IFormatter<MessageDTO, SafeHtml>() {
                 @Override
                 public SafeHtml format(MessageDTO value) {

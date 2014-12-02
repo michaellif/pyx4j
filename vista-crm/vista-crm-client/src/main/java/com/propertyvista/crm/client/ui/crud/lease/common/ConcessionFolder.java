@@ -17,12 +17,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.domain.financial.offering.Concession;
 
 public class ConcessionFolder extends VistaBoxFolder<Concession> {
@@ -65,8 +64,8 @@ public class ConcessionFolder extends VistaBoxFolder<Concession> {
     }
 
     @Override
-    public IFolderItemDecorator<Concession> createItemDecorator() {
-        BoxFolderItemDecorator<Concession> decor = (BoxFolderItemDecorator<Concession>) super.createItemDecorator();
+    public VistaBoxFolderItemDecorator<Concession> createItemDecorator() {
+        VistaBoxFolderItemDecorator<Concession> decor = super.createItemDecorator();
         decor.setExpended(false);
         return decor;
     }

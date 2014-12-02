@@ -25,13 +25,12 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.operations.domain.scheduler.ScheduleType;
 import com.propertyvista.operations.domain.scheduler.TriggerSchedule;
 
@@ -109,8 +108,8 @@ public class TriggerScheduleFolder extends VistaBoxFolder<TriggerSchedule> {
     }
 
     @Override
-    public IFolderItemDecorator<TriggerSchedule> createItemDecorator() {
-        BoxFolderItemDecorator<TriggerSchedule> decor = (BoxFolderItemDecorator<TriggerSchedule>) super.createItemDecorator();
+    public VistaBoxFolderItemDecorator<TriggerSchedule> createItemDecorator() {
+        VistaBoxFolderItemDecorator<TriggerSchedule> decor = super.createItemDecorator();
         decor.setExpended(false);
         return decor;
     }

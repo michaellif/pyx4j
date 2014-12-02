@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -15,8 +15,6 @@ package com.propertyvista.common.client.ui.components.folders;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.folder.CFolder;
-import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
@@ -46,12 +44,12 @@ public abstract class VistaBoxFolder<E extends IEntity> extends CFolder<E> {
     }
 
     @Override
-    protected IFolderDecorator<E> createFolderDecorator() {
+    protected VistaBoxFolderDecorator<E> createFolderDecorator() {
         return new VistaBoxFolderDecorator<E>(this);
     }
 
     @Override
-    public IFolderItemDecorator<E> createItemDecorator() {
+    public VistaBoxFolderItemDecorator<E> createItemDecorator() {
         return new VistaBoxFolderItemDecorator<E>(this);
     }
 

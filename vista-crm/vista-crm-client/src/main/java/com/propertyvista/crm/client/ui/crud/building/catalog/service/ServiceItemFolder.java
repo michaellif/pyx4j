@@ -30,8 +30,6 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CEntityHyperlink;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -39,6 +37,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.IShowable;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectionDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.ARCode;
@@ -64,8 +63,8 @@ class ServiceItemFolder extends VistaBoxFolder<ProductItem> {
     }
 
     @Override
-    public IFolderItemDecorator<ProductItem> createItemDecorator() {
-        BoxFolderItemDecorator<ProductItem> decor = (BoxFolderItemDecorator<ProductItem>) super.createItemDecorator();
+    public VistaBoxFolderItemDecorator<ProductItem> createItemDecorator() {
+        VistaBoxFolderItemDecorator<ProductItem> decor = super.createItemDecorator();
         decor.setExpended(false);
         decor.setCaptionFormatter(new IFormatter<ProductItem, SafeHtml>() {
             @Override

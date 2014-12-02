@@ -14,21 +14,20 @@
 package com.propertyvista.crm.client.ui.crud.lease.application.components;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.rpc.services.lease.ProofOfAssetDocumentCrmUploadService;
 import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
 
@@ -41,18 +40,11 @@ public class ProofOfAssetDocumentFileFolder extends VistaBoxFolder<ProofOfAssetD
     }
 
     @Override
-    public void addValidations() {
-        super.addValidations();
-
-        addComponentValidator(new AbstractComponentValidator<IList<ProofOfAssetDocumentFile>>() {
-            @Override
-            public BasicValidationError isValid() {
-                if (getCComponent().getValue() != null && getCComponent().getValue().isEmpty() && getCComponent().isVisited()) {
-                    return new BasicValidationError(getCComponent(), i18n.tr("Document file should be supplied"));
-                }
-                return null;
-            }
-        });
+    public VistaBoxFolderItemDecorator<ProofOfAssetDocumentFile> createItemDecorator() {
+        VistaBoxFolderItemDecorator<ProofOfAssetDocumentFile> decor = super.createItemDecorator();
+        decor.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
+        decor.setExpended(false);
+        return decor;
     }
 
     @Override
@@ -77,13 +69,6 @@ public class ProofOfAssetDocumentFileFolder extends VistaBoxFolder<ProofOfAssetD
             formPanel.append(Location.Dual, proto().description()).decorate();
 
             return formPanel;
-        }
-
-        @Override
-        protected void onValueSet(boolean populate) {
-            super.onValueSet(populate);
-
-            get(proto().description()).setVisible(isEditable() || !getValue().description().isNull());
         }
     }
 }

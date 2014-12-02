@@ -30,7 +30,6 @@ import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
@@ -43,7 +42,6 @@ import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.visor.notes.NotesAndAttachmentsVisorView;
 import com.propertyvista.domain.property.asset.CommunityEvent;
@@ -112,11 +110,6 @@ public class CommunityEventVisorView extends AbstractVisorPaneView {
             @Override
             protected CForm<CommunityEvent> createItemForm(IObject<?> member) {
                 return new EventEditor(true);
-            }
-
-            @Override
-            public IFolderItemDecorator<CommunityEvent> createItemDecorator() {
-                return new VistaBoxFolderItemDecorator<CommunityEvent>(this);
             }
 
             @Override

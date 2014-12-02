@@ -17,13 +17,12 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.PropertyVistaIntegratedInsurance;
@@ -49,8 +48,8 @@ public class TenantInsuranceCertificateFolder extends VistaBoxFolder<InsuranceCe
     }
 
     @Override
-    public IFolderItemDecorator<InsuranceCertificate> createItemDecorator() {
-        BoxFolderItemDecorator<InsuranceCertificate> decorator = (BoxFolderItemDecorator<InsuranceCertificate>) super.createItemDecorator();
+    public VistaBoxFolderItemDecorator<InsuranceCertificate> createItemDecorator() {
+        VistaBoxFolderItemDecorator<InsuranceCertificate> decorator = super.createItemDecorator();
         decorator.setExpended(isEditable());
         return decorator;
     }
