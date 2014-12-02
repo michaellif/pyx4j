@@ -75,6 +75,7 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
     private void initForm(Collection<CommunicationEndpointDTO> alreadySelected) {
 
         final ScrollPanel listScrollPanel = new ScrollPanel();
+        wrapIt(alreadySelected);
         listScrollPanel.setHeight("500px");
         listScrollPanel.setWidth("100%");
 
@@ -115,10 +116,10 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
             }
         });
 
-        Anchor allSelected = new Anchor("All Selected");
-        allSelected.setStyleName(DialogStyleName.AllRecipientsLabel.name());
+        Anchor allSelectedLabel = new Anchor("All Selected");
+        allSelectedLabel.setStyleName(DialogStyleName.AllRecipientsLabel.name());
 
-        allSelected.addClickHandler(new ClickHandler() {
+        allSelectedLabel.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
@@ -136,14 +137,15 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
 
         });
 
-        menuPanel.add(allSelected);
+        menuPanel.add(allSelectedLabel);
         menuPanel.add(groupTitle);
         menuPanel.add(rg);
+        rg.setValue("Tenant", true);
 
         add(menuPanel);
         add(listScrollPanel);
         setCellWidth(listScrollPanel, "100%");
-        wrapIt(alreadySelected);
+
         grabSelectedItems();
     }
 
