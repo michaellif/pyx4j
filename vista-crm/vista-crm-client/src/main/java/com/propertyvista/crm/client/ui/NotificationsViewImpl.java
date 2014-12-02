@@ -64,6 +64,7 @@ public class NotificationsViewImpl extends FlowPanel implements NotificationsVie
                 title.setStyleName(SiteViewTheme.StyleName.SiteViewNotificationItemTitle.name());
 
                 HTML body = new HTML(notification.getMessage());
+                body.setStyleName(SiteViewTheme.StyleName.SiteViewNotificationItemBody.name());
 
                 message.add(title);
                 message.add(body);

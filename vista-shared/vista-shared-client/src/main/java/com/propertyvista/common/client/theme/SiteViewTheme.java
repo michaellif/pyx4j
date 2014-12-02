@@ -31,7 +31,7 @@ public class SiteViewTheme extends Theme {
 
         SiteViewExtra, SiteViewExtraItem, SiteViewExtraTitle,
 
-        SiteViewNotificationContainer, SiteViewNotificationItem, SiteViewNotificationItemTitle, SiteViewNotificationItemCloseButton;
+        SiteViewNotificationContainer, SiteViewNotificationItem, SiteViewNotificationItemTitle, SiteViewNotificationItemBody, SiteViewNotificationItemCloseButton;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -163,7 +163,7 @@ public class SiteViewTheme extends Theme {
 
         style = new Style(".", StyleName.SiteViewNotificationItem);
         style.addProperty("text-align", "center");
-        style.addProperty("padding", "6px 6px 6px 50px");
+        style.addProperty("padding", "0 50px");
         style.addProperty("min-height", "40px");
         style.addProperty("position", "relative");
         addStyle(style);
@@ -189,7 +189,17 @@ public class SiteViewTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.SiteViewNotificationItemTitle);
+        style.addProperty("height", "50%");
         style.addProperty("font-weight", "bold");
+        style.addProperty("overflow", "hidden");
+        style.addProperty("white-space", "nowrap");
+        style.addProperty("text-overflow", "ellipsis");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SiteViewNotificationItemBody);
+        style.addProperty("overflow", "hidden");
+        style.addProperty("white-space", "nowrap");
+        style.addProperty("text-overflow", "ellipsis");
         addStyle(style);
 
         style = new Style(".", StyleName.SiteViewNotificationItemCloseButton);
