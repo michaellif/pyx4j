@@ -152,9 +152,17 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
     }
 
     public void setValue(E value) {
+        setValue(value, false);
+    }
+
+    public void setValue(E value, boolean fireChangeEvent) {
         RadioButton selectedButton = buttons.get(value);
         if (selectedButton != null) {
             selectedButton.setValue(Boolean.TRUE);
+
+            fireEvent(new ValueChangeEvent<Boolean>(fireChangeEvent) {
+            });
+
         } else {
             for (RadioButton button : buttons.values()) {
                 button.setValue(Boolean.FALSE);
