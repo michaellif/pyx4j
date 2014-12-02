@@ -14,6 +14,8 @@
 package com.propertyvista.domain.tenant.income;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
@@ -46,10 +48,11 @@ public interface CustomerScreeningIncome extends IEntity {
     @ReadOnly
     @ToString(index = 0)
     @MemberColumn(notNull = true)
+    @Editor(type = EditorType.label)
     IPrimitive<IncomeSource> incomeSource();
 
-    @Owned(forceCreation = true)
     @ToString(index = 1)
+    @Owned(forceCreation = true)
     @MemberColumn(notNull = true)
     CustomerScreeningIncomeInfo details();
 
