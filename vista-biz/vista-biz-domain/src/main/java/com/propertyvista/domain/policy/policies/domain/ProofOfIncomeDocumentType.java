@@ -30,6 +30,7 @@ public interface ProofOfIncomeDocumentType extends ApplicationDocumentType {
     @ReadOnly
     @ToString(index = 0)
     @MemberColumn(notNull = true)
+    @Editor(type = EditorType.label)
     IPrimitive<IncomeSource> incomeSource();
 
     @Override

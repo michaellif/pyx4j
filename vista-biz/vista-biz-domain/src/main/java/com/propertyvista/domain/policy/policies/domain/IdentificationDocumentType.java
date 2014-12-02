@@ -16,7 +16,10 @@ package com.propertyvista.domain.policy.policies.domain;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -47,7 +50,9 @@ public interface IdentificationDocumentType extends ApplicationDocumentType {
     }
 
     @NotNull
+    @ReadOnly
     @Caption(name = "ID Type")
     @MemberColumn(name = "idType")
+    @Editor(type = EditorType.label)
     IPrimitive<Type> type();
 }

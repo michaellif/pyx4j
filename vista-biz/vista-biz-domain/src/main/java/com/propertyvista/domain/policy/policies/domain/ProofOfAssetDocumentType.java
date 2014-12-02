@@ -30,6 +30,7 @@ public interface ProofOfAssetDocumentType extends ApplicationDocumentType {
     @ReadOnly
     @ToString(index = 0)
     @MemberColumn(notNull = true)
+    @Editor(type = EditorType.label)
     IPrimitive<AssetType> assetType();
 
     @Override
