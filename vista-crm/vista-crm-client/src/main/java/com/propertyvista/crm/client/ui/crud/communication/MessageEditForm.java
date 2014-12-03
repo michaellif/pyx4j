@@ -15,11 +15,8 @@ package com.propertyvista.crm.client.ui.crud.communication;
 
 import java.util.List;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CRichTextArea;
@@ -63,12 +60,6 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
     public IsWidget createGeneralForm() {
         FormPanel formPanel = new FormPanel(this);
 
-        epSelectorNew = createCommunicationEndpointSelectorNew();
-
-        formPanel.append(Location.Dual, proto().to(), epSelectorNew).decorate();
-
-        formPanel.append(Location.Dual, proto().subject()).decorate();
-
         formPanel.append(Location.Dual, proto().category(), new CEntityComboBox<MessageCategory>(MessageCategory.class) {
             @Override
             public void retriveOptions(final AsyncOptionsReadyCallback<MessageCategory> callback) {
@@ -108,39 +99,25 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
             }
         }).decorate();
 
-        get(proto().category());
+        formPanel.append(Location.Dual, proto().to(), epSelectorNew = createCommunicationEndpointSelectorNew()).decorate();
+
         inject(proto().deliveryMethod());
 
         formPanel.append(Location.Left, proto().onBehalf(), new TenantSelector()).decorate();
         formPanel.append(Location.Right, proto().onBehalfVisible()).decorate().customLabel(i18n.tr("Is Visible For Tenant"));
         formPanel.append(Location.Left, proto().allowedReply()).decorate();
         formPanel.append(Location.Right, proto().highImportance()).decorate();
-        formPanel.br();
-
         formPanel.append(Location.Left, proto().dateFrom()).decorate().componentWidth(120).customLabel(i18n.tr("Notification Date"));
-        formPanel.append(Location.Right, proto().timeWindow().timeFrom()).decorate().componentWidth(120).customLabel(i18n.tr("Notification Time"));
-        formPanel.append(Location.Left, proto().dateTo()).decorate().componentWidth(120).customLabel(i18n.tr("Expiration Date"));
-        formPanel.append(Location.Right, proto().timeWindow().timeTo()).decorate().componentWidth(120).customLabel(i18n.tr("Expiration Time"));
-        get(proto().timeWindow().timeFrom()).setVisible(false);
-        get(proto().timeWindow().timeTo()).setVisible(false);
-        get(proto().dateFrom()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
-                LogicalDate date = event.getValue();
-                get(proto().timeWindow().timeFrom()).setVisible(date != null);
-            }
-        });
+        formPanel.append(Location.Right, proto().dateTo()).decorate().componentWidth(120).customLabel(i18n.tr("Expiration Date"));
 
-        get(proto().dateTo()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
-                LogicalDate date = event.getValue();
-                get(proto().timeWindow().timeTo()).setVisible(date != null);
-            }
-        });
+        formPanel.append(Location.Dual, proto().notificationType()).decorate().componentWidth(120).customLabel(i18n.tr("Type"));
 
         get(proto().dateFrom()).addComponentValidator(new FutureDateIncludeTodayValidator());
         get(proto().dateTo()).addComponentValidator(new FutureDateIncludeTodayValidator());
+
+        formPanel.br();
+
+        formPanel.append(Location.Dual, proto().subject()).decorate();
 
         formPanel.append(Location.Dual, proto().deliveredText()).decorate();
         formPanel.append(Location.Dual, proto().text(), new CRichTextArea()).decorate();
@@ -166,14 +143,9 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
                     get(proto().category()).setEditable(true);
                 }
             } else {
-                if (DeliveryMethod.Notification.equals(dm)) {
-                    setVisibility(false, true);
-                    get(proto().text()).setTitle(dm.toString());
-                } else {
-                    setVisibility(false, false);
-                    get(proto().text()).setTitle(i18n.tr("Fallback"));
-                    get(proto().deliveredText()).setTitle(dm.toString());
-                }
+                setVisibility(false, DeliveryMethod.Notification.equals(dm));
+                get(proto().text()).setTitle(i18n.tr("Fallback"));
+                get(proto().deliveredText()).setTitle(dm.toString());
             }
         }
         return value;
@@ -186,14 +158,13 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
         get(proto().highImportance()).setVisible(isVisible);
         get(proto().allowedReply()).setVisible(isVisible);
         get(proto().attachments()).setVisible(isVisible);
-        get(proto().deliveredText()).setVisible(!isVisible && !isForNotification);
-        get(proto().deliveredText()).setMandatory(!isVisible && !isForNotification);
+        get(proto().deliveredText()).setVisible(!isVisible);
+        get(proto().deliveredText()).setMandatory(!isVisible);
+        get(proto().text()).setVisible(!isForNotification);
         get(proto().dateFrom()).setVisible(isForNotification);
         get(proto().dateTo()).setVisible(isForNotification);
-        get(proto().timeWindow().timeFrom()).setVisible(get(proto().dateFrom()).getValue() != null);
-        get(proto().timeWindow().timeTo()).setVisible(get(proto().dateTo()).getValue() != null);
-        get(proto().timeWindow().timeFrom()).setMandatory(false);
-        get(proto().timeWindow().timeTo()).setMandatory(false);
+        get(proto().notificationType()).setVisible(isForNotification);
+        get(proto().notificationType()).setMandatory(isForNotification);
     }
 
     public void reinit() {

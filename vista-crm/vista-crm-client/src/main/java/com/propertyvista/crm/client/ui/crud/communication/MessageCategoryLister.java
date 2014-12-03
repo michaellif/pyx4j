@@ -20,9 +20,7 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
@@ -38,7 +36,6 @@ import com.propertyvista.crm.client.event.BoardUpdateEvent;
 import com.propertyvista.crm.rpc.services.MessageCategoryCrudService;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
-import com.propertyvista.misc.VistaTODO;
 
 public class MessageCategoryLister extends SiteDataTablePanel<MessageCategory> {
 
@@ -94,13 +91,5 @@ public class MessageCategoryLister extends SiteDataTablePanel<MessageCategory> {
             AppSite.instance();
             AppSite.getEventBus().fireEvent(new BoardUpdateEvent(MessageCategory.class));
         }
-    }
-
-    @Override
-    protected EntityListCriteria<MessageCategory> updateCriteria(EntityListCriteria<MessageCategory> criteria) {
-        if (!ApplicationMode.isDevelopment() || !VistaTODO.ADDITIONAL_COMMUNICATION_FEATURES) {
-            criteria.in(criteria.proto().categoryType(), new CategoryType[] { CategoryType.Message, CategoryType.Ticket });
-        }
-        return super.updateCriteria(criteria);
     }
 }

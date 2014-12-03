@@ -75,7 +75,6 @@ import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.communication.SpecialDelivery.DeliveryMethod;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.dto.MessageDTO;
 
 public class MessageForm extends CrmEntityForm<MessageDTO> {
@@ -113,17 +112,16 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         formPanel.append(Location.Dual, proto().subject(), threadLabel);
         formPanel.br();
 
-        formPanel.append(Location.Left, proto().header()).decorate().customLabel(i18n.tr("Sent"));
-        formPanel.append(Location.Left, proto().allowedReply()).decorate();
-        formPanel.append(Location.Right, proto().category()).decorate();
+        formPanel.append(Location.Left, proto().category()).decorate();
+        formPanel.append(Location.Right, proto().allowedReply()).decorate();
         formPanel.append(Location.Left, proto().owner().name()).decorate().customLabel(i18n.tr("Owner"));
         formPanel.append(Location.Right, proto().status()).decorate();
+        formPanel.append(Location.Left, proto().header()).decorate().customLabel(i18n.tr("Sent"));
+        formPanel.append(Location.Dual, proto().to(), new CommunicationEndpointSelector()).decorate();
         formPanel.append(Location.Dual, proto().associated(), new CAssociationLabel()).decorate();
         formPanel.append(Location.Dual, proto().deliveredText()).decorate();
         formPanel.append(Location.Left, proto().dateFrom()).decorate().customLabel(i18n.tr("Notification Date"));
-        formPanel.append(Location.Right, proto().timeWindow().timeFrom()).decorate().customLabel(i18n.tr("Notification Time"));
-        formPanel.append(Location.Left, proto().dateTo()).decorate().customLabel(i18n.tr("Expiration Date"));
-        formPanel.append(Location.Right, proto().timeWindow().timeTo()).decorate().customLabel(i18n.tr("Expiration Time"));
+        formPanel.append(Location.Right, proto().dateTo()).decorate().customLabel(i18n.tr("Expiration Date"));
         formPanel.append(Location.Dual, proto().text(), new CRichTextArea()).decorate();
 
         formPanel.append(Location.Dual, proto().content(), messagesFolder);
@@ -145,6 +143,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             get(proto().deliveredText()).setVisible(false);
             get(proto().text()).setVisible(false);
             get(proto().header()).setVisible(false);
+            get(proto().to()).setVisible(false);
         } else {
             get(proto().owner().name()).setVisible(CategoryType.Ticket.equals(getValue().category().categoryType().getValue()));
             get(proto().status()).setVisible(CategoryType.Ticket.equals(getValue().category().categoryType().getValue()));
@@ -159,20 +158,15 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             get(proto().subject()).setVisible(isEmpty || isDeliveryMethodEmpty || isNotification);
             get(proto().dateFrom()).setVisible(isNotification && getValue().dateFrom() != null && !getValue().dateFrom().isNull());
             get(proto().dateTo()).setVisible(isNotification && getValue().dateTo() != null && !getValue().dateTo().isNull());
-            get(proto().timeWindow().timeFrom()).setVisible(
-                    isNotification && getValue().timeWindow() != null && !getValue().timeWindow().isNull() && getValue().timeWindow().timeFrom() != null
-                            && !getValue().timeWindow().timeFrom().isNull());
-            get(proto().timeWindow().timeTo()).setVisible(
-                    isNotification && getValue().timeWindow() != null && !getValue().timeWindow().isNull() && getValue().timeWindow().timeTo() != null
-                            && !getValue().timeWindow().timeTo().isNull());
             get(proto().header()).setVisible(!isEmpty && !isDeliveryMethodEmpty);
+            get(proto().to()).setVisible(!isEmpty && !isDeliveryMethodEmpty);
             get(proto().allowedReply()).setVisible(isEmpty || isDeliveryMethodEmpty);
 
             if (!isEmpty && !isDeliveryMethodEmpty) {
                 get(proto().deliveredText()).setTitle(getValue().deliveryMethod().getValue().toString());
-                get(proto().deliveredText()).setVisible(!isNotification);
-                get(proto().text()).setTitle(isNotification ? i18n.tr("Notification") : i18n.tr("Fallback"));
-                get(proto().text()).setVisible(true);
+                get(proto().deliveredText()).setVisible(true);
+                get(proto().text()).setTitle(i18n.tr("Fallback"));
+                get(proto().text()).setVisible(!isNotification);
             } else {
                 get(proto().deliveredText()).setVisible(false);
                 get(proto().text()).setVisible(false);
@@ -392,7 +386,10 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         @Override
         protected MessageDTO preprocessValue(MessageDTO value, boolean fireEvent, boolean populate) {
             if (value != null && value.getPrimaryKey() != null && !value.getPrimaryKey().isDraft()) {
-                if (!value.isRead().getValue(true) && value.isInRecipients().getValue(false)) {
+                if (!value.isRead().getValue(true)
+                        && value.isInRecipients().getValue(false)
+                        && (value.deliveryMethod() == null || value.deliveryMethod().isNull() || !DeliveryMethod.Notification.equals(value.deliveryMethod()
+                                .getValue()))) {
                     value.isRead().setValue(true);
                     BoxFolderItemDecorator<MessageDTO> d = (BoxFolderItemDecorator<MessageDTO>) getParent().getDecorator();
                     d.setExpended(true);
@@ -565,14 +562,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
         private CommunicationEndpointSelector createCommunicationEndpointSelector() {
             return new CommunicationEndpointSelector();
-        }
-
-        public void addToItem(CommunicationEndpointDTO item) {
-            getValue().to().add(item);
-        }
-
-        public void removeToItem(CommunicationEndpointDTO item) {
-            getValue().to().remove(item);
         }
 
         class TenantSelector extends CEntitySelectorHyperlink<Tenant> {

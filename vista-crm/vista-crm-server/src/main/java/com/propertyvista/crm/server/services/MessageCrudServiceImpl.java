@@ -18,6 +18,7 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
@@ -231,25 +232,25 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             switch (to.deliveryMethod().getValue()) {
             case SMS:
                 da = EntityFactory.create(SMSDelivery.class);
-                ((SMSDelivery) da).deliveredText().set(to.deliveredText());
                 if (to.deliveredText() != null && !to.deliveredText().isNull()) {
                     t.subject().setValue(to.deliveredText().getValue().substring(0, Math.min(77, to.deliveredText().getValue().length())));
                 }
                 break;
             case IVR:
                 da = EntityFactory.create(IVRDelivery.class);
-                ((IVRDelivery) da).deliveredText().set(to.deliveredText());
                 if (to.deliveredText() != null && !to.deliveredText().isNull()) {
                     t.subject().setValue(to.deliveredText().getValue().substring(0, Math.min(77, to.deliveredText().getValue().length())));
                 }
                 break;
             case Notification:
-                da = EntityFactory.create(NotificationDelivery.class);
-                ((NotificationDelivery) da).dateFrom().set(to.dateFrom());
-                ((NotificationDelivery) da).dateTo().set(to.dateTo());
-                ((NotificationDelivery) da).timeWindow().set(to.timeWindow());
+                NotificationDelivery nd = EntityFactory.create(NotificationDelivery.class);
+                da = nd;
+                nd.dateFrom().setValue(to.dateFrom() == null || to.dateFrom().isNull() ? new LogicalDate() : to.dateFrom().getValue(new LogicalDate()));
+                nd.dateTo().set(to.dateTo());
+                nd.notificationType().set(to.notificationType());
                 break;
             }
+            da.deliveredText().set(to.deliveredText());
             t.deliveryMethod().set(to.deliveryMethod());
             t.specialDelivery().set(da);
         }

@@ -13,30 +13,33 @@
  */
 package com.propertyvista.crm.client.activity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.config.shared.ApplicationBackend;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ContextChangeEvent;
 import com.pyx4j.security.client.ContextChangeHandler;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.domain.Notification.NotificationType;
 
-import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.crm.client.CrmSite;
+import com.propertyvista.crm.client.event.CommunicationStatusUpdateEvent;
+import com.propertyvista.crm.client.event.CommunicationStatusUpdateHandler;
 import com.propertyvista.crm.client.ui.NotificationsView;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
-import com.propertyvista.shared.config.VistaDemo;
+import com.propertyvista.crm.rpc.dto.communication.CrmCommunicationSystemNotification;
+import com.propertyvista.crm.rpc.services.MessageCrudService;
+import com.propertyvista.domain.communication.NotificationDelivery;
+import com.propertyvista.dto.MessageDTO;
 
 public class NotificationsActivity extends AbstractActivity implements NotificationsView.NotificationsPresenter {
 
@@ -44,16 +47,12 @@ public class NotificationsActivity extends AbstractActivity implements Notificat
 
     private final NotificationsView view;
 
-    private final List<Notification> notifications = new ArrayList<>();
+    private final int MAX_SIZE = 3;
 
-    private final Notification productionNotification = new Notification(i18n.tr("This is PRODUCTION Environment!"), i18n.tr("PRODUCTION SUPPORT!"),
-            NotificationType.WARNING);
+    private final Map<Notification, MessageDTO> notifications = new HashMap<>();
 
     public NotificationsActivity() {
         view = CrmSite.getViewFactory().getView(NotificationsView.class);
-        if (VistaFeaturesCustomizationClient.enviromentTitleVisible && VistaDemo.isDemo()) {
-            notifications.add(new Notification(i18n.tr("This is Demo Environment"), i18n.tr("Demo Environment"), NotificationType.INFO));
-        }
     }
 
     @Override
@@ -61,14 +60,13 @@ public class NotificationsActivity extends AbstractActivity implements Notificat
         view.setPresenter(this);
         container.setWidget(view);
 
-        updateAuthenticatedView();
-        view.showNotifications(notifications);
+        updateAuthenticatedView(null);
+        view.showNotifications(notifications.keySet());
 
         eventBus.addHandler(BehaviorChangeEvent.getType(), new BehaviorChangeHandler() {
             @Override
             public void onBehaviorChange(BehaviorChangeEvent event) {
-                updateAuthenticatedView();
-                view.showNotifications(notifications);
+                view.showNotifications(notifications.keySet());
             }
         });
 
@@ -76,8 +74,17 @@ public class NotificationsActivity extends AbstractActivity implements Notificat
 
             @Override
             public void onContextChange(ContextChangeEvent event) {
-                updateAuthenticatedView();
-                view.showNotifications(notifications);
+                view.showNotifications(notifications.keySet());
+            }
+        });
+
+        eventBus.addHandler(CommunicationStatusUpdateEvent.getType(), new CommunicationStatusUpdateHandler() {
+
+            @Override
+            public void onStatusUpdate(CommunicationStatusUpdateEvent event) {
+                CrmCommunicationSystemNotification data = event.getCommunicationSystemNotification();
+                updateAuthenticatedView(data == null ? null : data.notifications);
+                view.showNotifications(notifications.keySet());
             }
         });
 
@@ -89,15 +96,68 @@ public class NotificationsActivity extends AbstractActivity implements Notificat
 
     @Override
     public void acceptMessage(Notification notification) {
+        MessageDTO m = notifications.get(notification);
+        if (m != null) {
+            m.isRead().setValue(true);
+            GWT.<MessageCrudService> create(MessageCrudService.class).saveMessage(new AsyncCallback<MessageDTO>() {
+
+                @Override
+                public void onSuccess(MessageDTO result) {
+                }
+
+                @Override
+                public void onFailure(Throwable caught) {
+                }
+            }, m, null);
+        }
         notifications.remove(notification);
-        view.showNotifications(notifications);
+        view.showNotifications(notifications.keySet());
     }
 
-    private void updateAuthenticatedView() {
-        notifications.remove(productionNotification);
-        if (ClientContext.isAuthenticated() && SecurityController.check(VistaBasicBehavior.PropertyVistaSupport) && ApplicationBackend.isProductionBackend()) {
-            notifications.add(productionNotification);
+    @Override
+    public void addMessage(Notification notification) {
+        addMessage(notification, null);
+    }
+
+    private void addMessage(Notification notification, MessageDTO message) {
+
+        if (message != null && !message.isNull()) {
+            for (Notification n : notifications.keySet()) {
+                MessageDTO m = notifications.get(n);
+                if (m != null && m.id().getValue().equals(message.id().getValue())) {
+                    return;
+                }
+            }
+        }
+        if (notifications.size() == MAX_SIZE) {
+            Notification notificationToRemove = null;
+            for (Notification n : notifications.keySet()) {
+                // TODO: Add a logic to remove according a weight
+                notificationToRemove = n;
+                break;
+            }
+            notifications.remove(notificationToRemove);
+        }
+        notifications.put(notification, message);
+    }
+
+    private void updateAuthenticatedView(EntitySearchResult<MessageDTO> notificationMessages) {
+        if (notificationMessages != null && notificationMessages.getData() != null) {
+            for (MessageDTO m : notificationMessages.getData()) {
+                NotificationType nt = NotificationType.INFO;
+                switch (m.notificationType().getValue(NotificationDelivery.NotificationType.Information)) {
+                case Information:
+                    nt = NotificationType.INFO;
+                    break;
+                case Warning:
+                    nt = NotificationType.WARNING;
+                    break;
+                case Note:
+                    nt = NotificationType.STATUS;
+                    break;
+                }
+                addMessage(new Notification(m.text().getValue(), m.subject().getValue(), nt), m);
+            }
         }
     }
-
 }

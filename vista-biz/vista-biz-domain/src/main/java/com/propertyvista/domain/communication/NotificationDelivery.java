@@ -13,23 +13,44 @@
  */
 package com.propertyvista.domain.communication;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.core.IPrimitive;
-
-import com.propertyvista.domain.TimeWindow;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 @DiscriminatorValue("NotificationDelivery")
 public interface NotificationDelivery extends SpecialDelivery {
+
+    @I18n(context = "NotificationType")
+    @XmlType(name = "NotificationType")
+    public enum NotificationType {
+
+        @Translate("Information")
+        Information,
+
+        @Translate("Warning")
+        Warning,
+
+        @Translate("Note")
+        Note;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
 
     @ReadOnly
     IPrimitive<LogicalDate> dateFrom();
 
     @ReadOnly
-    IPrimitive<LogicalDate> dateTo();
+    IPrimitive<NotificationType> notificationType();
 
-    @EmbeddedEntity
-    TimeWindow timeWindow();
+    @ReadOnly
+    IPrimitive<LogicalDate> dateTo();
 }

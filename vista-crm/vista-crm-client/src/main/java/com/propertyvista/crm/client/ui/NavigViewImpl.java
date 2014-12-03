@@ -21,7 +21,6 @@ import java.util.Vector;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
@@ -74,7 +73,6 @@ import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.MessageDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
@@ -337,28 +335,26 @@ public class NavigViewImpl extends Composite implements NavigView {
         for (MessageCategory metadata : metadataList) {
             AppPlace place = null;
             CategoryType cat = metadata.categoryType().getValue();
-            if (CategoryType.Message.equals(cat) || CategoryType.Ticket.equals(cat)
-                    || (ApplicationMode.isDevelopment() && VistaTODO.ADDITIONAL_COMMUNICATION_FEATURES)) {
-                boolean added = false;
-                if (metadata.dispatchers() != null) {
-                    for (Employee emp : metadata.dispatchers()) {
-                        if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(emp.user().getPrimaryKey())) {
-                            place = new CrmSiteMap.Communication.Message(metadata).formListerPlace();
-                            communicationGroups.addMenuItem(new SideMenuAppPlaceItem(place, metadata.category().getStringView(), null));
-                            added = true;
-                        }
-                    }
-                }
-                if (!added && metadata.roles() != null) {
-                    for (CrmRole role : metadata.roles()) {
-                        if (cat != null && SecurityController.check(role.behaviors())) {
-                            place = new CrmSiteMap.Communication.Message(metadata).formListerPlace();
-                            communicationGroups.addMenuItem(new SideMenuAppPlaceItem(place, metadata.category().getStringView(), null));
-                            break;
-                        }
+            boolean added = false;
+            if (metadata.dispatchers() != null) {
+                for (Employee emp : metadata.dispatchers()) {
+                    if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(emp.user().getPrimaryKey())) {
+                        place = new CrmSiteMap.Communication.Message(metadata).formListerPlace();
+                        communicationGroups.addMenuItem(new SideMenuAppPlaceItem(place, metadata.category().getStringView(), null));
+                        added = true;
                     }
                 }
             }
+            if (!added && metadata.roles() != null) {
+                for (CrmRole role : metadata.roles()) {
+                    if (cat != null && SecurityController.check(role.behaviors())) {
+                        place = new CrmSiteMap.Communication.Message(metadata).formListerPlace();
+                        communicationGroups.addMenuItem(new SideMenuAppPlaceItem(place, metadata.category().getStringView(), null));
+                        break;
+                    }
+                }
+            }
+
         }
     }
 

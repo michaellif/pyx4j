@@ -14,15 +14,8 @@
 package com.propertyvista.domain.communication;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.core.IPrimitive;
 
 @DiscriminatorValue("IVRDelivery")
 public interface IVRDelivery extends SpecialDelivery {
-
-    @Length(48000)
-    @Editor(type = Editor.EditorType.textarea)
-    IPrimitive<String> deliveredText();
 
 }

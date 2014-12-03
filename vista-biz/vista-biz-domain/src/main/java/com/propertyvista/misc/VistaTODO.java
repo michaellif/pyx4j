@@ -56,8 +56,6 @@ public class VistaTODO {
 
     public static boolean pendingYardiConfigPatchILS = false;
 
-    public static boolean ADDITIONAL_COMMUNICATION_FEATURES = false;
-
     public static boolean ILS_TestMode = true;
 
     //VISTA-3995  this is temporary regulation in Canada;  TODO change when going to US

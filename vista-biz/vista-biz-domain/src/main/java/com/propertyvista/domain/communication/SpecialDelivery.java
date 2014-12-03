@@ -17,10 +17,13 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -51,4 +54,9 @@ public interface SpecialDelivery extends IEntity {
     @Detached
     @MemberColumn(name = "thrd")
     CommunicationThread thread();
+
+    @Length(48000)
+    @Editor(type = Editor.EditorType.textarea)
+    IPrimitive<String> deliveredText();
+
 }

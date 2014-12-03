@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
@@ -27,6 +28,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
@@ -43,12 +45,11 @@ import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
-import com.propertyvista.domain.communication.IVRDelivery;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.communication.NotificationDelivery;
-import com.propertyvista.domain.communication.SMSDelivery;
+import com.propertyvista.domain.communication.SpecialDelivery.DeliveryMethod;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.communication.ThreadPolicyHandle;
 import com.propertyvista.domain.company.Employee;
@@ -136,6 +137,7 @@ public class CommunicationManager {
         final List<CommunicationThread> directMessages = getDirectThreads(ep);
         boolean isCRM = VistaApplication.crm.equals(Context.visit(VistaUserVisit.class).getApplication());
         final List<CommunicationThread> dispatchedMessages = isCRM ? getDispatchedThreads((Employee) ep) : null;
+        final EntitySearchResult<MessageDTO> notifications = getNotifications(ep);
 
         if (dispatchedMessages != null && dispatchedMessages.size() > 0 && directMessages != null && directMessages.size() > 0) {
             directMessages.removeAll(dispatchedMessages);
@@ -143,13 +145,55 @@ public class CommunicationManager {
 
         if (isCRM) {
             return new CrmCommunicationSystemNotification(directMessages == null ? 0 : directMessages.size(), dispatchedMessages == null ? 0
-                    : dispatchedMessages.size());
+                    : dispatchedMessages.size(), notifications);
         } else if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())
                 || VistaApplication.prospect.equals(Context.visit(VistaUserVisit.class).getApplication())) {
             return new PortalCommunicationSystemNotification(directMessages == null ? 0 : directMessages.size());
         }
 
         return null;
+    }
+
+    private EntitySearchResult<MessageDTO> getNotifications(CommunicationEndpoint currentUser) {
+        if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())
+                && !SecurityController.check(VistaDataAccessBehavior.ResidentInPortal) && !SecurityController.check(VistaDataAccessBehavior.GuarantorInPortal)) {
+            return new EntitySearchResult<MessageDTO>();
+        }
+
+        final EntityListCriteria<NotificationDelivery> criteria = EntityListCriteria.create(NotificationDelivery.class);
+        criteria.eq(criteria.proto().thread().deliveryMethod(), DeliveryMethod.Notification);
+        criteria.eq(criteria.proto().thread().content().$().recipients().$().isRead(), false);
+        criteria.eq(criteria.proto().thread().content().$().recipients().$().recipient(), currentUser);
+
+        OrCriterion startedCriterion = new OrCriterion(PropertyCriterion.isNull(criteria.proto().dateFrom()), PropertyCriterion.ge(criteria.proto().dateFrom(),
+                new LogicalDate()));
+
+        OrCriterion notExpiredCriterion = new OrCriterion(PropertyCriterion.isNull(criteria.proto().dateTo()), PropertyCriterion.le(criteria.proto().dateTo(),
+                new LogicalDate()));
+
+        criteria.add(startedCriterion);
+        criteria.add(notExpiredCriterion);
+        EntitySearchResult<MessageDTO> result = new EntitySearchResult<MessageDTO>();
+        final Vector<NotificationDelivery> currentlyActiveNotifications = Persistence.secureQuery(criteria, AttachLevel.Attached);
+        if (currentlyActiveNotifications != null && currentlyActiveNotifications.size() > 0) {
+            for (NotificationDelivery nd : currentlyActiveNotifications) {
+                if (result.getData().size() > 3) {
+                    return result;
+                }
+                CommunicationThread thread = Persistence.secureRetrieve(CommunicationThread.class, nd.thread().getPrimaryKey());
+                Persistence.ensureRetrieve(thread.content(), AttachLevel.Attached);
+                MessageDTO dto = EntityFactory.create(MessageDTO.class);
+                dto.id().set(thread.content().get(0).id());
+                dto.date().set(thread.content().get(0).date());
+                dto.subject().set(thread.subject());
+                dto.text().set(nd.deliveredText());
+                dto.notificationType().set(nd.notificationType());
+
+                result.add(dto);
+            }
+        }
+
+        return result;
     }
 
     public boolean isDispatchedThread(Key threadKey, boolean includeByRoles, Employee currentUser) {
@@ -222,6 +266,9 @@ public class CommunicationManager {
         final EntityListCriteria<CommunicationThread> directCriteria = EntityListCriteria.create(CommunicationThread.class);
         directCriteria.eq(directCriteria.proto().content().$().recipients().$().isRead(), false);
         directCriteria.eq(directCriteria.proto().content().$().recipients().$().recipient(), currentUser);
+
+        directCriteria.add(new OrCriterion(PropertyCriterion.isNull(directCriteria.proto().deliveryMethod()), PropertyCriterion.ne(directCriteria.proto()
+                .deliveryMethod(), DeliveryMethod.Notification)));
 
         final List<CommunicationThread> directMessages = Persistence.secureQuery(directCriteria, AttachLevel.IdOnly);
         return directMessages;
@@ -375,24 +422,14 @@ public class CommunicationManager {
         messageDTO.subject().set(thread.subject());
         messageDTO.deliveryMethod().set(thread.deliveryMethod());
         if (thread.specialDelivery() != null && !thread.specialDelivery().isNull()) {
-            switch (thread.deliveryMethod().getValue()) {
-            case Notification:
+            messageDTO.deliveredText().set(thread.specialDelivery().deliveredText());
+            if (DeliveryMethod.Notification.equals(thread.deliveryMethod().getValue())) {
                 NotificationDelivery nd = thread.specialDelivery().cast();
                 messageDTO.dateFrom().set(nd.dateFrom());
                 messageDTO.dateTo().set(nd.dateTo());
-                messageDTO.timeWindow().set(nd.timeWindow());
-                messageDTO.timeWindow().set(nd.timeWindow());
-                break;
-            case SMS:
-                SMSDelivery smsd = thread.specialDelivery().cast();
-                messageDTO.deliveredText().set(smsd.deliveredText());
-                break;
-            case IVR:
-                IVRDelivery ivrd = thread.specialDelivery().cast();
-                messageDTO.deliveredText().set(ivrd.deliveredText());
-                break;
             }
         }
+
         messageDTO.allowedReply().set(thread.allowedReply());
         messageDTO.status().set(thread.status());
         Persistence.ensureRetrieve(thread.owner(), AttachLevel.Attached);

@@ -15,17 +15,24 @@ package com.propertyvista.crm.rpc.dto.communication;
 
 import java.io.Serializable;
 
+import com.pyx4j.entity.rpc.EntitySearchResult;
+
+import com.propertyvista.dto.MessageDTO;
+
 @SuppressWarnings("serial")
 public class CrmCommunicationSystemNotification implements Serializable {
     public int numberOfNewDirectMessages;
 
     public int numberOfNewDispatchedMessages;
 
+    public EntitySearchResult<MessageDTO> notifications;
+
     public CrmCommunicationSystemNotification() {
     }
 
-    public CrmCommunicationSystemNotification(int numberOfNewDirectMessages, int numberOfNewDispatchedMessages) {
+    public CrmCommunicationSystemNotification(int numberOfNewDirectMessages, int numberOfNewDispatchedMessages, EntitySearchResult<MessageDTO> notifications) {
         this.numberOfNewDirectMessages = numberOfNewDirectMessages;
         this.numberOfNewDispatchedMessages = numberOfNewDispatchedMessages;
+        this.notifications = notifications;
     }
 }

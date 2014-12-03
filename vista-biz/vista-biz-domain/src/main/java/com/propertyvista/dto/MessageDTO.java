@@ -31,11 +31,11 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.TimeWindow;
 import com.propertyvista.domain.communication.CommunicationAssociation;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
+import com.propertyvista.domain.communication.NotificationDelivery.NotificationType;
 import com.propertyvista.domain.communication.SpecialDelivery.DeliveryMethod;
 import com.propertyvista.domain.company.Employee;
 
@@ -99,7 +99,7 @@ public interface MessageDTO extends Message {
 
     IPrimitive<LogicalDate> dateTo();
 
-    TimeWindow timeWindow();
+    IPrimitive<NotificationType> notificationType();
 
     @NotNull
     @ReadOnly

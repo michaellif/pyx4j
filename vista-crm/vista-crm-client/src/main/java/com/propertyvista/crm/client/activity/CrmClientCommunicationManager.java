@@ -13,10 +13,12 @@
  */
 package com.propertyvista.crm.client.activity;
 
+import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.SystemNotificationEvent;
 import com.pyx4j.rpc.client.SystemNotificationHandler;
 
+import com.propertyvista.crm.client.event.CommunicationStatusUpdateEvent;
 import com.propertyvista.crm.rpc.dto.communication.CrmCommunicationSystemNotification;
 
 public class CrmClientCommunicationManager {
@@ -38,6 +40,7 @@ public class CrmClientCommunicationManager {
             public void onSystemNotificationReceived(SystemNotificationEvent event) {
                 if (event.getSystemNotification() instanceof CrmCommunicationSystemNotification) {
                     latestNotification = (CrmCommunicationSystemNotification) event.getSystemNotification();
+                    ClientEventBus.fireEvent(new CommunicationStatusUpdateEvent(latestNotification));
                 }
             }
         });
