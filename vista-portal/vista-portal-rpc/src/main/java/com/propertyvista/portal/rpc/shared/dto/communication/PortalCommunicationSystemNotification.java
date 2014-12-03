@@ -15,14 +15,21 @@ package com.propertyvista.portal.rpc.shared.dto.communication;
 
 import java.io.Serializable;
 
+import com.pyx4j.entity.rpc.EntitySearchResult;
+
+import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
+
 @SuppressWarnings("serial")
 public class PortalCommunicationSystemNotification implements Serializable {
     public int numberOfNewDirectMessages;
 
+    public EntitySearchResult<MessageDTO> notifications;
+
     public PortalCommunicationSystemNotification() {
     }
 
-    public PortalCommunicationSystemNotification(int numberOfNewDirectMessages) {
+    public PortalCommunicationSystemNotification(int numberOfNewDirectMessages, EntitySearchResult<MessageDTO> notifications) {
         this.numberOfNewDirectMessages = numberOfNewDirectMessages;
+        this.notifications = notifications;
     }
 }

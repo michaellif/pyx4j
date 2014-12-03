@@ -23,9 +23,12 @@ import com.pyx4j.security.server.UIAclBuilder;
 
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.DeliveryHandle;
+import com.propertyvista.domain.communication.IVRDelivery;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageAttachment;
 import com.propertyvista.domain.communication.MessageCategory;
+import com.propertyvista.domain.communication.NotificationDelivery;
+import com.propertyvista.domain.communication.SMSDelivery;
 import com.propertyvista.domain.communication.ThreadPolicyHandle;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -250,6 +253,9 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(PortalResidentBehavior.Resident, new EntityPermission(MaintenanceRequestPicture.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(MessageCategory.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(ThreadPolicyHandle.class, CRUD));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(NotificationDelivery.class, EntityPermission.READ));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(SMSDelivery.class, EntityPermission.READ));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(IVRDelivery.class, EntityPermission.READ));
 
         grant(PortalResidentBehavior.Guarantor, new EntityPermission(CustomerPreferences.class, CRUD));
         grant(PortalResidentBehavior.Guarantor, new EntityPermission(DeliveryHandle.class, CRUD));
@@ -259,6 +265,9 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(PortalResidentBehavior.Guarantor, new EntityPermission(MaintenanceRequestPicture.class, CRUD));
         grant(PortalResidentBehavior.Guarantor, new EntityPermission(MessageCategory.class, CRUD));
         grant(PortalResidentBehavior.Guarantor, new EntityPermission(ThreadPolicyHandle.class, CRUD));
+        grant(PortalResidentBehavior.Guarantor, new EntityPermission(NotificationDelivery.class, EntityPermission.READ));
+        grant(PortalResidentBehavior.Guarantor, new EntityPermission(SMSDelivery.class, EntityPermission.READ));
+        grant(PortalResidentBehavior.Guarantor, new EntityPermission(IVRDelivery.class, EntityPermission.READ));
 
         grant(PortalProspectBehavior.Prospect, new EntityPermission(DeliveryHandle.class, CRUD));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(MessageAttachment.class, CRUD));
@@ -266,6 +275,9 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(PortalProspectBehavior.Prospect, new EntityPermission(Message.class, CRUD));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(MessageCategory.class, EntityPermission.READ));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(ThreadPolicyHandle.class, CRUD));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(NotificationDelivery.class, EntityPermission.READ));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(SMSDelivery.class, EntityPermission.READ));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(IVRDelivery.class, EntityPermission.READ));
 
         //========================= Prospect Portal
 

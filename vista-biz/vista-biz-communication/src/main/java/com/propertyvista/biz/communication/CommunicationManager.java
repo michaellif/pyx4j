@@ -83,6 +83,11 @@ public class CommunicationManager {
         if (criteria.getFilters() != null) {
             replaceCriteria.addAll(criteria.getFilters());
         }
+        if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())
+                || VistaApplication.prospect.equals(Context.visit(VistaUserVisit.class).getApplication())) {
+            replaceCriteria.add(new OrCriterion(PropertyCriterion.isNull(replaceCriteria.proto().thread().deliveryMethod()), PropertyCriterion.ne(
+                    replaceCriteria.proto().thread().deliveryMethod(), DeliveryMethod.Notification)));
+        }
         replaceCriteria.setVersionedCriteria(criteria.getVersionedCriteria());
 
         EntitySearchResult<Message> r = new EntitySearchResult<Message>();
@@ -148,10 +153,30 @@ public class CommunicationManager {
                     : dispatchedMessages.size(), notifications);
         } else if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())
                 || VistaApplication.prospect.equals(Context.visit(VistaUserVisit.class).getApplication())) {
-            return new PortalCommunicationSystemNotification(directMessages == null ? 0 : directMessages.size());
+            return new PortalCommunicationSystemNotification(directMessages == null ? 0 : directMessages.size(), getPortalNotifications(notifications));
         }
 
         return null;
+    }
+
+    private EntitySearchResult<com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO> getPortalNotifications(
+            EntitySearchResult<MessageDTO> notifications) {
+        if (notifications == null || notifications.getData() == null) {
+            return new EntitySearchResult<com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO>();
+        }
+        EntitySearchResult<com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO> result = new EntitySearchResult<>();
+        for (MessageDTO m : notifications.getData()) {
+            com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO dto = EntityFactory
+                    .create(com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO.class);
+            dto.id().set(m.id());
+            dto.date().set(m.date());
+            dto.subject().set(m.subject());
+            dto.text().set(m.text());
+            dto.notificationType().set(m.notificationType());
+
+            result.add(dto);
+        }
+        return result;
     }
 
     private EntitySearchResult<MessageDTO> getNotifications(CommunicationEndpoint currentUser) {

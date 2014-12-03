@@ -13,11 +13,13 @@
  */
 package com.propertyvista.portal.shared.activity;
 
+import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.SystemNotificationEvent;
 import com.pyx4j.rpc.client.SystemNotificationHandler;
 
 import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
+import com.propertyvista.portal.shared.CommunicationStatusUpdateEvent;
 
 public class PortalClientCommunicationManager {
 
@@ -38,6 +40,7 @@ public class PortalClientCommunicationManager {
             public void onSystemNotificationReceived(SystemNotificationEvent event) {
                 if (event.getSystemNotification() instanceof PortalCommunicationSystemNotification) {
                     latestNotification = (PortalCommunicationSystemNotification) event.getSystemNotification();
+                    ClientEventBus.fireEvent(new CommunicationStatusUpdateEvent(latestNotification));
                 }
             }
         });

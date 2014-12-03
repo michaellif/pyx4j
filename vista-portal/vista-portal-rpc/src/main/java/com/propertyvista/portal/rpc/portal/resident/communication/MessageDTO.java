@@ -34,6 +34,7 @@ import com.propertyvista.domain.communication.CommunicationAssociation;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
+import com.propertyvista.domain.communication.NotificationDelivery.NotificationType;
 
 @Transient
 @ExtendsBO
@@ -107,4 +108,6 @@ public interface MessageDTO extends Message {
         @ReadOnly
         IPrimitive<Date> date();
     }
+
+    IPrimitive<NotificationType> notificationType();
 }
