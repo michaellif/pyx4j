@@ -118,7 +118,7 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
                 throw new Error("Lease not found for user " + visit.getCurrentUser().getDebugExceptionInfoString());
             } else {
                 log.warn("Invalid log-in attempt {} : no active lease or app found: ", visit.getEmail());
-                throw new UserRuntimeException(i18n.tr(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE));
+                throw new UserRuntimeException(true, AbstractAntiBot.cannedLoginFailedMessage());
             }
         }
 
