@@ -29,6 +29,9 @@ public class ProspectPortalSiteMap extends PortalSiteMap {
 
     @PlaceProperties(caption = "Prospect Registration")
     public static class Registration extends AppPlace implements PublicPlace {
+        {
+            setStable(false);
+        }
     }
 
     @PlaceProperties(navigLabel = "Select Application", caption = "Select Application")

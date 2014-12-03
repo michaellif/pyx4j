@@ -26,6 +26,9 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
 
     @PlaceProperties(caption = "Resident Registration")
     public static class Registration extends AppPlace implements PublicPlace {
+        {
+            setStable(false);
+        }
     }
 
     public static class ResidentPortalTerms {
