@@ -43,6 +43,7 @@ import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.crm.rpc.dto.lease.financial.DepositListDTO;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
+import com.propertyvista.crm.server.util.LeaseParticipantUtils;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
@@ -62,7 +63,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseTermDTO;
-import com.propertyvista.server.common.util.LeaseParticipantUtils;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<LeaseTerm, LeaseTermDTO> implements LeaseTermCrudService {

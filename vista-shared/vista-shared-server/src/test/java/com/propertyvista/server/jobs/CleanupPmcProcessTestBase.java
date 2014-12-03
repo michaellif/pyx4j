@@ -26,7 +26,7 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.blob.IdentificationDocumentBlob;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
-import com.propertyvista.domain.media.IdentificationDocumentFolder;
+import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.server.jobs.CleanupPmcProcess.CleanupPmcProcessConfig;
@@ -59,7 +59,7 @@ public class CleanupPmcProcessTestBase extends VistaDBTestBase {
         return blob;
     }
 
-    protected static IdentificationDocumentFolder createApplicationDocument(String desc, Key... blobs) {
+    protected static IdentificationDocument createApplicationDocument(String desc, Key... blobs) {
         Customer c = EntityFactory.create(Customer.class);
         Persistence.service().persist(c);
 
@@ -67,7 +67,7 @@ public class CleanupPmcProcessTestBase extends VistaDBTestBase {
         cs.screene().set(c);
         Persistence.service().persist(cs);
 
-        IdentificationDocumentFolder doc = EntityFactory.create(IdentificationDocumentFolder.class);
+        IdentificationDocument doc = EntityFactory.create(IdentificationDocument.class);
         doc.notes().setValue(desc);
 
         for (Key blobKey : blobs) {

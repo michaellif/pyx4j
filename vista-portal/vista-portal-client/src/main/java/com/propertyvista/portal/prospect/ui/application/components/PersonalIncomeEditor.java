@@ -100,7 +100,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
         formPanel.append(Location.Left, detailsHolder);
 
         formPanel.h3(i18n.tr("Proof Documents"));
-        formPanel.append(Location.Left, proto().documents(), fileUpload);
+        formPanel.append(Location.Left, proto().files(), fileUpload);
 
         return formPanel;
     }

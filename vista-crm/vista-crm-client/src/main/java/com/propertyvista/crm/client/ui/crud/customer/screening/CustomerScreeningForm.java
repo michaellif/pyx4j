@@ -35,7 +35,7 @@ import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidat
 import com.propertyvista.common.client.ui.validators.PastDateValidator;
 import com.propertyvista.common.client.ui.validators.StartEndDateWithinPeriodValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.crud.customer.common.components.IdUploaderFolder;
+import com.propertyvista.crm.client.ui.crud.customer.common.components.IdentificationDocumentFolder;
 import com.propertyvista.crm.client.ui.crud.customer.common.components.PersonalAssetFolder;
 import com.propertyvista.crm.client.ui.crud.customer.common.components.PersonalIncomeFolder;
 import com.propertyvista.domain.PriorAddress;
@@ -58,7 +58,7 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
         }
     };
 
-    private final IdUploaderFolder fileUpload = new IdUploaderFolder();
+    private final IdentificationDocumentFolder fileUpload = new IdentificationDocumentFolder();
 
     public CustomerScreeningForm(IPrimeFormView<LeaseParticipantScreeningTO, ?> view) {
         super(LeaseParticipantScreeningTO.class, view);

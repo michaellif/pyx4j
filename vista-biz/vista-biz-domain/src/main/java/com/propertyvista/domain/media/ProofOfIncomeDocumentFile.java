@@ -14,38 +14,22 @@
 package com.propertyvista.domain.media;
 
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.entity.shared.IFile;
-import com.pyx4j.entity.shared.IHasFile;
 
 import com.propertyvista.domain.blob.ProofOfIncomeDocumentBlob;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 
-@ToStringFormat("{1} {0,choice,null#|!null#({0})}")
-public interface ProofOfIncomeDocumentFile extends IHasFile<ProofOfIncomeDocumentBlob> {
+public interface ProofOfIncomeDocumentFile extends ApplicationDocumentFile<ProofOfIncomeDocumentBlob> {
 
     @Owner
+    @JoinColumn
+    @Detached
+    @ReadOnly
     @NotNull
     @MemberColumn(notNull = true)
-    @ReadOnly
-    @Detached
-    @JoinColumn
     CustomerScreeningIncome owner();
-
-    @Override
-    @EmbeddedEntity
-    @NotNull
-    @ToString(index = 1)
-    IFile<ProofOfIncomeDocumentBlob> file();
-
-    @ToString(index = 0)
-    IPrimitive<String> description();
 }

@@ -22,7 +22,6 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -102,6 +101,5 @@ public interface CustomerScreeningPersonalAsset extends IEntity {
     IPrimitive<BigDecimal> assetValue();
 
     @Owned
-    @OrderBy(PrimaryKey.class)
-    IList<ProofOfAssetDocumentFile> documents();
+    IList<ProofOfAssetDocumentFile> files();
 }

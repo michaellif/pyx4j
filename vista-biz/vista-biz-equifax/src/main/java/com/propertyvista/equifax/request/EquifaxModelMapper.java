@@ -51,7 +51,7 @@ import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.media.IdentificationDocumentFolder;
+import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.tenant.Customer;
@@ -167,7 +167,7 @@ public class EquifaxModelMapper {
         }
 
         // sin
-        for (IdentificationDocumentFolder document : pcc.screening().version().documents()) {
+        for (IdentificationDocument document : pcc.screening().version().documents()) {
             if ((document.idType().type().getValue() == IdentificationDocumentType.Type.canadianSIN) && (!document.idNumber().isNull())) {
                 subject.setSocialInsuranceNumber(new BigInteger(document.idNumber().getValue().replaceAll("[\\s-]+", "")));
                 break;

@@ -11,10 +11,13 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.common.util;
+package com.propertyvista.crm.server.util;
+
+import java.util.List;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
@@ -24,9 +27,13 @@ import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
+import com.propertyvista.domain.media.ApplicationDocumentFile;
+import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
+import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
@@ -76,13 +83,39 @@ public class LeaseParticipantUtils {
 
     public static void persistScreeningAsDraft(CustomerScreening screening) {
         screening.saveAction().setValue(SaveAction.saveAsDraft);
-        Persistence.secureSave(screening);
+        persistScreening(screening);
     }
 
     public static void persistScreeningAsNewVersion(CustomerScreening screening) {
 //        screening = VersionedEntityUtils.createNextVersion(screening);/
         screening.saveAction().setValue(SaveAction.saveAsFinal);
+        persistScreening(screening);
+    }
+
+    private static void persistScreening(CustomerScreening screening) {
+
+        for (IdentificationDocument item : screening.version().documents()) {
+            setVerification(item.files());
+        }
+
+        for (CustomerScreeningIncome item : screening.version().incomes()) {
+            setVerification(item.files());
+        }
+
+        for (CustomerScreeningPersonalAsset item : screening.version().assets()) {
+            setVerification(item.files());
+        }
+
         Persistence.secureSave(screening);
+    }
+
+    private static <F extends ApplicationDocumentFile<?>> void setVerification(List<F> files) {
+        for (F file : files) {
+            if (file.verified().getValue(false) && file.verifiedBy().isNull()) {
+                file.verifiedBy().set(CrmAppContext.getCurrentUserEmployee());
+                file.verifiedOn().setValue(SystemDateManager.getLogicalDate());
+            }
+        }
     }
 
     private static void loadRestrictions(LeaseParticipantScreeningTO to, LeaseParticipant<?> participant) {

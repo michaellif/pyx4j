@@ -27,7 +27,7 @@ import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactor
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.validators.ClientBusinessRules;
-import com.propertyvista.crm.client.ui.crud.customer.common.components.IdUploaderFolder;
+import com.propertyvista.crm.client.ui.crud.customer.common.components.IdentificationDocumentFolder;
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.dto.TenantInfoDTO;
 
@@ -65,7 +65,7 @@ public class TenantInfoViewForm extends CForm<TenantInfoDTO> {
         formPanel.append(Location.Right, proto().person().workPhone()).decorate().componentWidth(180);
 
         formPanel.h1(i18n.tr("Identification Documents"));
-        formPanel.append(Location.Dual, proto().version().documents(), new IdUploaderFolder());
+        formPanel.append(Location.Dual, proto().version().documents(), new IdentificationDocumentFolder());
 
         formPanel.h1(proto().version().currentAddress().getMeta().getCaption());
         formPanel.append(Location.Dual, proto().version().currentAddress(), new PriorAddressEditor());

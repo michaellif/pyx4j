@@ -55,7 +55,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.media.IdentificationDocumentFolder;
+import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -309,7 +309,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         // TO optimizations
         to.applicantData().picture().customer().setAttachLevel(AttachLevel.IdOnly);
-        for (IdentificationDocumentFolder i : to.applicantData().documents()) {
+        for (IdentificationDocument i : to.applicantData().documents()) {
             i.owner().setAttachLevel(AttachLevel.IdOnly);
         }
         for (EmergencyContact i : to.applicantData().emergencyContacts()) {

@@ -31,7 +31,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.tenant.CustomerScreening.CustomerScreeningV;
 
-public interface IdentificationDocumentFolder extends IEntity {
+public interface IdentificationDocument extends IEntity {
 
     @Owner
     @NotNull

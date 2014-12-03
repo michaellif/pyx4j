@@ -39,7 +39,7 @@ import com.propertyvista.domain.blob.IdentificationDocumentBlob;
 import com.propertyvista.domain.blob.ProofOfAssetDocumentBlob;
 import com.propertyvista.domain.blob.ProofOfIncomeDocumentBlob;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
-import com.propertyvista.domain.media.IdentificationDocumentFolder;
+import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
 import com.propertyvista.domain.media.ProofOfIncomeDocumentFile;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy.BjccEntry;
@@ -150,14 +150,14 @@ public class ScreeningGenerator {
             CustomerScreeningIncome income = EntityFactory.create(CustomerScreeningIncome.class);
             income.incomeSource().setValue(IncomeSource.fulltime);
             income.details().set(createEmployer());
-            income.documents().add(createProofOfIncomeDocument());
+            income.files().add(createProofOfIncomeDocument());
             incomes.add(income);
         }
         for (int i = 0; i < RandomUtil.randomInt(2); i++) {
             CustomerScreeningIncome income = EntityFactory.create(CustomerScreeningIncome.class);
             income.incomeSource().setValue(IncomeSource.selfemployed);
             income.details().set(createSelfEmployed());
-            income.documents().add(createProofOfIncomeDocument());
+            income.files().add(createProofOfIncomeDocument());
             incomes.add(income);
         }
 
@@ -214,7 +214,7 @@ public class ScreeningGenerator {
             asset.assetType().setValue(RandomUtil.random(AssetType.values()));
             asset.ownership().setValue(new BigDecimal(RandomUtil.randomDouble(1.d, 3)));
             asset.assetValue().setValue(BigDecimal.valueOf(500 + RandomUtil.randomDouble(500)));
-            asset.documents().add(createProofOfAssetDocument());
+            asset.files().add(createProofOfAssetDocument());
 
             assets.add(asset);
         }
@@ -256,8 +256,8 @@ public class ScreeningGenerator {
         return list;
     }
 
-    private IdentificationDocumentFolder createIdentificationDocument(IdentificationDocumentType.Type type) {
-        IdentificationDocumentFolder document = EntityFactory.create(IdentificationDocumentFolder.class);
+    private IdentificationDocument createIdentificationDocument(IdentificationDocumentType.Type type) {
+        IdentificationDocument document = EntityFactory.create(IdentificationDocument.class);
         if (identificationDocumentTypes == null) {
             identificationDocumentTypes = Persistence.service().query(EntityQueryCriteria.create(IdentificationDocumentType.class));
         }
@@ -302,7 +302,7 @@ public class ScreeningGenerator {
     }
 
     public static void attachDocumentData(CustomerScreening screening) {
-        for (IdentificationDocumentFolder document : screening.version().documents()) {
+        for (IdentificationDocument document : screening.version().documents()) {
             attachDocumentData(document);
         }
         for (CustomerScreeningIncome income : screening.version().incomes()) {
@@ -313,7 +313,7 @@ public class ScreeningGenerator {
         }
     }
 
-    private static void attachDocumentData(IdentificationDocumentFolder document) {
+    private static void attachDocumentData(IdentificationDocument document) {
         for (IdentificationDocumentFile applicationDocument : document.files()) {
             String fileName = applicationDocument.file().fileName().getValue();
             IdentificationDocumentBlob applicationDocumentData;
@@ -339,7 +339,7 @@ public class ScreeningGenerator {
     }
 
     private static void attachDocumentData(CustomerScreeningIncome income) {
-        for (ProofOfIncomeDocumentFile applicationDocument : income.documents()) {
+        for (ProofOfIncomeDocumentFile applicationDocument : income.files()) {
             String fileName = applicationDocument.file().fileName().getValue();
             ProofOfIncomeDocumentBlob applicationDocumentData;
             try {
@@ -364,7 +364,7 @@ public class ScreeningGenerator {
     }
 
     private static void attachDocumentData(CustomerScreeningPersonalAsset document) {
-        for (ProofOfAssetDocumentFile applicationDocument : document.documents()) {
+        for (ProofOfAssetDocumentFile applicationDocument : document.files()) {
             String fileName = applicationDocument.file().fileName().getValue();
             ProofOfAssetDocumentBlob applicationDocumentData;
             try {

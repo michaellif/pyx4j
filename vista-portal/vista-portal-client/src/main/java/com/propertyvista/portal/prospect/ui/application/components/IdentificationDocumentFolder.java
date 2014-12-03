@@ -36,7 +36,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.DocumentTypeSelectorDialog;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
-import com.propertyvista.domain.media.IdentificationDocumentFolder;
+import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.domain.ApplicationDocumentType.Importance;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
@@ -45,14 +45,14 @@ import com.propertyvista.misc.CreditCardNumberGenerator;
 import com.propertyvista.portal.shared.ui.AccessoryEntityForm;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
-public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFolder> {
+public class IdentificationDocumentFolder extends PortalBoxFolder<IdentificationDocument> {
 
-    final static I18n i18n = I18n.get(IdUploaderFolder.class);
+    final static I18n i18n = I18n.get(IdentificationDocumentFolder.class);
 
     private ApplicationDocumentationPolicy documentationPolicy;
 
-    public IdUploaderFolder() {
-        super(IdentificationDocumentFolder.class, i18n.tr("Identification Document"));
+    public IdentificationDocumentFolder() {
+        super(IdentificationDocument.class, i18n.tr("Identification Document"));
     }
 
     public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {
@@ -78,7 +78,7 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
     public void _addValidations() {
         super.addValidations();
 
-        addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFolder>>() {
+        addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocument>>() {
             @Override
             public BasicValidationError isValid() {
                 if (getCComponent().getValue() != null && documentationPolicy != null) {
@@ -94,7 +94,7 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
                     for (IdentificationDocumentType docType : documentationPolicy.allowedIDs()) {
                         if (docType.importance().getValue() == Importance.Required) {
                             boolean found = false;
-                            for (IdentificationDocumentFolder doc : getCComponent().getValue()) {
+                            for (IdentificationDocument doc : getCComponent().getValue()) {
                                 if (doc.idType().equals(docType)) {
                                     found = true;
                                     break;
@@ -116,14 +116,14 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
     @Override
     protected void addItem() {
         Collection<IdentificationDocumentType> usedTypes = new ArrayList<>();
-        for (IdentificationDocumentFolder doc : getValue()) {
+        for (IdentificationDocument doc : getValue()) {
             usedTypes.add(doc.idType());
         }
 
         new DocumentTypeSelectorDialog(documentationPolicy, usedTypes) {
             @Override
             public boolean onClickOk() {
-                IdentificationDocumentFolder document = EntityFactory.create(IdentificationDocumentFolder.class);
+                IdentificationDocument document = EntityFactory.create(IdentificationDocument.class);
                 document.idType().set(getSelectedItems().get(0));
                 addItem(document);
                 return true;
@@ -132,16 +132,16 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
     }
 
     @Override
-    protected CForm<IdentificationDocumentFolder> createItemForm(IObject<?> member) {
+    protected CForm<IdentificationDocument> createItemForm(IObject<?> member) {
         return new IdentificationDocumentEditor();
     }
 
     @Override
-    protected CFolderItem<IdentificationDocumentFolder> createItem(boolean first) {
-        return new CFolderItem<IdentificationDocumentFolder>(IdentificationDocumentFolder.class) {
+    protected CFolderItem<IdentificationDocument> createItem(boolean first) {
+        return new CFolderItem<IdentificationDocument>(IdentificationDocument.class) {
             @Override
-            public IFolderItemDecorator<IdentificationDocumentFolder> createItemDecorator() {
-                return IdUploaderFolder.this.createItemDecorator();
+            public IFolderItemDecorator<IdentificationDocument> createItemDecorator() {
+                return IdentificationDocumentFolder.this.createItemDecorator();
             }
 
             @Override
@@ -151,16 +151,16 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
             }
 
             @Override
-            protected CForm<IdentificationDocumentFolder> createItemForm(IObject<?> member) {
-                return IdUploaderFolder.this.createItemForm(null);
+            protected CForm<IdentificationDocument> createItemForm(IObject<?> member) {
+                return IdentificationDocumentFolder.this.createItemForm(null);
             }
         };
     }
 
-    private class IdentificationDocumentEditor extends AccessoryEntityForm<IdentificationDocumentFolder> {
+    private class IdentificationDocumentEditor extends AccessoryEntityForm<IdentificationDocument> {
 
         public IdentificationDocumentEditor() {
-            super(IdentificationDocumentFolder.class);
+            super(IdentificationDocument.class);
         }
 
         @Override
@@ -172,7 +172,7 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
             formPanel.append(Location.Left, proto().notes()).decorate();
 
             formPanel.h3(i18n.tr("Proof Documents"));
-            formPanel.append(Location.Left, proto().files(), new IdFileUploaderFolder());
+            formPanel.append(Location.Left, proto().files(), new IdentificationDocumentFileFolder());
             return formPanel;
         }
 

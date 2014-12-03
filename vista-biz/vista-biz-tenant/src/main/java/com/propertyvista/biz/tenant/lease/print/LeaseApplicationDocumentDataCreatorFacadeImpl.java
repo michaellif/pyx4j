@@ -30,7 +30,7 @@ import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.blob.LandlordMediaBlob;
-import com.propertyvista.domain.media.IdentificationDocumentFolder;
+import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.LeaseApplicationLegalPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm;
 import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm.TargetRole;
@@ -210,7 +210,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         CustomerScreening screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftForEdit(
                 subjectParticipant.leaseParticipant().customer(), application.lease().unit().building());
         Persistence.ensureRetrieve(screening.version().documents(), AttachLevel.Attached);
-        for (IdentificationDocumentFolder id : screening.version().documents()) {
+        for (IdentificationDocument id : screening.version().documents()) {
             LeaseApplicationDocumentDataIdentificationDocumentDTO idForPrint = EntityFactory
                     .create(LeaseApplicationDocumentDataIdentificationDocumentDTO.class);
             String documentType = id.idType().name().getValue() != null ? id.idType().name().getValue() : id.idType().type().getValue().toString();

@@ -37,6 +37,7 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.crm.rpc.services.customer.LeaseParticipantCrudServiceBase;
+import com.propertyvista.crm.server.util.LeaseParticipantUtils;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -50,7 +51,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.LeaseParticipantDTO;
 import com.propertyvista.server.common.util.AddressRetriever;
-import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
 public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeaseParticipant<? extends LeaseTermParticipant<?>>, TO extends LeaseParticipantDTO<? extends LeaseTermParticipant<?>>>
         extends AbstractCrudServiceDtoImpl<BO, TO> implements LeaseParticipantCrudServiceBase<TO> {

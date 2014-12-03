@@ -41,7 +41,7 @@ import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.DocumentTypeSelectorDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
-import com.propertyvista.domain.media.IdentificationDocumentFolder;
+import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.domain.ApplicationDocumentType.Importance;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
@@ -49,14 +49,14 @@ import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.misc.CreditCardNumberGenerator;
 import com.propertyvista.misc.VistaTODO;
 
-public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolder> {
+public class IdentificationDocumentFolder extends VistaBoxFolder<IdentificationDocument> {
 
-    final static I18n i18n = I18n.get(IdUploaderFolder.class);
+    final static I18n i18n = I18n.get(IdentificationDocumentFolder.class);
 
     private ApplicationDocumentationPolicy documentationPolicy;
 
-    public IdUploaderFolder() {
-        super(IdentificationDocumentFolder.class, i18n.tr("Identification Document"));
+    public IdentificationDocumentFolder() {
+        super(IdentificationDocument.class, i18n.tr("Identification Document"));
     }
 
     public void setPolicyEntity(IEntity parentEntity) {
@@ -89,7 +89,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
         super.addValidations();
 
         if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
-            addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFolder>>() {
+            addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocument>>() {
                 @Override
                 public BasicValidationError isValid() {
                     if (getCComponent().getValue() != null && documentationPolicy != null) {
@@ -107,14 +107,14 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
     @Override
     protected void addItem() {
         Collection<IdentificationDocumentType> usedTypes = new ArrayList<IdentificationDocumentType>();
-        for (IdentificationDocumentFolder doc : getValue()) {
+        for (IdentificationDocument doc : getValue()) {
             usedTypes.add(doc.idType());
         }
 
         new DocumentTypeSelectorDialog(documentationPolicy, usedTypes) {
             @Override
             public boolean onClickOk() {
-                IdentificationDocumentFolder document = EntityFactory.create(IdentificationDocumentFolder.class);
+                IdentificationDocument document = EntityFactory.create(IdentificationDocument.class);
                 document.idType().set(getSelectedItems().get(0));
                 addItem(document);
                 return true;
@@ -123,16 +123,16 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
     }
 
     @Override
-    protected CForm<IdentificationDocumentFolder> createItemForm(IObject<?> member) {
+    protected CForm<IdentificationDocument> createItemForm(IObject<?> member) {
         return new IdentificationDocumentEditor();
     }
 
     @Override
-    protected CFolderItem<IdentificationDocumentFolder> createItem(boolean first) {
-        return new CFolderItem<IdentificationDocumentFolder>(IdentificationDocumentFolder.class) {
+    protected CFolderItem<IdentificationDocument> createItem(boolean first) {
+        return new CFolderItem<IdentificationDocument>(IdentificationDocument.class) {
             @Override
-            public IFolderItemDecorator<IdentificationDocumentFolder> createItemDecorator() {
-                return IdUploaderFolder.this.createItemDecorator();
+            public IFolderItemDecorator<IdentificationDocument> createItemDecorator() {
+                return IdentificationDocumentFolder.this.createItemDecorator();
             }
 
             @Override
@@ -144,16 +144,16 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
             }
 
             @Override
-            protected CForm<IdentificationDocumentFolder> createItemForm(IObject<?> member) {
-                return IdUploaderFolder.this.createItemForm(null);
+            protected CForm<IdentificationDocument> createItemForm(IObject<?> member) {
+                return IdentificationDocumentFolder.this.createItemForm(null);
             }
         };
     }
 
-    private class IdentificationDocumentEditor extends CForm<IdentificationDocumentFolder> {
+    private class IdentificationDocumentEditor extends CForm<IdentificationDocument> {
 
         public IdentificationDocumentEditor() {
-            super(IdentificationDocumentFolder.class);
+            super(IdentificationDocument.class);
         }
 
         @Override
@@ -164,7 +164,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
             formPanel.append(Location.Dual, proto().idNumber()).decorate();
             formPanel.append(Location.Dual, proto().notes()).decorate();
 
-            IdFileUploaderFolder docPagesFolder = new IdFileUploaderFolder();
+            IdentificationDocumentFileFolder docPagesFolder = new IdentificationDocumentFileFolder();
             if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
                 docPagesFolder.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFile>>() {
                     @Override

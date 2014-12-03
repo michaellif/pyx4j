@@ -27,7 +27,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.biz.system.yardi.YardiServiceException;
-import com.propertyvista.domain.media.IdentificationDocumentFolder;
+import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Type;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
@@ -66,7 +66,7 @@ public class ApplicantScreeningMapper {
         //sin
         String sin = applicant.getASInformation().getSocSecNumber();
 
-        IdentificationDocumentFolder document = EntityFactory.create(IdentificationDocumentFolder.class);
+        IdentificationDocument document = EntityFactory.create(IdentificationDocument.class);
         creditCheck.screening().version().documents().add(document);
 
         document.idType().type().setValue(Type.canadianSIN);

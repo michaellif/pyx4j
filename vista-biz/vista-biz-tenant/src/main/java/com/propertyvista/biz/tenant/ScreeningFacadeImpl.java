@@ -42,7 +42,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
-import com.propertyvista.domain.media.IdentificationDocumentFolder;
+import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
 import com.propertyvista.domain.media.ProofOfIncomeDocumentFile;
 import com.propertyvista.domain.pmc.CreditCheckReportType;
@@ -254,7 +254,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
             if (Importance.activate().contains(docType.importance().getValue())) {
                 // see if we already have it.
                 boolean found = false;
-                for (IdentificationDocumentFolder doc : screening.version().documents()) {
+                for (IdentificationDocument doc : screening.version().documents()) {
                     if (doc.idType().equals(docType)) {
                         found = true;
                         break;
@@ -262,7 +262,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
                 }
 
                 if (!found) {
-                    IdentificationDocumentFolder doc = EntityFactory.create(IdentificationDocumentFolder.class);
+                    IdentificationDocument doc = EntityFactory.create(IdentificationDocument.class);
                     doc.set(doc.idType(), docType);
                     screening.version().documents().add(doc);
                 }
@@ -307,18 +307,18 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
 
     @Override
     public void registerUploadedDocuments(CustomerScreening screening) {
-        for (IdentificationDocumentFolder document : screening.version().documents()) {
+        for (IdentificationDocument document : screening.version().documents()) {
             for (IdentificationDocumentFile applicationDocument : document.files()) {
                 FileUploadRegistry.register(applicationDocument.file());
             }
         }
         for (CustomerScreeningIncome income : screening.version().incomes()) {
-            for (ProofOfIncomeDocumentFile applicationDocument : income.documents()) {
+            for (ProofOfIncomeDocumentFile applicationDocument : income.files()) {
                 FileUploadRegistry.register(applicationDocument.file());
             }
         }
         for (CustomerScreeningPersonalAsset asset : screening.version().assets()) {
-            for (ProofOfAssetDocumentFile applicationDocument : asset.documents()) {
+            for (ProofOfAssetDocumentFile applicationDocument : asset.files()) {
                 FileUploadRegistry.register(applicationDocument.file());
             }
         }

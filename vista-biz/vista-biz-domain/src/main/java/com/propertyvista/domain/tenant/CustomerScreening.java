@@ -37,7 +37,7 @@ import com.pyx4j.entity.core.IVersionData;
 import com.pyx4j.entity.core.IVersionedEntity;
 
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.media.IdentificationDocumentFolder;
+import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.tenant.CustomerScreening.CustomerScreeningV;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
@@ -96,6 +96,6 @@ public interface CustomerScreening extends IVersionedEntity<CustomerScreeningV> 
         @Owned
         @Detached
         @OrderBy(PrimaryKey.class)
-        IList<IdentificationDocumentFolder> documents();
+        IList<IdentificationDocument> documents();
     }
 }

@@ -49,6 +49,7 @@ import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudServic
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationApprove;
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
 import com.propertyvista.crm.server.util.CrmAppContext;
+import com.propertyvista.crm.server.util.LeaseParticipantUtils;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.policy.framework.PolicyNode;
@@ -71,7 +72,6 @@ import com.propertyvista.dto.LeaseParticipanApprovalDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.server.common.util.AddressRetriever;
-import com.propertyvista.server.common.util.LeaseParticipantUtils;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.shared.config.VistaFeatures;
 

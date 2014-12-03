@@ -126,7 +126,7 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
             formPanel.append(Location.Left, proto().ownership()).decorate().componentWidth(50);
 
             formPanel.h3(i18n.tr("Proof Documents"));
-            formPanel.append(Location.Dual, proto().documents(), fileUpload);
+            formPanel.append(Location.Dual, proto().files(), fileUpload);
 
             return formPanel;
         }

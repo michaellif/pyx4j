@@ -31,11 +31,11 @@ import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorato
 import com.propertyvista.crm.rpc.services.lease.IdentificationDocumentCrmUploadService;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
 
-public class IdFileUploaderFolder extends VistaBoxFolder<IdentificationDocumentFile> {
+public class IdentificationDocumentFileFolder extends VistaBoxFolder<IdentificationDocumentFile> {
 
-    private static final I18n i18n = I18n.get(IdFileUploaderFolder.class);
+    private static final I18n i18n = I18n.get(IdentificationDocumentFileFolder.class);
 
-    public IdFileUploaderFolder() {
+    public IdentificationDocumentFileFolder() {
         super(IdentificationDocumentFile.class, i18n.tr("File"));
     }
 
@@ -49,33 +49,33 @@ public class IdFileUploaderFolder extends VistaBoxFolder<IdentificationDocumentF
 
     @Override
     protected CForm<IdentificationDocumentFile> createItemForm(IObject<?> member) {
-        return new DocumentEditor();
-    }
+        return new CForm<IdentificationDocumentFile>(IdentificationDocumentFile.class) {
 
-    private class DocumentEditor extends CForm<IdentificationDocumentFile> {
+            @Override
+            protected IsWidget createContent() {
+                FormPanel formPanel = new FormPanel(this);
 
-        public DocumentEditor() {
-            super(IdentificationDocumentFile.class);
-        }
+                CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(IdentificationDocumentCrmUploadService.class), new VistaFileURLBuilder(
+                        IdentificationDocumentFile.class));
 
-        @Override
-        protected IsWidget createContent() {
-            FormPanel formPanel = new FormPanel(this);
+                formPanel.append(Location.Dual, proto().file(), cfile).decorate();
+                formPanel.append(Location.Dual, proto().description()).decorate();
 
-            CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(IdentificationDocumentCrmUploadService.class), new VistaFileURLBuilder(
-                    IdentificationDocumentFile.class));
+                formPanel.h4(i18n.tr("Verification"));
+                formPanel.append(Location.Left, proto().verified()).decorate();
+                formPanel.append(Location.Right, proto().verifiedBy()).decorate();
+                formPanel.append(Location.Right, proto().verifiedOn()).decorate();
 
-            formPanel.append(Location.Dual, proto().file(), cfile).decorate();
-            formPanel.append(Location.Dual, proto().description()).decorate();
+                return formPanel;
+            }
 
-            return formPanel;
-        }
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
 
-        @Override
-        protected void onValueSet(boolean populate) {
-            super.onValueSet(populate);
-
-            get(proto().description()).setVisible(isEditable() || !getValue().description().isNull());
-        }
+                get(proto().verifiedBy()).setVisible(getValue().verified().getValue(false));
+                get(proto().verifiedOn()).setVisible(getValue().verified().getValue(false));
+            }
+        };
     }
 }

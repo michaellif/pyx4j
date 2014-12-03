@@ -34,7 +34,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
-import com.propertyvista.domain.media.IdentificationDocumentFolder;
+import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.domain.ApplicationDocumentType.Importance;
@@ -42,7 +42,7 @@ import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentTyp
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
-import com.propertyvista.portal.prospect.ui.application.components.IdUploaderFolder;
+import com.propertyvista.portal.prospect.ui.application.components.IdentificationDocumentFolder;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.shared.services.CustomerPicturePortalUploadService;
 import com.propertyvista.portal.shared.ui.util.editors.NameEditor;
@@ -51,7 +51,7 @@ public class AboutYouStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(AboutYouStep.class);
 
-    private final IdUploaderFolder fileUpload = new IdUploaderFolder();
+    private final IdentificationDocumentFolder fileUpload = new IdentificationDocumentFolder();
 
     public AboutYouStep() {
         super(OnlineApplicationWizardStepMeta.AboutYou);
@@ -142,7 +142,7 @@ public class AboutYouStep extends ApplicationWizardStep {
             }
         });
 
-        get(proto().applicantData().documents()).addComponentValidator(new AbstractComponentValidator<List<IdentificationDocumentFolder>>() {
+        get(proto().applicantData().documents()).addComponentValidator(new AbstractComponentValidator<List<IdentificationDocument>>() {
             @Override
             public BasicValidationError isValid() {
                 ApplicationDocumentationPolicy documentationPolicy = getValue().applicantData().documentsPolicy();
@@ -159,7 +159,7 @@ public class AboutYouStep extends ApplicationWizardStep {
                     for (IdentificationDocumentType docType : documentationPolicy.allowedIDs()) {
                         if (docType.importance().getValue() == Importance.Required) {
                             boolean found = false;
-                            for (IdentificationDocumentFolder doc : getCComponent().getValue()) {
+                            for (IdentificationDocument doc : getCComponent().getValue()) {
                                 if (doc.idType().equals(docType)) {
                                     found = true;
                                     break;

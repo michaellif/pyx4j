@@ -49,26 +49,33 @@ public class ProofOfAssetDocumentFileFolder extends VistaBoxFolder<ProofOfAssetD
 
     @Override
     protected CForm<ProofOfAssetDocumentFile> createItemForm(IObject<?> member) {
-        return new DocumentEditor();
-    }
+        return new CForm<ProofOfAssetDocumentFile>(ProofOfAssetDocumentFile.class) {
 
-    private class DocumentEditor extends CForm<ProofOfAssetDocumentFile> {
+            @Override
+            protected IsWidget createContent() {
+                FormPanel formPanel = new FormPanel(this);
 
-        public DocumentEditor() {
-            super(ProofOfAssetDocumentFile.class);
-        }
+                CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(ProofOfAssetDocumentCrmUploadService.class), new VistaFileURLBuilder(
+                        ProofOfAssetDocumentFile.class));
 
-        @Override
-        protected IsWidget createContent() {
-            FormPanel formPanel = new FormPanel(this);
+                formPanel.append(Location.Dual, proto().file(), cfile).decorate();
+                formPanel.append(Location.Dual, proto().description()).decorate();
 
-            CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(ProofOfAssetDocumentCrmUploadService.class), new VistaFileURLBuilder(
-                    ProofOfAssetDocumentFile.class));
+                formPanel.h4(i18n.tr("Verification"));
+                formPanel.append(Location.Left, proto().verified()).decorate();
+                formPanel.append(Location.Right, proto().verifiedBy()).decorate();
+                formPanel.append(Location.Right, proto().verifiedOn()).decorate();
 
-            formPanel.append(Location.Dual, proto().file(), cfile).decorate();
-            formPanel.append(Location.Dual, proto().description()).decorate();
+                return formPanel;
+            }
 
-            return formPanel;
-        }
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+
+                get(proto().verifiedBy()).setVisible(getValue().verified().getValue(false));
+                get(proto().verifiedOn()).setVisible(getValue().verified().getValue(false));
+            }
+        };
     }
 }

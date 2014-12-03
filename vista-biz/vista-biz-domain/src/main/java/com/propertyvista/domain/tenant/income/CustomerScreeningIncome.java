@@ -18,7 +18,6 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -60,6 +59,5 @@ public interface CustomerScreeningIncome extends IEntity {
     IPrimitive<Integer> orderInOwner();
 
     @Owned
-    @OrderBy(PrimaryKey.class)
-    IList<ProofOfIncomeDocumentFile> documents();
+    IList<ProofOfIncomeDocumentFile> files();
 }

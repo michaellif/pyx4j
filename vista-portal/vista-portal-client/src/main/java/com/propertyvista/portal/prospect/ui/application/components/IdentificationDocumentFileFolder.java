@@ -31,11 +31,11 @@ import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.portal.rpc.portal.prospect.services.IdentificationDocumentProspectUploadService;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
-public class IdFileUploaderFolder extends PortalBoxFolder<IdentificationDocumentFile> {
+public class IdentificationDocumentFileFolder extends PortalBoxFolder<IdentificationDocumentFile> {
 
-    private static final I18n i18n = I18n.get(IdFileUploaderFolder.class);
+    private static final I18n i18n = I18n.get(IdentificationDocumentFileFolder.class);
 
-    public IdFileUploaderFolder() {
+    public IdentificationDocumentFileFolder() {
         super(IdentificationDocumentFile.class, i18n.tr("File"));
     }
 
