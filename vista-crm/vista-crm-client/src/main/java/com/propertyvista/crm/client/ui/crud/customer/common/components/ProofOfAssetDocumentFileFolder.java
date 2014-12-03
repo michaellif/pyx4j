@@ -15,8 +15,11 @@ package com.propertyvista.crm.client.ui.crud.customer.common.components;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CForm;
@@ -44,6 +47,17 @@ public class ProofOfAssetDocumentFileFolder extends VistaBoxFolder<ProofOfAssetD
         VistaBoxFolderItemDecorator<ProofOfAssetDocumentFile> decor = super.createItemDecorator();
         decor.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
         decor.setExpended(false);
+        decor.setCaptionFormatter(new IFormatter<ProofOfAssetDocumentFile, SafeHtml>() {
+            @Override
+            public SafeHtml format(ProofOfAssetDocumentFile value) {
+                if (value != null) {
+                    return SafeHtmlUtils.fromString(value.file().getStringView() //
+                            + (value.description().isNull() ? "" : " (" + value.description().getStringView() + ")") //
+                            + (value.verified().getValue(false) ? " - " + i18n.tr("Verified!") : ""));
+                }
+                return null;
+            }
+        });
         return decor;
     }
 
@@ -61,7 +75,7 @@ public class ProofOfAssetDocumentFileFolder extends VistaBoxFolder<ProofOfAssetD
                 formPanel.append(Location.Dual, proto().file(), cfile).decorate();
                 formPanel.append(Location.Dual, proto().description()).decorate();
 
-                formPanel.h4(i18n.tr("Verification"));
+                formPanel.h4(i18n.tr("Verification:"));
                 formPanel.append(Location.Left, proto().verified()).decorate();
                 formPanel.append(Location.Right, proto().verifiedBy()).decorate();
                 formPanel.append(Location.Right, proto().verifiedOn()).decorate();
