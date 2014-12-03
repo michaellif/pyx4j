@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -80,28 +80,23 @@ public class InsuranceStatusReport implements Report {
 
                 String specialFlag = "";
                 if (reportedStatusHolder.insurance().status().getValue() == TenantSureStatus.PendingCancellation) {
-                    specialFlag = SimpleMessageFormat.format(//@formatter:off
-                            "{0} due to {1}",
-                            TenantSureStatus.PendingCancellation,
-                            reportedStatusHolder.insurance().cancellation().getValue()
-                    );//@formatter:on
+                    specialFlag = SimpleMessageFormat.format("{0} due to {1}", //
+                            TenantSureStatus.PendingCancellation, //
+                            reportedStatusHolder.insurance().cancellation().getValue());
 
                     if (reportedStatusHolder.insurance().cancellation().getValue() == CancellationType.CancelledByTenant
                             || reportedStatusHolder.insurance().cancellation().getValue() == CancellationType.CancelledByTenantSure) {
-                        specialFlag += SimpleMessageFormat.format(" (since {0,date,short})" + reportedStatusHolder.insurance().cancellationDate().getValue());
+                        specialFlag += SimpleMessageFormat.format(" (since {0,date,short})", reportedStatusHolder.insurance().cancellationDate().getValue());
                     }
                 }
                 data.cancellation().setValue(specialFlag);
 
                 er.reportEntity(formatter, data);
 
-                executionMonitor.addProcessedEvent(//@formatter:off
-                        "Report",
-                        reportedStatusHolder.insurance().totalMonthlyPayable().getValue(),
-                        SimpleMessageFormat.format("TenantSure report for {0} {1} was generated.",
-                                reportedStatusHolder.insurance().client().tenant().customer().person().name().firstName().getValue(),
-                                reportedStatusHolder.insurance().client().tenant().customer().person().name().lastName().getValue())
-                );//@formatter:on
+                executionMonitor.addProcessedEvent("Report", reportedStatusHolder.insurance().totalMonthlyPayable().getValue(),
+                        SimpleMessageFormat.format("TenantSure report for {0} {1} was generated.", //
+                                reportedStatusHolder.insurance().client().tenant().customer().person().name().firstName().getValue(), //
+                                reportedStatusHolder.insurance().client().tenant().customer().person().name().lastName().getValue()));
             }
         } finally {
             iterator.close();
