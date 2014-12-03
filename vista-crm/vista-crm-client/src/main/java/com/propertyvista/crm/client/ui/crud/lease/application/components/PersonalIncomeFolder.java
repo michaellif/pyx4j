@@ -30,6 +30,7 @@ import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
@@ -114,10 +115,10 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
                     if (employmentCount == 1) {
                         IEmploymentInfo employment = getFirstEmployment();
                         if (!employment.isEmpty()) {
-                            if (!employment.ends().isNull() && !employment.starts().isNull()) {
-                                LogicalDate date = new LogicalDate(employment.starts().getValue());
-                                CalendarUtil.addMonthsToDate(date, restrictionsPolicy.minEmploymentDuration().getValue(0));
-                                if (employment.ends().getValue().before(date)) {
+                            if (!employment.starts().isNull()) {
+                                LogicalDate date = (employment.ends().isNull() ? new LogicalDate(ClientContext.getServerDate()) : employment.ends().getValue());
+                                CalendarUtil.addMonthsToDate(date, -restrictionsPolicy.minEmploymentDuration().getValue(0));
+                                if (employment.starts().getValue().after(date)) {
                                     return new BasicValidationError(getCComponent(), i18n.tr("You need to enter more employment information"));
                                 }
                             }
@@ -126,7 +127,7 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
                         return new BasicValidationError(getCComponent(), i18n.tr("No need to supply more than {0} employment items", restrictionsPolicy
                                 .maxNumberOfEmployments().getValue(Integer.MAX_VALUE)));
                     } else if (getCComponent().getValue().size() - employmentCount > 3) {
-                        return new BasicValidationError(getCComponent(), i18n.tr("No need to supply more than 3 general income items"));
+                        return new BasicValidationError(getCComponent(), i18n.tr("No need to supply more than 3 other income items"));
                     }
                 }
                 return null;

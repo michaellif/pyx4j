@@ -59,6 +59,7 @@ public interface IncomeInfoStudentIncome extends CustomerScreeningIncomeInfo {
     InternationalAddress address();
 
     @Override
+    @NotNull
     @Caption(name = "Program Start")
     IPrimitive<LogicalDate> starts();
 

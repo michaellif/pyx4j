@@ -77,6 +77,7 @@ public interface CustomerScreeningIncomeInfo extends IEntity {
     /**
      * Start of income period. For employment that would be employment start date.
      */
+    @NotNull
     @Caption(name = "Start Date")
     IPrimitive<LogicalDate> starts();
 
