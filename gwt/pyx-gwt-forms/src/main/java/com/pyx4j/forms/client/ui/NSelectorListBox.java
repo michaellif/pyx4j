@@ -93,15 +93,19 @@ public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<
     @Override
     public void setNativeValue(Collection<E> value) {
         if (isViewable()) {
-            StringBuilder text = new StringBuilder();
-            for (E val : value) {
-                if (text.length() == 0) {
-                    text.append(getCComponent().getFormatter().format(val));
-                } else {
-                    text.append(",").append(getCComponent().getFormatter().format(val));
+            if (value == null) {
+                getViewer().setText(null);
+            } else {
+                StringBuilder text = new StringBuilder();
+                for (E val : value) {
+                    if (text.length() == 0) {
+                        text.append(getCComponent().getFormatter().format(val));
+                    } else {
+                        text.append(",").append(getCComponent().getFormatter().format(val));
+                    }
                 }
+                getViewer().setText(text.toString());
             }
-            getViewer().setText(text.toString());
         } else {
             getEditor().setValue(value);
         }
