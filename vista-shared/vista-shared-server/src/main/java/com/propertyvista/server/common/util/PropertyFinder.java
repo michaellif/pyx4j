@@ -13,8 +13,8 @@
  */
 package com.propertyvista.server.common.util;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,16 +22,16 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.mutable.MutableInt;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.MinMaxPair;
 import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.geo.GeoBox;
 import com.pyx4j.geo.GeoCircle;
@@ -59,34 +59,6 @@ public class PropertyFinder {
         return PublicVisibilityType.global.equals(bld.marketing().visibility().getValue());
     }
 
-    // returns false if no results are expected based on the search criteria
-    private static boolean addSearchCriteria(EntityQueryCriteria<Building> dbCriteria, PropertySearchCriteria searchCriteria) {
-        // evaluate search criteria
-        if (!updateBuildingQueryCriteria(dbCriteria, searchCriteria)) {
-            return false;
-        }
-
-        // 2. filter buildings by floorplans
-        EntityQueryCriteria<Floorplan> fpCriteria = EntityQueryCriteria.create(Floorplan.class);
-        if (!updateFloorplanQueryCriteria(fpCriteria, searchCriteria)) {
-            return false;
-        }
-
-        // prepare building filter
-        final HashSet<Key> bldFilter2 = new HashSet<Key>();
-        for (Floorplan fp : Persistence.service().query(fpCriteria)) {
-            bldFilter2.add(fp.building().getPrimaryKey());
-        }
-        // filter buildings with filter
-        if (bldFilter2.size() == 0) {
-            // quit early
-            return false;
-        }
-        dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().id(), bldFilter2));
-
-        return true;
-    }
-
     /**
      * Populate db query criteria based on the given PropertySearchCriteria on Building level
      * 
@@ -96,7 +68,7 @@ public class PropertyFinder {
      *            - given search criteria
      * @return false if no buildings found to match the search criteria
      */
-    private static boolean updateBuildingQueryCriteria(EntityQueryCriteria<Building> dbCriteria, PropertySearchCriteria searchCriteria) {
+    private static void addSearchCriteria(EntityQueryCriteria<Building> dbCriteria, PropertySearchCriteria searchCriteria) {
         // add visibility check
         dbCriteria.eq(dbCriteria.proto().marketing().visibility(), PublicVisibilityType.global);
         // add sanity check
@@ -106,11 +78,11 @@ public class PropertyFinder {
         if (SearchType.city.equals(searchCriteria.searchType().getValue())) {
             String prov = searchCriteria.province().getValue();
             if (!StringUtils.isEmpty(prov)) {
-                dbCriteria.add(PropertyCriterion.like(dbCriteria.proto().info().address().province(), prov));
+                dbCriteria.like(dbCriteria.proto().info().address().province(), prov);
             }
             String city = searchCriteria.city().getValue();
             if (!StringUtils.isEmpty(city)) {
-                dbCriteria.add(PropertyCriterion.like(dbCriteria.proto().info().address().city(), city));
+                dbCriteria.like(dbCriteria.proto().info().address().city(), city);
             }
         } else {
             // Vicinity search within the given searchRadius of the centerPoint
@@ -120,101 +92,84 @@ public class PropertyFinder {
                 // Define dbCriteria here, It works perfectly in North America, TODO test other location
                 GeoCircle geoCircle = new GeoCircle(centerPoint, searchRadiusKm);
                 GeoBox geoBox = geoCircle.getMinBox();
-                dbCriteria.add(PropertyCriterion.le(dbCriteria.proto().info().location(), geoBox.getNorthEast()));
-                dbCriteria.add(PropertyCriterion.ge(dbCriteria.proto().info().location(), geoBox.getSouthWest()));
+                dbCriteria.le(dbCriteria.proto().info().location(), geoBox.getNorthEast());
+                dbCriteria.ge(dbCriteria.proto().info().location(), geoBox.getSouthWest());
             }
         }
 
-        // 1. filter buildings by amenities (must match all items in the set)
-        EntityQueryCriteria<BuildingAmenity> amCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
+        // filter buildings by amenities (must match all items in the set)
         int amSize = searchCriteria.amenities().size();
         if (amSize > 0) {
-            amCriteria.add(PropertyCriterion.in(amCriteria.proto().type(), searchCriteria.amenities().toArray((Serializable[]) new BuildingAmenity.Type[0])));
-            // count matched buildings
-            Map<Key, MutableInt> amCounter = new HashMap<Key, MutableInt>();
+            EntityQueryCriteria<BuildingAmenity> amCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
+            amCriteria.in(amCriteria.proto().type(), searchCriteria.amenities());
+            // prepare building amenity filter
+            Map<Key, Set<BuildingAmenity.Type>> amFilter = new HashMap<>();
             for (BuildingAmenity am : Persistence.service().query(amCriteria)) {
-                Key key = am.building().getPrimaryKey();
-                MutableInt count = amCounter.get(key);
-                if (count == null) {
-                    amCounter.put(key, new MutableInt(1));
-                } else {
-                    count.increment();
+                Key bldId = am.building().getPrimaryKey();
+                Set<BuildingAmenity.Type> amSet = amFilter.get(bldId);
+                if (amSet == null) {
+                    amFilter.put(bldId, amSet = new HashSet<BuildingAmenity.Type>());
+                }
+                amSet.add(am.type().getValue());
+            }
+            // filter buildings that have matched all items from the search criteria
+            for (Iterator<Key> it = amFilter.keySet().iterator(); it.hasNext();) {
+                if (amFilter.get(it.next()).size() != amSize) {
+                    it.remove();
                 }
             }
-            // prepare building filter 1
-            final HashSet<Key> bldFilter1 = new HashSet<Key>();
-            for (Key key : amCounter.keySet()) {
-                if (amCounter.get(key).intValue() == amSize) {
-                    bldFilter1.add(key);
-                }
-            }
-            // filter buildings with filter 1
-            if (bldFilter1.size() == 0) {
-                // empty set here means no match was found, so we can quit early
-                return false;
-            }
-            dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().id(), bldFilter1));
+            dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().id(), amFilter.keySet()));
         }
-        return true;
+
+        // add Floorplan related criteria
+        dbCriteria.addAll(getFloorplanQueryCriteria(dbCriteria.proto().floorplans().$(), searchCriteria));
     }
 
     /**
      * Populate db query criteria based on the given PropertySearchCriteria on Floorplan level
      * 
-     * @param dbCriteria
+     * @param fpCriteria
      *            - db query criteria to update
      * @param searchCriteria
      *            - given search criteria
      * @return false if no floorplans found to match the search criteria
      */
-    private static boolean updateFloorplanQueryCriteria(EntityQueryCriteria<Floorplan> dbCriteria, PropertySearchCriteria searchCriteria) {
+    private static List<Criterion> getFloorplanQueryCriteria(Floorplan proto, PropertySearchCriteria searchCriteria) {
+        List<Criterion> criteria = new ArrayList<>();
         // 2.1. filter floorplans by units
-        EntityQueryCriteria<AptUnit> auCriteria = EntityQueryCriteria.create(AptUnit.class);
         // price
         Integer minPrice = searchCriteria.minPrice().getValue();
         if (minPrice != null) {
-            auCriteria.add(new PropertyCriterion(auCriteria.proto().financial()._marketRent(), Restriction.GREATER_THAN_OR_EQUAL, new BigDecimal(minPrice)));
+            criteria.add(PropertyCriterion.ge(proto.units().$().financial()._marketRent(), new BigDecimal(minPrice)));
         }
         Integer maxPrice = searchCriteria.maxPrice().getValue();
         if (maxPrice != null && maxPrice > 0) {
-            auCriteria.add(new PropertyCriterion(auCriteria.proto().financial()._marketRent(), Restriction.LESS_THAN_OR_EQUAL, new BigDecimal(maxPrice)));
+            criteria.add(PropertyCriterion.le(proto.units().$().financial()._marketRent(), new BigDecimal(maxPrice)));
         }
         // filter units by finalized products only:
-        auCriteria.add(PropertyCriterion.isNotNull(auCriteria.proto().productItems().$().product().fromDate()));
-        auCriteria.add(PropertyCriterion.isNull(auCriteria.proto().productItems().$().product().toDate()));
-
-        // prepare new floorplan filter 1
-        final HashSet<Key> fpSet1 = new HashSet<Key>();
-        for (AptUnit unit : Persistence.service().query(auCriteria)) {
-            fpSet1.add(unit.floorplan().getPrimaryKey());
-        }
-        // add floorplan unit criteria
-        if (fpSet1.size() == 0) {
-            // quit early
-            return false;
-        }
-        dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().id(), fpSet1));
+        criteria.add(PropertyCriterion.isNotNull(proto.units().$().productItems().$().product().fromDate()));
+        criteria.add(PropertyCriterion.isNull(proto.units().$().productItems().$().product().toDate()));
 
         // 2.2 filter floorplans by other search criteria
         // beds
         BedroomChoice minBeds = searchCriteria.minBeds().getValue();
         if (minBeds != null && minBeds != BedroomChoice.Any) {
-            dbCriteria.add(new PropertyCriterion(dbCriteria.proto().bedrooms(), Restriction.GREATER_THAN_OR_EQUAL, minBeds.getBeds()));
+            criteria.add(PropertyCriterion.ge(proto.bedrooms(), minBeds.getBeds()));
         }
         BedroomChoice maxBeds = searchCriteria.maxBeds().getValue();
         if (maxBeds != null && maxBeds != BedroomChoice.Any) {
-            dbCriteria.add(new PropertyCriterion(dbCriteria.proto().bedrooms(), Restriction.LESS_THAN_OR_EQUAL, maxBeds.getBeds()));
+            criteria.add(PropertyCriterion.le(proto.bedrooms(), maxBeds.getBeds()));
         }
         // baths
         BathroomChoice minBaths = searchCriteria.minBaths().getValue();
         if (minBaths != null && minBaths != BathroomChoice.Any) {
-            dbCriteria.add(new PropertyCriterion(dbCriteria.proto().bathrooms(), Restriction.GREATER_THAN_OR_EQUAL, minBaths.getBaths()));
+            criteria.add(PropertyCriterion.ge(proto.bathrooms(), minBaths.getBaths()));
         }
         BathroomChoice maxBaths = searchCriteria.maxBaths().getValue();
         if (maxBaths != null && maxBaths != BathroomChoice.Any) {
-            dbCriteria.add(new PropertyCriterion(dbCriteria.proto().bathrooms(), Restriction.LESS_THAN_OR_EQUAL, maxBaths.getBaths()));
+            criteria.add(PropertyCriterion.le(proto.bathrooms(), maxBaths.getBaths()));
         }
-        return Persistence.service().exists(dbCriteria);
+        return criteria;
     }
 
     public static List<Building> getPropertyList(PropertySearchCriteria searchCriteria) {
@@ -225,24 +180,30 @@ public class PropertyFinder {
         if (dbCriteria == null) {
             dbCriteria = EntityQueryCriteria.create(Building.class);
         }
-        // if search criteria returns nothing, quit now!
-        if (searchCriteria != null && !addSearchCriteria(dbCriteria, searchCriteria)) {
-            return Collections.emptyList();
+
+        if (searchCriteria != null) {
+            addSearchCriteria(dbCriteria, searchCriteria);
         }
 
-        // get buildings with floorplans and media
-        final List<Building> buildings = Persistence.service().query(dbCriteria);
-        for (Iterator<Building> it = buildings.iterator(); it.hasNext();) {
-            Building building = it.next();
-            EntityQueryCriteria<Floorplan> fpCriteria = EntityQueryCriteria.create(Floorplan.class);
-            fpCriteria.eq(fpCriteria.proto().building(), building);
-            if (searchCriteria != null && !updateFloorplanQueryCriteria(fpCriteria, searchCriteria)) {
-                it.remove();
-                continue;
+        // get buildings with filtered floorplans and media
+        List<Building> buildings = Persistence.service().query(dbCriteria);
+        // prepare floorplan filter per search criteria
+        EntityQueryCriteria<Floorplan> fpCriteria = EntityQueryCriteria.create(Floorplan.class);
+        fpCriteria.addAll(getFloorplanQueryCriteria(fpCriteria.proto(), searchCriteria));
+        Criterion parentBld = null;
+        for (Building building : buildings) {
+            // remove previous parent building criterion, if any
+            if (parentBld != null) {
+                fpCriteria.removeCriterions(parentBld);
             }
+            // add new parent building criterion
+            parentBld = PropertyCriterion.eq(fpCriteria.proto().building(), building);
+            fpCriteria.add(parentBld);
+            // set filtered floorplans
             building.floorplans().setAttachLevel(AttachLevel.Attached);
             building.floorplans().clear();
             building.floorplans().addAll(Persistence.service().query(fpCriteria));
+            // retrieve media
             Persistence.service().retrieveMember(building.media());
         }
 
@@ -355,7 +316,7 @@ public class PropertyFinder {
             return null;
         }
 
-        if (getFloorplanUnits(fp).size() < 1) {
+        if (getFloorplanUnitCount(fp) < 1) {
             return null;
         }
         Persistence.service().retrieveMember(fp.media());
@@ -367,10 +328,15 @@ public class PropertyFinder {
             return Collections.emptyList();
         }
 
-        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-        criteria.eq(criteria.proto().building(), fp.building());
-        criteria.eq(criteria.proto().floorplan(), fp);
-        return Persistence.service().query(criteria);
+        return Persistence.service().query(getFloorplanUnitsCriteria(fp));
+    }
+
+    public static int getFloorplanUnitCount(Floorplan fp) {
+        if (!isPropertyVisible(fp.building())) {
+            return 0;
+        }
+
+        return Persistence.service().count(getFloorplanUnitsCriteria(fp));
     }
 
     public static List<FloorplanAmenity> getFloorplanAmenities(Floorplan fp) {
@@ -380,6 +346,14 @@ public class PropertyFinder {
         EntityQueryCriteria<FloorplanAmenity> criteria = EntityQueryCriteria.create(FloorplanAmenity.class);
         criteria.eq(criteria.proto().floorplan(), fp);
         return Persistence.service().query(criteria);
+    }
+
+    // ---------------- internals ---------------------
+    private static EntityQueryCriteria<AptUnit> getFloorplanUnitsCriteria(Floorplan fp) {
+        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+        criteria.eq(criteria.proto().building(), fp.building());
+        criteria.eq(criteria.proto().floorplan(), fp);
+        return criteria;
     }
 
 }
