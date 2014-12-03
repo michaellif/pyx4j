@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease.application.components;
+package com.propertyvista.crm.client.ui.crud.customer.common.components;
 
 import java.math.BigDecimal;
 import java.util.EnumSet;

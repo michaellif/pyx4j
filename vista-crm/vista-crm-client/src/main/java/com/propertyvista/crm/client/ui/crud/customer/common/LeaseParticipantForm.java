@@ -66,9 +66,9 @@ import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidat
 import com.propertyvista.common.client.ui.validators.PastDateValidator;
 import com.propertyvista.common.client.ui.validators.StartEndDateWithinPeriodValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.crud.lease.application.components.IdUploaderFolder;
-import com.propertyvista.crm.client.ui.crud.lease.application.components.PersonalAssetFolder;
-import com.propertyvista.crm.client.ui.crud.lease.application.components.PersonalIncomeFolder;
+import com.propertyvista.crm.client.ui.crud.customer.common.components.IdUploaderFolder;
+import com.propertyvista.crm.client.ui.crud.customer.common.components.PersonalAssetFolder;
+import com.propertyvista.crm.client.ui.crud.customer.common.components.PersonalIncomeFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;
 import com.propertyvista.crm.rpc.services.customer.CustomerPictureCrmUploadService;
 import com.propertyvista.domain.PriorAddress;

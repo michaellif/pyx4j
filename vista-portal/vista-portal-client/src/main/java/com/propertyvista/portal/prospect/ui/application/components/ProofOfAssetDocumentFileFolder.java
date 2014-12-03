@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.prospect.ui.application.editors;
+package com.propertyvista.portal.prospect.ui.application.components;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.BorderStyle;
@@ -27,54 +27,48 @@ import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
-import com.propertyvista.domain.media.IdentificationDocumentFile;
-import com.propertyvista.portal.rpc.portal.prospect.services.IdentificationDocumentProspectUploadService;
+import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
+import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfAssetDocumentProspectUploadService;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
-public class IdFileUploaderFolder extends PortalBoxFolder<IdentificationDocumentFile> {
+public class ProofOfAssetDocumentFileFolder extends PortalBoxFolder<ProofOfAssetDocumentFile> {
 
-    private static final I18n i18n = I18n.get(IdFileUploaderFolder.class);
+    private static final I18n i18n = I18n.get(ProofOfAssetDocumentFileFolder.class);
 
-    public IdFileUploaderFolder() {
-        super(IdentificationDocumentFile.class, i18n.tr("File"));
+    public ProofOfAssetDocumentFileFolder() {
+        super(ProofOfAssetDocumentFile.class, i18n.tr("File"));
     }
 
     @Override
-    public BoxFolderItemDecorator<IdentificationDocumentFile> createItemDecorator() {
-        BoxFolderItemDecorator<IdentificationDocumentFile> decor = super.createItemDecorator();
+    public BoxFolderItemDecorator<ProofOfAssetDocumentFile> createItemDecorator() {
+        BoxFolderItemDecorator<ProofOfAssetDocumentFile> decor = super.createItemDecorator();
         decor.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
         decor.setExpended(false);
         return decor;
     }
 
     @Override
-    protected CForm<IdentificationDocumentFile> createItemForm(IObject<?> member) {
-        return new ApplicationDocumentEditor();
+    protected CForm<ProofOfAssetDocumentFile> createItemForm(IObject<?> member) {
+        return new DocumentEditor();
     }
 
-    private class ApplicationDocumentEditor extends CForm<IdentificationDocumentFile> {
+    private class DocumentEditor extends CForm<ProofOfAssetDocumentFile> {
 
-        public ApplicationDocumentEditor() {
-            super(IdentificationDocumentFile.class);
+        public DocumentEditor() {
+            super(ProofOfAssetDocumentFile.class);
         }
 
         @Override
         protected IsWidget createContent() {
             FormPanel formPanel = new FormPanel(this);
 
-            CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(IdentificationDocumentProspectUploadService.class), new VistaFileURLBuilder(
-                    IdentificationDocumentFile.class));
+            CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(ProofOfAssetDocumentProspectUploadService.class), new VistaFileURLBuilder(
+                    ProofOfAssetDocumentFile.class));
 
-            formPanel.append(Location.Left, proto().file(), cfile).decorate();
+            formPanel.append(Location.Left, proto().file(), cfile).decorate().labelWidth(100);
 //            formPanel.append(Location.Left, proto().description()).decorate();
 
             return formPanel;
         }
-
-        @Override
-        public void generateMockData() {
-            get(proto().description()).setMockValue("Description");
-        }
-
     }
 }

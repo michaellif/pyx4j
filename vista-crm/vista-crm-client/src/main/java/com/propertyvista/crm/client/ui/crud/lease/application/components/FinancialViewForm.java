@@ -22,6 +22,8 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
+import com.propertyvista.crm.client.ui.crud.customer.common.components.PersonalAssetFolder;
+import com.propertyvista.crm.client.ui.crud.customer.common.components.PersonalIncomeFolder;
 import com.propertyvista.dto.TenantFinancialDTO;
 
 public class FinancialViewForm extends CForm<TenantFinancialDTO> {

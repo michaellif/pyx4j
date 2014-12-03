@@ -37,7 +37,7 @@ import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.themes.AdditionalInfoStepTheme;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
-import com.propertyvista.portal.prospect.ui.application.editors.PriorAddressEditor;
+import com.propertyvista.portal.prospect.ui.application.components.PriorAddressEditor;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.decorators.RadioButtonGroupDecoratorBuilder;
 

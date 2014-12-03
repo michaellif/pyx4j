@@ -42,7 +42,7 @@ import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentTyp
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
-import com.propertyvista.portal.prospect.ui.application.editors.IdUploaderFolder;
+import com.propertyvista.portal.prospect.ui.application.components.IdUploaderFolder;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.shared.services.CustomerPicturePortalUploadService;
 import com.propertyvista.portal.shared.ui.util.editors.NameEditor;

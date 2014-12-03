@@ -16,8 +16,8 @@ package com.propertyvista.portal.prospect.ui.application.steps.summary;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
-import com.propertyvista.portal.prospect.ui.application.editors.PersonalAssetFolder;
-import com.propertyvista.portal.prospect.ui.application.editors.PersonalIncomeFolder;
+import com.propertyvista.portal.prospect.ui.application.components.PersonalAssetFolder;
+import com.propertyvista.portal.prospect.ui.application.components.PersonalIncomeFolder;
 import com.propertyvista.portal.prospect.ui.application.steps.FinancialStep;
 import com.propertyvista.portal.prospect.ui.application.steps.GuarantorsFolder;
 

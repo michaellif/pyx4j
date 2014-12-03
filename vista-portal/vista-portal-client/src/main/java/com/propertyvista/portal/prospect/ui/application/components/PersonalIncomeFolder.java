@@ -11,7 +11,7 @@
  * @author vladlouk
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease.application.components;
+package com.propertyvista.portal.prospect.ui.application.components;
 
 import java.util.EnumSet;
 
@@ -19,7 +19,6 @@ import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -29,19 +28,17 @@ import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
-import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.domain.tenant.income.IncomeSource;
+import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
-public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome> {
+public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncome> {
 
     private static final I18n i18n = I18n.get(PersonalIncomeFolder.class);
 
@@ -49,24 +46,16 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
 
     private ApplicationDocumentationPolicy documentationPolicy;
 
-    public PersonalIncomeFolder(boolean modifyable) {
-        super(CustomerScreeningIncome.class, modifyable);
+    public PersonalIncomeFolder() {
+        this(true);
     }
 
-    public void setPolicyEntity(IEntity parentEntity) {
-        ClientPolicyManager.obtainHierarchicalEffectivePolicy(parentEntity, RestrictionsPolicy.class, new DefaultAsyncCallback<RestrictionsPolicy>() {
-            @Override
-            public void onSuccess(RestrictionsPolicy result) {
-                setRestrictionsPolicy(result);
-            }
-        });
-        ClientPolicyManager.obtainHierarchicalEffectivePolicy(parentEntity, ApplicationDocumentationPolicy.class,
-                new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
-                    @Override
-                    public void onSuccess(ApplicationDocumentationPolicy result) {
-                        setDocumentationPolicy(result);
-                    }
-                });
+    public PersonalIncomeFolder(boolean editable) {
+        super(CustomerScreeningIncome.class, i18n.tr("Personal Income"), editable);
+
+        if (editable) {
+            setNoDataLabel(i18n.tr("Please enter your source(s) of income if present"));
+        }
     }
 
     public void setRestrictionsPolicy(RestrictionsPolicy policy) {

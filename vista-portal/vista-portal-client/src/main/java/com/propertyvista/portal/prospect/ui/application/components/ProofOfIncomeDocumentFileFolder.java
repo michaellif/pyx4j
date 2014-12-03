@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.prospect.ui.application.editors;
+package com.propertyvista.portal.prospect.ui.application.components;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.BorderStyle;
@@ -27,43 +27,43 @@ import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
-import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
-import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfAssetDocumentProspectUploadService;
+import com.propertyvista.domain.media.ProofOfIncomeDocumentFile;
+import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfIncomeDocumentProspectUploadService;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
-public class ProofOfAssetDocumentFileFolder extends PortalBoxFolder<ProofOfAssetDocumentFile> {
+public class ProofOfIncomeDocumentFileFolder extends PortalBoxFolder<ProofOfIncomeDocumentFile> {
 
-    private static final I18n i18n = I18n.get(ProofOfAssetDocumentFileFolder.class);
+    private static final I18n i18n = I18n.get(ProofOfIncomeDocumentFileFolder.class);
 
-    public ProofOfAssetDocumentFileFolder() {
-        super(ProofOfAssetDocumentFile.class, i18n.tr("File"));
+    public ProofOfIncomeDocumentFileFolder() {
+        super(ProofOfIncomeDocumentFile.class, i18n.tr("File"));
     }
 
     @Override
-    public BoxFolderItemDecorator<ProofOfAssetDocumentFile> createItemDecorator() {
-        BoxFolderItemDecorator<ProofOfAssetDocumentFile> decor = super.createItemDecorator();
+    public BoxFolderItemDecorator<ProofOfIncomeDocumentFile> createItemDecorator() {
+        BoxFolderItemDecorator<ProofOfIncomeDocumentFile> decor = super.createItemDecorator();
         decor.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
         decor.setExpended(false);
         return decor;
     }
 
     @Override
-    protected CForm<ProofOfAssetDocumentFile> createItemForm(IObject<?> member) {
+    protected CForm<ProofOfIncomeDocumentFile> createItemForm(IObject<?> member) {
         return new DocumentEditor();
     }
 
-    private class DocumentEditor extends CForm<ProofOfAssetDocumentFile> {
+    private class DocumentEditor extends CForm<ProofOfIncomeDocumentFile> {
 
         public DocumentEditor() {
-            super(ProofOfAssetDocumentFile.class);
+            super(ProofOfIncomeDocumentFile.class);
         }
 
         @Override
         protected IsWidget createContent() {
             FormPanel formPanel = new FormPanel(this);
 
-            CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(ProofOfAssetDocumentProspectUploadService.class), new VistaFileURLBuilder(
-                    ProofOfAssetDocumentFile.class));
+            CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(ProofOfIncomeDocumentProspectUploadService.class), new VistaFileURLBuilder(
+                    ProofOfIncomeDocumentFile.class));
 
             formPanel.append(Location.Left, proto().file(), cfile).decorate().labelWidth(100);
 //            formPanel.append(Location.Left, proto().description()).decorate();

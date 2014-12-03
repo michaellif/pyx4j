@@ -27,6 +27,7 @@ import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactor
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.validators.ClientBusinessRules;
+import com.propertyvista.crm.client.ui.crud.customer.common.components.IdUploaderFolder;
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.dto.TenantInfoDTO;
 

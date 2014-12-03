@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.prospect.ui.application.editors;
+package com.propertyvista.portal.prospect.ui.application.components;
 
 import java.math.BigDecimal;
 import java.util.EnumSet;
