@@ -52,6 +52,8 @@ public class CommunityEventsViewImpl extends FlowPanel implements CommunityEvent
 
                 HTML descriptionHTML = new HTML(event.description().getValue());
                 descriptionHTML.setStyleName(ExtraGadgetsTheme.StyleName.CommunityEventDescription.name());
+                descriptionHTML.addStyleName(ExtraGadgetsTheme.StyleName.ellipsis.name());
+                descriptionHTML.addStyleName(ExtraGadgetsTheme.StyleName.ellipsis + ":after");
                 descriptionHTML.setTitle(event.description().getValue());
                 add(descriptionHTML);
 

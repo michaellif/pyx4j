@@ -24,7 +24,7 @@ public class ExtraGadgetsTheme extends Theme {
     public static enum StyleName implements IStyleName {
         CommunityEventCaption, CommunityEventTimeAndLocation, CommunityEventDescription,
 
-        WeatherIcon, WeatherText, WeatherTemperature, WeatherType
+        WeatherIcon, WeatherText, WeatherTemperature, WeatherType, ellipsis
 
     }
 
@@ -36,20 +36,39 @@ public class ExtraGadgetsTheme extends Theme {
         style.addProperty("text-overflow", "ellipsis");
         style.addProperty("white-space", "nowrap");
         style.addProperty("overflow", "hidden");
+        style.addProperty("text-align", "left");
+
         addStyle(style);
 
         style = new Style(".", StyleName.CommunityEventTimeAndLocation);
         style.addProperty("font-style", "italic");
-        style.addProperty("font-size", "0.9em");
+        style.addProperty("font-size", "0.7em");
         style.addProperty("text-overflow", "ellipsis");
         style.addProperty("white-space", "nowrap");
         style.addProperty("overflow", "hidden");
+        style.addProperty("text-align", "right");
+        style.addProperty("padding", "5px");
         addStyle(style);
 
         style = new Style(".", StyleName.CommunityEventDescription);
-        style.addProperty("text-overflow", "ellipsis");
-        style.addProperty("white-space", "nowrap");
         style.addProperty("overflow", "hidden");
+        addStyle(style);
+
+        style = new Style(".", StyleName.ellipsis);
+        style.addProperty("position", "relative");
+        style.addProperty("height", "3.7em");
+        style.addProperty("text-align", "left");
+        addStyle(style);
+
+        style = new Style(".", StyleName.ellipsis, ":", "after");
+        style.addProperty("content", "\". . .\"");
+        style.addProperty("text-align", "right");
+        style.addProperty("position", "absolute");
+        style.addProperty("bottom", "0");
+        style.addProperty("right", "20px");
+        style.addProperty("width", "25%");
+        style.addProperty("height", "1.3em");
+        style.addProperty("background", "linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%)");
         addStyle(style);
 
         style = new Style(".", StyleName.WeatherIcon);
