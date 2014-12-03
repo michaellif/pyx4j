@@ -413,7 +413,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, V 
         List<U> users = Persistence.service().query(criteria);
         if (users.size() != 1) {
             log.debug("Invalid PasswordReset {} rs {}", email, users.size());
-            throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
+            throw new UserRuntimeException(true, i18n.tr(GENERIC_FAILED_MESSAGE));
         }
         U user = users.get(0);
 
