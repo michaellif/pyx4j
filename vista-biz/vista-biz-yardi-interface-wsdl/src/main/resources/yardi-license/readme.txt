@@ -1,6 +1,6 @@
 # @version $Revision$ ($Author$) $Date$
 
-ILS/GC Data Exchange Interface license  [PIN 100055318] License is good through 12/31/2014
+ILS/GC Data Exchange Interface license  [PIN 100055318] License is good through 12/31/2015  (V100055318IL.lic)
 YSIInstall-ILSGuestCard.lic
 
 Collections Data Exchange Interface license [PIN 100055319] License is good through 12/31/2014
