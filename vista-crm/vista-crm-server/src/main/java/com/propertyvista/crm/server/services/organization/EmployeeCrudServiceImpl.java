@@ -215,8 +215,10 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                 credential = EntityFactory.create(CrmUserCredential.class);
                 credential.setPrimaryKey(user.getPrimaryKey());
                 credential.user().set(user);
-                credential.credential().setValue(
-                        ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(in.privileges().password().getValue()));
+                if (!in.privileges().password().isNull()) {
+                    credential.credential().setValue(
+                            ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(in.privileges().password().getValue()));
+                }
             }
             credential.enabled().set(in.privileges().enabled());
             credential.roles().clear();
