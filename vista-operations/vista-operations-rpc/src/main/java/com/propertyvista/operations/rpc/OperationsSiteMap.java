@@ -40,11 +40,15 @@ public class OperationsSiteMap implements SiteMap {
      * Used while user is waiting for authentication required for password reset.
      */
     public static class LoginWithToken extends AppPlace implements PublicPlace {
-
+        {
+            setStable(false);
+        }
     }
 
     public static class PasswordResetRequest extends AppPlace implements PublicPlace {
-
+        {
+            setStable(false);
+        }
     }
 
     @PlaceProperties(caption = "Reset Password")

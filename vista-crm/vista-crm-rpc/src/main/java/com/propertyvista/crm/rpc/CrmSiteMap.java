@@ -42,12 +42,18 @@ public class CrmSiteMap implements SiteMap {
      * A place where a unfortunate user can perform request to reset his password.
      */
     public static class PasswordResetRequest extends AppPlace implements PublicPlace {
+        {
+            setStable(false);
+        }
     }
 
     /**
      * Used while user is waiting for authentication required for password reset.
      */
     public static class LoginWithToken extends AppPlace implements PublicPlace {
+        {
+            setStable(false);
+        }
 
     }
 
