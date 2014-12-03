@@ -86,8 +86,10 @@ public class CComponentTheme extends Theme {
         Style style = new Style(".", StyleName.FieldEditorPanel, " .", WidgetsTheme.StyleName.Button);
         style.addProperty("background", "transparent");
         style.addProperty("border", "none");
-        style.addProperty("padding", "0");
+        style.addProperty("padding", "0 2px");
         style.addProperty("height", "19px");
+        style.addProperty("display", "inline-block");
+        style.addProperty("vertical-align", "middle");
         addStyle(style);
 
         style = new Style(".", StyleName.FieldViewerPanel, " .", WidgetsTheme.StyleName.Button);
