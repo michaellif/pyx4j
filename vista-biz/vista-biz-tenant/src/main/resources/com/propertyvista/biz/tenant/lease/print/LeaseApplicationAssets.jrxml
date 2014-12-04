@@ -9,7 +9,7 @@
 	<parameter name="backgroundImage" class="java.io.InputStream"/>
 	<parameter name="applicants" class="com.pyx4j.entity.core.IList"/>
 	<parameter name="landlordAgentsSignatures" class="java.util.List"/>
-	<field name="assetType" class="com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset.AssetType"/>
+	<field name="assetType" class="com.propertyvista.domain.tenant.income.CustomerScreeningAsset.AssetType"/>
 	<field name="ownership" class="java.math.BigDecimal"/>
 	<field name="assetValue" class="java.math.BigDecimal"/>
 	<title>
