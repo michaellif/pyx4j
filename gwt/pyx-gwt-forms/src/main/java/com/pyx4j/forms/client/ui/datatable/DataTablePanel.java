@@ -125,7 +125,9 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         add(topActionsBar);
 
         FilterPanel newFilterPanel = new FilterPanel<>();
-        add(newFilterPanel);
+        if (false) {
+            add(newFilterPanel);
+        }
 
         filterPanel = new DataTableFilterPanel<E>(this);
         add(filterPanel);
