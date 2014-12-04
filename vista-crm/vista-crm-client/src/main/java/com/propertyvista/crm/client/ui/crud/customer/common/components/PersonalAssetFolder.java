@@ -39,17 +39,17 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.domain.ProofOfAssetDocumentType;
-import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
-import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset.AssetType;
+import com.propertyvista.domain.tenant.income.CustomerScreeningAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningAsset.AssetType;
 
-public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersonalAsset> {
+public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningAsset> {
 
     private static final I18n i18n = I18n.get(PersonalAssetFolder.class);
 
     private ApplicationDocumentationPolicy documentationPolicy;
 
     public PersonalAssetFolder(boolean modifyable) {
-        super(CustomerScreeningPersonalAsset.class, modifyable);
+        super(CustomerScreeningAsset.class, modifyable);
     }
 
     public void setPolicyEntity(IEntity parentEntity) {
@@ -73,7 +73,7 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
     public void addValidations() {
         super.addValidations();
 
-        this.addComponentValidator(new AbstractComponentValidator<IList<CustomerScreeningPersonalAsset>>() {
+        this.addComponentValidator(new AbstractComponentValidator<IList<CustomerScreeningAsset>>() {
             @Override
             public AbstractValidationError isValid() {
                 if (getCComponent().getValue() != null) {
@@ -91,7 +91,7 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
         new SelectEnumDialog<AssetType>(i18n.tr("Select Asset Type"), EnumSet.allOf(AssetType.class)) {
             @Override
             public boolean onClickOk() {
-                CustomerScreeningPersonalAsset item = EntityFactory.create(CustomerScreeningPersonalAsset.class);
+                CustomerScreeningAsset item = EntityFactory.create(CustomerScreeningAsset.class);
                 item.assetType().setValue(getSelectedType());
                 addItem(item);
                 return true;
@@ -100,16 +100,16 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
     }
 
     @Override
-    protected CForm<CustomerScreeningPersonalAsset> createItemForm(IObject<?> member) {
+    protected CForm<CustomerScreeningAsset> createItemForm(IObject<?> member) {
         return new PersonalAssetEditor();
     }
 
-    private class PersonalAssetEditor extends CForm<CustomerScreeningPersonalAsset> {
+    private class PersonalAssetEditor extends CForm<CustomerScreeningAsset> {
 
         private final ProofOfAssetDocumentFileFolder fileUpload = new ProofOfAssetDocumentFileFolder();
 
         public PersonalAssetEditor() {
-            super(CustomerScreeningPersonalAsset.class);
+            super(CustomerScreeningAsset.class);
         }
 
         public void onSetDocumentationPolicy() {

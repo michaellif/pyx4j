@@ -23,7 +23,7 @@ import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentTyp
 import com.propertyvista.domain.policy.policies.domain.ProofOfAssetDocumentType;
 import com.propertyvista.domain.policy.policies.domain.ProofOfEmploymentDocumentType;
 import com.propertyvista.domain.policy.policies.domain.ProofOfIncomeDocumentType;
-import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset.AssetType;
+import com.propertyvista.domain.tenant.income.CustomerScreeningAsset.AssetType;
 import com.propertyvista.domain.tenant.income.IncomeSource;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 

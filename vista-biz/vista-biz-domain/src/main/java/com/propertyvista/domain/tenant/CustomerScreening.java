@@ -40,7 +40,7 @@ import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.tenant.CustomerScreening.CustomerScreeningV;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
-import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningAsset;
 
 @DiscriminatorValue("CustomerScreening")
 public interface CustomerScreening extends IVersionedEntity<CustomerScreeningV> {
@@ -91,7 +91,7 @@ public interface CustomerScreening extends IVersionedEntity<CustomerScreeningV> 
         @Owned
         @Detached
         @Length(3)
-        IList<CustomerScreeningPersonalAsset> assets();
+        IList<CustomerScreeningAsset> assets();
 
         @Owned
         @Detached

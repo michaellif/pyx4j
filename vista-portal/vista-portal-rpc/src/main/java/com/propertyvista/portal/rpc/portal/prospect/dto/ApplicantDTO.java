@@ -31,7 +31,7 @@ import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.CustomerScreeningLegalQuestions;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
-import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningAsset;
 import com.propertyvista.domain.tenant.lead.Lead.RefSource;
 
 @Transient
@@ -71,5 +71,5 @@ public interface ApplicantDTO extends IEntity {
     @Owned
     @Detached
     @Length(3)
-    IList<CustomerScreeningPersonalAsset> assets();
+    IList<CustomerScreeningAsset> assets();
 }

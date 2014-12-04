@@ -22,7 +22,7 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset.AssetType;
+import com.propertyvista.domain.tenant.income.CustomerScreeningAsset.AssetType;
 
 public interface ProofOfAssetDocumentType extends ApplicationDocumentType {
 

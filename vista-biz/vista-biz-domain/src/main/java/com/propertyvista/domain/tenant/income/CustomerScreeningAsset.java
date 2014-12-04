@@ -38,7 +38,7 @@ import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
 import com.propertyvista.domain.tenant.CustomerScreening;
 
 @Caption(name = "Personal Asset(s)")
-public interface CustomerScreeningPersonalAsset extends IEntity {
+public interface CustomerScreeningAsset extends IEntity {
 
     public enum AssetType {
 

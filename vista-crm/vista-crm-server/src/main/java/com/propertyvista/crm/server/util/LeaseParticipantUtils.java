@@ -33,7 +33,7 @@ import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
-import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningAsset;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
@@ -102,7 +102,7 @@ public class LeaseParticipantUtils {
             setVerification(item.files());
         }
 
-        for (CustomerScreeningPersonalAsset item : screening.version().assets()) {
+        for (CustomerScreeningAsset item : screening.version().assets()) {
             setVerification(item.files());
         }
 

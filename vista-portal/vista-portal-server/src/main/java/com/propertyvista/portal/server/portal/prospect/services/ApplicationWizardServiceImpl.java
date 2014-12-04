@@ -76,7 +76,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
-import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningAsset;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -318,7 +318,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         for (CustomerScreeningIncome i : to.applicantData().incomes()) {
             i.owner().setAttachLevel(AttachLevel.IdOnly);
         }
-        for (CustomerScreeningPersonalAsset i : to.applicantData().assets()) {
+        for (CustomerScreeningAsset i : to.applicantData().assets()) {
             i.owner().setAttachLevel(AttachLevel.IdOnly);
         }
     }

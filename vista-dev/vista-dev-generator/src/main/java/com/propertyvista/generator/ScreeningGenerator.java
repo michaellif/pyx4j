@@ -50,8 +50,8 @@ import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.CustomerScreeningLegalQuestions;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncomeInfo.AmountPeriod;
-import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
-import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset.AssetType;
+import com.propertyvista.domain.tenant.income.CustomerScreeningAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningAsset.AssetType;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeSource;
@@ -206,10 +206,10 @@ public class ScreeningGenerator {
         return selfEmpl;
     }
 
-    private Collection<CustomerScreeningPersonalAsset> createAssets(int minAssets) {
-        List<CustomerScreeningPersonalAsset> assets = new ArrayList<CustomerScreeningPersonalAsset>();
+    private Collection<CustomerScreeningAsset> createAssets(int minAssets) {
+        List<CustomerScreeningAsset> assets = new ArrayList<CustomerScreeningAsset>();
         for (int i = 0; i < 1 + minAssets + RandomUtil.randomInt(3); i++) {
-            CustomerScreeningPersonalAsset asset = EntityFactory.create(CustomerScreeningPersonalAsset.class);
+            CustomerScreeningAsset asset = EntityFactory.create(CustomerScreeningAsset.class);
 
             asset.assetType().setValue(RandomUtil.random(AssetType.values()));
             asset.ownership().setValue(new BigDecimal(RandomUtil.randomDouble(1.d, 3)));
@@ -308,7 +308,7 @@ public class ScreeningGenerator {
         for (CustomerScreeningIncome income : screening.version().incomes()) {
             attachDocumentData(income);
         }
-        for (CustomerScreeningPersonalAsset asset : screening.version().assets()) {
+        for (CustomerScreeningAsset asset : screening.version().assets()) {
             attachDocumentData(asset);
         }
     }
@@ -363,7 +363,7 @@ public class ScreeningGenerator {
         }
     }
 
-    private static void attachDocumentData(CustomerScreeningPersonalAsset document) {
+    private static void attachDocumentData(CustomerScreeningAsset document) {
         for (ProofOfAssetDocumentFile applicationDocument : document.files()) {
             String fileName = applicationDocument.file().fileName().getValue();
             ProofOfAssetDocumentBlob applicationDocumentData;

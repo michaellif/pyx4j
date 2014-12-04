@@ -60,7 +60,7 @@ import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
-import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningAsset;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -317,7 +317,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
                 FileUploadRegistry.register(applicationDocument.file());
             }
         }
-        for (CustomerScreeningPersonalAsset asset : screening.version().assets()) {
+        for (CustomerScreeningAsset asset : screening.version().assets()) {
             for (ProofOfAssetDocumentFile applicationDocument : asset.files()) {
                 FileUploadRegistry.register(applicationDocument.file());
             }

@@ -29,7 +29,7 @@ import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
-import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningAsset;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.prospect.ui.application.components.PersonalAssetFolder;
@@ -97,9 +97,9 @@ public class FinancialStep extends ApplicationWizardStep {
             }
         });
         get(proto().applicantData().assets()).addValueChangeHandler(
-                new RevalidationTrigger<List<CustomerScreeningPersonalAsset>>(get(proto().applicantData().incomes())));
+                new RevalidationTrigger<List<CustomerScreeningAsset>>(get(proto().applicantData().incomes())));
 
-        get(proto().applicantData().assets()).addComponentValidator(new AbstractComponentValidator<List<CustomerScreeningPersonalAsset>>() {
+        get(proto().applicantData().assets()).addComponentValidator(new AbstractComponentValidator<List<CustomerScreeningAsset>>() {
             @Override
             public BasicValidationError isValid() {
                 if (getCComponent().getValue() != null) {

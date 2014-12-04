@@ -18,14 +18,14 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
-import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningAsset;
 
 @Transient
 public interface LeaseApplicationDocumentDataFinancialSectionDTO extends IEntity {
 
     IList<CustomerScreeningIncome> incomeSources();
 
-    IList<CustomerScreeningPersonalAsset> assets();
+    IList<CustomerScreeningAsset> assets();
 
     IList<LeaseApplicationDocumentDataGuarantorDTO> guarantors();
 }

@@ -21,7 +21,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
 
 import com.propertyvista.domain.blob.ProofOfAssetDocumentBlob;
-import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningAsset;
 
 public interface ProofOfAssetDocumentFile extends ApplicationDocumentFile<ProofOfAssetDocumentBlob> {
 
@@ -31,5 +31,5 @@ public interface ProofOfAssetDocumentFile extends ApplicationDocumentFile<ProofO
     @ReadOnly
     @NotNull
     @MemberColumn(notNull = true)
-    CustomerScreeningPersonalAsset owner();
+    CustomerScreeningAsset owner();
 }

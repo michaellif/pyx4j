@@ -35,11 +35,11 @@ import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.domain.ProofOfAssetDocumentType;
-import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
-import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset.AssetType;
+import com.propertyvista.domain.tenant.income.CustomerScreeningAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningAsset.AssetType;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
-public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPersonalAsset> {
+public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningAsset> {
 
     private static final I18n i18n = I18n.get(PersonalAssetFolder.class);
 
@@ -50,7 +50,7 @@ public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPerson
     }
 
     public PersonalAssetFolder(boolean editable) {
-        super(CustomerScreeningPersonalAsset.class, i18n.tr("Personal Asset"), editable);
+        super(CustomerScreeningAsset.class, i18n.tr("Personal Asset"), editable);
 
         if (editable) {
             setNoDataLabel(i18n.tr("Please enter your asset(s) if present"));
@@ -69,7 +69,7 @@ public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPerson
     public void addValidations() {
         super.addValidations();
 
-        this.addComponentValidator(new AbstractComponentValidator<IList<CustomerScreeningPersonalAsset>>() {
+        this.addComponentValidator(new AbstractComponentValidator<IList<CustomerScreeningAsset>>() {
             @Override
             public AbstractValidationError isValid() {
                 if (getCComponent().getValue() != null) {
@@ -87,7 +87,7 @@ public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPerson
         new SelectEnumDialog<AssetType>(i18n.tr("Select Asset Type"), EnumSet.allOf(AssetType.class)) {
             @Override
             public boolean onClickOk() {
-                CustomerScreeningPersonalAsset item = EntityFactory.create(CustomerScreeningPersonalAsset.class);
+                CustomerScreeningAsset item = EntityFactory.create(CustomerScreeningAsset.class);
                 item.assetType().setValue(getSelectedType());
                 addItem(item);
                 return true;
@@ -96,16 +96,16 @@ public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPerson
     }
 
     @Override
-    protected CForm<CustomerScreeningPersonalAsset> createItemForm(IObject<?> member) {
+    protected CForm<CustomerScreeningAsset> createItemForm(IObject<?> member) {
         return new PersonalAssetEditor();
     }
 
-    private class PersonalAssetEditor extends CForm<CustomerScreeningPersonalAsset> {
+    private class PersonalAssetEditor extends CForm<CustomerScreeningAsset> {
 
         private final ProofOfAssetDocumentFileFolder fileUpload = new ProofOfAssetDocumentFileFolder();
 
         public PersonalAssetEditor() {
-            super(CustomerScreeningPersonalAsset.class);
+            super(CustomerScreeningAsset.class);
         }
 
         public void onSetDocumentationPolicy() {
