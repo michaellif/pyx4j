@@ -40,6 +40,8 @@ public class WidgetsTheme extends Theme {
 
         Button, ButtonText,
 
+        ImageButton, ImageButtonText,
+
         Label,
 
         CheckBox,
@@ -87,6 +89,7 @@ public class WidgetsTheme extends Theme {
         initListBoxStyle();
         initLabelStyle();
         initButtonStyle();
+        initImageButtonStyle();
         initCheckBoxStyle();
         initToolbarStyle();
         initAnchorStyle();
@@ -263,6 +266,39 @@ public class WidgetsTheme extends Theme {
         style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.1);
         style.addProperty("cursor", "default");
         style.addProperty("opacity", "0.4");
+        addStyle(style);
+
+    }
+
+    protected void initImageButtonStyle() {
+        Style style = new Style(".", StyleName.ImageButton);
+        style.addProperty("padding", "6px 3px");
+        style.addProperty("display", "inline-block");
+        style.addProperty("cursor", "pointer");
+        style.addProperty("-webkit-touch-callout", "none");
+        style.addProperty("-webkit-user-select", "none");
+        style.addProperty("-khtml-user-select", "none");
+        style.addProperty("-moz-user-select", "none");
+        style.addProperty("-ms-user-select", "none");
+        style.addProperty("user-select", "none");
+
+        addStyle(style);
+
+        style = new Style(".", StyleName.ImageButtonText);
+        style.addProperty("display", "inline");
+        style.addProperty("whiteSpace", "nowrap");
+        style.addProperty("text-indent", "0");
+        style.addProperty("height", "100%");
+        style.addProperty("text-align", "center");
+        style.addProperty("padding", "0 3px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.ImageButton, "-", WidgetsTheme.StyleDependent.hover);
+        style.addProperty("color", ThemeColor.foreground, 1.2);
+        addStyle(style);
+
+        style = new Style(".", StyleName.ImageButton, "-", WidgetsTheme.StyleDependent.disabled);
+        style.addProperty("cursor", "default");
         addStyle(style);
 
     }

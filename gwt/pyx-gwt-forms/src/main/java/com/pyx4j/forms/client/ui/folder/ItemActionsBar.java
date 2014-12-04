@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.widgets.client.IconButton;
+import com.pyx4j.widgets.client.ImageButton;
 import com.pyx4j.widgets.client.images.ButtonImages;
 
 public class ItemActionsBar extends HorizontalPanel {
@@ -49,7 +49,7 @@ public class ItemActionsBar extends HorizontalPanel {
         }
     }
 
-    private final Map<ActionType, IconButton> actions = new HashMap<ActionType, IconButton>();
+    private final Map<ActionType, ImageButton> actions = new HashMap<ActionType, ImageButton>();
 
     boolean boxDecorator = false;
 
@@ -72,14 +72,15 @@ public class ItemActionsBar extends HorizontalPanel {
     }
 
     private void placeAction(ActionType action) {
-        IconButton button = actions.get(action);
+        ImageButton button = actions.get(action);
         if (button != null) {
             add(button);
         }
     }
 
-    public void addAction(ActionType action, String title, ButtonImages images, Command command) {
-        IconButton button = new IconButton(title, images, command);
+    public void addAction(ActionType action, String tooltip, ButtonImages images, Command command) {
+        ImageButton button = new ImageButton(images, command);
+        button.setTooltip(tooltip);
         actions.put(action, button);
     }
 
@@ -136,7 +137,7 @@ public class ItemActionsBar extends HorizontalPanel {
     protected void onEnsureDebugId(String baseID) {
         super.onEnsureDebugId(baseID);
         for (ActionType type : ActionType.values()) {
-            IconButton button = actions.get(type);
+            ImageButton button = actions.get(type);
             if (button != null) {
                 button.ensureDebugId(new CompositeDebugId(baseID, type).debugId());
             }

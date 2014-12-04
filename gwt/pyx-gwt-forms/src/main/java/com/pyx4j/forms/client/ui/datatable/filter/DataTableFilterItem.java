@@ -35,7 +35,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.Key;
@@ -58,7 +57,7 @@ import com.pyx4j.forms.client.ui.datatable.DataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.widgets.client.IconButton;
+import com.pyx4j.widgets.client.ImageButton;
 
 public class DataTableFilterItem<E extends IEntity> extends FlowPanel {
 
@@ -185,13 +184,14 @@ public class DataTableFilterItem<E extends IEntity> extends FlowPanel {
         valueHolder.asWidget().getElement().getStyle().setProperty("paddingRight", "10px");
         valueHolder.setWidth("30%");
 
-        Image removeButton = new IconButton(i18n.tr("Remove Filter"), FolderImages.INSTANCE.delButton(), new Command() {
+        ImageButton removeButton = new ImageButton(FolderImages.INSTANCE.delButton(), new Command() {
 
             @Override
             public void execute() {
                 parent.removeFilter(DataTableFilterItem.this);
             }
         });
+        removeButton.setTooltip(i18n.tr("Remove Filter"));
         removeButton.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         Collection<FieldData> fds = new ArrayList<FieldData>();

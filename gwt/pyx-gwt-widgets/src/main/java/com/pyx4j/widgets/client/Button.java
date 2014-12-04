@@ -23,417 +23,117 @@ package com.pyx4j.widgets.client;
 import java.util.List;
 
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.DomEvent;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.dom.client.MouseUpEvent;
-import com.google.gwt.event.dom.client.MouseUpHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
-import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.commons.IDebugId;
 import com.pyx4j.security.annotations.ActionId;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.Permission;
-import com.pyx4j.widgets.client.images.ButtonImages;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
-public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern {
-
-    private final HTML textLabel;
-
-    private final SimplePanel imageHolder;
-
-    private final ButtonFacesHandler buttonFacesHandler;
-
-    private Command command;
+public class Button extends ButtonBase {
 
     private ButtonMenuBar menu;
 
-    private ImageResource singleImage;
-
-    private ButtonImages imageBundle;
-
-    private boolean active = false;
-
-    private final SecureConcern visible = new SecureConcern();
+    private ImageResource imageResource;
 
     public Button(ImageResource imageResource) {
         this(imageResource, (String) null);
     }
 
-    public Button(String text) {
-        this((ImageResource) null, text);
+    public Button(ImageResource imageResource, final String text) {
+        this(imageResource, text, null, null);
     }
 
-    public Button(String text, Permission... permission) {
-        this((ImageResource) null, text);
-        this.setPermission(permission);
-    }
-
-    public Button(String text, Class<? extends ActionId> actionId) {
-        this(text, new ActionPermission(actionId));
+    public Button(ImageResource imageResource, final String text, Command command) {
+        this(imageResource, text, command, null);
     }
 
     public Button(ImageResource imageResource, Command command) {
-        this(imageResource);
-        this.command = command;
+        this(imageResource, command, null);
     }
 
     public Button(ImageResource imageResource, Command command, Class<? extends ActionId> actionId) {
-        this(imageResource);
-        this.command = command;
-        this.setPermission(new ActionPermission(actionId));
+        this(imageResource, (String) null, command, actionId);
+    }
+
+    public Button(ImageResource imageResource, String text, Command command, Class<? extends ActionId> actionId) {
+        this(text, command, actionId);
+        setImage(imageResource);
+    }
+
+    public Button(String text) {
+        this(text, (Permission[]) null);
+    }
+
+    public Button(String text, Permission... permission) {
+        this(text, null, permission);
     }
 
     public Button(String text, Command command) {
-        this((ImageResource) null, text);
-        this.command = command;
-    }
-
-    public Button(String text, Command command, Permission... permission) {
-        this(text, command);
-        this.setPermission(permission);
+        this(text, command, (Permission[]) null);
     }
 
     public Button(String text, Command command, Class<? extends ActionId> actionId) {
-        this(text, command, new ActionPermission(actionId));
+        this(text, command, actionId == null ? null : new ActionPermission(actionId));
     }
 
-    public Button(ImageResource imageResource, String text, Command command) {
-        this(imageResource, text);
-        this.command = command;
-    }
-
-    public Button(ImageResource imageResource, final String text) {
-        this(new ButtonFacesHandler(), imageResource, text);
-    }
-
-    protected Button(ButtonFacesHandler facesHandler, ImageResource imageResource, String text) {
-
+    public Button(String text, Command command, Permission... permission) {
+        super(null, text, command, permission);
         setStylePrimaryName(getElement(), WidgetsTheme.StyleName.Button.name());
-
-        buttonFacesHandler = facesHandler;
-
-        facesHandler.init(this);
-
-        textLabel = new HTML();
-        setTextLabel(text);
-
-        textLabel.setStyleName(WidgetsTheme.StyleName.ButtonText.name());
-
-        imageHolder = new SimplePanel();
-        imageHolder.getElement().getStyle().setProperty("height", "100%");
-
-        imageHolder.setWidget(textLabel);
-
-        setWidget(imageHolder);
-
-        setImage(imageResource);
-
-        super.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                if (menu != null) {
-                    if (menu.getMenuPopup().isShowing()) {
-                        menu.getMenuPopup().hide();
-                    } else if (isEnabled()) {
-                        menu.getMenuPopup().showRelativeTo(Button.this);
-                        menu.getElement().getStyle().setProperty("minWidth", getOffsetWidth() + "px");
-                    }
-                } else {
-                    if (isEnabled() && (command != null)) {
-                        active = !active;
-                        command.execute();
-                        if (isActive()) {
-                            addStyleDependentName(WidgetsTheme.StyleDependent.active.name());
-                        } else {
-                            removeStyleDependentName(WidgetsTheme.StyleDependent.active.name());
-
-                        }
-                    }
-                }
-            }
-        });
+        getTextLabel().setStyleName(WidgetsTheme.StyleName.ButtonText.name());
     }
 
-    public void setCommand(Command command) {
-        this.command = command;
-    }
-
-    /**
-     * @deprecated Use setCommand(new Command(){})
-     */
     @Override
-    @Deprecated
-    public HandlerRegistration addClickHandler(final ClickHandler handler) {
-        ClickHandler wrapper = new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                if (isEnabled()) {
-                    handler.onClick(event);
-                }
+    protected void execute() {
+        if (menu != null) {
+            if (menu.getMenuPopup().isShowing()) {
+                menu.getMenuPopup().hide();
+            } else if (isEnabled()) {
+                menu.getMenuPopup().showRelativeTo(Button.this);
+                menu.getElement().getStyle().setProperty("minWidth", getOffsetWidth() + "px");
             }
-        };
-        return super.addClickHandler(wrapper);
+        } else {
+            super.execute();
+        }
+    }
+
+    public void setImage(ImageResource imageResource) {
+        this.imageResource = imageResource;
+        updateImageState();
+    }
+
+    @Override
+    protected void updateImageState() {
+        if (imageResource != null) {
+            getImageHolder().getElement().getStyle().setProperty("paddingLeft", imageResource.getWidth() + "px");
+            getImageHolder().getElement().getStyle()
+                    .setProperty("background", "url('" + imageResource.getSafeUri().asString() + "') no-repeat scroll left center");
+        } else {
+            super.updateImageState();
+        }
+    }
+
+    public void setMenu(ButtonMenuBar menu) {
+        this.menu = menu;
+        if (menu == null) {
+            getTextLabel().getElement().getStyle().setProperty("paddingRight", "0");
+            getTextLabel().getElement().getStyle().setProperty("background", "none");
+        } else {
+            Image menuIndicator = new Image(ImageFactory.getImages().viewMenu());
+            getTextLabel().getElement().getStyle().setProperty("paddingRight", (menuIndicator.getWidth() + 5) + "px");
+            getTextLabel().getElement().getStyle().setProperty("background", "url('" + menuIndicator.getUrl() + "') no-repeat scroll right center");
+        }
     }
 
     @Deprecated
     public ButtonMenuBar createMenu() {
         ButtonMenuBar menu = new ButtonMenuBar();
         return menu;
-    }
-
-    public void setMenu(ButtonMenuBar menu) {
-        this.menu = menu;
-        if (menu == null) {
-            textLabel.getElement().getStyle().setProperty("paddingRight", "0");
-            textLabel.getElement().getStyle().setProperty("background", "none");
-        } else {
-            Image menuIndicator = new Image(ImageFactory.getImages().viewMenu());
-            textLabel.getElement().getStyle().setProperty("paddingRight", (menuIndicator.getWidth() + 5) + "px");
-            textLabel.getElement().getStyle().setProperty("background", "url('" + menuIndicator.getUrl() + "') no-repeat scroll right center");
-        }
-    }
-
-    public void setTextLabel(String label) {
-        textLabel.setHTML(label);
-        textLabel.setVisible(label != null);
-    }
-
-    protected HTML getTextLabelComponent() {
-        return textLabel;
-    }
-
-    public void setCaption(String text) {
-        textLabel.setText(text);
-    }
-
-    public void setTooltip(String text) {
-        setTitle(text);
-    }
-
-    public void setImage(ImageResource imageResource) {
-        this.singleImage = imageResource;
-        if (singleImage != null) {
-            this.imageBundle = null;
-        }
-        updateImageState();
-    }
-
-    public void setImageBundle(ButtonImages imageBundle) {
-        this.imageBundle = imageBundle;
-        if (imageBundle != null) {
-            this.singleImage = null;
-        }
-        updateImageState();
-    }
-
-    private void updateImageState() {
-        if (singleImage != null) {
-            imageHolder.getElement().getStyle().setProperty("paddingLeft", singleImage.getWidth() + "px");
-            imageHolder.getElement().getStyle().setProperty("background", "url('" + singleImage.getSafeUri().asString() + "') no-repeat scroll left center");
-        } else if (imageBundle != null) {
-            imageHolder.getElement().getStyle()
-                    .setProperty("background", "url('" + imageBundle.regular().getSafeUri().asString() + "') no-repeat scroll left center");
-        } else {
-            imageHolder.getElement().getStyle().setProperty("paddingLeft", "0px");
-            imageHolder.getElement().getStyle().setProperty("background", "none");
-        }
-    }
-
-    public void setPermission(Permission... permission) {
-        visible.setPermission(permission);
-        setVisibleImpl();
-    }
-
-    private void setVisibleImpl() {
-        super.setVisible(this.visible.getDecision());
-    }
-
-    @Override
-    public void setVisible(boolean visible) {
-        this.visible.setDecision(visible);
-        if (this.visible.hasDecision()) {
-            setVisibleImpl();
-        }
-    }
-
-    @Override
-    public void setSecurityContext(AccessControlContext context) {
-        visible.setContext(context);
-        setVisibleImpl();
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void toggleActive() {
-        this.fireEvent(new ClickEvent() {
-        });
-        buttonFacesHandler.setActive(isActive());
-    }
-
-    public void click() {
-        DomEvent.fireNativeEvent(Document.get().createClickEvent(0, 0, 0, 0, 0, false, false, false, false), this);
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return !getElement().getPropertyBoolean("disabled");
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        getElement().setPropertyBoolean("disabled", !enabled);
-        buttonFacesHandler.setEnabled(enabled);
-    }
-
-    @Override
-    public void setDebugId(IDebugId debugId) {
-        ensureDebugId(debugId.debugId());
-    }
-
-    @Override
-    protected void onEnsureDebugId(String baseID) {
-        if (textLabel != null) {
-            textLabel.ensureDebugId(baseID);
-        }
-    }
-
-    @Override
-    protected void onUnload() {
-        buttonFacesHandler.onUnload();
-    }
-
-    @Override
-    public void setEditable(boolean editable) {
-    }
-
-    @Override
-    public boolean isEditable() {
-        return false;
-    }
-
-    static class ButtonFacesHandler implements MouseOverHandler, MouseOutHandler, MouseDownHandler, MouseUpHandler, ClickHandler {
-
-        private Button button;
-
-        private boolean mouseOver = false;
-
-        public ButtonFacesHandler() {
-        }
-
-        void init(Button button) {
-            this.button = button;
-            button.addMouseOverHandler(this);
-            button.addMouseOutHandler(this);
-            button.addMouseDownHandler(this);
-            button.addMouseUpHandler(this);
-            button.addClickHandler(this);
-
-        }
-
-        public void setEnabled(boolean enabled) {
-            if (button == null) {
-                return;
-            }
-            if (enabled) {
-                button.removeStyleDependentName(WidgetsTheme.StyleDependent.disabled.name());
-                if (mouseOver) {
-                    onMouseOver(null);
-                }
-            } else {
-                button.addStyleDependentName(WidgetsTheme.StyleDependent.disabled.name());
-                button.removeStyleDependentName(WidgetsTheme.StyleDependent.active.name());
-                button.removeStyleDependentName(WidgetsTheme.StyleDependent.hover.name());
-                // IE8: fix for Buttons remain in Mouse Over position after they are clicked in filter
-                mouseOver = false;
-            }
-        }
-
-        public void setActive(boolean active) {
-            if (button == null) {
-                return;
-            }
-            if (button.isEnabled() && active) {
-                button.addStyleDependentName(WidgetsTheme.StyleDependent.active.name());
-            } else {
-                button.removeStyleDependentName(WidgetsTheme.StyleDependent.active.name());
-            }
-        }
-
-        @Override
-        public void onMouseOver(MouseOverEvent event) {
-            mouseOver = true;
-            if (button.isEnabled()) {
-                button.addStyleDependentName(WidgetsTheme.StyleDependent.hover.name());
-            }
-        }
-
-        @Override
-        public void onMouseOut(MouseOutEvent event) {
-            mouseOver = false;
-            if (button.isEnabled()) {
-                button.removeStyleDependentName(WidgetsTheme.StyleDependent.hover.name());
-            }
-        }
-
-        public void onUnload() {
-            // fix for Buttons remain in Mouse Over position after they are clicked.
-            mouseOver = false;
-        }
-
-        @Override
-        public void onMouseDown(MouseDownEvent event) {
-            if (button.isEnabled()) {
-                if (!button.isActive()) {
-                    button.removeStyleDependentName(WidgetsTheme.StyleDependent.hover.name());
-                    button.addStyleDependentName(WidgetsTheme.StyleDependent.active.name());
-                }
-            }
-        }
-
-        @Override
-        public void onMouseUp(MouseUpEvent event) {
-            if (button.isEnabled()) {
-                if (button.isActive()) {
-                    button.addStyleDependentName(WidgetsTheme.StyleDependent.active.name());
-                } else {
-                    button.removeStyleDependentName(WidgetsTheme.StyleDependent.active.name());
-                    button.addStyleDependentName(WidgetsTheme.StyleDependent.hover.name());
-                }
-            }
-        }
-
-        @Override
-        public void onClick(ClickEvent event) {
-            // fix for Buttons remain in Mouse Over position after they are clicked.
-
-            button.removeStyleDependentName(WidgetsTheme.StyleDependent.hover.name());
-
-        }
-
-        public Button getButton() {
-            return button;
-        }
-
     }
 
     public static class ButtonMenuBar extends MenuBar implements HasSecureConcern {
@@ -541,5 +241,4 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
         }
 
     }
-
 }

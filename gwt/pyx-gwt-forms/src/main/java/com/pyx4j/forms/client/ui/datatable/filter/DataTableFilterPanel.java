@@ -33,8 +33,6 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -47,7 +45,7 @@ import com.pyx4j.forms.client.ui.datatable.DataTableTheme;
 import com.pyx4j.gwt.commons.FocusUtil;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.IconButton;
+import com.pyx4j.widgets.client.ImageButton;
 
 public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
 
@@ -150,7 +148,7 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
 
     private Widget createAddButton() {
 
-        IconButton btnAdd = new IconButton(i18n.tr("Add filter..."), FolderImages.INSTANCE.addButton(), new Command() {
+        ImageButton btnAdd = new ImageButton(FolderImages.INSTANCE.addButton(), i18n.tr("Add filter..."), new Command() {
             @Override
             public void execute() {
                 grid.addFilter(new DataTableFilterItem<E>(grid));
@@ -158,18 +156,7 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
             }
         });
 
-        HTML lblAdd = new HTML(i18n.tr("Add filter..."));
-
-        HorizontalPanel panel = new HorizontalPanel();
-        panel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-
-        panel.add(btnAdd);
-        btnAdd.getElement().getStyle().setMarginTop(0.3, Unit.EM);
-
-        panel.add(lblAdd);
-        lblAdd.getElement().getStyle().setMarginLeft(0.5, Unit.EM);
-
-        return panel;
+        return btnAdd;
     }
 
     public void setFilterApplyCommand(Command filterActionCommand) {
