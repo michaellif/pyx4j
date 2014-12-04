@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -25,7 +25,11 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.ConnectionTarget;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
@@ -142,14 +146,22 @@ public class OperationsTriggerFacadeImpl implements OperationsTriggerFacade {
     }
 
     @Override
-    public void stopRun(Run runId) {
+    public void stopRun(final Run runId) {
         if (PmcProcessMonitor.isRunning(runId)) {
             PmcProcessMonitor.requestExecutionTermination(runId);
         } else {
-            Run run = Persistence.service().retrieve(Run.class, runId.getPrimaryKey());
-            run.status().setValue(RunStatus.Terminated);
-            Persistence.service().persist(run);
-            Persistence.service().commit();
+            new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(new Executable<Void, RuntimeException>() {
+
+                @Override
+                public Void execute() {
+                    Run run = Persistence.service().retrieve(Run.class, runId.getPrimaryKey());
+                    run.status().setValue(RunStatus.Terminated);
+                    Persistence.service().persist(run);
+                    return null;
+                }
+
+            });
+
         }
     }
 
