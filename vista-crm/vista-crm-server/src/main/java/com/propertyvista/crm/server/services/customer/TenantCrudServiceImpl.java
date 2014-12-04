@@ -65,7 +65,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
     protected void enhanceRetrieved(Tenant bo, TenantDTO to, RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(bo, to, retrieveTarget);
 
-        to.role().setValue(retrieveTenant(to.leaseTermV(), bo).role().getValue());
+        to.role().setValue(retrieveTenantRole(to.leaseTermV(), bo));
 
         Persistence.service().retrieve(to.customer().emergencyContacts());
         Persistence.service().retrieve(to.lease().unit().building());
@@ -104,14 +104,9 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
     @Override
     protected void enhanceListRetrieved(Tenant entity, TenantDTO dto) {
         super.enhanceListRetrieved(entity, dto);
-        Persistence.service().retrieve(dto.lease().unit().building());
 
-        LeaseTermTenant ltt = retrieveTenant(dto.leaseTermV(), entity);
-        if (ltt != null) {
-            dto.role().setValue(ltt.role().getValue());
-        } else {
-            log.debug("Can't find Tenant {} in leaseTem {} !?!", entity, dto.leaseTermV());
-        }
+        Persistence.service().retrieve(dto.lease().unit().building());
+        dto.role().setValue(retrieveTenantRole(dto.leaseTermV(), entity));
     }
 
     @Override
@@ -126,9 +121,20 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
 
     private LeaseTermTenant retrieveTenant(LeaseTerm.LeaseTermV termV, Tenant leaseCustomer) {
         EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
+
         criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), leaseCustomer));
         criteria.add(PropertyCriterion.eq(criteria.proto().leaseTermV(), termV));
+
         return Persistence.service().retrieve(criteria);
+    }
+
+    private Role retrieveTenantRole(LeaseTerm.LeaseTermV termV, Tenant tenant) {
+        LeaseTermTenant ltt = retrieveTenant(termV, tenant);
+        if (ltt == null) {
+            log.debug("Can't find Tenant {} in leaseTem {} !?!", tenant, termV);
+            return null;
+        }
+        return ltt.role().getValue();
     }
 
     @Override
