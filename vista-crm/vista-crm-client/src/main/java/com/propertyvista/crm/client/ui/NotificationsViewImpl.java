@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.shared.domain.Notification;
-import com.pyx4j.widgets.client.IconButton;
+import com.pyx4j.widgets.client.ImageButton;
 
 import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.crm.client.resources.CrmImages;
@@ -69,13 +69,14 @@ public class NotificationsViewImpl extends FlowPanel implements NotificationsVie
                 message.add(title);
                 message.add(body);
 
-                IconButton closeButton = new IconButton(i18n.tr("Close"), CrmImages.INSTANCE.delButton(), new Command() {
+                ImageButton closeButton = new ImageButton(CrmImages.INSTANCE.delButton(), new Command() {
 
                     @Override
                     public void execute() {
                         presenter.acceptMessage(notification);
                     }
                 });
+                closeButton.setTooltip(i18n.tr("Close"));
                 message.add(closeButton);
                 closeButton.setStyleName(SiteViewTheme.StyleName.SiteViewNotificationItemCloseButton.name());
 

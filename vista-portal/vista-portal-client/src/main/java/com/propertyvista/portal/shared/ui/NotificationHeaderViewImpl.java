@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.shared.domain.Notification;
-import com.pyx4j.widgets.client.IconButton;
+import com.pyx4j.widgets.client.ImageButton;
 
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
@@ -63,13 +63,14 @@ public class NotificationHeaderViewImpl extends FlowPanel implements Notificatio
                 message.add(title);
                 message.add(body);
 
-                IconButton closeButton = new IconButton(i18n.tr("Close"), PortalImages.INSTANCE.delButton(), new Command() {
+                ImageButton closeButton = new ImageButton(PortalImages.INSTANCE.delButton(), new Command() {
 
                     @Override
                     public void execute() {
                         presenter.acceptMessage(notification);
                     }
                 });
+                closeButton.setTooltip(i18n.tr("Close"));
                 message.add(closeButton);
                 closeButton.setStyleName(PortalRootPaneTheme.StyleName.NotificationItemCloseButton.name());
 
