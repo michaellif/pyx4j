@@ -212,6 +212,9 @@ public interface CrmImages extends VistaImages {
     @Source("Notice_warning.png")
     ImageResource noticeWarning();
 
+    @Source("alert_15.png")
+    ImageResource messageImportant();
+
     @Source("WriteMessage.png")
     ImageResource writeMessage();
 

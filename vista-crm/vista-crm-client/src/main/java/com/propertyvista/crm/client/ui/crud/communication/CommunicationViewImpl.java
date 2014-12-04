@@ -182,7 +182,14 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
             dateField = new Label(message.date().getStringView());
             senderField = new Label(message.senderDTO().getStringView());
 
-            setWidget(0, 0, photoImage);
+            if (message.highImportance().getValue(false)) {
+                FlexTable fp = new FlexTable();
+                fp.setWidget(0, 0, photoImage);
+                fp.setWidget(0, 1, new Image(CrmImages.INSTANCE.messageImportant()));
+                setWidget(0, 0, fp);
+            } else {
+                setWidget(0, 0, photoImage);
+            }
             getFlexCellFormatter().setRowSpan(0, 0, 2);
             getFlexCellFormatter().setWidth(0, 0, "1px");
 
@@ -197,6 +204,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
             getFlexCellFormatter().setColSpan(2, 0, 3);
 
         }
+
     }
 
     class HeaderHolder extends FlowPanel {

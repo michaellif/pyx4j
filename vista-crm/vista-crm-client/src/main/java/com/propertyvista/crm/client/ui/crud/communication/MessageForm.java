@@ -345,7 +345,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
             });
 
-            highImportnaceImage = new Image(CrmImages.INSTANCE.noticeWarning());
+            highImportnaceImage = new Image(CrmImages.INSTANCE.messageImportant());
 
             statusToolBar.addItem(highImportnaceImage);
             statusToolBar.addItem(starImage);

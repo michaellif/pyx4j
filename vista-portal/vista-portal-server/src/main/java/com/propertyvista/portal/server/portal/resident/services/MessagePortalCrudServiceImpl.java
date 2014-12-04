@@ -206,8 +206,8 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
                 if (!currentDTO.isRead().getValue(false)) {
                     isRead = false;
                 }
-                if (!currentDTO.highImportance().getValue(false)) {
-                    isHighImportance = false;
+                if (currentDTO.highImportance().getValue(false)) {
+                    isHighImportance = true;
                 }
                 if (to.id().equals(currentDTO.id())) {
                     copyChildDTO(bo.thread(), m, to, facade);

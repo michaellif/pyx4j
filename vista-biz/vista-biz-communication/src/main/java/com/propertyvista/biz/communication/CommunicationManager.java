@@ -371,8 +371,8 @@ public class CommunicationManager {
                 if (!currentDTO.isRead().getValue(false)) {
                     isRead = false;
                 }
-                if (!currentDTO.highImportance().getValue(false)) {
-                    isHighImportance = false;
+                if (currentDTO.highImportance().getValue(false)) {
+                    isHighImportance = true;
                 }
                 if (to.id().equals(currentDTO.id())) {
                     lastMessage = m;
