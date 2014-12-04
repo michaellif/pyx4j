@@ -236,6 +236,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
                     parent.hidePickerPopup();
                     command.execute();
                 }
+
             }) {
 
                 @Override

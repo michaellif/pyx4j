@@ -79,7 +79,7 @@ public class Button extends ButtonBase {
     }
 
     public Button(String text, Command command, Class<? extends ActionId> actionId) {
-        this(text, command, actionId == null ? null : new ActionPermission(actionId));
+        this(text, command, actionId == null ? null : new Permission[] { new ActionPermission(actionId) });
     }
 
     public Button(String text, Command command, Permission... permission) {

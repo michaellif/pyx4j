@@ -152,7 +152,7 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
         getImageHolder().getElement().getStyle().setProperty("background", "none");
     }
 
-    private void setVisibleImpl() {
+    protected void setVisibleImpl() {
         super.setVisible(this.visible.getDecision());
     }
 

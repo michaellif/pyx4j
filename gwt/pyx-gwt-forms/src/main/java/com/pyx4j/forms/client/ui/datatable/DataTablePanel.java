@@ -54,6 +54,7 @@ import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.filter.CriteriaEditableComponentFactory;
 import com.pyx4j.forms.client.ui.datatable.filter.DataTableFilterItem;
 import com.pyx4j.forms.client.ui.datatable.filter.DataTableFilterPanel;
+import com.pyx4j.forms.client.ui.filter.FilterPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
@@ -122,6 +123,9 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
         topActionsBar = new DataTableActionsBar(this);
         add(topActionsBar);
+
+        FilterPanel newFilterPanel = new FilterPanel<>();
+        add(newFilterPanel);
 
         filterPanel = new DataTableFilterPanel<E>(this);
         add(filterPanel);

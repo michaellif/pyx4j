@@ -22,7 +22,6 @@ package com.pyx4j.forms.client.ui.filter;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.images.FolderImages;
@@ -42,8 +41,7 @@ public class FilterPanel<E extends IEntity> extends FlowPanel {
             }
         });
 
-        HTML lblAdd = new HTML(i18n.tr("Add filter..."));
-
+        add(addButton);
     }
 
 }
