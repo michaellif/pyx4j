@@ -33,6 +33,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
@@ -75,8 +76,8 @@ import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.EmergencyContact;
-import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.CustomerScreeningAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -192,10 +193,11 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     @Override
-    public void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, UnitTO unitId) {
+    public void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, UnitTO unitId, LogicalDate leaseFrom) {
         UnitOptionsSelectionDTO options = EntityFactory.create(UnitOptionsSelectionDTO.class);
 
         options.unit().set(filterUnitData(Persistence.service().retrieve(AptUnit.class, unitId.getPrimaryKey())));
+        options.leaseFrom().setValue(leaseFrom);
 
         callback.onSuccess(fillAvailableUnitOptions(options));
     }
@@ -326,8 +328,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     private void fillLeaseTermParticipant(OnlineApplication bo, OnlineApplicationDTO to, LeaseTermParticipant<?> participant) {
         // customer:
         Customer customer = participant.leaseParticipant().customer();
-        Persistence.service().retrieve(customer.picture());
-        Persistence.service().retrieve(customer.emergencyContacts());
+        Persistence.ensureRetrieve(customer.picture(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(customer.emergencyContacts(), AttachLevel.Attached);
         //
         to.applicantData().set(to.applicantData().person(), customer.person());
         to.applicantData().set(to.applicantData().picture(), customer.picture());
@@ -389,8 +391,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     private void saveLeaseTermParticipant(OnlineApplication bo, OnlineApplicationDTO to, LeaseTermParticipant<?> participant) {
         // customer:
         Customer customer = participant.leaseParticipant().customer();
-        Persistence.service().retrieve(customer.picture());
-        Persistence.service().retrieve(customer.emergencyContacts());
+        Persistence.ensureRetrieve(customer.picture(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(customer.emergencyContacts(), AttachLevel.Attached);
         //
         customer.set(customer.person(), to.applicantData().person());
         customer.set(customer.picture(), to.applicantData().picture());
@@ -737,7 +739,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         if (!lease.unit().isNull()) {
             UnitOptionsSelectionDTO options = retriveCurrentUnitOptions(lease);
             options.restrictions().set(retriveUnitOptionRestrictions(options.unit()));
-            fillCatalogFeatures(options, options.selectedService().item().product().<Service.ServiceV> cast(), false);
+            fillCatalogFeatures(options, options.selectedService().item().product().<Service.ServiceV> cast(), lease.leaseFrom().getValue(), false);
             to.unitOptionsSelection().set(options);
         }
     }
@@ -1060,17 +1062,17 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         return res.toString();
     }
 
-    private List<UnitTO> retriveAvailableUnits(Floorplan floorplanId, LogicalDate moveIn) {
+    private List<UnitTO> retriveAvailableUnits(Floorplan floorplanId, LogicalDate leaseFrom) {
         UnitSelectionDTO unitSelection = EntityFactory.create(UnitSelectionDTO.class);
         unitSelection.floorplan().set(Persistence.service().retrieve(Floorplan.class, floorplanId.getPrimaryKey()));
         updateBedsDensBaths(unitSelection);
 
-        return retriveAvailableUnits(unitSelection.floorplan().building(), unitSelection.bedrooms().getValue(), unitSelection.bathrooms().getValue(), moveIn);
+        return retriveAvailableUnits(unitSelection.floorplan().building(), unitSelection.bedrooms().getValue(), unitSelection.bathrooms().getValue(), leaseFrom);
     }
 
-    private List<UnitTO> retriveAvailableUnits(Building building, BedroomNumber beds, BathroomNumber baths, LogicalDate moveIn) {
-        if (moveIn == null) {
-            moveIn = SystemDateManager.getLogicalDate();
+    private List<UnitTO> retriveAvailableUnits(Building building, BedroomNumber beds, BathroomNumber baths, LogicalDate leaseFrom) {
+        if (leaseFrom == null) {
+            leaseFrom = SystemDateManager.getLogicalDate();
         }
         if (baths == null) {
             baths = BathroomNumber.Any;
@@ -1079,7 +1081,10 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             beds = BedroomNumber.Any;
         }
 
-        EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
+        ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ProspectPortalPolicy.class);
+        LogicalDate availabilityDeadline = DateUtils.daysAdd(leaseFrom, -policy.unitAvailabilitySpan().getValue());
+
+        EntityQueryCriteria<AptUnit> criteria = buildUnitRetriveCriteria(building, leaseFrom, availabilityDeadline, leaseFrom);
 
         switch (beds) {
         case Any:
@@ -1152,22 +1157,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             break;
         }
 
-        ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ProspectPortalPolicy.class);
-        LogicalDate availabilityDeadline = DateUtils.daysAdd(moveIn, -policy.unitAvailabilitySpan().getValue());
-
-        // building
-        criteria.eq(criteria.proto().building(), building);
-        // correct service type:
-        criteria.in(criteria.proto().productItems().$().product().holder().code().type(), ARCode.Type.Residential);
-        criteria.eq(criteria.proto().productItems().$().product().holder().defaultCatalogItem(), Boolean.FALSE);
-        criteria.eq(criteria.proto().productItems().$().product().holder().version().availableOnline(), Boolean.TRUE);
-        criteria.isCurrent(criteria.proto().productItems().$().product().holder().version());
-        // availability:
-        criteria.add(ServerSideFactory.create(OccupancyFacade.class).buildAvalableCriteria(criteria.proto(), AptUnitOccupancySegment.Status.available, moveIn,
-                availabilityDeadline));
-
-        criteria.sort(new Sort(criteria.proto().availability().availableForRent(), false));
-
         List<UnitTO> availableUnits = new ArrayList<UnitTO>();
         for (AptUnit unit : Persistence.service().query(criteria)) {
             if (availableUnits.size() < policy.maxExactMatchUnits().getValue()) {
@@ -1180,36 +1169,24 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         return availableUnits;
     }
 
-    private List<UnitTO> retrivePotentialUnits(Floorplan floorplanId, LogicalDate moveIn) {
+    private List<UnitTO> retrivePotentialUnits(Floorplan floorplanId, LogicalDate leaseFrom) {
         UnitSelectionDTO unitSelection = EntityFactory.create(UnitSelectionDTO.class);
         unitSelection.floorplan().set(Persistence.service().retrieve(Floorplan.class, floorplanId.getPrimaryKey()));
         updateBedsDensBaths(unitSelection);
 
-        return retrivePotentialUnits(unitSelection.floorplan().building(), unitSelection.bedrooms().getValue(), unitSelection.bathrooms().getValue(), moveIn);
+        return retrivePotentialUnits(unitSelection.floorplan().building(), unitSelection.bedrooms().getValue(), unitSelection.bathrooms().getValue(), leaseFrom);
     }
 
-    private List<UnitTO> retrivePotentialUnits(Building building, BedroomNumber beds, BathroomNumber baths, LogicalDate moveIn) {
-        if (moveIn == null) {
-            moveIn = SystemDateManager.getLogicalDate();
+    private List<UnitTO> retrivePotentialUnits(Building building, BedroomNumber beds, BathroomNumber baths, LogicalDate leaseFrom) {
+        if (leaseFrom == null) {
+            leaseFrom = SystemDateManager.getLogicalDate();
         }
 
-        EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
-
         ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ProspectPortalPolicy.class);
-        LogicalDate availabilityDeadline = DateUtils.daysAdd(moveIn, -policy.unitAvailabilitySpan().getValue());
-        LogicalDate availabilityRightBound = DateUtils.monthAdd(moveIn, 2);
+        LogicalDate availabilityDeadline = DateUtils.daysAdd(leaseFrom, -policy.unitAvailabilitySpan().getValue());
+        LogicalDate availabilityRightBound = DateUtils.monthAdd(leaseFrom, 2);
 
-        // building
-        criteria.eq(criteria.proto().building(), building);
-        // correct service type:
-        criteria.in(criteria.proto().productItems().$().product().holder().code().type(), ARCode.Type.Residential);
-        criteria.eq(criteria.proto().productItems().$().product().holder().defaultCatalogItem(), Boolean.FALSE);
-        criteria.eq(criteria.proto().productItems().$().product().holder().version().availableOnline(), Boolean.TRUE);
-        criteria.isCurrent(criteria.proto().productItems().$().product().holder().version());
-        // availability:
-        criteria.add(ServerSideFactory.create(OccupancyFacade.class).buildAvalableCriteria(criteria.proto(), AptUnitOccupancySegment.Status.available,
-                availabilityRightBound, availabilityDeadline));
-        criteria.sort(new Sort(criteria.proto().availability().availableForRent(), false));
+        EntityQueryCriteria<AptUnit> criteria = buildUnitRetriveCriteria(building, leaseFrom, availabilityDeadline, availabilityRightBound);
 
         List<UnitTO> availableUnits = new ArrayList<UnitTO>();
         for (AptUnit unit : Persistence.service().query(criteria)) {
@@ -1221,6 +1198,26 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         }
 
         return availableUnits;
+    }
+
+    private EntityQueryCriteria<AptUnit> buildUnitRetriveCriteria(Building building, LogicalDate leaseFrom, LogicalDate availabilityDeadline,
+            LogicalDate availabilityRightBound) {
+        EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
+
+        criteria.eq(criteria.proto().building(), building);
+        // correct service type:
+        criteria.in(criteria.proto().productItems().$().product().holder().code().type(), ARCode.Type.Residential);
+        criteria.eq(criteria.proto().productItems().$().product().holder().defaultCatalogItem(), Boolean.FALSE);
+        criteria.eq(criteria.proto().productItems().$().product().holder().version().availableOnline(), Boolean.TRUE);
+        criteria.or(PropertyCriterion.isNull(criteria.proto().productItems().$().product().holder().expiredFrom()),
+                PropertyCriterion.gt(criteria.proto().productItems().$().product().holder().expiredFrom(), leaseFrom));
+        criteria.isCurrent(criteria.proto().productItems().$().product().holder().version());
+        // availability:
+        criteria.add(ServerSideFactory.create(OccupancyFacade.class).buildAvalableCriteria(criteria.proto(), AptUnitOccupancySegment.Status.available,
+                availabilityRightBound, availabilityDeadline));
+        criteria.sort(new Sort(criteria.proto().availability().availableForRent(), false));
+
+        return criteria;
     }
 
     private void excludeAvailbleFromPotential(UnitSelectionDTO unitSelection) {
@@ -1292,11 +1289,17 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     private void fillAvailableCatalogProducts(UnitOptionsSelectionDTO options) {
         assert (!options.unit().isNull());
+        if (options.leaseFrom().isNull()) {
+            options.leaseFrom().setValue(SystemDateManager.getLogicalDate());
+        }
+
         EntityQueryCriteria<ProductItem> criteria = new EntityQueryCriteria<ProductItem>(ProductItem.class);
         // correct service type:
         criteria.eq(criteria.proto().product().holder().catalog().building().units(), options.unit());
         criteria.in(criteria.proto().product().holder().code().type(), ARCode.Type.Residential);
         criteria.eq(criteria.proto().product().holder().defaultCatalogItem(), Boolean.FALSE);
+        criteria.or(PropertyCriterion.isNull(criteria.proto().product().holder().expiredFrom()),
+                PropertyCriterion.gt(criteria.proto().product().holder().expiredFrom(), options.leaseFrom()));
         criteria.isCurrent(criteria.proto().product().holder().version());
         criteria.eq(criteria.proto().product().holder().version().availableOnline(), Boolean.TRUE);
         // correct unit:
@@ -1305,54 +1308,60 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         ProductItem productItem = Persistence.service().retrieve(criteria);
         if (productItem != null) {
             options.selectedService().set(createBillableItem(productItem));
-            fillCatalogFeatures(options, productItem.product().<Service.ServiceV> cast(), true);
+            fillCatalogFeatures(options, productItem.product().<Service.ServiceV> cast(), options.leaseFrom().getValue(), true);
         }
     }
 
-    private void fillCatalogFeatures(UnitOptionsSelectionDTO options, Service.ServiceV service, boolean fillMandatory) {
-        Persistence.service().retrieveMember(service.features());
+    private void fillCatalogFeatures(UnitOptionsSelectionDTO options, Service.ServiceV service, LogicalDate leaseFrom, boolean fillMandatory) {
+        if (leaseFrom == null) {
+            leaseFrom = SystemDateManager.getLogicalDate();
+        }
+
+        Persistence.ensureRetrieve(service.features(), AttachLevel.Attached);
 
         for (Feature feature : service.features()) {
-            Persistence.service().retrieveMember(feature.version().items());
+            if (feature.expiredFrom().isNull() || feature.expiredFrom().getValue().after(leaseFrom)) {
+                Persistence.ensureRetrieve(feature.version().items(), AttachLevel.Attached);
 
-            for (ProductItem item : feature.version().items()) {
-                Persistence.ensureRetrieve(item.product(), AttachLevel.Attached);
-                if (feature.version().availableOnline().getValue(false)) {
-                    switch (feature.code().type().getValue()) {
-                    case AddOn:
-                    case Utility:
-                        if (fillMandatory && feature.version().mandatory().getValue(false)) {
-                            options.selectedUtilities().add(createBillableItem(item));
-                        } else {
-                            options.availableUtilities().add(item);
-                        }
-                        break;
-                    case Pet:
-                        if (fillMandatory && feature.version().mandatory().getValue(false)) {
-                            options.selectedPets().add(createBillableItem(item));
-                        } else {
-                            options.availablePets().add(item);
-                        }
-                        break;
-                    case Parking:
-                        if (fillMandatory && feature.version().mandatory().getValue(false)) {
-                            options.selectedParking().add(createBillableItem(item));
-                        } else {
-                            options.availableParking().add(item);
-                        }
-                        break;
-                    case Locker:
-                        if (fillMandatory && feature.version().mandatory().getValue(false)) {
-                            options.selectedStorage().add(createBillableItem(item));
-                        } else {
-                            options.availableStorage().add(item);
-                        }
-                        break;
-                    default:
-                        if (fillMandatory && feature.version().mandatory().getValue(false)) {
-                            options.selectedOther().add(createBillableItem(item));
-                        } else {
-                            options.availableOther().add(item);
+                for (ProductItem item : feature.version().items()) {
+                    Persistence.ensureRetrieve(item.product(), AttachLevel.Attached);
+                    if (feature.version().availableOnline().getValue(false)) {
+                        switch (feature.code().type().getValue()) {
+                        case AddOn:
+                        case Utility:
+                            if (fillMandatory && feature.version().mandatory().getValue(false)) {
+                                options.selectedUtilities().add(createBillableItem(item));
+                            } else {
+                                options.availableUtilities().add(item);
+                            }
+                            break;
+                        case Pet:
+                            if (fillMandatory && feature.version().mandatory().getValue(false)) {
+                                options.selectedPets().add(createBillableItem(item));
+                            } else {
+                                options.availablePets().add(item);
+                            }
+                            break;
+                        case Parking:
+                            if (fillMandatory && feature.version().mandatory().getValue(false)) {
+                                options.selectedParking().add(createBillableItem(item));
+                            } else {
+                                options.availableParking().add(item);
+                            }
+                            break;
+                        case Locker:
+                            if (fillMandatory && feature.version().mandatory().getValue(false)) {
+                                options.selectedStorage().add(createBillableItem(item));
+                            } else {
+                                options.availableStorage().add(item);
+                            }
+                            break;
+                        default:
+                            if (fillMandatory && feature.version().mandatory().getValue(false)) {
+                                options.selectedOther().add(createBillableItem(item));
+                            } else {
+                                options.availableOther().add(item);
+                            }
                         }
                     }
                 }
@@ -1361,7 +1370,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private void loadDetachedProducts(UnitOptionsSelectionDTO options) {
-        Persistence.service().retrieve(options.selectedService().item().product());
+        Persistence.ensureRetrieve(options.selectedService().item().product(), AttachLevel.Attached);
 
         loadDetachedProducts(options.selectedPets());
         loadDetachedProducts(options.selectedParking());
@@ -1372,7 +1381,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     private void loadDetachedProducts(List<BillableItem> items) {
         for (BillableItem item : items) {
-            Persistence.service().retrieve(item.item().product());
+            Persistence.ensureRetrieve(item.item().product(), AttachLevel.Attached);
         }
     }
 

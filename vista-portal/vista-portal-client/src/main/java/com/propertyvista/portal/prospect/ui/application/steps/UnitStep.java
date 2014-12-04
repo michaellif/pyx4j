@@ -210,7 +210,7 @@ public class UnitStep extends ApplicationWizardStep {
                     ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(getWizard(),
                             ApplicationWizardStateChangeEvent.ChangeType.termChange));
                 }
-            }, unit);
+            }, unit, get(proto().unitSelection().moveIn()).getValue());
         }
     }
 
