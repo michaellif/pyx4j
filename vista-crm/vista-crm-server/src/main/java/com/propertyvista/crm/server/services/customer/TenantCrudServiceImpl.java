@@ -105,7 +105,13 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
     protected void enhanceListRetrieved(Tenant entity, TenantDTO dto) {
         super.enhanceListRetrieved(entity, dto);
         Persistence.service().retrieve(dto.lease().unit().building());
-        dto.role().setValue(retrieveTenant(dto.leaseTermV(), entity).role().getValue());
+
+        LeaseTermTenant ltt = retrieveTenant(dto.leaseTermV(), entity);
+        if (ltt != null) {
+            dto.role().setValue(ltt.role().getValue());
+        } else {
+            log.debug("Can't find Tenant {} in leaseTem {} !?!", entity, dto.leaseTermV());
+        }
     }
 
     @Override
