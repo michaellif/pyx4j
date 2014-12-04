@@ -77,6 +77,8 @@ public class ProofOfAssetDocumentFileFolder extends VistaBoxFolder<ProofOfAssetD
 
                 formPanel.h4(i18n.tr("Verification:"));
                 formPanel.append(Location.Left, proto().verified()).decorate();
+                formPanel.append(Location.Left, proto().notes()).decorate();
+
                 formPanel.append(Location.Right, proto().verifiedBy()).decorate();
                 formPanel.append(Location.Right, proto().verifiedOn()).decorate();
 

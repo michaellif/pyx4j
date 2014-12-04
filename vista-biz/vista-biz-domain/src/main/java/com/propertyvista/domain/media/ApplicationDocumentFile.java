@@ -56,4 +56,6 @@ public interface ApplicationDocumentFile<D extends IFileBlob> extends IHasFile<D
 
     @Editor(type = EditorType.label)
     IPrimitive<Date> verifiedOn();
+
+    IPrimitive<String> notes();
 }
