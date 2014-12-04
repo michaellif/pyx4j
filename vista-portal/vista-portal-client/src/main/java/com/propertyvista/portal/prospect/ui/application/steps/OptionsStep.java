@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
@@ -175,7 +174,7 @@ public class OptionsStep extends ApplicationWizardStep {
                             if (getMaxCount() < 0 || getValue().size() < getMaxCount()) {
                                 BillableItem newItem = EntityFactory.create(BillableItem.class);
                                 newItem.item().set(item);
-                                newItem.agreedPrice().setValue(item.price().isNull() ? BigDecimal.ZERO : item.price().getValue());
+                                newItem.agreedPrice().setValue(item.price().isNull() ? item.product().price().getValue() : item.price().getValue());
                                 addItem(newItem);
                             }
                         }
