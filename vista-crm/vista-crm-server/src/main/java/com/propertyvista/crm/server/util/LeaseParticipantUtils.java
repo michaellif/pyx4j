@@ -32,8 +32,8 @@ import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.CustomerScreening;
-import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.CustomerScreeningAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
@@ -50,7 +50,7 @@ public class LeaseParticipantUtils {
             screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftForEdit(participant.customer(), policyNode);
             ServerSideFactory.create(ScreeningFacade.class).registerUploadedDocuments(screening);
         } else {
-            screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningFinalOrDraft(participant.customer(), AttachLevel.Attached);
+            screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftOrFinal(participant.customer(), AttachLevel.Attached);
             if (screening == null) { // newly created tenant:
                 screening = EntityFactory.create(CustomerScreening.class);
                 screening.screene().set(participant.customer());
