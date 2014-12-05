@@ -58,6 +58,7 @@ import com.propertyvista.portal.resident.activity.services.insurance.tenantsurep
 import com.propertyvista.portal.resident.activity.services.insurance.tenantsurepaymentmethod.TenantSurePaymentMethodUpdateWizardActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Account;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.CommunityEvent;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Login;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.LoginWithToken;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Logout;
@@ -74,6 +75,7 @@ import com.propertyvista.portal.shared.activity.account.AccountPageActivity;
 import com.propertyvista.portal.shared.activity.communication.MessagePageActivity;
 import com.propertyvista.portal.shared.activity.communication.MessageViewActivity;
 import com.propertyvista.portal.shared.activity.communication.MessageWizardActivity;
+import com.propertyvista.portal.shared.activity.communityevent.CommunityEventPageActivity;
 import com.propertyvista.portal.shared.activity.login.LoginWithTokenActivity;
 import com.propertyvista.portal.shared.activity.login.LogoutActivity;
 import com.propertyvista.portal.shared.activity.login.PasswordResetRequestWizardActivity;
@@ -101,6 +103,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new ProfilePageActivity(appPlace);
                     } else if (appPlace instanceof Account) {
                         activity = new AccountPageActivity(appPlace);
+                    } else if (appPlace instanceof CommunityEvent) {
+                        activity = new CommunityEventPageActivity(appPlace);
 
 // Financial
                     } else if (appPlace instanceof ResidentPortalSiteMap.Financial) {

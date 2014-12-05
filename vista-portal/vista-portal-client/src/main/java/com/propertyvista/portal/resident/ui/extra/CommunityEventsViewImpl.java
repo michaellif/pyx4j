@@ -13,14 +13,18 @@
  */
 package com.propertyvista.portal.resident.ui.extra;
 
+import java.util.List;
+
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.domain.property.asset.CommunityEvent;
 import com.propertyvista.portal.resident.themes.ExtraGadgetsTheme;
-import com.propertyvista.portal.rpc.portal.resident.dto.CommunityEventsGadgetDTO;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class CommunityEventsViewImpl extends FlowPanel implements CommunityEventsView {
@@ -29,16 +33,18 @@ public class CommunityEventsViewImpl extends FlowPanel implements CommunityEvent
 
     private static final int MAX_EVENT_TO_SHOW = 3;
 
+    private CommunityEventsPresenter presenter;
+
     public CommunityEventsViewImpl() {
         setStyleName(PortalRootPaneTheme.StyleName.ExtraGadget.name());
     }
 
     @Override
-    public void populateCommunityEvents(CommunityEventsGadgetDTO notification) {
+    public void populateCommunityEvents(List<CommunityEvent> events) {
         clear();
-        if (notification != null && notification.events() != null && notification.events().size() > 0) {
+        if (events != null && events.size() > 0) {
             int i = 1;
-            for (CommunityEvent event : notification.events()) {
+            for (CommunityEvent event : events) {
                 HTML captionHTML = new HTML(event.caption().getValue());
                 captionHTML.setStyleName(ExtraGadgetsTheme.StyleName.CommunityEventCaption.name());
                 captionHTML.setTitle(event.caption().getValue());
@@ -57,6 +63,18 @@ public class CommunityEventsViewImpl extends FlowPanel implements CommunityEvent
                 descriptionHTML.setTitle(event.description().getValue());
                 add(descriptionHTML);
 
+                Anchor more = new Anchor("Read more>>");
+                more.addClickHandler(new ClickHandler() {
+
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        presenter.showEvent();
+
+                    }
+
+                });
+                add(more);
+
                 if (++i > MAX_EVENT_TO_SHOW) {
                     break;
                 }
@@ -72,5 +90,10 @@ public class CommunityEventsViewImpl extends FlowPanel implements CommunityEvent
         String time = event.time() == null || event.time().isNull() ? "" : " " + event.time().getStringView();
 
         return date + time + ((event.location() == null || event.location().isNull()) ? "" : " " + event.location());
+    }
+
+    @Override
+    public void setPresenter(CommunityEventsPresenter presenter) {
+        this.presenter = presenter;
     }
 }

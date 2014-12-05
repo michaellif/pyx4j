@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
@@ -7,16 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 25, 2013
- * @author michaellif
+ * Created on Oct 27, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.resident.dto;
+package com.propertyvista.portal.rpc.portal.shared.services.communityevent;
 
-import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.dto.CommunityEventsDTO;
+import com.propertyvista.domain.property.asset.CommunityEvent;
 
-@Transient
-public interface CommunityEventsGadgetDTO extends CommunityEventsDTO {
+public interface CommunityEventCrudService extends AbstractCrudService<CommunityEvent> {
+
 }

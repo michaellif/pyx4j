@@ -97,6 +97,7 @@ import com.propertyvista.portal.rpc.portal.shared.services.PortalPolicyRetrieveS
 import com.propertyvista.portal.rpc.portal.shared.services.PortalTermsAndPoliciesService;
 import com.propertyvista.portal.rpc.portal.shared.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.portal.shared.services.account.CustomerAccountCrudService;
+import com.propertyvista.portal.rpc.portal.shared.services.communityevent.CommunityEventCrudService;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
 import com.propertyvista.portal.server.security.access.prospect.CustomerPictureProspectDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.prospect.CustomerPreferencesDatasetAccessRule;
@@ -160,6 +161,9 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
 
         grant(VistaAccessGrantedBehavior.ResidentPortal, new IServiceExecutePermission(CustomerAccountCrudService.class));
         grant(VistaAccessGrantedBehavior.ProspectPortal, new IServiceExecutePermission(CustomerAccountCrudService.class));
+
+        grant(VistaAccessGrantedBehavior.ResidentPortal, new IServiceExecutePermission(CommunityEventCrudService.class));
+        grant(VistaAccessGrantedBehavior.ProspectPortal, new IServiceExecutePermission(CommunityEventCrudService.class));
 
         // Old TODO remove
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ReferenceDataService.class));

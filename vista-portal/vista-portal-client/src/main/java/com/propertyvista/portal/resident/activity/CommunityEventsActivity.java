@@ -19,22 +19,25 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.domain.property.asset.CommunityEvent;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.extra.CommunityEventsView;
 import com.propertyvista.portal.resident.ui.extra.CommunityEventsView.CommunityEventsPresenter;
-import com.propertyvista.portal.rpc.portal.resident.dto.CommunityEventsGadgetDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.CommunityEventPortalCrudService;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.shared.services.communityevent.CommunityEventCrudService;
 
 public class CommunityEventsActivity extends AbstractActivity implements CommunityEventsPresenter {
 
     private final CommunityEventsView view;
 
-    private final CommunityEventPortalCrudService communityEventService = (CommunityEventPortalCrudService) GWT.create(CommunityEventPortalCrudService.class);
+    private final CommunityEventCrudService communityEventService = (CommunityEventCrudService) GWT.create(CommunityEventCrudService.class);
 
     public CommunityEventsActivity(Place place) {
         view = ResidentPortalSite.getViewFactory().getView(CommunityEventsView.class);
@@ -43,16 +46,22 @@ public class CommunityEventsActivity extends AbstractActivity implements Communi
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        view.setPresenter(this);
         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
 
-        communityEventService.retreiveCommunityEvents(new DefaultAsyncCallback<CommunityEventsGadgetDTO>() {
+        communityEventService.list(new DefaultAsyncCallback<EntitySearchResult<CommunityEvent>>() {
 
             @Override
-            public void onSuccess(CommunityEventsGadgetDTO result) {
-                view.populateCommunityEvents(result);
+            public void onSuccess(EntitySearchResult<CommunityEvent> result) {
+                view.populateCommunityEvents(result.getData());
                 AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
             }
-        });
+        }, EntityListCriteria.create(CommunityEvent.class));
+    }
+
+    @Override
+    public void showEvent() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.CommunityEvent());
     }
 
 }

@@ -14,12 +14,13 @@
 package com.propertyvista.portal.rpc.portal.resident.dto;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @Transient
-public interface WeatherGadgetDTO extends ExtraGadgetDTO {
+public interface WeatherGadgetDTO extends IEntity {
 
     @I18n
     public enum WeatherType {
