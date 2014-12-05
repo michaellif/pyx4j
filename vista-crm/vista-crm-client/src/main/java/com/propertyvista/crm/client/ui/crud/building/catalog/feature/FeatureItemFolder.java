@@ -32,6 +32,7 @@ import com.pyx4j.forms.client.ui.CEntityHyperlink;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.IShowable;
@@ -49,6 +50,8 @@ import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.shared.config.VistaFeatures;
 
 class FeatureItemFolder extends VistaBoxFolder<ProductItem> {
+
+    private static final I18n i18n = I18n.get(FeatureItemFolder.class);
 
     private final CrmEntityForm<Feature> parent;
 
@@ -70,7 +73,8 @@ class FeatureItemFolder extends VistaBoxFolder<ProductItem> {
         decor.setCaptionFormatter(new IFormatter<ProductItem, SafeHtml>() {
             @Override
             public SafeHtml format(ProductItem value) {
-                return SafeHtmlUtils.fromString(value.name().getStringView() + ", Price: $" + value.price().getStringView());
+                return SafeHtmlUtils.fromString(value.name().getStringView() //
+                        + (value.price().isNull() ? "" : ", " + i18n.tr("Price: $") + value.price().getStringView()));
             }
         });
         return decor;

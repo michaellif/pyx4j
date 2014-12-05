@@ -32,6 +32,7 @@ import com.pyx4j.forms.client.ui.CEntityHyperlink;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.IShowable;
@@ -48,6 +49,8 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.shared.config.VistaFeatures;
 
 class ServiceItemFolder extends VistaBoxFolder<ProductItem> {
+
+    private static final I18n i18n = I18n.get(ServiceItemFolder.class);
 
     private final CrmEntityForm<Service> parent;
 
@@ -69,8 +72,9 @@ class ServiceItemFolder extends VistaBoxFolder<ProductItem> {
         decor.setCaptionFormatter(new IFormatter<ProductItem, SafeHtml>() {
             @Override
             public SafeHtml format(ProductItem value) {
-                return SafeHtmlUtils.fromString(value.name().getStringView() + ", Unit: " + value.element().getStringView() + ", Price: $"
-                        + value.price().getStringView());
+                return SafeHtmlUtils.fromString(value.name().getStringView() //
+                        + ", " + i18n.tr("Unit: ") + value.element().getStringView() //
+                        + (value.price().isNull() ? "" : ", " + i18n.tr("Price: $") + value.price().getStringView()));
             }
         });
         return decor;
