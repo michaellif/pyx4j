@@ -40,6 +40,7 @@ import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.domain.tenant.income.IncomeSource;
+import com.propertyvista.misc.VistaTODO;
 
 public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome> {
 
@@ -107,32 +108,36 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
     public void addValidations() {
         super.addValidations();
 
-        this.addComponentValidator(new AbstractComponentValidator<IList<CustomerScreeningIncome>>() {
-            @Override
-            public AbstractValidationError isValid() {
-                if (getCComponent().getValue() != null) {
-                    int employmentCount = countEmployments();
-                    if (employmentCount == 1) {
-                        IEmploymentInfo employment = getFirstEmployment();
-                        if (!employment.isEmpty()) {
-                            if (!employment.starts().isNull()) {
-                                LogicalDate date = (employment.ends().isNull() ? new LogicalDate(ClientContext.getServerDate()) : employment.ends().getValue());
-                                CalendarUtil.addMonthsToDate(date, -restrictionsPolicy.minEmploymentDuration().getValue(0));
-                                if (employment.starts().getValue().after(date)) {
-                                    return new BasicValidationError(getCComponent(), i18n.tr("You need to enter more employment information"));
+        // waiting for 'soft mode' validation!
+        if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
+            this.addComponentValidator(new AbstractComponentValidator<IList<CustomerScreeningIncome>>() {
+                @Override
+                public AbstractValidationError isValid() {
+                    if (getCComponent().getValue() != null) {
+                        int employmentCount = countEmployments();
+                        if (employmentCount == 1) {
+                            IEmploymentInfo employment = getFirstEmployment();
+                            if (!employment.isEmpty()) {
+                                if (!employment.starts().isNull()) {
+                                    LogicalDate date = (employment.ends().isNull() ? new LogicalDate(ClientContext.getServerDate()) : employment.ends()
+                                            .getValue());
+                                    CalendarUtil.addMonthsToDate(date, -restrictionsPolicy.minEmploymentDuration().getValue(0));
+                                    if (employment.starts().getValue().after(date)) {
+                                        return new BasicValidationError(getCComponent(), i18n.tr("You need to enter more employment information"));
+                                    }
                                 }
                             }
+                        } else if (employmentCount > restrictionsPolicy.maxNumberOfEmployments().getValue(Integer.MAX_VALUE)) {
+                            return new BasicValidationError(getCComponent(), i18n.tr("No need to supply more than {0} employment items", restrictionsPolicy
+                                    .maxNumberOfEmployments().getValue(Integer.MAX_VALUE)));
+                        } else if (getCComponent().getValue().size() - employmentCount > 3) {
+                            return new BasicValidationError(getCComponent(), i18n.tr("No need to supply more than 3 other income items"));
                         }
-                    } else if (employmentCount > restrictionsPolicy.maxNumberOfEmployments().getValue(Integer.MAX_VALUE)) {
-                        return new BasicValidationError(getCComponent(), i18n.tr("No need to supply more than {0} employment items", restrictionsPolicy
-                                .maxNumberOfEmployments().getValue(Integer.MAX_VALUE)));
-                    } else if (getCComponent().getValue().size() - employmentCount > 3) {
-                        return new BasicValidationError(getCComponent(), i18n.tr("No need to supply more than 3 other income items"));
                     }
+                    return null;
                 }
-                return null;
-            }
-        });
+            });
+        }
     }
 
     private int countEmployments() {

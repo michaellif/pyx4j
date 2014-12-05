@@ -40,8 +40,8 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.DocumentTypeSelectorDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocument;
+import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.domain.ApplicationDocumentType.Importance;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
@@ -88,6 +88,7 @@ public class IdentificationDocumentFolder extends VistaBoxFolder<IdentificationD
     public void addValidations() {
         super.addValidations();
 
+        // waiting for 'soft mode' validation!
         if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
             addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocument>>() {
                 @Override

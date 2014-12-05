@@ -49,6 +49,7 @@ import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeInfoSocialServices;
 import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
 import com.propertyvista.domain.tenant.income.IncomeSource;
+import com.propertyvista.misc.VistaTODO;
 
 public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
 
@@ -76,23 +77,26 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
     public void addValidations() {
         super.addValidations();
 
-        fileUpload.addComponentValidator(new AbstractComponentValidator<IList<ProofOfIncomeDocumentFile>>() {
-            @Override
-            public BasicValidationError isValid() {
-                if (!getCComponent().getValue().isNull() && parent.getDocumentationPolicy() != null) {
-                    if (IncomeSource.employment().contains(getValue().incomeSource().getValue())) {
-                        if (parent.getDocumentationPolicy().mandatoryProofOfEmployment().getValue(false) && getCComponent().getValue().isEmpty()) {
-                            return new BasicValidationError(getCComponent(), i18n.tr("Proof of Employment should be supplied"));
-                        }
-                    } else if (IncomeSource.otherIncome().contains(getValue().incomeSource().getValue())) {
-                        if (parent.getDocumentationPolicy().mandatoryProofOfIncome().getValue(false) && getCComponent().getValue().isEmpty()) {
-                            return new BasicValidationError(getCComponent(), i18n.tr("Proof of Income should be supplied"));
+        // waiting for 'soft mode' validation!
+        if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
+            fileUpload.addComponentValidator(new AbstractComponentValidator<IList<ProofOfIncomeDocumentFile>>() {
+                @Override
+                public BasicValidationError isValid() {
+                    if (!getCComponent().getValue().isNull() && parent.getDocumentationPolicy() != null) {
+                        if (IncomeSource.employment().contains(getValue().incomeSource().getValue())) {
+                            if (parent.getDocumentationPolicy().mandatoryProofOfEmployment().getValue(false) && getCComponent().getValue().isEmpty()) {
+                                return new BasicValidationError(getCComponent(), i18n.tr("Proof of Employment should be supplied"));
+                            }
+                        } else if (IncomeSource.otherIncome().contains(getValue().incomeSource().getValue())) {
+                            if (parent.getDocumentationPolicy().mandatoryProofOfIncome().getValue(false) && getCComponent().getValue().isEmpty()) {
+                                return new BasicValidationError(getCComponent(), i18n.tr("Proof of Income should be supplied"));
+                            }
                         }
                     }
+                    return null;
                 }
-                return null;
-            }
-        });
+            });
+        }
     }
 
     @Override
