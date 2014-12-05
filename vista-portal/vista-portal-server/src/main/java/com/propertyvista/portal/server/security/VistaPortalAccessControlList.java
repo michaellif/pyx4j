@@ -66,7 +66,6 @@ import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfIncomeDocume
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectSignUpService;
 import com.propertyvista.portal.rpc.portal.resident.ac.HelpAction;
-import com.propertyvista.portal.rpc.portal.resident.services.CommunityEventPortalCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.ExtraActivityPortalService;
 import com.propertyvista.portal.rpc.portal.resident.services.LeaseContextSelectionService;
 import com.propertyvista.portal.rpc.portal.resident.services.MessageAttachmentUploadPortalService;
@@ -162,9 +161,6 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(VistaAccessGrantedBehavior.ResidentPortal, new IServiceExecutePermission(CustomerAccountCrudService.class));
         grant(VistaAccessGrantedBehavior.ProspectPortal, new IServiceExecutePermission(CustomerAccountCrudService.class));
 
-        grant(VistaAccessGrantedBehavior.ResidentPortal, new IServiceExecutePermission(CommunityEventCrudService.class));
-        grant(VistaAccessGrantedBehavior.ProspectPortal, new IServiceExecutePermission(CommunityEventCrudService.class));
-
         // Old TODO remove
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ReferenceDataService.class));
 
@@ -234,7 +230,7 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MaintenanceRequestPictureUploadPortalService.class));
 
         grant(new IServiceExecutePermission(ExtraActivityPortalService.class));
-        grant(new IServiceExecutePermission(CommunityEventPortalCrudService.class));
+        grant(new IServiceExecutePermission(CommunityEventCrudService.class));
         grant(new IServiceExecutePermission(MessagePortalCrudService.class));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(DeferredProcessService.class));
