@@ -60,7 +60,8 @@ public class LeaseApplicationLister extends SiteDataTablePanel<LeaseApplicationD
             new Builder(proto()._applicant().customer().person().name()).columnTitle(i18n.tr("Primary Tenant Name")).searchable(false).build(),
             new Builder(proto()._applicant().customer().person().name().firstName(), false).columnTitle(i18n.tr("Primary Tenant First Name")).build(),
             new Builder(proto()._applicant().customer().person().name().lastName(), false).columnTitle(i18n.tr("Primary Tenant Last Name")).build(),
-            new Builder(proto().leaseParticipants().$().customer().customerId(), false).build(),
+
+            new Builder(proto().leaseParticipants().$().customer().customerId(), false).searchableOnly().build(),
 
             new Builder(proto().numberOfOccupants(), false).sortable(false).searchable(false).title(i18n.tr("Occupants")).build(),
             new Builder(proto().numberOfApplicants(), true).sortable(false).searchable(false).title(i18n.tr("Applicants")).build(),

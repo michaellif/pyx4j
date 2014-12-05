@@ -69,7 +69,7 @@ public class LeaseLister extends SiteDataTablePanel<LeaseDTO> {
             new Builder(proto()._applicant().customer().person().name().lastName(), false).columnTitle(i18n.tr("Primary Tenant Last Name")).build(),
             new Builder(proto()._applicant().customer().registeredInPortal(), false).build(),
 
-            new Builder(proto().leaseParticipants().$().customer().customerId(), false).build(),
+            new Builder(proto().leaseParticipants().$().customer().customerId(), false).searchableOnly().build(),
 
             new Builder(proto().status()).build(),
             new Builder(proto().completion()).build(),
@@ -87,8 +87,7 @@ public class LeaseLister extends SiteDataTablePanel<LeaseDTO> {
 
             new Builder(proto().approvalDate(), false).build(),
             new Builder(proto().creationDate(), false).build()
-                ));
-        //@formatter:on
+        )); //@formatter:on
 
         if (SecurityController.check(VistaBasicBehavior.PropertyVistaSupport)) {
             if (VistaFeatures.instance().yardiIntegration()) {
