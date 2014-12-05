@@ -62,10 +62,10 @@ public class LeaseParticipantUtils {
         Persistence.ensureRetrieve(screening.version().documents(), AttachLevel.Attached);
         Persistence.service().retrieve(screening.screene(), AttachLevel.ToStringMembers, false);
 
-        return createScreeningTO(participant, screening);
+        return createScreeningTO(participant, screening, forEdit);
     }
 
-    public static LeaseParticipantScreeningTO createScreeningTO(LeaseParticipant<?> participant, CustomerScreening screening) {
+    public static LeaseParticipantScreeningTO createScreeningTO(LeaseParticipant<?> participant, CustomerScreening screening, boolean forEdit) {
         LeaseParticipantScreeningTO to = EntityFactory.create(LeaseParticipantScreeningTO.class);
 
         to.leaseParticipantId().set(participant.<LeaseParticipant<?>> createIdentityStub());
@@ -77,7 +77,9 @@ public class LeaseParticipantUtils {
             to.setPrimaryKey(new Key(participant.getPrimaryKey().asLong(), screening.getPrimaryKey().getVersion()));
         }
 
-        loadRestrictions(to, participant);
+        if (forEdit) {
+            loadRestrictions(to, participant);
+        }
         return to;
     }
 
