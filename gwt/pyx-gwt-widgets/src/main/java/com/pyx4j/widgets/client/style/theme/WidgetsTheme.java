@@ -68,7 +68,7 @@ public class WidgetsTheme extends Theme {
 
         SuggestBoxPopup, SelectionPickerPanel, SelectionPickerPanelItem,
 
-        SelectedItemClose, SelectedItemHolder, SelectorListBoxValuePanel;
+        SelectedItemClose, SelectedItemHolder, SelectedItemHolderLabel, SelectorListBoxValuePanel;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -272,7 +272,7 @@ public class WidgetsTheme extends Theme {
 
     protected void initImageButtonStyle() {
         Style style = new Style(".", StyleName.ImageButton);
-        style.addProperty("padding", "6px 3px");
+        style.addProperty("padding", "2px");
         style.addProperty("display", "inline-block");
         style.addProperty("cursor", "pointer");
         style.addProperty("-webkit-touch-callout", "none");
@@ -492,18 +492,18 @@ public class WidgetsTheme extends Theme {
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", ThemeColor.foreground, 0.4);
-        style.addProperty("padding", "1px");
+        style.addProperty("padding", "4px");
         style.addProperty("box-sizing", "border-box");
         style.addProperty("-moz-box-sizing", "border-box");
         style.addProperty("-webkit-box-sizing", "border-box");
         style.addProperty("font-family", "inherit");
-        style.addProperty("margin", "1px");
-        style.addProperty("border-radius", "3px");
+        style.addProperty("margin", "3px");
+        style.addProperty("border-radius", "4px");
         addStyle(style);
 
         style = new Style(".", StyleName.SelectionPickerPanel);
         style.addProperty("background-color", "white");
-        style.addProperty("padding", "2px");
+        style.addProperty("padding", "4px");
         style.addProperty("border-color", ThemeColor.foreground, 0.4);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
@@ -515,12 +515,14 @@ public class WidgetsTheme extends Theme {
         style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.05);
         addStyle(style);
 
+        style = new Style(".", StyleName.SelectedItemHolderLabel);
+        style.addProperty("display", "inline-block");
+        style.addProperty("vertical-align", "middle");
+        addStyle(style);
+
         style = new Style(".", StyleName.SelectedItemClose);
-        style.addProperty("vertical-align", "left");
-        style.addProperty("padding", "1px");
-        style.addProperty("cursor", "pointer");
-        style.addProperty("font-weight", "bolder");
-        style.addProperty("display", "inline");
+        style.addProperty("vertical-align", "middle");
+        style.addProperty("padding-left", "4px");
         addStyle(style);
 
         style = new Style(".", StyleName.SelectorListBoxValuePanel);
