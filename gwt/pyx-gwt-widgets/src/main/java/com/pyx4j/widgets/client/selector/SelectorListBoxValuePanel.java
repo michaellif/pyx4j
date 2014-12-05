@@ -66,7 +66,21 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
 
     private final GroupFocusHandler groupFocusHandler;
 
-    public SelectorListBoxValuePanel(IFormatter<E, String> valueFormatter) {
+    private ItemHolderFactory<E> itemHolderFactory;
+
+    public SelectorListBoxValuePanel(IFormatter<E, String> valueFormatter, ItemHolderFactory<E> itemHolderFactory) {
+
+        this.itemHolderFactory = itemHolderFactory;
+
+        if (this.itemHolderFactory == null) {
+            this.itemHolderFactory = new ItemHolderFactory<E>() {
+
+                @Override
+                public ItemHolder<E> createItemHolder(E item) {
+                    return new ItemHolder<E>(SelectorListBoxValuePanel.this, item);
+                }
+            };
+        }
 
         setStyleName(WidgetsTheme.StyleName.SelectorListBoxValuePanel.name());
         addStyleName(WidgetsTheme.StyleName.ListBox.name());
@@ -107,7 +121,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
         if (value.size() > 0) {
             for (E item : value) {
                 if (item != null) {
-                    this.itemsPanel.insert(new ItemHolder<E>(this, item), itemsPanel.getWidgetCount() - 1);
+                    this.itemsPanel.insert(itemHolderFactory.createItemHolder(item), itemsPanel.getWidgetCount() - 1);
                 }
             }
         }

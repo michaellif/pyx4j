@@ -51,10 +51,15 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
         this(optionsGrabber, null, valueFormatter, optionFormatter);
     }
 
-    @SuppressWarnings("unchecked")
     public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, Command addItemCommand, IFormatter<E, String> valueFormatter,
             IFormatter<E, SafeHtml> optionFormatter) {
-        super(new SelectorListBoxValuePanel<E>(valueFormatter));
+        this(optionsGrabber, addItemCommand, valueFormatter, optionFormatter, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, Command addItemCommand, IFormatter<E, String> valueFormatter,
+            IFormatter<E, SafeHtml> optionFormatter, ItemHolderFactory<E> itemHolderFactory) {
+        super(new SelectorListBoxValuePanel<E>(valueFormatter, null));
 
         listBox = (SelectorListBoxValuePanel<E>) getViewerPanel();
         listBox.setParent(this);
@@ -89,6 +94,11 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
             }
         });
 
+    }
+
+    protected ItemHolder<E> createItemHolder(E item) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     public void setValue(Collection<E> value) {
