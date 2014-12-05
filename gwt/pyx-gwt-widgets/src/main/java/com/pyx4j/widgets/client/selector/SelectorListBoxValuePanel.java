@@ -107,12 +107,16 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
         if (value.size() > 0) {
             for (E item : value) {
                 if (item != null) {
-                    this.itemsPanel.insert(new ItemHolder<E>(this, item, valueFormatter.format(item)), itemsPanel.getWidgetCount() - 1);
+                    this.itemsPanel.insert(new ItemHolder<E>(this, item), itemsPanel.getWidgetCount() - 1);
                 }
             }
         }
 
         queryBox.setValue("");
+    }
+
+    public IFormatter<E, String> getValueFormatter() {
+        return valueFormatter;
     }
 
     @Override

@@ -36,13 +36,13 @@ public class ItemHolder<E> extends Composite {
 
     private static final I18n i18n = I18n.get(ItemHolder.class);
 
-    public ItemHolder(final SelectorListBoxValuePanel<E> parent, final E item, String text) {
+    public ItemHolder(final SelectorListBoxValuePanel<E> parent, final E item) {
         super();
 
         FlowPanel panel = new FlowPanel();
         panel.setStyleName(WidgetsTheme.StyleName.SelectedItemHolder.name());
 
-        Label label = new Label(text);
+        Label label = new Label(parent.getValueFormatter().format(item));
         label.setStyleName(WidgetsTheme.StyleName.SelectedItemHolderLabel.name());
         panel.add(label);
 
