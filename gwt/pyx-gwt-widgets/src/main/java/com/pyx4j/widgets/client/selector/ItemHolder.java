@@ -20,8 +20,8 @@
  */
 package com.pyx4j.widgets.client.selector;
 
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.VerticalAlign;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -46,17 +46,28 @@ public class ItemHolder<E> extends Composite {
         label.setStyleName(WidgetsTheme.StyleName.SelectedItemHolderLabel.name());
         panel.add(label);
 
-        ImageButton deleteItemAction = new ImageButton(ImageFactory.getImages().delButton(), new Command() {
+        ImageButton removeItemAction = new ImageButton(ImageFactory.getImages().delButton(), new Command() {
 
             @Override
             public void execute() {
                 parent.removeItem(item);
             }
+
         });
-        deleteItemAction.setTitle(i18n.tr("Remove"));
-        deleteItemAction.addStyleName(WidgetsTheme.StyleName.SelectedItemClose.name());
-        panel.add(deleteItemAction);
+
+        //Prevent focus grabbing on 'Remove' Button 
+        removeItemAction.addMouseDownHandler(new MouseDownHandler() {
+
+            @Override
+            public void onMouseDown(MouseDownEvent event) {
+                event.preventDefault();
+                parent.setFocus(true);
+            }
+        });
+
+        removeItemAction.setTitle(i18n.tr("Remove"));
+        removeItemAction.addStyleName(WidgetsTheme.StyleName.SelectedItemClose.name());
+        panel.add(removeItemAction);
         initWidget(panel);
     }
-
 }

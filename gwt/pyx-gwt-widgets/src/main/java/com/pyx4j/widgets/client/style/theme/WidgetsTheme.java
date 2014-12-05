@@ -485,7 +485,11 @@ public class WidgetsTheme extends Theme {
 
     protected void initSelectorBoxStyle() {
 
-        Style style = new Style(".", StyleName.SelectedItemHolder);
+        Style style = new Style(".", StyleName.SuggestBoxPopup);
+        style.addProperty("box-shadow", "10px 10px 5px rgba(0, 0, 0, 0.3)");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SelectedItemHolder);
         style.addProperty("display", "inline-block");
         style.addProperty("color", ThemeColor.foreground);
         style.addProperty("background-color", ThemeColor.object1, 0.2);

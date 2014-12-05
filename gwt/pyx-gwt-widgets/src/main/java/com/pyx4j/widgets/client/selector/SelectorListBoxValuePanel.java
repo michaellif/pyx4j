@@ -34,6 +34,7 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 
@@ -59,7 +60,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
 
     private Button actionButton;
 
-    private final FlowPanel cellsPanel;
+    private final FlowPanel itemsPanel;
 
     private SelectorListBox<E> parent;
 
@@ -74,16 +75,18 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
         setWidget(contentPanel);
 
         this.valueFormatter = valueFormatter;
-        cellsPanel = new FlowPanel();
+        itemsPanel = new FlowPanel();
 
         queryBox = new QueryBox();
-        cellsPanel.add(queryBox);
+        itemsPanel.add(queryBox);
 
-        contentPanel.add(cellsPanel);
+        contentPanel.add(itemsPanel);
 
         groupFocusHandler = new GroupFocusHandler(this);
         groupFocusHandler.addFocusable(queryBox);
         groupFocusHandler.addFocusable(this);
+
+        sinkEvents(Event.ONMOUSEDOWN);
 
         super.addFocusHandler(new FocusHandler() {
 
@@ -97,14 +100,14 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
 
     public void showValue(Collection<E> value) {
 
-        for (int i = cellsPanel.getWidgetCount() - 2; i >= 0; i--) {
-            cellsPanel.remove(i);
+        for (int i = itemsPanel.getWidgetCount() - 2; i >= 0; i--) {
+            itemsPanel.remove(i);
         }
 
         if (value.size() > 0) {
             for (E item : value) {
                 if (item != null) {
-                    this.cellsPanel.insert(new ItemHolder<E>(this, item, valueFormatter.format(item)), cellsPanel.getWidgetCount() - 1);
+                    this.itemsPanel.insert(new ItemHolder<E>(this, item, valueFormatter.format(item)), itemsPanel.getWidgetCount() - 1);
                 }
             }
         }
@@ -227,7 +230,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
             remove(actionButton);
         }
         if (command == null) {
-            cellsPanel.getElement().getStyle().setMarginRight(0, Unit.PX);
+            itemsPanel.getElement().getStyle().setMarginRight(0, Unit.PX);
         } else {
             actionButton = new Button(ImageFactory.getImages().addAction(), new Command() {
 
@@ -242,7 +245,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
                 @Override
                 protected void onAttach() {
                     super.onAttach();
-                    cellsPanel.getElement().getStyle().setMarginRight(actionButton.getOffsetWidth(), Unit.PX);
+                    itemsPanel.getElement().getStyle().setMarginRight(actionButton.getOffsetWidth(), Unit.PX);
 
                 }
 

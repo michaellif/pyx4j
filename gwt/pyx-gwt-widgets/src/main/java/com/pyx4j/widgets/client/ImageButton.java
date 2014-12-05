@@ -106,4 +106,5 @@ public class ImageButton extends ButtonBase {
             super.updateImageState();
         }
     }
+
 }
