@@ -270,7 +270,7 @@ public class SimpleMessageFormat {
                                 prevResult = choiceResult;
                             }
                         } else {
-                            throw new IllegalArgumentException();
+                            throw new IllegalArgumentException("Incompleate choice in Pattern '" + formatPattern + "'");
                         }
                     }
                 }
@@ -278,7 +278,7 @@ public class SimpleMessageFormat {
                     if (prevResult != null) {
                         formatedArg = prevResult;
                     } else {
-                        throw new IllegalArgumentException();
+                        throw new IllegalArgumentException("Error in Pattern '" + formatPattern + "'");
                     }
                 }
             } else {
