@@ -36,7 +36,7 @@ import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.property.asset.BuildingElement;
 
-@ToStringFormat("{0}, {1}{2,choice,null#|!null, ${2}}")
+@ToStringFormat("{0}, {1}{2,choice,null#|!null#, ${2}}")
 public interface ProductItem extends IEntity {
 
     @Owner
