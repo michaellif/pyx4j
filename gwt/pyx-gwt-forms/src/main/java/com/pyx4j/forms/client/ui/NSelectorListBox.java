@@ -57,17 +57,17 @@ public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<
                     getCComponent().getAddItemCommand().execute();
                 }
             }
-        }, new IFormatter<E, String>() {
-
-            @Override
-            public String format(E value) {
-                return getCComponent().getFormatter().format(value);
-            }
         }, new IFormatter<E, SafeHtml>() {
 
             @Override
             public SafeHtml format(E value) {
                 return getCComponent().getOptionFormatter().format(value);
+            }
+        }, new IFormatter<E, String>() {
+
+            @Override
+            public String format(E value) {
+                return getCComponent().getFormatter().format(value);
             }
         });
 

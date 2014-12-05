@@ -48,19 +48,24 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
     private final IPickerPanel<E> picker;
 
     public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, SafeHtml> optionFormatter) {
-        this(optionsGrabber, null, valueFormatter, optionFormatter);
+        this(optionsGrabber, null, optionFormatter, valueFormatter);
     }
 
-    public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, Command addItemCommand, IFormatter<E, String> valueFormatter,
-            IFormatter<E, SafeHtml> optionFormatter) {
-        this(optionsGrabber, addItemCommand, valueFormatter, optionFormatter, null);
+    public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, Command addItemCommand, IFormatter<E, SafeHtml> optionFormatter,
+            IFormatter<E, String> valueFormatter) {
+        this(optionsGrabber, addItemCommand, optionFormatter, new SelectorListBoxValuePanel<E>(valueFormatter));
+    }
+
+    public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, Command addItemCommand, IFormatter<E, SafeHtml> optionFormatter,
+            ItemHolderFactory<E> itemHolderFactory) {
+        this(optionsGrabber, addItemCommand, optionFormatter, new SelectorListBoxValuePanel<E>(itemHolderFactory));
+
     }
 
     @SuppressWarnings("unchecked")
-    public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, Command addItemCommand, IFormatter<E, String> valueFormatter,
-            IFormatter<E, SafeHtml> optionFormatter, ItemHolderFactory<E> itemHolderFactory) {
-        super(new SelectorListBoxValuePanel<E>(valueFormatter, null));
-
+    public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, Command addItemCommand, IFormatter<E, SafeHtml> optionFormatter,
+            SelectorListBoxValuePanel<E> selectorListBoxValuePanel) {
+        super(selectorListBoxValuePanel);
         listBox = (SelectorListBoxValuePanel<E>) getViewerPanel();
         listBox.setParent(this);
 
@@ -93,7 +98,6 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
                 listBox.removeStyleDependentName(WidgetsTheme.StyleDependent.focused.name());
             }
         });
-
     }
 
     protected ItemHolder<E> createItemHolder(E item) {

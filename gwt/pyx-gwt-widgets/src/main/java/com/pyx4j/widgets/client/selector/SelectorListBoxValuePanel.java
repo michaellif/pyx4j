@@ -54,8 +54,6 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
 
     private final FlowPanel contentPanel;
 
-    private final IFormatter<E, String> valueFormatter;
-
     private final QueryBox queryBox;
 
     private Button actionButton;
@@ -68,27 +66,30 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
 
     private ItemHolderFactory<E> itemHolderFactory;
 
-    public SelectorListBoxValuePanel(IFormatter<E, String> valueFormatter, ItemHolderFactory<E> itemHolderFactory) {
-
+    public SelectorListBoxValuePanel(ItemHolderFactory<E> itemHolderFactory) {
+        this();
         this.itemHolderFactory = itemHolderFactory;
+    }
 
-        if (this.itemHolderFactory == null) {
-            this.itemHolderFactory = new ItemHolderFactory<E>() {
+    public SelectorListBoxValuePanel(final IFormatter<E, String> valueFormatter) {
+        this();
+        this.itemHolderFactory = new ItemHolderFactory<E>() {
 
-                @Override
-                public ItemHolder<E> createItemHolder(E item) {
-                    return new ItemHolder<E>(SelectorListBoxValuePanel.this, item);
-                }
-            };
-        }
+            @Override
+            public ItemHolder<E> createItemHolder(E item) {
+                return new ItemHolder<E>(SelectorListBoxValuePanel.this, item, valueFormatter);
+            }
+        };
 
+    }
+
+    private SelectorListBoxValuePanel() {
         setStyleName(WidgetsTheme.StyleName.SelectorListBoxValuePanel.name());
         addStyleName(WidgetsTheme.StyleName.ListBox.name());
 
         contentPanel = new FlowPanel();
         setWidget(contentPanel);
 
-        this.valueFormatter = valueFormatter;
         itemsPanel = new FlowPanel();
 
         queryBox = new QueryBox();
@@ -109,7 +110,6 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
                 queryBox.setFocus(true);
             }
         });
-
     }
 
     public void showValue(Collection<E> value) {
@@ -127,10 +127,6 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
         }
 
         queryBox.setValue("");
-    }
-
-    public IFormatter<E, String> getValueFormatter() {
-        return valueFormatter;
     }
 
     @Override

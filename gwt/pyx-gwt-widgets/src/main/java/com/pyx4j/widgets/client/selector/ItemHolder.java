@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageButton;
 import com.pyx4j.widgets.client.ImageFactory;
@@ -36,13 +37,13 @@ public class ItemHolder<E> extends Composite {
 
     private static final I18n i18n = I18n.get(ItemHolder.class);
 
-    public ItemHolder(final SelectorListBoxValuePanel<E> parent, final E item) {
+    public ItemHolder(final SelectorListBoxValuePanel<E> parent, final E item, IFormatter<E, String> valueFormatter) {
         super();
 
         FlowPanel panel = new FlowPanel();
         panel.setStyleName(WidgetsTheme.StyleName.SelectedItemHolder.name());
 
-        Label label = new Label(parent.getValueFormatter().format(item));
+        Label label = new Label(valueFormatter.format(item));
         label.setStyleName(WidgetsTheme.StyleName.SelectedItemHolderLabel.name());
         panel.add(label);
 
