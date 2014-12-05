@@ -70,11 +70,5 @@ public class IdentificationDocumentFileFolder extends PortalBoxFolder<Identifica
 
             return formPanel;
         }
-
-        @Override
-        public void generateMockData() {
-            get(proto().description()).setMockValue("Description");
-        }
-
     }
 }
