@@ -19,10 +19,12 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 public class CBuildingLabel extends CEntityLabel<Building> {
 
-// TODO: VISTA-5535 - required format is implemented (remove 2)
+// TODO: VISTA-5535 - required format is implemented.
 //       BUT we do not want to send so many building info to client!
-//    @Override
-    public String format2(Building value) {
+//       VISTA-5680
+
+    @Override
+    public String format(Building value) {
         if (value == null) {
             return "";
         } else {

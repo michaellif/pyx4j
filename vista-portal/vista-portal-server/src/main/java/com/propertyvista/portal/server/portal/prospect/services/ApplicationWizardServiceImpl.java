@@ -664,7 +664,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
             to.unitSelection().set(unitSelection);
 
-            Persistence.ensureRetrieve(unitSelection.building(), AttachLevel.ToStringMembers);
+            Persistence.ensureRetrieve(unitSelection.building(), AttachLevel.Attached);
             Persistence.ensureRetrieve(unitSelection.floorplan(), AttachLevel.ToStringMembers);
         }
     }
