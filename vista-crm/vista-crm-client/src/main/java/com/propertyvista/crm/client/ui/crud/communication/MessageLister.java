@@ -72,7 +72,7 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
         setAddNewActionCaption(i18n.tr("New") + " " + CategoryType.Ticket.toString());
         setAddNewActionEnabled(false);
 
-        addUpperActionItem(newButton = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New..."), new Command() {
+        addUpperActionItem(newButton = new Button(FolderImages.INSTANCE.addIcon(), i18n.tr("New..."), new Command() {
             @Override
             public void execute() {
             }

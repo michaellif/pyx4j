@@ -71,13 +71,13 @@ public class VisorMessageLister extends SiteDataTablePanel<MessageDTO> {
         // No sorting work for it
         getDataTable().setHasColumnClickSorting(false);
 
-        addUpperActionItem(newMessage = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New Message"), new Command() {
+        addUpperActionItem(newMessage = new Button(FolderImages.INSTANCE.addIcon(), i18n.tr("New Message"), new Command() {
             @Override
             public void execute() {
                 editNewEntity(CategoryType.Message);
             }
         }));
-        addUpperActionItem(newTicket = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New Ticket"), new Command() {
+        addUpperActionItem(newTicket = new Button(FolderImages.INSTANCE.addIcon(), i18n.tr("New Ticket"), new Command() {
             @Override
             public void execute() {
                 editNewEntity(CategoryType.Ticket);

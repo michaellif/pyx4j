@@ -109,7 +109,7 @@ public class LeaseLister extends SiteDataTablePanel<LeaseDTO> {
 
         if (!VistaFeatures.instance().yardiIntegration()) {
             Button createLease;
-            addUpperActionItem(createLease = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New Lease"), new Command() {
+            addUpperActionItem(createLease = new Button(FolderImages.INSTANCE.addIcon(), i18n.tr("New Lease"), new Command() {
                 @Override
                 public void execute() {
                     new LeaseDataDialog(LeaseDataDialog.Type.New).show();
@@ -120,7 +120,7 @@ public class LeaseLister extends SiteDataTablePanel<LeaseDTO> {
 
         if (!VistaFeatures.instance().yardiIntegration()) {
             Button createLease;
-            addUpperActionItem(createLease = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("Current Lease"), new Command() {
+            addUpperActionItem(createLease = new Button(FolderImages.INSTANCE.addIcon(), i18n.tr("Current Lease"), new Command() {
                 @Override
                 public void execute() {
                     new LeaseDataDialog(LeaseDataDialog.Type.Current).show();
