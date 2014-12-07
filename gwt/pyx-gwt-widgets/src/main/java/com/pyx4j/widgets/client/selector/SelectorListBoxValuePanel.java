@@ -40,10 +40,10 @@ import com.google.gwt.user.client.ui.FocusPanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.IFocusGroup;
 import com.pyx4j.widgets.client.IWatermarkWidget;
+import com.pyx4j.widgets.client.ImageButton;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.StringBox;
 import com.pyx4j.widgets.client.event.shared.PasteEvent;
@@ -56,7 +56,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
 
     private final QueryBox queryBox;
 
-    private Button actionButton;
+    private ImageButton actionButton;
 
     private final FlowPanel itemsPanel;
 
@@ -77,7 +77,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
 
             @Override
             public ItemHolder<E> createItemHolder(E item) {
-                return new ItemHolder<E>(SelectorListBoxValuePanel.this, item, valueFormatter);
+                return new ItemHolder<E>(item, valueFormatter);
             }
         };
 
@@ -121,7 +121,9 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
         if (value.size() > 0) {
             for (E item : value) {
                 if (item != null) {
-                    this.itemsPanel.insert(itemHolderFactory.createItemHolder(item), itemsPanel.getWidgetCount() - 1);
+                    ItemHolder<E> itemHolder = itemHolderFactory.createItemHolder(item);
+                    itemHolder.setSelectorListBoxValuePanel(this);
+                    this.itemsPanel.insert(itemHolder, itemsPanel.getWidgetCount() - 1);
                 }
             }
         }
@@ -246,7 +248,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
         if (command == null) {
             itemsPanel.getElement().getStyle().setMarginRight(0, Unit.PX);
         } else {
-            actionButton = new Button(ImageFactory.getImages().addAction(), new Command() {
+            actionButton = new ImageButton(ImageFactory.getImages().addButton(), new Command() {
 
                 @Override
                 public void execute() {

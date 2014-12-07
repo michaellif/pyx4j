@@ -37,7 +37,9 @@ public class ItemHolder<E> extends Composite {
 
     private static final I18n i18n = I18n.get(ItemHolder.class);
 
-    public ItemHolder(final SelectorListBoxValuePanel<E> parent, final E item, IFormatter<E, String> valueFormatter) {
+    private SelectorListBoxValuePanel<E> parent;
+
+    public ItemHolder(final E item, IFormatter<E, String> valueFormatter) {
         super();
 
         FlowPanel panel = new FlowPanel();
@@ -70,5 +72,9 @@ public class ItemHolder<E> extends Composite {
         removeItemAction.addStyleName(WidgetsTheme.StyleName.SelectedItemClose.name());
         panel.add(removeItemAction);
         initWidget(panel);
+    }
+
+    public void setSelectorListBoxValuePanel(SelectorListBoxValuePanel<E> parent) {
+        this.parent = parent;
     }
 }

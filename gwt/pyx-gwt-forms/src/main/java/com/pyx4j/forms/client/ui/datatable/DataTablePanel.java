@@ -124,7 +124,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         topActionsBar = new DataTableActionsBar(this);
         add(topActionsBar);
 
-        FilterPanel newFilterPanel = new FilterPanel<>();
+        FilterPanel newFilterPanel = new FilterPanel();
         if (false) {
             add(newFilterPanel);
         }
@@ -234,7 +234,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
             if (addButtonCaption == null) {
                 addButtonCaption = i18n.tr("New {0}", entityPrototype.getEntityMeta().getCaption());
             }
-            topActionsBar.getToolbar().insertItem(addButton = new Button(FolderImages.INSTANCE.addButton().hover(), addButtonCaption, new Command() {
+            topActionsBar.getToolbar().insertItem(addButton = new Button(FolderImages.INSTANCE.addIcon(), addButtonCaption, new Command() {
                 @Override
                 public void execute() {
                     onItemNew();

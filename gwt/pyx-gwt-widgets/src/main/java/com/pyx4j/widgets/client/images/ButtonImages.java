@@ -37,4 +37,6 @@ public interface ButtonImages extends ClientBundle {
     @Source("icon-button-regular.png")
     ImageResource active();
 
+    @Source("icon-button-regular.png")
+    ImageResource disabled();
 }

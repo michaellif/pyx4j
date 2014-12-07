@@ -48,7 +48,7 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
 
     public BaseFolderDecorator(FolderImages images, String title, boolean addable) {
         this.addable = addable;
-        addButton = new Button(images.addButton().regular(), title);
+        addButton = new Button(images.addIcon(), title);
         addButton.addStyleName(FolderTheme.StyleName.CFolderAddButton.name());
 
         contentPanel = new SimplePanel();

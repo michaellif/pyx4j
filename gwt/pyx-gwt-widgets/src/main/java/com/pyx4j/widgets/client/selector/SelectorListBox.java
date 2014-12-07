@@ -100,11 +100,6 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
         });
     }
 
-    protected ItemHolder<E> createItemHolder(E item) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     public void setValue(Collection<E> value) {
         this.value.clear();
         if (value != null) {

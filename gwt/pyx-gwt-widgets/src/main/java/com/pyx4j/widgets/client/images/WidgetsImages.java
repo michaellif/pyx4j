@@ -42,8 +42,8 @@ public interface WidgetsImages extends ClientBundle {
     public ImageResource action();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("add-action.png")
-    public ImageResource addAction();
+    @Source("add_icon.png")
+    public ImageResource addIcon();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     public ImageResource comboBoxPicker();
@@ -101,18 +101,23 @@ public interface WidgetsImages extends ClientBundle {
     public interface AddIconButtonImages extends ButtonImages {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("add.png")
+        @Source("add-button.png")
         ImageResource regular();
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("add_hover.png")
+        @Source("add-button-hover.png")
         ImageResource hover();
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("add.png")
+        @Source("add-button.png")
         ImageResource active();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("add-button-disabled.png")
+        public ImageResource disabled();
     }
 
     DelIconButtonImages delButton();

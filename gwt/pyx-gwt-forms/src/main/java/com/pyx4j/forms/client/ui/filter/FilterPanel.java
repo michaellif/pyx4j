@@ -20,28 +20,45 @@
  */
 package com.pyx4j.forms.client.ui.filter;
 
+import javax.smartcardio.CommandAPDU;
+
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.images.FolderImages;
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.ImageButton;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.widgets.client.selector.ItemHolder;
+import com.pyx4j.widgets.client.selector.ItemHolderFactory;
+import com.pyx4j.widgets.client.selector.SelectorListBox;
 
-public class FilterPanel<E extends IEntity> extends FlowPanel {
-
-    private static final I18n i18n = I18n.get(FilterPanel.class);
+public class FilterPanel extends SelectorListBox<Criterion> {
 
     public FilterPanel() {
-        setStyleName(FilterTheme.StyleName.FilterPanel.name());
-
-        ImageButton addButton = new ImageButton(FolderImages.INSTANCE.addButton(), i18n.tr("Add filter..."), new Command() {
+        super(new FilterOptionsGrabber(), new Command() {
             @Override
             public void execute() {
+                // TODO Auto-generated method stub
+
+            }
+        }, new IFormatter<Criterion, SafeHtml>() {
+            @Override
+            public SafeHtml format(Criterion value) {
+                SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                return builder.toSafeHtml();
+            }
+        }, new ItemHolderFactory<Criterion>() {
+
+            @Override
+            public ItemHolder<Criterion> createItemHolder(Criterion item) {
+                return new ItemHolder<Criterion>(item, new IFormatter<Criterion, String>() {
+                    @Override
+                    public String format(Criterion value) {
+                        return "TESTTEST";
+                    }
+                });
             }
         });
 
-        add(addButton);
     }
-
 }

@@ -272,7 +272,7 @@ public class WidgetsTheme extends Theme {
 
     protected void initImageButtonStyle() {
         Style style = new Style(".", StyleName.ImageButton);
-        style.addProperty("padding", "2px");
+        style.addProperty("padding", "4px");
         style.addProperty("display", "inline-block");
         style.addProperty("cursor", "pointer");
         style.addProperty("-webkit-touch-callout", "none");
