@@ -24,15 +24,15 @@ import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCard;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationCardCrudService;
 
-public class CardServiceSimulationCardListerViewImpl extends AbstractListerView<CardServiceSimulationCard> implements
-        CardServiceSimulationCardListerView {
+public class CardServiceSimulationCardListerViewImpl extends AbstractListerView<CardServiceSimulationCard> implements CardServiceSimulationCardListerView {
 
     public static class CardServiceSimulationLister extends SiteDataTablePanel<CardServiceSimulationCard> {
 
         public CardServiceSimulationLister() {
             super(CardServiceSimulationCard.class, GWT.<AbstractCrudService<CardServiceSimulationCard>> create(CardServiceSimulationCardCrudService.class),
                     true, true);
-            setDataTableModel(new DataTableModel<CardServiceSimulationCard>( //
+
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().cardType()).build(), //
                     new MemberColumnDescriptor.Builder(proto().cardNumber()).build(), //
                     new MemberColumnDescriptor.Builder(proto().expiryDate()).build(), //
@@ -40,7 +40,9 @@ public class CardServiceSimulationCardListerViewImpl extends AbstractListerView<
                     new MemberColumnDescriptor.Builder(proto().creditLimit(), false).build(), //
                     new MemberColumnDescriptor.Builder(proto().responseCode()).build(), //
                     new MemberColumnDescriptor.Builder(proto().created()).build() //
-            ));
+            );
+
+            setDataTableModel(new DataTableModel<CardServiceSimulationCard>());
         }
     }
 

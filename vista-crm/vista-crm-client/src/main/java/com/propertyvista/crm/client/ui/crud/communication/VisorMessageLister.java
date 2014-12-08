@@ -65,7 +65,8 @@ public class VisorMessageLister extends SiteDataTablePanel<MessageDTO> {
 
         this.presenter = presenter;
 
-        setDataTableModel(new DataTableModel<MessageDTO>(createColumnDescriptors(CategoryType.Message)));
+        setColumnDescriptors(createColumnDescriptors(CategoryType.Message));
+        setDataTableModel(new DataTableModel<MessageDTO>());
 
         setFilteringEnabled(true);
         // No sorting work for it
@@ -195,7 +196,9 @@ public class VisorMessageLister extends SiteDataTablePanel<MessageDTO> {
                 criteria.eq(criteria.proto().category(), mc);
             }
         }
-        setDataTableModel(new DataTableModel<MessageDTO>(createColumnDescriptors(category)));
+
+        setColumnDescriptors(createColumnDescriptors(category));
+        setDataTableModel(new DataTableModel<MessageDTO>());
 
         EntityListCriteria<MessageDTO> result = super.updateCriteria(criteria);
         if (placeCriteria == null) {

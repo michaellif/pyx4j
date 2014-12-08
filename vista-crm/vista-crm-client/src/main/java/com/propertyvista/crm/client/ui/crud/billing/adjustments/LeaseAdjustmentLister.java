@@ -27,18 +27,19 @@ public class LeaseAdjustmentLister extends SiteDataTablePanel<LeaseAdjustment> {
     public LeaseAdjustmentLister() {
         super(LeaseAdjustment.class, GWT.<LeaseAdjustmentCrudService> create(LeaseAdjustmentCrudService.class), true);
 
-        setDataTableModel(new DataTableModel<LeaseAdjustment>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().code()).build(),
-            new MemberColumnDescriptor.Builder(proto().executionType()).build(),
-            new MemberColumnDescriptor.Builder(proto().receivedDate(), false).build(),
-            new MemberColumnDescriptor.Builder(proto().targetDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().tax()).build(),
-            new MemberColumnDescriptor.Builder(proto().status()).build(),
-            new MemberColumnDescriptor.Builder(proto().description(), false).build(),
-            new MemberColumnDescriptor.Builder(proto().updated(), false).build(),
-            new MemberColumnDescriptor.Builder(proto().created(), false).build(),
-            new MemberColumnDescriptor.Builder(proto().createdBy(), false).build()
-        ));//@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().code()).build(), //
+                new MemberColumnDescriptor.Builder(proto().executionType()).build(), //
+                new MemberColumnDescriptor.Builder(proto().receivedDate(), false).build(), //
+                new MemberColumnDescriptor.Builder(proto().targetDate()).build(), //
+                new MemberColumnDescriptor.Builder(proto().tax()).build(), //
+                new MemberColumnDescriptor.Builder(proto().status()).build(), //
+                new MemberColumnDescriptor.Builder(proto().description(), false).build(), //
+                new MemberColumnDescriptor.Builder(proto().updated(), false).build(), //
+                new MemberColumnDescriptor.Builder(proto().created(), false).build(), //
+                new MemberColumnDescriptor.Builder(proto().createdBy(), false).build());
+
+        setDataTableModel(new DataTableModel<LeaseAdjustment>());
     }
 
 }

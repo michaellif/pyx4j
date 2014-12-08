@@ -36,7 +36,8 @@ public class MaintenanceRequestLister extends SiteDataTablePanel<MaintenanceRequ
     public MaintenanceRequestLister() {
         super(MaintenanceRequestDTO.class, GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class), true);
 
-        setDataTableModel(new DataTableModel<MaintenanceRequestDTO>(createColumnDescriptors()));
+        setColumnDescriptors(createColumnDescriptors());
+        setDataTableModel(new DataTableModel<MaintenanceRequestDTO>());
     }
 
     public static ColumnDescriptor[] createColumnDescriptors() {

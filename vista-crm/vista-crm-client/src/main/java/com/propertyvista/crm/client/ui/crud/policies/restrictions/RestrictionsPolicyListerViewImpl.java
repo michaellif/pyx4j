@@ -33,7 +33,8 @@ public class RestrictionsPolicyListerViewImpl extends AbstractListerView<Restric
 
         public RestrictionsPolicyLister() {
             super(RestrictionsPolicyDTO.class, GWT.<RestrictionsPolicyCrudService> create(RestrictionsPolicyCrudService.class));
-            setDataTableModel(new DataTableModel<RestrictionsPolicyDTO>( //
+
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
                     new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build(), //
                     new MemberColumnDescriptor.Builder(proto().occupantsPerBedRoom()).build(), //
@@ -44,8 +45,9 @@ public class RestrictionsPolicyListerViewImpl extends AbstractListerView<Restric
                     new MemberColumnDescriptor.Builder(proto().enforceAgeOfMajority()).build(), // 
                     new MemberColumnDescriptor.Builder(proto().maturedOccupantsAreApplicants()).build(), //
                     new MemberColumnDescriptor.Builder(proto().noNeedGuarantors()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().yearsToForcingPreviousAddress()).build() // 
-            ));
+                    new MemberColumnDescriptor.Builder(proto().yearsToForcingPreviousAddress()).build());
+
+            setDataTableModel(new DataTableModel<RestrictionsPolicyDTO>());
         }
     }
 

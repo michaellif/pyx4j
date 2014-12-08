@@ -33,14 +33,15 @@ public class RoofLister extends SiteDataTablePanel<RoofDTO> {
         super(RoofDTO.class, GWT.<AbstractCrudService<RoofDTO>> create(RoofCrudService.class), true);
         setFilteringEnabled(false);
 
-        setDataTableModel(new DataTableModel<RoofDTO>( //@formatter:off
-                new MemberColumnDescriptor.Builder(proto().type()).build(),
-                new MemberColumnDescriptor.Builder(proto().year()).build(),
-                new MemberColumnDescriptor.Builder(proto().license().number(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().license().expiration(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().license().renewal(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().warranty().type(), false).build()
-        )); //@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().type()).build(), //
+                new MemberColumnDescriptor.Builder(proto().year()).build(), //
+                new MemberColumnDescriptor.Builder(proto().license().number(), false).build(), //
+                new MemberColumnDescriptor.Builder(proto().license().expiration(), false).build(), //
+                new MemberColumnDescriptor.Builder(proto().license().renewal(), false).build(), //
+                new MemberColumnDescriptor.Builder(proto().warranty().type(), false).build());
+
+        setDataTableModel(new DataTableModel<RoofDTO>());
     }
 
     @Override

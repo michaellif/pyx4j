@@ -28,26 +28,26 @@ public class FundsTransferBatchLister extends SiteDataTablePanel<FundsTransferBa
     public FundsTransferBatchLister() {
         super(FundsTransferBatchDTO.class, GWT.<AbstractCrudService<FundsTransferBatchDTO>> create(PadBatchCrudService.class), false, false);
 
-        setDataTableModel(new DataTableModel<FundsTransferBatchDTO>(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().padFile().id()).columnTitle("File Id").searchableOnly().build(),    
-                    new MemberColumnDescriptor.Builder(proto().padFile().fileCreationNumber()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().padFile().fileName()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().padFile().sent()).build(),
-                    new MemberColumnDescriptor.Builder(proto().batchNumber()).build(),    
-                    
-                    new MemberColumnDescriptor.Builder(proto().pmc()).build(),
-                    new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(),
-                    
-                    new MemberColumnDescriptor.Builder(proto().merchantTerminalId()).build(),
-                    
-                    
-                    new MemberColumnDescriptor.Builder(proto().bankId()).build(),
-                    new MemberColumnDescriptor.Builder(proto().branchTransitNumber()).build(),
-                    new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),
-                    new MemberColumnDescriptor.Builder(proto().batchAmount()).build(),
-                    new MemberColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build(),
-                    new MemberColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build(),
-                    new MemberColumnDescriptor.Builder(proto().processingStatus()).build()
-            ));//@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().padFile().id()).columnTitle("File Id").searchableOnly().build(), //    
+                new MemberColumnDescriptor.Builder(proto().padFile().fileCreationNumber()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().padFile().fileName()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().padFile().sent()).build(), //
+                new MemberColumnDescriptor.Builder(proto().batchNumber()).build(), //    
+
+                new MemberColumnDescriptor.Builder(proto().pmc()).build(), //
+                new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(), //
+
+                new MemberColumnDescriptor.Builder(proto().merchantTerminalId()).build(), //
+
+                new MemberColumnDescriptor.Builder(proto().bankId()).build(), //
+                new MemberColumnDescriptor.Builder(proto().branchTransitNumber()).build(), //
+                new MemberColumnDescriptor.Builder(proto().accountNumber()).build(), //
+                new MemberColumnDescriptor.Builder(proto().batchAmount()).build(), //
+                new MemberColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build(), //
+                new MemberColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build(), //
+                new MemberColumnDescriptor.Builder(proto().processingStatus()).build());
+
+        setDataTableModel(new DataTableModel<FundsTransferBatchDTO>());
     }
 }

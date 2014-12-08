@@ -34,10 +34,11 @@ public class BackgroundCheckPolicyListerViewImpl extends AbstractListerView<Back
         public BackgroundCheckPolicyLister() {
             super(BackgroundCheckPolicyDTO.class, GWT.<BackgroundCheckPolicyCrudService> create(BackgroundCheckPolicyCrudService.class));
 
-            setDataTableModel(new DataTableModel<BackgroundCheckPolicyDTO>( //
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
-            ));
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build());
+
+            setDataTableModel(new DataTableModel<BackgroundCheckPolicyDTO>());
 
         }
     }

@@ -38,7 +38,8 @@ public class RunLister extends SiteDataTablePanel<Run> {
 
     public RunLister(boolean isInlineMode) {
         super(Run.class, GWT.<AbstractCrudService<Run>> create(RunCrudService.class), false);
-        setDataTableModel(new DataTableModel<Run>(isInlineMode ? INLINE_VIEW_COLUMN_DESCRIPTORS : VIEW_COLUMN_DESCRIPTORS));
+        setColumnDescriptors(isInlineMode ? INLINE_VIEW_COLUMN_DESCRIPTORS : VIEW_COLUMN_DESCRIPTORS);
+        setDataTableModel(new DataTableModel<Run>());
     }
 
     static List<ColumnDescriptor> createInlineViewColumnDescriptors() {

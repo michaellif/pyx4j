@@ -35,7 +35,7 @@ public class CustomerCreditCheckTransactionLister extends SiteDataTablePanel<Cus
         super(CustomerCreditCheckTransactionDTO.class, GWT.<CustomerCreditCheckTransactionCrudService> create(CustomerCreditCheckTransactionCrudService.class),
                 false);
 
-        setDataTableModel(new DataTableModel<CustomerCreditCheckTransactionDTO>( //
+        setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().pmc()).build(), //
                 new MemberColumnDescriptor.Builder(proto().amount()).build(), //
                 new MemberColumnDescriptor.Builder(proto().tax()).build(), //
@@ -43,7 +43,9 @@ public class CustomerCreditCheckTransactionLister extends SiteDataTablePanel<Cus
                 new MemberColumnDescriptor.Builder(proto().status()).build(), //
                 new MemberColumnDescriptor.Builder(proto().transactionAuthorizationNumber()).build(), //
                 new MemberColumnDescriptor.Builder(proto().transactionDate()).build() //
-        ));
+        );
+
+        setDataTableModel(new DataTableModel<CustomerCreditCheckTransactionDTO>());
     }
 
     @Override

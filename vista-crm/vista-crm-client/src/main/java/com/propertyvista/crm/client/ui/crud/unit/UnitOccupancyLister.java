@@ -41,14 +41,15 @@ public class UnitOccupancyLister extends SiteDataTablePanel<AptUnitOccupancySegm
             }
         });
 
-        setDataTableModel(new DataTableModel<AptUnitOccupancySegment>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().dateFrom()).sortable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().dateTo()).sortable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().status()).sortable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().offMarket()).sortable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().lease().leaseId()).sortable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().lease().leaseFrom()).sortable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().lease().leaseTo()).sortable(false).build()
-        ));//@formatter:on        
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().dateFrom()).sortable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().dateTo()).sortable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().status()).sortable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().offMarket()).sortable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().lease().leaseId()).sortable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().lease().leaseFrom()).sortable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().lease().leaseTo()).sortable(false).build());
+
+        setDataTableModel(new DataTableModel<AptUnitOccupancySegment>());
     }
 }

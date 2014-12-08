@@ -34,10 +34,11 @@ public class N4PolicyListerViewImpl extends AbstractListerView<N4PolicyDTO> impl
         public N4PolicyLister() {
             super(N4PolicyDTO.class, GWT.<N4PolicyCrudService> create(N4PolicyCrudService.class));
 
-            setDataTableModel(new DataTableModel<N4PolicyDTO>(// @formatter:off
-                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
-            )); // @formatter:on
+            setColumnDescriptors( //
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build());
+
+            setDataTableModel(new DataTableModel<N4PolicyDTO>());
         }
     }
 }

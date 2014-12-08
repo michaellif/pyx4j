@@ -34,10 +34,12 @@ public class DepositPolicyListerViewImpl extends AbstractListerView<DepositPolic
         public DepositPolicyLister() {
             super(DepositPolicyDTO.class, GWT.<DepositPolicyCrudService> create(DepositPolicyCrudService.class));
 
-            setDataTableModel(new DataTableModel<DepositPolicyDTO>( //
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
                     new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
-            ));
+            );
+
+            setDataTableModel(new DataTableModel<DepositPolicyDTO>());
         }
     }
 

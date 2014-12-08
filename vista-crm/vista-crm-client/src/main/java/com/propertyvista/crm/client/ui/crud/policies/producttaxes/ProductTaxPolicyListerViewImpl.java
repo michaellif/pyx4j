@@ -34,10 +34,11 @@ public class ProductTaxPolicyListerViewImpl extends AbstractListerView<ProductTa
         public ProductTaxPolicyLister() {
             super(ProductTaxPolicyDTO.class, GWT.<ProductTaxPolicyCrudService> create(ProductTaxPolicyCrudService.class));
 
-            setDataTableModel(new DataTableModel<ProductTaxPolicyDTO>( //
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
-            ));
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build());
+
+            setDataTableModel(new DataTableModel<ProductTaxPolicyDTO>());
         }
     }
 }

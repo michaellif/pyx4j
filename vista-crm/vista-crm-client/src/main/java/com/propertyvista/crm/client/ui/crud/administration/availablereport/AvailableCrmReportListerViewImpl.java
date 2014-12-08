@@ -39,10 +39,11 @@ public class AvailableCrmReportListerViewImpl extends AbstractListerView<Availab
         public CrmRoleLister() {
             super(AvailableCrmReport.class, GWT.<AbstractListCrudService<AvailableCrmReport>> create(AvailableCrmReportAdminCrudService.class), false);
 
-            setDataTableModel(new DataTableModel<AvailableCrmReport>(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().reportType()).build(),
-                new MemberColumnDescriptor.Builder(proto().roles()).build()
-            ));//@formatter:on
+            setColumnDescriptors( //
+                    new MemberColumnDescriptor.Builder(proto().reportType()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().roles()).build());
+
+            setDataTableModel(new DataTableModel<AvailableCrmReport>());
         }
 
         @Override

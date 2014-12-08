@@ -31,22 +31,24 @@ public class BillingCycleLister extends SiteDataTablePanel<BillingCycleDTO> {
 
     public BillingCycleLister() {
         super(BillingCycleDTO.class, GWT.<AbstractCrudService<BillingCycleDTO>> create(BillingCycleCrudService.class), false);
-        setDataTableModel(new DataTableModel<BillingCycleDTO>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().building(), false).build(),
-            new MemberColumnDescriptor.Builder(proto().billingType()).build(),
-            new MemberColumnDescriptor.Builder(proto().billingCycleStartDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().billingCycleEndDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().targetBillExecutionDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().notRun()).sortable(false).searchable(false).build(),      
-            new MemberColumnDescriptor.Builder(proto().stats().notConfirmed()).build(),        
-            new MemberColumnDescriptor.Builder(proto().stats().failed()).build(), 
-            new MemberColumnDescriptor.Builder(proto().stats().rejected()).build(),  
-            new MemberColumnDescriptor.Builder(proto().stats().confirmed()).build(), 
-            new MemberColumnDescriptor.Builder(proto().total()).sortable(false).searchable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().pads()).sortable(false).searchable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().targetAutopayExecutionDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().actualAutopayExecutionDate()).build()
-        ));//@formatter:on
+
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().building(), false).build(), //
+                new MemberColumnDescriptor.Builder(proto().billingType()).build(), //
+                new MemberColumnDescriptor.Builder(proto().billingCycleStartDate()).build(), //
+                new MemberColumnDescriptor.Builder(proto().billingCycleEndDate()).build(), //
+                new MemberColumnDescriptor.Builder(proto().targetBillExecutionDate()).build(), //
+                new MemberColumnDescriptor.Builder(proto().notRun()).sortable(false).searchable(false).build(), //      
+                new MemberColumnDescriptor.Builder(proto().stats().notConfirmed()).build(), //        
+                new MemberColumnDescriptor.Builder(proto().stats().failed()).build(), // 
+                new MemberColumnDescriptor.Builder(proto().stats().rejected()).build(), //  
+                new MemberColumnDescriptor.Builder(proto().stats().confirmed()).build(), // 
+                new MemberColumnDescriptor.Builder(proto().total()).sortable(false).searchable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().pads()).sortable(false).searchable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().targetAutopayExecutionDate()).build(), //
+                new MemberColumnDescriptor.Builder(proto().actualAutopayExecutionDate()).build());
+
+        setDataTableModel(new DataTableModel<BillingCycleDTO>());
     }
 
     @Override

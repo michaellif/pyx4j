@@ -35,10 +35,12 @@ public class YardiInterfacePolicyListerViewImpl extends AbstractListerView<Yardi
         public YardiInterfacePolicyLister() {
             super(YardiInterfacePolicyDTO.class, GWT.<YardiInterfacePolicyCrudService> create(YardiInterfacePolicyCrudService.class));
 
-            setDataTableModel(new DataTableModel<YardiInterfacePolicyDTO>( //
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
                     new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
-            ));
+            );
+
+            setDataTableModel(new DataTableModel<YardiInterfacePolicyDTO>());
         }
 
     }

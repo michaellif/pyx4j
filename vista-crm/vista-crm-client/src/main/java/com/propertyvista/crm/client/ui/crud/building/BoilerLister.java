@@ -33,12 +33,13 @@ public class BoilerLister extends SiteDataTablePanel<BoilerDTO> {
         super(BoilerDTO.class, GWT.<AbstractCrudService<BoilerDTO>> create(BoilerCrudService.class), true);
         setFilteringEnabled(false);
 
-        setDataTableModel(new DataTableModel<BoilerDTO>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().type()).build(),
-            new MemberColumnDescriptor.Builder(proto().make()).build(),
-            new MemberColumnDescriptor.Builder(proto().model()).build(),
-            new MemberColumnDescriptor.Builder(proto().build()).build()
-        ));//@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().type()).build(), //
+                new MemberColumnDescriptor.Builder(proto().make()).build(), //
+                new MemberColumnDescriptor.Builder(proto().model()).build(), //
+                new MemberColumnDescriptor.Builder(proto().build()).build());
+
+        setDataTableModel(new DataTableModel<BoilerDTO>());
     }
 
     @Override

@@ -36,10 +36,11 @@ public class LegalTermsPolicyListerViewImpl extends AbstractListerView<LegalTerm
             setAddNewActionEnabled(false);
             setDeleteActionEnabled(false);
 
-            setDataTableModel(new DataTableModel<LegalTermsPolicyDTO>( //
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
-            ));
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build());
+
+            setDataTableModel(new DataTableModel<LegalTermsPolicyDTO>());
         }
     }
 }

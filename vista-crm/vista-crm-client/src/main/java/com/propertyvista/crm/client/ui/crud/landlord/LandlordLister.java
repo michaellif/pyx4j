@@ -32,12 +32,13 @@ public class LandlordLister extends SiteDataTablePanel<LandlordDTO> {
     public LandlordLister() {
         super(LandlordDTO.class, GWT.<AbstractCrudService<LandlordDTO>> create(LandlordCrudService.class), true);
 
-        setDataTableModel(new DataTableModel<LandlordDTO>( //
+        setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().name()).build(), // 
                 new MemberColumnDescriptor.Builder(proto().address().city()).sortable(false).searchable(false).build(), //
                 new MemberColumnDescriptor.Builder(proto().address().province()).sortable(false).searchable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().address().country()).sortable(false).searchable(false).build() //
-        ));
+                new MemberColumnDescriptor.Builder(proto().address().country()).sortable(false).searchable(false).build());
+
+        setDataTableModel(new DataTableModel<LandlordDTO>());
     }
 
     @Override

@@ -34,16 +34,17 @@ public class FloorplanLister extends SiteDataTablePanel<FloorplanDTO> {
         super(FloorplanDTO.class, GWT.<AbstractCrudService<FloorplanDTO>> create(FloorplanCrudService.class),
                 !VistaFeatures.instance().yardiIntegration() ? true : false);
 
-        setDataTableModel(new DataTableModel<FloorplanDTO>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().name()).build(),
-            new MemberColumnDescriptor.Builder(proto().marketingName()).build(),
-            new MemberColumnDescriptor.Builder(proto().floorCount()).build(),
-            new MemberColumnDescriptor.Builder(proto().bedrooms()).build(),
-            new MemberColumnDescriptor.Builder(proto().dens()).build(),
-            new MemberColumnDescriptor.Builder(proto().bathrooms()).build(),
-            new MemberColumnDescriptor.Builder(proto().counters()._unitCount()).build(),
-            new MemberColumnDescriptor.Builder(proto().counters()._marketingUnitCount(), false).build()
-        ));//@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().name()).build(), //
+                new MemberColumnDescriptor.Builder(proto().marketingName()).build(), //
+                new MemberColumnDescriptor.Builder(proto().floorCount()).build(), //
+                new MemberColumnDescriptor.Builder(proto().bedrooms()).build(), //
+                new MemberColumnDescriptor.Builder(proto().dens()).build(), //
+                new MemberColumnDescriptor.Builder(proto().bathrooms()).build(), //
+                new MemberColumnDescriptor.Builder(proto().counters()._unitCount()).build(), //
+                new MemberColumnDescriptor.Builder(proto().counters()._marketingUnitCount(), false).build());
+
+        setDataTableModel(new DataTableModel<FloorplanDTO>());
     }
 
     @Override

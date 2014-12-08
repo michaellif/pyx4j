@@ -32,11 +32,12 @@ public class GlCodeCategoryLister extends SiteDataTablePanel<GlCodeCategory> {
     public GlCodeCategoryLister() {
         super(GlCodeCategory.class, GWT.<AbstractListCrudService<GlCodeCategory>> create(GlCodeCategoryCrudService.class), true, true);
 
-        setDataTableModel(new DataTableModel<GlCodeCategory>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().categoryId()).build(),
-            new MemberColumnDescriptor.Builder(proto().description()).build(),
-            new MemberColumnDescriptor.Builder(proto().glCodes()).build()
-        ));//@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().categoryId()).build(), //
+                new MemberColumnDescriptor.Builder(proto().description()).build(), //
+                new MemberColumnDescriptor.Builder(proto().glCodes()).build());
+
+        setDataTableModel(new DataTableModel<GlCodeCategory>());
     }
 
     @Override

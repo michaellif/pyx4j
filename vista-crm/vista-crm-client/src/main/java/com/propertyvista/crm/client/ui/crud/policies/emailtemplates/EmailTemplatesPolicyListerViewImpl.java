@@ -34,10 +34,11 @@ public class EmailTemplatesPolicyListerViewImpl extends AbstractListerView<Email
         public EmailTemplatesPolicyLister() {
             super(EmailTemplatesPolicyDTO.class, GWT.<EmailTemplatesPolicyCrudService> create(EmailTemplatesPolicyCrudService.class));
 
-            setDataTableModel(new DataTableModel<EmailTemplatesPolicyDTO>( //
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
-            ));
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build());
+
+            setDataTableModel(new DataTableModel<EmailTemplatesPolicyDTO>());
         }
     }
 

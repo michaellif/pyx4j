@@ -110,12 +110,14 @@ public class LeaseContextSelectionViewImpl extends SimplePanel implements LeaseC
         public LeaseLister() {
             super(LeaseContextChoiceDTO.class, false, false);
             setFilteringEnabled(false);
-            setDataTableModel(new DataTableModel<LeaseContextChoiceDTO>(//
+
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().leasedUnitAddress()).build(),//
                     new MemberColumnDescriptor.Builder(proto().leaseFrom()).build(),//
                     new MemberColumnDescriptor.Builder(proto().leaseTo()).build(),//
-                    new MemberColumnDescriptor.Builder(proto().status()).build()//
-            ));//
+                    new MemberColumnDescriptor.Builder(proto().status()).build());
+
+            setDataTableModel(new DataTableModel<LeaseContextChoiceDTO>());
         }
     }
 

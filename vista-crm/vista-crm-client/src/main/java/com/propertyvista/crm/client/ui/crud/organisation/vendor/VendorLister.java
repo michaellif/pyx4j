@@ -32,10 +32,12 @@ public class VendorLister extends SiteDataTablePanel<Vendor> {
     public VendorLister() {
         super(Vendor.class, GWT.<AbstractListCrudService<Vendor>> create(VendorCrudService.class), true);
 
-        setDataTableModel(new DataTableModel<Vendor>( //
+        setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().name()).build(), //
                 new MemberColumnDescriptor.Builder(proto().type()).build() //
-        ));
+        );
+
+        setDataTableModel(new DataTableModel<Vendor>());
     }
 
     @Override

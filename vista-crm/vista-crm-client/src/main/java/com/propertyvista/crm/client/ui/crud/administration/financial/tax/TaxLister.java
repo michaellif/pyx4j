@@ -32,12 +32,13 @@ public class TaxLister extends SiteDataTablePanel<Tax> {
     public TaxLister() {
         super(Tax.class, GWT.<AbstractListCrudService<Tax>> create(TaxCrudService.class), true, true);
 
-        setDataTableModel(new DataTableModel<Tax>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().name()).build(),
-            new MemberColumnDescriptor.Builder(proto().authority()).build(),
-            new MemberColumnDescriptor.Builder(proto().rate()).build(),
-            new MemberColumnDescriptor.Builder(proto().compound()).build()
-        ));//@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().name()).build(), //
+                new MemberColumnDescriptor.Builder(proto().authority()).build(), //
+                new MemberColumnDescriptor.Builder(proto().rate()).build(), //
+                new MemberColumnDescriptor.Builder(proto().compound()).build());
+
+        setDataTableModel(new DataTableModel<Tax>());
     }
 
     @Override

@@ -37,11 +37,13 @@ public class LoginAttemptsListerViewImpl extends AbstractListerView<LoginAttempt
 
         public LoginAttemptsLister() {
             super(LoginAttemptDTO.class, GWT.<CrmLoginAttemptsListerService> create(CrmLoginAttemptsListerService.class));
-            setDataTableModel(new DataTableModel<LoginAttemptDTO>( //
+
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().time()).build(), //
                     new MemberColumnDescriptor.Builder(proto().remoteAddress()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().outcome()).build() //
-            ));
+                    new MemberColumnDescriptor.Builder(proto().outcome()).build());
+
+            setDataTableModel(new DataTableModel<LoginAttemptDTO>());
         }
 
         @Override

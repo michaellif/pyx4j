@@ -17,7 +17,6 @@ import java.util.Collection;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -29,7 +28,8 @@ public class SelectorDialogTenantLister extends EntityLister<Tenant> {
 
     public SelectorDialogTenantLister(SelectRecipientsDialogForm parent, Collection<Tenant> alreadySelected) {
         super(Tenant.class, GWT.<SelectTenantListService> create(SelectTenantListService.class), parent, alreadySelected);
-        DataTableModel<Tenant> dataTableModel = new DataTableModel<Tenant>(new ColumnDescriptor[] {//@formatter:off
+
+        setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().participantId()).build(),//
                 new MemberColumnDescriptor.Builder(proto().customer().person().name()).searchable(false).build(),//
                 new MemberColumnDescriptor.Builder(proto().customer().person().name().firstName()).searchableOnly().build(),//
@@ -41,12 +41,12 @@ public class SelectorDialogTenantLister extends EntityLister<Tenant> {
                 new MemberColumnDescriptor.Builder(proto().customer().person().mobilePhone()).build(),//
                 new MemberColumnDescriptor.Builder(proto().customer().person().workPhone()).build(),//
                 new MemberColumnDescriptor.Builder(proto().lease()).searchable(false).build(),//
-                new MemberColumnDescriptor.Builder(proto().lease().leaseId()).searchableOnly().build()
-        });
+                new MemberColumnDescriptor.Builder(proto().lease().leaseId()).searchableOnly().build());
+
+        DataTableModel<Tenant> dataTableModel = new DataTableModel<Tenant>();
         dataTableModel.setPageSize(DataTablePanel.PAGESIZE_SMALL);
         dataTableModel.setMultipleSelection(true);
         setDataTableModel(dataTableModel);
     }
-
 
 }

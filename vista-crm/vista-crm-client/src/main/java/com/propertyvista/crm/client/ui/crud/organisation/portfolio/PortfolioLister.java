@@ -32,10 +32,11 @@ public class PortfolioLister extends SiteDataTablePanel<Portfolio> {
     public PortfolioLister() {
         super(Portfolio.class, GWT.<AbstractCrudService<Portfolio>> create(PortfolioCrudService.class), true);
 
-        setDataTableModel(new DataTableModel<Portfolio>(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().name()).build(),
-                new MemberColumnDescriptor.Builder(proto().description()).build()
-        )); //@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().name()).build(), //
+                new MemberColumnDescriptor.Builder(proto().description()).build());
+
+        setDataTableModel(new DataTableModel<Portfolio>());
     }
 
     @Override

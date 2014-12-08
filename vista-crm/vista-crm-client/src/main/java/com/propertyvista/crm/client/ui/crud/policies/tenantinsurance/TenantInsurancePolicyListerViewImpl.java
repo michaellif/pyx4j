@@ -34,9 +34,12 @@ public class TenantInsurancePolicyListerViewImpl extends AbstractListerView<Tena
         public TenantInsurancePolicyLister() {
             super(TenantInsurancePolicyDTO.class, GWT.<TenantInsurancePolicyCrudService> create(TenantInsurancePolicyCrudService.class));
 
-            setDataTableModel(new DataTableModel<TenantInsurancePolicyDTO>(new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
+            setColumnDescriptors( //
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
                     new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
-            ));
+            );
+
+            setDataTableModel(new DataTableModel<TenantInsurancePolicyDTO>());
         }
 
     }

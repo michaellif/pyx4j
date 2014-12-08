@@ -19,7 +19,6 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -34,7 +33,8 @@ public class SelectorDialogCorporateLister extends EntityLister<Employee> {
 
     public SelectorDialogCorporateLister(SelectRecipientsDialogForm parent, Collection<Employee> alreadySelected) {
         super(Employee.class, GWT.<SelectEmployeeListService> create(SelectEmployeeListService.class), parent, alreadySelected);
-        DataTableModel<Employee> dataTableModel = new DataTableModel<Employee>(new ColumnDescriptor[] {
+
+        setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().employeeId()).build(),//
                 new MemberColumnDescriptor.Builder(proto().name()).searchable(false).build(),//
                 new MemberColumnDescriptor.Builder(proto().title()).build(),//
@@ -42,7 +42,9 @@ public class SelectorDialogCorporateLister extends EntityLister<Employee> {
                 new MemberColumnDescriptor.Builder(proto().name().lastName()).searchableOnly().build(),//
                 new MemberColumnDescriptor.Builder(proto().email(), false).build(),//
                 new MemberColumnDescriptor.Builder(proto().updated(), false).build() //
-                });
+        );
+
+        DataTableModel<Employee> dataTableModel = new DataTableModel<Employee>();
         dataTableModel.setPageSize(DataTablePanel.PAGESIZE_SMALL);
         dataTableModel.setMultipleSelection(true);
         setDataTableModel(dataTableModel);

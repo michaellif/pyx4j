@@ -30,7 +30,7 @@ public class GuarantorLister extends LeaseParticipantLister<GuarantorDTO> {
     public GuarantorLister() {
         super(GuarantorDTO.class, GWT.<GuarantorCrudService> create(GuarantorCrudService.class));
 
-        setDataTableModel(new DataTableModel<GuarantorDTO>( //
+        setColumnDescriptors( //
                 new Builder(proto().participantId()).build(), //
 
                 new Builder(proto().customer().person().name()).searchable(false).build(), //
@@ -47,7 +47,10 @@ public class GuarantorLister extends LeaseParticipantLister<GuarantorDTO> {
                 new Builder(proto().lease()).searchable(false).build(), //
                 new Builder(proto().lease().leaseId()).columnTitle(i18n.tr("Lease Id")).searchableOnly().build(), //
 
-                new Builder(proto().lease().unit().info().number()).columnTitle(i18n.tr("Unit #")).searchableOnly().build() //
-        ));
+                new Builder(proto().lease().unit().info().number()).columnTitle(i18n.tr("Unit #")).searchableOnly().build()
+
+        );
+
+        setDataTableModel(new DataTableModel<GuarantorDTO>());
     }
 }

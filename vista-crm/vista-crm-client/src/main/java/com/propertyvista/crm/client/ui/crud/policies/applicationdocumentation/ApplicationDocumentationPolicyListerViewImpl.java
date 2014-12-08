@@ -35,13 +35,16 @@ public class ApplicationDocumentationPolicyListerViewImpl extends AbstractLister
         public ApplicationDocumentationPolicyLister() {
             super(ApplicationDocumentationPolicyDTO.class, GWT
                     .<ApplicationDocumentationPolicyCrudService> create(ApplicationDocumentationPolicyCrudService.class));
-            setDataTableModel(new DataTableModel<ApplicationDocumentationPolicyDTO>(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().numberOfRequiredIDs()).build(),
-                    new MemberColumnDescriptor.Builder(proto().allowedIDs()).build(),
-                    new MemberColumnDescriptor.Builder(proto().mandatoryProofOfIncome()).build()
-            ));//@formatter:on
+
+            setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build(), //
+                    new MemberColumnDescriptor.Builder(proto().numberOfRequiredIDs()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().allowedIDs()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().mandatoryProofOfIncome()).build() //
+
+            );
+
+            setDataTableModel(new DataTableModel<ApplicationDocumentationPolicyDTO>());
         }
     }
 }

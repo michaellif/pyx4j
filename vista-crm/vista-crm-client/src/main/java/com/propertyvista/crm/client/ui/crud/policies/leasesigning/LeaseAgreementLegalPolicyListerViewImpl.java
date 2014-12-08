@@ -32,10 +32,12 @@ public class LeaseAgreementLegalPolicyListerViewImpl extends AbstractListerView<
     public static class AgreementLegalPolicyLister extends PolicyListerBase<LeaseAgreementLegalPolicyDTO> {
         public AgreementLegalPolicyLister() {
             super(LeaseAgreementLegalPolicyDTO.class, GWT.<LeaseAgreementLegalPolicyCrudService> create(LeaseAgreementLegalPolicyCrudService.class));
-            setDataTableModel(new DataTableModel<LeaseAgreementLegalPolicyDTO>( //
+
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
-            ));
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build());
+
+            setDataTableModel(new DataTableModel<LeaseAgreementLegalPolicyDTO>());
         }
     }
 }

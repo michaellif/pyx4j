@@ -108,8 +108,9 @@ public class ApplicationContextSelectionViewImpl extends SimplePanel implements 
         public ApplicationLister() {
             super(OnlineApplicationContextChoiceDTO.class, false, false);
             setFilteringEnabled(false);
-            setDataTableModel(new DataTableModel<OnlineApplicationContextChoiceDTO>(
-                    new MemberColumnDescriptor.Builder(proto().leaseApplicationUnitAddress()).build()));
+
+            setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().leaseApplicationUnitAddress()).build());
+            setDataTableModel(new DataTableModel<OnlineApplicationContextChoiceDTO>());
         }
     }
 

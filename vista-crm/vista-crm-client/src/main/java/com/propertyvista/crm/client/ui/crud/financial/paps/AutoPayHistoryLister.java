@@ -34,7 +34,7 @@ public class AutoPayHistoryLister extends SiteDataTablePanel<AutoPayHistoryDTO> 
     public AutoPayHistoryLister() {
         super(AutoPayHistoryDTO.class, GWT.<AutoPayHistoryCrudService> create(AutoPayHistoryCrudService.class), false);
 
-        setDataTableModel(new DataTableModel<AutoPayHistoryDTO>( //
+        setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().id()).build(), //
                 new MemberColumnDescriptor.Builder(proto().isDeleted()).build(), //
 
@@ -64,8 +64,9 @@ public class AutoPayHistoryLister extends SiteDataTablePanel<AutoPayHistoryDTO> 
                 new MemberColumnDescriptor.Builder(proto().updatedByTenant(), false).build(), //
                 new MemberColumnDescriptor.Builder(proto().updatedBySystem(), false).build(), //
                 new MemberColumnDescriptor.Builder(proto().updated()).searchable(false).build() //
+        );
 
-        ));
+        setDataTableModel(new DataTableModel<AutoPayHistoryDTO>());
     }
 
     @Override

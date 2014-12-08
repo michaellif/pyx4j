@@ -36,10 +36,11 @@ public class IdAssignmentPolicyListerViewImpl extends AbstractListerView<IdAssig
             setAddNewActionEnabled(false);
             setDeleteActionEnabled(false);
 
-            setDataTableModel(new DataTableModel<IdAssignmentPolicyDTO>(// @formatter:off
-                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
-            )); // @formatter:on
+            setColumnDescriptors( //
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build());
+
+            setDataTableModel(new DataTableModel<IdAssignmentPolicyDTO>());
         }
     }
 

@@ -41,34 +41,34 @@ public class ServiceLister extends SiteDataTablePanel<Service> {
 
     private final static I18n i18n = I18n.get(ServiceLister.class);
 
-    private final IPaneView parentView;
+    private final IPaneView<?> parentView;
 
-    public ServiceLister(IPaneView parentView) {
+    public ServiceLister(IPaneView<?> parentView) {
         super(Service.class, GWT.<AbstractCrudService<Service>> create(ServiceCrudService.class), !VistaFeatures.instance().yardiIntegration(), !VistaFeatures
                 .instance().yardiIntegration());
         this.parentView = parentView;
         setFilteringEnabled(false);
 
         if (VistaTODO.VISTA_2256_Default_Product_Catalog_Show) {
-            setDataTableModel(new DataTableModel<Service>(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().code()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().name()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().price()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), 
-                    new MemberColumnDescriptor.Builder(proto().version().availableOnline()).build(),
-                    new MemberColumnDescriptor.Builder(proto().expiredFrom()).build(),
-                    new MemberColumnDescriptor.Builder(proto().defaultCatalogItem()).build()
-                ));//@formatter:on
+            setColumnDescriptors( //
+                    new MemberColumnDescriptor.Builder(proto().code()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().version().name()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().version().price()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), // 
+                    new MemberColumnDescriptor.Builder(proto().version().availableOnline()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().expiredFrom()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().defaultCatalogItem()).build());
         } else {
-            setDataTableModel(new DataTableModel<Service>(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().code()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().name()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().price()).visible(!VistaFeatures.instance().yardiIntegration()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), 
-                    new MemberColumnDescriptor.Builder(proto().version().availableOnline()).build(),
-                    new MemberColumnDescriptor.Builder(proto().expiredFrom()).build()
-                ));//@formatter:on
+            setColumnDescriptors( //
+                    new MemberColumnDescriptor.Builder(proto().code()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().version().name()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().version().price()).visible(!VistaFeatures.instance().yardiIntegration()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), // 
+                    new MemberColumnDescriptor.Builder(proto().version().availableOnline()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().expiredFrom()).build());
         }
+
+        setDataTableModel(new DataTableModel<Service>());
     }
 
     @Override

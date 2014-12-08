@@ -39,11 +39,13 @@ public class CrmRoleListerViewImpl extends AbstractListerView<CrmRole> implement
         public CrmRoleLister() {
             super(CrmRole.class, GWT.<AbstractListCrudService<CrmRole>> create(CrmRoleCrudService.class), true);
 
-            setDataTableModel(new DataTableModel<CrmRole>( //
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().name()).build(), //
                     new MemberColumnDescriptor.Builder(proto().description()).build(), //
                     new MemberColumnDescriptor.Builder(proto().behaviors()).build() //
-            ));
+            );
+
+            setDataTableModel(new DataTableModel<CrmRole>());
         }
 
         @Override

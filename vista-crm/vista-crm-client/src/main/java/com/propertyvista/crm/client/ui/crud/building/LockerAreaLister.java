@@ -33,11 +33,12 @@ public class LockerAreaLister extends SiteDataTablePanel<LockerAreaDTO> {
         super(LockerAreaDTO.class, GWT.<AbstractCrudService<LockerAreaDTO>> create(LockerAreaCrudService.class), true);
         setFilteringEnabled(false);
 
-        setDataTableModel(new DataTableModel<LockerAreaDTO>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().name()).build(),
-            new MemberColumnDescriptor.Builder(proto().levels()).build(),
-            new MemberColumnDescriptor.Builder(proto().totalLockers()).build()
-        )); // @formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().name()).build(), // 
+                new MemberColumnDescriptor.Builder(proto().levels()).build(), //
+                new MemberColumnDescriptor.Builder(proto().totalLockers()).build());
+
+        setDataTableModel(new DataTableModel<LockerAreaDTO>());
     }
 
     @Override

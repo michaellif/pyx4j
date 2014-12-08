@@ -80,8 +80,10 @@ public class ListerUtils {
             assert userSettingsProvider != null;
             assert onColumnSelectionChanged != null;
 
-            DataTableModel<E> dataTableModel = new DataTableModel<E>(ColumnDescriptorDiffUtil.applyDiff((Class<E>) dataTablePanel.proto()
-                    .getInstanceValueClass(), columnDescriptors, userSettingsProvider.get()));
+            dataTablePanel.setColumnDescriptors(ColumnDescriptorDiffUtil.applyDiff((Class<E>) dataTablePanel.proto().getInstanceValueClass(),
+                    columnDescriptors, userSettingsProvider.get()));
+
+            DataTableModel<E> dataTableModel = new DataTableModel<E>();
             dataTableModel.setMultipleSelection(false);
             dataTableModel.setPageSize(userSettingsProvider.get().pageSize().isNull() ? 10 : userSettingsProvider.get().pageSize().getValue());
             dataTablePanel.setDataTableModel(dataTableModel);
@@ -90,7 +92,7 @@ public class ListerUtils {
                 @Override
                 public void onChange() {
                     List<ColumnUserSettings> diff = ColumnDescriptorDiffUtil.getDescriptorsDiff(columnDescriptors, dataTablePanel.getDataTable()
-                            .getDataTableModel().getColumnDescriptors());
+                            .getColumnDescriptors());
                     userSettingsProvider.get().overriddenColumns().clear();
                     userSettingsProvider.get().overriddenColumns().addAll(diff);
 

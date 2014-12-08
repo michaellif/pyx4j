@@ -31,22 +31,23 @@ public class AuditRecordsLister extends SiteDataTablePanel<AuditRecordOperations
     public AuditRecordsLister() {
         super(AuditRecordOperationsDTO.class, GWT.<AuditRecordCrudService> create(AuditRecordCrudService.class), false, false);
 
-        setDataTableModel(new DataTableModel<AuditRecordOperationsDTO>(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().when()).build(),
-                new MemberColumnDescriptor.Builder(proto().worldTime()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto().namespace()).build(),
-                new MemberColumnDescriptor.Builder(proto().pmc()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto().application()).build(),
-                new MemberColumnDescriptor.Builder(proto().userKey()).build(),
-                new MemberColumnDescriptor.Builder(proto().userName()).searchable(false).sortable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().remoteAddr()).build(),
-                new MemberColumnDescriptor.Builder(proto().sessionId()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto().event()).build(),
-                new MemberColumnDescriptor.Builder(proto().targetEntity()).searchable(false).sortable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().entityId()).build(),
-                new MemberColumnDescriptor.Builder(proto().entityClass()).build(),
-                new MemberColumnDescriptor.Builder(proto().details()).build()                
-        ));//@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().when()).build(), //
+                new MemberColumnDescriptor.Builder(proto().worldTime()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().namespace()).build(), //
+                new MemberColumnDescriptor.Builder(proto().pmc()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().application()).build(), //
+                new MemberColumnDescriptor.Builder(proto().userKey()).build(), //
+                new MemberColumnDescriptor.Builder(proto().userName()).searchable(false).sortable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().remoteAddr()).build(), //
+                new MemberColumnDescriptor.Builder(proto().sessionId()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().event()).build(), //
+                new MemberColumnDescriptor.Builder(proto().targetEntity()).searchable(false).sortable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().entityId()).build(), //
+                new MemberColumnDescriptor.Builder(proto().entityClass()).build(), //
+                new MemberColumnDescriptor.Builder(proto().details()).build());
+
+        setDataTableModel(new DataTableModel<AuditRecordOperationsDTO>());
     }
 
     @Override

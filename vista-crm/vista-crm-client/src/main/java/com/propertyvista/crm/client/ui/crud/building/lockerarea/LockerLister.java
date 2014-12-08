@@ -31,9 +31,11 @@ public class LockerLister extends SiteDataTablePanel<Locker> {
     public LockerLister() {
         super(Locker.class, GWT.<LockerCrudService> create(LockerCrudService.class), true);
 
-        setDataTableModel(new DataTableModel<Locker>( //
+        setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().name()).build(), //
-                new MemberColumnDescriptor.Builder(proto().type()).build()));
+                new MemberColumnDescriptor.Builder(proto().type()).build());
+
+        setDataTableModel(new DataTableModel<Locker>());
     }
 
     @Override

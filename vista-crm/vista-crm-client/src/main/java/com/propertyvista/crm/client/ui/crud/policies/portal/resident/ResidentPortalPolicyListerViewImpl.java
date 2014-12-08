@@ -34,10 +34,11 @@ public class ResidentPortalPolicyListerViewImpl extends AbstractListerView<Resid
         public ResidentPortalPolicyLister() {
             super(ResidentPortalPolicyDTO.class, GWT.<ResidentPortalPolicyCrudService> create(ResidentPortalPolicyCrudService.class));
 
-            setDataTableModel(new DataTableModel<ResidentPortalPolicyDTO>( //
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
-            ));
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build());
+
+            setDataTableModel(new DataTableModel<ResidentPortalPolicyDTO>());
         }
     }
 

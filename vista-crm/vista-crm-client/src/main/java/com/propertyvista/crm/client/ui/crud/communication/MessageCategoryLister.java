@@ -53,7 +53,10 @@ public class MessageCategoryLister extends SiteDataTablePanel<MessageCategory> {
             }
 
         });
-        setDataTableModel(new DataTableModel<MessageCategory>(createColumnDescriptors()));
+
+        setColumnDescriptors(createColumnDescriptors());
+
+        setDataTableModel(new DataTableModel<MessageCategory>());
     }
 
     public static ColumnDescriptor[] createColumnDescriptors() {

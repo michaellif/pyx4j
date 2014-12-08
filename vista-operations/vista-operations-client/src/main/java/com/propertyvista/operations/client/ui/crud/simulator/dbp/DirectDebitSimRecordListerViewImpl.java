@@ -34,13 +34,15 @@ public class DirectDebitSimRecordListerViewImpl extends AbstractListerView<Direc
 
         public DirectDebitSimRecordLister() {
             super(DirectDebitSimRecord.class, GWT.<AbstractListCrudService<DirectDebitSimRecord>> create(DirectDebitSimRecordCrudService.class), true);
-            setDataTableModel(new DataTableModel<DirectDebitSimRecord>( //
+
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().accountNumber()).build(), //
                     new MemberColumnDescriptor.Builder(proto().amount()).build(), //
                     new MemberColumnDescriptor.Builder(proto().paymentReferenceNumber()).build(), //
                     new MemberColumnDescriptor.Builder(proto().customerName()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().receivedDate()).build() //
-            ));
+                    new MemberColumnDescriptor.Builder(proto().receivedDate()).build());
+
+            setDataTableModel(new DataTableModel<DirectDebitSimRecord>());
         }
     }
 

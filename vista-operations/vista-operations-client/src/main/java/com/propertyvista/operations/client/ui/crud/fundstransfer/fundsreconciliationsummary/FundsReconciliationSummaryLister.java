@@ -29,7 +29,7 @@ public class FundsReconciliationSummaryLister extends SiteDataTablePanel<FundsRe
         super(FundsReconciliationSummaryDTO.class,
                 GWT.<AbstractCrudService<FundsReconciliationSummaryDTO>> create(FundsReconciliationSummaryCrudService.class), false, false);
 
-        setDataTableModel(new DataTableModel<FundsReconciliationSummaryDTO>( //
+        setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().id()).columnTitle("Summary Id").searchableOnly().build(), //
                 new MemberColumnDescriptor.Builder(proto().reconciliationFile().id()).columnTitle("File Id").searchableOnly().build(), //
                 new MemberColumnDescriptor.Builder(proto().reconciliationFile().fileName()).build(), //
@@ -45,7 +45,9 @@ public class FundsReconciliationSummaryLister extends SiteDataTablePanel<FundsRe
                 new MemberColumnDescriptor.Builder(proto().grossPaymentCount()).build(), //
                 new MemberColumnDescriptor.Builder(proto().rejectItemsAmount()).build(), //
                 new MemberColumnDescriptor.Builder(proto().rejectItemsCount()).build() //
-        ));
+        );
+
+        setDataTableModel(new DataTableModel<FundsReconciliationSummaryDTO>());
     }
 
 }

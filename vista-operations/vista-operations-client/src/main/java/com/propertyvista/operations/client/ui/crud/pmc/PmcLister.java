@@ -37,24 +37,25 @@ public class PmcLister extends SiteDataTablePanel<PmcDTO> {
     public PmcLister(final PmcListerView view) {
         super(PmcDTO.class, GWT.<AbstractCrudService<PmcDTO>> create(PmcCrudService.class), true);
 
-        setDataTableModel(new DataTableModel<PmcDTO>( //@formatter:off
-            new MemberColumnDescriptor.Builder(proto().name()).build(),
-            new MemberColumnDescriptor.Builder(proto().dnsName()).build(),
-            new MemberColumnDescriptor.Builder(proto().namespace()).visible(false).build(),
-            new MemberColumnDescriptor.Builder(proto().status()).build(),
-            new MemberColumnDescriptor.Builder(proto().created()).build(),
-            new MemberColumnDescriptor.Builder(proto().updated()).build(),
-            new MemberColumnDescriptor.Builder(proto().features().yardiIntegration()).visible(false).build(),
-            new MemberColumnDescriptor.Builder(proto().features().yardiMaintenance()).visible(false).build(),
-            new MemberColumnDescriptor.Builder(proto().features().yardiInterfaces()).searchable(false).visible(false).build(),
-            new MemberColumnDescriptor.Builder(proto().features().onlineApplication()).visible(false).build(),
-            new MemberColumnDescriptor.Builder(proto().features().whiteLabelPortal()).visible(false).build(),
-            new MemberColumnDescriptor.Builder(proto().features().tenantSureIntegration()).visible(false).build(),
-            new MemberColumnDescriptor.Builder(proto().features().tenantEmailEnabled()).visible(false).build(),
-            new MemberColumnDescriptor.Builder(proto().features().countryOfOperation()).visible(false).build(),
-            new MemberColumnDescriptor.Builder(proto().equifaxInfo().status()).columnTitle("Equifax Status").visible(false).build(),
-            new MemberColumnDescriptor.Builder(proto().equifaxInfo().reportType()).visible(false).build()
-        ));//@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().name()).build(), //
+                new MemberColumnDescriptor.Builder(proto().dnsName()).build(), //
+                new MemberColumnDescriptor.Builder(proto().namespace()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().status()).build(), //
+                new MemberColumnDescriptor.Builder(proto().created()).build(), //
+                new MemberColumnDescriptor.Builder(proto().updated()).build(), //
+                new MemberColumnDescriptor.Builder(proto().features().yardiIntegration()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().features().yardiMaintenance()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().features().yardiInterfaces()).searchable(false).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().features().onlineApplication()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().features().whiteLabelPortal()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().features().tenantSureIntegration()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().features().tenantEmailEnabled()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().features().countryOfOperation()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().equifaxInfo().status()).columnTitle("Equifax Status").visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().equifaxInfo().reportType()).visible(false).build());
+
+        setDataTableModel(new DataTableModel<PmcDTO>());
 
         addUpperActionItem(new Button(i18n.tr("Upload Merchant Accounts"), new Command() {
             @Override

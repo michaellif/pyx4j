@@ -35,7 +35,7 @@ public class LeadLister extends SiteDataTablePanel<Lead> {
     public LeadLister() {
         super(Lead.class, GWT.<AbstractCrudService<Lead>> create(LeadCrudService.class), true);
 
-        setDataTableModel(new DataTableModel<Lead>( //
+        setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().leadId(), true).build(), //
                 new MemberColumnDescriptor.Builder(proto().guests(), true).build(), //
                 new MemberColumnDescriptor.Builder(proto().guests().$().person().name().lastName()).columnTitle(i18n.tr("Guest Last Name")).searchableOnly()
@@ -44,8 +44,9 @@ public class LeadLister extends SiteDataTablePanel<Lead> {
                 new MemberColumnDescriptor.Builder(proto().leaseTerm(), true).build(), //
                 new MemberColumnDescriptor.Builder(proto().floorplan(), true).searchable(false).build(), //
                 new MemberColumnDescriptor.Builder(proto().createDate(), true).build(), //
-                new MemberColumnDescriptor.Builder(proto().status(), true).build() //
-        ));
+                new MemberColumnDescriptor.Builder(proto().status(), true).build());
+
+        setDataTableModel(new DataTableModel<Lead>());
     }
 
     @Override

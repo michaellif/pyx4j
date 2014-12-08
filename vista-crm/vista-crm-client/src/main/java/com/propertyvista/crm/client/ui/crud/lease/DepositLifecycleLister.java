@@ -34,15 +34,17 @@ public class DepositLifecycleLister extends SiteDataTablePanel<DepositLifecycleD
     public DepositLifecycleLister() {
         super(DepositLifecycleDTO.class, GWT.<DepositLifecycleCrudService> create(DepositLifecycleCrudService.class), false);
 
-        setDataTableModel(new DataTableModel<DepositLifecycleDTO>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().deposit().billableItem()).searchable(false).sortable(false).columnTitle(i18n.tr("Service/Feature")).build(),
-            new MemberColumnDescriptor.Builder(proto().deposit().type()).searchable(false).sortable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().deposit().amount()).searchable(false).sortable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().status()).build(),
-            new MemberColumnDescriptor.Builder(proto().depositDate(), false).build(),
-            new MemberColumnDescriptor.Builder(proto().refundDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().currentAmount()).build()
-        ));//@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().deposit().billableItem()).searchable(false).sortable(false).columnTitle(i18n.tr("Service/Feature"))
+                        .build(), //
+                new MemberColumnDescriptor.Builder(proto().deposit().type()).searchable(false).sortable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().deposit().amount()).searchable(false).sortable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().status()).build(), //
+                new MemberColumnDescriptor.Builder(proto().depositDate(), false).build(), //
+                new MemberColumnDescriptor.Builder(proto().refundDate()).build(), //
+                new MemberColumnDescriptor.Builder(proto().currentAmount()).build());
+
+        setDataTableModel(new DataTableModel<DepositLifecycleDTO>());
     }
 
     @Override

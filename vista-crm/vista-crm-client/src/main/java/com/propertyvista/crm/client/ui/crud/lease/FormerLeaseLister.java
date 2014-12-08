@@ -36,7 +36,7 @@ public class FormerLeaseLister extends SiteDataTablePanel<LeaseDTO> {
     public FormerLeaseLister() {
         super(LeaseDTO.class, GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class), false);
 
-        setDataTableModel(new DataTableModel<LeaseDTO>( //
+        setColumnDescriptors( //
                 new Builder(proto().leaseId()).columnTitle(i18n.tr("Id")).build(), //
                 new Builder(proto().type()).build(), //
 
@@ -58,8 +58,9 @@ public class FormerLeaseLister extends SiteDataTablePanel<LeaseDTO> {
                 new Builder(proto().moveOutSubmissionDate(), false).build(), //
 
                 new Builder(proto().approvalDate(), false).build(), //
-                new Builder(proto().creationDate(), false).build() //
-        ));
+                new Builder(proto().creationDate(), false).build());
+
+        setDataTableModel(new DataTableModel<LeaseDTO>());
     }
 
     @Override

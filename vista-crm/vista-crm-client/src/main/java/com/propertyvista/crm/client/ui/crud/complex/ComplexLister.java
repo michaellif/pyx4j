@@ -32,13 +32,15 @@ public class ComplexLister extends SiteDataTablePanel<ComplexDTO> {
     public ComplexLister() {
         super(ComplexDTO.class, GWT.<AbstractCrudService<ComplexDTO>> create(ComplexCrudService.class), true);
 
-        setDataTableModel(new DataTableModel<ComplexDTO>( //
+        setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().name()).build(), //
                 new MemberColumnDescriptor.Builder(proto().address().city()).sortable(false).searchable(false).build(), //
                 new MemberColumnDescriptor.Builder(proto().address().province()).sortable(false).searchable(false).build(), //
                 new MemberColumnDescriptor.Builder(proto().address().country()).sortable(false).searchable(false).build(), //
                 new MemberColumnDescriptor.Builder(proto().primaryBuilding()).sortable(false).searchable(false).build() //
-        ));
+        );
+
+        setDataTableModel(new DataTableModel<ComplexDTO>());
     }
 
     @Override

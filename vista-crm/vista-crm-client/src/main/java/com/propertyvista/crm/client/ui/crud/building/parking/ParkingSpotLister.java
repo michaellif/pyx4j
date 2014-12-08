@@ -31,10 +31,11 @@ public class ParkingSpotLister extends SiteDataTablePanel<ParkingSpot> {
     public ParkingSpotLister() {
         super(ParkingSpot.class, GWT.<ParkingSpotCrudService> create(ParkingSpotCrudService.class), true);
 
-        setDataTableModel(new DataTableModel<ParkingSpot>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().name()).build(),
-            new MemberColumnDescriptor.Builder(proto().type()).build()
-        ));//@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().name()).build(), //
+                new MemberColumnDescriptor.Builder(proto().type()).build());
+
+        setDataTableModel(new DataTableModel<ParkingSpot>());
     }
 
     @Override

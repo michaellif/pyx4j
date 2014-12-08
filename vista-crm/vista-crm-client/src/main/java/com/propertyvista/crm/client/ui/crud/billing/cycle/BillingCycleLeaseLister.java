@@ -34,32 +34,33 @@ public class BillingCycleLeaseLister extends SiteDataTablePanel<LeaseDTO> {
     public BillingCycleLeaseLister() {
         super(LeaseDTO.class, GWT.<BillingCycleLeaseListService> create(BillingCycleLeaseListService.class), false);
 
-        setDataTableModel(new DataTableModel<LeaseDTO>(//@formatter:off
-            new Builder(proto().leaseId()).build(),
-            new Builder(proto().type()).build(),
-            
-            new Builder(proto().unit().building().propertyCode()).build(),
-            new Builder(proto().unit()).build(),
-            
-            new Builder(proto().status()).build(),
-            new Builder(proto().completion()).build(),
+        setColumnDescriptors( //
+                new Builder(proto().leaseId()).build(), //
+                new Builder(proto().type()).build(), //
 
-            new Builder(proto().billingAccount().accountNumber()).build(),
-            
-            new Builder(proto().leaseFrom()).build(),
-            new Builder(proto().leaseTo()).build(),
-            
-            new Builder(proto().expectedMoveIn()).build(),
-            new Builder(proto().expectedMoveOut(), false).build(),
-            new Builder(proto().actualMoveIn(), false).build(),
-            new Builder(proto().actualMoveOut(), false).build(),
-            new Builder(proto().moveOutSubmissionDate(), false).build(),
-            
-            new Builder(proto().approvalDate(), false).build(),
-            new Builder(proto().creationDate(), false).build(),
-            
-            new Builder(proto().currentTerm().version().tenants()).build()
-        ));//@formatter:on
+                new Builder(proto().unit().building().propertyCode()).build(), //
+                new Builder(proto().unit()).build(), //
+
+                new Builder(proto().status()).build(), //
+                new Builder(proto().completion()).build(), //
+
+                new Builder(proto().billingAccount().accountNumber()).build(), //
+
+                new Builder(proto().leaseFrom()).build(), //
+                new Builder(proto().leaseTo()).build(), //
+
+                new Builder(proto().expectedMoveIn()).build(), //
+                new Builder(proto().expectedMoveOut(), false).build(), //
+                new Builder(proto().actualMoveIn(), false).build(), //
+                new Builder(proto().actualMoveOut(), false).build(), //
+                new Builder(proto().moveOutSubmissionDate(), false).build(), //
+
+                new Builder(proto().approvalDate(), false).build(), //
+                new Builder(proto().creationDate(), false).build(), //
+
+                new Builder(proto().currentTerm().version().tenants()).build());
+
+        setDataTableModel(new DataTableModel<LeaseDTO>());
     }
 
     @Override

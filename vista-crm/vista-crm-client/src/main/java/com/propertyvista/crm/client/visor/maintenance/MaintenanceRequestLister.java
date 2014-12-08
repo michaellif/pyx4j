@@ -44,22 +44,26 @@ public class MaintenanceRequestLister extends SiteDataTablePanel<MaintenanceRequ
         super(MaintenanceRequestDTO.class, GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class), true);
         this.view = view;
         MaintenanceRequestDTO proto = EntityFactory.getEntityPrototype(MaintenanceRequestDTO.class);
-        setDataTableModel(new DataTableModel<MaintenanceRequestDTO>(new ColumnDescriptor[] {
-                new MemberColumnDescriptor.Builder(proto.requestId()).build(),
-                new MemberColumnDescriptor.Builder(proto.unit()).build(),
-                createCategoryColumn(proto),
-                new MemberColumnDescriptor.Builder(proto.priority()).build(),
-                new MemberColumnDescriptor.Builder(proto.summary()).build(),
-                new MemberColumnDescriptor.Builder(proto.reporterName()).columnTitle(i18n.tr("Tenant")).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.reporterPhone(), false).build(),
-                new MemberColumnDescriptor.Builder(proto.permissionToEnter()).columnTitle(i18n.tr("Entry Allowed")).build(),
-                new MemberColumnDescriptor.Builder(proto.petInstructions()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto.submitted()).build(),
-                new MemberColumnDescriptor.Builder(proto.status()).build(),
-                new MemberColumnDescriptor.Builder(proto.updated()).build(),
-                new MemberColumnDescriptor.Builder(proto.surveyResponse().rating()).build(),
+
+        setColumnDescriptors(
+                //
+                new MemberColumnDescriptor.Builder(proto.requestId()).build(), //
+                new MemberColumnDescriptor.Builder(proto.unit()).build(), //
+                createCategoryColumn(proto), //
+                new MemberColumnDescriptor.Builder(proto.priority()).build(), //
+                new MemberColumnDescriptor.Builder(proto.summary()).build(), //
+                new MemberColumnDescriptor.Builder(proto.reporterName()).columnTitle(i18n.tr("Tenant")).searchable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto.reporterPhone(), false).build(), //
+                new MemberColumnDescriptor.Builder(proto.permissionToEnter()).columnTitle(i18n.tr("Entry Allowed")).build(), //
+                new MemberColumnDescriptor.Builder(proto.petInstructions()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto.submitted()).build(), //
+                new MemberColumnDescriptor.Builder(proto.status()).build(), //
+                new MemberColumnDescriptor.Builder(proto.updated()).build(), //
+                new MemberColumnDescriptor.Builder(proto.surveyResponse().rating()).build(), //
                 new MemberColumnDescriptor.Builder(proto.surveyResponse().description()).visible(false)
-                        .columnTitle(proto.surveyResponse().getMeta().getCaption()).build() }));
+                        .columnTitle(proto.surveyResponse().getMeta().getCaption()).build());
+
+        setDataTableModel(new DataTableModel<MaintenanceRequestDTO>());
     }
 
     @Override

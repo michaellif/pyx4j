@@ -64,7 +64,8 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
 
         this.view = view;
 
-        setDataTableModel(new DataTableModel<MessageDTO>(createColumnDescriptors(CategoryType.Message)));
+        setColumnDescriptors(createColumnDescriptors(CategoryType.Message));
+        setDataTableModel(new DataTableModel<MessageDTO>());
 
         setFilteringEnabled(true);
         // No sorting work for it
@@ -220,7 +221,8 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
                 newNotification.setVisible(CategoryType.Message == category);
             }
         }
-        setDataTableModel(new DataTableModel<MessageDTO>(createColumnDescriptors(category)));
+        setColumnDescriptors(createColumnDescriptors(category));
+        setDataTableModel(new DataTableModel<MessageDTO>());
 
         EntityListCriteria<MessageDTO> result = super.updateCriteria(criteria);
         if (placeCriteria == null) {

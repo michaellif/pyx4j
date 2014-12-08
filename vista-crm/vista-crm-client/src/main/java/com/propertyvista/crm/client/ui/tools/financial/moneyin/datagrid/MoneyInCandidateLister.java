@@ -24,12 +24,12 @@ public class MoneyInCandidateLister extends DataTablePanel<MoneyInCandidateDTO> 
     public MoneyInCandidateLister() {
         super(MoneyInCandidateDTO.class);
 
-        DataTableModel<MoneyInCandidateDTO> dataTableModel = new DataTableModel<MoneyInCandidateDTO>(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().building()).build(),
-                new MemberColumnDescriptor.Builder(proto().unit()).build(),
-                new MemberColumnDescriptor.Builder(proto().leaseId()).build(),
-                new MemberColumnDescriptor.Builder(proto().payerCandidates().$().name()).searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto().payerCandidates()).searchable(false).sortable(false).build(),
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().building()).build(), //
+                new MemberColumnDescriptor.Builder(proto().unit()).build(), //
+                new MemberColumnDescriptor.Builder(proto().leaseId()).build(), //
+                new MemberColumnDescriptor.Builder(proto().payerCandidates().$().name()).searchableOnly().build(), //
+                new MemberColumnDescriptor.Builder(proto().payerCandidates()).searchable(false).sortable(false).build(), //
 //                new MemberColumnDescriptor(new Builder(proto().payerCandidates()).searchable(false).sortable(false).title(i18n.tr("Tenants"))) {
 //                    @Override
 //                    public String convert(IEntity entity) {
@@ -45,9 +45,11 @@ public class MoneyInCandidateLister extends DataTablePanel<MoneyInCandidateDTO> 
 //                    }
 //                }, 
                 new MemberColumnDescriptor.Builder(proto().totalOutstanding()).build());
-        
+
+        DataTableModel<MoneyInCandidateDTO> dataTableModel = new DataTableModel<MoneyInCandidateDTO>();
+
         dataTableModel.setMultipleSelection(true);
-        
+
         setDataTableModel(dataTableModel);
     }
 }

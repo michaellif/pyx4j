@@ -36,28 +36,30 @@ public class AggregatedTransferLister extends SiteDataTablePanel<AggregatedTrans
     public AggregatedTransferLister() {
         super(AggregatedTransfer.class, GWT.<AggregatedTransferCrudService> create(AggregatedTransferCrudService.class), false);
 
-        setDataTableModel(new DataTableModel<AggregatedTransfer>(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().paymentDate()).build(),
-                new MemberColumnDescriptor.Builder(proto().status()).build(),
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().paymentDate()).build(), //
+                new MemberColumnDescriptor.Builder(proto().status()).build(), //
 
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().accountNumber()).searchableOnly().columnTitle(i18n.tr("Merchant Account Number")).build(),
-                new MemberColumnDescriptor.Builder(proto().merchantAccount()).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().fundsTransferType()).build(),
+                new MemberColumnDescriptor.Builder(proto().merchantAccount().accountNumber()).searchableOnly().columnTitle(i18n.tr("Merchant Account Number"))
+                        .build(), //
+                new MemberColumnDescriptor.Builder(proto().merchantAccount()).searchable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().fundsTransferType()).build(), //
 
-                new MemberColumnDescriptor.Builder(proto().netAmount()).build(),
-                new MemberColumnDescriptor.Builder(proto().grossPaymentAmount()).build(),
-                new MemberColumnDescriptor.Builder(proto().grossPaymentFee()).build(),
-                new MemberColumnDescriptor.Builder(proto().grossPaymentCount()).build(),
+                new MemberColumnDescriptor.Builder(proto().netAmount()).build(), //
+                new MemberColumnDescriptor.Builder(proto().grossPaymentAmount()).build(), //
+                new MemberColumnDescriptor.Builder(proto().grossPaymentFee()).build(), //
+                new MemberColumnDescriptor.Builder(proto().grossPaymentCount()).build(), //
 
-                new MemberColumnDescriptor.Builder(proto().adjustments(), false).sortable(false).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().adjustments().$().adjustment()).searchableOnly().build(),
+                new MemberColumnDescriptor.Builder(proto().adjustments(), false).sortable(false).searchable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().adjustments().$().adjustment()).searchableOnly().build(), //
 
-                new MemberColumnDescriptor.Builder(proto().chargebacks(), false).sortable(false).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().chargebacks().$().chargeback()).searchableOnly().build(),
+                new MemberColumnDescriptor.Builder(proto().chargebacks(), false).sortable(false).searchable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().chargebacks().$().chargeback()).searchableOnly().build(), //
 
-                new MemberColumnDescriptor.Builder(proto().payments().$().id()).searchableOnly().columnTitle(i18n.tr("Payment Id")).build(),
-                new MemberColumnDescriptor.Builder(proto().returnedPayments().$().id()).searchableOnly().columnTitle(i18n.tr("Returned Payment Id")).build()
-        ));
+                new MemberColumnDescriptor.Builder(proto().payments().$().id()).searchableOnly().columnTitle(i18n.tr("Payment Id")).build(), //
+                new MemberColumnDescriptor.Builder(proto().returnedPayments().$().id()).searchableOnly().columnTitle(i18n.tr("Returned Payment Id")).build());
+
+        setDataTableModel(new DataTableModel<AggregatedTransfer>());
 
         addUpperActionItem(new Button(i18n.tr("Export"), new Command() {
             @Override
@@ -66,7 +68,7 @@ public class AggregatedTransferLister extends SiteDataTablePanel<AggregatedTrans
             }
         }));
 
-    }//@formatter:on
+    }
 
     @Override
     public List<Sort> getDefaultSorting() {

@@ -34,11 +34,14 @@ public class ARPolicyListerViewImpl extends AbstractListerView<ARPolicyDTO> impl
 
         public ARPolicyLister() {
             super(ARPolicyDTO.class, GWT.<AbstractListCrudService<ARPolicyDTO>> create(ARPolicyCrudService.class));
-            setDataTableModel(new DataTableModel<ARPolicyDTO>( //
+
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
                     new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build(), //
                     new MemberColumnDescriptor.Builder(proto().creditDebitRule()).build() //
-            ));
+            );
+
+            setDataTableModel(new DataTableModel<ARPolicyDTO>());
         }
     }
 }

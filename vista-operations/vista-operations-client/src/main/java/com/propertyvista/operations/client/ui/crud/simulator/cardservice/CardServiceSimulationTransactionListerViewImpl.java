@@ -36,7 +36,8 @@ public class CardServiceSimulationTransactionListerViewImpl extends AbstractList
         public CardServiceSimulationTransactionLister() {
             super(CardServiceSimulationTransaction.class, GWT
                     .<AbstractCrudService<CardServiceSimulationTransaction>> create(CardServiceSimulationTransactionCrudService.class), false, true);
-            setDataTableModel(new DataTableModel<CardServiceSimulationTransaction>( //
+
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().id()).build(), //
                     new MemberColumnDescriptor.Builder(proto().card().cardNumber()).columnTitle("Card Number").build(), //
                     new MemberColumnDescriptor.Builder(proto().merchant()).build(), //
@@ -49,7 +50,9 @@ public class CardServiceSimulationTransactionListerViewImpl extends AbstractList
                     new MemberColumnDescriptor.Builder(proto().authorizationNumber()).build(), //
                     new MemberColumnDescriptor.Builder(proto().voided()).build(), //
                     new MemberColumnDescriptor.Builder(proto().transactionDate()).build() //
-            ));
+            );
+
+            setDataTableModel(new DataTableModel<CardServiceSimulationTransaction>());
         }
 
         @Override

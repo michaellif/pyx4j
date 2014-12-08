@@ -32,7 +32,7 @@ public class FundsTransferFileLister extends SiteDataTablePanel<FundsTransferFil
     public FundsTransferFileLister() {
         super(FundsTransferFileDTO.class, GWT.<AbstractCrudService<FundsTransferFileDTO>> create(PadFileCrudService.class), false, false);
 
-        setDataTableModel(new DataTableModel<FundsTransferFileDTO>( //              
+        setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().fileCreationNumber()).build(), //
                 new MemberColumnDescriptor.Builder(proto().fileName()).build(), //
                 new MemberColumnDescriptor.Builder(proto().companyId()).build(), //
@@ -49,7 +49,9 @@ public class FundsTransferFileLister extends SiteDataTablePanel<FundsTransferFil
                 new MemberColumnDescriptor.Builder(proto().acknowledgmentFileName(), false).build(), //
                 new MemberColumnDescriptor.Builder(proto().acknowledgmentRemoteFileDate(), false).build(), //
                 new MemberColumnDescriptor.Builder(proto().acknowledgmentStatus()).build() //
-        ));
+        );
+
+        setDataTableModel(new DataTableModel<FundsTransferFileDTO>());
     }
 
     @Override

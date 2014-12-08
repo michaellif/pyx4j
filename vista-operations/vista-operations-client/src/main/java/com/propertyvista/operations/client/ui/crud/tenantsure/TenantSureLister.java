@@ -28,7 +28,7 @@ public class TenantSureLister extends SiteDataTablePanel<TenantSureDTO> {
     public TenantSureLister() {
         super(TenantSureDTO.class, GWT.<AbstractCrudService<TenantSureDTO>> create(TenantSureCrudService.class), false, false);
 
-        setDataTableModel(new DataTableModel<TenantSureDTO>( //
+        setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().pmc()).build(), //
                 new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(), //
 
@@ -41,6 +41,8 @@ public class TenantSureLister extends SiteDataTablePanel<TenantSureDTO> {
                 new MemberColumnDescriptor.Builder(proto().policy().cancellationDate()).searchable(false).sortable(false).build(), //
                 new MemberColumnDescriptor.Builder(proto().policy().certificate().inceptionDate()).searchable(false).sortable(false).build(), //
                 new MemberColumnDescriptor.Builder(proto().policy().tenant().customer().person().name()).searchable(false).sortable(false).build() //
-        ));
+        );
+
+        setDataTableModel(new DataTableModel<TenantSureDTO>());
     }
 }

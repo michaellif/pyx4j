@@ -41,38 +41,36 @@ public class FeatureLister extends SiteDataTablePanel<Feature> {
 
     private final static I18n i18n = I18n.get(FeatureLister.class);
 
-    private final IPaneView parentView;
+    private final IPaneView<?> parentView;
 
-    public FeatureLister(IPaneView parentView) {
+    public FeatureLister(IPaneView<?> parentView) {
         super(Feature.class, GWT.<AbstractCrudService<Feature>> create(FeatureCrudService.class), !VistaFeatures.instance().yardiIntegration(), !VistaFeatures
                 .instance().yardiIntegration());
         this.parentView = parentView;
         setFilteringEnabled(false);
 
         if (VistaTODO.VISTA_2256_Default_Product_Catalog_Show) {
-            setDataTableModel(new DataTableModel<Feature>(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().code(), true).build(),
-                new MemberColumnDescriptor.Builder(proto().version().name(), true).build(),
-                new MemberColumnDescriptor.Builder(proto().version().price()).build(),
-                new MemberColumnDescriptor.Builder(proto().version().mandatory()).build(),
-                new MemberColumnDescriptor.Builder(proto().version().recurring()).build(),
-                new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), 
-                new MemberColumnDescriptor.Builder(proto().version().availableOnline()).build(),
-                new MemberColumnDescriptor.Builder(proto().expiredFrom()).build(),
-                new MemberColumnDescriptor.Builder(proto().defaultCatalogItem()).build()
-            ));//@formatter:on
+            setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().code(), true).build(), //
+                    new MemberColumnDescriptor.Builder(proto().version().name(), true).build(), //
+                    new MemberColumnDescriptor.Builder(proto().version().price()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().version().mandatory()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().version().recurring()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), // 
+                    new MemberColumnDescriptor.Builder(proto().version().availableOnline()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().expiredFrom()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().defaultCatalogItem()).build());
         } else {
-            setDataTableModel(new DataTableModel<Feature>(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().code(), true).build(),
-                new MemberColumnDescriptor.Builder(proto().version().name(), true).build(),
-                new MemberColumnDescriptor.Builder(proto().version().price()).build(),
-                new MemberColumnDescriptor.Builder(proto().version().mandatory()).build(),
-                new MemberColumnDescriptor.Builder(proto().version().recurring()).build(),
-                new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), 
-                new MemberColumnDescriptor.Builder(proto().version().availableOnline()).build(),
-                new MemberColumnDescriptor.Builder(proto().expiredFrom()).build()
-            ));//@formatter:on
+            setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().code(), true).build(), //
+                    new MemberColumnDescriptor.Builder(proto().version().name(), true).build(), //
+                    new MemberColumnDescriptor.Builder(proto().version().price()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().version().mandatory()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().version().recurring()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), // 
+                    new MemberColumnDescriptor.Builder(proto().version().availableOnline()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().expiredFrom()).build());
         }
+
+        setDataTableModel(new DataTableModel<Feature>());
     }
 
     @Override

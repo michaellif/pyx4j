@@ -34,10 +34,11 @@ public class ProspectPortalPolicyListerViewImpl extends AbstractListerView<Prosp
         public ProspectPortalPolicyLister() {
             super(ProspectPortalPolicyDTO.class, GWT.<ProspectPortalPolicyCrudService> create(ProspectPortalPolicyCrudService.class));
 
-            setDataTableModel(new DataTableModel<ProspectPortalPolicyDTO>( //
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
-            ));
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build());
+
+            setDataTableModel(new DataTableModel<ProspectPortalPolicyDTO>());
         }
     }
 

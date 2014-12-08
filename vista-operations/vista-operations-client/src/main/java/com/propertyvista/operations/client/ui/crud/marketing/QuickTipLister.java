@@ -35,13 +35,14 @@ public class QuickTipLister extends SiteDataTablePanel<PortalResidentMarketingTi
     public QuickTipLister() {
         super(PortalResidentMarketingTip.class, GWT.<AbstractCrudService<PortalResidentMarketingTip>> create(QuickTipCrudService.class), true);
 
-        setDataTableModel(new DataTableModel<PortalResidentMarketingTip>(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().created()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto().updated()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto().target()).build(),
-                new MemberColumnDescriptor.Builder(proto().comments()).build(),
-                new MemberColumnDescriptor.Builder(proto().content()).visible(false).build()
-            ));//@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().created()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().updated()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().target()).build(), //
+                new MemberColumnDescriptor.Builder(proto().comments()).build(), //
+                new MemberColumnDescriptor.Builder(proto().content()).visible(false).build());
+
+        setDataTableModel(new DataTableModel<PortalResidentMarketingTip>());
 
         setDeleteActionEnabled(true);
 

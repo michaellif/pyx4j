@@ -58,7 +58,10 @@ public class PaymentLister extends SiteDataTablePanel<PaymentRecordDTO> {
         cd.add(new MemberColumnDescriptor.Builder(proto().finalizedDate(), false).build());
         cd.add(new MemberColumnDescriptor.Builder(proto().rejectedWithNSF()).visible(false).build());
         cd.add(new MemberColumnDescriptor.Builder(proto().transactionErrorMessage()).visible(false).build());
-        setDataTableModel(new DataTableModel<PaymentRecordDTO>(cd));
+
+        setColumnDescriptors(cd);
+
+        setDataTableModel(new DataTableModel<PaymentRecordDTO>());
     }
 
     @Override

@@ -31,7 +31,7 @@ public class OperationsAlertLister extends SiteDataTablePanel<OperationsAlertDTO
     public OperationsAlertLister() {
         super(OperationsAlertDTO.class, GWT.<OperationsAlertCrudService> create(OperationsAlertCrudService.class), false, false);
 
-        setDataTableModel(new DataTableModel<OperationsAlertDTO>( //
+        setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().namespace()).build(), //
                 new MemberColumnDescriptor.Builder(proto().remoteAddr()).build(), //
                 new MemberColumnDescriptor.Builder(proto().created()).build(), //
@@ -41,8 +41,9 @@ public class OperationsAlertLister extends SiteDataTablePanel<OperationsAlertDTO
                 new MemberColumnDescriptor.Builder(proto().details()).build(), //
                 new MemberColumnDescriptor.Builder(proto().user()).build(), //
                 new MemberColumnDescriptor.Builder(proto().resolved()).build(), //
-                new MemberColumnDescriptor.Builder(proto().operationsNotes()).build() //
-        ));
+                new MemberColumnDescriptor.Builder(proto().operationsNotes()).build());
+
+        setDataTableModel(new DataTableModel<OperationsAlertDTO>());
     }
 
     @Override

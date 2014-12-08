@@ -33,17 +33,18 @@ public class ElevatorLister extends SiteDataTablePanel<ElevatorDTO> {
         super(ElevatorDTO.class, GWT.<AbstractCrudService<ElevatorDTO>> create(ElevatorCrudService.class), true);
         setFilteringEnabled(false);
 
-        setDataTableModel(new DataTableModel<ElevatorDTO>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().type()).build(),
-            new MemberColumnDescriptor.Builder(proto().description()).build(),
-            new MemberColumnDescriptor.Builder(proto().make()).build(),
-            new MemberColumnDescriptor.Builder(proto().model()).build(),
-            new MemberColumnDescriptor.Builder(proto().build()).build(),
-            new MemberColumnDescriptor.Builder(proto().license().number(), false).build(),
-            new MemberColumnDescriptor.Builder(proto().license().expiration(), false).build(),
-            new MemberColumnDescriptor.Builder(proto().license().renewal(), false).build(),
-            new MemberColumnDescriptor.Builder(proto().warranty().type(), false).build()
-        ));//@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().type()).build(), //
+                new MemberColumnDescriptor.Builder(proto().description()).build(), //
+                new MemberColumnDescriptor.Builder(proto().make()).build(), //
+                new MemberColumnDescriptor.Builder(proto().model()).build(), //
+                new MemberColumnDescriptor.Builder(proto().build()).build(), //
+                new MemberColumnDescriptor.Builder(proto().license().number(), false).build(), //
+                new MemberColumnDescriptor.Builder(proto().license().expiration(), false).build(), //
+                new MemberColumnDescriptor.Builder(proto().license().renewal(), false).build(), //
+                new MemberColumnDescriptor.Builder(proto().warranty().type(), false).build());
+
+        setDataTableModel(new DataTableModel<ElevatorDTO>());
     }
 
     @Override

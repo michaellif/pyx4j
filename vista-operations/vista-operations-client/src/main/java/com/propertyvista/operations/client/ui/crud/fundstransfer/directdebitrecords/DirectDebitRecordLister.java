@@ -58,7 +58,9 @@ public class DirectDebitRecordLister extends SiteDataTablePanel<DirectDebitRecor
         columns.add(new MemberColumnDescriptor.Builder(proto().trace().sourceCode()).build());
         columns.add(new MemberColumnDescriptor.Builder(proto().trace().traceNumber()).build());
 
-        setDataTableModel(new DataTableModel<DirectDebitRecord>(columns));
+        setColumnDescriptors(columns);
+
+        setDataTableModel(new DataTableModel<DirectDebitRecord>());
 
     }
 

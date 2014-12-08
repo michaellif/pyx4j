@@ -29,12 +29,13 @@ public class FundsReconciliationFileLister extends SiteDataTablePanel<FundsRecon
         super(FundsReconciliationFileDTO.class, GWT.<AbstractCrudService<FundsReconciliationFileDTO>> create(PadReconciliationFileCrudService.class), false,
                 false);
 
-        setDataTableModel(new DataTableModel<FundsReconciliationFileDTO>(//@formatter:off                
-                    new MemberColumnDescriptor.Builder(proto().fileName()).build(),
-                    new MemberColumnDescriptor.Builder(proto().fundsTransferType()).build(),
-                    new MemberColumnDescriptor.Builder(proto().created()).build(),
-                    new MemberColumnDescriptor.Builder(proto().remoteFileDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto().fileNameDate()).build()
-        ));//@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().fileName()).build(), //
+                new MemberColumnDescriptor.Builder(proto().fundsTransferType()).build(), //
+                new MemberColumnDescriptor.Builder(proto().created()).build(), //
+                new MemberColumnDescriptor.Builder(proto().remoteFileDate()).build(), //
+                new MemberColumnDescriptor.Builder(proto().fileNameDate()).build());
+
+        setDataTableModel(new DataTableModel<FundsReconciliationFileDTO>());
     }
 }

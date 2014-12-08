@@ -27,15 +27,16 @@ public class TenantSureTransactionLister extends SiteDataTablePanel<TenantSureTr
     public TenantSureTransactionLister() {
         super(TenantSureTransaction.class, GWT.<TenantSureTransactionListerService> create(TenantSureTransactionListerService.class));
 
-        setDataTableModel(new DataTableModel<TenantSureTransaction>(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().amount()).build(),
-                new MemberColumnDescriptor.Builder(proto().paymentDue()).build(),
-                new MemberColumnDescriptor.Builder(proto().paymentMethod()).build(),
-                new MemberColumnDescriptor.Builder(proto().status()).build(),
-                new MemberColumnDescriptor.Builder(proto().transactionAuthorizationNumber()).build(),
-                new MemberColumnDescriptor.Builder(proto().transactionErrorMessage()).build(),
-                new MemberColumnDescriptor.Builder(proto().transactionDate()).build()
-            ));//@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().amount()).build(), //
+                new MemberColumnDescriptor.Builder(proto().paymentDue()).build(), //
+                new MemberColumnDescriptor.Builder(proto().paymentMethod()).build(), //
+                new MemberColumnDescriptor.Builder(proto().status()).build(), //
+                new MemberColumnDescriptor.Builder(proto().transactionAuthorizationNumber()).build(), //
+                new MemberColumnDescriptor.Builder(proto().transactionErrorMessage()).build(), //
+                new MemberColumnDescriptor.Builder(proto().transactionDate()).build());
+
+        setDataTableModel(new DataTableModel<TenantSureTransaction>());
 
         setItemZoomInCommand(null);
     }

@@ -35,13 +35,14 @@ public class ShowingLister extends SiteDataTablePanel<ShowingDTO> {
     public ShowingLister() {
         super(ShowingDTO.class, GWT.<AbstractCrudService<ShowingDTO>> create(ShowingCrudService.class), true);
 
-        setDataTableModel(new DataTableModel<ShowingDTO>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().unit().building()).build(),
-            new MemberColumnDescriptor.Builder(proto().unit()).build(),
-            new MemberColumnDescriptor.Builder(proto().status()).build(),
-            new MemberColumnDescriptor.Builder(proto().result()).build(),
-            new MemberColumnDescriptor.Builder(proto().reason()).build()
-        ));//@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().unit().building()).build(), //
+                new MemberColumnDescriptor.Builder(proto().unit()).build(), //
+                new MemberColumnDescriptor.Builder(proto().status()).build(), //
+                new MemberColumnDescriptor.Builder(proto().result()).build(), //
+                new MemberColumnDescriptor.Builder(proto().reason()).build());
+
+        setDataTableModel(new DataTableModel<ShowingDTO>());
     }
 
     @Override

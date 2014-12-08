@@ -45,29 +45,27 @@ public class UnitLister extends SiteDataTablePanel<AptUnitDTO> {
         super(AptUnitDTO.class, GWT.<AbstractCrudService<AptUnitDTO>> create(UnitCrudService.class), !VistaFeatures.instance().yardiIntegration() ? allowAddNew
                 : false);
         setAddNewActionCaption(i18n.tr("New Unit"));
-        setupColumns();
-    }
 
-    protected void setupColumns() {
-        setDataTableModel(new DataTableModel<AptUnitDTO>(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().buildingCode()).build(),
-                
-                new MemberColumnDescriptor.Builder(proto().floorplan().name()).title(i18n.tr("Floorplan Name")).build(),
-                new MemberColumnDescriptor.Builder(proto().floorplan().marketingName()).visible(false).title(i18n.tr("Floorplan Marketing Name")).build(),
-                
-                new MemberColumnDescriptor.Builder(proto().info().floor()).build(),
-                new MemberColumnDescriptor.Builder(proto().info().number()).build(),
-                new MemberColumnDescriptor.Builder(proto().info().area()).build(),
-                new MemberColumnDescriptor.Builder(proto().info().areaUnits()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto().info()._bedrooms()).build(),
-                new MemberColumnDescriptor.Builder(proto().info()._bathrooms()).build(),
-                new MemberColumnDescriptor.Builder(proto().info().economicStatus()).visible(false).build(),
-                
-                new MemberColumnDescriptor.Builder(proto().financial()._unitRent()).build(),
-                new MemberColumnDescriptor.Builder(proto().financial()._marketRent()).build(),
-                
-                new MemberColumnDescriptor.Builder(proto().availability().availableForRent()).build()
-       ));//@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().buildingCode()).build(), //
+
+                new MemberColumnDescriptor.Builder(proto().floorplan().name()).title(i18n.tr("Floorplan Name")).build(), //
+                new MemberColumnDescriptor.Builder(proto().floorplan().marketingName()).visible(false).title(i18n.tr("Floorplan Marketing Name")).build(), //
+
+                new MemberColumnDescriptor.Builder(proto().info().floor()).build(), //
+                new MemberColumnDescriptor.Builder(proto().info().number()).build(), //
+                new MemberColumnDescriptor.Builder(proto().info().area()).build(), //
+                new MemberColumnDescriptor.Builder(proto().info().areaUnits()).visible(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().info()._bedrooms()).build(), //
+                new MemberColumnDescriptor.Builder(proto().info()._bathrooms()).build(), //
+                new MemberColumnDescriptor.Builder(proto().info().economicStatus()).visible(false).build(), //
+
+                new MemberColumnDescriptor.Builder(proto().financial()._unitRent()).build(), //
+                new MemberColumnDescriptor.Builder(proto().financial()._marketRent()).build(), //
+
+                new MemberColumnDescriptor.Builder(proto().availability().availableForRent()).build());
+
+        setDataTableModel(new DataTableModel<AptUnitDTO>());
     }
 
     @Override

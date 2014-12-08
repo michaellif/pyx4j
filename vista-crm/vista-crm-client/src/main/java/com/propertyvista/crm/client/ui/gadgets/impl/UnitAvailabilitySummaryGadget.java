@@ -63,8 +63,6 @@ public class UnitAvailabilitySummaryGadget extends GadgetInstanceBase<UnitAvaila
 
     private Label asOf;
 
-    private DataTableModel<UnitAvailabilityStatusSummaryLineDTO> tableModel;
-
     private final UnitAvailabilitySummaryGadgetService service;
 
     public UnitAvailabilitySummaryGadget(UnitAvailabilitySummaryGadgetMetadata gadgetMetadata) {
@@ -102,8 +100,9 @@ public class UnitAvailabilitySummaryGadget extends GadgetInstanceBase<UnitAvaila
         contentPanel.add(asOf);
         contentPanel.setCellHorizontalAlignment(asOf, HasHorizontalAlignment.ALIGN_CENTER);
 
-        tableModel = new DataTableModel<UnitAvailabilityStatusSummaryLineDTO>(COLUMN_DESCRIPTORS);
-        table = new DataTable<UnitAvailabilityStatusSummaryLineDTO>(tableModel);
+        table = new DataTable<UnitAvailabilityStatusSummaryLineDTO>();
+        table.setColumnDescriptors(COLUMN_DESCRIPTORS);
+        table.setDataTableModel(new DataTableModel<UnitAvailabilityStatusSummaryLineDTO>());
         table.asWidget().setWidth("100%");
         table.asWidget().getElement().getStyle().setProperty("tableLayout", "auto");
         table.setHasColumnClickSorting(false);
@@ -127,7 +126,7 @@ public class UnitAvailabilitySummaryGadget extends GadgetInstanceBase<UnitAvaila
                 }
 
                 asOf.setText(i18n.tr("As of Date: {0,date,short}", getStatusDate()));
-                tableModel.populateData(dataItems, 0, false, 0);
+                table.getDataTableModel().populateData(dataItems, 0, false, 0);
 
                 populateSucceded();
             }

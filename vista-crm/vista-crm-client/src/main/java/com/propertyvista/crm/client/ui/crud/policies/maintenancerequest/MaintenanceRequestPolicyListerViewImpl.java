@@ -34,10 +34,11 @@ public class MaintenanceRequestPolicyListerViewImpl extends AbstractListerView<M
         public MaintenanceRequestPolicyLister() {
             super(MaintenanceRequestPolicyDTO.class, GWT.<MaintenanceRequestPolicyCrudService> create(MaintenanceRequestPolicyCrudService.class));
 
-            setDataTableModel(new DataTableModel<MaintenanceRequestPolicyDTO>( //
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
-            ));
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build());
+
+            setDataTableModel(new DataTableModel<MaintenanceRequestPolicyDTO>());
         }
     }
 }

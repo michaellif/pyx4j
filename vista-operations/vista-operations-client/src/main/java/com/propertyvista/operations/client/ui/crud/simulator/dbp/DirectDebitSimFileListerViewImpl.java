@@ -33,12 +33,14 @@ public class DirectDebitSimFileListerViewImpl extends AbstractListerView<DirectD
 
         public DirectDebitSimFileLister() {
             super(DirectDebitSimFile.class, GWT.<DirectDebitSimFileCrudService> create(DirectDebitSimFileCrudService.class), true);
-            setDataTableModel(new DataTableModel<DirectDebitSimFile>( //
+
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().serialNumber()).build(), //
                     new MemberColumnDescriptor.Builder(proto().creatationDate()).build(), //
                     new MemberColumnDescriptor.Builder(proto().sentDate()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().status()).build() //
-            ));
+                    new MemberColumnDescriptor.Builder(proto().status()).build());
+
+            setDataTableModel(new DataTableModel<DirectDebitSimFile>());
         }
     }
 }

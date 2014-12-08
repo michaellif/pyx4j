@@ -34,12 +34,15 @@ public class DatesPolicyListerViewImpl extends AbstractListerView<DatesPolicyDTO
 
         public DatesPolicyLister() {
             super(DatesPolicyDTO.class, GWT.<AbstractListCrudService<DatesPolicyDTO>> create(DatesPolicyCrudService.class));
-            setDataTableModel(new DataTableModel<DatesPolicyDTO>( //
+
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
                     new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build(), //
                     new MemberColumnDescriptor.Builder(proto().yearRangeFutureSpan()).build(), //
                     new MemberColumnDescriptor.Builder(proto().yearRangeStart()).build() //
-            ));
+            );
+
+            setDataTableModel(new DataTableModel<DatesPolicyDTO>());
         }
     }
 }

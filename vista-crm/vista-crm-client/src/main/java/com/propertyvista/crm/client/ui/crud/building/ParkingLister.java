@@ -34,12 +34,13 @@ public class ParkingLister extends SiteDataTablePanel<ParkingDTO> {
 
         setFilteringEnabled(false);
 
-        setDataTableModel(new DataTableModel<ParkingDTO>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().name()).build(),
-            new MemberColumnDescriptor.Builder(proto().type()).build(),
-            new MemberColumnDescriptor.Builder(proto().levels()).build(),
-            new MemberColumnDescriptor.Builder(proto().totalSpaces()).build()
-        ));//@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().name()).build(), //
+                new MemberColumnDescriptor.Builder(proto().type()).build(), //
+                new MemberColumnDescriptor.Builder(proto().levels()).build(), //
+                new MemberColumnDescriptor.Builder(proto().totalSpaces()).build());
+
+        setDataTableModel(new DataTableModel<ParkingDTO>());
     }
 
     @Override

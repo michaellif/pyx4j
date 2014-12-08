@@ -33,7 +33,7 @@ public class TriggerLister extends SiteDataTablePanel<TriggerDTO> {
     public TriggerLister() {
         super(TriggerDTO.class, GWT.<AbstractCrudService<TriggerDTO>> create(TriggerCrudService.class), true);
 
-        DataTableModel<TriggerDTO> dataTableModel = new DataTableModel<TriggerDTO>( //
+        setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().triggerType()).build(), //
                 new MemberColumnDescriptor.Builder(proto().options()).visible(false).sortable(false).searchable(false).build(), //
                 new MemberColumnDescriptor.Builder(proto().name()).build(), //
@@ -43,6 +43,8 @@ public class TriggerLister extends SiteDataTablePanel<TriggerDTO> {
                 new MemberColumnDescriptor.Builder(proto().populationType(), false).build(), //
                 new MemberColumnDescriptor.Builder(proto().created()).build() //
         );
+
+        DataTableModel<TriggerDTO> dataTableModel = new DataTableModel<TriggerDTO>();
         dataTableModel.setPageSize(DataTablePanel.PAGESIZE_LARGE);
         setDataTableModel(dataTableModel);
 

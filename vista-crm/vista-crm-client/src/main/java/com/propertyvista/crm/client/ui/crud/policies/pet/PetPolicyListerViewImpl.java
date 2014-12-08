@@ -29,10 +29,12 @@ public class PetPolicyListerViewImpl extends AbstractListerView<PetPolicyDTO> im
     public PetPolicyListerViewImpl() {
         setDataTablePanel(new PolicyListerBase<PetPolicyDTO>(PetPolicyDTO.class, GWT.<AbstractListCrudService<PetPolicyDTO>> create(PetPolicyCrudService.class)) {
             {
-                setDataTableModel(new DataTableModel<PetPolicyDTO>( //
+
+                setColumnDescriptors( //
                         new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
-                        new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
-                ));
+                        new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build());
+
+                setDataTableModel(new DataTableModel<PetPolicyDTO>());
             }
         });
     }

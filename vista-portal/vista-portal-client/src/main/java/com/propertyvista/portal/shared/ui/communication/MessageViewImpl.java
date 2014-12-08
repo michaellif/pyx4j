@@ -92,17 +92,19 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
             //getDataTablePanel().getAddButton().asWidget().setStyleName(DataTableTheme.StyleName.ListerButton.name());
             // No filtering work for it
             getDataTable().setHasColumnClickSorting(false);
-            //@formatter:off
-            setDataTableModel(
-                    new DataTableModel<MessageDTO>(new MemberColumnDescriptor.Builder(proto().isRead()).build(),
-                    new MemberColumnDescriptor.Builder(proto().highImportance()).build(),
-                    new MemberColumnDescriptor.Builder(proto().star()).build(),
-                    new MemberColumnDescriptor.Builder(proto().hasAttachments()).build(),
-                    new MemberColumnDescriptor.Builder(proto().senders()).build(),
-                    new MemberColumnDescriptor.Builder(proto().subject()).build(),
-                    new MemberColumnDescriptor.Builder(proto().messagesInThread()).build(),
-                    new MemberColumnDescriptor.Builder(proto().date()).build()));
-          //@formatter:on
+
+            setColumnDescriptors( //
+                    new MemberColumnDescriptor.Builder(proto().isRead()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().highImportance()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().star()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().hasAttachments()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().senders()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().subject()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().messagesInThread()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().date()).build());
+
+            setDataTableModel(new DataTableModel<MessageDTO>());
+
         }
 
         @Override

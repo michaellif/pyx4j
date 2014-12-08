@@ -35,12 +35,13 @@ public class OapiLister extends SiteDataTablePanel<OapiConversionDTO> {
     public OapiLister() {
         super(OapiConversionDTO.class, GWT.<AbstractCrudService<OapiConversionDTO>> create(OapiCrudService.class), true);
 
-        setDataTableModel(new DataTableModel<OapiConversionDTO>( //
+        setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().created()).build(), //
                 new MemberColumnDescriptor.Builder(proto().name()).build(), //
                 new MemberColumnDescriptor.Builder(proto().description()).build(), //
-                new MemberColumnDescriptor.Builder(proto().filesNumber()).build() //
-        ));
+                new MemberColumnDescriptor.Builder(proto().filesNumber()).build());
+
+        setDataTableModel(new DataTableModel<OapiConversionDTO>());
 
         setDeleteActionEnabled(true);
     }

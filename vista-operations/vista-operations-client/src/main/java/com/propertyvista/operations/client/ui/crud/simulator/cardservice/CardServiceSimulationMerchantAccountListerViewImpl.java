@@ -32,13 +32,16 @@ public class CardServiceSimulationMerchantAccountListerViewImpl extends Abstract
         public CardServiceSimulationLister() {
             super(CardServiceSimulationMerchantAccount.class, GWT
                     .<AbstractCrudService<CardServiceSimulationMerchantAccount>> create(CardServiceSimulationMerchantAccountCrudService.class), true, true);
-            setDataTableModel(new DataTableModel<CardServiceSimulationMerchantAccount>( //
+
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().terminalID()).build(), //
                     new MemberColumnDescriptor.Builder(proto().company()).build(), //
                     new MemberColumnDescriptor.Builder(proto().balance()).build(), //
                     new MemberColumnDescriptor.Builder(proto().responseCode()).build(), //
                     new MemberColumnDescriptor.Builder(proto().created()).build() //
-            ));
+            );
+
+            setDataTableModel(new DataTableModel<CardServiceSimulationMerchantAccount>());
         }
     }
 

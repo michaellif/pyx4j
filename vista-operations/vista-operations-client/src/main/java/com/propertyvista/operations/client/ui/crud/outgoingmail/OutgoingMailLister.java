@@ -28,7 +28,7 @@ public class OutgoingMailLister extends SiteDataTablePanel<OutgoingMailQueueDTO>
     public OutgoingMailLister() {
         super(OutgoingMailQueueDTO.class, GWT.<AbstractCrudService<OutgoingMailQueueDTO>> create(OutgoingMailCrudService.class), false, false);
 
-        setDataTableModel(new DataTableModel<OutgoingMailQueueDTO>( //
+        setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().status()).build(), //
                 new MemberColumnDescriptor.Builder(proto().namespace()).build(), //
                 new MemberColumnDescriptor.Builder(proto().configurationId()).visible(false).build(), //
@@ -42,6 +42,8 @@ public class OutgoingMailLister extends SiteDataTablePanel<OutgoingMailQueueDTO>
                 new MemberColumnDescriptor.Builder(proto().sentDate()).visible(false).build(), //
                 new MemberColumnDescriptor.Builder(proto().messageId()).visible(false).build(), //
                 new MemberColumnDescriptor.Builder(proto().keywords()).build() //
-        ));
+        );
+
+        setDataTableModel(new DataTableModel<OutgoingMailQueueDTO>());
     }
 }

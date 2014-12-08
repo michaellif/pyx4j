@@ -38,16 +38,16 @@ public class MoneyInBatchListerViewImpl extends AbstractListerView<MoneyInBatchD
         public MoneyInBatchLister() {
             super(MoneyInBatchDTO.class, GWT.<MoneyInBatchCrudService> create(MoneyInBatchCrudService.class), false, false);
 
-            setDataTableModel(new DataTableModel<MoneyInBatchDTO>(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().building()).build(),
-                    new MemberColumnDescriptor.Builder(proto().depositDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto().bankAccountName()).build(),
-                    new MemberColumnDescriptor.Builder(proto().depositSlipNumber()).build(),
-                    new MemberColumnDescriptor.Builder(proto().totalReceivedAmount()).build(),
-                    new MemberColumnDescriptor.Builder(proto().numberOfReceipts()).build(),                    
-                    new MemberColumnDescriptor.Builder(proto().postingStatus()).build()
-                    
-            ));//@formatter:off
+            setColumnDescriptors( //
+                    new MemberColumnDescriptor.Builder(proto().building()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().depositDate()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().bankAccountName()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().depositSlipNumber()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().totalReceivedAmount()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().numberOfReceipts()).build(), //                    
+                    new MemberColumnDescriptor.Builder(proto().postingStatus()).build());
+
+            setDataTableModel(new DataTableModel<MoneyInBatchDTO>());
         }
 
         @Override

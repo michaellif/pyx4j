@@ -24,8 +24,7 @@ import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
 import com.propertyvista.crm.rpc.services.policies.policy.PaymentTypeSelectionPolicyCrudService;
 import com.propertyvista.domain.policy.dto.PaymentTypeSelectionPolicyDTO;
 
-public class PaymentTypeSelectionPolicyListerViewImpl extends AbstractListerView<PaymentTypeSelectionPolicyDTO> implements
-        PaymentTypeSelectionPolicyListerView {
+public class PaymentTypeSelectionPolicyListerViewImpl extends AbstractListerView<PaymentTypeSelectionPolicyDTO> implements PaymentTypeSelectionPolicyListerView {
 
     public PaymentTypeSelectionPolicyListerViewImpl() {
         setDataTablePanel(new PaymentTypeSelectionPolicyLister());
@@ -37,10 +36,11 @@ public class PaymentTypeSelectionPolicyListerViewImpl extends AbstractListerView
             super(PaymentTypeSelectionPolicyDTO.class, GWT
                     .<AbstractListCrudService<PaymentTypeSelectionPolicyDTO>> create(PaymentTypeSelectionPolicyCrudService.class));
 
-            setDataTableModel(new DataTableModel<PaymentTypeSelectionPolicyDTO>( //
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
-            ));
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build());
+
+            setDataTableModel(new DataTableModel<PaymentTypeSelectionPolicyDTO>());
         }
     }
 }

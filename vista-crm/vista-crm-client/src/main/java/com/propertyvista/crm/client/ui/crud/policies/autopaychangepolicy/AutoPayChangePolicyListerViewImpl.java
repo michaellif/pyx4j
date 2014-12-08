@@ -34,10 +34,12 @@ public class AutoPayChangePolicyListerViewImpl extends AbstractListerView<AutoPa
         public AutoPayChangePolicyLister() {
             super(AutoPayPolicyDTO.class, GWT.<AutoPayPolicyCrudService> create(AutoPayPolicyCrudService.class));
 
-            setDataTableModel(new DataTableModel<AutoPayPolicyDTO>( //
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
                     new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
-            ));
+            );
+
+            setDataTableModel(new DataTableModel<AutoPayPolicyDTO>());
 
         }
     }

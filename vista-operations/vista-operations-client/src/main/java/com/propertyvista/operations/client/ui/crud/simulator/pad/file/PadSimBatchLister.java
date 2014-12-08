@@ -28,15 +28,16 @@ public class PadSimBatchLister extends SiteDataTablePanel<PadSimBatch> {
     public PadSimBatchLister() {
         super(PadSimBatch.class, GWT.<AbstractCrudService<PadSimBatch>> create(PadSimBatchCrudService.class), true);
 
-        setDataTableModel(new DataTableModel<PadSimBatch>(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().batchNumber()).build(),
-                new MemberColumnDescriptor.Builder(proto().terminalId()).build(),
-                new MemberColumnDescriptor.Builder(proto().bankId()).build(),
-                new MemberColumnDescriptor.Builder(proto().branchTransitNumber()).build(),
-                new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),
-                new MemberColumnDescriptor.Builder(proto().recordsCount()).build(),
-                new MemberColumnDescriptor.Builder(proto().batchAmount()).build(),
-                new MemberColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build()
-        ));//@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().batchNumber()).build(), //
+                new MemberColumnDescriptor.Builder(proto().terminalId()).build(), //
+                new MemberColumnDescriptor.Builder(proto().bankId()).build(), //
+                new MemberColumnDescriptor.Builder(proto().branchTransitNumber()).build(), //
+                new MemberColumnDescriptor.Builder(proto().accountNumber()).build(), //
+                new MemberColumnDescriptor.Builder(proto().recordsCount()).build(), //
+                new MemberColumnDescriptor.Builder(proto().batchAmount()).build(), //
+                new MemberColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build());
+
+        setDataTableModel(new DataTableModel<PadSimBatch>());
     }
 }

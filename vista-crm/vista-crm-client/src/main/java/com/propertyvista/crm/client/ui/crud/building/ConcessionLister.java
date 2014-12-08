@@ -36,37 +36,37 @@ public class ConcessionLister extends VersionedLister<Concession> {
         super(Concession.class, GWT.<AbstractCrudService<Concession>> create(ConcessionCrudService.class), true, true);
         setFilteringEnabled(false);
 
-        setDataTableModel(new DataTableModel<Concession>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(),
-            new MemberColumnDescriptor.Builder(proto().version().type()).build(),
-            new MemberColumnDescriptor.Builder(proto().version().term()).build(),
-            new ColumnDescriptor(proto().version().value().getPath().toString(), proto().version().value().getMeta().getCaption()) {              
-                @Override
-                public String convert(IEntity entity) {
-                    if (entity != null) {
-                        Concession consssion = (Concession) entity;
-                        String format = null;
-                        switch(consssion.version().type().getValue()) {
-                        case percentageOff:
-                            format = "{0,number,percent}";
-                            break;
-                        case free:
-                        case monetaryOff:
-                        case promotionalItem:                           
-                        default:
-                            format = "${0,number,#.##}";
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), //
+                new MemberColumnDescriptor.Builder(proto().version().type()).build(), //
+                new MemberColumnDescriptor.Builder(proto().version().term()).build(), //
+                new ColumnDescriptor(proto().version().value().getPath().toString(), proto().version().value().getMeta().getCaption()) {
+                    @Override
+                    public String convert(IEntity entity) {
+                        if (entity != null) {
+                            Concession consssion = (Concession) entity;
+                            String format = null;
+                            switch (consssion.version().type().getValue()) {
+                            case percentageOff:
+                                format = "{0,number,percent}";
+                                break;
+                            case free:
+                            case monetaryOff:
+                            case promotionalItem:
+                            default:
+                                format = "${0,number,#.##}";
+                            }
+                            String formattedValue = SimpleMessageFormat.format(format, consssion.version().value().getValue());
+                            return formattedValue;
+                        } else {
+                            return super.convert(entity);
                         }
-                        String formattedValue = SimpleMessageFormat.format(format, consssion.version().value().getValue());
-                        return formattedValue;
-                    } else {
-                        return super.convert(entity);
-                    }                        
-                }
-            },
-            new MemberColumnDescriptor.Builder(proto().version().condition()).build(),
-            new MemberColumnDescriptor.Builder(proto().version().effectiveDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().version().expirationDate()).build()
-        ));//@formatter:on        
+                    }
+                }, new MemberColumnDescriptor.Builder(proto().version().condition()).build(), //
+                new MemberColumnDescriptor.Builder(proto().version().effectiveDate()).build(), //
+                new MemberColumnDescriptor.Builder(proto().version().expirationDate()).build());
+
+        setDataTableModel(new DataTableModel<Concession>());
     }
 
     @Override

@@ -28,7 +28,7 @@ public class FundsTransferDebitRecordLister extends SiteDataTablePanel<FundsTran
     public FundsTransferDebitRecordLister() {
         super(FundsTransferRecordDTO.class, GWT.<AbstractCrudService<FundsTransferRecordDTO>> create(PadDebitRecordCrudService.class), false, false);
 
-        setDataTableModel(new DataTableModel<FundsTransferRecordDTO>( //
+        setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().padBatch().padFile().id()).columnTitle("File Id").searchableOnly().build(), //  
                 new MemberColumnDescriptor.Builder(proto().padBatch().padFile().fileName(), false).build(), //
                 new MemberColumnDescriptor.Builder(proto().padBatch().padFile().status(), false).columnTitle("File status").build(), //
@@ -48,8 +48,8 @@ public class FundsTransferDebitRecordLister extends SiteDataTablePanel<FundsTran
                 new MemberColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build(), //
                 new MemberColumnDescriptor.Builder(proto().processed()).build(), //
                 new MemberColumnDescriptor.Builder(proto().processingStatus()).build(), //
-                new MemberColumnDescriptor.Builder(proto().statusChangeDate()).build() //
+                new MemberColumnDescriptor.Builder(proto().statusChangeDate()).build());
 
-        ));
+        setDataTableModel(new DataTableModel<FundsTransferRecordDTO>());
     }
 }

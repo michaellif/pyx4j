@@ -34,10 +34,11 @@ public class LeaseBillingPolicyListerViewImpl extends AbstractListerView<LeaseBi
         public LateFeePolicyLister() {
             super(LeaseBillingPolicyDTO.class, GWT.<LeaseBillingPolicyCrudService> create(LeaseBillingPolicyCrudService.class));
 
-            setDataTableModel(new DataTableModel<LeaseBillingPolicyDTO>( //
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
-            ));
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build());
+
+            setDataTableModel(new DataTableModel<LeaseBillingPolicyDTO>());
         }
     }
 

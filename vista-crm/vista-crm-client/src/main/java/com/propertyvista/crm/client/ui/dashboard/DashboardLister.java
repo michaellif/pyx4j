@@ -42,13 +42,14 @@ public class DashboardLister extends SiteDataTablePanel<DashboardMetadata> {
     public DashboardLister() {
         super(DashboardMetadata.class, GWT.<AbstractCrudService<DashboardMetadata>> create(DashboardMetadataCrudService.class), true, true);
 
-        setDataTableModel(new DataTableModel<DashboardMetadata>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().type()).build(),
-            new MemberColumnDescriptor.Builder(proto().name()).build(),
-            new MemberColumnDescriptor.Builder(proto().isShared()).build(),
-            new MemberColumnDescriptor.Builder(proto().ownerUser()).title(i18n.tr("Owner")).build(),
-            new MemberColumnDescriptor.Builder(proto().description()).build()
-        ));//@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().type()).build(), //
+                new MemberColumnDescriptor.Builder(proto().name()).build(), //
+                new MemberColumnDescriptor.Builder(proto().isShared()).build(), //
+                new MemberColumnDescriptor.Builder(proto().ownerUser()).title(i18n.tr("Owner")).build(), //
+                new MemberColumnDescriptor.Builder(proto().description()).build());
+
+        setDataTableModel(new DataTableModel<DashboardMetadata>());
     }
 
     @Override

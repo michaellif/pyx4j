@@ -30,16 +30,18 @@ public class CrmAuditRecordLister extends SiteDataTablePanel<AuditRecordDTO> {
 
     public CrmAuditRecordLister() {
         super(AuditRecordDTO.class, GWT.<CrmAuditRecordsListerService> create(CrmAuditRecordsListerService.class));
-        setDataTableModel(new DataTableModel<AuditRecordDTO>(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().when()).build(),
-                new MemberColumnDescriptor.Builder(proto().application()).build(),
-                new MemberColumnDescriptor.Builder(proto().userName()).searchable(false).sortable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().remoteAddr()).build(),
-                new MemberColumnDescriptor.Builder(proto().event()).build(),
-                new MemberColumnDescriptor.Builder(proto().targetEntity()).build(),
-                new MemberColumnDescriptor.Builder(proto().targetEntityId()).build(),
-                new MemberColumnDescriptor.Builder(proto().details()).build()                
-        ));//@formatter:on
+
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().when()).build(), //
+                new MemberColumnDescriptor.Builder(proto().application()).build(), //
+                new MemberColumnDescriptor.Builder(proto().userName()).searchable(false).sortable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().remoteAddr()).build(), //
+                new MemberColumnDescriptor.Builder(proto().event()).build(), //
+                new MemberColumnDescriptor.Builder(proto().targetEntity()).build(), //
+                new MemberColumnDescriptor.Builder(proto().targetEntityId()).build(), //
+                new MemberColumnDescriptor.Builder(proto().details()).build());
+
+        setDataTableModel(new DataTableModel<AuditRecordDTO>());
     }
 
     @Override

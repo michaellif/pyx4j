@@ -57,32 +57,34 @@ public class ExecutionReportSectionLister extends SiteDataTablePanel<ExecutionRe
             }
         });
 
-        setDataTableModel(new DataTableModel<ExecutionReportSection>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().name()).build(),
-            new MemberColumnDescriptor.Builder(proto().type()).build(),
-            new MemberColumnDescriptor.Builder(proto().counter()).build(),
-            new MemberColumnDescriptor.Builder(proto().value()).build(),
-            new MemberColumnDescriptor(new Builder(proto().messages())) {
-                @Override
-                public String convert(IEntity entity) {
-                    return String.valueOf(entity.isEmpty() ? 0 : ((ICollection<?,?>)entity.getMember(getColumnPath())).size());
-                }
-            },
-            new MemberColumnDescriptor(new Builder(proto().messages())) {
-                {
-                    setColumnTitle(i18n.tr("First Message"));                    
-                }
-                @Override
-                public String convert(IEntity entity) {
-                    String message = entity.isEmpty() || ((IList<ExecutionReportMessage>)entity.getMember(getColumnPath())).isEmpty() ? "" : ((IList<ExecutionReportMessage>)entity.getMember(getColumnPath())).get(0).message().getValue();
-                    if (message != null && message.length() > 200) {
-                        message = message.substring(0, 200) + "...";                        
+        setColumnDescriptors( //              
+                new MemberColumnDescriptor.Builder(proto().name()).build(), //
+                new MemberColumnDescriptor.Builder(proto().type()).build(), //
+                new MemberColumnDescriptor.Builder(proto().counter()).build(), //
+                new MemberColumnDescriptor.Builder(proto().value()).build(), //
+                new MemberColumnDescriptor(new Builder(proto().messages())) {
+                    @Override
+                    public String convert(IEntity entity) {
+                        return String.valueOf(entity.isEmpty() ? 0 : ((ICollection<?, ?>) entity.getMember(getColumnPath())).size());
                     }
-                    return message != null ? message : "";
-                }
-            }
+                }, //
+                new MemberColumnDescriptor(new Builder(proto().messages())) {
+                    {
+                        setColumnTitle(i18n.tr("First Message"));
+                    }
 
-        ));//@formatter:on
+                    @Override
+                    public String convert(IEntity entity) {
+                        String message = entity.isEmpty() || ((IList<ExecutionReportMessage>) entity.getMember(getColumnPath())).isEmpty() ? ""
+                                : ((IList<ExecutionReportMessage>) entity.getMember(getColumnPath())).get(0).message().getValue();
+                        if (message != null && message.length() > 200) {
+                            message = message.substring(0, 200) + "...";
+                        }
+                        return message != null ? message : "";
+                    }
+                });
+
+        setDataTableModel(new DataTableModel<ExecutionReportSection>());
 
         messageDialog = new OkDialog(i18n.tr("Execution Messages")) {
             @Override
@@ -98,10 +100,11 @@ public class ExecutionReportSectionLister extends SiteDataTablePanel<ExecutionRe
         public ExecutionReportMessageLister() {
             super(ExecutionReportMessage.class);
 
-            setDataTableModel(new DataTableModel<ExecutionReportMessage>(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().eventTime()).build(),
-                new MemberColumnDescriptor.Builder(proto().message()).build()
-            ));//@formatter:on
+            setColumnDescriptors( //
+                    new MemberColumnDescriptor.Builder(proto().eventTime()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().message()).build());
+
+            setDataTableModel(new DataTableModel<ExecutionReportMessage>());
 
             setDataSource(new ListerDataSource<ExecutionReportMessage>(ExecutionReportMessage.class,
                     GWT.<AbstractListCrudService<ExecutionReportMessage>> create(ExecutionReportMessageService.class)));

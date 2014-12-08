@@ -61,7 +61,9 @@ public class EmployeeLister extends SiteDataTablePanel<EmployeeDTO> {
             cd.add(new MemberColumnDescriptor.Builder(proto().notifications(), false).displayOnly().build());
         }
 
-        setDataTableModel(new DataTableModel<EmployeeDTO>(cd));
+        setColumnDescriptors(cd);
+
+        setDataTableModel(new DataTableModel<EmployeeDTO>());
     }
 
     @Override

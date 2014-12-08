@@ -28,16 +28,17 @@ public class PadSimFileLister extends SiteDataTablePanel<PadSimFile> {
     public PadSimFileLister() {
         super(PadSimFile.class, GWT.<AbstractCrudService<PadSimFile>> create(PadSimFileCrudService.class), false);
 
-        setDataTableModel(new DataTableModel<PadSimFile>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().fileName()).build(),
-            new MemberColumnDescriptor.Builder(proto().fundsTransferType()).build(),
-            new MemberColumnDescriptor.Builder(proto().fileCreationNumber()).build(),
-            new MemberColumnDescriptor.Builder(proto().state()).build(),
-            new MemberColumnDescriptor.Builder(proto().returns()).build(),
-            new MemberColumnDescriptor.Builder(proto().received()).build(),
-            new MemberColumnDescriptor.Builder(proto().recordsCount()).build(),
-            new MemberColumnDescriptor.Builder(proto().fileAmount()).build(),
-            new MemberColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build()
-        ));//@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().fileName()).build(), //
+                new MemberColumnDescriptor.Builder(proto().fundsTransferType()).build(), //
+                new MemberColumnDescriptor.Builder(proto().fileCreationNumber()).build(), //
+                new MemberColumnDescriptor.Builder(proto().state()).build(), //
+                new MemberColumnDescriptor.Builder(proto().returns()).build(), //
+                new MemberColumnDescriptor.Builder(proto().received()).build(), //
+                new MemberColumnDescriptor.Builder(proto().recordsCount()).build(), //
+                new MemberColumnDescriptor.Builder(proto().fileAmount()).build(), //
+                new MemberColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build());
+
+        setDataTableModel(new DataTableModel<PadSimFile>());
     }
 }

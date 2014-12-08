@@ -33,20 +33,22 @@ public class CustomerCreditCheckLister extends SiteDataTablePanel<CustomerCredit
 
     public CustomerCreditCheckLister() {
         super(CustomerCreditCheckDTO.class, GWT.<CustomerCreditCheckCrudService> create(CustomerCreditCheckCrudService.class), false);
-        setDataTableModel(new DataTableModel<CustomerCreditCheckDTO>(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().screening().screene().person().name()).title(i18n.tr("Tenant")).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().screening().screene().person().name().firstName()).searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto().screening().screene().person().name().lastName()).searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto().creditCheckDate()).build(),
-                new MemberColumnDescriptor.Builder(proto().createdBy().name()).title(i18n.tr("Created By")).build(),
-                new MemberColumnDescriptor.Builder(proto().createdBy().name().firstName()).searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto().createdBy().name().lastName()).searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto().amountChecked()).build(),
-                new MemberColumnDescriptor.Builder(proto().riskCode()).build(),
-                new MemberColumnDescriptor.Builder(proto().creditCheckResult()).build(),
-                new MemberColumnDescriptor.Builder(proto().amountApproved()).build(),
-                new MemberColumnDescriptor.Builder(proto().reason()).build()
-        ));//@formatter:on
+
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().screening().screene().person().name()).title(i18n.tr("Tenant")).searchable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto().screening().screene().person().name().firstName()).searchableOnly().build(), //
+                new MemberColumnDescriptor.Builder(proto().screening().screene().person().name().lastName()).searchableOnly().build(), //
+                new MemberColumnDescriptor.Builder(proto().creditCheckDate()).build(), //
+                new MemberColumnDescriptor.Builder(proto().createdBy().name()).title(i18n.tr("Created By")).build(), //
+                new MemberColumnDescriptor.Builder(proto().createdBy().name().firstName()).searchableOnly().build(), //
+                new MemberColumnDescriptor.Builder(proto().createdBy().name().lastName()).searchableOnly().build(), //
+                new MemberColumnDescriptor.Builder(proto().amountChecked()).build(), //
+                new MemberColumnDescriptor.Builder(proto().riskCode()).build(), //
+                new MemberColumnDescriptor.Builder(proto().creditCheckResult()).build(), //
+                new MemberColumnDescriptor.Builder(proto().amountApproved()).build(), //
+                new MemberColumnDescriptor.Builder(proto().reason()).build());
+
+        setDataTableModel(new DataTableModel<CustomerCreditCheckDTO>());
 
     }
 

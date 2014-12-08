@@ -97,7 +97,9 @@ public class LeaseLister extends SiteDataTablePanel<LeaseDTO> {
             columnDescriptors.add(new MemberColumnDescriptor.Builder(proto().billingAccount().id(), false).columnTitle("Billing Account Id").build());
         }
 
-        setDataTableModel(new DataTableModel<LeaseDTO>(columnDescriptors));
+        setColumnDescriptors(columnDescriptors);
+
+        setDataTableModel(new DataTableModel<LeaseDTO>());
 
         // TODO currently disabled till new drop-down quick filters selector implemented:
 //        addActionItem(new Button(new Image(EntityFolderImages.INSTANCE.addButton().hover()), i18n.tr("Application"), new Command() {

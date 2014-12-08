@@ -36,40 +36,36 @@ public class CardTransactionRecordLister extends SiteDataTablePanel<CardTransact
         super(CardTransactionRecord.class, GWT.<AbstractCrudService<CardTransactionRecord>> create(PmcCardTransactionRecordCrudService.class), false, false);
 
         if (addPmcColumn) {
-            setDataTableModel(new DataTableModel<CardTransactionRecord>(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().pmc()).build(),
-                new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto().merchantTerminalId()).build(),
-                new MemberColumnDescriptor.Builder(proto().cardType()).build(),
-                new MemberColumnDescriptor.Builder(proto().amount()).build(),
-                new MemberColumnDescriptor.Builder(proto().feeAmount()).build(),
-                new MemberColumnDescriptor.Builder(proto().paymentTransactionId()).build(),
-                new MemberColumnDescriptor.Builder(proto().completionDate()).build(),
-                new MemberColumnDescriptor.Builder(proto().saleResponseCode()).build(),
-                new MemberColumnDescriptor.Builder(proto().voided()).build(),
-                new MemberColumnDescriptor.Builder(proto().feeResponseCode()).build(),
-                new MemberColumnDescriptor.Builder(proto().creationDate()).build()
-            ));//@formatter:on
+            setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().pmc()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(), //
+                    new MemberColumnDescriptor.Builder(proto().merchantTerminalId()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().cardType()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().amount()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().feeAmount()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().paymentTransactionId()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().completionDate()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().saleResponseCode()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().voided()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().feeResponseCode()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().creationDate()).build());
         } else {
-            setDataTableModel(new DataTableModel<CardTransactionRecord>(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().cardType()).build(),
-                    new MemberColumnDescriptor.Builder(proto().amount()).build(),
-                    new MemberColumnDescriptor.Builder(proto().feeAmount()).build(),
-                    new MemberColumnDescriptor.Builder(proto().paymentTransactionId()).build(),
-                    new MemberColumnDescriptor.Builder(proto().completionDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto().saleResponseCode()).build(),
-                    new MemberColumnDescriptor.Builder(proto().voided()).build(),
-                    new MemberColumnDescriptor.Builder(proto().feeResponseCode()).build(),
-                    new MemberColumnDescriptor.Builder(proto().creationDate()).build()
-            ));//@formatter:on
+            setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().cardType()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().amount()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().feeAmount()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().paymentTransactionId()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().completionDate()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().saleResponseCode()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().voided()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().feeResponseCode()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().creationDate()).build());
         }
-
+        setDataTableModel(new DataTableModel<CardTransactionRecord>());
     }
 
     public void setParentPmc(Pmc pmc) {
         this.getDataSource().setPreDefinedFilters(Arrays.<Criterion> asList(//@formatter:off
                 PropertyCriterion.eq(proto().pmc(), pmc)
-        ));//@formatter:on
+        ));
     }
 
     @Override

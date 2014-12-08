@@ -17,7 +17,6 @@ import java.util.Collection;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -29,9 +28,12 @@ public class SelectorDialogPortfolioLister extends EntityLister<Portfolio> {
 
     public SelectorDialogPortfolioLister(SelectRecipientsDialogForm parent, Collection<Portfolio> alreadySelected) {
         super(Portfolio.class, GWT.<SelectPortfolioListService> create(SelectPortfolioListService.class), parent, alreadySelected);
-        DataTableModel<Portfolio> dataTableModel = new DataTableModel<Portfolio>(new ColumnDescriptor[] {
+
+        setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().name()).build(), //
-                new MemberColumnDescriptor.Builder(proto().description()).wordWrap(true).build() });
+                new MemberColumnDescriptor.Builder(proto().description()).wordWrap(true).build());
+
+        DataTableModel<Portfolio> dataTableModel = new DataTableModel<Portfolio>();
         dataTableModel.setPageSize(DataTablePanel.PAGESIZE_SMALL);
         dataTableModel.setMultipleSelection(true);
         setDataTableModel(dataTableModel);

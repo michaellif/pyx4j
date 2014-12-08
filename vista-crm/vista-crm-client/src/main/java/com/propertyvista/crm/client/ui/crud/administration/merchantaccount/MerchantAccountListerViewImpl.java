@@ -36,13 +36,14 @@ public class MerchantAccountListerViewImpl extends AbstractListerView<MerchantAc
         public MerchantAccountLister() {
             super(MerchantAccount.class, GWT.<AbstractListCrudService<MerchantAccount>> create(MerchantAccountCrudService.class), true);
 
-            setDataTableModel(new DataTableModel<MerchantAccount>(//
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().accountName()).build(),//
                     new MemberColumnDescriptor.Builder(proto().bankId()).build(),//
                     new MemberColumnDescriptor.Builder(proto().branchTransitNumber()).build(),//
                     new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),//
-                    new MemberColumnDescriptor.Builder(proto().paymentsStatus()).searchable(false).sortable(false).build() //
-            ));
+                    new MemberColumnDescriptor.Builder(proto().paymentsStatus()).searchable(false).sortable(false).build());
+
+            setDataTableModel(new DataTableModel<MerchantAccount>());
         }
 
         @Override

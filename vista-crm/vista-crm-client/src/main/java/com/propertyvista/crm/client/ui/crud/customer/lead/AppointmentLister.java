@@ -34,14 +34,16 @@ public class AppointmentLister extends SiteDataTablePanel<Appointment> {
 
     public AppointmentLister() {
         super(Appointment.class, GWT.<AbstractCrudService<Appointment>> create(AppointmentCrudService.class), true);
-        setDataTableModel(new DataTableModel<Appointment>(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().date()).build(),
-                new MemberColumnDescriptor.Builder(proto().time()).build(),
-                new MemberColumnDescriptor.Builder(proto().agent()).build(),
-                new MemberColumnDescriptor.Builder(proto().phone()).build(),
-                new MemberColumnDescriptor.Builder(proto().email()).build(),
-                new MemberColumnDescriptor.Builder(proto().status()).build()
-        ));//@formatter:on
+
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().date()).build(), //
+                new MemberColumnDescriptor.Builder(proto().time()).build(), //
+                new MemberColumnDescriptor.Builder(proto().agent()).build(), //
+                new MemberColumnDescriptor.Builder(proto().phone()).build(), //
+                new MemberColumnDescriptor.Builder(proto().email()).build(), //
+                new MemberColumnDescriptor.Builder(proto().status()).build());
+
+        setDataTableModel(new DataTableModel<Appointment>());
     }
 
     @Override

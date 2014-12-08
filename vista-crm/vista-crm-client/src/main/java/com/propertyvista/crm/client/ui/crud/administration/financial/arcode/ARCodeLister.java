@@ -62,7 +62,9 @@ public class ARCodeLister extends SiteDataTablePanel<ARCode> {
             columnDescriptors.add(new MemberColumnDescriptor.Builder(proto().yardiChargeCodes()).build());
         }
 
-        setDataTableModel(new DataTableModel<ARCode>(columnDescriptors));
+        setColumnDescriptors(columnDescriptors);
+
+        setDataTableModel(new DataTableModel<ARCode>());
     }
 
     @Override

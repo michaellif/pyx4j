@@ -34,10 +34,11 @@ public class LeaseAdjustmentPolicyListerViewImpl extends AbstractListerView<Leas
         public LeaseAdjustmentPolicyLister() {
             super(LeaseAdjustmentPolicyDTO.class, GWT.<LeaseAdjustmentPolicyCrudService> create(LeaseAdjustmentPolicyCrudService.class));
 
-            setDataTableModel(new DataTableModel<LeaseAdjustmentPolicyDTO>( //
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
-            ));
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build());
+
+            setDataTableModel(new DataTableModel<LeaseAdjustmentPolicyDTO>());
         }
     }
 }

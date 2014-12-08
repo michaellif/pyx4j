@@ -17,7 +17,6 @@ import java.util.Collection;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -33,7 +32,8 @@ public class SelectorDialogBuildingLister extends EntityLister<Building> {
 
     public SelectorDialogBuildingLister(SelectRecipientsDialogForm parent, Collection<Building> alreadySelected) {
         super(Building.class, GWT.<SelectBuildingListService> create(SelectBuildingListService.class), parent, alreadySelected);
-        DataTableModel<Building> dataTableModel = new DataTableModel<Building>(new ColumnDescriptor[] {
+
+        setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().propertyCode(), true).build(),//
                 new MemberColumnDescriptor.Builder(proto().info().name(), true).build(),//
                 new MemberColumnDescriptor.Builder(proto().info().address().streetNumber(), false).build(),//
@@ -42,7 +42,9 @@ public class SelectorDialogBuildingLister extends EntityLister<Building> {
                 new MemberColumnDescriptor.Builder(proto().info().address().province(), true).build(),//
                 new MemberColumnDescriptor.Builder(proto().info().address().country(), false).build(),//
                 new MemberColumnDescriptor.Builder(proto().marketing().name(), false).title("Marketing Name").build() //
-                });
+        );
+
+        DataTableModel<Building> dataTableModel = new DataTableModel<Building>();
         dataTableModel.setPageSize(DataTablePanel.PAGESIZE_SMALL);
         dataTableModel.setMultipleSelection(true);
         setDataTableModel(dataTableModel);

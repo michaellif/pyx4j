@@ -32,13 +32,14 @@ public class UnitItemLister extends SiteDataTablePanel<AptUnitItem> {
         super(AptUnitItem.class, GWT.<UnitItemCrudService> create(UnitItemCrudService.class), true);
         setFilteringEnabled(false);
 
-        setDataTableModel(new DataTableModel<AptUnitItem>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().type()).build(),
-            new MemberColumnDescriptor.Builder(proto().description()).build(),
-            new MemberColumnDescriptor.Builder(proto().flooringType()).build(),
-            new MemberColumnDescriptor.Builder(proto().cabinetsType()).build(),
-            new MemberColumnDescriptor.Builder(proto().counterTopType()).build()
-        ));//@formatter:on
+        setColumnDescriptors( //
+                new MemberColumnDescriptor.Builder(proto().type()).build(), //
+                new MemberColumnDescriptor.Builder(proto().description()).build(), //
+                new MemberColumnDescriptor.Builder(proto().flooringType()).build(), //
+                new MemberColumnDescriptor.Builder(proto().cabinetsType()).build(), //
+                new MemberColumnDescriptor.Builder(proto().counterTopType()).build());
+
+        setDataTableModel(new DataTableModel<AptUnitItem>());
     }
 
     @Override

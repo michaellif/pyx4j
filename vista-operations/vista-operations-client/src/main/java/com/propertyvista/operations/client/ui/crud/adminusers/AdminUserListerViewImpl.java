@@ -37,13 +37,15 @@ public class AdminUserListerViewImpl extends AbstractListerView<OperationsUserDT
 
         public AdminUserLister() {
             super(OperationsUserDTO.class, GWT.<AdminUserCrudService> create(AdminUserCrudService.class), true);
-            setDataTableModel(new DataTableModel<OperationsUserDTO>( //
+
+            setColumnDescriptors( //
                     new MemberColumnDescriptor.Builder(proto().name()).build(), //
                     new MemberColumnDescriptor.Builder(proto().email()).build(), //
                     new MemberColumnDescriptor.Builder(proto().enabled()).build(), //
                     new MemberColumnDescriptor.Builder(proto().created()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().credentialUpdated()).build() //
-            ));
+                    new MemberColumnDescriptor.Builder(proto().credentialUpdated()).build());
+
+            setDataTableModel(new DataTableModel<OperationsUserDTO>());
         }
 
         @Override

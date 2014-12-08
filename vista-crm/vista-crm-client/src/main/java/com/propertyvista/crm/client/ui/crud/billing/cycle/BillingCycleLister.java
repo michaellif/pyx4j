@@ -30,7 +30,8 @@ public class BillingCycleLister extends SiteDataTablePanel<BillingCycleDTO> {
 
     public BillingCycleLister() {
         super(BillingCycleDTO.class, GWT.<BillingCycleCrudService> create(BillingCycleCrudService.class), false);
-        setDataTableModel(new DataTableModel<BillingCycleDTO>( //
+
+        setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().building(), false).build(), //
                 new MemberColumnDescriptor.Builder(proto().billingType()).build(), //
                 new MemberColumnDescriptor.Builder(proto().billingCycleStartDate()).build(), //
@@ -45,7 +46,9 @@ public class BillingCycleLister extends SiteDataTablePanel<BillingCycleDTO> {
                 new MemberColumnDescriptor.Builder(proto().pads()).sortable(false).searchable(false).build(), //
                 new MemberColumnDescriptor.Builder(proto().targetAutopayExecutionDate()).build(), //
                 new MemberColumnDescriptor.Builder(proto().actualAutopayExecutionDate()).build() //
-        ));
+        );
+
+        setDataTableModel(new DataTableModel<BillingCycleDTO>());
     }
 
     @Override
