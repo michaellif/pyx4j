@@ -84,17 +84,19 @@ public class CommunityEventCrudServiceImpl implements CommunityEventCrudService 
         queryCriteria.asc(queryCriteria.proto().date());
 
         List<CommunityEvent> events = Persistence.service().query(queryCriteria);
-        if (events == null || events.isEmpty()) {
+        if (events == null || events.isEmpty() || events.size() == 0) {
             callback.onSuccess(null);
             return;
         }
 
         EntitySearchResult<CommunityEvent> result = new EntitySearchResult<CommunityEvent>();
+
         for (CommunityEvent e : events) {
             result.add(e);
         }
 
         //TODO: sort the events and get first 3
+
         callback.onSuccess(result);
     }
 }

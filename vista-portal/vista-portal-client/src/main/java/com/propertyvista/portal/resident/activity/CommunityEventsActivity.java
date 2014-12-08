@@ -54,7 +54,7 @@ public class CommunityEventsActivity extends AbstractActivity implements Communi
 
             @Override
             public void onSuccess(EntitySearchResult<CommunityEvent> result) {
-                view.populateCommunityEvents(result.getData());
+                view.populateCommunityEvents(result == null || result.getData() == null ? null : result.getData());
                 AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
             }
         }, EntityListCriteria.create(CommunityEvent.class));
