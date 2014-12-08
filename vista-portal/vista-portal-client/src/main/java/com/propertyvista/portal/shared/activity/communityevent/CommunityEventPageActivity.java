@@ -27,9 +27,9 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.property.asset.CommunityEvent;
-import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.shared.services.communityevent.CommunityEventCrudService;
+import com.propertyvista.portal.shared.PortalSite;
 import com.propertyvista.portal.shared.ui.communityevent.CommunityEventPageView;
 import com.propertyvista.portal.shared.ui.communityevent.CommunityEventPageView.CommunityEventPagePresenter;
 
@@ -42,7 +42,7 @@ public class CommunityEventPageActivity extends AbstractActivity implements Comm
     private final CommunityEventCrudService communityEventService = (CommunityEventCrudService) GWT.create(CommunityEventCrudService.class);
 
     public CommunityEventPageActivity(AppPlace place) {
-        view = ResidentPortalSite.getViewFactory().getView(CommunityEventPageView.class);
+        view = PortalSite.getViewFactory().getView(CommunityEventPageView.class);
         this.entityId = place.getItemId();
     }
 
