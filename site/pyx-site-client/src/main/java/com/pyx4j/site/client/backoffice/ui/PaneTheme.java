@@ -241,7 +241,6 @@ public class PaneTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.ListerListPanel);
-        style.addProperty("line-height", "1em");
         addStyle(style);
 
     }

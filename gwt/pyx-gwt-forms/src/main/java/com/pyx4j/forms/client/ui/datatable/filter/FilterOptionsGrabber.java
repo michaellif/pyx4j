@@ -28,18 +28,30 @@ import com.pyx4j.widgets.client.selector.MultyWordSuggestOptionsGrabber;
 
 public class FilterOptionsGrabber extends MultyWordSuggestOptionsGrabber<FilterItem> {
 
+    private ArrayList<FilterItem> filterItems;
+
+    private final DataTablePanel<?> dataTablePanel;
+
     public FilterOptionsGrabber(DataTablePanel<?> dataTablePanel) {
+        this.dataTablePanel = dataTablePanel;
+    }
 
-        ArrayList<FilterItem> filterItems = new ArrayList<>();
+    @Override
+    public void grabOptions(Request request, Callback<FilterItem> callback) {
+        if (filterItems == null) {
+            filterItems = new ArrayList<>();
 
-        for (ColumnDescriptor cd : dataTablePanel.getDataTable().getColumnDescriptors()) {
-            if (cd.isSearchable()) {
-                filterItems.add(new FilterItem(cd));
+            for (ColumnDescriptor cd : dataTablePanel.getDataTable().getColumnDescriptors()) {
+                if (cd.isSearchable()) {
+                    filterItems.add(new FilterItem(cd));
+                }
             }
-        }
 
-        setFormatter(new FilterItemFormatter());
-        setAllOptions(filterItems);
+            setFormatter(new FilterItemFormatter());
+            setAllOptions(filterItems);
+
+        }
+        super.grabOptions(request, callback);
     }
 
 }

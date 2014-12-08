@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui.datatable.filter;
 
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 
-public class FilterItem {
+public class FilterItem implements Comparable<FilterItem> {
 
     private final ColumnDescriptor columnDescriptor;
 
@@ -33,5 +33,10 @@ public class FilterItem {
     @Override
     public String toString() {
         return columnDescriptor.getColumnName() + ":" + "All";
+    }
+
+    @Override
+    public int compareTo(FilterItem o) {
+        return 0;
     }
 }
