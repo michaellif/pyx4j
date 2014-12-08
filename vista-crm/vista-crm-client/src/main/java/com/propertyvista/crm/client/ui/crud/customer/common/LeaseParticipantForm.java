@@ -417,7 +417,7 @@ public abstract class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> ext
 
     private void enablePreviousAddress() {
         previousAddress.setVisible(ClientBusinessRules.needPreviousAddress(getValue().screening().data().version().currentAddress().moveInDate().getValue(),
-                getValue().screening().yearsToForcingPreviousAddress().getValue()));
+                getValue().screening().yearsToForcingPreviousAddress().getValue(0)));
     }
 
 // Financial: ------------------------------------------------------------------------------------------------

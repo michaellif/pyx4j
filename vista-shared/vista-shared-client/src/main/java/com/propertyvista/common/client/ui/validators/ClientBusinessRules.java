@@ -24,6 +24,10 @@ public class ClientBusinessRules {
         if (currentAddressMoveInDate == null) {
             return false;
         }
+        if (yearsToForcingPreviousAddress == 0) {
+            return true;
+        }
+
         Date now = ClientContext.getServerDate();
         @SuppressWarnings("deprecation")
         LogicalDate needPreviousAddress = new LogicalDate(now.getYear() - yearsToForcingPreviousAddress, now.getMonth(), now.getDate());
