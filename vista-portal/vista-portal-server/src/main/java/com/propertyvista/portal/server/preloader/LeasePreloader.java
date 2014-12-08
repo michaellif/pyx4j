@@ -21,6 +21,7 @@ import java.util.Random;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -37,6 +38,8 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseApplication;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -47,6 +50,7 @@ import com.propertyvista.portal.server.preloader.util.AptUnitSource;
 import com.propertyvista.portal.server.preloader.util.LeaseLifecycleSimulator;
 import com.propertyvista.portal.server.preloader.util.LeaseLifecycleSimulator.LeaseLifecycleSimulatorBuilder;
 import com.propertyvista.preloader.BaseVistaDevDataPreloader;
+import com.propertyvista.preloader.helper.LeasePreloaderHelper;
 
 public class LeasePreloader extends BaseVistaDevDataPreloader {
 
@@ -65,6 +69,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         Customer dualTenantCustomer = null;
         int tCoApplicantCount = 0;
         int tGuarantorCount = 0;
+
         for (int i = 0; i < config().numTenants; i++) {
             AptUnit unit = makeAvailable(aptUnitSource.next());
             final Lease lease = generator.createLeaseWithTenants(unit);
@@ -78,6 +83,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 if (i == 2) {
                     dualTenantCustomer = mainTenant.leaseParticipant().customer();
                 }
+
             } else if (i == DemoData.UserType.TENANT.getDefaultMax()) {
                 LeaseTermTenant mainTenant = lease.currentTerm().version().tenants().get(0);
                 mainTenant.leaseParticipant().customer().set(dualTenantCustomer);
@@ -103,6 +109,9 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
             // Create normal Active Lease first for Shortcut users
             if (i < config().numOfLeasesWithNoSimulation) {
+
+                final int tenantsCount = i;
+
                 final Date trDate = SystemDateManager.getDate();
                 new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
@@ -131,6 +140,15 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                             SystemDateManager.setDate(lease.leaseFrom().getValue());
                             ServerSideFactory.create(LeaseFacade.class).activate(lease);
                         }
+
+                        // First DEMO tenant
+//                        if (tenantsCount == 0) {
+//                            LeaseTermTenant mainTenant = lease.currentTerm().version().tenants().get(0);
+//                            skipResidentWizard((LeaseTermTenant) mainTenant.duplicate());
+//                            LeaseProducts products = lease.currentTerm().version().leaseProducts();
+//                            createDefaultAutopay(mainTenant, products);
+//                        }
+
                         return null;
                     }
                 });
@@ -242,7 +260,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         int pCoApplicantCount = 0;
         int pGuarantorCount = 0;
         for (int i = 0; i < config().numPotentialTenants; i++) {
-
             AptUnit unit = aptUnitSource.next();
             unit = makeAvailable(unit);
 
@@ -310,7 +327,14 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                     ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease, null, null);
                 }
             }
+
+            if (lease.leaseApplication().status().getValue() == LeaseApplication.Status.InProgress) {
+                LeaseTermParticipant<? extends LeaseParticipant<?>> leaseTermParticipant = lease.currentTerm().version().tenants().get(0);
+                LeasePreloaderHelper.addDefaultPaymentToLeaseApplication(leaseTermParticipant);
+            }
+
             SystemDateManager.resetDate();
+
         }
 
         TenantsEquifaxTestCasesGenerator tenantsEquifaxTestCasesGenerator = new TenantsEquifaxTestCasesGenerator();
@@ -325,6 +349,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             LeaseGenerator.attachDocumentData(lease);
             ServerSideFactory.create(LeaseFacade.class).persist(lease);
             for (LeaseTermTenant participant : lease.currentTerm().version().tenants()) {
+                Persistence.ensureRetrieve(participant.leaseParticipant().customer().paymentMethods(), AttachLevel.Attached);
                 participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
                 Persistence.service().persist(participant.leaseParticipant().customer().personScreening());
             }
@@ -332,12 +357,48 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
                 Persistence.service().persist(participant.leaseParticipant().customer().personScreening());
             }
+
+            if (lease.leaseApplication().status().getValue() == LeaseApplication.Status.InProgress) {
+                LeaseTermParticipant<? extends LeaseParticipant<?>> leaseTermParticipant = lease.currentTerm().version().tenants().get(0);
+                LeasePreloaderHelper.addDefaultPaymentToLeaseApplication(leaseTermParticipant);
+            }
         }
 
         StringBuilder b = new StringBuilder();
         b.append("Created " + numCreated + " leases");
+
         return b.toString();
     }
+
+//    private void skipResidentWizard(LeaseTermParticipant<?> tenant) {
+//        signAgreement(tenant);
+//        doLaterSetupAutoPay(tenant);
+//        doLaterSetupInsurance(tenant);
+//    }
+//
+//    private void signAgreement(LeaseTermParticipant<?> tenant) {
+//        LeasePreloaderHelper.signDefaultAgreement(tenant.leaseParticipant());
+//    }
+//
+//    private void doLaterSetupAutoPay(LeaseTermParticipant<?> tenant) {
+//        markDoLater(tenant, MoveInActionType.autoPay);
+//    }
+//
+//    private void doLaterSetupInsurance(LeaseTermParticipant<?> tenant) {
+//        markDoLater(tenant, MoveInActionType.insurance);
+//    }
+//
+//    private void markDoLater(LeaseTermParticipant<?> mainTenant, MoveInActionType action) {
+//        ServerSideFactory.create(CustomerFacade.class).skipMoveInAction(mainTenant.leaseParticipant(), action);
+//    }
+//
+//    private void createDefaultAutopay(LeaseTermTenant tenant, LeaseProducts products) {
+//        BillableItem item = null;
+//        if (products != null && !products.isEmpty()) {
+//            item = products.featureItems().get(0);
+//        }
+//        LeasePreloaderHelper.createDefaultAutoPayment(tenant.leaseParticipant(), item);
+//    }
 
     @Override
     public String delete() {

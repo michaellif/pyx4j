@@ -133,7 +133,7 @@ public class LeaseGenerator extends DataGenerator {
         }
     }
 
-    private void addPreathorisedPaymentMethod(LeaseTermTenant tenant) {
+    private static void addPreathorisedPaymentMethod(LeaseTermTenant tenant) {
         LeasePaymentMethod m = EntityFactory.create(LeasePaymentMethod.class);
         m.type().setValue(PaymentType.Echeck);
         m.isProfiledMethod().setValue(Boolean.TRUE);
@@ -145,6 +145,7 @@ public class LeaseGenerator extends DataGenerator {
         details.bankId().setValue(CommonsStringUtils.paddZerro(RandomUtil.randomInt(999), 3));
         details.branchTransitNumber().setValue(CommonsStringUtils.paddZerro(RandomUtil.randomInt(99999), 5));
         details.accountNo().number().setValue(Integer.toString(RandomUtil.randomInt(99999)) + Integer.toString(RandomUtil.randomInt(999999)));
+        details.accountNo().newNumber().setValue(details.accountNo().number().getValue());
         details.accountNo().obfuscatedNumber().setValue(new AccountNumberFormatter().obfuscate(details.accountNo().number().getValue()));
         m.details().set(details);
 
@@ -153,6 +154,11 @@ public class LeaseGenerator extends DataGenerator {
         m.billingAddress().set(CommonsGenerator.createInternationalAddress());
 
         tenant.leaseParticipant().customer().paymentMethods().add(m);
+    }
+
+    public static LeasePaymentMethod createPaymentMethod(LeaseTermTenant tenant) {
+        addPreathorisedPaymentMethod(tenant);
+        return tenant.leaseParticipant().customer().paymentMethods().get(0);
     }
 
     public static void attachDocumentData(Lease lease) {
