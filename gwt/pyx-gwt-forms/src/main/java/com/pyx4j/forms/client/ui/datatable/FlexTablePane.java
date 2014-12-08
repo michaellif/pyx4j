@@ -109,7 +109,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
 
     private void processHeaderClick(int column) {
         if (dataTable.hasColumnClickSorting()) {
-            ColumnDescriptor columnDescriptor = dataTable.getDataTableModel().getVisibleColumnDescriptor(column);
+            ColumnDescriptor columnDescriptor = dataTable.getVisibleColumnDescriptor(column);
             DataTableModel<E> model = dataTable.getDataTableModel();
             if (columnDescriptor.isSortable()) {
                 if (columnDescriptor.equals(model.getSortColumn())) {
@@ -135,7 +135,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
     @Override
     public void renderTable() {
 
-        if (dataTable.getDataTableModel().getColumnDescriptors() == null) {
+        if (dataTable.getColumnDescriptors() == null) {
             return;
         }
 
@@ -184,7 +184,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
             ++colIndex;
         }
 
-        for (ColumnDescriptor columnDescriptor : dataTable.getDataTableModel().getColumnDescriptorsVisible()) {
+        for (ColumnDescriptor columnDescriptor : dataTable.getColumnDescriptorsVisible()) {
             String columnTitle = columnDescriptor.getColumnTitle();
             StringBuffer headerText = new StringBuffer("&nbsp;");
             headerText.append(columnTitle);
@@ -242,7 +242,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
 
             final Iterator<DataItem<E>> dataIterator = model.getData().iterator();
 
-            final List<ColumnDescriptor> visibleColumnDescriptors = model.getColumnDescriptorsVisible();
+            final List<ColumnDescriptor> visibleColumnDescriptors = dataTable.getColumnDescriptorsVisible();
 
             int rowIndex = 1;
 

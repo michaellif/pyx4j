@@ -21,7 +21,9 @@
 package com.pyx4j.forms.client.ui.datatable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -40,6 +42,8 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
     private ITablePane<E> tablePanel;
 
     private DataTableModel<E> model;
+
+    private List<ColumnDescriptor> columnDescriptors;
 
     private boolean hasColumnClickSorting = false;
 
@@ -67,14 +71,58 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
         }
     }
 
-    public DataTable(DataTableModel<E> model) {
-        this();
-        setDataTableModel(model);
-    }
-
     @Override
     public Widget asWidget() {
         return tablePanel.asWidget();
+    }
+
+    public void setColumnDescriptors(List<ColumnDescriptor> columnDescriptors) {
+        this.columnDescriptors = columnDescriptors;
+    }
+
+    public List<ColumnDescriptor> getColumnDescriptors() {
+        return Collections.unmodifiableList(columnDescriptors);
+    }
+
+    public List<ColumnDescriptor> getColumnDescriptorsVisible() {
+        List<ColumnDescriptor> descriptors = new ArrayList<ColumnDescriptor>();
+        for (ColumnDescriptor columnDescriptor : getColumnDescriptors()) {
+            if (columnDescriptor.isVisible()) {
+                descriptors.add(columnDescriptor);
+                continue;
+            }
+        }
+        return descriptors;
+    }
+
+    public ColumnDescriptor getColumnDescriptor(int index) {
+        return columnDescriptors.get(index);
+    }
+
+    public ColumnDescriptor getVisibleColumnDescriptor(int index) {
+        int i = -1;
+        for (ColumnDescriptor descriptor : columnDescriptors) {
+            if (descriptor.isVisible()) {
+                i++;
+                if (index == i) {
+                    return descriptor;
+                }
+            }
+        }
+        return null;
+    }
+
+    public ColumnDescriptor getColumnDescriptor(String columnName) {
+        for (ColumnDescriptor descriptor : columnDescriptors) {
+            if (descriptor.getColumnName().equals(columnName)) {
+                return descriptor;
+            }
+        }
+        return null;
+    }
+
+    public String getColumnName(int index) {
+        return getColumnDescriptor(index).getColumnName();
     }
 
     public void setItemZoomInCommand(ItemZoomInCommand<E> itemZoomInCommand) {
@@ -251,7 +299,7 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
 
             setDialogPixelWidth(300);
             FlowPanel panel = new FlowPanel();
-            for (ColumnDescriptor column : getDataTableModel().getColumnDescriptors()) {
+            for (ColumnDescriptor column : getColumnDescriptors()) {
                 if (!column.isSearchableOnly()) {
                     CheckBox columnCheck = new CheckBox(column.getColumnTitle());
                     columnCheck.setValue(column.isVisible());
@@ -272,7 +320,7 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
         public boolean onClickOk() {
             boolean hasChanged = false;
             int checksListIdx = 0;
-            for (ColumnDescriptor column : getDataTableModel().getColumnDescriptors()) {
+            for (ColumnDescriptor column : getColumnDescriptors()) {
                 if (!column.isSearchableOnly()) {
                     boolean requestedVisible = columnChecksList.get(checksListIdx).getValue();
                     if (column.isVisible() != requestedVisible) {

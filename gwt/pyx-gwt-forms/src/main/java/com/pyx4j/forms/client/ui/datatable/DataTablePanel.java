@@ -21,6 +21,7 @@
 package com.pyx4j.forms.client.ui.datatable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -54,7 +55,7 @@ import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.filter.CriteriaEditableComponentFactory;
 import com.pyx4j.forms.client.ui.datatable.filter.DataTableFilterItem;
 import com.pyx4j.forms.client.ui.datatable.filter.DataTableFilterPanel;
-import com.pyx4j.forms.client.ui.filter.FilterPanel;
+import com.pyx4j.forms.client.ui.datatable.filter.FilterPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
@@ -124,8 +125,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         topActionsBar = new DataTableActionsBar(this);
         add(topActionsBar);
 
-        FilterPanel newFilterPanel = new FilterPanel();
         if (false) {
+            FilterPanel newFilterPanel = new FilterPanel(this);
             add(newFilterPanel);
         }
 
@@ -164,7 +165,16 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         return clazz;
     }
 
+    public void setColumnDescriptors(ColumnDescriptor... columnDescriptors) {
+        setColumnDescriptors(Arrays.asList(columnDescriptors));
+    }
+
+    public void setColumnDescriptors(List<ColumnDescriptor> columnDescriptors) {
+        dataTable.setColumnDescriptors(columnDescriptors);
+    }
+
     public void setDataTableModel(DataTableModel<E> model) {
+        model.setDataTable(dataTable);
         dataTable.setDataTableModel(model);
         topActionsBar.setDataTableModel(model);
         bottomActionsBar.setDataTableModel(model);

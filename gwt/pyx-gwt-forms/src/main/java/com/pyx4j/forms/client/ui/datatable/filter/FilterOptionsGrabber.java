@@ -32,7 +32,7 @@ public class FilterOptionsGrabber extends MultyWordSuggestOptionsGrabber<FilterI
 
         ArrayList<FilterItem> filterItems = new ArrayList<>();
 
-        for (ColumnDescriptor cd : dataTablePanel.getDataTableModel().getColumnDescriptors()) {
+        for (ColumnDescriptor cd : dataTablePanel.getDataTable().getColumnDescriptors()) {
             if (cd.isSearchable()) {
                 filterItems.add(new FilterItem(cd));
             }

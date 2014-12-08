@@ -195,7 +195,7 @@ public class DataTableFilterItem<E extends IEntity> extends FlowPanel {
         removeButton.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         Collection<FieldData> fds = new ArrayList<FieldData>();
-        for (ColumnDescriptor cd : parent.getDataTablePanel().getDataTableModel().getColumnDescriptors()) {
+        for (ColumnDescriptor cd : parent.getDataTablePanel().getDataTable().getColumnDescriptors()) {
             if (cd.isSearchable()) {
                 fds.add(new FieldData(cd));
             }

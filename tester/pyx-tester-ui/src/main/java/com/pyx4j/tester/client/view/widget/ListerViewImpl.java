@@ -79,7 +79,9 @@ public class ListerViewImpl extends ScrollPanel implements ListerView {
             for (int col = 0; col < cols; col++) {
                 columns[col] = new MemberColumnDescriptor.Builder(proto().getMember("field" + col), true).build();
             }
-            setDataTableModel(new DataTableModel<ListerDataItem>(columns));
+
+            setColumnDescriptors(columns);
+            setDataTableModel(new DataTableModel<ListerDataItem>());
             setDataSource(new TestListerDataSource(cols, rows));
             populate();
         }

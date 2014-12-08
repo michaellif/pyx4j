@@ -207,13 +207,14 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
                 addUpperActionItem(displayModeButton.asWidget());
             }
 
-
             setDataSource(new ListerDataSource<E>(entityClass, service));
 
-            DataTableModel<E> dataTableModel = new DataTableModel<E>(EntitySelectorTableDialog.this.defineColumnDescriptors());
+            setColumnDescriptors(EntitySelectorTableDialog.this.defineColumnDescriptors());
+
+            DataTableModel<E> dataTableModel = new DataTableModel<E>();
             dataTableModel.setMultipleSelection(EntitySelectorTableDialog.this.isMultiselect);
             setDataTableModel(dataTableModel);
-            
+
             getDataTable().setHasColumnClickSorting(true);
 
         }

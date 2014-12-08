@@ -63,7 +63,7 @@ public class SectionTablePane<E extends IEntity> implements ITablePane<E> {
 
         DataTableModel<E> model = dataTable.getDataTableModel();
 
-        contentPanel = new SectionTable(model.getColumnDescriptors());
+        contentPanel = new SectionTable(dataTable.getColumnDescriptors());
         contentHolder.setWidget(contentPanel);
 
         for (DataItem<?> item : model.getData()) {

@@ -21,9 +21,7 @@
 package com.pyx4j.forms.client.ui.datatable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -38,6 +36,8 @@ public class DataTableModel<E extends IEntity> {
 
     public static final int PAGE_SIZE = 20;
 
+    private DataTable<E> dataTable;
+
     /** List of listeners */
     private final ArrayList<DataTableModelListener> listenerList = new ArrayList<DataTableModelListener>();
 
@@ -46,8 +46,6 @@ public class DataTableModel<E extends IEntity> {
     private final Collection<DataItem<E>> selected = new HashSet<DataItem<E>>();
 
     private boolean multipleSelection = false;
-
-    private final List<ColumnDescriptor> columnDescriptors;
 
     private ColumnDescriptor sortColumn;
 
@@ -65,62 +63,16 @@ public class DataTableModel<E extends IEntity> {
 
     private int totalRows;
 
-    public DataTableModel(ColumnDescriptor... columnDescriptors) {
-        this(Arrays.asList(columnDescriptors));
+    public DataTableModel() {
     }
 
-    public DataTableModel(List<ColumnDescriptor> columnDescriptors) {
-        this.columnDescriptors = columnDescriptors;
+    public void setDataTable(DataTable<E> dataTable) {
+        this.dataTable = dataTable;
     }
 
     public void close() {
         listenerList.clear();
         data.clear();
-    }
-
-    public List<ColumnDescriptor> getColumnDescriptors() {
-        return Collections.unmodifiableList(columnDescriptors);
-    }
-
-    public List<ColumnDescriptor> getColumnDescriptorsVisible() {
-        List<ColumnDescriptor> descriptors = new ArrayList<ColumnDescriptor>();
-        for (ColumnDescriptor columnDescriptor : getColumnDescriptors()) {
-            if (columnDescriptor.isVisible()) {
-                descriptors.add(columnDescriptor);
-                continue;
-            }
-        }
-        return descriptors;
-    }
-
-    public ColumnDescriptor getColumnDescriptor(int index) {
-        return columnDescriptors.get(index);
-    }
-
-    public ColumnDescriptor getVisibleColumnDescriptor(int index) {
-        int i = -1;
-        for (ColumnDescriptor descriptor : columnDescriptors) {
-            if (descriptor.isVisible()) {
-                i++;
-                if (index == i) {
-                    return descriptor;
-                }
-            }
-        }
-        return null;
-    }
-
-    public ColumnDescriptor getColumnDescriptor(String columnName) {
-        for (ColumnDescriptor descriptor : columnDescriptors) {
-            if (descriptor.getColumnName().equals(columnName)) {
-                return descriptor;
-            }
-        }
-        return null;
-    }
-
-    public String getColumnName(int index) {
-        return getColumnDescriptor(index).getColumnName();
     }
 
     /**
@@ -208,13 +160,13 @@ public class DataTableModel<E extends IEntity> {
         if (sorts != null) {
             if (sorts.size() > 0) {
                 Sort sort = sorts.get(0);
-                ColumnDescriptor column = getColumnDescriptor(sort.getPropertyPath());
+                ColumnDescriptor column = dataTable.getColumnDescriptor(sort.getPropertyPath());
                 setSortColumn(column);
                 setSortAscending(!sort.isDescending());
             }
             if (sorts.size() > 1) {
                 Sort sort = sorts.get(1);
-                ColumnDescriptor column = getColumnDescriptor(sort.getPropertyPath());
+                ColumnDescriptor column = dataTable.getColumnDescriptor(sort.getPropertyPath());
                 setSecondarySortColumn(column);
                 setSecondarySortAscending(!sort.isDescending());
             }
