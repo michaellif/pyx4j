@@ -19,7 +19,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -40,9 +39,18 @@ public class CommunityEventCrudServiceImpl implements CommunityEventCrudService 
 
     @Override
     public void retrieve(AsyncCallback<CommunityEvent> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
-        CommunityEvent event = EntityFactory.create(CommunityEvent.class);
-        callback.onSuccess(event);
 
+        EntityQueryCriteria<CommunityEvent> queryCriteria = EntityQueryCriteria.create(CommunityEvent.class);
+        queryCriteria.eq(queryCriteria.proto().id(), entityId);
+
+        List<CommunityEvent> events = Persistence.service().query(queryCriteria);
+
+        if (events.size() == 1) {
+            callback.onSuccess(events.get(0));
+            return;
+        }
+
+        callback.onSuccess(null);
     }
 
     @Override

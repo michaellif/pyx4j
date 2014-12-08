@@ -15,6 +15,7 @@ package com.propertyvista.portal.resident.themes;
 
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.portal.shared.themes.CommunicationTheme;
+import com.propertyvista.portal.shared.themes.CommunityEventTheme;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.portal.shared.themes.PortalTheme;
 
@@ -32,6 +33,7 @@ public class ResidentPortalTheme extends PortalTheme {
         addTheme(new PortalRootPaneTheme());
         addTheme(new CommunicationTheme());
         addTheme(new MoveInWizardTheme());
+        addTheme(new CommunityEventTheme());
 
     }
 

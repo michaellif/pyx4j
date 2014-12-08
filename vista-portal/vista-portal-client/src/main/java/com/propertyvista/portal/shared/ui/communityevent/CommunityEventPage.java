@@ -13,23 +13,17 @@
  */
 package com.propertyvista.portal.shared.ui.communityevent;
 
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.TextAlign;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.domain.property.asset.CommunityEvent;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.shared.themes.CommunityEventTheme;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
-import com.propertyvista.portal.shared.themes.NavigationAnchorTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
 
 public class CommunityEventPage extends CPortalEntityForm<CommunityEvent> {
@@ -44,27 +38,18 @@ public class CommunityEventPage extends CPortalEntityForm<CommunityEvent> {
     @Override
     protected IsWidget createContent() {
         FormPanel formPanel = new FormPanel(this);
-        formPanel.h1(i18n.tr("Security"));
 
-        Anchor anchor = new Anchor("Change my Password");
+        CLabel<String> caption = new CLabel<String>();
+        caption.asWidget().setStyleName(CommunityEventTheme.StyleName.CommunityEventCaption.name());
+        formPanel.append(Location.Dual, proto().caption(), caption);
 
-        formPanel.append(Location.Left, anchor);
+        CLabel<String> date = new CLabel<String>();
+        date.asWidget().setStyleName(CommunityEventTheme.StyleName.CommunityEventDate.name());
+        formPanel.append(Location.Dual, proto().date(), date);
 
-        formPanel.h1(i18n.tr("Mail Preferences"));
-
-        HTML label = new HTML("Coming soon.");
-        label.setWidth("200px");
-        label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        label.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-        formPanel.append(Location.Left, label);
-
-        formPanel.h1(i18n.tr("Notification Preferences"));
-
-        label = new HTML("Coming soon.");
-        label.setWidth("200px");
-        label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        label.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-        formPanel.append(Location.Left, label);
+        CLabel<String> description = new CLabel<String>();
+        description.asWidget().setStyleName(CommunityEventTheme.StyleName.CommunityEventDescription.name());
+        formPanel.append(Location.Dual, proto().description(), description);
 
         return formPanel;
     }

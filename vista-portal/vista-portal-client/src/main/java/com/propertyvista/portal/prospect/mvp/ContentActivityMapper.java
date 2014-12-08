@@ -37,7 +37,6 @@ import com.propertyvista.portal.shared.activity.account.AccountPageActivity;
 import com.propertyvista.portal.shared.activity.communication.MessagePageActivity;
 import com.propertyvista.portal.shared.activity.communication.MessageViewActivity;
 import com.propertyvista.portal.shared.activity.communication.MessageWizardActivity;
-import com.propertyvista.portal.shared.activity.communityevent.CommunityEventPageActivity;
 import com.propertyvista.portal.shared.activity.login.LoginWithTokenActivity;
 import com.propertyvista.portal.shared.activity.login.LogoutActivity;
 import com.propertyvista.portal.shared.activity.login.PasswordResetRequestWizardActivity;
@@ -57,6 +56,7 @@ public class ContentActivityMapper implements AppActivityMapper {
 
 
 
+
             @Override
             public void onSuccess() {
                 if (place instanceof AppPlace) {
@@ -67,8 +67,6 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new ApplicationStatusPageActivity(appPlace);
                     } else if (appPlace instanceof PortalSiteMap.Account) {
                         activity = new AccountPageActivity(appPlace);
-                    } else if (appPlace instanceof PortalSiteMap.CommunityEvent) {
-                        activity = new CommunityEventPageActivity(appPlace);
 // Internals:
                     } else if (appPlace instanceof PortalSiteMap.Login) {
                         activity = new LandingActivity(appPlace);

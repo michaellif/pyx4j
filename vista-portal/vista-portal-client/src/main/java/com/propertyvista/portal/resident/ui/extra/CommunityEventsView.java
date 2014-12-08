@@ -15,6 +15,7 @@ package com.propertyvista.portal.resident.ui.extra;
 
 import java.util.List;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.domain.property.asset.CommunityEvent;
@@ -22,7 +23,7 @@ import com.propertyvista.domain.property.asset.CommunityEvent;
 public interface CommunityEventsView extends IsView {
 
     public interface CommunityEventsPresenter {
-        void showEvent();
+        void showEvent(Key caption);
     }
 
     void populateCommunityEvents(List<CommunityEvent> notification);

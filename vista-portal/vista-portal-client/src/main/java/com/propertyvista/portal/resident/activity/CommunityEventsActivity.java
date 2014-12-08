@@ -19,6 +19,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
@@ -60,8 +61,8 @@ public class CommunityEventsActivity extends AbstractActivity implements Communi
     }
 
     @Override
-    public void showEvent() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.CommunityEvent());
+    public void showEvent(Key eventId) {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.CommunityEvent().formPlace(eventId));
     }
 
 }

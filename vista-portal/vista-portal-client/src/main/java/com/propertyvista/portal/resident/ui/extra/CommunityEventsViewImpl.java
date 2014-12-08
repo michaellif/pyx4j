@@ -44,7 +44,7 @@ public class CommunityEventsViewImpl extends FlowPanel implements CommunityEvent
         clear();
         if (events != null && events.size() > 0) {
             int i = 1;
-            for (CommunityEvent event : events) {
+            for (final CommunityEvent event : events) {
                 HTML captionHTML = new HTML(event.caption().getValue());
                 captionHTML.setStyleName(ExtraGadgetsTheme.StyleName.CommunityEventCaption.name());
                 captionHTML.setTitle(event.caption().getValue());
@@ -67,8 +67,8 @@ public class CommunityEventsViewImpl extends FlowPanel implements CommunityEvent
                 more.addClickHandler(new ClickHandler() {
 
                     @Override
-                    public void onClick(ClickEvent event) {
-                        presenter.showEvent();
+                    public void onClick(ClickEvent clickEvent) {
+                        presenter.showEvent(event.getPrimaryKey());
 
                     }
 

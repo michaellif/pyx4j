@@ -13,13 +13,15 @@
  */
 package com.propertyvista.portal.shared.ui.communityevent;
 
+import com.pyx4j.commons.Key;
+
 import com.propertyvista.domain.property.asset.CommunityEvent;
 import com.propertyvista.portal.shared.ui.IEditorView;
 
 public interface CommunityEventPageView extends IEditorView<CommunityEvent> {
 
     public interface CommunityEventPagePresenter extends IEditorPresenter<CommunityEvent> {
-
+        void showEvent(Key caption);
     }
 
 }
