@@ -18,47 +18,45 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui.filter;
-
-import javax.smartcardio.CommandAPDU;
+package com.pyx4j.forms.client.ui.datatable.filter;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.widgets.client.selector.ItemHolder;
 import com.pyx4j.widgets.client.selector.ItemHolderFactory;
 import com.pyx4j.widgets.client.selector.SelectorListBox;
 
-public class FilterPanel extends SelectorListBox<Criterion> {
+public class FilterPanel extends SelectorListBox<FilterItem> {
 
-    public FilterPanel() {
-        super(new FilterOptionsGrabber(), new Command() {
+    private DataTablePanel<?> dataTablePanel;
+
+    public FilterPanel(DataTablePanel<?> dataTablePanel) {
+        super(new FilterOptionsGrabber(dataTablePanel), new Command() {
             @Override
             public void execute() {
                 // TODO Auto-generated method stub
 
             }
-        }, new IFormatter<Criterion, SafeHtml>() {
+        }, new IFormatter<FilterItem, SafeHtml>() {
             @Override
-            public SafeHtml format(Criterion value) {
+            public SafeHtml format(FilterItem value) {
                 SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                builder.appendHtmlConstant(SimpleMessageFormat.format("<div style=\"padding:2px;\">{0}</div>", value.toString()));
                 return builder.toSafeHtml();
             }
-        }, new ItemHolderFactory<Criterion>() {
+        }, new ItemHolderFactory<FilterItem>() {
 
             @Override
-            public ItemHolder<Criterion> createItemHolder(Criterion item) {
-                return new ItemHolder<Criterion>(item, new IFormatter<Criterion, String>() {
-                    @Override
-                    public String format(Criterion value) {
-                        return "TESTTEST";
-                    }
-                });
+            public ItemHolder<FilterItem> createItemHolder(FilterItem item) {
+                return new ItemHolder<FilterItem>(item, new FilterItemFormatter());
             }
         });
+        this.dataTablePanel = dataTablePanel;
 
     }
 }

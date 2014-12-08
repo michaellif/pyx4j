@@ -496,7 +496,7 @@ public class WidgetsTheme extends Theme {
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", ThemeColor.foreground, 0.4);
-        style.addProperty("padding", "4px");
+        style.addProperty("padding", "0 4px");
         style.addProperty("box-sizing", "border-box");
         style.addProperty("-moz-box-sizing", "border-box");
         style.addProperty("-webkit-box-sizing", "border-box");
