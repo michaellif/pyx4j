@@ -32,6 +32,7 @@ import com.propertyvista.oapi.v1.processing.AbstractProcessor;
 import com.propertyvista.oapi.v1.service.MarketingService;
 import com.propertyvista.oapi.v1.service.PortationService;
 import com.propertyvista.oapi.xml.Note;
+import com.propertyvista.oapi.xml.StringIO;
 
 public class BuildingMarshaller extends AbstractMarshaller<Building, BuildingIO> {
 
@@ -53,6 +54,8 @@ public class BuildingMarshaller extends AbstractMarshaller<Building, BuildingIO>
         }
         BuildingIO buildingIO = new BuildingIO();
         buildingIO.propertyCode = getValue(building.propertyCode());
+
+        buildingIO.name = createIo(StringIO.class, building.info().name());
 
         buildingIO.address = AddressMarshaller.getInstance().marshalItem(building.info().address());
         buildingIO.buildingType = createIo(BuildingTypeIO.class, building.info().type());

@@ -18,6 +18,7 @@ import com.propertyvista.operations.server.services.tools.oapi.base.ConverterToO
 
 public class ConverterToOAPIFactory {
 
+    @SuppressWarnings("rawtypes")
     static ConverterToOAPI create(OapiConversion data) {
         switch (data.type().getValue()) {
         //TODO case between other versions of converters
@@ -26,5 +27,4 @@ public class ConverterToOAPIFactory {
         }
 
     }
-
 }

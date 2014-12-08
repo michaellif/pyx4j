@@ -13,6 +13,9 @@
  */
 package com.propertyvista.operations.server.services.tools.oapi;
 
+import java.io.Serializable;
+import java.util.HashMap;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.core.IEntity;
@@ -22,7 +25,7 @@ import com.pyx4j.essentials.server.report.ReportServiceImpl;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 
 import com.propertyvista.config.ThreadPoolNames;
-import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.operations.domain.imports.OapiConversion;
 import com.propertyvista.operations.rpc.services.tools.oapi.OapiXMLFileDownloadService;
 
 public class OapiXMLFileDownloadServiceImpl extends ReportServiceImpl<IEntity> implements OapiXMLFileDownloadService {
@@ -30,8 +33,11 @@ public class OapiXMLFileDownloadServiceImpl extends ReportServiceImpl<IEntity> i
     @SuppressWarnings("unchecked")
     @Override
     public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
+
         callback.onSuccess(DeferredProcessRegistry.fork(
-                new DownloadOapiXMLFileDeferredProcess((EntityQueryCriteria<AggregatedTransfer>) reportRequest.getCriteria()), ThreadPoolNames.DOWNLOADS));
+                new DownloadOapiXMLFileDeferredProcess((EntityQueryCriteria<OapiConversion>) reportRequest.getCriteria(),
+                        (HashMap<String, Serializable>) reportRequest.getParameters()), ThreadPoolNames.DOWNLOADS));
+
     }
 
 }

@@ -24,24 +24,7 @@ import com.propertyvista.operations.domain.imports.OapiConversion;
 //@ExtendsBO(OapiConversion.class)
 public interface OapiConversionDTO extends OapiConversion {
 
-//    @Override
-//    @Format("yyyy-MM-dd HH:mm")
-//    @Caption(name = "Creation date")
-//    @Timestamp(Timestamp.Update.Created)
-//    IPrimitive<Date> created();
-
-//    @Override
-//    IPrimitive<String> name();
-//
-//    @Override
-//    IPrimitive<String> description();
-
     @Caption(name = "Attached files")
     IPrimitive<Integer> filesNumber();
-
-//    @Override
-//    @Owned
-//    @OrderBy(PrimaryKey.class)
-//    IList<OapiConversionFile> conversionFiles();
 
 }

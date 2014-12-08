@@ -18,4 +18,6 @@ import com.pyx4j.essentials.rpc.report.ReportService;
 
 public interface OapiXMLFileDownloadService extends ReportService<IEntity> {
 
+    public static final String OAPIExportDownloadDTOPKParameter = "pk_param";
+
 }

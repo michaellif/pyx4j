@@ -41,6 +41,8 @@ public class OapiLister extends SiteDataTablePanel<OapiConversionDTO> {
                 new MemberColumnDescriptor.Builder(proto().description()).build(), //
                 new MemberColumnDescriptor.Builder(proto().filesNumber()).build() //
         ));
+
+        setDeleteActionEnabled(true);
     }
 
     @Override

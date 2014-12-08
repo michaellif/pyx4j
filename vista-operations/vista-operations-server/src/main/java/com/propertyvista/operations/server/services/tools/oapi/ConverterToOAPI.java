@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.server.services.tools.oapi;
 
-import com.propertyvista.oapi.v1.model.BuildingIO;
+import com.propertyvista.oapi.xml.ElementIO;
 import com.propertyvista.operations.domain.imports.OapiConversion;
 
 public interface ConverterToOAPI {
 
-    BuildingIO convert(OapiConversion data);
+    ElementIO process(OapiConversion data);
 }

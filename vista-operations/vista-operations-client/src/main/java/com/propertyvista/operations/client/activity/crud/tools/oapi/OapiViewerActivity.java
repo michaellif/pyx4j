@@ -13,8 +13,12 @@
  */
 package com.propertyvista.operations.client.activity.crud.tools.oapi;
 
+import java.io.Serializable;
+import java.util.HashMap;
+
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.site.client.ReportDialog;
@@ -37,8 +41,14 @@ public class OapiViewerActivity extends AdminViewerActivity<OapiConversionDTO> i
 
     @Override
     public void downloadXMLFile() {
+        OapiConversionDTO entity = EntityFactory.create(OapiConversionDTO.class);
+        entity.id().setValue(getEntityId());
+
+        HashMap<String, Serializable> params = new HashMap<String, Serializable>();
+        params.put(OapiXMLFileDownloadService.OAPIExportDownloadDTOPKParameter, entity);
+
         ReportDialog d = new ReportDialog("Download XML file", "Generating file...");
         d.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
-        d.start(GWT.<ReportService<?>> create(OapiXMLFileDownloadService.class), null, null);
+        d.start(GWT.<ReportService<?>> create(OapiXMLFileDownloadService.class), null, params);
     }
 }

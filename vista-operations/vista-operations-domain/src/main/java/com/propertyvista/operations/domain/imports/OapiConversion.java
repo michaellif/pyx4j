@@ -36,9 +36,14 @@ import com.propertyvista.domain.VistaNamespace;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface OapiConversion extends IEntity {
 
+    /* Type of conversion (for different conversion implementations */
     public enum Type {
 
         Base,
+
+        // Production,
+
+        // Development,
 
     }
 
@@ -51,6 +56,7 @@ public interface OapiConversion extends IEntity {
     @ToString
     IPrimitive<String> name();
 
+    @NotNull
     @MemberColumn(name = "tp")
     IPrimitive<Type> type();
 
