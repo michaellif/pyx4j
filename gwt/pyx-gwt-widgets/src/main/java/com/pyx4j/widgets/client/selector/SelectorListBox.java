@@ -47,6 +47,8 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
     private final IPickerPanel<E> picker;
 
+    private IOptionsGrabber<E> optionsGrabber;
+
     public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, SafeHtml> optionFormatter) {
         this(optionsGrabber, null, optionFormatter, valueFormatter);
     }
@@ -66,6 +68,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
     public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, Command addItemCommand, IFormatter<E, SafeHtml> optionFormatter,
             SelectorListBoxValuePanel<E> selectorListBoxValuePanel) {
         super(selectorListBoxValuePanel);
+        this.optionsGrabber = optionsGrabber;
         listBox = (SelectorListBoxValuePanel<E>) getViewerPanel();
         listBox.setParent(this);
 
@@ -98,6 +101,10 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
                 listBox.removeStyleDependentName(WidgetsTheme.StyleDependent.focused.name());
             }
         });
+    }
+
+    public IOptionsGrabber<E> getOptionsGrabber() {
+        return optionsGrabber;
     }
 
     public void setValue(Collection<E> value) {

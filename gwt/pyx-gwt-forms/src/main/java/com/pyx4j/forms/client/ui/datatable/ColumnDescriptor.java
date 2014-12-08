@@ -30,19 +30,7 @@ public class ColumnDescriptor {
     private final Builder builder;
 
     public ColumnDescriptor(String columnName, String columnTitle) {
-        this(columnName, columnTitle, DEFAULT_WIDTH);
-    }
-
-    public ColumnDescriptor(String columnName, String columnTitle, String width) {
-        this(columnName, columnTitle, true, width);
-    }
-
-    public ColumnDescriptor(String columnName, String columnTitle, boolean sortable) {
-        this(columnName, columnTitle, sortable, DEFAULT_WIDTH);
-    }
-
-    public ColumnDescriptor(String columnName, String columnTitle, boolean sortable, String width) {
-        this(new Builder(columnName, columnTitle).sortable(sortable).width(width));
+        this(new Builder(columnName, columnTitle));
     }
 
     protected ColumnDescriptor(Builder builder) {

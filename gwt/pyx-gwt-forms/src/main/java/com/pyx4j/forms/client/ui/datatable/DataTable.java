@@ -84,7 +84,7 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
         return Collections.unmodifiableList(columnDescriptors);
     }
 
-    public List<ColumnDescriptor> getColumnDescriptorsVisible() {
+    public List<ColumnDescriptor> getVisibleColumnDescriptors() {
         List<ColumnDescriptor> descriptors = new ArrayList<ColumnDescriptor>();
         for (ColumnDescriptor columnDescriptor : getColumnDescriptors()) {
             if (columnDescriptor.isVisible()) {

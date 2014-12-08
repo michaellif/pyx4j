@@ -36,22 +36,17 @@ public class FilterOptionsGrabber extends MultyWordSuggestOptionsGrabber<FilterI
         this.dataTablePanel = dataTablePanel;
     }
 
-    @Override
-    public void grabOptions(Request request, Callback<FilterItem> callback) {
-        if (filterItems == null) {
-            filterItems = new ArrayList<>();
+    public void updateFilterOptions() {
+        filterItems = new ArrayList<>();
 
-            for (ColumnDescriptor cd : dataTablePanel.getDataTable().getColumnDescriptors()) {
-                if (cd.isSearchable()) {
-                    filterItems.add(new FilterItem(cd));
-                }
+        for (ColumnDescriptor cd : dataTablePanel.getDataTable().getColumnDescriptors()) {
+            if (cd.isSearchable()) {
+                filterItems.add(new FilterItem(cd));
             }
-
-            setFormatter(new FilterItemFormatter());
-            setAllOptions(filterItems);
-
         }
-        super.grabOptions(request, callback);
+
+        setFormatter(new FilterItemFormatter());
+        setAllOptions(filterItems);
     }
 
 }

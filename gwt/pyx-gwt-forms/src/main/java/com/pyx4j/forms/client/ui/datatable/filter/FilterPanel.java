@@ -20,12 +20,15 @@
  */
 package com.pyx4j.forms.client.ui.datatable.filter;
 
+import java.util.List;
+
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.widgets.client.selector.ItemHolder;
 import com.pyx4j.widgets.client.selector.ItemHolderFactory;
@@ -57,6 +60,14 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
             }
         });
         this.dataTablePanel = dataTablePanel;
+
+    }
+
+    public void onColimnDescriptorsChanged() {
+        ((FilterOptionsGrabber) getOptionsGrabber()).updateFilterOptions();
+
+        List<ColumnDescriptor> columnDescriptors = dataTablePanel.getDataTable().getColumnDescriptors();
+        //TODO setValue(value);
 
     }
 }

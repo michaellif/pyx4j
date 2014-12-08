@@ -184,7 +184,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
             ++colIndex;
         }
 
-        for (ColumnDescriptor columnDescriptor : dataTable.getColumnDescriptorsVisible()) {
+        for (ColumnDescriptor columnDescriptor : dataTable.getVisibleColumnDescriptors()) {
             String columnTitle = columnDescriptor.getColumnTitle();
             StringBuffer headerText = new StringBuffer("&nbsp;");
             headerText.append(columnTitle);
@@ -242,7 +242,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
 
             final Iterator<DataItem<E>> dataIterator = model.getData().iterator();
 
-            final List<ColumnDescriptor> visibleColumnDescriptors = dataTable.getColumnDescriptorsVisible();
+            final List<ColumnDescriptor> visibleColumnDescriptors = dataTable.getVisibleColumnDescriptors();
 
             int rowIndex = 1;
 

@@ -32,7 +32,7 @@ public class FilterItem implements Comparable<FilterItem> {
 
     @Override
     public String toString() {
-        return columnDescriptor.getColumnName() + ":" + "All";
+        return columnDescriptor.getColumnTitle() + " - " + "All";
     }
 
     @Override

@@ -91,6 +91,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     private final DataTableFilterPanel<E> filterPanel;
 
+    private FilterPanel newFilterPanel;
+
     private IEditableComponentFactory compFactory = new CriteriaEditableComponentFactory();
 
     private WidgetsImages images;
@@ -125,10 +127,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         topActionsBar = new DataTableActionsBar(this);
         add(topActionsBar);
 
-        if (false) {
-            FilterPanel newFilterPanel = new FilterPanel(this);
-            add(newFilterPanel);
-        }
+        newFilterPanel = new FilterPanel(this);
+        add(newFilterPanel);
 
         filterPanel = new DataTableFilterPanel<E>(this);
         add(filterPanel);
@@ -171,6 +171,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     public void setColumnDescriptors(List<ColumnDescriptor> columnDescriptors) {
         dataTable.setColumnDescriptors(columnDescriptors);
+        newFilterPanel.onColimnDescriptorsChanged();
     }
 
     public void setDataTableModel(DataTableModel<E> model) {
