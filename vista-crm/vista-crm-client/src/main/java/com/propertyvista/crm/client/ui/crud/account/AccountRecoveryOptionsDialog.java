@@ -70,7 +70,7 @@ public class AccountRecoveryOptionsDialog extends Composite {
                 , this.recoveryOptionsForm.asWidget()
         ) {
             {
-                setDialogPixelWidth(700);
+                setDialogPixelWidth(500);
             }
             @Override protected String optionTextOk() {
                 return i18n.tr("Update");

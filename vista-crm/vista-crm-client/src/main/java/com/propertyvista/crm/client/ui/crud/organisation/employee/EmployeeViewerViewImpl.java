@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,7 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.UserRuntimeException;
@@ -22,6 +24,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.widgets.client.Button.SecureMenuItem;
+import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.PasswordBox;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
@@ -43,7 +46,7 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
     public EmployeeViewerViewImpl() {
         setForm(new EmployeeForm(this));
 
-        // Add actions:        
+        // Add actions:
         passwordAction = new MenuItem(i18n.tr("Change Password"), new Command() {
             @Override
             public void execute() {
@@ -143,9 +146,17 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
         private final PasswordBox passwordBox;
 
         public GetPasswordDialog() {
-            super(i18n.tr("Your password is required to proceed"));
-            passwordBox = new PasswordBox();
-            setBody(passwordBox);
+            super(i18n.tr("Account Recovery"));
+
+            FlowPanel boldyPanel = new FlowPanel();
+
+            boldyPanel.add(new Label(i18n.tr("Your password is required to proceed:")));
+            boldyPanel.add(passwordBox = new PasswordBox());
+
+            boldyPanel.getElement().getStyle().setPadding(1, Unit.EM);
+
+            setBody(boldyPanel);
+            setDialogPixelWidth(350);
         }
 
         @Override

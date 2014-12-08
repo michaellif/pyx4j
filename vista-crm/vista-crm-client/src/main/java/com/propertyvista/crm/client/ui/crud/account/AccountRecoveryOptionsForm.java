@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.crud.account;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -38,31 +37,34 @@ public class AccountRecoveryOptionsForm extends CForm<AccountRecoveryOptionsDTO>
 
     @Override
     protected IsWidget createContent() {
-
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().recoveryEmail()).decorate();
-
         formPanel.append(Location.Left, proto().useSecurityQuestionChallengeForPasswordReset()).decorate();
-        get(proto().useSecurityQuestionChallengeForPasswordReset()).asWidget().getElement().getStyle().setPaddingTop(1, Unit.EM);
-        get(proto().useSecurityQuestionChallengeForPasswordReset()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+        formPanel.append(Location.Left, proto().securityQuestion()).decorate();
+        formPanel.append(Location.Left, proto().securityAnswer(), new CPasswordBox()).decorate();
 
+        //  tweaks:
+        get(proto().useSecurityQuestionChallengeForPasswordReset()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 setUpSecurityQuestionControls();
             }
         });
 
-        formPanel.append(Location.Left, proto().securityQuestion()).decorate();
-        get(proto().securityQuestion()).setVisible(false);
-        formPanel.append(Location.Left, proto().securityAnswer(), new CPasswordBox()).decorate();
-        get(proto().securityAnswer()).setVisible(false);
-
         return formPanel;
     }
 
     public void setSecurityQuestionRequired(boolean isSecurityQuestionEntiryRequired) {
         get(proto().useSecurityQuestionChallengeForPasswordReset()).setViewable(isSecurityQuestionEntiryRequired);
+    }
+
+    @Override
+    public void onReset() {
+        super.onReset();
+
+        get(proto().securityQuestion()).setVisible(false);
+        get(proto().securityAnswer()).setVisible(false);
     }
 
     @Override
@@ -85,6 +87,7 @@ public class AccountRecoveryOptionsForm extends CForm<AccountRecoveryOptionsDTO>
         } else {
             get(proto().securityQuestion()).setVisible(false);
             get(proto().securityQuestion()).setValue("");
+
             get(proto().securityAnswer()).setVisible(false);
             get(proto().securityAnswer()).setValue("");
         }
