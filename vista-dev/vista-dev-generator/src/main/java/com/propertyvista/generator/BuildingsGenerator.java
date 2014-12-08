@@ -58,6 +58,8 @@ import com.propertyvista.generator.util.RandomUtil;
 
 public class BuildingsGenerator {
 
+    private int nBuildings = 0;
+
     public static class BuildingsGeneratorConfig {
 
         public String provinceCode = null;
@@ -71,6 +73,7 @@ public class BuildingsGenerator {
     }
 
     public List<Building> createBuildings(int numBuildings, BuildingsGeneratorConfig config) {
+        nBuildings = numBuildings;
         List<Building> buildings = new ArrayList<Building>();
         for (int b = 0; b < numBuildings; b++) {
             Building building = createBuilding(b, config);
@@ -98,7 +101,10 @@ public class BuildingsGenerator {
         // this later
         String propertyCode = "B" + String.valueOf(counter);
 
-        Building building = createBuilding(propertyCode, buildingType, website, address, email);
+        // name
+        String name = CommonsGenerator.randomBuildingName(nBuildings);
+
+        Building building = createBuilding(propertyCode, buildingType, website, address, email, name);
 
         // log.info("Created: " + building);
         ensureProvincePolicyNode(ISOProvince.forName(address.province().getValue(), address.country().getValue()));
@@ -109,7 +115,7 @@ public class BuildingsGenerator {
         return address.streetNumber().getStringView() + " " + address.streetName().getStringView();
     }
 
-    private Building createBuilding(String propertyCode, BuildingInfo.Type buildingType, String website, InternationalAddress address, String email) {
+    private Building createBuilding(String propertyCode, BuildingInfo.Type buildingType, String website, InternationalAddress address, String email, String name) {
         Building building = EntityFactory.create(Building.class);
         building.propertyCode().setValue(propertyCode);
         building.integrationSystemId().setValue(IntegrationSystem.internal);
@@ -138,7 +144,8 @@ public class BuildingsGenerator {
         building.financial().currency().name().setValue("CAD");
 
         building.marketing().visibility().setValue(PublicVisibilityType.global);
-        building.marketing().name().setValue(building.info().name().getStringView() + " mkt" + RandomUtil.randomLetters(2));
+//        building.marketing().name().setValue(building.info().name().getStringView() + " mkt" + RandomUtil.randomLetters(2));
+        building.marketing().name().setValue(name);
         building.marketing().description().setValue(CommonsGenerator.lipsum());
 
         Set<PropertyContactType> created = new HashSet<PropertyContactType>();

@@ -58,6 +58,7 @@ import com.propertyvista.generator.BuildingsGenerator;
 import com.propertyvista.generator.BuildingsGenerator.BuildingsGeneratorConfig;
 import com.propertyvista.generator.MediaGenerator;
 import com.propertyvista.generator.ProductCatalogGenerator;
+import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.preloader.BaseVistaDevDataPreloader;
@@ -97,7 +98,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         // create some complexes:
         List<Complex> complexes = new Vector<Complex>();
         for (int i = 0; i < config().numComplexes; ++i) {
-            complexes.add(buildingGenerator.createComplex("Complex #" + i));
+            complexes.add(buildingGenerator.createComplex(CommonsGenerator.randomComplexName(config().numComplexes)));
         }
 
         Persistence.service().persist(complexes);

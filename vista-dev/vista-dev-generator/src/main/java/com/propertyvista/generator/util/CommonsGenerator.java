@@ -47,6 +47,10 @@ public class CommonsGenerator {
 
     private static String[] lipsumShort;
 
+    private static String[] complexNames;
+
+    private static String[] buildingNames;
+
     private static Map<String, List<InternationalAddress>> addresses = new HashMap<>();
 
     private static final String DEFAULT_ADDRESSES_RESOURCE_FILE = "address-intern.csv";
@@ -70,6 +74,20 @@ public class CommonsGenerator {
             employeeTitles = CSVLoad.loadFile(IOUtils.resourceFileName("employee-titles.csv", CommonsGenerator.class), "title");
         }
         return employeeTitles[DataGenerator.nextInt(employeeTitles.length, "employeeTitles", 4)];
+    }
+
+    public static String randomComplexName(int noRepeatResults) {
+        if (complexNames == null) {
+            complexNames = CSVLoad.loadFile(IOUtils.resourceFileName("complex-names.csv", CommonsGenerator.class), "name");
+        }
+        return complexNames[DataGenerator.nextInt(complexNames.length, "complexNames", noRepeatResults)];
+    }
+
+    public static String randomBuildingName(int noRepeatResults) {
+        if (buildingNames == null) {
+            buildingNames = CSVLoad.loadFile(IOUtils.resourceFileName("building-names.csv", CommonsGenerator.class), "name");
+        }
+        return buildingNames[DataGenerator.nextInt(buildingNames.length, "buildingNames", noRepeatResults)];
     }
 
     public static Name createName() {
