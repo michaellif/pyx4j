@@ -66,6 +66,8 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
 
     private ItemHolderFactory<E> itemHolderFactory;
 
+    private ItemEditorPopup itemEditorPopup;
+
     public SelectorListBoxValuePanel(ItemHolderFactory<E> itemHolderFactory) {
         this();
         this.itemHolderFactory = itemHolderFactory;
@@ -76,7 +78,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
         this.itemHolderFactory = new ItemHolderFactory<E>() {
 
             @Override
-            public ItemHolder<E> createItemHolder(E item) {
+            public ItemHolder<E> createItemHolder(E item, SelectorListBoxValuePanel<E> selectorListBoxValuePanel) {
                 return new ItemHolder<E>(item, valueFormatter);
             }
         };
@@ -101,6 +103,9 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
         groupFocusHandler.addFocusable(queryBox);
         groupFocusHandler.addFocusable(this);
 
+        itemEditorPopup = new ItemEditorPopup();
+        groupFocusHandler.addFocusable(itemEditorPopup);
+
         sinkEvents(Event.ONMOUSEDOWN);
 
         super.addFocusHandler(new FocusHandler() {
@@ -121,7 +126,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
         if (value.size() > 0) {
             for (E item : value) {
                 if (item != null) {
-                    ItemHolder<E> itemHolder = itemHolderFactory.createItemHolder(item);
+                    ItemHolder<E> itemHolder = itemHolderFactory.createItemHolder(item, this);
                     itemHolder.setSelectorListBoxValuePanel(this);
                     this.itemsPanel.insert(itemHolder, itemsPanel.getWidgetCount() - 1);
                 }
@@ -281,6 +286,10 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
     @Override
     public GroupFocusHandler getGroupFocusHandler() {
         return groupFocusHandler;
+    }
+
+    public ItemEditorPopup getItemEditorPopup() {
+        return itemEditorPopup;
     }
 
     class QueryBox extends StringBox {

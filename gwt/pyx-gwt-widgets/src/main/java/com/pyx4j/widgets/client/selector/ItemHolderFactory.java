@@ -22,5 +22,6 @@ package com.pyx4j.widgets.client.selector;
 
 public interface ItemHolderFactory<E> {
 
-    ItemHolder<E> createItemHolder(E item);
+    ItemHolder<E> createItemHolder(E item, SelectorListBoxValuePanel<E> selectorListBoxValuePanel);
+
 }

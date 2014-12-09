@@ -20,13 +20,17 @@
  */
 package com.pyx4j.forms.client.ui.datatable.filter;
 
+import com.google.gwt.user.client.ui.HTML;
+
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.widgets.client.selector.ItemHolder;
+import com.pyx4j.widgets.client.selector.EditableItemHolder;
+import com.pyx4j.widgets.client.selector.SelectorListBoxValuePanel;
 
-public class FilterItemHolder extends ItemHolder<FilterItem> {
+public class FilterItemHolder extends EditableItemHolder<FilterItem> {
 
-    public FilterItemHolder(FilterItem item, IFormatter<FilterItem, String> valueFormatter) {
-        super(item, valueFormatter, item.isRemovable());
+    public FilterItemHolder(FilterItem item, IFormatter<FilterItem, String> valueFormatter, SelectorListBoxValuePanel<FilterItem> valuePanel) {
+        super(item, valueFormatter, item.isRemovable(), valuePanel);
+        setEditor(new HTML("TESTTEST"));
     }
 
 }

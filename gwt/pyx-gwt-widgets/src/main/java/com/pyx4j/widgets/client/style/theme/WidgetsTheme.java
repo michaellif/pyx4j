@@ -74,7 +74,7 @@ public class WidgetsTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        watermark, hover, focused, readonly, disabled, active, semitransparent, singleLine, selected, playing, paused, left, right
+        watermark, hover, focused, readonly, disabled, active, semitransparent, singleLine, selected, playing, paused, left, right, editable
     }
 
     public WidgetsTheme() {
@@ -527,6 +527,10 @@ public class WidgetsTheme extends Theme {
         style.addProperty("margin", "3px");
         style.addProperty("border-radius", "4px");
         style.addProperty("line-height", "2em");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SelectedItemHolder, "-", StyleDependent.editable);
+        style.addProperty("cursor", "pointer");
         addStyle(style);
 
         style = new Style(".", StyleName.SelectionPickerPanel);

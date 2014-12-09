@@ -73,12 +73,18 @@ public class ItemHolder<E> extends Composite {
     public void setRemovable(boolean removable) {
 
         if (this.removable != removable) {
+            if (removeButton != null) {
+                panel.remove(removeButton);
+                removeButton = null;
+            }
+
             if (removable) {
                 removeButton = new ImageButton(ImageFactory.getImages().delButton(), new Command() {
 
                     @Override
                     public void execute() {
                         parent.removeItem(item);
+                        onRemove();
                     }
 
                 });
@@ -96,12 +102,12 @@ public class ItemHolder<E> extends Composite {
                 removeButton.setTitle(i18n.tr("Remove"));
                 removeButton.addStyleName(WidgetsTheme.StyleName.SelectedItemClose.name());
                 panel.add(removeButton);
-            } else if (removeButton != null) {
-                panel.remove(removeButton);
-                removeButton = null;
             }
 
             this.removable = removable;
         }
+    }
+
+    protected void onRemove() {
     }
 }

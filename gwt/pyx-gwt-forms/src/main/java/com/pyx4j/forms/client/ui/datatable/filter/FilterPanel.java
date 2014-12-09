@@ -33,6 +33,7 @@ import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.widgets.client.selector.ItemHolderFactory;
 import com.pyx4j.widgets.client.selector.SelectorListBox;
+import com.pyx4j.widgets.client.selector.SelectorListBoxValuePanel;
 
 public class FilterPanel extends SelectorListBox<FilterItem> {
 
@@ -55,8 +56,8 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
         }, new ItemHolderFactory<FilterItem>() {
 
             @Override
-            public FilterItemHolder createItemHolder(FilterItem item) {
-                return new FilterItemHolder(item, new FilterItemFormatter());
+            public FilterItemHolder createItemHolder(FilterItem item, SelectorListBoxValuePanel<FilterItem> valuePanel) {
+                return new FilterItemHolder(item, new FilterItemFormatter(), valuePanel);
             }
         });
         this.dataTablePanel = dataTablePanel;
