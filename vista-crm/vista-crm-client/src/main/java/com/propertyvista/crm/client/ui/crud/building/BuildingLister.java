@@ -34,8 +34,7 @@ public class BuildingLister extends SiteDataTablePanel<BuildingDTO> {
     private static final I18n i18n = I18n.get(BuildingLister.class);
 
     public BuildingLister() {
-        super(BuildingDTO.class, GWT.<AbstractCrudService<BuildingDTO>> create(BuildingCrudService.class), !VistaFeatures.instance().yardiIntegration() ? true
-                : false);
+        super(BuildingDTO.class, GWT.<AbstractCrudService<BuildingDTO>> create(BuildingCrudService.class), !VistaFeatures.instance().yardiIntegration());
 
         setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().propertyCode(), true).filterAlwaysShown(true).build(), //

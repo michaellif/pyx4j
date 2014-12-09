@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -18,7 +18,6 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
@@ -29,21 +28,16 @@ import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectionDialog;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class UnitLister extends SiteDataTablePanel<AptUnitDTO> {
 
-    public static final I18n i18n = I18n.get(UnitLister.class);
+    private static final I18n i18n = I18n.get(UnitLister.class);
 
     public UnitLister() {
-        this(true);
-    }
+        super(AptUnitDTO.class, GWT.<AbstractCrudService<AptUnitDTO>> create(UnitCrudService.class), !VistaFeatures.instance().yardiIntegration());
 
-    public UnitLister(boolean allowAddNew) {
-        super(AptUnitDTO.class, GWT.<AbstractCrudService<AptUnitDTO>> create(UnitCrudService.class), !VistaFeatures.instance().yardiIntegration() ? allowAddNew
-                : false);
         setAddNewActionCaption(i18n.tr("New Unit"));
 
         setColumnDescriptors( //
@@ -75,22 +69,16 @@ public class UnitLister extends SiteDataTablePanel<AptUnitDTO> {
 
     @Override
     protected void onItemNew() {
-        final Key parentBuildingPk = getDataSource().getParentEntityId();
-        final UnitCrudService.UnitInitializationdata id = EntityFactory.create(UnitCrudService.UnitInitializationdata.class);
-        if (parentBuildingPk == null) {
-            new BuildingSelectionDialog() {
-                @Override
-                public boolean onClickOk() {
-                    if (!getSelectedItem().isNull()) {
-                        id.parent().set(getSelectedItem());
-                        editNew(getItemOpenPlaceClass(), id);
-                    }
-                    return true;
+        new BuildingSelectionDialog() {
+            @Override
+            public boolean onClickOk() {
+                if (!getSelectedItem().isNull()) {
+                    UnitCrudService.UnitInitializationdata id = EntityFactory.create(UnitCrudService.UnitInitializationdata.class);
+                    id.parent().set(getSelectedItem());
+                    editNew(getItemOpenPlaceClass(), id);
                 }
-            }.show();
-        } else {
-            id.parent().set(EntityFactory.createIdentityStub(Building.class, parentBuildingPk));
-            editNew(getItemOpenPlaceClass(), id);
-        }
+                return true;
+            }
+        }.show();
     }
 }
