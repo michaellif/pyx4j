@@ -145,7 +145,7 @@ public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningAsset>
             fileUpload.addComponentValidator(new AbstractComponentValidator<IList<ProofOfAssetDocumentFile>>() {
                 @Override
                 public BasicValidationError isValid() {
-                    if (getCComponent().getValue() != null && documentationPolicy != null) {
+                    if (documentationPolicy != null) {
                         if (documentationPolicy.mandatoryProofOfAsset().getValue(false) && getCComponent().getValue().isEmpty()) {
                             return new BasicValidationError(getCComponent(), i18n.tr("Proof of Asset should be supplied"));
                         }

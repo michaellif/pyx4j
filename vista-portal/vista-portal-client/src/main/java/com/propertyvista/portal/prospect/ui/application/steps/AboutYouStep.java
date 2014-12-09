@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
-import java.util.List;
-
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -34,11 +32,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
-import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
-import com.propertyvista.domain.policy.policies.domain.ApplicationDocumentType.Importance;
-import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
@@ -139,41 +133,6 @@ public class AboutYouStep extends ApplicationWizardStep {
 
             private boolean hasNoOtherPhone(OnlineApplicationDTO value) {
                 return (value.applicantData().person().homePhone().isNull() && value.applicantData().person().mobilePhone().isNull());
-            }
-        });
-
-        get(proto().applicantData().documents()).addComponentValidator(new AbstractComponentValidator<List<IdentificationDocument>>() {
-            @Override
-            public BasicValidationError isValid() {
-                ApplicationDocumentationPolicy documentationPolicy = getValue().applicantData().documentsPolicy();
-                if (getCComponent().getValue() != null && documentationPolicy != null) {
-                    int requredDocsCount = documentationPolicy.numberOfRequiredIDs().getValue();
-                    int remainingDocsCount = requredDocsCount - getCComponent().getValue().size();
-                    if (remainingDocsCount > 0) {
-                        return new BasicValidationError(getCComponent(), i18n.tr(
-                                "You have to provide {0} identification document(s), {1} more document(s) is/are required", requredDocsCount,
-                                remainingDocsCount));
-                    }
-
-                    // 'Required' check:
-                    for (IdentificationDocumentType docType : documentationPolicy.allowedIDs()) {
-                        if (docType.importance().getValue() == Importance.Required) {
-                            boolean found = false;
-                            for (IdentificationDocument doc : getCComponent().getValue()) {
-                                if (doc.idType().equals(docType)) {
-                                    found = true;
-                                    break;
-                                }
-                            }
-
-                            if (!found) {
-                                return new BasicValidationError(getCComponent(), i18n.tr("You have to provide {0} identification document which is required",
-                                        docType.getStringView()));
-                            }
-                        }
-                    }
-                }
-                return null;
             }
         });
     }

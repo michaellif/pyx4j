@@ -76,7 +76,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
         fileUpload.addComponentValidator(new AbstractComponentValidator<IList<ProofOfIncomeDocumentFile>>() {
             @Override
             public BasicValidationError isValid() {
-                if (!getCComponent().getValue().isNull() && parent.getDocumentationPolicy() != null) {
+                if (parent.getDocumentationPolicy() != null) {
                     if (IncomeSource.employment().contains(getValue().incomeSource().getValue())) {
                         if (parent.getDocumentationPolicy().mandatoryProofOfEmployment().getValue(false) && getCComponent().getValue().isEmpty()) {
                             return new BasicValidationError(getCComponent(), i18n.tr("Proof of Employment should be supplied"));

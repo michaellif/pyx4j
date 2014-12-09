@@ -22,10 +22,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -35,8 +33,8 @@ import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.DocumentTypeSelectorDialog;
-import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocument;
+import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.domain.ApplicationDocumentType.Importance;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
@@ -78,10 +76,10 @@ public class IdentificationDocumentFolder extends PortalBoxFolder<Identification
     public void _addValidations() {
         super.addValidations();
 
-        addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocument>>() {
+        this.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocument>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getCComponent().getValue() != null && documentationPolicy != null) {
+                if (documentationPolicy != null) {
                     int requredDocsCount = documentationPolicy.numberOfRequiredIDs().getValue();
                     int remainingDocsCount = requredDocsCount - getCComponent().getValue().size();
                     if (remainingDocsCount > 0) {
@@ -159,6 +157,8 @@ public class IdentificationDocumentFolder extends PortalBoxFolder<Identification
 
     private class IdentificationDocumentEditor extends AccessoryEntityForm<IdentificationDocument> {
 
+        private final IdentificationDocumentFileFolder fileUpload = new IdentificationDocumentFileFolder();
+
         public IdentificationDocumentEditor() {
             super(IdentificationDocument.class);
         }
@@ -172,7 +172,8 @@ public class IdentificationDocumentFolder extends PortalBoxFolder<Identification
             formPanel.append(Location.Left, proto().notes()).decorate();
 
             formPanel.h3(i18n.tr("Proof Documents"));
-            formPanel.append(Location.Left, proto().files(), new IdentificationDocumentFileFolder());
+            formPanel.append(Location.Left, proto().files(), fileUpload);
+
             return formPanel;
         }
 
@@ -221,13 +222,11 @@ public class IdentificationDocumentFolder extends PortalBoxFolder<Identification
                 }
             });
 
-            @SuppressWarnings("unchecked")
-            CFolder<IdentificationDocumentFile> folder = ((CFolder<IdentificationDocumentFile>) ((CComponent<?, ?, ?, ?>) get(proto().files())));
-            folder.setNoDataLabel(i18n.tr("Please provide at least one document file"));
-            folder.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFile>>() {
+            fileUpload.setNoDataLabel(i18n.tr("Please provide at least one document file"));
+            fileUpload.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFile>>() {
                 @Override
                 public BasicValidationError isValid() {
-                    if (getCComponent().getValue() != null && getCComponent().getValue().size() < 1) {
+                    if (getCComponent().getValue().isEmpty()) {
                         return new BasicValidationError(getCComponent(), i18n.tr("At least one document file is required"));
                     }
                     return null;
