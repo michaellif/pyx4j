@@ -38,7 +38,7 @@ public class BuildingLister extends SiteDataTablePanel<BuildingDTO> {
                 : false);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().propertyCode(), true).build(), //
+                new MemberColumnDescriptor.Builder(proto().propertyCode(), true).filterAlwaysShown(true).build(), //
                 new MemberColumnDescriptor.Builder(proto().complex()).build(), //
                 new MemberColumnDescriptor.Builder(proto().complexPrimary(), false).build(), //
                 new MemberColumnDescriptor.Builder(proto().externalId(), false).build(), //
@@ -51,7 +51,7 @@ public class BuildingLister extends SiteDataTablePanel<BuildingDTO> {
                 new MemberColumnDescriptor.Builder(proto().info().shape(), false).build(), //
                 new MemberColumnDescriptor.Builder(proto().info().address().streetNumber(), false).build(), //
                 new MemberColumnDescriptor.Builder(proto().info().address().streetName(), false).build(), //
-                new MemberColumnDescriptor.Builder(proto().info().address().city(), true).build(), //
+                new MemberColumnDescriptor.Builder(proto().info().address().city(), true).filterAlwaysShown(true).build(), //
                 new MemberColumnDescriptor.Builder(proto().info().address().province(), true).build(), //
                 new MemberColumnDescriptor.Builder(proto().info().address().country(), false).build(), //
                 new MemberColumnDescriptor.Builder(proto().marketing().visibility(), false).build(), //
