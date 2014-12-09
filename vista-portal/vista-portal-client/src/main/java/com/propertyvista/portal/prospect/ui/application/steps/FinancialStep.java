@@ -28,8 +28,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.security.PortalProspectBehavior;
-import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.CustomerScreeningAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.prospect.ui.application.components.PersonalAssetFolder;
@@ -89,11 +89,8 @@ public class FinancialStep extends ApplicationWizardStep {
         get(proto().applicantData().incomes()).addComponentValidator(new AbstractComponentValidator<List<CustomerScreeningIncome>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getCComponent().getValue() != null) {
-                    return (getValue().applicantData().assets().size() > 0) || (getValue().applicantData().incomes().size() > 0) ? null
-                            : new BasicValidationError(getCComponent(), i18n.tr("At least one source of income or one asset is required"));
-                }
-                return null;
+                return (getValue().applicantData().assets().size() > 0) || (getValue().applicantData().incomes().size() > 0) ? null : new BasicValidationError(
+                        getCComponent(), i18n.tr("Incomes and/or Assets are required"));
             }
         });
         get(proto().applicantData().assets()).addValueChangeHandler(
@@ -102,11 +99,8 @@ public class FinancialStep extends ApplicationWizardStep {
         get(proto().applicantData().assets()).addComponentValidator(new AbstractComponentValidator<List<CustomerScreeningAsset>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getCComponent().getValue() != null) {
-                    return (getValue().applicantData().assets().size() > 0) || (getValue().applicantData().incomes().size() > 0) ? null
-                            : new BasicValidationError(getCComponent(), i18n.tr("At least one asset or one source of income is required"));
-                }
-                return null;
+                return (getValue().applicantData().assets().size() > 0) || (getValue().applicantData().incomes().size() > 0) ? null : new BasicValidationError(
+                        getCComponent(), i18n.tr("Assets and/or Incomes are required"));
             }
         });
         get(proto().applicantData().incomes()).addValueChangeHandler(

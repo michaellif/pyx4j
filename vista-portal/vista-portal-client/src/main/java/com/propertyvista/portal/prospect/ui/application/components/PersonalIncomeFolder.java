@@ -60,7 +60,6 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
 
     public void setRestrictionsPolicy(RestrictionsPolicy policy) {
         restrictionsPolicy = policy;
-        revalidate();
     }
 
     public void setDocumentationPolicy(ApplicationDocumentationPolicy policy) {
@@ -99,23 +98,24 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
         this.addComponentValidator(new AbstractComponentValidator<IList<CustomerScreeningIncome>>() {
             @Override
             public AbstractValidationError isValid() {
-                if (getCComponent().getValue() != null) {
-                    int employmentCount = countEmployments();
-                    if (employmentCount == 1) {
-                        IEmploymentInfo employment = getFirstEmployment();
-                        if (!employment.isEmpty()) {
-                            if (!employment.starts().isNull()) {
-                                LogicalDate date = (employment.ends().isNull() ? new LogicalDate(ClientContext.getServerDate()) : employment.ends().getValue());
+                if (!getCComponent().getValue().isEmpty()) {
+                    EmploymentsInfo info = getEmploymentsInfo();
+                    if (info.employmentCount == 1) {
+                        if (info.firstEmployment != null && !info.firstEmployment.isEmpty()) {
+                            if (!info.firstEmployment.starts().isNull()) {
+                                LogicalDate today = new LogicalDate(ClientContext.getServerDate());
+                                LogicalDate date = (info.firstEmployment.ends().isNull() ? today : info.firstEmployment.ends().getValue());
                                 CalendarUtil.addMonthsToDate(date, -restrictionsPolicy.minEmploymentDuration().getValue(0));
-                                if (employment.starts().getValue().after(date)) {
+                                if (info.firstEmployment.starts().getValue().after(date) //
+                                        || (!info.firstEmployment.ends().isNull() && !info.firstEmployment.ends().getValue().after(today))) {
                                     return new BasicValidationError(getCComponent(), i18n.tr("You need to enter more employment information"));
                                 }
                             }
                         }
-                    } else if (employmentCount > restrictionsPolicy.maxNumberOfEmployments().getValue(Integer.MAX_VALUE)) {
+                    } else if (info.employmentCount > restrictionsPolicy.maxNumberOfEmployments().getValue(Integer.MAX_VALUE)) {
                         return new BasicValidationError(getCComponent(), i18n.tr("No need to supply more than {0} employment items", restrictionsPolicy
                                 .maxNumberOfEmployments().getValue(Integer.MAX_VALUE)));
-                    } else if (getCComponent().getValue().size() - employmentCount > 3) {
+                    } else if (getCComponent().getValue().size() - info.employmentCount > 3) {
                         return new BasicValidationError(getCComponent(), i18n.tr("No need to supply more than 3 other income items"));
                     }
                 }
@@ -124,27 +124,26 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
         });
     }
 
-    private int countEmployments() {
-        int counter = 0;
+    private class EmploymentsInfo {
 
-        for (CustomerScreeningIncome income : getValue()) {
-            if (IncomeSource.employment().contains(income.incomeSource().getValue())) {
-                ++counter;
-            }
-        }
+        int employmentCount;
 
-        return counter;
+        IEmploymentInfo firstEmployment;
     }
 
-    private IEmploymentInfo getFirstEmployment() {
-        IEmploymentInfo employment = null;
+    private EmploymentsInfo getEmploymentsInfo() {
+        EmploymentsInfo info = new EmploymentsInfo();
+        info.firstEmployment = null;
+        info.employmentCount = 0;
 
         for (CustomerScreeningIncome income : getValue()) {
             if (IncomeSource.employment().contains(income.incomeSource().getValue())) {
-                employment = income.details().cast();
+                if (++info.employmentCount == 1) {
+                    info.firstEmployment = income.details().cast();
+                }
             }
         }
 
-        return employment;
+        return info;
     }
 }
