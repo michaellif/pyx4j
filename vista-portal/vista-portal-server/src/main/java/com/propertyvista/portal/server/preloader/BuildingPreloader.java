@@ -12,7 +12,9 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import org.slf4j.Logger;
@@ -102,7 +104,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         }
 
         Persistence.service().persist(complexes);
-        List<Complex> complexesWithBuildings = new Vector<Complex>();
+        Set<Complex> complexesWithBuildings = new HashSet<Complex>();
 
         MerchantAccount merchantAccount = getMerchantAccount();
 
@@ -135,7 +137,15 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             }
 
             if (DataGenerator.randomBoolean()) {
-                Complex complex = DataGenerator.random(complexes);
+                Complex complex;
+                // Assert that one complex has at least one building assigned
+                if (complexesWithBuildings.size() < complexes.size()) {
+                    int index = DataGenerator.nextInt(complexes.size(), "complex", complexes.size());
+                    complex = complexes.get(index);
+                } else {
+                    complex = DataGenerator.random(complexes);
+                }
+
                 building.complex().set(complex);
                 building.complexPrimary().setValue(!complexesWithBuildings.contains(complex));
                 complexesWithBuildings.add(complex);

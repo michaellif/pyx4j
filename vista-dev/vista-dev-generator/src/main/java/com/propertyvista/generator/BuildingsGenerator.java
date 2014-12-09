@@ -144,7 +144,6 @@ public class BuildingsGenerator {
         building.financial().currency().name().setValue("CAD");
 
         building.marketing().visibility().setValue(PublicVisibilityType.global);
-//        building.marketing().name().setValue(building.info().name().getStringView() + " mkt" + RandomUtil.randomLetters(2));
         building.marketing().name().setValue(name);
         building.marketing().description().setValue(CommonsGenerator.lipsum());
 
