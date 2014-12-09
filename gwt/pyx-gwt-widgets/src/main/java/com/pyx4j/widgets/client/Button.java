@@ -119,13 +119,9 @@ public class Button extends ButtonBase {
 
     public void setMenu(ButtonMenuBar menu) {
         this.menu = menu;
-        if (menu == null) {
-            getTextLabel().getElement().getStyle().setProperty("paddingRight", "0");
-            getTextLabel().getElement().getStyle().setProperty("background", "none");
-        } else {
-            getTextLabel().getElement().getStyle().setProperty("paddingRight", "10px");
-            addStyleName(WidgetsTheme.StyleName.DownArrow.name());
-            addStyleName(WidgetsTheme.StyleName.DownArrow + ":after");
+        if (menu != null) {
+            getTextLabel().addStyleName(WidgetsTheme.StyleName.DownArrow.name());
+            getTextLabel().addStyleName(WidgetsTheme.StyleName.DownArrow + ":after");
         }
     }
 

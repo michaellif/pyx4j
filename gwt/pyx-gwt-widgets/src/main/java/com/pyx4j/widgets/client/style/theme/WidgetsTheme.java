@@ -274,22 +274,16 @@ public class WidgetsTheme extends Theme {
 
         style = new Style(".", StyleName.DownArrow);
         style.addProperty("position", "relative");
-        style.addProperty("padding-right", "20px");
         addStyle(style);
 
         style = new Style(".", StyleName.DownArrow, ":", "after");
         style.addProperty("content", "\"\"");
-        style.addProperty("width", "0");
-        // style.addProperty("padding-right", "20px");
-        style.addProperty("height", "0");
-        style.addProperty("position", "absolute");
-        style.addProperty("display", "block");
+        style.addProperty("display", "inline-block");
         style.addProperty("border-left", "4px solid transparent");
         style.addProperty("border-right", "4px solid transparent");
         style.addProperty("border", "4px solid rgba(0, 0, 0, 0)");
-        style.addProperty("border-top-color", "#707070");
-        style.addProperty("right", "4px");
-        style.addProperty("top", "50%");
+        style.addProperty("border-top-color", ThemeColor.object1, 0.1);
+        style.addProperty("margin-left", "4px");
 
         addStyle(style);
 
