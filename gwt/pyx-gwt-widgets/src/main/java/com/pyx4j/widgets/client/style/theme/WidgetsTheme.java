@@ -68,7 +68,9 @@ public class WidgetsTheme extends Theme {
 
         SuggestBoxPopup, SelectionPickerPanel, SelectionPickerPanelItem,
 
-        SelectedItemClose, SelectedItemHolder, SelectedItemHolderLabel, SelectorListBoxValuePanel;
+        SelectedItemClose, SelectedItemHolder, SelectedItemHolderLabel, SelectorListBoxValuePanel,
+
+        DownArrow;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -266,6 +268,27 @@ public class WidgetsTheme extends Theme {
         style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.1);
         style.addProperty("cursor", "default");
         style.addProperty("opacity", "0.4");
+        addStyle(style);
+
+        style = new Style(".", StyleName.DownArrow);
+        style.addProperty("position", "relative");
+        style.addProperty("padding-right", "20px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.DownArrow, ":", "after");
+        style.addProperty("content", "\"\"");
+        style.addProperty("width", "0");
+        // style.addProperty("padding-right", "20px");
+        style.addProperty("height", "0");
+        style.addProperty("position", "absolute");
+        style.addProperty("display", "block");
+        style.addProperty("border-left", "4px solid transparent");
+        style.addProperty("border-right", "4px solid transparent");
+        style.addProperty("border", "4px solid rgba(0, 0, 0, 0)");
+        style.addProperty("border-top-color", "#707070");
+        style.addProperty("right", "4px");
+        style.addProperty("top", "50%");
+
         addStyle(style);
 
     }

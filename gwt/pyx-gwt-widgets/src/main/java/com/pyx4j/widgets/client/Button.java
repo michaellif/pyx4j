@@ -25,7 +25,6 @@ import java.util.List;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
@@ -124,9 +123,9 @@ public class Button extends ButtonBase {
             getTextLabel().getElement().getStyle().setProperty("paddingRight", "0");
             getTextLabel().getElement().getStyle().setProperty("background", "none");
         } else {
-            Image menuIndicator = new Image(ImageFactory.getImages().viewMenu());
-            getTextLabel().getElement().getStyle().setProperty("paddingRight", (menuIndicator.getWidth() + 5) + "px");
-            getTextLabel().getElement().getStyle().setProperty("background", "url('" + menuIndicator.getUrl() + "') no-repeat scroll right center");
+            getTextLabel().getElement().getStyle().setProperty("paddingRight", "10px");
+            addStyleName(WidgetsTheme.StyleName.DownArrow.name());
+            addStyleName(WidgetsTheme.StyleName.DownArrow + ":after");
         }
     }
 
