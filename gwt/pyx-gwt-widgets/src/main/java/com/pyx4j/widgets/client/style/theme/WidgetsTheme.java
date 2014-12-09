@@ -281,7 +281,7 @@ public class WidgetsTheme extends Theme {
         style.addProperty("-moz-user-select", "none");
         style.addProperty("-ms-user-select", "none");
         style.addProperty("user-select", "none");
-
+        style.addProperty("outline", "0");
         addStyle(style);
 
         style = new Style(".", StyleName.ImageButtonText);

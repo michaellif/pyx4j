@@ -20,6 +20,9 @@
  */
 package com.pyx4j.forms.client.ui.datatable;
 
+import java.util.List;
+
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -33,9 +36,9 @@ public class DataTableActionsBar extends SimplePanel implements DataTableModelLi
 
     private final Toolbar toolbar;
 
-    private final PageNavigBar pageNavigBar;
+    private PageNavigBar pageNavigBar;
 
-    public DataTableActionsBar(DataTablePanel<?> dataTablePanel) {
+    public DataTableActionsBar(DataTablePanel<?> dataTablePanel, boolean showPageNavigBar) {
         this.dataTablePanel = dataTablePanel;
         setStyleName(DataTableTheme.StyleName.DataTableActionsBar.name());
 
@@ -47,9 +50,11 @@ public class DataTableActionsBar extends SimplePanel implements DataTableModelLi
         toolbar.addStyleName(DataTableTheme.StyleName.DataTableToolBar.name());
         content.add(toolbar);
 
-        pageNavigBar = new PageNavigBar(this);
-        pageNavigBar.addStyleName(DataTableTheme.StyleName.DataTablePageNavigBar.name());
-        content.add(pageNavigBar);
+        if (showPageNavigBar) {
+            pageNavigBar = new PageNavigBar(this);
+            pageNavigBar.addStyleName(DataTableTheme.StyleName.DataTablePageNavigBar.name());
+            content.add(pageNavigBar);
+        }
 
     }
 
@@ -73,13 +78,47 @@ public class DataTableActionsBar extends SimplePanel implements DataTableModelLi
         return toolbar;
     }
 
-    public PageNavigBar getPageNavigBar() {
-        return pageNavigBar;
-    }
-
     @Override
     public void onDataTableModelChanged(DataTableModelEvent e) {
-        pageNavigBar.onTableModelChanged(e);
+        if (pageNavigBar != null) {
+            pageNavigBar.onTableModelChanged(e);
+        }
+    }
+
+    public void setFirstActionCommand(Command firstActionCommand) {
+        if (pageNavigBar != null) {
+            pageNavigBar.setFirstActionCommand(firstActionCommand);
+        }
+    }
+
+    public void setPrevActionCommand(Command prevActionCommand) {
+        if (pageNavigBar != null) {
+            pageNavigBar.setPrevActionCommand(prevActionCommand);
+        }
+    }
+
+    public void setNextActionCommand(Command nextActionCommand) {
+        if (pageNavigBar != null) {
+            pageNavigBar.setNextActionCommand(nextActionCommand);
+        }
+    }
+
+    public void setLastActionCommand(Command lastActionCommand) {
+        if (pageNavigBar != null) {
+            pageNavigBar.setLastActionCommand(lastActionCommand);
+        }
+    }
+
+    public void setPageSizeActionCommand(Command pageSizeActionCommand) {
+        if (pageNavigBar != null) {
+            pageNavigBar.setPageSizeActionCommand(pageSizeActionCommand);
+        }
+    }
+
+    public void setPageSizeOptions(List<Integer> pageSizeOptions) {
+        if (pageNavigBar != null) {
+            pageNavigBar.setPageSizeOptions(pageSizeOptions);
+        }
     }
 
 }

@@ -124,7 +124,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         this.images = images;
         entityPrototype = EntityFactory.getEntityPrototype(clazz);
 
-        topActionsBar = new DataTableActionsBar(this);
+        topActionsBar = new DataTableActionsBar(this, false);
         add(topActionsBar);
 
         newFilterPanel = new FilterPanel(this);
@@ -138,7 +138,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         dataTableScroll.setStyleName(DataTableTheme.StyleName.DataTableHolder.name());
         add(dataTableScroll);
 
-        bottomActionsBar = new DataTableActionsBar(this);
+        bottomActionsBar = new DataTableActionsBar(this, true);
         add(bottomActionsBar);
 
         filterButton = new Button(i18n.tr("Filter"), new Command() {
@@ -276,33 +276,27 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     }
 
     public void setFirstActionHandler(Command firstActionCommand) {
-        topActionsBar.getPageNavigBar().setFirstActionCommand(firstActionCommand);
-        bottomActionsBar.getPageNavigBar().setFirstActionCommand(firstActionCommand);
+        bottomActionsBar.setFirstActionCommand(firstActionCommand);
     }
 
     public void setPrevActionHandler(Command prevActionCommand) {
-        topActionsBar.getPageNavigBar().setPrevActionCommand(prevActionCommand);
-        bottomActionsBar.getPageNavigBar().setPrevActionCommand(prevActionCommand);
+        bottomActionsBar.setPrevActionCommand(prevActionCommand);
     }
 
     public void setNextActionHandler(Command nextActionCommand) {
-        topActionsBar.getPageNavigBar().setNextActionCommand(nextActionCommand);
-        bottomActionsBar.getPageNavigBar().setNextActionCommand(nextActionCommand);
+        bottomActionsBar.setNextActionCommand(nextActionCommand);
     }
 
     public void setLastActionHandler(Command lastActionCommand) {
-        topActionsBar.getPageNavigBar().setLastActionCommand(lastActionCommand);
-        bottomActionsBar.getPageNavigBar().setLastActionCommand(lastActionCommand);
+        bottomActionsBar.setLastActionCommand(lastActionCommand);
     }
 
     public void setPageSizeActionHandler(Command pageSizeActionCommand) {
-        topActionsBar.getPageNavigBar().setPageSizeActionCommand(pageSizeActionCommand);
-        bottomActionsBar.getPageNavigBar().setPageSizeActionCommand(pageSizeActionCommand);
+        bottomActionsBar.setPageSizeActionCommand(pageSizeActionCommand);
     }
 
     public void setPageSizeOptions(List<Integer> pageSizeOptions) {
-        topActionsBar.getPageNavigBar().setPageSizeOptions(pageSizeOptions);
-        bottomActionsBar.getPageNavigBar().setPageSizeOptions(pageSizeOptions);
+        bottomActionsBar.setPageSizeOptions(pageSizeOptions);
     }
 
     public void addUpperActionItem(Widget widget) {
