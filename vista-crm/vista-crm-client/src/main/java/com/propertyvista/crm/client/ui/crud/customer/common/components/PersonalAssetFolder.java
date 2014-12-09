@@ -20,27 +20,23 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.AbstractValidationError;
-import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.domain.ProofOfAssetDocumentType;
 import com.propertyvista.domain.tenant.income.CustomerScreeningAsset;
 import com.propertyvista.domain.tenant.income.CustomerScreeningAsset.AssetType;
+import com.propertyvista.misc.VistaTODO;
 
 public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningAsset> {
 
@@ -73,17 +69,11 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningAsset> 
     public void addValidations() {
         super.addValidations();
 
-        this.addComponentValidator(new AbstractComponentValidator<IList<CustomerScreeningAsset>>() {
-            @Override
-            public AbstractValidationError isValid() {
-                if (getCComponent().getValue() != null) {
-                    if (getCComponent().getValue().size() > 3) {
-                        return new BasicValidationError(getCComponent(), i18n.tr("No need to supply more than 3 items"));
-                    }
-                }
-                return null;
-            }
-        });
+        // waiting for 'soft mode' validation!
+        if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
+            // get validation logic from portal
+        }
+
     }
 
     @Override
@@ -146,17 +136,11 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningAsset> 
 
         @Override
         public void addValidations() {
-            fileUpload.addComponentValidator(new AbstractComponentValidator<IList<ProofOfAssetDocumentFile>>() {
-                @Override
-                public BasicValidationError isValid() {
-                    if (getCComponent().getValue() != null && documentationPolicy != null) {
-                        if (documentationPolicy.mandatoryProofOfAsset().getValue(false) && getCComponent().getValue().isEmpty()) {
-                            return new BasicValidationError(getCComponent(), i18n.tr("Proof of Asset should be supplied"));
-                        }
-                    }
-                    return null;
-                }
-            });
+
+            // waiting for 'soft mode' validation!
+            if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
+                // get validation logic from portal
+            }
         }
 
         @Override

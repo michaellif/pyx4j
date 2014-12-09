@@ -101,6 +101,7 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
 
         // waiting for 'soft mode' validation!
         if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
+            // get validation logic from portal
         }
     }
 }

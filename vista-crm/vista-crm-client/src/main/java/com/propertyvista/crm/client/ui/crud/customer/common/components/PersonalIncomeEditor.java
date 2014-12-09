@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -29,13 +28,10 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
-import com.propertyvista.domain.media.ProofOfIncomeDocumentFile;
 import com.propertyvista.domain.policy.policies.domain.ProofOfEmploymentDocumentType;
 import com.propertyvista.domain.policy.policies.domain.ProofOfIncomeDocumentType;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
@@ -79,23 +75,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
 
         // waiting for 'soft mode' validation!
         if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
-            fileUpload.addComponentValidator(new AbstractComponentValidator<IList<ProofOfIncomeDocumentFile>>() {
-                @Override
-                public BasicValidationError isValid() {
-                    if (!getCComponent().getValue().isNull() && parent.getDocumentationPolicy() != null) {
-                        if (IncomeSource.employment().contains(getValue().incomeSource().getValue())) {
-                            if (parent.getDocumentationPolicy().mandatoryProofOfEmployment().getValue(false) && getCComponent().getValue().isEmpty()) {
-                                return new BasicValidationError(getCComponent(), i18n.tr("Proof of Employment should be supplied"));
-                            }
-                        } else if (IncomeSource.otherIncome().contains(getValue().incomeSource().getValue())) {
-                            if (parent.getDocumentationPolicy().mandatoryProofOfIncome().getValue(false) && getCComponent().getValue().isEmpty()) {
-                                return new BasicValidationError(getCComponent(), i18n.tr("Proof of Income should be supplied"));
-                            }
-                        }
-                    }
-                    return null;
-                }
-            });
+            // get validation logic from portal
         }
     }
 
