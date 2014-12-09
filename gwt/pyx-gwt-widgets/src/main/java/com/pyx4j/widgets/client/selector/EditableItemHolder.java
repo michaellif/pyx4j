@@ -64,8 +64,9 @@ public abstract class EditableItemHolder<E> extends ItemHolder<E> {
     }
 
     protected void showEditor() {
-        System.out.println("CLick");
+        addStyleDependentName(WidgetsTheme.StyleDependent.editing.name());
         parent.getItemEditorPopup().show(EditableItemHolder.this);
+        parent.getItemEditorPopup().setFocus(true);
         popupCloseHandlerRegistration = parent.getItemEditorPopup().addCloseHandler(new CloseHandler<PopupPanel>() {
 
             @Override
@@ -73,7 +74,6 @@ public abstract class EditableItemHolder<E> extends ItemHolder<E> {
                 onEditorHidden();
             }
         });
-        addStyleDependentName(WidgetsTheme.StyleDependent.editing.name());
     }
 
     protected void onEditorHidden() {

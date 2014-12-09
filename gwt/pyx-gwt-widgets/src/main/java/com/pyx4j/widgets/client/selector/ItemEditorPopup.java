@@ -20,6 +20,7 @@
  */
 package com.pyx4j.widgets.client.selector;
 
+import com.google.gwt.dom.client.Style.OutlineStyle;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasAllFocusHandlers;
@@ -55,6 +56,7 @@ public class ItemEditorPopup extends DropDownPanel implements Focusable, HasAllF
         addStyleName(WidgetsTheme.StyleName.SelectedItemEditor.name());
 
         focusPanel = new FocusPanel();
+        focusPanel.getElement().getStyle().setOutlineStyle(OutlineStyle.NONE);
 
         groupFocusHandler = new GroupFocusHandler(this);
         groupFocusHandler.addFocusable(focusPanel);
