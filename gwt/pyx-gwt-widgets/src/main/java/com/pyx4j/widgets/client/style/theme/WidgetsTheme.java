@@ -503,6 +503,7 @@ public class WidgetsTheme extends Theme {
         style.addProperty("font-family", "inherit");
         style.addProperty("margin", "3px");
         style.addProperty("border-radius", "4px");
+        style.addProperty("line-height", "2em");
         addStyle(style);
 
         style = new Style(".", StyleName.SelectionPickerPanel);
@@ -530,7 +531,7 @@ public class WidgetsTheme extends Theme {
 
         style = new Style(".", StyleName.SelectedItemClose);
         style.addProperty("vertical-align", "middle");
-        style.addProperty("padding-left", "4px");
+        style.addProperty("padding", "0");
         addStyle(style);
 
         style = new Style(".", StyleName.SelectorListBoxValuePanel);

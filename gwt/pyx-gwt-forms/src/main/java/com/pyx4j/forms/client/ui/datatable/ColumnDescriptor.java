@@ -49,6 +49,10 @@ public class ColumnDescriptor {
         builder.searchable = searchable;
     }
 
+    public boolean isFilterAlwaysShown() {
+        return builder.filterAlwaysShown;
+    }
+
     public boolean isSortable() {
         return builder.sortable;
     }
@@ -173,6 +177,8 @@ public class ColumnDescriptor {
 
         private boolean searchable = true;
 
+        private boolean filterAlwaysShown = false;
+
         private boolean searchableOnly = false;
 
         private String width = DEFAULT_WIDTH;
@@ -220,6 +226,11 @@ public class ColumnDescriptor {
 
         public Builder searchable(boolean searchable) {
             this.searchable = searchable;
+            return this;
+        }
+
+        public Builder filterAlwaysShown(boolean filterAlwaysShown) {
+            this.filterAlwaysShown = filterAlwaysShown;
             return this;
         }
 

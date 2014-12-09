@@ -26,8 +26,20 @@ public class FilterItem implements Comparable<FilterItem> {
 
     private final ColumnDescriptor columnDescriptor;
 
+    private final boolean removable;
+
     public FilterItem(ColumnDescriptor columnDescriptor) {
         this.columnDescriptor = columnDescriptor;
+        this.removable = !columnDescriptor.isFilterAlwaysShown();
+    }
+
+    public boolean isRemovable() {
+        return removable;
+    }
+
+    @Override
+    public int compareTo(FilterItem o) {
+        return 0;
     }
 
     @Override
@@ -36,7 +48,19 @@ public class FilterItem implements Comparable<FilterItem> {
     }
 
     @Override
-    public int compareTo(FilterItem o) {
-        return 0;
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        return columnDescriptor == ((FilterItem) obj).columnDescriptor;
     }
+
+    @Override
+    public int hashCode() {
+        return 31 + ((columnDescriptor == null) ? 0 : columnDescriptor.hashCode());
+    }
+
 }

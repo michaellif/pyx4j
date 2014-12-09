@@ -37,44 +37,71 @@ public class ItemHolder<E> extends Composite {
 
     private static final I18n i18n = I18n.get(ItemHolder.class);
 
+    private E item;
+
+    private FlowPanel panel;
+
     private SelectorListBoxValuePanel<E> parent;
 
-    public ItemHolder(final E item, IFormatter<E, String> valueFormatter) {
-        super();
+    private ImageButton removeButton;
 
-        FlowPanel panel = new FlowPanel();
+    private boolean removable;
+
+    public ItemHolder(final E item, IFormatter<E, String> valueFormatter) {
+        this(item, valueFormatter, true);
+    }
+
+    public ItemHolder(final E item, IFormatter<E, String> valueFormatter, boolean removable) {
+        super();
+        this.item = item;
+        panel = new FlowPanel();
         panel.setStyleName(WidgetsTheme.StyleName.SelectedItemHolder.name());
 
         Label label = new Label(valueFormatter.format(item));
         label.setStyleName(WidgetsTheme.StyleName.SelectedItemHolderLabel.name());
         panel.add(label);
 
-        ImageButton removeItemAction = new ImageButton(ImageFactory.getImages().delButton(), new Command() {
+        setRemovable(removable);
 
-            @Override
-            public void execute() {
-                parent.removeItem(item);
-            }
-
-        });
-
-        //Prevent focus grabbing on 'Remove' Button 
-        removeItemAction.addMouseDownHandler(new MouseDownHandler() {
-
-            @Override
-            public void onMouseDown(MouseDownEvent event) {
-                event.preventDefault();
-                parent.setFocus(true);
-            }
-        });
-
-        removeItemAction.setTitle(i18n.tr("Remove"));
-        removeItemAction.addStyleName(WidgetsTheme.StyleName.SelectedItemClose.name());
-        panel.add(removeItemAction);
         initWidget(panel);
     }
 
     public void setSelectorListBoxValuePanel(SelectorListBoxValuePanel<E> parent) {
         this.parent = parent;
+    }
+
+    public void setRemovable(boolean removable) {
+
+        if (this.removable != removable) {
+            if (removable) {
+                removeButton = new ImageButton(ImageFactory.getImages().delButton(), new Command() {
+
+                    @Override
+                    public void execute() {
+                        parent.removeItem(item);
+                    }
+
+                });
+
+                //Prevent focus grabbing on 'Remove' Button 
+                removeButton.addMouseDownHandler(new MouseDownHandler() {
+
+                    @Override
+                    public void onMouseDown(MouseDownEvent event) {
+                        event.preventDefault();
+                        parent.setFocus(true);
+                    }
+                });
+
+                removeButton.setTitle(i18n.tr("Remove"));
+                removeButton.addStyleName(WidgetsTheme.StyleName.SelectedItemClose.name());
+                panel.add(removeButton);
+            } else if (removeButton != null) {
+                panel.remove(removeButton);
+                removeButton = null;
+            }
+
+            this.removable = removable;
+        }
     }
 }

@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui.datatable.filter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -30,7 +31,6 @@ import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
-import com.pyx4j.widgets.client.selector.ItemHolder;
 import com.pyx4j.widgets.client.selector.ItemHolderFactory;
 import com.pyx4j.widgets.client.selector.SelectorListBox;
 
@@ -55,8 +55,8 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
         }, new ItemHolderFactory<FilterItem>() {
 
             @Override
-            public ItemHolder<FilterItem> createItemHolder(FilterItem item) {
-                return new ItemHolder<FilterItem>(item, new FilterItemFormatter());
+            public FilterItemHolder createItemHolder(FilterItem item) {
+                return new FilterItemHolder(item, new FilterItemFormatter());
             }
         });
         this.dataTablePanel = dataTablePanel;
@@ -67,7 +67,12 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
         ((FilterOptionsGrabber) getOptionsGrabber()).updateFilterOptions();
 
         List<ColumnDescriptor> columnDescriptors = dataTablePanel.getDataTable().getColumnDescriptors();
-        //TODO setValue(value);
-
+        List<FilterItem> alwaysShownItems = new ArrayList<>();
+        for (ColumnDescriptor columnDescriptor : columnDescriptors) {
+            if (columnDescriptor.isFilterAlwaysShown()) {
+                alwaysShownItems.add(new FilterItem(columnDescriptor));
+            }
+        }
+        setValue(alwaysShownItems);
     }
 }
