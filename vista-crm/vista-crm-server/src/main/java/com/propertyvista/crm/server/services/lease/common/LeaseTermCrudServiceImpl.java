@@ -266,7 +266,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         DepositListDTO result = EntityFactory.create(DepositListDTO.class);
 
         if (VistaFeatures.instance().yardiIntegration()) {
-            // deposits in Yardi mode non-ediable, so reload them from the scratch
+            // deposits in Yardi mode non-editable, so reload them from the scratch
             result.deposits().addAll(ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(item));
         } else {
             for (Deposit deposit : item.deposits()) {
