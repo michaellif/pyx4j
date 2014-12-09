@@ -70,7 +70,7 @@ public class WidgetsTheme extends Theme {
 
         SelectedItemClose, SelectedItemHolder, SelectedItemHolderLabel, SelectorListBoxValuePanel,
 
-        SelectedItemEditor,
+        SelectedItemEditor, SelectedItemEditorContent,
 
         DownArrow;
     }
@@ -588,9 +588,18 @@ public class WidgetsTheme extends Theme {
         style.addProperty("border-width", "1px");
         addStyle(style);
 
+        style = new Style(".", StyleName.SelectedItemEditorContent, " .", WidgetsTheme.StyleName.Toolbar);
+        style.addProperty("float", "right");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SelectedItemEditorContent, " .", WidgetsTheme.StyleName.Toolbar, " .", WidgetsTheme.StyleName.Button);
+        style.addProperty("margin", "6px");
+        addStyle(style);
+
         style = new Style(".", StyleName.SelectedItemHolder, "-", StyleDependent.editing);
         style.addProperty("border-bottom-right-radius", "0px");
         style.addProperty("border-bottom-left-radius", "0px");
+        style.addProperty("border-bottom-width", "0");
         addStyle(style);
 
     }

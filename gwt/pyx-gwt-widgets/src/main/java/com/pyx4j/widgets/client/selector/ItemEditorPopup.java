@@ -24,32 +24,58 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasAllFocusHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.DropDownPanel;
+import com.pyx4j.widgets.client.GroupFocusHandler;
+import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class ItemEditorPopup extends DropDownPanel implements Focusable, HasAllFocusHandlers {
 
+    private static final I18n i18n = I18n.get(ItemEditorPopup.class);
+
+    private final ContentPanel contentPanel;
+
+    private final GroupFocusHandler groupFocusHandler;
+
     private final FocusPanel focusPanel;
+
+    private EditableItemHolder<?> itemHolder;
 
     public ItemEditorPopup() {
         super();
         addStyleName(WidgetsTheme.StyleName.SelectedItemEditor.name());
 
         focusPanel = new FocusPanel();
+
+        groupFocusHandler = new GroupFocusHandler(this);
+        groupFocusHandler.addFocusable(focusPanel);
+        groupFocusHandler.addFocusable(this);
+
+        contentPanel = new ContentPanel();
+        focusPanel.setWidget(contentPanel);
+
         setWidget(focusPanel);
     }
 
     public void show(EditableItemHolder<?> itemHolder) {
-        focusPanel.setWidget(itemHolder.getEditor().asWidget());
+        this.itemHolder = itemHolder;
+        contentPanel.setBody(itemHolder.getEditor().asWidget());
         showRelativeTo(itemHolder);
     }
 
     @Override
     public void hide(boolean autoClosed) {
-        focusPanel.setWidget(null);
+        itemHolder = null;
+        contentPanel.setBody(null);
         super.hide(autoClosed);
     }
 
@@ -75,11 +101,47 @@ public class ItemEditorPopup extends DropDownPanel implements Focusable, HasAllF
 
     @Override
     public HandlerRegistration addFocusHandler(FocusHandler handler) {
-        return focusPanel.addFocusHandler(handler);
+        return groupFocusHandler.addFocusHandler(handler);
     }
 
     @Override
     public HandlerRegistration addBlurHandler(BlurHandler handler) {
-        return focusPanel.addBlurHandler(handler);
+        return groupFocusHandler.addBlurHandler(handler);
+    }
+
+    class ContentPanel extends FlowPanel {
+
+        private final SimplePanel bodyHolder;
+
+        private final Toolbar toolbar;
+
+        public ContentPanel() {
+            setStylePrimaryName(WidgetsTheme.StyleName.SelectedItemEditorContent.name());
+
+            bodyHolder = new SimplePanel();
+            add(bodyHolder);
+
+            toolbar = new Toolbar();
+
+            Button buttonOk = new Button(i18n.tr("OK"));
+            groupFocusHandler.addFocusable(buttonOk);
+            toolbar.addItem(buttonOk);
+
+            Button buttonCancel = new Button(i18n.tr("Cancel"), new Command() {
+                @Override
+                public void execute() {
+                    hide(true);
+                }
+            });
+            groupFocusHandler.addFocusable(buttonCancel);
+            toolbar.addItem(buttonCancel);
+
+            add(toolbar);
+        }
+
+        public void setBody(IsWidget body) {
+            bodyHolder.setWidget(body);
+        }
+
     }
 }

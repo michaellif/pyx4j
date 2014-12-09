@@ -30,7 +30,9 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
 
     public FilterItemHolder(FilterItem item, IFormatter<FilterItem, String> valueFormatter, SelectorListBoxValuePanel<FilterItem> valuePanel) {
         super(item, valueFormatter, item.isRemovable(), valuePanel);
-        setEditor(new HTML("TESTTEST"));
+        HTML editor = new HTML("TESTTEST TESTTEST TESTTEST TESTTEST");
+        editor.setWidth("200px");
+        setEditor(editor);
     }
 
 }
