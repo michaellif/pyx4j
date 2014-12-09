@@ -70,11 +70,13 @@ public class WidgetsTheme extends Theme {
 
         SelectedItemClose, SelectedItemHolder, SelectedItemHolderLabel, SelectorListBoxValuePanel,
 
+        SelectedItemEditor,
+
         DownArrow;
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        watermark, hover, focused, readonly, disabled, active, semitransparent, singleLine, selected, playing, paused, left, right, editable
+        watermark, hover, focused, readonly, disabled, active, semitransparent, singleLine, selected, playing, paused, left, right, editable, editing
     }
 
     public WidgetsTheme() {
@@ -581,6 +583,20 @@ public class WidgetsTheme extends Theme {
 
         style = new Style(".", StyleName.SelectorListBoxValuePanel, " .", WidgetsTheme.StyleName.Button);
         style.addProperty("margin", "4px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SelectedItemEditor);
+        style.addProperty("box-shadow", "10px 10px 5px rgba(0, 0, 0, 0.3)");
+        style.addProperty("background-color", "white");
+        style.addProperty("padding", "4px");
+        style.addProperty("border-color", ThemeColor.foreground, 0.4);
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-width", "1px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SelectedItemHolder, "-", StyleDependent.editing);
+        style.addProperty("border-bottom-right-radius", "0px");
+        style.addProperty("border-bottom-left-radius", "0px");
         addStyle(style);
 
     }

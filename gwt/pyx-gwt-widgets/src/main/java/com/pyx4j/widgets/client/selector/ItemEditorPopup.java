@@ -26,7 +26,6 @@ import com.google.gwt.event.dom.client.HasAllFocusHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Focusable;
-import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.widgets.client.DropDownPanel;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
@@ -37,7 +36,7 @@ public class ItemEditorPopup extends DropDownPanel implements Focusable, HasAllF
 
     public ItemEditorPopup() {
         super();
-        addStyleName(WidgetsTheme.StyleName.SuggestBoxPopup.name());
+        addStyleName(WidgetsTheme.StyleName.SelectedItemEditor.name());
 
         focusPanel = new FocusPanel();
         setWidget(focusPanel);

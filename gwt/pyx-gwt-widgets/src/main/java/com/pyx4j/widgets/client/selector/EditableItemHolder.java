@@ -22,8 +22,11 @@ package com.pyx4j.widgets.client.selector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.PopupPanel;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
@@ -35,6 +38,8 @@ public class EditableItemHolder<E> extends ItemHolder<E> {
     private HandlerRegistration clickHandlerRegistration;
 
     private final SelectorListBoxValuePanel<E> parent;
+
+    private HandlerRegistration popupCloseHandlerRegistration;
 
     public EditableItemHolder(E item, IFormatter<E, String> valueFormatter, boolean removable, SelectorListBoxValuePanel<E> parent) {
         super(item, valueFormatter, removable);
@@ -50,13 +55,30 @@ public class EditableItemHolder<E> extends ItemHolder<E> {
 
                 @Override
                 public void onClick(ClickEvent event) {
-                    System.out.println("CLick");
-                    parent.getItemEditorPopup().show(EditableItemHolder.this);
+                    showEditor();
                 }
             }, ClickEvent.getType());
             addStyleDependentName(WidgetsTheme.StyleDependent.editable.name());
         }
         this.editor = editor;
+    }
+
+    protected void showEditor() {
+        System.out.println("CLick");
+        parent.getItemEditorPopup().show(EditableItemHolder.this);
+        popupCloseHandlerRegistration = parent.getItemEditorPopup().addCloseHandler(new CloseHandler<PopupPanel>() {
+
+            @Override
+            public void onClose(CloseEvent<PopupPanel> event) {
+                onEditorHidden();
+            }
+        });
+        addStyleDependentName(WidgetsTheme.StyleDependent.editing.name());
+    }
+
+    protected void onEditorHidden() {
+        popupCloseHandlerRegistration.removeHandler();
+        removeStyleDependentName(WidgetsTheme.StyleDependent.editing.name());
     }
 
     public IsWidget getEditor() {
