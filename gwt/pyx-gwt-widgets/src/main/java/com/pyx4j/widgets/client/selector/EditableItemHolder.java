@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
-public class EditableItemHolder<E> extends ItemHolder<E> {
+public abstract class EditableItemHolder<E> extends ItemHolder<E> {
 
     private IsWidget editor;
 
@@ -85,9 +85,7 @@ public class EditableItemHolder<E> extends ItemHolder<E> {
         return editor;
     }
 
-    protected void onEditingComplete() {
-
-    }
+    abstract protected void onEditingComplete();
 
     @Override
     protected void onRemove() {

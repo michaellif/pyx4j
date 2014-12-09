@@ -123,18 +123,24 @@ public class ItemEditorPopup extends DropDownPanel implements Focusable, HasAllF
 
             toolbar = new Toolbar();
 
-            Button buttonOk = new Button(i18n.tr("OK"));
-            groupFocusHandler.addFocusable(buttonOk);
-            toolbar.addItem(buttonOk);
+            Button okButton = new Button(i18n.tr("OK"), new Command() {
+                @Override
+                public void execute() {
+                    hide(true);
+                    itemHolder.onEditingComplete();
+                }
+            });
+            groupFocusHandler.addFocusable(okButton);
+            toolbar.addItem(okButton);
 
-            Button buttonCancel = new Button(i18n.tr("Cancel"), new Command() {
+            Button cancelButton = new Button(i18n.tr("Cancel"), new Command() {
                 @Override
                 public void execute() {
                     hide(true);
                 }
             });
-            groupFocusHandler.addFocusable(buttonCancel);
-            toolbar.addItem(buttonCancel);
+            groupFocusHandler.addFocusable(cancelButton);
+            toolbar.addItem(cancelButton);
 
             add(toolbar);
         }

@@ -35,4 +35,10 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
         setEditor(editor);
     }
 
+    @Override
+    protected void onEditingComplete() {
+        // TODO Auto-generated method stub
+
+    }
+
 }
