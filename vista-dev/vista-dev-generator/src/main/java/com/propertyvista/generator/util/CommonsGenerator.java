@@ -89,56 +89,56 @@ public class CommonsGenerator {
         return employeeTitles[DataGenerator.nextInt(employeeTitles.length, "employeeTitles", 4)];
     }
 
-    public static String randomComplexName(int noRepeatResults) {
+    public static String randomComplexName() {
         if (complexNames == null) {
             complexNames = CSVLoad.loadFile(IOUtils.resourceFileName("complex-names.csv", CommonsGenerator.class), "name");
         }
-        return complexNames[DataGenerator.nextInt(complexNames.length, "complexNames", noRepeatResults)];
+        return complexNames[DataGenerator.nextInt(complexNames.length, "complexNames", 3)];
     }
 
-    public static Marketing randomBuilding(int noRepeatResults) {
+    public static Marketing randomBuilding() {
         if (buildingMarketings == null) {
             List<Marketing> entities = EntityCSVReciver.create(Marketing.class).loadResourceFile(
                     IOUtils.resourceFileName("buildings.xlsx", CommonsGenerator.class));
             buildingMarketings = entities.toArray(new Marketing[entities.size()]);
         }
-        return buildingMarketings[DataGenerator.nextInt(buildingMarketings.length, "buildings", noRepeatResults)];
+        return buildingMarketings[DataGenerator.nextInt(buildingMarketings.length, "buildings", 15)];
     }
 
-    public static BuildingAmenity randomBuildingAmenity(int noRepeatResults) {
+    public static BuildingAmenity randomBuildingAmenity() {
         if (amenities == null) {
             List<BuildingAmenity> entities = EntityCSVReciver.create(BuildingAmenity.class).loadResourceFile(
                     IOUtils.resourceFileName("building-amenities.xlsx", CommonsGenerator.class));
             amenities = entities.toArray(new BuildingAmenity[entities.size()]);
         }
-        return amenities[DataGenerator.nextInt(amenities.length, "amenities", noRepeatResults)];
+        return amenities[DataGenerator.nextInt(amenities.length, "amenities", 6)];
     }
 
-    public static BuildingUtility randomBuildingUtility(int noRepeatResults) {
+    public static BuildingUtility randomBuildingUtility() {
         if (buildingUtilities == null) {
             List<BuildingUtility> entities = EntityCSVReciver.create(BuildingUtility.class).loadResourceFile(
                     IOUtils.resourceFileName("building-utilities.xlsx", CommonsGenerator.class));
             buildingUtilities = entities.toArray(new BuildingUtility[entities.size()]);
         }
-        return buildingUtilities[DataGenerator.nextInt(buildingUtilities.length, "buildingUtilities", noRepeatResults)];
+        return buildingUtilities[DataGenerator.nextInt(buildingUtilities.length, "buildingUtilities", 4)];
     }
 
-    public static FloorplanAmenity randomFloorPlanAmenity(int noRepeatResults) {
+    public static FloorplanAmenity randomFloorPlanAmenity() {
         if (floorPlanAmenities == null) {
             List<FloorplanAmenity> entities = EntityCSVReciver.create(FloorplanAmenity.class).loadResourceFile(
                     IOUtils.resourceFileName("floorplan-amenities.xlsx", CommonsGenerator.class));
             floorPlanAmenities = entities.toArray(new FloorplanAmenity[entities.size()]);
         }
-        return floorPlanAmenities[DataGenerator.nextInt(floorPlanAmenities.length, "floorPlanAmenities", noRepeatResults)];
+        return floorPlanAmenities[DataGenerator.nextInt(floorPlanAmenities.length, "floorPlanAmenities", 10)];
     }
 
-    public static Floorplan randomFloorPlan(int noRepeatResults) {
+    public static Floorplan randomFloorPlan() {
         if (floorPlans == null) {
             List<Floorplan> entities = EntityCSVReciver.create(Floorplan.class).loadResourceFile(
                     IOUtils.resourceFileName("floorplans.xlsx", CommonsGenerator.class));
             floorPlans = entities.toArray(new Floorplan[entities.size()]);
         }
-        return floorPlans[DataGenerator.nextInt(floorPlans.length, "floorPlans", noRepeatResults)];
+        return floorPlans[DataGenerator.nextInt(floorPlans.length, "floorPlans", 6)];
     }
 
     public static Name createName() {

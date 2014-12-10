@@ -100,7 +100,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         // create some complexes:
         List<Complex> complexes = new Vector<Complex>();
         for (int i = 0; i < config().numComplexes; ++i) {
-            complexes.add(buildingGenerator.createComplex(CommonsGenerator.randomComplexName(config().numComplexes)));
+            complexes.add(buildingGenerator.createComplex(CommonsGenerator.randomComplexName()));
         }
 
         Persistence.service().persist(complexes);

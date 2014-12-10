@@ -59,8 +59,6 @@ import com.propertyvista.generator.util.RandomUtil;
 
 public class BuildingsGenerator {
 
-    private int nBuildings = 0;
-
     public static class BuildingsGeneratorConfig {
 
         public String provinceCode = null;
@@ -74,7 +72,6 @@ public class BuildingsGenerator {
     }
 
     public List<Building> createBuildings(int numBuildings, BuildingsGeneratorConfig config) {
-        nBuildings = numBuildings;
         List<Building> buildings = new ArrayList<Building>();
         for (int b = 0; b < numBuildings; b++) {
             Building building = createBuilding(b, config);
@@ -143,7 +140,7 @@ public class BuildingsGenerator {
 
         building.marketing().visibility().setValue(PublicVisibilityType.global);
         // Preload specific marketing data for demos
-        Marketing marketingBuildingPreloaded = CommonsGenerator.randomBuilding(nBuildings);
+        Marketing marketingBuildingPreloaded = CommonsGenerator.randomBuilding();
         building.marketing().name().setValue(marketingBuildingPreloaded.name().getValue());
         building.marketing().description().setValue(marketingBuildingPreloaded.description().getValue());
 
@@ -355,14 +352,14 @@ public class BuildingsGenerator {
     public List<BuildingAmenity> createBuildingAmenities(Building owner, int num) {
         List<BuildingAmenity> items = new ArrayList<BuildingAmenity>();
         for (int i = 0; i < num; i++) {
-            items.add(createBuildingAmenity(owner, num));
+            items.add(createBuildingAmenity(owner));
         }
         return items;
     }
 
-    public BuildingAmenity createBuildingAmenity(Building building, int noRepeat) {
+    public BuildingAmenity createBuildingAmenity(Building building) {
 
-        BuildingAmenity preloadedAmenity = CommonsGenerator.randomBuildingAmenity(noRepeat);
+        BuildingAmenity preloadedAmenity = CommonsGenerator.randomBuildingAmenity();
 
         BuildingAmenity amenity = EntityFactory.create(BuildingAmenity.class);
         building.amenities().add(amenity);
@@ -378,13 +375,13 @@ public class BuildingsGenerator {
     public List<BuildingUtility> createBuildingUtilities(Building owner, int num) {
         List<BuildingUtility> items = new ArrayList<BuildingUtility>();
         for (int i = 0; i < num; i++) {
-            items.add(createBuildingUtility(owner, num));
+            items.add(createBuildingUtility(owner));
         }
         return items;
     }
 
-    public BuildingUtility createBuildingUtility(Building building, int nUtilities) {
-        BuildingUtility preloadedUtility = CommonsGenerator.randomBuildingUtility(nUtilities);
+    public BuildingUtility createBuildingUtility(Building building) {
+        BuildingUtility preloadedUtility = CommonsGenerator.randomBuildingUtility();
 
         BuildingUtility utility = EntityFactory.create(BuildingUtility.class);
         building.utilities().add(utility);
@@ -418,7 +415,7 @@ public class BuildingsGenerator {
                 if (attemptCounter > 10) {
                     throw new Error("Infinite loop protection");
                 }
-                floorplan = createFloorplan(num);
+                floorplan = createFloorplan();
             } while (uniqueFloorplanNames.contains(floorplan.name().getValue()));
 
             uniqueFloorplanNames.add(floorplan.name().getValue());
@@ -430,8 +427,8 @@ public class BuildingsGenerator {
         return floorplans;
     }
 
-    public Floorplan createFloorplan(int nTotalFloorPlans) {
-        Floorplan preloadedFloorplan = CommonsGenerator.randomFloorPlan(nTotalFloorPlans);
+    public Floorplan createFloorplan() {
+        Floorplan preloadedFloorplan = CommonsGenerator.randomFloorPlan();
 
         Floorplan floorplan = EntityFactory.create(Floorplan.class);
 
@@ -453,7 +450,7 @@ public class BuildingsGenerator {
 
         int nFloorPlanAmenities = 2 + DataGenerator.randomInt(6);
         for (int i = 0; i < nFloorPlanAmenities; i++) {
-            FloorplanAmenity amenity = BuildingsGenerator.createFloorplanAmenity(nFloorPlanAmenities);
+            FloorplanAmenity amenity = BuildingsGenerator.createFloorplanAmenity();
             floorplan.amenities().add(amenity);
         }
 
@@ -480,9 +477,9 @@ public class BuildingsGenerator {
         return marketingName;
     }
 
-    public static FloorplanAmenity createFloorplanAmenity(int nAmenities) {
+    public static FloorplanAmenity createFloorplanAmenity() {
 
-        FloorplanAmenity preloadedFloorPlanAmenity = CommonsGenerator.randomFloorPlanAmenity(nAmenities);
+        FloorplanAmenity preloadedFloorPlanAmenity = CommonsGenerator.randomFloorPlanAmenity();
 
         FloorplanAmenity amenity = EntityFactory.create(FloorplanAmenity.class);
         amenity.type().setValue(preloadedFloorPlanAmenity.type().getValue());
