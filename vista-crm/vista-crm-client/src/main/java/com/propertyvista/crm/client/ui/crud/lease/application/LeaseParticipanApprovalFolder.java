@@ -60,8 +60,8 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
 
     private final LeaseApplicationViewerView view;
 
-    public LeaseParticipanApprovalFolder(boolean modifyable, LeaseApplicationViewerView view) {
-        super(LeaseParticipanApprovalDTO.class, modifyable);
+    public LeaseParticipanApprovalFolder(LeaseApplicationViewerView view) {
+        super(LeaseParticipanApprovalDTO.class, false);
         this.view = view;
     }
 

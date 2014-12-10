@@ -60,7 +60,7 @@ public class LeaseParticipantUtils {
         Persistence.ensureRetrieve(screening.version().incomes(), AttachLevel.Attached);
         Persistence.ensureRetrieve(screening.version().assets(), AttachLevel.Attached);
         Persistence.ensureRetrieve(screening.version().documents(), AttachLevel.Attached);
-        Persistence.service().retrieve(screening.screene(), AttachLevel.ToStringMembers, false);
+        Persistence.ensureRetrieve(screening.screene(), AttachLevel.ToStringMembers);
 
         return createScreeningTO(participant, screening, forEdit);
     }
@@ -174,10 +174,10 @@ public class LeaseParticipantUtils {
             }
 
         }
-        if ((screening != null) && !screening.isNull()) {
-            Persistence.service().retrieve(screening.version().incomes());
-            Persistence.service().retrieve(screening.version().assets());
-            Persistence.service().retrieve(screening.version().documents());
+        if (screening != null && !screening.isNull()) {
+            Persistence.ensureRetrieve(screening.version().incomes(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(screening.version().assets(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(screening.version().documents(), AttachLevel.Attached);
         }
         return screening;
     }

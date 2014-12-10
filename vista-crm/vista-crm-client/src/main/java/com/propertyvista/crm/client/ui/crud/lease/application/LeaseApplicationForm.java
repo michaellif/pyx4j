@@ -190,7 +190,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
         formPanel.br();
 
-        formPanel.append(Location.Dual, proto().leaseApproval().participants(), new LeaseParticipanApprovalFolder(false,
+        formPanel.append(Location.Dual, proto().leaseApproval().participants(), new LeaseParticipanApprovalFolder(
                 ((LeaseApplicationViewerView) getParentView())));
 
         return formPanel;
