@@ -296,21 +296,8 @@ public class PrimitiveHandler<TYPE extends Serializable> extends ObjectHandler<T
     }
 
     @Override
-    public boolean isBooleanTrue() {
-        if (isNull()) {
-            return false;
-        } else {
-            if (valueClass.equals(Boolean.class)) {
-                return (Boolean) getValue();
-            } else {
-                TYPE thisValue = this.getValue();
-                if (thisValue instanceof Number) {
-                    return 0 != ((Number) thisValue).intValue();
-                } else {
-                    return Boolean.valueOf(thisValue.toString());
-                }
-            }
-        }
+    public void clear() {
+        setValue(null);
     }
 
     @Override
@@ -326,7 +313,9 @@ public class PrimitiveHandler<TYPE extends Serializable> extends ObjectHandler<T
             }
         } else if (format == null) {
             if (valueClass.equals(Boolean.class)) {
-                return isBooleanTrue() ? i18nYesText() : i18nNoText();
+                @SuppressWarnings("unchecked")
+                IPrimitive<Boolean> thisAsBoolean = ((IPrimitive<Boolean>) this);
+                return thisAsBoolean.getValue(false) ? i18nYesText() : i18nNoText();
             } else if (thisValue instanceof Date) {
                 // TODO Add global variable for user preference
                 format = dateFormat;

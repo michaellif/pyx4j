@@ -90,12 +90,14 @@ public interface IEntity extends IObject<Map<String, Serializable>>, Serializabl
 
     /**
      * Remove all values from this entity, preserve ownership relationships
+     * TODO use clear()
      */
+    @Deprecated
     public void clearValues();
 
     /**
      * Like !isNull() only ignores Owner member
-     * 
+     *
      * @see isEmpty()
      */
     public boolean hasValues();
@@ -106,14 +108,14 @@ public interface IEntity extends IObject<Map<String, Serializable>>, Serializabl
 
     /**
      * Unsafe set entity value object.
-     * 
+     *
      * @param entity
      */
     public void set(IEntity entity);
 
     /**
      * Safer way to assign members value
-     * 
+     *
      * @param <T>
      * @param member
      *            meta
@@ -161,7 +163,7 @@ public interface IEntity extends IObject<Map<String, Serializable>>, Serializabl
 
     /**
      * Clone the entity to new entity of the same type
-     * 
+     *
      * @return clone of the entity
      */
     public <T extends IEntity> T duplicate();
@@ -190,7 +192,7 @@ public interface IEntity extends IObject<Map<String, Serializable>>, Serializabl
     /**
      * Cast the entity to actual type if entity is Abstract Entity. Return the same entity if Concrete type is the same as current type.
      * Use case when you need access to Concrete entity metadata(filed names).
-     * 
+     *
      * @return Entity that reference the same data as original entity.
      */
     public <T extends IEntity> T cast();

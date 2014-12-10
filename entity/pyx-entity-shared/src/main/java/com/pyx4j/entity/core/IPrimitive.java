@@ -31,14 +31,6 @@ public interface IPrimitive<TYPE extends Serializable> extends IObject<TYPE>, Co
 
     public TYPE parse(String value);
 
-    /**
-     * Here until Elvis operator in java 7
-     * 
-     * @deprecated use getValue(false)
-     */
-    @Deprecated
-    public boolean isBooleanTrue();
-
     public TYPE getValue(TYPE defaultValueIfNull);
 
     // TODO suggestions. See EntityGraph.updateMember

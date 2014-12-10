@@ -112,6 +112,19 @@ public abstract class CFolder<DATA_TYPE extends IEntity> extends CContainer<CFol
         });
     }
 
+    @Override
+    protected IList<DATA_TYPE> preprocessValue(IList<DATA_TYPE> value, boolean fireEvent, boolean populate) {
+        if (!populate && value != null) {
+            IList<DATA_TYPE> boundList = getValue();
+//            if (boundList != null) {
+            boundList.clear();
+            boundList.addAll(value);
+//            }
+            value = boundList;
+        }
+        return super.preprocessValue(value, fireEvent, populate);
+    }
+
     public boolean isOrderable() {
         return orderable;
     }
@@ -294,7 +307,7 @@ public abstract class CFolder<DATA_TYPE extends IEntity> extends CContainer<CFol
     /**
      * Implementation to override new Entity creation. No need to call
      * super.createNewEntity().
-     * 
+     *
      * @param newEntity
      * @param callback
      */

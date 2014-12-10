@@ -501,6 +501,10 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         return true;
     }
 
+    /**
+     * Use only when you abandon component and detaching from Editing model.
+     * In all other cases use clear();
+     */
     public final void reset() {
         this.value = null;
         setEditorValue(getValue());
@@ -510,6 +514,13 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         setVisited(false);
         onReset();
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.reset);
+    }
+
+    /**
+     * Remove all values from this component; in case of entity, preserves ownership relationships.
+     */
+    public final void clear() {
+        setValue(null);
     }
 
     public final void setValue(DATA_TYPE value, boolean fireEvent, boolean populate) {
@@ -540,7 +551,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     /**
      * Attention! Fires onValueChange event
-     * 
+     *
      * @param value
      */
     public final void setValue(DATA_TYPE value) {
