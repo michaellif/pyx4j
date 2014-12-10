@@ -216,7 +216,7 @@ public abstract class LeaseAbstractManager {
         if (serviceItem != null) {
             leaseTerm.version().leaseProducts().serviceItem().set(serviceItem);
         } else {
-            leaseTerm.version().leaseProducts().serviceItem().clearValues();
+            leaseTerm.version().leaseProducts().serviceItem().clear();
             leaseTerm.version().leaseProducts().serviceItem().agreedPrice().setValue(BigDecimal.ZERO);
         }
 
