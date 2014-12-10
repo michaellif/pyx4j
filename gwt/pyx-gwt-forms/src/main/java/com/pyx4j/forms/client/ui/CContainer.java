@@ -91,6 +91,17 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     protected abstract void setComponentsValue(DATA_TYPE value, boolean fireEvent, boolean populate);
 
     @Override
+    protected DATA_TYPE preprocessValue(DATA_TYPE value, boolean fireEvent, boolean populate) {
+        if (!populate && value == null) {
+            value = getValue();
+            if (value != null) {
+                value.clear();
+            }
+        }
+        return super.preprocessValue(value, fireEvent, populate);
+    }
+
+    @Override
     protected void onValuePropagation(DATA_TYPE value, boolean fireEvent, boolean populate) {
         super.onValuePropagation(value, fireEvent, populate);
         setComponentsValue(value, fireEvent, populate);

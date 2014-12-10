@@ -310,6 +310,11 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
     }
 
     @Override
+    public void clear() {
+        clearValues();
+    }
+
+    @Override
     public void clearValues() {
         Map<String, Serializable> entityValue = ensureValue();
 
