@@ -41,7 +41,7 @@ public class EmergencyContactsStep extends ApplicationWizardStep {
     public void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        emergencyContactFolder.setRestrictions(getValue().emergencyContactsIsMandatory().isBooleanTrue(), getValue().emergencyContactsNumberRequired()
+        emergencyContactFolder.setRestrictions(getValue().emergencyContactsIsMandatory().getValue(false), getValue().emergencyContactsNumberRequired()
                 .getValue());
     }
 }

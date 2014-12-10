@@ -60,8 +60,8 @@ public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO>
         form.get(form.proto().building()).setValue(value);
 
         // just clear all unit-related data:
-        form.get(form.proto().unit()).reset();
-        form.get(form.proto().version().utilities()).reset();
+        form.get(form.proto().unit()).clear();
+        form.get(form.proto().version().utilities()).clear();
 
         form.getValue().selectedServiceItems().clear();
 
@@ -116,10 +116,10 @@ public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO>
         form.getValue().selectedFeatureItems().clear();
         form.getValue().selectedConcessions().clear();
 
-        form.get(form.proto().version().leaseProducts().serviceItem()).reset();
-        form.get(form.proto().version().leaseProducts().featureItems()).reset();
+        form.get(form.proto().version().leaseProducts().serviceItem()).clear();
+        form.get(form.proto().version().leaseProducts().featureItems()).clear();
         if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
-            form.get(form.proto().version().leaseProducts().concessions()).reset();
+            form.get(form.proto().version().leaseProducts().concessions()).clear();
         }
     }
 }
