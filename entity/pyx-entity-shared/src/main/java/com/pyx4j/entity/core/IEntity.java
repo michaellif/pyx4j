@@ -90,10 +90,9 @@ public interface IEntity extends IObject<Map<String, Serializable>>, Serializabl
 
     /**
      * Remove all values from this entity, preserve ownership relationships
-     * TODO use clear()
      */
-    @Deprecated
-    public void clearValues();
+    @Override
+    public void clear();
 
     /**
      * Like !isNull() only ignores Owner member

@@ -154,7 +154,7 @@ public class BidirectionalRelationshipTest extends InitializerTestBase {
         assertEquals("parent value is the same", o.getValue(), o.child().parent().getValue());
         assertTrue("parent value is the same", o.getValue() == o.child().parent().getValue());
 
-        o.child().clearValues();
+        o.child().clear();
 
         assertEquals("parent value is the same", o.getValue(), o.child().parent().getValue());
         assertTrue("parent value is the same", o.getValue() == o.child().parent().getValue());
@@ -172,11 +172,11 @@ public class BidirectionalRelationshipTest extends InitializerTestBase {
 
         if (ObjectHandler.PROPER_POINTERS) {
             BidirectionalOneToManyChild cActual = o.children().get(0);
-            cActual.clearValues();
+            cActual.clear();
             assertEquals("parent value is the same", o.getValue(), cActual.parent().getValue());
             assertTrue("parent value is the same", o.getValue() == cActual.parent().getValue());
         } else {
-            c.clearValues();
+            c.clear();
 
             assertEquals("parent value is the same", o.getValue(), c.parent().getValue());
             assertTrue("parent value is the same", o.getValue() == c.parent().getValue());

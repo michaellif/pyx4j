@@ -36,6 +36,10 @@ public interface IObject<VALUE_TYPE> extends IStringView {
 
     public VALUE_TYPE getValue();
 
+    /**
+     * If IEntity: Remove all values from this entity, preserve ownership relationships.
+     * If IPrimitive set value to null.
+     */
     public void clear();
 
     /**
