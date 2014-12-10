@@ -29,9 +29,14 @@ import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.RangeGroup;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.contact.InternationalAddress;
+import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.PropertyContact;
+import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.FloorplanAmenity;
+import com.propertyvista.domain.property.asset.building.BuildingAmenity;
+import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.generator.BuildingsGenerator.BuildingsGeneratorConfig;
@@ -49,7 +54,15 @@ public class CommonsGenerator {
 
     private static String[] complexNames;
 
-    private static String[] buildingNames;
+    private static BuildingAmenity[] amenities;
+
+    private static BuildingUtility[] buildingUtilities;
+
+    private static FloorplanAmenity[] floorPlanAmenities;
+
+    private static Marketing[] buildingMarketings;
+
+    private static Floorplan[] floorPlans;
 
     private static Map<String, List<InternationalAddress>> addresses = new HashMap<>();
 
@@ -83,11 +96,49 @@ public class CommonsGenerator {
         return complexNames[DataGenerator.nextInt(complexNames.length, "complexNames", noRepeatResults)];
     }
 
-    public static String randomBuildingName(int noRepeatResults) {
-        if (buildingNames == null) {
-            buildingNames = CSVLoad.loadFile(IOUtils.resourceFileName("building-names.csv", CommonsGenerator.class), "name");
+    public static Marketing randomBuilding(int noRepeatResults) {
+        if (buildingMarketings == null) {
+            List<Marketing> entities = EntityCSVReciver.create(Marketing.class).loadResourceFile(
+                    IOUtils.resourceFileName("buildings.xlsx", CommonsGenerator.class));
+            buildingMarketings = entities.toArray(new Marketing[entities.size()]);
         }
-        return buildingNames[DataGenerator.nextInt(buildingNames.length, "buildingNames", noRepeatResults)];
+        return buildingMarketings[DataGenerator.nextInt(buildingMarketings.length, "buildings", noRepeatResults)];
+    }
+
+    public static BuildingAmenity randomBuildingAmenity(int noRepeatResults) {
+        if (amenities == null) {
+            List<BuildingAmenity> entities = EntityCSVReciver.create(BuildingAmenity.class).loadResourceFile(
+                    IOUtils.resourceFileName("building-amenities.xlsx", CommonsGenerator.class));
+            amenities = entities.toArray(new BuildingAmenity[entities.size()]);
+        }
+        return amenities[DataGenerator.nextInt(amenities.length, "amenities", noRepeatResults)];
+    }
+
+    public static BuildingUtility randomBuildingUtility(int noRepeatResults) {
+        if (buildingUtilities == null) {
+            List<BuildingUtility> entities = EntityCSVReciver.create(BuildingUtility.class).loadResourceFile(
+                    IOUtils.resourceFileName("building-utilities.xlsx", CommonsGenerator.class));
+            buildingUtilities = entities.toArray(new BuildingUtility[entities.size()]);
+        }
+        return buildingUtilities[DataGenerator.nextInt(buildingUtilities.length, "buildingUtilities", noRepeatResults)];
+    }
+
+    public static FloorplanAmenity randomFloorPlanAmenity(int noRepeatResults) {
+        if (floorPlanAmenities == null) {
+            List<FloorplanAmenity> entities = EntityCSVReciver.create(FloorplanAmenity.class).loadResourceFile(
+                    IOUtils.resourceFileName("floorplan-amenities.xlsx", CommonsGenerator.class));
+            floorPlanAmenities = entities.toArray(new FloorplanAmenity[entities.size()]);
+        }
+        return floorPlanAmenities[DataGenerator.nextInt(floorPlanAmenities.length, "floorPlanAmenities", noRepeatResults)];
+    }
+
+    public static Floorplan randomFloorPlan(int noRepeatResults) {
+        if (floorPlans == null) {
+            List<Floorplan> entities = EntityCSVReciver.create(Floorplan.class).loadResourceFile(
+                    IOUtils.resourceFileName("floorplans.xlsx", CommonsGenerator.class));
+            floorPlans = entities.toArray(new Floorplan[entities.size()]);
+        }
+        return floorPlans[DataGenerator.nextInt(floorPlans.length, "floorPlans", noRepeatResults)];
     }
 
     public static Name createName() {
@@ -172,7 +223,6 @@ public class CommonsGenerator {
         Name name = createName();
         contact.type().setValue(RandomUtil.randomEnum(PropertyContact.PropertyContactType.class));
         contact.name().setValue(name.getStringView());
-        contact.description().setValue(lipsumShort());
         contact.phone().setValue(DataGenerator.randomPhone(RandomUtil.randomBoolean() ? "416" : "905"));
         contact.email().setValue(createEmail(name));
         contact.visibility().setValue(RandomUtil.randomEnum(PublicVisibilityType.class));

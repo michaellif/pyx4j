@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -33,7 +33,7 @@ import com.propertyvista.server.domain.FileImageThumbnailBlobDTO;
 
 public class MediaGenerator {
 
-    // Minimize PreloadData Size and speed, Share common images statically.  (25 sec instead of 2 min on fast computer) 
+    // Minimize PreloadData Size and speed, Share common images statically.  (25 sec instead of 2 min on fast computer)
     static final boolean blob_mimize_Preload_Data_Size = true;
 
     static String[] youtubeIds;
@@ -49,7 +49,7 @@ public class MediaGenerator {
     private static Map<String, FileImageThumbnailBlobDTO> resized = new HashMap<String, FileImageThumbnailBlobDTO>();
 
     public static void generatedBuildingMedia(Building building) {
-        int imageIndex = RandomUtil.nextInt(7, "bld-img", 4) + 1;
+        int imageIndex = RandomUtil.nextInt(14, "bld-img", 10) + 1;
         String filename = "building" + imageIndex;
 
         boolean newData = false;

@@ -139,7 +139,7 @@ public class ProductCatalogGenerator {
         service.defaultCatalogItem().setValue(false);
 
         service.code().set(arCode);
-        service.version().name().setValue(RandomUtil.randomLetters(6));
+        service.version().name().setValue(createNameBasedOnARCode(arCode));
         service.version().description().setValue("Service description");
         service.version().price().setValue(new BigDecimal(1000.10));
         service.version().availableOnline().setValue(onlineUse);
@@ -175,7 +175,7 @@ public class ProductCatalogGenerator {
         feature.defaultCatalogItem().setValue(false);
 
         feature.code().set(arCode);
-        feature.version().name().setValue(RandomUtil.randomLetters(6));
+        feature.version().name().setValue(createNameBasedOnARCode(arCode));
         feature.version().description().setValue("Feature description");
 
         feature.version().recurring().setValue(RandomUtil.randomBoolean() && !ARCode.Type.nonReccuringFeatures().contains(arCode.type()));
@@ -340,5 +340,32 @@ public class ProductCatalogGenerator {
         base = base.add(new BigDecimal(unit.info()._bedrooms().getValue() * 150));
         base = base.add(new BigDecimal(unit.info()._bathrooms().getValue() * 50));
         return base.add(new BigDecimal(RandomUtil.randomInt(200)));
+    }
+
+    private String createNameBasedOnARCode(ARCode arCode) {
+        if (arCode == null) {
+            return "";
+        }
+
+        StringBuffer name = new StringBuffer("");
+        String[] parts = arCode.getStringView().split(",");
+
+        if (parts.length > 1) {
+            name.append(parts[0]);
+            String[] subParts = parts[1].split(" ");
+            if (subParts.length > 1) {
+                name.append(" - ");
+                for (int i = 1; i < subParts.length; i++) {
+                    String part = subParts[i];
+                    if (part.length() > 0) {
+                        name.append(part.charAt(0));
+                    }
+                }
+
+                return name.toString();
+            }
+        }
+
+        return arCode.getStringView();
     }
 }

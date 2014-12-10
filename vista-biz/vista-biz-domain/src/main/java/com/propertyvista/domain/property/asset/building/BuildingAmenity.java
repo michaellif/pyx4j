@@ -107,7 +107,7 @@ public interface BuildingAmenity extends Amenity {
 
         pool,
 
-        racquetball,
+        racquetballCourt,
 
         recreationalRoom,
 
@@ -133,6 +133,20 @@ public interface BuildingAmenity extends Amenity {
         volleyballCourt,
 
         water,
+
+        // new amenities for marketing demos
+        balcony,
+
+        furnishedUnitsAvailable,
+
+        intrusionAlarmAvailable,
+
+        controlledAccess,
+
+        handicapAccess,
+
+        airConditioning,
+        // new amenities for marketing demos
 
         other;
 

@@ -138,7 +138,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
             if (DataGenerator.randomBoolean()) {
                 Complex complex;
-                // Assert that one complex has at least one building assigned
+                // Ensure that one complex has at least one building assigned
                 if (complexesWithBuildings.size() < complexes.size()) {
                     int index = DataGenerator.nextInt(complexes.size(), "complex", complexes.size());
                     complex = complexes.get(index);

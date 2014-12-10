@@ -28,6 +28,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.contact.InternationalAddress;
+import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.pmc.IntegrationSystem;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
@@ -101,10 +102,7 @@ public class BuildingsGenerator {
         // this later
         String propertyCode = "B" + String.valueOf(counter);
 
-        // name
-        String name = CommonsGenerator.randomBuildingName(nBuildings);
-
-        Building building = createBuilding(propertyCode, buildingType, website, address, email, name);
+        Building building = createBuilding(propertyCode, buildingType, website, address, email);
 
         // log.info("Created: " + building);
         ensureProvincePolicyNode(ISOProvince.forName(address.province().getValue(), address.country().getValue()));
@@ -115,7 +113,7 @@ public class BuildingsGenerator {
         return address.streetNumber().getStringView() + " " + address.streetName().getStringView();
     }
 
-    private Building createBuilding(String propertyCode, BuildingInfo.Type buildingType, String website, InternationalAddress address, String email, String name) {
+    private Building createBuilding(String propertyCode, BuildingInfo.Type buildingType, String website, InternationalAddress address, String email) {
         Building building = EntityFactory.create(Building.class);
         building.propertyCode().setValue(propertyCode);
         building.integrationSystemId().setValue(IntegrationSystem.internal);
@@ -144,8 +142,10 @@ public class BuildingsGenerator {
         building.financial().currency().name().setValue("CAD");
 
         building.marketing().visibility().setValue(PublicVisibilityType.global);
-        building.marketing().name().setValue(name);
-        building.marketing().description().setValue(CommonsGenerator.lipsum());
+        // Preload specific marketing data for demos
+        Marketing marketingBuildingPreloaded = CommonsGenerator.randomBuilding(nBuildings);
+        building.marketing().name().setValue(marketingBuildingPreloaded.name().getValue());
+        building.marketing().description().setValue(marketingBuildingPreloaded.description().getValue());
 
         Set<PropertyContactType> created = new HashSet<PropertyContactType>();
         for (int i = 0; i <= 1 + RandomUtil.randomInt(3); i++) {
@@ -183,7 +183,9 @@ public class BuildingsGenerator {
             item.make().setValue("Bosh");
             item.model().setValue("Elevator" + RandomUtil.randomInt(100));
             item.build().setValue(RandomUtil.randomLogicalDate());
-            item.description().setValue("Elevator description here...");
+            item.description()
+                    .setValue(
+                            "Bosch 5500 is the modular passenger elevator that takes configurability to a new level - performance, flexibility and design, which makes it easy to fit to the requirements of commercial residential buildings. Solutions that fit you.");
 
             item.license().number().setValue(String.valueOf(RandomUtil.randomInt(8)));
             item.license().expiration().setValue(RandomUtil.randomLogicalDate());
@@ -353,18 +355,21 @@ public class BuildingsGenerator {
     public List<BuildingAmenity> createBuildingAmenities(Building owner, int num) {
         List<BuildingAmenity> items = new ArrayList<BuildingAmenity>();
         for (int i = 0; i < num; i++) {
-            items.add(createBuildingAmenity(owner));
+            items.add(createBuildingAmenity(owner, num));
         }
         return items;
     }
 
-    public BuildingAmenity createBuildingAmenity(Building building) {
+    public BuildingAmenity createBuildingAmenity(Building building, int noRepeat) {
+
+        BuildingAmenity preloadedAmenity = CommonsGenerator.randomBuildingAmenity(noRepeat);
+
         BuildingAmenity amenity = EntityFactory.create(BuildingAmenity.class);
         building.amenities().add(amenity);
 
-        amenity.type().setValue(RandomUtil.randomEnum(BuildingAmenity.Type.class));
-        amenity.name().setValue(amenity.type().getStringView() + " " + RandomUtil.randomLetters(2));
-        amenity.description().setValue(CommonsGenerator.lipsumShort());
+        amenity.type().setValue(preloadedAmenity.type().getValue());
+        amenity.name().setValue(preloadedAmenity.name().getValue());
+        amenity.description().setValue(preloadedAmenity.description().getValue());
 
         return amenity;
     }
@@ -373,20 +378,22 @@ public class BuildingsGenerator {
     public List<BuildingUtility> createBuildingUtilities(Building owner, int num) {
         List<BuildingUtility> items = new ArrayList<BuildingUtility>();
         for (int i = 0; i < num; i++) {
-            items.add(createBuildingUtility(owner));
+            items.add(createBuildingUtility(owner, num));
         }
         return items;
     }
 
-    public BuildingUtility createBuildingUtility(Building building) {
+    public BuildingUtility createBuildingUtility(Building building, int nUtilities) {
+        BuildingUtility preloadedUtility = CommonsGenerator.randomBuildingUtility(nUtilities);
+
         BuildingUtility utility = EntityFactory.create(BuildingUtility.class);
         building.utilities().add(utility);
 
         utility.building().set(building);
         utility.isDeleted().setValue(false);
-        utility.type().setValue(RandomUtil.randomEnum(BuildingUtility.Type.class));
-        utility.name().setValue(utility.type().getStringView() + " " + RandomUtil.randomLetters(2));
-        utility.description().setValue(CommonsGenerator.lipsumShort());
+        utility.type().setValue(preloadedUtility.type().getValue());
+        utility.name().setValue(preloadedUtility.name().getValue());
+        utility.description().setValue(preloadedUtility.description().getValue());
 
         return utility;
     }
@@ -411,7 +418,7 @@ public class BuildingsGenerator {
                 if (attemptCounter > 10) {
                     throw new Error("Infinite loop protection");
                 }
-                floorplan = createFloorplan();
+                floorplan = createFloorplan(num);
             } while (uniqueFloorplanNames.contains(floorplan.name().getValue()));
 
             uniqueFloorplanNames.add(floorplan.name().getValue());
@@ -423,10 +430,12 @@ public class BuildingsGenerator {
         return floorplans;
     }
 
-    public Floorplan createFloorplan() {
+    public Floorplan createFloorplan(int nTotalFloorPlans) {
+        Floorplan preloadedFloorplan = CommonsGenerator.randomFloorPlan(nTotalFloorPlans);
+
         Floorplan floorplan = EntityFactory.create(Floorplan.class);
 
-        floorplan.description().setValue(CommonsGenerator.lipsum());
+        floorplan.description().setValue(preloadedFloorplan.description().getValue());
 
         floorplan.floorCount().setValue(1 + DataGenerator.randomInt(2));
         floorplan.bedrooms().setValue(1 + DataGenerator.randomInt(4));
@@ -436,12 +445,15 @@ public class BuildingsGenerator {
         floorplan.area().setValue(DataGenerator.randomDouble(300.0, 3));
         floorplan.areaUnits().setValue(DataGenerator.randomEnum(AreaMeasurementUnit.class));
 
-        floorplan.marketingName().setValue(createMarketingName(floorplan.bedrooms().getValue(), floorplan.dens().getValue()));
-        floorplan.name().setValue(
-                floorplan.marketingName().getValue() + ' ' + floorplan.bathrooms().getValue() + ' ' + ((char) (1 + DataGenerator.randomInt(5) + 'A')));
+        String marketingName = createMarketingName(floorplan.bedrooms().getValue(), floorplan.dens().getValue());
+        floorplan.name().setValue(marketingName + ' ' + floorplan.bathrooms().getValue() + ' ' + ((char) (1 + DataGenerator.randomInt(5) + 'A')));
 
-        for (int i = 0; i < 2 + DataGenerator.randomInt(6); i++) {
-            FloorplanAmenity amenity = BuildingsGenerator.createFloorplanAmenity();
+        // Set preloaded name as marketing name
+        floorplan.marketingName().setValue(preloadedFloorplan.name().getValue());
+
+        int nFloorPlanAmenities = 2 + DataGenerator.randomInt(6);
+        for (int i = 0; i < nFloorPlanAmenities; i++) {
+            FloorplanAmenity amenity = BuildingsGenerator.createFloorplanAmenity(nFloorPlanAmenities);
             floorplan.amenities().add(amenity);
         }
 
@@ -468,13 +480,14 @@ public class BuildingsGenerator {
         return marketingName;
     }
 
-    public static FloorplanAmenity createFloorplanAmenity() {
+    public static FloorplanAmenity createFloorplanAmenity(int nAmenities) {
+
+        FloorplanAmenity preloadedFloorPlanAmenity = CommonsGenerator.randomFloorPlanAmenity(nAmenities);
+
         FloorplanAmenity amenity = EntityFactory.create(FloorplanAmenity.class);
-
-        amenity.type().setValue(RandomUtil.random(FloorplanAmenity.Type.values()));
-
-        amenity.name().setValue(RandomUtil.randomLetters(6));
-        amenity.description().setValue(CommonsGenerator.lipsumShort());
+        amenity.type().setValue(preloadedFloorPlanAmenity.type().getValue());
+        amenity.name().setValue(preloadedFloorPlanAmenity.name().getValue());
+        amenity.description().setValue(preloadedFloorPlanAmenity.description().getValue());
 
         return amenity;
     }

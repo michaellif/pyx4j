@@ -28,6 +28,7 @@ import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.marketing.yield.Amenity;
@@ -102,6 +103,21 @@ public interface FloorplanAmenity extends Amenity {
         wdHookup,
 
         windowCoverings,
+
+        // new values for demos
+        carpeting, //
+
+        hardwoodFloors, //
+
+        highSpeedInternetAvailable, //
+
+        vaultedCeiling, //
+
+        @Translate("Walk-in Closets")
+        walkinClosets, //
+
+        garbageDisposal, //
+        // new values for demos
 
         other;
 
