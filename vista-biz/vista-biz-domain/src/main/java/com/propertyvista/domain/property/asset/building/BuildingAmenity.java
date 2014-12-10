@@ -137,9 +137,9 @@ public interface BuildingAmenity extends Amenity {
         // new amenities for marketing demos
         balcony,
 
-        furnishedUnitsAvailable,
+        furnishedUnits,
 
-        intrusionAlarmAvailable,
+        intrusionAlarm,
 
         controlledAccess,
 

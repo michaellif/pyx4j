@@ -115,8 +115,6 @@ public interface FloorplanAmenity extends Amenity {
 
         @Translate("Walk-in Closets")
         walkinClosets, //
-
-        garbageDisposal, //
         // new values for demos
 
         other;
