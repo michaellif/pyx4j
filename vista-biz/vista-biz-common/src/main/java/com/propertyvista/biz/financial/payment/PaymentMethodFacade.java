@@ -41,7 +41,7 @@ public interface PaymentMethodFacade {
     // Lease:
     /**
      * Used when form allow to enter incomplete data
-     *
+     * 
      * @param paymentMethod
      * @return is payment method can be saved
      */
@@ -80,7 +80,7 @@ public interface PaymentMethodFacade {
 
     /**
      * Suspend PreauthorizedPayments if required during LeaseTerm finalize.
-     *
+     * 
      * Update PreauthorizedPaymentCoveredItem to point to new BillableItem (May not be required after BillableItem version support)
      */
     void renewAutopayAgreements(Lease lease);
@@ -105,7 +105,7 @@ public interface PaymentMethodFacade {
 
     BillingCycle getNextAutopayBillingCycle(Lease lease);
 
-    BillingCycle getNextAutopayBillingCycle(Building buildingId, BillingPeriod billingPeriod, Integer billingCycleStartDay);
+    BillingCycle getNextAutopayBillingCycle(Building buildingId, BillingPeriod billingPeriod);
 
     LogicalDate getNextAutopayDate(Lease lease);
 

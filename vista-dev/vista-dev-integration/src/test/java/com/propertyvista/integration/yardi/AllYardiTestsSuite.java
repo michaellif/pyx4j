@@ -33,7 +33,10 @@ PaymentPostingCreditCardYardiTest.class,//
         YardiLeaseImportVersionsTest.class, //
         YardiLeaseLifecycleTest.class, //
         YardiLeasePriceEstimatorTest.class, //
-        YardiUnitTransferTest.class //
+        YardiUnitTransferTest.class, //
+        YardiLeaseApplicationNotApprovedTest.class, //
+        YardiLeaseApplicationTest.class, //
+        YardiPropertyConfigurationTest.class, //
 })
 public class AllYardiTestsSuite {
 

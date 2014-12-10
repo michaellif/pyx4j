@@ -242,7 +242,8 @@ class PolicyManager {
             criteria.add(PropertyCriterion.in(criteria.proto().province(), provList));
             return Persistence.service().query(criteria);
         } else if (OrganizationPoliciesNode.class.equals(nodeClass)) {
-            return Persistence.service().query(new EntityQueryCriteria<>(CountryPolicyNode.class));
+            // no CountryPolicyNode is currently used, so we return next level nodes - ProvincePolicyNodes
+            return Persistence.service().query(new EntityQueryCriteria<>(ProvincePolicyNode.class));
         } else {
             throw new Error("Got unknown type of " + PolicyNode.class.getName() + ": '" + nodeClass.getName() + "'");
         }

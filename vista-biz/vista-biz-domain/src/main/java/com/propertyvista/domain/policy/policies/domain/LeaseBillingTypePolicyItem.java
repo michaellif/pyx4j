@@ -38,9 +38,9 @@ public interface LeaseBillingTypePolicyItem extends IEntity {
     @Detached
     @NotNull
     @MemberColumn(notNull = true)
-    @Indexed
+    @Indexed(group = "BP,1", uniqueConstraint = true)
     @JoinColumn
-    LeaseBillingPolicy leaseBillingPolicy();
+    LeaseBillingPolicy policy();
 
     interface OrderId extends ColumnId {
     }
@@ -48,6 +48,7 @@ public interface LeaseBillingTypePolicyItem extends IEntity {
     @OrderColumn(OrderId.class)
     IPrimitive<Integer> orderInParent();
 
+    @Indexed(group = "BP,2")
     IPrimitive<BillingPeriod> billingPeriod();
 
     @Caption(description = "First day of Billing Cycle for selected Payment Frequency")

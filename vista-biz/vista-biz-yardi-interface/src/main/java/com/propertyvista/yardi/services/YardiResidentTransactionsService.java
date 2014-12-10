@@ -341,7 +341,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 executionMonitor.addInfoEvent("YardiConfig", CompletionType.failed, "Suspended property excluded for transaction import: "
                         + building.propertyCode().getValue(), null);
             } else {
-                BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(building, BillingPeriod.Monthly, 1);
+                BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(building, BillingPeriod.Monthly);
                 try {
                     ResidentTransactions residentTransactions = YardiStubFactory.create(YardiResidentTransactionsStub.class).getAllLeaseCharges(yc,
                             building.propertyCode().getValue(), nextCycle.billingCycleStartDate().getValue());

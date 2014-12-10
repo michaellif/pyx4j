@@ -20,20 +20,23 @@ import com.propertyvista.biz.financial.billingcycle.BillingCycleForDefaultStartD
 import com.propertyvista.biz.financial.billingcycle.BillingCycleForDefaultStartDayPolicy1Test;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleForDefaultStartDayPolicy28Test;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleForSameDayAsLeaseStartDayPolicyTest;
+import com.propertyvista.biz.financial.billingcycle.BillingCycleMultiplePoliciesTest;
+import com.propertyvista.biz.financial.billingcycle.BillingCyclePolicyChangeTest;
 import com.propertyvista.biz.financial.billingcycle.BillingTypeForDefaultStartDayPolicyTest;
 import com.propertyvista.biz.financial.billingcycle.BillingTypeForSameDayAsLeaseStartDayPolicyTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 //@formatter:off
-    BillingCycleForDefaultStartDayPolicy15Test.class, 
-    BillingCycleForDefaultStartDayPolicy1Test.class, 
-    BillingCycleForDefaultStartDayPolicy28Test.class, 
-    BillingCycleForSameDayAsLeaseStartDayPolicyTest.class, 
-    BillingTypeForDefaultStartDayPolicyTest.class, 
-    BillingTypeForSameDayAsLeaseStartDayPolicyTest.class, 
+    BillingCycleForDefaultStartDayPolicy15Test.class,
+    BillingCycleForDefaultStartDayPolicy1Test.class,
+    BillingCycleForDefaultStartDayPolicy28Test.class,
+    BillingCycleForSameDayAsLeaseStartDayPolicyTest.class,
+    BillingCycleMultiplePoliciesTest.class,
+    BillingCyclePolicyChangeTest.class,
+    BillingTypeForDefaultStartDayPolicyTest.class,
+    BillingTypeForSameDayAsLeaseStartDayPolicyTest.class,
     //@formatter:on
-
 })
 public class BillingCycleSuite {
 

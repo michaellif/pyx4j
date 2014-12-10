@@ -126,6 +126,10 @@ public abstract class IntegrationTestBase extends VistaDBTestBase {
         preloadData(createMockConfig());
     }
 
+    protected MockConfig getConfig() {
+        return mockManager == null ? null : mockManager.getConfig();
+    }
+
     protected void preloadData(final MockConfig config) {
 
         mockManager = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<MockManager, RuntimeException>() {

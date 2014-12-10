@@ -38,7 +38,7 @@ public interface BillingCycleFacade {
      */
     BillingCycle getBillingCycleForDate(Lease lease, LogicalDate date);
 
-    BillingCycle getBillingCycleForDate(Building buildingId, BillingPeriod billingPeriod, Integer billingCycleStartDay, LogicalDate date);
+    BillingCycle getBillingCycleForDate(Building buildingId, BillingPeriod billingPeriod, LogicalDate date);
 
     BillingCycle getSubsequentBillingCycle(BillingCycle billingCycle);
 

@@ -15,6 +15,8 @@ package com.propertyvista.integration.yardi;
 
 import java.util.List;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
@@ -32,6 +34,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.test.integration.InvoiceLineItemTester;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.models.ARCodeDataModel;
@@ -53,6 +56,7 @@ import com.propertyvista.yardi.mock.model.stub.impl.YardiMockResidentTransaction
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 
+@Category(FunctionalTests.class)
 public class YardiLeaseApplicationNotApprovedTest extends YardiTestBase {
 
     final String BuildingID = YardiBuildingManager.DEFAULT_PROPERTY_CODE;

@@ -15,7 +15,10 @@ package com.propertyvista.biz.financial.billingcycle;
 
 import java.util.Arrays;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 
@@ -26,12 +29,14 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
+import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.test.mock.MockConfig;
 
 /**
  * Validates that existing BillingCycles are updated properly when the date offsets
  * have been modified in the LeaseBillingPolicy
  */
+@Category(FunctionalTests.class)
 public class BillingCyclePolicyChangeTest extends LeaseFinancialTestBase {
 
     private MockConfig config;
@@ -47,13 +52,12 @@ public class BillingCyclePolicyChangeTest extends LeaseFinancialTestBase {
     public void testExistingPolicyUpdate() {
         setSysDate("01-Apr-2013");
         BillingCycle billingCycle = createBillingCycle();
-        // @formatter:off
-        new BillingCycleTester(billingCycle)
-        .billingCycleStartDate("01-Apr-2013")
-        .billingCycleEndDate("30-Apr-2013")
-        .billExecutionDate("17-Mar-2013")
-        .autopayExecutionDate("01-Apr-2013");
-        // @formatter:on
+
+        new BillingCycleTester(billingCycle). //
+                billingCycleStartDate("01-Apr-2013"). //
+                billingCycleEndDate("30-Apr-2013"). //
+                billExecutionDate("17-Mar-2013"). //
+                autopayExecutionDate("01-Apr-2013");
 
         // CASE 1: Update policy on BEFORE EXECUTION DATE; all new dates are in the future
         //================================================================================
@@ -63,11 +67,9 @@ public class BillingCyclePolicyChangeTest extends LeaseFinancialTestBase {
         // refresh billing cycle
         Persistence.service().retrieve(billingCycle);
         // validate that all dates have been updated
-        // @formatter:off
-        new BillingCycleTester(billingCycle)
-        .billExecutionDate("18-Mar-2013") // updated
-        .autopayExecutionDate("31-Mar-2013"); // updated
-        // @formatter:on
+        new BillingCycleTester(billingCycle). //
+                billExecutionDate("18-Mar-2013"). // updated
+                autopayExecutionDate("31-Mar-2013"); // updated
 
         // CASE 2: Update policy BEFORE EXECUTION DATE - new exec day is today
         //====================================================================
@@ -76,11 +78,9 @@ public class BillingCyclePolicyChangeTest extends LeaseFinancialTestBase {
         // refresh billing cycle
         Persistence.service().retrieve(billingCycle);
         // validate that all dates have been updated
-        // @formatter:off
-        new BillingCycleTester(billingCycle)
-        .billExecutionDate("18-Mar-2013") // no change
-        .autopayExecutionDate("01-Apr-2013"); // updated
-        // @formatter:on
+        new BillingCycleTester(billingCycle). //
+                billExecutionDate("18-Mar-2013"). // no change
+                autopayExecutionDate("01-Apr-2013"); // updated
 
         // CASE 3: Update policy AFTER BILL EXEC DATE - new padGen day is in the future
         // Also, validate correct processing if the policy moved to Building-level
@@ -91,11 +91,9 @@ public class BillingCyclePolicyChangeTest extends LeaseFinancialTestBase {
         // refresh billing cycle
         Persistence.service().retrieve(billingCycle);
         // validate that all dates have been updated
-        // @formatter:off
-        new BillingCycleTester(billingCycle)
-        .billExecutionDate("18-Mar-2013") // no change
-        .autopayExecutionDate("31-Mar-2013"); // updated
-        // @formatter:on
+        new BillingCycleTester(billingCycle). //
+                billExecutionDate("18-Mar-2013"). // no change
+                autopayExecutionDate("31-Mar-2013"); // updated
 
         // CASE 4: Update policy AFTER PAD GEN DATE - new padExec day is in the future
         //=============================================================================
@@ -105,11 +103,9 @@ public class BillingCyclePolicyChangeTest extends LeaseFinancialTestBase {
         // refresh billing cycle
         Persistence.service().retrieve(billingCycle);
         // validate that all dates have been updated
-        // @formatter:off
-        new BillingCycleTester(billingCycle)
-        .billExecutionDate("18-Mar-2013") // no change
-        .autopayExecutionDate("01-Apr-2013"); // updated
-        // @formatter:on
+        new BillingCycleTester(billingCycle). //
+                billExecutionDate("18-Mar-2013"). // no change
+                autopayExecutionDate("01-Apr-2013"); // updated
 
         // CASE 5: Update policy ON PAD EXEC DATE - new padExec day is in the future
         //=============================================================================
@@ -119,11 +115,9 @@ public class BillingCyclePolicyChangeTest extends LeaseFinancialTestBase {
         // refresh billing cycle
         Persistence.service().retrieve(billingCycle);
         // validate that all dates have been updated
-        // @formatter:off
-        new BillingCycleTester(billingCycle)
-        .billExecutionDate("18-Mar-2013") // no change
-        .autopayExecutionDate("01-Apr-2013"); // no change
-        // @formatter:on
+        new BillingCycleTester(billingCycle). //
+                billExecutionDate("18-Mar-2013"). // no change
+                autopayExecutionDate("01-Apr-2013"); // no change
     }
 
     public void testNewPolicyUpdatedAndDeleted() {
@@ -139,13 +133,11 @@ public class BillingCyclePolicyChangeTest extends LeaseFinancialTestBase {
         // refresh billing cycle
         Persistence.service().retrieve(billingCycle);
         // validate that all dates have been updated
-        // @formatter:off
-        new BillingCycleTester(billingCycle)
-        .billingCycleStartDate("01-Apr-2013")
-        .billingCycleEndDate("30-Apr-2013")
-        .billExecutionDate("18-Mar-2013") // updated
-        .autopayExecutionDate("31-Mar-2013"); // updated
-        // @formatter:on
+        new BillingCycleTester(billingCycle). //
+                billingCycleStartDate("01-Apr-2013"). //
+                billingCycleEndDate("30-Apr-2013"). //
+                billExecutionDate("18-Mar-2013"). // updated
+                autopayExecutionDate("31-Mar-2013"); // updated
 
         // CASE 2: delete newly created policy and validate the dates are back to original values
         // ===============================================================================
@@ -154,17 +146,15 @@ public class BillingCyclePolicyChangeTest extends LeaseFinancialTestBase {
 
         // refresh billing cycle
         Persistence.service().retrieve(billingCycle);
-        // @formatter:off
-        new BillingCycleTester(billingCycle)
-        .billingCycleStartDate("01-Apr-2013")
-        .billingCycleEndDate("30-Apr-2013")
-        .billExecutionDate("17-Mar-2013")
-        .autopayExecutionDate("01-Apr-2013");
-        // @formatter:on
+        new BillingCycleTester(billingCycle). //
+                billingCycleStartDate("01-Apr-2013"). //
+                billingCycleEndDate("30-Apr-2013"). //
+                billExecutionDate("17-Mar-2013"). //
+                autopayExecutionDate("01-Apr-2013");
     }
 
     private BillingCycle createBillingCycle() {
-        return BillingCycleTester.ensureBillingCycle(getBuilding(), BillingPeriod.Monthly, "05-Apr-2013");
+        return BillingCycleTester.ensureBillingCycleForDate(getBuilding(), BillingPeriod.Monthly, "05-Apr-2013");
     }
 
     // default offsets: -15, -3, 0
@@ -197,6 +187,8 @@ public class BillingCyclePolicyChangeTest extends LeaseFinancialTestBase {
         billingType.autopayExecutionDayOffset().setValue(0);
         policy.availableBillingTypes().add(billingType);
         Persistence.service().persist(policy);
+        // PolicyManager uses cache, so we need to reset it...
+        CacheService.reset();
         return policy;
     }
 

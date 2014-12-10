@@ -36,76 +36,53 @@ public class BillingCycleForDefaultStartDayPolicy1Test extends LeaseFinancialTes
 
     public void testBillingCycleCreation() throws ParseException {
 
-        // @formatter:off
-        new BillingCycleTester(BillingCycleTester.ensureBillingCycle(getBuilding(), BillingPeriod.Monthly, "01-Feb-2012")).
-        billingCycleStartDate("01-Feb-2012").
-        billingCycleEndDate("29-Feb-2012");
-        // @formatter:on
+        // create billing cycle
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycleForDate(getBuilding(), BillingPeriod.Monthly, "01-Feb-2012")). //
+                billingCycleStartDate("01-Feb-2012"). //
+                billingCycleEndDate("29-Feb-2012");
+        // test billing cycle
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycleForDate(getBuilding(), BillingPeriod.Monthly, "02-Feb-2012")). //
+                billingCycleStartDate("01-Feb-2012"). //
+                billingCycleEndDate("29-Feb-2012");
 
-        // @formatter:off
-        new BillingCycleTester(BillingCycleTester.ensureBillingCycle(getBuilding(), BillingPeriod.Monthly, "02-Feb-2012")).
-        billingCycleStartDate("01-Feb-2012").
-        billingCycleEndDate("29-Feb-2012");
-        // @formatter:on
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycleForDate(getBuilding(), BillingPeriod.Monthly, "05-Feb-2012")). //
+                billingCycleStartDate("01-Feb-2012"). //
+                billingCycleEndDate("29-Feb-2012");
 
-        // @formatter:off
-        new BillingCycleTester(BillingCycleTester.ensureBillingCycle(getBuilding(), BillingPeriod.Monthly, "05-Feb-2012")).
-        billingCycleStartDate("01-Feb-2012").
-        billingCycleEndDate("29-Feb-2012");
-        // @formatter:on
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycleForDate(getBuilding(), BillingPeriod.Monthly, "22-Feb-2012")). //
+                billingCycleStartDate("01-Feb-2012"). //
+                billingCycleEndDate("29-Feb-2012");
 
-        // @formatter:off
-        new BillingCycleTester(BillingCycleTester.ensureBillingCycle(getBuilding(), BillingPeriod.Monthly, "22-Feb-2012")).
-        billingCycleStartDate("01-Feb-2012").
-        billingCycleEndDate("29-Feb-2012");
-        // @formatter:on
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycleForDate(getBuilding(), BillingPeriod.Monthly, "28-Feb-2012")). //
+                billingCycleStartDate("01-Feb-2012"). //
+                billingCycleEndDate("29-Feb-2012");
 
-        // @formatter:off
-        new BillingCycleTester(BillingCycleTester.ensureBillingCycle(getBuilding(), BillingPeriod.Monthly, "28-Feb-2012")).
-        billingCycleStartDate("01-Feb-2012").
-        billingCycleEndDate("29-Feb-2012");
-        // @formatter:on
-
-        // @formatter:off
-        new BillingCycleTester(BillingCycleTester.ensureBillingCycle(getBuilding(), BillingPeriod.Monthly, "29-Feb-2012")).
-        billingCycleStartDate("01-Feb-2012").
-        billingCycleEndDate("29-Feb-2012");
-        // @formatter:on
-
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycleForDate(getBuilding(), BillingPeriod.Monthly, "29-Feb-2012")). //
+                billingCycleStartDate("01-Feb-2012"). //
+                billingCycleEndDate("29-Feb-2012");
     }
 
     public void testBillingForDate() {
         createLease("23-Mar-2013", "03-Aug-2013");
 
-        // @formatter:off
-        new BillingCycleTester(BillingCycleTester.getBillingCycleForDate(getLease(), "30-Apr-2013")).
-        billingCycleStartDate("1-Apr-2013").
-        billingCycleEndDate("30-Apr-2013");
-        // @formatter:on
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycleForDate(getLease(), "30-Apr-2013")). //
+                billingCycleStartDate("1-Apr-2013"). //
+                billingCycleEndDate("30-Apr-2013");
 
-        // @formatter:off
-        new BillingCycleTester(BillingCycleTester.getBillingCycleForDate(getLease(), "1-May-2013")).
-        billingCycleStartDate("1-May-2013").
-        billingCycleEndDate("31-May-2013");
-        // @formatter:on
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycleForDate(getLease(), "1-May-2013")). //
+                billingCycleStartDate("1-May-2013"). //
+                billingCycleEndDate("31-May-2013");
 
-        // @formatter:off
-        new BillingCycleTester(BillingCycleTester.getBillingCycleForDate(getLease(), "15-May-2013")).
-        billingCycleStartDate("1-May-2013").
-        billingCycleEndDate("31-May-2013");
-        // @formatter:on
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycleForDate(getLease(), "15-May-2013")). //
+                billingCycleStartDate("1-May-2013"). //
+                billingCycleEndDate("31-May-2013");
 
-        // @formatter:off
-        new BillingCycleTester(BillingCycleTester.getBillingCycleForDate(getLease(), "31-May-2013")).
-        billingCycleStartDate("1-May-2013").
-        billingCycleEndDate("31-May-2013");
-        // @formatter:on
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycleForDate(getLease(), "31-May-2013")). //
+                billingCycleStartDate("1-May-2013"). //
+                billingCycleEndDate("31-May-2013");
 
-        // @formatter:off
-        new BillingCycleTester(BillingCycleTester.getBillingCycleForDate(getLease(), "1-Jun-2013")).
-        billingCycleStartDate("1-Jun-2013").
-        billingCycleEndDate("30-Jun-2013");
-        // @formatter:on
-
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycleForDate(getLease(), "1-Jun-2013")). //
+                billingCycleStartDate("1-Jun-2013"). //
+                billingCycleEndDate("30-Jun-2013");
     }
 }

@@ -28,7 +28,7 @@ public class BillingCycleFacadeImpl implements BillingCycleFacade {
 
     @Override
     public BillingType getBillingType(Lease lease) {
-        return BillingCycleManager.instance().getBillingType(lease);
+        return BillingCycleManager.instance().ensureBillingType(lease);
     }
 
     @Override
@@ -38,12 +38,12 @@ public class BillingCycleFacadeImpl implements BillingCycleFacade {
 
     @Override
     public BillingCycle getBillingCycleForDate(Lease lease, LogicalDate date) {
-        return BillingCycleManager.instance().getBillingCycleForDate(lease, date);
+        return BillingCycleManager.instance().ensureBillingCycleForDate(lease, date);
     }
 
     @Override
-    public BillingCycle getBillingCycleForDate(Building buildingId, BillingPeriod billingPeriod, Integer billingCycleStartDay, LogicalDate date) {
-        return BillingCycleManager.instance().getBillingCycleForDate(buildingId, billingPeriod, billingCycleStartDay, date);
+    public BillingCycle getBillingCycleForDate(Building buildingId, BillingPeriod billingPeriod, LogicalDate date) {
+        return BillingCycleManager.instance().ensureBillingCycleForDate(buildingId, billingPeriod, date);
     }
 
     @Override
