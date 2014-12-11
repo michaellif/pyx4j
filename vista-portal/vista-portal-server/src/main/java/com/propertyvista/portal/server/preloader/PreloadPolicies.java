@@ -13,34 +13,35 @@
  */
 package com.propertyvista.portal.server.preloader;
 
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.ARPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.ApplicationDocumentationPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.AutoPayPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.BackgroundCheckPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.DatesPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.DepositPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.EmailTemplatesPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.IdAssignmentPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseAgreementPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseApplicationPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseBillingPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.LegalTermsPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.MaintenanceRequestPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupDepositPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseAdjustmentPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseBillingPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupProductTaxPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupProspectPortalPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.N4PolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.PaymentMethodSelectionPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.PreloadRestrictionsPolicies;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.ProductTaxPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.ProspectPortalPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.ResidentPortalPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.TenantInsurancePolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.YardiInterfacePolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.util.AbstractPoliciesPreloader;
-import com.propertyvista.portal.server.preloader.policy.util.OrganizationPoliciesNodePreloader;
+import com.propertyvista.biz.preloader.policy.AbstractPoliciesPreloader;
+import com.propertyvista.biz.preloader.policy.OrganizationPoliciesNodePreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.ARPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.ApplicationDocumentationPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.AutoPayPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.BackgroundCheckPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.DatesPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.DepositPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.EmailTemplatesPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.IdAssignmentPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.LeaseAdjustmentPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.LeaseAgreementPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.LeaseApplicationPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.LeaseBillingPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.LegalTermsPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.MaintenanceRequestPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.N4PolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.PaymentMethodSelectionPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.PreloadRestrictionsPolicies;
+import com.propertyvista.biz.preloader.policy.subpreloaders.ProductTaxPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.ProspectPortalPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.ResidentPortalPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.TenantInsurancePolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.YardiInterfacePolicyPreloader;
+import com.propertyvista.preloader.policy.MockupDepositPolicyPreloader;
+import com.propertyvista.preloader.policy.MockupLeaseAdjustmentPolicyPreloader;
+import com.propertyvista.preloader.policy.MockupLeaseBillingPolicyPreloader;
+import com.propertyvista.preloader.policy.MockupProductTaxPolicyPreloader;
+import com.propertyvista.preloader.policy.MockupProspectPortalPolicyPreloader;
 
 public class PreloadPolicies extends AbstractPoliciesPreloader {
 

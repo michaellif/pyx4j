@@ -25,6 +25,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 
+import com.propertyvista.biz.preloader.BaseVistaDevDataPreloader;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
@@ -34,7 +35,7 @@ import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.generator.PreloadData;
-import com.propertyvista.preloader.ido.MerchantAccountImport;
+import com.propertyvista.preloader.model.MerchantAccountImport;
 import com.propertyvista.server.TaskRunner;
 
 public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {

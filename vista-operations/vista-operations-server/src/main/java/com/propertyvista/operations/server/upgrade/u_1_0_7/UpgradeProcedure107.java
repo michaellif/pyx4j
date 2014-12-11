@@ -20,9 +20,9 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.preloader.policy.subpreloaders.PaymentMethodSelectionPolicyPreloader;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.operations.server.upgrade.UpgradeProcedure;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.PaymentMethodSelectionPolicyPreloader;
 
 /**
  * This was never executed the version SQL was executed

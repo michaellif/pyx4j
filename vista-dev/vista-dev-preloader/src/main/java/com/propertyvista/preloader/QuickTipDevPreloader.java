@@ -16,6 +16,7 @@ package com.propertyvista.preloader;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.preloader.BaseVistaDevDataPreloader;
 import com.propertyvista.domain.marketing.PortalResidentMarketingTarget;
 import com.propertyvista.domain.marketing.PortalResidentMarketingTip;
 

@@ -20,11 +20,11 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.preloader.policy.subpreloaders.LegalTermsPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.ProspectPortalPolicyPreloader;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.operations.server.upgrade.UpgradeProcedure;
 import com.propertyvista.operations.server.upgrade.u_1_0_5.UpgradeProcedure105;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.LegalTermsPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.ProspectPortalPolicyPreloader;
 
 public class UpgradeProcedure113 implements UpgradeProcedure {
 

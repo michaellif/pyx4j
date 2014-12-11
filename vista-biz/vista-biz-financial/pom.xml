@@ -81,7 +81,7 @@
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
-
+<!-- 
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-biz-preloader</artifactId>
@@ -89,7 +89,7 @@
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
-
+ -->
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-dev-generator</artifactId>

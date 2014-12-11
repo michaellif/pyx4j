@@ -16,8 +16,8 @@ package com.propertyvista.preloader.policy;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.preloader.BaseVistaDevDataPreloader;
 import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
-import com.propertyvista.preloader.BaseVistaDevDataPreloader;
 
 public class PaymentMethodSelectionPolicyDevPreloader extends BaseVistaDevDataPreloader {
 

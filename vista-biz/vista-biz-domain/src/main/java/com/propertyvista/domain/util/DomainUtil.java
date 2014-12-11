@@ -20,8 +20,6 @@ import com.pyx4j.commons.MinMaxPair;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.charges.ChargeLine;
-import com.propertyvista.domain.charges.ChargeLine.ChargeType;
 import com.propertyvista.domain.financial.Currency;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.tenant.lease.extradata.Pet.WeightUnit;
@@ -44,29 +42,6 @@ public class DomainUtil {
         } else {
             return value.substring(value.length() - 4, value.length());
         }
-    }
-
-    public static ChargeLine createChargeLine(String label, BigDecimal money) {
-        ChargeLine cl = EntityFactory.create(ChargeLine.class);
-        cl.amount().setValue(money);
-        cl.label().setValue(label);
-        return cl;
-    }
-
-    public static ChargeLine createChargeLine(ChargeType type, BigDecimal money) {
-        ChargeLine cl = EntityFactory.create(ChargeLine.class);
-        cl.amount().setValue(money);
-        cl.type().setValue(type);
-        cl.label().setValue(type.toString());
-        return cl;
-    }
-
-    public static ChargeLine createChargeLine(String label, ChargeType type, BigDecimal money) {
-        ChargeLine cl = EntityFactory.create(ChargeLine.class);
-        cl.amount().setValue(money);
-        cl.type().setValue(type);
-        cl.label().setValue(label);
-        return cl;
     }
 
 // weight

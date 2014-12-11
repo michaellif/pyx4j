@@ -24,10 +24,10 @@ import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.biz.preloader.DashboardPreloader;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.operations.server.upgrade.UpgradeProcedure;
-import com.propertyvista.portal.server.preloader.DashboardPreloader;
 
 public class UpgradeProcedure105 implements UpgradeProcedure {
 

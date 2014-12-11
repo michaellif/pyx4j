@@ -20,6 +20,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.biz.preloader.BaseVistaDevDataPreloader;
 import com.propertyvista.operations.domain.dev.EquifaxSimulatorConfig;
 
 public class EquifaxSimulationPreloader extends BaseVistaDevDataPreloader {

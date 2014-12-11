@@ -33,6 +33,9 @@ import com.propertyvista.biz.dashboard.GadgetMetadataRepositoryFacade;
 import com.propertyvista.biz.dashboard.GadgetStorageFacade;
 import com.propertyvista.biz.financial.ar.ARArreasManagerUtils;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
+import com.propertyvista.biz.preloader.policy.subpreloaders.AutoPayPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.YardiInterfacePolicyPreloader;
+import com.propertyvista.biz.preloader.ref.ReferenceDataPreloader;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.dashboard.GadgetMetadataHolder;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
@@ -47,9 +50,6 @@ import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.operations.server.upgrade.UpgradeProcedure;
-import com.propertyvista.portal.server.preloader.ReferenceDataPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.AutoPayPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.YardiInterfacePolicyPreloader;
 
 public class UpgradeProcedure110 implements UpgradeProcedure {
 
