@@ -64,6 +64,11 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
     }
 
+    public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, IFormatter<E, SafeHtml> optionFormatter, ItemHolderFactory<E> itemHolderFactory) {
+        this(optionsGrabber, null, optionFormatter, new SelectorListBoxValuePanel<E>(itemHolderFactory));
+
+    }
+
     @SuppressWarnings("unchecked")
     public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, Command addItemCommand, IFormatter<E, SafeHtml> optionFormatter,
             SelectorListBoxValuePanel<E> selectorListBoxValuePanel) {
@@ -181,6 +186,10 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
                 fireValueChangeEvent();
             }
         }
+    }
+
+    public void setAction(final Command addItemCommand) {
+        listBox.setAction(addItemCommand);
     }
 
 }

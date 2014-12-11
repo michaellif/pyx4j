@@ -37,6 +37,10 @@ public class FilterItem implements Comparable<FilterItem> {
         return removable;
     }
 
+    public ColumnDescriptor getColumnDescriptor() {
+        return this.columnDescriptor;
+    }
+
     @Override
     public int compareTo(FilterItem o) {
         return 0;

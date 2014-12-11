@@ -31,6 +31,7 @@ import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
+import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.selector.ItemHolderFactory;
 import com.pyx4j.widgets.client.selector.SelectorListBox;
 import com.pyx4j.widgets.client.selector.SelectorListBoxValuePanel;
@@ -40,13 +41,7 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
     private DataTablePanel<?> dataTablePanel;
 
     public FilterPanel(DataTablePanel<?> dataTablePanel) {
-        super(new FilterOptionsGrabber(dataTablePanel), new Command() {
-            @Override
-            public void execute() {
-                // TODO Auto-generated method stub
-
-            }
-        }, new IFormatter<FilterItem, SafeHtml>() {
+        super(new FilterOptionsGrabber(dataTablePanel), new IFormatter<FilterItem, SafeHtml>() {
             @Override
             public SafeHtml format(FilterItem value) {
                 SafeHtmlBuilder builder = new SafeHtmlBuilder();
@@ -60,7 +55,16 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
                 return new FilterItemHolder(item, new FilterItemFormatter(), valuePanel);
             }
         });
+
         this.dataTablePanel = dataTablePanel;
+
+        setAction(new Command() {
+            @Override
+            public void execute() {
+                Dialog dialog = new FilterItemAddDialog(FilterPanel.this, FilterPanel.this.dataTablePanel);
+                dialog.show();
+            }
+        });
 
     }
 
