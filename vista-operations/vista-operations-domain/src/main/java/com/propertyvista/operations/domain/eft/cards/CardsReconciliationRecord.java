@@ -74,6 +74,6 @@ public interface CardsReconciliationRecord extends IEntity {
 
     @Timestamp(Timestamp.Update.Created)
     @Editor(type = EditorType.label)
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     IPrimitive<Date> recordReceivedDate();
 }

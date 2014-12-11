@@ -45,12 +45,12 @@ public interface MaintenanceRequestWorkOrder extends IEntity {
     @JoinColumn
     MaintenanceRequest request();
 
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> created();
 
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     @Caption(name = "Last Updated")
     @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Updated)

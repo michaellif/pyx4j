@@ -45,12 +45,12 @@ public interface YardiPaymentPostingBatchRecord extends IEntity {
     @JoinColumn
     YardiPaymentPostingBatch batch();
 
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> created();

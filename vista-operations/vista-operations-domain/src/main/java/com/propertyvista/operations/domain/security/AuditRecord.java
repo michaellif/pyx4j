@@ -56,11 +56,11 @@ public interface AuditRecord extends IEntity {
     IPrimitive<String> sessionId();
 
     @Caption(name = "When")
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> created();
 
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     IPrimitive<Date> worldTime();
 
     IPrimitive<AuditRecordEventType> event();

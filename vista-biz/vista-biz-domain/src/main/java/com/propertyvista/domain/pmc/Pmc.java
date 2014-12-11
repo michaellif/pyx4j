@@ -109,12 +109,12 @@ public interface Pmc extends IEntity {
     IPrimitive<String> interfaceUidBase();
 
     @ReadOnly
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> created();
 
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();

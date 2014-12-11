@@ -58,7 +58,7 @@ public interface AbstractUserCredential<E extends AbstractUser> extends IEntity 
 
     IPrimitive<Date> passwordUpdated();
 
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> credentialUpdated();

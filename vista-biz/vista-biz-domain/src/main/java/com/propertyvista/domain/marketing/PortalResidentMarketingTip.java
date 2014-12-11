@@ -31,12 +31,12 @@ import com.propertyvista.domain.VistaNamespace;
 @Table(namespace = VistaNamespace.operationsNamespace)
 public interface PortalResidentMarketingTip extends IEntity {
 
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> created();
 
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();

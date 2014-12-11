@@ -47,7 +47,7 @@ public interface RunData extends IEntity {
 
     IPrimitive<RunDataStatus> status();
 
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     IPrimitive<Date> started();
 
     @Length(4000)
@@ -60,7 +60,7 @@ public interface RunData extends IEntity {
     @Owned(forceCreation = true, cascade = {})
     ExecutionReport executionReport();
 
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 }

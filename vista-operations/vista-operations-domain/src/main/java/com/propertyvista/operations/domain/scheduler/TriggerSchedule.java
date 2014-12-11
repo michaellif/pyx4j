@@ -83,7 +83,7 @@ public interface TriggerSchedule extends IEntity {
     @Transient
     @Editor(type = Editor.EditorType.label)
     @ReadOnly
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     IPrimitive<Date> nextFireTime();
 
 }

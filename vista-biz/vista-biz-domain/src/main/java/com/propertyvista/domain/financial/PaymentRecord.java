@@ -291,12 +291,12 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
     @Editor(type = EditorType.textarea)
     IPrimitive<String> notes();
 
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     @Editor(type = EditorType.label)
     IPrimitive<Date> created();
 

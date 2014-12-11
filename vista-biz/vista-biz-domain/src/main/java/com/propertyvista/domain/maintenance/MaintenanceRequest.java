@@ -104,12 +104,12 @@ public interface MaintenanceRequest extends IEntity, CommunicationAssociation, H
     @NotNull
     MaintenanceRequestStatus status();
 
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     @Editor(type = EditorType.label)
     @Timestamp(Update.Created)
     IPrimitive<Date> submitted();
 
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     @Caption(name = "Last Updated")
     @Editor(type = EditorType.label)
     @Timestamp(Update.Updated)

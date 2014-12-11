@@ -81,12 +81,12 @@ public interface PaymentPostingBatch extends IEntity, HasNotesAndAttachments {
     IPrimitive<PostingStatus> status();
 
     @ReadOnly
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     @Editor(type = EditorType.label)
     @Timestamp(Update.Created)
     IPrimitive<Date> created();
 
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();

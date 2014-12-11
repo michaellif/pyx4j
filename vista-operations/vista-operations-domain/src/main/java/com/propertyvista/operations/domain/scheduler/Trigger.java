@@ -70,12 +70,12 @@ public interface Trigger extends IEntity {
     @Transient
     @Editor(type = Editor.EditorType.label)
     @ReadOnly
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     IPrimitive<Date> nextScheduledFireTime();
 
     @Timestamp(Timestamp.Update.Created)
     @ReadOnly
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     IPrimitive<Date> created();
 
     @Owned(cascade = {})
@@ -88,7 +88,7 @@ public interface Trigger extends IEntity {
     @Transient
     @Editor(type = Editor.EditorType.label)
     @ReadOnly
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     IPrimitive<Date> nextSleepRetryFireTime();
 
     @Owned

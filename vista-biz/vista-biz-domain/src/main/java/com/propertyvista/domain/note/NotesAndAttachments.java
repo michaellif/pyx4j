@@ -65,12 +65,12 @@ public interface NotesAndAttachments extends IEntity {
     CrmUser user();
 
     @ToString(index = 2)
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     @Editor(type = EditorType.label)
     @Timestamp(Update.Updated)
     IPrimitive<Date> updated();
 
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd, HH:mm:ss")
     @Editor(type = EditorType.label)
     @Timestamp(Update.Created)
     IPrimitive<Date> created();
