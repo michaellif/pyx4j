@@ -50,6 +50,7 @@ import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.tenant.CustomerDeliveryPreferences;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.CustomerPreferences;
 import com.propertyvista.domain.tenant.insurance.GeneralInsurancePolicy;
@@ -81,7 +82,6 @@ import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseAgreeme
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseSigningCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveInWizardService;
-import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentPreferencesCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentProfileCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentSummaryService;
 import com.propertyvista.portal.rpc.portal.resident.services.services.GeneralInsurancePolicyCrudService;
@@ -95,7 +95,8 @@ import com.propertyvista.portal.rpc.portal.shared.services.PortalPasswordResetSe
 import com.propertyvista.portal.rpc.portal.shared.services.PortalPolicyRetrieveService;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalTermsAndPoliciesService;
 import com.propertyvista.portal.rpc.portal.shared.services.SiteThemeServices;
-import com.propertyvista.portal.rpc.portal.shared.services.account.CustomerAccountCrudService;
+import com.propertyvista.portal.rpc.portal.shared.services.profile.CustomerAccountCrudService;
+import com.propertyvista.portal.rpc.portal.shared.services.profile.CustomerPreferencesCrudService;
 import com.propertyvista.portal.rpc.portal.shared.services.communityevent.CommunityEventCrudService;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
 import com.propertyvista.portal.server.security.access.prospect.CustomerPictureProspectDatasetAccessRule;
@@ -109,6 +110,7 @@ import com.propertyvista.portal.server.security.access.resident.AutopayAgreement
 import com.propertyvista.portal.server.security.access.resident.AutopayAgreementTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.BillTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.CommunicationThreadPortalAccessRule;
+import com.propertyvista.portal.server.security.access.resident.CustomerDeliveryPreferencesDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.CustomerPictureTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.GeneralInsurancePolicyDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.InsuranceCertificateScanDatasetAccessRule;
@@ -182,7 +184,7 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(ResidentProfileCrudService.class));
 
-        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(ResidentPreferencesCrudService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(CustomerPreferencesCrudService.class));
 
         grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(ResidentProfileCrudService.class));
 
@@ -256,6 +258,7 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(PortalResidentBehavior.Resident, new EntityPermission(NotificationDelivery.class, EntityPermission.READ));
         grant(PortalResidentBehavior.Resident, new EntityPermission(SMSDelivery.class, EntityPermission.READ));
         grant(PortalResidentBehavior.Resident, new EntityPermission(IVRDelivery.class, EntityPermission.READ));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(CustomerDeliveryPreferences.class, CRUD));
 
         grant(PortalResidentBehavior.Guarantor, new EntityPermission(CustomerPreferences.class, CRUD));
         grant(PortalResidentBehavior.Guarantor, new EntityPermission(DeliveryHandle.class, CRUD));
@@ -268,7 +271,9 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(PortalResidentBehavior.Guarantor, new EntityPermission(NotificationDelivery.class, EntityPermission.READ));
         grant(PortalResidentBehavior.Guarantor, new EntityPermission(SMSDelivery.class, EntityPermission.READ));
         grant(PortalResidentBehavior.Guarantor, new EntityPermission(IVRDelivery.class, EntityPermission.READ));
+        grant(PortalResidentBehavior.Guarantor, new EntityPermission(CustomerDeliveryPreferences.class, CRUD));
 
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(CustomerPreferences.class, CRUD));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(DeliveryHandle.class, CRUD));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(MessageAttachment.class, CRUD));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(CommunicationThread.class, EntityPermission.READ | EntityPermission.UPDATE));
@@ -278,6 +283,7 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(PortalProspectBehavior.Prospect, new EntityPermission(NotificationDelivery.class, EntityPermission.READ));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(SMSDelivery.class, EntityPermission.READ));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(IVRDelivery.class, EntityPermission.READ));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(CustomerDeliveryPreferences.class, CRUD));
 
         //========================= Prospect Portal
 
@@ -353,6 +359,7 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(VistaDataAccessBehavior.ResidentInPortal, new MaintenanceRequestPictureTenantDatasetAccessRule(), MaintenanceRequestPicture.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new MessagePortalAccessRule(), Message.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new CommunicationThreadPortalAccessRule(), CommunicationThread.class);
+        grant(VistaDataAccessBehavior.ResidentInPortal, new CustomerDeliveryPreferencesDatasetAccessRule(), CustomerDeliveryPreferences.class);
 
         grant(PortalResidentBehavior.Guarantor, VistaDataAccessBehavior.GuarantorInPortal);
         grant(VistaDataAccessBehavior.GuarantorInPortal, new MessagePortalAccessRule(), Message.class);
@@ -368,6 +375,7 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(VistaDataAccessBehavior.ProspectInPortal, new LeaseTermTenantProspectDatasetAccessRule(), LeaseTermTenant.class);
         grant(VistaDataAccessBehavior.ProspectInPortal, new MessagePortalAccessRule(), Message.class);
         grant(VistaDataAccessBehavior.ProspectInPortal, new CommunicationThreadPortalAccessRule(), CommunicationThread.class);
+        grant(VistaDataAccessBehavior.ProspectInPortal, new CustomerDeliveryPreferencesDatasetAccessRule(), CustomerDeliveryPreferences.class);
 
         grant(new IServiceExecutePermission(PortalContentService.class));
         freeze();

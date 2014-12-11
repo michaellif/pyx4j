@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 13, 2014
- * @author michaellif
+ * Created on Dec 5, 2014
+ * @author smolka
  * @version $Id$
  */
-package com.propertyvista.domain.tenant;
+package com.propertyvista.domain.preferences;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -19,24 +19,19 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.core.AttachLevel;
-import com.pyx4j.entity.core.ISet;
 import com.pyx4j.entity.shared.IUserPreferences;
 
-import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.security.CrmUser;
 
-public interface CustomerPreferences extends IUserPreferences {
+public interface CrmUserPreferences extends IUserPreferences {
 
     @Owner
     @Detached
     @JoinColumn
     @ReadOnly
-    CustomerUser customerUser();
-
-    @Owned
-    ISet<CustomerPreferencesPortalHidable> hiddenPortalElements();
+    CrmUser crmUser();
 
     @Owned
     @Detached(level = AttachLevel.Detached)
-    CustomerDeliveryPreferences deliveryPreferences();
-
+    CrmUserDeliveryPreferences deliveryPreferences();
 }

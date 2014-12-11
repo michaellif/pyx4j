@@ -13,13 +13,17 @@
  */
 package com.propertyvista.domain.security;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.core.AttachLevel;
 
+import com.propertyvista.domain.preferences.CrmUserPreferences;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.security.common.AbstractUserCredential;
 
@@ -36,4 +40,9 @@ public interface CrmUser extends AbstractPmcUser {
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = CrmUserCredential.class, mappedBy = AbstractUserCredential.UserColumnId.class)
     CrmUserCredential credential();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    @XmlTransient
+    CrmUserPreferences preferences();
 }

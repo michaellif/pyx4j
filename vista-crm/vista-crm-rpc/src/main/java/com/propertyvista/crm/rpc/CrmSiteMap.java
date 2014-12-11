@@ -402,11 +402,19 @@ public class CrmSiteMap implements SiteMap {
     @PlaceProperties(navigLabel = "User Account")
     public static class Account extends AppPlace {
 
-        public static class AccountData extends CrmCrudAppPlace {
-            public AccountData() {
+        @PlaceProperties(navigLabel = "Profile")
+        public static class UserProfile extends CrmCrudAppPlace {
+            public UserProfile() {
                 super(Type.viewer);
             }
         }
+        
+        @PlaceProperties(navigLabel = "Account")
+        public static class AccountPreferences extends CrmCrudAppPlace {
+         public AccountPreferences() {
+             super(Type.viewer);
+         }
+ }
 
         public static class AccountRecoveryOptionsRequired extends AppPlace {
         }

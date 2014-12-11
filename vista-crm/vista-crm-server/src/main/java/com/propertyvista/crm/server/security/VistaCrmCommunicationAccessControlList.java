@@ -44,7 +44,6 @@ class VistaCrmCommunicationAccessControlList extends UIAclBuilder {
 
     VistaCrmCommunicationAccessControlList() {
         grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(MessageCategoryCrudService.class));
-
         grant(VistaAccessGrantedBehavior.CRM, new MessageCategoryAccessRule(), MessageCategory.class);
         grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(SystemEndpoint.class, READ));
         grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(MessageCrudService.class));

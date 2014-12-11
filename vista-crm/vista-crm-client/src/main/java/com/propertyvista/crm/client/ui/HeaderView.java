@@ -19,9 +19,9 @@ public interface HeaderView extends IsWidget, IsView {
 
         boolean isAdminPlace();
 
-        void showAccount();
+        void showUserProfile();
 
-        void showProperties();
+        void showUserPreferences();
 
         void back2CrmView();
 

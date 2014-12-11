@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.resident.services.profile;
+package com.propertyvista.portal.server.portal.shared.services.profile;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -22,16 +22,17 @@ import com.pyx4j.security.shared.Context;
 
 import com.propertyvista.domain.tenant.CustomerPreferences;
 import com.propertyvista.portal.rpc.portal.CustomerUserVisit;
-import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentPreferencesCrudService;
+import com.propertyvista.portal.rpc.portal.shared.services.profile.CustomerPreferencesCrudService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 
-public class ResidentPreferencesCrudServiceImpl implements ResidentPreferencesCrudService {
+public class CustomerPreferencesCrudServiceImpl implements CustomerPreferencesCrudService {
 
     @Override
     public void persist(AsyncCallback<Key> callback, CustomerPreferences bo) {
         if (bo.getPrimaryKey() == null) {
             CustomerPreferences cp = EntityFactory.create(CustomerPreferences.class);
             cp.hiddenPortalElements().set(bo.hiddenPortalElements());
+            cp.deliveryPreferences().set(bo.deliveryPreferences());
             bo = cp;
         }
         // Force ownership security

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
@@ -7,16 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 18, 2011
- * @author Dad
+ * Created on Dec 10, 2013
+ * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.shared.dto;
+package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
-@Transient
-public interface CustomerAccountDTO extends IEntity {
-    CustomerDeliveryPreferencesDTO deliveryPreferences();
+import com.propertyvista.dto.CrmUserDeliveryPreferencesDTO;
+
+public interface EmployeePreferencesViewerView extends IPrimeViewerView<CrmUserDeliveryPreferencesDTO> {
+
 }

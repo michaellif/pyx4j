@@ -28,6 +28,8 @@ import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.propertyvista.crm.client.activity.RuntimeErrorActivity;
 import com.propertyvista.crm.client.activity.WelcomeActivity;
 import com.propertyvista.crm.client.activity.crud.account.AccountEditorActivity;
+import com.propertyvista.crm.client.activity.crud.account.AccountPreferencesEditorActivity;
+import com.propertyvista.crm.client.activity.crud.account.AccountPreferencesViewerActivity;
 import com.propertyvista.crm.client.activity.crud.account.AccountViewerActivity;
 import com.propertyvista.crm.client.activity.crud.account.LoginAttemptsListerActivity;
 import com.propertyvista.crm.client.activity.crud.account.MandatoryAccountRecoveryOptionsSetupActivity;
@@ -886,17 +888,31 @@ public class ContentActivityMapper implements AppActivityMapper {
                         }
 
 // - Settings:
-                    } else if (crudPlace instanceof Account.AccountData) {
+                    } else if (crudPlace instanceof Account.UserProfile) {
                         // the service that the Account related activities use doesn't care about the 'id' arg,
                         // but nevertheless the base "Activity" classes need it, so we just add a value let them be happy
                         switch (crudPlace.getType()) {
                         case editor:
-                            ((Account.AccountData) place).formEditorPlace(new Key(1));
+                            ((Account.UserProfile) place).formEditorPlace(new Key(1));
                             activity = new AccountEditorActivity(crudPlace);
                             break;
                         case viewer:
-                            ((Account.AccountData) place).formViewerPlace(new Key(1));
+                            ((Account.UserProfile) place).formViewerPlace(new Key(1));
                             activity = new AccountViewerActivity(crudPlace);
+                            break;
+                        default:
+                            break;
+                        }
+
+                    } else if (crudPlace instanceof Account.AccountPreferences) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            ((Account.AccountPreferences) place).formEditorPlace(new Key(1));
+                            activity = new AccountPreferencesEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            ((Account.AccountPreferences) place).formViewerPlace(new Key(1));
+                            activity = new AccountPreferencesViewerActivity(crudPlace);
                             break;
                         default:
                             break;

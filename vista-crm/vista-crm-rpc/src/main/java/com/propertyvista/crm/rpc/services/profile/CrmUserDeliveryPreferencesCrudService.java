@@ -7,16 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 18, 2011
- * @author Dad
+ * Created on Oct 27, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.shared.dto;
+package com.propertyvista.crm.rpc.services.profile;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-@Transient
-public interface CustomerAccountDTO extends IEntity {
-    CustomerDeliveryPreferencesDTO deliveryPreferences();
+import com.propertyvista.dto.CrmUserDeliveryPreferencesDTO;
+import com.propertyvista.portal.rpc.shared.dto.CustomerAccountDTO;
+
+public interface CrmUserDeliveryPreferencesCrudService extends AbstractCrudService<CrmUserDeliveryPreferencesDTO> {
+
 }

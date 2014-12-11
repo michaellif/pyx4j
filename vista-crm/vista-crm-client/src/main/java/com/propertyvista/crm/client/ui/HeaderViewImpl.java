@@ -161,18 +161,18 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
             ButtonMenuBar userButtonMenu = new ButtonMenuBar();
             userButton.setMenu(userButtonMenu);
 
+            userButtonMenu.addItem(new SecureMenuItem(i18n.tr("Profile"), new Command() {
+                @Override
+                public void execute() {
+                    presenter.showUserProfile();
+                }
+            }, EmployeeSelfAccountAndSettings.class));
             userButtonMenu.addItem(new SecureMenuItem(i18n.tr("Account"), new Command() {
                 @Override
                 public void execute() {
-                    presenter.showAccount();
+                    presenter.showUserPreferences();
                 }
-            }, EmployeeSelfAccountAndSettings.class));
-            userButtonMenu.addItem(new SecureMenuItem(i18n.tr("Settings"), new Command() {
-                @Override
-                public void execute() {
-                    presenter.showProperties();
-                }
-            }, EmployeeSelfAccountAndSettings.class));
+            }));
 
             userButtonMenu.addItem(support = new MenuItem(i18n.tr("Support"), new Command() {
                 @Override

@@ -154,13 +154,13 @@ public class HeaderActivity extends AbstractActivity implements HeaderPresenter 
     }
 
     @Override
-    public void showAccount() {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.Account.AccountData());
+    public void showUserProfile() {
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Account.UserProfile());
     }
 
     @Override
-    public void showProperties() {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.Dashboard.Manage());
+    public void showUserPreferences() {
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Account.AccountPreferences());
     }
 
     @Override

@@ -7,21 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Oct 1, 2014
- * @author vlads
+ * Created on Dec 10, 2014
+ * @author smolka
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.resident.services.profile;
+package com.propertyvista.crm.rpc.services.profile;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.domain.tenant.CustomerPreferences;
+import com.propertyvista.domain.preferences.CrmUserPreferences;
 
-public interface ResidentPreferencesCrudService extends IService {
+public interface CrmUserPreferencesCrudService extends IService {
 
-    void persist(AsyncCallback<Key> callback, CustomerPreferences bo);
+    void persist(AsyncCallback<Key> callback, CrmUserPreferences bo);
 
 }

@@ -25,7 +25,7 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.domain.tenant.CustomerPreferences;
 import com.propertyvista.domain.tenant.CustomerPreferencesPortalHidable;
 import com.propertyvista.portal.resident.events.PortalHidableEvent;
-import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentPreferencesCrudService;
+import com.propertyvista.portal.rpc.portal.shared.services.profile.CustomerPreferencesCrudService;
 
 public class PortalHidablePreferenceManager {
 
@@ -42,7 +42,7 @@ public class PortalHidablePreferenceManager {
             }
         }
 
-        ((ResidentPreferencesCrudService) GWT.create(ResidentPreferencesCrudService.class)).persist(new DefaultAsyncCallback<Key>() {
+        ((CustomerPreferencesCrudService) GWT.create(CustomerPreferencesCrudService.class)).persist(new DefaultAsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
                 AppSite.getEventBus().fireEvent(new PortalHidableEvent(preferenceType, preferenceValue));

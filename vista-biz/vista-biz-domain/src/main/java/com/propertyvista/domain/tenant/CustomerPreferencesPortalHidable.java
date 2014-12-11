@@ -28,7 +28,6 @@ public interface CustomerPreferencesPortalHidable extends IEntity {
     public enum Type implements Serializable {
 
         GettingStartedGadget,
-
     }
 
     @Owner

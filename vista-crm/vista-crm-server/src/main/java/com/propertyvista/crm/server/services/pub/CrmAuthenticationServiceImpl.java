@@ -22,6 +22,7 @@ import java.util.Set;
 import com.pyx4j.config.server.Credentials;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.j2se.CredentialsFileStorage;
@@ -32,6 +33,7 @@ import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.crm.rpc.CrmUserVisit;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
+import com.propertyvista.domain.preferences.CrmUserPreferences;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CrmUserCredential;
 import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
@@ -48,7 +50,11 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
 
     @Override
     protected CrmUserVisit createUserVisit(CrmUser user) {
-        return new CrmUserVisit(getVistaApplication(), user);
+        CrmUserVisit visit = new CrmUserVisit(getVistaApplication(), user);
+        Persistence.ensureRetrieve(user.preferences(), AttachLevel.Attached);
+        visit.setPreferences(user.preferences().<CrmUserPreferences> detach());
+
+        return visit;
     }
 
     @Override

@@ -13,10 +13,8 @@
  */
 package com.propertyvista.portal.shared.ui.account;
 
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
@@ -30,9 +28,9 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.shared.dto.CustomerAccountDTO;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
 import com.propertyvista.portal.shared.themes.NavigationAnchorTheme;
-import com.propertyvista.portal.shared.ui.CPortalEntityForm;
+import com.propertyvista.portal.shared.ui.CPortalEntityEditor;
 
-public class AccountPage extends CPortalEntityForm<CustomerAccountDTO> {
+public class AccountPage extends CPortalEntityEditor<CustomerAccountDTO> {
 
     private static final I18n i18n = I18n.get(AccountPage.class);
 
@@ -46,7 +44,7 @@ public class AccountPage extends CPortalEntityForm<CustomerAccountDTO> {
         FormPanel formPanel = new FormPanel(this);
         formPanel.h1(i18n.tr("Security"));
 
-        Anchor anchor = new Anchor("Change my Password", new Command() {
+        Anchor anchor = new Anchor(i18n.tr("Change my Password"), new Command() {
 
             @Override
             public void execute() {
@@ -58,21 +56,16 @@ public class AccountPage extends CPortalEntityForm<CustomerAccountDTO> {
         anchor.setStyleName(NavigationAnchorTheme.StyleName.NavigationAnchor.name());
         formPanel.append(Location.Left, anchor);
 
-        formPanel.h1(i18n.tr("Mail Preferences"));
+        formPanel.br();
+        formPanel.br();
+        formPanel.h1(i18n.tr("Communication Preferences"));
+        formPanel.br();
 
-        HTML label = new HTML("Coming soon.");
-        label.setWidth("200px");
-        label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        label.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-        formPanel.append(Location.Left, label);
-
-        formPanel.h1(i18n.tr("Notification Preferences"));
-
-        label = new HTML("Coming soon.");
-        label.setWidth("200px");
-        label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        label.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-        formPanel.append(Location.Left, label);
+        formPanel.h3(i18n.tr("Informational"));
+        formPanel.append(Location.Left, proto().deliveryPreferences().informationalDelivery()).decorate().customLabel(i18n.tr("Delivery Frequency"));
+        formPanel.br();
+        formPanel.h3(i18n.tr("Promotional"));
+        formPanel.append(Location.Left, proto().deliveryPreferences().promotionalDelivery()).decorate().customLabel(i18n.tr("Delivery Frequency"));
 
         return formPanel;
     }

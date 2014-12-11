@@ -7,36 +7,43 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 13, 2014
- * @author michaellif
+ * Created on Dec 10, 2014
+ * @author smolka
  * @version $Id$
  */
 package com.propertyvista.domain.tenant;
 
+import java.io.Serializable;
+
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.core.AttachLevel;
-import com.pyx4j.entity.core.ISet;
-import com.pyx4j.entity.shared.IUserPreferences;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.security.CustomerUser;
+public interface CustomerDeliveryPreferences extends IEntity {
 
-public interface CustomerPreferences extends IUserPreferences {
+    @I18n
+    public enum DeliveryType implements Serializable {
+
+        Daily, Weekly, Individual, DoNotSend;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
 
     @Owner
     @Detached
     @JoinColumn
     @ReadOnly
-    CustomerUser customerUser();
+    CustomerPreferences userPreferences();
 
-    @Owned
-    ISet<CustomerPreferencesPortalHidable> hiddenPortalElements();
+    IPrimitive<DeliveryType> promotionalDelivery();
 
-    @Owned
-    @Detached(level = AttachLevel.Detached)
-    CustomerDeliveryPreferences deliveryPreferences();
-
+    IPrimitive<DeliveryType> informationalDelivery();
 }

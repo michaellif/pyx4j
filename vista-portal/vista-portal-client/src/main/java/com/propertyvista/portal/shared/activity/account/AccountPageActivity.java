@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.rpc.portal.shared.services.account.CustomerAccountCrudService;
+import com.propertyvista.portal.rpc.portal.shared.services.profile.CustomerAccountCrudService;
 import com.propertyvista.portal.rpc.shared.dto.CustomerAccountDTO;
 import com.propertyvista.portal.shared.activity.AbstractEditorActivity;
 import com.propertyvista.portal.shared.ui.account.AccountPageView;

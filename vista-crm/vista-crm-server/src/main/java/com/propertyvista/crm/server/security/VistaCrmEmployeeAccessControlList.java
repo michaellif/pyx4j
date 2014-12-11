@@ -37,11 +37,17 @@ import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
 import com.propertyvista.crm.rpc.services.organization.PortfolioCrudService;
 import com.propertyvista.crm.rpc.services.organization.SelectCrmRoleListService;
 import com.propertyvista.crm.rpc.services.organization.ac.EmployeeSelfAccountAndSettings;
+import com.propertyvista.crm.rpc.services.profile.CrmUserDeliveryPreferencesCrudService;
+import com.propertyvista.crm.rpc.services.profile.CrmUserPreferencesCrudService;
 import com.propertyvista.crm.rpc.services.security.CrmAccountRecoveryOptionsUserService;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordChangeUserService;
+import com.propertyvista.crm.server.security.access.CrmUserDeliveryPreferencesDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.CrmUserPreferencesDatasetAccessRule;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.company.Portfolio;
+import com.propertyvista.domain.preferences.CrmUserDeliveryPreferences;
+import com.propertyvista.domain.preferences.CrmUserPreferences;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -57,6 +63,14 @@ class VistaCrmEmployeeAccessControlList extends UIAclBuilder {
         grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(CrmPasswordChangeUserService.class));
         grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(CrmAccountRecoveryOptionsUserService.class));
         grant(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired, new IServiceExecutePermission(CrmAccountRecoveryOptionsUserService.class));
+
+        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(CrmUserPreferencesCrudService.class));
+        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(CrmUserDeliveryPreferencesCrudService.class));
+
+        grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(CrmUserDeliveryPreferences.class, ALL));
+        grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(CrmUserPreferences.class, ALL));
+        grant(VistaAccessGrantedBehavior.CRM, new CrmUserPreferencesDatasetAccessRule(), CrmUserPreferences.class);
+        grant(VistaAccessGrantedBehavior.CRM, new CrmUserDeliveryPreferencesDatasetAccessRule(), CrmUserDeliveryPreferences.class);
 
         // ------ Account Self management
         // There are no UI Permissions, UI bound to  VistaCrmBehavior.AccountSelf
