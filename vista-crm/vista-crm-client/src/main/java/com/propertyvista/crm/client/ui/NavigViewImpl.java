@@ -132,6 +132,7 @@ public class NavigViewImpl extends Composite implements NavigView {
             sideMenuList = new SideMenuList();
             root.addMenuItem(userMenuItem = new SideMenuFolderItem(sideMenuList, "User", CrmImages.INSTANCE.userIcon()));
             sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Account.UserProfile()));
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Account.AccountPreferences()));
 
             sideMenuList.addMenuItem(adminMenuItem = new SideMenuItem(new SideMenuCommand() {
 
