@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -17,9 +17,12 @@ import java.math.BigDecimal;
 
 import com.pyx4j.entity.core.EntityFactory;
 
+import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
+import com.propertyvista.shared.config.VistaDemo;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class MockupProspectPortalPolicyPreloader extends AbstractPolicyPreloader<ProspectPortalPolicy> {
 
@@ -35,9 +38,14 @@ public class MockupProspectPortalPolicyPreloader extends AbstractPolicyPreloader
         policy.maxPartialMatchUnits().setValue(5);
         policy.unitAvailabilitySpan().setValue(20);
 
-        policy.feePayment().setValue(FeePayment.perLease);
-        policy.feeAmount().setValue(new BigDecimal(88.88));
-
+        // In case of demo and Canadian Buildings, Prospect Portal fee do not apply
+        boolean avoidFee = (VistaDemo.isDemo() && VistaFeatures.instance().countryOfOperation().equals(CountryOfOperation.Canada));
+        if (avoidFee) {
+            policy.feePayment().setValue(FeePayment.none);
+        } else {
+            policy.feePayment().setValue(FeePayment.perLease);
+            policy.feeAmount().setValue(new BigDecimal(88.88));
+        }
         log.append(policy.getStringView());
         return policy;
     }
