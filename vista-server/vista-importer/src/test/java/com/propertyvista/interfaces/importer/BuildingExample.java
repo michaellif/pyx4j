@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -37,13 +37,12 @@ import com.propertyvista.config.tests.VistaTestsNamespaceResolver;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.interfaces.importer.converter.MediaConfig;
-import com.propertyvista.interfaces.importer.model.CreateModelXML;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityNamingConvention;
 
 public class BuildingExample {
 
-    private final static Logger log = LoggerFactory.getLogger(CreateModelXML.class);
+    private final static Logger log = LoggerFactory.getLogger(BuildingExample.class);
 
     public static void main(String[] args) {
 
