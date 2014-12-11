@@ -35,9 +35,13 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 public abstract class SelectEnumDialog<E extends Enum<E>> extends OkCancelDialog {
+
+    private static final I18n i18n = I18n.get(SelectEnumDialog.class);
+
     public static interface CellTemplate extends SafeHtmlTemplates {
         @Template("{0}")
         SafeHtml typeCell(String type);
@@ -60,10 +64,10 @@ public abstract class SelectEnumDialog<E extends Enum<E>> extends OkCancelDialog
     }
 
     public String getEmptySelectionMessage() {
-        return "The set of values is empty";
+        return i18n.tr("The set of values is empty");
     }
 
-    protected <E extends Enum<E>> Widget initBody(SelectionModel<E> selectionModel, Collection<E> values, String height) {
+    protected Widget initBody(SelectionModel<E> selectionModel, Collection<E> values, String height) {
         CellList<E> list = new CellList<E>(new AbstractCell<E>() {
             @Override
             public void render(com.google.gwt.cell.client.Cell.Context context, E value, SafeHtmlBuilder sb) {
