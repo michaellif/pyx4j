@@ -31,12 +31,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-biz-communication</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        
-        <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-unit-server</artifactId>
             <version>${pyxVersion}</version>

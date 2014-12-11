@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
 
-import com.propertyvista.biz.communication.CommunicationTemplateFacade;
+import com.propertyvista.biz.communication.template.TemplateFacade;
 import com.propertyvista.crm.rpc.services.policies.emailtemplates.EmailTemplateManagerService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.policy.dto.emailtemplates.EmailTemplateTypeDTO;
@@ -34,7 +34,7 @@ public class EmailTemplateManagerServiceImpl implements EmailTemplateManagerServ
         for (EmailTemplateType tplType : EmailTemplateType.values()) {
             EmailTemplateTypeDTO typeDto = new EmailTemplateTypeDTO();
             typeDto.type = tplType;
-            typeDto.objectNames = new Vector<String>(ServerSideFactory.create(CommunicationTemplateFacade.class).getTemplateDataObjectSelection(tplType));
+            typeDto.objectNames = new Vector<String>(ServerSideFactory.create(TemplateFacade.class).getTemplateDataObjectSelection(tplType));
             dto.types.add(typeDto);
         }
         callback.onSuccess(dto);

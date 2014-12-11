@@ -15,7 +15,7 @@ package com.propertyvista.biz.communication;
 
 import junit.framework.TestCase;
 
-import com.propertyvista.biz.communication.mail.template.EmailTemplateManager;
+import com.propertyvista.biz.communication.template.EmailTemplateManager;
 
 public class EmailTemplateParserTest extends TestCase {
 

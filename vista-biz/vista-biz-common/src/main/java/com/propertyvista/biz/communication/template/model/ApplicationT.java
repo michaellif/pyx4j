@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.biz.communication.mail.template.model;
+package com.propertyvista.biz.communication.template.model;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
@@ -20,19 +20,23 @@ import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface PortalLinksT extends IEntity {
+public interface ApplicationT extends IEntity {
 
-    IPrimitive<String> CompanyLogo();
+    TenantT Applicant();
 
-    IPrimitive<String> CompanyName();
+    TenantT CoApplicant();
 
-    IPrimitive<String> SiteHomeUrl();
+    TenantT Guarantor();
 
-    IPrimitive<String> TenantPortalUrl();
+    TenantT GuarantorRequester();
 
-    IPrimitive<String> ProspectPortalUrl();
+    IPrimitive<String> ApplicantsNames();
 
-    IPrimitive<String> DirectBankingHelpUrl();
+    IPrimitive<String> ApplicantsAndGuarantorsNames();
 
-    IPrimitive<String> CopyrightNotice();
+    IPrimitive<String> ReferenceNumber();
+
+    IPrimitive<String> UnitAddress();
+
+    IPrimitive<String> SignUpUrl();
 }

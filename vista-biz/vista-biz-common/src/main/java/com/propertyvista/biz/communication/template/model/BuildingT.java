@@ -8,10 +8,10 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Feb 2, 2012
- * @author stanp
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.communication.mail.template.model;
+package com.propertyvista.biz.communication.template.model;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
@@ -20,23 +20,19 @@ import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface ApplicationT extends IEntity {
+public interface BuildingT extends IEntity {
 
-    TenantT Applicant();
+    IPrimitive<String> PropertyCode();
 
-    TenantT CoApplicant();
+    IPrimitive<String> PropertyMarketingName();
 
-    TenantT Guarantor();
+    IPrimitive<String> Website();
 
-    TenantT GuarantorRequester();
+    IPrimitive<String> Address();
 
-    IPrimitive<String> ApplicantsNames();
+    PropertyContactT MainOffice();
 
-    IPrimitive<String> ApplicantsAndGuarantorsNames();
+    PropertyContactT Administrator();
 
-    IPrimitive<String> ReferenceNumber();
-
-    IPrimitive<String> UnitAddress();
-
-    IPrimitive<String> SignUpUrl();
+    PropertyContactT Superintendent();
 }

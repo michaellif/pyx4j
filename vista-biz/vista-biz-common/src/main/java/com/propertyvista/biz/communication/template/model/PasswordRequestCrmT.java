@@ -11,24 +11,12 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.biz.communication.mail.template.model;
+package com.propertyvista.biz.communication.template.model;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface LeaseT extends IEntity {
-
-    IPrimitive<String> ApplicantName();
-
-    IPrimitive<String> StartDate();
-
-    IPrimitive<String> StartDateWeekDay();
-
-    IPrimitive<String> UnitAddress();
-
-    IPrimitive<String> BillingAccount();
+public interface PasswordRequestCrmT extends PasswordRequestT {
 }

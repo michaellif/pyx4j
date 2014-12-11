@@ -34,10 +34,10 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.mail.MailAttachment;
 import com.pyx4j.server.mail.MailMessage;
 
-import com.propertyvista.biz.communication.mail.template.EmailTemplateManager;
-import com.propertyvista.biz.communication.mail.template.EmailTemplateRootObjectLoader;
-import com.propertyvista.biz.communication.mail.template.MessageKeywords;
-import com.propertyvista.biz.communication.mail.template.model.EmailTemplateContext;
+import com.propertyvista.biz.communication.template.EmailTemplateManager;
+import com.propertyvista.biz.communication.template.EmailTemplateRootObjectLoader;
+import com.propertyvista.biz.communication.template.MessageKeywords;
+import com.propertyvista.biz.communication.template.model.EmailTemplateContext;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.blob.LeaseApplicationDocumentBlob;
 import com.propertyvista.domain.blob.MaintenanceRequestPictureBlob;

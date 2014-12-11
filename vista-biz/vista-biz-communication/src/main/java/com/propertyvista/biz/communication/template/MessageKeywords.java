@@ -11,7 +11,7 @@
  * @author ernestog
  * @version $Id$
  */
-package com.propertyvista.biz.communication.mail.template;
+package com.propertyvista.biz.communication.template;
 
 import java.util.ArrayList;
 import java.util.List;

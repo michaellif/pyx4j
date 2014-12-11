@@ -28,7 +28,7 @@ import com.pyx4j.server.mail.MessageTemplate;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.biz.communication.NotificationFacade.BatchErrorType;
-import com.propertyvista.biz.communication.mail.template.MessageKeywords;
+import com.propertyvista.biz.communication.template.MessageKeywords;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.BillingAccount;

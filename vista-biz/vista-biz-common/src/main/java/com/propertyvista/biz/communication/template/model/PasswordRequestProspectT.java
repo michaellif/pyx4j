@@ -11,12 +11,12 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.biz.communication.mail.template.model;
+package com.propertyvista.biz.communication.template.model;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface PasswordRequestTenantT extends PasswordRequestT {
+public interface PasswordRequestProspectT extends PasswordRequestT {
 }

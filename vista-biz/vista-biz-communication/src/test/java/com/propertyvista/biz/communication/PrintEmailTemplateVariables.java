@@ -19,7 +19,7 @@ import java.io.FileOutputStream;
 
 import com.pyx4j.entity.xml.XMLEntitySchemaWriter;
 
-import com.propertyvista.biz.communication.mail.template.model.EmailTemplateRoot;
+import com.propertyvista.biz.communication.template.model.EmailTemplateRoot;
 
 public class PrintEmailTemplateVariables {
 

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,32 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-03-28
+ * Created on Nov 29, 2013
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.communication.mail.template.model;
+package com.propertyvista.biz.communication.template.model;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
-
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface EmailTemplateRoot extends IEntity {
+public interface PaymentT extends IEntity {
 
-    PortalLinksT portalLinks();
+    IPrimitive<String> Amount();
 
-    PasswordRequestT passwordRequest();
+    IPrimitive<String> ConvenienceFee();
 
-    PasswordRequestCrmT passwordRequestCrm();
+    IPrimitive<String> ReferenceNumber();
 
-    TenantT tenant();
+    IPrimitive<String> Date();
 
-    BuildingT building();
-
-    ApplicationT lpplication();
-
-    LeaseT lease();
+    IPrimitive<String> RejectReason();
 }

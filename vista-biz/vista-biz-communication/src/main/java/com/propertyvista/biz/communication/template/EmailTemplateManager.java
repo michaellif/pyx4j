@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.communication.mail.template;
+package com.propertyvista.biz.communication.template;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,19 +32,19 @@ import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
 
-import com.propertyvista.biz.communication.mail.template.model.ApplicationT;
-import com.propertyvista.biz.communication.mail.template.model.AutopayAgreementT;
-import com.propertyvista.biz.communication.mail.template.model.BuildingT;
-import com.propertyvista.biz.communication.mail.template.model.CompanyInfoT;
-import com.propertyvista.biz.communication.mail.template.model.LeaseT;
-import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestT;
-import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestWOT;
-import com.propertyvista.biz.communication.mail.template.model.PasswordRequestCrmT;
-import com.propertyvista.biz.communication.mail.template.model.PasswordRequestProspectT;
-import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTenantT;
-import com.propertyvista.biz.communication.mail.template.model.PaymentT;
-import com.propertyvista.biz.communication.mail.template.model.PortalLinksT;
-import com.propertyvista.biz.communication.mail.template.model.TenantT;
+import com.propertyvista.biz.communication.template.model.ApplicationT;
+import com.propertyvista.biz.communication.template.model.AutopayAgreementT;
+import com.propertyvista.biz.communication.template.model.BuildingT;
+import com.propertyvista.biz.communication.template.model.CompanyInfoT;
+import com.propertyvista.biz.communication.template.model.LeaseT;
+import com.propertyvista.biz.communication.template.model.MaintenanceRequestT;
+import com.propertyvista.biz.communication.template.model.MaintenanceRequestWOT;
+import com.propertyvista.biz.communication.template.model.PasswordRequestCrmT;
+import com.propertyvista.biz.communication.template.model.PasswordRequestProspectT;
+import com.propertyvista.biz.communication.template.model.PasswordRequestTenantT;
+import com.propertyvista.biz.communication.template.model.PaymentT;
+import com.propertyvista.biz.communication.template.model.PortalLinksT;
+import com.propertyvista.biz.communication.template.model.TenantT;
 import com.propertyvista.domain.communication.EmailTemplateType;
 
 public class EmailTemplateManager {

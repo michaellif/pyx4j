@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.biz.communication.mail.template;
+package com.propertyvista.biz.communication.template;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -29,20 +29,20 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import com.propertyvista.biz.communication.mail.template.model.ApplicationT;
-import com.propertyvista.biz.communication.mail.template.model.AutopayAgreementT;
-import com.propertyvista.biz.communication.mail.template.model.BuildingT;
-import com.propertyvista.biz.communication.mail.template.model.CompanyInfoT;
-import com.propertyvista.biz.communication.mail.template.model.EmailTemplateContext;
-import com.propertyvista.biz.communication.mail.template.model.LeaseT;
-import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestT;
-import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestWOT;
-import com.propertyvista.biz.communication.mail.template.model.PasswordRequestCrmT;
-import com.propertyvista.biz.communication.mail.template.model.PasswordRequestProspectT;
-import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTenantT;
-import com.propertyvista.biz.communication.mail.template.model.PaymentT;
-import com.propertyvista.biz.communication.mail.template.model.PortalLinksT;
-import com.propertyvista.biz.communication.mail.template.model.TenantT;
+import com.propertyvista.biz.communication.template.model.ApplicationT;
+import com.propertyvista.biz.communication.template.model.AutopayAgreementT;
+import com.propertyvista.biz.communication.template.model.BuildingT;
+import com.propertyvista.biz.communication.template.model.CompanyInfoT;
+import com.propertyvista.biz.communication.template.model.EmailTemplateContext;
+import com.propertyvista.biz.communication.template.model.LeaseT;
+import com.propertyvista.biz.communication.template.model.MaintenanceRequestT;
+import com.propertyvista.biz.communication.template.model.MaintenanceRequestWOT;
+import com.propertyvista.biz.communication.template.model.PasswordRequestCrmT;
+import com.propertyvista.biz.communication.template.model.PasswordRequestProspectT;
+import com.propertyvista.biz.communication.template.model.PasswordRequestTenantT;
+import com.propertyvista.biz.communication.template.model.PaymentT;
+import com.propertyvista.biz.communication.template.model.PortalLinksT;
+import com.propertyvista.biz.communication.template.model.TenantT;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.CrmSiteMap;

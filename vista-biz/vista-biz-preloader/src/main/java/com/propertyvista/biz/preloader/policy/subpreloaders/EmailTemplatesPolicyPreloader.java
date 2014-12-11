@@ -19,24 +19,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.communication.mail.template.EmailTemplateManager;
-import com.propertyvista.biz.communication.mail.template.model.ApplicationT;
-import com.propertyvista.biz.communication.mail.template.model.AutopayAgreementT;
-import com.propertyvista.biz.communication.mail.template.model.BuildingT;
-import com.propertyvista.biz.communication.mail.template.model.CompanyInfoT;
-import com.propertyvista.biz.communication.mail.template.model.LeaseT;
-import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestT;
-import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestWOT;
-import com.propertyvista.biz.communication.mail.template.model.PasswordRequestCrmT;
-import com.propertyvista.biz.communication.mail.template.model.PasswordRequestProspectT;
-import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTenantT;
-import com.propertyvista.biz.communication.mail.template.model.PaymentT;
-import com.propertyvista.biz.communication.mail.template.model.PortalLinksT;
-import com.propertyvista.biz.communication.mail.template.model.TenantT;
+import com.propertyvista.biz.communication.template.TemplateFacade;
+import com.propertyvista.biz.communication.template.model.ApplicationT;
+import com.propertyvista.biz.communication.template.model.AutopayAgreementT;
+import com.propertyvista.biz.communication.template.model.BuildingT;
+import com.propertyvista.biz.communication.template.model.CompanyInfoT;
+import com.propertyvista.biz.communication.template.model.LeaseT;
+import com.propertyvista.biz.communication.template.model.MaintenanceRequestT;
+import com.propertyvista.biz.communication.template.model.MaintenanceRequestWOT;
+import com.propertyvista.biz.communication.template.model.PasswordRequestCrmT;
+import com.propertyvista.biz.communication.template.model.PasswordRequestProspectT;
+import com.propertyvista.biz.communication.template.model.PasswordRequestTenantT;
+import com.propertyvista.biz.communication.template.model.PaymentT;
+import com.propertyvista.biz.communication.template.model.PortalLinksT;
+import com.propertyvista.biz.communication.template.model.TenantT;
 import com.propertyvista.biz.preloader.policy.AbstractPolicyPreloader;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
@@ -47,6 +48,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private final static I18n i18n = I18n.get(EmailTemplatesPolicyPreloader.class);
 
     private final static Logger log = LoggerFactory.getLogger(EmailTemplatesPolicyPreloader.class);
+
+    TemplateFacade templateFacade = ServerSideFactory.create(TemplateFacade.class);
 
     public EmailTemplatesPolicyPreloader() {
         super(EmailTemplatesPolicy.class);
@@ -108,18 +111,18 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
 
         policy.header().setValue( SimpleMessageFormat.format(//@formatter:off
                 headerRaw,
-                EmailTemplateManager.getVarname(portalT.SiteHomeUrl()),
-                EmailTemplateManager.getVarname(portalT.CompanyLogo()),
-                EmailTemplateManager.getVarname(portalT.CompanyName()),
-                EmailTemplateManager.getVarname(portalT.CopyrightNotice())
+                templateFacade.getVarname(portalT.SiteHomeUrl()),
+                templateFacade.getVarname(portalT.CompanyLogo()),
+                templateFacade.getVarname(portalT.CompanyName()),
+                templateFacade.getVarname(portalT.CopyrightNotice())
             ));//@formatter:on
 
         policy.footer().setValue( SimpleMessageFormat.format(//@formatter:off
                 footerRaw,
-                EmailTemplateManager.getVarname(portalT.SiteHomeUrl()),
-                EmailTemplateManager.getVarname(portalT.CompanyLogo()),
-                EmailTemplateManager.getVarname(portalT.CompanyName()),
-                EmailTemplateManager.getVarname(portalT.CopyrightNotice())
+                templateFacade.getVarname(portalT.SiteHomeUrl()),
+                templateFacade.getVarname(portalT.CompanyLogo()),
+                templateFacade.getVarname(portalT.CompanyName()),
+                templateFacade.getVarname(portalT.CopyrightNotice())
             ));//@formatter:on
 
     }
@@ -127,8 +130,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplatePasswordRetrievalCrm() {
         EmailTemplateType type = EmailTemplateType.PasswordRetrievalCrm;
 
-        PasswordRequestCrmT pwdReqT = EmailTemplateManager.getProto(type, PasswordRequestCrmT.class);
-        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
+        PasswordRequestCrmT pwdReqT = templateFacade.getProto(type, PasswordRequestCrmT.class);
+        PortalLinksT portalT = templateFacade.getProto(type, PortalLinksT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
@@ -140,9 +143,9 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "This email was sent to you in response to your request to modify your Property Vista account password.<br/>\n" +
                 "Click the link below to go to the {1} site and create new password for your account:<br/>\n" +
                 "    [[{2}|Change Your Password]]",
-                EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
-                EmailTemplateManager.getVarname(portalT.CompanyName()),
-                EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl())
+                templateFacade.getVarname(pwdReqT.RequestorName()),
+                templateFacade.getVarname(portalT.CompanyName()),
+                templateFacade.getVarname(pwdReqT.PasswordResetUrl())
         ));//@formatter:on
         return template;
     }
@@ -150,8 +153,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplatePasswordRetrievalTenant() {
         EmailTemplateType type = EmailTemplateType.PasswordRetrievalTenant;
 
-        PasswordRequestTenantT pwdReqT = EmailTemplateManager.getProto(type, PasswordRequestTenantT.class);
-        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
+        PasswordRequestTenantT pwdReqT = templateFacade.getProto(type, PasswordRequestTenantT.class);
+        PortalLinksT portalT = templateFacade.getProto(type, PortalLinksT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
@@ -163,9 +166,9 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "This email was sent to you in response to your request to modify your Property Vista account password.<br/>\n" +
                 "Click the link below to go to the {1} site and create new password for your account:<br/>\n" +
                 "    [[{2}|Change Your Password]]",
-                EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
-                EmailTemplateManager.getVarname(portalT.CompanyName()),
-                EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl())
+                templateFacade.getVarname(pwdReqT.RequestorName()),
+                templateFacade.getVarname(portalT.CompanyName()),
+                templateFacade.getVarname(pwdReqT.PasswordResetUrl())
         ));//@formatter:on
         return template;
     }
@@ -173,8 +176,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplatePasswordRetrievalProspect() {
         EmailTemplateType type = EmailTemplateType.PasswordRetrievalProspect;
 
-        PasswordRequestProspectT pwdReqT = EmailTemplateManager.getProto(type, PasswordRequestProspectT.class);
-        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
+        PasswordRequestProspectT pwdReqT = templateFacade.getProto(type, PasswordRequestProspectT.class);
+        PortalLinksT portalT = templateFacade.getProto(type, PortalLinksT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
@@ -186,9 +189,9 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "This email was sent to you in response to your request to modify your Property Vista account password.<br/>\n" +
                 "Click the link below to go to the {1} site and create new password for your account:<br/>\n" +
                 "    [[{2}|Change Your Password]]",
-                EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
-                EmailTemplateManager.getVarname(portalT.CompanyName()),
-                EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl())
+                templateFacade.getVarname(pwdReqT.RequestorName()),
+                templateFacade.getVarname(portalT.CompanyName()),
+                templateFacade.getVarname(pwdReqT.PasswordResetUrl())
         ));//@formatter:on
         return template;
     }
@@ -196,9 +199,9 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateProspectWelcome() {
         EmailTemplateType type = EmailTemplateType.ProspectWelcome;
 
-        ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
-        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
-        CompanyInfoT companyT = EmailTemplateManager.getProto(type, CompanyInfoT.class);
+        ApplicationT appT = templateFacade.getProto(type, ApplicationT.class);
+        PortalLinksT portalT = templateFacade.getProto(type, PortalLinksT.class);
+        CompanyInfoT companyT = templateFacade.getProto(type, CompanyInfoT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
@@ -229,12 +232,12 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Sincerely,<br/><br/>"+
                 "{4}<br/>" +
                 "{5}",
-                EmailTemplateManager.getVarname(appT.Applicant().FirstName()),
-                EmailTemplateManager.getVarname(companyT.Administrator().Phone()),
-                EmailTemplateManager.getVarname(appT.ReferenceNumber()),
-                EmailTemplateManager.getVarname(portalT.ProspectPortalUrl()),
-                EmailTemplateManager.getVarname(companyT.Administrator().ContactName()),
-                EmailTemplateManager.getVarname(companyT.CompanyName())
+                templateFacade.getVarname(appT.Applicant().FirstName()),
+                templateFacade.getVarname(companyT.Administrator().Phone()),
+                templateFacade.getVarname(appT.ReferenceNumber()),
+                templateFacade.getVarname(portalT.ProspectPortalUrl()),
+                templateFacade.getVarname(companyT.Administrator().ContactName()),
+                templateFacade.getVarname(companyT.CompanyName())
         ));//@formatter:on
         return template;
     }
@@ -242,9 +245,9 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateApplicationCreatedApplicant() {
         EmailTemplateType type = EmailTemplateType.ApplicationCreatedApplicant;
 
-        ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
-        BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
-        CompanyInfoT companyT = EmailTemplateManager.getProto(type, CompanyInfoT.class);
+        ApplicationT appT = templateFacade.getProto(type, ApplicationT.class);
+        BuildingT bldT = templateFacade.getProto(type, BuildingT.class);
+        CompanyInfoT companyT = templateFacade.getProto(type, CompanyInfoT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
@@ -278,13 +281,13 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "{4}<br/>"+
                 "{5}<br/>"+
                 "{6}<br/>",
-                EmailTemplateManager.getVarname(appT.Applicant().FirstName()),
-                EmailTemplateManager.getVarname(bldT.Administrator().Phone()),
-                EmailTemplateManager.getVarname(appT.ReferenceNumber()),
-                EmailTemplateManager.getVarname(appT.SignUpUrl()),
-                EmailTemplateManager.getVarname(bldT.Administrator().ContactName()),
-                EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
-                EmailTemplateManager.getVarname(companyT.CompanyName())
+                templateFacade.getVarname(appT.Applicant().FirstName()),
+                templateFacade.getVarname(bldT.Administrator().Phone()),
+                templateFacade.getVarname(appT.ReferenceNumber()),
+                templateFacade.getVarname(appT.SignUpUrl()),
+                templateFacade.getVarname(bldT.Administrator().ContactName()),
+                templateFacade.getVarname(bldT.PropertyMarketingName()),
+                templateFacade.getVarname(companyT.CompanyName())
         ));//@formatter:on
         return template;
     }
@@ -292,9 +295,9 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateApplicationCreatedCoApplicant() {
         EmailTemplateType type = EmailTemplateType.ApplicationCreatedCoApplicant;
 
-        ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
-        BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
-        CompanyInfoT companyT = EmailTemplateManager.getProto(type, CompanyInfoT.class);
+        ApplicationT appT = templateFacade.getProto(type, ApplicationT.class);
+        BuildingT bldT = templateFacade.getProto(type, BuildingT.class);
+        CompanyInfoT companyT = templateFacade.getProto(type, CompanyInfoT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
@@ -330,15 +333,15 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "{6}<br/>"+
                 "{7}<br/>"+
                 "{8}<br/>",
-                EmailTemplateManager.getVarname(appT.CoApplicant().FirstName()),
-                EmailTemplateManager.getVarname(appT.Applicant().Name()),
-                EmailTemplateManager.getVarname(appT.UnitAddress()),
-                EmailTemplateManager.getVarname(bldT.Administrator().Phone()),
-                EmailTemplateManager.getVarname(appT.ReferenceNumber()),
-                EmailTemplateManager.getVarname(appT.SignUpUrl()),
-                EmailTemplateManager.getVarname(bldT.Administrator().ContactName()),
-                EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
-                EmailTemplateManager.getVarname(companyT.CompanyName())
+                templateFacade.getVarname(appT.CoApplicant().FirstName()),
+                templateFacade.getVarname(appT.Applicant().Name()),
+                templateFacade.getVarname(appT.UnitAddress()),
+                templateFacade.getVarname(bldT.Administrator().Phone()),
+                templateFacade.getVarname(appT.ReferenceNumber()),
+                templateFacade.getVarname(appT.SignUpUrl()),
+                templateFacade.getVarname(bldT.Administrator().ContactName()),
+                templateFacade.getVarname(bldT.PropertyMarketingName()),
+                templateFacade.getVarname(companyT.CompanyName())
         ));//@formatter:on
         return template;
     }
@@ -346,9 +349,9 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateApplicationCreatedGuarantor() {
         EmailTemplateType type = EmailTemplateType.ApplicationCreatedGuarantor;
 
-        ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
-        BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
-        CompanyInfoT companyT = EmailTemplateManager.getProto(type, CompanyInfoT.class);
+        ApplicationT appT = templateFacade.getProto(type, ApplicationT.class);
+        BuildingT bldT = templateFacade.getProto(type, BuildingT.class);
+        CompanyInfoT companyT = templateFacade.getProto(type, CompanyInfoT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
@@ -386,15 +389,15 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "{6}<br/>"+
                 "{7}<br/>"+
                 "{8}<br/>",
-                EmailTemplateManager.getVarname(appT.Guarantor().FirstName()),
-                EmailTemplateManager.getVarname(appT.GuarantorRequester().Name()),
-                EmailTemplateManager.getVarname(appT.UnitAddress()),
-                EmailTemplateManager.getVarname(bldT.Administrator().Phone()),
-                EmailTemplateManager.getVarname(appT.ReferenceNumber()),
-                EmailTemplateManager.getVarname(appT.SignUpUrl()),
-                EmailTemplateManager.getVarname(bldT.Administrator().ContactName()),
-                EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
-                EmailTemplateManager.getVarname(companyT.CompanyName())
+                templateFacade.getVarname(appT.Guarantor().FirstName()),
+                templateFacade.getVarname(appT.GuarantorRequester().Name()),
+                templateFacade.getVarname(appT.UnitAddress()),
+                templateFacade.getVarname(bldT.Administrator().Phone()),
+                templateFacade.getVarname(appT.ReferenceNumber()),
+                templateFacade.getVarname(appT.SignUpUrl()),
+                templateFacade.getVarname(bldT.Administrator().ContactName()),
+                templateFacade.getVarname(bldT.PropertyMarketingName()),
+                templateFacade.getVarname(companyT.CompanyName())
         ));//@formatter:on
         return template;
     }
@@ -402,11 +405,11 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateApplicationApproved() {
         EmailTemplateType type = EmailTemplateType.ApplicationApproved;
 
-        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
-        ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
-        BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
-        LeaseT leaseT = EmailTemplateManager.getProto(type, LeaseT.class);
-        CompanyInfoT companyT = EmailTemplateManager.getProto(type, CompanyInfoT.class);
+        PortalLinksT portalT = templateFacade.getProto(type, PortalLinksT.class);
+        ApplicationT appT = templateFacade.getProto(type, ApplicationT.class);
+        BuildingT bldT = templateFacade.getProto(type, BuildingT.class);
+        LeaseT leaseT = templateFacade.getProto(type, LeaseT.class);
+        CompanyInfoT companyT = templateFacade.getProto(type, CompanyInfoT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
@@ -441,14 +444,14 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "{5}<br/>"+
                 "{6}<br/>"+
                 "{7}<br/>",
-                EmailTemplateManager.getVarname(appT.ApplicantsAndGuarantorsNames()),
-                EmailTemplateManager.getVarname(leaseT.UnitAddress()),
-                EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
-                EmailTemplateManager.getVarname(bldT.Administrator().Phone()),
-                EmailTemplateManager.getVarname(appT.ReferenceNumber()),
-                EmailTemplateManager.getVarname(bldT.Administrator().ContactName()),
-                EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
-                EmailTemplateManager.getVarname(companyT.CompanyName())
+                templateFacade.getVarname(appT.ApplicantsAndGuarantorsNames()),
+                templateFacade.getVarname(leaseT.UnitAddress()),
+                templateFacade.getVarname(portalT.TenantPortalUrl()),
+                templateFacade.getVarname(bldT.Administrator().Phone()),
+                templateFacade.getVarname(appT.ReferenceNumber()),
+                templateFacade.getVarname(bldT.Administrator().ContactName()),
+                templateFacade.getVarname(bldT.PropertyMarketingName()),
+                templateFacade.getVarname(companyT.CompanyName())
         ));//@formatter:on
         return template;
     }
@@ -456,9 +459,9 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateApplicationDeclined() {
         EmailTemplateType type = EmailTemplateType.ApplicationDeclined;
 
-        CompanyInfoT companyT = EmailTemplateManager.getProto(type, CompanyInfoT.class);
-        ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
-        BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
+        CompanyInfoT companyT = templateFacade.getProto(type, CompanyInfoT.class);
+        ApplicationT appT = templateFacade.getProto(type, ApplicationT.class);
+        BuildingT bldT = templateFacade.getProto(type, BuildingT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
@@ -481,12 +484,12 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "{3}<br/>" +
                 "{4}<br/>" +
                 "{5}<br/>",
-                EmailTemplateManager.getVarname(appT.ApplicantsAndGuarantorsNames()),
-                EmailTemplateManager.getVarname(bldT.Administrator().Phone()),
-                EmailTemplateManager.getVarname(appT.ReferenceNumber()),
-                EmailTemplateManager.getVarname(bldT.Administrator().ContactName()),
-                EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
-                EmailTemplateManager.getVarname(companyT.CompanyName())
+                templateFacade.getVarname(appT.ApplicantsAndGuarantorsNames()),
+                templateFacade.getVarname(bldT.Administrator().Phone()),
+                templateFacade.getVarname(appT.ReferenceNumber()),
+                templateFacade.getVarname(bldT.Administrator().ContactName()),
+                templateFacade.getVarname(bldT.PropertyMarketingName()),
+                templateFacade.getVarname(companyT.CompanyName())
         ));//@formatter:on
         return template;
     }
@@ -494,9 +497,9 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateTenantInvitation() {
         EmailTemplateType type = EmailTemplateType.TenantInvitation;
 
-        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
-        BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
-        PasswordRequestTenantT pwdReqT = EmailTemplateManager.getProto(type, PasswordRequestTenantT.class);
+        PortalLinksT portalT = templateFacade.getProto(type, PortalLinksT.class);
+        BuildingT bldT = templateFacade.getProto(type, BuildingT.class);
+        PasswordRequestTenantT pwdReqT = templateFacade.getProto(type, PasswordRequestTenantT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
@@ -517,13 +520,13 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Sincerely,<br/><br/>" +
                 "{5}<br/>" +
                 "{6}<br/>",
-                EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
-                EmailTemplateManager.getVarname(portalT.CompanyName()),
-                EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl()),
-                EmailTemplateManager.getVarname(portalT.SiteHomeUrl()),
-                EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
-                EmailTemplateManager.getVarname(bldT.PropertyMarketingName()) ,
-                EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
+                templateFacade.getVarname(pwdReqT.RequestorName()),
+                templateFacade.getVarname(portalT.CompanyName()),
+                templateFacade.getVarname(pwdReqT.PasswordResetUrl()),
+                templateFacade.getVarname(portalT.SiteHomeUrl()),
+                templateFacade.getVarname(portalT.TenantPortalUrl()),
+                templateFacade.getVarname(bldT.PropertyMarketingName()) ,
+                templateFacade.getVarname(bldT.Administrator().ContactName())
         ));//@formatter:on
         return template;
     }
@@ -531,7 +534,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateMaintenanceRequestCreatedPMC() {
         EmailTemplateType type = EmailTemplateType.MaintenanceRequestCreatedPMC;
 
-        MaintenanceRequestT requestT = EmailTemplateManager.getProto(type, MaintenanceRequestT.class);
+        MaintenanceRequestT requestT = templateFacade.getProto(type, MaintenanceRequestT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
@@ -539,8 +542,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.type().setValue(type);
         template.subject().setValue(i18n.tr(//@formatter:off
                 "New Work Order - {0}{1,choice,!null#, ${1}}",
-                EmailTemplateManager.getVarname(requestT.propertyCode()),
-                EmailTemplateManager.getVarname(requestT.unitNo())
+                templateFacade.getVarname(requestT.propertyCode()),
+                templateFacade.getVarname(requestT.unitNo())
         ));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Building: {0}<br/>" +
@@ -560,20 +563,20 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "[[{13}|Request ID: {10}]]<br/>" +
                 "Request Submitted: {11}<br/>" +
                 "Current Status: {12}<br/>",
-                EmailTemplateManager.getVarname(requestT.propertyCode()),
-                EmailTemplateManager.getVarname(requestT.unitNo()),
-                EmailTemplateManager.getVarname(requestT.reporterName()),
-                EmailTemplateManager.getVarname(requestT.summary()),
-                EmailTemplateManager.getVarname(requestT.category()),
-                EmailTemplateManager.getVarname(requestT.priority()),
-                EmailTemplateManager.getVarname(requestT.description()),
-                EmailTemplateManager.getVarname(requestT.permissionToEnter()),
-                EmailTemplateManager.getVarname(requestT.preferredDateTime1()),
-                EmailTemplateManager.getVarname(requestT.preferredDateTime2()),
-                EmailTemplateManager.getVarname(requestT.requestId()),
-                EmailTemplateManager.getVarname(requestT.submitted()),
-                EmailTemplateManager.getVarname(requestT.status()),
-                EmailTemplateManager.getVarname(requestT.crmViewUrl())
+                templateFacade.getVarname(requestT.propertyCode()),
+                templateFacade.getVarname(requestT.unitNo()),
+                templateFacade.getVarname(requestT.reporterName()),
+                templateFacade.getVarname(requestT.summary()),
+                templateFacade.getVarname(requestT.category()),
+                templateFacade.getVarname(requestT.priority()),
+                templateFacade.getVarname(requestT.description()),
+                templateFacade.getVarname(requestT.permissionToEnter()),
+                templateFacade.getVarname(requestT.preferredDateTime1()),
+                templateFacade.getVarname(requestT.preferredDateTime2()),
+                templateFacade.getVarname(requestT.requestId()),
+                templateFacade.getVarname(requestT.submitted()),
+                templateFacade.getVarname(requestT.status()),
+                templateFacade.getVarname(requestT.crmViewUrl())
         ));//@formatter:on
         return template;
     }
@@ -581,8 +584,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateMaintenanceRequestCreatedTenant() {
         EmailTemplateType type = EmailTemplateType.MaintenanceRequestCreatedTenant;
 
-        MaintenanceRequestT requestT = EmailTemplateManager.getProto(type, MaintenanceRequestT.class);
-        BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
+        MaintenanceRequestT requestT = templateFacade.getProto(type, MaintenanceRequestT.class);
+        BuildingT bldT = templateFacade.getProto(type, BuildingT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
@@ -638,22 +641,22 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "[[{13}|Request ID: {10}]]<br/>" +
                 "Request Submitted: {11}<br/>" +
                 "Current Status: {12}<br/>",
-                EmailTemplateManager.getVarname(requestT.propertyCode()),
-                EmailTemplateManager.getVarname(requestT.unitNo()),
-                EmailTemplateManager.getVarname(requestT.reporterName()),
-                EmailTemplateManager.getVarname(requestT.summary()),
-                EmailTemplateManager.getVarname(requestT.category()),
-                EmailTemplateManager.getVarname(requestT.priority()),
-                EmailTemplateManager.getVarname(requestT.description()),
-                EmailTemplateManager.getVarname(requestT.permissionToEnter()),
-                EmailTemplateManager.getVarname(requestT.preferredDateTime1()),
-                EmailTemplateManager.getVarname(requestT.preferredDateTime2()),
-                EmailTemplateManager.getVarname(requestT.requestId()),
-                EmailTemplateManager.getVarname(requestT.submitted()),
-                EmailTemplateManager.getVarname(requestT.status()),
-                EmailTemplateManager.getVarname(requestT.residentViewUrl()),
-                EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
-                EmailTemplateManager.getVarname(bldT.Address())
+                templateFacade.getVarname(requestT.propertyCode()),
+                templateFacade.getVarname(requestT.unitNo()),
+                templateFacade.getVarname(requestT.reporterName()),
+                templateFacade.getVarname(requestT.summary()),
+                templateFacade.getVarname(requestT.category()),
+                templateFacade.getVarname(requestT.priority()),
+                templateFacade.getVarname(requestT.description()),
+                templateFacade.getVarname(requestT.permissionToEnter()),
+                templateFacade.getVarname(requestT.preferredDateTime1()),
+                templateFacade.getVarname(requestT.preferredDateTime2()),
+                templateFacade.getVarname(requestT.requestId()),
+                templateFacade.getVarname(requestT.submitted()),
+                templateFacade.getVarname(requestT.status()),
+                templateFacade.getVarname(requestT.residentViewUrl()),
+                templateFacade.getVarname(bldT.PropertyMarketingName()),
+                templateFacade.getVarname(bldT.Address())
         ));//@formatter:on
         return template;
     }
@@ -661,9 +664,9 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateMaintenanceRequestEntryNotice() {
         EmailTemplateType type = EmailTemplateType.MaintenanceRequestEntryNotice;
 
-        MaintenanceRequestT requestT = EmailTemplateManager.getProto(type, MaintenanceRequestT.class);
-        MaintenanceRequestWOT woT = EmailTemplateManager.getProto(type, MaintenanceRequestWOT.class);
-        BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
+        MaintenanceRequestT requestT = templateFacade.getProto(type, MaintenanceRequestT.class);
+        MaintenanceRequestWOT woT = templateFacade.getProto(type, MaintenanceRequestWOT.class);
+        BuildingT bldT = templateFacade.getProto(type, BuildingT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
@@ -699,25 +702,25 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "[[{13}|Request ID: {10}]]<br/>" +
                 "Request Submitted: {11}<br/>" +
                 "Current Status: {12}<br/>",
-                EmailTemplateManager.getVarname(requestT.propertyCode()),
-                EmailTemplateManager.getVarname(requestT.unitNo()),
-                EmailTemplateManager.getVarname(requestT.reporterName()),
-                EmailTemplateManager.getVarname(requestT.summary()),
-                EmailTemplateManager.getVarname(requestT.category()),
-                EmailTemplateManager.getVarname(requestT.priority()),
-                EmailTemplateManager.getVarname(requestT.description()),
-                EmailTemplateManager.getVarname(requestT.permissionToEnter()),
-                EmailTemplateManager.getVarname(requestT.preferredDateTime1()),
-                EmailTemplateManager.getVarname(requestT.preferredDateTime2()),
-                EmailTemplateManager.getVarname(requestT.requestId()),
-                EmailTemplateManager.getVarname(requestT.submitted()),
-                EmailTemplateManager.getVarname(requestT.status()),
-                EmailTemplateManager.getVarname(requestT.residentViewUrl()),
-                EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
-                EmailTemplateManager.getVarname(bldT.Address()),
-                EmailTemplateManager.getVarname(woT.scheduledDate()),
-                EmailTemplateManager.getVarname(woT.scheduledTimeSlot()),
-                EmailTemplateManager.getVarname(woT.workDescription())
+                templateFacade.getVarname(requestT.propertyCode()),
+                templateFacade.getVarname(requestT.unitNo()),
+                templateFacade.getVarname(requestT.reporterName()),
+                templateFacade.getVarname(requestT.summary()),
+                templateFacade.getVarname(requestT.category()),
+                templateFacade.getVarname(requestT.priority()),
+                templateFacade.getVarname(requestT.description()),
+                templateFacade.getVarname(requestT.permissionToEnter()),
+                templateFacade.getVarname(requestT.preferredDateTime1()),
+                templateFacade.getVarname(requestT.preferredDateTime2()),
+                templateFacade.getVarname(requestT.requestId()),
+                templateFacade.getVarname(requestT.submitted()),
+                templateFacade.getVarname(requestT.status()),
+                templateFacade.getVarname(requestT.residentViewUrl()),
+                templateFacade.getVarname(bldT.PropertyMarketingName()),
+                templateFacade.getVarname(bldT.Address()),
+                templateFacade.getVarname(woT.scheduledDate()),
+                templateFacade.getVarname(woT.scheduledTimeSlot()),
+                templateFacade.getVarname(woT.workDescription())
         ));//@formatter:on
         return template;
     }
@@ -725,8 +728,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateMaintenanceRequestUpdated() {
         EmailTemplateType type = EmailTemplateType.MaintenanceRequestUpdated;
 
-        MaintenanceRequestT requestT = EmailTemplateManager.getProto(type, MaintenanceRequestT.class);
-        BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
+        MaintenanceRequestT requestT = templateFacade.getProto(type, MaintenanceRequestT.class);
+        BuildingT bldT = templateFacade.getProto(type, BuildingT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
@@ -761,22 +764,22 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "[[{13}|Request ID: {10}]]<br/>" +
                 "Request Submitted: {11}<br/>" +
                 "Current Status: {12}<br/>",
-                EmailTemplateManager.getVarname(requestT.propertyCode()),
-                EmailTemplateManager.getVarname(requestT.unitNo()),
-                EmailTemplateManager.getVarname(requestT.reporterName()),
-                EmailTemplateManager.getVarname(requestT.summary()),
-                EmailTemplateManager.getVarname(requestT.category()),
-                EmailTemplateManager.getVarname(requestT.priority()),
-                EmailTemplateManager.getVarname(requestT.description()),
-                EmailTemplateManager.getVarname(requestT.permissionToEnter()),
-                EmailTemplateManager.getVarname(requestT.preferredDateTime1()),
-                EmailTemplateManager.getVarname(requestT.preferredDateTime2()),
-                EmailTemplateManager.getVarname(requestT.requestId()),
-                EmailTemplateManager.getVarname(requestT.submitted()),
-                EmailTemplateManager.getVarname(requestT.status()),
-                EmailTemplateManager.getVarname(requestT.residentViewUrl()),
-                EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
-                EmailTemplateManager.getVarname(bldT.Address())
+                templateFacade.getVarname(requestT.propertyCode()),
+                templateFacade.getVarname(requestT.unitNo()),
+                templateFacade.getVarname(requestT.reporterName()),
+                templateFacade.getVarname(requestT.summary()),
+                templateFacade.getVarname(requestT.category()),
+                templateFacade.getVarname(requestT.priority()),
+                templateFacade.getVarname(requestT.description()),
+                templateFacade.getVarname(requestT.permissionToEnter()),
+                templateFacade.getVarname(requestT.preferredDateTime1()),
+                templateFacade.getVarname(requestT.preferredDateTime2()),
+                templateFacade.getVarname(requestT.requestId()),
+                templateFacade.getVarname(requestT.submitted()),
+                templateFacade.getVarname(requestT.status()),
+                templateFacade.getVarname(requestT.residentViewUrl()),
+                templateFacade.getVarname(bldT.PropertyMarketingName()),
+                templateFacade.getVarname(bldT.Address())
         ));//@formatter:on
         return template;
     }
@@ -784,8 +787,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateMaintenanceRequestCompleted() {
         EmailTemplateType type = EmailTemplateType.MaintenanceRequestCompleted;
 
-        MaintenanceRequestT requestT = EmailTemplateManager.getProto(type, MaintenanceRequestT.class);
-        BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
+        MaintenanceRequestT requestT = templateFacade.getProto(type, MaintenanceRequestT.class);
+        BuildingT bldT = templateFacade.getProto(type, BuildingT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
@@ -825,23 +828,23 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "[[{13}|Request ID: {10}]]<br/>" +
                 "Request Submitted: {11}<br/>" +
                 "Request Completed: {16}<br/>",
-                EmailTemplateManager.getVarname(requestT.propertyCode()),
-                EmailTemplateManager.getVarname(requestT.unitNo()),
-                EmailTemplateManager.getVarname(requestT.reporterName()),
-                EmailTemplateManager.getVarname(requestT.summary()),
-                EmailTemplateManager.getVarname(requestT.category()),
-                EmailTemplateManager.getVarname(requestT.priority()),
-                EmailTemplateManager.getVarname(requestT.description()),
-                EmailTemplateManager.getVarname(requestT.permissionToEnter()),
-                EmailTemplateManager.getVarname(requestT.preferredDateTime1()),
-                EmailTemplateManager.getVarname(requestT.preferredDateTime2()),
-                EmailTemplateManager.getVarname(requestT.requestId()),
-                EmailTemplateManager.getVarname(requestT.submitted()),
-                EmailTemplateManager.getVarname(requestT.status()),
-                EmailTemplateManager.getVarname(requestT.residentViewUrl()),
-                EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
-                EmailTemplateManager.getVarname(bldT.Address()),
-                EmailTemplateManager.getVarname(requestT.resolved()),
+                templateFacade.getVarname(requestT.propertyCode()),
+                templateFacade.getVarname(requestT.unitNo()),
+                templateFacade.getVarname(requestT.reporterName()),
+                templateFacade.getVarname(requestT.summary()),
+                templateFacade.getVarname(requestT.category()),
+                templateFacade.getVarname(requestT.priority()),
+                templateFacade.getVarname(requestT.description()),
+                templateFacade.getVarname(requestT.permissionToEnter()),
+                templateFacade.getVarname(requestT.preferredDateTime1()),
+                templateFacade.getVarname(requestT.preferredDateTime2()),
+                templateFacade.getVarname(requestT.requestId()),
+                templateFacade.getVarname(requestT.submitted()),
+                templateFacade.getVarname(requestT.status()),
+                templateFacade.getVarname(requestT.residentViewUrl()),
+                templateFacade.getVarname(bldT.PropertyMarketingName()),
+                templateFacade.getVarname(bldT.Address()),
+                templateFacade.getVarname(requestT.resolved()),
                 "SurveyURL" // TODO
         ));//@formatter:on
         return template;
@@ -850,8 +853,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateMaintenanceRequestCancelled() {
         EmailTemplateType type = EmailTemplateType.MaintenanceRequestCancelled;
 
-        MaintenanceRequestT requestT = EmailTemplateManager.getProto(type, MaintenanceRequestT.class);
-        BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
+        MaintenanceRequestT requestT = templateFacade.getProto(type, MaintenanceRequestT.class);
+        BuildingT bldT = templateFacade.getProto(type, BuildingT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
@@ -887,23 +890,23 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "[[{13}|Request ID: {10}]]<br/>" +
                 "Request Submitted: {11}<br/>" +
                 "Current Status: {12}<br/>",
-                EmailTemplateManager.getVarname(requestT.propertyCode()),
-                EmailTemplateManager.getVarname(requestT.unitNo()),
-                EmailTemplateManager.getVarname(requestT.reporterName()),
-                EmailTemplateManager.getVarname(requestT.summary()),
-                EmailTemplateManager.getVarname(requestT.category()),
-                EmailTemplateManager.getVarname(requestT.priority()),
-                EmailTemplateManager.getVarname(requestT.description()),
-                EmailTemplateManager.getVarname(requestT.permissionToEnter()),
-                EmailTemplateManager.getVarname(requestT.preferredDateTime1()),
-                EmailTemplateManager.getVarname(requestT.preferredDateTime2()),
-                EmailTemplateManager.getVarname(requestT.requestId()),
-                EmailTemplateManager.getVarname(requestT.submitted()),
-                EmailTemplateManager.getVarname(requestT.status()),
-                EmailTemplateManager.getVarname(requestT.residentViewUrl()),
-                EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
-                EmailTemplateManager.getVarname(bldT.Address()),
-                EmailTemplateManager.getVarname(requestT.cancellationNote())
+                templateFacade.getVarname(requestT.propertyCode()),
+                templateFacade.getVarname(requestT.unitNo()),
+                templateFacade.getVarname(requestT.reporterName()),
+                templateFacade.getVarname(requestT.summary()),
+                templateFacade.getVarname(requestT.category()),
+                templateFacade.getVarname(requestT.priority()),
+                templateFacade.getVarname(requestT.description()),
+                templateFacade.getVarname(requestT.permissionToEnter()),
+                templateFacade.getVarname(requestT.preferredDateTime1()),
+                templateFacade.getVarname(requestT.preferredDateTime2()),
+                templateFacade.getVarname(requestT.requestId()),
+                templateFacade.getVarname(requestT.submitted()),
+                templateFacade.getVarname(requestT.status()),
+                templateFacade.getVarname(requestT.residentViewUrl()),
+                templateFacade.getVarname(bldT.PropertyMarketingName()),
+                templateFacade.getVarname(bldT.Address()),
+                templateFacade.getVarname(requestT.cancellationNote())
         ));//@formatter:on
         return template;
     }
@@ -911,15 +914,15 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateOneTimePaymentSubmitted() {
         EmailTemplateType type = EmailTemplateType.OneTimePaymentSubmitted;
 
-        PaymentT paymentT = EmailTemplateManager.getProto(type, PaymentT.class);
-        TenantT tenantT = EmailTemplateManager.getProto(type, TenantT.class);
-        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
+        PaymentT paymentT = templateFacade.getProto(type, PaymentT.class);
+        TenantT tenantT = templateFacade.getProto(type, TenantT.class);
+        PortalLinksT portalT = templateFacade.getProto(type, PortalLinksT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("{0} - Your payment has been Submitted", EmailTemplateManager.getVarname(portalT.CompanyName())));
+        template.subject().setValue(i18n.tr("{0} - Your payment has been Submitted", templateFacade.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/>" +
                 "<br/>" +
@@ -936,12 +939,12 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "You can review the status of your payment at anytime in your myCommunity portal <b>[[{4}|here]]</b><br/>" +
                 "<br/>" +
                 "Thank you for choosing {5}.",
-                EmailTemplateManager.getVarname(tenantT.FirstName()),
-                EmailTemplateManager.getVarname(paymentT.Amount()),
-                EmailTemplateManager.getVarname(paymentT.Date()),
-                EmailTemplateManager.getVarname(paymentT.ReferenceNumber()),
-                EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
-                EmailTemplateManager.getVarname(portalT.CompanyName())
+                templateFacade.getVarname(tenantT.FirstName()),
+                templateFacade.getVarname(paymentT.Amount()),
+                templateFacade.getVarname(paymentT.Date()),
+                templateFacade.getVarname(paymentT.ReferenceNumber()),
+                templateFacade.getVarname(portalT.TenantPortalUrl()),
+                templateFacade.getVarname(portalT.CompanyName())
         ));//@formatter:on
         return template;
     }
@@ -949,15 +952,15 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplatePaymentReceipt() {
         EmailTemplateType type = EmailTemplateType.PaymentReceipt;
 
-        PaymentT paymentT = EmailTemplateManager.getProto(type, PaymentT.class);
-        TenantT tenantT = EmailTemplateManager.getProto(type, TenantT.class);
-        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
+        PaymentT paymentT = templateFacade.getProto(type, PaymentT.class);
+        TenantT tenantT = templateFacade.getProto(type, TenantT.class);
+        PortalLinksT portalT = templateFacade.getProto(type, PortalLinksT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("{0} - Your payment has been Processed", EmailTemplateManager.getVarname(portalT.CompanyName())));
+        template.subject().setValue(i18n.tr("{0} - Your payment has been Processed", templateFacade.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
                 "Thank you for submitting your payment.<br/><br/>" +
@@ -967,12 +970,12 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "You can review the status of your payment at anytime in your myCommunity portal <b>[[{4}|here]]</b><br/><br/>" +
                 "Thank you for choosing {5}.",
                 //TODO (If you do not wish to receive this notice any further you can opt out under your personal settings in your myCommunity portal here)
-                EmailTemplateManager.getVarname(tenantT.FirstName()),
-                EmailTemplateManager.getVarname(paymentT.Amount()),
-                EmailTemplateManager.getVarname(paymentT.Date()),
-                EmailTemplateManager.getVarname(paymentT.ReferenceNumber()),
-                EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
-                EmailTemplateManager.getVarname(portalT.CompanyName())
+                templateFacade.getVarname(tenantT.FirstName()),
+                templateFacade.getVarname(paymentT.Amount()),
+                templateFacade.getVarname(paymentT.Date()),
+                templateFacade.getVarname(paymentT.ReferenceNumber()),
+                templateFacade.getVarname(portalT.TenantPortalUrl()),
+                templateFacade.getVarname(portalT.CompanyName())
         ));//@formatter:on
         return template;
     }
@@ -980,15 +983,15 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplatePaymentReceiptWithWebPaymentFee() {
         EmailTemplateType type = EmailTemplateType.PaymentReceiptWithWebPaymentFee;
 
-        PaymentT paymentT = EmailTemplateManager.getProto(type, PaymentT.class);
-        TenantT tenantT = EmailTemplateManager.getProto(type, TenantT.class);
-        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
+        PaymentT paymentT = templateFacade.getProto(type, PaymentT.class);
+        TenantT tenantT = templateFacade.getProto(type, TenantT.class);
+        PortalLinksT portalT = templateFacade.getProto(type, PortalLinksT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("{0} - Your payment has been Processed", EmailTemplateManager.getVarname(portalT.CompanyName())));
+        template.subject().setValue(i18n.tr("{0} - Your payment has been Processed", templateFacade.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
                 "Thank you for submitting your payment.<br/><br/>" +
@@ -998,13 +1001,13 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<div style=\"margin-left:80px\">#<b>{4}</b></div><br/><br/>" +
                 "You can review the status of your payment at anytime in your myCommunity portal <b>[[{5}|here]]</b><br/><br/>" +
                 "Thank you for choosing {6}.",
-                EmailTemplateManager.getVarname(tenantT.FirstName()),
-                EmailTemplateManager.getVarname(paymentT.Amount()),
-                EmailTemplateManager.getVarname(paymentT.ConvenienceFee()),
-                EmailTemplateManager.getVarname(paymentT.Date()),
-                EmailTemplateManager.getVarname(paymentT.ReferenceNumber()),
-                EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
-                EmailTemplateManager.getVarname(portalT.CompanyName())
+                templateFacade.getVarname(tenantT.FirstName()),
+                templateFacade.getVarname(paymentT.Amount()),
+                templateFacade.getVarname(paymentT.ConvenienceFee()),
+                templateFacade.getVarname(paymentT.Date()),
+                templateFacade.getVarname(paymentT.ReferenceNumber()),
+                templateFacade.getVarname(portalT.TenantPortalUrl()),
+                templateFacade.getVarname(portalT.CompanyName())
         ));//@formatter:on
         return template;
     }
@@ -1012,15 +1015,15 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplatePaymentReturned() {
         EmailTemplateType type = EmailTemplateType.PaymentReturned;
 
-        PaymentT paymentT = EmailTemplateManager.getProto(type, PaymentT.class);
-        TenantT tenantT = EmailTemplateManager.getProto(type, TenantT.class);
-        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
+        PaymentT paymentT = templateFacade.getProto(type, PaymentT.class);
+        TenantT tenantT = templateFacade.getProto(type, TenantT.class);
+        PortalLinksT portalT = templateFacade.getProto(type, PortalLinksT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("{0} - Your payment has not been processed", EmailTemplateManager.getVarname(portalT.CompanyName())));
+        template.subject().setValue(i18n.tr("{0} - Your payment has not been processed", templateFacade.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
                 "Your payment of {1} on {2} has not been processed for the following reason:<br/><br/>" +
@@ -1031,14 +1034,14 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "You can review the status of your arrears on your myCommunity Resident Portal at anytime. To access your myCommunity portal click <b>[[{6}|here]]</b><br/><br/>" +
                 "Note: Additional administrative fees may apply as per your agreement.<br/><br/>" +
                 "Thank you for choosing {7}.",
-                /*{0}*/EmailTemplateManager.getVarname(tenantT.FirstName()),
-                /*{1}*/EmailTemplateManager.getVarname(paymentT.Amount()),
-                /*{2}*/EmailTemplateManager.getVarname(paymentT.Date()),
-                /*{3}*/EmailTemplateManager.getVarname(paymentT.RejectReason()),
-                /*{4}*/EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
-                /*{5}*/EmailTemplateManager.getVarname(paymentT.ReferenceNumber()),
-                /*{6}*/EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
-                /*{7}*/EmailTemplateManager.getVarname(portalT.CompanyName())
+                /*{0}*/templateFacade.getVarname(tenantT.FirstName()),
+                /*{1}*/templateFacade.getVarname(paymentT.Amount()),
+                /*{2}*/templateFacade.getVarname(paymentT.Date()),
+                /*{3}*/templateFacade.getVarname(paymentT.RejectReason()),
+                /*{4}*/templateFacade.getVarname(portalT.TenantPortalUrl()),
+                /*{5}*/templateFacade.getVarname(paymentT.ReferenceNumber()),
+                /*{6}*/templateFacade.getVarname(portalT.TenantPortalUrl()),
+                /*{7}*/templateFacade.getVarname(portalT.CompanyName())
         ));//@formatter:on
         return template;
     }
@@ -1046,15 +1049,15 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateAutoPaySetupConfirmation() {
         EmailTemplateType type = EmailTemplateType.AutoPaySetupConfirmation;
 
-        AutopayAgreementT paymentT = EmailTemplateManager.getProto(type, AutopayAgreementT.class);
-        TenantT tenantT = EmailTemplateManager.getProto(type, TenantT.class);
-        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
+        AutopayAgreementT paymentT = templateFacade.getProto(type, AutopayAgreementT.class);
+        TenantT tenantT = templateFacade.getProto(type, TenantT.class);
+        PortalLinksT portalT = templateFacade.getProto(type, PortalLinksT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("{0} - AutoPay Setup Confirmation", EmailTemplateManager.getVarname(portalT.CompanyName())));
+        template.subject().setValue(i18n.tr("{0} - AutoPay Setup Confirmation", templateFacade.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
                 "Thank you for setting up your AutoPay payment.<br/><br/>" +
@@ -1062,11 +1065,11 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Your first payment will be processed on <b>{2}</b><br/><br/>" +
                 "You can review the status of your payment at anytime in your myCommunity portal <b>[[{3}|here]]</b> and easily make any changes to your AutoPay payment via your myCommunity portal.<br/><br/>" +
                 "Thank you for choosing {4}.",
-                EmailTemplateManager.getVarname(tenantT.FirstName()),
-                EmailTemplateManager.getVarname(paymentT.Amount()),
-                EmailTemplateManager.getVarname(paymentT.NextPaymentDate()),
-                EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
-                EmailTemplateManager.getVarname(portalT.CompanyName())
+                templateFacade.getVarname(tenantT.FirstName()),
+                templateFacade.getVarname(paymentT.Amount()),
+                templateFacade.getVarname(paymentT.NextPaymentDate()),
+                templateFacade.getVarname(portalT.TenantPortalUrl()),
+                templateFacade.getVarname(portalT.CompanyName())
         ));//@formatter:on
         return template;
     }
@@ -1074,15 +1077,15 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateAutoPayChanges() {
         EmailTemplateType type = EmailTemplateType.AutoPayChanges;
 
-        AutopayAgreementT paymentT = EmailTemplateManager.getProto(type, AutopayAgreementT.class);
-        TenantT tenantT = EmailTemplateManager.getProto(type, TenantT.class);
-        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
+        AutopayAgreementT paymentT = templateFacade.getProto(type, AutopayAgreementT.class);
+        TenantT tenantT = templateFacade.getProto(type, TenantT.class);
+        PortalLinksT portalT = templateFacade.getProto(type, PortalLinksT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("{0} - AutoPay Change Confirmation", EmailTemplateManager.getVarname(portalT.CompanyName())));
+        template.subject().setValue(i18n.tr("{0} - AutoPay Change Confirmation", templateFacade.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
                 "Your AutoPay payment has been updated to reflect your most recent changes on your account.<br/><br/>" +
@@ -1090,11 +1093,11 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Your first payment with the new payment amount will be processed on <b>{2}</b><br/><br/>" +
                 "You can review the status of your payment at anytime in your myCommunity portal <b>[[{3}|here]]</b> and easily make any changes to your AutoPay payment via your myCommunity portal.<br/><br/>" +
                 "Thank you for choosing {4}.",
-                EmailTemplateManager.getVarname(tenantT.FirstName()),
-                EmailTemplateManager.getVarname(paymentT.Amount()),
-                EmailTemplateManager.getVarname(paymentT.NextPaymentDate()),
-                EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
-                EmailTemplateManager.getVarname(portalT.CompanyName())
+                templateFacade.getVarname(tenantT.FirstName()),
+                templateFacade.getVarname(paymentT.Amount()),
+                templateFacade.getVarname(paymentT.NextPaymentDate()),
+                templateFacade.getVarname(portalT.TenantPortalUrl()),
+                templateFacade.getVarname(portalT.CompanyName())
         ));//@formatter:on
         return template;
     }
@@ -1102,25 +1105,25 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateAutoPayCancellation() {
         EmailTemplateType type = EmailTemplateType.AutoPayCancellation;
 
-        AutopayAgreementT paymentT = EmailTemplateManager.getProto(type, AutopayAgreementT.class);
-        TenantT tenantT = EmailTemplateManager.getProto(type, TenantT.class);
-        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
+        AutopayAgreementT paymentT = templateFacade.getProto(type, AutopayAgreementT.class);
+        TenantT tenantT = templateFacade.getProto(type, TenantT.class);
+        PortalLinksT portalT = templateFacade.getProto(type, PortalLinksT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("{0} - AutoPay Change Confirmation", EmailTemplateManager.getVarname(portalT.CompanyName())));
+        template.subject().setValue(i18n.tr("{0} - AutoPay Change Confirmation", templateFacade.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
                 "Your AutoPay payment of <b>{1}</b> has been cancelled effective immediately.<br/><br/>" +
                 "Please remember all rent is due in full on the 1st of the month. If you believe the AutoPay payment has been cancelled in error you can login to your myCommunity portal <b>[[{3}|here]]</b> to add a new AutoPay payment.<br/><br/>" +
                 "Thank you for choosing {4}.",
-                EmailTemplateManager.getVarname(tenantT.FirstName()),
-                EmailTemplateManager.getVarname(paymentT.Amount()),
-                EmailTemplateManager.getVarname(paymentT.NextPaymentDate()),
-                EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
-                EmailTemplateManager.getVarname(portalT.CompanyName())
+                templateFacade.getVarname(tenantT.FirstName()),
+                templateFacade.getVarname(paymentT.Amount()),
+                templateFacade.getVarname(paymentT.NextPaymentDate()),
+                templateFacade.getVarname(portalT.TenantPortalUrl()),
+                templateFacade.getVarname(portalT.CompanyName())
         ));//@formatter:on
         return template;
     }
@@ -1128,15 +1131,15 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateDirectDebitAccountChanged() {
         EmailTemplateType type = EmailTemplateType.DirectDebitAccountChanged;
 
-        TenantT tenantT = EmailTemplateManager.getProto(type, TenantT.class);
-        LeaseT leaseT = EmailTemplateManager.getProto(type, LeaseT.class);
-        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
+        TenantT tenantT = templateFacade.getProto(type, TenantT.class);
+        LeaseT leaseT = templateFacade.getProto(type, LeaseT.class);
+        PortalLinksT portalT = templateFacade.getProto(type, PortalLinksT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("Direct Debit Account Changed", EmailTemplateManager.getVarname(portalT.CompanyName())));
+        template.subject().setValue(i18n.tr("Direct Debit Account Changed", templateFacade.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
                 "Our Record indicate that you have made a Direct Debit Rent Payment in the past through your bank directly." +
@@ -1148,11 +1151,11 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "You may click <b>[[{2}|here]]</b> for further detailed payment instructions.<br/><br/>" +
                 "If you have any questions around your balance and/or available payment methods you can review them in your Resident Portal <b>[[{3}|here]]</b>.<br/><br/>" +
                 "Thank you for choosing {4}.",
-                EmailTemplateManager.getVarname(tenantT.FirstName()),
-                EmailTemplateManager.getVarname(leaseT.BillingAccount()),
-                EmailTemplateManager.getVarname(portalT.DirectBankingHelpUrl()),
-                EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
-                EmailTemplateManager.getVarname(portalT.CompanyName())
+                templateFacade.getVarname(tenantT.FirstName()),
+                templateFacade.getVarname(leaseT.BillingAccount()),
+                templateFacade.getVarname(portalT.DirectBankingHelpUrl()),
+                templateFacade.getVarname(portalT.TenantPortalUrl()),
+                templateFacade.getVarname(portalT.CompanyName())
         ));//@formatter:on
         return template;
     }

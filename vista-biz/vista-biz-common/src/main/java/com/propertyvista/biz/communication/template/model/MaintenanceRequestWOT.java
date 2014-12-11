@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 2, 2013
- * @author vlads
+ * Created on Jul 30, 2013
+ * @author stanp
  * @version $Id$
  */
-package com.propertyvista.biz.communication.mail.template.model;
+package com.propertyvista.biz.communication.template.model;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
@@ -20,10 +20,11 @@ import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface CompanyInfoT extends IEntity {
+public interface MaintenanceRequestWOT extends IEntity {
 
-    IPrimitive<String> CompanyName();
+    IPrimitive<String> scheduledDate();
 
-    PropertyContactT Administrator();
+    IPrimitive<String> scheduledTimeSlot();
 
+    IPrimitive<String> workDescription();
 }
