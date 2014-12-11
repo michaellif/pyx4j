@@ -24,16 +24,12 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.StringDebugId;
@@ -43,10 +39,8 @@ import com.pyx4j.entity.core.ICollection;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.entity.core.ISet;
 import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.Path;
-import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.EntityGraph.EntityGraphEqualOptions;
@@ -292,125 +286,6 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
         options.ignoreRpcTransient = true;
         options.trace = true;
         return !EntityGraph.fullyEqual(getOrigValue(), getValue(), options);
-        //return !equalRecursive(getOrigValue(), getValue());
-    }
-
-    //TODO VladsL I keep in in 1.1.4 to verify the code.  Remove once tested
-    @Deprecated
-    public static boolean equalRecursive(IEntity entity1, IEntity entity2) {
-        return equalRecursive(entity1, entity2, new HashSet<IEntity>());
-    }
-
-    @Deprecated
-    private static boolean equalRecursive(IEntity entity1, IEntity entity2, Set<IEntity> processed) {
-        if (((entity2 == null) || entity2.isNull())) {
-            return isEmptyEntity(entity1);
-        } else if ((entity1 == null) || entity1.isNull()) {
-            return isEmptyEntity(entity2);
-        }
-        if (processed != null) {
-            if (processed.contains(entity1)) {
-                return true;
-            }
-            processed.add(entity1);
-        }
-        EntityMeta em = entity1.getEntityMeta();
-        for (String memberName : em.getMemberNames()) {
-            MemberMeta memberMeta = em.getMemberMeta(memberName);
-            if (memberMeta.isDetached() || memberMeta.isTransient() || memberMeta.isRpcTransient()) {
-                continue;
-            }
-            if (memberMeta.isEntity()) {
-                if (memberMeta.isOwnedRelationships()) {
-                    if (!equalRecursive((IEntity) entity1.getMember(memberName), (IEntity) entity2.getMember(memberName), processed)) {
-                        log.debug("changed {}", memberName);
-                        return false;
-                    }
-                } else if (((IEntity) entity1.getMember(memberName)).isNull()) {
-                    if (!((IEntity) entity2.getMember(memberName)).isNull()) {
-                        log.debug("changed [null] -> [{}]", entity2.getMember(memberName));
-                        return false;
-                    }
-                } else if (!EqualsHelper.equals(entity1.getMember(memberName), entity2.getMember(memberName))) {
-                    log.debug("changed [{}] -> [{}]", entity1.getMember(memberName), entity2.getMember(memberName));
-                    return false;
-                }
-            } else if (ISet.class.equals(memberMeta.getObjectClass())) {
-                //TODO OwnedRelationships
-                if (!EqualsHelper.equals((ISet<?>) entity1.getMember(memberName), (ISet<?>) entity2.getMember(memberName))) {
-                    log.debug("changed {}", memberName);
-                    return false;
-                }
-            } else if (IList.class.equals(memberMeta.getObjectClass())) {
-                if (memberMeta.isOwnedRelationships()) {
-                    if (!listValuesEquals((IList<?>) entity1.getMember(memberName), (IList<?>) entity2.getMember(memberName), processed)) {
-                        log.debug("changed {}", memberName);
-                        return false;
-                    }
-                } else if (!EqualsHelper.equals((IList<?>) entity1.getMember(memberName), (IList<?>) entity2.getMember(memberName))) {
-                    log.debug("changed {}", memberName);
-                    return false;
-                }
-            } else if (!EqualsHelper.equals(entity1.getMember(memberName), entity2.getMember(memberName))) {
-                log.debug("changed {}", memberName);
-                log.debug("[{}] -> [{}]", entity1.getMember(memberName), entity2.getMember(memberName));
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Deprecated
-    private static boolean listValuesEquals(IList<?> value1, IList<?> value2, Set<IEntity> processed) {
-        if (value1.size() != value2.size()) {
-            return false;
-        }
-        Iterator<?> iter1 = value1.iterator();
-        Iterator<?> iter2 = value2.iterator();
-        for (; iter1.hasNext() && iter2.hasNext();) {
-            if (!equalRecursive((IEntity) iter1.next(), (IEntity) iter2.next(), processed)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Deprecated
-    public static boolean isEmptyEntity(IEntity entity) {
-        if ((entity == null) || entity.isNull()) {
-            return true;
-        }
-        EntityMeta em = entity.getEntityMeta();
-        for (String memberName : em.getMemberNames()) {
-            MemberMeta memberMeta = em.getMemberMeta(memberName);
-            if (memberMeta.isDetached() || memberMeta.isTransient() || memberMeta.isRpcTransient()) {
-                continue;
-            }
-            IObject<?> member = entity.getMember(memberName);
-            if (member.isNull()) {
-                continue;
-            } else if (memberMeta.isEntity()) {
-                if (!isEmptyEntity((IEntity) member)) {
-                    log.debug("member {} not empty; {}", memberName, member);
-                    return false;
-                }
-            } else if ((ISet.class.equals(memberMeta.getObjectClass())) || (IList.class.equals(memberMeta.getObjectClass()))) {
-                if (!((ICollection<?, ?>) member).isEmpty()) {
-                    log.debug("member {} not empty; {}", memberName, member);
-                    return false;
-                }
-            } else if (Boolean.class.equals(memberMeta.getValueClass())) {
-                // Special case for values presented by CheckBox
-                if (member.getValue() == Boolean.TRUE) {
-                    log.debug("member {} not empty; {}", memberName, member);
-                    return false;
-                }
-            } else {
-                log.debug("member {} not empty; {}", memberName, member);
-                return false;
-            }
-        }
-        return true;
     }
 
     @Override
