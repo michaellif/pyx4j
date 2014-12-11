@@ -56,6 +56,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
@@ -413,7 +414,33 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         //DataDump.dump("saveScreening", screening);
 
+        persistScreening(screening);
+    }
+
+    private void persistScreening(CustomerScreening screening) {
+
+        for (IdentificationDocument item : screening.version().documents()) {
+            removeEmptyFiles(item.files());
+        }
+
+        for (CustomerScreeningIncome item : screening.version().incomes()) {
+            removeEmptyFiles(item.files());
+        }
+
+        for (CustomerScreeningAsset item : screening.version().assets()) {
+            removeEmptyFiles(item.files());
+        }
+
         Persistence.service().merge(screening);
+    }
+
+    private <F extends ApplicationDocumentFile<?>> void removeEmptyFiles(List<F> files) {
+        Iterator<F> it = files.iterator();
+        while (it.hasNext()) {
+            if (it.next().file().isEmpty()) {
+                it.remove();
+            }
+        }
     }
 
     private void fillOccupants(OnlineApplication bo, OnlineApplicationDTO to) {
