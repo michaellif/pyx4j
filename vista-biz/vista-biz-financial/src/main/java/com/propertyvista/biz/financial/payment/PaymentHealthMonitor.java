@@ -215,8 +215,8 @@ class PaymentHealthMonitor {
             Date reportSince = DateUtils.addMonths(forDate, -2);
             Date reportBefore = DateUtils.addDays(forDate, -3);
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.ge(criteria.proto().createdDate(), reportSince);
-            criteria.le(criteria.proto().createdDate(), reportBefore);
+            criteria.ge(criteria.proto().created(), reportSince);
+            criteria.le(criteria.proto().created(), reportBefore);
             criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.CreditCard);
             criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Received);
             criteria.isNull(criteria.proto().aggregatedTransfer());
@@ -254,7 +254,7 @@ class PaymentHealthMonitor {
 
             Date reportSince = DateUtils.addMonths(forDate, -2);
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.ge(criteria.proto().createdDate(), reportSince);
+            criteria.ge(criteria.proto().created(), reportSince);
             criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.CreditCard);
             ICursorIterator<PaymentRecord> iterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
             try {

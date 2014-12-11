@@ -17,6 +17,9 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -42,9 +45,13 @@ public interface YardiPaymentPostingBatchRecord extends IEntity {
     @JoinColumn
     YardiPaymentPostingBatch batch();
 
+    @Format("yyyy-MM-dd HH:mm:ss")
+    @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 
+    @Format("yyyy-MM-dd HH:mm:ss")
+    @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> created();
 

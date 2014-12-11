@@ -63,7 +63,7 @@ public class PapFolder extends VistaBoxFolder<PreauthorizedPaymentDTO> {
 
     /**
      * Override this method to supply tenant's payment methods
-     * 
+     *
      * @return list of available payment methods.
      */
     protected List<LeasePaymentMethod> getPaymentMethods() {
@@ -84,7 +84,7 @@ public class PapFolder extends VistaBoxFolder<PreauthorizedPaymentDTO> {
             formPanel.append(Location.Left, proto().effectiveFrom()).decorate().componentWidth(120);
 
             formPanel.append(Location.Right, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate();
-            formPanel.append(Location.Right, proto().creationDate()).decorate().componentWidth(180);
+            formPanel.append(Location.Right, proto().created()).decorate().componentWidth(180);
             formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(180);
 
             formPanel.append(Location.Dual, proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
@@ -111,7 +111,7 @@ public class PapFolder extends VistaBoxFolder<PreauthorizedPaymentDTO> {
 
             get(proto().id()).setVisible(!getValue().id().isNull());
             get(proto().createdBy()).setVisible(!getValue().createdBy().isNull());
-            get(proto().creationDate()).setVisible(!getValue().creationDate().isNull());
+            get(proto().created()).setVisible(!getValue().created().isNull());
             get(proto().updated()).setVisible(!getValue().updated().isNull());
 
             get(proto().comments()).setVisible(isEditable() || !getValue().comments().isNull());

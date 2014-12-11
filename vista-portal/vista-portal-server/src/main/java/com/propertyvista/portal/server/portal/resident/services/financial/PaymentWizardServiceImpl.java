@@ -93,7 +93,7 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
         dto.leaseTermParticipant().set(ResidentPortalContext.getLeaseTermTenant());
 
         // some default values:
-        dto.createdDate().setValue(SystemDateManager.getDate());
+        dto.created().setValue(SystemDateManager.getDate());
 
         // calculate current balance:
         dto.amount().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(lease.billingAccount()));

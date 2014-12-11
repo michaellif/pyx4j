@@ -48,6 +48,8 @@ public interface AbstractEquifaxFee extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> fullCreditReportSetUpFee();
 
+    @Format("yyyy-MM-dd HH:mm:ss")
+    @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 

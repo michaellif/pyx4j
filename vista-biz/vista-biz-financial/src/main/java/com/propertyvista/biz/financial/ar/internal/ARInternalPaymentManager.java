@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -67,7 +67,7 @@ class ARInternalPaymentManager extends ARAbstractPaymentManager {
         backOut.paymentRecord().set(paymentRecord);
         backOut.amount().setValue(paymentRecord.amount().getValue());
         backOut.billingAccount().set(paymentRecord.billingAccount());
-        backOut.description().setValue(i18n.tr("Payment from ''{0,date,MM/dd/yyyy}'' was rejected", paymentRecord.createdDate().getValue()));
+        backOut.description().setValue(i18n.tr("Payment from ''{0,date,MM/dd/yyyy}'' was rejected", paymentRecord.created().getValue()));
         backOut.taxTotal().setValue(BigDecimal.ZERO);
         backOut.applyNSF().setValue(applyNSF);
 

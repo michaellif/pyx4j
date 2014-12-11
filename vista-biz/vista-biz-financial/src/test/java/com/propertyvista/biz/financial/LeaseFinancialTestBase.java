@@ -558,7 +558,7 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
         Persistence.service().retrieve(leaseParticipant);
 
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
-        paymentRecord.createdDate().setValue(getDate(receivedDate));
+        paymentRecord.created().setValue(getDate(receivedDate));
         paymentRecord.receivedDate().setValue(getDate(receivedDate));
         paymentRecord.amount().setValue(new BigDecimal(amount));
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);

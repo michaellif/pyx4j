@@ -40,7 +40,7 @@ public class PaymentRecordsGadgetListServiceImpl extends AbstractListServiceDtoI
             bind(toProto.tenant(), boProto.paymentMethod().customer());
             bind(toProto.method(), boProto.paymentMethod().type());
             bind(toProto.status(), boProto.paymentStatus());
-            bind(toProto.created(), boProto.createdDate());
+            bind(toProto.created(), boProto.created());
             bind(toProto.received(), boProto.receivedDate());
             bind(toProto.finalized(), boProto.finalizedDate());
             bind(toProto.target(), boProto.targetDate());

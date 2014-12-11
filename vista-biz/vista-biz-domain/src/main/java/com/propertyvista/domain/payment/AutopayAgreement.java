@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -135,12 +135,12 @@ public interface AutopayAgreement extends IEntity, HasNotesAndAttachments {
     @Detached(level = AttachLevel.ToStringMembers)
     AbstractPmcUser createdBy();
 
-    @Format("MM/dd/yyyy HH:mm:ss")
+    @Format("yyyy-MM-dd HH:mm:ss")
     @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Created)
-    IPrimitive<Date> creationDate();
+    IPrimitive<Date> created();
 
-    @Format("MM/dd/yyyy HH:mm:ss")
+    @Format("yyyy-MM-dd HH:mm:ss")
     @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();

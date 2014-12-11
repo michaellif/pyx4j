@@ -56,7 +56,7 @@ public class PaymentRecordLister extends SiteDataTablePanel<PaymentRecordDTO> {
         cd.add(new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().role()).columnTitle(i18n.tr("Lease role")).visible(false).build());
         cd.add(new MemberColumnDescriptor.Builder(proto().amount()).build());
         cd.add(new MemberColumnDescriptor.Builder(proto().paymentMethod().type()).build());
-        cd.add(new MemberColumnDescriptor.Builder(proto().createdDate()).build());
+        cd.add(new MemberColumnDescriptor.Builder(proto().created()).build());
         cd.add(new MemberColumnDescriptor.Builder(proto().receivedDate()).build());
         cd.add(new MemberColumnDescriptor.Builder(proto().lastStatusChangeDate()).build());
         cd.add(new MemberColumnDescriptor.Builder(proto().targetDate()).build());

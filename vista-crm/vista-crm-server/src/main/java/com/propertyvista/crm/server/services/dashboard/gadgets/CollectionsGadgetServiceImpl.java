@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -77,8 +77,8 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
         criteria.ne(criteria.proto().billingAccount().payments().$().paymentStatus(), PaymentRecord.PaymentStatus.Submitted);
         criteria.ne(criteria.proto().billingAccount().payments().$().paymentStatus(), PaymentRecord.PaymentStatus.Canceled);
         criteria.ne(criteria.proto().billingAccount().payments().$().paymentStatus(), PaymentRecord.PaymentStatus.Rejected);
-        criteria.ge(criteria.proto().billingAccount().payments().$().createdDate(), thisMonthStartDay);
-        criteria.le(criteria.proto().billingAccount().payments().$().createdDate(), today);
+        criteria.ge(criteria.proto().billingAccount().payments().$().created(), thisMonthStartDay);
+        criteria.le(criteria.proto().billingAccount().payments().$().created(), today);
 
         return criteria;
     }
@@ -96,8 +96,8 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
         LogicalDate today = Util.dayOfCurrentTransaction();
         LogicalDate thisMonthStartDay = Util.beginningOfMonth(today);
 
-        criteria.ge(criteria.proto().createdDate(), thisMonthStartDay);
-        criteria.le(criteria.proto().createdDate(), today);
+        criteria.ge(criteria.proto().created(), thisMonthStartDay);
+        criteria.le(criteria.proto().created(), today);
 
         criteria.ne(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Submitted);
         criteria.ne(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Canceled);

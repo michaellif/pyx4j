@@ -146,7 +146,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
             protected IsWidget createContent() {
                 FormPanel formPanel = new FormPanel(this);
 
-                formPanel.append(Location.Left, proto().paymentMethod().creationDate(), new CDateLabel()).decorate().componentWidth(100);
+                formPanel.append(Location.Left, proto().paymentMethod().created(), new CDateLabel()).decorate().componentWidth(100);
                 formPanel.append(Location.Left, proto().paymentMethod().type(), new CEnumLabel()).decorate().componentWidth(150);
                 formPanel.append(Location.Left, proto().paymentMethod().details(), new CEntityLabel<PaymentDetails>()).decorate();
                 formPanel.append(Location.Left, proto().paymentMethod().billingAddress(), new CEntityLabel<InternationalAddress>()).decorate();

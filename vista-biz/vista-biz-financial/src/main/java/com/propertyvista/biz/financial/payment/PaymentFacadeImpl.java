@@ -202,7 +202,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         boolean isNew = false;
         if (paymentRecord.id().isNull()) {
             isNew = true;
-            paymentRecord.createdDate().setValue(SystemDateManager.getDate());
+            paymentRecord.created().setValue(SystemDateManager.getDate());
             paymentRecord.createdBy().set(VistaContext.getCurrentUserIfAvalable());
         }
 

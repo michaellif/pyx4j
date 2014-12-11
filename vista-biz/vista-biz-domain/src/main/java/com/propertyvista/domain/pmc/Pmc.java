@@ -18,6 +18,7 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
@@ -108,11 +109,13 @@ public interface Pmc extends IEntity {
     IPrimitive<String> interfaceUidBase();
 
     @ReadOnly
-    @Format("yyyy-MM-dd HH:mm")
+    @Format("yyyy-MM-dd HH:mm:ss")
+    @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> created();
 
-    @Format("yyyy-MM-dd HH:mm")
+    @Format("yyyy-MM-dd HH:mm:ss")
+    @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 

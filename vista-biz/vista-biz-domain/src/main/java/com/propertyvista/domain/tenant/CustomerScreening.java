@@ -13,11 +13,15 @@
  */
 package com.propertyvista.domain.tenant;
 
-import com.pyx4j.commons.LogicalDate;
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -26,7 +30,6 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
-import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.AttachLevel;
@@ -39,8 +42,8 @@ import com.pyx4j.entity.core.IVersionedEntity;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.tenant.CustomerScreening.CustomerScreeningV;
-import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.CustomerScreeningAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 
 @DiscriminatorValue("CustomerScreening")
 public interface CustomerScreening extends IVersionedEntity<CustomerScreeningV> {
@@ -59,12 +62,16 @@ public interface CustomerScreening extends IVersionedEntity<CustomerScreeningV> 
 
     public interface CustomerScreeningV extends IVersionData<CustomerScreening> {
 
-        @Timestamp(Update.Created)
-        IPrimitive<LogicalDate> createDate();
+        @Format("yyyy-MM-dd HH:mm:ss")
+        @Editor(type = EditorType.label)
+        @Timestamp(Timestamp.Update.Created)
+        IPrimitive<Date> created();
 
         @ToString(index = 0)
-        @Timestamp(Update.Updated)
-        IPrimitive<LogicalDate> updateDate();
+        @Format("yyyy-MM-dd HH:mm:ss")
+        @Editor(type = EditorType.label)
+        @Timestamp(Timestamp.Update.Updated)
+        IPrimitive<Date> updated();
 
         /**
          * TODO I think that it is better to have a list here since some forms may ask for

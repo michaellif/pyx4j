@@ -23,6 +23,9 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -30,7 +33,6 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
-import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -263,7 +265,8 @@ public interface Lease extends IEntity, HasNotesAndAttachments {
     IPrimitive<CompletionType> completion();
 
     @ReadOnly
-    @Timestamp(Update.Created)
+    @Editor(type = EditorType.label)
+    @Timestamp(Timestamp.Update.Created)
     IPrimitive<LogicalDate> creationDate();
 
     // Used for versioning retrieval of approved Application
@@ -271,7 +274,9 @@ public interface Lease extends IEntity, HasNotesAndAttachments {
 
     IPrimitive<LogicalDate> activationDate();
 
-    @Timestamp(Update.Updated)
+    @Format("yyyy-MM-dd HH:mm:ss")
+    @Editor(type = EditorType.label)
+    @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 
     @Owned

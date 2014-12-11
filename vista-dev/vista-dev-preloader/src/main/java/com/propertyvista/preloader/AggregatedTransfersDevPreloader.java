@@ -48,7 +48,7 @@ public class AggregatedTransfersDevPreloader extends BaseVistaDevDataPreloader {
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
         criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Received);
         criteria.asc(criteria.proto().paymentMethod().type());
-        criteria.asc(criteria.proto().createdDate());
+        criteria.asc(criteria.proto().created());
 
         List<PaymentRecord> eChequePayments = Persistence.service().query(criteria);
         log.info("There are {} payment records", eChequePayments.size());

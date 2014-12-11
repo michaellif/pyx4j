@@ -52,13 +52,13 @@ public interface PmcYardiCredential extends IEntity {
         SQL, Oracle
     }
 
-    @Caption(name = "Created")
-    @Format("MM/dd/yyyy HH:mm")
+    @Format("yyyy-MM-dd HH:mm:ss")
+    @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> created();
 
-    @Caption(name = "Updated")
-    @Format("MM/dd/yyyy HH:mm")
+    @Format("yyyy-MM-dd HH:mm:ss")
+    @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 

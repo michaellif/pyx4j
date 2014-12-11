@@ -370,7 +370,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                 formPanel.append(Location.Left, proto().effectiveFrom()).decorate().componentWidth(120);
 
                 formPanel.append(Location.Right, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate();
-                formPanel.append(Location.Right, proto().creationDate()).decorate().componentWidth(180);
+                formPanel.append(Location.Right, proto().created()).decorate().componentWidth(180);
                 formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(180);
 
                 formPanel.append(Location.Dual, proto().coveredItems(), new PapCoveredItemFolder());
@@ -385,7 +385,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
                 get(proto().id()).setVisible(!getValue().id().isNull());
                 get(proto().createdBy()).setVisible(!getValue().createdBy().isNull());
-                get(proto().creationDate()).setVisible(!getValue().creationDate().isNull());
+                get(proto().created()).setVisible(!getValue().created().isNull());
                 get(proto().updated()).setVisible(!getValue().updated().isNull());
 
                 get(proto().comments()).setVisible(!getValue().comments().isNull());

@@ -254,7 +254,7 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         formPanel.append(Location.Right, proto().lastStatusChangeDate()).decorate().componentWidth(120);
 
         formPanel.append(Location.Right, proto().createdBy()).decorate();
-        formPanel.append(Location.Right, proto().createdDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().created()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(120);
 
         formPanel.append(Location.Right, proto().notes()).decorate();
@@ -348,7 +348,7 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         paymentMethodEditor.reset();
         paymentMethodEditor.setEditable(false);
 
-// TODO : investigate why invisible paymentMethodEditor is not populated!?          
+// TODO : investigate why invisible paymentMethodEditor is not populated!?
 //        paymentMethodEditor.setVisible(false);
 //        paymentMethodEditorHeader.setVisible(false);
 
@@ -573,7 +573,7 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
                 }
             });
 
-            formPanel.append(Location.Left, proto().creationDate()).decorate().componentWidth(120);
+            formPanel.append(Location.Left, proto().created()).decorate().componentWidth(120);
             formPanel.append(Location.Right, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate();
 
             formPanel.append(Location.Left, proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()).decorate();

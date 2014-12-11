@@ -299,7 +299,7 @@ class VistaBusinessStatsReport {
         if (false) {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
             criteria.eq(criteria.proto().billingAccount().payments().$().createdBy(), CustomerUser.class);
-            criteria.ge(criteria.proto().billingAccount().payments().$().createdDate(), reportSince);
+            criteria.ge(criteria.proto().billingAccount().payments().$().created(), reportSince);
             data.newPayingTenants().setValue(Persistence.service().count(criteria));
         }
 

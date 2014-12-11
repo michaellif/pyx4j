@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -63,7 +63,7 @@ public class TenantSurePaymentMethodWizard extends CPortalEntityWizard<Insurance
 
     private IsWidget createDisplayCurrentPaymentMethodStep() {
         FormPanel formPanel = new FormPanel(this);
-        formPanel.append(Location.Left, proto().currentPaymentMethod().creationDate(), new CDateLabel()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().currentPaymentMethod().created(), new CDateLabel()).decorate().componentWidth(100);
         formPanel.append(Location.Left, proto().currentPaymentMethod().details(), new CEntityLabel<PaymentDetails>()).decorate();
         formPanel.append(Location.Left, proto().currentPaymentMethod().billingAddress(), new CEntityLabel<InternationalAddress>()).decorate();
         return formPanel;

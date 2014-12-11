@@ -467,7 +467,7 @@ public class LeaseLifecycleSimulator {
                 }
 
                 PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
-                paymentRecord.createdDate().setValue(currentRecordDate);
+                paymentRecord.created().setValue(currentRecordDate);
                 paymentRecord.receivedDate().setValue(currentRecordDate);
                 paymentRecord.targetDate().setValue(currentRecordDate);
                 paymentRecord.finalizedDate().setValue(currentRecordDate);

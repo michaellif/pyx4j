@@ -15,8 +15,8 @@ package com.propertyvista.domain.marketing;
 
 import java.util.Date;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Table;
@@ -31,13 +31,13 @@ import com.propertyvista.domain.VistaNamespace;
 @Table(namespace = VistaNamespace.operationsNamespace)
 public interface PortalResidentMarketingTip extends IEntity {
 
-    @Caption(name = "Created")
-    @Format("MM/dd/yyyy HH:mm")
+    @Format("yyyy-MM-dd HH:mm:ss")
+    @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> created();
 
-    @Caption(name = "Updated")
-    @Format("MM/dd/yyyy HH:mm")
+    @Format("yyyy-MM-dd HH:mm:ss")
+    @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 

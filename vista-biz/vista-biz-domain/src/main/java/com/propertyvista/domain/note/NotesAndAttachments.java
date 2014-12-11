@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,11 +13,13 @@
  */
 package com.propertyvista.domain.note;
 
-import com.pyx4j.commons.LogicalDate;
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -63,11 +65,13 @@ public interface NotesAndAttachments extends IEntity {
     CrmUser user();
 
     @ToString(index = 2)
+    @Format("yyyy-MM-dd HH:mm:ss")
+    @Editor(type = EditorType.label)
     @Timestamp(Update.Updated)
-    @Editor(type = EditorType.label)
-    IPrimitive<LogicalDate> updated();
+    IPrimitive<Date> updated();
 
-    @Timestamp(Update.Created)
+    @Format("yyyy-MM-dd HH:mm:ss")
     @Editor(type = EditorType.label)
-    IPrimitive<LogicalDate> created();
+    @Timestamp(Update.Created)
+    IPrimitive<Date> created();
 }

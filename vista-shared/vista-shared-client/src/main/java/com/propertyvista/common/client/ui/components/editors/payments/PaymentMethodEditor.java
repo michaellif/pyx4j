@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -77,7 +77,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CForm<
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().id(), new CNumberLabel()).decorate().componentWidth(120);
-        formPanel.append(Location.Right, proto().creationDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().created()).decorate().componentWidth(120);
 
         formPanel.append(Location.Left, proto().type(), new CComboBox<PaymentType>()).decorate().componentWidth(200);
         if (proto() instanceof PaymentMethod) {
@@ -129,7 +129,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CForm<
         // setup CRM only block:
         if (isBound(proto().id())) {
             get(proto().id()).setVisible(false);
-            get(proto().creationDate()).setVisible(false);
+            get(proto().created()).setVisible(false);
             if (proto() instanceof PaymentMethod) {
                 get(((PaymentMethod) proto()).createdBy()).setVisible(false);
             }
@@ -155,7 +155,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CForm<
         // setup CRM only block:
         if (isBound(proto().id())) {
             get(proto().id()).setVisible(!getValue().id().isNull());
-            get(proto().creationDate()).setVisible(!getValue().creationDate().isNull());
+            get(proto().created()).setVisible(!getValue().created().isNull());
             if (proto() instanceof PaymentMethod) {
                 get(((PaymentMethod) proto()).createdBy()).setVisible(!((PaymentMethod) getValue()).createdBy().isNull());
             }
@@ -185,7 +185,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CForm<
 
             switch (type) {
             case Cash:
-                // Disable cash editor:            
+                // Disable cash editor:
 //                editor = createCashInfoEditor();
                 if (details.getInstanceValueClass() != CashInfo.class) {
                     details.set(EntityFactory.create(CashInfo.class));

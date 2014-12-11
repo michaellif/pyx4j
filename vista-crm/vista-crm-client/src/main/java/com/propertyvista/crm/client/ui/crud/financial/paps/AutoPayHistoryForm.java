@@ -72,7 +72,7 @@ public class AutoPayHistoryForm extends CrmEntityForm<AutoPayHistoryDTO> {
         formPanel.append(Location.Right, proto().updatedBySystem()).decorate().componentWidth(120);
 
         formPanel.append(Location.Right, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate().componentWidth(200);
-        formPanel.append(Location.Right, proto().creationDate()).decorate().componentWidth(180);
+        formPanel.append(Location.Right, proto().created()).decorate().componentWidth(180);
         formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(180);
         formPanel.append(Location.Right, proto().isDeleted()).decorate().componentWidth(70);
 
