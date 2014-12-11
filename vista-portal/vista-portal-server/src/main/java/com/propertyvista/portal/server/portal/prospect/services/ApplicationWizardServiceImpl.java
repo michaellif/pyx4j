@@ -1332,7 +1332,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         // correct unit:
         criteria.eq(criteria.proto().element(), options.unit());
 
-        ProductItem productItem = Persistence.service().retrieve(criteria);
+        ProductItem productItem = getProductItem(Persistence.service().query(criteria));
         if (productItem != null) {
             options.selectedService().set(createBillableItem(productItem));
             fillCatalogFeatures(options, productItem.product().<Service.ServiceV> cast(), options.leaseFrom().getValue(), true);
@@ -1414,6 +1414,22 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     private BillableItem createBillableItem(ProductItem productItem) {
         return ServerSideFactory.create(LeaseFacade.class).createBillableItem(ProspectPortalContext.getLease(), productItem);
+    }
+
+    private ProductItem getProductItem(List<ProductItem> items) {
+        ProductItem productItem = null;
+
+        for (ProductItem item : items) {
+            Persistence.ensureRetrieve(item.product(), AttachLevel.Attached);
+            BigDecimal itemPrice = (item.price().isNull() ? item.product().price().getValue() : item.price().getValue());
+
+            // item with highest price selected:
+            if (productItem == null || productItem.price().getValue().compareTo(itemPrice) < 0) {
+                productItem = item;
+            }
+        }
+
+        return productItem;
     }
 
 }
