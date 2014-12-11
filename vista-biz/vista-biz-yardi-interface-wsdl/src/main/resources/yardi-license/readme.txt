@@ -6,7 +6,7 @@ YSIInstall-ILSGuestCard.lic
 Collections Data Exchange Interface license [PIN 100055319] License is good through 12/31/2014
 YSIInstall-Collections.lic
 
-BillingAndPayments  License [PIN 100052673] License is good through 12/31/2014
+BillingAndPayments  License [PIN 100052673] License is good through 12/31/2015
 YSIInstall-BillingAndPayments.lic
 
 Service Request Data Exchange Interface [PIN 100055548]  License is good through 02/28/2015
