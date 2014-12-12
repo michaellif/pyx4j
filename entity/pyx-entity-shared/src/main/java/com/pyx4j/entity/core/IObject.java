@@ -36,8 +36,6 @@ public interface IObject<VALUE_TYPE> extends IStringView {
 
     public VALUE_TYPE getValue();
 
-    public void clear();
-
     /**
      * @return Detached or Attached if data was retrieved. Entity have more options.
      */
@@ -77,14 +75,14 @@ public interface IObject<VALUE_TYPE> extends IStringView {
 
     /**
      * Name of this Object in parent's object map
-     *
+     * 
      * @return null for root Entity in Graph
      */
     public String getFieldName();
 
     /**
      * Meta of this Entity in parent's object map
-     *
+     * 
      * @return null for root Entity in Graph
      */
     public MemberMeta getMeta();
@@ -93,11 +91,11 @@ public interface IObject<VALUE_TYPE> extends IStringView {
 
     /**
      * Business toString() presentation.
-     *
+     * 
      * @return String value of member formated using annotation
      *         com.pyx4j.entity.annotations.Format or String value of members annotated
      *         with ToString for IEntity
-     *
+     * 
      * @see com.pyx4j.entity.annotations.Format
      * @see com.pyx4j.entity.annotations.ToString
      */

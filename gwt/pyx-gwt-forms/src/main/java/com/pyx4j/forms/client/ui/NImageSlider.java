@@ -45,6 +45,7 @@ import com.pyx4j.entity.shared.IListWrapper;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolder;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.gwt.client.upload.FileUploadDialog;
@@ -207,6 +208,13 @@ public class NImageSlider<E extends IHasFile<?>> extends NField<IList<E>, ImageS
 
         public void addNewImage() {
             addItem();
+        }
+
+        @SuppressWarnings("unchecked")
+        public void clear() {
+            for (CComponent<?, ?, ?> item : new ArrayList<CComponent<?, ?, ?>>(getComponents())) {
+                removeItem((CFolderItem<E>) item);
+            }
         }
 
         @Override

@@ -26,6 +26,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
@@ -110,19 +112,6 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
                 calculateActionsState();
             }
         });
-    }
-
-    @Override
-    protected IList<E> preprocessValue(IList<E> value, boolean fireEvent, boolean populate) {
-        if (!populate && value != null) {
-            IList<E> boundList = getValue();
-//            if (boundList != null) {
-            boundList.clear();
-            boundList.addAll(value);
-//            }
-            value = boundList;
-        }
-        return super.preprocessValue(value, fireEvent, populate);
     }
 
     public boolean isOrderable() {
@@ -307,7 +296,7 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
     /**
      * Implementation to override new Entity creation. No need to call
      * super.createNewEntity().
-     *
+     * 
      * @param newEntity
      * @param callback
      */
