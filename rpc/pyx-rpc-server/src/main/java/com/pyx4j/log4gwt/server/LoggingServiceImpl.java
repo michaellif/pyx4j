@@ -97,8 +97,10 @@ public class LoggingServiceImpl implements LoggingService {
     private static StackTraceDeobfuscator getDeobfuscator(String strongName) throws MalformedURLException {
         StackTraceDeobfuscator stackTraceDeobfuscator = deobfuscators.get(strongName);
         if (stackTraceDeobfuscator == null) {
-            stackTraceDeobfuscator = StackTraceDeobfuscator.fromUrl(ServerContext.getRequest().getServletContext()
-                    .getResource("/WEB-INF/deploy" + getGwtModuleRelativePath(strongName) + "symbolMaps"));
+            URL urlPath = ServerContext.getRequest().getServletContext().getResource("/WEB-INF/deploy" + getGwtModuleRelativePath(strongName) + "symbolMaps/");
+            log.debug("Load Deobfuscator fromUrl {}", urlPath);
+            stackTraceDeobfuscator = StackTraceDeobfuscator.fromUrl(urlPath);
+
             deobfuscators.put(strongName, stackTraceDeobfuscator);
         }
         return stackTraceDeobfuscator;
@@ -116,7 +118,7 @@ public class LoggingServiceImpl implements LoggingService {
         }
 
         String contextRelativePath = modulePath.substring(contextPath.length());
-        log.debug("Use contextRelativePath {} for {}", contextRelativePath, strongName);
+        log.debug("Use contextRelativePath '{}' for strongName '{}'", contextRelativePath, strongName);
         return contextRelativePath;
     }
 }
