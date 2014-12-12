@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -38,7 +38,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 
-// TODO refactor a little bit, create status setting function for various cases and use them 
+// TODO refactor a little bit, create status setting function for various cases and use them
 public class AvailabilityReportManager {
 
     private final AptUnit unit;
@@ -58,7 +58,7 @@ public class AvailabilityReportManager {
 
     /**
      * Refresh the series of availability statuses based on occupancy: remove the old statuses from the DB, and create new ones.
-     * 
+     *
      * @param startingOn
      *            Start the computation of statuses on this date.
      */
@@ -307,7 +307,6 @@ public class AvailabilityReportManager {
     }
 
     private BigDecimal getMarketRent() {
-
         EntityQueryCriteria<ProductItem> criteria = EntityQueryCriteria.create(ProductItem.class);
         criteria.eq(criteria.proto().product().holder().catalog().building().units(), unit);
         //criteria.in(criteria.proto().product().holder().code().type(), ARCode.Type.unitRelatedServices());

@@ -67,10 +67,10 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
     }
 
     @Override
-    protected void enhanceRetrieved(AptUnit in, AptUnitDTO to, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(AptUnit bo, AptUnitDTO to, RetrieveTarget retrieveTarget) {
         // find corresponding lease:
         {
-            to.lease().set(ServerSideFactory.create(OccupancyFacade.class).retriveCurrentLease(in));
+            to.lease().set(ServerSideFactory.create(OccupancyFacade.class).retriveCurrentLease(bo));
         }
 
         Persistence.service().retrieve(to.floorplan());
@@ -80,18 +80,19 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         to.buildingLegalAddress().set(AddressRetriever.getUnitLegalAddress(to));
 
         // retrieve market rent prices
-        retrieveServicePrices(to);
+        retrieveServicePrices(bo, to);
 
         // check unit catalog/lease readiness:
         if (retrieveTarget == RetrieveTarget.View) {
             EntityQueryCriteria<ProductItem> criteria = EntityQueryCriteria.create(ProductItem.class);
+
             criteria.add(PropertyCriterion.in(criteria.proto().product().holder().code().type(), ARCode.Type.unitRelatedServices()));
-            criteria.add(PropertyCriterion.eq(criteria.proto().element(), in));
+            criteria.add(PropertyCriterion.eq(criteria.proto().element(), bo));
 
             to.isPresentInCatalog().setValue(Persistence.service().exists(criteria));
-            to.isAvailableForExistingLease().setValue(ServerSideFactory.create(OccupancyFacade.class).isAvailableForExistingLease(in.getPrimaryKey()));
+            to.isAvailableForExistingLease().setValue(ServerSideFactory.create(OccupancyFacade.class).isAvailableForExistingLease(bo.getPrimaryKey()));
 
-            Pair<Date, Lease> result = ServerSideFactory.create(OccupancyFacade.class).isReserved(in.getPrimaryKey());
+            Pair<Date, Lease> result = ServerSideFactory.create(OccupancyFacade.class).isReserved(bo.getPrimaryKey());
             if (result.getB() != null) {
                 to.reservedUntil().setValue(result.getA());
             }
@@ -118,22 +119,24 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         return true;
     }
 
-    private void retrieveServicePrices(AptUnitDTO dto) {
+    private void retrieveServicePrices(AptUnit bo, AptUnitDTO dto) {
         EntityQueryCriteria<ProductItem> criteria = EntityQueryCriteria.create(ProductItem.class);
+
         criteria.add(PropertyCriterion.eq(criteria.proto().product().holder().catalog().building(), dto.building()));
         criteria.add(PropertyCriterion.in(criteria.proto().product().holder().code().type(), ARCode.Type.unitRelatedServices()));
         criteria.add(PropertyCriterion.eq(criteria.proto().product().holder().defaultCatalogItem(), false));
+        criteria.add(PropertyCriterion.eq(criteria.proto().element(), bo));
         criteria.isCurrent(criteria.proto().product());
 
         for (ProductItem item : Persistence.secureQuery(criteria)) {
-            if (item.element().getInstanceValueClass().equals(AptUnit.class) & item.element().getPrimaryKey().equals(dto.getPrimaryKey())) {
-                AptUnitServicePriceDTO serviceDTO = EntityFactory.create(AptUnitServicePriceDTO.class);
-                serviceDTO.id().setValue(item.product().holder().id().getValue());
-                serviceDTO.code().set(item.product().holder().code());
-                serviceDTO.name().setValue(item.product().holder().version().name().getValue());
-                serviceDTO.price().setValue(ServerSideFactory.create(ProductCatalogFacade.class).calculateItemPrice(item));
-                dto.marketPrices().add(serviceDTO);
-            }
+            AptUnitServicePriceDTO serviceDTO = EntityFactory.create(AptUnitServicePriceDTO.class);
+
+            serviceDTO.id().setValue(item.product().holder().id().getValue());
+            serviceDTO.code().set(item.product().holder().code());
+            serviceDTO.name().setValue(item.product().holder().version().name().getValue());
+            serviceDTO.price().setValue(ServerSideFactory.create(ProductCatalogFacade.class).calculateItemPrice(item));
+
+            dto.marketPrices().add(serviceDTO);
         }
     }
 }

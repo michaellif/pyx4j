@@ -1352,7 +1352,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 Persistence.ensureRetrieve(feature.version().items(), AttachLevel.Attached);
 
                 for (ProductItem item : feature.version().items()) {
-                    Persistence.ensureRetrieve(item.product(), AttachLevel.Attached);
+                    Persistence.ensureRetrieve(item.product().holder(), AttachLevel.Attached);
                     if (feature.version().availableOnline().getValue(false)) {
                         switch (feature.code().type().getValue()) {
                         case AddOn:
