@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CRichTextArea;
+import com.pyx4j.forms.client.ui.CSelectorListBox;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -100,6 +101,7 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
         }).decorate();
 
         formPanel.append(Location.Dual, proto().to(), epSelectorNew = createCommunicationEndpointSelectorNew()).decorate();
+        ((CSelectorListBox) get(proto().to())).setWatermark(i18n.tr("+Add more"));
 
         inject(proto().deliveryMethod());
 
