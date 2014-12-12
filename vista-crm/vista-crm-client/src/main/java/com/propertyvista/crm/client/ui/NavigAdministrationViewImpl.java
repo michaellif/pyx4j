@@ -122,20 +122,16 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
         }
 
         {//Settings
+            sideMenuList = new SideMenuList();
+            root.addMenuItem(new SideMenuFolderItem(sideMenuList, i18n.tr("Settings"), null));
             if (VistaTODO.ENABLE_ONBOARDING_WIZARDS_IN_DEVELOPMENT && ApplicationMode.isDevelopment()) {
-                sideMenuList = new SideMenuList();
-                root.addMenuItem(new SideMenuFolderItem(sideMenuList, i18n.tr("Settings"), null));
                 sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new Settings.OnlinePaymentSetup()));
                 sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new Settings.CreditCheck()));
-
-                if (ApplicationMode.isDevelopment()) {
-                    sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new Settings.CreditCheck.Setup()));
-                    sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new Settings.CreditCheck.Status().formViewerPlace(new Key(-1))));
-                }
-
-                if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
-                    sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new Settings.ILSConfig()));
-                }
+                sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new Settings.CreditCheck.Setup()));
+                sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new Settings.CreditCheck.Status().formViewerPlace(new Key(-1))));
+            }
+            if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
+                sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new Settings.ILSConfig()));
             }
         }
 
