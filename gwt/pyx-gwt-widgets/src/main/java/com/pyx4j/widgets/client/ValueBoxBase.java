@@ -194,7 +194,7 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
 
     protected void updateTextBox() {
         if (parsedOk) {
-            if (value != null) {
+            if (value != null && !value.equals("")) {
                 setText(getFormatter().format(value), false);
                 textBoxWidget.removeStyleDependentName(WidgetsTheme.StyleDependent.watermark.name());
             } else {
