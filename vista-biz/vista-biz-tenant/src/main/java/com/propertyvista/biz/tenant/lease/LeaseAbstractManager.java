@@ -47,6 +47,7 @@ import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.occupancy.OccupancyOperationException;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
@@ -731,7 +732,7 @@ public abstract class LeaseAbstractManager {
 
         BillableItem newItem = EntityFactory.create(BillableItem.class);
         newItem.item().set(productItem);
-        newItem.agreedPrice().setValue(productItem.price().isNull() ? productItem.product().price().getValue() : productItem.price().getValue());
+        newItem.agreedPrice().setValue(ServerSideFactory.create(ProductCatalogFacade.class).calculateItemPrice(productItem));
 
         // avoid policed deposits for existing Leases:
         if (lease.status().getValue() != Lease.Status.ExistingLease) {

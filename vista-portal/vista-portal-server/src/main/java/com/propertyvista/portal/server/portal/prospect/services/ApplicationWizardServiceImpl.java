@@ -45,6 +45,7 @@ import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
+import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
@@ -1332,7 +1333,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         // correct unit:
         criteria.eq(criteria.proto().element(), options.unit());
 
-        ProductItem productItem = getProductItem(Persistence.service().query(criteria));
+        ProductItem productItem = selectProductItem(Persistence.service().query(criteria));
         if (productItem != null) {
             options.selectedService().set(createBillableItem(productItem));
             fillCatalogFeatures(options, productItem.product().<Service.ServiceV> cast(), options.leaseFrom().getValue(), true);
@@ -1416,20 +1417,21 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         return ServerSideFactory.create(LeaseFacade.class).createBillableItem(ProspectPortalContext.getLease(), productItem);
     }
 
-    private ProductItem getProductItem(List<ProductItem> items) {
-        ProductItem productItem = null;
+    private ProductItem selectProductItem(List<ProductItem> candidates) {
+        ProductItem selectedItem = null;
+        BigDecimal selectedItemPrice = BigDecimal.ZERO;
 
-        for (ProductItem item : items) {
-            Persistence.ensureRetrieve(item.product(), AttachLevel.Attached);
-            BigDecimal itemPrice = (item.price().isNull() ? item.product().price().getValue() : item.price().getValue());
+        for (ProductItem item : candidates) {
+            BigDecimal itemPrice = ServerSideFactory.create(ProductCatalogFacade.class).calculateItemPrice(item);
 
-            // item with highest price selected:
-            if (productItem == null || productItem.price().getValue().compareTo(itemPrice) < 0) {
-                productItem = item;
+            // select item with highest price:
+            if (selectedItem == null || selectedItemPrice.compareTo(itemPrice) < 0) {
+                selectedItem = item;
+                selectedItemPrice = itemPrice;
             }
         }
 
-        return productItem;
+        return selectedItem;
     }
 
 }

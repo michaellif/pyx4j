@@ -13,11 +13,13 @@
  */
 package com.propertyvista.biz.financial.productcatalog;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.financial.ARCode;
@@ -134,4 +136,16 @@ public class ProductCatalogFacadeImpl implements ProductCatalogFacade {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public BigDecimal calculateItemPrice(ProductItem productItem) {
+        assert (productItem != null);
+
+        Persistence.ensureRetrieve(productItem.product(), AttachLevel.Attached);
+        BigDecimal itemPrice = (productItem.price().isNull() ? productItem.product().price().getValue() : productItem.price().getValue());
+
+        //TODO add concessions and adjustments
+        return itemPrice;
+    }
+
 }

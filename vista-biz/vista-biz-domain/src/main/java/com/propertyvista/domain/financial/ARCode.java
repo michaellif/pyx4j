@@ -126,6 +126,14 @@ public interface ARCode extends IEntity {
             }
         }
 
+        public static EnumSet<Type> unitRelatedServicesResidential() {
+            if (VistaTODO.removedForProduction) {
+                return EnumSet.of(Residential);
+            } else {
+                return EnumSet.of(Residential, ResidentialShortTerm);
+            }
+        }
+
         public static EnumSet<Type> features() {
             return EnumSet.of(Parking, Locker, Pet, Utility, AddOn, OneTime);
         }

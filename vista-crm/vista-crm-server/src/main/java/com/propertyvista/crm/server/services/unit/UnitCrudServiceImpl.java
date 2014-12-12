@@ -17,7 +17,6 @@ import java.util.Date;
 
 import com.pyx4j.commons.Pair;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -26,11 +25,11 @@ import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.asset.BuildingFacade;
+import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -120,23 +119,20 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
     }
 
     private void retrieveServicePrices(AptUnitDTO dto) {
-        EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
-        criteria.eq(criteria.proto().catalog().building(), dto.building());
-        criteria.in(criteria.proto().code().type(), ARCode.Type.unitRelatedServices());
+        EntityQueryCriteria<ProductItem> criteria = EntityQueryCriteria.create(ProductItem.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().product().holder().catalog().building(), dto.building()));
+        criteria.add(PropertyCriterion.in(criteria.proto().product().holder().code().type(), ARCode.Type.unitRelatedServices()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().product().holder().defaultCatalogItem(), false));
+        criteria.isCurrent(criteria.proto().product());
 
-        for (Service service : Persistence.secureQuery(criteria)) {
-            if (!service.defaultCatalogItem().getValue(false)) {
-                Persistence.ensureRetrieve(service.version().items(), AttachLevel.Attached);
-                for (ProductItem item : service.version().items()) {
-                    if (item.element().getInstanceValueClass().equals(AptUnit.class) & item.element().getPrimaryKey().equals(dto.getPrimaryKey())) {
-                        AptUnitServicePriceDTO serviceDTO = EntityFactory.create(AptUnitServicePriceDTO.class);
-                        serviceDTO.id().setValue(service.id().getValue());
-                        serviceDTO.code().set(service.code());
-                        serviceDTO.name().setValue(service.version().name().getValue());
-                        serviceDTO.price().setValue(item.price().getValue());
-                        dto.marketPrices().add(serviceDTO);
-                    }
-                }
+        for (ProductItem item : Persistence.secureQuery(criteria)) {
+            if (item.element().getInstanceValueClass().equals(AptUnit.class) & item.element().getPrimaryKey().equals(dto.getPrimaryKey())) {
+                AptUnitServicePriceDTO serviceDTO = EntityFactory.create(AptUnitServicePriceDTO.class);
+                serviceDTO.id().setValue(item.product().holder().id().getValue());
+                serviceDTO.code().set(item.product().holder().code());
+                serviceDTO.name().setValue(item.product().holder().version().name().getValue());
+                serviceDTO.price().setValue(ServerSideFactory.create(ProductCatalogFacade.class).calculateItemPrice(item));
+                dto.marketPrices().add(serviceDTO);
             }
         }
     }
