@@ -27,7 +27,6 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -124,8 +123,8 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
             @Override
             protected List<ColumnDescriptor> defineColumnDescriptors() {
                 return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().name()).build(),
-                    new MemberColumnDescriptor.Builder(proto().glCode()).build()
+                    new ColumnDescriptor.Builder(proto().name()).build(),
+                    new ColumnDescriptor.Builder(proto().glCode()).build()
                 );//@formatter:on
             }
 

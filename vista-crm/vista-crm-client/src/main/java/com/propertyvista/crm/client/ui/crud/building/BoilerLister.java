@@ -21,7 +21,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.services.building.mech.BoilerCrudService;
@@ -34,10 +34,10 @@ public class BoilerLister extends SiteDataTablePanel<BoilerDTO> {
         setFilteringEnabled(false);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().type()).build(), //
-                new MemberColumnDescriptor.Builder(proto().make()).build(), //
-                new MemberColumnDescriptor.Builder(proto().model()).build(), //
-                new MemberColumnDescriptor.Builder(proto().build()).build());
+                new ColumnDescriptor.Builder(proto().type()).build(), //
+                new ColumnDescriptor.Builder(proto().make()).build(), //
+                new ColumnDescriptor.Builder(proto().model()).build(), //
+                new ColumnDescriptor.Builder(proto().build()).build());
 
         setDataTableModel(new DataTableModel<BoilerDTO>());
     }

@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.policies.deposit;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
@@ -35,8 +35,8 @@ public class DepositPolicyListerViewImpl extends AbstractListerView<DepositPolic
             super(DepositPolicyDTO.class, GWT.<DepositPolicyCrudService> create(DepositPolicyCrudService.class));
 
             setColumnDescriptors( //
-                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
+                    new ColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
+                    new ColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build() //
             );
 
             setDataTableModel(new DataTableModel<DepositPolicyDTO>());

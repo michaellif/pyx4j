@@ -24,10 +24,9 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.images.FolderImages;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.SecurityController;
@@ -91,10 +90,10 @@ public class LeaseLister extends SiteDataTablePanel<LeaseDTO> {
 
         if (SecurityController.check(VistaBasicBehavior.PropertyVistaSupport)) {
             if (VistaFeatures.instance().yardiIntegration()) {
-                columnDescriptors.add(new MemberColumnDescriptor.Builder(proto().billingAccount().invoiceLineItems().$().chargeCode(), false)
+                columnDescriptors.add(new ColumnDescriptor.Builder(proto().billingAccount().invoiceLineItems().$().chargeCode(), false)
                         .columnTitle("Yardi Charge Codes").searchableOnly().build());
             }
-            columnDescriptors.add(new MemberColumnDescriptor.Builder(proto().billingAccount().id(), false).columnTitle("Billing Account Id").build());
+            columnDescriptors.add(new ColumnDescriptor.Builder(proto().billingAccount().id(), false).columnTitle("Billing Account Id").build());
         }
 
         setColumnDescriptors(columnDescriptors);

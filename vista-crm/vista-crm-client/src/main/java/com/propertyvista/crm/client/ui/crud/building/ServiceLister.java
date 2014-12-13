@@ -23,7 +23,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.IPaneView;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
@@ -51,21 +51,21 @@ public class ServiceLister extends SiteDataTablePanel<Service> {
 
         if (VistaTODO.VISTA_2256_Default_Product_Catalog_Show) {
             setColumnDescriptors( //
-                    new MemberColumnDescriptor.Builder(proto().code()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().version().name()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().version().price()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), // 
-                    new MemberColumnDescriptor.Builder(proto().version().availableOnline()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().expiredFrom()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().defaultCatalogItem()).build());
+                    new ColumnDescriptor.Builder(proto().code()).build(), //
+                    new ColumnDescriptor.Builder(proto().version().name()).build(), //
+                    new ColumnDescriptor.Builder(proto().version().price()).build(), //
+                    new ColumnDescriptor.Builder(proto().version().versionNumber()).build(), // 
+                    new ColumnDescriptor.Builder(proto().version().availableOnline()).build(), //
+                    new ColumnDescriptor.Builder(proto().expiredFrom()).build(), //
+                    new ColumnDescriptor.Builder(proto().defaultCatalogItem()).build());
         } else {
             setColumnDescriptors( //
-                    new MemberColumnDescriptor.Builder(proto().code()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().version().name()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().version().price()).visible(!VistaFeatures.instance().yardiIntegration()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), // 
-                    new MemberColumnDescriptor.Builder(proto().version().availableOnline()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().expiredFrom()).build());
+                    new ColumnDescriptor.Builder(proto().code()).build(), //
+                    new ColumnDescriptor.Builder(proto().version().name()).build(), //
+                    new ColumnDescriptor.Builder(proto().version().price()).visible(!VistaFeatures.instance().yardiIntegration()).build(), //
+                    new ColumnDescriptor.Builder(proto().version().versionNumber()).build(), // 
+                    new ColumnDescriptor.Builder(proto().version().availableOnline()).build(), //
+                    new ColumnDescriptor.Builder(proto().expiredFrom()).build());
         }
 
         setDataTableModel(new DataTableModel<Service>());

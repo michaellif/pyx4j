@@ -24,7 +24,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
@@ -43,11 +43,11 @@ public class DashboardLister extends SiteDataTablePanel<DashboardMetadata> {
         super(DashboardMetadata.class, GWT.<AbstractCrudService<DashboardMetadata>> create(DashboardMetadataCrudService.class), true, true);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().type()).build(), //
-                new MemberColumnDescriptor.Builder(proto().name()).build(), //
-                new MemberColumnDescriptor.Builder(proto().isShared()).build(), //
-                new MemberColumnDescriptor.Builder(proto().ownerUser()).title(i18n.tr("Owner")).build(), //
-                new MemberColumnDescriptor.Builder(proto().description()).build());
+                new ColumnDescriptor.Builder(proto().type()).build(), //
+                new ColumnDescriptor.Builder(proto().name()).build(), //
+                new ColumnDescriptor.Builder(proto().isShared()).build(), //
+                new ColumnDescriptor.Builder(proto().ownerUser()).title(i18n.tr("Owner")).build(), //
+                new ColumnDescriptor.Builder(proto().description()).build());
 
         setDataTableModel(new DataTableModel<DashboardMetadata>());
     }

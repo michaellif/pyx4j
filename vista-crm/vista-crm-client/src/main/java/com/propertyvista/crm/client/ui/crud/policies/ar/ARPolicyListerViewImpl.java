@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
@@ -36,9 +36,9 @@ public class ARPolicyListerViewImpl extends AbstractListerView<ARPolicyDTO> impl
             super(ARPolicyDTO.class, GWT.<AbstractListCrudService<ARPolicyDTO>> create(ARPolicyCrudService.class));
 
             setColumnDescriptors( //
-                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build(), //
-                    new MemberColumnDescriptor.Builder(proto().creditDebitRule()).build() //
+                    new ColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
+                    new ColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build(), //
+                    new ColumnDescriptor.Builder(proto().creditDebitRule()).build() //
             );
 
             setDataTableModel(new DataTableModel<ARPolicyDTO>());

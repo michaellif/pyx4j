@@ -20,7 +20,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
@@ -32,20 +32,20 @@ public class AuditRecordsLister extends SiteDataTablePanel<AuditRecordOperations
         super(AuditRecordOperationsDTO.class, GWT.<AuditRecordCrudService> create(AuditRecordCrudService.class), false, false);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().when()).build(), //
-                new MemberColumnDescriptor.Builder(proto().worldTime()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().namespace()).build(), //
-                new MemberColumnDescriptor.Builder(proto().pmc()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().application()).build(), //
-                new MemberColumnDescriptor.Builder(proto().userKey()).build(), //
-                new MemberColumnDescriptor.Builder(proto().userName()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().remoteAddr()).build(), //
-                new MemberColumnDescriptor.Builder(proto().sessionId()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().event()).build(), //
-                new MemberColumnDescriptor.Builder(proto().targetEntity()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().entityId()).build(), //
-                new MemberColumnDescriptor.Builder(proto().entityClass()).build(), //
-                new MemberColumnDescriptor.Builder(proto().details()).build());
+                new ColumnDescriptor.Builder(proto().when()).build(), //
+                new ColumnDescriptor.Builder(proto().worldTime()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().namespace()).build(), //
+                new ColumnDescriptor.Builder(proto().pmc()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().application()).build(), //
+                new ColumnDescriptor.Builder(proto().userKey()).build(), //
+                new ColumnDescriptor.Builder(proto().userName()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().remoteAddr()).build(), //
+                new ColumnDescriptor.Builder(proto().sessionId()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().event()).build(), //
+                new ColumnDescriptor.Builder(proto().targetEntity()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().entityId()).build(), //
+                new ColumnDescriptor.Builder(proto().entityClass()).build(), //
+                new ColumnDescriptor.Builder(proto().details()).build());
 
         setDataTableModel(new DataTableModel<AuditRecordOperationsDTO>());
     }

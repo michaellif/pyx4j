@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.billing.adjustments;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
@@ -28,16 +28,16 @@ public class LeaseAdjustmentLister extends SiteDataTablePanel<LeaseAdjustment> {
         super(LeaseAdjustment.class, GWT.<LeaseAdjustmentCrudService> create(LeaseAdjustmentCrudService.class), true);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().code()).build(), //
-                new MemberColumnDescriptor.Builder(proto().executionType()).build(), //
-                new MemberColumnDescriptor.Builder(proto().receivedDate(), false).build(), //
-                new MemberColumnDescriptor.Builder(proto().targetDate()).build(), //
-                new MemberColumnDescriptor.Builder(proto().tax()).build(), //
-                new MemberColumnDescriptor.Builder(proto().status()).build(), //
-                new MemberColumnDescriptor.Builder(proto().description(), false).build(), //
-                new MemberColumnDescriptor.Builder(proto().updated(), false).build(), //
-                new MemberColumnDescriptor.Builder(proto().created(), false).build(), //
-                new MemberColumnDescriptor.Builder(proto().createdBy(), false).build());
+                new ColumnDescriptor.Builder(proto().code()).build(), //
+                new ColumnDescriptor.Builder(proto().executionType()).build(), //
+                new ColumnDescriptor.Builder(proto().receivedDate(), false).build(), //
+                new ColumnDescriptor.Builder(proto().targetDate()).build(), //
+                new ColumnDescriptor.Builder(proto().tax()).build(), //
+                new ColumnDescriptor.Builder(proto().status()).build(), //
+                new ColumnDescriptor.Builder(proto().description(), false).build(), //
+                new ColumnDescriptor.Builder(proto().updated(), false).build(), //
+                new ColumnDescriptor.Builder(proto().created(), false).build(), //
+                new ColumnDescriptor.Builder(proto().createdBy(), false).build());
 
         setDataTableModel(new DataTableModel<LeaseAdjustment>());
     }

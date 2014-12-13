@@ -20,15 +20,15 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor.Builder;
 
 import com.propertyvista.domain.dashboard.gadgets.util.ColumnUserSettings;
 import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 
 public class ColumnDescriptorDiffUtil {
 
-    public static List<ColumnUserSettings> getDescriptorsDiff(List<ColumnDescriptor> defaultColumnDescriptors, List<ColumnDescriptor> columnDescriptors) {
+    public static List<ColumnUserSettings> getDescriptorsDiff(List<ColumnDescriptor> defaultColumnDescriptors,
+            List<ColumnDescriptor> columnDescriptors) {
         List<ColumnUserSettings> diff = new ArrayList<ColumnUserSettings>();
         for (ColumnDescriptor defaultColumnDescriptor : defaultColumnDescriptors) {
             for (ColumnDescriptor columnDescriptor : columnDescriptors) {
@@ -41,14 +41,14 @@ public class ColumnDescriptorDiffUtil {
     }
 
     /** makes a new column descriptors list applying differences from ListDescriptor */
-    public static <E extends IEntity> List<ColumnDescriptor> applyDiff(Class<E> describedEntityClass, List<ColumnDescriptor> defaultColumnDescriptors,
-            ListerUserSettings listDescriptor) {
+    public static <E extends IEntity> List<ColumnDescriptor> applyDiff(Class<E> describedEntityClass,
+            List<ColumnDescriptor> defaultColumnDescriptors, ListerUserSettings listDescriptor) {
         List<ColumnDescriptor> patchedColumnDescriptors = new ArrayList<ColumnDescriptor>();
         for (ColumnDescriptor defaultColumnDescriptor : defaultColumnDescriptors) {
             ColumnUserSettings overriddingColumnDescriptor = getOverridingDescriptor(listDescriptor, defaultColumnDescriptor);
             E proto = EntityFactory.getEntityPrototype(describedEntityClass);
 
-            Builder builder = new MemberColumnDescriptor.Builder(proto.getMember(new Path(defaultColumnDescriptor.getColumnName())));
+            Builder builder = new ColumnDescriptor.Builder(proto.getMember(new Path(defaultColumnDescriptor.getColumnName())));
             builder.columnTitle(defaultColumnDescriptor.getColumnTitle());
             builder.visible(overriddingColumnDescriptor != null ? overriddingColumnDescriptor.isVisible().getValue() : defaultColumnDescriptor.isVisible());
             builder.searchable(defaultColumnDescriptor.isSearchable());

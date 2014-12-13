@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
@@ -112,10 +112,10 @@ public class LeaseContextSelectionViewImpl extends SimplePanel implements LeaseC
             setFilteringEnabled(false);
 
             setColumnDescriptors( //
-                    new MemberColumnDescriptor.Builder(proto().leasedUnitAddress()).build(),//
-                    new MemberColumnDescriptor.Builder(proto().leaseFrom()).build(),//
-                    new MemberColumnDescriptor.Builder(proto().leaseTo()).build(),//
-                    new MemberColumnDescriptor.Builder(proto().status()).build());
+                    new ColumnDescriptor.Builder(proto().leasedUnitAddress()).build(),//
+                    new ColumnDescriptor.Builder(proto().leaseFrom()).build(),//
+                    new ColumnDescriptor.Builder(proto().leaseTo()).build(),//
+                    new ColumnDescriptor.Builder(proto().status()).build());
 
             setDataTableModel(new DataTableModel<LeaseContextChoiceDTO>());
         }

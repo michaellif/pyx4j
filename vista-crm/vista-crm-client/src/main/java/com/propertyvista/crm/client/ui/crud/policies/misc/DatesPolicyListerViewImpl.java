@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
@@ -36,10 +36,10 @@ public class DatesPolicyListerViewImpl extends AbstractListerView<DatesPolicyDTO
             super(DatesPolicyDTO.class, GWT.<AbstractListCrudService<DatesPolicyDTO>> create(DatesPolicyCrudService.class));
 
             setColumnDescriptors( //
-                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build(), //
-                    new MemberColumnDescriptor.Builder(proto().yearRangeFutureSpan()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().yearRangeStart()).build() //
+                    new ColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
+                    new ColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build(), //
+                    new ColumnDescriptor.Builder(proto().yearRangeFutureSpan()).build(), //
+                    new ColumnDescriptor.Builder(proto().yearRangeStart()).build() //
             );
 
             setDataTableModel(new DataTableModel<DatesPolicyDTO>());

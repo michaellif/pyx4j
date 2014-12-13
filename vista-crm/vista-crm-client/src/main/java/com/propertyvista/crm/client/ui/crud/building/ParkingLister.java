@@ -21,7 +21,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.services.building.ParkingCrudService;
@@ -35,10 +35,10 @@ public class ParkingLister extends SiteDataTablePanel<ParkingDTO> {
         setFilteringEnabled(false);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().name()).build(), //
-                new MemberColumnDescriptor.Builder(proto().type()).build(), //
-                new MemberColumnDescriptor.Builder(proto().levels()).build(), //
-                new MemberColumnDescriptor.Builder(proto().totalSpaces()).build());
+                new ColumnDescriptor.Builder(proto().name()).build(), //
+                new ColumnDescriptor.Builder(proto().type()).build(), //
+                new ColumnDescriptor.Builder(proto().levels()).build(), //
+                new ColumnDescriptor.Builder(proto().totalSpaces()).build());
 
         setDataTableModel(new DataTableModel<ParkingDTO>());
     }

@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.simulator.dbp;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
@@ -35,10 +35,10 @@ public class DirectDebitSimFileListerViewImpl extends AbstractListerView<DirectD
             super(DirectDebitSimFile.class, GWT.<DirectDebitSimFileCrudService> create(DirectDebitSimFileCrudService.class), true);
 
             setColumnDescriptors( //
-                    new MemberColumnDescriptor.Builder(proto().serialNumber()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().creatationDate()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().sentDate()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().status()).build());
+                    new ColumnDescriptor.Builder(proto().serialNumber()).build(), //
+                    new ColumnDescriptor.Builder(proto().creatationDate()).build(), //
+                    new ColumnDescriptor.Builder(proto().sentDate()).build(), //
+                    new ColumnDescriptor.Builder(proto().status()).build());
 
             setDataTableModel(new DataTableModel<DirectDebitSimFile>());
         }

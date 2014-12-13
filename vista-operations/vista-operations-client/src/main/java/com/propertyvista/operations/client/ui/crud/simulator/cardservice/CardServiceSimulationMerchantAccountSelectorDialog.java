@@ -21,7 +21,6 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationMerchantAccount;
@@ -38,8 +37,8 @@ abstract class CardServiceSimulationMerchantAccountSelectorDialog extends Entity
     @Override
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//
-                new MemberColumnDescriptor.Builder(proto().terminalID()).build(), //
-                new MemberColumnDescriptor.Builder(proto().company()).build()//
+                new ColumnDescriptor.Builder(proto().terminalID()).build(), //
+                new ColumnDescriptor.Builder(proto().company()).build()//
                 );
     }
 

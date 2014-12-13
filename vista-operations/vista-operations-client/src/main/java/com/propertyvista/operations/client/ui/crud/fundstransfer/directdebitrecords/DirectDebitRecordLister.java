@@ -23,9 +23,8 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.domain.pmc.Pmc;
@@ -40,23 +39,23 @@ public class DirectDebitRecordLister extends SiteDataTablePanel<DirectDebitRecor
         List<ColumnDescriptor> columns = new ArrayList<>();
 
         if (addPmcColumn) {
-            columns.add(new MemberColumnDescriptor.Builder(proto().pmc()).build());
-            columns.add(new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build());
+            columns.add(new ColumnDescriptor.Builder(proto().pmc()).build());
+            columns.add(new ColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build());
         }
 
-        columns.add(new MemberColumnDescriptor.Builder(proto().accountNumber()).build());
-        columns.add(new MemberColumnDescriptor.Builder(proto().amount()).build());
-        columns.add(new MemberColumnDescriptor.Builder(proto().paymentReferenceNumber()).build());
-        columns.add(new MemberColumnDescriptor.Builder(proto().directDebitFile().fileSerialNumber()).build());
-        columns.add(new MemberColumnDescriptor.Builder(proto().directDebitFile().fileName()).visible(false).build());
-        columns.add(new MemberColumnDescriptor.Builder(proto().directDebitFile().fileSerialDate()).visible(false).build());
-        columns.add(new MemberColumnDescriptor.Builder(proto().customerName()).build());
-        columns.add(new MemberColumnDescriptor.Builder(proto().receivedDate()).build());
-        columns.add(new MemberColumnDescriptor.Builder(proto().processingStatus()).build());
-        columns.add(new MemberColumnDescriptor.Builder(proto().trace().collection()).build());
-        columns.add(new MemberColumnDescriptor.Builder(proto().trace().locationCode()).build());
-        columns.add(new MemberColumnDescriptor.Builder(proto().trace().sourceCode()).build());
-        columns.add(new MemberColumnDescriptor.Builder(proto().trace().traceNumber()).build());
+        columns.add(new ColumnDescriptor.Builder(proto().accountNumber()).build());
+        columns.add(new ColumnDescriptor.Builder(proto().amount()).build());
+        columns.add(new ColumnDescriptor.Builder(proto().paymentReferenceNumber()).build());
+        columns.add(new ColumnDescriptor.Builder(proto().directDebitFile().fileSerialNumber()).build());
+        columns.add(new ColumnDescriptor.Builder(proto().directDebitFile().fileName()).visible(false).build());
+        columns.add(new ColumnDescriptor.Builder(proto().directDebitFile().fileSerialDate()).visible(false).build());
+        columns.add(new ColumnDescriptor.Builder(proto().customerName()).build());
+        columns.add(new ColumnDescriptor.Builder(proto().receivedDate()).build());
+        columns.add(new ColumnDescriptor.Builder(proto().processingStatus()).build());
+        columns.add(new ColumnDescriptor.Builder(proto().trace().collection()).build());
+        columns.add(new ColumnDescriptor.Builder(proto().trace().locationCode()).build());
+        columns.add(new ColumnDescriptor.Builder(proto().trace().sourceCode()).build());
+        columns.add(new ColumnDescriptor.Builder(proto().trace().traceNumber()).build());
 
         setColumnDescriptors(columns);
 

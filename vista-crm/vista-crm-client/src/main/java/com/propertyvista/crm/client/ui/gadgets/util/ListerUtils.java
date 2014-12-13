@@ -18,11 +18,11 @@ import java.util.List;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ColumnSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 
 import com.propertyvista.domain.dashboard.gadgets.util.ColumnUserSettings;
 import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;

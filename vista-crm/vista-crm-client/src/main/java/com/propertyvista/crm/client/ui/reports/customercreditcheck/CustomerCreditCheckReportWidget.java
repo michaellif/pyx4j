@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.report.IReportWidget;
 import com.pyx4j.widgets.client.memento.IMementoAware;
@@ -44,16 +43,16 @@ public class CustomerCreditCheckReportWidget extends HTML implements IReportWidg
 
         CREDITCHECK_TABLE_COLUMNS = new ColumnDescriptor[] {
 
-        new MemberColumnDescriptor.Builder(proto.screening().screene().person().name()).title(i18n.tr("Tenant")).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.screening().screene().person().name().firstName()).searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto.screening().screene().person().name().lastName()).searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto.creditCheckDate()).build(),
-                new MemberColumnDescriptor.Builder(proto.createdBy().name()).title(i18n.tr("Created By")).build(),
-                new MemberColumnDescriptor.Builder(proto.createdBy().name().firstName()).searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto.createdBy().name().lastName()).searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto.amountChecked()).build(), new MemberColumnDescriptor.Builder(proto.riskCode()).build(),
-                new MemberColumnDescriptor.Builder(proto.creditCheckResult()).build(), new MemberColumnDescriptor.Builder(proto.amountApproved()).build(),
-                new MemberColumnDescriptor.Builder(proto.reason()).build()
+        new ColumnDescriptor.Builder(proto.screening().screene().person().name()).title(i18n.tr("Tenant")).searchable(false).build(),
+                new ColumnDescriptor.Builder(proto.screening().screene().person().name().firstName()).searchableOnly().build(),
+                new ColumnDescriptor.Builder(proto.screening().screene().person().name().lastName()).searchableOnly().build(),
+                new ColumnDescriptor.Builder(proto.creditCheckDate()).build(),
+                new ColumnDescriptor.Builder(proto.createdBy().name()).title(i18n.tr("Created By")).build(),
+                new ColumnDescriptor.Builder(proto.createdBy().name().firstName()).searchableOnly().build(),
+                new ColumnDescriptor.Builder(proto.createdBy().name().lastName()).searchableOnly().build(),
+                new ColumnDescriptor.Builder(proto.amountChecked()).build(), new ColumnDescriptor.Builder(proto.riskCode()).build(),
+                new ColumnDescriptor.Builder(proto.creditCheckResult()).build(), new ColumnDescriptor.Builder(proto.amountApproved()).build(),
+                new ColumnDescriptor.Builder(proto.reason()).build()
 
         //statuses
         };

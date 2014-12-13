@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.policies.leaseadjustment;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
@@ -35,8 +35,8 @@ public class LeaseAdjustmentPolicyListerViewImpl extends AbstractListerView<Leas
             super(LeaseAdjustmentPolicyDTO.class, GWT.<LeaseAdjustmentPolicyCrudService> create(LeaseAdjustmentPolicyCrudService.class));
 
             setColumnDescriptors( //
-                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build());
+                    new ColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
+                    new ColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build());
 
             setDataTableModel(new DataTableModel<LeaseAdjustmentPolicyDTO>());
         }

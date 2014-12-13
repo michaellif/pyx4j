@@ -21,7 +21,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
@@ -38,18 +38,18 @@ public class CardServiceSimulationTransactionListerViewImpl extends AbstractList
                     .<AbstractCrudService<CardServiceSimulationTransaction>> create(CardServiceSimulationTransactionCrudService.class), false, true);
 
             setColumnDescriptors( //
-                    new MemberColumnDescriptor.Builder(proto().id()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().card().cardNumber()).columnTitle("Card Number").build(), //
-                    new MemberColumnDescriptor.Builder(proto().merchant()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().merchant().company()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().transactionType()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().amount()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().convenienceFee()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().reference()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().responseCode()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().authorizationNumber()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().voided()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().transactionDate()).build() //
+                    new ColumnDescriptor.Builder(proto().id()).build(), //
+                    new ColumnDescriptor.Builder(proto().card().cardNumber()).columnTitle("Card Number").build(), //
+                    new ColumnDescriptor.Builder(proto().merchant()).build(), //
+                    new ColumnDescriptor.Builder(proto().merchant().company()).build(), //
+                    new ColumnDescriptor.Builder(proto().transactionType()).build(), //
+                    new ColumnDescriptor.Builder(proto().amount()).build(), //
+                    new ColumnDescriptor.Builder(proto().convenienceFee()).build(), //
+                    new ColumnDescriptor.Builder(proto().reference()).build(), //
+                    new ColumnDescriptor.Builder(proto().responseCode()).build(), //
+                    new ColumnDescriptor.Builder(proto().authorizationNumber()).build(), //
+                    new ColumnDescriptor.Builder(proto().voided()).build(), //
+                    new ColumnDescriptor.Builder(proto().transactionDate()).build() //
             );
 
             setDataTableModel(new DataTableModel<CardServiceSimulationTransaction>());

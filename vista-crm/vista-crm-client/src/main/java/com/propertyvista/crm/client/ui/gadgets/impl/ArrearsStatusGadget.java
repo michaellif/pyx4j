@@ -30,10 +30,9 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -59,27 +58,27 @@ public class ArrearsStatusGadget extends GadgetInstanceBase<ArrearsStatusGadgetM
     static {
         LeaseArrearsSnapshotDTO proto = EntityFactory.getEntityPrototype(LeaseArrearsSnapshotDTO.class);
         DEFAULT_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().propertyCode()).visible(true).build(),
-                new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().name()).title(i18n.ntr("Building")).build(),
-                new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().streetNumber()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().streetName()).visible(false).build(),                    
-                new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().province()).visible(false).title(i18n.ntr("Province")).build(),                    
-                new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().country()).visible(false).title(i18n.ntr("Country")).build(),                    
-                new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().complex().name()).visible(false).title(i18n.ntr("Complex")).build(),
-                new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().info().number()).title(i18n.ntr("Unit")).build(),
-                new MemberColumnDescriptor.Builder(proto.billingAccount().lease().leaseId()).build(),
-                new MemberColumnDescriptor.Builder(proto.billingAccount().lease().leaseFrom()).build(),
-                new MemberColumnDescriptor.Builder(proto.billingAccount().lease().leaseTo()).build(),
+                new ColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().propertyCode()).visible(true).build(),
+                new ColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().name()).title(i18n.ntr("Building")).build(),
+                new ColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().streetNumber()).visible(false).build(),
+                new ColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().streetName()).visible(false).build(),                    
+                new ColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().province()).visible(false).title(i18n.ntr("Province")).build(),                    
+                new ColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().country()).visible(false).title(i18n.ntr("Country")).build(),                    
+                new ColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().complex().name()).visible(false).title(i18n.ntr("Complex")).build(),
+                new ColumnDescriptor.Builder(proto.billingAccount().lease().unit().info().number()).title(i18n.ntr("Unit")).build(),
+                new ColumnDescriptor.Builder(proto.billingAccount().lease().leaseId()).build(),
+                new ColumnDescriptor.Builder(proto.billingAccount().lease().leaseFrom()).build(),
+                new ColumnDescriptor.Builder(proto.billingAccount().lease().leaseTo()).build(),
                 
                 // arrears
-                new MemberColumnDescriptor.Builder(proto.selectedBuckets().bucketCurrent()).build(),
-                new MemberColumnDescriptor.Builder(proto.selectedBuckets().bucketThisMonth()).build(),
-                new MemberColumnDescriptor.Builder(proto.selectedBuckets().bucket30()).build(),
-                new MemberColumnDescriptor.Builder(proto.selectedBuckets().bucket60()).build(),
-                new MemberColumnDescriptor.Builder(proto.selectedBuckets().bucket90()).build(),
-                new MemberColumnDescriptor.Builder(proto.selectedBuckets().bucketOver90()).build(),
+                new ColumnDescriptor.Builder(proto.selectedBuckets().bucketCurrent()).build(),
+                new ColumnDescriptor.Builder(proto.selectedBuckets().bucketThisMonth()).build(),
+                new ColumnDescriptor.Builder(proto.selectedBuckets().bucket30()).build(),
+                new ColumnDescriptor.Builder(proto.selectedBuckets().bucket60()).build(),
+                new ColumnDescriptor.Builder(proto.selectedBuckets().bucket90()).build(),
+                new ColumnDescriptor.Builder(proto.selectedBuckets().bucketOver90()).build(),
                 
-                new MemberColumnDescriptor.Builder(proto.selectedBuckets().arrearsAmount()).build()
+                new ColumnDescriptor.Builder(proto.selectedBuckets().arrearsAmount()).build()
         //TODO calculate CREDIT AMOUNT                    
         //        column(proto.selectedBuckets().creditAmount()).build(),
         //        column(proto.selectedBuckets().totalBalance()).build(),

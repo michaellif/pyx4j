@@ -21,7 +21,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.services.organization.VendorCrudService;
@@ -33,8 +33,8 @@ public class VendorLister extends SiteDataTablePanel<Vendor> {
         super(Vendor.class, GWT.<AbstractListCrudService<Vendor>> create(VendorCrudService.class), true);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().name()).build(), //
-                new MemberColumnDescriptor.Builder(proto().type()).build() //
+                new ColumnDescriptor.Builder(proto().name()).build(), //
+                new ColumnDescriptor.Builder(proto().type()).build() //
         );
 
         setDataTableModel(new DataTableModel<Vendor>());

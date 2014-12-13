@@ -28,7 +28,6 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -126,13 +125,13 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().code()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().name()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().mandatory()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().recurring()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().availableOnline()).build(),
-                    new MemberColumnDescriptor.Builder(proto().defaultCatalogItem()).build()
+                    new ColumnDescriptor.Builder(proto().code()).build(),
+                    new ColumnDescriptor.Builder(proto().version().name()).build(),
+                    new ColumnDescriptor.Builder(proto().version().mandatory()).build(),
+                    new ColumnDescriptor.Builder(proto().version().recurring()).build(),
+                    new ColumnDescriptor.Builder(proto().version().versionNumber()).build(),
+                    new ColumnDescriptor.Builder(proto().version().availableOnline()).build(),
+                    new ColumnDescriptor.Builder(proto().defaultCatalogItem()).build()
             );//@formatter:on
         }
 

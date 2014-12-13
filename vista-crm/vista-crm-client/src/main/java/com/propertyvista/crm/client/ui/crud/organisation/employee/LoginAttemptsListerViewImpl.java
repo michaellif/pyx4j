@@ -20,7 +20,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
@@ -39,9 +39,9 @@ public class LoginAttemptsListerViewImpl extends AbstractListerView<LoginAttempt
             super(LoginAttemptDTO.class, GWT.<CrmLoginAttemptsListerService> create(CrmLoginAttemptsListerService.class));
 
             setColumnDescriptors( //
-                    new MemberColumnDescriptor.Builder(proto().time()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().remoteAddress()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().outcome()).build());
+                    new ColumnDescriptor.Builder(proto().time()).build(), //
+                    new ColumnDescriptor.Builder(proto().remoteAddress()).build(), //
+                    new ColumnDescriptor.Builder(proto().outcome()).build());
 
             setDataTableModel(new DataTableModel<LoginAttemptDTO>());
         }

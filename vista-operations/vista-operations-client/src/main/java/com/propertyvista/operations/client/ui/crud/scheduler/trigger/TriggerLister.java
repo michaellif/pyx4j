@@ -22,7 +22,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.rpc.dto.TriggerDTO;
@@ -34,14 +34,14 @@ public class TriggerLister extends SiteDataTablePanel<TriggerDTO> {
         super(TriggerDTO.class, GWT.<AbstractCrudService<TriggerDTO>> create(TriggerCrudService.class), true);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().triggerType()).build(), //
-                new MemberColumnDescriptor.Builder(proto().options()).visible(false).sortable(false).searchable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().name()).build(), //
-                new MemberColumnDescriptor.Builder(proto().scheduleSuspended()).sortable(false).searchable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().schedule()).sortable(false).searchable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().nextScheduledFireTime()).sortable(false).searchable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().populationType(), false).build(), //
-                new MemberColumnDescriptor.Builder(proto().created()).build() //
+                new ColumnDescriptor.Builder(proto().triggerType()).build(), //
+                new ColumnDescriptor.Builder(proto().options()).visible(false).sortable(false).searchable(false).build(), //
+                new ColumnDescriptor.Builder(proto().name()).build(), //
+                new ColumnDescriptor.Builder(proto().scheduleSuspended()).sortable(false).searchable(false).build(), //
+                new ColumnDescriptor.Builder(proto().schedule()).sortable(false).searchable(false).build(), //
+                new ColumnDescriptor.Builder(proto().nextScheduledFireTime()).sortable(false).searchable(false).build(), //
+                new ColumnDescriptor.Builder(proto().populationType(), false).build(), //
+                new ColumnDescriptor.Builder(proto().created()).build() //
         );
 
         DataTableModel<TriggerDTO> dataTableModel = new DataTableModel<TriggerDTO>();

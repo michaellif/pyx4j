@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.rpc.dto.TenantSureDTO;
@@ -29,18 +29,18 @@ public class TenantSureLister extends SiteDataTablePanel<TenantSureDTO> {
         super(TenantSureDTO.class, GWT.<AbstractCrudService<TenantSureDTO>> create(TenantSureCrudService.class), false, false);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().pmc()).build(), //
-                new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().pmc()).build(), //
+                new ColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(), //
 
-                new MemberColumnDescriptor.Builder(proto().propertyCode()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().propertySuspended()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().certificateNumber()).build(), //
+                new ColumnDescriptor.Builder(proto().propertyCode()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().propertySuspended()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().certificateNumber()).build(), //
 
-                new MemberColumnDescriptor.Builder(proto().policy().status()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().policy().cancellation()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().policy().cancellationDate()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().policy().certificate().inceptionDate()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().policy().tenant().customer().person().name()).searchable(false).sortable(false).build() //
+                new ColumnDescriptor.Builder(proto().policy().status()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().policy().cancellation()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().policy().cancellationDate()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().policy().certificate().inceptionDate()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().policy().tenant().customer().person().name()).searchable(false).sortable(false).build() //
         );
 
         setDataTableModel(new DataTableModel<TenantSureDTO>());

@@ -18,7 +18,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
@@ -42,13 +42,13 @@ public class MerchantAccountsLister extends SiteDataTablePanel<PmcMerchantAccoun
         });
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().terminalId()).build(), //
-                new MemberColumnDescriptor.Builder(proto().merchantTerminalIdConvenienceFee()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().status()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().paymentsStatus()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().bankId()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().branchTransitNumber()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().accountNumber()).searchable(false).sortable(false).build());
+                new ColumnDescriptor.Builder(proto().terminalId()).build(), //
+                new ColumnDescriptor.Builder(proto().merchantTerminalIdConvenienceFee()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().merchantAccount().status()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().merchantAccount().paymentsStatus()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().merchantAccount().bankId()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().merchantAccount().branchTransitNumber()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().merchantAccount().accountNumber()).searchable(false).sortable(false).build());
 
         setDataTableModel(new DataTableModel<PmcMerchantAccountDTO>());
     }

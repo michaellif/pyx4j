@@ -26,7 +26,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 
 import com.propertyvista.common.client.ui.components.versioning.VersionedLister;
 import com.propertyvista.crm.rpc.services.building.catalog.ConcessionCrudService;
@@ -39,10 +39,10 @@ public class ConcessionLister extends VersionedLister<Concession> {
         setFilteringEnabled(false);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), //
-                new MemberColumnDescriptor.Builder(proto().version().type()).build(), //
-                new MemberColumnDescriptor.Builder(proto().version().term()).build(), //
-                new MemberColumnDescriptor.Builder(proto().version()).formatter(new IFormatter<IEntity, SafeHtml>() {
+                new ColumnDescriptor.Builder(proto().version().versionNumber()).build(), //
+                new ColumnDescriptor.Builder(proto().version().type()).build(), //
+                new ColumnDescriptor.Builder(proto().version().term()).build(), //
+                new ColumnDescriptor.Builder(proto().version()).formatter(new IFormatter<IEntity, SafeHtml>() {
 
                     @Override
                     public SafeHtml format(IEntity value) {
@@ -65,9 +65,9 @@ public class ConcessionLister extends VersionedLister<Concession> {
                         return builder.toSafeHtml();
                     }
                 }).build(), //
-                new MemberColumnDescriptor.Builder(proto().version().condition()).build(), //
-                new MemberColumnDescriptor.Builder(proto().version().effectiveDate()).build(), //
-                new MemberColumnDescriptor.Builder(proto().version().expirationDate()).build());
+                new ColumnDescriptor.Builder(proto().version().condition()).build(), //
+                new ColumnDescriptor.Builder(proto().version().effectiveDate()).build(), //
+                new ColumnDescriptor.Builder(proto().version().expirationDate()).build());
 
         setDataTableModel(new DataTableModel<Concession>());
     }

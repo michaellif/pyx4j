@@ -20,7 +20,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
@@ -39,13 +39,13 @@ public class MoneyInBatchListerViewImpl extends AbstractListerView<MoneyInBatchD
             super(MoneyInBatchDTO.class, GWT.<MoneyInBatchCrudService> create(MoneyInBatchCrudService.class), false, false);
 
             setColumnDescriptors( //
-                    new MemberColumnDescriptor.Builder(proto().building()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().depositDate()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().bankAccountName()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().depositSlipNumber()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().totalReceivedAmount()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().numberOfReceipts()).build(), //                    
-                    new MemberColumnDescriptor.Builder(proto().postingStatus()).build());
+                    new ColumnDescriptor.Builder(proto().building()).build(), //
+                    new ColumnDescriptor.Builder(proto().depositDate()).build(), //
+                    new ColumnDescriptor.Builder(proto().bankAccountName()).build(), //
+                    new ColumnDescriptor.Builder(proto().depositSlipNumber()).build(), //
+                    new ColumnDescriptor.Builder(proto().totalReceivedAmount()).build(), //
+                    new ColumnDescriptor.Builder(proto().numberOfReceipts()).build(), //                    
+                    new ColumnDescriptor.Builder(proto().postingStatus()).build());
 
             setDataTableModel(new DataTableModel<MoneyInBatchDTO>());
         }

@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid;
 
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 
 import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInCandidateDTO;
 
@@ -25,11 +25,11 @@ public class MoneyInCandidateLister extends DataTablePanel<MoneyInCandidateDTO> 
         super(MoneyInCandidateDTO.class);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().building()).build(), //
-                new MemberColumnDescriptor.Builder(proto().unit()).build(), //
-                new MemberColumnDescriptor.Builder(proto().leaseId()).build(), //
-                new MemberColumnDescriptor.Builder(proto().payerCandidates().$().name()).searchableOnly().build(), //
-                new MemberColumnDescriptor.Builder(proto().payerCandidates()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().building()).build(), //
+                new ColumnDescriptor.Builder(proto().unit()).build(), //
+                new ColumnDescriptor.Builder(proto().leaseId()).build(), //
+                new ColumnDescriptor.Builder(proto().payerCandidates().$().name()).searchableOnly().build(), //
+                new ColumnDescriptor.Builder(proto().payerCandidates()).searchable(false).sortable(false).build(), //
 //                new MemberColumnDescriptor(new Builder(proto().payerCandidates()).searchable(false).sortable(false).title(i18n.tr("Tenants"))) {
 //                    @Override
 //                    public String convert(IEntity entity) {
@@ -44,7 +44,7 @@ public class MoneyInCandidateLister extends DataTablePanel<MoneyInCandidateDTO> 
 //                        return payerTenantsStringBuilder.toString();
 //                    }
 //                }, 
-                new MemberColumnDescriptor.Builder(proto().totalOutstanding()).build());
+                new ColumnDescriptor.Builder(proto().totalOutstanding()).build());
 
         DataTableModel<MoneyInCandidateDTO> dataTableModel = new DataTableModel<MoneyInCandidateDTO>();
 

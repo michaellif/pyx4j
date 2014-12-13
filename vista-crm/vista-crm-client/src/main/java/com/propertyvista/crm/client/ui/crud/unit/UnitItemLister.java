@@ -20,7 +20,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.services.unit.UnitItemCrudService;
@@ -33,11 +33,11 @@ public class UnitItemLister extends SiteDataTablePanel<AptUnitItem> {
         setFilteringEnabled(false);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().type()).build(), //
-                new MemberColumnDescriptor.Builder(proto().description()).build(), //
-                new MemberColumnDescriptor.Builder(proto().flooringType()).build(), //
-                new MemberColumnDescriptor.Builder(proto().cabinetsType()).build(), //
-                new MemberColumnDescriptor.Builder(proto().counterTopType()).build());
+                new ColumnDescriptor.Builder(proto().type()).build(), //
+                new ColumnDescriptor.Builder(proto().description()).build(), //
+                new ColumnDescriptor.Builder(proto().flooringType()).build(), //
+                new ColumnDescriptor.Builder(proto().cabinetsType()).build(), //
+                new ColumnDescriptor.Builder(proto().counterTopType()).build());
 
         setDataTableModel(new DataTableModel<AptUnitItem>());
     }

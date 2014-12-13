@@ -20,7 +20,6 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
@@ -41,19 +40,19 @@ public class UnitDetailsFactory extends AbstractListerDetailsFactory<AptUnitDTO,
     static {
         AptUnitDTO proto = EntityFactory.create(AptUnitDTO.class);
         DEFAULT_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto.buildingCode()).build(),
-                new MemberColumnDescriptor.Builder(proto.floorplan().name()).title(i18n.tr("Floorplan Name")).build(),
-                new MemberColumnDescriptor.Builder(proto.floorplan().marketingName()).title(i18n.tr("Floorplan Marketing Name")).build(),
-                new MemberColumnDescriptor.Builder(proto.info().economicStatus()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto.info().floor()).build(),
-                new MemberColumnDescriptor.Builder(proto.info().number()).build(),
-                new MemberColumnDescriptor.Builder(proto.info().area()).build(),
-                new MemberColumnDescriptor.Builder(proto.info().areaUnits()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto.info()._bedrooms()).build(),
-                new MemberColumnDescriptor.Builder(proto.info()._bathrooms()).build(),
-                new MemberColumnDescriptor.Builder(proto.financial()._unitRent()).build(),
-                new MemberColumnDescriptor.Builder(proto.financial()._marketRent()).build(),
-                new MemberColumnDescriptor.Builder(proto.availability().availableForRent()).build()
+                new ColumnDescriptor.Builder(proto.buildingCode()).build(),
+                new ColumnDescriptor.Builder(proto.floorplan().name()).title(i18n.tr("Floorplan Name")).build(),
+                new ColumnDescriptor.Builder(proto.floorplan().marketingName()).title(i18n.tr("Floorplan Marketing Name")).build(),
+                new ColumnDescriptor.Builder(proto.info().economicStatus()).visible(false).build(),
+                new ColumnDescriptor.Builder(proto.info().floor()).build(),
+                new ColumnDescriptor.Builder(proto.info().number()).build(),
+                new ColumnDescriptor.Builder(proto.info().area()).build(),
+                new ColumnDescriptor.Builder(proto.info().areaUnits()).visible(false).build(),
+                new ColumnDescriptor.Builder(proto.info()._bedrooms()).build(),
+                new ColumnDescriptor.Builder(proto.info()._bathrooms()).build(),
+                new ColumnDescriptor.Builder(proto.financial()._unitRent()).build(),
+                new ColumnDescriptor.Builder(proto.financial()._marketRent()).build(),
+                new ColumnDescriptor.Builder(proto.availability().availableForRent()).build()
             );//@formatter:on
     }
 

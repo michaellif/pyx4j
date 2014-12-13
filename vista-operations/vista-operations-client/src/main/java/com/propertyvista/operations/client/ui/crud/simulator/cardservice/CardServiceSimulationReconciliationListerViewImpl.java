@@ -22,7 +22,7 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.widgets.client.Button;
 
@@ -40,19 +40,19 @@ public class CardServiceSimulationReconciliationListerViewImpl extends AbstractL
                     .<AbstractCrudService<CardServiceSimulationReconciliationRecord>> create(CardServiceSimulationReconciliationCrudService.class), false, true);
 
             setColumnDescriptors( //
-                    new MemberColumnDescriptor.Builder(proto().id()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().fileId()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().created()).build(), // 
-                    new MemberColumnDescriptor.Builder(proto().depositDate()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().merchant()).build(), // 
-                    new MemberColumnDescriptor.Builder(proto().merchant().company()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().totalDeposit()).build(), // 
-                    new MemberColumnDescriptor.Builder(proto().visaDeposit()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().visaFee()).build(), // 
-                    new MemberColumnDescriptor.Builder(proto().visaTransactions()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().mastercardDeposit()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().mastercardFee()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().mastercardTransactions()).build());
+                    new ColumnDescriptor.Builder(proto().id()).build(), //
+                    new ColumnDescriptor.Builder(proto().fileId()).build(), //
+                    new ColumnDescriptor.Builder(proto().created()).build(), // 
+                    new ColumnDescriptor.Builder(proto().depositDate()).build(), //
+                    new ColumnDescriptor.Builder(proto().merchant()).build(), // 
+                    new ColumnDescriptor.Builder(proto().merchant().company()).build(), //
+                    new ColumnDescriptor.Builder(proto().totalDeposit()).build(), // 
+                    new ColumnDescriptor.Builder(proto().visaDeposit()).build(), //
+                    new ColumnDescriptor.Builder(proto().visaFee()).build(), // 
+                    new ColumnDescriptor.Builder(proto().visaTransactions()).build(), //
+                    new ColumnDescriptor.Builder(proto().mastercardDeposit()).build(), //
+                    new ColumnDescriptor.Builder(proto().mastercardFee()).build(), //
+                    new ColumnDescriptor.Builder(proto().mastercardTransactions()).build());
 
             setDataTableModel(new DataTableModel<CardServiceSimulationReconciliationRecord>());
         }

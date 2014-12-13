@@ -23,7 +23,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
@@ -139,8 +138,8 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
             @Override
             protected List<ColumnDescriptor> defineColumnDescriptors() {
                 return Arrays.asList(//
-                        new MemberColumnDescriptor.Builder(proto().permission(), true).build(),//
-                        new MemberColumnDescriptor.Builder(proto().description(), true).build());
+                        new ColumnDescriptor.Builder(proto().permission(), true).build(),//
+                        new ColumnDescriptor.Builder(proto().description(), true).build());
             }
 
             @Override

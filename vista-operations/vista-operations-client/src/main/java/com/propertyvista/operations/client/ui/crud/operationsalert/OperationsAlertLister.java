@@ -20,7 +20,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.rpc.dto.OperationsAlertDTO;
@@ -32,16 +32,16 @@ public class OperationsAlertLister extends SiteDataTablePanel<OperationsAlertDTO
         super(OperationsAlertDTO.class, GWT.<OperationsAlertCrudService> create(OperationsAlertCrudService.class), false, false);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().namespace()).build(), //
-                new MemberColumnDescriptor.Builder(proto().remoteAddr()).build(), //
-                new MemberColumnDescriptor.Builder(proto().created()).build(), //
-                new MemberColumnDescriptor.Builder(proto().app()).build(), //
-                new MemberColumnDescriptor.Builder(proto().entityId()).build(), //
-                new MemberColumnDescriptor.Builder(proto().entityClass()).build(), //
-                new MemberColumnDescriptor.Builder(proto().details()).build(), //
-                new MemberColumnDescriptor.Builder(proto().user()).build(), //
-                new MemberColumnDescriptor.Builder(proto().resolved()).build(), //
-                new MemberColumnDescriptor.Builder(proto().operationsNotes()).build());
+                new ColumnDescriptor.Builder(proto().namespace()).build(), //
+                new ColumnDescriptor.Builder(proto().remoteAddr()).build(), //
+                new ColumnDescriptor.Builder(proto().created()).build(), //
+                new ColumnDescriptor.Builder(proto().app()).build(), //
+                new ColumnDescriptor.Builder(proto().entityId()).build(), //
+                new ColumnDescriptor.Builder(proto().entityClass()).build(), //
+                new ColumnDescriptor.Builder(proto().details()).build(), //
+                new ColumnDescriptor.Builder(proto().user()).build(), //
+                new ColumnDescriptor.Builder(proto().resolved()).build(), //
+                new ColumnDescriptor.Builder(proto().operationsNotes()).build());
 
         setDataTableModel(new DataTableModel<OperationsAlertDTO>());
     }

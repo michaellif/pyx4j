@@ -21,7 +21,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
@@ -40,8 +40,8 @@ public class AvailableCrmReportListerViewImpl extends AbstractListerView<Availab
             super(AvailableCrmReport.class, GWT.<AbstractListCrudService<AvailableCrmReport>> create(AvailableCrmReportAdminCrudService.class), false);
 
             setColumnDescriptors( //
-                    new MemberColumnDescriptor.Builder(proto().reportType()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().roles()).build());
+                    new ColumnDescriptor.Builder(proto().reportType()).build(), //
+                    new ColumnDescriptor.Builder(proto().roles()).build());
 
             setDataTableModel(new DataTableModel<AvailableCrmReport>());
         }

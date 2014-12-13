@@ -30,7 +30,7 @@ import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.backoffice.ui.prime.report.IReportWidget;
 import com.pyx4j.widgets.client.memento.IMementoAware;
 import com.pyx4j.widgets.client.memento.IMementoInput;
@@ -165,16 +165,16 @@ public class ResidentInsuranceReportWidget extends HTML implements IReportWidget
         int INCREASED_COLUMN_WIDTH = 150;
         int WIDE_COLUMN_WIDTH = 200;
         return Arrays.<ITableColumnFormatter> asList(//@formatter:off
-                new ColumnDescriptorTableColumnFormatter(NORMAL_COLUMN_WIDTH, new MemberColumnDescriptor.Builder(proto.hasResidentInsurance()).build()),
-                new ColumnDescriptorAnchorTableColumnFormatter(WIDE_COLUMN_WIDTH, new MemberColumnDescriptor.Builder(proto.namesOnLease()).build()),
-                new ColumnDescriptorTableColumnFormatter(NORMAL_COLUMN_WIDTH, new MemberColumnDescriptor.Builder(proto.building()).build()),
-                new ColumnDescriptorTableColumnFormatter(SHORT_COLUMN_WIDTH, new MemberColumnDescriptor.Builder(proto.unit()).build()),
-                new ColumnDescriptorTableColumnFormatter(WIDE_COLUMN_WIDTH, new MemberColumnDescriptor.Builder(proto.address()).build()),
-                new ColumnDescriptorTableColumnFormatter(NORMAL_COLUMN_WIDTH, new MemberColumnDescriptor.Builder(proto.postalCode()).build()),                
-                new ColumnDescriptorTableColumnFormatter(INCREASED_COLUMN_WIDTH, new MemberColumnDescriptor.Builder(proto.provider()).build()),
-                new ColumnDescriptorTableColumnFormatter(NORMAL_COLUMN_WIDTH, new MemberColumnDescriptor.Builder(proto.liabilityCoverage()).build()),
-                new ColumnDescriptorTableColumnFormatter(NORMAL_COLUMN_WIDTH, new MemberColumnDescriptor.Builder(proto.expiryDate()).build()),
-                new ColumnDescriptorAnchorTableColumnFormatter(INCREASED_COLUMN_WIDTH, new MemberColumnDescriptor.Builder(proto.certificate()).build())
+                new ColumnDescriptorTableColumnFormatter(NORMAL_COLUMN_WIDTH, new ColumnDescriptor.Builder(proto.hasResidentInsurance()).build()),
+                new ColumnDescriptorAnchorTableColumnFormatter(WIDE_COLUMN_WIDTH, new ColumnDescriptor.Builder(proto.namesOnLease()).build()),
+                new ColumnDescriptorTableColumnFormatter(NORMAL_COLUMN_WIDTH, new ColumnDescriptor.Builder(proto.building()).build()),
+                new ColumnDescriptorTableColumnFormatter(SHORT_COLUMN_WIDTH, new ColumnDescriptor.Builder(proto.unit()).build()),
+                new ColumnDescriptorTableColumnFormatter(WIDE_COLUMN_WIDTH, new ColumnDescriptor.Builder(proto.address()).build()),
+                new ColumnDescriptorTableColumnFormatter(NORMAL_COLUMN_WIDTH, new ColumnDescriptor.Builder(proto.postalCode()).build()),                
+                new ColumnDescriptorTableColumnFormatter(INCREASED_COLUMN_WIDTH, new ColumnDescriptor.Builder(proto.provider()).build()),
+                new ColumnDescriptorTableColumnFormatter(NORMAL_COLUMN_WIDTH, new ColumnDescriptor.Builder(proto.liabilityCoverage()).build()),
+                new ColumnDescriptorTableColumnFormatter(NORMAL_COLUMN_WIDTH, new ColumnDescriptor.Builder(proto.expiryDate()).build()),
+                new ColumnDescriptorAnchorTableColumnFormatter(INCREASED_COLUMN_WIDTH, new ColumnDescriptor.Builder(proto.certificate()).build())
         );//@formatter:on
     }
 

@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.tenantsure;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.domain.tenant.insurance.TenantSureTransaction;
@@ -28,13 +28,13 @@ public class TenantSureTransactionLister extends SiteDataTablePanel<TenantSureTr
         super(TenantSureTransaction.class, GWT.<TenantSureTransactionListerService> create(TenantSureTransactionListerService.class));
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().amount()).build(), //
-                new MemberColumnDescriptor.Builder(proto().paymentDue()).build(), //
-                new MemberColumnDescriptor.Builder(proto().paymentMethod()).build(), //
-                new MemberColumnDescriptor.Builder(proto().status()).build(), //
-                new MemberColumnDescriptor.Builder(proto().transactionAuthorizationNumber()).build(), //
-                new MemberColumnDescriptor.Builder(proto().transactionErrorMessage()).build(), //
-                new MemberColumnDescriptor.Builder(proto().transactionDate()).build());
+                new ColumnDescriptor.Builder(proto().amount()).build(), //
+                new ColumnDescriptor.Builder(proto().paymentDue()).build(), //
+                new ColumnDescriptor.Builder(proto().paymentMethod()).build(), //
+                new ColumnDescriptor.Builder(proto().status()).build(), //
+                new ColumnDescriptor.Builder(proto().transactionAuthorizationNumber()).build(), //
+                new ColumnDescriptor.Builder(proto().transactionErrorMessage()).build(), //
+                new ColumnDescriptor.Builder(proto().transactionDate()).build());
 
         setDataTableModel(new DataTableModel<TenantSureTransaction>());
 

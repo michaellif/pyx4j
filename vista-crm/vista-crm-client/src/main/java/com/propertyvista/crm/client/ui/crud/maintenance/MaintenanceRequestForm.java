@@ -46,7 +46,6 @@ import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -535,15 +534,15 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 protected List<ColumnDescriptor> defineColumnDescriptors() {
                     return Arrays.asList( //
                             // building data                
-                            new MemberColumnDescriptor.Builder(proto().building().propertyCode(), true).build(), //
+                            new ColumnDescriptor.Builder(proto().building().propertyCode(), true).build(), //
                             // unit data
-                            new MemberColumnDescriptor.Builder(proto().info().number(), true).build(), //
-                            new MemberColumnDescriptor.Builder(proto().info().floor(), false).build(), //
-                            new MemberColumnDescriptor.Builder(proto().info().area()).build(), //
-                            new MemberColumnDescriptor.Builder(proto().info()._bedrooms()).build(), //
-                            new MemberColumnDescriptor.Builder(proto().info()._bathrooms()).build(), //
-                            new MemberColumnDescriptor.Builder(proto().availability().availableForRent()).build(), //
-                            new MemberColumnDescriptor.Builder(proto().financial()._marketRent()).build() //
+                            new ColumnDescriptor.Builder(proto().info().number(), true).build(), //
+                            new ColumnDescriptor.Builder(proto().info().floor(), false).build(), //
+                            new ColumnDescriptor.Builder(proto().info().area()).build(), //
+                            new ColumnDescriptor.Builder(proto().info()._bedrooms()).build(), //
+                            new ColumnDescriptor.Builder(proto().info()._bathrooms()).build(), //
+                            new ColumnDescriptor.Builder(proto().availability().availableForRent()).build(), //
+                            new ColumnDescriptor.Builder(proto().financial()._marketRent()).build() //
                             );
                 }
             };
@@ -585,18 +584,18 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 @Override
                 protected List<ColumnDescriptor> defineColumnDescriptors() {
                     return Arrays.asList( //
-                            new MemberColumnDescriptor.Builder(proto().lease().unit()).searchable(false).build(), //
-                            new MemberColumnDescriptor.Builder(proto().customer().person().name()).searchable(false).build(), //
-                            new MemberColumnDescriptor.Builder(proto().customer().person().name().firstName()).searchableOnly().build(), //
-                            new MemberColumnDescriptor.Builder(proto().customer().person().name().lastName()).searchableOnly().build(), //
-                            new MemberColumnDescriptor.Builder(proto().customer().person().sex()).visible(false).build(), //
-                            new MemberColumnDescriptor.Builder(proto().customer().person().birthDate(), false).build(), //
-                            new MemberColumnDescriptor.Builder(proto().customer().person().email(), false).build(), //
-                            new MemberColumnDescriptor.Builder(proto().customer().person().homePhone()).build(), //
-                            new MemberColumnDescriptor.Builder(proto().customer().person().mobilePhone()).build(), //
-                            new MemberColumnDescriptor.Builder(proto().customer().person().workPhone()).build(), //
+                            new ColumnDescriptor.Builder(proto().lease().unit()).searchable(false).build(), //
+                            new ColumnDescriptor.Builder(proto().customer().person().name()).searchable(false).build(), //
+                            new ColumnDescriptor.Builder(proto().customer().person().name().firstName()).searchableOnly().build(), //
+                            new ColumnDescriptor.Builder(proto().customer().person().name().lastName()).searchableOnly().build(), //
+                            new ColumnDescriptor.Builder(proto().customer().person().sex()).visible(false).build(), //
+                            new ColumnDescriptor.Builder(proto().customer().person().birthDate(), false).build(), //
+                            new ColumnDescriptor.Builder(proto().customer().person().email(), false).build(), //
+                            new ColumnDescriptor.Builder(proto().customer().person().homePhone()).build(), //
+                            new ColumnDescriptor.Builder(proto().customer().person().mobilePhone()).build(), //
+                            new ColumnDescriptor.Builder(proto().customer().person().workPhone()).build(), //
 
-                            new MemberColumnDescriptor.Builder(proto().lease().leaseId()).searchableOnly().build() //
+                            new ColumnDescriptor.Builder(proto().lease().leaseId()).searchableOnly().build() //
                             );
                 }
             };

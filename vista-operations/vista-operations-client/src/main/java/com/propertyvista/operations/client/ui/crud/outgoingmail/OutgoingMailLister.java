@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.rpc.dto.OutgoingMailQueueDTO;
@@ -29,19 +29,19 @@ public class OutgoingMailLister extends SiteDataTablePanel<OutgoingMailQueueDTO>
         super(OutgoingMailQueueDTO.class, GWT.<AbstractCrudService<OutgoingMailQueueDTO>> create(OutgoingMailCrudService.class), false, false);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().status()).build(), //
-                new MemberColumnDescriptor.Builder(proto().namespace()).build(), //
-                new MemberColumnDescriptor.Builder(proto().configurationId()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().statusCallbackClass()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().created()).build(), //
-                new MemberColumnDescriptor.Builder(proto().updated()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().attempts()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().priority()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().lastAttemptErrorMessage()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().sendTo()).build(), //
-                new MemberColumnDescriptor.Builder(proto().sentDate()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().messageId()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().keywords()).build() //
+                new ColumnDescriptor.Builder(proto().status()).build(), //
+                new ColumnDescriptor.Builder(proto().namespace()).build(), //
+                new ColumnDescriptor.Builder(proto().configurationId()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().statusCallbackClass()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().created()).build(), //
+                new ColumnDescriptor.Builder(proto().updated()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().attempts()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().priority()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().lastAttemptErrorMessage()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().sendTo()).build(), //
+                new ColumnDescriptor.Builder(proto().sentDate()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().messageId()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().keywords()).build() //
         );
 
         setDataTableModel(new DataTableModel<OutgoingMailQueueDTO>());

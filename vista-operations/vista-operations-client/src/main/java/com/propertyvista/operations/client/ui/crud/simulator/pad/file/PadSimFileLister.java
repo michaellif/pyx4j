@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
@@ -29,15 +29,15 @@ public class PadSimFileLister extends SiteDataTablePanel<PadSimFile> {
         super(PadSimFile.class, GWT.<AbstractCrudService<PadSimFile>> create(PadSimFileCrudService.class), false);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().fileName()).build(), //
-                new MemberColumnDescriptor.Builder(proto().fundsTransferType()).build(), //
-                new MemberColumnDescriptor.Builder(proto().fileCreationNumber()).build(), //
-                new MemberColumnDescriptor.Builder(proto().state()).build(), //
-                new MemberColumnDescriptor.Builder(proto().returns()).build(), //
-                new MemberColumnDescriptor.Builder(proto().received()).build(), //
-                new MemberColumnDescriptor.Builder(proto().recordsCount()).build(), //
-                new MemberColumnDescriptor.Builder(proto().fileAmount()).build(), //
-                new MemberColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build());
+                new ColumnDescriptor.Builder(proto().fileName()).build(), //
+                new ColumnDescriptor.Builder(proto().fundsTransferType()).build(), //
+                new ColumnDescriptor.Builder(proto().fileCreationNumber()).build(), //
+                new ColumnDescriptor.Builder(proto().state()).build(), //
+                new ColumnDescriptor.Builder(proto().returns()).build(), //
+                new ColumnDescriptor.Builder(proto().received()).build(), //
+                new ColumnDescriptor.Builder(proto().recordsCount()).build(), //
+                new ColumnDescriptor.Builder(proto().fileAmount()).build(), //
+                new ColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build());
 
         setDataTableModel(new DataTableModel<PadSimFile>());
     }

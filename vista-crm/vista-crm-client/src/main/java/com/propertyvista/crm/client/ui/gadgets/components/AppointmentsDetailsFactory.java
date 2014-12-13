@@ -20,7 +20,6 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
@@ -37,12 +36,12 @@ public class AppointmentsDetailsFactory extends AbstractListerDetailsFactory<App
     static {
         Appointment proto = EntityFactory.getEntityPrototype(Appointment.class);
         DEFAULT_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto.date()).build(),
-                new MemberColumnDescriptor.Builder(proto.time()).build(),
-                new MemberColumnDescriptor.Builder(proto.agent()).build(),
-                new MemberColumnDescriptor.Builder(proto.phone()).build(),
-                new MemberColumnDescriptor.Builder(proto.email()).build(),
-                new MemberColumnDescriptor.Builder(proto.status()).build()
+                new ColumnDescriptor.Builder(proto.date()).build(),
+                new ColumnDescriptor.Builder(proto.time()).build(),
+                new ColumnDescriptor.Builder(proto.agent()).build(),
+                new ColumnDescriptor.Builder(proto.phone()).build(),
+                new ColumnDescriptor.Builder(proto.email()).build(),
+                new ColumnDescriptor.Builder(proto.status()).build()
         );//@formatter:on
 
     }

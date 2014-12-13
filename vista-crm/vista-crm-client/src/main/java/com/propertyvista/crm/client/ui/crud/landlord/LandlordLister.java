@@ -21,7 +21,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.services.building.LandlordCrudService;
@@ -33,10 +33,10 @@ public class LandlordLister extends SiteDataTablePanel<LandlordDTO> {
         super(LandlordDTO.class, GWT.<AbstractCrudService<LandlordDTO>> create(LandlordCrudService.class), true);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().name()).build(), // 
-                new MemberColumnDescriptor.Builder(proto().address().city()).sortable(false).searchable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().address().province()).sortable(false).searchable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().address().country()).sortable(false).searchable(false).build());
+                new ColumnDescriptor.Builder(proto().name()).build(), // 
+                new ColumnDescriptor.Builder(proto().address().city()).sortable(false).searchable(false).build(), //
+                new ColumnDescriptor.Builder(proto().address().province()).sortable(false).searchable(false).build(), //
+                new ColumnDescriptor.Builder(proto().address().country()).sortable(false).searchable(false).build());
 
         setDataTableModel(new DataTableModel<LandlordDTO>());
     }

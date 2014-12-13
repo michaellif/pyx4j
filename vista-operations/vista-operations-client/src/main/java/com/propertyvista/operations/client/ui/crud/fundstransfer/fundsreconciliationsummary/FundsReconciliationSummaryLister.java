@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
@@ -30,21 +30,21 @@ public class FundsReconciliationSummaryLister extends SiteDataTablePanel<FundsRe
                 GWT.<AbstractCrudService<FundsReconciliationSummaryDTO>> create(FundsReconciliationSummaryCrudService.class), false, false);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().id()).columnTitle("Summary Id").searchableOnly().build(), //
-                new MemberColumnDescriptor.Builder(proto().reconciliationFile().id()).columnTitle("File Id").searchableOnly().build(), //
-                new MemberColumnDescriptor.Builder(proto().reconciliationFile().fileName()).build(), //
-                new MemberColumnDescriptor.Builder(proto().reconciliationFile().fundsTransferType()).build(), //
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().pmc()).build(), //
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().pmc().namespace()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().paymentDate()).build(), //
-                new MemberColumnDescriptor.Builder(proto().merchantTerminalId()).build(), //  
-                new MemberColumnDescriptor.Builder(proto().merchantAccount()).build(), //
-                new MemberColumnDescriptor.Builder(proto().reconciliationStatus()).build(), //   
-                new MemberColumnDescriptor.Builder(proto().processingStatus()).build(), //
-                new MemberColumnDescriptor.Builder(proto().grossPaymentAmount()).build(), //
-                new MemberColumnDescriptor.Builder(proto().grossPaymentCount()).build(), //
-                new MemberColumnDescriptor.Builder(proto().rejectItemsAmount()).build(), //
-                new MemberColumnDescriptor.Builder(proto().rejectItemsCount()).build() //
+                new ColumnDescriptor.Builder(proto().id()).columnTitle("Summary Id").searchableOnly().build(), //
+                new ColumnDescriptor.Builder(proto().reconciliationFile().id()).columnTitle("File Id").searchableOnly().build(), //
+                new ColumnDescriptor.Builder(proto().reconciliationFile().fileName()).build(), //
+                new ColumnDescriptor.Builder(proto().reconciliationFile().fundsTransferType()).build(), //
+                new ColumnDescriptor.Builder(proto().merchantAccount().pmc()).build(), //
+                new ColumnDescriptor.Builder(proto().merchantAccount().pmc().namespace()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().paymentDate()).build(), //
+                new ColumnDescriptor.Builder(proto().merchantTerminalId()).build(), //  
+                new ColumnDescriptor.Builder(proto().merchantAccount()).build(), //
+                new ColumnDescriptor.Builder(proto().reconciliationStatus()).build(), //   
+                new ColumnDescriptor.Builder(proto().processingStatus()).build(), //
+                new ColumnDescriptor.Builder(proto().grossPaymentAmount()).build(), //
+                new ColumnDescriptor.Builder(proto().grossPaymentCount()).build(), //
+                new ColumnDescriptor.Builder(proto().rejectItemsAmount()).build(), //
+                new ColumnDescriptor.Builder(proto().rejectItemsCount()).build() //
         );
 
         setDataTableModel(new DataTableModel<FundsReconciliationSummaryDTO>());

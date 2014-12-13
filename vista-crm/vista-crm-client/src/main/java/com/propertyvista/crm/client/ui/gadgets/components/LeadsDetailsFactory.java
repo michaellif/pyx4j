@@ -20,7 +20,6 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
@@ -40,14 +39,14 @@ public class LeadsDetailsFactory extends AbstractListerDetailsFactory<Lead, Coun
     static {
         Lead proto = EntityFactory.getEntityPrototype(Lead.class);
         DEFAULT_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto.leadId(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto.guests(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto.guests().$().person().name().lastName()).columnTitle(i18n.tr("Guest Last Name")).searchableOnly().build(),
-                    new MemberColumnDescriptor.Builder(proto.moveInDate(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto.leaseTerm(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto.floorplan(), true).searchable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto.createDate(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto.status(), true).build()
+                    new ColumnDescriptor.Builder(proto.leadId(), true).build(),
+                    new ColumnDescriptor.Builder(proto.guests(), true).build(),
+                    new ColumnDescriptor.Builder(proto.guests().$().person().name().lastName()).columnTitle(i18n.tr("Guest Last Name")).searchableOnly().build(),
+                    new ColumnDescriptor.Builder(proto.moveInDate(), true).build(),
+                    new ColumnDescriptor.Builder(proto.leaseTerm(), true).build(),
+                    new ColumnDescriptor.Builder(proto.floorplan(), true).searchable(false).build(),
+                    new ColumnDescriptor.Builder(proto.createDate(), true).build(),
+                    new ColumnDescriptor.Builder(proto.status(), true).build()
             );//@formatter:on
 
     }

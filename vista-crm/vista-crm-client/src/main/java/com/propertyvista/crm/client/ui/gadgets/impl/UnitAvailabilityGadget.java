@@ -27,11 +27,10 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -63,31 +62,31 @@ public class UnitAvailabilityGadget extends GadgetInstanceBase<UnitAvailabilityG
     static {
         UnitAvailabilityStatusDTO proto = EntityFactory.create(UnitAvailabilityStatusDTO.class);
         DEFAULT_COLUMN_DESCRIPTORS = Arrays.<ColumnDescriptor> asList(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto.propertyCode()).build(),
-                new MemberColumnDescriptor.Builder(proto.externalId()).visible(false).build(),                
-                new MemberColumnDescriptor.Builder(proto.buildingName()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto.address()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto.propertyManager()).build(),                    
-                new MemberColumnDescriptor.Builder(proto.complex()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto.unit()).build(),
-                new MemberColumnDescriptor.Builder(proto.floorplanName()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto.floorplanMarketingName()).visible(false).build(),
+                new ColumnDescriptor.Builder(proto.propertyCode()).build(),
+                new ColumnDescriptor.Builder(proto.externalId()).visible(false).build(),                
+                new ColumnDescriptor.Builder(proto.buildingName()).visible(false).build(),
+                new ColumnDescriptor.Builder(proto.address()).visible(false).build(),
+                new ColumnDescriptor.Builder(proto.propertyManager()).build(),                    
+                new ColumnDescriptor.Builder(proto.complex()).visible(false).build(),
+                new ColumnDescriptor.Builder(proto.unit()).build(),
+                new ColumnDescriptor.Builder(proto.floorplanName()).visible(false).build(),
+                new ColumnDescriptor.Builder(proto.floorplanMarketingName()).visible(false).build(),
                 
                 // status
-                new MemberColumnDescriptor.Builder(proto.vacancyStatus()).build(),
-                new MemberColumnDescriptor.Builder(proto.rentedStatus()).visible(true).build(),
-                new MemberColumnDescriptor.Builder(proto.scoping()).visible(true).build(),
-                new MemberColumnDescriptor.Builder(proto.rentReadinessStatus()).visible(true).build(),
-                new MemberColumnDescriptor.Builder(proto.unitRent()).build(),
-                new MemberColumnDescriptor.Builder(proto.marketRent()).build(),
-                new MemberColumnDescriptor.Builder(proto.rentDeltaAbsolute()).visible(true).build(),
-                new MemberColumnDescriptor.Builder(proto.rentDeltaRelative()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto.rentEndDay()).visible(true).build(),
-                new MemberColumnDescriptor.Builder(proto.moveInDay()).visible(true).build(),
-                new MemberColumnDescriptor.Builder(proto.rentedFromDay()).visible(true).build(),
-                new MemberColumnDescriptor.Builder(proto.vacantSince()).visible(true).build(),
-                new MemberColumnDescriptor.Builder(proto.daysVacant()).sortable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.revenueLost()).sortable(false).build()
+                new ColumnDescriptor.Builder(proto.vacancyStatus()).build(),
+                new ColumnDescriptor.Builder(proto.rentedStatus()).visible(true).build(),
+                new ColumnDescriptor.Builder(proto.scoping()).visible(true).build(),
+                new ColumnDescriptor.Builder(proto.rentReadinessStatus()).visible(true).build(),
+                new ColumnDescriptor.Builder(proto.unitRent()).build(),
+                new ColumnDescriptor.Builder(proto.marketRent()).build(),
+                new ColumnDescriptor.Builder(proto.rentDeltaAbsolute()).visible(true).build(),
+                new ColumnDescriptor.Builder(proto.rentDeltaRelative()).visible(false).build(),
+                new ColumnDescriptor.Builder(proto.rentEndDay()).visible(true).build(),
+                new ColumnDescriptor.Builder(proto.moveInDay()).visible(true).build(),
+                new ColumnDescriptor.Builder(proto.rentedFromDay()).visible(true).build(),
+                new ColumnDescriptor.Builder(proto.vacantSince()).visible(true).build(),
+                new ColumnDescriptor.Builder(proto.daysVacant()).sortable(false).build(),
+                new ColumnDescriptor.Builder(proto.revenueLost()).sortable(false).build()
         );//@formatter:on
     }
 

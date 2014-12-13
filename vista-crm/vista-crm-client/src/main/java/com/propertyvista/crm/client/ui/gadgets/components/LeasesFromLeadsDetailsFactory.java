@@ -20,7 +20,6 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 
@@ -39,28 +38,28 @@ public class LeasesFromLeadsDetailsFactory extends AbstractListerDetailsFactory<
     static {
         Lead proto = EntityFactory.getEntityPrototype(Lead.class);
         DEFAULT_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto.lease().leaseId()).build(),
-                    new MemberColumnDescriptor.Builder(proto.lease().type()).build(),
+                    new ColumnDescriptor.Builder(proto.lease().leaseId()).build(),
+                    new ColumnDescriptor.Builder(proto.lease().type()).build(),
                     
-                    new MemberColumnDescriptor.Builder(proto.lease().unit().building().propertyCode()).build(),
-                    new MemberColumnDescriptor.Builder(proto.lease().unit()).searchable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto.lease().unit().info().number()).columnTitle(proto.lease().unit().getMeta().getCaption()).searchableOnly().build(),
+                    new ColumnDescriptor.Builder(proto.lease().unit().building().propertyCode()).build(),
+                    new ColumnDescriptor.Builder(proto.lease().unit()).searchable(false).build(),
+                    new ColumnDescriptor.Builder(proto.lease().unit().info().number()).columnTitle(proto.lease().unit().getMeta().getCaption()).searchableOnly().build(),
                     
-                    new MemberColumnDescriptor.Builder(proto.lease().status()).build(),
-                    new MemberColumnDescriptor.Builder(proto.lease().completion()).build(),
-                    new MemberColumnDescriptor.Builder(proto.lease().billingAccount().accountNumber()).build(),
+                    new ColumnDescriptor.Builder(proto.lease().status()).build(),
+                    new ColumnDescriptor.Builder(proto.lease().completion()).build(),
+                    new ColumnDescriptor.Builder(proto.lease().billingAccount().accountNumber()).build(),
                     
-                    new MemberColumnDescriptor.Builder(proto.lease().leaseFrom()).build(),
-                    new MemberColumnDescriptor.Builder(proto.lease().leaseTo()).build(),
+                    new ColumnDescriptor.Builder(proto.lease().leaseFrom()).build(),
+                    new ColumnDescriptor.Builder(proto.lease().leaseTo()).build(),
                     
-                    new MemberColumnDescriptor.Builder(proto.lease().expectedMoveIn()).build(),
-                    new MemberColumnDescriptor.Builder(proto.lease().expectedMoveOut(), false).build(),
-                    new MemberColumnDescriptor.Builder(proto.lease().actualMoveIn(), false).build(),
-                    new MemberColumnDescriptor.Builder(proto.lease().actualMoveOut(), false).build(),
-                    new MemberColumnDescriptor.Builder(proto.lease().moveOutSubmissionDate(), false).build(),
+                    new ColumnDescriptor.Builder(proto.lease().expectedMoveIn()).build(),
+                    new ColumnDescriptor.Builder(proto.lease().expectedMoveOut(), false).build(),
+                    new ColumnDescriptor.Builder(proto.lease().actualMoveIn(), false).build(),
+                    new ColumnDescriptor.Builder(proto.lease().actualMoveOut(), false).build(),
+                    new ColumnDescriptor.Builder(proto.lease().moveOutSubmissionDate(), false).build(),
                     
-                    new MemberColumnDescriptor.Builder(proto.lease().approvalDate(), false).build(),
-                    new MemberColumnDescriptor.Builder(proto.lease().creationDate(), false).build()
+                    new ColumnDescriptor.Builder(proto.lease().approvalDate(), false).build(),
+                    new ColumnDescriptor.Builder(proto.lease().creationDate(), false).build()
                 );//@formatter:on
 
     }

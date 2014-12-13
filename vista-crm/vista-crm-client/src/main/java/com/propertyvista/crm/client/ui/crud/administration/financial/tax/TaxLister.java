@@ -21,7 +21,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.services.admin.TaxCrudService;
@@ -33,10 +33,10 @@ public class TaxLister extends SiteDataTablePanel<Tax> {
         super(Tax.class, GWT.<AbstractListCrudService<Tax>> create(TaxCrudService.class), true, true);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().name()).build(), //
-                new MemberColumnDescriptor.Builder(proto().authority()).build(), //
-                new MemberColumnDescriptor.Builder(proto().rate()).build(), //
-                new MemberColumnDescriptor.Builder(proto().compound()).build());
+                new ColumnDescriptor.Builder(proto().name()).build(), //
+                new ColumnDescriptor.Builder(proto().authority()).build(), //
+                new ColumnDescriptor.Builder(proto().rate()).build(), //
+                new ColumnDescriptor.Builder(proto().compound()).build());
 
         setDataTableModel(new DataTableModel<Tax>());
     }

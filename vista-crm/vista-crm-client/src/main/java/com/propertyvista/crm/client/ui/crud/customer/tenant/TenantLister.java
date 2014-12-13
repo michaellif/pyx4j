@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.customer.tenant;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantLister;

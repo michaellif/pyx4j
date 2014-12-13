@@ -19,7 +19,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 
 import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
 import com.propertyvista.domain.company.Portfolio;
@@ -30,8 +30,8 @@ public class SelectorDialogPortfolioLister extends EntityLister<Portfolio> {
         super(Portfolio.class, GWT.<SelectPortfolioListService> create(SelectPortfolioListService.class), parent, alreadySelected);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().name()).build(), //
-                new MemberColumnDescriptor.Builder(proto().description()).build());
+                new ColumnDescriptor.Builder(proto().name()).build(), //
+                new ColumnDescriptor.Builder(proto().description()).build());
 
         DataTableModel<Portfolio> dataTableModel = new DataTableModel<Portfolio>();
         dataTableModel.setPageSize(DataTablePanel.PAGESIZE_SMALL);

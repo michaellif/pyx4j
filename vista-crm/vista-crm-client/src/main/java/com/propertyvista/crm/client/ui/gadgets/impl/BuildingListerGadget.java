@@ -22,11 +22,10 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -49,17 +48,17 @@ public class BuildingListerGadget extends GadgetInstanceBase<BuildingListerGadge
     static {
         BuildingDTO proto = EntityFactory.getEntityPrototype(BuildingDTO.class);
         DEFAULT_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto.complex()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto.propertyCode()).build(),
-                new MemberColumnDescriptor.Builder(proto.marketing().name()).title(i18n.ntr("Marketing Name")).build(),
-                new MemberColumnDescriptor.Builder(proto.info().name()).build(),
-                new MemberColumnDescriptor.Builder(proto.info().type()).build(),
-                new MemberColumnDescriptor.Builder(proto.info().shape()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto.info().address().streetNumber()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto.info().address().streetName()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto.info().address().city()).build(),
-                new MemberColumnDescriptor.Builder(proto.info().address().province()).build(),
-                new MemberColumnDescriptor.Builder(proto.info().address().country()).build()
+                new ColumnDescriptor.Builder(proto.complex()).visible(false).build(),
+                new ColumnDescriptor.Builder(proto.propertyCode()).build(),
+                new ColumnDescriptor.Builder(proto.marketing().name()).title(i18n.ntr("Marketing Name")).build(),
+                new ColumnDescriptor.Builder(proto.info().name()).build(),
+                new ColumnDescriptor.Builder(proto.info().type()).build(),
+                new ColumnDescriptor.Builder(proto.info().shape()).visible(false).build(),
+                new ColumnDescriptor.Builder(proto.info().address().streetNumber()).visible(false).build(),
+                new ColumnDescriptor.Builder(proto.info().address().streetName()).visible(false).build(),
+                new ColumnDescriptor.Builder(proto.info().address().city()).build(),
+                new ColumnDescriptor.Builder(proto.info().address().province()).build(),
+                new ColumnDescriptor.Builder(proto.info().address().country()).build()
         );//@formatter:on
     }
 

@@ -22,7 +22,7 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.widgets.client.Button;
@@ -38,22 +38,22 @@ public class PmcLister extends SiteDataTablePanel<PmcDTO> {
         super(PmcDTO.class, GWT.<AbstractCrudService<PmcDTO>> create(PmcCrudService.class), true);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().name()).build(), //
-                new MemberColumnDescriptor.Builder(proto().dnsName()).build(), //
-                new MemberColumnDescriptor.Builder(proto().namespace()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().status()).build(), //
-                new MemberColumnDescriptor.Builder(proto().created()).build(), //
-                new MemberColumnDescriptor.Builder(proto().updated()).build(), //
-                new MemberColumnDescriptor.Builder(proto().features().yardiIntegration()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().features().yardiMaintenance()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().features().yardiInterfaces()).searchable(false).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().features().onlineApplication()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().features().whiteLabelPortal()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().features().tenantSureIntegration()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().features().tenantEmailEnabled()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().features().countryOfOperation()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().equifaxInfo().status()).columnTitle("Equifax Status").visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().equifaxInfo().reportType()).visible(false).build());
+                new ColumnDescriptor.Builder(proto().name()).build(), //
+                new ColumnDescriptor.Builder(proto().dnsName()).build(), //
+                new ColumnDescriptor.Builder(proto().namespace()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().status()).build(), //
+                new ColumnDescriptor.Builder(proto().created()).build(), //
+                new ColumnDescriptor.Builder(proto().updated()).build(), //
+                new ColumnDescriptor.Builder(proto().features().yardiIntegration()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().features().yardiMaintenance()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().features().yardiInterfaces()).searchable(false).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().features().onlineApplication()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().features().whiteLabelPortal()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().features().tenantSureIntegration()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().features().tenantEmailEnabled()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().features().countryOfOperation()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().equifaxInfo().status()).columnTitle("Equifax Status").visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().equifaxInfo().reportType()).visible(false).build());
 
         setDataTableModel(new DataTableModel<PmcDTO>());
 

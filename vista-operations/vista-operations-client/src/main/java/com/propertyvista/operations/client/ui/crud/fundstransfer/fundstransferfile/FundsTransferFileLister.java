@@ -21,7 +21,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
@@ -33,22 +33,22 @@ public class FundsTransferFileLister extends SiteDataTablePanel<FundsTransferFil
         super(FundsTransferFileDTO.class, GWT.<AbstractCrudService<FundsTransferFileDTO>> create(PadFileCrudService.class), false, false);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().fileCreationNumber()).build(), //
-                new MemberColumnDescriptor.Builder(proto().fileName()).build(), //
-                new MemberColumnDescriptor.Builder(proto().companyId()).build(), //
-                new MemberColumnDescriptor.Builder(proto().status()).build(), //
-                new MemberColumnDescriptor.Builder(proto().fundsTransferType()).build(), //
-                new MemberColumnDescriptor.Builder(proto().sent()).build(), //
-                new MemberColumnDescriptor.Builder(proto().created()).build(), //
-                new MemberColumnDescriptor.Builder(proto().updated()).build(), //
-                new MemberColumnDescriptor.Builder(proto().acknowledged()).build(), //
-                new MemberColumnDescriptor.Builder(proto().recordsCount()).build(), //
-                new MemberColumnDescriptor.Builder(proto().fileAmount()).build(), //
-                new MemberColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build(), //
-                new MemberColumnDescriptor.Builder(proto().acknowledgmentRejectReasonMessage()).build(), //
-                new MemberColumnDescriptor.Builder(proto().acknowledgmentFileName(), false).build(), //
-                new MemberColumnDescriptor.Builder(proto().acknowledgmentRemoteFileDate(), false).build(), //
-                new MemberColumnDescriptor.Builder(proto().acknowledgmentStatus()).build() //
+                new ColumnDescriptor.Builder(proto().fileCreationNumber()).build(), //
+                new ColumnDescriptor.Builder(proto().fileName()).build(), //
+                new ColumnDescriptor.Builder(proto().companyId()).build(), //
+                new ColumnDescriptor.Builder(proto().status()).build(), //
+                new ColumnDescriptor.Builder(proto().fundsTransferType()).build(), //
+                new ColumnDescriptor.Builder(proto().sent()).build(), //
+                new ColumnDescriptor.Builder(proto().created()).build(), //
+                new ColumnDescriptor.Builder(proto().updated()).build(), //
+                new ColumnDescriptor.Builder(proto().acknowledged()).build(), //
+                new ColumnDescriptor.Builder(proto().recordsCount()).build(), //
+                new ColumnDescriptor.Builder(proto().fileAmount()).build(), //
+                new ColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build(), //
+                new ColumnDescriptor.Builder(proto().acknowledgmentRejectReasonMessage()).build(), //
+                new ColumnDescriptor.Builder(proto().acknowledgmentFileName(), false).build(), //
+                new ColumnDescriptor.Builder(proto().acknowledgmentRemoteFileDate(), false).build(), //
+                new ColumnDescriptor.Builder(proto().acknowledgmentStatus()).build() //
         );
 
         setDataTableModel(new DataTableModel<FundsTransferFileDTO>());

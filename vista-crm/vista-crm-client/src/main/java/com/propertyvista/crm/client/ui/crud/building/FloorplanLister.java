@@ -21,7 +21,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.services.building.FloorplanCrudService;
@@ -35,14 +35,14 @@ public class FloorplanLister extends SiteDataTablePanel<FloorplanDTO> {
                 !VistaFeatures.instance().yardiIntegration() ? true : false);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().name()).build(), //
-                new MemberColumnDescriptor.Builder(proto().marketingName()).build(), //
-                new MemberColumnDescriptor.Builder(proto().floorCount()).build(), //
-                new MemberColumnDescriptor.Builder(proto().bedrooms()).build(), //
-                new MemberColumnDescriptor.Builder(proto().dens()).build(), //
-                new MemberColumnDescriptor.Builder(proto().bathrooms()).build(), //
-                new MemberColumnDescriptor.Builder(proto().counters()._unitCount()).build(), //
-                new MemberColumnDescriptor.Builder(proto().counters()._marketingUnitCount(), false).build());
+                new ColumnDescriptor.Builder(proto().name()).build(), //
+                new ColumnDescriptor.Builder(proto().marketingName()).build(), //
+                new ColumnDescriptor.Builder(proto().floorCount()).build(), //
+                new ColumnDescriptor.Builder(proto().bedrooms()).build(), //
+                new ColumnDescriptor.Builder(proto().dens()).build(), //
+                new ColumnDescriptor.Builder(proto().bathrooms()).build(), //
+                new ColumnDescriptor.Builder(proto().counters()._unitCount()).build(), //
+                new ColumnDescriptor.Builder(proto().counters()._marketingUnitCount(), false).build());
 
         setDataTableModel(new DataTableModel<FloorplanDTO>());
     }

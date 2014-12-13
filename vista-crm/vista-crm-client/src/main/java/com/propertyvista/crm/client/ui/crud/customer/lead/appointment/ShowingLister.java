@@ -22,7 +22,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
@@ -36,11 +36,11 @@ public class ShowingLister extends SiteDataTablePanel<ShowingDTO> {
         super(ShowingDTO.class, GWT.<AbstractCrudService<ShowingDTO>> create(ShowingCrudService.class), true);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().unit().building()).build(), //
-                new MemberColumnDescriptor.Builder(proto().unit()).build(), //
-                new MemberColumnDescriptor.Builder(proto().status()).build(), //
-                new MemberColumnDescriptor.Builder(proto().result()).build(), //
-                new MemberColumnDescriptor.Builder(proto().reason()).build());
+                new ColumnDescriptor.Builder(proto().unit().building()).build(), //
+                new ColumnDescriptor.Builder(proto().unit()).build(), //
+                new ColumnDescriptor.Builder(proto().status()).build(), //
+                new ColumnDescriptor.Builder(proto().result()).build(), //
+                new ColumnDescriptor.Builder(proto().reason()).build());
 
         setDataTableModel(new DataTableModel<ShowingDTO>());
     }

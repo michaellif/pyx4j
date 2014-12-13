@@ -23,7 +23,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.domain.pmc.Pmc;
@@ -36,28 +36,28 @@ public class CardTransactionRecordLister extends SiteDataTablePanel<CardTransact
         super(CardTransactionRecord.class, GWT.<AbstractCrudService<CardTransactionRecord>> create(PmcCardTransactionRecordCrudService.class), false, false);
 
         if (addPmcColumn) {
-            setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().pmc()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(), //
-                    new MemberColumnDescriptor.Builder(proto().merchantTerminalId()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().cardType()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().amount()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().feeAmount()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().paymentTransactionId()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().completionDate()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().saleResponseCode()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().voided()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().feeResponseCode()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().creationDate()).build());
+            setColumnDescriptors(new ColumnDescriptor.Builder(proto().pmc()).build(), //
+                    new ColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(), //
+                    new ColumnDescriptor.Builder(proto().merchantTerminalId()).build(), //
+                    new ColumnDescriptor.Builder(proto().cardType()).build(), //
+                    new ColumnDescriptor.Builder(proto().amount()).build(), //
+                    new ColumnDescriptor.Builder(proto().feeAmount()).build(), //
+                    new ColumnDescriptor.Builder(proto().paymentTransactionId()).build(), //
+                    new ColumnDescriptor.Builder(proto().completionDate()).build(), //
+                    new ColumnDescriptor.Builder(proto().saleResponseCode()).build(), //
+                    new ColumnDescriptor.Builder(proto().voided()).build(), //
+                    new ColumnDescriptor.Builder(proto().feeResponseCode()).build(), //
+                    new ColumnDescriptor.Builder(proto().creationDate()).build());
         } else {
-            setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().cardType()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().amount()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().feeAmount()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().paymentTransactionId()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().completionDate()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().saleResponseCode()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().voided()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().feeResponseCode()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().creationDate()).build());
+            setColumnDescriptors(new ColumnDescriptor.Builder(proto().cardType()).build(), //
+                    new ColumnDescriptor.Builder(proto().amount()).build(), //
+                    new ColumnDescriptor.Builder(proto().feeAmount()).build(), //
+                    new ColumnDescriptor.Builder(proto().paymentTransactionId()).build(), //
+                    new ColumnDescriptor.Builder(proto().completionDate()).build(), //
+                    new ColumnDescriptor.Builder(proto().saleResponseCode()).build(), //
+                    new ColumnDescriptor.Builder(proto().voided()).build(), //
+                    new ColumnDescriptor.Builder(proto().feeResponseCode()).build(), //
+                    new ColumnDescriptor.Builder(proto().creationDate()).build());
         }
         setDataTableModel(new DataTableModel<CardTransactionRecord>());
     }

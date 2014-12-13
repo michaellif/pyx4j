@@ -23,7 +23,6 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
@@ -53,9 +52,9 @@ public abstract class LeaseAdjustmentReasonSelectionDialog extends EntitySelecto
     @Override
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().type(), true).build(),
-                new MemberColumnDescriptor.Builder(proto().name(), true).build(),
-                new MemberColumnDescriptor.Builder(proto().glCode(), true).build()
+                new ColumnDescriptor.Builder(proto().type(), true).build(),
+                new ColumnDescriptor.Builder(proto().name(), true).build(),
+                new ColumnDescriptor.Builder(proto().glCode(), true).build()
         ); //@formatter:on
     }
 

@@ -21,7 +21,6 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.dashboard.gadgets.common.ColumnDescriptorEntity;
@@ -31,12 +30,13 @@ public class ColumnDescriptorConverter {
 
     private static final I18n i18n = I18n.get(ColumnDescriptorConverter.class);
 
-    public static <E extends IEntity> ColumnDescriptor columnDescriptorFromEntity(Class<E> describedEntityClass, ColumnDescriptorEntity columnDescriptorEntity) {
+    public static <E extends IEntity> ColumnDescriptor columnDescriptorFromEntity(Class<E> describedEntityClass,
+            ColumnDescriptorEntity columnDescriptorEntity) {
         if (columnDescriptorEntity != null && !columnDescriptorEntity.isNull()) {
             IEntity proto = EntityFactory.getEntityPrototype(describedEntityClass);
             IObject<?> member = proto.getMember(new Path(columnDescriptorEntity.propertyPath().getValue()));
 
-            MemberColumnDescriptor.Builder columnDescriptorBuilder = new MemberColumnDescriptor.Builder(member);
+            ColumnDescriptor.Builder columnDescriptorBuilder = new ColumnDescriptor.Builder(member);
             if (!columnDescriptorEntity.title().isNull()) {
                 columnDescriptorBuilder.title(i18n.translate("", columnDescriptorEntity.title().getValue()));
             }
@@ -52,8 +52,8 @@ public class ColumnDescriptorConverter {
         }
     }
 
-    public static <E extends IEntity> ColumnDescriptorEntity saveColumnDescriptorToEntity(Class<E> describedEntityClass, ColumnDescriptor columnDescriptor,
-            ColumnDescriptorEntity entity) {
+    public static <E extends IEntity> ColumnDescriptorEntity saveColumnDescriptorToEntity(Class<E> describedEntityClass,
+            ColumnDescriptor columnDescriptor, ColumnDescriptorEntity entity) {
         entity.propertyPath().setValue(columnDescriptor.getColumnName());
         entity.isSortable().setValue(columnDescriptor.isSortable());
         if (!EntityFactory.getEntityPrototype(describedEntityClass).getMember(new Path(entity.propertyPath().getValue())).getMeta().getCaption()

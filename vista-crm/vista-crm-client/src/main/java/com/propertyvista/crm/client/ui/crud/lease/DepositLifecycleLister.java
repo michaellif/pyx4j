@@ -20,7 +20,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
@@ -35,14 +35,14 @@ public class DepositLifecycleLister extends SiteDataTablePanel<DepositLifecycleD
         super(DepositLifecycleDTO.class, GWT.<DepositLifecycleCrudService> create(DepositLifecycleCrudService.class), false);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().deposit().billableItem()).searchable(false).sortable(false).columnTitle(i18n.tr("Service/Feature"))
+                new ColumnDescriptor.Builder(proto().deposit().billableItem()).searchable(false).sortable(false).columnTitle(i18n.tr("Service/Feature"))
                         .build(), //
-                new MemberColumnDescriptor.Builder(proto().deposit().type()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().deposit().amount()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().status()).build(), //
-                new MemberColumnDescriptor.Builder(proto().depositDate(), false).build(), //
-                new MemberColumnDescriptor.Builder(proto().refundDate()).build(), //
-                new MemberColumnDescriptor.Builder(proto().currentAmount()).build());
+                new ColumnDescriptor.Builder(proto().deposit().type()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().deposit().amount()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().status()).build(), //
+                new ColumnDescriptor.Builder(proto().depositDate(), false).build(), //
+                new ColumnDescriptor.Builder(proto().refundDate()).build(), //
+                new ColumnDescriptor.Builder(proto().currentAmount()).build());
 
         setDataTableModel(new DataTableModel<DepositLifecycleDTO>());
     }

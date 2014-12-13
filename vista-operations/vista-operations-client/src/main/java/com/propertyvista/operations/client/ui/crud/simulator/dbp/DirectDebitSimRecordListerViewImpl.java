@@ -17,7 +17,7 @@ import com.google.gwt.core.shared.GWT;
 
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
@@ -36,11 +36,11 @@ public class DirectDebitSimRecordListerViewImpl extends AbstractListerView<Direc
             super(DirectDebitSimRecord.class, GWT.<AbstractListCrudService<DirectDebitSimRecord>> create(DirectDebitSimRecordCrudService.class), true);
 
             setColumnDescriptors( //
-                    new MemberColumnDescriptor.Builder(proto().accountNumber()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().amount()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().paymentReferenceNumber()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().customerName()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().receivedDate()).build());
+                    new ColumnDescriptor.Builder(proto().accountNumber()).build(), //
+                    new ColumnDescriptor.Builder(proto().amount()).build(), //
+                    new ColumnDescriptor.Builder(proto().paymentReferenceNumber()).build(), //
+                    new ColumnDescriptor.Builder(proto().customerName()).build(), //
+                    new ColumnDescriptor.Builder(proto().receivedDate()).build());
 
             setDataTableModel(new DataTableModel<DirectDebitSimRecord>());
         }

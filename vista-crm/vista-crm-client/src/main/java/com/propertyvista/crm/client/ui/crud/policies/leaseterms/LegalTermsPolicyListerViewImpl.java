@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
@@ -37,8 +37,8 @@ public class LegalTermsPolicyListerViewImpl extends AbstractListerView<LegalTerm
             setDeleteActionEnabled(false);
 
             setColumnDescriptors( //
-                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build());
+                    new ColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
+                    new ColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build());
 
             setDataTableModel(new DataTableModel<LegalTermsPolicyDTO>());
         }

@@ -20,7 +20,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
@@ -35,35 +35,35 @@ public class AutoPayHistoryLister extends SiteDataTablePanel<AutoPayHistoryDTO> 
         super(AutoPayHistoryDTO.class, GWT.<AutoPayHistoryCrudService> create(AutoPayHistoryCrudService.class), false);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().id()).build(), //
-                new MemberColumnDescriptor.Builder(proto().isDeleted()).build(), //
+                new ColumnDescriptor.Builder(proto().id()).build(), //
+                new ColumnDescriptor.Builder(proto().isDeleted()).build(), //
 
-                new MemberColumnDescriptor.Builder(proto().price()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().payment()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().price()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().payment()).searchable(false).sortable(false).build(), //
 
-                new MemberColumnDescriptor.Builder(proto().tenant().lease()).searchable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().tenant().lease().leaseId()).searchableOnly().build(), //
+                new ColumnDescriptor.Builder(proto().tenant().lease()).searchable(false).build(), //
+                new ColumnDescriptor.Builder(proto().tenant().lease().leaseId()).searchableOnly().build(), //
 
-                new MemberColumnDescriptor.Builder(proto().tenant()).searchable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().tenant().participantId()).columnTitle(i18n.tr("Tenant Id")).searchableOnly().build(), //
+                new ColumnDescriptor.Builder(proto().tenant()).searchable(false).build(), //
+                new ColumnDescriptor.Builder(proto().tenant().participantId()).columnTitle(i18n.tr("Tenant Id")).searchableOnly().build(), //
 
-                new MemberColumnDescriptor.Builder(proto().tenant().lease().unit().building()).searchable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().tenant().lease().unit().building().propertyCode()).searchableOnly().build(), //
+                new ColumnDescriptor.Builder(proto().tenant().lease().unit().building()).searchable(false).build(), //
+                new ColumnDescriptor.Builder(proto().tenant().lease().unit().building().propertyCode()).searchableOnly().build(), //
 
-                new MemberColumnDescriptor.Builder(proto().paymentMethod()).searchable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().paymentMethod().type()).title(i18n.tr("Payment Method Type")).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().paymentMethod()).searchable(false).build(), //
+                new ColumnDescriptor.Builder(proto().paymentMethod().type()).title(i18n.tr("Payment Method Type")).visible(false).build(), //
 
-                new MemberColumnDescriptor.Builder(proto().comments()).build(), //
+                new ColumnDescriptor.Builder(proto().comments()).build(), //
 
-                new MemberColumnDescriptor.Builder(proto().effectiveFrom()).build(), //
-                new MemberColumnDescriptor.Builder(proto().expiredFrom()).build(), //
+                new ColumnDescriptor.Builder(proto().effectiveFrom()).build(), //
+                new ColumnDescriptor.Builder(proto().expiredFrom()).build(), //
 
-                new MemberColumnDescriptor.Builder(proto().createdBy(), false).searchable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().created()).searchable(false).build(), //
+                new ColumnDescriptor.Builder(proto().createdBy(), false).searchable(false).build(), //
+                new ColumnDescriptor.Builder(proto().created()).searchable(false).build(), //
 
-                new MemberColumnDescriptor.Builder(proto().updatedByTenant(), false).build(), //
-                new MemberColumnDescriptor.Builder(proto().updatedBySystem(), false).build(), //
-                new MemberColumnDescriptor.Builder(proto().updated()).searchable(false).build() //
+                new ColumnDescriptor.Builder(proto().updatedByTenant(), false).build(), //
+                new ColumnDescriptor.Builder(proto().updatedBySystem(), false).build(), //
+                new ColumnDescriptor.Builder(proto().updated()).searchable(false).build() //
         );
 
         setDataTableModel(new DataTableModel<AutoPayHistoryDTO>());

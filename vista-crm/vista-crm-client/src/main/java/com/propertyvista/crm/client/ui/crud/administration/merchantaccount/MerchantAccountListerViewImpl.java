@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
@@ -37,11 +37,11 @@ public class MerchantAccountListerViewImpl extends AbstractListerView<MerchantAc
             super(MerchantAccount.class, GWT.<AbstractListCrudService<MerchantAccount>> create(MerchantAccountCrudService.class), true);
 
             setColumnDescriptors( //
-                    new MemberColumnDescriptor.Builder(proto().accountName()).build(),//
-                    new MemberColumnDescriptor.Builder(proto().bankId()).build(),//
-                    new MemberColumnDescriptor.Builder(proto().branchTransitNumber()).build(),//
-                    new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),//
-                    new MemberColumnDescriptor.Builder(proto().paymentsStatus()).searchable(false).sortable(false).build());
+                    new ColumnDescriptor.Builder(proto().accountName()).build(),//
+                    new ColumnDescriptor.Builder(proto().bankId()).build(),//
+                    new ColumnDescriptor.Builder(proto().branchTransitNumber()).build(),//
+                    new ColumnDescriptor.Builder(proto().accountNumber()).build(),//
+                    new ColumnDescriptor.Builder(proto().paymentsStatus()).searchable(false).sortable(false).build());
 
             setDataTableModel(new DataTableModel<MerchantAccount>());
         }

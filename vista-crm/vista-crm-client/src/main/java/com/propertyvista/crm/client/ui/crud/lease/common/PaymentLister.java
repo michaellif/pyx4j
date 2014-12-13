@@ -20,9 +20,8 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.services.billing.PaymentRecordCrudService;
@@ -35,29 +34,29 @@ public class PaymentLister extends SiteDataTablePanel<PaymentRecordDTO> {
         super(PaymentRecordDTO.class, GWT.<PaymentRecordCrudService> create(PaymentRecordCrudService.class), false);
 
         List<ColumnDescriptor> cd = new ArrayList<>();
-        cd.add(new MemberColumnDescriptor.Builder(proto().id()).build());
+        cd.add(new ColumnDescriptor.Builder(proto().id()).build());
         if (VistaFeatures.instance().yardiIntegration()) {
-            cd.add(new MemberColumnDescriptor.Builder(proto().yardiDocumentNumber(), false).build());
-            cd.add(new MemberColumnDescriptor.Builder(proto().yardiBatches().$().externalBatchNumber()).searchableOnly().build());
+            cd.add(new ColumnDescriptor.Builder(proto().yardiDocumentNumber(), false).build());
+            cd.add(new ColumnDescriptor.Builder(proto().yardiBatches().$().externalBatchNumber()).searchableOnly().build());
         }
-        cd.add(new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().customerId()).build());
-        cd.add(new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().person().name()).searchable(false).build());
-        cd.add(new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().person().name().firstName()).searchableOnly()
+        cd.add(new ColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().customerId()).build());
+        cd.add(new ColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().person().name()).searchable(false).build());
+        cd.add(new ColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().person().name().firstName()).searchableOnly()
                 .build());
-        cd.add(new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().person().name().lastName()).searchableOnly()
+        cd.add(new ColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().person().name().lastName()).searchableOnly()
                 .build());
-        cd.add(new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().role()).build());
-        cd.add(new MemberColumnDescriptor.Builder(proto().amount()).build());
-        cd.add(new MemberColumnDescriptor.Builder(proto().convenienceFee(), false).build());
-        cd.add(new MemberColumnDescriptor.Builder(proto().paymentMethod().type()).build());
-        cd.add(new MemberColumnDescriptor.Builder(proto().created()).build());
-        cd.add(new MemberColumnDescriptor.Builder(proto().receivedDate()).build());
-        cd.add(new MemberColumnDescriptor.Builder(proto().lastStatusChangeDate()).build());
-        cd.add(new MemberColumnDescriptor.Builder(proto().targetDate()).build());
-        cd.add(new MemberColumnDescriptor.Builder(proto().paymentStatus()).build());
-        cd.add(new MemberColumnDescriptor.Builder(proto().finalizedDate(), false).build());
-        cd.add(new MemberColumnDescriptor.Builder(proto().rejectedWithNSF()).visible(false).build());
-        cd.add(new MemberColumnDescriptor.Builder(proto().transactionErrorMessage()).visible(false).build());
+        cd.add(new ColumnDescriptor.Builder(proto().leaseTermParticipant().role()).build());
+        cd.add(new ColumnDescriptor.Builder(proto().amount()).build());
+        cd.add(new ColumnDescriptor.Builder(proto().convenienceFee(), false).build());
+        cd.add(new ColumnDescriptor.Builder(proto().paymentMethod().type()).build());
+        cd.add(new ColumnDescriptor.Builder(proto().created()).build());
+        cd.add(new ColumnDescriptor.Builder(proto().receivedDate()).build());
+        cd.add(new ColumnDescriptor.Builder(proto().lastStatusChangeDate()).build());
+        cd.add(new ColumnDescriptor.Builder(proto().targetDate()).build());
+        cd.add(new ColumnDescriptor.Builder(proto().paymentStatus()).build());
+        cd.add(new ColumnDescriptor.Builder(proto().finalizedDate(), false).build());
+        cd.add(new ColumnDescriptor.Builder(proto().rejectedWithNSF()).visible(false).build());
+        cd.add(new ColumnDescriptor.Builder(proto().transactionErrorMessage()).visible(false).build());
 
         setColumnDescriptors(cd);
 

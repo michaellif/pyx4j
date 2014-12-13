@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.pmc.mercantaccount;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
@@ -29,26 +29,26 @@ public class MerchantAccountLister extends SiteDataTablePanel<PmcMerchantAccount
 
         setColumnDescriptors(
                 //
-                new MemberColumnDescriptor.Builder(proto().pmc()).build(), //
-                new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().pmc()).build(), //
+                new ColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(), //
 
-                new MemberColumnDescriptor.Builder(proto().terminalId()).build(), //
-                new MemberColumnDescriptor.Builder(proto().merchantTerminalIdConvenienceFee()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().terminalId()).build(), //
+                new ColumnDescriptor.Builder(proto().merchantTerminalIdConvenienceFee()).searchable(false).sortable(false).build(), //
 
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().status()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().paymentsStatus()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().bankId()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().branchTransitNumber()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().accountNumber()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().merchantAccount().status()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().merchantAccount().paymentsStatus()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().merchantAccount().bankId()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().merchantAccount().branchTransitNumber()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().merchantAccount().accountNumber()).searchable(false).sortable(false).build(), //
 
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedEcheck()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedDirectBanking()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedCreditCard()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedCreditCardConvenienceFee()).visible(false).searchable(false)
+                new ColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedEcheck()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedDirectBanking()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedCreditCard()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedCreditCardConvenienceFee()).visible(false).searchable(false)
                         .sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedCreditCardVisaDebit()).visible(false).searchable(false)
+                new ColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedCreditCardVisaDebit()).visible(false).searchable(false)
                         .sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedInterac()).visible(false).searchable(false).sortable(false)
+                new ColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedInterac()).visible(false).searchable(false).sortable(false)
                         .build());
 
         setDataTableModel(new DataTableModel<PmcMerchantAccountDTO>());

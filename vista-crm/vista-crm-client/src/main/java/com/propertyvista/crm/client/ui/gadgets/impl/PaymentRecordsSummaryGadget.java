@@ -35,10 +35,9 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
@@ -69,18 +68,18 @@ public class PaymentRecordsSummaryGadget extends GadgetInstanceBase<PaymentsSumm
         PaymentsSummary proto = EntityFactory.getEntityPrototype(PaymentsSummary.class);
         DEFAULT_PAYMENTS_SUMMARY_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
                 (PaymentsSummary.summaryByBuilding)?
-                        new MemberColumnDescriptor.Builder(proto.building()).build():
-                        new MemberColumnDescriptor.Builder(proto.merchantAccount().accountNumber()).title(i18n.ntr("Merchant Account")).build(),
-                        new MemberColumnDescriptor.Builder(proto.status()).build(),
-                        new MemberColumnDescriptor.Builder(proto.cash()).build(),
-                        new MemberColumnDescriptor.Builder(proto.check()).build(),
-                        new MemberColumnDescriptor.Builder(proto.eCheck()).build(),
-                        new MemberColumnDescriptor.Builder(proto.eft()).build(),
-                        new MemberColumnDescriptor.Builder(proto.visa()).build(),
-                        new MemberColumnDescriptor.Builder(proto.visaDebit()).build(),
-                        new MemberColumnDescriptor.Builder(proto.masterCard()).build(),
-                        new MemberColumnDescriptor.Builder(proto.cc()).build(),
-                        new MemberColumnDescriptor.Builder(proto.interac()).build()
+                        new ColumnDescriptor.Builder(proto.building()).build():
+                        new ColumnDescriptor.Builder(proto.merchantAccount().accountNumber()).title(i18n.ntr("Merchant Account")).build(),
+                        new ColumnDescriptor.Builder(proto.status()).build(),
+                        new ColumnDescriptor.Builder(proto.cash()).build(),
+                        new ColumnDescriptor.Builder(proto.check()).build(),
+                        new ColumnDescriptor.Builder(proto.eCheck()).build(),
+                        new ColumnDescriptor.Builder(proto.eft()).build(),
+                        new ColumnDescriptor.Builder(proto.visa()).build(),
+                        new ColumnDescriptor.Builder(proto.visaDebit()).build(),
+                        new ColumnDescriptor.Builder(proto.masterCard()).build(),
+                        new ColumnDescriptor.Builder(proto.cc()).build(),
+                        new ColumnDescriptor.Builder(proto.interac()).build()
                 
         );//@formatter:on
     }

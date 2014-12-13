@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.policies.restrictions;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
@@ -35,17 +35,17 @@ public class RestrictionsPolicyListerViewImpl extends AbstractListerView<Restric
             super(RestrictionsPolicyDTO.class, GWT.<RestrictionsPolicyCrudService> create(RestrictionsPolicyCrudService.class));
 
             setColumnDescriptors( //
-                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build(), //
-                    new MemberColumnDescriptor.Builder(proto().occupantsPerBedRoom()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().maxParkingSpots()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().maxLockers()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().maxPets()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().ageOfMajority()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().enforceAgeOfMajority()).build(), // 
-                    new MemberColumnDescriptor.Builder(proto().maturedOccupantsAreApplicants()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().noNeedGuarantors()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().yearsToForcingPreviousAddress()).build());
+                    new ColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
+                    new ColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build(), //
+                    new ColumnDescriptor.Builder(proto().occupantsPerBedRoom()).build(), //
+                    new ColumnDescriptor.Builder(proto().maxParkingSpots()).build(), //
+                    new ColumnDescriptor.Builder(proto().maxLockers()).build(), //
+                    new ColumnDescriptor.Builder(proto().maxPets()).build(), //
+                    new ColumnDescriptor.Builder(proto().ageOfMajority()).build(), //
+                    new ColumnDescriptor.Builder(proto().enforceAgeOfMajority()).build(), // 
+                    new ColumnDescriptor.Builder(proto().maturedOccupantsAreApplicants()).build(), //
+                    new ColumnDescriptor.Builder(proto().noNeedGuarantors()).build(), //
+                    new ColumnDescriptor.Builder(proto().yearsToForcingPreviousAddress()).build());
 
             setDataTableModel(new DataTableModel<RestrictionsPolicyDTO>());
         }

@@ -22,11 +22,10 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
@@ -47,10 +46,10 @@ public class BuildingResidentInsuranceCoverageGadget extends GadgetInstanceBase<
     static {
         BuildingResidentInsuranceCoverageDTO proto = EntityFactory.getEntityPrototype(BuildingResidentInsuranceCoverageDTO.class);
         COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto.building()).build(),
-                new MemberColumnDescriptor.Builder(proto.complex()).build(), new MemberColumnDescriptor.Builder(proto.units()).build(),
-                new MemberColumnDescriptor.Builder(proto.unitsWithInsuranceCount()).build(),
-                new MemberColumnDescriptor.Builder(proto.unitsWithInsuranceShare()).build()                
+                new ColumnDescriptor.Builder(proto.building()).build(),
+                new ColumnDescriptor.Builder(proto.complex()).build(), new ColumnDescriptor.Builder(proto.units()).build(),
+                new ColumnDescriptor.Builder(proto.unitsWithInsuranceCount()).build(),
+                new ColumnDescriptor.Builder(proto.unitsWithInsuranceShare()).build()                
         );//@formatter:on
     }
 

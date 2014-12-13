@@ -23,10 +23,9 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
@@ -63,10 +62,10 @@ public class MessageCategoryLister extends SiteDataTablePanel<MessageCategory> {
         MessageCategory proto = EntityFactory.getEntityPrototype(MessageCategory.class);
 
         return new ColumnDescriptor[] {//@formatter:off
-                new MemberColumnDescriptor.Builder(proto.category()).columnTitle(i18n.tr("Name")).build(),
-                new MemberColumnDescriptor.Builder(proto.categoryType()).columnTitle(i18n.tr("Type")).build(),
-                new MemberColumnDescriptor.Builder(proto.roles(),false).sortable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.dispatchers(),false).sortable(false).build()};
+                new ColumnDescriptor.Builder(proto.category()).columnTitle(i18n.tr("Name")).build(),
+                new ColumnDescriptor.Builder(proto.categoryType()).columnTitle(i18n.tr("Type")).build(),
+                new ColumnDescriptor.Builder(proto.roles(),false).sortable(false).build(),
+                new ColumnDescriptor.Builder(proto.dispatchers(),false).sortable(false).build()};
       //@formatter:on
     }
 

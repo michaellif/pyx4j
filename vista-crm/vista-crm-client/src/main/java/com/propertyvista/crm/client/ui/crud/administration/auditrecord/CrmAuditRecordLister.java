@@ -20,7 +20,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.services.security.CrmAuditRecordsListerService;
@@ -32,14 +32,14 @@ public class CrmAuditRecordLister extends SiteDataTablePanel<AuditRecordDTO> {
         super(AuditRecordDTO.class, GWT.<CrmAuditRecordsListerService> create(CrmAuditRecordsListerService.class));
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().when()).build(), //
-                new MemberColumnDescriptor.Builder(proto().application()).build(), //
-                new MemberColumnDescriptor.Builder(proto().userName()).searchable(false).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().remoteAddr()).build(), //
-                new MemberColumnDescriptor.Builder(proto().event()).build(), //
-                new MemberColumnDescriptor.Builder(proto().targetEntity()).build(), //
-                new MemberColumnDescriptor.Builder(proto().targetEntityId()).build(), //
-                new MemberColumnDescriptor.Builder(proto().details()).build());
+                new ColumnDescriptor.Builder(proto().when()).build(), //
+                new ColumnDescriptor.Builder(proto().application()).build(), //
+                new ColumnDescriptor.Builder(proto().userName()).searchable(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().remoteAddr()).build(), //
+                new ColumnDescriptor.Builder(proto().event()).build(), //
+                new ColumnDescriptor.Builder(proto().targetEntity()).build(), //
+                new ColumnDescriptor.Builder(proto().targetEntityId()).build(), //
+                new ColumnDescriptor.Builder(proto().details()).build());
 
         setDataTableModel(new DataTableModel<AuditRecordDTO>());
     }

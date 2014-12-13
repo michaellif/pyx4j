@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -60,11 +60,11 @@ public class ExecutionReportSectionLister extends SiteDataTablePanel<ExecutionRe
         });
 
         setColumnDescriptors( //              
-                new MemberColumnDescriptor.Builder(proto().name()).build(), //
-                new MemberColumnDescriptor.Builder(proto().type()).build(), //
-                new MemberColumnDescriptor.Builder(proto().counter()).build(), //
-                new MemberColumnDescriptor.Builder(proto().value()).build(), //
-                new MemberColumnDescriptor.Builder(proto().messages()).formatter(new IFormatter<IEntity, SafeHtml>() {
+                new ColumnDescriptor.Builder(proto().name()).build(), //
+                new ColumnDescriptor.Builder(proto().type()).build(), //
+                new ColumnDescriptor.Builder(proto().counter()).build(), //
+                new ColumnDescriptor.Builder(proto().value()).build(), //
+                new ColumnDescriptor.Builder(proto().messages()).formatter(new IFormatter<IEntity, SafeHtml>() {
 
                     @Override
                     public SafeHtml format(IEntity value) {
@@ -74,7 +74,7 @@ public class ExecutionReportSectionLister extends SiteDataTablePanel<ExecutionRe
                         return builder.toSafeHtml();
                     }
                 }).build(), //
-                new MemberColumnDescriptor.Builder(proto().messages()).columnTitle(i18n.tr("First Message")).formatter(new IFormatter<IEntity, SafeHtml>() {
+                new ColumnDescriptor.Builder(proto().messages()).columnTitle(i18n.tr("First Message")).formatter(new IFormatter<IEntity, SafeHtml>() {
 
                     @Override
                     public SafeHtml format(IEntity value) {
@@ -105,8 +105,8 @@ public class ExecutionReportSectionLister extends SiteDataTablePanel<ExecutionRe
             super(ExecutionReportMessage.class);
 
             setColumnDescriptors( //
-                    new MemberColumnDescriptor.Builder(proto().eventTime()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().message()).build());
+                    new ColumnDescriptor.Builder(proto().eventTime()).build(), //
+                    new ColumnDescriptor.Builder(proto().message()).build());
 
             setDataTableModel(new DataTableModel<ExecutionReportMessage>());
 

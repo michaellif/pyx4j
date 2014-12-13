@@ -21,7 +21,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
@@ -33,20 +33,20 @@ public class BillingCycleLister extends SiteDataTablePanel<BillingCycleDTO> {
         super(BillingCycleDTO.class, GWT.<AbstractCrudService<BillingCycleDTO>> create(BillingCycleCrudService.class), false);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().building(), false).build(), //
-                new MemberColumnDescriptor.Builder(proto().billingType()).build(), //
-                new MemberColumnDescriptor.Builder(proto().billingCycleStartDate()).build(), //
-                new MemberColumnDescriptor.Builder(proto().billingCycleEndDate()).build(), //
-                new MemberColumnDescriptor.Builder(proto().targetBillExecutionDate()).build(), //
-                new MemberColumnDescriptor.Builder(proto().notRun()).sortable(false).searchable(false).build(), //      
-                new MemberColumnDescriptor.Builder(proto().stats().notConfirmed()).build(), //        
-                new MemberColumnDescriptor.Builder(proto().stats().failed()).build(), // 
-                new MemberColumnDescriptor.Builder(proto().stats().rejected()).build(), //  
-                new MemberColumnDescriptor.Builder(proto().stats().confirmed()).build(), // 
-                new MemberColumnDescriptor.Builder(proto().total()).sortable(false).searchable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().pads()).sortable(false).searchable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().targetAutopayExecutionDate()).build(), //
-                new MemberColumnDescriptor.Builder(proto().actualAutopayExecutionDate()).build());
+                new ColumnDescriptor.Builder(proto().building(), false).build(), //
+                new ColumnDescriptor.Builder(proto().billingType()).build(), //
+                new ColumnDescriptor.Builder(proto().billingCycleStartDate()).build(), //
+                new ColumnDescriptor.Builder(proto().billingCycleEndDate()).build(), //
+                new ColumnDescriptor.Builder(proto().targetBillExecutionDate()).build(), //
+                new ColumnDescriptor.Builder(proto().notRun()).sortable(false).searchable(false).build(), //      
+                new ColumnDescriptor.Builder(proto().stats().notConfirmed()).build(), //        
+                new ColumnDescriptor.Builder(proto().stats().failed()).build(), // 
+                new ColumnDescriptor.Builder(proto().stats().rejected()).build(), //  
+                new ColumnDescriptor.Builder(proto().stats().confirmed()).build(), // 
+                new ColumnDescriptor.Builder(proto().total()).sortable(false).searchable(false).build(), //
+                new ColumnDescriptor.Builder(proto().pads()).sortable(false).searchable(false).build(), //
+                new ColumnDescriptor.Builder(proto().targetAutopayExecutionDate()).build(), //
+                new ColumnDescriptor.Builder(proto().actualAutopayExecutionDate()).build());
 
         setDataTableModel(new DataTableModel<BillingCycleDTO>());
     }

@@ -31,11 +31,10 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -63,17 +62,17 @@ public class PaymentRecordsGadget extends GadgetInstanceBase<PaymentRecordsGadge
     static {
         PaymentRecordForReportDTO proto = EntityFactory.getEntityPrototype(PaymentRecordForReportDTO.class);
         DEFAULT_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto.merchantAccount()).build(),
-                new MemberColumnDescriptor.Builder(proto.building()).build(),
-                new MemberColumnDescriptor.Builder(proto.lease()).build(),
-                new MemberColumnDescriptor.Builder(proto.tenant()).build(),                    
-                new MemberColumnDescriptor.Builder(proto.method()).build(),
-                new MemberColumnDescriptor.Builder(proto.status()).build(),
-                new MemberColumnDescriptor.Builder(proto.created()).build(),
-                new MemberColumnDescriptor.Builder(proto.received()).build(),
-                new MemberColumnDescriptor.Builder(proto.finalized()).build(),
-                new MemberColumnDescriptor.Builder(proto.target()).build(),
-                new MemberColumnDescriptor.Builder(proto.amount()).build()                    
+                new ColumnDescriptor.Builder(proto.merchantAccount()).build(),
+                new ColumnDescriptor.Builder(proto.building()).build(),
+                new ColumnDescriptor.Builder(proto.lease()).build(),
+                new ColumnDescriptor.Builder(proto.tenant()).build(),                    
+                new ColumnDescriptor.Builder(proto.method()).build(),
+                new ColumnDescriptor.Builder(proto.status()).build(),
+                new ColumnDescriptor.Builder(proto.created()).build(),
+                new ColumnDescriptor.Builder(proto.received()).build(),
+                new ColumnDescriptor.Builder(proto.finalized()).build(),
+                new ColumnDescriptor.Builder(proto.target()).build(),
+                new ColumnDescriptor.Builder(proto.amount()).build()                    
         );//@formatter:on
     }
 

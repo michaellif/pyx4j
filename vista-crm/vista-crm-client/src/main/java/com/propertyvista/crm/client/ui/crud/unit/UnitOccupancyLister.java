@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
@@ -42,13 +42,13 @@ public class UnitOccupancyLister extends SiteDataTablePanel<AptUnitOccupancySegm
         });
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().dateFrom()).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().dateTo()).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().status()).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().offMarket()).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().lease().leaseId()).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().lease().leaseFrom()).sortable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().lease().leaseTo()).sortable(false).build());
+                new ColumnDescriptor.Builder(proto().dateFrom()).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().dateTo()).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().status()).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().offMarket()).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().lease().leaseId()).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().lease().leaseFrom()).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().lease().leaseTo()).sortable(false).build());
 
         setDataTableModel(new DataTableModel<AptUnitOccupancySegment>());
     }

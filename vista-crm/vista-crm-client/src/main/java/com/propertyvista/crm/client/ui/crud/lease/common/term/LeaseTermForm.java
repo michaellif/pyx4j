@@ -43,7 +43,6 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerCollapsableDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
@@ -244,7 +243,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                     @Override
                     public boolean onClickOk() {
                         if (!getSelectedItem().isNull()) {
-                            ((LeaseTermEditorView.Presenter) ((IPrimeEditorView<LeaseTermDTO>) getParentView()).getPresenter()).setSelectedUnit(getSelectedItem());
+                            ((LeaseTermEditorView.Presenter) ((IPrimeEditorView<LeaseTermDTO>) getParentView()).getPresenter())
+                                    .setSelectedUnit(getSelectedItem());
                         }
                         return true;
                     }
@@ -542,9 +542,9 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             @Override
             protected List<ColumnDescriptor> defineColumnDescriptors() {
                 return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().type()).build(),
-                    new MemberColumnDescriptor.Builder(proto().name()).build(),
-                    new MemberColumnDescriptor.Builder(proto().description()).build()
+                    new ColumnDescriptor.Builder(proto().type()).build(),
+                    new ColumnDescriptor.Builder(proto().name()).build(),
+                    new ColumnDescriptor.Builder(proto().description()).build()
                   );//@formatter:on
             }
 

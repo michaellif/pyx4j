@@ -40,7 +40,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.utils.EntityFormatUtils;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractPrimeReport;
@@ -343,22 +343,22 @@ public class EftReportWidget extends HTML implements IReportWidget, IMementoAwar
         List<ITableColumnFormatter> columnDescriptors = Arrays.<ITableColumnFormatter> asList(//@formatter:off
                     noticeTooltipColumnFormatter,
                     noticeForPrintColumnFormatter,
-                    new ColumnDescriptorTableColumnFormatter(wideColumnWidth, new MemberColumnDescriptor.Builder(proto.billingCycleStartDate()).build()),
-                    new ColumnDescriptorAnchorTableColumnFormatter(shortColumnWidth, new MemberColumnDescriptor.Builder(proto.leaseId()).build()),
-                    new ColumnDescriptorTableColumnFormatter(shortColumnWidth, new MemberColumnDescriptor.Builder(proto.expectedMoveOut()).build()),
-                    new ColumnDescriptorAnchorTableColumnFormatter(shortColumnWidth, new MemberColumnDescriptor.Builder(proto.building()).build()),
-                    new ColumnDescriptorAnchorTableColumnFormatter(shortColumnWidth, new MemberColumnDescriptor.Builder(proto.unit()).build()),
-                    new ColumnDescriptorTableColumnFormatter(shortColumnWidth, new MemberColumnDescriptor.Builder(proto.participantId()).build()),
-                    new ColumnDescriptorAnchorTableColumnFormatter(wideColumnWidth, new MemberColumnDescriptor.Builder(proto.customer()).build()),
-                    new ColumnDescriptorAnchorTableColumnFormatter(shortColumnWidth, new MemberColumnDescriptor.Builder(proto.amount()).build()) {
+                    new ColumnDescriptorTableColumnFormatter(wideColumnWidth, new ColumnDescriptor.Builder(proto.billingCycleStartDate()).build()),
+                    new ColumnDescriptorAnchorTableColumnFormatter(shortColumnWidth, new ColumnDescriptor.Builder(proto.leaseId()).build()),
+                    new ColumnDescriptorTableColumnFormatter(shortColumnWidth, new ColumnDescriptor.Builder(proto.expectedMoveOut()).build()),
+                    new ColumnDescriptorAnchorTableColumnFormatter(shortColumnWidth, new ColumnDescriptor.Builder(proto.building()).build()),
+                    new ColumnDescriptorAnchorTableColumnFormatter(shortColumnWidth, new ColumnDescriptor.Builder(proto.unit()).build()),
+                    new ColumnDescriptorTableColumnFormatter(shortColumnWidth, new ColumnDescriptor.Builder(proto.participantId()).build()),
+                    new ColumnDescriptorAnchorTableColumnFormatter(wideColumnWidth, new ColumnDescriptor.Builder(proto.customer()).build()),
+                    new ColumnDescriptorAnchorTableColumnFormatter(shortColumnWidth, new ColumnDescriptor.Builder(proto.amount()).build()) {
                         @Override
                         public SafeHtml formatContent(IEntity entity) {
                             EftReportRecordDTO pr = (EftReportRecordDTO)entity;
                             setEnabled(pr.billingCycleStartDate().isNull() || pr.billingCycleStartDate().getValue().before(new LogicalDate(ClientContext.getServerDate())));
                             return super.formatContent(entity);
                         }},
-                    new ColumnDescriptorTableColumnFormatter(wideColumnWidth, new MemberColumnDescriptor.Builder(proto.paymentType()).build()),
-                    new ColumnDescriptorTableColumnFormatter(wideColumnWidth, new MemberColumnDescriptor.Builder(proto.paymentStatus()).build())
+                    new ColumnDescriptorTableColumnFormatter(wideColumnWidth, new ColumnDescriptor.Builder(proto.paymentType()).build()),
+                    new ColumnDescriptorTableColumnFormatter(wideColumnWidth, new ColumnDescriptor.Builder(proto.paymentStatus()).build())
         );//@formatter:on
         return columnDescriptors;
     }

@@ -27,7 +27,6 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -122,12 +121,12 @@ class ServiceConcessionFolder extends VistaTableFolder<Concession> {
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().version().type()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().term()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().value()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().condition()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().effectiveDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().expirationDate()).build()
+                    new ColumnDescriptor.Builder(proto().version().type()).build(),
+                    new ColumnDescriptor.Builder(proto().version().term()).build(),
+                    new ColumnDescriptor.Builder(proto().version().value()).build(),
+                    new ColumnDescriptor.Builder(proto().version().condition()).build(),
+                    new ColumnDescriptor.Builder(proto().version().effectiveDate()).build(),
+                    new ColumnDescriptor.Builder(proto().version().expirationDate()).build()
             );//@formatter:on
         }
 

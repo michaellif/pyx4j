@@ -24,7 +24,6 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.backoffice.ui.IPaneView;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
@@ -41,10 +40,10 @@ public abstract class ProductCodeSelectorDialog extends EntitySelectorTableDialo
     @Override
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off                    
-                new MemberColumnDescriptor.Builder(proto().name()).build(),
-                new MemberColumnDescriptor.Builder(proto().type()).build(),
-                new MemberColumnDescriptor.Builder(proto().glCode()).build(),
-                new MemberColumnDescriptor.Builder(proto().updated(), false).build()
+                new ColumnDescriptor.Builder(proto().name()).build(),
+                new ColumnDescriptor.Builder(proto().type()).build(),
+                new ColumnDescriptor.Builder(proto().glCode()).build(),
+                new ColumnDescriptor.Builder(proto().updated(), false).build()
         ); //@formatter:on
     }
 

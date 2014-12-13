@@ -23,7 +23,6 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
@@ -54,47 +53,47 @@ public abstract class UnitSelectionDialog extends EntitySelectorTableDialog<AptU
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
                 // unit data
-                new MemberColumnDescriptor.Builder(proto().info().floor(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().info().number(), true).build(),
-                new MemberColumnDescriptor.Builder(proto().info().area()).build(),
-                new MemberColumnDescriptor.Builder(proto().info()._bedrooms()).build(),
-                new MemberColumnDescriptor.Builder(proto().info()._bathrooms()).build(),
-                new MemberColumnDescriptor.Builder(proto().floorplan().name()).title(i18n.tr("Floorplan")).build(),
-                new MemberColumnDescriptor.Builder(proto().floorplan().marketingName(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().availability().availableForRent()).build(),
-                new MemberColumnDescriptor.Builder(proto().financial()._marketRent()).build(),
+                new ColumnDescriptor.Builder(proto().info().floor(), false).build(),
+                new ColumnDescriptor.Builder(proto().info().number(), true).build(),
+                new ColumnDescriptor.Builder(proto().info().area()).build(),
+                new ColumnDescriptor.Builder(proto().info()._bedrooms()).build(),
+                new ColumnDescriptor.Builder(proto().info()._bathrooms()).build(),
+                new ColumnDescriptor.Builder(proto().floorplan().name()).title(i18n.tr("Floorplan")).build(),
+                new ColumnDescriptor.Builder(proto().floorplan().marketingName(), false).build(),
+                new ColumnDescriptor.Builder(proto().availability().availableForRent()).build(),
+                new ColumnDescriptor.Builder(proto().financial()._marketRent()).build(),
 
                 // building data                
-                new MemberColumnDescriptor.Builder(proto().building().propertyCode(), true).build(),
-                new MemberColumnDescriptor.Builder(proto().building().complex(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().info().name(), true).title(i18n.tr("Building")).build(),
-                new MemberColumnDescriptor.Builder(proto().building().info().type(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().info().shape(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().info().address().streetNumber(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().info().address().streetName(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().info().address().city(), true).build(),
-                new MemberColumnDescriptor.Builder(proto().building().info().address().province(), true).build(),
-                new MemberColumnDescriptor.Builder(proto().building().info().address().country(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().info().totalStoreys(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().info().residentialStoreys(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().info().structureType(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().info().structureBuildYear(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().info().constructionType(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().info().foundationType(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().info().floorType(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().info().landArea(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().info().waterSupply(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().info().centralAir(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().info().centralHeat(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().contacts().website(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().financial().dateAcquired(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().financial().purchasePrice(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().financial().marketPrice(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().financial().lastAppraisalDate(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().financial().lastAppraisalValue(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().building().financial().currency().name(), false).title(proto().building().financial().currency())
+                new ColumnDescriptor.Builder(proto().building().propertyCode(), true).build(),
+                new ColumnDescriptor.Builder(proto().building().complex(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().info().name(), true).title(i18n.tr("Building")).build(),
+                new ColumnDescriptor.Builder(proto().building().info().type(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().info().shape(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().info().address().streetNumber(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().info().address().streetName(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().info().address().city(), true).build(),
+                new ColumnDescriptor.Builder(proto().building().info().address().province(), true).build(),
+                new ColumnDescriptor.Builder(proto().building().info().address().country(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().info().totalStoreys(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().info().residentialStoreys(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().info().structureType(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().info().structureBuildYear(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().info().constructionType(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().info().foundationType(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().info().floorType(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().info().landArea(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().info().waterSupply(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().info().centralAir(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().info().centralHeat(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().contacts().website(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().financial().dateAcquired(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().financial().purchasePrice(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().financial().marketPrice(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().financial().lastAppraisalDate(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().financial().lastAppraisalValue(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().financial().currency().name(), false).title(proto().building().financial().currency())
                         .build(),
-                new MemberColumnDescriptor.Builder(proto().building().marketing().name(), false).title(i18n.tr("Building Marketing Name")).build()
+                new ColumnDescriptor.Builder(proto().building().marketing().name(), false).title(i18n.tr("Building Marketing Name")).build()
                 ); //@formatter:on
     }
 

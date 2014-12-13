@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
@@ -109,7 +109,7 @@ public class ApplicationContextSelectionViewImpl extends SimplePanel implements 
             super(OnlineApplicationContextChoiceDTO.class, false, false);
             setFilteringEnabled(false);
 
-            setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().leaseApplicationUnitAddress()).build());
+            setColumnDescriptors(new ColumnDescriptor.Builder(proto().leaseApplicationUnitAddress()).build());
             setDataTableModel(new DataTableModel<OnlineApplicationContextChoiceDTO>());
         }
     }

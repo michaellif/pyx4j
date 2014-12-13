@@ -24,7 +24,6 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
@@ -68,13 +67,13 @@ public class PopulationFolder extends VistaTableFolder<TriggerPmc> {
             @Override
             protected List<ColumnDescriptor> defineColumnDescriptors() {
                 return Arrays.asList(//@formatter:off                    
-                        new MemberColumnDescriptor.Builder(proto().name()).build(),
-                        new MemberColumnDescriptor.Builder(proto().dnsName()).build(),
-                        new MemberColumnDescriptor.Builder(proto().created()).build(),
-                        new MemberColumnDescriptor.Builder(proto().features().yardiIntegration()).build(),
-                        new MemberColumnDescriptor.Builder(proto().features().onlineApplication()).build(),
-                        new MemberColumnDescriptor.Builder(proto().features().whiteLabelPortal()).build(),
-                        new MemberColumnDescriptor.Builder(proto().features().yardiMaintenance()).build()
+                        new ColumnDescriptor.Builder(proto().name()).build(),
+                        new ColumnDescriptor.Builder(proto().dnsName()).build(),
+                        new ColumnDescriptor.Builder(proto().created()).build(),
+                        new ColumnDescriptor.Builder(proto().features().yardiIntegration()).build(),
+                        new ColumnDescriptor.Builder(proto().features().onlineApplication()).build(),
+                        new ColumnDescriptor.Builder(proto().features().whiteLabelPortal()).build(),
+                        new ColumnDescriptor.Builder(proto().features().yardiMaintenance()).build()
                 ); //@formatter:on
             }
 

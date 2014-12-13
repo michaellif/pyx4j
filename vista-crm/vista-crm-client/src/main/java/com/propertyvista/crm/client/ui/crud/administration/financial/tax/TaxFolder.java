@@ -26,7 +26,6 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolder;
@@ -115,10 +114,10 @@ public class TaxFolder extends CFolder<Tax> {
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().authority(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto().name(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto().rate(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto().compound(), true).build()
+                    new ColumnDescriptor.Builder(proto().authority(), true).build(),
+                    new ColumnDescriptor.Builder(proto().name(), true).build(),
+                    new ColumnDescriptor.Builder(proto().rate(), true).build(),
+                    new ColumnDescriptor.Builder(proto().compound(), true).build()
             );//@formatter:on
         }
 

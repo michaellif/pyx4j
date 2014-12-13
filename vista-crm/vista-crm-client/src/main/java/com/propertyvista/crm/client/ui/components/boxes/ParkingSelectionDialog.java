@@ -23,7 +23,6 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
@@ -54,14 +53,14 @@ public abstract class ParkingSelectionDialog extends EntitySelectorTableDialog<P
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
                 // unit data
-                new MemberColumnDescriptor.Builder(proto().name()).build(),
-                new MemberColumnDescriptor.Builder(proto().type()).build(),
-                new MemberColumnDescriptor.Builder(proto().levels()).build(),
-                new MemberColumnDescriptor.Builder(proto().totalSpaces()).build(),
-                new MemberColumnDescriptor.Builder(proto().regularSpaces()).build(),
-                new MemberColumnDescriptor.Builder(proto().disabledSpaces()).build(),
-                new MemberColumnDescriptor.Builder(proto().wideSpaces()).build(),
-                new MemberColumnDescriptor.Builder(proto().narrowSpaces()).build()
+                new ColumnDescriptor.Builder(proto().name()).build(),
+                new ColumnDescriptor.Builder(proto().type()).build(),
+                new ColumnDescriptor.Builder(proto().levels()).build(),
+                new ColumnDescriptor.Builder(proto().totalSpaces()).build(),
+                new ColumnDescriptor.Builder(proto().regularSpaces()).build(),
+                new ColumnDescriptor.Builder(proto().disabledSpaces()).build(),
+                new ColumnDescriptor.Builder(proto().wideSpaces()).build(),
+                new ColumnDescriptor.Builder(proto().narrowSpaces()).build()
                 ); //@formatter:on
     }
 

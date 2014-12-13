@@ -21,7 +21,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 
 import com.propertyvista.crm.rpc.services.selections.SelectEmployeeListService;
 import com.propertyvista.domain.company.Employee;
@@ -35,13 +35,13 @@ public class SelectorDialogCorporateLister extends EntityLister<Employee> {
         super(Employee.class, GWT.<SelectEmployeeListService> create(SelectEmployeeListService.class), parent, alreadySelected);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().employeeId()).build(),//
-                new MemberColumnDescriptor.Builder(proto().name()).searchable(false).build(),//
-                new MemberColumnDescriptor.Builder(proto().title()).build(),//
-                new MemberColumnDescriptor.Builder(proto().name().firstName()).searchableOnly().build(),//
-                new MemberColumnDescriptor.Builder(proto().name().lastName()).searchableOnly().build(),//
-                new MemberColumnDescriptor.Builder(proto().email(), false).build(),//
-                new MemberColumnDescriptor.Builder(proto().updated(), false).build() //
+                new ColumnDescriptor.Builder(proto().employeeId()).build(),//
+                new ColumnDescriptor.Builder(proto().name()).searchable(false).build(),//
+                new ColumnDescriptor.Builder(proto().title()).build(),//
+                new ColumnDescriptor.Builder(proto().name().firstName()).searchableOnly().build(),//
+                new ColumnDescriptor.Builder(proto().name().lastName()).searchableOnly().build(),//
+                new ColumnDescriptor.Builder(proto().email(), false).build(),//
+                new ColumnDescriptor.Builder(proto().updated(), false).build() //
         );
 
         DataTableModel<Employee> dataTableModel = new DataTableModel<Employee>();

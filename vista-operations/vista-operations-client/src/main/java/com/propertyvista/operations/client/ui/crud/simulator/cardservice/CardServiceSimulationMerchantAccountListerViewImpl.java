@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
@@ -34,11 +34,11 @@ public class CardServiceSimulationMerchantAccountListerViewImpl extends Abstract
                     .<AbstractCrudService<CardServiceSimulationMerchantAccount>> create(CardServiceSimulationMerchantAccountCrudService.class), true, true);
 
             setColumnDescriptors( //
-                    new MemberColumnDescriptor.Builder(proto().terminalID()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().company()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().balance()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().responseCode()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().created()).build() //
+                    new ColumnDescriptor.Builder(proto().terminalID()).build(), //
+                    new ColumnDescriptor.Builder(proto().company()).build(), //
+                    new ColumnDescriptor.Builder(proto().balance()).build(), //
+                    new ColumnDescriptor.Builder(proto().responseCode()).build(), //
+                    new ColumnDescriptor.Builder(proto().created()).build() //
             );
 
             setDataTableModel(new DataTableModel<CardServiceSimulationMerchantAccount>());

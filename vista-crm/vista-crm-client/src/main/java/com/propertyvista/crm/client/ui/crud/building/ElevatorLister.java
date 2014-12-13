@@ -21,7 +21,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
@@ -34,15 +34,15 @@ public class ElevatorLister extends SiteDataTablePanel<ElevatorDTO> {
         setFilteringEnabled(false);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().type()).build(), //
-                new MemberColumnDescriptor.Builder(proto().description()).build(), //
-                new MemberColumnDescriptor.Builder(proto().make()).build(), //
-                new MemberColumnDescriptor.Builder(proto().model()).build(), //
-                new MemberColumnDescriptor.Builder(proto().build()).build(), //
-                new MemberColumnDescriptor.Builder(proto().license().number(), false).build(), //
-                new MemberColumnDescriptor.Builder(proto().license().expiration(), false).build(), //
-                new MemberColumnDescriptor.Builder(proto().license().renewal(), false).build(), //
-                new MemberColumnDescriptor.Builder(proto().warranty().type(), false).build());
+                new ColumnDescriptor.Builder(proto().type()).build(), //
+                new ColumnDescriptor.Builder(proto().description()).build(), //
+                new ColumnDescriptor.Builder(proto().make()).build(), //
+                new ColumnDescriptor.Builder(proto().model()).build(), //
+                new ColumnDescriptor.Builder(proto().build()).build(), //
+                new ColumnDescriptor.Builder(proto().license().number(), false).build(), //
+                new ColumnDescriptor.Builder(proto().license().expiration(), false).build(), //
+                new ColumnDescriptor.Builder(proto().license().renewal(), false).build(), //
+                new ColumnDescriptor.Builder(proto().warranty().type(), false).build());
 
         setDataTableModel(new DataTableModel<ElevatorDTO>());
     }

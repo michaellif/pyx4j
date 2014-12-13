@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
@@ -29,26 +29,26 @@ public class FundsTransferDebitRecordLister extends SiteDataTablePanel<FundsTran
         super(FundsTransferRecordDTO.class, GWT.<AbstractCrudService<FundsTransferRecordDTO>> create(PadDebitRecordCrudService.class), false, false);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().padBatch().padFile().id()).columnTitle("File Id").searchableOnly().build(), //  
-                new MemberColumnDescriptor.Builder(proto().padBatch().padFile().fileName(), false).build(), //
-                new MemberColumnDescriptor.Builder(proto().padBatch().padFile().status(), false).columnTitle("File status").build(), //
-                new MemberColumnDescriptor.Builder(proto().padBatch().padFile().sent()).build(), //
-                new MemberColumnDescriptor.Builder(proto().padBatch().padFile().fundsTransferType()).build(), //
+                new ColumnDescriptor.Builder(proto().padBatch().padFile().id()).columnTitle("File Id").searchableOnly().build(), //  
+                new ColumnDescriptor.Builder(proto().padBatch().padFile().fileName(), false).build(), //
+                new ColumnDescriptor.Builder(proto().padBatch().padFile().status(), false).columnTitle("File status").build(), //
+                new ColumnDescriptor.Builder(proto().padBatch().padFile().sent()).build(), //
+                new ColumnDescriptor.Builder(proto().padBatch().padFile().fundsTransferType()).build(), //
 
-                new MemberColumnDescriptor.Builder(proto().padBatch().pmc()).build(), //
-                new MemberColumnDescriptor.Builder(proto().padBatch().pmc().namespace()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().padBatch().merchantTerminalId()).build(), //
+                new ColumnDescriptor.Builder(proto().padBatch().pmc()).build(), //
+                new ColumnDescriptor.Builder(proto().padBatch().pmc().namespace()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().padBatch().merchantTerminalId()).build(), //
 
-                new MemberColumnDescriptor.Builder(proto().clientId()).build(), //
-                new MemberColumnDescriptor.Builder(proto().amount()).build(), //
-                new MemberColumnDescriptor.Builder(proto().bankId()).build(), //
-                new MemberColumnDescriptor.Builder(proto().branchTransitNumber()).build(), //
-                new MemberColumnDescriptor.Builder(proto().accountNumber()).build(), //
-                new MemberColumnDescriptor.Builder(proto().transactionId()).build(), //
-                new MemberColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build(), //
-                new MemberColumnDescriptor.Builder(proto().processed()).build(), //
-                new MemberColumnDescriptor.Builder(proto().processingStatus()).build(), //
-                new MemberColumnDescriptor.Builder(proto().statusChangeDate()).build());
+                new ColumnDescriptor.Builder(proto().clientId()).build(), //
+                new ColumnDescriptor.Builder(proto().amount()).build(), //
+                new ColumnDescriptor.Builder(proto().bankId()).build(), //
+                new ColumnDescriptor.Builder(proto().branchTransitNumber()).build(), //
+                new ColumnDescriptor.Builder(proto().accountNumber()).build(), //
+                new ColumnDescriptor.Builder(proto().transactionId()).build(), //
+                new ColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build(), //
+                new ColumnDescriptor.Builder(proto().processed()).build(), //
+                new ColumnDescriptor.Builder(proto().processingStatus()).build(), //
+                new ColumnDescriptor.Builder(proto().statusChangeDate()).build());
 
         setDataTableModel(new DataTableModel<FundsTransferRecordDTO>());
     }

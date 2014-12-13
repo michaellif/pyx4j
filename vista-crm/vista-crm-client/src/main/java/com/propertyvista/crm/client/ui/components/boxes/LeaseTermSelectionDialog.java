@@ -23,7 +23,6 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
@@ -53,12 +52,12 @@ public abstract class LeaseTermSelectionDialog extends EntitySelectorTableDialog
     @Override
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().termFrom()).build(),
-                new MemberColumnDescriptor.Builder(proto().termTo()).build(),
+                new ColumnDescriptor.Builder(proto().termFrom()).build(),
+                new ColumnDescriptor.Builder(proto().termTo()).build(),
                 
-                new MemberColumnDescriptor.Builder(proto().type()).build(),
-                new MemberColumnDescriptor.Builder(proto().status()).build(),
-                new MemberColumnDescriptor.Builder(proto().creationDate()).build()
+                new ColumnDescriptor.Builder(proto().type()).build(),
+                new ColumnDescriptor.Builder(proto().status()).build(),
+                new ColumnDescriptor.Builder(proto().creationDate()).build()
         );//@formatter:on
     }
 

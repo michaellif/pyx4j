@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
@@ -94,14 +94,14 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
             getDataTable().setHasColumnClickSorting(false);
 
             setColumnDescriptors( //
-                    new MemberColumnDescriptor.Builder(proto().isRead()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().highImportance()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().star()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().hasAttachments()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().senders()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().subject()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().messagesInThread()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().date()).build());
+                    new ColumnDescriptor.Builder(proto().isRead()).build(), //
+                    new ColumnDescriptor.Builder(proto().highImportance()).build(), //
+                    new ColumnDescriptor.Builder(proto().star()).build(), //
+                    new ColumnDescriptor.Builder(proto().hasAttachments()).build(), //
+                    new ColumnDescriptor.Builder(proto().senders()).build(), //
+                    new ColumnDescriptor.Builder(proto().subject()).build(), //
+                    new ColumnDescriptor.Builder(proto().messagesInThread()).build(), //
+                    new ColumnDescriptor.Builder(proto().date()).build());
 
             setDataTableModel(new DataTableModel<MessageDTO>());
 

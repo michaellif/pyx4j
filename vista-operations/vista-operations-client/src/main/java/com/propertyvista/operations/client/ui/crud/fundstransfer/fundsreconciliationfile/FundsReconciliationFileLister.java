@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
@@ -30,11 +30,11 @@ public class FundsReconciliationFileLister extends SiteDataTablePanel<FundsRecon
                 false);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().fileName()).build(), //
-                new MemberColumnDescriptor.Builder(proto().fundsTransferType()).build(), //
-                new MemberColumnDescriptor.Builder(proto().created()).build(), //
-                new MemberColumnDescriptor.Builder(proto().remoteFileDate()).build(), //
-                new MemberColumnDescriptor.Builder(proto().fileNameDate()).build());
+                new ColumnDescriptor.Builder(proto().fileName()).build(), //
+                new ColumnDescriptor.Builder(proto().fundsTransferType()).build(), //
+                new ColumnDescriptor.Builder(proto().created()).build(), //
+                new ColumnDescriptor.Builder(proto().remoteFileDate()).build(), //
+                new ColumnDescriptor.Builder(proto().fileNameDate()).build());
 
         setDataTableModel(new DataTableModel<FundsReconciliationFileDTO>());
     }

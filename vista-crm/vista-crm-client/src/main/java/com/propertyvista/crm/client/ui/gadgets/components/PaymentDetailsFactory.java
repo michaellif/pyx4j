@@ -20,7 +20,6 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
@@ -37,17 +36,17 @@ public class PaymentDetailsFactory extends AbstractListerDetailsFactory<PaymentR
     static {
         PaymentRecordDTO proto = EntityFactory.getEntityPrototype(PaymentRecordDTO.class);
         DEFAULT_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto.id()).build(),
-                    new MemberColumnDescriptor.Builder(proto.leaseTermParticipant().leaseParticipant().customer().customerId()).build(),
-                    new MemberColumnDescriptor.Builder(proto.leaseTermParticipant().leaseParticipant().customer().person().name()).build(),
-                    new MemberColumnDescriptor.Builder(proto.leaseTermParticipant().role()).build(),
-                    new MemberColumnDescriptor.Builder(proto.amount()).build(),
-                    new MemberColumnDescriptor.Builder(proto.paymentMethod().type()).build(),
-                    new MemberColumnDescriptor.Builder(proto.created()).build(),
-                    new MemberColumnDescriptor.Builder(proto.receivedDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto.lastStatusChangeDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto.targetDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto.paymentStatus()).build()
+                    new ColumnDescriptor.Builder(proto.id()).build(),
+                    new ColumnDescriptor.Builder(proto.leaseTermParticipant().leaseParticipant().customer().customerId()).build(),
+                    new ColumnDescriptor.Builder(proto.leaseTermParticipant().leaseParticipant().customer().person().name()).build(),
+                    new ColumnDescriptor.Builder(proto.leaseTermParticipant().role()).build(),
+                    new ColumnDescriptor.Builder(proto.amount()).build(),
+                    new ColumnDescriptor.Builder(proto.paymentMethod().type()).build(),
+                    new ColumnDescriptor.Builder(proto.created()).build(),
+                    new ColumnDescriptor.Builder(proto.receivedDate()).build(),
+                    new ColumnDescriptor.Builder(proto.lastStatusChangeDate()).build(),
+                    new ColumnDescriptor.Builder(proto.targetDate()).build(),
+                    new ColumnDescriptor.Builder(proto.paymentStatus()).build()
                 );//@formatter:on
     }
 

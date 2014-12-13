@@ -20,7 +20,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
@@ -39,11 +39,11 @@ public class AdminUserListerViewImpl extends AbstractListerView<OperationsUserDT
             super(OperationsUserDTO.class, GWT.<AdminUserCrudService> create(AdminUserCrudService.class), true);
 
             setColumnDescriptors( //
-                    new MemberColumnDescriptor.Builder(proto().name()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().email()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().enabled()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().created()).build(), //
-                    new MemberColumnDescriptor.Builder(proto().credentialUpdated()).build());
+                    new ColumnDescriptor.Builder(proto().name()).build(), //
+                    new ColumnDescriptor.Builder(proto().email()).build(), //
+                    new ColumnDescriptor.Builder(proto().enabled()).build(), //
+                    new ColumnDescriptor.Builder(proto().created()).build(), //
+                    new ColumnDescriptor.Builder(proto().credentialUpdated()).build());
 
             setDataTableModel(new DataTableModel<OperationsUserDTO>());
         }

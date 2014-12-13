@@ -20,9 +20,8 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.domain.scheduler.RunData;
@@ -38,41 +37,41 @@ public class RunDataLister extends SiteDataTablePanel<RunData> {
 
     private List<ColumnDescriptor> createViewColumnDescriptors() {
         List<ColumnDescriptor> c = Arrays.asList(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().pmc()).build(),
-                new MemberColumnDescriptor.Builder(proto().pmc().namespace()).title("Pmc namespace").searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto().execution().trigger()).build(),
-                new MemberColumnDescriptor.Builder(proto().execution().trigger().name()).title("Trigger Name").searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto().execution().trigger().triggerType()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto().started()).build(),
-                new MemberColumnDescriptor.Builder(proto().status()).build(),
-                new MemberColumnDescriptor.Builder(proto().executionReport().total()).build(),
-                new MemberColumnDescriptor.Builder(proto().executionReport().processed()).build(),
-                new MemberColumnDescriptor.Builder(proto().executionReport().failed()).build(),
-                new MemberColumnDescriptor.Builder(proto().executionReport().erred()).build(),
-                new MemberColumnDescriptor.Builder(proto().executionReport().detailsErred()).build(),
-                new MemberColumnDescriptor.Builder(proto().executionReport().totalDuration()).build(),
-                new MemberColumnDescriptor.Builder(proto().executionReport().message()).build(),
-                new MemberColumnDescriptor.Builder(proto().errorMessage()).build(),
-                new MemberColumnDescriptor.Builder(proto().updated()).build()
+                new ColumnDescriptor.Builder(proto().pmc()).build(),
+                new ColumnDescriptor.Builder(proto().pmc().namespace()).title("Pmc namespace").searchableOnly().build(),
+                new ColumnDescriptor.Builder(proto().execution().trigger()).build(),
+                new ColumnDescriptor.Builder(proto().execution().trigger().name()).title("Trigger Name").searchableOnly().build(),
+                new ColumnDescriptor.Builder(proto().execution().trigger().triggerType()).visible(false).build(),
+                new ColumnDescriptor.Builder(proto().started()).build(),
+                new ColumnDescriptor.Builder(proto().status()).build(),
+                new ColumnDescriptor.Builder(proto().executionReport().total()).build(),
+                new ColumnDescriptor.Builder(proto().executionReport().processed()).build(),
+                new ColumnDescriptor.Builder(proto().executionReport().failed()).build(),
+                new ColumnDescriptor.Builder(proto().executionReport().erred()).build(),
+                new ColumnDescriptor.Builder(proto().executionReport().detailsErred()).build(),
+                new ColumnDescriptor.Builder(proto().executionReport().totalDuration()).build(),
+                new ColumnDescriptor.Builder(proto().executionReport().message()).build(),
+                new ColumnDescriptor.Builder(proto().errorMessage()).build(),
+                new ColumnDescriptor.Builder(proto().updated()).build()
         );//@formatter:on
         return c;
     }
 
     private List<ColumnDescriptor> createInlineViewColumnDescriptors() {
         List<ColumnDescriptor> c = Arrays.asList(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().pmc()).build(),
-                new MemberColumnDescriptor.Builder(proto().pmc().namespace()).title("Pmc namespace").searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto().started()).build(),
-                new MemberColumnDescriptor.Builder(proto().status()).build(),
-                new MemberColumnDescriptor.Builder(proto().executionReport().total()).build(),
-                new MemberColumnDescriptor.Builder(proto().executionReport().processed()).build(),
-                new MemberColumnDescriptor.Builder(proto().executionReport().failed()).build(),
-                new MemberColumnDescriptor.Builder(proto().executionReport().erred()).build(),
-                new MemberColumnDescriptor.Builder(proto().executionReport().detailsErred()).build(),
-                new MemberColumnDescriptor.Builder(proto().executionReport().totalDuration()).build(),
-                new MemberColumnDescriptor.Builder(proto().executionReport().message()).build(),
-                new MemberColumnDescriptor.Builder(proto().errorMessage()).build(),
-                new MemberColumnDescriptor.Builder(proto().updated()).build()
+                new ColumnDescriptor.Builder(proto().pmc()).build(),
+                new ColumnDescriptor.Builder(proto().pmc().namespace()).title("Pmc namespace").searchableOnly().build(),
+                new ColumnDescriptor.Builder(proto().started()).build(),
+                new ColumnDescriptor.Builder(proto().status()).build(),
+                new ColumnDescriptor.Builder(proto().executionReport().total()).build(),
+                new ColumnDescriptor.Builder(proto().executionReport().processed()).build(),
+                new ColumnDescriptor.Builder(proto().executionReport().failed()).build(),
+                new ColumnDescriptor.Builder(proto().executionReport().erred()).build(),
+                new ColumnDescriptor.Builder(proto().executionReport().detailsErred()).build(),
+                new ColumnDescriptor.Builder(proto().executionReport().totalDuration()).build(),
+                new ColumnDescriptor.Builder(proto().executionReport().message()).build(),
+                new ColumnDescriptor.Builder(proto().errorMessage()).build(),
+                new ColumnDescriptor.Builder(proto().updated()).build()
         );//@formatter:on
         return c;
     }

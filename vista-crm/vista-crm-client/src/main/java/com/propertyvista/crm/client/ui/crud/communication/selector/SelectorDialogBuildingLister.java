@@ -19,7 +19,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -34,14 +34,14 @@ public class SelectorDialogBuildingLister extends EntityLister<Building> {
         super(Building.class, GWT.<SelectBuildingListService> create(SelectBuildingListService.class), parent, alreadySelected);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().propertyCode(), true).build(),//
-                new MemberColumnDescriptor.Builder(proto().info().name(), true).build(),//
-                new MemberColumnDescriptor.Builder(proto().info().address().streetNumber(), false).build(),//
-                new MemberColumnDescriptor.Builder(proto().info().address().streetName(), false).build(),//
-                new MemberColumnDescriptor.Builder(proto().info().address().city(), true).build(),//
-                new MemberColumnDescriptor.Builder(proto().info().address().province(), true).build(),//
-                new MemberColumnDescriptor.Builder(proto().info().address().country(), false).build(),//
-                new MemberColumnDescriptor.Builder(proto().marketing().name(), false).title("Marketing Name").build() //
+                new ColumnDescriptor.Builder(proto().propertyCode(), true).build(),//
+                new ColumnDescriptor.Builder(proto().info().name(), true).build(),//
+                new ColumnDescriptor.Builder(proto().info().address().streetNumber(), false).build(),//
+                new ColumnDescriptor.Builder(proto().info().address().streetName(), false).build(),//
+                new ColumnDescriptor.Builder(proto().info().address().city(), true).build(),//
+                new ColumnDescriptor.Builder(proto().info().address().province(), true).build(),//
+                new ColumnDescriptor.Builder(proto().info().address().country(), false).build(),//
+                new ColumnDescriptor.Builder(proto().marketing().name(), false).title("Marketing Name").build() //
         );
 
         DataTableModel<Building> dataTableModel = new DataTableModel<Building>();

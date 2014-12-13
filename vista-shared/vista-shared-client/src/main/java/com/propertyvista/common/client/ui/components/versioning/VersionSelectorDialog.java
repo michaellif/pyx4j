@@ -21,7 +21,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IVersionData;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
@@ -47,9 +46,9 @@ public abstract class VersionSelectorDialog<V extends IVersionData<?>> extends E
     @Override
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().versionNumber()).build(),
-                new MemberColumnDescriptor.Builder(proto().fromDate()).build(),
-                new MemberColumnDescriptor.Builder(proto().createdByUser()).build()
+                new ColumnDescriptor.Builder(proto().versionNumber()).build(),
+                new ColumnDescriptor.Builder(proto().fromDate()).build(),
+                new ColumnDescriptor.Builder(proto().createdByUser()).build()
             );//@formatter:on
     }
 

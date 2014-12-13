@@ -23,7 +23,6 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
@@ -53,20 +52,20 @@ public abstract class TenantSelectionDialog extends EntitySelectorTableDialog<Te
     @Override
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().participantId()).build(),
+                new ColumnDescriptor.Builder(proto().participantId()).build(),
                 
-                new MemberColumnDescriptor.Builder(proto().customer().person().name()).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().customer().person().name().firstName()).searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto().customer().person().name().lastName()).searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto().customer().person().sex()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto().customer().person().birthDate(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().customer().person().email(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().customer().person().homePhone()).build(),
-                new MemberColumnDescriptor.Builder(proto().customer().person().mobilePhone()).build(),
-                new MemberColumnDescriptor.Builder(proto().customer().person().workPhone()).build(),
+                new ColumnDescriptor.Builder(proto().customer().person().name()).searchable(false).build(),
+                new ColumnDescriptor.Builder(proto().customer().person().name().firstName()).searchableOnly().build(),
+                new ColumnDescriptor.Builder(proto().customer().person().name().lastName()).searchableOnly().build(),
+                new ColumnDescriptor.Builder(proto().customer().person().sex()).visible(false).build(),
+                new ColumnDescriptor.Builder(proto().customer().person().birthDate(), false).build(),
+                new ColumnDescriptor.Builder(proto().customer().person().email(), false).build(),
+                new ColumnDescriptor.Builder(proto().customer().person().homePhone()).build(),
+                new ColumnDescriptor.Builder(proto().customer().person().mobilePhone()).build(),
+                new ColumnDescriptor.Builder(proto().customer().person().workPhone()).build(),
                 
-                new MemberColumnDescriptor.Builder(proto().lease()).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().lease().leaseId()).searchableOnly().build()
+                new ColumnDescriptor.Builder(proto().lease()).searchable(false).build(),
+                new ColumnDescriptor.Builder(proto().lease().leaseId()).searchableOnly().build()
         );//@formatter:on
     }
 
