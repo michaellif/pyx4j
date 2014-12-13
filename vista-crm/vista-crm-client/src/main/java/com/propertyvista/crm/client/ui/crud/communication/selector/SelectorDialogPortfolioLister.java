@@ -31,7 +31,7 @@ public class SelectorDialogPortfolioLister extends EntityLister<Portfolio> {
 
         setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().name()).build(), //
-                new MemberColumnDescriptor.Builder(proto().description()).wordWrap(true).build());
+                new MemberColumnDescriptor.Builder(proto().description()).build());
 
         DataTableModel<Portfolio> dataTableModel = new DataTableModel<Portfolio>();
         dataTableModel.setPageSize(DataTablePanel.PAGESIZE_SMALL);

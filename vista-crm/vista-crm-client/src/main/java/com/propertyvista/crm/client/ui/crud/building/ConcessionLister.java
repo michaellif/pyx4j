@@ -17,12 +17,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
@@ -40,11 +42,13 @@ public class ConcessionLister extends VersionedLister<Concession> {
                 new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), //
                 new MemberColumnDescriptor.Builder(proto().version().type()).build(), //
                 new MemberColumnDescriptor.Builder(proto().version().term()).build(), //
-                new ColumnDescriptor(proto().version().value().getPath().toString(), proto().version().value().getMeta().getCaption()) {
+                new MemberColumnDescriptor.Builder(proto().version()).formatter(new IFormatter<IEntity, SafeHtml>() {
+
                     @Override
-                    public String convert(IEntity entity) {
-                        if (entity != null) {
-                            Concession consssion = (Concession) entity;
+                    public SafeHtml format(IEntity value) {
+                        SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                        if (value != null) {
+                            Concession consssion = (Concession) value;
                             String format = null;
                             switch (consssion.version().type().getValue()) {
                             case percentageOff:
@@ -56,13 +60,12 @@ public class ConcessionLister extends VersionedLister<Concession> {
                             default:
                                 format = "${0,number,#.##}";
                             }
-                            String formattedValue = SimpleMessageFormat.format(format, consssion.version().value().getValue());
-                            return formattedValue;
-                        } else {
-                            return super.convert(entity);
+                            builder.appendHtmlConstant(SimpleMessageFormat.format(format, consssion.version().value().getValue()));
                         }
+                        return builder.toSafeHtml();
                     }
-                }, new MemberColumnDescriptor.Builder(proto().version().condition()).build(), //
+                }).build(), //
+                new MemberColumnDescriptor.Builder(proto().version().condition()).build(), //
                 new MemberColumnDescriptor.Builder(proto().version().effectiveDate()).build(), //
                 new MemberColumnDescriptor.Builder(proto().version().expirationDate()).build());
 

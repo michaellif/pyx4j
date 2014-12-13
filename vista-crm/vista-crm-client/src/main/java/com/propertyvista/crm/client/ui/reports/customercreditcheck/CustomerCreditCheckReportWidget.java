@@ -94,7 +94,9 @@ public class CustomerCreditCheckReportWidget extends HTML implements IReportWidg
         for (CustomerCreditCheck status : reportData.unitStatuses) {
             bb.appendHtmlConstant("<tr>");
             for (ColumnDescriptor desc : CREDITCHECK_TABLE_COLUMNS) {
-                cell(bb, desc.convert(status));
+                bb.appendHtmlConstant("<td>");
+                bb.append(desc.getFormatter().format(status));
+                bb.appendHtmlConstant("</td>");
             }
             bb.appendHtmlConstant("</tr>");
         }
@@ -133,9 +135,4 @@ public class CustomerCreditCheckReportWidget extends HTML implements IReportWidg
         });
     }
 
-    private void cell(SafeHtmlBuilder bb, String data) {
-        bb.appendHtmlConstant("<td>");
-        bb.appendEscaped(data);
-        bb.appendHtmlConstant("</td>");
-    }
 }

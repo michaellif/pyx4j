@@ -18,13 +18,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
@@ -43,17 +45,17 @@ public class ARCodeLister extends SiteDataTablePanel<ARCode> {
         //@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),
             new MemberColumnDescriptor.Builder(proto().type()).build(),
-            new MemberColumnDescriptor(new Builder(proto().type()).searchable(false).sortable(false).title(i18n.tr("Debit/Credit"))) {
+            new MemberColumnDescriptor.Builder(proto().type()).searchable(false).sortable(false).title(i18n.tr("Debit/Credit")).formatter(new IFormatter<IEntity, SafeHtml>() {
                 @Override
-                public String convert(IEntity entity) {
-                    ARCode.Type type = (ARCode.Type) entity.getMember(getColumnPath()).getValue();
+                public SafeHtml format(IEntity value) {
+                    SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                  ARCode.Type type = (ARCode.Type) value.getMember(proto().type().getPath()).getValue();
                     if (type != null) {
-                    return type.getActionType().toString();
-                    } else {
-                        return null;
+                        builder.appendHtmlConstant(type.getActionType().toString());
                     }
+                    return builder.toSafeHtml();
                 }
-            },
+            }).build(),
             new MemberColumnDescriptor.Builder(proto().glCode()).build(),
             new MemberColumnDescriptor.Builder(proto().reserved()).build()
         ));//@formatter:on

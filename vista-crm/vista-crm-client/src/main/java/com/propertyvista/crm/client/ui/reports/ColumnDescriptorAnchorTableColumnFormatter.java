@@ -75,7 +75,7 @@ public class ColumnDescriptorAnchorTableColumnFormatter implements ITableColumnF
                 b.appendHtmlConstant("<div class='" + styleName + "'>");
             }
 
-            b.appendEscaped(columnDescriptor.convert(entity));
+            b.append(columnDescriptor.getFormatter().format(entity));
 
             if (styleName != null) {
                 b.appendHtmlConstant("</div>");
@@ -86,7 +86,7 @@ public class ColumnDescriptorAnchorTableColumnFormatter implements ITableColumnF
             if (styleName != null) {
                 b.appendHtmlConstant("<div class='" + styleName + "'>");
             }
-            b.appendEscaped(columnDescriptor.convert(entity));
+            b.append(columnDescriptor.getFormatter().format(entity));
 
             if (styleName != null) {
                 b.appendHtmlConstant("</div>");

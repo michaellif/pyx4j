@@ -17,11 +17,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -49,7 +51,26 @@ public class MaintenanceRequestLister extends SiteDataTablePanel<MaintenanceRequ
                 //
                 new MemberColumnDescriptor.Builder(proto.requestId()).build(), //
                 new MemberColumnDescriptor.Builder(proto.unit()).build(), //
-                createCategoryColumn(proto), //
+                new MemberColumnDescriptor.Builder(proto.category()).formatter(new IFormatter<IEntity, SafeHtml>() {
+
+                    @Override
+                    public SafeHtml format(IEntity value) {
+                        SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                        if (value instanceof MaintenanceRequestDTO) {
+                            // return slash-separated name list
+                            StringBuilder result = new StringBuilder();
+                            MaintenanceRequestCategory category = ((MaintenanceRequestDTO) value).category();
+                            while (!category.parent().isNull()) {
+                                if (!category.name().isNull()) {
+                                    result.insert(0, result.length() > 0 ? "/" : "").insert(0, category.name().getValue());
+                                }
+                                category = category.parent();
+                            }
+                            builder.appendHtmlConstant(result.toString());
+                        }
+                        return builder.toSafeHtml();
+                    }
+                }).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto.priority()).build(), //
                 new MemberColumnDescriptor.Builder(proto.summary()).build(), //
                 new MemberColumnDescriptor.Builder(proto.reporterName()).columnTitle(i18n.tr("Tenant")).searchable(false).build(), //
@@ -82,29 +103,6 @@ public class MaintenanceRequestLister extends SiteDataTablePanel<MaintenanceRequ
     @Override
     public List<Sort> getDefaultSorting() {
         return Arrays.asList(new Sort(proto().submitted(), true), new Sort(proto().updated(), false));
-    }
-
-    private static ColumnDescriptor createCategoryColumn(MaintenanceRequestDTO proto) {
-        ColumnDescriptor desc = new ColumnDescriptor(proto.category().getPath().toString(), proto.category().getMeta().getCaption()) {
-            @Override
-            public String convert(IEntity entity) {
-                if (entity instanceof MaintenanceRequestDTO) {
-                    // return slash-separated name list
-                    StringBuilder result = new StringBuilder();
-                    MaintenanceRequestCategory category = ((MaintenanceRequestDTO) entity).category();
-                    while (!category.parent().isNull()) {
-                        if (!category.name().isNull()) {
-                            result.insert(0, result.length() > 0 ? "/" : "").insert(0, category.name().getValue());
-                        }
-                        category = category.parent();
-                    }
-                    return result.toString();
-                }
-                return super.convert(entity);
-            }
-        };
-        desc.setSearchable(false); // do not use if for filtering!..
-        return desc;
     }
 
 }

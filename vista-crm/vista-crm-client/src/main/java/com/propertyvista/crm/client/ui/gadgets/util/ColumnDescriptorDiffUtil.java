@@ -53,7 +53,6 @@ public class ColumnDescriptorDiffUtil {
             builder.visible(overriddingColumnDescriptor != null ? overriddingColumnDescriptor.isVisible().getValue() : defaultColumnDescriptor.isVisible());
             builder.searchable(defaultColumnDescriptor.isSearchable());
             builder.sortable(defaultColumnDescriptor.isSortable());
-            builder.wordWrap(defaultColumnDescriptor.isWordWrap());
             builder.width(defaultColumnDescriptor.getWidth());
             if (defaultColumnDescriptor.isSearchableOnly()) {
                 builder.searchableOnly();

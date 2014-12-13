@@ -48,7 +48,7 @@ public class ColumnDescriptorTableColumnFormatter implements ITableColumnFormatt
         if (styleName != null) {
             b.appendHtmlConstant("<div class='" + styleName + ">");
         }
-        b.appendEscaped(columnDescriptor.convert(entity)).toSafeHtml();
+        b.append(columnDescriptor.getFormatter().format(entity));
         if (styleName != null) {
             b.appendHtmlConstant("</div>");
         }

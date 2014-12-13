@@ -62,8 +62,7 @@ public class AvailabilityReportWidget extends FlowPanel implements IReportWidget
         HTML header = new HTML(bb.toSafeHtml());
         add(header);
 
-        ReportTable reportTable = new ReportTable(Arrays.asList(AvailabilityReportTableColumnsHolder.AVAILABILITY_TABLE_COLUMNS),
-                new ArrayList<CellFormatter>());
+        ReportTable reportTable = new ReportTable(Arrays.asList(AvailabilityReportTableColumnsHolder.AVAILABILITY_TABLE_COLUMNS));
         reportTable.populate(reportData.unitStatuses);
         add(reportTable);
         addDomHandler(new ScrollHandler() {

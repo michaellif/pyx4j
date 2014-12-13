@@ -44,7 +44,6 @@ public class ColumnDescriptorConverter {
             return columnDescriptorBuilder
                 .sortable(columnDescriptorEntity.isSortable().getValue())
                 .width(columnDescriptorEntity.width().getValue())
-                .wordWrap(columnDescriptorEntity.wrapWords().getValue())
                 .visible(columnDescriptorEntity.isVisible().getValue())
                 .build();
             //@formatter:on
@@ -63,7 +62,6 @@ public class ColumnDescriptorConverter {
         }
 
         entity.width().setValue(columnDescriptor.getWidth());
-        entity.wrapWords().setValue(columnDescriptor.isWordWrap());
         entity.isVisible().setValue(columnDescriptor.isVisible());
         return entity;
     }
