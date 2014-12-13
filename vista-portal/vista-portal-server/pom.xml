@@ -185,7 +185,7 @@
     <profiles>
 
         <profile>
-            <id>full</id>
+            <id>XXX-full</id>
             <build>
                 <plugins>
 
@@ -218,6 +218,7 @@
             </build>
 
         </profile>
+
     </profiles>
 
 
