@@ -22,13 +22,12 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.InMemeoryListService;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataItem;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 
 public class FilterItemLister<E extends IEntity> extends DataTablePanel<FilterItemDTO> {
 
@@ -47,7 +46,7 @@ public class FilterItemLister<E extends IEntity> extends DataTablePanel<FilterIt
         setPageSizeOptions(Arrays.asList(new Integer[] { DataTablePanel.PAGESIZE_SMALL, DataTablePanel.PAGESIZE_MEDIUM }));
 
         setColumnDescriptors( //
-        new MemberColumnDescriptor.Builder(proto().columnDescriptor()).build());
+        new ColumnDescriptor.Builder(proto().columnDescriptor()).build());
         setDataTableModel();
         setDataSource(dataTablePanel.getDataTable().getColumnDescriptors());
 
@@ -153,7 +152,7 @@ public class FilterItemLister<E extends IEntity> extends DataTablePanel<FilterIt
     private Collection<FilterItem> convertToFilterItemList(Collection<FilterItemDTO> from) {
         Collection<FilterItem> to = new ArrayList<FilterItem>(from.size());
         for (FilterItemDTO current : from) {
-            to.add(new FilterItem(new ColumnDescriptor(current.columnDescriptor().getValue(), current.columnDescriptor().getValue())));
+            //TODO    to.add(new FilterItem(current.columnDescriptor()));
         }
         return to;
     }

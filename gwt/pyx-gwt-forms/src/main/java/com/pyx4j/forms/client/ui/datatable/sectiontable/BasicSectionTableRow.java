@@ -24,8 +24,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataItem;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 
 public class BasicSectionTableRow implements ISection {
 

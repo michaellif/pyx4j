@@ -32,7 +32,6 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 public class ReportTable extends Composite {
 
@@ -80,9 +79,9 @@ public class ReportTable extends Composite {
 
     private final HTML reportHtml;
 
-    private final List<MemberColumnDescriptor> columnDescriptors;
+    private final List<ColumnDescriptor> columnDescriptors;
 
-    public ReportTable(List<MemberColumnDescriptor> columnDescriptors) {
+    public ReportTable(List<ColumnDescriptor> columnDescriptors) {
         this.columnDescriptors = columnDescriptors;
         this.reportHtml = new HTML();
 
@@ -112,13 +111,13 @@ public class ReportTable extends Composite {
 
     private void row(SafeHtmlBuilder bb, IEntity rowData) {
         bb.appendHtmlConstant("<tr>");
-        for (MemberColumnDescriptor columnDescriptor : columnDescriptors) {
+        for (ColumnDescriptor columnDescriptor : columnDescriptors) {
             cell(bb, columnDescriptor, rowData);
         }
         bb.appendHtmlConstant("</tr>");
     }
 
-    private void cell(SafeHtmlBuilder bb, MemberColumnDescriptor columnDescriptor, IEntity rowData) {
+    private void cell(SafeHtmlBuilder bb, ColumnDescriptor columnDescriptor, IEntity rowData) {
         bb.appendHtmlConstant("<td>");
         bb.append(columnDescriptor.getFormatter().format(rowData));
         bb.appendHtmlConstant("</td>");

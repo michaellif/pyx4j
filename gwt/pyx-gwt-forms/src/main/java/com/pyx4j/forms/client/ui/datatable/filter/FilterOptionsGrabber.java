@@ -22,8 +22,8 @@ package com.pyx4j.forms.client.ui.datatable.filter;
 
 import java.util.ArrayList;
 
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.widgets.client.selector.MultyWordSuggestOptionsGrabber;
 
 public class FilterOptionsGrabber extends MultyWordSuggestOptionsGrabber<FilterItem> {
