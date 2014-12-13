@@ -74,10 +74,10 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
             protected IsWidget createContent() {
                 FormPanel formPanel = new FormPanel(this);
 
-                formPanel.append(Location.Dual, proto().applyToRole()).decorate().componentWidth(200);
-                formPanel.append(Location.Dual, proto().title()).decorate().componentWidth(200);
-                formPanel.append(Location.Dual, proto().content()).decorate().componentWidth(200);
-                formPanel.append(Location.Dual, proto().signatureFormat()).decorate().componentWidth(200);
+                formPanel.append(Location.Dual, proto().applyToRole()).decorate();
+                formPanel.append(Location.Dual, proto().title()).decorate();
+                formPanel.append(Location.Dual, proto().content()).decorate();
+                formPanel.append(Location.Dual, proto().signatureFormat()).decorate();
                 return formPanel;
             }
         }
@@ -104,10 +104,10 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
             protected IsWidget createContent() {
                 FormPanel formPanel = new FormPanel(this);
 
-                formPanel.append(Location.Dual, proto().applyToRole()).decorate().componentWidth(200);
-                formPanel.append(Location.Dual, proto().title()).decorate().componentWidth(200);
-                formPanel.append(Location.Dual, proto().content()).decorate().componentWidth(200);
-                formPanel.append(Location.Dual, proto().signatureFormat()).decorate().componentWidth(200);
+                formPanel.append(Location.Dual, proto().applyToRole()).decorate();
+                formPanel.append(Location.Dual, proto().title()).decorate();
+                formPanel.append(Location.Dual, proto().content()).decorate();
+                formPanel.append(Location.Dual, proto().signatureFormat()).decorate();
                 return formPanel;
             }
         }
