@@ -408,13 +408,13 @@ public class CrmSiteMap implements SiteMap {
                 super(Type.viewer);
             }
         }
-        
+
         @PlaceProperties(navigLabel = "Account")
         public static class AccountPreferences extends CrmCrudAppPlace {
-         public AccountPreferences() {
-             super(Type.viewer);
-         }
- }
+            public AccountPreferences() {
+                super(Type.viewer);
+            }
+        }
 
         public static class AccountRecoveryOptionsRequired extends AppPlace {
         }
@@ -583,6 +583,10 @@ public class CrmSiteMap implements SiteMap {
 
             @PlaceProperties(caption = "Portal Terms and Privacy")
             public static class LegalDocumentation extends CrmCrudAppPlace {
+            }
+
+            public static class LegalQuestions extends CrmCrudAppPlace {
+
             }
 
             public static class MaintenanceRequest extends CrmCrudAppPlace {

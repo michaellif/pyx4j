@@ -27,6 +27,7 @@ import com.propertyvista.biz.preloader.policy.subpreloaders.LeaseAdjustmentPolic
 import com.propertyvista.biz.preloader.policy.subpreloaders.LeaseAgreementPolicyPreloader;
 import com.propertyvista.biz.preloader.policy.subpreloaders.LeaseApplicationPolicyPreloader;
 import com.propertyvista.biz.preloader.policy.subpreloaders.LeaseBillingPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.LegalQuestionsPolicyPreloader;
 import com.propertyvista.biz.preloader.policy.subpreloaders.LegalTermsPolicyPreloader;
 import com.propertyvista.biz.preloader.policy.subpreloaders.MaintenanceRequestPolicyPreloader;
 import com.propertyvista.biz.preloader.policy.subpreloaders.N4PolicyPreloader;
@@ -62,6 +63,7 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
         add(new LeaseApplicationPolicyPreloader());
         add(new LeaseAgreementPolicyPreloader());
         add(new LegalTermsPolicyPreloader());
+        add(new LegalQuestionsPolicyPreloader());
         add(new BackgroundCheckPolicyPreloader());
         add(new ResidentPortalPolicyPreloader());
 

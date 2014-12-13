@@ -219,6 +219,9 @@ import com.propertyvista.crm.client.activity.policies.leasetermination.LeaseTerm
 import com.propertyvista.crm.client.activity.policies.leaseterms.LegalTermsPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LegalTermsPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LegalTermsPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.legalquestions.LegalQuestionsPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.legalquestions.LegalQuestionsPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.legalquestions.LegalQuestionsPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.maintenancerequest.MaintenanceRequestPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.maintenancerequest.MaintenanceRequestPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.maintenancerequest.MaintenanceRequestPolicyViewerActivity;
@@ -1112,6 +1115,19 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new LegalTermsPolicyViewerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (crudPlace instanceof Administration.Policies.LegalQuestions) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new LegalQuestionsPolicyListerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new LegalQuestionsPolicyEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new LegalQuestionsPolicyViewerActivity(crudPlace);
                             break;
                         }
 

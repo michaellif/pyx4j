@@ -23,7 +23,6 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
@@ -83,21 +82,25 @@ public interface CustomerScreening extends IVersionedEntity<CustomerScreeningV> 
         @EmbeddedEntity
         PriorAddress previousAddress();
 
+        @Deprecated
         @Owned
         @Caption(name = "General Questions")
         CustomerScreeningLegalQuestions legalQuestions();
+
+        @Owned
+        @Detached
+        @Caption(name = "General Questions")
+        IList<CustomerScreeningIncome> legalQuestions2();
 
         //=============== Financial =============//
 
         @Owned
         @Detached
-        @Length(3)
         @Caption(name = "Income")
         IList<CustomerScreeningIncome> incomes();
 
         @Owned
         @Detached
-        @Length(3)
         IList<CustomerScreeningAsset> assets();
 
         @Owned

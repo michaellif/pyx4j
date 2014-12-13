@@ -76,6 +76,7 @@ import com.propertyvista.domain.policy.policies.ResidentPortalPolicy;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.policy.policies.YardiInterfacePolicy;
+import com.propertyvista.domain.policy.policies.domain.LegalQuestionsPolicy;
 import com.propertyvista.domain.property.Landlord;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.CommunityEvent;
@@ -185,6 +186,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(LeaseApplicationLegalPolicy.class, Administration.Policies.LeaseApplicationTerms.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseAgreementLegalPolicy.class, Administration.Policies.AgreementLegalTerms.class, defaultImage);
         AppPlaceEntityMapper.register(LegalTermsPolicy.class, Administration.Policies.LegalDocumentation.class, defaultImage);
+        AppPlaceEntityMapper.register(LegalQuestionsPolicy.class, Administration.Policies.LegalQuestions.class, defaultImage);
         AppPlaceEntityMapper.register(MaintenanceRequestPolicy.class, Administration.Policies.MaintenanceRequest.class, defaultImage);
         AppPlaceEntityMapper.register(N4Policy.class, Administration.Policies.N4.class, defaultImage);
         AppPlaceEntityMapper.register(DatesPolicy.class, Administration.Policies.Dates.class, defaultImage);
