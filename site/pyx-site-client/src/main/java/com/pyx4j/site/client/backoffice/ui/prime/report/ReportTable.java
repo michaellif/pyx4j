@@ -20,7 +20,6 @@
  */
 package com.pyx4j.site.client.backoffice.ui.prime.report;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -83,10 +82,7 @@ public class ReportTable extends Composite {
 
     private final List<MemberColumnDescriptor> columnDescriptors;
 
-    private final List<CellFormatter> formatters;
-
-    public ReportTable(List<MemberColumnDescriptor> columnDescriptors, List<CellFormatter> formatters) {
-        this.formatters = formatters;
+    public ReportTable(List<MemberColumnDescriptor> columnDescriptors) {
         this.columnDescriptors = columnDescriptors;
         this.reportHtml = new HTML();
 
@@ -123,21 +119,9 @@ public class ReportTable extends Composite {
     }
 
     private void cell(SafeHtmlBuilder bb, MemberColumnDescriptor columnDescriptor, IEntity rowData) {
-        CellData cellData = new CellData(columnDescriptor.convert(rowData), new HashMap<String, String>());
-        for (CellFormatter formatter : formatters) {
-            cellData = formatter.formatCell(rowData, cellData, columnDescriptor.getColumnPath());
-        }
-        bb.appendHtmlConstant("<td style=\"" + makeStyleAttributeValue(cellData.styleProperties) + "\">");
-        bb.appendEscaped(cellData.value);
+        bb.appendHtmlConstant("<td>");
+        bb.append(columnDescriptor.getFormatter().format(rowData));
         bb.appendHtmlConstant("</td>");
-    }
-
-    private String makeStyleAttributeValue(Map<String, String> properties) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Map.Entry<String, String> property : properties.entrySet()) {
-            stringBuilder.append(property.getKey()).append(":").append(property.getValue()).append("; ");
-        }
-        return stringBuilder.toString();
     }
 
 }

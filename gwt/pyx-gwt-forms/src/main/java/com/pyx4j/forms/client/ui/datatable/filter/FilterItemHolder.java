@@ -37,8 +37,7 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
 
     @Override
     protected void onEditingComplete() {
-        // TODO Auto-generated method stub
-
+        System.out.println("+++++++++++++++++333");
     }
 
 }

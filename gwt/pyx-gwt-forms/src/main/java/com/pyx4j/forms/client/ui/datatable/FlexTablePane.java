@@ -275,21 +275,12 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
                 }
 
                 for (ColumnDescriptor columnDescriptor : visibleColumnDescriptors) {
-                    Widget contentHtml;
-                    Object value = dataItem.getCellValue(columnDescriptor);
-                    if (value instanceof Widget) {
-                        contentHtml = (Widget) value;
-                    } else if (value == null || value.equals("")) {
-                        contentHtml = new HTML("&nbsp;");
-                    } else {
-                        contentHtml = new HTML(SafeHtmlUtils.fromString(value.toString()));
-                        if (!columnDescriptor.isWordWrap()) {
-                            contentHtml.getElement().getStyle().setProperty("overflow", "hidden");
-                            contentHtml.getElement().getStyle().setMarginRight(5, Unit.PX);
-                        }
-                    }
+                    Widget contentHtml = new HTML(dataItem.getCellValue(columnDescriptor));
+                    contentHtml.getElement().getStyle().setProperty("overflow", "hidden");
+                    contentHtml.getElement().getStyle().setMarginRight(5, Unit.PX);
+
                     flexTable.setWidget(rowIndex, colIndex, contentHtml);
-                    flexTable.getCellFormatter().setWordWrap(rowIndex, colIndex, columnDescriptor.isWordWrap());
+                    //TODO flexTable.getCellFormatter().setWordWrap(rowIndex, colIndex, columnDescriptor.isWordWrap());
                     ++colIndex;
                 }
 

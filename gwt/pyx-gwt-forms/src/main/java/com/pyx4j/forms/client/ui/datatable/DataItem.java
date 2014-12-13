@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.ui.datatable;
 
+import com.google.gwt.safehtml.shared.SafeHtml;
+
 import com.pyx4j.entity.core.IEntity;
 
 public class DataItem<E extends IEntity> {
@@ -34,8 +36,7 @@ public class DataItem<E extends IEntity> {
         return entity;
     }
 
-    public Object getCellValue(ColumnDescriptor descriptor) {
-        return descriptor.getCellValue(entity);
+    public SafeHtml getCellValue(ColumnDescriptor descriptor) {
+        return descriptor.getFormatter().format(entity);
     }
-
 }
