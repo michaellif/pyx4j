@@ -120,7 +120,7 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
 
                 }
                 @SuppressWarnings("unchecked")
-                ICursorIterator<E> it = (ICursorIterator<E>) Persistence.service().query(encodedCursorReference, request.getCriteria(), AttachLevel.Attached);
+                ICursorIterator<E> it = (ICursorIterator<E>) Persistence.secureQuery(encodedCursorReference, request.getCriteria(), AttachLevel.Attached);
                 try {
                     int currentFetchCount = 0;
                     while (it.hasNext()) {
