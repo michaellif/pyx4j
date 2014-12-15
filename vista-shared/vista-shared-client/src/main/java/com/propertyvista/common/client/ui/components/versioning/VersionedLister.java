@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
-import com.pyx4j.widgets.client.RadioGroup.Layout;
+import com.pyx4j.widgets.client.OptionGroup.Layout;
 
 public abstract class VersionedLister<E extends IVersionedEntity<?>> extends SiteDataTablePanel<E> {
 

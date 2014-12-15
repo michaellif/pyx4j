@@ -74,7 +74,7 @@ public class NewPaymentMethodEditorTheme extends Theme {
         style.addProperty("width", "100px");
         addStyle(style);
 
-        style = new Style(".", StyleName.PaymentEditorButtons, " .", WidgetsTheme.StyleName.RadioGroupItem);
+        style = new Style(".", StyleName.PaymentEditorButtons, " .", WidgetsTheme.StyleName.OptionGroupItem);
         style.addProperty("width", "100%");
         style.addProperty("padding-top", "3px");
         style.addProperty("height", "30px");
@@ -83,7 +83,7 @@ public class NewPaymentMethodEditorTheme extends Theme {
         style.addProperty("white-space", "nowrap");
         addStyle(style);
 
-        style = new Style(".", StyleName.PaymentEditorButtons, ".", WidgetsTheme.StyleName.RadioGroupItem, "-",
+        style = new Style(".", StyleName.PaymentEditorButtons, ".", WidgetsTheme.StyleName.OptionGroupItem, "-",
                 WidgetsTheme.StyleDependent.active);
 //        style.addProperty("border-top", "1px solid #bbb");
 //        style.addProperty("border-bottom", "1px solid #bbb");
