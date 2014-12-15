@@ -71,6 +71,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         mapToNoNamespace.add("env");
         mapToNoNamespace.add("static");
         mapToNoNamespace.add("operations");
+        mapToNoNamespace.add("onboarding");
         mapToNoNamespace.add("h");
         mapToNoNamespace.add("m");
     }
