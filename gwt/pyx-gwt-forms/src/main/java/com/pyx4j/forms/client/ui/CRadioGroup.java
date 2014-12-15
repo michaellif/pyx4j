@@ -41,8 +41,6 @@ public abstract class CRadioGroup<E> extends CFocusComponent<E, NRadioGroup<E>> 
 
     private List<E> options;
 
-    private Collection<E> enabledOptions;
-
     public CRadioGroup(RadioGroup.Layout layout) {
         super();
         this.layout = layout;
@@ -84,35 +82,7 @@ public abstract class CRadioGroup<E> extends CFocusComponent<E, NRadioGroup<E>> 
             options.addAll(opt);
         }
         getNativeComponent().setOptions(getOptions());
-        this.enabledOptions = new HashSet<E>(getOptions());
         OptionsChangeEvent.fire(this, getOptions());
-    }
-
-    public Collection<E> getOptionsEnabled() {
-        if (enabledOptions == null) {
-            this.enabledOptions = new HashSet<E>(getOptions());
-        }
-        return enabledOptions;
-    }
-
-    public void setOptionEnabled(E optionValue, boolean enabled) {
-        getNativeComponent().setOptionEnabled(optionValue, enabled);
-        if (enabledOptions == null) {
-            this.enabledOptions = new HashSet<E>(getOptions());
-        }
-        if (enabled) {
-            if (!enabledOptions.contains(optionValue)) {
-                enabledOptions.add(optionValue);
-            }
-        } else {
-            enabledOptions.remove(optionValue);
-        }
-    }
-
-    public void setOptionsEnabled(Collection<E> opt, boolean enabled) {
-        for (E optionValue : opt) {
-            setOptionEnabled(optionValue, enabled);
-        }
     }
 
     @Override

@@ -22,6 +22,7 @@ package com.pyx4j.widgets.client;
 
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.LabelElement;
+import com.google.gwt.safehtml.shared.SafeHtml;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
@@ -38,8 +39,13 @@ public class CheckBox extends com.google.gwt.user.client.ui.CheckBox implements 
     }
 
     public CheckBox(String label) {
-        this();
-        this.setText(label);
+        super(label);
+        setStyleName(WidgetsTheme.StyleName.CheckBox.name());
+    }
+
+    public CheckBox(SafeHtml html) {
+        super(html);
+        setStyleName(WidgetsTheme.StyleName.CheckBox.name());
     }
 
     @Override

@@ -20,7 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -58,11 +57,6 @@ public class NRadioGroup<E> extends NFocusField<E, RadioGroup<E>, CRadioGroup<E>
         List<E> options = getCComponent().getOptions();
         getEditor().setOptions(options);
 
-        List<E> disabeldOptions = new ArrayList<E>(options);
-        disabeldOptions.removeAll(getCComponent().getOptionsEnabled());
-        for (E opt : disabeldOptions) {
-            getEditor().setOptionEnabled(opt, false);
-        }
         getEditor().addValueChangeHandler(new ValueChangeHandler<E>() {
             @Override
             public void onValueChange(ValueChangeEvent<E> event) {
