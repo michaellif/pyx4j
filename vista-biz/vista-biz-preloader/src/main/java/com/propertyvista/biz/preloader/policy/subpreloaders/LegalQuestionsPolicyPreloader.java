@@ -17,8 +17,8 @@ import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.biz.preloader.policy.AbstractPolicyPreloader;
 import com.propertyvista.config.VistaLocale;
+import com.propertyvista.domain.policy.policies.domain.LegalQuestionsPolicyItem;
 import com.propertyvista.domain.policy.policies.domain.LegalQuestionsPolicy;
-import com.propertyvista.domain.policy.policies.domain.LegalQuestionsPolicy.LegalQuestionPolicyItem;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class LegalQuestionsPolicyPreloader extends AbstractPolicyPreloader<LegalQuestionsPolicy> {
@@ -36,7 +36,7 @@ public class LegalQuestionsPolicyPreloader extends AbstractPolicyPreloader<Legal
         if (eng != null) {
             policy.enabled().setValue(true);
 
-            LegalQuestionPolicyItem item = policy.questions().$();
+            LegalQuestionsPolicyItem item = policy.questions().$();
             item.locale().setValue(eng);
             item.question().setValue("Have you ever been sued for rent?");
             policy.questions().add(item);

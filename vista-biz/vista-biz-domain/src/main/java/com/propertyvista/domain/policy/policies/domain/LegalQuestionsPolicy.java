@@ -13,21 +13,11 @@
  */
 package com.propertyvista.domain.policy.policies.domain;
 
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.ILocalizedEntity;
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
@@ -36,25 +26,8 @@ import com.propertyvista.domain.policy.framework.Policy;
 @LowestApplicableNode(value = OrganizationPoliciesNode.class)
 public interface LegalQuestionsPolicy extends Policy {
 
-    public interface LegalQuestionPolicyItem extends ILocalizedEntity {
-        @Owner
-        @NotNull
-        @MemberColumn(notNull = true)
-        @ReadOnly
-        @Detached
-        @Indexed
-        @JoinColumn
-        LegalQuestionsPolicy policy();
-
-        @OrderColumn
-        IPrimitive<Integer> orderInPolicy();
-
-        @ToString
-        IPrimitive<String> question();
-    }
-
     IPrimitive<Boolean> enabled();
 
     @Owned
-    IList<LegalQuestionPolicyItem> questions();
+    IList<LegalQuestionsPolicyItem> questions();
 }

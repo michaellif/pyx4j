@@ -136,38 +136,39 @@ public class ScreeningGenerator {
 
         CustomerScreeningLegalQuestion item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
         item.question().setValue("Have you ever been sued for rent?");
+        item.answer().setValue(RandomUtil.randomBoolean());
         legalQuestion.add(item);
 
         item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
-        item.answer().setValue(RandomUtil.randomBoolean());
         item.question().setValue("Have you ever been sued for damages?");
+        item.answer().setValue(RandomUtil.randomBoolean());
         legalQuestion.add(item);
 
         item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
-        item.answer().setValue(RandomUtil.randomBoolean());
         item.question().setValue("Have you ever been evicted?");
+        item.answer().setValue(RandomUtil.randomBoolean());
         legalQuestion.add(item);
 
         item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
-        item.answer().setValue(RandomUtil.randomBoolean());
         item.question().setValue("Have you ever defaulted on a lease?");
+        item.answer().setValue(RandomUtil.randomBoolean());
         legalQuestion.add(item);
 
         item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
-        item.answer().setValue(RandomUtil.randomBoolean());
         item.question()
                 .setValue(
                         "Have you ever been convicted of a crime/felony that involved an offense against property, persons, government officials, or that involved firearms, illegal drugs, or sex or sex crimes?");
+        item.answer().setValue(RandomUtil.randomBoolean());
         legalQuestion.add(item);
 
         item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
-        item.answer().setValue(RandomUtil.randomBoolean());
         item.question().setValue("Have you ever had any liens, court judgments or repossessions?");
+        item.answer().setValue(RandomUtil.randomBoolean());
         legalQuestion.add(item);
 
         item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
-        item.answer().setValue(RandomUtil.randomBoolean());
         item.question().setValue("Have you ever filed for bankruptcy protection");
+        item.answer().setValue(RandomUtil.randomBoolean());
         legalQuestion.add(item);
 
         return legalQuestion;

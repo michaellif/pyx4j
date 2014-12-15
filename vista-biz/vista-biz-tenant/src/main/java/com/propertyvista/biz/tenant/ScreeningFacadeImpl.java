@@ -54,8 +54,8 @@ import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
 import com.propertyvista.domain.policy.policies.domain.ApplicationDocumentType.Importance;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
+import com.propertyvista.domain.policy.policies.domain.LegalQuestionsPolicyItem;
 import com.propertyvista.domain.policy.policies.domain.LegalQuestionsPolicy;
-import com.propertyvista.domain.policy.policies.domain.LegalQuestionsPolicy.LegalQuestionPolicyItem;
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
@@ -313,7 +313,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         LegalQuestionsPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, LegalQuestionsPolicy.class);
 
         if (policy.enabled().getValue(false)) {
-            for (LegalQuestionPolicyItem item : policy.questions()) {
+            for (LegalQuestionsPolicyItem item : policy.questions()) {
                 CustomerScreeningLegalQuestion question = EntityFactory.create(CustomerScreeningLegalQuestion.class);
                 question.question().setValue(item.question().getValue());
                 screening.version().legalQuestions().add(question);

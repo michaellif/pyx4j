@@ -25,7 +25,7 @@ import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.propertyvista.crm.client.ui.components.boxes.LocalizedContentFolderBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.LegalQuestionsPolicyDTO;
-import com.propertyvista.domain.policy.policies.domain.LegalQuestionsPolicy.LegalQuestionPolicyItem;
+import com.propertyvista.domain.policy.policies.domain.LegalQuestionsPolicyItem;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class LegalQuestionsPolicyForm extends PolicyDTOTabPanelBasedForm<LegalQuestionsPolicyDTO> {
@@ -47,14 +47,14 @@ public class LegalQuestionsPolicyForm extends PolicyDTOTabPanelBasedForm<LegalQu
         return formPanel;
     }
 
-    private class LegalQuestionFolder extends LocalizedContentFolderBase<LegalQuestionPolicyItem> {
+    private class LegalQuestionFolder extends LocalizedContentFolderBase<LegalQuestionsPolicyItem> {
 
         public LegalQuestionFolder(boolean editable) {
-            super(LegalQuestionPolicyItem.class, editable);
+            super(LegalQuestionsPolicyItem.class, editable);
         }
 
         @Override
-        public IsWidget createEditorContent(CForm<LegalQuestionPolicyItem> editor) {
+        public IsWidget createEditorContent(CForm<LegalQuestionsPolicyItem> editor) {
             FormPanel formPanel = new FormPanel(editor);
 
             formPanel.append(Location.Dual, proto().locale(), new CLabel<CompiledLocale>()).decorate();
