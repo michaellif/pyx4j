@@ -15,6 +15,7 @@ package com.propertyvista.portal.rpc.portal.resident.dto;
 
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
@@ -45,4 +46,8 @@ public interface SelfRegistrationBuildingDTO extends IEntity {
 
     @Editor(type = EditorType.phone)
     IPrimitive<String> supportPhone();
+
+    @ToString
+    @Length(128)
+    IPrimitive<String> marketingName();
 }

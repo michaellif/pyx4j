@@ -35,22 +35,35 @@ public class BuildingSuggestBox extends CSelectorTextBox<SelfRegistrationBuildin
         super(new MultyWordSuggestOptionsGrabber<SelfRegistrationBuildingDTO>());
 
         optionsGrabber = ((MultyWordSuggestOptionsGrabber) getOptionsGrabber());
-        optionsGrabber.setFormatter(getFormatter());
-
+        optionsGrabber.setFormatter(new IFormatter<SelfRegistrationBuildingDTO, String>() {
+            @Override
+            public String format(SelfRegistrationBuildingDTO value) {
+                return SimpleMessageFormat.format("{0} {1} {2} {3} {4}", //
+                        value.propertyCode(),//
+                        value.marketingName(),//
+                        value.streetAddress().getValue(), //
+                        value.municipality().getValue(), //
+                        value.region().getValue());
+            }
+        });
         setFormatter(new IFormatter<SelfRegistrationBuildingDTO, String>() {
             @Override
             public String format(SelfRegistrationBuildingDTO value) {
-                return SimpleMessageFormat.format("{0} - {1}", value.propertyCode().getValue(), value.streetAddress().getValue());
+                if (value != null) {
+                    return SimpleMessageFormat.format("{0} - {1}", value.propertyCode().getValue(), value.streetAddress().getValue());
+                }
+                return null;
             }
+
         });
 
         setOptionFormatter(new IFormatter<SelfRegistrationBuildingDTO, SafeHtml>() {
             @Override
             public SafeHtml format(SelfRegistrationBuildingDTO value) {
                 SafeHtmlBuilder builder = new SafeHtmlBuilder();
-                builder.appendHtmlConstant(SimpleMessageFormat.format("<div style=\"font-size:12px;\"><div>{0} - {1}</div><div>{2}</div><div>{3}</div></div>",
-                        value.propertyCode(), value.streetAddress().getValue(), value.streetAddress().getValue() + ", " + value.municipality().getValue(),
-                        value.region().getValue()));
+                builder.appendHtmlConstant(SimpleMessageFormat.format(
+                        "<div style=\"font-size:12px;\"><div>{0} - {1}</div><div>{2}, {3}</div><div>{4}</div></div>", value.propertyCode(),
+                        value.marketingName(), value.streetAddress().getValue(), value.municipality().getValue(), value.region().getValue()));
                 return builder.toSafeHtml();
             }
         });
