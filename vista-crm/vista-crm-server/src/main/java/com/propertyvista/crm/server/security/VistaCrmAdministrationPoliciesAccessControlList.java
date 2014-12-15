@@ -64,6 +64,7 @@ import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
 import com.propertyvista.domain.policy.policies.LeaseAgreementLegalPolicy;
 import com.propertyvista.domain.policy.policies.LeaseApplicationLegalPolicy;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
+import com.propertyvista.domain.policy.policies.LegalQuestionsPolicy;
 import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
 import com.propertyvista.domain.policy.policies.MaintenanceRequestPolicy;
 import com.propertyvista.domain.policy.policies.N4Policy;
@@ -74,7 +75,6 @@ import com.propertyvista.domain.policy.policies.ResidentPortalPolicy;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.policy.policies.YardiInterfacePolicy;
-import com.propertyvista.domain.policy.policies.domain.LegalQuestionsPolicy;
 import com.propertyvista.domain.site.SiteImageResource;
 
 class VistaCrmAdministrationPoliciesAccessControlList extends UIAclBuilder {

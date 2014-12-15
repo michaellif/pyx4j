@@ -16,7 +16,7 @@ package com.propertyvista.crm.server.services.policies.policy;
 import com.propertyvista.crm.rpc.services.policies.policy.LegalQuestionsPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LegalQuestionsPolicyDTO;
-import com.propertyvista.domain.policy.policies.domain.LegalQuestionsPolicy;
+import com.propertyvista.domain.policy.policies.LegalQuestionsPolicy;
 
 public class LegalQuestionsPolicyCrudServiceImpl extends GenericPolicyCrudService<LegalQuestionsPolicy, LegalQuestionsPolicyDTO> implements
         LegalQuestionsPolicyCrudService {

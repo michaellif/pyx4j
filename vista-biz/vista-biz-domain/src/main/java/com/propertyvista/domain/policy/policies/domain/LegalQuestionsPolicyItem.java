@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.ILocalizedEntity;
+import com.propertyvista.domain.policy.policies.LegalQuestionsPolicy;
 
 public interface LegalQuestionsPolicyItem extends ILocalizedEntity {
     @Owner

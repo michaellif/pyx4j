@@ -17,8 +17,8 @@ import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.biz.preloader.policy.AbstractPolicyPreloader;
 import com.propertyvista.config.VistaLocale;
+import com.propertyvista.domain.policy.policies.LegalQuestionsPolicy;
 import com.propertyvista.domain.policy.policies.domain.LegalQuestionsPolicyItem;
-import com.propertyvista.domain.policy.policies.domain.LegalQuestionsPolicy;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class LegalQuestionsPolicyPreloader extends AbstractPolicyPreloader<LegalQuestionsPolicy> {

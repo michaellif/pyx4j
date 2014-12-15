@@ -11,7 +11,7 @@
  * @author antonk
  * @version $Id$
  */
-package com.propertyvista.domain.policy.policies.domain;
+package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Owned;
@@ -21,6 +21,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
+import com.propertyvista.domain.policy.policies.domain.LegalQuestionsPolicyItem;
 
 @DiscriminatorValue("LegalQuestionsPolicy")
 @LowestApplicableNode(value = OrganizationPoliciesNode.class)

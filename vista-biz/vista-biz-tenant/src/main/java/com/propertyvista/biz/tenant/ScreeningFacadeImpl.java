@@ -52,10 +52,10 @@ import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
+import com.propertyvista.domain.policy.policies.LegalQuestionsPolicy;
 import com.propertyvista.domain.policy.policies.domain.ApplicationDocumentType.Importance;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.policy.policies.domain.LegalQuestionsPolicyItem;
-import com.propertyvista.domain.policy.policies.domain.LegalQuestionsPolicy;
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
@@ -72,6 +72,7 @@ import com.propertyvista.dto.LeaseApprovalDTO.SuggestedDecision;
 import com.propertyvista.dto.LeaseParticipanApprovalDTO;
 import com.propertyvista.equifax.EquifaxCreditCheck;
 import com.propertyvista.server.TaskRunner;
+import com.propertyvista.server.common.util.LocalizedContent;
 
 public class ScreeningFacadeImpl implements ScreeningFacade {
 
@@ -313,7 +314,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         LegalQuestionsPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, LegalQuestionsPolicy.class);
 
         if (policy.enabled().getValue(false)) {
-            for (LegalQuestionsPolicyItem item : policy.questions()) {
+            for (LegalQuestionsPolicyItem item : LocalizedContent.selectAllFromList(policy.questions())) {
                 CustomerScreeningLegalQuestion question = EntityFactory.create(CustomerScreeningLegalQuestion.class);
                 question.question().setValue(item.question().getValue());
                 screening.version().legalQuestions().add(question);

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.common.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.i18n.server.I18nManager;
@@ -26,6 +27,7 @@ public class LocalizedContent {
         E result = null;
         String eng = VistaLocale.getPmcDefaultEnglishLocale().getLanguage();
         String lang = I18nManager.getThreadLocale().getLanguage();
+
         for (E cont : localizedList) {
             String contLang = cont.locale().getValue().getLanguage();
             if (lang.equals(contLang)) {
@@ -35,6 +37,30 @@ public class LocalizedContent {
                 result = cont;
             }
         }
+
+        return result;
+    }
+
+    public static <E extends ILocalizedEntity> List<E> selectAllFromList(List<E> localizedList) {
+        List<E> result = new ArrayList<>();
+        String lang = I18nManager.getThreadLocale().getLanguage();
+
+        for (E cont : localizedList) {
+            if (lang.equals(cont.locale().getValue().getLanguage())) {
+                result.add(cont);
+            }
+        }
+
+        if (result.isEmpty()) {
+            String eng = VistaLocale.getPmcDefaultEnglishLocale().getLanguage();
+
+            for (E cont : localizedList) {
+                if (eng.equals(cont.locale().getValue().getLanguage())) {
+                    result.add(cont);
+                }
+            }
+        }
+
         return result;
     }
 }
