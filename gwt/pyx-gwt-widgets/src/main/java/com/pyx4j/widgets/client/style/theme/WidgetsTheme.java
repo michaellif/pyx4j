@@ -570,6 +570,7 @@ public class WidgetsTheme extends Theme {
         style = new Style(".", StyleName.SelectorListBoxValuePanel);
         style.addProperty("position", "relative");
         style.addProperty("text-align", "left");
+        style.addProperty("min-height", "3.5em");
         addStyle(style);
 
         style = new Style(".", StyleName.SelectorListBoxValuePanel, "-", StyleDependent.focused);
