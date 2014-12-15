@@ -67,6 +67,7 @@ import com.propertyvista.common.client.ui.validators.PastDateValidator;
 import com.propertyvista.common.client.ui.validators.StartEndDateWithinPeriodValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.customer.common.components.IdentificationDocumentFolder;
+import com.propertyvista.crm.client.ui.crud.customer.common.components.LegalQuestionFolder;
 import com.propertyvista.crm.client.ui.crud.customer.common.components.PersonalAssetFolder;
 import com.propertyvista.crm.client.ui.crud.customer.common.components.PersonalIncomeFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;
@@ -86,7 +87,6 @@ import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseParticipantDTO;
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
 import com.propertyvista.dto.TenantDTO;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public abstract class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmEntityForm<P> {
@@ -127,8 +127,7 @@ public abstract class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> ext
             tab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(LeaseParticipantScreeningTO.class));
         }
 
-        tab = addTab(createlegalQuestionsTab(), proto().screening().data().version().legalQuestions().getMeta().getCaption(),
-                DataModelPermission.permissionRead(LeaseParticipantScreeningTO.class));
+        tab = addTab(createlegalQuestionsTab(), i18n.tr("General Questions"), DataModelPermission.permissionRead(LeaseParticipantScreeningTO.class));
         if (isEditable()) {
             tab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(LeaseParticipantScreeningTO.class));
         }
@@ -393,24 +392,9 @@ public abstract class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> ext
     }
 
     private IsWidget createlegalQuestionsTab() {
-        QuestionsFormPanel formPanel = new QuestionsFormPanel(this);
-        formPanel.appendQuestion(proto().screening().data().version().legalQuestions().suedForRent());
-        formPanel.appendQuestion(proto().screening().data().version().legalQuestions().suedForDamages());
-        formPanel.appendQuestion(proto().screening().data().version().legalQuestions().everEvicted());
-        formPanel.appendQuestion(proto().screening().data().version().legalQuestions().defaultedOnLease());
-        formPanel.appendQuestion(proto().screening().data().version().legalQuestions().convictedOfFelony());
-        formPanel.appendQuestion(proto().screening().data().version().legalQuestions().legalTroubles());
-        formPanel.appendQuestion(proto().screening().data().version().legalQuestions().filedBankruptcy());
+        FormPanel formPanel = new FormPanel(this);
 
-        if (VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
-            get(proto().screening().data().version().legalQuestions().suedForRent()).setMandatory(false);
-            get(proto().screening().data().version().legalQuestions().suedForDamages()).setMandatory(false);
-            get(proto().screening().data().version().legalQuestions().everEvicted()).setMandatory(false);
-            get(proto().screening().data().version().legalQuestions().defaultedOnLease()).setMandatory(false);
-            get(proto().screening().data().version().legalQuestions().convictedOfFelony()).setMandatory(false);
-            get(proto().screening().data().version().legalQuestions().legalTroubles()).setMandatory(false);
-            get(proto().screening().data().version().legalQuestions().filedBankruptcy()).setMandatory(false);
-        }
+        formPanel.append(Location.Dual, proto().screening().data().version().legalQuestions(), new LegalQuestionFolder());
 
         return formPanel;
     }
@@ -424,6 +408,7 @@ public abstract class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> ext
 
     private IsWidget createIncomesTab() {
         FormPanel formPanel = new FormPanel(this);
+
         formPanel.append(Location.Dual, proto().screening().data().version().incomes(), new PersonalIncomeFolder(isEditable()));
 
         return formPanel;
@@ -431,7 +416,9 @@ public abstract class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> ext
 
     private IsWidget createAssetsTab() {
         FormPanel formPanel = new FormPanel(this);
+
         formPanel.append(Location.Dual, proto().screening().data().version().assets(), new PersonalAssetFolder(isEditable()));
+
         return formPanel;
     }
 

@@ -256,17 +256,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         ((ApplicationWizardDecorator) getDecorator()).setCaption(currentStep.getStepTitle());
     }
 
-    @Override
-    public void generateMockData() {
-        get(proto().applicantData().legalQuestions().suedForRent()).setMockValue(true);
-        get(proto().applicantData().legalQuestions().suedForDamages()).setMockValue(true);
-        get(proto().applicantData().legalQuestions().everEvicted()).setMockValue(true);
-        get(proto().applicantData().legalQuestions().defaultedOnLease()).setMockValue(true);
-        get(proto().applicantData().legalQuestions().convictedOfFelony()).setMockValue(true);
-        get(proto().applicantData().legalQuestions().legalTroubles()).setMockValue(true);
-        get(proto().applicantData().legalQuestions().filedBankruptcy()).setMockValue(true);
-    }
-
     static class ApplicationWizardDecorator extends WizardDecorator<OnlineApplicationDTO> {
 
         public ApplicationWizardDecorator() {

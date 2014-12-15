@@ -36,11 +36,11 @@ import com.propertyvista.common.client.ui.validators.PastDateValidator;
 import com.propertyvista.common.client.ui.validators.StartEndDateWithinPeriodValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.customer.common.components.IdentificationDocumentFolder;
+import com.propertyvista.crm.client.ui.crud.customer.common.components.LegalQuestionFolder;
 import com.propertyvista.crm.client.ui.crud.customer.common.components.PersonalAssetFolder;
 import com.propertyvista.crm.client.ui.crud.customer.common.components.PersonalIncomeFolder;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
-import com.propertyvista.misc.VistaTODO;
 
 public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeningTO> {
 
@@ -65,7 +65,7 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
 
         selectTab(addTab(createIdentificationDocumentsTab(), i18n.tr("Identification")));
         addTab(createAddressesTab(), i18n.tr("Addresses"));
-        addTab(createlegalQuestionsTab(), proto().data().version().legalQuestions().getMeta().getCaption());
+        addTab(createlegalQuestionsTab(), i18n.tr("General Questions"));
         addTab(createIncomesTab(), i18n.tr("Incomes"));
         addTab(createAssetsTab(), i18n.tr("Assets"));
     }
@@ -140,24 +140,9 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
     }
 
     private IsWidget createlegalQuestionsTab() {
-        QuestionsFormPanel formPanel = new QuestionsFormPanel(this);
-        formPanel.appendQuestion(proto().data().version().legalQuestions().suedForRent());
-        formPanel.appendQuestion(proto().data().version().legalQuestions().suedForDamages());
-        formPanel.appendQuestion(proto().data().version().legalQuestions().everEvicted());
-        formPanel.appendQuestion(proto().data().version().legalQuestions().defaultedOnLease());
-        formPanel.appendQuestion(proto().data().version().legalQuestions().convictedOfFelony());
-        formPanel.appendQuestion(proto().data().version().legalQuestions().legalTroubles());
-        formPanel.appendQuestion(proto().data().version().legalQuestions().filedBankruptcy());
+        FormPanel formPanel = new FormPanel(this);
 
-        if (VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
-            get(proto().data().version().legalQuestions().suedForRent()).setMandatory(false);
-            get(proto().data().version().legalQuestions().suedForDamages()).setMandatory(false);
-            get(proto().data().version().legalQuestions().everEvicted()).setMandatory(false);
-            get(proto().data().version().legalQuestions().defaultedOnLease()).setMandatory(false);
-            get(proto().data().version().legalQuestions().convictedOfFelony()).setMandatory(false);
-            get(proto().data().version().legalQuestions().legalTroubles()).setMandatory(false);
-            get(proto().data().version().legalQuestions().filedBankruptcy()).setMandatory(false);
-        }
+        formPanel.append(Location.Dual, proto().data().version().legalQuestions(), new LegalQuestionFolder());
 
         return formPanel;
     }

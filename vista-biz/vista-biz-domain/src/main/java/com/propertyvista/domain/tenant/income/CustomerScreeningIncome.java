@@ -43,6 +43,11 @@ public interface CustomerScreeningIncome extends IEntity {
     @JoinColumn
     CustomerScreening.CustomerScreeningV owner();
 
+    @OrderColumn
+    IPrimitive<Integer> orderInOwner();
+
+    // -------------------------------------------
+
     @NotNull
     @ReadOnly
     @ToString(index = 0)
@@ -54,9 +59,6 @@ public interface CustomerScreeningIncome extends IEntity {
     @Owned(forceCreation = true)
     @MemberColumn(notNull = true)
     CustomerScreeningIncomeInfo details();
-
-    @OrderColumn
-    IPrimitive<Integer> orderInOwner();
 
     @Owned
     IList<ProofOfIncomeDocumentFile> files();

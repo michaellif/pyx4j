@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -34,10 +35,17 @@ public interface CustomerScreeningLegalQuestion extends IEntity {
     @JoinColumn
     CustomerScreening.CustomerScreeningV owner();
 
+    @OrderColumn
+    IPrimitive<Integer> orderInOwner();
+
+    // -------------------------------------------
+
+    @ReadOnly
+    @Editor(type = EditorType.label)
     IPrimitive<String> question();
 
     @Editor(type = EditorType.radiogroup)
     IPrimitive<Boolean> answer();
 
-    IPrimitive<String> description();
+    IPrimitive<String> notes();
 }

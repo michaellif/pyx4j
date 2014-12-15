@@ -83,6 +83,8 @@ public interface CustomerScreeningAsset extends IEntity {
     @OrderColumn
     IPrimitive<Integer> seq();
 
+    // -------------------------------------------
+
     @NotNull
     @ReadOnly
     @ToString(index = 0)

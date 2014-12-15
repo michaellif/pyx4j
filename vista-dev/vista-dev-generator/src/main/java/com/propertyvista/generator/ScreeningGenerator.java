@@ -38,8 +38,8 @@ import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.blob.IdentificationDocumentBlob;
 import com.propertyvista.domain.blob.ProofOfAssetDocumentBlob;
 import com.propertyvista.domain.blob.ProofOfIncomeDocumentBlob;
-import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocument;
+import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
 import com.propertyvista.domain.media.ProofOfIncomeDocumentFile;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy.BjccEntry;
@@ -47,11 +47,11 @@ import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentTyp
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.CustomerScreening;
-import com.propertyvista.domain.tenant.CustomerScreeningLegalQuestions;
-import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
-import com.propertyvista.domain.tenant.income.CustomerScreeningIncomeInfo.AmountPeriod;
+import com.propertyvista.domain.tenant.CustomerScreeningLegalQuestion;
 import com.propertyvista.domain.tenant.income.CustomerScreeningAsset;
 import com.propertyvista.domain.tenant.income.CustomerScreeningAsset.AssetType;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncomeInfo.AmountPeriod;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeSource;
@@ -82,7 +82,7 @@ public class ScreeningGenerator {
         makeAddressValid(screening.version().currentAddress(), screening.version().previousAddress());
 
         // Questions
-        screening.version().legalQuestions().set(createLegalQuestions());
+        screening.version().legalQuestions().addAll(createLegalQuestions());
 
         // Incomes
         screening.version().incomes().addAll(createIncomes());
@@ -129,18 +129,48 @@ public class ScreeningGenerator {
         return address;
     }
 
-    private CustomerScreeningLegalQuestions createLegalQuestions() {
-        CustomerScreeningLegalQuestions lq = EntityFactory.create(CustomerScreeningLegalQuestions.class);
+    private Collection<CustomerScreeningLegalQuestion> createLegalQuestions() {
+        List<CustomerScreeningLegalQuestion> legalQuestion = new ArrayList<CustomerScreeningLegalQuestion>();
 
-        lq.suedForDamages().setValue(RandomUtil.randomBoolean());
-        lq.suedForRent().setValue(RandomUtil.randomBoolean());
-        lq.defaultedOnLease().setValue(RandomUtil.randomBoolean());
-        lq.convictedOfFelony().setValue(RandomUtil.randomBoolean());
-        lq.everEvicted().setValue(RandomUtil.randomBoolean());
-        lq.legalTroubles().setValue(RandomUtil.randomBoolean());
-        lq.filedBankruptcy().setValue(RandomUtil.randomBoolean());
+        //TODO: generate it somehow according the LegalQuestionsPolicy ?!
 
-        return lq;
+        CustomerScreeningLegalQuestion item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
+        item.question().setValue("Have you ever been sued for rent?");
+        legalQuestion.add(item);
+
+        item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
+        item.answer().setValue(RandomUtil.randomBoolean());
+        item.question().setValue("Have you ever been sued for damages?");
+        legalQuestion.add(item);
+
+        item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
+        item.answer().setValue(RandomUtil.randomBoolean());
+        item.question().setValue("Have you ever been evicted?");
+        legalQuestion.add(item);
+
+        item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
+        item.answer().setValue(RandomUtil.randomBoolean());
+        item.question().setValue("Have you ever defaulted on a lease?");
+        legalQuestion.add(item);
+
+        item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
+        item.answer().setValue(RandomUtil.randomBoolean());
+        item.question()
+                .setValue(
+                        "Have you ever been convicted of a crime/felony that involved an offense against property, persons, government officials, or that involved firearms, illegal drugs, or sex or sex crimes?");
+        legalQuestion.add(item);
+
+        item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
+        item.answer().setValue(RandomUtil.randomBoolean());
+        item.question().setValue("Have you ever had any liens, court judgments or repossessions?");
+        legalQuestion.add(item);
+
+        item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
+        item.answer().setValue(RandomUtil.randomBoolean());
+        item.question().setValue("Have you ever filed for bankruptcy protection");
+        legalQuestion.add(item);
+
+        return legalQuestion;
     }
 
     private Collection<CustomerScreeningIncome> createIncomes() {

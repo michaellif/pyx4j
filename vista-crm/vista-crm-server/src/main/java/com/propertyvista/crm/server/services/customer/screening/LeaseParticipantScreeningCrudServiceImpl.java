@@ -86,6 +86,7 @@ public class LeaseParticipantScreeningCrudServiceImpl extends AbstractVersionedC
         Persistence.ensureRetrieve(screening.version().incomes(), AttachLevel.Attached);
         Persistence.ensureRetrieve(screening.version().assets(), AttachLevel.Attached);
         Persistence.ensureRetrieve(screening.version().documents(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(screening.version().legalQuestions(), AttachLevel.Attached);
 
         ServerSideFactory.create(ScreeningFacade.class).registerUploadedDocuments(screening);
 
@@ -114,6 +115,8 @@ public class LeaseParticipantScreeningCrudServiceImpl extends AbstractVersionedC
         Persistence.ensureRetrieve(bo.version().incomes(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.version().assets(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.version().documents(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(bo.version().legalQuestions(), AttachLevel.Attached);
+
         Persistence.service().retrieve(bo.screene(), AttachLevel.ToStringMembers, false);
     }
 

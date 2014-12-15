@@ -41,8 +41,8 @@ import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocument;
+import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
 import com.propertyvista.domain.media.ProofOfIncomeDocumentFile;
 import com.propertyvista.domain.pmc.CreditCheckReportType;
@@ -54,13 +54,16 @@ import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
 import com.propertyvista.domain.policy.policies.domain.ApplicationDocumentType.Importance;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
+import com.propertyvista.domain.policy.policies.domain.LegalQuestionsPolicy;
+import com.propertyvista.domain.policy.policies.domain.LegalQuestionsPolicy.LegalQuestionPolicyItem;
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.CustomerScreening;
-import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
+import com.propertyvista.domain.tenant.CustomerScreeningLegalQuestion;
 import com.propertyvista.domain.tenant.income.CustomerScreeningAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -248,9 +251,45 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         }
     }
 
-    private void initializeRequiredDocuments(CustomerScreening screening, ApplicationDocumentationPolicy docPolicy) {
-        // prepopulate required docs
-        for (IdentificationDocumentType docType : docPolicy.allowedIDs()) {
+    @Override
+    public CustomerScreening retrivePersonScreeningFinalOrDraft(Customer customerId, AttachLevel attachLevel) {
+        EntityQueryCriteria<CustomerScreening> criteria = EntityQueryCriteria.create(CustomerScreening.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().screene(), customerId));
+        criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
+        CustomerScreening screening = Persistence.service().retrieve(criteria, attachLevel);
+        if (screening != null) {
+            return screening;
+        }
+        criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
+        screening = Persistence.service().retrieve(criteria, attachLevel);
+        return screening;
+    }
+
+    @Override
+    public CustomerScreening retrivePersonScreeningDraftForEdit(Customer customerId, PolicyNode policyNode) {
+        CustomerScreening screening;
+        CustomerScreening screeningId = retrivePersonScreeningDraftOrFinal(customerId, AttachLevel.IdOnly);
+        if (screeningId == null) {
+            screening = EntityFactory.create(CustomerScreening.class);
+            screening.screene().set(customerId);
+        } else {
+            screening = Persistence.retrieveDraftForEdit(CustomerScreening.class, screeningId.getPrimaryKey());
+        }
+
+        // initialize required docs for new screening version
+        if (screening.version().getPrimaryKey() == null) {
+            initializeRequiredDocuments(screening, policyNode);
+            initializeLegalQuestions(screening, policyNode);
+        }
+
+        return screening;
+    }
+
+    private void initializeRequiredDocuments(CustomerScreening screening, PolicyNode policyNode) {
+        ApplicationDocumentationPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode,
+                ApplicationDocumentationPolicy.class);
+
+        for (IdentificationDocumentType docType : policy.allowedIDs()) {
             if (Importance.activate().contains(docType.importance().getValue())) {
                 // see if we already have it.
                 boolean found = false;
@@ -270,39 +309,16 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         }
     }
 
-    @Override
-    public CustomerScreening retrivePersonScreeningFinalOrDraft(Customer customerId, AttachLevel attachLevel) {
-        EntityQueryCriteria<CustomerScreening> criteria = EntityQueryCriteria.create(CustomerScreening.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().screene(), customerId));
-        criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
-        CustomerScreening screening = Persistence.service().retrieve(criteria, attachLevel);
-        if (screening != null) {
-            return screening;
-        }
-        criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
-        screening = Persistence.service().retrieve(criteria, attachLevel);
-        return screening;
-    }
+    private void initializeLegalQuestions(CustomerScreening screening, PolicyNode policyNode) {
+        LegalQuestionsPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, LegalQuestionsPolicy.class);
 
-    @Override
-    public CustomerScreening retrivePersonScreeningDraftForEdit(Customer customerId, PolicyNode documentPolicyNode) {
-        CustomerScreening screening;
-        CustomerScreening screeningId = retrivePersonScreeningDraftOrFinal(customerId, AttachLevel.IdOnly);
-        if (screeningId == null) {
-            screening = EntityFactory.create(CustomerScreening.class);
-            screening.screene().set(customerId);
-        } else {
-            screening = Persistence.retrieveDraftForEdit(CustomerScreening.class, screeningId.getPrimaryKey());
+        if (policy.enabled().getValue(false)) {
+            for (LegalQuestionPolicyItem item : policy.questions()) {
+                CustomerScreeningLegalQuestion question = EntityFactory.create(CustomerScreeningLegalQuestion.class);
+                question.question().setValue(item.question().getValue());
+                screening.version().legalQuestions().add(question);
+            }
         }
-
-        // initialize required docs for new screening version
-        if (screening.version().getPrimaryKey() == null) {
-            ApplicationDocumentationPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(documentPolicyNode,
-                    ApplicationDocumentationPolicy.class);
-            initializeRequiredDocuments(screening, policy);
-        }
-
-        return screening;
     }
 
     @Override

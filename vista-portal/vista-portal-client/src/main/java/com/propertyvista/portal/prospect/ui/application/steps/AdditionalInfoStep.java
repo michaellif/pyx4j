@@ -35,8 +35,8 @@ import com.propertyvista.common.client.ui.validators.StartEndDateWithinPeriodVal
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
-import com.propertyvista.portal.prospect.themes.AdditionalInfoStepTheme;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
+import com.propertyvista.portal.prospect.ui.application.components.LegalQuestionFolder;
 import com.propertyvista.portal.prospect.ui.application.components.PriorAddressEditor;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.decorators.RadioButtonGroupDecoratorBuilder;
@@ -73,30 +73,7 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
         formPanel.append(Location.Left, previousAddress);
 
         formPanel.h3(i18n.tr("General Questions"));
-
-        FormPanel questionsPanel = new FormPanel(getWizard());
-        questionsPanel.addStyleName(AdditionalInfoStepTheme.StyleName.GeneralQuestionsSection.name());
-
-        questionsPanel.append(Location.Left, inject(proto().applicantData().legalQuestions().suedForRent(), new LegalQuestionWidgetDecoratorBuilder().build()));
-
-        questionsPanel.append(Location.Left,
-                inject(proto().applicantData().legalQuestions().suedForDamages(), new LegalQuestionWidgetDecoratorBuilder().build()));
-
-        questionsPanel.append(Location.Left, inject(proto().applicantData().legalQuestions().everEvicted(), new LegalQuestionWidgetDecoratorBuilder().build()));
-
-        questionsPanel.append(Location.Left,
-                inject(proto().applicantData().legalQuestions().defaultedOnLease(), new LegalQuestionWidgetDecoratorBuilder().build()));
-
-        questionsPanel.append(Location.Left,
-                inject(proto().applicantData().legalQuestions().convictedOfFelony(), new LegalQuestionWidgetDecoratorBuilder().build()));
-
-        questionsPanel.append(Location.Left,
-                inject(proto().applicantData().legalQuestions().legalTroubles(), new LegalQuestionWidgetDecoratorBuilder().build()));
-
-        questionsPanel.append(Location.Left,
-                inject(proto().applicantData().legalQuestions().filedBankruptcy(), new LegalQuestionWidgetDecoratorBuilder().build()));
-
-        formPanel.append(Location.Left, questionsPanel);
+        formPanel.append(Location.Left, proto().applicantData().legalQuestions(), new LegalQuestionFolder());
 
         // TODO currently removed, then rethink:
         if (false && !SecurityController.check(PortalProspectBehavior.Guarantor)) {

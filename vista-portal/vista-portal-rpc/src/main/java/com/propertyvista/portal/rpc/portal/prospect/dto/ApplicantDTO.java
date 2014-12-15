@@ -28,10 +28,10 @@ import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.CustomerPicture;
-import com.propertyvista.domain.tenant.CustomerScreeningLegalQuestions;
+import com.propertyvista.domain.tenant.CustomerScreeningLegalQuestion;
 import com.propertyvista.domain.tenant.EmergencyContact;
-import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.CustomerScreeningAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.lead.Lead.RefSource;
 
 @Transient
@@ -55,7 +55,7 @@ public interface ApplicantDTO extends IEntity {
 
     @Owned
     @Caption(name = "General Questions")
-    CustomerScreeningLegalQuestions legalQuestions();
+    IList<CustomerScreeningLegalQuestion> legalQuestions();
 
     @Caption(name = "How did you hear about us")
     IPrimitive<RefSource> refSource();

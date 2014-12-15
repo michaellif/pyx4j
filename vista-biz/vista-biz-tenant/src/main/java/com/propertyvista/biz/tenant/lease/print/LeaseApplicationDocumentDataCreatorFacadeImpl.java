@@ -37,6 +37,7 @@ import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.domain.tenant.CustomerScreeningLegalQuestion;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -236,11 +237,12 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         }
 
         Persistence.ensureRetrieve(screening.version().legalQuestions(), AttachLevel.Attached);
-        for (String memberName : screening.version().legalQuestions().getEntityMeta().getMemberNames()) {
+        for (CustomerScreeningLegalQuestion item : screening.version().legalQuestions()) {
             LeaseApplicationDocumentDataGeneralQuestionDTO question = EntityFactory.create(LeaseApplicationDocumentDataGeneralQuestionDTO.class);
-            question.question().setValue(screening.version().legalQuestions().getMember(memberName).getMeta().getCaption());
-            question.answerYes().setValue(screening.version().legalQuestions().getMember(memberName).getValue() == Boolean.TRUE);
-            question.answerNo().setValue(screening.version().legalQuestions().getMember(memberName).getValue() == Boolean.FALSE);
+
+            question.question().setValue(item.question().getValue());
+            question.answerYes().setValue(item.answer().getValue() == Boolean.TRUE);
+            question.answerNo().setValue(item.answer().getValue() == Boolean.FALSE);
 
             additionalInfo.generalQuestions().add(question);
         }

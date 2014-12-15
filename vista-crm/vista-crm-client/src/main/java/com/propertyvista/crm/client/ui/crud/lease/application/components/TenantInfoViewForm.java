@@ -28,6 +28,7 @@ import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.validators.ClientBusinessRules;
 import com.propertyvista.crm.client.ui.crud.customer.common.components.IdentificationDocumentFolder;
+import com.propertyvista.crm.client.ui.crud.customer.common.components.LegalQuestionFolder;
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.dto.TenantInfoDTO;
 
@@ -74,14 +75,8 @@ public class TenantInfoViewForm extends CForm<TenantInfoDTO> {
         previousAddress.append(Location.Dual, proto().version().previousAddress(), new PriorAddressEditor());
         formPanel.append(Location.Dual, previousAddress);
 
-        formPanel.h1(proto().version().legalQuestions().getMeta().getCaption());
-        formPanel.appendLegalQuestion(proto().version().legalQuestions().suedForRent());
-        formPanel.appendLegalQuestion(proto().version().legalQuestions().suedForDamages());
-        formPanel.appendLegalQuestion(proto().version().legalQuestions().everEvicted());
-        formPanel.appendLegalQuestion(proto().version().legalQuestions().defaultedOnLease());
-        formPanel.appendLegalQuestion(proto().version().legalQuestions().convictedOfFelony());
-        formPanel.appendLegalQuestion(proto().version().legalQuestions().legalTroubles());
-        formPanel.appendLegalQuestion(proto().version().legalQuestions().filedBankruptcy());
+        formPanel.h1(i18n.tr("General Questions"));
+        formPanel.append(Location.Dual, proto().version().legalQuestions(), new LegalQuestionFolder());
 
         if (!SecurityController.check(PortalResidentBehavior.Guarantor)) {
             formPanel.h1(proto().emergencyContacts().getMeta().getCaption());

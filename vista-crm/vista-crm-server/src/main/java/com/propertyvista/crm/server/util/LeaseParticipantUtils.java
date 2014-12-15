@@ -57,6 +57,7 @@ public class LeaseParticipantUtils {
             }
         }
 
+        Persistence.ensureRetrieve(screening.version().legalQuestions(), AttachLevel.Attached);
         Persistence.ensureRetrieve(screening.version().incomes(), AttachLevel.Attached);
         Persistence.ensureRetrieve(screening.version().assets(), AttachLevel.Attached);
         Persistence.ensureRetrieve(screening.version().documents(), AttachLevel.Attached);
@@ -175,6 +176,7 @@ public class LeaseParticipantUtils {
 
         }
         if (screening != null && !screening.isNull()) {
+            Persistence.ensureRetrieve(screening.version().legalQuestions(), AttachLevel.Attached);
             Persistence.ensureRetrieve(screening.version().incomes(), AttachLevel.Attached);
             Persistence.ensureRetrieve(screening.version().assets(), AttachLevel.Attached);
             Persistence.ensureRetrieve(screening.version().documents(), AttachLevel.Attached);

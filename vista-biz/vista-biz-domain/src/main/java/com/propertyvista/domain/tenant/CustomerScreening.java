@@ -82,15 +82,10 @@ public interface CustomerScreening extends IVersionedEntity<CustomerScreeningV> 
         @EmbeddedEntity
         PriorAddress previousAddress();
 
-        @Deprecated
-        @Owned
-        @Caption(name = "General Questions")
-        CustomerScreeningLegalQuestions legalQuestions();
-
         @Owned
         @Detached
         @Caption(name = "General Questions")
-        IList<CustomerScreeningIncome> legalQuestions2();
+        IList<CustomerScreeningLegalQuestion> legalQuestions();
 
         //=============== Financial =============//
 

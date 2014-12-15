@@ -342,6 +342,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         Persistence.ensureRetrieve(screening.version().incomes(), AttachLevel.Attached);
         Persistence.ensureRetrieve(screening.version().assets(), AttachLevel.Attached);
         Persistence.ensureRetrieve(screening.version().documents(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(screening.version().legalQuestions(), AttachLevel.Attached);
         ServerSideFactory.create(ScreeningFacade.class).registerUploadedDocuments(screening);
         //
         to.applicantData().set(to.applicantData().currentAddress(), screening.version().currentAddress());
@@ -355,7 +356,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(to.policyNode(), RestrictionsPolicy.class));
 
         to.applicantData().set(to.applicantData().legalQuestions(), screening.version().legalQuestions());
-
         to.applicantData().set(to.applicantData().incomes(), screening.version().incomes());
         to.applicantData().set(to.applicantData().assets(), screening.version().assets());
     }

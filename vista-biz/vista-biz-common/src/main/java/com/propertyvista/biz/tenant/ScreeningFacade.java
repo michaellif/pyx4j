@@ -44,7 +44,7 @@ public interface ScreeningFacade {
      */
     CustomerScreening retrivePersonScreeningFinalOrDraft(Customer customerId, AttachLevel attachLevel);
 
-    CustomerScreening retrivePersonScreeningDraftForEdit(Customer customerId, PolicyNode documentPolicyNode);
+    CustomerScreening retrivePersonScreeningDraftForEdit(Customer customerId, PolicyNode policyNode);
 
     void registerUploadedDocuments(CustomerScreening screening);
 
