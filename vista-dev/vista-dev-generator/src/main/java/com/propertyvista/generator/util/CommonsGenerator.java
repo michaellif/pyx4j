@@ -37,6 +37,7 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
+import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.generator.BuildingsGenerator.BuildingsGeneratorConfig;
@@ -63,6 +64,8 @@ public class CommonsGenerator {
     private static Marketing[] buildingMarketings;
 
     private static Floorplan[] floorPlans;
+
+    private static AptUnitItem[] unitItems;
 
     private static Map<String, List<InternationalAddress>> addresses = new HashMap<>();
 
@@ -139,6 +142,15 @@ public class CommonsGenerator {
             floorPlans = entities.toArray(new Floorplan[entities.size()]);
         }
         return floorPlans[DataGenerator.nextInt(floorPlans.length, "floorPlans", 6)];
+    }
+
+    public static AptUnitItem randomAptUnitItem() {
+        if (unitItems == null) {
+            List<AptUnitItem> entities = EntityCSVReciver.create(AptUnitItem.class).loadResourceFile(
+                    IOUtils.resourceFileName("unit-items.xlsx", CommonsGenerator.class));
+            unitItems = entities.toArray(new AptUnitItem[entities.size()]);
+        }
+        return unitItems[DataGenerator.nextInt(unitItems.length, "unitItems", 11)];
     }
 
     public static Name createName() {

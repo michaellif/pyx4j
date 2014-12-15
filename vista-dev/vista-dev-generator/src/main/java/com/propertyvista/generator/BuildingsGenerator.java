@@ -49,6 +49,7 @@ import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
+import com.propertyvista.domain.property.asset.unit.AptUnitInfo.EconomicStatus;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.domain.ref.ISOProvince;
@@ -514,8 +515,9 @@ public class BuildingsGenerator {
         AptUnit unit = EntityFactory.create(AptUnit.class);
         unit.building().set(building);
 
-        unit.info().economicStatus().setValue(RandomUtil.random(AptUnitInfo.EconomicStatus.values()));
-        unit.info().economicStatusDescription().setValue(RandomUtil.randomLetters(35).toLowerCase());
+        EconomicStatus economicStatus = RandomUtil.random(AptUnitInfo.EconomicStatus.values());
+        unit.info().economicStatus().setValue(economicStatus);
+        unit.info().economicStatusDescription().setValue("Current economic status is '" + economicStatus + "'");
 
         unit.info().floor().setValue(floor);
         unit.info().number().setValue(suiteNumber);
@@ -558,11 +560,14 @@ public class BuildingsGenerator {
     }
 
     public static AptUnitItem createUnitDetailItem(AptUnitItem.Type type) {
+
+        AptUnitItem preloadedAptUnitItem = CommonsGenerator.randomAptUnitItem();
+
         AptUnitItem item = EntityFactory.create(AptUnitItem.class);
 
-        item.type().setValue(type);
-        item.description().setValue("UnitItem description here...");
-        item.conditionNotes().setValue(CommonsGenerator.lipsum());
+        item.type().setValue(preloadedAptUnitItem.type().getValue());
+        item.description().setValue(preloadedAptUnitItem.description().getValue());
+        item.conditionNotes().setValue(preloadedAptUnitItem.conditionNotes().getValue());
 
         item.flooringType().setValue(RandomUtil.random(AptUnitItem.FlooringType.values()));
         item.flooringInstallDate().setValue(RandomUtil.randomLogicalDate(1911, 2011));
