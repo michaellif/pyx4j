@@ -29,9 +29,9 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.widgets.client.dialog.Dialog;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
+import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.selector.ItemHolderFactory;
 import com.pyx4j.widgets.client.selector.SelectorListBox;
 import com.pyx4j.widgets.client.selector.SelectorListBoxValuePanel;
@@ -61,11 +61,36 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
         setAction(new Command() {
             @Override
             public void execute() {
-                Dialog dialog = new FilterItemAddDialog(FilterPanel.this, FilterPanel.this.dataTablePanel);
+                final FilterItemAddDialog dialog = new FilterItemAddDialog(FilterPanel.this);
+
+                dialog.setDialogOptions(new OkCancelOption() {
+
+                    @Override
+                    public boolean onClickOk() {
+                        List<FilterItem> items = new ArrayList<>(getValue());
+                        for (ColumnDescriptor columnDescriptor : dialog.getSelectedItems()) {
+                            FilterItem item = new FilterItem(columnDescriptor);
+                            if (!items.contains(item)) {
+                                items.add(item);
+                            }
+                        }
+                        FilterPanel.this.setValue(items);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onClickCancel() {
+                        return true;
+                    }
+                });
                 dialog.show();
             }
         });
 
+    }
+
+    public List<ColumnDescriptor> getColumnDescriptors() {
+        return dataTablePanel.getDataTable().getColumnDescriptors();
     }
 
     public void onColimnDescriptorsChanged() {

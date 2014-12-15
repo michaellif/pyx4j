@@ -15,53 +15,39 @@ package com.pyx4j.forms.client.ui.datatable.filter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
-import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.widgets.client.CheckGroup;
+import com.pyx4j.widgets.client.OptionGroup.Layout;
 import com.pyx4j.widgets.client.dialog.Dialog;
-import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
-public class FilterItemAddDialog extends Dialog implements OkCancelOption {
+public class FilterItemAddDialog extends Dialog {
 
-    private final SelectFilterItemDialogForm selectForm;
+    private final CheckGroup<ColumnDescriptor> checkGroup;
 
-    private final Collection<FilterItem> alreadySelected;
-
-    private final FilterPanel parent;
-
-    public FilterItemAddDialog(FilterPanel parent, DataTablePanel<?> dataTablePanel) {
+    public FilterItemAddDialog(FilterPanel parent) {
         super("Select Filter Items");
-        this.parent = parent;
-        alreadySelected = parent.getValue() != null ? parent.getValue() : new ArrayList<FilterItem>();
-        selectForm = new SelectFilterItemDialogForm(alreadySelected, dataTablePanel);
-        setDialogOptions(this);
-        setDialogPixelWidth(1000);
-        setBody(selectForm);
-    }
 
-    @Override
-    public boolean onClickCancel() {
-        this.hide(true);
-        return true;
-    }
+        checkGroup = new CheckGroup<>(Layout.VERTICAL);
 
-    @Override
-    public boolean onClickOk() {
-        setSelectedItems(selectForm.getSelectedItems());
-        this.hide(true);
-        return true;
-    }
+        checkGroup.setHeight("400px");
+        checkGroup.setWidth("100%");
 
-    private void setSelectedItems(Collection<FilterItem> eps) {
-        if (alreadySelected != null) {
-            alreadySelected.clear();
+        checkGroup.setOptions(parent.getColumnDescriptors());
+
+        List<ColumnDescriptor> descriptors = new ArrayList<>();
+        for (FilterItem item : parent.getValue()) {
+            descriptors.add(item.getColumnDescriptor());
         }
-        if (eps != null && eps.size() > 0) {
-            alreadySelected.addAll(eps);
-        }
-        updateSelector(parent, alreadySelected);
+        checkGroup.setValue(descriptors);
+
+        setDialogPixelWidth(500);
+        setBody(checkGroup);
     }
 
-    private void updateSelector(FilterPanel parent, Collection<FilterItem> value) {
-        parent.setValue(value);
+    public Collection<ColumnDescriptor> getSelectedItems() {
+        return checkGroup.getValue();
     }
+
 }

@@ -52,7 +52,7 @@ public class WidgetsTheme extends Theme {
 
         ImageGallery,
 
-        RadioGroup, RadioGroupItem,
+        OptionGroup, OptionGroupItem,
 
         GlassPanel, GlassPanelLabel,
 
@@ -76,7 +76,7 @@ public class WidgetsTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        watermark, hover, focused, readonly, disabled, active, semitransparent, singleLine, selected, playing, paused, left, right, editable, editing
+        watermark, hover, focused, readonly, disabled, active, semitransparent, singleLine, selected, playing, paused, left, right, editable, editing, horizontal
     }
 
     public WidgetsTheme() {
@@ -384,28 +384,38 @@ public class WidgetsTheme extends Theme {
     }
 
     protected void initRadioGroupStyle() {
-        Style style = new Style(".", StyleName.RadioGroup);
+        Style style = new Style(".", StyleName.OptionGroup);
+        style.addProperty("overflow", "auto");
         addStyle(style);
 
-        style = new Style(".", StyleName.RadioGroupItem);
+        style = new Style(".", StyleName.OptionGroupItem);
         style.addProperty("white-space", "nowrap");
         style.addProperty("line-height", "1.5em");
         style.addProperty("padding", "0 10px");
+        style.addProperty("display", "block");
         addStyle(style);
 
-        style = new Style(".", StyleName.RadioGroupItem, " input");
+        style = new Style(".", StyleName.OptionGroupItem, " input");
         style.addProperty("margin", "0");
         addStyle(style);
 
-        style = new Style(".", StyleName.RadioGroupItem, " label");
+        style = new Style(".", StyleName.OptionGroupItem, " label");
         style.addProperty("padding-left", "5px");
         addStyle(style);
 
-        style = new Style(".", StyleName.RadioGroupItem, "-", WidgetsTheme.StyleDependent.active);
+        style = new Style(".", StyleName.OptionGroupItem, "-", WidgetsTheme.StyleDependent.active);
         addStyle(style);
 
-        style = new Style(".", StyleName.RadioGroupItem, "-", WidgetsTheme.StyleDependent.disabled);
+        style = new Style(".", StyleName.OptionGroupItem, "-", WidgetsTheme.StyleDependent.disabled);
         style.addProperty("color", ThemeColor.foreground, 0.3);
+        addStyle(style);
+
+        style = new Style(".", StyleName.OptionGroup, "-", WidgetsTheme.StyleDependent.horizontal);
+        style.addProperty("overflow", "hidden");
+        addStyle(style);
+
+        style = new Style(".", StyleName.OptionGroup, "-", WidgetsTheme.StyleDependent.horizontal, " .", StyleName.OptionGroupItem);
+        style.addProperty("display", "inline-block");
         addStyle(style);
 
     }

@@ -52,7 +52,7 @@ import com.pyx4j.tester.client.domain.test.EntityI;
 import com.pyx4j.tester.client.domain.test.EntityI.Enum1;
 import com.pyx4j.tester.client.domain.test.EntityV;
 import com.pyx4j.widgets.client.Anchor;
-import com.pyx4j.widgets.client.RadioGroup.Layout;
+import com.pyx4j.widgets.client.OptionGroup.Layout;
 
 public class EntityIFormWithoutLists extends CForm<EntityI> {
 

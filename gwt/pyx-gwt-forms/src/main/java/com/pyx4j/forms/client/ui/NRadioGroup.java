@@ -90,10 +90,4 @@ public class NRadioGroup<E> extends NFocusField<E, RadioGroup<E>, CRadioGroup<E>
         }
     }
 
-    public void setOptionEnabled(E optionValue, boolean enabled) {
-        if (getEditor() != null) {
-            getEditor().setOptionEnabled(optionValue, enabled);
-        }
-    }
-
 }
