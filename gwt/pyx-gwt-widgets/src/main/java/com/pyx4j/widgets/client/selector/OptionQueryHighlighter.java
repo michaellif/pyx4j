@@ -27,28 +27,34 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
+import com.google.gwt.xml.client.impl.DOMParseException;
 
 public class OptionQueryHighlighter {
 
     public static SafeHtml highlight(SafeHtml html, String query) {
 
-        Document parser = XMLParser.parse(html.asString());
-        Element root = parser.getDocumentElement();
-        NodeList nodes = root.getChildNodes();
-        for (int i = 0; i < nodes.getLength(); i++) {
-            recursiveGetString(nodes.item(i), query);
+        Document parser;
+        try {
+            parser = XMLParser.parse(html.asString());
+            Element root = parser.getDocumentElement();
+            NodeList nodes = root.getChildNodes();
+            for (int i = 0; i < nodes.getLength(); i++) {
+                recursiveHighlightQuery(nodes.item(i), query);
+            }
+            return new SafeHtmlBuilder().appendHtmlConstant((root.getOwnerDocument().toString())).toSafeHtml();
+        } catch (DOMParseException ex) {
+            return new SafeHtmlBuilder().appendHtmlConstant(highlightQueryInString(html.asString(), query)).toSafeHtml();
         }
 
-        return new SafeHtmlBuilder().appendHtmlConstant((root.getOwnerDocument().toString())).toSafeHtml();
     }
 
-    private static void recursiveGetString(Node node, String query) {
+    private static void recursiveHighlightQuery(Node node, String query) {
         if (node.hasChildNodes()) {
             NodeList children = node.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
                 Node currentChild = children.item(i);
                 i = i + 2; // highlighting increments count of children
-                recursiveGetString(currentChild, query);
+                recursiveHighlightQuery(currentChild, query);
             }
         } else if (node.getNodeValue() != null) {
             highlightQuery(node, query);
@@ -76,4 +82,16 @@ public class OptionQueryHighlighter {
         }
     }
 
+    private static String highlightQueryInString(String inputText, String query) {
+        StringBuilder ret = new StringBuilder();
+        String text = inputText.toLowerCase();
+        if (text.contains(query.toLowerCase())) {
+            int start = text.indexOf(query.toLowerCase());
+            int end = start + query.length();
+            ret.append(inputText.substring(0, start)).append("<b>").append(inputText.substring(start, end)).append("</b>")
+                    .append(inputText.subSequence(end, inputText.length()));
+        }
+        return ret.toString();
+
+    }
 }
