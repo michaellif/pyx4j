@@ -22,7 +22,6 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 import com.google.gwt.event.shared.HandlerRegistration;

@@ -24,6 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -52,18 +53,18 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
         VERTICAL, HORISONTAL;
     }
 
-    private static int uniqueGroupId = 0;
-
     private boolean enabled = true;
 
     private boolean editable = true;
+
+    private String uniqueId;
 
     private static class OptionRadioButton extends RadioButton {
 
         boolean optionEnabled;
 
-        public OptionRadioButton(String name, SafeHtml label) {
-            super(name, label);
+        public OptionRadioButton(String groupName, SafeHtml label) {
+            super(groupName, label);
             optionEnabled = true;
         }
 
@@ -75,18 +76,20 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
 
     private final Panel panel;
 
-    private final String groupName;
-
     public RadioGroup(Layout layout) {
+        this(layout, false);
+    }
+
+    public RadioGroup(Layout layout, boolean multipleSelection) {
         if (layout == Layout.HORISONTAL) {
             panel = new HorizontalPanel();
         } else {
             panel = new VerticalPanel();
         }
 
-        this.setWidget(panel);
+        uniqueId = Document.get().createUniqueId();
 
-        groupName = "rb" + (uniqueGroupId++);
+        this.setWidget(panel);
 
         focusHandlerManager = new GroupFocusHandler(this);
 
@@ -98,7 +101,7 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
         buttons.clear();
 
         for (final E option : options) {
-            OptionRadioButton button = new OptionRadioButton(groupName, format(option));
+            OptionRadioButton button = new OptionRadioButton(uniqueId, format(option));
             button.setStyleName(WidgetsTheme.StyleName.RadioGroupItem.name());
             buttons.put(option, button);
             button.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
