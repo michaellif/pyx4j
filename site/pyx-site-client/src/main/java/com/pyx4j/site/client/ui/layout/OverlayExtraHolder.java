@@ -40,7 +40,7 @@ public class OverlayExtraHolder extends AbstractOverlayHolder {
     public OverlayExtraHolder(ResponsiveLayoutPanel parent, String extra1Caption, String extra2Caption, String extra4Caption, AbstractDevConsole devConsole) {
         this.parent = parent;
         if (ApplicationMode.isDevelopment()) {
-            addTab(devConsole, "Dev.");
+            addTab(devConsole, "Dev."); //TODO
         }
 
         overlayExtra1Holder = new LayoutPanel();
