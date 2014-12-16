@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
-import com.pyx4j.essentials.server.report.ReportServiceImpl;
+import com.pyx4j.essentials.server.docs.sheet.ReportServiceImpl;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 
 import com.propertyvista.config.ThreadPoolNames;

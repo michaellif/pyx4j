@@ -40,8 +40,8 @@ import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
-import com.pyx4j.essentials.server.report.EntityReportFormatter;
-import com.pyx4j.essentials.server.report.ReportTableCSVFormatter;
+import com.pyx4j.essentials.server.docs.sheet.EntityReportFormatter;
+import com.pyx4j.essentials.server.docs.sheet.ReportTableCSVFormatter;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;

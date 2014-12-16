@@ -27,7 +27,7 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.utils.EntityFormatUtils;
-import com.pyx4j.essentials.server.report.ReportTableXLSXFormatter;
+import com.pyx4j.essentials.server.docs.sheet.ReportTableXLSXFormatter;
 import com.pyx4j.essentials.server.services.reports.ReportExporter.ExportedReport;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatusHolder;

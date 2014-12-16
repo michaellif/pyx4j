@@ -16,7 +16,7 @@ package com.propertyvista.crm.server.services.reports.generators;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.pyx4j.essentials.server.report.ReportTableXLSXFormatter;
+import com.pyx4j.essentials.server.docs.sheet.ReportTableXLSXFormatter;
 
 public abstract class ExportTotals<T, DTO> {
 

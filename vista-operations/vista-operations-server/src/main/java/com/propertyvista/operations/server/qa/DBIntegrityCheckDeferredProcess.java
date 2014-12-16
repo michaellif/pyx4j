@@ -39,7 +39,7 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.server.impl.EntityClassFinder;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
-import com.pyx4j.essentials.server.report.SearchReportDeferredProcess;
+import com.pyx4j.essentials.server.docs.sheet.SearchReportDeferredProcess;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.VistaNamespace;

@@ -32,8 +32,8 @@ import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
-import com.pyx4j.essentials.server.report.ReportTableCSVFormatter;
-import com.pyx4j.essentials.server.report.ReportTableFormatter;
+import com.pyx4j.essentials.server.docs.sheet.ReportTableCSVFormatter;
+import com.pyx4j.essentials.server.docs.sheet.ReportTableFormatter;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.tenant.insurance.tenantsure.reports.InsuranceStatusReport;

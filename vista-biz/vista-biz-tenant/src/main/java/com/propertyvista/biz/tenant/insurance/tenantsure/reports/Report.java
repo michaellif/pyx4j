@@ -15,7 +15,7 @@ package com.propertyvista.biz.tenant.insurance.tenantsure.reports;
 
 import java.util.Date;
 
-import com.pyx4j.essentials.server.report.ReportTableFormatter;
+import com.pyx4j.essentials.server.docs.sheet.ReportTableFormatter;
 
 import com.propertyvista.biz.ExecutionMonitor;
 

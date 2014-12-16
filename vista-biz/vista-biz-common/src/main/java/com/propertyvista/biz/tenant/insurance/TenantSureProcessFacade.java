@@ -16,7 +16,7 @@ package com.propertyvista.biz.tenant.insurance;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.essentials.server.report.ReportTableFormatter;
+import com.pyx4j.essentials.server.docs.sheet.ReportTableFormatter;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.operations.domain.tenantsure.TenantSureHQUpdateFile;

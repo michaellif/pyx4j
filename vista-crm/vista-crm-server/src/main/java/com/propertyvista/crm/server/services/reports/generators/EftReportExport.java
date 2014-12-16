@@ -14,8 +14,8 @@
 package com.propertyvista.crm.server.services.reports.generators;
 
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.essentials.server.report.EntityReportFormatter;
-import com.pyx4j.essentials.server.report.ReportTableXLSXFormatter;
+import com.pyx4j.essentials.server.docs.sheet.EntityReportFormatter;
+import com.pyx4j.essentials.server.docs.sheet.ReportTableXLSXFormatter;
 import com.pyx4j.essentials.server.services.reports.ReportExporter.ExportedReport;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatusHolder;

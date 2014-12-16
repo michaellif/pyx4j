@@ -13,9 +13,9 @@
  */
 package com.propertyvista.interfaces.importer;
 
+import com.pyx4j.essentials.server.docs.sheet.ReportTableFormatter;
+import com.pyx4j.essentials.server.docs.sheet.ReportTableXLSXFormatter;
 import com.pyx4j.essentials.server.download.Downloadable;
-import com.pyx4j.essentials.server.report.ReportTableFormatter;
-import com.pyx4j.essentials.server.report.ReportTableXLSXFormatter;
 
 import com.propertyvista.interfaces.importer.model.ImportInformation;
 

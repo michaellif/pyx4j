@@ -14,7 +14,7 @@
 package com.propertyvista.server.jobs.insurance;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.essentials.server.report.ReportTableFormatter;
+import com.pyx4j.essentials.server.docs.sheet.ReportTableFormatter;
 
 import com.propertyvista.biz.tenant.insurance.TenantSureProcessFacade;
 import com.propertyvista.domain.settings.PmcVistaFeatures;

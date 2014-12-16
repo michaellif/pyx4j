@@ -27,9 +27,9 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
-import com.pyx4j.essentials.server.report.EntityReportFormatter;
-import com.pyx4j.essentials.server.report.ReportTableFormatter;
-import com.pyx4j.essentials.server.report.ReportTableXLSXFormatter;
+import com.pyx4j.essentials.server.docs.sheet.EntityReportFormatter;
+import com.pyx4j.essentials.server.docs.sheet.ReportTableFormatter;
+import com.pyx4j.essentials.server.docs.sheet.ReportTableXLSXFormatter;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.interfaces.importer.model.PadFileModel;

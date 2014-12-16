@@ -18,10 +18,10 @@ import java.util.List;
 import org.apache.commons.io.FilenameUtils;
 
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.essentials.server.docs.sheet.EntityReportFormatter;
+import com.pyx4j.essentials.server.docs.sheet.ReportTableFormatter;
+import com.pyx4j.essentials.server.docs.sheet.ReportTableXLSXFormatter;
 import com.pyx4j.essentials.server.download.Downloadable;
-import com.pyx4j.essentials.server.report.EntityReportFormatter;
-import com.pyx4j.essentials.server.report.ReportTableFormatter;
-import com.pyx4j.essentials.server.report.ReportTableXLSXFormatter;
 import com.pyx4j.gwt.shared.DownloadFormat;
 
 import com.propertyvista.interfaces.importer.model.MerchantAccountFileModel;

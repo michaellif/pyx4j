@@ -20,7 +20,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.IndexedColors;
 
-import com.pyx4j.essentials.server.report.ReportTableXLSXFormatter;
+import com.pyx4j.essentials.server.docs.sheet.ReportTableXLSXFormatter;
 import com.pyx4j.i18n.shared.I18n;
 
 public class EftReportExportBuildingTotals extends ExportTotals<BigDecimal, EftReportExportModel> {

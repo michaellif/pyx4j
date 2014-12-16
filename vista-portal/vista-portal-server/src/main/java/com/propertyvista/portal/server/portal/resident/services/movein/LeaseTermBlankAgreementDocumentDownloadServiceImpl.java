@@ -19,7 +19,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
-import com.pyx4j.essentials.server.report.ReportServiceImpl;
+import com.pyx4j.essentials.server.docs.sheet.ReportServiceImpl;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.security.shared.SecurityController;
 

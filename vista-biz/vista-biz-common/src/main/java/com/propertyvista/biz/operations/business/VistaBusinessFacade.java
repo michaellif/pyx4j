@@ -13,7 +13,7 @@
  */
 package com.propertyvista.biz.operations.business;
 
-import com.pyx4j.essentials.server.report.ReportTableFormatter;
+import com.pyx4j.essentials.server.docs.sheet.ReportTableFormatter;
 
 import com.propertyvista.biz.ExecutionMonitor;
 

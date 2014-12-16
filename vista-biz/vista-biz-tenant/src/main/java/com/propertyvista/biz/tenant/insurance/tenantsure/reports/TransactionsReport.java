@@ -27,8 +27,8 @@ import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.UnitOfWork;
-import com.pyx4j.essentials.server.report.EntityReportFormatter;
-import com.pyx4j.essentials.server.report.ReportTableFormatter;
+import com.pyx4j.essentials.server.docs.sheet.EntityReportFormatter;
+import com.pyx4j.essentials.server.docs.sheet.ReportTableFormatter;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
