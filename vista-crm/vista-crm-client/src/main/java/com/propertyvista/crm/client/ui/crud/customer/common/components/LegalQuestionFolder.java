@@ -21,6 +21,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.domain.tenant.CustomerScreeningLegalQuestion;
 import com.propertyvista.misc.VistaTODO;
 
@@ -28,6 +29,13 @@ public class LegalQuestionFolder extends VistaBoxFolder<CustomerScreeningLegalQu
 
     public LegalQuestionFolder() {
         super(CustomerScreeningLegalQuestion.class, false);
+    }
+
+    @Override
+    public VistaBoxFolderItemDecorator<CustomerScreeningLegalQuestion> createItemDecorator() {
+        VistaBoxFolderItemDecorator<CustomerScreeningLegalQuestion> decor = super.createItemDecorator();
+//        decor.setExpended(isEditable());
+        return decor;
     }
 
     @Override
