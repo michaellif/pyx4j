@@ -70,7 +70,7 @@ public class LegalQuestionsPolicyPreloader extends AbstractPolicyPreloader<Legal
 
             item = policy.questions().$();
             item.locale().setValue(eng);
-            item.question().setValue("Have you ever filed for bankruptcy protection");
+            item.question().setValue("Have you ever filed for bankruptcy protection?");
             policy.questions().add(item);
 
         } else {

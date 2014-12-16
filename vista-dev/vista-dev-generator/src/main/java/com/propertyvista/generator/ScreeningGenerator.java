@@ -167,7 +167,7 @@ public class ScreeningGenerator {
         legalQuestion.add(item);
 
         item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
-        item.question().setValue("Have you ever filed for bankruptcy protection");
+        item.question().setValue("Have you ever filed for bankruptcy protection?");
         item.answer().setValue(RandomUtil.randomBoolean());
         legalQuestion.add(item);
 
