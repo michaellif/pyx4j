@@ -118,6 +118,10 @@ public class ColumnDescriptor {
         builder.formatter = formatter;
     }
 
+    public IObject<?> getMemeber() {
+        return builder.member;
+    }
+
     protected Builder getBuilder() {
         return builder;
     }
@@ -244,11 +248,6 @@ public class ColumnDescriptor {
 
         public Builder formatter(IFormatter<IEntity, SafeHtml> formatter) {
             this.formatter = formatter;
-            return this;
-        }
-
-        public Builder title(IObject<?> member) {
-            title(member.getMeta().getCaption());
             return this;
         }
 

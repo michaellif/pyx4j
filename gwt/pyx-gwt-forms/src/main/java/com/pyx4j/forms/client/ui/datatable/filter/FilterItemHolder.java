@@ -21,8 +21,11 @@
 package com.pyx4j.forms.client.ui.datatable.filter;
 
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IFormatter;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.widgets.client.selector.EditableItemHolder;
 import com.pyx4j.widgets.client.selector.SelectorListBoxValuePanel;
 
@@ -30,14 +33,19 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
 
     public FilterItemHolder(FilterItem item, IFormatter<FilterItem, String> valueFormatter, SelectorListBoxValuePanel<FilterItem> valuePanel) {
         super(item, valueFormatter, item.isRemovable(), valuePanel);
-        HTML editor = new HTML("TESTTEST TESTTEST TESTTEST TESTTEST");
-        editor.setWidth("200px");
+        ColumnDescriptor columnDescriptor = item.getColumnDescriptor();
+        IsWidget editor = createEditor(columnDescriptor.getMemeber());
+        editor.asWidget().setWidth("200px");
         setEditor(editor);
     }
 
     @Override
     protected void onEditingComplete() {
         System.out.println("+++++++++++++++++333");
+    }
+
+    private IsWidget createEditor(IObject<?> member) {
+        return new HTML("TESTTEST TESTTEST TESTTEST TESTTEST");
     }
 
 }
