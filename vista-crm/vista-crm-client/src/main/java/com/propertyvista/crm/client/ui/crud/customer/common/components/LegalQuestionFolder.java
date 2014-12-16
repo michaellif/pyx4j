@@ -22,6 +22,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.tenant.CustomerScreeningLegalQuestion;
+import com.propertyvista.misc.VistaTODO;
 
 public class LegalQuestionFolder extends VistaBoxFolder<CustomerScreeningLegalQuestion> {
 
@@ -40,6 +41,11 @@ public class LegalQuestionFolder extends VistaBoxFolder<CustomerScreeningLegalQu
 
                 formPanel.append(Location.Left, proto().answer()).decorate();
                 formPanel.append(Location.Right, proto().notes()).decorate().labelWidth(60);
+
+                // waiting for 'soft mode' validation!
+                if (VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
+                    get(proto().answer()).setMandatory(false);
+                }
 
                 return formPanel;
             }
