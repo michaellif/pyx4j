@@ -77,7 +77,7 @@ public class BuildingLister extends SiteDataTablePanel<BuildingDTO> {
                 new ColumnDescriptor.Builder(proto().defaultProductCatalog(), false).sortable(false).build(), //
 
                 new ColumnDescriptor.Builder(proto().merchantAccountPresent(), false).sortable(false).build(), //
-                new ColumnDescriptor.Builder(proto().financial().currency().name(), false).build(), //
+                new ColumnDescriptor.Builder(proto().financial().currency(), false).build(), //
 
                 new ColumnDescriptor.Builder(proto().marketing().name(), false).title(i18n.tr("Marketing Name")).build());
 

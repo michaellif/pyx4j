@@ -82,7 +82,7 @@ public abstract class BuildingSelectionDialog extends EntitySelectorTableDialog<
                 new ColumnDescriptor.Builder(proto().financial().marketPrice(), false).build(),
                 new ColumnDescriptor.Builder(proto().financial().lastAppraisalDate(), false).build(),
                 new ColumnDescriptor.Builder(proto().financial().lastAppraisalValue(), false).build(),
-                new ColumnDescriptor.Builder(proto().financial().currency().name(), false).build(),
+                new ColumnDescriptor.Builder(proto().financial().currency(), false).build(),
                 new ColumnDescriptor.Builder(proto().marketing().name(), false).title(i18n.tr("Marketing Name")).build()
         ); //@formatter:on
     }

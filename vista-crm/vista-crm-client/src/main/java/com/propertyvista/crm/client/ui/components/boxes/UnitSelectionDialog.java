@@ -91,7 +91,7 @@ public abstract class UnitSelectionDialog extends EntitySelectorTableDialog<AptU
                 new ColumnDescriptor.Builder(proto().building().financial().marketPrice(), false).build(),
                 new ColumnDescriptor.Builder(proto().building().financial().lastAppraisalDate(), false).build(),
                 new ColumnDescriptor.Builder(proto().building().financial().lastAppraisalValue(), false).build(),
-                new ColumnDescriptor.Builder(proto().building().financial().currency().name(), false).build(),
+                new ColumnDescriptor.Builder(proto().building().financial().currency(), false).build(),
                 new ColumnDescriptor.Builder(proto().building().marketing().name(), false).title(i18n.tr("Building Marketing Name")).build()
                 ); //@formatter:on
     }
