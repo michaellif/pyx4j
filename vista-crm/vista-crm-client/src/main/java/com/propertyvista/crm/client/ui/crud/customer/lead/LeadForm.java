@@ -78,6 +78,9 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
 
 
+
+
+
             @Override
             public BasicValidationError isValid() {
                 Boolean hasContact = false;
@@ -224,8 +227,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
                     new ColumnDescriptor.Builder(proto().building().financial().marketPrice(), false).build(),
                     new ColumnDescriptor.Builder(proto().building().financial().lastAppraisalDate(), false).build(),
                     new ColumnDescriptor.Builder(proto().building().financial().lastAppraisalValue(), false).build(),
-                    new ColumnDescriptor.Builder(proto().building().financial().currency().name(), false).title(proto().building().financial().currency())
-                            .build(),
+                    new ColumnDescriptor.Builder(proto().building().financial().currency().name(), false).build(),
                     new ColumnDescriptor.Builder(proto().building().marketing().name(), false).title(i18n.tr("Building Marketing Name")).build(),
 
                     // floorplan columns
