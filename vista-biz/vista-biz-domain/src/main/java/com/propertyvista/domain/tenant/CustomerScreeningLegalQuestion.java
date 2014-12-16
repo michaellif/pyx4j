@@ -48,6 +48,7 @@ public interface CustomerScreeningLegalQuestion extends IEntity {
     @Editor(type = EditorType.label)
     IPrimitive<String> question();
 
+    @NotNull
     @ToString(index = 1)
     @Editor(type = EditorType.radiogroup)
     IPrimitive<Boolean> answer();
