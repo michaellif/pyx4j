@@ -522,7 +522,7 @@
             <id>deploy-target-env-33</id>
             <properties>
                 <deployContext>vista33</deployContext>
-                <vista-tomcat-url>http://qa.devpv.com</vista-tomcat-url>
+                <vista-tomcat-url>https://qa.devpv.com</vista-tomcat-url>
                 <vista-app-ping-url>http://env-33.devpv.com</vista-app-ping-url>
             </properties>
         </profile>
@@ -531,7 +531,7 @@
             <id>deploy-target-env-55</id>
             <properties>
                 <deployContext>vista55</deployContext>
-                <vista-tomcat-url>http://qa.devpv.com</vista-tomcat-url>
+                <vista-tomcat-url>https://qa.devpv.com</vista-tomcat-url>
                 <vista-app-ping-url>http://env-55.devpv.com</vista-app-ping-url>
             </properties>
         </profile>
@@ -540,7 +540,7 @@
             <id>deploy-target-env-77</id>
             <properties>
                 <deployContext>vista77</deployContext>
-                <vista-tomcat-url>http://qa.devpv.com</vista-tomcat-url>
+                <vista-tomcat-url>https://qa.devpv.com</vista-tomcat-url>
                 <vista-app-ping-url>http://env-77.devpv.com/</vista-app-ping-url>
             </properties>
         </profile>
@@ -549,7 +549,7 @@
             <id>deploy-target-env-99</id>
             <properties>
                 <deployContext>vista99</deployContext>
-                <vista-tomcat-url>http://qa2.devpv.com</vista-tomcat-url>
+                <vista-tomcat-url>https://qa2.devpv.com</vista-tomcat-url>
                 <vista-app-ping-url>http://env-99.devpv.com/</vista-app-ping-url>
             </properties>
         </profile>
