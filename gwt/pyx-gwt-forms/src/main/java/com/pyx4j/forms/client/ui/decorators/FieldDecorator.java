@@ -122,7 +122,6 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
         this.component = component;
 
         label = new Label();
-        label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         label.setStyleName(WidgetDecoratorLabel.name());
 
         infoImageHolder = new SimplePanel();
