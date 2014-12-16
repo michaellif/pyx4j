@@ -13,7 +13,6 @@
  */
 package com.propertyvista.integration.portal.prospect;
 
-import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.commons.Key;
@@ -44,7 +43,6 @@ public class ProspectSelfRegistrationFlowInternalTest extends ProspectInternalTe
         getBuilding();
     }
 
-    @Ignore
     public void testRegistration() {
         TestLifecycle.endRequest();
         // Logout from CRM
@@ -68,7 +66,6 @@ public class ProspectSelfRegistrationFlowInternalTest extends ProspectInternalTe
 
         // Now we have working session
         TestServiceFactory.create(ApplicationWizardService.class).init(new AsyncCallbackAssertion<OnlineApplicationDTO>() {
-
             @Override
             public void onSuccess(OnlineApplicationDTO result) {
                 applicationDTOInitial.set(result);

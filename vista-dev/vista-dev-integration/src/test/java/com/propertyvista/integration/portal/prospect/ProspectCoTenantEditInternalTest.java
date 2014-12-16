@@ -13,7 +13,6 @@
  */
 package com.propertyvista.integration.portal.prospect;
 
-import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.commons.Key;
@@ -43,7 +42,6 @@ public class ProspectCoTenantEditInternalTest extends ProspectInternalTestBase {
         TestLifecycle.testSession(null);
     }
 
-    @Ignore
     public void testCoTenantEdit() {
 
         final OnlineApplicationDTO applicationDTO = createApplication();
@@ -91,7 +89,6 @@ public class ProspectCoTenantEditInternalTest extends ProspectInternalTestBase {
 
         // Test Duplicate email CoAppliant
         if (false) {
-
             CoapplicantDTO coapplicant2 = applicationDTO.coapplicants().$();
             coapplicant2.name().firstName().setValue("Coop2F " + DataGenerator.randomFirstName());
             coapplicant2.name().lastName().setValue("Coop2L " + DataGenerator.randomLastName());

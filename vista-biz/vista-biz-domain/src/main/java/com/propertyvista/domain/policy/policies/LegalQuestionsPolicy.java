@@ -19,12 +19,12 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
-import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.policies.domain.LegalQuestionsPolicyItem;
+import com.propertyvista.domain.property.asset.building.Building;
 
 @DiscriminatorValue("LegalQuestionsPolicy")
-@LowestApplicableNode(value = OrganizationPoliciesNode.class)
+@LowestApplicableNode(value = Building.class)
 public interface LegalQuestionsPolicy extends Policy {
 
     IPrimitive<Boolean> enabled();
