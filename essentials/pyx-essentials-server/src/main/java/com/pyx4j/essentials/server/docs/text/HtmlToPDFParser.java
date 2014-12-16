@@ -18,7 +18,7 @@
  * @author David
  * @version $Id$
  */
-package com.pyx4j.essentials.server.report;
+package com.pyx4j.essentials.server.docs.text;
 
 import java.io.IOException;
 import java.io.InputStream;

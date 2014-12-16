@@ -25,6 +25,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
 import org.junit.Assert;
+
+import com.pyx4j.essentials.server.docs.sheet.ReportsProcessor;
+
 import junit.framework.TestCase;
 
 public class CreateReportTest extends TestCase {

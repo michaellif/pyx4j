@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,39 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2010-05-10
+ * Created on Dec 11, 2014
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.server.report;
+package com.pyx4j.entity.rpc;
 
 import java.io.Serializable;
 
-public interface ReportTableFormatter extends Serializable {
+@SuppressWarnings("serial")
+public class DocCreationRequest implements Serializable {
 
-    /**
-     * Start adding cells to new row.
-     */
-    public void header(String text);
-
-    /**
-     * Adding data cells.
-     */
-    public void cell(Object value);
-
-    /**
-     * Start adding cells to new row.
-     */
-    public void newRow();
-
-    public int getRowCount();
-
-    /**
-     * Write binary data to the output
-     */
-    public byte[] getBinaryData();
-
-    public int getBinaryDataSize();
-
-    public String getContentType();
 }

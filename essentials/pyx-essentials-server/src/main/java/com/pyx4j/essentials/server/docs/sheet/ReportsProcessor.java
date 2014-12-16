@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.server.report;
+package com.pyx4j.essentials.server.docs.sheet;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -39,6 +39,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.essentials.server.docs.text.HtmlToPDFParser;
 import com.pyx4j.gwt.server.IOUtils;
 
 public class ReportsProcessor {

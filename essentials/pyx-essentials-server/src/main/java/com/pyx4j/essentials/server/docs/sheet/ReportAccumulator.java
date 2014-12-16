@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.server.report;
+package com.pyx4j.essentials.server.docs.sheet;
 
 import java.io.Serializable;
 import java.util.HashMap;

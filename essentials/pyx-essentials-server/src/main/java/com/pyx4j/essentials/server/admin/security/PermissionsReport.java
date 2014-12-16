@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.pyx4j.essentials.server.report.ReportTableFormatter;
+import com.pyx4j.essentials.server.docs.sheet.ReportTableFormatter;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.Permission;
 

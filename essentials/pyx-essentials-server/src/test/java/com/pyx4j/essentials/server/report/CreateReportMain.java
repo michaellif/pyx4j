@@ -25,6 +25,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 
+import com.pyx4j.essentials.server.docs.sheet.ReportsProcessor;
+
 /**
  * Local Executable to create report
  */
