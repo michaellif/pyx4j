@@ -29,11 +29,11 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 public class CheckGroup<E> extends OptionGroup<E> {
 
     public CheckGroup(Layout layout) {
-        super(layout, false);
+        super(layout, true);
     }
 
     public void setValue(Collection<E> value) {
-        setValue(value, false);
+        setValue(value, true);
     }
 
     public void setValue(Collection<E> value, boolean fireChangeEvent) {

@@ -237,9 +237,9 @@ public class OptionGroup<E> extends FlowPanel implements IFocusWidget, HasValueC
         public OptionGroupButton(SafeHtml label) {
             super();
             if (multipleSelection) {
-                checkBox = new RadioButton(uniqueId, label);
-            } else {
                 checkBox = new CheckBox(label);
+            } else {
+                checkBox = new RadioButton(uniqueId, label);
             }
             initWidget(checkBox);
             setStyleName(WidgetsTheme.StyleName.OptionGroupItem.name());
