@@ -27,7 +27,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
-@ToStringFormat("{0} - {1}")
+@ToStringFormat("{0}{1,choice,null#|!null# - {1,choice,0#No|1#Yes}}")
 public interface CustomerScreeningLegalQuestion extends IEntity {
 
     @Owner

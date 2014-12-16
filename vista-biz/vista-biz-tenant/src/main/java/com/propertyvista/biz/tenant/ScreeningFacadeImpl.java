@@ -290,6 +290,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         ApplicationDocumentationPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode,
                 ApplicationDocumentationPolicy.class);
 
+        screening.version().documents().clear();
         for (IdentificationDocumentType docType : policy.allowedIDs()) {
             if (Importance.activate().contains(docType.importance().getValue())) {
                 // see if we already have it.
@@ -313,6 +314,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
     private void initializeLegalQuestions(CustomerScreening screening, PolicyNode policyNode) {
         LegalQuestionsPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, LegalQuestionsPolicy.class);
 
+        screening.version().legalQuestions().clear();
         if (policy.enabled().getValue(false)) {
             for (LegalQuestionsPolicyItem item : LocalizedContent.selectAllFromList(policy.questions())) {
                 CustomerScreeningLegalQuestion question = EntityFactory.create(CustomerScreeningLegalQuestion.class);
