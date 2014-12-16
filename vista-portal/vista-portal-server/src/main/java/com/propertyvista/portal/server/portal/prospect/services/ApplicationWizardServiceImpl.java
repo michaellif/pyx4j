@@ -407,8 +407,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         //
         screening.version().set(screening.version().currentAddress(), to.applicantData().currentAddress());
         screening.version().set(screening.version().previousAddress(), to.applicantData().previousAddress());
-        screening.version().set(screening.version().legalQuestions(), to.applicantData().legalQuestions());
 
+        screening.version().legalQuestions().set(to.applicantData().legalQuestions());
         screening.version().documents().set(to.applicantData().documents());
         screening.version().incomes().set(to.applicantData().incomes());
         screening.version().assets().set(to.applicantData().assets());

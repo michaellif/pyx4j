@@ -14,9 +14,7 @@
 package com.propertyvista.portal.rpc.portal.prospect.dto;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
@@ -53,7 +51,6 @@ public interface ApplicantDTO extends IEntity {
 
     IList<EmergencyContact> emergencyContacts();
 
-    @Owned
     @Caption(name = "General Questions")
     IList<CustomerScreeningLegalQuestion> legalQuestions();
 
@@ -62,14 +59,10 @@ public interface ApplicantDTO extends IEntity {
 
     //=============== Financial =============//
 
-    @Owned
-    @Detached
     @Length(3)
     @Caption(name = "Income")
     IList<CustomerScreeningIncome> incomes();
 
-    @Owned
-    @Detached
     @Length(3)
     IList<CustomerScreeningAsset> assets();
 }
