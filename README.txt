@@ -1,6 +1,6 @@
 # @version $Revision$ ($Author$) $Date$
 
-test ========= Environment setup =========
+========= Environment setup =========
 
 1. Folow setup instruction http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Vista+Development+Environment+Setup
 
