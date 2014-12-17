@@ -53,6 +53,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         FormPanel companyNameAndPhonesFormPanel = new FormPanel(this);
 
         signatureFormPanel.append(Location.Left, proto().includeSignature()).decorate();
+        signatureFormPanel.append(Location.Left, proto().agentSelectionMethod()).decorate();
         signatureFormPanel.h1(i18n.tr("The following information will be used for signing N4 letters:"));
 
         companyNameAndPhonesFormPanel.append(Location.Left, proto().companyName()).decorate();
