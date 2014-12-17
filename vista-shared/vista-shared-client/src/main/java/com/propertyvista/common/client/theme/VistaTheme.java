@@ -374,12 +374,6 @@ public class VistaTheme extends Theme {
 
     }
 
-    protected void initBannerStyle() {
-        Style style = new Style(CSSClass.pyx4j_Banner);
-        addStyle(style);
-
-    }
-
     protected void initCellListStyle() {
         // Available Selectors
         // cellListWidget
