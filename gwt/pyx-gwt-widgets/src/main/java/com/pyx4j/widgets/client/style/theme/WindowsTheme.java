@@ -58,7 +58,6 @@ public class WindowsTheme extends Theme {
         initDatePickerStyle();
         initHyperlinkStyle();
         initPhotoalbomStyle();
-        initBannerStyle();
         initMultipleDatePicker();
     }
 
@@ -352,12 +351,6 @@ public class WindowsTheme extends Theme {
         style = new Style(CSSClass.pyx4j_Photoalbom_Caption);
         style.addProperty("color", "#333");
         style.addProperty("font-weight", "bold");
-        addStyle(style);
-
-    }
-
-    protected void initBannerStyle() {
-        Style style = new Style(CSSClass.pyx4j_Banner);
         addStyle(style);
 
     }

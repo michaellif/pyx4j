@@ -34,7 +34,6 @@ import com.pyx4j.forms.client.ui.folder.FolderTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.forms.client.ui.panels.FormPanelTheme;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
-import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.datepicker.DatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DialogTheme;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
@@ -115,7 +114,6 @@ public class TesterTheme extends Theme {
         initTreeStyle();
         initHyperlinkStyle();
         initPhotoalbomStyle();
-        initBannerStyle();
 
         initImageGalleryStyle();
     }
@@ -511,9 +509,4 @@ public class TesterTheme extends Theme {
         addStyle(style);
     }
 
-    protected void initBannerStyle() {
-        Style style = new Style(CSSClass.pyx4j_Banner);
-        addStyle(style);
-
-    }
 }
