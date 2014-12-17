@@ -9,7 +9,7 @@
  *
  * Created on Feb 12, 2011
  * @author Misha
- * @version $Id$
+ * @version $Id: PortalImages.java 20403 2014-09-24 23:33:53Z michaellif $
  */
 package com.propertyvista.portal.shared.resources;
 
@@ -212,6 +212,10 @@ public interface PortalImages extends ClientBundle, FolderImages, WidgetsImageBu
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("SignUp-Security.png")
     ImageResource signUpSecurity();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("attach.png")
+    ImageResource attachement();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("MyApplication-Icon-Time.png")
