@@ -1,6 +1,6 @@
 # @version $Revision$ ($Author$) $Date$
 
-========= Install Eclipse ==========1
+========= Install Eclipse ==========
 
 1. Get: Latest Eclipse SDK
       eclipse-standard-kepler-R-win32-x86_64.zip or eclipse-standard-kepler-R-win32.zip
