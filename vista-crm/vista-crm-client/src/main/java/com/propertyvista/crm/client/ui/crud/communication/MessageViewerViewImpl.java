@@ -9,7 +9,7 @@
  *
  * Created on Dec 22, 2011
  * @author stanp
- * @version $Id$
+ * @version $Id: MessageViewerViewImpl.java 21429 2014-11-28 15:24:08Z igors $
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
@@ -157,8 +157,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
     public void populate(MessageDTO value) {
         super.populate(value);
 
-        boolean invisible = TicketType.Maintenance.equals(value.category().ticketType().getValue())
-                || !CategoryType.Ticket.equals(value.category().categoryType().getValue()) || value.isDirect().getValue(false).booleanValue();
+        boolean invisible = !CategoryType.Ticket.equals(value.category().categoryType().getValue()) || value.isDirect().getValue(false).booleanValue();
         setActionVisible(assignOwnershipAction, !invisible);
         for (ThreadStatus status : threadStatusActions.keySet()) {
             MenuItem action = threadStatusActions.get(status);
@@ -167,7 +166,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
             }
             // only Open, Resolved;
             else {
-                setActionVisible(action, !invisible);
+                setActionVisible(action, !invisible && !TicketType.Maintenance.equals(value.category().ticketType().getValue()));
             }
         }
         setActionVisible(assignToMeAction, !invisible && !ClientContext.getUserVisit().getName().equals(value.owner().name().getValue()));

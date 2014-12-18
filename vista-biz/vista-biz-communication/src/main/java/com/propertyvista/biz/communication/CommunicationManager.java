@@ -9,7 +9,7 @@
  *
  * Created on Jun 4, 2014
  * @author smolka
- * @version $Id$
+ * @version $Id: CommunicationManager.java 21504 2014-12-04 23:49:40Z igors $
  */
 package com.propertyvista.biz.communication;
 
@@ -393,7 +393,7 @@ public class CommunicationManager {
             to.hasAttachments().setValue(hasAttachment);
 
             if (currentUser instanceof Employee) {
-                to.isDirect().setValue(!communicationFacade.isDispatchedThread(bo.thread().getPrimaryKey(), !isForList, (Employee) currentUser));
+                to.isDirect().setValue(!communicationFacade.isDispatchedThread(bo.thread().getPrimaryKey(), true, (Employee) currentUser));
             }
             evaluateHiddenProperty(bo, to);
         }

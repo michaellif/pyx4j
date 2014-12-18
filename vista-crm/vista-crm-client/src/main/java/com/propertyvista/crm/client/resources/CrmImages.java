@@ -9,7 +9,7 @@
  *
  * Created on Feb 12, 2011
  * @author Misha
- * @version $Id$
+ * @version $Id: CrmImages.java 21504 2014-12-04 23:49:40Z igors $
  */
 package com.propertyvista.crm.client.resources;
 
@@ -139,6 +139,9 @@ public interface CrmImages extends VistaImages {
 
     @Source("Marketing_hover.png")
     ImageResource marketingHover();
+
+    @Source("attach.png")
+    ImageResource attachement();
 
     @Source("Marketing_normal.png")
     ImageResource marketingNormal();

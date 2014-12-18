@@ -9,22 +9,32 @@
  *
  * Created on Apr 24, 2012
  * @author ArtyomB
- * @version $Id$
+ * @version $Id: MessageViewImpl.java 21572 2014-12-13 16:48:45Z michaellif $
  */
 package com.propertyvista.portal.shared.ui.communication;
 
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
@@ -32,6 +42,7 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
+import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 
@@ -92,16 +103,21 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
             //getDataTablePanel().getAddButton().asWidget().setStyleName(DataTableTheme.StyleName.ListerButton.name());
             // No filtering work for it
             getDataTable().setHasColumnClickSorting(false);
-
+            MessageDTO proto = EntityFactory.getEntityPrototype(MessageDTO.class);
             setColumnDescriptors( //
-                    new ColumnDescriptor.Builder(proto().isRead()).build(), //
-                    new ColumnDescriptor.Builder(proto().highImportance()).build(), //
-                    new ColumnDescriptor.Builder(proto().star()).build(), //
-                    new ColumnDescriptor.Builder(proto().hasAttachments()).build(), //
-                    new ColumnDescriptor.Builder(proto().senders()).build(), //
-                    new ColumnDescriptor.Builder(proto().subject()).build(), //
-                    new ColumnDescriptor.Builder(proto().messagesInThread()).build(), //
-                    new ColumnDescriptor.Builder(proto().date()).build());
+                    new ColumnDescriptor.Builder(proto.highImportance()).searchable(false).width("25px").formatter(//
+                            booleanField2Image(proto.highImportance().getPath(), PortalImages.INSTANCE.messageImportance(), null))//
+                            .columnTitle(i18n.tr("Importance")).build(),//
+                    new ColumnDescriptor.Builder(proto.star()).searchable(false).width("25px").formatter(//
+                            booleanField2Image(proto.star().getPath(), PortalImages.INSTANCE.fullStar(), PortalImages.INSTANCE.noStar()))//
+                            .columnTitle(i18n.tr("Star")).build(),//
+                    new ColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("25px").formatter(//
+                            booleanField2Image(proto.hasAttachments().getPath(), PortalImages.INSTANCE.attachement(), null))//
+                            .columnTitle(i18n.tr("Attachment")).build(), //
+                    new ColumnDescriptor.Builder(proto.senders()).width("200px").formatter(baseFieldViewOnIsRead(proto.senders().getPath())).build(),//
+                    new ColumnDescriptor.Builder(proto.subject()).width("100px").formatter(baseFieldViewOnIsRead(proto.subject().getPath())).build(),//
+                    new ColumnDescriptor.Builder(proto().date()).width("100px").build(), //
+                    new ColumnDescriptor.Builder(proto().messagesInThread()).width("100px").build());
 
             setDataTableModel(new DataTableModel<MessageDTO>());
 
@@ -116,6 +132,46 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
         @Override
         public List<Sort> getDefaultSorting() {
             return Arrays.asList(new Sort(proto().date(), true), new Sort(proto().isRead(), false), new Sort(proto().highImportance(), true));
+        }
+
+        private static IFormatter<IEntity, SafeHtml> booleanField2Image(final Path path, final ImageResource trueValueResource,
+                final ImageResource falseValueResource) {
+            return new IFormatter<IEntity, SafeHtml>() {
+                @Override
+                public SafeHtml format(IEntity value) {
+                    SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                    Boolean v = (Boolean) value.getMember(path).getValue();
+                    if (v != null && v.booleanValue()) {
+                        builder.appendHtmlConstant(new Image(trueValueResource).toString());
+                    } else if (falseValueResource != null) {
+                        builder.appendHtmlConstant(new Image(falseValueResource).toString());
+                    }
+
+                    return builder.toSafeHtml();
+                }
+            };
+        }
+
+        private static IFormatter<IEntity, SafeHtml> baseFieldViewOnIsRead(final Path path) {
+            return new IFormatter<IEntity, SafeHtml>() {
+                @Override
+                public SafeHtml format(IEntity value) {
+                    SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                    if (value != null) {
+                        MessageDTO v = (MessageDTO) value;
+                        Boolean isRead = v.isRead().getValue();
+                        String s = value.getMember(path).getValue().toString();
+                        if ((isRead == null || !isRead.booleanValue())) {
+                            Label messageField = new Label(s);
+                            messageField.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+                            builder.appendHtmlConstant(messageField.toString());
+                        } else {
+                            builder.appendHtmlConstant(s);
+                        }
+                    }
+                    return builder.toSafeHtml();
+                }
+            };
         }
     }
 }
