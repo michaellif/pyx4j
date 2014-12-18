@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -23,8 +23,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.CrudEntityBinder;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.DepositSlipCheckDetailsRecordDTO;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
@@ -108,9 +108,11 @@ public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<Paym
     protected void enhanceRetrieved(PaymentPostingBatch bo, MoneyInBatchDTO to, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(bo, to, retrieveTarget);
         this.enhanceListRetrieved(bo, to);
+
         List<DepositSlipCheckDetailsRecordDTO> paymentsDto = new ArrayList<>(bo.payments().size());
         for (PaymentRecord paymentRecord : bo.payments()) {
             DepositSlipCheckDetailsRecordDTO paymentDetailsDto = to.payments().$();
+
             paymentDetailsDto.id().setValue(paymentRecord.id().getValue());
             paymentDetailsDto.status().setValue(paymentRecord.paymentStatus().getValue());
             Persistence.service().retrieve(paymentRecord.billingAccount());
@@ -122,6 +124,7 @@ public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<Paym
             paymentDetailsDto.checkNumber().setValue(paymentRecord.paymentMethod().details().duplicate(CheckInfo.class).checkNo().getValue());
             paymentDetailsDto.amount().setValue(paymentRecord.amount().getValue());
             paymentDetailsDto.date().setValue(paymentRecord.targetDate().getValue());
+
             paymentsDto.add(paymentDetailsDto);
         }
         Collections.sort(paymentsDto, new Comparator<DepositSlipCheckDetailsRecordDTO>() {
@@ -131,7 +134,6 @@ public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<Paym
             }
         });
         to.payments().addAll(paymentsDto);
-
     }
 
     @Override
