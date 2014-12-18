@@ -9,7 +9,6 @@
  *
  * Created on 2012-10-16
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.admin;
 

@@ -9,7 +9,6 @@
  *
  * Created on Oct 27, 2014
  * @author arminea
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.tools.common.selectors;
 

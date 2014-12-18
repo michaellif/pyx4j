@@ -9,7 +9,6 @@
  *
  * Created on Mar 1, 2012
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.test.integration;
 

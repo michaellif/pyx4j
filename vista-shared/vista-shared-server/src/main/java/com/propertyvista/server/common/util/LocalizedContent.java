@@ -9,7 +9,6 @@
  *
  * Created on Nov 20, 2014
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.server.common.util;
 

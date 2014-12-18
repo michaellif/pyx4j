@@ -16,7 +16,6 @@
  *
  * Created on 2013-09-30
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.biz.legal;
 

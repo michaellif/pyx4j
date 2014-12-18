@@ -9,7 +9,6 @@
  *
  * Created on 2013-12-10
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.dto.tools;
 

@@ -9,7 +9,6 @@
  *
  * Created on Dec 2, 2013
  * @author smolka
- * @version $Id$
  */
 package com.propertyvista.server.jobs;
 

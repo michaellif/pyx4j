@@ -9,7 +9,6 @@
  *
  * Created on Apr 3, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.breadcrumbs;
 

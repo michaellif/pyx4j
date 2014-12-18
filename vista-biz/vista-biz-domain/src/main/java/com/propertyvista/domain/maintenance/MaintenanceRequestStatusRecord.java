@@ -9,7 +9,6 @@
  *
  * Created on Feb 5, 2014
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.domain.maintenance;
 

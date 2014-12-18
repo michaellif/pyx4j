@@ -9,7 +9,6 @@
  *
  * Created on Mar 28, 2012
  * @author yuriyl
- * @version $Id$
  */
 package com.propertyvista.server.adapters;
 

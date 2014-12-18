@@ -9,7 +9,6 @@
  *
  * Created on 2014-07-17
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.operations.client.ui.crud.outgoingmail;
 

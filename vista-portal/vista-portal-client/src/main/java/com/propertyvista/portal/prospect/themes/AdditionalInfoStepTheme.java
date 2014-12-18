@@ -9,7 +9,6 @@
  *
  * Created on 2013-01-29
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.portal.prospect.themes;
 

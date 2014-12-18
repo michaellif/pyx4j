@@ -9,7 +9,6 @@
  *
  * Created on Jan 11, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.administration.availablereport;
 

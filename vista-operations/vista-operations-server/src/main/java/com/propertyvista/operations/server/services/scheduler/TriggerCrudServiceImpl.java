@@ -9,7 +9,6 @@
  *
  * Created on May 4, 2012
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.operations.server.services.scheduler;
 

@@ -9,7 +9,6 @@
  *
  * Created on Sep 12, 2013
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.domain.marketing.ils;
 

@@ -9,7 +9,6 @@
  *
  * Created on 2014-03-31
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.domain.legal.errors;
 

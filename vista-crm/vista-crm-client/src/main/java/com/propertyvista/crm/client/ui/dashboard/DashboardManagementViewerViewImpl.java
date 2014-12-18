@@ -9,7 +9,6 @@
  *
  * Created on 2012-10-04
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.dashboard;
 

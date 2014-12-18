@@ -16,7 +16,6 @@
  *
  * Created on Sep 27, 2012
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.biz.financial.billing.internal;
 

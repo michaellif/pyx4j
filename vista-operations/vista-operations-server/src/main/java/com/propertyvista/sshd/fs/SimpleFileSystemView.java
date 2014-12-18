@@ -9,7 +9,6 @@
  *
  * Created on 2012-12-17
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.sshd.fs;
 

@@ -9,7 +9,6 @@
  *
  * Created on Apr 29, 2014
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.lease.agreement;
 

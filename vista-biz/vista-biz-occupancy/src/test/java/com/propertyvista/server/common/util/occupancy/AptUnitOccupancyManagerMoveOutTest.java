@@ -9,7 +9,6 @@
  *
  * Created on 2012-11-01
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.server.common.util.occupancy;
 

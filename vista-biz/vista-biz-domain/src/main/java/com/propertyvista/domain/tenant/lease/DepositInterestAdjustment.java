@@ -9,7 +9,6 @@
  *
  * Created on Jun 14, 2012
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.domain.tenant.lease;
 

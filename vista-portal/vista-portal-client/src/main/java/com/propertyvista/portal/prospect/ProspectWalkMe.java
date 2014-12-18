@@ -9,7 +9,6 @@
  *
  * Created on Sep 8, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.portal.prospect;
 

@@ -9,7 +9,6 @@
  *
  * Created on Oct 25, 2011
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.activity.crud.landlord;
 

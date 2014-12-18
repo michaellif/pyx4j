@@ -9,7 +9,6 @@
  *
  * Created on Nov 22, 2012
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.crm.client.visor.communityevent;
 

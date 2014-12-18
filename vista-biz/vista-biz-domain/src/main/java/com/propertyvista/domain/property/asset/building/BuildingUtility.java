@@ -9,7 +9,6 @@
  *
  * Created on 2013-04-23
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.domain.property.asset.building;
 

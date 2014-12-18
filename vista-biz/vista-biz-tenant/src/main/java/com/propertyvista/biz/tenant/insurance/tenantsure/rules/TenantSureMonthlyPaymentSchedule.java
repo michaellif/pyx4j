@@ -9,7 +9,6 @@
  *
  * Created on 2013-07-29
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.biz.tenant.insurance.tenantsure.rules;
 

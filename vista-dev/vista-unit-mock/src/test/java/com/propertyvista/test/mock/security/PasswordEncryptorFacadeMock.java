@@ -9,7 +9,6 @@
  *
  * Created on Jun 28, 2013
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.test.mock.security;
 

@@ -9,7 +9,6 @@
  *
  * Created on 2012-12-03
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.biz.preloader;
 

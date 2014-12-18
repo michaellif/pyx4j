@@ -9,7 +9,6 @@
  *
  * Created on 2013-04-26
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.portal.resident.ui.signup;
 

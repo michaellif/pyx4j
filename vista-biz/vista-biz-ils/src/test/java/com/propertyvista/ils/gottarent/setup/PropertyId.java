@@ -9,7 +9,6 @@
  *
  * Created on Oct 10, 2013
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.ils.gottarent.setup;
 

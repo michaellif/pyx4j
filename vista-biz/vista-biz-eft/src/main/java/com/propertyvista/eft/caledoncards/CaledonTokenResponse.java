@@ -9,7 +9,6 @@
  *
  * Created on Mar 26, 2011
  * @author kostya
- * @version $Id$
  */
 package com.propertyvista.eft.caledoncards;
 

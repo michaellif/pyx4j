@@ -9,7 +9,6 @@
  *
  * Created on 2013-02-07
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.common.client.theme;
 

@@ -9,7 +9,6 @@
  *
  * Created on Jan 19, 2013
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.yardi.processors;
 

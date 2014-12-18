@@ -9,7 +9,6 @@
  *
  * Created on 2012-07-19
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.domain.tenant.lease;
 

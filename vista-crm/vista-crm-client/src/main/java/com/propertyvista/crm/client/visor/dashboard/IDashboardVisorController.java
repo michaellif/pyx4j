@@ -9,7 +9,6 @@
  *
  * Created on Aug 3, 2012
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.crm.client.visor.dashboard;
 

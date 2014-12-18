@@ -9,7 +9,6 @@
  *
  * Created on 2011-06-23
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.equifax.request;
 

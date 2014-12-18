@@ -9,7 +9,6 @@
  *
  * Created on Feb 8, 2011
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.server.ci;
 

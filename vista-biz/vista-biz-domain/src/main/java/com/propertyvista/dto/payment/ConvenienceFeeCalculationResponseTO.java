@@ -9,7 +9,6 @@
  *
  * Created on Nov 14, 2013
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.dto.payment;
 

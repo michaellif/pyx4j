@@ -9,7 +9,6 @@
  *
  * Created on 2012-04-19
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.biz.tenant;
 

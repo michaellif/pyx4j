@@ -9,7 +9,6 @@
  *
  * Created on 2011-02-20
  * @author antonk
- * @version $Id$
  */
 package com.propertyvista.domain.person;
 

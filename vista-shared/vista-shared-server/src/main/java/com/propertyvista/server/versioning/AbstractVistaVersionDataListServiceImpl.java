@@ -9,7 +9,6 @@
  *
  * Created on Mar 17, 2012
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.server.versioning;
 

@@ -9,7 +9,6 @@
  *
  * Created on Aug 17, 2012
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.operations.client.ui.crud.legal;
 

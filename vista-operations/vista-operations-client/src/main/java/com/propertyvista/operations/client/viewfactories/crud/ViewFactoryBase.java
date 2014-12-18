@@ -9,7 +9,6 @@
  *
  * Created on 2011-06-09
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.operations.client.viewfactories.crud;
 

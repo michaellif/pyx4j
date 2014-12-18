@@ -9,7 +9,6 @@
  *
  * Created on 2012-06-13
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.domain.financial;
 

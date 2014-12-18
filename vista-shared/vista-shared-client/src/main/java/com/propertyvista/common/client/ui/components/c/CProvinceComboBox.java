@@ -9,7 +9,6 @@
  *
  * Created on May 14, 2014
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.common.client.ui.components.c;
 

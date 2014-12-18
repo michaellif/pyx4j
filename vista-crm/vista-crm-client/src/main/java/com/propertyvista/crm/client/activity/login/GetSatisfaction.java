@@ -9,7 +9,6 @@
  *
  * Created on Mar 29, 2012
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.crm.client.activity.login;
 

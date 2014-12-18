@@ -9,7 +9,6 @@
  *
  * Created on Jun 27, 20011
  * @author Dad
- * @version $Id$
  */
 package com.propertyvista.portal.shared.ui.util.editors;
 

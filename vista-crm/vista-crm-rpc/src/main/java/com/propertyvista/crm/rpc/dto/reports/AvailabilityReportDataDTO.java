@@ -9,7 +9,6 @@
  *
  * Created on Aug 2, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.dto.reports;
 

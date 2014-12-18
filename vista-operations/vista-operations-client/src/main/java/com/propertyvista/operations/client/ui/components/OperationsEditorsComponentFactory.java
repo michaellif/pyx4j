@@ -9,7 +9,6 @@
  *
  * Created on 2011-05-10
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.operations.client.ui.components;
 

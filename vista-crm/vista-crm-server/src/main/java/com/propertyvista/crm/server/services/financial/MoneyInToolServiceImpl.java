@@ -9,7 +9,6 @@
  *
  * Created on 2013-12-09
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.financial;
 

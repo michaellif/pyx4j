@@ -10,7 +10,6 @@
  *
  * Created on 2013-08-29
  * @author vladlouk
- * @version $Id$
  */
 package com.propertyvista.integration.yardi;
 

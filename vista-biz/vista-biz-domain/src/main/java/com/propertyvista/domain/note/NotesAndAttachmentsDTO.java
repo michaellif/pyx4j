@@ -9,7 +9,6 @@
  *
  * Created on Aug 1, 2012
  * @author dev_vista
- * @version $Id$
  */
 package com.propertyvista.domain.note;
 

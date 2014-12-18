@@ -31,7 +31,6 @@ import javax.net.ssl.X509TrustManager;
 
 /**
  * @author olamy
- * @version $Id$
  * @since 1.2.3
  */
 public class EasyX509TrustManager implements X509TrustManager {

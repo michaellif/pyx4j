@@ -9,7 +9,6 @@
  *
  * Created on 2011-06-27
  * @author TPRGLET
- * @version $Id$
  */
 package com.propertyvista.common.client.ui.validators;
 

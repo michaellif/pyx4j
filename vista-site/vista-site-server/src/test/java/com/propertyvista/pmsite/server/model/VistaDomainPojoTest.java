@@ -9,7 +9,6 @@
  *
  * Created on Jan 18, 2012
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.pmsite.server.model;
 

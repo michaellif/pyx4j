@@ -9,7 +9,6 @@
  *
  * Created on 2011-04-23
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.gadgets.common;
 

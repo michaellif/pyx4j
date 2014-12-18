@@ -9,7 +9,6 @@
  *
  * Created on 2012-06-06
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.server.jobs;
 

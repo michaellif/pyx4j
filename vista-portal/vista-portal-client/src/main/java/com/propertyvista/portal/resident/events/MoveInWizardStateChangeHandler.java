@@ -16,7 +16,6 @@
  *
  * Created on Oct 29, 2010
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.portal.resident.events;
 

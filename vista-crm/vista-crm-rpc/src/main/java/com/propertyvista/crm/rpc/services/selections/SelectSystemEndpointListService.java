@@ -9,7 +9,6 @@
  *
  * Created on Jun 4, 2014
  * @author smolka
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.selections;
 

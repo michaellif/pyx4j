@@ -9,7 +9,6 @@
  *
  * Created on 2013-01-08
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.activity.crud.administration.profile;
 

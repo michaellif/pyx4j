@@ -9,7 +9,6 @@
  *
  * Created on 2012-12-12
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.oapi.v1.persisting;
 

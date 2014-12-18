@@ -9,7 +9,6 @@
  *
  * Created on 2014-04-14
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.tools.common;
 

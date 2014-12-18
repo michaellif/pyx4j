@@ -9,7 +9,6 @@
  *
  * Created on Sep 20, 2013
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.dto.vista2pmc;
 

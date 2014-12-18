@@ -9,7 +9,6 @@
  *
  * Created on 2011-04-22
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.dashboard;
 

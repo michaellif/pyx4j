@@ -9,7 +9,6 @@
  *
  * Created on 2012-11-14
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure;
 

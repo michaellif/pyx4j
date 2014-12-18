@@ -9,7 +9,6 @@
  *
  * Created on Feb 3, 2014
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.dto.financial;
 

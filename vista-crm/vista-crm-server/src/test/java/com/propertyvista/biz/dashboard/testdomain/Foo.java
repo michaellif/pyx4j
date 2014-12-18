@@ -9,7 +9,6 @@
  *
  * Created on 2012-10-15
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.biz.dashboard.testdomain;
 

@@ -9,7 +9,6 @@
  *
  * Created on Jan 30, 2012
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.lease;
 

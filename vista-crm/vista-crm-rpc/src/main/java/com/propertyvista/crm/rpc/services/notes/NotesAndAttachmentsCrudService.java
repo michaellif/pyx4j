@@ -9,7 +9,6 @@
  *
  * Created on Aug 2, 2012
  * @author dev_vista
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.notes;
 

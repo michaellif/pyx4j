@@ -9,7 +9,6 @@
  *
  * Created on Aug 26, 2011
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.common.client.ui.validators;
 

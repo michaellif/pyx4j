@@ -9,7 +9,6 @@
  *
  * Created on 2013-10-03
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.activity.tools.legal.n4;
 

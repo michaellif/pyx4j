@@ -9,7 +9,6 @@
  *
  * Created on Dec 4, 2012
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.domain.financial.billingext.dto;
 

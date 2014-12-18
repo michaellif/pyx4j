@@ -9,7 +9,6 @@
  *
  * Created on Oct 8, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.server.jetty;
 

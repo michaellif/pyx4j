@@ -9,7 +9,6 @@
  *
  * Created on 2014-01-08
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.resident.services.movein;
 

@@ -9,7 +9,6 @@
  *
  * Created on Sep 11, 2014
  * @author ernestog
- * @version $Id$
  */
 package com.propertyvista.operations.client.ui.crud.tools.oapi;
 

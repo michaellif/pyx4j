@@ -9,7 +9,6 @@
  *
  * Created on Aug 29, 2011
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.pmsite.server.panels;
 

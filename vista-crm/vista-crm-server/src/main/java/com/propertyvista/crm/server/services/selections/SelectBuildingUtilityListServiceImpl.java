@@ -9,7 +9,6 @@
  *
  * Created on Dec 9, 2013
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.selections;
 

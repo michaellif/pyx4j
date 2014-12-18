@@ -9,7 +9,6 @@
  *
  * Created on May 11, 2013
  * @author anatolyk
- * @version $Id$
  */
 package com.propertyvista.ils.kijiji.rs;
 

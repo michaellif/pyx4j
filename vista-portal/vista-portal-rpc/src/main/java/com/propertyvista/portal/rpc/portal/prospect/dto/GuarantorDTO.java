@@ -9,7 +9,6 @@
  *
  * Created on Nov 29, 2013
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.prospect.dto;
 

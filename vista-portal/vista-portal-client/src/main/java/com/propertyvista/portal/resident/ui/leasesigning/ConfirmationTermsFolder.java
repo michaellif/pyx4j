@@ -9,7 +9,6 @@
  *
  * Created on Oct 19, 2011
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.portal.resident.ui.leasesigning;
 

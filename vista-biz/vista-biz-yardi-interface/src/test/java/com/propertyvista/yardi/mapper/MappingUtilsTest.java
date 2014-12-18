@@ -9,7 +9,6 @@
  *
  * Created on Nov 21, 2014
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.yardi.mapper;
 

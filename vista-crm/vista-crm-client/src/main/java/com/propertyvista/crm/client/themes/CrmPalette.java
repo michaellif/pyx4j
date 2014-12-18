@@ -9,7 +9,6 @@
  *
  * Created on Oct 15, 2014
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.crm.client.themes;
 

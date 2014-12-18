@@ -9,7 +9,6 @@
  *
  * Created on Sep 27, 2013
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.portal.resident.ui.financial.views;
 

@@ -9,7 +9,6 @@
  *
  * Created on Jul 18, 2011
  * @author dmitry
- * @version $Id$
  */
 package com.propertyvista.misc;
 

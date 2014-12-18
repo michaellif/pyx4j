@@ -9,7 +9,6 @@
  *
  * Created on Feb 12, 2011
  * @author Misha
- * @version $Id$
  */
 package com.propertyvista.operations.client.resources;
 

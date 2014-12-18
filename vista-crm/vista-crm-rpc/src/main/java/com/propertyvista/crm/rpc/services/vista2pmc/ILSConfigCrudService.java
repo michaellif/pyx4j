@@ -9,7 +9,6 @@
  *
  * Created on Sep 23, 2013
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.vista2pmc;
 

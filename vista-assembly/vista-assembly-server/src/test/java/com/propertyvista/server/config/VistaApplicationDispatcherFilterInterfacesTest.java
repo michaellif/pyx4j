@@ -9,7 +9,6 @@
  *
  * Created on Oct 14, 2014
  * @author ernestog
- * @version $Id$
  */
 package com.propertyvista.server.config;
 

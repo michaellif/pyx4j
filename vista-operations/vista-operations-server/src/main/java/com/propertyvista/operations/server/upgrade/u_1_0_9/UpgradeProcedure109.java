@@ -9,7 +9,6 @@
  *
  * Created on 2013-04-11
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.operations.server.upgrade.u_1_0_9;
 

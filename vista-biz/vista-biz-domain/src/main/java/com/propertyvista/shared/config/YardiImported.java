@@ -9,7 +9,6 @@
  *
  * Created on Apr 18, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.shared.config;
 

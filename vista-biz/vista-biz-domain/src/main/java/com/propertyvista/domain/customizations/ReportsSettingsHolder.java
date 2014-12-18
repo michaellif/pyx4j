@@ -9,7 +9,6 @@
  *
  * Created on Sep 7, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.domain.customizations;
 

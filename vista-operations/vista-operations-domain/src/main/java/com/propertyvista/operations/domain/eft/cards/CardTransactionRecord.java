@@ -9,7 +9,6 @@
  *
  * Created on Nov 26, 2013
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.operations.domain.eft.cards;
 

@@ -9,7 +9,6 @@
  *
  * Created on Dec 22, 2011
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 

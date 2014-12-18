@@ -9,7 +9,6 @@
  *
  * Created on Sep 28, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.components;
 

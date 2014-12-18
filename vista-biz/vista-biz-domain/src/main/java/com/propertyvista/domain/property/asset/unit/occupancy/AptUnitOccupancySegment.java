@@ -9,7 +9,6 @@
  *
  * Created on May 2, 2011
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.domain.property.asset.unit.occupancy;
 

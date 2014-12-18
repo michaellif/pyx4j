@@ -9,7 +9,6 @@
  *
  * Created on Jun 29, 2011
  * @author Dad
- * @version $Id$
  */
 package com.propertyvista.portal.resident.ui.financial.views.bill;
 

@@ -9,7 +9,6 @@
  *
  * Created on Feb 9, 2012
  * @author igor
- * @version $Id$
  */
 package com.propertyvista.crm.client.activity.policies.leaseadjustment;
 

@@ -9,7 +9,6 @@
  *
  * Created on Sep 14, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.operations.client.activity.crud.pmc.merchantaccount;
 

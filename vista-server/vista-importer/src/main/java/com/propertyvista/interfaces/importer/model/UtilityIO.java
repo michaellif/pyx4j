@@ -9,7 +9,6 @@
  *
  * Created on 2012-07-12
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.interfaces.importer.model;
 

@@ -9,7 +9,6 @@
  *
  * Created on 2014-02-12
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.activity.crud.lease.agreement;
 

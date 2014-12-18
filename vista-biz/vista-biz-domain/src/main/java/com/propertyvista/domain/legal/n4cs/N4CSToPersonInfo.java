@@ -9,7 +9,6 @@
  *
  * Created on Nov 11, 2014
  * @author arminea
- * @version $Id$
  */
 package com.propertyvista.domain.legal.n4cs;
 

@@ -9,7 +9,6 @@
  *
  * Created on Dec 12, 2014
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.crm.client.activity.policies.legalquestions;
 

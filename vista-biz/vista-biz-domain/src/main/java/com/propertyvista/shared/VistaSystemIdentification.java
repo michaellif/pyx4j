@@ -9,7 +9,6 @@
  *
  * Created on 2012-03-30
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.shared;
 

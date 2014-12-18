@@ -9,7 +9,6 @@
  *
  * Created on 2013-08-01
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.portal.server.portal.resident.services.weather;
 

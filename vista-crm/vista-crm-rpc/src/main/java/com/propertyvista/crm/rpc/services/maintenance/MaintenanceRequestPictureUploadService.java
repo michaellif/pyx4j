@@ -9,7 +9,6 @@
  *
  * Created on Dec 25, 2013
  * @author smolka
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.maintenance;
 

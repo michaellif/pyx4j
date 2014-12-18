@@ -9,7 +9,6 @@
  *
  * Created on Jan 23, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.security;
 

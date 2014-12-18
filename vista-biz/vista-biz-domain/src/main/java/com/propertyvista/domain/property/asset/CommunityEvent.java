@@ -9,7 +9,6 @@
  *
  * Created on Jan 22, 2014
  * @author smolka
- * @version $Id$
  */
 package com.propertyvista.domain.property.asset;
 
