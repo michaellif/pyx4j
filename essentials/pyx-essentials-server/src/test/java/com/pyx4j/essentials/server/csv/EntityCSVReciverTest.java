@@ -16,7 +16,6 @@
  *
  * Created on 2012-07-19
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.essentials.server.csv;
 

@@ -16,7 +16,6 @@
  *
  * Created on May 3, 2012
  * @author vlads
- * @version $Id$
  */
 package org.apache.log4j;
 

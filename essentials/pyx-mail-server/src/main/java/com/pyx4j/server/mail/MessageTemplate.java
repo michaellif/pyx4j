@@ -16,7 +16,6 @@
  *
  * Created on Dec 10, 2013
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.server.mail;
 

@@ -16,7 +16,6 @@
  *
  * Created on Jun 9, 2014
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.site.client.backoffice.ui.layout;
 

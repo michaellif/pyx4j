@@ -15,7 +15,6 @@
  * the License.
  *
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.commons;
 

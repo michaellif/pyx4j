@@ -16,7 +16,6 @@
  *
  * Created on 2011-06-27
  * @author Vlad
- * @version $Id$
  */
 package com.pyx4j.widgets.client.dashboard;
 

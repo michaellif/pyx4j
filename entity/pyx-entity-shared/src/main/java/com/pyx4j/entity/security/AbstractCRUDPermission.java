@@ -16,7 +16,6 @@
  *
  * Created on Sep 14, 2007
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.security;
 

@@ -16,7 +16,6 @@
  *
  * Created on Apr 19, 2011
  * @author Misha
- * @version $Id$
  */
 package com.pyx4j.widgets.client.dashboard;
 

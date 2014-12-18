@@ -16,7 +16,6 @@
  *
  * Created on Jan 15, 2012
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.workflow.attempt2;
 

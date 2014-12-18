@@ -16,7 +16,6 @@
  *
  * Created on Jul 17, 2014
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.widgets.client.selector;
 

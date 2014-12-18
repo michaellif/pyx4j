@@ -16,7 +16,6 @@
  *
  * Created on Oct 22, 2011
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.commons.css;
 

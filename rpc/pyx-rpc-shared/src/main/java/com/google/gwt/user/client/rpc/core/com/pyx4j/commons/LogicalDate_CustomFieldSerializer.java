@@ -16,7 +16,6 @@
  *
  * Created on 2011-06-01
  * @author vlads
- * @version $Id$
  */
 package com.google.gwt.user.client.rpc.core.com.pyx4j.commons;
 

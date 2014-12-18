@@ -16,7 +16,6 @@
  *
  * Created on Dec 4, 2013
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.site.client.place;
 

@@ -16,7 +16,6 @@
  *
  * Created on Apr 14, 2012
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.widgets.client.dialog;
 

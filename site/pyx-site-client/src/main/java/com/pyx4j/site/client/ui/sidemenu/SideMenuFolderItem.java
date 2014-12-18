@@ -16,7 +16,6 @@
  *
  * Created on Sep 9, 2014
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.site.client.ui.sidemenu;
 

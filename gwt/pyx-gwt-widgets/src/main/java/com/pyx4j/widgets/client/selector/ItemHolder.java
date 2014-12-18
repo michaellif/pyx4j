@@ -16,7 +16,6 @@
  *
  * Created on Sep 11, 2014
  * @author arminea
- * @version $Id$
  */
 package com.pyx4j.widgets.client.selector;
 

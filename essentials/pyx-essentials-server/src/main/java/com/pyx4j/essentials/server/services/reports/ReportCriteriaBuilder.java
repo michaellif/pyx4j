@@ -16,7 +16,6 @@
  *
  * Created on Aug 10, 2012
  * @author Artyom
- * @version $Id$
  */
 package com.pyx4j.essentials.server.services.reports;
 

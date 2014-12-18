@@ -16,7 +16,6 @@
  *
  * Created on 2012-10-18
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.core.criterion;
 

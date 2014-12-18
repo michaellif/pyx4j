@@ -16,7 +16,6 @@
  *
  * Created on May 20, 2010
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.widgets.client.photoalbum;
 

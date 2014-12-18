@@ -16,7 +16,6 @@
  *
  * Created on 2011-03-26
  * @author yura
- * @version $Id$
  */
 package com.pyx4j.widgets.client.datepicker.images;
 

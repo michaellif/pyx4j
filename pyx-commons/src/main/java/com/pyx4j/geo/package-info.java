@@ -16,7 +16,6 @@
  *
  * Created on Feb 23, 2010
  * @author kaushansky
- * @version $Id$
  */
 /**
  * <pre>

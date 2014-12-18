@@ -4,7 +4,6 @@
  *
  * Created on 2008-08-01
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.forms.client.validators;
 

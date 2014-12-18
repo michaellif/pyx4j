@@ -16,7 +16,6 @@
  *
  * Created on May 19, 2010
  * @author Misha
- * @version $Id$
  */
 package com.pyx4j.widgets.client.richtext;
 

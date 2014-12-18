@@ -16,7 +16,6 @@
  *
  * Created on Mar 17, 2012
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.rdb.mapping;
 

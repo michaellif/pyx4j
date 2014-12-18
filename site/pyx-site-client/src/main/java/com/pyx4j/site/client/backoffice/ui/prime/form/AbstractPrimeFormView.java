@@ -16,7 +16,6 @@
  *
  * Created on Jun 13, 2011
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.site.client.backoffice.ui.prime.form;
 

@@ -16,7 +16,6 @@
  *
  * Created on Sep 26, 2010
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.essentials.j2se.backup;
 

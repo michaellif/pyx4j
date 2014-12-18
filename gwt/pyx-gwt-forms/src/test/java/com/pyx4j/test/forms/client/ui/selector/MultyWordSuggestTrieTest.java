@@ -16,7 +16,6 @@
  *
  * Created on Jul 21, 2014
  * @author arminea
- * @version $Id$
  */
 package com.pyx4j.test.forms.client.ui.selector;
 

@@ -9,7 +9,6 @@
  *
  * Created on 2011-07-14
  * @author TPRGLET
- * @version $Id$
  */
 package com.pyx4j.site.client;
 

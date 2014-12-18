@@ -16,7 +16,6 @@
  *
  * Created on Apr 10, 2011
  * @author dmitry
- * @version $Id$
  */
 package com.pyx4j.entity.rdb;
 

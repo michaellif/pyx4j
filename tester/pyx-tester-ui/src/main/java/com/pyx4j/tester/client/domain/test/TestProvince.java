@@ -9,7 +9,6 @@
  *
  * Created on 2011-02-25
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.tester.client.domain.test;
 

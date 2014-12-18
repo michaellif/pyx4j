@@ -16,7 +16,6 @@
  *
  * Created on Oct 21, 2012
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.entity.shared;
 

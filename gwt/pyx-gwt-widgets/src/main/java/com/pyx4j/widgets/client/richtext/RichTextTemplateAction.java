@@ -16,7 +16,6 @@
  *
  * Created on Sep 12, 2014
  * @author smolka
- * @version $Id$
  */
 package com.pyx4j.widgets.client.richtext;
 

@@ -16,7 +16,6 @@
  *
  * Created on 2011-04-28
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.rdb.postgresql;
 

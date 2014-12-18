@@ -16,7 +16,6 @@
  *
  * Created on 2011-03-29
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.report;
 

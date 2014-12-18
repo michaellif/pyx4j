@@ -16,7 +16,6 @@
  *
  * Created on Apr 24, 2010
  * @author Misha
- * @version $Id$
  */
 package com.pyx4j.forms.client.ui.datatable;
 

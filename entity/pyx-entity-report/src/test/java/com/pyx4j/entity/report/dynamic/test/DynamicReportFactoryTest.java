@@ -16,7 +16,6 @@
  *
  * Created on Aug 12, 2014
  * @author arminea
- * @version $Id$
  */
 package com.pyx4j.entity.report.dynamic.test;
 

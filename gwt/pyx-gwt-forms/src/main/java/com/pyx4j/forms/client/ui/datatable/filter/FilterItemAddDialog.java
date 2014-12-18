@@ -9,7 +9,6 @@
  *
  * Created on Sep 19, 2014
  * @author arminea
- * @version $Id$
  */
 package com.pyx4j.forms.client.ui.datatable.filter;
 

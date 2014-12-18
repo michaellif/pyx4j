@@ -16,7 +16,6 @@
  *
  * Created on 2010-11-04
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.serialization.test.client;
 

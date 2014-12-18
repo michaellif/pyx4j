@@ -16,7 +16,6 @@
  *
  * Created on Oct 7, 2011
  * @author vlads
- * @version $Id$
  */
 package ut.annotations;
 

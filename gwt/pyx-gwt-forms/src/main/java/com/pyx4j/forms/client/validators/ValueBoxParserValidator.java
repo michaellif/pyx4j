@@ -4,7 +4,6 @@
  *
  * Created on Oct 14, 2008
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.forms.client.validators;
 

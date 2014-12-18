@@ -16,7 +16,6 @@
  *
  * Created on May 5, 2012
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.annotations;
 

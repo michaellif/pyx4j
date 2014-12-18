@@ -16,7 +16,6 @@
  *
  * Created on Oct 8, 2011
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.i18n.gettext;
 

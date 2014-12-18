@@ -16,7 +16,6 @@
  *
  * Created on Jan 13, 2012
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.core.adapters;
 

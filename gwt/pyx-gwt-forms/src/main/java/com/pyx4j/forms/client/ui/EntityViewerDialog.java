@@ -16,7 +16,6 @@
  *
  * Created on Jul 19, 2012
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.forms.client.ui;
 

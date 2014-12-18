@@ -16,7 +16,6 @@
  *
  * Created on Mar 18, 2010
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.essentials.server.docs.sheet;
 

@@ -16,7 +16,6 @@
  *
  * Created on Oct 1, 2011
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.forms.client.ui.decorators;
 

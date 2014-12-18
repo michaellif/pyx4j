@@ -16,7 +16,6 @@
  *
  * Created on Nov 6, 2010
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.maven.plugin.gwt;
 

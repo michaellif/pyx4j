@@ -16,7 +16,6 @@
  *
  * Created on Mar 25, 2012
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.test.shared.domain.inherit;
 

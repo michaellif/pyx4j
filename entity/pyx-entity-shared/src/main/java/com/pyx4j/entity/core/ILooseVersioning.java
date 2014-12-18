@@ -16,7 +16,6 @@
  *
  * Created on Jan 24, 2010
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.entity.core;
 

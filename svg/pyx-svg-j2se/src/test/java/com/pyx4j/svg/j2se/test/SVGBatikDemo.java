@@ -16,7 +16,6 @@
  *
  * Created on May 4, 2011
  * @author vadims
- * @version $Id$
  */
 package com.pyx4j.svg.j2se.test;
 

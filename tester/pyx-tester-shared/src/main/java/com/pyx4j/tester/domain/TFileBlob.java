@@ -16,7 +16,6 @@
  *
  * Created on Dec 16, 2013
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.tester.domain;
 

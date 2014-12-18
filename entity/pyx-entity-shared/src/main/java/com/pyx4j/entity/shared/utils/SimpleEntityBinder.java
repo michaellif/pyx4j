@@ -16,7 +16,6 @@
  *
  * Created on Jul 21, 2011
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.shared.utils;
 

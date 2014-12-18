@@ -15,7 +15,6 @@
  * the License.
  *
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.log4gwt.client;
 

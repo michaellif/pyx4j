@@ -16,7 +16,6 @@
  *
  * Created on May 7, 2014
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.gwt.commons.css;
 

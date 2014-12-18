@@ -16,7 +16,6 @@
  *
  * Created on 2012-12-30
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.tester.shared;
 

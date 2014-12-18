@@ -16,7 +16,6 @@ f * Pyx4j framework
  *
  * Created on Oct 9, 2014
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.server.contexts;
 

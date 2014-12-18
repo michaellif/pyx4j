@@ -16,7 +16,6 @@
  *
  * Created on 2011-03-30
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.unit.server.mock.filter;
 

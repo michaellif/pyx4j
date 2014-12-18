@@ -16,7 +16,6 @@
  *
  * Created on Sep 26, 2014
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.security.shared;
 

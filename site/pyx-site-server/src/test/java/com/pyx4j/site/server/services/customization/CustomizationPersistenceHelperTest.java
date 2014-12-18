@@ -16,7 +16,6 @@
  *
  * Created on 2012-09-05
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.site.server.services.customization;
 

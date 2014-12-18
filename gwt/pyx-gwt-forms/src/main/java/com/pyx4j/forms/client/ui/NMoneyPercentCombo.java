@@ -16,7 +16,6 @@
  *
  * Created on Nov 25, 2014
  * @author stanp
- * @version $Id$
  */
 package com.pyx4j.forms.client.ui;
 

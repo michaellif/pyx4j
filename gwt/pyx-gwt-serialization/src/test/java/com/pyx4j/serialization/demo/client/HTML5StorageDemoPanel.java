@@ -16,7 +16,6 @@
  *
  * Created on Sep 11, 2010
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.serialization.demo.client;
 

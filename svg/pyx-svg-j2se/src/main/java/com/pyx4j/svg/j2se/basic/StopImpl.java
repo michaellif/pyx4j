@@ -16,7 +16,6 @@
  *
  * Created on 2012-08-18
  * @author Alex
- * @version $Id$
  */
 package com.pyx4j.svg.j2se.basic;
 

@@ -16,7 +16,6 @@
  *
  * Created on Feb 21, 2010
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.gae;
 

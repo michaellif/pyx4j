@@ -16,7 +16,6 @@
  *
  * Created on Jun 9, 2014
  * @author stanp
- * @version $Id$
  */
 package com.pyx4j.widgets.client.dashboard;
 

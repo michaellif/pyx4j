@@ -16,7 +16,6 @@
  *
  * Created on 2010-10-07
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.dnd.client;
 

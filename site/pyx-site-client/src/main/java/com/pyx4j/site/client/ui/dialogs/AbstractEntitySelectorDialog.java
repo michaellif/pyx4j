@@ -16,7 +16,6 @@
  *
  * Created on Mar 31, 2012
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.site.client.ui.dialogs;
 

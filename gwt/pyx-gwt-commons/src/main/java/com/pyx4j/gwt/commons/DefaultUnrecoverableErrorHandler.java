@@ -16,7 +16,6 @@
  *
  * Created on 2011-02-22
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.gwt.commons;
 

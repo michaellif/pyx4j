@@ -16,7 +16,6 @@
  *
  * Created on 2013-07-23
  * @author ArtyomB
- * @version $Id$
  */
 package com.pyx4j.site.shared.domain.reports;
 

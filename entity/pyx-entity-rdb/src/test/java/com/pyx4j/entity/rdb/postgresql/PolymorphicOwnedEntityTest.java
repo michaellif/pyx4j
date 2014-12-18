@@ -16,7 +16,6 @@
  *
  * Created on Feb 10, 2012
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.entity.rdb.postgresql;
 

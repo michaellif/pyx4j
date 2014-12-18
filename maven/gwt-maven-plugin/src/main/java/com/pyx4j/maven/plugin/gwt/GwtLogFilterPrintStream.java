@@ -2,7 +2,6 @@
  * Copyright (C) 2007 pyx4j.com.
  *
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.maven.plugin.gwt;
 

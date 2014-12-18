@@ -16,7 +16,6 @@
  *
  * Created on May 1, 2010
  * @author Misha
- * @version $Id$
  */
 package com.pyx4j.commons;
 

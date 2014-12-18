@@ -16,7 +16,6 @@
  *
  * Created on Oct 10, 2014
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.security.test.server;
 

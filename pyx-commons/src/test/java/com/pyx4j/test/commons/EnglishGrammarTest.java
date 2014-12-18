@@ -16,7 +16,6 @@
  *
  * Created on 2011-05-10
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.test.commons;
 

@@ -16,7 +16,6 @@
  *
  * Created on Oct 29, 2014
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.tester.client.view.form;
 

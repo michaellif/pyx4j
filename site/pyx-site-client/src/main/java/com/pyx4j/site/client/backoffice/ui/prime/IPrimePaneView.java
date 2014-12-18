@@ -16,7 +16,6 @@
  *
  * Created on Mar 14, 2013
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.site.client.backoffice.ui.prime;
 
