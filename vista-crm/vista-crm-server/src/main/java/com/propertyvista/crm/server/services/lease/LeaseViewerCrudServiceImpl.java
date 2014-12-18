@@ -117,6 +117,10 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
     @Override
     protected void enhanceRetrieved(Lease in, LeaseDTO to, RetrieveTarget retrieveTarget) {
+        if (retrieveTarget != RetrieveTarget.View) {
+            throw new Error("Shouldn't be called - view service only");
+        }
+
         super.enhanceRetrieved(in, to, retrieveTarget);
 
         EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
@@ -133,6 +137,11 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         to.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(in));
 
         loadcurrentLegalStatus(to);
+    }
+
+    @Override
+    protected boolean persist(Lease dbo, LeaseDTO in) {
+        throw new Error("Shouldn't be called - view service only");
     }
 
     @Override

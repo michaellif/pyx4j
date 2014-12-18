@@ -29,14 +29,12 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
-import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImage;
-import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
@@ -421,15 +419,4 @@ public abstract class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> ext
 
         return formPanel;
     }
-
-    class QuestionsFormPanel extends FormPanel {
-
-        public QuestionsFormPanel(CForm<?> parent) {
-            super(parent);
-        }
-
-        public void appendQuestion(IObject<?> member) {
-            append(Location.Dual, member).decorate().labelWidth(400).labelPosition(LabelPosition.top).useLabelSemicolon(false);
-        }
-    };
 }

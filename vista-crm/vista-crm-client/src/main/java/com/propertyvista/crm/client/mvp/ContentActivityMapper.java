@@ -133,7 +133,6 @@ import com.propertyvista.crm.client.activity.crud.customer.lead.LeadListerActivi
 import com.propertyvista.crm.client.activity.crud.customer.lead.LeadViewerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.lead.ShowingEditorActivity;
 import com.propertyvista.crm.client.activity.crud.customer.lead.ShowingViewerActivity;
-import com.propertyvista.crm.client.activity.crud.customer.screening.CustomerScreeningEditorActivity;
 import com.propertyvista.crm.client.activity.crud.customer.screening.CustomerScreeningViewerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.FormerTenantListerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.PotentialTenantListerActivity;
@@ -616,9 +615,6 @@ public class ContentActivityMapper implements AppActivityMapper {
 
                     } else if (crudPlace instanceof Tenants.Screening) {
                         switch (crudPlace.getType()) {
-                        case editor:
-                            activity = new CustomerScreeningEditorActivity(crudPlace);
-                            break;
                         case viewer:
                             activity = new CustomerScreeningViewerActivity(crudPlace);
                             break;
