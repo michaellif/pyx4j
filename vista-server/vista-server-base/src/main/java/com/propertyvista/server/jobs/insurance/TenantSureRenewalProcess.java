@@ -9,7 +9,6 @@
  *
  * Created on Jul 10, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.server.jobs.insurance;
 

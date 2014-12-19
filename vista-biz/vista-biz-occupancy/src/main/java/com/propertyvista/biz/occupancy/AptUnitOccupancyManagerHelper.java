@@ -9,7 +9,6 @@
  *
  * Created on Feb 2, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.biz.occupancy;
 

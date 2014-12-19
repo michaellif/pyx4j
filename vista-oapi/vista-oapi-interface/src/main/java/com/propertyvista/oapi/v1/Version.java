@@ -9,7 +9,6 @@
  *
  * Created on Aug 30, 2014
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.oapi.v1;
 

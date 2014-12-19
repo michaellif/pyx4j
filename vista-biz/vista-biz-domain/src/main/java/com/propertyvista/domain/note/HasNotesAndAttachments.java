@@ -9,7 +9,6 @@
  *
  * Created on Nov 21, 2013
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.domain.note;
 

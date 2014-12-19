@@ -9,7 +9,6 @@
  *
  * Created on Jan 31, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.portal.shared.activity.login;
 

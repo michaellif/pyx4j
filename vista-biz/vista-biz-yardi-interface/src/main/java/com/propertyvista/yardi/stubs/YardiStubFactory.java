@@ -16,7 +16,6 @@
  *
  * Created on 2010-09-22
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.yardi.stubs;
 

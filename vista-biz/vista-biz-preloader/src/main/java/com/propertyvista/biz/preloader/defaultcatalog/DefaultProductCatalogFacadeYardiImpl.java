@@ -16,7 +16,6 @@
  *
  * Created on 2014-03-17
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.biz.preloader.defaultcatalog;
 

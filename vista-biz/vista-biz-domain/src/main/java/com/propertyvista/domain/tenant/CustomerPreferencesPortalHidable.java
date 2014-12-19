@@ -9,7 +9,6 @@
  *
  * Created on Sep 13, 2014
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.domain.tenant;
 

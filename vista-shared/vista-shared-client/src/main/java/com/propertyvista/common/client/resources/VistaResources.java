@@ -9,7 +9,6 @@
  *
  * Created on Aug 29, 2012
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.common.client.resources;
 

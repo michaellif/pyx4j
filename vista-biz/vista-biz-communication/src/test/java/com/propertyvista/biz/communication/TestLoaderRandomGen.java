@@ -9,7 +9,6 @@
  *
  * Created on Mar 13, 2012
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.biz.communication;
 

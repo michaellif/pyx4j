@@ -9,7 +9,6 @@
  *
  * Created on 2013-04-09
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.server.common.reference.geo.googleapis;
 

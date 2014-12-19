@@ -9,7 +9,6 @@
  *
  * Created on 2011-03-21
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.unit;
 

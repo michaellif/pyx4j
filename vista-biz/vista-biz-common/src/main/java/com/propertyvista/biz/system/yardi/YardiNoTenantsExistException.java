@@ -9,7 +9,6 @@
  *
  * Created on Jun 27, 2013
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.biz.system.yardi;
 

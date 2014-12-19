@@ -9,7 +9,6 @@
  *
  * Created on 2013-11-20
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.domain.legal.l1;
 

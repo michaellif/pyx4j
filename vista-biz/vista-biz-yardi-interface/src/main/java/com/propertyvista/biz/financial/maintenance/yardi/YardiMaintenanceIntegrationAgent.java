@@ -9,7 +9,6 @@
  *
  * Created on Apr 3, 2013
  * @author yuriyl
- * @version $Id$
  */
 package com.propertyvista.biz.financial.maintenance.yardi;
 

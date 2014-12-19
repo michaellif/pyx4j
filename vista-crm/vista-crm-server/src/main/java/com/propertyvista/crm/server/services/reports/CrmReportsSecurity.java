@@ -9,7 +9,6 @@
  *
  * Created on Jul 27, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.reports;
 

@@ -9,13 +9,13 @@
  *
  * Created on Jun 25, 2014
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.crm.server.security;
 
 import static com.propertyvista.domain.security.VistaCrmBehavior.LegalCollectionsBasic;
 import static com.propertyvista.domain.security.VistaCrmBehavior.LegalCollectionsFull;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
+import static com.pyx4j.entity.security.AbstractCRUDPermission.CREATE;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
@@ -42,7 +42,7 @@ class VistaCrmLegalAccessControlList extends UIAclBuilder {
         grant(LegalCollectionsBasic, LeaseLegalStateDTO.class, READ);
         grant(LegalCollectionsBasic, LegalNoticeCandidateDTO.class, READ);
 
-        grant(LegalCollectionsFull, LegalLetter.class, READ);
+        grant(LegalCollectionsFull, LegalLetter.class, READ | CREATE);
         grant(LegalCollectionsFull, LeaseLegalStateDTO.class, READ | UPDATE);
         grant(LegalCollectionsFull, LegalNoticeCandidateDTO.class, ALL);
     }

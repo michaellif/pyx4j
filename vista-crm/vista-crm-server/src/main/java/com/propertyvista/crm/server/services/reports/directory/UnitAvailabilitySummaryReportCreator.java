@@ -9,7 +9,6 @@
  *
  * Created on Mar 16, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.reports.directory;
 

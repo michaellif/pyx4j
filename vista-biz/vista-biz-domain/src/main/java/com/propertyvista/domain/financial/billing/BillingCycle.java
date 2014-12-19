@@ -9,7 +9,6 @@
  *
  * Created on Jan 25, 2012
  * @author vladlouk
- * @version $Id$
  */
 
 package com.propertyvista.domain.financial.billing;

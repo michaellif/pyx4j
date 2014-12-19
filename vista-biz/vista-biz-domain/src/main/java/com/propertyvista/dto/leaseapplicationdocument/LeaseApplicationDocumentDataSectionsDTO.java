@@ -9,7 +9,6 @@
  *
  * Created on 2014-03-19
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.dto.leaseapplicationdocument;
 

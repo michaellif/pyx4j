@@ -9,7 +9,6 @@
  *
  * Created on Sep 3, 2013
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.resident.dto.insurance;
 

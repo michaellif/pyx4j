@@ -9,7 +9,6 @@
  *
  * Created on Dec 18, 2011
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.server.common.util;
 
@@ -74,55 +73,58 @@ public class PropertyFinder {
         // add sanity check
         dbCriteria.isNotNull(dbCriteria.proto().productCatalog());
         dbCriteria.isNotNull(dbCriteria.proto().info().location());
+
         // add search criteria
-        if (SearchType.city.equals(searchCriteria.searchType().getValue())) {
-            String prov = searchCriteria.province().getValue();
-            if (!StringUtils.isEmpty(prov)) {
-                dbCriteria.like(dbCriteria.proto().info().address().province(), prov);
-            }
-            String city = searchCriteria.city().getValue();
-            if (!StringUtils.isEmpty(city)) {
-                dbCriteria.like(dbCriteria.proto().info().address().city(), city);
-            }
-        } else {
-            // Vicinity search within the given searchRadius of the centerPoint
-            Integer searchRadiusKm = searchCriteria.distance().getValue();
-            GeoPoint centerPoint = searchCriteria.geolocation().getValue();
-            if (searchRadiusKm != null && centerPoint != null) {
-                // Define dbCriteria here, It works perfectly in North America, TODO test other location
-                GeoCircle geoCircle = new GeoCircle(centerPoint, searchRadiusKm);
-                GeoBox geoBox = geoCircle.getMinBox();
-                dbCriteria.le(dbCriteria.proto().info().location(), geoBox.getNorthEast());
-                dbCriteria.ge(dbCriteria.proto().info().location(), geoBox.getSouthWest());
-            }
-        }
-
-        // filter buildings by amenities (must match all items in the set)
-        int amSize = searchCriteria.amenities().size();
-        if (amSize > 0) {
-            EntityQueryCriteria<BuildingAmenity> amCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
-            amCriteria.in(amCriteria.proto().type(), searchCriteria.amenities());
-            // prepare building amenity filter
-            Map<Key, Set<BuildingAmenity.Type>> amFilter = new HashMap<>();
-            for (BuildingAmenity am : Persistence.service().query(amCriteria)) {
-                Key bldId = am.building().getPrimaryKey();
-                Set<BuildingAmenity.Type> amSet = amFilter.get(bldId);
-                if (amSet == null) {
-                    amFilter.put(bldId, amSet = new HashSet<BuildingAmenity.Type>());
+        if (searchCriteria != null) {
+            if (SearchType.city.equals(searchCriteria.searchType().getValue())) {
+                String prov = searchCriteria.province().getValue();
+                if (!StringUtils.isEmpty(prov)) {
+                    dbCriteria.like(dbCriteria.proto().info().address().province(), prov);
                 }
-                amSet.add(am.type().getValue());
-            }
-            // filter buildings that have matched all items from the search criteria
-            for (Iterator<Key> it = amFilter.keySet().iterator(); it.hasNext();) {
-                if (amFilter.get(it.next()).size() != amSize) {
-                    it.remove();
+                String city = searchCriteria.city().getValue();
+                if (!StringUtils.isEmpty(city)) {
+                    dbCriteria.like(dbCriteria.proto().info().address().city(), city);
+                }
+            } else {
+                // Vicinity search within the given searchRadius of the centerPoint
+                Integer searchRadiusKm = searchCriteria.distance().getValue();
+                GeoPoint centerPoint = searchCriteria.geolocation().getValue();
+                if (searchRadiusKm != null && centerPoint != null) {
+                    // Define dbCriteria here, It works perfectly in North America, TODO test other location
+                    GeoCircle geoCircle = new GeoCircle(centerPoint, searchRadiusKm);
+                    GeoBox geoBox = geoCircle.getMinBox();
+                    dbCriteria.le(dbCriteria.proto().info().location(), geoBox.getNorthEast());
+                    dbCriteria.ge(dbCriteria.proto().info().location(), geoBox.getSouthWest());
                 }
             }
-            dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().id(), amFilter.keySet()));
-        }
 
-        // add Floorplan related criteria
-        dbCriteria.addAll(getFloorplanQueryCriteria(dbCriteria.proto().floorplans().$(), searchCriteria));
+            // filter buildings by amenities (must match all items in the set)
+            int amSize = searchCriteria.amenities().size();
+            if (amSize > 0) {
+                EntityQueryCriteria<BuildingAmenity> amCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
+                amCriteria.in(amCriteria.proto().type(), searchCriteria.amenities());
+                // prepare building amenity filter
+                Map<Key, Set<BuildingAmenity.Type>> amFilter = new HashMap<>();
+                for (BuildingAmenity am : Persistence.service().query(amCriteria)) {
+                    Key bldId = am.building().getPrimaryKey();
+                    Set<BuildingAmenity.Type> amSet = amFilter.get(bldId);
+                    if (amSet == null) {
+                        amFilter.put(bldId, amSet = new HashSet<BuildingAmenity.Type>());
+                    }
+                    amSet.add(am.type().getValue());
+                }
+                // filter buildings that have matched all items from the search criteria
+                for (Iterator<Key> it = amFilter.keySet().iterator(); it.hasNext();) {
+                    if (amFilter.get(it.next()).size() != amSize) {
+                        it.remove();
+                    }
+                }
+                dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().id(), amFilter.keySet()));
+            }
+
+            // add Floorplan related criteria
+            dbCriteria.addAll(getFloorplanQueryCriteria(dbCriteria.proto().floorplans().$(), searchCriteria));
+        }
     }
 
     /**
@@ -136,38 +138,42 @@ public class PropertyFinder {
      */
     private static List<Criterion> getFloorplanQueryCriteria(Floorplan proto, PropertySearchCriteria searchCriteria) {
         List<Criterion> criteria = new ArrayList<>();
-        // 2.1. filter floorplans by units
-        // price
-        Integer minPrice = searchCriteria.minPrice().getValue();
-        if (minPrice != null) {
-            criteria.add(PropertyCriterion.ge(proto.units().$().financial()._marketRent(), new BigDecimal(minPrice)));
-        }
-        Integer maxPrice = searchCriteria.maxPrice().getValue();
-        if (maxPrice != null && maxPrice > 0) {
-            criteria.add(PropertyCriterion.le(proto.units().$().financial()._marketRent(), new BigDecimal(maxPrice)));
-        }
+
         // filter units by finalized products only:
         criteria.add(PropertyCriterion.isNotNull(proto.units().$().productItems().$().product().fromDate()));
         criteria.add(PropertyCriterion.isNull(proto.units().$().productItems().$().product().toDate()));
 
-        // 2.2 filter floorplans by other search criteria
-        // beds
-        BedroomChoice minBeds = searchCriteria.minBeds().getValue();
-        if (minBeds != null && minBeds != BedroomChoice.Any) {
-            criteria.add(PropertyCriterion.ge(proto.bedrooms(), minBeds.getBeds()));
-        }
-        BedroomChoice maxBeds = searchCriteria.maxBeds().getValue();
-        if (maxBeds != null && maxBeds != BedroomChoice.Any) {
-            criteria.add(PropertyCriterion.le(proto.bedrooms(), maxBeds.getBeds()));
-        }
-        // baths
-        BathroomChoice minBaths = searchCriteria.minBaths().getValue();
-        if (minBaths != null && minBaths != BathroomChoice.Any) {
-            criteria.add(PropertyCriterion.ge(proto.bathrooms(), minBaths.getBaths()));
-        }
-        BathroomChoice maxBaths = searchCriteria.maxBaths().getValue();
-        if (maxBaths != null && maxBaths != BathroomChoice.Any) {
-            criteria.add(PropertyCriterion.le(proto.bathrooms(), maxBaths.getBaths()));
+        // filter by search criteria
+        if (searchCriteria != null) {
+            // filter floorplans by unit price
+            Integer minPrice = searchCriteria.minPrice().getValue();
+            if (minPrice != null) {
+                criteria.add(PropertyCriterion.ge(proto.units().$().financial()._marketRent(), new BigDecimal(minPrice)));
+            }
+            Integer maxPrice = searchCriteria.maxPrice().getValue();
+            if (maxPrice != null && maxPrice > 0) {
+                criteria.add(PropertyCriterion.le(proto.units().$().financial()._marketRent(), new BigDecimal(maxPrice)));
+            }
+
+            // filter floorplans by other search criteria
+            // beds
+            BedroomChoice minBeds = searchCriteria.minBeds().getValue();
+            if (minBeds != null && minBeds != BedroomChoice.Any) {
+                criteria.add(PropertyCriterion.ge(proto.bedrooms(), minBeds.getBeds()));
+            }
+            BedroomChoice maxBeds = searchCriteria.maxBeds().getValue();
+            if (maxBeds != null && maxBeds != BedroomChoice.Any) {
+                criteria.add(PropertyCriterion.le(proto.bedrooms(), maxBeds.getBeds()));
+            }
+            // baths
+            BathroomChoice minBaths = searchCriteria.minBaths().getValue();
+            if (minBaths != null && minBaths != BathroomChoice.Any) {
+                criteria.add(PropertyCriterion.ge(proto.bathrooms(), minBaths.getBaths()));
+            }
+            BathroomChoice maxBaths = searchCriteria.maxBaths().getValue();
+            if (maxBaths != null && maxBaths != BathroomChoice.Any) {
+                criteria.add(PropertyCriterion.le(proto.bathrooms(), maxBaths.getBaths()));
+            }
         }
         return criteria;
     }

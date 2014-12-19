@@ -9,7 +9,6 @@
  *
  * Created on 2012-03-29
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.biz.financial.billing.print;
 

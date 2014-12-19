@@ -9,7 +9,6 @@
  *
  * Created on Sep 9, 2013
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.yardi.services;
 

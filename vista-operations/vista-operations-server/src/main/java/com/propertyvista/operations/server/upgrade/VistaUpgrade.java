@@ -9,7 +9,6 @@
  *
  * Created on 2012-10-26
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.operations.server.upgrade;
 

@@ -9,7 +9,6 @@
  *
  * Created on Aug 8, 2011
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.domain.tenant.lead;
 

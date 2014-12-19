@@ -9,7 +9,6 @@
  *
  * Created on Dec 27, 2013
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.server.security.openId;
 

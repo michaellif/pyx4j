@@ -9,7 +9,6 @@
  *
  * Created on 2013-08-02
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferfile;
 

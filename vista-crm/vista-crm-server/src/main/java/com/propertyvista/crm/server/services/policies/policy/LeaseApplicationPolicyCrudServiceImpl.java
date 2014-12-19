@@ -9,7 +9,6 @@
  *
  * Created on Dec 4, 2013
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.policies.policy;
 

@@ -9,7 +9,6 @@
  *
  * Created on Jun 17, 2014
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.oapi.v1.rs;
 

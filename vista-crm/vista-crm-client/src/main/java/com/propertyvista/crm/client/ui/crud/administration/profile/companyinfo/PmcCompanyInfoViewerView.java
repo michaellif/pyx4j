@@ -9,7 +9,6 @@
  *
  * Created on Dec 10, 2013
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.administration.profile.companyinfo;
 

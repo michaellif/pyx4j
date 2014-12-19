@@ -9,7 +9,6 @@
  *
  * Created on 2013-04-10
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.activity.crud.lease.financial;
 

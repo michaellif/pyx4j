@@ -9,7 +9,6 @@
  *
  * Created on Feb 1, 2011
  * @author Misha
- * @version $Id$
  */package com.propertyvista.operations.client.resources;
 
 import com.google.gwt.core.client.GWT;

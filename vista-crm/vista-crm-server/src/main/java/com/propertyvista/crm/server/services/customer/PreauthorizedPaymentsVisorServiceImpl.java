@@ -9,7 +9,6 @@
  *
  * Created on 2013-03-15
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.customer;
 

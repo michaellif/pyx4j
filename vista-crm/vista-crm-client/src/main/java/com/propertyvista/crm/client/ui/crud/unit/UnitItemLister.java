@@ -9,7 +9,6 @@
  *
  * Created on 2011-06-28
  * @author TPRGLET
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 

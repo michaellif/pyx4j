@@ -9,7 +9,6 @@
  *
  * Created on Sep 12, 2011
  * @author stanp
- * @version $Id$
  */
 package js;
 

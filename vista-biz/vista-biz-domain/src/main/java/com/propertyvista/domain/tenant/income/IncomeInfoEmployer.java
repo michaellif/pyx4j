@@ -9,7 +9,6 @@
  *
  * Created on Feb 12, 2011
  * @author dmitry
- * @version $Id$
  */
 package com.propertyvista.domain.tenant.income;
 

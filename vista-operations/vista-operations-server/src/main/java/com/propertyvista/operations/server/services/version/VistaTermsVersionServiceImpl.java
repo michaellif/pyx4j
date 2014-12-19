@@ -9,7 +9,6 @@
  *
  * Created on 2012-08-28
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.operations.server.services.version;
 

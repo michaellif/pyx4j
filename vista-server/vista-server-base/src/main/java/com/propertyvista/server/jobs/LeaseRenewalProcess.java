@@ -9,7 +9,6 @@
  *
  * Created on May 22, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.server.jobs;
 

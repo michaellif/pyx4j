@@ -9,7 +9,6 @@
  *
  * Created on 2013-10-10
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.portal.server.portal.resident.services.services;
 

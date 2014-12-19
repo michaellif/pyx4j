@@ -38,7 +38,6 @@ import org.apache.http.params.HttpParams;
  * This socket factory will create ssl socket that accepts self signed certificate
  * 
  * @author olamy
- * @version $Id$
  * @since 1.2.3
  */
 public class EasySSLSocketFactory implements SocketFactory, LayeredSocketFactory {

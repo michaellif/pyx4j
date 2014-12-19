@@ -9,7 +9,6 @@
  *
  * Created on 2011-01-25
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.server.config;
 

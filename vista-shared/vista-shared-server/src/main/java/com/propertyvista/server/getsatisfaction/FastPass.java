@@ -1,7 +1,6 @@
 /*
  * http://getsatisfaction.com/developers/fastpass-implementation
  *
- * @version $Id$
  */
 
 //@formatter:off

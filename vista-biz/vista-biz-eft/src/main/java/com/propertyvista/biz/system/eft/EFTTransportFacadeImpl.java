@@ -9,7 +9,6 @@
  *
  * Created on Dec 30, 2013
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.biz.system.eft;
 

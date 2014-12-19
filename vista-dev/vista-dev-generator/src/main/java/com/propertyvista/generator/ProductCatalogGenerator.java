@@ -9,7 +9,6 @@
  *
  * Created on Jul 24, 2011
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.generator;
 

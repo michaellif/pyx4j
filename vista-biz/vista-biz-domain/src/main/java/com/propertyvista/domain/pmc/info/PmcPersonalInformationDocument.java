@@ -9,7 +9,6 @@
  *
  * Created on 2013-01-23
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.domain.pmc.info;
 

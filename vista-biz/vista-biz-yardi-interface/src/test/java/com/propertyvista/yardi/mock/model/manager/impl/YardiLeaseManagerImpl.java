@@ -9,7 +9,6 @@
  *
  * Created on Sep 17, 2014
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.yardi.mock.model.manager.impl;
 

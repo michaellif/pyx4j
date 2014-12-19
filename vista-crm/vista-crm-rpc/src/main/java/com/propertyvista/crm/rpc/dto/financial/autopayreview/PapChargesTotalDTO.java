@@ -9,7 +9,6 @@
  *
  * Created on 2013-08-30
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.dto.financial.autopayreview;
 

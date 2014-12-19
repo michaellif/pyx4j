@@ -9,7 +9,6 @@
  *
  * Created on Sep 27, 2013
  * @author Artyom
- * @version $Id$
  */
 package com.propertyvista.biz.tenant.insurance;
 

@@ -9,7 +9,6 @@
  *
  * Created on 2014-03-03
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationsummary;
 

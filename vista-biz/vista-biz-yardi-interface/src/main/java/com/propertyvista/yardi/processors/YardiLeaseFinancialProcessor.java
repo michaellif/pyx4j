@@ -9,7 +9,6 @@
  *
  * Created on Jul 7, 2014
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.yardi.processors;
 

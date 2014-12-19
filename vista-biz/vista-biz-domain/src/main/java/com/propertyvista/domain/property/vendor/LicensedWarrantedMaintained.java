@@ -9,7 +9,6 @@
  *
  * Created on 2011-07-28
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.domain.property.vendor;
 

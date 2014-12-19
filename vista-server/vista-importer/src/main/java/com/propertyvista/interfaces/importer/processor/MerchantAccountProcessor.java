@@ -9,7 +9,6 @@
  *
  * Created on Mar 7, 2013
  * @author yuriyl
- * @version $Id$
  */
 package com.propertyvista.interfaces.importer.processor;
 

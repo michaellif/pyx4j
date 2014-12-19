@@ -9,7 +9,6 @@
  *
  * Created on 2011-05-17
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.crm.client.activity.crud.building.catalog;
 

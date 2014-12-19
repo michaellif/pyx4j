@@ -9,7 +9,6 @@
  *
  * Created on 2011-06-26
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.eft.caledoncards.dev;
 

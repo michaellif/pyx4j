@@ -9,7 +9,6 @@
  *
  * Created on 2012-07-18
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.common.client.config.demo;
 

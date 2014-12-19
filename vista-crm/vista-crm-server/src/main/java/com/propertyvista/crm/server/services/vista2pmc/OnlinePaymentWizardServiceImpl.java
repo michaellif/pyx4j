@@ -9,7 +9,6 @@
  *
  * Created on 2012-12-27
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.vista2pmc;
 

@@ -9,7 +9,6 @@
  *
  * Created on 2013-01-17
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.prospect.services;
 

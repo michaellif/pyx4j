@@ -9,7 +9,6 @@
  *
  * Created on Mar 27, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.portal.prospect.ui.application.components;
 

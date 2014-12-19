@@ -9,7 +9,6 @@
  *
  * Created on Jan 11, 2014
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.portal.shared.ui.util.decorators;
 

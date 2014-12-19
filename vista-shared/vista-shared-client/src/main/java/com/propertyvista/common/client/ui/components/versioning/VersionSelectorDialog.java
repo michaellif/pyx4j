@@ -9,7 +9,6 @@
  *
  * Created on 2012-03-06
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.common.client.ui.components.versioning;
 

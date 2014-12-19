@@ -9,7 +9,6 @@
  *
  * Created on 2012-06-09
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.billing.cycle;
 

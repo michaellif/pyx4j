@@ -9,7 +9,6 @@
  *
  * Created on Apr 1, 2013
  * @author Mykola
- * @version $Id$
  */
 package com.propertyvista.portal.shared.ui.communication;
 

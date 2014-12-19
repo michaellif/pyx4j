@@ -9,7 +9,6 @@
  *
  * Created on May 18, 2011
  * @author vadims
- * @version $Id$
  */
 package com.propertyvista.portal.shared.activity.communityevent;
 

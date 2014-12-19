@@ -9,7 +9,6 @@
  *
  * Created on 2012-12-13
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.domain.customizations;
 

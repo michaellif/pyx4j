@@ -9,7 +9,6 @@
  *
  * Created on 2014-01-06
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.biz.tenant.lease.print;
 

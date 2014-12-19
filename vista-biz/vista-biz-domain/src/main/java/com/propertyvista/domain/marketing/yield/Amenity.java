@@ -9,7 +9,6 @@
  *
  * Created on 2011-02-22
  * @author aroytbur
- * @version $Id$
  */
 package com.propertyvista.domain.marketing.yield;
 

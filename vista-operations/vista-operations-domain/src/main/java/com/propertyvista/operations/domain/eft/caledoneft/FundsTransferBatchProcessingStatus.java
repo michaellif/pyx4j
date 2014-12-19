@@ -9,7 +9,6 @@
  *
  * Created on 2013-04-28
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.operations.domain.eft.caledoneft;
 

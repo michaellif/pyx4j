@@ -9,7 +9,6 @@
  *
  * Created on Mar 7, 2012
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.administration.website.general;
 

@@ -9,7 +9,6 @@
  *
  * Created on Sep 11, 2013
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.resident.services.financial;
 

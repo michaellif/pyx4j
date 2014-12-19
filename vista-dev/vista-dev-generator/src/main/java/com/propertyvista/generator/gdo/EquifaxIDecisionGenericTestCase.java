@@ -9,7 +9,6 @@
  *
  * Created on 2012-11-14
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.generator.gdo;
 

@@ -9,7 +9,6 @@
  *
  * Created on 2012-04-12
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.biz.communication;
 

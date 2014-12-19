@@ -9,7 +9,6 @@
  *
  * Created on Jul 25, 2014
  * @author smolka
- * @version $Id$
  */
 package com.propertyvista.biz.communication;
 

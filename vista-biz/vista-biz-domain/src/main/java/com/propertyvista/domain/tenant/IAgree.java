@@ -9,7 +9,6 @@
  *
  * Created on Jan 4, 2012
  * @author vladlouk
- * @version $Id$
  */
 package com.propertyvista.domain.tenant;
 

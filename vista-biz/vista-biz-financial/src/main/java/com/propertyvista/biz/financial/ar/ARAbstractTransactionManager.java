@@ -22,7 +22,6 @@
  *
  * Created on Apr 22, 2012
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.biz.financial.ar;
 

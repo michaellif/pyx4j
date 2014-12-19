@@ -9,7 +9,6 @@
  *
  * Created on Sep 17, 2011
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.pmsite.server.model;
 

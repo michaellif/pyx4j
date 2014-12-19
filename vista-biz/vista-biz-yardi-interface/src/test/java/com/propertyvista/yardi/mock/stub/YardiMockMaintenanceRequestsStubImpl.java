@@ -9,7 +9,6 @@
  *
  * Created on May 15, 2013
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.yardi.mock.stub;
 

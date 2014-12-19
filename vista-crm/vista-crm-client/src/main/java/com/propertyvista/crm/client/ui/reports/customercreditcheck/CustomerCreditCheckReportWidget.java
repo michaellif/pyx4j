@@ -9,7 +9,6 @@
  *
  * Created on 2012-12-19
  * @author Amer Sohail
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.reports.customercreditcheck;
 

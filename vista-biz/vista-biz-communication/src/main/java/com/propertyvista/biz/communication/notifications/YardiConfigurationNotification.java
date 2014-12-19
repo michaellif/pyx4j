@@ -9,7 +9,6 @@
  *
  * Created on Jul 14, 2014
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.biz.communication.notifications;
 

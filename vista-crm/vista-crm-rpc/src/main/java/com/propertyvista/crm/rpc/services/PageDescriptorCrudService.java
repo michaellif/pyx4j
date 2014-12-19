@@ -9,7 +9,6 @@
  *
  * Created on 2011-06-06
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.services;
 

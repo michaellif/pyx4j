@@ -9,7 +9,6 @@
  *
  * Created on Nov 16, 2012
  * @author yuriyl
- * @version $Id$
  */
 package com.propertyvista.oapi.v1.model;
 

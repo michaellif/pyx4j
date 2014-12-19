@@ -9,7 +9,6 @@
  *
  * Created on Dec 2, 2011
  * @author vladlouk
- * @version $Id$
  */
 package com.propertyvista.portal.shared.ui.util.editors;
 

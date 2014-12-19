@@ -9,7 +9,6 @@
  *
  * Created on Dec 23, 2011
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.domain.policy.framework;
 

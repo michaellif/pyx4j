@@ -9,7 +9,6 @@
  *
  * Created on 2013-02-11
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.resident.dto.financial;
 

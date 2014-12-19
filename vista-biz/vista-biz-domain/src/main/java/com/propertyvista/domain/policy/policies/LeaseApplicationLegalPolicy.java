@@ -9,7 +9,6 @@
  *
  * Created on Dec 3, 2013
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.domain.policy.policies;
 

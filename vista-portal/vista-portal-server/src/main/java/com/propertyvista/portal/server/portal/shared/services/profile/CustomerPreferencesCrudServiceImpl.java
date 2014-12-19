@@ -9,7 +9,6 @@
  *
  * Created on Oct 1, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.portal.server.portal.shared.services.profile;
 

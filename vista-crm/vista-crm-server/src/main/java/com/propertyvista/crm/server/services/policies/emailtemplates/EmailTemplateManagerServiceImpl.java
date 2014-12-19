@@ -9,7 +9,6 @@
  *
  * Created on Feb 16, 2012
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.policies.emailtemplates;
 

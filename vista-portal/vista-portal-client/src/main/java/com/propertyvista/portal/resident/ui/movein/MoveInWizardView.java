@@ -9,7 +9,6 @@
  *
  * Created on Feb 13, 2014
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.portal.resident.ui.movein;
 

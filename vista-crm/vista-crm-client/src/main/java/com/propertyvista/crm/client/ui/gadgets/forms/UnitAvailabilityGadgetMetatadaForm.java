@@ -9,7 +9,6 @@
  *
  * Created on Jun 11, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.gadgets.forms;
 

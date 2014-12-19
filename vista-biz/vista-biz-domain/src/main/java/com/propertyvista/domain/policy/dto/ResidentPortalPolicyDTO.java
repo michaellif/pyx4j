@@ -9,7 +9,6 @@
  *
  * Created on Sep 5, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.domain.policy.dto;
 

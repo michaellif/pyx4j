@@ -16,7 +16,6 @@
  *
  * Created on Jan 19, 2013
  * @author Mykola
- * @version $Id$
  */
 package com.propertyvista.yardi.xml.bind;
 

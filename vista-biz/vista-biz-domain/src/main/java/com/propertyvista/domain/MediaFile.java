@@ -9,7 +9,6 @@
  *
  * Created on Jan 28, 2011
  * @author Misha
- * @version $Id$
  */
 package com.propertyvista.domain;
 

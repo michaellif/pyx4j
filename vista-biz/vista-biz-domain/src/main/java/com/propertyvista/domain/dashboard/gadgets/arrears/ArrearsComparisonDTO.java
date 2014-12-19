@@ -9,7 +9,6 @@
  *
  * Created on May 23, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.domain.dashboard.gadgets.arrears;
 

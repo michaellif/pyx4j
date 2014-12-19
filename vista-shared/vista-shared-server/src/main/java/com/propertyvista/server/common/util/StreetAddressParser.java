@@ -9,7 +9,6 @@
  *
  * Created on 2013-07-10
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.server.common.util;
 

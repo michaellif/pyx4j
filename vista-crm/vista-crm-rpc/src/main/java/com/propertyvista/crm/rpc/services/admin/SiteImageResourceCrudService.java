@@ -9,7 +9,6 @@
  *
  * Created on Jan 27, 2012
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.admin;
 

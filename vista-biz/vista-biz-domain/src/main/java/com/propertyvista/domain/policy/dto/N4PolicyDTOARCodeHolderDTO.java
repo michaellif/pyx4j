@@ -9,7 +9,6 @@
  *
  * Created on 2013-10-21
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.domain.policy.dto;
 

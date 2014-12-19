@@ -16,7 +16,6 @@
  *
  * Created on 2012-05-10
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.domain.pmc;
 

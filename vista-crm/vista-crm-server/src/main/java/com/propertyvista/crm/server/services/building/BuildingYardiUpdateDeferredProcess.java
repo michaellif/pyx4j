@@ -9,7 +9,6 @@
  *
  * Created on Apr 7, 2014
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.building;
 

@@ -9,7 +9,6 @@
  *
  * Created on 2013-05-31
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.operations.client.ui.crud.scheduler.trigger;
 

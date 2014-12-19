@@ -9,7 +9,6 @@
  *
  * Created on Feb 3, 2012
  * @author yuriyl
- * @version $Id$
  */
 package com.propertyvista.common.client.ui.validators;
 

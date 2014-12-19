@@ -9,7 +9,6 @@
  *
  * Created on 2013-06-11
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.policies.autopaychangepolicy;
 

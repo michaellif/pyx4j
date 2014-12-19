@@ -9,7 +9,6 @@
  *
  * Created on May 28, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.reports.util;
 

@@ -9,7 +9,6 @@
  *
  * Created on Feb 6, 2012
  * @author igor
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.policies.leaseadjustment;
 

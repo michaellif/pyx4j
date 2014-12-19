@@ -9,7 +9,6 @@
  *
  * Created on Apr 6, 2012
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.crm.client;
 

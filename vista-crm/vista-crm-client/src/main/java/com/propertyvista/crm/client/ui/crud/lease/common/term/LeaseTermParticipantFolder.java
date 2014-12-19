@@ -9,7 +9,6 @@
  *
  * Created on 2012-05-04
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 

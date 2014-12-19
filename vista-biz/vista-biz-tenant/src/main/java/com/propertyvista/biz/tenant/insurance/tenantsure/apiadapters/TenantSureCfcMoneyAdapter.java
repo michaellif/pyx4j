@@ -9,7 +9,6 @@
  *
  * Created on 2013-02-04
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters;
 

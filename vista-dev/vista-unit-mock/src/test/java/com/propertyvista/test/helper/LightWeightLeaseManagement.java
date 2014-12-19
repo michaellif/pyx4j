@@ -9,7 +9,6 @@
  *
  * Created on 2012-08-13
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.test.helper;
 

@@ -9,7 +9,6 @@
  *
  * Created on 2012-12-14
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.portal.resident.activity.services.insurance;
 

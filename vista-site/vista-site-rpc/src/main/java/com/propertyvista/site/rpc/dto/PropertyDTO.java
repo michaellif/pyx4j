@@ -9,7 +9,6 @@
  *
  * Created on May 15, 2011
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.site.rpc.dto;
 

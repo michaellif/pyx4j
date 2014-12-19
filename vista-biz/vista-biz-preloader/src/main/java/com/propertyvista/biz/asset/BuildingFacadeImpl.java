@@ -16,7 +16,6 @@
  *
  * Created on 2013-01-29
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.biz.asset;
 

@@ -9,7 +9,6 @@
  *
  * Created on Aug 26, 2014
  * @author smolka
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.components.boxes;
 

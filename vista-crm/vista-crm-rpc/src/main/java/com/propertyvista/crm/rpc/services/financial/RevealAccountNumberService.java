@@ -9,7 +9,6 @@
  *
  * Created on 2013-05-03
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.financial;
 

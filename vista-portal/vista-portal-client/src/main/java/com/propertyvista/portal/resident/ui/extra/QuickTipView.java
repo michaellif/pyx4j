@@ -9,7 +9,6 @@
  *
  * Created on Jun 23, 2013
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.portal.resident.ui.extra;
 

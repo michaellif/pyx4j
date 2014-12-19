@@ -9,7 +9,6 @@
  *
  * Created on 2013-03-22
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.billing.payment;
 
