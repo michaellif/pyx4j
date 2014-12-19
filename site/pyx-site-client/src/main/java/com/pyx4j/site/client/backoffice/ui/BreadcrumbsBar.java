@@ -79,14 +79,13 @@ public class BreadcrumbsBar extends HorizontalPanel {
             String label = !breadcrumb.getStringView().isEmpty() ? breadcrumb.getStringView() : breadcrumb.getEntityMeta().getCaption();
             anchor = new Label(label);
             anchor.addClickHandler(new ClickHandler() {
-
                 @Override
                 public void onClick(ClickEvent event) {
-                    AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(breadcrumb.getObjectClass(), breadcrumb.getPrimaryKey()));
+                    AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(breadcrumb.getInstanceValueClass(), breadcrumb.getPrimaryKey()));
                 }
             });
 
-            ImageResource image = AppPlaceEntityMapper.resolveImageResource(breadcrumb.getObjectClass());
+            ImageResource image = AppPlaceEntityMapper.resolveImageResource(breadcrumb.getInstanceValueClass());
             if (image != null) {
                 Image icon = new Image(image);
                 add(icon);
@@ -94,7 +93,6 @@ public class BreadcrumbsBar extends HorizontalPanel {
             }
             add(anchor);
             setCellVerticalAlignment(anchor, HorizontalPanel.ALIGN_MIDDLE);
-
         }
     }
 }
