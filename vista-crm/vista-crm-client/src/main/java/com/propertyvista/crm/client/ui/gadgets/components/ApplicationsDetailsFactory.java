@@ -64,9 +64,9 @@ public class ApplicationsDetailsFactory extends AbstractListerDetailsFactory<Lea
                     new Builder(proto._applicant().customer().person().name().lastName(), false).columnTitle(i18n.tr("Primary Tenant Last Name")).build(),
                     new Builder(proto.leaseParticipants().$().customer().customerId(), false).build(),
                     
-                    new Builder(proto.numberOfOccupants(), false).sortable(false).searchable(false).title(i18n.tr("Occupants")).build(),
-                    new Builder(proto.numberOfApplicants(), true).sortable(false).searchable(false).title(i18n.tr("Applicants")).build(),
-                    new Builder(proto.numberOfGuarantors(), true).sortable(false).searchable(false).title(i18n.tr("Guarantors")).build(),
+                    new Builder(proto.numberOfOccupants(), false).sortable(false).searchable(false).columnTitle(i18n.tr("Occupants")).build(),
+                    new Builder(proto.numberOfApplicants(), true).sortable(false).searchable(false).columnTitle(i18n.tr("Applicants")).build(),
+                    new Builder(proto.numberOfGuarantors(), true).sortable(false).searchable(false).columnTitle(i18n.tr("Guarantors")).build(),
                     
                     new Builder(proto.currentTerm().version().tenants()).build()
                 );//@formatter:on

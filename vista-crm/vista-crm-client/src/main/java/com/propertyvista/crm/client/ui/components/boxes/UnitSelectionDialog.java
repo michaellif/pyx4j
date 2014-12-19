@@ -57,7 +57,7 @@ public abstract class UnitSelectionDialog extends EntitySelectorTableDialog<AptU
                 new ColumnDescriptor.Builder(proto().info().area()).build(),
                 new ColumnDescriptor.Builder(proto().info()._bedrooms()).build(),
                 new ColumnDescriptor.Builder(proto().info()._bathrooms()).build(),
-                new ColumnDescriptor.Builder(proto().floorplan().name()).title(i18n.tr("Floorplan")).build(),
+                new ColumnDescriptor.Builder(proto().floorplan().name()).columnTitle(i18n.tr("Floorplan")).build(),
                 new ColumnDescriptor.Builder(proto().floorplan().marketingName(), false).build(),
                 new ColumnDescriptor.Builder(proto().availability().availableForRent()).build(),
                 new ColumnDescriptor.Builder(proto().financial()._marketRent()).build(),
@@ -65,7 +65,7 @@ public abstract class UnitSelectionDialog extends EntitySelectorTableDialog<AptU
                 // building data                
                 new ColumnDescriptor.Builder(proto().building().propertyCode(), true).build(),
                 new ColumnDescriptor.Builder(proto().building().complex(), false).build(),
-                new ColumnDescriptor.Builder(proto().building().info().name(), true).title(i18n.tr("Building")).build(),
+                new ColumnDescriptor.Builder(proto().building().info().name(), true).columnTitle(i18n.tr("Building")).build(),
                 new ColumnDescriptor.Builder(proto().building().info().type(), false).build(),
                 new ColumnDescriptor.Builder(proto().building().info().shape(), false).build(),
                 new ColumnDescriptor.Builder(proto().building().info().address().streetNumber(), false).build(),
@@ -91,7 +91,7 @@ public abstract class UnitSelectionDialog extends EntitySelectorTableDialog<AptU
                 new ColumnDescriptor.Builder(proto().building().financial().lastAppraisalDate(), false).build(),
                 new ColumnDescriptor.Builder(proto().building().financial().lastAppraisalValue(), false).build(),
                 new ColumnDescriptor.Builder(proto().building().financial().currency(), false).build(),
-                new ColumnDescriptor.Builder(proto().building().marketing().name(), false).title(i18n.tr("Building Marketing Name")).build()
+                new ColumnDescriptor.Builder(proto().building().marketing().name(), false).columnTitle(i18n.tr("Building Marketing Name")).build()
                 ); //@formatter:on
     }
 

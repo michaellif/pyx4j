@@ -63,7 +63,7 @@ public class RunLister extends SiteDataTablePanel<Run> {
     static List<ColumnDescriptor> createViewColumnDescriptors() {
         Run proto = EntityFactory.getEntityPrototype(Run.class);
         List<ColumnDescriptor> c = new Vector<ColumnDescriptor>(Arrays.asList(//@formatter:off
-                new ColumnDescriptor.Builder(proto.trigger().name()).title("Trigger Name").build(),
+                new ColumnDescriptor.Builder(proto.trigger().name()).columnTitle("Trigger Name").build(),
                 new ColumnDescriptor.Builder(proto.trigger().triggerType()).build(),
                 new ColumnDescriptor.Builder(proto.trigger()).searchableOnly().build()
         ));//@formatter:on

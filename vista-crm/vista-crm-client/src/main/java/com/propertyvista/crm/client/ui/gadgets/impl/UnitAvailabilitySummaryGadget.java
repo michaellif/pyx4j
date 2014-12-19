@@ -51,7 +51,7 @@ public class UnitAvailabilitySummaryGadget extends GadgetInstanceBase<UnitAvaila
     static {
         UnitAvailabilityStatusSummaryLineDTO proto = EntityFactory.getEntityPrototype(UnitAvailabilityStatusSummaryLineDTO.class);
         COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
-                new ColumnDescriptor.Builder(proto.category()).title("").sortable(false).build(),
+                new ColumnDescriptor.Builder(proto.category()).columnTitle("").sortable(false).build(),
                 new ColumnDescriptor.Builder(proto.units()).sortable(false).build(),
                 new ColumnDescriptor.Builder(proto.percentage()).sortable(false).build()
         );//@formatter:on
