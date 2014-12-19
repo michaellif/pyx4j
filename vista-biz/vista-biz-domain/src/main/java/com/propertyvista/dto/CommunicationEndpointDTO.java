@@ -9,7 +9,6 @@
  *
  * Created on Mar 28, 2014
  * @author smolka
- * @version $Id$
  */
 package com.propertyvista.dto;
 

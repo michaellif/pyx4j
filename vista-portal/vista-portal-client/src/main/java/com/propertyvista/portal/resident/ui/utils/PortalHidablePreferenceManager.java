@@ -9,7 +9,6 @@
  *
  * Created on Oct 2, 2014
  * @author smolka
- * @version $Id$
  */
 package com.propertyvista.portal.resident.ui.utils;
 

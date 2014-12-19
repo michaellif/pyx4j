@@ -9,7 +9,6 @@
  *
  * Created on 2013-04-11
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.portal.resident.activity.financial.autopay;
 

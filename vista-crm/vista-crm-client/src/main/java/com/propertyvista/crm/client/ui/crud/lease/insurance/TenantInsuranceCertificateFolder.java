@@ -9,7 +9,6 @@
  *
  * Created on 2012-11-29
  * @author Artyom
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.lease.insurance;
 

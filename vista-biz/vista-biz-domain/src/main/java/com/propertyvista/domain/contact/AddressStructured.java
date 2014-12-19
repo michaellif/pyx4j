@@ -9,7 +9,6 @@
  *
  * Created on 2011-05-13
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.domain.contact;
 

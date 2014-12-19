@@ -9,7 +9,6 @@
  *
  * Created on 2013-06-12
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.reports.generators;
 

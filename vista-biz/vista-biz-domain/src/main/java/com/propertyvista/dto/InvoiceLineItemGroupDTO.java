@@ -9,7 +9,6 @@
  *
  * Created on Apr 15, 2012
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.dto;
 

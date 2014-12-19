@@ -9,7 +9,6 @@
  *
  * Created on Nov 10, 2014
  * @author arminea
- * @version $Id$
  */
 package com.propertyvista.biz.legal;
 

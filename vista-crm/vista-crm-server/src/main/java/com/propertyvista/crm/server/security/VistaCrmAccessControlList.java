@@ -9,7 +9,6 @@
  *
  * Created on 2011-03-25
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.crm.server.security;
 

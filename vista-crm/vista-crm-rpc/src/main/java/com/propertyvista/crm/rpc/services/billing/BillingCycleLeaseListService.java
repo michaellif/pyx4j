@@ -9,7 +9,6 @@
  *
  * Created on 2012-06-27
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.billing;
 

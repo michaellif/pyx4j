@@ -9,7 +9,6 @@
  *
  * Created on Jan 30, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.common.client.ui.components.security;
 

@@ -9,7 +9,6 @@
  *
  * Created on 2011-02-17
  * @author VladLL
- * @version $Id$
  */
 package com.propertyvista.common.client.ui.decorations;
 

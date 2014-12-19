@@ -9,7 +9,6 @@
  *
  * Created on Oct 5, 2011
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.operations.client.themes;
 

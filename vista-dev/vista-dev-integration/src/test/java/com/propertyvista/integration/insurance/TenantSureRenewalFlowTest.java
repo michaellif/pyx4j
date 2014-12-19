@@ -9,7 +9,6 @@
  *
  * Created on Jul 11, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.integration.insurance;
 

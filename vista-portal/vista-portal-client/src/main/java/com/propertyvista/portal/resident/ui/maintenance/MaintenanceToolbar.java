@@ -9,7 +9,6 @@
  *
  * Created on Sep 26, 2013
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.portal.resident.ui.maintenance;
 

@@ -9,7 +9,6 @@
  *
  * Created on Feb 15, 2011
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.common.client.theme;
 
@@ -370,12 +369,6 @@ public class VistaTheme extends Theme {
         style = new Style(CSSClass.pyx4j_Photoalbom_Caption);
         style.addProperty("color", "#333");
         style.addProperty("font-weight", "bold");
-        addStyle(style);
-
-    }
-
-    protected void initBannerStyle() {
-        Style style = new Style(CSSClass.pyx4j_Banner);
         addStyle(style);
 
     }

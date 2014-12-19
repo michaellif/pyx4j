@@ -9,7 +9,6 @@
  *
  * Created on Dec 4, 2013
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.portal.prospect.ui;
 

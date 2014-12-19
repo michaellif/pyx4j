@@ -9,7 +9,6 @@
  *
  * Created on 2013-10-02
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.domain.policy.policies;
 
@@ -24,18 +23,28 @@ import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.policy.framework.LowestApplicableNode;
-import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
 
 @DiscriminatorValue("N4Policy")
-//TODO in order to change Lowest Applicable Node there must be a UI and whole N4 generation infrastructure that allows to set up the defaults listed here on lease level
-//      right now there's nothing like that
-@LowestApplicableNode(value = OrganizationPoliciesNode.class)
 public interface N4Policy extends Policy {
+
+    @I18n
+    public enum EmployeeSelectionMethod {
+        ByLoggedInUser, FromEmployeeList;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
+    @NotNull
+    IPrimitive<EmployeeSelectionMethod> agentSelectionMethod();
 
     @Caption(description = "Signature image taken from Employee's profile")
     IPrimitive<Boolean> includeSignature();

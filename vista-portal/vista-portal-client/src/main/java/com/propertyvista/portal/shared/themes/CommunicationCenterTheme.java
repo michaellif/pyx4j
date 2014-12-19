@@ -9,7 +9,6 @@
  *
  * Created on Feb 11, 2013
  * @author matheszabi
- * @version $Id$
  */
 package com.propertyvista.portal.shared.themes;
 

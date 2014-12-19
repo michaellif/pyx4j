@@ -9,7 +9,6 @@
  *
  * Created on Feb 16, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.portal.server.portal.prospect.security;
 

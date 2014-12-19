@@ -9,7 +9,6 @@
  *
  * Created on Jan 31, 2014
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.domain.legal;
 

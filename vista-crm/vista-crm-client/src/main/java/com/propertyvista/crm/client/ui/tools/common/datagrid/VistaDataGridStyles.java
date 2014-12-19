@@ -9,7 +9,6 @@
  *
  * Created on 2013-12-03
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.tools.common.datagrid;
 

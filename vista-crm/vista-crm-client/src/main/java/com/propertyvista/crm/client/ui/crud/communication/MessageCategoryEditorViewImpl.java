@@ -9,7 +9,6 @@
  *
  * Created on Mar 26, 2014
  * @author smolka
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 

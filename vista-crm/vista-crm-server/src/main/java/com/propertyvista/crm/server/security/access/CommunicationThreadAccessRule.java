@@ -9,7 +9,6 @@
  *
  * Created on Apr 22, 2014
  * @author smolka
- * @version $Id$
  */
 package com.propertyvista.crm.server.security.access;
 

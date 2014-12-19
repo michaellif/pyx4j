@@ -9,7 +9,6 @@
  *
  * Created on Sep 22, 2014
  * @author ernestog
- * @version $Id$
  */
 package com.propertyvista.portal.server.portal.resident.services;
 

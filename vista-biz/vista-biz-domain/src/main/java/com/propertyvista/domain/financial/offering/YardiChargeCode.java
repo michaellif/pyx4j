@@ -9,7 +9,6 @@
  *
  * Created on 2013-03-11
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.domain.financial.offering;
 

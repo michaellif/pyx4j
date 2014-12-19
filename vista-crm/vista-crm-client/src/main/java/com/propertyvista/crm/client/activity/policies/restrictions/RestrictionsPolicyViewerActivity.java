@@ -9,7 +9,6 @@
  *
  * Created on Jul 13, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.activity.policies.restrictions;
 

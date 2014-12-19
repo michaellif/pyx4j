@@ -9,7 +9,6 @@
  *
  * Created on May 28, 2014
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.crm.client.activity;
 

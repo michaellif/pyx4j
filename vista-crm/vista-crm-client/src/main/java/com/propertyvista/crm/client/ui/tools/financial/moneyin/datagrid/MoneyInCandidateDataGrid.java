@@ -9,7 +9,6 @@
  *
  * Created on 2013-12-02
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid;
 

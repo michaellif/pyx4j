@@ -9,7 +9,6 @@
  *
  * Created on Nov 4, 2014
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.domain.policy.policies.domain;
 

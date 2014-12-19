@@ -9,7 +9,6 @@
  *
  * Created on 2012-12-11
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.crm.client.activity.crud.administration.website.content;
 

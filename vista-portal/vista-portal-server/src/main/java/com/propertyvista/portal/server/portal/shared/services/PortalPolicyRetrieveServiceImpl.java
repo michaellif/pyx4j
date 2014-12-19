@@ -9,7 +9,6 @@
  *
  * Created on 2013-05-08
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.portal.server.portal.shared.services;
 

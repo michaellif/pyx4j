@@ -9,7 +9,6 @@
  *
  * Created on 2013-06-21
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.dto;
 

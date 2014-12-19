@@ -9,7 +9,6 @@
  *
  * Created on Sep 14, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.dashboard.gadgets.filters;
 

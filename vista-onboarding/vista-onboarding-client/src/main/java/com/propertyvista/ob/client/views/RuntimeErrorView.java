@@ -9,7 +9,6 @@
  *
  * Created on 2012-12-20
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.ob.client.views;
 

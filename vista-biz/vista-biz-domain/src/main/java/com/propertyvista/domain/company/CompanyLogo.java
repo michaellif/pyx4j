@@ -9,7 +9,6 @@
  *
  * Created on Oct 24, 2013
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.domain.company;
 

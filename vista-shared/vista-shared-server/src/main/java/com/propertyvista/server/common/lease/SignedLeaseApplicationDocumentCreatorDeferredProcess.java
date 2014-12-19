@@ -9,7 +9,6 @@
  *
  * Created on 2013-12-20
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.server.common.lease;
 

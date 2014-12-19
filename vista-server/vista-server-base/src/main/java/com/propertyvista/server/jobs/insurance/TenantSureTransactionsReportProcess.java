@@ -9,7 +9,6 @@
  *
  * Created on 2013-02-15
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.server.jobs.insurance;
 

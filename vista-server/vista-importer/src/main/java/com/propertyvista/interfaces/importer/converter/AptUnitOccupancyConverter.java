@@ -9,7 +9,6 @@
  *
  * Created on Apr 20, 2012
  * @author yuriyl
- * @version $Id$
  */
 package com.propertyvista.interfaces.importer.converter;
 

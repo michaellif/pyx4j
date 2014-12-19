@@ -9,7 +9,6 @@
  *
  * Created on Jul 18, 2013
  * @author VLadL
- * @version $Id$
  */
 package com.propertyvista.crm.server.security.access;
 

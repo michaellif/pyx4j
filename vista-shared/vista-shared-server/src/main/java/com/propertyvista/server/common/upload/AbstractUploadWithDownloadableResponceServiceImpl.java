@@ -9,7 +9,6 @@
  *
  * Created on 2013-04-18
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.server.common.upload;
 

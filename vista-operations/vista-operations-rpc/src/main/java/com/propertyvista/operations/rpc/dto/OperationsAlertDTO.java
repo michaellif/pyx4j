@@ -9,7 +9,6 @@
  *
  * Created on Jun 23, 2014
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.operations.rpc.dto;
 

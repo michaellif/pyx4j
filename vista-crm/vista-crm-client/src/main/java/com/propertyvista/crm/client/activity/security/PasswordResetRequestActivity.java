@@ -9,7 +9,6 @@
  *
  * Created on 2011-02-20
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.crm.client.activity.security;
 

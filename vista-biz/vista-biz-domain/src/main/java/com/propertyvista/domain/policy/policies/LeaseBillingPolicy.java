@@ -9,7 +9,6 @@
  *
  * Created on Mar 10, 2012
  * @author igor
- * @version $Id$
  */
 
 //TODO See VISTA-2605 for comments

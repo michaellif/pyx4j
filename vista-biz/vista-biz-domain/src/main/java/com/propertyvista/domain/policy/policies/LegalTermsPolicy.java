@@ -9,7 +9,6 @@
  *
  * Created on Jan 3, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.domain.policy.policies;
 

@@ -9,7 +9,6 @@
  *
  * Created on Mar 29, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.activity.policies.common;
 

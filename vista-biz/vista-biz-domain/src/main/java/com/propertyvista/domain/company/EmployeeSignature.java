@@ -9,7 +9,6 @@
  *
  * Created on 2013-10-24
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.domain.company;
 

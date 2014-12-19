@@ -9,7 +9,6 @@
  *
  * Created on Mar 23, 2012
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.portal.server.preloader;
 

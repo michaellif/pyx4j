@@ -9,7 +9,6 @@
  *
  * Created on Jun 19, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.domain.security;
 

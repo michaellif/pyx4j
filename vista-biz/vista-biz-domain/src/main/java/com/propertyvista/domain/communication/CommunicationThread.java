@@ -9,7 +9,6 @@
  *
  * Created on 2013-01-21
  * @author matheszabi
- * @version $Id$
  */
 package com.propertyvista.domain.communication;
 

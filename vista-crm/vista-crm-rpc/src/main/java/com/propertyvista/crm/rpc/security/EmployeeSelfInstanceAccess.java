@@ -9,7 +9,6 @@
  *
  * Created on Jul 17, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.security;
 

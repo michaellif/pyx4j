@@ -9,7 +9,6 @@
  *
  * Created on Dec 29, 2011
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.activity.policies.leaseterms;
 

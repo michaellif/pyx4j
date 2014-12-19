@@ -9,7 +9,6 @@
  *
  * Created on Feb 16, 2012
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.config.tests;
 

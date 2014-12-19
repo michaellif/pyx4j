@@ -9,7 +9,6 @@
  *
  * Created on Dec 23, 2011
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.crm.client.activity.crud.maintenance;
 

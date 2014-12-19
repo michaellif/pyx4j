@@ -9,7 +9,6 @@
  *
  * Created on Sep 19, 2014
  * @author ernestog
- * @version $Id$
  */
 package com.propertyvista.biz.communication.template;
 

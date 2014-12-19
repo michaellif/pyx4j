@@ -9,7 +9,6 @@
  *
  * Created on Nov 3, 2014
  * @author ernestog
- * @version $Id$
  */
 package com.propertyvista.server.config.filter;
 
@@ -49,10 +48,7 @@ public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
         return new VistaURIData(app, namespace);
     }
 
-    /**
-     * Calculate app based on inner HttpRequest object on initialization. Internal use preferred.
-     * To get VistaNamespace object use getVistaNamespace() instead.
-     */
+
     @Override
     public String getNamespace(HttpServletRequest httpRequest) {
         return "";
@@ -60,10 +56,7 @@ public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
 //        return ServerSideConfiguration.instance().getNamespaceResolver().getNamespace(httpRequest);
     }
 
-    /**
-     * Calculate app based on inner HttpRequest object on initialization. Internal use preferred.
-     * To get VistaApplication object use getVistaApplication() instead.
-     */
+
     @Override
     public VistaApplication getApplication() {
         return getAppByRequest();

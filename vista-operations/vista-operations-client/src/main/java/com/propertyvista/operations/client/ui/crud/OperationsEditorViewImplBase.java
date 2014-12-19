@@ -9,7 +9,6 @@
  *
  * Created on 2011-05-04
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.operations.client.ui.crud;
 

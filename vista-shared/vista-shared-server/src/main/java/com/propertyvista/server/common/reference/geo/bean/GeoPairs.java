@@ -9,7 +9,6 @@
  *
  * Created on May 23, 2011
  * @author dmitry
- * @version $Id$
  */
 package com.propertyvista.server.common.reference.geo.bean;
 

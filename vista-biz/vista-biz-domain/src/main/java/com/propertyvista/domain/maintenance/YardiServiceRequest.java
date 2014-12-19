@@ -9,7 +9,6 @@
  *
  * Created on Mar 26, 2013
  * @author yuriyl
- * @version $Id$
  */
 package com.propertyvista.domain.maintenance;
 

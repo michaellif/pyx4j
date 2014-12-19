@@ -9,7 +9,6 @@
  *
  * Created on 2011-06-14
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.operations.server.security;
 

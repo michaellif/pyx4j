@@ -9,7 +9,6 @@
  *
  * Created on 2011-06-28
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.dashboard;
 

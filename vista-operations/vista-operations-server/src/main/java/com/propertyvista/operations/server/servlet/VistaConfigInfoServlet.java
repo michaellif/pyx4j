@@ -9,7 +9,6 @@
  *
  * Created on Sep 17, 2011
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.operations.server.servlet;
 

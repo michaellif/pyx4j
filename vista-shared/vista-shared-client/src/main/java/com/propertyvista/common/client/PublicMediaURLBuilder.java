@@ -9,7 +9,6 @@
  *
  * Created on Nov 25, 2013
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.common.client;
 

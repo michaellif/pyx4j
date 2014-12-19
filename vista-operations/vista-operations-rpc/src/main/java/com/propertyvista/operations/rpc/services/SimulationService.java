@@ -9,7 +9,6 @@
  *
  * Created on Apr 9, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.operations.rpc.services;
 

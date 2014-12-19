@@ -9,7 +9,6 @@
  *
  * Created on 2013-02-08
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.operations.server.services.simulator;
 

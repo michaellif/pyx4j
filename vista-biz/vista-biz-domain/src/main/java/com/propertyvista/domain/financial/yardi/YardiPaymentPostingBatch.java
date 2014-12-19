@@ -9,7 +9,6 @@
  *
  * Created on Oct 15, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.domain.financial.yardi;
 

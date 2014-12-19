@@ -9,7 +9,6 @@
  *
  * Created on Mar 7, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.server.config.logback;
 

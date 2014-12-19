@@ -9,7 +9,6 @@
  *
  * Created on Aug 26, 2011
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.pmsite.server.pages;
 

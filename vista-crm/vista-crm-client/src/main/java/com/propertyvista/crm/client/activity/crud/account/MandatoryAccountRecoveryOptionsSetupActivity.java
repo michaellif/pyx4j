@@ -9,7 +9,6 @@
  *
  * Created on Jun 20, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.activity.crud.account;
 

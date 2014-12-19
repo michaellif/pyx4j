@@ -9,7 +9,6 @@
  *
  * Created on Jul 9, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.eft.mock.cards;
 

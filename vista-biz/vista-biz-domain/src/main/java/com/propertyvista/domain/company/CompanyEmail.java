@@ -9,7 +9,6 @@
  *
  * Created on Jan 12, 2012
  * @author yuriyl
- * @version $Id$
  */
 package com.propertyvista.domain.company;
 

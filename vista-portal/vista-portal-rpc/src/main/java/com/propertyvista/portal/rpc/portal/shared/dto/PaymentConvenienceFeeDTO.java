@@ -9,7 +9,6 @@
  *
  * Created on Nov 15, 2013
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.shared.dto;
 

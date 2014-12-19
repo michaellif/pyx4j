@@ -9,7 +9,6 @@
  *
  * Created on Apr 14, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.importer;
 

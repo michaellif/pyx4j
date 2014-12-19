@@ -9,7 +9,6 @@
  *
  * Created on 2013-06-16
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.biz.operations.business;
 

@@ -9,7 +9,6 @@
  *
  * Created on Jul 3, 2013
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.portal.resident.ui.offers.dashboard;
 

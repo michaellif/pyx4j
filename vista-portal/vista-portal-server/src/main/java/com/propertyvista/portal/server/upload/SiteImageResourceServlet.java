@@ -9,7 +9,6 @@
  *
  * Created on Mar 20, 2011
  * @author sergei
- * @version $Id$
  */
 
 package com.propertyvista.portal.server.upload;

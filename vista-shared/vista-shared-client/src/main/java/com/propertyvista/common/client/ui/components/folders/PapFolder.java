@@ -9,7 +9,6 @@
  *
  * Created on Oct 16, 2014
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.common.client.ui.components.folders;
 

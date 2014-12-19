@@ -9,7 +9,6 @@
  *
  * Created on Mar 13, 2011
  * @author Misha
- * @version $Id$
  */
 package com.propertyvista.common.client.site;
 

@@ -9,7 +9,6 @@
  *
  * Created on 2013-12-19
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.dto.financial.moneyin.batch;
 

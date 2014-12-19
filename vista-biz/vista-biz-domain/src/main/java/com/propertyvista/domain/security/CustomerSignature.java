@@ -9,7 +9,6 @@
  *
  * Created on Dec 11, 2013
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.domain.security;
 

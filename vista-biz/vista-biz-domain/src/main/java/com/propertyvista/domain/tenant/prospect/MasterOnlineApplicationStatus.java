@@ -9,7 +9,6 @@
  *
  * Created on Aug 9, 2011
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.domain.tenant.prospect;
 

@@ -9,7 +9,6 @@
  *
  * Created on 2013-05-12
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.server.ci.bugs;
 

@@ -9,7 +9,6 @@
  *
  * Created on Sep 6, 2012
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.crm.client.visor.charges;
 

@@ -9,7 +9,6 @@
  *
  * Created on Jul 9, 2011
  * @author dad
- * @version $Id$
  */
 package com.propertyvista.portal.resident.activity.financial.paymentmethod;
 

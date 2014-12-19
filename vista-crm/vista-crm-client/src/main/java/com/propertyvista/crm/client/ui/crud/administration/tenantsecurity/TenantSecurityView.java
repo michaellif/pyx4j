@@ -9,7 +9,6 @@
  *
  * Created on 2013-04-16
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.administration.tenantsecurity;
 

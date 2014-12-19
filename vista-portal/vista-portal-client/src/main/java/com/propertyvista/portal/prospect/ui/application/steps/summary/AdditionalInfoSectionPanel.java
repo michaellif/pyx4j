@@ -9,7 +9,6 @@
  *
  * Created on Jan 22, 2014
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.portal.prospect.ui.application.steps.summary;
 

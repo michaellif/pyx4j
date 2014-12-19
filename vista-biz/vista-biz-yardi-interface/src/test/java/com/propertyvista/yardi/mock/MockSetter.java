@@ -9,7 +9,6 @@
  *
  * Created on Oct 30, 2013
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.yardi.mock;
 

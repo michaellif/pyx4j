@@ -9,7 +9,6 @@
  *
  * Created on 2013-03-13
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.biz.financial.ar;
 

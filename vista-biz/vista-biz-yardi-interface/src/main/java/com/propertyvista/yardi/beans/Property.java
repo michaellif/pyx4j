@@ -9,7 +9,6 @@
  *
  * Created on May 27, 2011
  * @author dmitry
- * @version $Id$
  */
 package com.propertyvista.yardi.beans;
 

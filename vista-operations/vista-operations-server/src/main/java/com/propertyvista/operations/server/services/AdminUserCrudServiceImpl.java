@@ -4,7 +4,6 @@
  *
  * Created on Nov 4, 2011
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.operations.server.services;
 

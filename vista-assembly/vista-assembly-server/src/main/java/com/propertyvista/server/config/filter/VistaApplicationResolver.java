@@ -16,7 +16,6 @@
  *
  * Created on Nov 3, 2014
  * @author ernestog
- * @version $Id$
  */
 package com.propertyvista.server.config.filter;
 

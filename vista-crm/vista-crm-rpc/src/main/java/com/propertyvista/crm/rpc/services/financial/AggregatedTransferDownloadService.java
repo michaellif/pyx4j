@@ -9,7 +9,6 @@
  *
  * Created on Sep 4, 2014
  * @author ernestog
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.financial;
 

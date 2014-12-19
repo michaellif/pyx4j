@@ -9,7 +9,6 @@
  *
  * Created on Aug 22, 2014
  * @author smolka
- * @version $Id$
  */
 package com.propertyvista.domain.communication;
 

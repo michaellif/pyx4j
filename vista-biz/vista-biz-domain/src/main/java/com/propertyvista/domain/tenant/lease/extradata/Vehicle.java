@@ -9,7 +9,6 @@
  *
  * Created on 2011-02-10
  * @author antonk
- * @version $Id$
  */
 package com.propertyvista.domain.tenant.lease.extradata;
 

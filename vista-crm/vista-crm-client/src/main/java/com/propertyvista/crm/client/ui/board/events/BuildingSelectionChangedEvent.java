@@ -9,7 +9,6 @@
  *
  * Created on Feb 10, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.board.events;
 

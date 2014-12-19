@@ -9,7 +9,6 @@
  *
  * Created on Oct 20, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.shared.rpc;
 

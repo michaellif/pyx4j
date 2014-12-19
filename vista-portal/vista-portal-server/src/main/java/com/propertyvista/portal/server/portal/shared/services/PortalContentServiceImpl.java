@@ -9,7 +9,6 @@
  *
  * Created on 2013-07-05
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.portal.server.portal.shared.services;
 

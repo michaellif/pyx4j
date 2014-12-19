@@ -9,7 +9,6 @@
  *
  * Created on 2014-01-13
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.activity.tools.financial.moneyin;
 

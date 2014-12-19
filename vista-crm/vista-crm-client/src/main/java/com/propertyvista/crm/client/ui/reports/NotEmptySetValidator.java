@@ -9,7 +9,6 @@
  *
  * Created on Aug 14, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.reports;
 

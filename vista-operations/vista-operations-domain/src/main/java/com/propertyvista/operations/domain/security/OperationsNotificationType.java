@@ -9,7 +9,6 @@
  *
  * Created on Jul 29, 2013
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.operations.domain.security;
 

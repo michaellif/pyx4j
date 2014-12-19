@@ -9,7 +9,6 @@
  *
  * Created on 2014-01-21
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.lease.legal;
 

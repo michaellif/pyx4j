@@ -9,7 +9,6 @@
  *
  * Created on Dec 3, 2014
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.domain.media;
 

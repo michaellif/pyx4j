@@ -9,7 +9,6 @@
  *
  * Created on Dec 16, 2011
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.policies;
 

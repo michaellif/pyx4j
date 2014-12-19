@@ -9,7 +9,6 @@
  *
  * Created on 2012-11-12
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.common.client.ui.components.tenantinsurance;
 

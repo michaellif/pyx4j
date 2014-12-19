@@ -9,7 +9,6 @@
  *
  * Created on 2013-01-23
  * @author matheszabi
- * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.resident.communication;
 

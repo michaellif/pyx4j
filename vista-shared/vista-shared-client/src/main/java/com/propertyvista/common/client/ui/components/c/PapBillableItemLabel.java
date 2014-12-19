@@ -9,7 +9,6 @@
  *
  * Created on 2013-05-21
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.common.client.ui.components.c;
 

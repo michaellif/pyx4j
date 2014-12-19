@@ -9,7 +9,6 @@
  *
  * Created on Jan 27, 2012
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.shared.services;
 

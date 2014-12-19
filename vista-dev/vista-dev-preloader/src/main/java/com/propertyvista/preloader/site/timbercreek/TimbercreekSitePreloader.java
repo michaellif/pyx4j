@@ -9,7 +9,6 @@
  *
  * Created on Nov 1, 2011
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.preloader.site.timbercreek;
 

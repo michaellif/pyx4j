@@ -9,7 +9,6 @@
  *
  * Created on Oct 17, 2013
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.portal.shared.themes;
 

@@ -9,7 +9,6 @@
  *
  * Created on Jul 3, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.biz.validation.framework.validators;
 

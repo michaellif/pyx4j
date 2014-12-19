@@ -9,7 +9,6 @@
  *
  * Created on Oct 30, 2013
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.portal.server.security.access.resident;
 

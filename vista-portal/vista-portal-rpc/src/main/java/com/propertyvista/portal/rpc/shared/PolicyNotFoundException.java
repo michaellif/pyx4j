@@ -9,7 +9,6 @@
  *
  * Created on Mar 24, 2012
  * @author Artyom
- * @version $Id$
  */
 package com.propertyvista.portal.rpc.shared;
 

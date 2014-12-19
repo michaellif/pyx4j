@@ -9,7 +9,6 @@
  *
  * Created on Mar 22, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.operations.client.ui.crud.adminusers;
 

@@ -9,7 +9,7 @@
  *
  * Created on Dec 10, 2014
  * @author smolka
- * @version $Id$
+ * @version $Id: CrmUserDeliveryPreferences.java 21558 2014-12-11 21:08:23Z igors $
  */
 package com.propertyvista.domain.preferences;
 
@@ -21,12 +21,20 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 public interface CrmUserDeliveryPreferences extends IEntity {
 
+    @I18n
     public enum DeliveryType implements Serializable {
 
-        Daily, Weekly, Individual, DoNotSend
+        Daily, Weekly, Individual, DoNotSend;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
     }
 
     @Owner

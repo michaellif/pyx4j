@@ -9,7 +9,6 @@
  *
  * Created on Jul 4, 2011
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.site.client.ui.maps;
 

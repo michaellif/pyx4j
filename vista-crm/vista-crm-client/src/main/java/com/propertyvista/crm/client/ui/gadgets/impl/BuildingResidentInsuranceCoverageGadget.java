@@ -9,7 +9,6 @@
  *
  * Created on 2013-08-07
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.gadgets.impl;
 

@@ -9,7 +9,6 @@
  *
  * Created on 2013-04-12
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.dto;
 

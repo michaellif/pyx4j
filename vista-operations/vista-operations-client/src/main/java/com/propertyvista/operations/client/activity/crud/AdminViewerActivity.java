@@ -9,7 +9,6 @@
  *
  * Created on Feb 14, 2012
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.operations.client.activity.crud;
 

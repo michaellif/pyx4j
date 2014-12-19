@@ -9,7 +9,6 @@
  *
  * Created on Mar 26, 2011
  * @author dmitry
- * @version $Id$
  */
 package com.propertyvista.test.mock.models;
 

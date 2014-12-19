@@ -9,7 +9,6 @@
  *
  * Created on Dec 6, 2013
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.administration.ils;
 

@@ -9,7 +9,6 @@
  *
  * Created on 2013-07-30
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.operations.server.services;
 

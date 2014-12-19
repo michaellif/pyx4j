@@ -9,7 +9,6 @@
  *
  * Created on Jun 27, 2012
  * @author dev_vista
- * @version $Id$
  */
 package com.propertyvista.biz.financial.deposit;
 

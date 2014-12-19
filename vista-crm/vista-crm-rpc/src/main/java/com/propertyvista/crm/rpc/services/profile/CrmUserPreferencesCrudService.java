@@ -9,7 +9,6 @@
  *
  * Created on Dec 10, 2014
  * @author smolka
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.profile;
 

@@ -9,7 +9,6 @@
  *
  * Created on Dec 18, 2013
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.biz.financial.payment.assertions;
 

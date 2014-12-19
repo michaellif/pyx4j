@@ -9,7 +9,6 @@
  *
  * Created on Oct 28, 2011
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.common.client.theme;
 

@@ -9,7 +9,6 @@
  *
  * Created on Dec 20, 2011
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation;
 

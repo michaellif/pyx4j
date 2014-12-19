@@ -9,7 +9,6 @@
  *
  * Created on 2011-06-06
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.domain.property.asset;
 

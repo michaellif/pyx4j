@@ -9,7 +9,6 @@
  *
  * Created on May 29, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.server.common.gadgets.defaultsettings;
 

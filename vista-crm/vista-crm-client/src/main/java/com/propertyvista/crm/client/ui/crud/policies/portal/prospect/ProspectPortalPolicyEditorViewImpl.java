@@ -9,7 +9,6 @@
  *
  * Created on Jan 30, 2014
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.policies.portal.prospect;
 

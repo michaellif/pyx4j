@@ -9,7 +9,6 @@
  *
  * Created on Mar 15, 2012
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.biz.financial.productcatalog;
 

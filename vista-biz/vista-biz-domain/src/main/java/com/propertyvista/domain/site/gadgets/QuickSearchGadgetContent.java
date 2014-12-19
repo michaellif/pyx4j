@@ -9,7 +9,6 @@
  *
  * Created on Jan 26, 2013
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.domain.site.gadgets;
 

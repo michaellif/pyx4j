@@ -9,7 +9,6 @@
  *
  * Created on Jan 14, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.preloader.policy;
 

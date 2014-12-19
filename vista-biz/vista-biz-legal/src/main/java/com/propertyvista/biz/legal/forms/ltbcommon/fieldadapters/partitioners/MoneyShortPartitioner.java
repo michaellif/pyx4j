@@ -16,7 +16,6 @@
  *
  * Created on 2013-11-19
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.partitioners;
 

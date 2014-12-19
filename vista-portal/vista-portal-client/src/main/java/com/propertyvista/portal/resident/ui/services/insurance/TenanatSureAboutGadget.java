@@ -9,7 +9,6 @@
  *
  * Created on Nov 13, 2014
  * @author arminea
- * @version $Id$
  */
 package com.propertyvista.portal.resident.ui.services.insurance;
 

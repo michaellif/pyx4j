@@ -9,7 +9,6 @@
  *
  * Created on 2012-09-24
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard;
 

@@ -9,7 +9,6 @@
  *
  * Created on Apr 18, 2011
  * @author vadims
- * @version $Id$
  */
 package com.propertyvista.operations.client.activity;
 

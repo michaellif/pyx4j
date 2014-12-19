@@ -9,7 +9,6 @@
  *
  * Created on Feb 15, 2011
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.crm.client.event;
 
