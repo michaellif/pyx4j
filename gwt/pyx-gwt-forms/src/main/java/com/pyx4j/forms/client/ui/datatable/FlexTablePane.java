@@ -184,7 +184,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
         }
 
         for (ColumnDescriptor columnDescriptor : dataTable.getVisibleColumnDescriptors()) {
-            String columnTitle = columnDescriptor.getColumnTitle();
+            String columnTitle = columnDescriptor.isColumnTitleShown() ? columnDescriptor.getColumnTitle() : "";
             StringBuffer headerText = new StringBuffer("&nbsp;");
             headerText.append(columnTitle);
             if (columnDescriptor.equals(dataTable.getDataTableModel().getSortColumn())) {

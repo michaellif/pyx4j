@@ -89,6 +89,10 @@ public class ColumnDescriptor {
         return builder.columnTitle;
     }
 
+    public boolean isColumnTitleShown() {
+        return builder.columnTitleShown;
+    }
+
     public void setColumnTitle(String columnTitle) {
         builder.columnTitle = columnTitle;
     }
@@ -154,7 +158,7 @@ public class ColumnDescriptor {
 
         private String columnTitle;
 
-        private boolean columnTitleVisible;
+        private boolean columnTitleShown = true;
 
         private boolean sortable = true;
 
@@ -186,6 +190,11 @@ public class ColumnDescriptor {
 
         public Builder columnTitle(String columnTitle) {
             this.columnTitle = columnTitle;
+            return this;
+        }
+
+        public Builder columnTitleShown(boolean columnTitleShown) {
+            this.columnTitleShown = columnTitleShown;
             return this;
         }
 
