@@ -148,7 +148,7 @@ public class DataTableTheme extends Theme {
         style = new Style(".", StyleName.DataTableCellHolder);
         style.addProperty("position", "relative");
         style.addProperty("overflow", "hidden");
-        style.addProperty("height", "2em");
+        style.addProperty("height", "2.2em");
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableActionsBar);
