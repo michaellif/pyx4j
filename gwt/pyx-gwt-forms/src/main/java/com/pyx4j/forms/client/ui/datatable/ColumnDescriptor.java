@@ -58,7 +58,7 @@ public class ColumnDescriptor {
     }
 
     public String getColumnName() {
-        return builder.columnName;
+        return getColumnPath().toString();
     }
 
     public boolean isSearchable() {
@@ -127,13 +127,13 @@ public class ColumnDescriptor {
 
     @Override
     public String toString() {
-        return builder.columnName + "[" + builder.columnTitle + "]";
+        return getColumnName() + "[" + getColumnTitle() + "]";
     }
 
     @Override
     public boolean equals(Object obj) {
-        if ((builder.columnName != null) && (obj instanceof ColumnDescriptor)) {
-            return builder.columnName.equals(((ColumnDescriptor) obj).builder.columnName);
+        if (obj instanceof ColumnDescriptor) {
+            return builder.member.getPath().equals(((ColumnDescriptor) obj).builder.member.getPath());
         } else {
             return false;
         }
@@ -141,8 +141,8 @@ public class ColumnDescriptor {
 
     @Override
     public int hashCode() {
-        if (builder.columnName != null) {
-            return builder.columnName.hashCode();
+        if (builder.member.getPath() != null) {
+            return builder.member.getPath().hashCode();
         } else {
             return super.hashCode();
         }
@@ -151,8 +151,6 @@ public class ColumnDescriptor {
     public static class Builder {
 
         private final IObject<?> member;
-
-        private String columnName;
 
         private String columnTitle;
 
@@ -172,9 +170,6 @@ public class ColumnDescriptor {
 
         public Builder(IObject<?> member) {
             this.member = member;
-            columnName = member.getPath().toString();
-            assert columnName != null : "columnName can't be null";
-
             columnTitle = member.getMeta().getCaption();
 
             if (EnumSet.of(ObjectClassType.EntityList, ObjectClassType.EntitySet).contains(member.getMeta().getObjectClassType())) {
@@ -185,11 +180,6 @@ public class ColumnDescriptor {
         public Builder(IObject<?> member, boolean visible) {
             this(member);
             visible(visible);
-        }
-
-        public Builder columnName(String columnName) {
-            this.columnName = columnName;
-            return this;
         }
 
         public Builder columnTitle(String columnTitle) {
