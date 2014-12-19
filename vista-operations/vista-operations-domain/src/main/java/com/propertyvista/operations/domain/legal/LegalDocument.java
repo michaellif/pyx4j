@@ -9,7 +9,6 @@
  *
  * Created on 2012-01-29
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.operations.domain.legal;
 

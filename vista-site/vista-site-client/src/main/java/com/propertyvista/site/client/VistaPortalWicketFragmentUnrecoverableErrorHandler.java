@@ -9,7 +9,6 @@
  *
  * Created on 2012-08-25
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.site.client;
 

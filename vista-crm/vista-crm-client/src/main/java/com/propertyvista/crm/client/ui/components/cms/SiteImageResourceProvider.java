@@ -9,7 +9,6 @@
  *
  * Created on Jan 25, 2012
  * @author dev_vista
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.components.cms;
 

@@ -9,7 +9,6 @@
  *
  * Created on Sep 27, 2011
  * @author Artyom
- * @version $Id$
  */
 package com.propertyvista.domain.dashboard.gadgets.type;
 

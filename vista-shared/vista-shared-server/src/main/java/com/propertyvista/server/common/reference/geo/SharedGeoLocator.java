@@ -9,7 +9,6 @@
  *
  * Created on Aug 28, 2011
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.server.common.reference.geo;
 

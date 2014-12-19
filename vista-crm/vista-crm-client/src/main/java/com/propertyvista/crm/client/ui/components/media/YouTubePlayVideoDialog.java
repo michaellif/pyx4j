@@ -16,7 +16,6 @@
  *
  * Created on Apr 15, 2010
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.components.media;
 

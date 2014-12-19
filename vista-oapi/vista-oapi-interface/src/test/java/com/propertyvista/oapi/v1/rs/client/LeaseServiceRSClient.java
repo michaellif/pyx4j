@@ -9,7 +9,6 @@
  *
  * Created on Nov 28, 2012
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.oapi.v1.rs.client;
 

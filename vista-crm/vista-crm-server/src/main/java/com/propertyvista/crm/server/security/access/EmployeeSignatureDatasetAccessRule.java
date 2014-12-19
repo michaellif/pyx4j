@@ -9,7 +9,6 @@
  *
  * Created on 2013-11-26
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.crm.server.security.access;
 

@@ -9,7 +9,6 @@
  *
  * Created on 2013-06-11
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.biz.financial.payment;
 

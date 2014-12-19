@@ -9,7 +9,6 @@
  *
  * Created on 2013-10-28
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.portal.server.security.access.resident;
 

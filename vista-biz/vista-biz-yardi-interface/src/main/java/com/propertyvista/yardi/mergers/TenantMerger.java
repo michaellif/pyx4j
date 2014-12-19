@@ -9,7 +9,6 @@
  *
  * Created on Jan 24, 2013
  * @author yuriyl
- * @version $Id$
  */
 package com.propertyvista.yardi.mergers;
 

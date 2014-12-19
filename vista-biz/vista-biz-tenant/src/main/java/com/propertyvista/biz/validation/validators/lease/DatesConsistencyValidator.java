@@ -9,7 +9,6 @@
  *
  * Created on 2012-07-04
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.biz.validation.validators.lease;
 

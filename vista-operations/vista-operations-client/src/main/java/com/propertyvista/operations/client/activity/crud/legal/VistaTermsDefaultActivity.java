@@ -9,7 +9,6 @@
  *
  * Created on Aug 22, 2012
  * @author dev_vista
- * @version $Id$
  */
 package com.propertyvista.operations.client.activity.crud.legal;
 

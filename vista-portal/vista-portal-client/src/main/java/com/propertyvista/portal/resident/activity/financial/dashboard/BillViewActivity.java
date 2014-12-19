@@ -9,7 +9,6 @@
  *
  * Created on Sep 30, 2013
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.portal.resident.activity.financial.dashboard;
 

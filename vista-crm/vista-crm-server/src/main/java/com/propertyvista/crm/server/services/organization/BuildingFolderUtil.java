@@ -9,7 +9,6 @@
  *
  * Created on Jun 27, 2013
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.organization;
 

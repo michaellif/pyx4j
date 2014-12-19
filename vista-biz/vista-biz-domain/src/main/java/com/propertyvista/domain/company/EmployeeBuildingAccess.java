@@ -9,7 +9,6 @@
  *
  * Created on 2013-06-21
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.domain.company;
 

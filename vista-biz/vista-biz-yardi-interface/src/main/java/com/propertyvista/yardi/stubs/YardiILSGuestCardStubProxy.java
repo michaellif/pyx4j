@@ -9,7 +9,6 @@
  *
  * Created on Aug 5, 2014
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.yardi.stubs;
 

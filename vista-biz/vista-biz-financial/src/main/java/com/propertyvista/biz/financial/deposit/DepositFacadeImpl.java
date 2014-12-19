@@ -9,7 +9,6 @@
  *
  * Created on Jun 13, 2012
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.biz.financial.deposit;
 

@@ -9,7 +9,6 @@
  *
  * Created on Oct 12, 2011
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.pmsite.server.pages;
 

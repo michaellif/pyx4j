@@ -9,7 +9,6 @@
  *
  * Created on 2013-07-26
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 

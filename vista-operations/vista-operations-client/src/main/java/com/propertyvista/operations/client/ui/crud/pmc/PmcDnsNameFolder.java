@@ -9,7 +9,6 @@
  *
  * Created on Mar 16, 2012
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.operations.client.ui.crud.pmc;
 

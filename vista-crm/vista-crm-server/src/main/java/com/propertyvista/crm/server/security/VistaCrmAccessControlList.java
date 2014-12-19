@@ -9,7 +9,6 @@
  *
  * Created on 2011-03-25
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.crm.server.security;
 
@@ -60,7 +59,7 @@ import com.propertyvista.crm.rpc.services.customer.TenantPadFileUploadService;
 import com.propertyvista.crm.rpc.services.customer.lead.AppointmentCrudService;
 import com.propertyvista.crm.rpc.services.customer.lead.LeadCrudService;
 import com.propertyvista.crm.rpc.services.customer.lead.ShowingCrudService;
-import com.propertyvista.crm.rpc.services.customer.screening.LeaseParticipantScreeningCrudService;
+import com.propertyvista.crm.rpc.services.customer.screening.LeaseParticipantScreeningViewService;
 import com.propertyvista.crm.rpc.services.customer.screening.LeaseParticipantScreeningVersionService;
 import com.propertyvista.crm.rpc.services.importer.ExportBuildingDataDownloadService;
 import com.propertyvista.crm.rpc.services.importer.ImportBuildingDataService;
@@ -331,7 +330,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(SelectCustomerListService.class));
 
         grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(CustomerScreening.class, EntityPermission.ALL));
-        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(LeaseParticipantScreeningCrudService.class));
+        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(LeaseParticipantScreeningViewService.class));
         grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(LeaseParticipantScreeningVersionService.class));
 
         grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(Lease.class, EntityPermission.ALL));

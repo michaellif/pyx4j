@@ -9,7 +9,6 @@
  *
  * Created on 2013-11-25
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.tools.legal.l1.forms;
 

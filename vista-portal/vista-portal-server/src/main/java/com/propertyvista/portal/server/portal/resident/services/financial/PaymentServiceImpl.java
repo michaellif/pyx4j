@@ -9,7 +9,6 @@
  *
  * Created on Sep 12, 2013
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.portal.server.portal.resident.services.financial;
 

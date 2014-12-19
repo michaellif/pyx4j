@@ -9,7 +9,6 @@
  *
  * Created on 2011-05-24
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.operations.client.activity.crud.simulator.pad;
 

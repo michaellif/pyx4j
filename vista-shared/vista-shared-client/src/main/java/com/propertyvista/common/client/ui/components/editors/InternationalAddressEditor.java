@@ -9,7 +9,6 @@
  *
  * Created on May 21, 2014
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.common.client.ui.components.editors;
 

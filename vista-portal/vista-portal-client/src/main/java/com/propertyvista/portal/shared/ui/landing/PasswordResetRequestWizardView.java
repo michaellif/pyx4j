@@ -9,7 +9,6 @@
  *
  * Created on Oct 2, 2013
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.portal.shared.ui.landing;
 

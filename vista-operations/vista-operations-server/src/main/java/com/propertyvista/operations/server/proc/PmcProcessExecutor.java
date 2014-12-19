@@ -9,7 +9,6 @@
  *
  * Created on Apr 7, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.operations.server.proc;
 

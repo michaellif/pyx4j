@@ -9,37 +9,22 @@
  *
  * Created on 2011-05-25
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.customer.screening;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
-import com.propertyvista.common.client.ui.validators.ClientBusinessRules;
-import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValidator;
-import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
-import com.propertyvista.common.client.ui.validators.PastDateValidator;
-import com.propertyvista.common.client.ui.validators.StartEndDateWithinPeriodValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.customer.common.components.IdentificationDocumentFolder;
 import com.propertyvista.crm.client.ui.crud.customer.common.components.LegalQuestionFolder;
 import com.propertyvista.crm.client.ui.crud.customer.common.components.PersonalAssetFolder;
 import com.propertyvista.crm.client.ui.crud.customer.common.components.PersonalIncomeFolder;
-import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
 public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeningTO> {
@@ -49,10 +34,6 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
     private final FormPanel previousAddress = new FormPanel(this) {
         @Override
         public void setVisible(boolean visible) {
-// this will clean previous address:
-//            if (visible != get(proto().screening().version().previousAddress()).isVisible()) {
-//                get(proto().screening().version().previousAddress()).reset();
-//            }
             get(proto().data().version().previousAddress()).setVisible(visible);
             super.setVisible(visible);
         }
@@ -70,55 +51,11 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
         addTab(createAssetsTab(), i18n.tr("Assets"));
     }
 
-    private IEntity getPolicyEntity() {
-        if (getValue().getPrimaryKey() == null) {
-            return getValue().leaseParticipantId();
-        } else {
-            return getValue();
-        }
-    }
-
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        if (isEditable()) {
-            fileUpload.setPolicyEntity(getPolicyEntity());
-
-            ((PersonalIncomeFolder) (CComponent<?, ?, ?, ?>) get(proto().data().version().incomes())).setPolicyEntity(getPolicyEntity());
-            ((PersonalAssetFolder) (CComponent<?, ?, ?, ?>) get(proto().data().version().assets())).setPolicyEntity(getValue());
-        }
-
-        enablePreviousAddress();
-    }
-
-    @Override
-    public void addValidations() {
-        super.addValidations();
-
-        // ------------------------------------------------------------------------------------------------
-        @SuppressWarnings("unchecked")
-        CForm<PriorAddress> currentAF = ((CForm<PriorAddress>) get(proto().data().version().currentAddress()));
-
-        currentAF.get(currentAF.proto().moveInDate()).addComponentValidator(new PastDateIncludeTodayValidator());
-        currentAF.get(currentAF.proto().moveOutDate()).addComponentValidator(new FutureDateIncludeTodayValidator());
-        currentAF.get(currentAF.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
-                enablePreviousAddress();
-            }
-        });
-
-        // ------------------------------------------------------------------------------------------------
-        @SuppressWarnings("unchecked")
-        CForm<PriorAddress> previousAF = ((CForm<PriorAddress>) get(proto().data().version().previousAddress()));
-
-        previousAF.get(previousAF.proto().moveInDate()).addComponentValidator(new PastDateValidator());
-        previousAF.get(previousAF.proto().moveOutDate()).addComponentValidator(new PastDateValidator());
-
-        // ------------------------------------------------------------------------------------------------
-        new StartEndDateWithinPeriodValidation(previousAF.get(previousAF.proto().moveOutDate()), currentAF.get(currentAF.proto().moveInDate()), 1, 0,
-                i18n.tr("Current Move In date should be within 1 month of previous Move Out date"));
+        previousAddress.setVisible(!getValue().data().version().previousAddress().isEmpty());
     }
 
     private IsWidget createIdentificationDocumentsTab() {
@@ -147,15 +84,11 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
         return formPanel;
     }
 
-    private void enablePreviousAddress() {
-        previousAddress.setVisible(ClientBusinessRules.needPreviousAddress(getValue().data().version().currentAddress().moveInDate().getValue(), getValue()
-                .yearsToForcingPreviousAddress().getValue()));
-    }
-
 // Financial: ------------------------------------------------------------------------------------------------
 
     private IsWidget createIncomesTab() {
         FormPanel formPanel = new FormPanel(this);
+
         formPanel.append(Location.Dual, proto().data().version().incomes(), new PersonalIncomeFolder(isEditable()));
 
         return formPanel;
@@ -163,18 +96,9 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
 
     private IsWidget createAssetsTab() {
         FormPanel formPanel = new FormPanel(this);
+
         formPanel.append(Location.Dual, proto().data().version().assets(), new PersonalAssetFolder(isEditable()));
+
         return formPanel;
     }
-
-    class QuestionsFormPanel extends FormPanel {
-
-        public QuestionsFormPanel(CForm<?> parent) {
-            super(parent);
-        }
-
-        public void appendQuestion(IObject<?> member) {
-            append(Location.Dual, member).decorate().labelWidth(400).labelPosition(LabelPosition.top).useLabelSemicolon(false);
-        }
-    };
 }

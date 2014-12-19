@@ -9,7 +9,6 @@
  *
  * Created on 2013-01-13
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.dto.vista2pmc;
 

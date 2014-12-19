@@ -9,7 +9,6 @@
  *
  * Created on Aug 25, 2011
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.components.boxes;
 

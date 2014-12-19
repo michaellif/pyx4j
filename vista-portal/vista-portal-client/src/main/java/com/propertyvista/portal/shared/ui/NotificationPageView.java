@@ -9,7 +9,6 @@
  *
  * Created on 2013-02-05
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.portal.shared.ui;
 

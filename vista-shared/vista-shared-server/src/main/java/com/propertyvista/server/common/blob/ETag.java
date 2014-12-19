@@ -9,7 +9,6 @@
  *
  * Created on Sep 19, 2011
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.server.common.blob;
 

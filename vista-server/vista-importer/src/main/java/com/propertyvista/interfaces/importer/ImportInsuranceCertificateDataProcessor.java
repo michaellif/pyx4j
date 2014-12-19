@@ -9,7 +9,6 @@
  *
  * Created on Jun 16, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.interfaces.importer;
 

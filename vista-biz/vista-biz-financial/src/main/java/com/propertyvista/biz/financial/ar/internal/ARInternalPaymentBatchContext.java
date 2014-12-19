@@ -9,7 +9,6 @@
  *
  * Created on Mar 5, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.biz.financial.ar.internal;
 

@@ -9,7 +9,6 @@
  *
  * Created on Apr 17, 2012
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.common.client.theme;
 

@@ -9,7 +9,6 @@
  *
  * Created on 2013-09-20
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.domain.legal.n4;
 

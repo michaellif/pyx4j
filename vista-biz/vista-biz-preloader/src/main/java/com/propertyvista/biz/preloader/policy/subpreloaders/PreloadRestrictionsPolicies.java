@@ -9,7 +9,6 @@
  *
  * Created on 2013-04-24
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.biz.preloader.policy.subpreloaders;
 

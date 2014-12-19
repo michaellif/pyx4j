@@ -9,7 +9,6 @@
  *
  * Created on May 9, 2011
  * @author vadims
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.administration.website.content.pages;
 

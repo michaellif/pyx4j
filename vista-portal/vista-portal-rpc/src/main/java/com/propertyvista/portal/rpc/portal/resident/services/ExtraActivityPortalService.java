@@ -9,7 +9,6 @@
  *
  * Created on Jan 9, 2014
  * @author smolka
- * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.resident.services;
 

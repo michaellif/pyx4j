@@ -9,7 +9,6 @@
  *
  * Created on 2012-10-03
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.customer.screening;
 

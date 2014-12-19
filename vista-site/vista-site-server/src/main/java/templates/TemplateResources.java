@@ -9,7 +9,6 @@
  *
  * Created on Aug 24, 2011
  * @author michaellif
- * @version $Id$
  */
 package templates;
 

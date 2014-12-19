@@ -9,7 +9,6 @@
  *
  * Created on 2012-10-11
  * @author artyom
- * @version $Id$
  */
 package com.propertyvista.common.client.ui.components.editors;
 

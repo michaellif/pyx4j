@@ -9,7 +9,6 @@
  *
  * Created on Oct 13, 2011
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.biz.generator;
 

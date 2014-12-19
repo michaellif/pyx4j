@@ -9,7 +9,6 @@
  *
  * Created on Apr 10, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.biz.system;
 

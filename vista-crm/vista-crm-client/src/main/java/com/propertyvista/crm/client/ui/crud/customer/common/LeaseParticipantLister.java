@@ -9,7 +9,6 @@
  *
  * Created on Nov 26, 2014
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.customer.common;
 

@@ -9,7 +9,6 @@
  *
  * Created on 2012-11-06
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.dto.occupancy.opconstraints;
 

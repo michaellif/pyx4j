@@ -9,7 +9,6 @@
  *
  * Created on Nov 24, 2013
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal;
 

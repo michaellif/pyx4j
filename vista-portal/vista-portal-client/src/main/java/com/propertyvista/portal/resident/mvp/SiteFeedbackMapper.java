@@ -9,7 +9,6 @@
  *
  * Created on Apr 18, 2011
  * @author Dad
- * @version $Id$
  */
 package com.propertyvista.portal.resident.mvp;
 

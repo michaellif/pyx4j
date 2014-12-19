@@ -9,7 +9,6 @@
  *
  * Created on 2013-07-24
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.operations.client.activity.crud.simulator.dbp;
 

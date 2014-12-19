@@ -9,7 +9,6 @@
  *
  * Created on 2013-04-08
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.eft.dbp.remcon;
 

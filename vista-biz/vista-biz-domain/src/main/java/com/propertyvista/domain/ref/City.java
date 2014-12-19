@@ -9,7 +9,6 @@
  *
  * Created on 2011-05-16
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.domain.ref;
 

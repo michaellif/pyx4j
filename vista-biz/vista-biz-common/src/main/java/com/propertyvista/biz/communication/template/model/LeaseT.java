@@ -9,7 +9,6 @@
  *
  * Created on Feb 2, 2012
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.biz.communication.template.model;
 

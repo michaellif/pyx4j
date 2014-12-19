@@ -9,7 +9,6 @@
  *
  * Created on 2011-06-29
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.customer.screening;
 
@@ -24,7 +23,7 @@ import com.propertyvista.dto.LeaseParticipantScreeningTO;
  * 
  * This is Unique case where BO Key != TO Key.
  */
-public interface LeaseParticipantScreeningCrudService extends AbstractVersionedCrudService<LeaseParticipantScreeningTO> {
+public interface LeaseParticipantScreeningViewService extends AbstractVersionedCrudService<LeaseParticipantScreeningTO> {
 
     @Transient
     public interface CustomerScreeningInitializationData extends InitializationData {

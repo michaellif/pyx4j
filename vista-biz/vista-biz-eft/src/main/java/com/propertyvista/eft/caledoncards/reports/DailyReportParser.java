@@ -9,7 +9,6 @@
  *
  * Created on Sep 15, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.eft.caledoncards.reports;
 

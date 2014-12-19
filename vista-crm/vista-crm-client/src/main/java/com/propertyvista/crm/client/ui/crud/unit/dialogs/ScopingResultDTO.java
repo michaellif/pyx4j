@@ -9,7 +9,6 @@
  *
  * Created on Feb 23, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.unit.dialogs;
 

@@ -9,7 +9,6 @@
  *
  * Created on Jun 9, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.lease.ac;
 

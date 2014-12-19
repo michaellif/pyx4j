@@ -9,7 +9,6 @@
  *
  * Created on Jul 23, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.portal.shared.activity;
 

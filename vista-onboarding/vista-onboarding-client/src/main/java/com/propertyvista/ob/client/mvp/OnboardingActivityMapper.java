@@ -9,7 +9,6 @@
  *
  * Created on 2012-12-10
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.ob.client.mvp;
 

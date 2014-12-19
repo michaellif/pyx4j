@@ -9,7 +9,6 @@
  *
  * Created on Nov 17, 2013
  * @author smolka
- * @version $Id$
  */
 package com.propertyvista.ils.gottarent.mapper;
 

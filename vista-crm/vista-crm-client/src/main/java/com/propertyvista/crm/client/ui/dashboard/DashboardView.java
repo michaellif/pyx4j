@@ -9,7 +9,6 @@
  *
  * Created on Apr 16, 2011
  * @author Misha
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.dashboard;
 

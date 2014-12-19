@@ -9,7 +9,6 @@
  *
  * Created on Nov 28, 2011
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.crm.server.util;
 

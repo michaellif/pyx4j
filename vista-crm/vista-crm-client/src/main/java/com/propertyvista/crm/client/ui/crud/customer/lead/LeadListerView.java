@@ -9,7 +9,6 @@
  *
  * Created on 2011-05-09
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead;
 

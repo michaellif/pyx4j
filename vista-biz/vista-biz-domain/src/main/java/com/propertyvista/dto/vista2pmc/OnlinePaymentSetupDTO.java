@@ -9,7 +9,6 @@
  *
  * Created on May 19, 2011
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.dto.vista2pmc;
 

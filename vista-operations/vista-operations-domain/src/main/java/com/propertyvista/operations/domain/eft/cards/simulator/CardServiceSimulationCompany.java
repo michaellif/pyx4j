@@ -9,7 +9,6 @@
  *
  * Created on Aug 27, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.operations.domain.eft.cards.simulator;
 

@@ -1,15 +1,14 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Apr 3, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.breadcrumbs;
 
@@ -33,7 +32,13 @@ import com.propertyvista.dto.LeaseParticipantScreeningTO;
 public class BreadcrumbsHelper {
 
     public List<IEntity> breadcrumbTrail(IEntity targetEntity) {
-        IEntity startFromTarget = Persistence.service().retrieve(EntityFactory.resolveBOClass(targetEntity), targetEntity.getPrimaryKey());
+        IEntity startFromTarget = null;
+        if (targetEntity instanceof LeaseParticipantScreeningTO) {
+            startFromTarget = targetEntity;
+        } else {
+            startFromTarget = Persistence.service().retrieve(EntityFactory.resolveBOClass(targetEntity), targetEntity.getPrimaryKey());
+        }
+
         List<IEntity> trail = getOwners(startFromTarget);
         Collections.reverse(trail);
         return trail;
@@ -58,7 +63,7 @@ public class BreadcrumbsHelper {
         @Override
         public boolean apply(IEntity owner) {
             if (owner.getPrimaryKey() == null) {
-                // Breaks on non existent owner 
+                // Breaks on non existent owner
                 return false;
             }
             if (owner.isValueDetached()) {
@@ -103,6 +108,7 @@ public class BreadcrumbsHelper {
         // Special case for no business owned
         if (startFromTarget instanceof LeaseParticipantScreeningTO) {
             startFromTarget = Persistence.service().retrieve(LeaseParticipant.class, startFromTarget.getPrimaryKey());
+            trail.add(toStringDuplicate(startFromTarget));
         }
 
         if (startFromTarget instanceof Lease) {

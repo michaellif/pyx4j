@@ -9,7 +9,6 @@
  *
  * Created on Apr 24, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.resident.services;
 

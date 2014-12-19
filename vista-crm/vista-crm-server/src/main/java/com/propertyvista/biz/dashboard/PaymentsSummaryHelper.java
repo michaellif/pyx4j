@@ -9,7 +9,6 @@
  *
  * Created on May 31, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.biz.dashboard;
 

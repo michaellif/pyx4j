@@ -16,7 +16,6 @@
  *
  * Created on May 25, 2010
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.portal.shared;
 

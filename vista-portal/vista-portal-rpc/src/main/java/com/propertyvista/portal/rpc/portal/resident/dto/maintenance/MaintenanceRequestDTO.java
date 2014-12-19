@@ -9,7 +9,6 @@
  *
  * Created on 2011-06-29
  * @author Vlad
- * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.resident.dto.maintenance;
 

@@ -9,7 +9,6 @@
  *
  * Created on Oct 22, 2014
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.biz.legal.forms.framework.mapping;
 

@@ -9,7 +9,6 @@
  *
  * Created on Oct 22, 2013
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.portal.resident.ui.services.insurance;
 

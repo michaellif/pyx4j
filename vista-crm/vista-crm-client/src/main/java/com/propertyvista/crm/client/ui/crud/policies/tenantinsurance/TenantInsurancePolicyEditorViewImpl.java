@@ -9,7 +9,6 @@
  *
  * Created on 2012-11-13
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.policies.tenantinsurance;
 

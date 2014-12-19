@@ -9,7 +9,6 @@
  *
  * Created on Aug 18, 2011
  * @author Vlad
- * @version $Id$
  */
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
@@ -22,7 +21,6 @@
  *
  * Created on May 9, 2011
  * @author vadims
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.administration.website.content.pages;
 

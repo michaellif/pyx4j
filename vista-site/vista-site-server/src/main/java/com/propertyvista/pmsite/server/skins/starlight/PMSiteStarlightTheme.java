@@ -9,7 +9,6 @@
  *
  * Created on Mar 18, 2013
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.pmsite.server.skins.starlight;
 

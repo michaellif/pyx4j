@@ -9,7 +9,6 @@
  *
  * Created on Jul 23, 2013
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.operations.domain.eft.dbp;
 

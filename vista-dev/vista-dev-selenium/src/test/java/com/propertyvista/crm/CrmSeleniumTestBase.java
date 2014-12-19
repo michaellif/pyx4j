@@ -9,7 +9,6 @@
  *
  * Created on 2011-07-11
  * @author TPRGLET
- * @version $Id$
  */
 package com.propertyvista.crm;
 

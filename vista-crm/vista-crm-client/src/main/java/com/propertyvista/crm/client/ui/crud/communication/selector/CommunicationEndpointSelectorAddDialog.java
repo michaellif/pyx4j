@@ -9,7 +9,6 @@
  *
  * Created on Sep 19, 2014
  * @author arminea
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.communication.selector;
 

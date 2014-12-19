@@ -9,7 +9,6 @@
  *
  * Created on Jul 31, 2013
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.domain.payment;
 

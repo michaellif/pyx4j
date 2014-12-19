@@ -9,7 +9,6 @@
  *
  * Created on 2013-01-07
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.domain.pmc.payment;
 

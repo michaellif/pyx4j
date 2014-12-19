@@ -9,7 +9,6 @@
  *
  * Created on 2012-12-31
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.crm.rpc.dto.tenant;
 

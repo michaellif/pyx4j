@@ -9,7 +9,6 @@
  *
  * Created on 2013-02-12
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.operations.client.ui.crud.encryptedstorage;
 

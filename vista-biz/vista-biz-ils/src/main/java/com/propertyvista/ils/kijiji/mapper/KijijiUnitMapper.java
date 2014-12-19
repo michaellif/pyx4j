@@ -9,7 +9,6 @@
  *
  * Created on Sep 26, 2013
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.ils.kijiji.mapper;
 

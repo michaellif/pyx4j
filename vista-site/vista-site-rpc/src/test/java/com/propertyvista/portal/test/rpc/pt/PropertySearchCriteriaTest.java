@@ -9,7 +9,6 @@
  *
  * Created on Nov 15, 2011
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.portal.test.rpc.pt;
 

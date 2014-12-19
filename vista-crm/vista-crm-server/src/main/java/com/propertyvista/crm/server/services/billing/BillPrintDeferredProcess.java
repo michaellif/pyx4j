@@ -9,7 +9,6 @@
  *
  * Created on Feb 1, 2012
  * @author Artyom
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.billing;
 

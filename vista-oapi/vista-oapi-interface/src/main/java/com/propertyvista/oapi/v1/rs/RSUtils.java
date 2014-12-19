@@ -9,7 +9,6 @@
  *
  * Created on Dec 10, 2012
  * @author Mykola
- * @version $Id$
  */
 package com.propertyvista.oapi.v1.rs;
 

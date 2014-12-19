@@ -9,7 +9,6 @@
  *
  * Created on Sep 19, 2014
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.portal.shared.ui;
 

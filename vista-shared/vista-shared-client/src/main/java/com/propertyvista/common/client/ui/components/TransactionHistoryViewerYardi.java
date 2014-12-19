@@ -9,7 +9,6 @@
  *
  * Created on 2013-01-28
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.common.client.ui.components;
 

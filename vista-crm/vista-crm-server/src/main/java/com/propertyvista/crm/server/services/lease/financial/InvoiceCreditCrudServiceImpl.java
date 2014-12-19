@@ -9,7 +9,6 @@
  *
  * Created on 2013-04-09
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.lease.financial;
 

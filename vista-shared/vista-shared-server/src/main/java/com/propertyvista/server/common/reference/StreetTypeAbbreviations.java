@@ -9,7 +9,6 @@
  *
  * Created on Oct 19, 2013
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.server.common.reference;
 

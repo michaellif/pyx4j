@@ -9,7 +9,6 @@
  *
  * Created on 2012-12-28
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.crm.client.ui.wizard.onlinepayment;
 

@@ -9,7 +9,6 @@
  *
  * Created on Sep 25, 2014
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 

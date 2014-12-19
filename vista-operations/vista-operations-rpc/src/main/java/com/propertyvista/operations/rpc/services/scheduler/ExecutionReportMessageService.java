@@ -9,7 +9,6 @@
  *
  * Created on Feb 25, 2013
  * @author stanp
- * @version $Id$
  */
 package com.propertyvista.operations.rpc.services.scheduler;
 

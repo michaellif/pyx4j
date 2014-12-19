@@ -9,7 +9,6 @@
  *
  * Created on Aug 17, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.propertyvista.common.client.ui.components.editors.payments;
 

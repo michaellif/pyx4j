@@ -9,7 +9,6 @@
  *
  * Created on Jan 26, 2011
  * @author michaellif
- * @version $Id$
  */
 package com.propertyvista.domain.property.asset.building;
 

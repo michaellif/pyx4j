@@ -9,7 +9,6 @@
  *
  * Created on 2013-06-13
  * @author vlads
- * @version $Id$
  */
 package com.propertyvista.crm.server.services.reports.generators;
 

@@ -9,7 +9,6 @@
  *
  * Created on Nov 25, 2013
  * @author VladL
- * @version $Id$
  */
 package com.propertyvista.crm.client.activity.crud.lease.common;
 
