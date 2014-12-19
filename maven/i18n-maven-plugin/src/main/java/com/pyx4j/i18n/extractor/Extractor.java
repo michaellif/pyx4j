@@ -16,7 +16,6 @@
  *
  * Created on Oct 19, 2011
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.i18n.extractor;
 

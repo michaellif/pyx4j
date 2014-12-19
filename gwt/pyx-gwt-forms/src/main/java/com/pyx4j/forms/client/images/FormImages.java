@@ -16,7 +16,6 @@
  *
  * Created on Jan 11, 2010
  * @author Michael
- * @version $Id$
  */
 package com.pyx4j.forms.client.images;
 

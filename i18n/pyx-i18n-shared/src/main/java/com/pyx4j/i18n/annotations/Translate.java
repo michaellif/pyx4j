@@ -16,7 +16,6 @@
  *
  * Created on May 2, 2011
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.i18n.annotations;
 

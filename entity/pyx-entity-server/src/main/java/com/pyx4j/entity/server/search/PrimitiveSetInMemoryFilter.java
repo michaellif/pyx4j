@@ -16,7 +16,6 @@
  *
  * Created on May 12, 2010
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.server.search;
 

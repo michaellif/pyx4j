@@ -16,7 +16,6 @@
  *
  * This classes are taken from Jour
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.scanner;
 

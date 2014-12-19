@@ -16,7 +16,6 @@
  *
  * Created on Mar 5, 2011
  * @author Misha
- * @version $Id$
  */
 package com.pyx4j.forms.client.ui.folder;
 

@@ -16,7 +16,6 @@
  *
  * Created on Apr 12, 2013
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.site.client.backoffice.activity;
 

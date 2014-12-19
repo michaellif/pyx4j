@@ -16,7 +16,6 @@
  *
  * Created on Jan 9, 2010
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.log4gwt.rpc;
 

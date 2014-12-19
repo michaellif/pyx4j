@@ -16,7 +16,6 @@
  *
  * Created on Jan 6, 2010
  * @author Michael
- * @version $Id$
  */
 package com.pyx4j.commons.css;
 
@@ -39,8 +38,5 @@ public enum CSSClass {
 
     //Photoalbom
     pyx4j_Photoalbom_Thumbnail, pyx4j_SlideshowPopup, pyx4j_Photoalbom_Caption,
-
-    //Banner
-    pyx4j_Banner,
 
 }

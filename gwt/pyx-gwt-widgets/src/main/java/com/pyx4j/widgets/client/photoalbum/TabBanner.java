@@ -16,7 +16,6 @@
  *
  * Created on May 15, 2010
  * @author Misha
- * @version $Id$
  */
 package com.pyx4j.widgets.client.photoalbum;
 
@@ -35,7 +34,6 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.css.CSSClass;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.widgets.client.Button;
 
@@ -74,7 +72,6 @@ public class TabBanner extends AbsolutePanel {
         this.runOnInit = runOnInit;
         items = new ArrayList<>();
         setSize(width + "px", height + "px");
-        setStyleName(CSSClass.pyx4j_Banner.name());
     }
 
     public void addItem(BannerItem item) {

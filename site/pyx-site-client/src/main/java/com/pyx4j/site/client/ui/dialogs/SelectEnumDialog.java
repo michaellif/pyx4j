@@ -16,7 +16,6 @@
  *
  * Created on Jan 19, 2012
  * @author artem
- * @version $Id$
  */
 package com.pyx4j.site.client.ui.dialogs;
 

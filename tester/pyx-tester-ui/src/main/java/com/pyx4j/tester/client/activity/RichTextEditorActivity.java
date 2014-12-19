@@ -16,7 +16,6 @@
  *
  * Created on Nov 10, 2011
  * @author stanp
- * @version $Id$
  */
 package com.pyx4j.tester.client.activity;
 

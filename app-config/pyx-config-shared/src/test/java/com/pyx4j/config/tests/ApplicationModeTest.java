@@ -16,7 +16,6 @@
  *
  * Created on 2011-05-07
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.config.tests;
 

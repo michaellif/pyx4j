@@ -16,7 +16,6 @@
  *
  * Created on Dec 26, 2012
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.widgets.client.tabpanel;
 

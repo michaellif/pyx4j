@@ -16,7 +16,6 @@
  *
  * Created on Jun 8, 2010
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.i18n.client;
 

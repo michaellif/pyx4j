@@ -16,7 +16,6 @@
  *
  * Created on Dec 27, 2009
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.log4gwt.client;
 

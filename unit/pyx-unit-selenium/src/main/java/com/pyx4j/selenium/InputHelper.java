@@ -16,7 +16,6 @@
  *
  * Created on Mar 25, 2011
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.selenium;
 

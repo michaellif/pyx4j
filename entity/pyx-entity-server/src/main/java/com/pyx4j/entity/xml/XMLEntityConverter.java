@@ -16,7 +16,6 @@
  *
  * Created on 2010-12-29
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.xml;
 

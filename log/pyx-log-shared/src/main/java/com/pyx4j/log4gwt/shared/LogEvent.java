@@ -16,7 +16,6 @@
  *
  * Created on Apr 23, 2009
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.log4gwt.shared;
 

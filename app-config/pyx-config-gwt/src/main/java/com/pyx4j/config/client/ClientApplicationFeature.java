@@ -16,7 +16,6 @@
  *
  * Created on Nov 7, 2014
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.config.client;
 

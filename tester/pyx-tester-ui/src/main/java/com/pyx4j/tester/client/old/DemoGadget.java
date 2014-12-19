@@ -16,7 +16,6 @@
  *
  * Created on 2011-04-17
  * @author Vlad
- * @version $Id$
  */
 package com.pyx4j.tester.client.old;
 

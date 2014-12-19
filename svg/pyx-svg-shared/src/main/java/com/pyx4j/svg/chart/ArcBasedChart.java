@@ -16,7 +16,6 @@
  *
  * Created on 2011-07-18
  * @author vadim
- * @version $Id$
  */
 package com.pyx4j.svg.chart;
 

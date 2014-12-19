@@ -16,7 +16,6 @@
  *
  * Created on Feb 25, 2010
  * @author Michael
- * @version $Id$
  */
 package com.pyx4j.gwt.geo;
 

@@ -9,7 +9,6 @@
  *
  * Created on Jan 9, 2014
  * @author stanp
- * @version $Id$
  */
 package com.pyx4j.commons;
 

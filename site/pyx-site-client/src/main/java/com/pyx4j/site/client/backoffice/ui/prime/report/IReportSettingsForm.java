@@ -16,7 +16,6 @@
  *
  * Created on Jul 30, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.pyx4j.site.client.backoffice.ui.prime.report;
 

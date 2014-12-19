@@ -16,7 +16,6 @@
  *
  * Created on Oct 6, 2011
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.tester.client.activity;
 

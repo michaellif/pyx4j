@@ -16,7 +16,6 @@
  *
  * Created on May 21, 2010
  * @author Misha
- * @version $Id$
  */
 package com.pyx4j.site.shared.meta;
 

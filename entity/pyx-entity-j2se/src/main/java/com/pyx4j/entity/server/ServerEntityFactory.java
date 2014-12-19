@@ -16,7 +16,6 @@
  *
  * Created on Oct 28, 2009
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.entity.server;
 

@@ -16,7 +16,6 @@
  *
  * Created on Feb 22, 2014
  * @author vlads
- * @version $Id$
  */
 package ch.qos.logback.classic.spi;
 

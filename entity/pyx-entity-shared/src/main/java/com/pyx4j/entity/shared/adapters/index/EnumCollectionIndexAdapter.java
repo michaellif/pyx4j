@@ -16,7 +16,6 @@
  *
  * Created on Oct 1, 2010
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.shared.adapters.index;
 

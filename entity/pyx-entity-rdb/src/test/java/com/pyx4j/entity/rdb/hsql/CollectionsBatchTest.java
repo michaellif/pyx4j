@@ -16,7 +16,6 @@
  *
  * Created on Jan 09, 2011
  * @author vadymp
- * @version $Id$
  */
 package com.pyx4j.entity.rdb.hsql;
 

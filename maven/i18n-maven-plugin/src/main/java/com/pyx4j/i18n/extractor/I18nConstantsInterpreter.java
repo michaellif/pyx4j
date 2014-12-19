@@ -19,7 +19,6 @@
  * The idea is taken from https://gist.github.com/1201922
  * 
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.i18n.extractor;
 

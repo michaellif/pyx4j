@@ -16,7 +16,6 @@
  *
  * Created on 2011-05-13
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.tester.client.tests;
 

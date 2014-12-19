@@ -16,7 +16,6 @@
  *
  * Created on Jan 27, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.pyx4j.security.rpc;
 

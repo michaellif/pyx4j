@@ -16,7 +16,6 @@
  *
  * Created on 2012-05-22
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.xml;
 

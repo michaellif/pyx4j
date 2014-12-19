@@ -16,7 +16,6 @@
  *
  * Created on Oct 8, 2013
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.widgets.client;
 

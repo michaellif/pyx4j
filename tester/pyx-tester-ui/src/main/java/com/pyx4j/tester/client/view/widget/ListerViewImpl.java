@@ -16,7 +16,6 @@
  *
  * Created on Oct 25, 201
  * @author stanp
- * @version $Id$
  */
 package com.pyx4j.tester.client.view.widget;
 

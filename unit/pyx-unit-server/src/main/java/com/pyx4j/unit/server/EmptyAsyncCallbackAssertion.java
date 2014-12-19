@@ -16,7 +16,6 @@
  *
  * Created on Feb 20, 2014
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.unit.server;
 

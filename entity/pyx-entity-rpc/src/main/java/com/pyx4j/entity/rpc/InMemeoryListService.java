@@ -16,7 +16,6 @@
  *
  * Created on Jan 19, 2012
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.rpc;
 

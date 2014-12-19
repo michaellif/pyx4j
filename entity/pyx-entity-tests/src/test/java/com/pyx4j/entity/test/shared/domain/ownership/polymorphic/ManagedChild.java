@@ -16,7 +16,6 @@
  *
  * Created on May 16, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.pyx4j.entity.test.shared.domain.ownership.polymorphic;
 

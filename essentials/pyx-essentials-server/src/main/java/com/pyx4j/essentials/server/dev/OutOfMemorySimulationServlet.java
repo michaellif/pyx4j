@@ -16,7 +16,6 @@
  *
  * Created on Sep 28, 2013
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.essentials.server.dev;
 

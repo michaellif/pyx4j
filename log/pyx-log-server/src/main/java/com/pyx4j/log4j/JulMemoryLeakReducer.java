@@ -16,7 +16,6 @@
  *
  * Created on May 24, 2014
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.log4j;
 

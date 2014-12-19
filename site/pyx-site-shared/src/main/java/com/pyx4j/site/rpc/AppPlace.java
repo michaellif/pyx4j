@@ -16,7 +16,6 @@
  *
  * Created on Feb 4, 2011
  * @author Misha
- * @version $Id$
  */
 package com.pyx4j.site.rpc;
 

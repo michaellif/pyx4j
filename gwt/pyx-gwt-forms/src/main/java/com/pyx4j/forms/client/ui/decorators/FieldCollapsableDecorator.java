@@ -16,7 +16,6 @@
  *
  * Created on May 26, 2010
  * @author stanp
- * @version $Id$
  */
 package com.pyx4j.forms.client.ui.decorators;
 

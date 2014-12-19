@@ -16,7 +16,6 @@
  *
  * Created on May 8, 2010
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.essentials.rpc.report;
 

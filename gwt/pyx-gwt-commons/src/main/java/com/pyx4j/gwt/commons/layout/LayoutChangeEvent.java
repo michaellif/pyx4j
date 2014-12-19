@@ -16,7 +16,6 @@
  *
  * Created on Apr 14, 2010
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.gwt.commons.layout;
 

@@ -9,7 +9,6 @@
  *
  * Created on 2013-01-29
  * @author ArtyomB
- * @version $Id$
  */
 package com.pyx4j.site.client.backoffice.ui.prime.form;
 

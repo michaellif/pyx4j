@@ -16,7 +16,6 @@
  *
  * Created on Dec 24, 2009
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.entity.gae;
 

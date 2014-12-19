@@ -16,7 +16,6 @@
  *
  * Created on Mar 5, 2014
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.tester.svg.client.ui;
 

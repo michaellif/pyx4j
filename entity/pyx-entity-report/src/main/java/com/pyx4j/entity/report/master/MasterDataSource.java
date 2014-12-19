@@ -16,7 +16,6 @@
  *
  * Created on Jan 29, 2012
  * @author David
- * @version $Id$
  */
 package com.pyx4j.entity.report.master;
 

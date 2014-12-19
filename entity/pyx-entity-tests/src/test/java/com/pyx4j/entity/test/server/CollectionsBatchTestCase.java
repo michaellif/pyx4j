@@ -16,7 +16,6 @@
  *
  * Created on Jan 09, 2011
  * @author 
- * @version $Id$
  */
 
 package com.pyx4j.entity.test.server;

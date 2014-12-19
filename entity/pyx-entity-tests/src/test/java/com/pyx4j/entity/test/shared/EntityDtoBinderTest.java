@@ -16,7 +16,6 @@
  *
  * Created on Oct 23, 2011
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.test.shared;
 

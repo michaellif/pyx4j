@@ -16,7 +16,6 @@
  *
  * Created on Jan 22, 2012
  * @author igor
- * @version $Id$
  */
 package com.pyx4j.tester.client.domain.test;
 

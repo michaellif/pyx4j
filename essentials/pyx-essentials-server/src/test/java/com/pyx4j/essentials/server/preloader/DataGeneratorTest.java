@@ -16,7 +16,6 @@
  *
  * Created on 2011-05-04
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.essentials.server.preloader;
 

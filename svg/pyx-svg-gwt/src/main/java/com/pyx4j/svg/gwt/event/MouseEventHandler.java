@@ -16,7 +16,6 @@
  *
  * Created on 2012-09-08
  * @author Alex
- * @version $Id$
  */
 package com.pyx4j.svg.gwt.event;
 

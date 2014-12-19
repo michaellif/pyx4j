@@ -16,7 +16,6 @@
  *
  * Created on 2012-06-02
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.logback;
 

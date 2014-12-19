@@ -16,7 +16,6 @@
  *
  * Created on 2010-11-15
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.client.impl;
 

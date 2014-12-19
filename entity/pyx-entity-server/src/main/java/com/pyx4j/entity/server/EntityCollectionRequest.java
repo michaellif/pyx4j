@@ -16,7 +16,6 @@
  *
  * Created on Oct 17, 2010
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.server;
 

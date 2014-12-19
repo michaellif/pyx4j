@@ -16,7 +16,6 @@
  *
  * Created on Sep 15, 2014
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.config.server;
 

@@ -16,7 +16,6 @@
  *
  * Created on Feb 20, 2010
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.core;
 

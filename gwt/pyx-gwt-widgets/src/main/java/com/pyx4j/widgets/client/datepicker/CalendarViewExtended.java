@@ -17,7 +17,6 @@
  *
  * Created on 2011-03-03
  * @author leont
- * @version $Id$
  */
 
 package com.pyx4j.widgets.client.datepicker;

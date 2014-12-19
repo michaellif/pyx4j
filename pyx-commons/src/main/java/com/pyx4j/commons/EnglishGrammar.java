@@ -16,7 +16,6 @@
  *
  * Created on Nov 26, 2008
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.commons;
 

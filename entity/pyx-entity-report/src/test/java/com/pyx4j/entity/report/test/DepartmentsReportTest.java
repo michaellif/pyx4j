@@ -16,7 +16,6 @@
  *
  * Created on Mar 23, 2011
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.entity.report.test;
 

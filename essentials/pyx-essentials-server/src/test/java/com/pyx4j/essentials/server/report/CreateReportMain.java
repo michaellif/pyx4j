@@ -16,7 +16,6 @@
  *
  * Created on Mar 18, 2010
  * @author go.david
- * @version $Id$
  */
 package com.pyx4j.essentials.server.report;
 

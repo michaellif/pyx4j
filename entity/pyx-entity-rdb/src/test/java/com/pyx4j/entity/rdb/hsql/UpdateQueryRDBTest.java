@@ -16,7 +16,6 @@
  *
  * Created on Feb 3, 2014
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.rdb.hsql;
 

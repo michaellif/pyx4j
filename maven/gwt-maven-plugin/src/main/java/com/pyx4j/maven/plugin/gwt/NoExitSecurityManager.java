@@ -1,6 +1,5 @@
 /*
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.maven.plugin.gwt;
 

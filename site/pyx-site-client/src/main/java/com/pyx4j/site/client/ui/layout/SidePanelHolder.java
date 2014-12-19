@@ -16,7 +16,6 @@
  *
  * Created on Jun 19, 2013
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.site.client.ui.layout;
 

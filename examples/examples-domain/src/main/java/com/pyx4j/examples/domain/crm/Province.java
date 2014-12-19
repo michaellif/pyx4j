@@ -16,7 +16,6 @@
  *
  * Created on Mar 4, 2010
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.examples.domain.crm;
 

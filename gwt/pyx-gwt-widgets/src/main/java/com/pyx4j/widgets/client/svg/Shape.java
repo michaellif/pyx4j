@@ -16,7 +16,6 @@
  *
  * Created on Apr 27, 2010
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.widgets.client.svg;
 

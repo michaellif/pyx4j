@@ -16,7 +16,6 @@
  *
  *
  * @author vlads
- * @version $Id$
  */
 package org.apache.commons.lang.builder;
 

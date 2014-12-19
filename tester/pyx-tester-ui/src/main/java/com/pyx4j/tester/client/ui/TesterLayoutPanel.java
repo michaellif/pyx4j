@@ -16,7 +16,6 @@
  *
  * Created on Apr 22, 2013
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.tester.client.ui;
 

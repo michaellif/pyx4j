@@ -16,7 +16,6 @@
  *
  * Created on Sep 28, 2012
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.test.shared.domain.ownership.polymorphic.st2;
 

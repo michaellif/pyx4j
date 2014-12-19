@@ -16,7 +16,6 @@
  *
  * Created on 2011-01-06
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.test.shared.domain.bidir;
 

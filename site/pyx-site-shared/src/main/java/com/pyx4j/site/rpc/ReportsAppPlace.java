@@ -16,7 +16,6 @@
  *
  * Created on Sep 5, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.pyx4j.site.rpc;
 

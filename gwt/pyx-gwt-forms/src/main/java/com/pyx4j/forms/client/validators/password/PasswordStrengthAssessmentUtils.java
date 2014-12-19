@@ -16,7 +16,6 @@
  *
  * Created on Apr 20, 2012
  * @author ArtyomB
- * @version $Id$
  */
 package com.pyx4j.forms.client.validators.password;
 

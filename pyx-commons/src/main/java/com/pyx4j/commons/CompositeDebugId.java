@@ -16,7 +16,6 @@
  *
  * Created on 2011-02-07
  * @author antonk
- * @version $Id$
  */
 package com.pyx4j.commons;
 

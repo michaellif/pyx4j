@@ -16,7 +16,6 @@
  *
  * Created on Feb 11, 2010
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.security.server;
 

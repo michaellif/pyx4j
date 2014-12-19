@@ -16,7 +16,6 @@
  *
  * Created on Apr 26, 2010
  * @author Misha
- * @version $Id$
  */
 package com.pyx4j.gwt.commons;
 

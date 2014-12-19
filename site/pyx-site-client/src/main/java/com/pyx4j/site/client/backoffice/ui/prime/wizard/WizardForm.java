@@ -16,7 +16,6 @@
  *
  * Created on 2011-07-29
  * @author Vlad
- * @version $Id$
  */
 package com.pyx4j.site.client.backoffice.ui.prime.wizard;
 

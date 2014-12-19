@@ -16,7 +16,6 @@
  *
  * Created on Nov 6, 2014
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.site.client.memento;
 

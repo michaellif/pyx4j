@@ -16,7 +16,6 @@
  *
  * Created on Mar 18, 2010
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.site.client;
 

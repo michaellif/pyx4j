@@ -16,7 +16,6 @@
  *
  * Created on May 27, 2011
  * @author dmitry
- * @version $Id$
  */
 package com.pyx4j.essentials.j2se.util;
 

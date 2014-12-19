@@ -16,7 +16,6 @@
  *
  * Created on Jun 21, 2013
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.site.client.ui.devconsole;
 

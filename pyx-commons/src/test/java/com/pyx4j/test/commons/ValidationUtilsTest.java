@@ -16,7 +16,6 @@
  *
  * Created on Aug 27, 2013
  * @author stanp
- * @version $Id$
  */
 package com.pyx4j.test.commons;
 

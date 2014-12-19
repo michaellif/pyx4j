@@ -16,7 +16,6 @@
  *
  * Created on Aug 29, 2011
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.gwt.server.deferred;
 

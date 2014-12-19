@@ -16,7 +16,6 @@
  *
  * Created on Apr 24, 2014
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.forms.client.ui.panels;
 

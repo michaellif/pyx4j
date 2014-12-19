@@ -16,7 +16,6 @@
  *
  * Created on May 15, 2009
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.widgets.client.event.shared;
 

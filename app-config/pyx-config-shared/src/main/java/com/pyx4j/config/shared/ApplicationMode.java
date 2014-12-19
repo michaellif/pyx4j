@@ -16,7 +16,6 @@
  *
  * Created on 2010-08-16
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.config.shared;
 

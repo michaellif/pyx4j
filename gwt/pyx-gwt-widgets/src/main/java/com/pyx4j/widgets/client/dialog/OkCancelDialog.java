@@ -16,7 +16,6 @@
  *
  * Created on Dec 7, 2011
  * @author michaellif
- * @version $Id$
  */
 package com.pyx4j.widgets.client.dialog;
 

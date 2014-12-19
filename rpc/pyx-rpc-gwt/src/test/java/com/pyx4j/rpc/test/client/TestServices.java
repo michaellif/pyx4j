@@ -16,7 +16,6 @@
  *
  * Created on Dec 29, 2009
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.rpc.test.client;
 

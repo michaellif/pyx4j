@@ -9,7 +9,6 @@
  *
  * Created on Jan 17, 2012
  * @author vladlouk
- * @version $Id$
  */
 package com.pyx4j.forms.client.ui.datatable;
 

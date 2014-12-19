@@ -16,7 +16,6 @@
  *
  * Created on 2011-03-01
  * @author Vlad
- * @version $Id$
  */
 package com.pyx4j.forms.client.ui;
 

@@ -16,7 +16,6 @@
  *
  * Created on 2010-05-14
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.site.client.events;
 

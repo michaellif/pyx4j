@@ -16,7 +16,6 @@
  *
  * Created on 2011-03-25
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.unit.test.rpc;
 

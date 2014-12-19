@@ -16,7 +16,6 @@
  *
  * Created on Dec 29, 2009
  * @author Misha
- * @version $Id$
  */
 package com.pyx4j.unit.client.ui;
 

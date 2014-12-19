@@ -3,7 +3,6 @@
  * Copyright (C) 2007 pyx4j.com.
  *
  * @author vlads
- * @version $Id$
  */
 package org.apache.commons.lang.builder;
 
