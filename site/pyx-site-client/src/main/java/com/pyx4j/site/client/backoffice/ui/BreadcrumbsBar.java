@@ -81,11 +81,11 @@ public class BreadcrumbsBar extends HorizontalPanel {
 
                 @Override
                 public void onClick(ClickEvent event) {
-                    AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(breadcrumb.getObjectClass(), breadcrumb.getPrimaryKey()));
+                    AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(breadcrumb.getInstanceValueClass(), breadcrumb.getPrimaryKey()));
                 }
             });
 
-            ImageResource image = AppPlaceEntityMapper.resolveImageResource(breadcrumb.getObjectClass());
+            ImageResource image = AppPlaceEntityMapper.resolveImageResource(breadcrumb.getInstanceValueClass());
             if (image != null) {
                 Image icon = new Image(image);
                 add(icon);
