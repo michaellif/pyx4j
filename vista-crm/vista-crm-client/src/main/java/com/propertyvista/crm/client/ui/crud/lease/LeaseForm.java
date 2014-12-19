@@ -23,12 +23,14 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.TransactionHistoryViewerYardi;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
+import com.propertyvista.crm.client.ui.crud.lease.eviction.EvictionHistoryFolder;
 import com.propertyvista.crm.client.ui.crud.lease.financial.TransactionHistoryViewer;
 import com.propertyvista.crm.client.ui.crud.lease.legal.LegalLetterFolder;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.DepositLifecycleDTO;
+import com.propertyvista.dto.EvictionCaseDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
@@ -36,7 +38,7 @@ import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
-    private final Tab depositsTab, adjustmentsTab, chargesTab, billsTab, paymentsTab, financialTab, communicationTab;
+    private final Tab depositsTab, adjustmentsTab, chargesTab, billsTab, paymentsTab, financialTab, evictionHistoryTab, communicationTab;
 
     public LeaseForm(IPrimeFormView<LeaseDTO, ?> view) {
         super(LeaseDTO.class, view);
@@ -50,6 +52,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         paymentsTab = addTab(getParentView().getPaymentListerView().asWidget(), i18n.tr("Receipts"), DataModelPermission.permissionRead(PaymentRecordDTO.class));
         financialTab = addTab(createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"),
                 DataModelPermission.permissionRead(TransactionHistoryDTO.class));
+        evictionHistoryTab = addTab(createEvictionTab(), i18n.tr("Eviction History"), DataModelPermission.permissionRead(EvictionCaseDTO.class));
         communicationTab = addTab(createCommunicationsTab(), i18n.tr("Documents/Communication"), DataModelPermission.permissionRead(LegalLetter.class));
     }
 
@@ -96,6 +99,12 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         formPanel.append(Location.Dual, proto().transactionHistory(), transactionHistoryViewer);
         transactionHistoryViewer.asWidget().setWidth("100%");
 
+        return formPanel;
+    }
+
+    private IsWidget createEvictionTab() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Dual, proto().evictionHistory(), new EvictionHistoryFolder());
         return formPanel;
     }
 

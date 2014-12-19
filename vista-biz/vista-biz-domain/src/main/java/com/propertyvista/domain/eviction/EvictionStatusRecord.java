@@ -18,7 +18,9 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
@@ -29,6 +31,12 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.propertyvista.domain.security.CrmUser;
 
 public interface EvictionStatusRecord extends IEntity {
+
+    @Owner
+    @MemberColumn(notNull = true)
+    @ReadOnly
+    @Detached
+    EvictionStatus evictionStatus();
 
     @Editor(type = EditorType.textarea)
     IPrimitive<String> note();

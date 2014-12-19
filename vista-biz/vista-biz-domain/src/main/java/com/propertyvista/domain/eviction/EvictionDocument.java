@@ -31,7 +31,7 @@ public interface EvictionDocument extends IHasFile<EvictionDocumentBlob> {
 
     @ReadOnly
     @Timestamp(Update.Created)
-    IPrimitive<Date> createdOn();
+    IPrimitive<Date> addedOn();
 
     IPrimitive<String> title();
 

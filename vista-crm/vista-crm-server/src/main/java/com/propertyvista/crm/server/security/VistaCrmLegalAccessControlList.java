@@ -25,6 +25,7 @@ import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseCompletion;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseNotice;
 import com.propertyvista.domain.legal.LegalLetter;
+import com.propertyvista.dto.EvictionCaseDTO;
 import com.propertyvista.dto.LeaseLegalStateDTO;
 
 class VistaCrmLegalAccessControlList extends UIAclBuilder {
@@ -42,8 +43,12 @@ class VistaCrmLegalAccessControlList extends UIAclBuilder {
         grant(LegalCollectionsBasic, LeaseLegalStateDTO.class, READ);
         grant(LegalCollectionsBasic, LegalNoticeCandidateDTO.class, READ);
 
+        grant(LegalCollectionsBasic, EvictionCaseDTO.class, READ);
+
         grant(LegalCollectionsFull, LegalLetter.class, READ | CREATE);
         grant(LegalCollectionsFull, LeaseLegalStateDTO.class, READ | UPDATE);
         grant(LegalCollectionsFull, LegalNoticeCandidateDTO.class, ALL);
+
+        grant(LegalCollectionsFull, EvictionCaseDTO.class, READ | UPDATE);
     }
 }

@@ -23,6 +23,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
@@ -37,9 +38,12 @@ public interface EvictionStatus extends IEntity {
     EvictionCase evictionCase();
 
     @Indexed(uniqueConstraint = true, group = { "c,2" })
+    @ReadOnly
     EvictionFlowStep evictionStep();
 
     @ReadOnly
     @Timestamp(Update.Created)
     IPrimitive<Date> addedOn();
+
+    IList<EvictionStatusRecord> statusRecords();
 }

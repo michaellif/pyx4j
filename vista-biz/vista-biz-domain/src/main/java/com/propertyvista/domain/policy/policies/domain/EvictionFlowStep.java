@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
@@ -32,6 +33,7 @@ public interface EvictionFlowStep extends IEntity {
     @Indexed(uniqueConstraint = true, group = { "n,1" })
     EvictionFlowPolicy policy();
 
+    @ToString
     @Indexed(uniqueConstraint = true, group = { "n,2" })
     IPrimitive<String> name();
 
