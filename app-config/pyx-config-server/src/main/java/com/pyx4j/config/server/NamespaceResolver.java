@@ -19,10 +19,9 @@
  */
 package com.pyx4j.config.server;
 
-import javax.servlet.http.HttpServletRequest;
 
 public interface NamespaceResolver {
 
-    public String getNamespace(HttpServletRequest httprequest);
+    public NamespaceData getNamespaceData();
 
 }
