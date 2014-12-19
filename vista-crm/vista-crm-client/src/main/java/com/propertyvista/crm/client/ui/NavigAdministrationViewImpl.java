@@ -218,6 +218,8 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
 
             sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.MaintenanceRequest(),
                     CrmAdministrationPolicesOtherAccess.class));
+            sideMenuList
+                    .addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.EvictionFlow(), CrmAdministrationPolicesOtherAccess.class));
             sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.N4(), CrmAdministrationPolicesOtherAccess.class));
 //          list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Settings.Policies.Pet(), CrmAdministrationPolicesOtherAccess.class));
             sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.PaymentTypeSelection(),

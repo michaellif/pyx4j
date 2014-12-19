@@ -591,6 +591,9 @@ public class CrmSiteMap implements SiteMap {
             public static class MaintenanceRequest extends CrmCrudAppPlace {
             }
 
+            public static class EvictionFlow extends CrmCrudAppPlace {
+            }
+
             @PlaceProperties(caption = "N4")
             public static class N4 extends CrmCrudAppPlace {
             }

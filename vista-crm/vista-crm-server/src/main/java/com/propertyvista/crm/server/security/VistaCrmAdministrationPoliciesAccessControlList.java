@@ -33,6 +33,7 @@ import com.propertyvista.crm.rpc.services.policies.policy.BackgroundCheckPolicyC
 import com.propertyvista.crm.rpc.services.policies.policy.DatesPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.DepositPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.EmailTemplatesPolicyCrudService;
+import com.propertyvista.crm.rpc.services.policies.policy.EvictionFlowPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.IdAssignmentPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.LeaseAdjustmentPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.LeaseAgreementLegalPolicyCrudService;
@@ -58,6 +59,7 @@ import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
 import com.propertyvista.domain.policy.policies.DatesPolicy;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
+import com.propertyvista.domain.policy.policies.EvictionFlowPolicy;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
 import com.propertyvista.domain.policy.policies.LeaseAgreementLegalPolicy;
@@ -132,6 +134,9 @@ class VistaCrmAdministrationPoliciesAccessControlList extends UIAclBuilder {
 
         grant(AdminGeneral, new IServiceExecutePermission(MaintenanceRequestPolicyCrudService.class));
         grant(AdminGeneral, new EntityPermission(MaintenanceRequestPolicy.class, ALL));
+
+        grant(AdminGeneral, new IServiceExecutePermission(EvictionFlowPolicyCrudService.class));
+        grant(AdminGeneral, new EntityPermission(EvictionFlowPolicy.class, ALL));
 
         grant(AdminGeneral, new IServiceExecutePermission(N4PolicyCrudService.class));
         grant(AdminGeneral, new EntityPermission(N4Policy.class, ALL));
