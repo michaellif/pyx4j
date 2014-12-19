@@ -36,7 +36,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -44,6 +43,7 @@ import com.google.gwt.user.client.ui.HTMLTable.Cell;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.IEntity;
@@ -274,11 +274,18 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
                 }
 
                 for (ColumnDescriptor columnDescriptor : visibleColumnDescriptors) {
-                    Widget contentHtml = new HTML(dataItem.getCellValue(columnDescriptor));
-                    contentHtml.getElement().getStyle().setProperty("overflow", "hidden");
-                    contentHtml.getElement().getStyle().setMarginRight(5, Unit.PX);
 
-                    flexTable.setWidget(rowIndex, colIndex, contentHtml);
+                    Widget contentHtml = new HTML(dataItem.getCellValue(columnDescriptor));
+                    contentHtml.setStyleName(DataTableTheme.StyleName.DataTableCellContent.name());
+                    contentHtml.setTitle(dataItem.getCellValue(columnDescriptor).asString());
+
+                    SimplePanel contentHolder = new SimplePanel(contentHtml);
+                    contentHolder.setStyleName(DataTableTheme.StyleName.DataTableCellHolder.name());
+                    if (columnDescriptor.getWidth() != null) {
+                        contentHolder.getElement().getStyle().setProperty("minWidth", columnDescriptor.getWidth());
+                    }
+
+                    flexTable.setWidget(rowIndex, colIndex, contentHolder);
                     //TODO flexTable.getCellFormatter().setWordWrap(rowIndex, colIndex, columnDescriptor.isWordWrap());
                     ++colIndex;
                 }

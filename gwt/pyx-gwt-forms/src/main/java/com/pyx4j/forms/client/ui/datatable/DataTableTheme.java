@@ -36,7 +36,9 @@ public class DataTableTheme extends Theme {
 
         DataTableFilter, DataTableFilterMain, DataTableFilterHeader, DataTableFilterFooter, DataTableFilterItem,
 
-        DataTableCriteria, DataTableCriteriaMain, DataTableCriteriaHeader, DataTableCriteriaFooter
+        DataTableCriteria, DataTableCriteriaMain, DataTableCriteriaHeader, DataTableCriteriaFooter,
+
+        DataTableCellContent, DataTableCellHolder
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -129,6 +131,24 @@ public class DataTableTheme extends Theme {
         style = new Style(".", StyleName.DataTableRow, "-", StyleDependent.selected);
         style.addProperty("background-color", ThemeColor.object1, 0.8);
         style.addProperty("color", ThemeColor.foreground, 0);
+        addStyle(style);
+
+        style = new Style(".", StyleName.DataTableCellContent);
+        style.addProperty("margin", "5px");
+        style.addProperty("position", "absolute");
+        style.addProperty("top", "0");
+        style.addProperty("bottom", "0");
+        style.addProperty("left", "0");
+        style.addProperty("right", "0");
+        style.addProperty("text-overflow", "ellipsis");
+        style.addProperty("white-space", "nowrap");
+        style.addProperty("overflow", "hidden");
+        addStyle(style);
+
+        style = new Style(".", StyleName.DataTableCellHolder);
+        style.addProperty("position", "relative");
+        style.addProperty("overflow", "hidden");
+        style.addProperty("height", "2em");
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableActionsBar);

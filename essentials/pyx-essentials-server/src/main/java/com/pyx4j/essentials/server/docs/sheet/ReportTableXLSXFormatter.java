@@ -238,6 +238,9 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
     }
 
     public Cell createCell() {
+    	if (this.curentRow == null) {
+            newRow();
+        }
         return this.curentRow.createCell(this.cellIdx++);
     }
 
