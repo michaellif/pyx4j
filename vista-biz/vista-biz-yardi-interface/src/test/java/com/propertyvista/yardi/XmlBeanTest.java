@@ -37,7 +37,7 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
-import com.propertyvista.config.tests.VistaTestsNamespaceResolver;
+import com.propertyvista.config.tests.VistaTestsNamespaceDataResolver;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -57,7 +57,7 @@ public class XmlBeanTest {
     @BeforeClass
     //TODO clean init of tests without persistence
     public static void init() {
-        NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
+        NamespaceManager.setNamespace(VistaTestsNamespaceDataResolver.demoNamespace);
         VistaTestDBSetup.init();
 
         createPmc();
@@ -66,7 +66,7 @@ public class XmlBeanTest {
 
     public static synchronized void createPmc() {
         final Pmc pmc = EntityFactory.create(Pmc.class);
-        pmc.namespace().setValue(VistaTestsNamespaceResolver.demoNamespace);
+        pmc.namespace().setValue(VistaTestsNamespaceDataResolver.demoNamespace);
         pmc.features().countryOfOperation().setValue(CountryOfOperation.US);
 
         TaskRunner.runInOperationsNamespace(new Callable<Void>() {

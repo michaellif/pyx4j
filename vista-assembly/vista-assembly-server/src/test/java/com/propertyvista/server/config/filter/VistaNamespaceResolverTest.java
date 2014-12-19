@@ -10,9 +10,7 @@
  * Created on Oct 8, 2014
  * @author ernestog
  */
-package com.propertyvista.server.config;
-
-import junit.framework.TestCase;
+package com.propertyvista.server.config.filter;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -21,16 +19,13 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.unit.server.mock.MockHttpServletRequest;
 
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.portal.rpc.shared.SiteWasNotActivatedUserRuntimeException;
+import com.propertyvista.server.config.VistaServerSideConfiguration;
 
-public class VistaNamespaceResolverTest extends TestCase {
+public class VistaNamespaceResolverTest extends VistaNamespaceResolverTestBase {//extends TestCase {
 
     private final static Logger log = LoggerFactory.getLogger(VistaNamespaceResolverTest.class);
 
@@ -39,15 +34,7 @@ public class VistaNamespaceResolverTest extends TestCase {
     @Override
     @Before
     public void setUp() throws Exception {
-        // Init HSQL DB
-        VistaTestDBSetupForNamespace.init();
-
-        // Create testing PMCs
-        createDefaultPMC("vista");
-        createDefaultPMC("testnamespace");
-        createDefaultPMC("testpmcs");
-        createInactivePMC("inactivepmc");
-
+        super.setUp();
         log.info("VistaNamespaceResolverTest initialized");
     }
 
@@ -135,31 +122,10 @@ public class VistaNamespaceResolverTest extends TestCase {
             req.setContextPath(contextPath);
         }
 
-        String nsResult = VistaServerSideConfiguration.instance().getNamespaceResolver().getNamespace(req);
-
+        String nsResult = VistaServerSideConfiguration.instance().getNamespaceResolver(req).getNamespaceData().getNamespace();
         Assert.assertTrue("Namespace Resolution error for request'" + urlReq + "'. Expected '" + expectedNamespace + "' and was '" + nsResult + "'",
                 nsResult.equalsIgnoreCase(expectedNamespace));
 
-    }
-
-    private void createDefaultPMC(String namespace) {
-        createPMC(namespace, PmcStatus.Active);
-    }
-
-    private void createInactivePMC(String namespace) {
-        createPMC(namespace, PmcStatus.Activating);
-    }
-
-    private void createPMC(String namespace, PmcStatus status) {
-        Pmc pmc = EntityFactory.create(Pmc.class);
-
-        // Set NOT_NULL property values
-        pmc.name().setValue("nameSpaceFor" + namespace);
-        pmc.dnsName().setValue(namespace);
-        pmc.namespace().setValue(namespace);
-        pmc.status().setValue(status);
-
-        Persistence.service().persist(pmc);
     }
 
 }

@@ -10,7 +10,7 @@
  * Created on Oct 14, 2014
  * @author ernestog
  */
-package com.propertyvista.server.config;
+package com.propertyvista.server.config.filter;
 
 import java.io.IOException;
 
@@ -28,8 +28,7 @@ import com.pyx4j.unit.server.mock.filter.MockFilterChain;
 import com.pyx4j.unit.server.mock.filter.MockHttpServletRequestFilter;
 
 import com.propertyvista.domain.security.common.VistaApplication;
-import com.propertyvista.server.config.filter.VistaApplicationDispatcherFilter;
-import com.propertyvista.server.config.filter.VistaURIDataResolver;
+import com.propertyvista.server.config.filter.namespace.VistaApplicationResolverHelper;
 
 public class VistaApplicationDispatcherFilterTestBase {
 
@@ -84,7 +83,7 @@ public class VistaApplicationDispatcherFilterTestBase {
         resp = new MockHttpServletResponse();
 
         Assert.assertTrue("Redirection " + (redirectExpected ? "expected" : "not expected") + " for url '" + url + "'",
-                new VistaURIDataResolver(req).isHttpsRedirectionNeeded() == redirectExpected);
+                VistaApplicationResolverHelper.isHttpsRedirectionNeeded(req) == redirectExpected);
 
     }
 
