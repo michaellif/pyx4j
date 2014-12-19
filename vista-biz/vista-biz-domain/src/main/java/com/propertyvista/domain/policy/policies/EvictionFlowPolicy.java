@@ -14,13 +14,22 @@
 package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.core.ISet;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
+import com.propertyvista.domain.ref.ProvincePolicyNode;
 
-@DiscriminatorValue("EvictionPolicy")
-public interface EvictionPolicy extends Policy {
+@DiscriminatorValue("EvictionFlowPolicy")
+@LowestApplicableNode(value = ProvincePolicyNode.class)
+public interface EvictionFlowPolicy extends Policy {
 
-    ISet<EvictionFlowStep> evictionFlow();
+    @Owned
+    IList<EvictionFlowStep> evictionFlow();
+
+    @Deprecated
+    IPrimitive<String> x();
 }

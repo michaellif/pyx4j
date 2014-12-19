@@ -15,11 +15,8 @@ package com.propertyvista.domain.eviction;
 
 import java.util.Date;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.annotations.Inheritance.InheritanceStrategy;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -30,13 +27,13 @@ import com.pyx4j.entity.shared.IHasFile;
 import com.propertyvista.domain.blob.EvictionDocumentBlob;
 
 @SecurityEnabled
-@AbstractEntity
-@Inheritance(strategy = InheritanceStrategy.SINGLE_TABLE)
 public interface EvictionDocument extends IHasFile<EvictionDocumentBlob> {
 
     @ReadOnly
     @Timestamp(Update.Created)
     IPrimitive<Date> createdOn();
+
+    IPrimitive<String> title();
 
     @Editor(type = EditorType.textarea)
     IPrimitive<String> note();

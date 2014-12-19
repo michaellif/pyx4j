@@ -14,13 +14,14 @@
 package com.propertyvista.domain.policy.policies.domain;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.policy.policies.EvictionPolicy;
+import com.propertyvista.domain.policy.policies.EvictionFlowPolicy;
 
 public interface EvictionFlowStep extends IEntity {
 
@@ -28,8 +29,10 @@ public interface EvictionFlowStep extends IEntity {
     @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
-    EvictionPolicy policy();
+    @Indexed(uniqueConstraint = true, group = { "n,1" })
+    EvictionFlowPolicy policy();
 
+    @Indexed(uniqueConstraint = true, group = { "n,2" })
     IPrimitive<String> name();
 
     IPrimitive<String> description();

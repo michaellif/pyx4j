@@ -201,6 +201,9 @@ import com.propertyvista.crm.client.activity.policies.deposit.DepositPolicyViewe
 import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.eviction.EvictionFlowPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.eviction.EvictionFlowPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.eviction.EvictionFlowPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.idassignment.IdAssignmentPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.idassignment.IdAssignmentPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.idassignment.IdAssignmentPolicyViewerActivity;
@@ -1128,6 +1131,19 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new LegalQuestionsPolicyViewerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (crudPlace instanceof Administration.Policies.EvictionFlow) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new EvictionFlowPolicyListerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new EvictionFlowPolicyEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new EvictionFlowPolicyViewerActivity(crudPlace);
                             break;
                         }
 
