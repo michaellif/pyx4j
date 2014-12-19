@@ -134,13 +134,13 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
             return new ColumnDescriptor[] {//@formatter:off
                     new ColumnDescriptor.Builder(proto.star()).searchable(false).width("30px").formatter(
                             booleanField2Image(proto.star().getPath(),CrmImages.INSTANCE.fullStar(), CrmImages.INSTANCE.noStar()))
-                            .columnTitle("").build(),
+                            .columnTitleShown(false).build(),
                     new ColumnDescriptor.Builder(proto.highImportance()).searchable(false).width("30px").formatter(
                             booleanField2Image( proto.highImportance().getPath(),CrmImages.INSTANCE.messageImportant(), null))
-                            .columnTitle("").build(),
+                            .columnTitleShown(false).build(),
                     new ColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("30px").formatter(
                             booleanField2Image( proto.hasAttachments().getPath(),CrmImages.INSTANCE.attachement(), null))
-                            .columnTitle("").build(),
+                            .columnTitleShown(false).build(),
                     new ColumnDescriptor.Builder(proto.senderDTO().name()).columnTitle(i18n.tr("Sender")).searchable(false).width("150px").formatter(baseFieldViewOnIsRead(proto.senderDTO().name().getPath())).build(),
                     new ColumnDescriptor.Builder(proto.subject()).searchable(false).width("300px").formatter(baseFieldViewOnIsRead(proto.subject().getPath())).build(),
                     new ColumnDescriptor.Builder(proto.date()).searchable(false).width("80px").build(),
@@ -159,13 +159,13 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
             return new ColumnDescriptor[] {//@formatter:off
                 new ColumnDescriptor.Builder(proto.star()).searchable(false).width("25px").formatter(
                         booleanField2Image( proto.star().getPath(),CrmImages.INSTANCE.fullStar(), CrmImages.INSTANCE.noStar()))
-                        .columnTitle("").build(),
+                        .columnTitleShown(false).build(),
                 new ColumnDescriptor.Builder(proto.highImportance()).searchable(false).width("25px").formatter(
                         booleanField2Image( proto.highImportance().getPath(),CrmImages.INSTANCE.messageImportant(), null))
-                        .columnTitle("").build(),
+                        .columnTitleShown(false).build(),
                 new ColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("25px").formatter(
                         booleanField2Image( proto.hasAttachments().getPath(),CrmImages.INSTANCE.attachement(), null))
-                        .columnTitle("").build(),
+                        .columnTitleShown(false).build(),
                 new ColumnDescriptor.Builder(proto.senderDTO().name()).columnTitle(i18n.tr("Sender")).searchable(false).width("200px").formatter(baseFieldViewOnIsRead(proto.senderDTO().name().getPath())).build(),
                 new ColumnDescriptor.Builder(proto.subject()).searchable(false).width("1000px").formatter(baseFieldViewOnIsRead(proto.subject().getPath())).build(),
                 new ColumnDescriptor.Builder(proto.date()).searchable(false).width("200px").build(),
@@ -179,13 +179,13 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
             return new ColumnDescriptor[] {//@formatter:off
                 new ColumnDescriptor.Builder(proto.star()).searchable(false).width("25px").formatter(
                         booleanField2Image( proto.star().getPath(),CrmImages.INSTANCE.fullStar(), CrmImages.INSTANCE.noStar()))
-                        .columnTitle("").build(),
+                        .columnTitleShown(false).build(),
                 new ColumnDescriptor.Builder(proto.highImportance()).searchable(false).width("25px").formatter(
                         booleanField2Image( proto.highImportance().getPath(),CrmImages.INSTANCE.messageImportant(), null))
-                        .columnTitle("").build(),
+                        .columnTitleShown(false).build(),
                 new ColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("25px").formatter(
                         booleanField2Image( proto.hasAttachments().getPath(),CrmImages.INSTANCE.attachement(), null))
-                        .columnTitle("").build(),
+                        .columnTitleShown(false).build(),
                 new ColumnDescriptor.Builder(proto.senderDTO().name()).columnTitle(i18n.tr("Sender")).searchable(false).width("200px").formatter(baseFieldViewOnIsRead(proto.senderDTO().name().getPath())).build(),
                 new ColumnDescriptor.Builder(proto.subject()).searchable(false).width("1000px").formatter(baseFieldViewOnIsRead(proto.subject().getPath())).build(),
                 new ColumnDescriptor.Builder(proto.date()).searchable(false).width("200px").build(),
@@ -198,13 +198,13 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
                 return new ColumnDescriptor[] {//@formatter:off
                     new ColumnDescriptor.Builder(proto.star()).searchable(false).width("25px").formatter(
                             booleanField2Image( proto.star().getPath(),CrmImages.INSTANCE.fullStar(), CrmImages.INSTANCE.noStar()))
-                            .columnTitle("").build(),
+                            .columnTitleShown(false).build(),
                     new ColumnDescriptor.Builder(proto.highImportance()).searchable(false).width("25px").formatter(
                             booleanField2Image( proto.highImportance().getPath(),CrmImages.INSTANCE.messageImportant(), null))
-                            .columnTitle("").build(),
+                            .columnTitleShown(false).build(),
                     new ColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("25px").formatter(
                             booleanField2Image( proto.hasAttachments().getPath(),CrmImages.INSTANCE.attachement(), null))
-                            .columnTitle("").build(),
+                            .columnTitleShown(false).build(),
                     new ColumnDescriptor.Builder(proto.senderDTO().name()).columnTitle(i18n.tr("Sender")).searchable(false).width("200px").formatter(baseFieldViewOnIsRead(proto.senderDTO().name().getPath())).build(),
                     new ColumnDescriptor.Builder(proto.subject()).searchable(false).width("1000px").formatter(baseFieldViewOnIsRead(proto.subject().getPath())).build(),
                     new ColumnDescriptor.Builder(proto.date()).searchable(false).width("200px").build(),
