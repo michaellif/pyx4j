@@ -154,6 +154,8 @@ public class ColumnDescriptor {
 
         private String columnTitle;
 
+        private boolean columnTitleVisible;
+
         private boolean sortable = true;
 
         private boolean searchable = true;
@@ -183,11 +185,6 @@ public class ColumnDescriptor {
         }
 
         public Builder columnTitle(String columnTitle) {
-            this.columnTitle = columnTitle;
-            return this;
-        }
-
-        public Builder title(String columnTitle) {
             this.columnTitle = columnTitle;
             return this;
         }
