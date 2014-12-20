@@ -68,9 +68,9 @@
     </distributionManagement>
 
     <scm>
-        <url>https://svn.pyx4j.com/svn/trunk/</url>
-        <connection>scm:svn:https://svn.pyx4j.com/svn/trunk</connection>
-        <developerConnection>scm:svn:https://svn.pyx4j.com/svn/trunk</developerConnection>
+        <url>https://stash.devpv.com/projects/PYX4J/repos/pyx4j/browse</url>
+        <connection>scm:git:ssh://git@stash-ssh.devpv.com:7999/pyx4j/pyx4j.git</connection>
+        <developerConnection>scm:git:ssh://git@stash-ssh.devpv.com:7999/pyx4j/pyx4j.git</developerConnection>
     </scm>
 
     <modules>

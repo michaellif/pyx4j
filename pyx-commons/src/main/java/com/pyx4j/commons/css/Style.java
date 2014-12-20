@@ -22,6 +22,8 @@ package com.pyx4j.commons.css;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.commons.css.GradientProperty.GradientDirection;
+
 public class Style {
 
     private String selector;
@@ -75,6 +77,10 @@ public class Style {
     }
 
     public void addGradient(ThemeColor startColor, double startVibrance, ThemeColor endColor, double endVibrance) {
+        properties.add(new GradientProperty(startColor, startVibrance, endColor, endVibrance));
+    }
+
+    public void addGradient(ThemeColor startColor, double startVibrance, ThemeColor endColor, double endVibrance, GradientDirection direction) {
         properties.add(new GradientProperty(startColor, startVibrance, endColor, endVibrance));
     }
 

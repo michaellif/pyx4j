@@ -29,22 +29,34 @@ public class GradientProperty extends Property {
 
     private final double endVibrance;
 
+    private GradientDirection direction;
+
+    public enum GradientDirection {
+        top, left
+    }
+
     public GradientProperty(ThemeColor startColor, double startVibrance, ThemeColor endColor, double endVibrance) {
+        this(startColor, startVibrance, endColor, endVibrance, GradientDirection.top);
+    }
+
+    public GradientProperty(ThemeColor startColor, double startVibrance, ThemeColor endColor, double endVibrance, GradientDirection direction) {
         super(null);
         this.startColor = startColor;
         this.startVibrance = startVibrance;
         this.endColor = endColor;
         this.endVibrance = endVibrance;
+        this.direction = direction;
     }
 
     @Override
     protected String convertToString(Theme theme, Palette palette) {
-        String color1 = palette.getThemeColor(startColor, startVibrance);
-        String color2 = palette.getThemeColor(endColor, endVibrance);
+        String color1 = (startColor != null) ? palette.getThemeColor(startColor, startVibrance) : "rgba(255, 255, 255, 0)";
+        String color2 = (endColor != null) ? palette.getThemeColor(endColor, endVibrance) : "rgba(255, 255, 255, 0)";
         String noSupport = "background:" + color1 + ";";
-        String ie = "background:-ms-linear-gradient(top,  " + color1 + ",  " + color2 + ");";
-        String ff = "background:-moz-linear-gradient(top,  " + color1 + ",  " + color2 + ");";
-        String other = "background:-webkit-gradient(linear, left top, left bottom, from(" + color1 + "), to(" + color2 + "));";
+        String ie = "background:-ms-linear-gradient(" + direction + ",  " + color1 + ",  " + color2 + ");";
+        String ff = "background:-moz-linear-gradient(" + direction + ",  " + color1 + ",  " + color2 + ");";
+        String other = direction.equals(GradientDirection.top) ? "background:-webkit-gradient(linear, left top, left bottom, from(" + color1 + "), to("
+                + color2 + "));" : "background:-webkit-gradient(linear, left top, right top, from(" + color1 + "), to(" + color2 + "));";
         return noSupport + "\n" + ie + "\n" + ff + "\n" + other;
     }
 }

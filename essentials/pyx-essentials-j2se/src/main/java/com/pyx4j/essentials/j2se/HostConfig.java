@@ -23,12 +23,22 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Locale;
 import java.util.TreeMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.pyx4j.commons.CompareHelper;
+
 public abstract class HostConfig {
 
+	private final static Logger log = LoggerFactory.getLogger(HostConfig.class);
+	
     public static class ProxyConfig {
 
         private String host;
@@ -117,7 +127,7 @@ public abstract class HostConfig {
             TreeMap<String, byte[]> macByName = new TreeMap<String, byte[]>();
             while (en.hasMoreElements()) {
                 NetworkInterface itf = en.nextElement();
-                if (itf.isLoopback() || itf.isVirtual() || !itf.isUp() || (itf.getName() == null) || itf.isPointToPoint()) {
+                if (!isUp(itf) || itf.isLoopback() || itf.isVirtual() || (itf.getName() == null) || itf.isPointToPoint()) {
                     continue;
                 }
                 if ((!itf.getName().startsWith("eth") && !itf.getName().startsWith("bond")) || itf.getInterfaceAddresses().isEmpty()) {
@@ -144,8 +154,66 @@ public abstract class HostConfig {
             throw new Error(e);
         }
     }
+    
+    public static String getNetworkInfo() {
+        StringBuilder b = new StringBuilder();
+        try {
+            Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
+            List<NetworkInterface> interfaces = new ArrayList<>();
+            while (en.hasMoreElements()) {
+                NetworkInterface itf = en.nextElement();
+                interfaces.add(itf);
+            }
+            interfaces.sort(new Comparator<NetworkInterface>() {
+                @Override
+                public int compare(NetworkInterface i1, NetworkInterface i2) {
+                    int cmp = Boolean.valueOf(isUp(i2)).compareTo(Boolean.valueOf(isUp(i1)));
+                    if (cmp != 0) {
+                        return cmp;
+                    } else {
+                        return CompareHelper.compareTo(i1.getName(), i2.getName());
+                    }
+                }
+            });
+
+            for (NetworkInterface itf : interfaces) {
+                b.append("\t").append(itf.getName()).append(" ")//
+                        .append("Up: ").append(itf.isUp()).append(" \n\t\t");
+
+                try {
+                    b.append("Loopback: ").append(itf.isLoopback()).append(", ")//
+                            .append("Virtual: ").append(itf.isVirtual()).append(", ")//
+                            .append("PointToPoint: ").append(itf.isPointToPoint()).append(", ")//
+                            .append("SupportsMulticast: ").append(itf.supportsMulticast()).append(" \n\t\t")//
+                            .append("Index: ").append(itf.getIndex()).append(", ")//
+                            .append("MTU: ").append(itf.getMTU()).append(" \n\t\t")//
+                            .append("MAC: ").append(macToString(itf.getHardwareAddress())).append(", ").append(itf.getDisplayName());
+
+                    b.append(" InterfaceAddresses ").append(itf.getInterfaceAddresses()).append("\n");
+                } catch (Throwable e) {
+                    log.error("Unable to read NetworkInfo", e);
+                    b.append("\n");
+                }
+            }
+        } catch (Throwable e) {
+            log.error("Unable to read NetworkInfo ", e);
+            b.append(e);
+        }
+        return b.toString();
+    }
+    
+    static boolean isUp(NetworkInterface itf) {
+        try {
+            return itf.isUp();
+        } catch (Throwable e) {
+            return false;
+        }
+    }
 
     static String macToString(byte[] mac) {
+    	 if (mac == null) {
+             return "";
+         }
         StringBuilder sb = new StringBuilder(18);
         for (byte b : mac) {
             if (sb.length() > 0)

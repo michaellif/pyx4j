@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,14 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-06-12
- * @author vlads
+ * Created on Dec 19, 2014
+ * @author ernestog
+ * @version $Id: code-templates.xml 12647 2013-05-01 18:01:19Z vlads $
  */
 package com.pyx4j.config.server;
 
+public class NamespaceData {
 
-public interface NamespaceResolver {
+    protected String namespace;
 
-    public NamespaceData getNamespaceData();
+    public NamespaceData(String namespace) {
+        this.namespace = namespace;
+    }
+
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
+    }
 
 }

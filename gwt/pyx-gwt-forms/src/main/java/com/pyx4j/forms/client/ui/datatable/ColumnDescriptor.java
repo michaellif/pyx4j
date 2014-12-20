@@ -58,7 +58,7 @@ public class ColumnDescriptor {
     }
 
     public String getColumnName() {
-        return builder.columnName;
+        return getColumnPath().toString();
     }
 
     public boolean isSearchable() {
@@ -87,6 +87,10 @@ public class ColumnDescriptor {
 
     public String getColumnTitle() {
         return builder.columnTitle;
+    }
+
+    public boolean isColumnTitleShown() {
+        return builder.columnTitleShown;
     }
 
     public void setColumnTitle(String columnTitle) {
@@ -127,13 +131,13 @@ public class ColumnDescriptor {
 
     @Override
     public String toString() {
-        return builder.columnName + "[" + builder.columnTitle + "]";
+        return getColumnName() + "[" + getColumnTitle() + "]";
     }
 
     @Override
     public boolean equals(Object obj) {
-        if ((builder.columnName != null) && (obj instanceof ColumnDescriptor)) {
-            return builder.columnName.equals(((ColumnDescriptor) obj).builder.columnName);
+        if (obj instanceof ColumnDescriptor) {
+            return builder.member.getPath().equals(((ColumnDescriptor) obj).builder.member.getPath());
         } else {
             return false;
         }
@@ -141,8 +145,8 @@ public class ColumnDescriptor {
 
     @Override
     public int hashCode() {
-        if (builder.columnName != null) {
-            return builder.columnName.hashCode();
+        if (builder.member.getPath() != null) {
+            return builder.member.getPath().hashCode();
         } else {
             return super.hashCode();
         }
@@ -152,9 +156,9 @@ public class ColumnDescriptor {
 
         private final IObject<?> member;
 
-        private String columnName;
-
         private String columnTitle;
+
+        private boolean columnTitleShown = true;
 
         private boolean sortable = true;
 
@@ -172,9 +176,6 @@ public class ColumnDescriptor {
 
         public Builder(IObject<?> member) {
             this.member = member;
-            columnName = member.getPath().toString();
-            assert columnName != null : "columnName can't be null";
-
             columnTitle = member.getMeta().getCaption();
 
             if (EnumSet.of(ObjectClassType.EntityList, ObjectClassType.EntitySet).contains(member.getMeta().getObjectClassType())) {
@@ -187,18 +188,13 @@ public class ColumnDescriptor {
             visible(visible);
         }
 
-        public Builder columnName(String columnName) {
-            this.columnName = columnName;
-            return this;
-        }
-
         public Builder columnTitle(String columnTitle) {
             this.columnTitle = columnTitle;
             return this;
         }
 
-        public Builder title(String columnTitle) {
-            this.columnTitle = columnTitle;
+        public Builder columnTitleShown(boolean columnTitleShown) {
+            this.columnTitleShown = columnTitleShown;
             return this;
         }
 
