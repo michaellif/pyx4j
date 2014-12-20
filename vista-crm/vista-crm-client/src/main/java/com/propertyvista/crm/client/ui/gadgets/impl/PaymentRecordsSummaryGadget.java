@@ -68,7 +68,7 @@ public class PaymentRecordsSummaryGadget extends GadgetInstanceBase<PaymentsSumm
         DEFAULT_PAYMENTS_SUMMARY_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
                 (PaymentsSummary.summaryByBuilding)?
                         new ColumnDescriptor.Builder(proto.building()).build():
-                        new ColumnDescriptor.Builder(proto.merchantAccount().accountNumber()).title(i18n.ntr("Merchant Account")).build(),
+                        new ColumnDescriptor.Builder(proto.merchantAccount().accountNumber()).columnTitle(i18n.ntr("Merchant Account")).build(),
                         new ColumnDescriptor.Builder(proto.status()).build(),
                         new ColumnDescriptor.Builder(proto.cash()).build(),
                         new ColumnDescriptor.Builder(proto.check()).build(),

@@ -36,9 +36,9 @@ public class RunViewerDataLister extends SiteDataTablePanel<RunData> {
     private List<ColumnDescriptor> createViewColumnDescriptors() {
         List<ColumnDescriptor> c = Arrays.asList(//@formatter:off
                 new ColumnDescriptor.Builder(proto().pmc()).build(),
-                new ColumnDescriptor.Builder(proto().pmc().namespace()).title("Pmc namespace").searchableOnly().build(),
+                new ColumnDescriptor.Builder(proto().pmc().namespace()).columnTitle("Pmc namespace").searchableOnly().build(),
                 new ColumnDescriptor.Builder(proto().execution().trigger()).build(),
-                new ColumnDescriptor.Builder(proto().execution().trigger().name()).title("Trigger Name").searchableOnly().build(),
+                new ColumnDescriptor.Builder(proto().execution().trigger().name()).columnTitle("Trigger Name").searchableOnly().build(),
                 new ColumnDescriptor.Builder(proto().execution().trigger().triggerType()).visible(false).build(),
                 new ColumnDescriptor.Builder(proto().started()).build(),
                 new ColumnDescriptor.Builder(proto().status()).build(),
@@ -58,7 +58,7 @@ public class RunViewerDataLister extends SiteDataTablePanel<RunData> {
     private List<ColumnDescriptor> createInlineViewColumnDescriptors() {
         List<ColumnDescriptor> c = Arrays.asList(//@formatter:off
                 new ColumnDescriptor.Builder(proto().pmc()).build(),
-                new ColumnDescriptor.Builder(proto().pmc().namespace()).title("Pmc namespace").searchableOnly().build(),
+                new ColumnDescriptor.Builder(proto().pmc().namespace()).columnTitle("Pmc namespace").searchableOnly().build(),
                 new ColumnDescriptor.Builder(proto().started()).build(),
                 new ColumnDescriptor.Builder(proto().status()).build(),
                 new ColumnDescriptor.Builder(proto().executionReport().total()).build(),

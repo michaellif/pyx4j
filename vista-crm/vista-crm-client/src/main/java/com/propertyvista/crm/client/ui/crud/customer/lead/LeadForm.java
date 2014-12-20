@@ -81,6 +81,8 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
 
 
+
+
             @Override
             public BasicValidationError isValid() {
                 Boolean hasContact = false;
@@ -202,7 +204,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
                     // building columns
                     new ColumnDescriptor.Builder(proto().building().propertyCode(), true).build(),
                     new ColumnDescriptor.Builder(proto().building().complex(), false).build(),
-                    new ColumnDescriptor.Builder(proto().building().info().name(), true).title(i18n.tr("Building")).build(),
+                    new ColumnDescriptor.Builder(proto().building().info().name(), true).columnTitle(i18n.tr("Building")).build(),
                     new ColumnDescriptor.Builder(proto().building().info().type(), false).build(),
                     new ColumnDescriptor.Builder(proto().building().info().shape(), false).build(),
                     new ColumnDescriptor.Builder(proto().building().info().address().streetNumber(), false).build(),
@@ -228,7 +230,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
                     new ColumnDescriptor.Builder(proto().building().financial().lastAppraisalDate(), false).build(),
                     new ColumnDescriptor.Builder(proto().building().financial().lastAppraisalValue(), false).build(),
                     new ColumnDescriptor.Builder(proto().building().financial().currency(), false).build(),
-                    new ColumnDescriptor.Builder(proto().building().marketing().name(), false).title(i18n.tr("Building Marketing Name")).build(),
+                    new ColumnDescriptor.Builder(proto().building().marketing().name(), false).columnTitle(i18n.tr("Building Marketing Name")).build(),
 
                     // floorplan columns
                     new ColumnDescriptor.Builder(proto().name(), false).build(),

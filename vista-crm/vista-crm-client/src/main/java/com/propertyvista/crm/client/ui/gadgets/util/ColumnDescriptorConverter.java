@@ -29,15 +29,14 @@ public class ColumnDescriptorConverter {
 
     private static final I18n i18n = I18n.get(ColumnDescriptorConverter.class);
 
-    public static <E extends IEntity> ColumnDescriptor columnDescriptorFromEntity(Class<E> describedEntityClass,
-            ColumnDescriptorEntity columnDescriptorEntity) {
+    public static <E extends IEntity> ColumnDescriptor columnDescriptorFromEntity(Class<E> describedEntityClass, ColumnDescriptorEntity columnDescriptorEntity) {
         if (columnDescriptorEntity != null && !columnDescriptorEntity.isNull()) {
             IEntity proto = EntityFactory.getEntityPrototype(describedEntityClass);
             IObject<?> member = proto.getMember(new Path(columnDescriptorEntity.propertyPath().getValue()));
 
             ColumnDescriptor.Builder columnDescriptorBuilder = new ColumnDescriptor.Builder(member);
             if (!columnDescriptorEntity.title().isNull()) {
-                columnDescriptorBuilder.title(i18n.translate("", columnDescriptorEntity.title().getValue()));
+                columnDescriptorBuilder.columnTitle(i18n.translate("", columnDescriptorEntity.title().getValue()));
             }
             //@formatter:off
             return columnDescriptorBuilder
@@ -51,8 +50,8 @@ public class ColumnDescriptorConverter {
         }
     }
 
-    public static <E extends IEntity> ColumnDescriptorEntity saveColumnDescriptorToEntity(Class<E> describedEntityClass,
-            ColumnDescriptor columnDescriptor, ColumnDescriptorEntity entity) {
+    public static <E extends IEntity> ColumnDescriptorEntity saveColumnDescriptorToEntity(Class<E> describedEntityClass, ColumnDescriptor columnDescriptor,
+            ColumnDescriptorEntity entity) {
         entity.propertyPath().setValue(columnDescriptor.getColumnName());
         entity.isSortable().setValue(columnDescriptor.isSortable());
         if (!EntityFactory.getEntityPrototype(describedEntityClass).getMember(new Path(entity.propertyPath().getValue())).getMeta().getCaption()
