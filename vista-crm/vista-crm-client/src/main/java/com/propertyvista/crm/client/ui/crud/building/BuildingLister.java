@@ -19,8 +19,8 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
@@ -37,14 +37,14 @@ public class BuildingLister extends SiteDataTablePanel<BuildingDTO> {
 
         setColumnDescriptors( //
                 new ColumnDescriptor.Builder(proto().propertyCode(), true).filterAlwaysShown(true).build(), //
-                new ColumnDescriptor.Builder(proto().complex()).build(), //
+                new ColumnDescriptor.Builder(proto().complex()).width("150px").build(), //
                 new ColumnDescriptor.Builder(proto().complexPrimary(), false).build(), //
                 new ColumnDescriptor.Builder(proto().externalId(), false).build(), //
                 new ColumnDescriptor.Builder(proto().integrationSystemId(), VistaFeatures.instance().yardiIntegration()).build(), //
                 new ColumnDescriptor.Builder(proto().suspended(), false).build(), //
                 new ColumnDescriptor.Builder(proto().updated(), false).build(), //
 
-                new ColumnDescriptor.Builder(proto().info().name(), true).build(), //
+                new ColumnDescriptor.Builder(proto().info().name(), true).width("150px").build(), //
                 new ColumnDescriptor.Builder(proto().info().type(), true).build(), //
                 new ColumnDescriptor.Builder(proto().info().shape(), false).build(), //
                 new ColumnDescriptor.Builder(proto().info().address().streetNumber(), false).build(), //
