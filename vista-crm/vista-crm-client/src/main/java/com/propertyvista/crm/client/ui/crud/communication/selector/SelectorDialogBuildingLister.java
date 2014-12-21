@@ -40,7 +40,7 @@ public class SelectorDialogBuildingLister extends EntityLister<Building> {
                 new ColumnDescriptor.Builder(proto().info().address().city(), true).build(),//
                 new ColumnDescriptor.Builder(proto().info().address().province(), true).build(),//
                 new ColumnDescriptor.Builder(proto().info().address().country(), false).build(),//
-                new ColumnDescriptor.Builder(proto().marketing().name(), false).title("Marketing Name").build() //
+                new ColumnDescriptor.Builder(proto().marketing().name(), false).columnTitle("Marketing Name").build() //
         );
 
         DataTableModel<Building> dataTableModel = new DataTableModel<Building>();

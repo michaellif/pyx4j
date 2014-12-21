@@ -11,7 +11,7 @@ Jetty:
 
 tests
 
-   7771  ports for applications in unit tests
+   7771  ports for applications in unit tests  (Use += System.getProperty("bamboo.agentOffsetNo")) for paralel build
 
 codeServerPort
    9994  vista-crm-client.launch

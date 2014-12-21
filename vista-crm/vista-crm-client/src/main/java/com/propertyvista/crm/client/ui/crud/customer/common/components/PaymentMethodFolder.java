@@ -10,7 +10,7 @@
  * Created on 2012-05-04
  * @author Vlad
  */
-package com.propertyvista.crm.client.ui.crud.customer.common;
+package com.propertyvista.crm.client.ui.crud.customer.common.components;
 
 import java.util.EnumSet;
 import java.util.Set;

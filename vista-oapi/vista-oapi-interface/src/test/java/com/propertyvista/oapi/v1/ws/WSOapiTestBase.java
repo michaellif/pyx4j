@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.test.integration.IntegrationTestBase;
 import com.propertyvista.test.mock.MockDataModel;
@@ -84,6 +83,10 @@ public abstract class WSOapiTestBase extends IntegrationTestBase {
         assert endpoint == null;
         this.serviceClass = serviceClass;
         port = 7771;
+        if (System.getProperty("bamboo.agentOffsetNo") == null) {
+        	port += Integer.valueOf(System.getProperty("bamboo.agentOffsetNo"));
+        }
+        
         int monitorPort = port;
         //For TCP/IP monitor
         if (false) {

@@ -113,7 +113,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
         if (to.lease().status().getValue().isDraft()) {
             LeaseParticipantUtils.persistScreeningAsDraft(to.screening().data());
         } else {
-            LeaseParticipantUtils.persistScreeningAsNewVersion(to.screening().data());
+            LeaseParticipantUtils.persistScreeningAsNewVersionLazily(to.screening().data());
         }
 
         if (to.electronicPaymentsAllowed().getValue(false)) {

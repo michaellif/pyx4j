@@ -21,6 +21,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 
 import com.propertyvista.biz.policy.PolicyFacade;
@@ -92,6 +93,17 @@ public class LeaseParticipantUtils {
 //        screening = VersionedEntityUtils.createNextVersion(screening);/
         screening.saveAction().setValue(SaveAction.saveAsFinal);
         persistScreening(screening);
+    }
+
+    public static void persistScreeningAsNewVersionLazily(CustomerScreening screening) {
+        if (screening.getPrimaryKey() != null) {
+            CustomerScreening current = Persistence.retrieveDraftForEdit(CustomerScreening.class, screening.getPrimaryKey());
+            if (!EntityGraph.fullyEqualValues(screening, current)) {
+                persistScreeningAsNewVersion(screening);
+            }
+        } else {
+            persistScreeningAsNewVersion(screening);
+        }
     }
 
     private static void persistScreening(CustomerScreening screening) {

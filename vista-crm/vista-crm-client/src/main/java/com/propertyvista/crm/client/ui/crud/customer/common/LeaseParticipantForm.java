@@ -65,6 +65,7 @@ import com.propertyvista.common.client.ui.validators.StartEndDateWithinPeriodVal
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.customer.common.components.IdentificationDocumentFolder;
 import com.propertyvista.crm.client.ui.crud.customer.common.components.LegalQuestionFolder;
+import com.propertyvista.crm.client.ui.crud.customer.common.components.PaymentMethodFolder;
 import com.propertyvista.crm.client.ui.crud.customer.common.components.PersonalAssetFolder;
 import com.propertyvista.crm.client.ui.crud.customer.common.components.PersonalIncomeFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;

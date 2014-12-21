@@ -45,7 +45,7 @@ public class DashboardLister extends SiteDataTablePanel<DashboardMetadata> {
                 new ColumnDescriptor.Builder(proto().type()).build(), //
                 new ColumnDescriptor.Builder(proto().name()).build(), //
                 new ColumnDescriptor.Builder(proto().isShared()).build(), //
-                new ColumnDescriptor.Builder(proto().ownerUser()).title(i18n.tr("Owner")).build(), //
+                new ColumnDescriptor.Builder(proto().ownerUser()).columnTitle(i18n.tr("Owner")).build(), //
                 new ColumnDescriptor.Builder(proto().description()).build());
 
         setDataTableModel(new DataTableModel<DashboardMetadata>());

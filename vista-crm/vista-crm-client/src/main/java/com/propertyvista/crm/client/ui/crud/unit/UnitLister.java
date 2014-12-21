@@ -42,8 +42,8 @@ public class UnitLister extends SiteDataTablePanel<AptUnitDTO> {
         setColumnDescriptors( //
                 new ColumnDescriptor.Builder(proto().buildingCode()).build(), //
 
-                new ColumnDescriptor.Builder(proto().floorplan().name()).width("200px").title(i18n.tr("Floorplan Name")).build(), //
-                new ColumnDescriptor.Builder(proto().floorplan().marketingName()).visible(false).title(i18n.tr("Floorplan Marketing Name")).build(), //
+                new ColumnDescriptor.Builder(proto().floorplan().name()).width("200px").columnTitle(i18n.tr("Floorplan Name")).build(), //
+                new ColumnDescriptor.Builder(proto().floorplan().marketingName()).visible(false).columnTitle(i18n.tr("Floorplan Marketing Name")).build(), //
 
                 new ColumnDescriptor.Builder(proto().info().floor()).width("50px").build(), //
                 new ColumnDescriptor.Builder(proto().info().number()).width("80px").build(), //

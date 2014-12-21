@@ -29,28 +29,26 @@ public final class AvailabilityReportTableColumnsHolder {
 
         AVAILABILITY_TABLE_COLUMNS = new ColumnDescriptor[] {//@formatter:off
                 
-                // references                
-                (ColumnDescriptor) new ColumnDescriptor.Builder(proto.building().propertyCode()).build(),
-                (ColumnDescriptor) new ColumnDescriptor.Builder(proto.building().externalId()).build(),
-                (ColumnDescriptor) new ColumnDescriptor.Builder(proto.building().info().name()).title(i18n.tr("Building Name")).build(),
-                (ColumnDescriptor) new ColumnDescriptor.Builder(proto.building().info().address()).build(),
-                (ColumnDescriptor) new ColumnDescriptor.Builder(proto.building().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
-                (ColumnDescriptor) new ColumnDescriptor.Builder(proto.unit().info().number()).title(i18n.tr("Unit Name")).build(),
-                (ColumnDescriptor) new ColumnDescriptor.Builder(proto.floorplan().name()).visible(false).title(i18n.tr("Floorplan Name")).build(),
-                (ColumnDescriptor) new ColumnDescriptor.Builder(proto.floorplan().marketingName()).visible(false).title(i18n.tr("Floorplan Marketing Name")).build(),
+                new ColumnDescriptor.Builder(proto.building().propertyCode()).build(),
+                new ColumnDescriptor.Builder(proto.building().externalId()).build(),
+                new ColumnDescriptor.Builder(proto.building().info().name()).columnTitle(i18n.tr("Building Name")).build(),
+                new ColumnDescriptor.Builder(proto.building().info().address()).build(),
+                new ColumnDescriptor.Builder(proto.building().complex().name()).visible(false).columnTitle(i18n.tr("Complex")).build(),
+                new ColumnDescriptor.Builder(proto.unit().info().number()).columnTitle(i18n.tr("Unit Name")).build(),
+                new ColumnDescriptor.Builder(proto.floorplan().name()).visible(false).columnTitle(i18n.tr("Floorplan Name")).build(),
+                new ColumnDescriptor.Builder(proto.floorplan().marketingName()).visible(false).columnTitle(i18n.tr("Floorplan Marketing Name")).build(),
                 
-                // status
-                (ColumnDescriptor) new ColumnDescriptor.Builder(proto.vacancyStatus()).build(),
-                (ColumnDescriptor) new ColumnDescriptor.Builder(proto.rentedStatus()).visible(true).build(),
-                (ColumnDescriptor) new ColumnDescriptor.Builder(proto.scoping()).visible(true).build(),
-                (ColumnDescriptor) new ColumnDescriptor.Builder(proto.rentReadinessStatus()).visible(true).build(),
-                (ColumnDescriptor) new ColumnDescriptor.Builder(proto.unitRent()).build(),
-                (ColumnDescriptor) new ColumnDescriptor.Builder(proto.marketRent()).build(),
-                (ColumnDescriptor) new ColumnDescriptor.Builder(proto.rentDeltaAbsolute()).visible(true).build(),
-                (ColumnDescriptor) new ColumnDescriptor.Builder(proto.rentDeltaRelative()).visible(false).build(),
-                (ColumnDescriptor) new ColumnDescriptor.Builder(proto.rentEndDay()).visible(true).build(),
-                (ColumnDescriptor) new ColumnDescriptor.Builder(proto.moveInDay()).visible(true).build(),
-                (ColumnDescriptor) new ColumnDescriptor.Builder(proto.rentedFromDay()).visible(true).build()
+                new ColumnDescriptor.Builder(proto.vacancyStatus()).build(),
+                new ColumnDescriptor.Builder(proto.rentedStatus()).visible(true).build(),
+                new ColumnDescriptor.Builder(proto.scoping()).visible(true).build(),
+                new ColumnDescriptor.Builder(proto.rentReadinessStatus()).visible(true).build(),
+                new ColumnDescriptor.Builder(proto.unitRent()).build(),
+                new ColumnDescriptor.Builder(proto.marketRent()).build(),
+                new ColumnDescriptor.Builder(proto.rentDeltaAbsolute()).visible(true).build(),
+                new ColumnDescriptor.Builder(proto.rentDeltaRelative()).visible(false).build(),
+                new ColumnDescriptor.Builder(proto.rentEndDay()).visible(true).build(),
+                new ColumnDescriptor.Builder(proto.moveInDay()).visible(true).build(),
+                new ColumnDescriptor.Builder(proto.rentedFromDay()).visible(true).build()
         };//@formatter:on
     }
 
