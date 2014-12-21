@@ -43,6 +43,8 @@ public class CommunicationCrmTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.CommContent);
+        style.addProperty("border", "2px solid");
+        style.addProperty("border-color", ThemeColor.foreground, 0.8);
         style.addProperty("max-height", "400px");
         style.addProperty("height", "400px");
         addStyle(style);
@@ -52,7 +54,7 @@ public class CommunicationCrmTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.CommHeader);
-        style.addProperty("line-height", "60px");
+        style.addProperty("line-height", "4em");
         style.addProperty("background", ThemeColor.foreground, 0.8);
         addStyle(style);
 

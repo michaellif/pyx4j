@@ -8,8 +8,7 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Dec 22, 2011
- * @author stanp
- * @version $Id: MessageViewerViewImpl.java 21429 2014-11-28 15:24:08Z igors $
+ * @author igors
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
@@ -158,7 +157,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
         super.populate(value);
 
         boolean invisible = !CategoryType.Ticket.equals(value.category().categoryType().getValue()) || value.isDirect().getValue(false).booleanValue();
-        setActionVisible(assignOwnershipAction, !invisible);
+        setActionVisible(assignOwnershipAction, !invisible || ClientContext.getUserVisit().getName().equals(value.owner().name().getValue()));
         for (ThreadStatus status : threadStatusActions.keySet()) {
             MenuItem action = threadStatusActions.get(status);
             if (status.equals(value.status().getValue())) {
@@ -170,7 +169,8 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
             }
         }
         setActionVisible(assignToMeAction, !invisible && !ClientContext.getUserVisit().getName().equals(value.owner().name().getValue()));
-        setActionVisible(unassignAction, !invisible && !ContactType.System.equals(value.owner().type().getValue()));
+        setActionVisible(unassignAction, (!invisible && !ContactType.System.equals(value.owner().type().getValue()))
+                || ClientContext.getUserVisit().getName().equals(value.owner().name().getValue()));
         setCaption(value.deliveryMethod() == null || value.deliveryMethod().isNull() ? value.category().categoryType().getValue().toString() : value
                 .deliveryMethod().getValue().toString());
 

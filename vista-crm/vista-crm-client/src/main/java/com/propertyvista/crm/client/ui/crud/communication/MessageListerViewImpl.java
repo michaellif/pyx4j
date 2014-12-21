@@ -8,11 +8,12 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Dec 20, 2011
- * @author stanp
+ * @author igors
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView;
 import com.pyx4j.site.rpc.AppPlace;
@@ -53,6 +54,8 @@ public class MessageListerViewImpl extends AbstractListerView<MessageDTO> implem
                 } else if (placeCriteria instanceof MessageCategory) {
                     MessageCategory mc = (MessageCategory) placeCriteria;
                     caption = mc.category().getValue();
+                } else if (placeCriteria instanceof UserVisit) {
+                    caption = i18n.tr("Tickets");
                 }
             }
             if (caption != null) {

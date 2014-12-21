@@ -8,7 +8,7 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Apr 1, 2013
- * @author Mykola
+ * @author igors
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
@@ -40,6 +40,8 @@ import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.gwt.commons.layout.LayoutType;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace.Type;
@@ -54,9 +56,21 @@ import com.propertyvista.dto.MessageDTO;
 
 public class CommunicationViewImpl extends FlowPanel implements CommunicationView, RequiresResize {
 
+    private static final I18n i18n = I18n.get(MessageForm.class);
+
     private final DockLayoutPanel contentPanel;
 
-    private final HeaderHolder headerHolder;
+    private final HeaderHolder messageHeaderHolder;
+
+    private final HeaderHolder dispatchedHeaderHolder;
+
+    private final Anchor messagesAnchor;
+
+    private final Anchor ticketsAnchor;
+
+    private final Anchor newMessageAnchor;
+
+    private final Anchor newTicketAnchor;
 
     private final FlowPanel mainHolder;
 
@@ -72,16 +86,69 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
         calloutHandler.getElement().getStyle().setProperty("right", "0");
         calloutHandler.getElement().getStyle().setProperty("top", "0");
 
-        headerHolder = new HeaderHolder();
+        messagesAnchor = new Anchor(i18n.tr("Messages"), new Command() {
+
+            @Override
+            public void execute() {
+                CrudAppPlace place = new CrmSiteMap.Communication.Message();
+                place.setType(Type.lister);
+                AppSite.getPlaceController().goTo(place);
+                doToggleHandler();
+            }
+        });
+
+        messagesAnchor.setStyleName(CommunicationCrmTheme.StyleName.CommHeaderTitle.name());
+        messagesAnchor.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+        ticketsAnchor = new Anchor(i18n.tr("Dispatch Queue"), new Command() {
+
+            @Override
+            public void execute() {
+                CrudAppPlace place = new CrmSiteMap.Communication.Message(ClientContext.getUserVisit());
+                place.setType(Type.lister);
+                doToggleHandler();
+                AppSite.getPlaceController().goTo(place);
+            }
+        });
+        ticketsAnchor.setStyleName(CommunicationCrmTheme.StyleName.CommHeaderTitle.name());
+        ticketsAnchor.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+        newMessageAnchor = new Anchor(i18n.tr("Create Message") + ", ", new Command() {
+
+            @Override
+            public void execute() {
+                CrudAppPlace place = new CrmSiteMap.Communication.Message();
+                place.setType(Type.editor);
+                doToggleHandler();
+                AppSite.getPlaceController().goTo(place);
+            }
+        });
+        newMessageAnchor.setStyleName(CommunicationCrmTheme.StyleName.CommHeaderTitle.name());
+        newMessageAnchor.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+        newTicketAnchor = new Anchor(i18n.tr("Create Ticket"), new Command() {
+
+            @Override
+            public void execute() {
+                CrudAppPlace place = new CrmSiteMap.Communication.Message(CategoryType.Ticket);
+                place.setType(Type.editor);
+                doToggleHandler();
+                AppSite.getPlaceController().goTo(place);
+            }
+        });
+        newTicketAnchor.setStyleName(CommunicationCrmTheme.StyleName.CommHeaderTitle.name());
+        newTicketAnchor.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
         mainHolder = new FlowPanel();
+
+        messageHeaderHolder = new HeaderHolder(messagesAnchor, newMessageAnchor, newTicketAnchor);
+        dispatchedHeaderHolder = new HeaderHolder(ticketsAnchor);
 
         contentPanel = new DockLayoutPanel(Unit.PX);
         contentPanel.setStyleName(CommunicationCrmTheme.StyleName.CommContent.name());
 
         add(calloutHandler);
         add(contentPanel);
-
-        contentPanel.addNorth(headerHolder, 60);
 
         contentPanel.add(new ScrollPanel(mainHolder));
 
@@ -118,12 +185,21 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
         int directMessagesNum = 0;
         int dispatchedMessagesNum = 0;
         if (messages != null && messages.size() > 0) {
+            mainHolder.insert(messageHeaderHolder, 0);
             for (final MessageDTO message : messages) {
                 boolean isDirect = message.isDirect().getValue(false);
-                mainHolder.add(new MessagePanel(message, isDirect));
                 if (isDirect) {
+                    mainHolder.add(new MessagePanel(message, message.category() == null
+                            || MessageCategory.CategoryType.Message.equals(message.category().categoryType().getValue())));
                     directMessagesNum++;
                 } else {
+                    if (dispatchedMessagesNum == 0) {
+                        mainHolder.insert(dispatchedHeaderHolder, 0);
+                    }
+                    mainHolder.insert(
+                            new MessagePanel(message, message.category() == null
+                                    || MessageCategory.CategoryType.Message.equals(message.category().categoryType().getValue())), 1);
+
                     dispatchedMessagesNum++;
                 }
             }
@@ -140,7 +216,22 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
     @Override
     public void setHeader(int directMessagesNum, int dispatchedMessagesNum) {
-        headerHolder.setNumberOfMessages(directMessagesNum, dispatchedMessagesNum);
+        if (directMessagesNum > 0) {
+            StringBuffer statusLabel = new StringBuffer();
+            statusLabel.append(directMessagesNum);
+            messagesAnchor.setText(i18n.tr("Messages") + " (" + statusLabel.toString() + "), ");
+        } else {
+            messagesAnchor.setText(i18n.tr("Messages") + ", ");
+        }
+
+        if (dispatchedMessagesNum > 0) {
+            StringBuffer statusLabel = new StringBuffer();
+            statusLabel.append(dispatchedMessagesNum);
+            ticketsAnchor.setVisible(true);
+            ticketsAnchor.setText(i18n.tr("Dispatch Queue") + "(" + statusLabel.toString() + "), ");
+        } else {
+            ticketsAnchor.setVisible(false);
+        }
     }
 
     class MessagePanel extends FlexTable {
@@ -160,7 +251,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
             photoImage = new Image(isDirect ? CrmImages.INSTANCE.userIcon().regular() : (message.category() == null
                     || !MessageCategory.TicketType.Maintenance.equals(message.category().ticketType().getValue()) ? CrmImages.INSTANCE.alertsOn()
-                    : CrmImages.INSTANCE.reportsNormal()));
+                    : CrmImages.INSTANCE.maintenanceAlert()));
             subjectField = new Label(message.subject().getStringView());
             getElement().getStyle().setCursor(Cursor.POINTER);
             addClickHandler(new ClickHandler() {
@@ -208,97 +299,18 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
     class HeaderHolder extends FlowPanel {
 
-        private final Anchor messagesAnchor;
-
-        private final Anchor ticketsAnchor;
-
-        private final Anchor newMessageAnchor;
-
-        private final Anchor newTicketAnchor;
-
-        public HeaderHolder() {
+        public HeaderHolder(Anchor... commands) {
 
             setStyleName(CommunicationCrmTheme.StyleName.CommHeader.name());
 
             getElement().getStyle().setPosition(Position.RELATIVE);
 
-            messagesAnchor = new Anchor("Messages", new Command() {
-
-                @Override
-                public void execute() {
-                    CrudAppPlace place = new CrmSiteMap.Communication.Message();
-                    place.setType(Type.lister);
-                    AppSite.getPlaceController().goTo(place);
-                    doToggleHandler();
+            if (commands != null) {
+                for (int i = 0; i < commands.length; ++i) {
+                    add(commands[i]);
                 }
-            });
-
-            messagesAnchor.setStyleName(CommunicationCrmTheme.StyleName.CommHeaderTitle.name());
-            messagesAnchor.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-
-            ticketsAnchor = new Anchor("Tickets", new Command() {
-
-                @Override
-                public void execute() {
-                    CrudAppPlace place = new CrmSiteMap.Communication.Message(CategoryType.Ticket);
-                    place.setType(Type.lister);
-                    doToggleHandler();
-                    AppSite.getPlaceController().goTo(place);
-                }
-            });
-            ticketsAnchor.setStyleName(CommunicationCrmTheme.StyleName.CommHeaderTitle.name());
-            ticketsAnchor.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-
-            newMessageAnchor = new Anchor("Create Message, ", new Command() {
-
-                @Override
-                public void execute() {
-                    CrudAppPlace place = new CrmSiteMap.Communication.Message();
-                    place.setType(Type.editor);
-                    doToggleHandler();
-                    AppSite.getPlaceController().goTo(place);
-                }
-            });
-            newMessageAnchor.setStyleName(CommunicationCrmTheme.StyleName.CommHeaderTitle.name());
-            newMessageAnchor.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-
-            newTicketAnchor = new Anchor("Create Ticket", new Command() {
-
-                @Override
-                public void execute() {
-                    CrudAppPlace place = new CrmSiteMap.Communication.Message(CategoryType.Ticket);
-                    place.setType(Type.editor);
-                    doToggleHandler();
-                    AppSite.getPlaceController().goTo(place);
-                }
-            });
-            newTicketAnchor.setStyleName(CommunicationCrmTheme.StyleName.CommHeaderTitle.name());
-            newTicketAnchor.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-
-            add(messagesAnchor);
-            add(ticketsAnchor);
-            add(newMessageAnchor);
-            add(newTicketAnchor);
-
-        }
-
-        public void setNumberOfMessages(int directMessagesNum, int dispatchedMessagesNum) {
-            if (directMessagesNum > 0) {
-                StringBuffer statusLabel = new StringBuffer();
-                statusLabel.append(directMessagesNum);
-                messagesAnchor.setText("Messages (" + statusLabel.toString() + "), ");
-            } else {
-                messagesAnchor.setText("Messages, ");
             }
 
-            if (dispatchedMessagesNum > 0) {
-                StringBuffer statusLabel = new StringBuffer();
-                statusLabel.append(dispatchedMessagesNum);
-                ticketsAnchor.setVisible(true);
-                ticketsAnchor.setText("Tickets in Process (" + statusLabel.toString() + "), ");
-            } else {
-                ticketsAnchor.setVisible(false);
-            }
         }
     }
 

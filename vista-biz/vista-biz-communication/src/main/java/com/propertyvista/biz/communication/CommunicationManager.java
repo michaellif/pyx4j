@@ -8,8 +8,7 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Jun 4, 2014
- * @author smolka
- * @version $Id: CommunicationManager.java 21504 2014-12-04 23:49:40Z igors $
+ * @author igors
  */
 package com.propertyvista.biz.communication;
 
@@ -249,12 +248,7 @@ public class CommunicationManager {
             AndCriterion newDispatchedCriteria = new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().owner(),
                     ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned)),
                     PropertyCriterion.in(dispatchedCriteria.proto().category(), userGroups));
-
-            AndCriterion ownedUnreadCriteria = new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().owner(), currentUser), new AndCriterion(
-                    PropertyCriterion.eq(dispatchedCriteria.proto().content().$().recipients().$().isRead(), false), PropertyCriterion.eq(dispatchedCriteria
-                            .proto().content().$().recipients().$().recipient(), currentUser)));
-
-            dispatchedCriteria.or(newDispatchedCriteria, ownedUnreadCriteria);
+            dispatchedCriteria.add(newDispatchedCriteria);
             return dispatchedCriteria;
         }
         return null;
@@ -264,21 +258,11 @@ public class CommunicationManager {
         final EntityListCriteria<CommunicationThread> dispatchedCriteria = EntityListCriteria.create(CommunicationThread.class);
         dispatchedCriteria.in(dispatchedCriteria.proto().status(), ThreadStatus.Open, ThreadStatus.Resolved);
 
-        List<MessageCategory> userGroups = includeByRoles ? getUserGroupsIncludingRoles(currentUser) : getUserGroups(currentUser);
-        if (userGroups != null && userGroups.size() > 0) {
-            if (includeByRoles) {
-                dispatchedCriteria.or(PropertyCriterion.in(dispatchedCriteria.proto().category(), userGroups),
-                        PropertyCriterion.eq(dispatchedCriteria.proto().owner(), currentUser));
-            } else {
-                AndCriterion newDispatchedCriteria = new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().owner(),
-                        ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned)),
-                        PropertyCriterion.in(dispatchedCriteria.proto().category(), userGroups));
+        dispatchedCriteria.eq(dispatchedCriteria.proto().owner(),
+                ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned));
+        List<MessageCategory> userGroups = getUserGroups(currentUser);
+        dispatchedCriteria.in(dispatchedCriteria.proto().category(), userGroups);
 
-                dispatchedCriteria.or(newDispatchedCriteria, PropertyCriterion.eq(dispatchedCriteria.proto().owner(), currentUser));
-            }
-        } else {
-            dispatchedCriteria.eq(dispatchedCriteria.proto().owner(), currentUser);
-        }
         return dispatchedCriteria;
     }
 
@@ -306,18 +290,6 @@ public class CommunicationManager {
         }
         groupCriteria.in(groupCriteria.proto().dispatchers(), e.getPrimaryKey());
 
-        return Persistence.service().query(groupCriteria, AttachLevel.IdOnly);
-    }
-
-    private List<MessageCategory> getUserGroupsIncludingRoles(Employee e) {
-        EntityQueryCriteria<MessageCategory> groupCriteria = EntityQueryCriteria.create(MessageCategory.class);
-
-        PropertyCriterion byRoles = PropertyCriterion.in(groupCriteria.proto().roles().$().users(), e);
-        if (e == null) {
-            groupCriteria.add(byRoles);
-        } else {
-            groupCriteria.or(byRoles, PropertyCriterion.in(groupCriteria.proto().dispatchers(), e.getPrimaryKey()));
-        }
         return Persistence.service().query(groupCriteria, AttachLevel.IdOnly);
     }
 
@@ -468,6 +440,7 @@ public class CommunicationManager {
         messageDTO.date().set(m.date());
         messageDTO.thread().setAttachLevel(AttachLevel.Attached);
         messageDTO.thread().set(thread);
+        messageDTO.isSystem().set(m.isSystem());
         messageDTO.attachments().set(m.attachments());
         messageDTO.hasAttachments().setValue(m.attachments().size() > 0);
         messageDTO.highImportance().set(m.highImportance());

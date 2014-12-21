@@ -8,7 +8,7 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on 2013-01-23
- * @author matheszabi
+ * @author igors
  */
 package com.propertyvista.dto;
 
@@ -41,6 +41,14 @@ import com.propertyvista.domain.company.Employee;
 @Transient
 @ExtendsBO
 public interface MessageDTO extends Message {
+
+    public enum ViewScope {
+
+        Dispatched, Direct;
+    }
+
+    @Transient
+    IPrimitive<ViewScope> viewScope();
 
     @NotNull
     IList<CommunicationEndpointDTO> to();

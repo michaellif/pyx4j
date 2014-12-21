@@ -9,7 +9,6 @@
  *
  * Created on Feb 12, 2011
  * @author Misha
- * @version $Id: CrmImages.java 21504 2014-12-04 23:49:40Z igors $
  */
 package com.propertyvista.crm.client.resources;
 
@@ -190,6 +189,9 @@ public interface CrmImages extends VistaImages {
 
     @Source("Reports_normal.png")
     ImageResource reportsNormal();
+
+    @Source("maintenace_alert.png")
+    ImageResource maintenanceAlert();
 
     @Source("Tenants_active.png")
     ImageResource tenantsActive();
