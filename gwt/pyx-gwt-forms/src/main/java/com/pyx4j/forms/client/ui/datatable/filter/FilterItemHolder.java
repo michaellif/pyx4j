@@ -22,70 +22,55 @@ package com.pyx4j.forms.client.ui.datatable.filter;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.widgets.client.StringBox;
-import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.selector.EditableItemHolder;
 import com.pyx4j.widgets.client.selector.SelectorListBoxValuePanel;
 
 public class FilterItemHolder extends EditableItemHolder<FilterItem> {
 
+    private final IFilterEditor editor;
+
     public FilterItemHolder(FilterItem item, IFormatter<FilterItem, String> valueFormatter, SelectorListBoxValuePanel<FilterItem> valuePanel) {
         super(item, valueFormatter, item.isRemovable(), valuePanel);
         ColumnDescriptor columnDescriptor = item.getColumnDescriptor();
-        IsWidget editor = createFilterEditor(columnDescriptor.getMemeber());
+        editor = createFilterEditor(columnDescriptor.getMemeber());
+        editor.setMemeber(columnDescriptor.getMemeber());
+        editor.setPropertyCriterion(item.getPropertyCriterion());
         editor.asWidget().setWidth("200px");
         setEditor(editor);
     }
 
     @Override
     protected void onEditingComplete() {
-        System.out.println("+++++++++++++++++333");
+        getItem().setPropertyCriterion(editor.getPropertyCriterion());
     }
 
-    private IsWidget createFilterEditor(IObject<?> member) {
+    private IFilterEditor createFilterEditor(IObject<?> member) {
         Class<?> valueClass = member.getValueClass();
         if (member.getMeta().isEntity() || valueClass.isEnum() || valueClass.equals(Boolean.class)) {
-            return createMultiSelectFilterEditor();
+            return new MultiSelectFilterEditor();
         } else if (valueClass.equals(String.class)) {
-            return createTextQueryFilterEditor();
+            return new TextQueryFilterEditor();
         } else if ((member.getMeta().getObjectClassType() == ObjectClassType.EntityList)
                 || (member.getMeta().getObjectClassType() == ObjectClassType.EntitySet)) {
-            return createMultiSelectFilterEditor();
+            return new MultiSelectFilterEditor();
         } else if (isDate(valueClass)) {
-            return createDateFilterEditor();
+            return new DateFilterEditor();
         } else if (valueClass.equals(BigDecimal.class) || valueClass.equals(Key.class) || member.getMeta().isNumberValueClass()) {
-            return createNumberFilterEditor();
+            return new NumberFilterEditor();
+        } else {
+            throw new Error("Filter can't be created");
         }
-        return new HTML("TESTTEST TESTTEST TESTTEST TESTTEST");
+
     }
 
     private static boolean isDate(Class<?> valueClass) {
         return (valueClass.equals(Date.class) || valueClass.equals(java.sql.Date.class) || valueClass.equals(LogicalDate.class));
     }
 
-    private IsWidget createTextQueryFilterEditor() {
-        StringBox queryBox = new StringBox();
-        return queryBox;
-    }
-
-    private IsWidget createMultiSelectFilterEditor() {
-        return new HTML("createMultiSelectFilterEditor");
-    }
-
-    private IsWidget createNumberFilterEditor() {
-        return new HTML("createNumberFilterEditor");
-    }
-
-    private IsWidget createDateFilterEditor() {
-        return new HTML("createDateFilterEditor");
-    }
 }

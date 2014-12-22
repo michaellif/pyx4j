@@ -19,11 +19,14 @@
  */
 package com.pyx4j.forms.client.ui.datatable.filter;
 
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 
 public class FilterItem implements Comparable<FilterItem> {
 
     private final ColumnDescriptor columnDescriptor;
+
+    private PropertyCriterion propertyCriterion;
 
     private final boolean removable;
 
@@ -38,6 +41,14 @@ public class FilterItem implements Comparable<FilterItem> {
 
     public ColumnDescriptor getColumnDescriptor() {
         return this.columnDescriptor;
+    }
+
+    public PropertyCriterion getPropertyCriterion() {
+        return propertyCriterion;
+    }
+
+    public void setPropertyCriterion(PropertyCriterion propertyCriterion) {
+        this.propertyCriterion = propertyCriterion;
     }
 
     @Override

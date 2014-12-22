@@ -170,7 +170,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     public void setColumnDescriptors(List<ColumnDescriptor> columnDescriptors) {
         dataTable.setColumnDescriptors(columnDescriptors);
-        newFilterPanel.onColimnDescriptorsChanged();
+        newFilterPanel.resetFilters();
     }
 
     public void setDataTableModel(DataTableModel<E> model) {
@@ -354,14 +354,14 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     }
 
     public List<Criterion> getFilters() {
-        return filterPanel.getFilters();
+        return newFilterPanel.getFilters();
     }
 
     public void setFilters(List<Criterion> filters) {
         if (filters == null || filters.isEmpty()) {
-            filterPanel.resetFilters();
+            newFilterPanel.resetFilters();
         } else {
-            filterPanel.setFilters(filters);
+            newFilterPanel.setFilters(filters);
         }
     }
 

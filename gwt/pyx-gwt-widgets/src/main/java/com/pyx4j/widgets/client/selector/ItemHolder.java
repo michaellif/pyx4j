@@ -107,6 +107,10 @@ public class ItemHolder<E> extends Composite {
         }
     }
 
+    public E getItem() {
+        return item;
+    }
+
     protected void onRemove() {
     }
 }

@@ -20,6 +20,7 @@
 package com.pyx4j.forms.client.ui.datatable.filter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -28,6 +29,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
@@ -92,7 +94,7 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
         return dataTablePanel.getDataTable().getColumnDescriptors();
     }
 
-    public void onColimnDescriptorsChanged() {
+    public void resetFilters() {
         ((FilterOptionsGrabber) getOptionsGrabber()).updateFilterOptions();
 
         List<ColumnDescriptor> columnDescriptors = dataTablePanel.getDataTable().getColumnDescriptors();
@@ -104,4 +106,21 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
         }
         setValue(alwaysShownItems);
     }
+
+    public void setFilters(List<Criterion> filters) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public List<Criterion> getFilters() {
+        Collection<FilterItem> filterItems = getValue();
+        List<Criterion> filters = new ArrayList<>();
+        for (FilterItem filterItem : filterItems) {
+            if (filterItem.getPropertyCriterion() != null) {
+                filters.add(filterItem.getPropertyCriterion());
+            }
+        }
+        return filters;
+    }
+
 }
