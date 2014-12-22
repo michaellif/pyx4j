@@ -22,7 +22,6 @@ package com.pyx4j.forms.client.ui.datatable.filter;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IObject;
@@ -35,8 +34,8 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
 
     private final IFilterEditor editor;
 
-    public FilterItemHolder(FilterItem item, IFormatter<FilterItem, String> valueFormatter, SelectorListBoxValuePanel<FilterItem> valuePanel) {
-        super(item, valueFormatter, item.isRemovable(), valuePanel);
+    public FilterItemHolder(FilterItem item, SelectorListBoxValuePanel<FilterItem> valuePanel) {
+        super(item, new FilterItemFormatter(), item.isRemovable(), valuePanel);
         ColumnDescriptor columnDescriptor = item.getColumnDescriptor();
         editor = createFilterEditor(columnDescriptor.getMemeber());
         editor.setMemeber(columnDescriptor.getMemeber());
@@ -48,6 +47,7 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
     @Override
     protected void onEditingComplete() {
         getItem().setPropertyCriterion(editor.getPropertyCriterion());
+        super.onEditingComplete();
     }
 
     private IFilterEditor createFilterEditor(IObject<?> member) {

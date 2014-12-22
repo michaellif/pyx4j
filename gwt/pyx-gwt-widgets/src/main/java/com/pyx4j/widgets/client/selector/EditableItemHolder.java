@@ -84,11 +84,14 @@ public abstract class EditableItemHolder<E> extends ItemHolder<E> {
         return editor;
     }
 
-    abstract protected void onEditingComplete();
+    protected void onEditingComplete() {
+        setLabel(getValueFormatter().format(getItem()));
+    }
 
     @Override
     protected void onRemove() {
         super.onRemove();
         parent.getItemEditorPopup().hide();
     }
+
 }

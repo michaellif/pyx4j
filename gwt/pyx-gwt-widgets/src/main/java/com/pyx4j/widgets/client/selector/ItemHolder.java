@@ -46,6 +46,10 @@ public class ItemHolder<E> extends Composite {
 
     private boolean removable;
 
+    private IFormatter<E, String> valueFormatter;
+
+    private Label label;
+
     public ItemHolder(final E item, IFormatter<E, String> valueFormatter) {
         this(item, valueFormatter, true);
     }
@@ -53,16 +57,24 @@ public class ItemHolder<E> extends Composite {
     public ItemHolder(final E item, IFormatter<E, String> valueFormatter, boolean removable) {
         super();
         this.item = item;
+        this.valueFormatter = valueFormatter;
+
         panel = new FlowPanel();
         panel.setStyleName(WidgetsTheme.StyleName.SelectedItemHolder.name());
 
-        Label label = new Label(valueFormatter.format(item));
+        label = new Label();
         label.setStyleName(WidgetsTheme.StyleName.SelectedItemHolderLabel.name());
         panel.add(label);
+
+        setLabel(valueFormatter.format(item));
 
         setRemovable(removable);
 
         initWidget(panel);
+    }
+
+    protected void setLabel(String text) {
+        label.setText(text);
     }
 
     public void setSelectorListBoxValuePanel(SelectorListBoxValuePanel<E> parent) {
@@ -112,5 +124,9 @@ public class ItemHolder<E> extends Composite {
     }
 
     protected void onRemove() {
+    }
+
+    protected IFormatter<E, String> getValueFormatter() {
+        return valueFormatter;
     }
 }

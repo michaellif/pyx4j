@@ -58,7 +58,7 @@ public class FilterItem implements Comparable<FilterItem> {
 
     @Override
     public String toString() {
-        return columnDescriptor.getColumnTitle() + " - " + "All";
+        return columnDescriptor.getColumnTitle() + " - " + propertyCriterion;
     }
 
     @Override

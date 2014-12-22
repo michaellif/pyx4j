@@ -53,7 +53,7 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
 
             @Override
             public FilterItemHolder createItemHolder(FilterItem item, SelectorListBoxValuePanel<FilterItem> valuePanel) {
-                return new FilterItemHolder(item, new FilterItemFormatter(), valuePanel);
+                return new FilterItemHolder(item, valuePanel);
             }
         });
 
