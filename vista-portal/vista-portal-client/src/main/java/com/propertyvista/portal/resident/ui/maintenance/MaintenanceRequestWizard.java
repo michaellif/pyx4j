@@ -251,7 +251,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
                 value.permissionToEnter().setValue(true);
             }
         }
-        return value;
+        return super.preprocessValue(value, fireEvent, populate);
     }
 
     @Override

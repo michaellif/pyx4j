@@ -149,7 +149,7 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
                 get(proto().deliveredText()).setTitle(dm.toString());
             }
         }
-        return value;
+        return super.preprocessValue(value, fireEvent, populate);
     }
 
     private void setVisibility(boolean isVisible, boolean isForNotification) {

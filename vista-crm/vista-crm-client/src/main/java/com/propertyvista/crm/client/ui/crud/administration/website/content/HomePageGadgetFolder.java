@@ -49,7 +49,7 @@ public class HomePageGadgetFolder extends VistaTableFolder<HomePageGadget> {
                 gadget.type().setValue(type);
             }
         }
-        return value;
+        return super.preprocessValue(value, fireEvent, populate);
     }
 
     @Override

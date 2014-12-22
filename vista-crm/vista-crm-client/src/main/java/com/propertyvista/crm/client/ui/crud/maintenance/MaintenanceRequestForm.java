@@ -385,7 +385,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 value.permissionToEnter().setValue(value.reportedForOwnUnit().getValue(false)); // according reportedForOwnUnit
             }
         }
-        return value;
+        return super.preprocessValue(value, fireEvent, populate);
     }
 
     private FormPanel createWorkHistoryTab() {
