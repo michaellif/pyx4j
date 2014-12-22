@@ -83,7 +83,7 @@ public abstract class WSOapiTestBase extends IntegrationTestBase {
         assert endpoint == null;
         this.serviceClass = serviceClass;
         port = 7771;
-        if (System.getProperty("bamboo.agentOffsetNo") == null) {
+        if (System.getProperty("bamboo.agentOffsetNo") != null) {
         	port += Integer.valueOf(System.getProperty("bamboo.agentOffsetNo"));
         }
         
