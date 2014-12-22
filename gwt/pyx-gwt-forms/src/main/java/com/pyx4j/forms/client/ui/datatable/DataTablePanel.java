@@ -70,6 +70,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     private static final I18n i18n = I18n.get(DataTableFilterItem.class);
 
+    private static final Boolean USE_NEW_FILTERS = true;
+
     public static int PAGESIZE_SMALL = 10;
 
     public static int PAGESIZE_MEDIUM = 25;
@@ -88,7 +90,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     private final DataTableActionsBar bottomActionsBar;
 
-    private final DataTableFilterPanel<E> filterPanel;
+    private DataTableFilterPanel<E> filterPanel;
 
     private FilterPanel newFilterPanel;
 
@@ -126,11 +128,13 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         topActionsBar = new DataTableActionsBar(this, false);
         add(topActionsBar);
 
-        newFilterPanel = new FilterPanel(this);
-        add(newFilterPanel);
-
-        filterPanel = new DataTableFilterPanel<E>(this);
-        add(filterPanel);
+        if (USE_NEW_FILTERS) {
+            newFilterPanel = new FilterPanel(this);
+            add(newFilterPanel);
+        } else {
+            filterPanel = new DataTableFilterPanel<E>(this);
+            add(filterPanel);
+        }
 
         dataTable = new DataTable<E>();
         dataTableScroll = new DataTableScrollPanel();
@@ -326,7 +330,11 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         if (getDataTableModel() != null) {
             getDataTableModel().clearData();
         }
-        filterPanel.resetFilters();
+        if (USE_NEW_FILTERS) {
+            newFilterPanel.resetFilters();
+        } else {
+            filterPanel.resetFilters();
+        }
     }
 
     public int getPageSize() {
@@ -354,14 +362,26 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     }
 
     public List<Criterion> getFilters() {
-        return newFilterPanel.getFilters();
+        if (USE_NEW_FILTERS) {
+            return newFilterPanel.getFilters();
+        } else {
+            return filterPanel.getFilters();
+        }
     }
 
     public void setFilters(List<Criterion> filters) {
-        if (filters == null || filters.isEmpty()) {
-            newFilterPanel.resetFilters();
+        if (USE_NEW_FILTERS) {
+            if (filters == null || filters.isEmpty()) {
+                newFilterPanel.resetFilters();
+            } else {
+                newFilterPanel.setFilters(filters);
+            }
         } else {
-            newFilterPanel.setFilters(filters);
+            if (filters == null || filters.isEmpty()) {
+                filterPanel.resetFilters();
+            } else {
+                filterPanel.setFilters(filters);
+            }
         }
     }
 

@@ -23,6 +23,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -86,6 +87,7 @@ public abstract class EditableItemHolder<E> extends ItemHolder<E> {
 
     protected void onEditingComplete() {
         setLabel(getValueFormatter().format(getItem()));
+        ValueChangeEvent.fire(parent.getSelectorListBox(), parent.getSelectorListBox().getValue());
     }
 
     @Override

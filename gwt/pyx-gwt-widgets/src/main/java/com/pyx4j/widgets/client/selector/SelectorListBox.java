@@ -74,7 +74,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
         super(selectorListBoxValuePanel);
         this.optionsGrabber = optionsGrabber;
         listBox = (SelectorListBoxValuePanel<E>) getViewerPanel();
-        listBox.setParent(this);
+        listBox.setSelectorListBox(this);
 
         value = new ArrayList<>();
 

@@ -21,8 +21,11 @@ package com.pyx4j.forms.client.ui.datatable.filter;
 
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.i18n.shared.I18n;
 
 public class FilterItem implements Comparable<FilterItem> {
+
+    private static final I18n i18n = I18n.get(FilterItem.class);
 
     private final ColumnDescriptor columnDescriptor;
 
@@ -58,7 +61,7 @@ public class FilterItem implements Comparable<FilterItem> {
 
     @Override
     public String toString() {
-        return columnDescriptor.getColumnTitle() + " - " + propertyCriterion;
+        return columnDescriptor.getColumnTitle() + ": \"" + (propertyCriterion == null ? i18n.tr("All") : propertyCriterion.getValue()) + "\"";
     }
 
     @Override

@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
@@ -41,7 +43,7 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
 
     private DataTablePanel<?> dataTablePanel;
 
-    public FilterPanel(DataTablePanel<?> dataTablePanel) {
+    public FilterPanel(final DataTablePanel<?> dataTablePanel) {
         super(new FilterOptionsGrabber(dataTablePanel), new IFormatter<FilterItem, SafeHtml>() {
             @Override
             public SafeHtml format(FilterItem value) {
@@ -58,6 +60,14 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
         });
 
         this.dataTablePanel = dataTablePanel;
+
+        addValueChangeHandler(new ValueChangeHandler<Collection<FilterItem>>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<Collection<FilterItem>> event) {
+                dataTablePanel.populate();
+            }
+        });
 
         setAction(new Command() {
             @Override

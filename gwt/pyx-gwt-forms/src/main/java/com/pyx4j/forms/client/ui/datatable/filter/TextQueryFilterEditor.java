@@ -34,7 +34,7 @@ public class TextQueryFilterEditor extends FilterEditorBase implements IFilterEd
 
     @Override
     public PropertyCriterion getPropertyCriterion() {
-        return new PropertyCriterion(getMemeber(), PropertyCriterion.Restriction.RDB_LIKE, queryBox.getValue());
+        return PropertyCriterion.like(getMemeber(), queryBox.getValue());
     }
 
     @Override

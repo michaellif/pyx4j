@@ -59,7 +59,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
 
     private final FlowPanel itemsPanel;
 
-    private SelectorListBox<E> parent;
+    private SelectorListBox<E> selectorListBox;
 
     private final GroupFocusHandler groupFocusHandler;
 
@@ -238,11 +238,15 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
     }
 
     public final void removeItem(E item) {
-        this.parent.removeItem(item);
+        this.selectorListBox.removeItem(item);
     }
 
-    public void setParent(SelectorListBox<E> parent) {
-        this.parent = parent;
+    public void setSelectorListBox(SelectorListBox<E> selectorListBox) {
+        this.selectorListBox = selectorListBox;
+    }
+
+    public SelectorListBox<E> getSelectorListBox() {
+        return selectorListBox;
     }
 
     public void setAction(final Command command) {
@@ -256,7 +260,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
 
                 @Override
                 public void execute() {
-                    parent.hidePickerPopup();
+                    selectorListBox.hidePickerPopup();
                     command.execute();
                 }
 
