@@ -21,8 +21,9 @@ package com.pyx4j.test.commons;
 
 import java.util.Date;
 
-import org.junit.Assert;
 import junit.framework.TestCase;
+
+import org.junit.Assert;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.IStringView;
@@ -131,11 +132,6 @@ public class SimpleMessageFormatTest extends TestCase {
         assertMessageFormat("9", pattern10x, 9);
         assertMessageFormat("10 or more", pattern10x, 10);
 
-        // Boolean
-        assertMessageFormat("Yes", "{0,choice,0#No|1#Yes}", Boolean.TRUE);
-        assertMessageFormat("No", "{0,choice,null#May|0#No|1#Yes}", Boolean.FALSE);
-        assertMessageFormat("May", "{0,choice,null#May|0#No|1#Yes}", (Boolean) null);
-
         // Strings
         assertMessageFormat("A", "{0}{1,choice,null#|!null#, {1}}", "A", null);
         assertMessageFormat("A", "{0}{1,choice,null#|!null#, {1}}", "A", "");
@@ -153,6 +149,21 @@ public class SimpleMessageFormatTest extends TestCase {
         assertMessageFormat("is two", pattern, 2.1);
         assertMessageFormat("is two", pattern, 3);
         assertMessageFormat("is more than 3", pattern, 3.1);
+    }
+
+    public void testBooleanChoiceFormat() {
+        // Boolean
+        assertMessageFormat("Yes", "{0,choice,0#No|1#Yes}", Boolean.TRUE);
+        assertMessageFormat("No", "{0,choice,null#May|0#No|1#Yes}", Boolean.FALSE);
+
+        assertMessageFormat("May", "{0,choice,null#May|0#No|1#Yes}", (Boolean) null);
+
+        assertMessageFormat("No", "{0,choice,1#Yes|0#No}", (Boolean) null);
+        //TODO assertMessageFormat("No", "{0,choice,0#No|1#Yes}", (Boolean) null);
+
+        assertMessageFormat("Nothing", "{0,choice,null#Nothing|!null#Something}", (Boolean) null);
+        assertMessageFormat("Nothing", "{0,choice,!null#Something|null#Nothing}", (Boolean) null);
+        assertMessageFormat("Something", "{0,choice,null#Nothing|!null#Something}", Boolean.FALSE);
     }
 
     public void testFormatEnums() {
