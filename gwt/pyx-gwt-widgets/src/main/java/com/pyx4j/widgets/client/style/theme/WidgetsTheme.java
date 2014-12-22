@@ -165,6 +165,7 @@ public class WidgetsTheme extends Theme {
 
         style = new Style(".", StyleName.TextBoxContainer, "-", StyleDependent.singleLine);
         style.addProperty("height", "2em");
+        style.addProperty("line-height", "2em");
         addStyle(style);
 
         style = new Style(".", StyleName.TextBoxActionButton);

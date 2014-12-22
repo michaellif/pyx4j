@@ -31,6 +31,8 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.widgets.client.StringBox;
+import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.selector.EditableItemHolder;
 import com.pyx4j.widgets.client.selector.SelectorListBoxValuePanel;
 
@@ -71,7 +73,8 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
     }
 
     private IsWidget createTextQueryFilterEditor() {
-        return new HTML("createTextQueryFilterEditor");
+        StringBox queryBox = new StringBox();
+        return queryBox;
     }
 
     private IsWidget createMultiSelectFilterEditor() {
