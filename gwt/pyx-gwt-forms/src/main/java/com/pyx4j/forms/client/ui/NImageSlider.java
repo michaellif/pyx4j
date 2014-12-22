@@ -184,7 +184,7 @@ public class NImageSlider<E extends IHasFile<?>> extends NField<IList<E>, ImageS
         }
 
         public void show() {
-            imgFolder.setValue(getCComponent().getValue());
+            imgFolder.populate(getCComponent().getValue());
             ((Dialog) imgFolder.getDecorator()).show();
         }
 

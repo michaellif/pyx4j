@@ -86,6 +86,9 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     protected abstract void setComponentsValue(DATA_TYPE value, boolean fireEvent, boolean populate);
 
+    /**
+     * Implementations should call super to avoid setting value to null.
+     */
     @Override
     protected DATA_TYPE preprocessValue(DATA_TYPE value, boolean fireEvent, boolean populate) {
         if (!populate && value == null) {

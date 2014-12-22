@@ -91,7 +91,7 @@ public class CListBox<E> extends CFocusComponent<List<E>, NListBox<E>> implement
         if (value != null && getComparator() != null) {
             Collections.sort(value, getComparator());
         }
-        return value;
+        return super.preprocessValue(value, fireEvent, populate);
     }
 
     /**
