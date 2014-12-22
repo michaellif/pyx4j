@@ -231,7 +231,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
         if ((value != null) && (value.isNull())) {
             value = null;
         }
-        return value;
+        return super.preprocessValue(value, fireEvent, populate);
     }
 
     @Override

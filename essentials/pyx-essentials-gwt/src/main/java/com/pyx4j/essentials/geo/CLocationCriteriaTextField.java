@@ -53,7 +53,7 @@ public class CLocationCriteriaTextField extends CTextFieldBase<GeoCriteria, NTex
         if (!populate && (orig != null) && (value != null)) {
             value.radius().setValue(orig.radius().getValue());
         }
-        return value;
+        return super.preprocessValue(value, fireEvent, populate);
     }
 
     @Override
