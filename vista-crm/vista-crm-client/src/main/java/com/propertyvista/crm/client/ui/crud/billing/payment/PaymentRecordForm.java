@@ -275,7 +275,7 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().selectPaymentMethod()).addValueChangeHandler(new ValueChangeHandler<PaymentDataDTO.PaymentSelect>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentDataDTO.PaymentSelect> event) {
-                paymentMethodEditor.reset();
+                paymentMethodEditor.clear();
                 paymentMethodEditor.setDefaultPaymentTypes();
 
                 if (event.getValue() != null) {
@@ -310,7 +310,7 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
                         paymentMethodEditor.setVisible(false);
                         paymentMethodEditorHeader.setVisible(false);
 
-                        profiledPaymentMethodsCombo.reset();
+                        profiledPaymentMethodsCombo.clear();
                         setProfiledPaymentMethodsVisible(true);
                         if (profiledPaymentMethodsCombo.getOptions().size() == 1) {
                             profiledPaymentMethodsCombo.setValue(profiledPaymentMethodsCombo.getOptions().get(0));
@@ -416,7 +416,7 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
                         boolean hasProfiledMethods = !profiledPaymentMethodsCombo.getOptions().isEmpty();
                         boolean isProfiledMethod = profiledPaymentMethodsCombo.getOptions().contains(getValue().paymentMethod());
 
-                        get(proto().selectPaymentMethod()).reset();
+                        get(proto().selectPaymentMethod()).clear();
                         get(proto().selectPaymentMethod()).setEnabled(hasProfiledMethods);
                         get(proto().selectPaymentMethod()).setVisible(hasProfiledMethods);
                         get(proto().selectPaymentMethod()).setValue(
@@ -498,14 +498,14 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
     }
 
     private void changeLeaseParticipant() {
-        paymentMethodEditor.reset();
+        paymentMethodEditor.clear();
         paymentMethodEditor.setDefaultPaymentTypes();
         paymentMethodEditor.setBillingAddressAsCurrentEnabled(true);
         loadProfiledPaymentMethods(new DefaultAsyncCallback<Void>() {
             @Override
             public void onSuccess(Void result) {
                 boolean hasProfiledMethods = !profiledPaymentMethodsCombo.getOptions().isEmpty();
-                get(proto().selectPaymentMethod()).reset();
+                get(proto().selectPaymentMethod()).clear();
                 get(proto().selectPaymentMethod()).setEnabled(hasProfiledMethods);
                 get(proto().selectPaymentMethod()).setVisible(hasProfiledMethods);
                 get(proto().selectPaymentMethod()).setValue(hasProfiledMethods ? PaymentDataDTO.PaymentSelect.Profiled : PaymentDataDTO.PaymentSelect.New);

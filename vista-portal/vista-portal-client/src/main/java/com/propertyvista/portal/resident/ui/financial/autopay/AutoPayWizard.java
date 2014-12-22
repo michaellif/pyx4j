@@ -185,7 +185,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         get(proto().selectPaymentMethod()).addValueChangeHandler(new ValueChangeHandler<PaymentSelect>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentSelect> event) {
-                paymentMethodEditor.reset();
+                paymentMethodEditor.clear();
                 paymentMethodEditor.setDefaultPaymentTypes();
 
                 if (event.getValue() != null) {
@@ -214,7 +214,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
                     case Profiled:
                         paymentMethodEditor.setEditable(false);
 
-                        profiledPaymentMethodsCombo.reset();
+                        profiledPaymentMethodsCombo.clear();
                         profiledPaymentMethodsCombo.setVisible(true);
                         if (!profiledPaymentMethodsCombo.getOptions().isEmpty()) {
                             profiledPaymentMethodsCombo.setValue(profiledPaymentMethodsCombo.getOptions().get(0));
@@ -303,7 +303,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
             public void onSuccess(Void result) {
                 boolean hasProfiledMethods = !profiledPaymentMethodsCombo.getOptions().isEmpty();
 
-                get(proto().selectPaymentMethod()).reset();
+                get(proto().selectPaymentMethod()).clear();
                 get(proto().selectPaymentMethod()).setEnabled(hasProfiledMethods);
                 get(proto().selectPaymentMethod()).setVisible(hasProfiledMethods);
                 get(proto().selectPaymentMethod()).setValue(hasProfiledMethods ? PaymentDataDTO.PaymentSelect.Profiled : PaymentDataDTO.PaymentSelect.New,

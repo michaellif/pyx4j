@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -40,7 +40,7 @@ public class AbstractFormView<E extends IEntity> extends AbstractPortalPanel imp
     @Override
     public void setPresenter(IViewerPresenter<E> presenter) {
         this.presenter = presenter;
-        form.reset();
+        getForm().reset();
     }
 
     @Override
@@ -50,8 +50,8 @@ public class AbstractFormView<E extends IEntity> extends AbstractPortalPanel imp
 
     @Override
     public void populate(E value) {
-        form.reset();
-        form.populate(value);
+        getForm().reset();
+        getForm().populate(value);
     }
 
     public CPortalEntityForm<E> getForm() {
