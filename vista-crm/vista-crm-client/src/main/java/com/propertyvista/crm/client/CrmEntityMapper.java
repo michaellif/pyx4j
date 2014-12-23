@@ -23,6 +23,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.crm.rpc.CrmSiteMap.Communication;
 import com.propertyvista.crm.rpc.CrmSiteMap.Dashboard;
 import com.propertyvista.crm.rpc.CrmSiteMap.Finance;
+import com.propertyvista.crm.rpc.CrmSiteMap.LegalAndCollections;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.crm.rpc.CrmSiteMap.Organization;
 import com.propertyvista.crm.rpc.CrmSiteMap.Properties;
@@ -104,6 +105,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.dto.EvictionCaseDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
@@ -208,6 +210,7 @@ public class CrmEntityMapper {
         // DTO mappings:
         AppPlaceEntityMapper.register(LeaseDTO.class, Tenants.Lease.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseApplicationDTO.class, Tenants.LeaseApplication.class, defaultImage);
+        AppPlaceEntityMapper.register(EvictionCaseDTO.class, LegalAndCollections.EvictionCase.class, defaultImage);
 
         AppPlaceEntityMapper.register(LeaseParticipantScreeningTO.class, Tenants.Screening.class, defaultImage);
 
