@@ -59,6 +59,7 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILo
     ProductCatalog catalog();
 
     @NotNull
+    @MemberColumn(notNull = true)
     IPrimitive<Boolean> defaultCatalogItem();
 
     /**

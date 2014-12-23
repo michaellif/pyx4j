@@ -12,13 +12,13 @@
  */
 package com.propertyvista.domain.settings;
 
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
-
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 
@@ -27,24 +27,31 @@ import com.propertyvista.domain.customizations.CountryOfOperation;
 public interface PmcVistaFeatures extends IEntity {
 
     @NotNull
+    @MemberColumn(notNull = true)
     IPrimitive<Boolean> onlineApplication();
 
     @NotNull
+    @MemberColumn(notNull = true)
     IPrimitive<Boolean> whiteLabelPortal();
 
     @NotNull
+    @MemberColumn(notNull = true)
     IPrimitive<CountryOfOperation> countryOfOperation();
 
     @NotNull
+    @MemberColumn(notNull = true)
     IPrimitive<Boolean> yardiIntegration();
 
     @NotNull
+    @MemberColumn(notNull = true)
     IPrimitive<Boolean> yardiMaintenance();
 
     @NotNull
+    @MemberColumn(notNull = true)
     IPrimitive<Boolean> tenantEmailEnabled();
 
     @NotNull
+    @MemberColumn(notNull = true)
     IPrimitive<Boolean> tenantSureIntegration();
 
     //------ calculated values ------------
