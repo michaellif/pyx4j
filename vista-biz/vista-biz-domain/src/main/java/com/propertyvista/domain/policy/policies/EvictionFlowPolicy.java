@@ -14,6 +14,7 @@
 package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
@@ -28,6 +29,7 @@ import com.propertyvista.domain.ref.ProvincePolicyNode;
 public interface EvictionFlowPolicy extends Policy {
 
     @Owned
+    @OrderBy(PrimaryKey.class)
     IList<EvictionFlowStep> evictionFlow();
 
     @Deprecated

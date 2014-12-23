@@ -27,6 +27,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
+import com.propertyvista.biz.legal.eviction.EvictionCaseFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -65,6 +66,8 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
 
             checkUnitMoveOut(to);
         }
+
+        to.evictionHistory().addAll(ServerSideFactory.create(EvictionCaseFacade.class).getEvictionHistory(in));
     }
 
     @Override

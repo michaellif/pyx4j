@@ -81,6 +81,7 @@ import com.propertyvista.crm.rpc.services.legal.L1FormDataReviewWizardService;
 import com.propertyvista.crm.rpc.services.legal.LegalLetterUploadService;
 import com.propertyvista.crm.rpc.services.legal.N4CreateBatchService;
 import com.propertyvista.crm.rpc.services.legal.N4DownloadToolService;
+import com.propertyvista.crm.rpc.services.legal.eviction.EvictionCaseCrudService;
 import com.propertyvista.crm.rpc.services.notes.NotesAndAttachmentsCrudService;
 import com.propertyvista.crm.rpc.services.organization.EmployeeSignatureUploadService;
 import com.propertyvista.crm.rpc.services.organization.VendorCrudService;
@@ -366,6 +367,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(DepositLifecycleCrudService.class));
         grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(PaymentRecordCrudService.class));
         grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(CreditCardValidationService.class));
+
+        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(EvictionCaseCrudService.class));
 
         grant(VistaBasicBehavior.PropertyVistaSupport, new IServiceExecutePermission(TenantPadFileDownloadService.class));
         grant(VistaBasicBehavior.PropertyVistaSupport, new IServiceExecutePermission(TenantPadFileUploadService.class));

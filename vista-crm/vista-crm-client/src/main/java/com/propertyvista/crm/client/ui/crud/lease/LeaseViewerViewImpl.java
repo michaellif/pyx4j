@@ -64,6 +64,7 @@ import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentL
 import com.propertyvista.crm.client.ui.crud.communication.MessageReportDialog;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.lease.eviction.EvictionCaseLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
@@ -85,6 +86,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.dto.EvictionCaseDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseLegalStateDTO;
@@ -101,6 +103,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     private final BillLister billLister;
 
     private final LeaseAdjustmentLister adjustmentLister;
+
+    private final EvictionCaseLister evictionCaseLister;
 
     private final MenuItem viewFutureTerm;
 
@@ -156,6 +160,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         depositLister = new DepositLifecycleLister();
         billLister = new BillLister(this);
         adjustmentLister = new LeaseAdjustmentLister();
+        evictionCaseLister = new EvictionCaseLister();
 
         // set main form here:
         setForm(new LeaseForm(this));
@@ -602,6 +607,12 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         adjustmentLister.populate();
         adjustmentLister.setAddNewActionEnabled(!value.status().getValue().isFormer());
 
+        EntityFiltersBuilder<EvictionCaseDTO> evictionFilter = EntityFiltersBuilder.create(EvictionCaseDTO.class);
+        evictionFilter.eq(evictionFilter.proto().lease(), value);
+        evictionCaseLister.getDataSource().addPreDefinedFilter(evictionFilter);
+        evictionCaseLister.populate();
+        evictionCaseLister.setAddNewActionEnabled(!value.status().getValue().isFormer());
+
         viewFutureTerm.setVisible(!value.nextTerm().isNull());
         viewHistoricTerms.setVisible(value.historyPresent().getValue(false));
 
@@ -660,6 +671,11 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     @Override
     public LeaseAdjustmentLister getLeaseAdjustmentLister() {
         return adjustmentLister;
+    }
+
+    @Override
+    public EvictionCaseLister getEvictionCaseLister() {
+        return evictionCaseLister;
     }
 
     @Override
