@@ -133,8 +133,8 @@ public class LeaseParticipantUtils {
     }
 
     private static void loadRestrictions(LeaseParticipantScreeningTO to, LeaseParticipant<?> participant) {
-        PolicyNode policyNode = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(participant.lease());
-        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, RestrictionsPolicy.class);
+        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainHierarchicalEffectivePolicy(participant,
+                RestrictionsPolicy.class);
 
         to.yearsToForcingPreviousAddress().setValue(restrictionsPolicy.yearsToForcingPreviousAddress().getValue());
     }

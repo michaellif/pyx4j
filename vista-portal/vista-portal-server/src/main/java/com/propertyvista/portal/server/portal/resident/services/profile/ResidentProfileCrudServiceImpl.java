@@ -26,8 +26,6 @@ import com.pyx4j.security.server.EmailValidator;
 import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.biz.tenant.lease.LeaseFacade;
-import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.EmergencyContact;
@@ -60,8 +58,8 @@ public class ResidentProfileCrudServiceImpl implements ResidentProfileCrudServic
         }
 
         if (retrieveTarget == RetrieveTarget.Edit) {
-            PolicyNode policyNode = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(ResidentPortalContext.getLeaseIdStub());
-            RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, RestrictionsPolicy.class);
+            RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainHierarchicalEffectivePolicy(
+                    ResidentPortalContext.getLeaseIdStub(), RestrictionsPolicy.class);
             to.emergencyContactsIsMandatory().setValue(restrictionsPolicy.emergencyContactsIsMandatory().getValue());
             to.emergencyContactsNumberRequired().setValue(restrictionsPolicy.emergencyContactsNumber().getValue());
         } else {

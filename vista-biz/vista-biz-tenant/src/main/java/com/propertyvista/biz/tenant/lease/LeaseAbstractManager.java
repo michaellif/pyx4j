@@ -1318,7 +1318,10 @@ public abstract class LeaseAbstractManager {
     }
 
     public PolicyNode getLeasePolicyNode(Lease leaseId) {
-        if (leaseId.unit().isNull()) {
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey(), AttachLevel.IdOnly, false);
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.IdOnly);
+
+        if (lease.unit().isNull()) {
             // no unit selected still - return organization node for policy queries:
             return Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class));
         }
@@ -1326,15 +1329,18 @@ public abstract class LeaseAbstractManager {
     }
 
     public Building getLeaseBuilding(Lease leaseId) {
-        if (leaseId.unit().isNull()) {
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey(), AttachLevel.IdOnly, false);
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.IdOnly);
+
+        if (lease.unit().isNull()) {
             return null; // no unit selected still!..
-        } else if (!leaseId.unit().building().isValueDetached()) {
-            return leaseId.unit().building();
+        } else if (!lease.unit().building().isValueDetached()) {
+            return lease.unit().building();
         } else {
             Building building;
             {
                 EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-                criteria.eq(criteria.proto().units().$().leases(), leaseId);
+                criteria.eq(criteria.proto().units().$().leases(), lease);
                 building = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
             }
             if (building != null) {
@@ -1344,7 +1350,7 @@ public abstract class LeaseAbstractManager {
             // OnlineApplication, Case of ILS link, see  OnlineApplicationFacadeImpl.getOnlineApplicationPolicyNode
             {
                 EntityQueryCriteria<MasterOnlineApplication> criteria = EntityQueryCriteria.create(MasterOnlineApplication.class);
-                criteria.eq(criteria.proto().leaseApplication().lease(), leaseId);
+                criteria.eq(criteria.proto().leaseApplication().lease(), lease);
                 MasterOnlineApplication masterOnlineApplication = Persistence.service().retrieve(criteria);
                 if (masterOnlineApplication != null) {
                     building = masterOnlineApplication.ilsBuilding();

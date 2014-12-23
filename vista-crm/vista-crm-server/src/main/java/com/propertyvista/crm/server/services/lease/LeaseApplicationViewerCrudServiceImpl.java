@@ -51,7 +51,6 @@ import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.crm.server.util.LeaseParticipantUtils;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
-import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
@@ -263,9 +262,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     }
 
     private void loadRestrictions(TenantInfoDTO to, Lease lease) {
-        PolicyNode policyNode = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(lease);
-        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, RestrictionsPolicy.class);
-
+        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainHierarchicalEffectivePolicy(lease, RestrictionsPolicy.class);
         to.yearsToForcingPreviousAddress().setValue(restrictionsPolicy.yearsToForcingPreviousAddress().getValue());
     }
 
