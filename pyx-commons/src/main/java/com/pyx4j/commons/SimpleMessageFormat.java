@@ -214,6 +214,7 @@ public class SimpleMessageFormat {
             } else if (formatType.equals("choice")) {
                 String[] choices = formatStyle.split("\\|");
                 String prevResult = null;
+                String choiceResultBooleanFalse = null;
                 for (String choice : choices) {
                     int comparatorIdx = choice.indexOf('#');
                     if (comparatorIdx > 0) {
@@ -236,8 +237,23 @@ public class SimpleMessageFormat {
                                 continue;
                             }
                         } else if (!choiceValueText.matches("^-?\\d.*")) {
-                            // handle enum
-                            if (isEnumEquals(arg, choiceValueText)) {
+                            // handle enum or boolean
+                            if (choiceValueText.equals("true")) {
+                                if (Boolean.TRUE.equals(toBoolean(arg))) {
+                                    formatedArg = choiceResult;
+                                    break;
+                                } else {
+                                    continue;
+                                }
+                            } else if (choiceValueText.equals("false")) {
+                                choiceResultBooleanFalse = choiceResult;
+                                if (Boolean.FALSE.equals(toBoolean(arg))) {
+                                    formatedArg = choiceResult;
+                                    break;
+                                } else {
+                                    continue;
+                                }
+                            } else if (isEnumEquals(arg, choiceValueText)) {
                                 formatedArg = choiceResult;
                                 break;
                             } else {
@@ -274,7 +290,9 @@ public class SimpleMessageFormat {
                     }
                 }
                 if (formatedArg == null) {
-                    if (prevResult != null) {
+                    if (choiceResultBooleanFalse != null) {
+                        formatedArg = choiceResultBooleanFalse;
+                    } else if (prevResult != null) {
                         formatedArg = prevResult;
                     } else {
                         throw new IllegalArgumentException("Error in Pattern '" + formatPattern + "'");
@@ -297,6 +315,16 @@ public class SimpleMessageFormat {
 
     private static boolean isNull(Object arg) {
         return (arg == null) || (arg.toString().length() == 0);
+    }
+
+    private static Boolean toBoolean(Object arg) {
+        if (arg == null) {
+            return null;
+        } else if (arg instanceof Boolean) {
+            return (Boolean) arg;
+        } else {
+            return Boolean.valueOf(arg.toString());
+        }
     }
 
     private static boolean isEnumEquals(Object arg, String value) {

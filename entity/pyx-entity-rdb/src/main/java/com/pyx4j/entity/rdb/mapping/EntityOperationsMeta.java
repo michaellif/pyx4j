@@ -40,7 +40,6 @@ import com.pyx4j.entity.annotations.ManagedColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.Versioned;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.ICollection;
 import com.pyx4j.entity.core.IEntity;
@@ -460,6 +459,15 @@ public class EntityOperationsMeta {
         }
     }
 
+    private boolean hasNotNullConstraint(MemberMeta memberMeta) {
+        MemberColumn memberColumn = memberMeta.getAnnotation(MemberColumn.class);
+        if (memberColumn == null) {
+            return false;
+        } else {
+            return memberColumn.notNull();
+        }
+    }
+
     private ValueAdapter createValueAdapter(Dialect dialect, Class<?> valueClass, MemberMeta memberMeta) {
         if (valueClass.equals(String.class)) {
             return new ValueAdapterString(dialect, memberMeta);
@@ -486,7 +494,8 @@ public class EntityOperationsMeta {
             Class<Enum> enumValueClass = (Class<Enum>) valueClass;
             return new ValueAdapterEnum(dialect, enumValueClass);
         } else if (valueClass.equals(Boolean.class)) {
-            return new ValueAdapterBoolean(dialect, memberMeta.isAnnotationPresent(NotNull.class));
+
+            return new ValueAdapterBoolean(dialect, hasNotNullConstraint(memberMeta));
         } else if (valueClass.equals(BigDecimal.class)) {
             return new ValueAdapterBigDecimal(dialect);
         } else if (valueClass.equals(Short.class)) {

@@ -120,7 +120,7 @@
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm z</maven.build.timestamp.format>
         <timestamp>${maven.build.timestamp}</timestamp>
 
-        <gwtVersion>2.6.1</gwtVersion>
+        <gwtVersion>2.7.0</gwtVersion>
         <gaeVersion>1.9.15</gaeVersion>
         <gaeVersion.kindleit.deploy>1.8.8</gaeVersion.kindleit.deploy>
         <gae.version>${gaeVersion}</gae.version>
@@ -831,6 +831,12 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
                     <version>2.8</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-scm-plugin</artifactId>
+                    <version>1.9.2</version>
                 </plugin>
 
                 <plugin>

@@ -29,6 +29,7 @@ import com.pyx4j.entity.test.shared.domain.Country;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
+import com.pyx4j.entity.test.shared.domain.format.BooleanChoiceField;
 import com.pyx4j.entity.test.shared.domain.format.FormattedInheritanceChild1;
 import com.pyx4j.entity.test.shared.domain.format.FormattedInheritanceChild2;
 import com.pyx4j.entity.test.shared.domain.format.StringFields;
@@ -158,5 +159,16 @@ public class EntityToStringTest extends InitializerTestBase {
         ent.strField1().setValue("One");
         ent.strField2().setValue("Two");
         assertEquals("StringView", "One - Two", ent.getStringView());
+    }
+
+    public void testBooleanChoiceFormat() {
+        BooleanChoiceField ent = EntityFactory.create(BooleanChoiceField.class);
+        assertEquals("StringView", "", ent.getStringView());
+
+        ent.answer().setValue(true);
+        assertEquals("StringView", " - Yes", ent.getStringView());
+
+        ent.answer().setValue(false);
+        assertEquals("StringView", " - No", ent.getStringView());
     }
 }
