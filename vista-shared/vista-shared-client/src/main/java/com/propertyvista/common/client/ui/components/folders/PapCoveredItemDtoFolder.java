@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -21,8 +21,8 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -41,12 +41,12 @@ public class PapCoveredItemDtoFolder extends VistaTableFolder<PreauthorizedPayme
     @Override
     public List<FolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new FolderColumnDescriptor(proto().billableItem(),"25em", i18n.tr("Lease Charge")),
+                new FolderColumnDescriptor(proto().billableItem(),"22em", i18n.tr("Lease Charge")),
                 new FolderColumnDescriptor(proto().billableItem().agreedPrice(),"6em", i18n.tr("Price"), true),
                 new FolderColumnDescriptor(proto().covered(), "6em", true),
                 new FolderColumnDescriptor(proto().amount(), "6em", i18n.tr("Payment")),
                 new FolderColumnDescriptor(proto().percent(), "4em", true));
-          //@formatter:on                
+          //@formatter:on
     }
 
     public void onAmontValueChange() {
@@ -74,7 +74,7 @@ public class PapCoveredItemDtoFolder extends VistaTableFolder<PreauthorizedPayme
                 comp = super.createCell(column);
             }
 
-            // handle value changes: 
+            // handle value changes:
             if (column.getObject() == proto().amount()) {
                 ((CField<BigDecimal, ?>) comp).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
                     @Override

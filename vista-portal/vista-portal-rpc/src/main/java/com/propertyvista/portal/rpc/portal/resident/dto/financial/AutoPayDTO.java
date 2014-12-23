@@ -37,7 +37,7 @@ public interface AutoPayDTO extends PaymentDataDTO, com.propertyvista.dto.Preaut
     @ReadOnly
     @ToString(index = 10)
     @Format("#,##0.00")
-    @Editor(type = EditorType.money)
+    @Editor(type = EditorType.moneylabel)
     @Caption(name = "Submitted amount total")
     IPrimitive<BigDecimal> total();
 
