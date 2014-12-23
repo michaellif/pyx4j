@@ -12,9 +12,10 @@
  */
 package com.propertyvista.server.config;
 
+import com.pyx4j.config.shared.ApplicationMode;
+
 import com.propertyvista.config.TenantSureConfiguration;
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.shared.config.VistaDemo;
 
 public class VistaTenantSureConfiguration extends TenantSureConfiguration {
 
@@ -29,7 +30,7 @@ public class VistaTenantSureConfiguration extends TenantSureConfiguration {
         if (VistaDeployment.isVistaProduction()) {
             return false;
         } else {
-            return serverSideConfiguration.getConfigProperties().getBooleanValue("tenantsure.cfcApiMockup", VistaDemo.isDemo());
+            return serverSideConfiguration.getConfigProperties().getBooleanValue("tenantsure.cfcApiMockup", ApplicationMode.isDemo());
         }
     }
 

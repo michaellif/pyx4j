@@ -26,7 +26,6 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.security.VistaOperationsBehavior;
 import com.propertyvista.operations.domain.security.OperationsUser;
 import com.propertyvista.operations.domain.security.OperationsUserCredential;
-import com.propertyvista.shared.config.VistaDemo;
 
 class OperationsUsersPreloader extends AbstractDataPreloader {
 
@@ -53,7 +52,7 @@ class OperationsUsersPreloader extends AbstractDataPreloader {
     public String create() {
 
         int cnt = 0;
-        if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
+        if (ApplicationMode.isDevelopment() || ApplicationMode.isDemo()) {
             int a = 1;
             for (VistaOperationsBehavior behavior : VistaOperationsBehavior.values()) {
                 String email = DemoData.UserType.ADMIN.getEmail(a);
@@ -63,7 +62,7 @@ class OperationsUsersPreloader extends AbstractDataPreloader {
             }
         }
         cnt += 4;
-        if (!VistaDemo.isDemo()) {
+        if (!ApplicationMode.isDemo()) {
             createAdminUser("PropertyVista Support", "support@propertyvista.com", rnd4prod("support@propertyvista.com"), VistaOperationsBehavior.SystemAdmin);
             createAdminUser("VladS", "vlads@propertyvista.com", rnd4prod("vlads@propertyvista.com"), VistaOperationsBehavior.SecurityAdmin);
             createAdminUser("VictorV", "vvassiliev@propertyvista.com", rnd4prod("vvassiliev@propertyvista.com"), VistaOperationsBehavior.SystemAdmin);

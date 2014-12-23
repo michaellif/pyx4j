@@ -29,8 +29,6 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.events.NotificationEvent;
 import com.pyx4j.site.shared.domain.Notification.NotificationType;
 
-import com.propertyvista.shared.config.VistaDemo;
-
 public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHandler {
 
     private static final I18n i18n = I18n.get(VistaUnrecoverableErrorHandler.class);
@@ -113,7 +111,7 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
 
         StringBuilder systemInfo = new StringBuilder();
 
-        if (!VistaDemo.isDemo() && ApplicationMode.isDevelopment()) {
+        if (!ApplicationMode.isDemo() && ApplicationMode.isDevelopment()) {
             systemInfo.append(new Date());
             if (errorCode != null) {
                 systemInfo.append("ErrorCode [" + errorCode + "]");

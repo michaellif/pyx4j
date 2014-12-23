@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.security;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.rpc.ReferenceDataService;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.essentials.rpc.download.DownloadableService;
@@ -59,8 +60,8 @@ import com.propertyvista.crm.rpc.services.customer.TenantPadFileUploadService;
 import com.propertyvista.crm.rpc.services.customer.lead.AppointmentCrudService;
 import com.propertyvista.crm.rpc.services.customer.lead.LeadCrudService;
 import com.propertyvista.crm.rpc.services.customer.lead.ShowingCrudService;
-import com.propertyvista.crm.rpc.services.customer.screening.LeaseParticipantScreeningViewService;
 import com.propertyvista.crm.rpc.services.customer.screening.LeaseParticipantScreeningVersionService;
+import com.propertyvista.crm.rpc.services.customer.screening.LeaseParticipantScreeningViewService;
 import com.propertyvista.crm.rpc.services.importer.ExportBuildingDataDownloadService;
 import com.propertyvista.crm.rpc.services.importer.ImportBuildingDataService;
 import com.propertyvista.crm.rpc.services.lease.BlankApplicationDocumentDownloadService;
@@ -192,7 +193,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
-import com.propertyvista.shared.config.VistaDemo;
 
 public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
@@ -205,7 +205,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaAccessGrantedBehavior.CRM, new CRMImpliedPermission());
 
-        if (allowAllDuringDevelopment || VistaDemo.isDemo()) {
+        if (allowAllDuringDevelopment || ApplicationMode.isDemo()) {
             // Debug
             grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission("*"));
             grant(VistaAccessGrantedBehavior.CRM, new ServiceExecutePermission("*"));

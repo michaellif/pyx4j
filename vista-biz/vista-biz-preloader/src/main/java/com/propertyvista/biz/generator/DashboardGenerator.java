@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -41,7 +42,6 @@ import com.propertyvista.domain.dashboard.gadgets.type.UnitTurnoverAnalysisGadge
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.demo.OccupancyChartGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.demo.OutstandingMaintenanceChartGadgetMetadata;
-import com.propertyvista.shared.config.VistaDemo;
 import com.propertyvista.shared.config.VistaFeatures;
 
 @SuppressWarnings("unchecked")
@@ -107,7 +107,7 @@ public class DashboardGenerator {
     }
 
     private DashboardMetadata makeDefaultSystemDashboard() {
-        if (VistaDemo.isDemo()) {
+        if (ApplicationMode.isDemo()) {
             return makeSystemDashboard(//@formatter:off
                 i18n.tr("System Dashboard"),
                 i18n.tr("Displays default system data"),

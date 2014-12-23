@@ -42,11 +42,6 @@ public class VistaServerSideConfiguration44 extends VistaServerSideConfiguration
     }
 
     @Override
-    public boolean isVistaDemo() {
-        return true;
-    }
-
-    @Override
     public int interfaceSSHDPort() {
         return 8824;
     }

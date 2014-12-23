@@ -15,6 +15,7 @@ package com.propertyvista.portal.server.preloader;
 import java.math.BigDecimal;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 
@@ -31,7 +32,6 @@ import com.propertyvista.domain.pmc.info.PmcBusinessInfoDocument.Type;
 import com.propertyvista.domain.pmc.info.PmcDocumentFile;
 import com.propertyvista.domain.security.PasswordIdentity;
 import com.propertyvista.server.config.DevYardiCredentials;
-import com.propertyvista.shared.config.VistaDemo;
 
 public class PmcCreatorDev {
 
@@ -64,7 +64,7 @@ public class PmcCreatorDev {
         pmc.equifaxInfo().securityCode().number().setValue("77");
         pmc.equifaxInfo().securityCode().obfuscatedNumber().setValue(PasswordIdentity.obfuscatedValue);
 
-        if (VistaDemo.isDemo()) {
+        if (ApplicationMode.isDemo()) {
             pmc.equifaxFee().recommendationReportPerApplicantFee().setValue(BigDecimal.ZERO);
             pmc.equifaxFee().recommendationReportSetUpFee().setValue(BigDecimal.ZERO);
             pmc.equifaxFee().fullCreditReportPerApplicantFee().setValue(BigDecimal.ZERO);

@@ -29,7 +29,6 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.VistaInterfaceCredentials;
 import com.propertyvista.operations.domain.dev.DevelopmentUser;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
-import com.propertyvista.shared.config.VistaDemo;
 
 class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
 
@@ -86,7 +85,7 @@ class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
             } else {
                 return super.getForwardAllTo();
             }
-        } else if (VistaDemo.isDemo() || ApplicationMode.isDevelopment()
+        } else if (ApplicationMode.isDemo() || ApplicationMode.isDevelopment()
                 || ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).isVistaQa()) {
             DevelopmentUser developmentUser = DevelopmentSecurity.findDevelopmentUser();
             if (developmentUser != null) {

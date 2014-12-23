@@ -44,7 +44,6 @@ import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.CustomerUserCredential;
 import com.propertyvista.generator.SecurityGenerator;
 import com.propertyvista.generator.util.CommonsGenerator;
-import com.propertyvista.shared.config.VistaDemo;
 
 public class UserPreloader extends BaseVistaDevDataPreloader {
 
@@ -111,7 +110,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
             }
         }
 
-        if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
+        if (ApplicationMode.isDevelopment() || ApplicationMode.isDemo()) {
             SecurityGenerator.assignSecurityQuestion(credential);
         }
 

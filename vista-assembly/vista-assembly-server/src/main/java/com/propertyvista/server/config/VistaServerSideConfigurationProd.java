@@ -38,6 +38,11 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
     }
 
     @Override
+    public boolean isDemoBehavior() {
+        return false;
+    }
+
+    @Override
     public boolean isDevelopmentBehavior() {
         return false;
     }

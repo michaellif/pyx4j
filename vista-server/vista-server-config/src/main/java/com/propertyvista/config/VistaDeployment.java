@@ -33,7 +33,6 @@ import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.server.config.VistaFeatures;
 import com.propertyvista.shared.VistaSystemIdentification;
-import com.propertyvista.shared.config.VistaDemo;
 import com.propertyvista.shared.config.VistaSettings;
 
 public class VistaDeployment {
@@ -64,8 +63,7 @@ public class VistaDeployment {
     }
 
     public static boolean isVistaProduction() {
-        return ((!ApplicationMode.isDevelopment()) && (!VistaDemo.isDemo()) && (VistaSystemIdentification.production == VistaDeployment
-                .getSystemIdentification()));
+        return (ApplicationMode.isProduction() && (VistaSystemIdentification.production == VistaDeployment.getSystemIdentification()));
     }
 
     public static boolean isVistaStaging() {

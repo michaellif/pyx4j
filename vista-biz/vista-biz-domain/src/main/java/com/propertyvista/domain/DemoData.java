@@ -13,20 +13,18 @@
 package com.propertyvista.domain;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.shared.ApplicationMode;
 
 import com.propertyvista.domain.security.VistaOperationsBehavior;
-import com.propertyvista.shared.config.VistaDemo;
 
 public class DemoData {
-
-    public static final boolean vistaDemo = VistaDemo.isDemo();
 
     public static enum DemoPmc {
         vista, redridge, rockville, star, gondor, metcap, timbercreek, demo;
     }
 
     //We need E-mail delivery during tests. All E-mails goes to us!
-    public final static String USERS_DOMAIN = vistaDemo ? "@propertyvista.com" : "@pyx4j.com";
+    public final static String USERS_DOMAIN = ApplicationMode.isDemo() ? "@propertyvista.com" : "@pyx4j.com";
 
     public static enum UserType {
 
@@ -80,6 +78,6 @@ public class DemoData {
     }
 
     public static String applicationModeName() {
-        return vistaDemo ? "DEMO" : "DEVELOPMENT";
+        return ApplicationMode.isDemo() ? "DEMO" : "DEVELOPMENT";
     }
 }
