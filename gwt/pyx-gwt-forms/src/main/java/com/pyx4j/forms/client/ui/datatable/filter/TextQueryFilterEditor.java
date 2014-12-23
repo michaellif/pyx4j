@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui.datatable.filter;
 
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.widgets.client.StringBox;
 
@@ -27,7 +28,8 @@ public class TextQueryFilterEditor extends FilterEditorBase implements IFilterEd
 
     private final StringBox queryBox;
 
-    public TextQueryFilterEditor() {
+    public TextQueryFilterEditor(IObject<?> member) {
+        super(member);
         queryBox = new StringBox();
         initWidget(queryBox);
     }
@@ -37,7 +39,7 @@ public class TextQueryFilterEditor extends FilterEditorBase implements IFilterEd
         if (queryBox.getValue() == null || queryBox.getValue().trim().equals("")) {
             return null;
         } else {
-            return PropertyCriterion.like(getMemeber(), queryBox.getValue());
+            return PropertyCriterion.like(getMember(), queryBox.getValue());
         }
     }
 
@@ -50,7 +52,7 @@ public class TextQueryFilterEditor extends FilterEditorBase implements IFilterEd
                 throw new Error("Filter criterion isn't supported by editor");
             }
 
-            if (!getMemeber().getPath().toString().equals(criterion.getPropertyPath())) {
+            if (!getMember().getPath().toString().equals(criterion.getPropertyPath())) {
                 throw new Error("Filter editor member doesn't mach filter criterion path");
             }
 

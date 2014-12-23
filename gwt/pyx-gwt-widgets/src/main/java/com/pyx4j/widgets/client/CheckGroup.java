@@ -36,17 +36,18 @@ public class CheckGroup<E> extends OptionGroup<E> {
     }
 
     public void setValue(Collection<E> value, boolean fireChangeEvent) {
-        for (E item : value) {
-            OptionGroupButton selectedButton = getButtons().get(item);
-            if (selectedButton != null) {
-                selectedButton.setValue(Boolean.TRUE);
-                if (fireChangeEvent) {
-                    fireEvent(new ValueChangeEvent<Boolean>(fireChangeEvent) {
-                    });
-                }
-            } else {
-                for (OptionGroupButton button : getButtons().values()) {
-                    button.setValue(Boolean.FALSE);
+        for (OptionGroupButton button : getButtons().values()) {
+            button.setValue(Boolean.FALSE);
+        }
+        if (value != null) {
+            for (E item : value) {
+                OptionGroupButton selectedButton = getButtons().get(item);
+                if (selectedButton != null) {
+                    selectedButton.setValue(Boolean.TRUE);
+                    if (fireChangeEvent) {
+                        fireEvent(new ValueChangeEvent<Boolean>(fireChangeEvent) {
+                        });
+                    }
                 }
             }
         }
@@ -62,4 +63,5 @@ public class CheckGroup<E> extends OptionGroup<E> {
         }
         return value;
     }
+
 }

@@ -22,7 +22,6 @@ package com.pyx4j.forms.client.ui.datatable.filter;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 
 public interface IFilterEditor extends IsWidget {
@@ -30,8 +29,6 @@ public interface IFilterEditor extends IsWidget {
     PropertyCriterion getPropertyCriterion();
 
     void setPropertyCriterion(PropertyCriterion filterCriterion);
-
-    void setMemeber(IObject<?> memeber);
 
     void onShown();
 

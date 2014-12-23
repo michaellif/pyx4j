@@ -38,7 +38,6 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
         super(item, new FilterItemFormatter(), item.isRemovable(), valuePanel);
         ColumnDescriptor columnDescriptor = item.getColumnDescriptor();
         editor = createFilterEditor(columnDescriptor.getMemeber());
-        editor.setMemeber(columnDescriptor.getMemeber());
         editor.setPropertyCriterion(item.getPropertyCriterion());
         editor.asWidget().setWidth("200px");
         setEditor(editor);
@@ -53,16 +52,16 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
     private IFilterEditor createFilterEditor(IObject<?> member) {
         Class<?> valueClass = member.getValueClass();
         if (member.getMeta().isEntity() || valueClass.isEnum() || valueClass.equals(Boolean.class)) {
-            return new MultiSelectFilterEditor();
+            return new MultiSelectFilterEditor(member);
         } else if (valueClass.equals(String.class)) {
-            return new TextQueryFilterEditor();
+            return new TextQueryFilterEditor(member);
         } else if ((member.getMeta().getObjectClassType() == ObjectClassType.EntityList)
                 || (member.getMeta().getObjectClassType() == ObjectClassType.EntitySet)) {
-            return new MultiSelectFilterEditor();
+            return new MultiSelectFilterEditor(member);
         } else if (isDate(valueClass)) {
-            return new DateFilterEditor();
+            return new DateFilterEditor(member);
         } else if (valueClass.equals(BigDecimal.class) || valueClass.equals(Key.class) || member.getMeta().isNumberValueClass()) {
-            return new NumberFilterEditor();
+            return new NumberFilterEditor(member);
         } else {
             throw new Error("Filter can't be created");
         }

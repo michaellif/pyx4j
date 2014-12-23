@@ -26,15 +26,14 @@ import com.pyx4j.entity.core.IObject;
 
 public abstract class FilterEditorBase extends Composite implements IFilterEditor {
 
-    private IObject<?> memeber;
+    private final IObject<?> member;
 
-    @Override
-    public void setMemeber(IObject<?> memeber) {
-        this.memeber = memeber;
+    public FilterEditorBase(IObject<?> member) {
+        this.member = member;
     }
 
-    protected IObject<?> getMemeber() {
-        return memeber;
+    protected IObject<?> getMember() {
+        return member;
     }
 
     @Override

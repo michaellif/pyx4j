@@ -20,26 +20,61 @@
  */
 package com.pyx4j.forms.client.ui.datatable.filter;
 
-import com.google.gwt.user.client.ui.FlowPanel;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
 
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.widgets.client.CheckGroup;
+import com.pyx4j.widgets.client.OptionGroup.Layout;
 
 public class MultiSelectFilterEditor extends FilterEditorBase implements IFilterEditor {
 
-    public MultiSelectFilterEditor() {
-        initWidget(new FlowPanel());
+    private final CheckGroup<?> checkGroup;
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public MultiSelectFilterEditor(IObject<?> member) {
+        super(member);
+        checkGroup = new CheckGroup<>(Layout.VERTICAL);
+        initWidget(checkGroup);
+        MemberMeta mm = member.getMeta();
+        if (mm.isEntity()) {
+            //TODO talk to Slava
+        } else if (mm.getValueClass().isEnum()) {
+            checkGroup.setOptions(new ArrayList(EnumSet.allOf((Class<Enum>) mm.getValueClass())));
+        }
     }
 
     @Override
     public PropertyCriterion getPropertyCriterion() {
-        // TODO Auto-generated method stub
-        return null;
+        if (checkGroup.getValue() == null || checkGroup.getValue().size() == 0) {
+            return null;
+        } else {
+            return PropertyCriterion.in(getMember(), checkGroup.getValue());
+        }
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public void setPropertyCriterion(PropertyCriterion filterCriterion) {
-        // TODO Auto-generated method stub
+    public void setPropertyCriterion(PropertyCriterion criterion) {
+        if (criterion == null || criterion.getValue() == null) {
+            checkGroup.setValue(null);
+        } else {
+            if (criterion.getRestriction() != PropertyCriterion.Restriction.IN) {
+                throw new Error("Filter criterion isn't supported by editor");
+            }
 
+            if (!getMember().getPath().toString().equals(criterion.getPropertyPath())) {
+                throw new Error("Filter editor member doesn't mach filter criterion path");
+            }
+
+            if (!(criterion.getValue() instanceof Collection)) {
+                throw new Error("Filter criterion value class is" + criterion.getValue().getClass().getSimpleName() + ". Collection is expected.");
+            }
+
+            checkGroup.setValue((Collection) criterion.getValue());
+        }
     }
-
 }

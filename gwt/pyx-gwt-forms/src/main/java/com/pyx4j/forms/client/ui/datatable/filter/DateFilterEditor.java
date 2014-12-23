@@ -22,11 +22,13 @@ package com.pyx4j.forms.client.ui.datatable.filter;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 
 public class DateFilterEditor extends FilterEditorBase implements IFilterEditor {
 
-    public DateFilterEditor() {
+    public DateFilterEditor(IObject<?> member) {
+        super(member);
         initWidget(new FlowPanel());
     }
 
