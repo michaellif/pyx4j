@@ -70,7 +70,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     private static final I18n i18n = I18n.get(DataTableFilterItem.class);
 
-    private static final Boolean USE_NEW_FILTERS = true;
+    private static final Boolean USE_NEW_FILTERS = false;
 
     public static int PAGESIZE_SMALL = 10;
 
