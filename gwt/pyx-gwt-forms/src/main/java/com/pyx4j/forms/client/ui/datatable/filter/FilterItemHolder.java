@@ -58,7 +58,7 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
         } else if ((member.getMeta().getObjectClassType() == ObjectClassType.EntityList)
                 || (member.getMeta().getObjectClassType() == ObjectClassType.EntitySet)) {
             return new MultiSelectFilterEditor(member);
-        } else if (isDate(valueClass)) {
+        } else if (valueClass.equals(Date.class) || valueClass.equals(java.sql.Date.class) || valueClass.equals(LogicalDate.class)) {
             return new DateFilterEditor(member);
         } else if (valueClass.equals(BigDecimal.class) || valueClass.equals(Key.class) || member.getMeta().isNumberValueClass()) {
             return new NumberFilterEditor(member);
@@ -66,10 +66,6 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
             throw new Error("Filter can't be created");
         }
 
-    }
-
-    private static boolean isDate(Class<?> valueClass) {
-        return (valueClass.equals(Date.class) || valueClass.equals(java.sql.Date.class) || valueClass.equals(LogicalDate.class));
     }
 
     @Override

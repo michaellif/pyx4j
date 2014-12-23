@@ -19,6 +19,7 @@
  */
 package com.pyx4j.forms.client.ui.datatable;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
@@ -30,6 +31,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.ConverterUtils.ToStringConverter;
 import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
@@ -41,6 +43,10 @@ import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.shared.IUserPreferences;
+import com.pyx4j.forms.client.ui.datatable.filter.DateFilterEditor;
+import com.pyx4j.forms.client.ui.datatable.filter.MultiSelectFilterEditor;
+import com.pyx4j.forms.client.ui.datatable.filter.NumberFilterEditor;
+import com.pyx4j.forms.client.ui.datatable.filter.TextQueryFilterEditor;
 import com.pyx4j.security.shared.Context;
 
 public class ColumnDescriptor {
@@ -62,7 +68,20 @@ public class ColumnDescriptor {
     }
 
     public boolean isSearchable() {
-        return builder.searchable;
+        Class<?> valueClass = builder.member.getValueClass();
+        if (valueClass.isEnum() || valueClass.equals(Boolean.class)) {
+            return builder.searchable;
+        } else if (valueClass.equals(String.class)) {
+            return builder.searchable;
+        } else if ((builder.member.getMeta().getObjectClassType() == ObjectClassType.EntityList)
+                || (builder.member.getMeta().getObjectClassType() == ObjectClassType.EntitySet)) {
+            return builder.searchable;
+        } else if (valueClass.equals(Date.class) || valueClass.equals(java.sql.Date.class) || valueClass.equals(LogicalDate.class)) {
+            return builder.searchable;
+        } else if (valueClass.equals(BigDecimal.class) || valueClass.equals(Key.class) || builder.member.getMeta().isNumberValueClass()) {
+            return builder.searchable;
+        }
+        return false;
     }
 
     public void setSearchable(boolean searchable) {
