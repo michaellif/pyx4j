@@ -51,7 +51,7 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
 
     private IFilterEditor createFilterEditor(IObject<?> member) {
         Class<?> valueClass = member.getValueClass();
-        if (member.getMeta().isEntity() || valueClass.isEnum() || valueClass.equals(Boolean.class)) {
+        if (valueClass.isEnum() || valueClass.equals(Boolean.class)) {
             return new MultiSelectFilterEditor(member);
         } else if (valueClass.equals(String.class)) {
             return new TextQueryFilterEditor(member);

@@ -70,7 +70,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     private static final I18n i18n = I18n.get(DataTableFilterItem.class);
 
-    private static final Boolean USE_NEW_FILTERS = false;
+    private static final Boolean USE_NEW_FILTERS = true;
 
     public static int PAGESIZE_SMALL = 10;
 
@@ -151,7 +151,9 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
                 filterPanel.setFilters(null);
             }
         });
-        topActionsBar.getToolbar().addItem(filterButton);
+        if (!USE_NEW_FILTERS) {
+            topActionsBar.getToolbar().addItem(filterButton);
+        }
 
         getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
             @Override

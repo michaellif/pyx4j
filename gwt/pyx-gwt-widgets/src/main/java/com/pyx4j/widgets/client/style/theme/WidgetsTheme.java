@@ -599,6 +599,10 @@ public class WidgetsTheme extends Theme {
         style.addProperty("border-width", "1px");
         addStyle(style);
 
+        style = new Style(".", StyleName.SelectedItemEditorContent);
+        style.addProperty("margin", "4px");
+        addStyle(style);
+
         style = new Style(".", StyleName.SelectedItemEditorContent, " .", WidgetsTheme.StyleName.Toolbar);
         style.addProperty("float", "right");
         addStyle(style);
