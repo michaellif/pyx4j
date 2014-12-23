@@ -123,6 +123,10 @@ public class ServerSideConfiguration {
         return true;
     }
 
+    public boolean isDemoBehavior() {
+        return false;
+    }
+
     public boolean isProductionBackend() {
         return false;
     }

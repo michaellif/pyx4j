@@ -33,6 +33,7 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.config.server.ApplicationVersion;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.config.shared.ClientVersionMismatchError;
 import com.pyx4j.entity.security.DataModelPermission;
@@ -121,6 +122,8 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
             ar.setDatastoreReadOnly(true);
         }
         ar.setProductionBackend(ServerSideConfiguration.instance().isProductionBackend());
+        ar.setDevelopmentBehavior(ApplicationMode.isDevelopment());
+        ar.setDemoBehavior(ApplicationMode.isDemo());
 
         ar.setServertTime(System.currentTimeMillis());
         return ar;

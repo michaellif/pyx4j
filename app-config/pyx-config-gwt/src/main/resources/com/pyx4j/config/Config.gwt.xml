@@ -23,8 +23,9 @@
     <generate-with class="com.pyx4j.config.rebind.ClientApplicationVersionGenerator">
         <when-type-assignable class="com.pyx4j.config.client.ClientApplicationVersion"/>
     </generate-with>
-    <replace-with class="com.pyx4j.config.client.ClientApplicationFeatureDefault">
-         <when-type-is class="com.pyx4j.config.client.ClientApplicationFeature"/>
+    
+	<replace-with class="com.pyx4j.config.client.ClientApplicationMode">
+        <when-type-is class="com.pyx4j.config.shared.ApplicationMode.Mode"/>
     </replace-with>
     
 </module>

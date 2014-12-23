@@ -75,37 +75,31 @@ public class ApplicationMode {
     }
 
     public static interface Mode {
+
         boolean isDevelopment();
-    }
 
-    static final class DevelopmentMode implements Mode {
-
-        @Override
-        public boolean isDevelopment() {
-            return true;
-        }
-    }
-
-    static final class ProductionMode implements Mode {
-
-        @Override
-        public boolean isDevelopment() {
-            return false;
-        }
+        boolean isDemo();
     }
 
     /**
-     * Used as dev/prod switch. For production build include GWT module
-     * com.pyx4j.gwt.ApplicationProductionMode
+     * Used as dev/demo/prod switch.
      * 
      * Affects:
      * - error message visibility to application user
-     * - login Ctrl+Q helpers
+     * - Ctrl+Q helpers
      * - data preloaded to application
      * - encryption algorithms are intentionally incompatibly with production
-     * - enables JavaScrip debug messages in browser
+     * - enables debug messages in browser
      */
     public final static boolean isDevelopment() {
         return impl.isDevelopment();
+    }
+
+    public final static boolean isDemo() {
+        return impl.isDemo();
+    }
+
+    public final static boolean isProduction() {
+        return !impl.isDevelopment() && !impl.isDemo();
     }
 }

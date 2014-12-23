@@ -19,13 +19,18 @@
  */
 package com.pyx4j.config.server;
 
-public class ApplicationMode {
+class ApplicationMode {
 
     public static final class ModeImpl implements com.pyx4j.config.shared.ApplicationMode.Mode {
 
         @Override
         public boolean isDevelopment() {
             return ServerSideConfiguration.instance().isDevelopmentBehavior();
+        }
+
+        @Override
+        public boolean isDemo() {
+            return ServerSideConfiguration.instance().isDemoBehavior();
         }
 
     }

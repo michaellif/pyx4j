@@ -26,7 +26,6 @@ import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -35,7 +34,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.config.client.ClientApplicationFeature;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
@@ -267,7 +266,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
             addValidations();
 
-            if (GWT.<ClientApplicationFeature> create(ClientApplicationFeature.class).developmentShortcutsEnabled()) {
+            if (ApplicationMode.isDemo() || ApplicationMode.isDevelopment()) {
                 DevelopmentShortcutUtil.attachDevelopmentShortcuts(asWidget(), this);
             }
 
