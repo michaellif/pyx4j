@@ -820,10 +820,10 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
                 IPrimitive<Boolean> booleanMember = (IPrimitive<Boolean>) member;
                 if (booleanMember.isNull()) {
                     return null;
-                } else if (booleanMember.getValue(false)) {
-                    return Integer.valueOf(1);
+                } else if (booleanMember.getValue()) {
+                    return Boolean.TRUE;
                 } else {
-                    return Integer.valueOf(0);
+                    return Boolean.FALSE;
                 }
             } else if (forMessageFormatFormat && mm.getValueClass().isEnum()) {
                 return member.getValue();

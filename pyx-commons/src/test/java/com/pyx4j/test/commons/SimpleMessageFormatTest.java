@@ -156,10 +156,16 @@ public class SimpleMessageFormatTest extends TestCase {
         assertMessageFormat("Yes", "{0,choice,0#No|1#Yes}", Boolean.TRUE);
         assertMessageFormat("No", "{0,choice,null#May|0#No|1#Yes}", Boolean.FALSE);
 
+        assertMessageFormat("Yes", "{0,choice,false#No|true#Yes}", Boolean.TRUE);
+        assertMessageFormat("No", "{0,choice,false#No|true#Yes}", Boolean.FALSE);
+
         assertMessageFormat("May", "{0,choice,null#May|0#No|1#Yes}", (Boolean) null);
 
         assertMessageFormat("No", "{0,choice,1#Yes|0#No}", (Boolean) null);
-        //TODO assertMessageFormat("No", "{0,choice,0#No|1#Yes}", (Boolean) null);
+        assertMessageFormat("Yes", "{0,choice,0#No|1#Yes}", (Boolean) null); // <!--  This takes Yes as default, Use 'false' condition to make it work
+
+        assertMessageFormat("No", "{0,choice,false#Yes|false#No}", (Boolean) null);
+        assertMessageFormat("No", "{0,choice,false#No|true#Yes}", (Boolean) null);
 
         assertMessageFormat("Nothing", "{0,choice,null#Nothing|!null#Something}", (Boolean) null);
         assertMessageFormat("Nothing", "{0,choice,!null#Something|null#Nothing}", (Boolean) null);
