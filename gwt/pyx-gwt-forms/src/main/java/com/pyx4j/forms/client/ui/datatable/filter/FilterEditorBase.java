@@ -36,4 +36,14 @@ public abstract class FilterEditorBase extends Composite implements IFilterEdito
     protected IObject<?> getMemeber() {
         return memeber;
     }
+
+    @Override
+    public void onShown() {
+
+    }
+
+    @Override
+    public void onHidden() {
+
+    }
 }

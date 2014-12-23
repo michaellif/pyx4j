@@ -34,13 +34,17 @@ public class TextQueryFilterEditor extends FilterEditorBase implements IFilterEd
 
     @Override
     public PropertyCriterion getPropertyCriterion() {
-        return PropertyCriterion.like(getMemeber(), queryBox.getValue());
+        if (queryBox.getValue() == null || queryBox.getValue().trim().equals("")) {
+            return null;
+        } else {
+            return PropertyCriterion.like(getMemeber(), queryBox.getValue());
+        }
     }
 
     @Override
     public void setPropertyCriterion(PropertyCriterion criterion) {
-        if (criterion == null) {
-            queryBox.setValue("");
+        if (criterion == null || criterion.getValue() == null) {
+            queryBox.setValue(null);
         } else {
             if (criterion.getRestriction() != PropertyCriterion.Restriction.RDB_LIKE) {
                 throw new Error("Filter criterion isn't supported by editor");
@@ -51,11 +55,16 @@ public class TextQueryFilterEditor extends FilterEditorBase implements IFilterEd
             }
 
             if (!(criterion.getValue() instanceof String)) {
-                throw new Error("Filter criterion value is not String");
+                throw new Error("Filter criterion value class is" + criterion.getValue().getClass().getSimpleName() + ". String is expected.");
             }
 
             queryBox.setValue((String) criterion.getValue());
         }
     }
 
+    @Override
+    public void onShown() {
+        super.onShown();
+        queryBox.setFocus(true);
+    }
 }

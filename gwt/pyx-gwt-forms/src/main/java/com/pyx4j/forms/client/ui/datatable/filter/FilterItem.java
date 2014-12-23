@@ -61,7 +61,8 @@ public class FilterItem implements Comparable<FilterItem> {
 
     @Override
     public String toString() {
-        return columnDescriptor.getColumnTitle() + ": \"" + (propertyCriterion == null ? i18n.tr("All") : propertyCriterion.getValue()) + "\"";
+        return columnDescriptor.getColumnTitle() + ": \""
+                + ((propertyCriterion == null || propertyCriterion.getValue() == null) ? i18n.tr("All") : propertyCriterion.getValue()) + "\"";
     }
 
     @Override

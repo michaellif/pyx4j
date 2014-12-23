@@ -74,6 +74,10 @@ public abstract class EditableItemHolder<E> extends ItemHolder<E> {
                 onEditorHidden();
             }
         });
+        onEditorShown();
+    }
+
+    protected void onEditorShown() {
     }
 
     protected void onEditorHidden() {

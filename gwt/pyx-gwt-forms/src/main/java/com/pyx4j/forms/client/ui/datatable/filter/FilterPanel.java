@@ -126,7 +126,7 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
         Collection<FilterItem> filterItems = getValue();
         List<Criterion> filters = new ArrayList<>();
         for (FilterItem filterItem : filterItems) {
-            if (filterItem.getPropertyCriterion() != null) {
+            if (filterItem.getPropertyCriterion() != null && filterItem.getPropertyCriterion().getValue() != null) {
                 filters.add(filterItem.getPropertyCriterion());
             }
         }

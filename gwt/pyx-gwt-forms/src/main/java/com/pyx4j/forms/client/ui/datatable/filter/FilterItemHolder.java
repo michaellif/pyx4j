@@ -73,4 +73,16 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
         return (valueClass.equals(Date.class) || valueClass.equals(java.sql.Date.class) || valueClass.equals(LogicalDate.class));
     }
 
+    @Override
+    protected void onEditorShown() {
+        super.onEditorShown();
+        editor.onShown();
+    };
+
+    @Override
+    protected void onEditorHidden() {
+        super.onEditorHidden();
+        editor.onHidden();
+    };
+
 }

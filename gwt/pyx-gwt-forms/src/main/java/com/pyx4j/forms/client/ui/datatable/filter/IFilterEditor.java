@@ -33,4 +33,8 @@ public interface IFilterEditor extends IsWidget {
 
     void setMemeber(IObject<?> memeber);
 
+    void onShown();
+
+    void onHidden();
+
 }
