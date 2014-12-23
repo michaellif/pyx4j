@@ -20,9 +20,12 @@
  */
 package com.pyx4j.forms.client.ui.datatable.filter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.List;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -32,25 +35,30 @@ import com.pyx4j.widgets.client.OptionGroup.Layout;
 
 public class MultiSelectFilterEditor extends FilterEditorBase implements IFilterEditor {
 
-    private final CheckGroup<?> checkGroup;
+    private CheckGroup<?> checkGroup;
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public MultiSelectFilterEditor(IObject<?> member) {
         super(member);
-        checkGroup = new CheckGroup<>(Layout.VERTICAL);
-        initWidget(checkGroup);
         MemberMeta mm = member.getMeta();
-        if (mm.isEntity()) {
-            //TODO talk to Slava
-        } else if (mm.getValueClass().isEnum()) {
+        if (mm.getValueClass().isEnum()) {
+            checkGroup = new CheckGroup<>(Layout.VERTICAL);
             checkGroup.setOptions(new ArrayList(EnumSet.allOf((Class<Enum>) mm.getValueClass())));
+        } else if (mm.getValueClass().equals(Boolean.class)) {
+            checkGroup = new CheckGroup<Boolean>(Layout.HORISONTAL);
+            checkGroup.setOptions((List) Arrays.asList(new Boolean[] { Boolean.FALSE, Boolean.TRUE }));
+            checkGroup.setValue((List) Arrays.asList(new Boolean[] { Boolean.FALSE, Boolean.TRUE }));
         }
+
+        initWidget(checkGroup);
     }
 
     @Override
     public PropertyCriterion getPropertyCriterion() {
-        if (checkGroup.getValue() == null || checkGroup.getValue().size() == 0) {
+        if (checkGroup.getValue() == null) {
             return null;
+        } else if (checkGroup.getValue().size() == 0) {
+            return PropertyCriterion.eq(getMember(), (Serializable) null);
         } else {
             return PropertyCriterion.in(getMember(), checkGroup.getValue());
         }
@@ -62,7 +70,7 @@ public class MultiSelectFilterEditor extends FilterEditorBase implements IFilter
         if (criterion == null || criterion.getValue() == null) {
             checkGroup.setValue(null);
         } else {
-            if (criterion.getRestriction() != PropertyCriterion.Restriction.IN) {
+            if (criterion.getRestriction() != PropertyCriterion.Restriction.IN || criterion.getRestriction() != PropertyCriterion.Restriction.EQUAL) {
                 throw new Error("Filter criterion isn't supported by editor");
             }
 
