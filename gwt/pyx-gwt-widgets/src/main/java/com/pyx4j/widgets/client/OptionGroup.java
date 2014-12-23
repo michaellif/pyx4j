@@ -44,6 +44,7 @@ import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasValue;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class OptionGroup<E> extends FlowPanel implements IFocusWidget, HasValueChangeHandlers<E> {
@@ -57,6 +58,8 @@ public class OptionGroup<E> extends FlowPanel implements IFocusWidget, HasValueC
     private boolean editable = true;
 
     private final String uniqueId;
+
+    private IFormatter<E, SafeHtml> formatter;
 
     private final boolean multipleSelection;
 
@@ -85,7 +88,7 @@ public class OptionGroup<E> extends FlowPanel implements IFocusWidget, HasValueC
         buttons.clear();
 
         for (final E option : options) {
-            OptionGroupButton button = new OptionGroupButton(format(option));
+            OptionGroupButton button = new OptionGroupButton(getFormatter().format(option));
             buttons.put(option, button);
             button.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
@@ -102,6 +105,23 @@ public class OptionGroup<E> extends FlowPanel implements IFocusWidget, HasValueC
             button.addBlurHandler(focusHandlerManager);
             add(button);
         }
+    }
+
+    public void setFormatter(IFormatter<E, SafeHtml> formatter) {
+        this.formatter = formatter;
+    }
+
+    public IFormatter<E, SafeHtml> getFormatter() {
+        if (formatter == null) {
+            formatter = new IFormatter<E, SafeHtml>() {
+
+                @Override
+                public SafeHtml format(E value) {
+                    return SafeHtmlUtils.fromTrustedString(value.toString());
+                }
+            };
+        }
+        return formatter;
     }
 
     @Override
@@ -218,10 +238,6 @@ public class OptionGroup<E> extends FlowPanel implements IFocusWidget, HasValueC
     public void setAccessKey(char key) {
         // TODO Auto-generated method stub
 
-    }
-
-    protected SafeHtml format(E value) {
-        return SafeHtmlUtils.fromTrustedString(value.toString());
     }
 
     @Override

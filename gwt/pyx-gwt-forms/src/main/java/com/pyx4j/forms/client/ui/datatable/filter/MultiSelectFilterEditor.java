@@ -27,13 +27,21 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.CheckGroup;
 import com.pyx4j.widgets.client.OptionGroup.Layout;
 
 public class MultiSelectFilterEditor extends FilterEditorBase implements IFilterEditor {
+
+    private static final I18n i18n = I18n.get(MultiSelectFilterEditor.class);
 
     private CheckGroup<?> checkGroup;
 
@@ -45,9 +53,30 @@ public class MultiSelectFilterEditor extends FilterEditorBase implements IFilter
             checkGroup = new CheckGroup<>(Layout.VERTICAL);
             checkGroup.setOptions(new ArrayList(EnumSet.allOf((Class<Enum>) mm.getValueClass())));
         } else if (mm.getValueClass().equals(Boolean.class)) {
-            checkGroup = new CheckGroup<Boolean>(Layout.HORISONTAL);
-            checkGroup.setOptions((List) Arrays.asList(new Boolean[] { Boolean.FALSE, Boolean.TRUE }));
-            checkGroup.setValue((List) Arrays.asList(new Boolean[] { Boolean.FALSE, Boolean.TRUE }));
+            //TODO
+
+            CheckGroup<Boolean> booleanGroup = new CheckGroup<>(Layout.HORISONTAL);
+            booleanGroup.setFormatter(new IFormatter<Boolean, SafeHtml>() {
+
+                @Override
+                public SafeHtml format(Boolean value) {
+                    String title;
+                    if (value == null) {
+                        title = i18n.tr("Empty");
+                    } else if (value) {
+                        title = i18n.tr("Yes");
+                    } else {
+                        title = i18n.tr("No");
+                    }
+                    return SafeHtmlUtils.fromTrustedString(title);
+                }
+            });
+            if (mm.isAnnotationPresent(NotNull.class)) {
+                booleanGroup.setOptions(Arrays.asList(new Boolean[] { Boolean.FALSE, Boolean.TRUE }));
+            } else {
+                booleanGroup.setOptions(Arrays.asList(new Boolean[] { Boolean.FALSE, Boolean.TRUE, null }));
+            }
+            checkGroup = booleanGroup;
         }
 
         initWidget(checkGroup);
@@ -55,10 +84,8 @@ public class MultiSelectFilterEditor extends FilterEditorBase implements IFilter
 
     @Override
     public PropertyCriterion getPropertyCriterion() {
-        if (checkGroup.getValue() == null) {
+        if (checkGroup.getValue() == null || checkGroup.getValue().size() == 0) {
             return null;
-        } else if (checkGroup.getValue().size() == 0) {
-            return PropertyCriterion.eq(getMember(), (Serializable) null);
         } else {
             return PropertyCriterion.in(getMember(), checkGroup.getValue());
         }

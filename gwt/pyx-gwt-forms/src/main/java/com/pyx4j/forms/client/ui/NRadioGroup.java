@@ -27,6 +27,7 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.RadioGroup;
 
 public class NRadioGroup<E> extends NFocusField<E, RadioGroup<E>, CRadioGroup<E>, HTML> {
@@ -37,12 +38,15 @@ public class NRadioGroup<E> extends NFocusField<E, RadioGroup<E>, CRadioGroup<E>
 
     @Override
     protected RadioGroup<E> createEditor() {
-        return new RadioGroup<E>(getCComponent().getLayout()) {
+        RadioGroup<E> radioGroup = new RadioGroup<E>(getCComponent().getLayout());
+        radioGroup.setFormatter(new IFormatter<E, SafeHtml>() {
+
             @Override
-            protected SafeHtml format(E value) {
+            public SafeHtml format(E value) {
                 return SafeHtmlUtils.fromTrustedString(getCComponent().getFormat().format(value));
-            };
-        };
+            }
+        });
+        return radioGroup;
     }
 
     @Override
