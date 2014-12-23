@@ -49,6 +49,6 @@ class VistaCrmLegalAccessControlList extends UIAclBuilder {
         grant(LegalCollectionsFull, LeaseLegalStateDTO.class, READ | UPDATE);
         grant(LegalCollectionsFull, LegalNoticeCandidateDTO.class, ALL);
 
-        grant(LegalCollectionsFull, EvictionCaseDTO.class, READ | UPDATE);
+        grant(LegalCollectionsFull, EvictionCaseDTO.class, READ | CREATE | UPDATE);
     }
 }

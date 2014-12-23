@@ -22,6 +22,7 @@ import com.pyx4j.commons.UserRuntimeException;
 
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentLister;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
+import com.propertyvista.crm.client.ui.crud.lease.eviction.EvictionCaseLister;
 import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
@@ -98,4 +99,6 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
     void reportSendMailActionResult(String message);
 
     void reportCancelNoticeFailed(UserRuntimeException caught);
+
+    EvictionCaseLister getEvictionCaseLister();
 }

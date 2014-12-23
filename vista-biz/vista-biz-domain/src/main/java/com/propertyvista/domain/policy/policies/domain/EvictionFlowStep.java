@@ -15,6 +15,7 @@ package com.propertyvista.domain.policy.policies.domain;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -28,13 +29,14 @@ public interface EvictionFlowStep extends IEntity {
 
     @Owner
     @MemberColumn(notNull = true)
+    @JoinColumn
     @ReadOnly
     @Detached
-    @Indexed(uniqueConstraint = true, group = { "n,1" })
+    @Indexed(group = { "n,1" })
     EvictionFlowPolicy policy();
 
     @ToString
-    @Indexed(uniqueConstraint = true, group = { "n,2" })
+    @Indexed(group = { "n,2" })
     IPrimitive<String> name();
 
     IPrimitive<String> description();

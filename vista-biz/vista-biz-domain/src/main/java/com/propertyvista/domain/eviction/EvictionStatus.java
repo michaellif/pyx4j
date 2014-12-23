@@ -17,7 +17,10 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderBy;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -26,24 +29,33 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
 
 public interface EvictionStatus extends IEntity {
 
     @Owner
+    @JoinColumn
     @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
-    @Indexed(uniqueConstraint = true, group = { "c,1" })
+    @Indexed(group = { "c,1" })
     EvictionCase evictionCase();
 
-    @Indexed(uniqueConstraint = true, group = { "c,2" })
     @ReadOnly
+    @Indexed(group = { "c,2" })
     EvictionFlowStep evictionStep();
 
     @ReadOnly
     @Timestamp(Update.Created)
     IPrimitive<Date> addedOn();
 
+    @ReadOnly
+    @Detached
+    Employee addedBy();
+
+    @Owned
+    @Detached
+    @OrderBy(PrimaryKey.class)
     IList<EvictionStatusRecord> statusRecords();
 }

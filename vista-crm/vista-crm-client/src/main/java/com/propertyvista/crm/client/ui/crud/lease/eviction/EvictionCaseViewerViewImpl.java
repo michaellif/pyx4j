@@ -7,19 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 19, 2014
+ * Created on Dec 22, 2014
  * @author stanp
  */
-package com.propertyvista.dto;
+package com.propertyvista.crm.client.ui.crud.lease.eviction;
 
-import com.pyx4j.entity.annotations.ExtendsBO;
-import com.pyx4j.entity.annotations.SecurityEnabled;
-import com.pyx4j.entity.annotations.Transient;
+import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.dto.EvictionCaseDTO;
 
-import com.propertyvista.domain.eviction.EvictionCase;
+public class EvictionCaseViewerViewImpl extends CrmViewerViewImplBase<EvictionCaseDTO> implements EvictionCaseViewerView {
 
-@Transient
-@ExtendsBO
-@SecurityEnabled
-public interface EvictionCaseDTO extends EvictionCase {
+    public EvictionCaseViewerViewImpl() {
+        setForm(new EvictionCaseForm(this, true));
+    }
+
 }

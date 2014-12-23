@@ -18,7 +18,9 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -28,12 +30,13 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.company.Employee;
 
 public interface EvictionStatusRecord extends IEntity {
 
     @Owner
     @MemberColumn(notNull = true)
+    @JoinColumn
     @ReadOnly
     @Detached
     EvictionStatus evictionStatus();
@@ -47,9 +50,10 @@ public interface EvictionStatusRecord extends IEntity {
 
     @ReadOnly
     @Detached
-    CrmUser addedBy();
+    Employee addedBy();
 
     @Owned
     @Detached
+    @OrderBy(PrimaryKey.class)
     IList<EvictionDocument> attachments();
 }

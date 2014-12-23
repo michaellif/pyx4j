@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -29,7 +30,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface EvictionCase extends IEntity {
@@ -52,13 +53,13 @@ public interface EvictionCase extends IEntity {
     IPrimitive<Date> closedOn();
 
     @Detached
-    @ReadOnly
-    CrmUser createdBy();
+    Employee createdBy();
 
     @NotNull
     @Editor(type = EditorType.textarea)
     IPrimitive<String> note();
 
     @Owned
+    @OrderBy(PrimaryKey.class)
     IList<EvictionStatus> history();
 }

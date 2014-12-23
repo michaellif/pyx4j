@@ -23,7 +23,6 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.TransactionHistoryViewerYardi;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
-import com.propertyvista.crm.client.ui.crud.lease.eviction.EvictionHistoryFolder;
 import com.propertyvista.crm.client.ui.crud.lease.financial.TransactionHistoryViewer;
 import com.propertyvista.crm.client.ui.crud.lease.legal.LegalLetterFolder;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
@@ -52,7 +51,8 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         paymentsTab = addTab(getParentView().getPaymentListerView().asWidget(), i18n.tr("Receipts"), DataModelPermission.permissionRead(PaymentRecordDTO.class));
         financialTab = addTab(createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"),
                 DataModelPermission.permissionRead(TransactionHistoryDTO.class));
-        evictionHistoryTab = addTab(createEvictionTab(), i18n.tr("Eviction History"), DataModelPermission.permissionRead(EvictionCaseDTO.class));
+        evictionHistoryTab = addTab(getParentView().getEvictionCaseLister().asWidget(), i18n.tr("Eviction History"),
+                DataModelPermission.permissionRead(EvictionCaseDTO.class));
         communicationTab = addTab(createCommunicationsTab(), i18n.tr("Documents/Communication"), DataModelPermission.permissionRead(LegalLetter.class));
     }
 
@@ -70,6 +70,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
             setTabVisible(adjustmentsTab, false);
             setTabVisible(chargesTab, false);
             setTabVisible(billsTab, false);
+            setTabVisible(evictionHistoryTab, false);
         }
     }
 
@@ -89,6 +90,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
         setTabVisible(paymentsTab, !getValue().status().getValue().isDraft());
         setTabVisible(financialTab, !getValue().status().getValue().isDraft());
+        setTabVisible(evictionHistoryTab, isInternalMode && !getValue().status().getValue().isDraft());
     }
 
     private IsWidget createFinancialTransactionHistoryTab() {
@@ -99,12 +101,6 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         formPanel.append(Location.Dual, proto().transactionHistory(), transactionHistoryViewer);
         transactionHistoryViewer.asWidget().setWidth("100%");
 
-        return formPanel;
-    }
-
-    private IsWidget createEvictionTab() {
-        FormPanel formPanel = new FormPanel(this);
-        formPanel.append(Location.Dual, proto().evictionHistory(), new EvictionHistoryFolder());
         return formPanel;
     }
 

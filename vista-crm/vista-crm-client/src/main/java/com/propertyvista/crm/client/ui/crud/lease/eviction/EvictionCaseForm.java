@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2014-01-21
- * @author ArtyomB
+ * Created on Dec 19, 2014
+ * @author stanp
  */
 package com.propertyvista.crm.client.ui.crud.lease.eviction;
 
@@ -22,40 +22,43 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.legal.eviction.EvictionDocumentUploadService;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.eviction.EvictionDocument;
 import com.propertyvista.domain.eviction.EvictionStatus;
 import com.propertyvista.domain.eviction.EvictionStatusRecord;
 import com.propertyvista.dto.EvictionCaseDTO;
 
-public class EvictionCaseForm extends CForm<EvictionCaseDTO> {
+public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
 
     private static final I18n i18n = I18n.get(EvictionCaseForm.class);
 
     private final boolean uploadable;
 
-    public EvictionCaseForm(boolean uploadable) {
-        super(EvictionCaseDTO.class);
+    public EvictionCaseForm(IPrimeFormView<EvictionCaseDTO, ?> view, boolean uploadable) {
+        super(EvictionCaseDTO.class, view);
         this.uploadable = uploadable;
-    }
 
-    @Override
-    protected IsWidget createContent() {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Dual, proto().createdOn()).decorate();
-        formPanel.append(Location.Dual, proto().createdBy().name()).decorate();
+        formPanel.append(Location.Dual, proto().createdBy(), new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class))).decorate();
         formPanel.append(Location.Dual, proto().updatedOn()).decorate();
         formPanel.append(Location.Dual, proto().closedOn()).decorate();
         formPanel.append(Location.Dual, proto().note()).decorate();
 
         formPanel.h1(i18n.tr("Status History"));
-        formPanel.append(Location.Dual, proto().note(), new StatusHistoryFolder());
+        formPanel.append(Location.Dual, proto().history(), new StatusHistoryFolder());
 
-        return formPanel;
+        selectTab(addTab(formPanel, i18n.tr("General")));
+        setTabBarVisible(false);
     }
 
     @Override
@@ -64,7 +67,7 @@ public class EvictionCaseForm extends CForm<EvictionCaseDTO> {
         boolean isNew = getValue().getPrimaryKey() == null;
         if (isNew) {
             get(proto().createdOn()).setVisible(false);
-            get(proto().createdBy().name()).setVisible(false);
+            get(proto().createdBy()).setVisible(false);
             get(proto().updatedOn()).setVisible(false);
             get(proto().closedOn()).setVisible(false);
         }
@@ -86,6 +89,7 @@ public class EvictionCaseForm extends CForm<EvictionCaseDTO> {
 
                     formPanel.append(Location.Dual, proto().evictionStep()).decorate();
                     formPanel.append(Location.Dual, proto().addedOn()).decorate();
+                    formPanel.append(Location.Dual, proto().addedBy()).decorate();
 
                     formPanel.h1(i18n.tr("Records"));
                     formPanel.append(Location.Dual, proto().statusRecords(), new StatusRecordFolder());
@@ -111,8 +115,9 @@ public class EvictionCaseForm extends CForm<EvictionCaseDTO> {
                 protected IsWidget createContent() {
                     FormPanel formPanel = new FormPanel(this);
 
+                    formPanel.append(Location.Dual, proto().note()).decorate();
                     formPanel.append(Location.Dual, proto().addedOn()).decorate();
-                    formPanel.append(Location.Dual, proto().addedBy().name()).decorate();
+                    formPanel.append(Location.Dual, proto().addedBy()).decorate();
 
                     formPanel.h1(i18n.tr("Attachments"));
                     formPanel.append(Location.Dual, proto().attachments(), new UploadableEvictionDocumentFolder());
