@@ -41,6 +41,7 @@ import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.client.ClientApplicationBackendConfig;
+import com.pyx4j.config.client.ClientApplicationMode;
 import com.pyx4j.config.client.ClientApplicationVersion;
 import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.entity.core.EntityFactory;
@@ -272,6 +273,8 @@ public class ClientContext extends Context {
 
     public static void authenticated(AuthenticationResponse authenticationResponse) {
         try {
+            ClientApplicationMode.setDevelopment(authenticationResponse.isDevelopmentBehavior());
+            ClientApplicationMode.setDemo(authenticationResponse.isDemoBehavior());
             authenticationObtained = true;
             userVisit = authenticationResponse.getUserVisit();
             if (authenticationResponse.getLogoutURL() != null) {

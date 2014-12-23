@@ -50,6 +50,10 @@ public class AuthenticationResponse implements Serializable {
 
     private boolean datastoreReadOnly;
 
+    private boolean developmentBehavior;
+
+    private boolean demoBehavior;
+
     private boolean productionBackend;
 
     private long servertTime;
@@ -140,6 +144,22 @@ public class AuthenticationResponse implements Serializable {
 
     public void setDatastoreReadOnly(boolean datastoreReadOnly) {
         this.datastoreReadOnly = datastoreReadOnly;
+    }
+
+    public boolean isDevelopmentBehavior() {
+        return developmentBehavior;
+    }
+
+    public void setDevelopmentBehavior(boolean developmentBehavior) {
+        this.developmentBehavior = developmentBehavior;
+    }
+
+    public boolean isDemoBehavior() {
+        return demoBehavior;
+    }
+
+    public void setDemoBehavior(boolean demoBehavior) {
+        this.demoBehavior = demoBehavior;
     }
 
     public boolean isProductionBackend() {
