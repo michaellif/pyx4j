@@ -14,8 +14,8 @@ package com.propertyvista.crm.client.ui.crud.customer.tenant;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor.Builder;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantLister;
@@ -30,8 +30,8 @@ public class TenantLister extends LeaseParticipantLister<TenantDTO> {
         super(TenantDTO.class, GWT.<TenantCrudService> create(TenantCrudService.class));
 
         setColumnDescriptors( //
-                new Builder(proto().participantId()).build(), //
-                new Builder(proto().role()).sortable(false).searchable(false).build(), //
+                new Builder(proto().participantId()).width("80px").build(), //
+                new Builder(proto().role()).sortable(false).searchable(false).width("80px").build(), //
 
                 new Builder(proto().customer().person().name()).searchable(false).build(), //
                 new Builder(proto().customer().person().name().firstName(), false).build(), //
@@ -42,14 +42,14 @@ public class TenantLister extends LeaseParticipantLister<TenantDTO> {
                 new Builder(proto().customer().person().homePhone()).build(), //
                 new Builder(proto().customer().person().mobilePhone(), false).build(), //
                 new Builder(proto().customer().person().workPhone(), false).build(), //
-                new Builder(proto().customer().person().email()).build(), //
-                new Builder(proto().customer().registeredInPortal()).visible(false).build(), //
+                new Builder(proto().customer().person().email()).width("180px").build(), //
+                new Builder(proto().customer().registeredInPortal()).visible(false).width("50px").build(), //
 
-                new Builder(proto().lease()).searchable(false).build(), //
+                new Builder(proto().lease()).searchable(false).width("180px").build(), //
                 new Builder(proto().lease().leaseId()).columnTitle(i18n.tr("Lease Id")).searchableOnly().build(), //
-                new Builder(proto().lease().status()).columnTitle(i18n.tr("Lease Status")).build(), //
+                new Builder(proto().lease().status()).columnTitle(i18n.tr("Lease Status")).width("80px").build(), //
 
-                new Builder(proto().lease().unit().info().number()).columnTitle(i18n.tr("Unit #")).build(), //
+                new Builder(proto().lease().unit().info().number()).columnTitle(i18n.tr("Unit #")).width("80px").build(), //
                 new Builder(proto().lease().unit().building().propertyCode()).visible(false).build(), //
                 new Builder(proto().lease().unit().building().info().name()).visible(false).columnTitle(i18n.tr("Building Name")).build());
 

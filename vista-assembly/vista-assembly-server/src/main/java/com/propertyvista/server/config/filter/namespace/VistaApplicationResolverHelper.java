@@ -7,84 +7,34 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 3, 2014
+ * Created on Dec 19, 2014
  * @author ernestog
  */
-package com.propertyvista.server.config.filter;
+package com.propertyvista.server.config.filter.namespace;
 
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.server.config.filter.utils.HttpRequestUtils;
 
-public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
-
-    private static Logger log = LoggerFactory.getLogger(VistaURIDataResolver.class);
-
+public class VistaApplicationResolverHelper {
     private static final String regExTwoDigits = "\\d\\d";
 
-    private final VistaURIData URIData;
-
-    public VistaURIDataResolver(ServletRequest request) {
-        this((HttpServletRequest) request);
-    }
-
-    public VistaURIDataResolver(HttpServletRequest httprequest) {
-        super(httprequest);
-        this.URIData = initilizeURLInfo();
-    }
-
-    public VistaURIData initilizeURLInfo() {
-        VistaApplication app = getApplication();
-        String namespace = getNamespace(this.httpRequest);
-
-        return new VistaURIData(app, namespace);
-    }
-
-
-    @Override
-    public String getNamespace(HttpServletRequest httpRequest) {
-        return "";
-        // TODO define namespace for onboarding and then use line below
-//        return ServerSideConfiguration.instance().getNamespaceResolver().getNamespace(httpRequest);
-    }
-
-
-    @Override
-    public VistaApplication getApplication() {
-        return getAppByRequest();
-    }
-
-    // getters
-    public VistaURIData vistaURIData() {
-        return this.URIData;
-    }
-
-    public VistaApplication getVistaApplication() {
-        return this.URIData.getApplication();
-    }
-
-    public String getVistaNamespace() {
-        return this.URIData.getNamespace();
-    }
-
-    protected VistaApplication getAppByRequest() {
+    public static VistaApplication getApplication(HttpServletRequest httpRequest) {
 
         VistaApplication app = null;
 
         String serverName = httpRequest.getServerName();
         String requestPath = httpRequest.getServletPath();
+        String rootServletPath = HttpRequestUtils.getRootServletPath(httpRequest);
 
         try {
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
-            app = CacheService.get(getAppCacheKey());
+            app = CacheService.get(HttpRequestUtils.getAppCacheKey(httpRequest));
 
             if (app != null) {
                 return app;
@@ -92,10 +42,10 @@ public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
                 String[] serverNameParts = serverName.split("\\.");
                 if (serverNameParts.length > 0) {
                     String appByDomain = serverNameParts[0];
-                    app = getAppByDomainOrPath(appByDomain, requestPath);
+                    app = getAppByDomainOrPath(appByDomain, requestPath, rootServletPath);
                 }
 
-                CacheService.put(getAppCacheKey(), app);
+                CacheService.put(HttpRequestUtils.getAppCacheKey(httpRequest), app);
 
                 return app;
             }
@@ -103,25 +53,6 @@ public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
             NamespaceManager.remove();
         }
 
-    }
-
-    private String getAppCacheKey() {
-        return httpRequest.getServerName() + "/" + getRootServletPath();
-    }
-
-    /**
-     * Get first string in request servlet path
-     *
-     * @return first String in request servlet path or empty string in case servlet path is empty
-     */
-    private String getRootServletPath() {
-        String[] appByPathTokens = httpRequest.getServletPath().split("/");
-
-        if (appByPathTokens.length >= 2) {
-            return appByPathTokens[1];
-        }
-
-        return "";
     }
 
     /**
@@ -133,7 +64,7 @@ public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
      *            request path for this request
      * @return Vista application
      */
-    protected VistaApplication getAppByDomainOrPath(String appByDomain, String path) {
+    private static VistaApplication getAppByDomainOrPath(String appByDomain, String path, String rootServletPath) {
         // TODO Extract method to a new class. Create new return type including data from VistaApplication and PMC. Redo vistaNameSpace resolver (common tasks)
         String[] appByDomainTokens = appByDomain.split("-");
         VistaApplication app = null;
@@ -158,7 +89,7 @@ public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
             if (appByDomainTokens[1].equalsIgnoreCase("portal")) {
 
                 // If request path starts with "/prospect", portal is prospect
-                if (getRootServletPath().equalsIgnoreCase("prospect")) {
+                if (rootServletPath.equalsIgnoreCase("prospect")) {
                     return VistaApplication.prospect;
                 }
 
@@ -181,14 +112,19 @@ public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
         return app;
     }
 
-    public boolean isHttpsRedirectionNeeded() {
+    public static boolean isHttpsRedirectionNeeded(HttpServletRequest httpRequest) {
+        VistaApplication app = getApplication(httpRequest);
+        return isHttpsRedirectionNeeded(httpRequest, app);
+    }
+
+    public static boolean isHttpsRedirectionNeeded(HttpServletRequest httpRequest, VistaApplication app) {
+
         boolean redirect = false;
 
         if (httpRequest.isSecure()) {
             return redirect;
         }
 
-        VistaApplication app = getVistaApplication();
         if (app != null && app != VistaApplication.site && app != VistaApplication.noApp) {
             redirect = true;
         }
@@ -202,11 +138,10 @@ public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
      * @param request
      * @return true if request is first request; false otherwise
      */
-    public boolean isRootAppRequest() {
+    public static boolean isRootAppRequest(HttpServletRequest httpRequest, VistaApplication app) {
         String servletPath = httpRequest.getServletPath();
 
-        if (servletPath.equals("") || servletPath.equals("/")
-                || (servletPath.equals("/" + VistaApplication.prospect) && (getVistaApplication() == VistaApplication.prospect))) {
+        if (servletPath.equals("") || servletPath.equals("/") || (servletPath.equals("/" + VistaApplication.prospect) && (app == VistaApplication.prospect))) {
             return true;
         }
         return false;
@@ -219,9 +154,8 @@ public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
      * @param app
      * @return
      */
-    public String getNewURLRequest() {
+    public static String getNewURLRequest(HttpServletRequest httpRequest, VistaApplication app) {
         String requestPath = httpRequest.getServletPath();
-        VistaApplication app = getVistaApplication();
 
         String subRequestPath = "";
 
@@ -245,18 +179,9 @@ public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
         return newUri;
     }
 
-    public String getPathToForwarded() {
-        // TODO what if ApplicationType = noApp?
-        if (getVistaApplication() != VistaApplication.prospect) {
-            return "/" + getVistaApplication().name();
-        } else {
-            return "";
-        }
-    }
-
-    public String getCompleteURLToForward() {
-        StringBuffer uri = new StringBuffer(getServerURL());
-        uri.append(getNewURLRequest());
+    public static String getCompleteURLToForward(HttpServletRequest httpRequest, VistaApplication app) {
+        StringBuffer uri = new StringBuffer(HttpRequestUtils.getServerURL(httpRequest));
+        uri.append(getNewURLRequest(httpRequest, app));
 
         String queryStr = httpRequest.getQueryString();
         if (queryStr != null && !queryStr.isEmpty()) {
@@ -265,37 +190,13 @@ public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
         return uri.toString();
     }
 
-    protected String getServerURL() {
-        return httpRequest.getScheme()
-                + "://"
-                + httpRequest.getServerName()
-                + ("http".equals(httpRequest.getScheme()) && httpRequest.getServerPort() == 80 || "https".equals(httpRequest.getScheme())
-                        && httpRequest.getServerPort() == 443 ? "" : ":" + httpRequest.getServerPort());
-    }
-
-    public String getCompleteURLNoContextPath() {
-        return getCompleteURL(false);
-    }
-
-    public String getCompleteURLWithContextPath() {
-        return getCompleteURL(true);
-    }
-
-    public String getCompleteURL(boolean returnWithContextPath) {
-        String requestUri = httpRequest.getRequestURI();
-        if (!returnWithContextPath && requestUri != null) {
-            String contextPath = httpRequest.getContextPath();
-            if (contextPath != null) {
-                requestUri = requestUri.replaceAll(contextPath, ""); // hack for duplicate context on request
-                log.info("updatedRequestUri -> " + requestUri);
-            }
+    public static String getPathToForwarded(VistaApplication app) {
+        // TODO what if ApplicationType = noApp?
+        if (app != VistaApplication.prospect) {
+            return "/" + app.name();
+        } else {
+            return "";
         }
-
-        return getServerURL() + requestUri + (httpRequest.getQueryString() != null ? "?" + httpRequest.getQueryString() : "");
-    }
-
-    public String getHttpsUrl() {
-        return new StringBuffer(getCompleteURLNoContextPath()).replace(0, 4, "https").toString();
     }
 
 }

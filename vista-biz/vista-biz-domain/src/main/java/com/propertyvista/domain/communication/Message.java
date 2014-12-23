@@ -8,7 +8,7 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Mar 19, 2014
- * @author smolka
+ * @author igors
  */
 package com.propertyvista.domain.communication;
 
@@ -60,6 +60,8 @@ public interface Message extends IEntity {
     IPrimitive<Date> date();
 
     IPrimitive<Boolean> highImportance();
+
+    IPrimitive<Boolean> isSystem();
 
     @Owned
     @Detached

@@ -277,7 +277,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         }
 
         // initialize required docs for new screening version
-        if (screening.version().getPrimaryKey() == null) {
+        if (screening.getPrimaryKey() == null && policyNode != null) {
             initializeRequiredDocuments(screening, policyNode);
             initializeLegalQuestions(screening, policyNode);
         }

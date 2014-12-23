@@ -4,7 +4,7 @@ rem helper to run maven3
 rem
 
 for /f "tokens=*" %%I in ('CD') do @set CurDir=%%~nI
-title *%CurDir% - mvn with pyx and svn update
+title *%CurDir% - mvn with pyx and GIT pull
 
 call mvn --file ..\pyx4j\pom.xml clean --fail-never
 @if errorlevel 1 goto errormark

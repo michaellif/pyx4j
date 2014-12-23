@@ -61,7 +61,7 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
             @Override
             public void setVisible(boolean visible) {
                 if (visible != get(proto().applicantData().previousAddress()).isVisible()) {
-                    get(proto().applicantData().previousAddress()).reset();
+                    get(proto().applicantData().previousAddress()).clear();
                 }
                 get(proto().applicantData().previousAddress()).setVisible(visible);
                 super.setVisible(visible);

@@ -23,6 +23,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.domain.tenant.EmergencyContact;
+import com.propertyvista.misc.VistaTODO;
 
 public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
 
@@ -32,7 +33,7 @@ public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
 
     private boolean isMandatory = false;
 
-    private int contactsAmount = 1;
+    private int contactsNumber = 1;
 
     public EmergencyContactFolder() {
         this(false);
@@ -43,9 +44,9 @@ public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
         this.collapsed = collapsed;
     }
 
-    public void setRestrictions(boolean isMandatory, int contactsAmount) {
+    public void setRestrictions(boolean isMandatory, int contactsNumber) {
         this.isMandatory = isMandatory;
-        this.contactsAmount = contactsAmount;
+        this.contactsNumber = contactsNumber;
     }
 
     @Override
@@ -64,20 +65,22 @@ public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
     public void addValidations() {
         super.addValidations();
 
-        this.addComponentValidator(new AbstractComponentValidator<IList<EmergencyContact>>() {
-            @Override
-            public BasicValidationError isValid() {
-                if (getValue() == null) {
-                    return null;
-                }
+        if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
+            this.addComponentValidator(new AbstractComponentValidator<IList<EmergencyContact>>() {
+                @Override
+                public BasicValidationError isValid() {
+                    if (getValue() == null) {
+                        return null;
+                    }
 
-                if (isMandatory && getValue().size() < contactsAmount) {
-                    return new BasicValidationError(getCComponent(), i18n.tr("At least {0} Emergency Contact(s) should be specified", contactsAmount));
-                }
+                    if (isMandatory && getValue().size() < contactsNumber) {
+                        return new BasicValidationError(getCComponent(), i18n.tr("At least {0} Emergency Contact(s) should be specified", contactsNumber));
+                    }
 
-                return !EntityGraph.hasBusinessDuplicates(getValue()) ? null : new BasicValidationError(getCComponent(), i18n
-                        .tr("Duplicate Emergency Contacts specified"));
-            }
-        });
+                    return !EntityGraph.hasBusinessDuplicates(getValue()) ? null : new BasicValidationError(getCComponent(), i18n
+                            .tr("Duplicate Emergency Contacts specified"));
+                }
+            });
+        }
     }
 }

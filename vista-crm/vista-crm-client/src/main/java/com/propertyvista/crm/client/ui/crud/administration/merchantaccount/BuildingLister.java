@@ -67,7 +67,7 @@ public class BuildingLister extends SiteDataTablePanel<Building> {
                 new ColumnDescriptor.Builder(proto().financial().lastAppraisalDate(), false).build(), //
                 new ColumnDescriptor.Builder(proto().financial().lastAppraisalValue(), false).build(), //
                 new ColumnDescriptor.Builder(proto().financial().currency(), false).build(), //
-                new ColumnDescriptor.Builder(proto().marketing().name(), false).title(i18n.tr("Marketing Name")).build());
+                new ColumnDescriptor.Builder(proto().marketing().name(), false).columnTitle(i18n.tr("Marketing Name")).build());
 
         setDataTableModel(new DataTableModel<Building>());
     }

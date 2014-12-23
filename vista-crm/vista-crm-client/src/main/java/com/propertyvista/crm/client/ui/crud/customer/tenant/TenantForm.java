@@ -43,6 +43,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.dto.PreauthorizedPaymentDTO;
 import com.propertyvista.dto.TenantDTO;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class TenantForm extends LeaseParticipantForm<TenantDTO> {
@@ -98,8 +99,10 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
         updateTenantInsuranceTabControls();
 
-// TODO: currently we do not want to validate tenant data in CRM:
-//        emergencyContactFolder.setRestrictions(getValue().emergencyContactsIsMandatory().isBooleanTrue(), getValue().emergencyContactsAmount().getValue());
+        if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
+            emergencyContactFolder.setRestrictions(getValue().emergencyContactsIsMandatory().getValue(false), getValue().emergencyContactsNumberRequired()
+                    .getValue(1));
+        }
     }
 
     @Override
@@ -115,17 +118,19 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
     public void addValidations() {
         super.addValidations();
 
-        get(proto().customer().emergencyContacts()).addComponentValidator(new AbstractComponentValidator<List<EmergencyContact>>() {
-            @Override
-            public BasicValidationError isValid() {
-                if (getCComponent().getValue() == null || getValue() == null) {
-                    return null;
-                }
+        if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
+            get(proto().customer().emergencyContacts()).addComponentValidator(new AbstractComponentValidator<List<EmergencyContact>>() {
+                @Override
+                public BasicValidationError isValid() {
+                    if (getCComponent().getValue() == null || getValue() == null) {
+                        return null;
+                    }
 
-                return !EntityGraph.hasBusinessDuplicates(getValue().customer().emergencyContacts()) ? null : new BasicValidationError(getCComponent(), i18n
-                        .tr("Duplicate Emergency Contacts specified"));
-            }
-        });
+                    return !EntityGraph.hasBusinessDuplicates(getValue().customer().emergencyContacts()) ? null : new BasicValidationError(getCComponent(),
+                            i18n.tr("Duplicate Emergency Contacts specified"));
+                }
+            });
+        }
     }
 
     private IsWidget createContactsTab() {

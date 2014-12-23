@@ -10,7 +10,7 @@
  * Created on Oct 14, 2014
  * @author ernestog
  */
-package com.propertyvista.server.config;
+package com.propertyvista.server.config.filter;
 
 import java.io.IOException;
 

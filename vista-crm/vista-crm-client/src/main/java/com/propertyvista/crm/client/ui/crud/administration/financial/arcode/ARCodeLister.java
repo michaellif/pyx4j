@@ -43,7 +43,7 @@ public class ARCodeLister extends SiteDataTablePanel<ARCode> {
         //@formatter:off
             new ColumnDescriptor.Builder(proto().name()).build(),
             new ColumnDescriptor.Builder(proto().type()).build(),
-            new ColumnDescriptor.Builder(proto().type()).searchable(false).sortable(false).title(i18n.tr("Debit/Credit")).formatter(new IFormatter<IEntity, SafeHtml>() {
+            new ColumnDescriptor.Builder(proto().type()).searchable(false).sortable(false).columnTitle(i18n.tr("Debit/Credit")).formatter(new IFormatter<IEntity, SafeHtml>() {
                 @Override
                 public SafeHtml format(IEntity value) {
                     SafeHtmlBuilder builder = new SafeHtmlBuilder();

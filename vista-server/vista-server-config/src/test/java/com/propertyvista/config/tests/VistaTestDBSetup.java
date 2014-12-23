@@ -76,7 +76,7 @@ public class VistaTestDBSetup {
             Mail.getMailService().setDisabled(true);
             initOperationsNamespace();
         }
-        NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
+        NamespaceManager.setNamespace(VistaTestsNamespaceDataResolver.demoNamespace);
     }
 
     /**
@@ -128,7 +128,7 @@ public class VistaTestDBSetup {
         case PostgreSQL:
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
             RDBUtils.ensureNamespace();
-            NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
+            NamespaceManager.setNamespace(VistaTestsNamespaceDataResolver.demoNamespace);
             RDBUtils.ensureNamespace();
             break;
         default:

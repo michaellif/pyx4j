@@ -8,7 +8,7 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Jan 31, 2014
- * @author smolka
+ * @author igors
  */
 package com.propertyvista.crm.server.services;
 
@@ -27,7 +27,9 @@ import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
@@ -52,6 +54,7 @@ import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.communication.ThreadPolicyHandle;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.dto.MessageDTO;
+import com.propertyvista.dto.MessageDTO.ViewScope;
 
 public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, MessageDTO> implements MessageCrudService {
     public MessageCrudServiceImpl() {
@@ -71,6 +74,9 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         }
         if (path.equals(toProto.category().categoryType().getPath().toString())) {
             return boProto.thread().category().categoryType().getPath();
+        }
+        if (path.equals(toProto.category().dispatchers().$().user().getPath().toString())) {
+            return boProto.thread().category().dispatchers().$().user().getPath();
         }
         if (path.equals(toProto.content().$().recipients().$().isRead().getPath().toString()) || path.equals(toProto.isRead().getPath().toString())) {
             return boProto.recipients().$().isRead().getPath();
@@ -106,6 +112,20 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         if (recipientCiteria != null) {
             toCriteria.getFilters().remove(recipientCiteria);
             boCriteria.eq(boCriteria.proto().recipients().$().recipient(), CrmAppContext.getCurrentUserEmployee());
+        }
+
+        PropertyCriterion ownerCiteria = toCriteria.getCriterion(toCriteria.proto().viewScope());
+        if (ownerCiteria != null && ownerCiteria.getValue() != null) {
+            ViewScope critValue = (ViewScope) ownerCiteria.getValue();
+            Restriction restr = ownerCiteria.getRestriction();
+            toCriteria.getFilters().remove(ownerCiteria);
+            if (ViewScope.Dispatched.equals(critValue)) {
+                boCriteria.eq(boCriteria.proto().thread().owner(),
+                        ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned));
+            } else {
+                boCriteria.add(new OrCriterion(PropertyCriterion.eq(boCriteria.proto().thread().category().categoryType(), CategoryType.Message),
+                        PropertyCriterion.eq(boCriteria.proto().thread().owner(), CrmAppContext.getCurrentUserEmployee())));
+            }
         }
 
         super.enhanceListCriteria(boCriteria, toCriteria);

@@ -21,6 +21,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 
 import com.propertyvista.biz.policy.PolicyFacade;
@@ -94,6 +95,17 @@ public class LeaseParticipantUtils {
         persistScreening(screening);
     }
 
+    public static void persistScreeningAsNewVersionLazily(CustomerScreening screening) {
+        if (screening.getPrimaryKey() != null) {
+            CustomerScreening current = Persistence.retrieveDraftForEdit(CustomerScreening.class, screening.getPrimaryKey());
+            if (!EntityGraph.fullyEqualValues(screening, current)) {
+                persistScreeningAsNewVersion(screening);
+            }
+        } else {
+            persistScreeningAsNewVersion(screening);
+        }
+    }
+
     private static void persistScreening(CustomerScreening screening) {
 
         for (IdentificationDocument item : screening.version().documents()) {
@@ -121,8 +133,8 @@ public class LeaseParticipantUtils {
     }
 
     private static void loadRestrictions(LeaseParticipantScreeningTO to, LeaseParticipant<?> participant) {
-        PolicyNode policyNode = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(participant.lease());
-        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, RestrictionsPolicy.class);
+        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainHierarchicalEffectivePolicy(participant,
+                RestrictionsPolicy.class);
 
         to.yearsToForcingPreviousAddress().setValue(restrictionsPolicy.yearsToForcingPreviousAddress().getValue());
     }

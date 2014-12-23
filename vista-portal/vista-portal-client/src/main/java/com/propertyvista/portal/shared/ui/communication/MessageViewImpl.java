@@ -9,7 +9,6 @@
  *
  * Created on Apr 24, 2012
  * @author ArtyomB
- * @version $Id: MessageViewImpl.java 21572 2014-12-13 16:48:45Z michaellif $
  */
 package com.propertyvista.portal.shared.ui.communication;
 
@@ -105,15 +104,15 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
             getDataTable().setHasColumnClickSorting(false);
             MessageDTO proto = EntityFactory.getEntityPrototype(MessageDTO.class);
             setColumnDescriptors( //
-                    new ColumnDescriptor.Builder(proto.highImportance()).searchable(false).width("25px").formatter(//
+                    new ColumnDescriptor.Builder(proto.highImportance()).searchable(false).width("30px").formatter(//
                             booleanField2Image(proto.highImportance().getPath(), PortalImages.INSTANCE.messageImportance(), null))//
-                            .columnTitle(i18n.tr("Importance")).build(),//
-                    new ColumnDescriptor.Builder(proto.star()).searchable(false).width("25px").formatter(//
+                            .columnTitleShown(false).build(),//
+                    new ColumnDescriptor.Builder(proto.star()).searchable(false).width("30px").formatter(//
                             booleanField2Image(proto.star().getPath(), PortalImages.INSTANCE.fullStar(), PortalImages.INSTANCE.noStar()))//
-                            .columnTitle(i18n.tr("Star")).build(),//
-                    new ColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("25px").formatter(//
+                            .columnTitleShown(false).build(),//
+                    new ColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("30px").formatter(//
                             booleanField2Image(proto.hasAttachments().getPath(), PortalImages.INSTANCE.attachement(), null))//
-                            .columnTitle(i18n.tr("Attachment")).build(), //
+                            .columnTitleShown(false).build(), //
                     new ColumnDescriptor.Builder(proto.senders()).width("200px").formatter(baseFieldViewOnIsRead(proto.senders().getPath())).build(),//
                     new ColumnDescriptor.Builder(proto.subject()).width("100px").formatter(baseFieldViewOnIsRead(proto.subject().getPath())).build(),//
                     new ColumnDescriptor.Builder(proto().date()).width("100px").build(), //

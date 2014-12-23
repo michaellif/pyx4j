@@ -301,14 +301,6 @@ public class BillableItemEditor extends CForm<BillableItem> {
         super.onValuePropagation(value, fireEvent, populate);
     }
 
-    @Override
-    protected BillableItem preprocessValue(BillableItem value, boolean fireEvent, boolean populate) {
-        if (!isValueEmpty()) {
-            return super.preprocessValue(value, fireEvent, populate);
-        }
-        return value;
-    }
-
     @SuppressWarnings("unchecked")
     private void setExtraDataEditor(BillableItem value, boolean populate) {
 

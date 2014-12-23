@@ -50,7 +50,7 @@ public class AutoPayHistoryLister extends SiteDataTablePanel<AutoPayHistoryDTO> 
                 new ColumnDescriptor.Builder(proto().tenant().lease().unit().building().propertyCode()).searchableOnly().build(), //
 
                 new ColumnDescriptor.Builder(proto().paymentMethod()).searchable(false).build(), //
-                new ColumnDescriptor.Builder(proto().paymentMethod().type()).title(i18n.tr("Payment Method Type")).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().paymentMethod().type()).columnTitle(i18n.tr("Payment Method Type")).visible(false).build(), //
 
                 new ColumnDescriptor.Builder(proto().comments()).build(), //
 

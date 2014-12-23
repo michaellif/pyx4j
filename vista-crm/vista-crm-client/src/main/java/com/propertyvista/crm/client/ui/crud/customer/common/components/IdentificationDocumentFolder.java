@@ -152,6 +152,8 @@ public class IdentificationDocumentFolder extends VistaBoxFolder<IdentificationD
 
     private class IdentificationDocumentEditor extends CForm<IdentificationDocument> {
 
+        private final IdentificationDocumentFileFolder docPagesFolder = new IdentificationDocumentFileFolder();
+
         public IdentificationDocumentEditor() {
             super(IdentificationDocument.class);
         }
@@ -164,22 +166,12 @@ public class IdentificationDocumentFolder extends VistaBoxFolder<IdentificationD
             formPanel.append(Location.Dual, proto().idNumber()).decorate();
             formPanel.append(Location.Dual, proto().notes()).decorate();
 
-            IdentificationDocumentFileFolder docPagesFolder = new IdentificationDocumentFileFolder();
-            if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
-                docPagesFolder.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFile>>() {
-                    @Override
-                    public BasicValidationError isValid() {
-                        if (getCComponent().getValue() != null && getCComponent().getValue().size() < 1) {
-                            return new BasicValidationError(getCComponent(), i18n.tr("At least one document file is required"));
-                        } else {
-                            return null;
-                        }
-                    }
-                });
-            }
-
             formPanel.h3(i18n.tr("Proof Documents"));
             formPanel.append(Location.Dual, proto().files(), docPagesFolder);
+
+            if (VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
+                get(proto().idNumber()).setMandatory(false);
+            }
             return formPanel;
         }
 
@@ -195,6 +187,19 @@ public class IdentificationDocumentFolder extends VistaBoxFolder<IdentificationD
         @Override
         public void addValidations() {
             super.addValidations();
+
+            if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
+                docPagesFolder.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFile>>() {
+                    @Override
+                    public BasicValidationError isValid() {
+                        if (getCComponent().getValue() != null && getCComponent().getValue().size() < 1) {
+                            return new BasicValidationError(getCComponent(), i18n.tr("At least one document file is required"));
+                        } else {
+                            return null;
+                        }
+                    }
+                });
+            }
 
             get(proto().idNumber()).addComponentValidator(new AbstractComponentValidator<String>() {
                 @Override

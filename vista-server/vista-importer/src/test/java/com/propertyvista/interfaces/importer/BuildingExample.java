@@ -32,7 +32,7 @@ import com.pyx4j.entity.xml.XMLStringWriter;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.config.tests.VistaTestsNamespaceResolver;
+import com.propertyvista.config.tests.VistaTestsNamespaceDataResolver;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.interfaces.importer.converter.MediaConfig;
@@ -48,7 +48,7 @@ public class BuildingExample {
         long start = System.currentTimeMillis();
 
         ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(DatabaseType.MySQL));
-        NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
+        NamespaceManager.setNamespace(VistaTestsNamespaceDataResolver.demoNamespace);
 
         MediaConfig mediaConfig = new MediaConfig();
         mediaConfig.baseFolder = "data/export/images/";

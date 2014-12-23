@@ -99,8 +99,6 @@ public class NavigViewImpl extends Composite implements NavigView {
 
     private final SideMenuItem userMenuItem;
 
-    private final SideMenuItem adminMenuItem;
-
     private SideMenuList languagesMenuList;
 
     private SideMenuAppPlaceItem systemDashboard;
@@ -108,6 +106,8 @@ public class NavigViewImpl extends Composite implements NavigView {
     private SideMenuList customDashboards;
 
     private SideMenuList communicationGroups;
+
+    private SideMenuAppPlaceItem dispatchedQueue;
 
     private SideMenuList reports;
 
@@ -133,7 +133,7 @@ public class NavigViewImpl extends Composite implements NavigView {
             sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Account.UserProfile()));
             sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Account.AccountPreferences()));
 
-            sideMenuList.addMenuItem(adminMenuItem = new SideMenuItem(new SideMenuCommand() {
+            sideMenuList.addMenuItem(new SideMenuItem(new SideMenuCommand() {
 
                 @Override
                 public boolean execute() {
@@ -269,6 +269,8 @@ public class NavigViewImpl extends Composite implements NavigView {
             root.addMenuItem(new SideMenuFolderItem(sideMenuList, i18n.tr("Message Center"), CrmImages.INSTANCE.messageCenterIcon()));
 
             sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(), DataModelPermission.permissionRead(MessageDTO.class)));
+            sideMenuList.addMenuItem(dispatchedQueue = new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(ClientContext.getUserVisit()), i18n
+                    .tr("Dispatch Queue"), null, DataModelPermission.permissionRead(MessageDTO.class)));
             communicationGroups = new SideMenuList();
             sideMenuList.addMenuItem(new SideMenuFolderItem(communicationGroups, i18n.tr("Groups"), null, null, DataModelPermission
                     .permissionRead(MessageCategory.class)));
@@ -330,6 +332,7 @@ public class NavigViewImpl extends Composite implements NavigView {
     @Override
     public void updateCommunicationGroups(Vector<MessageCategory> metadataList) {
 
+        dispatchedQueue.setVisible(false);
         communicationGroups.clear();
         Collections.sort(metadataList, ORDER_CATEGORY_BY_NAME);
         for (MessageCategory metadata : metadataList) {
@@ -339,6 +342,7 @@ public class NavigViewImpl extends Composite implements NavigView {
             if (metadata.dispatchers() != null) {
                 for (Employee emp : metadata.dispatchers()) {
                     if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(emp.user().getPrimaryKey())) {
+                        dispatchedQueue.setVisible(true);
                         place = new CrmSiteMap.Communication.Message(metadata).formListerPlace();
                         communicationGroups.addMenuItem(new SideMenuAppPlaceItem(place, metadata.category().getStringView(), null));
                         added = true;

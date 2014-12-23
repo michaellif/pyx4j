@@ -54,9 +54,9 @@
     </distributionManagement>
 
     <scm>
-        <url>https://svn.birchwoodsoftwaregroup.com/svn/VISTA/trunk</url>
-        <connection>scm:svn:https://svn.birchwoodsoftwaregroup.com/svn/VISTA/trunk</connection>
-        <developerConnection>scm:svn:https://svn.birchwoodsoftwaregroup.com/svn/VISTA/trunk</developerConnection>
+        <url>https://stash.devpv.com/projects/VISTA/repos/vista/browse</url>
+        <connection>scm:git:ssh://git@stash-ssh.devpv.com:7999/vista/vista.git</connection>
+        <developerConnection>scm:git:ssh://git@stash-ssh.devpv.com:7999/vista/vista.git</developerConnection>
     </scm>
 
     <developers>

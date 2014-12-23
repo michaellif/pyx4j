@@ -58,10 +58,10 @@ public class LeaseApplicationLister extends SiteDataTablePanel<LeaseApplicationD
 
                 new Builder(proto().leaseParticipants().$().customer().customerId(), false).searchableOnly().build(),
 
-                new Builder(proto().numberOfOccupants(), false).sortable(false).searchable(false).title(i18n.tr("Occupants")).build(), new Builder(proto()
-                        .numberOfApplicants(), true).sortable(false).searchable(false).title(i18n.tr("Applicants")).build(), new Builder(proto()
-                        .numberOfDepentands(), true).sortable(false).searchable(false).title(i18n.tr("Dependents")).build(), new Builder(proto()
-                        .numberOfGuarantors(), true).sortable(false).searchable(false).title(i18n.tr("Guarantors")).build(),
+                new Builder(proto().numberOfOccupants(), false).sortable(false).searchable(false).columnTitle(i18n.tr("Occupants")).build(), new Builder(
+                        proto().numberOfApplicants(), true).sortable(false).searchable(false).columnTitle(i18n.tr("Applicants")).build(), new Builder(proto()
+                        .numberOfDepentands(), true).sortable(false).searchable(false).columnTitle(i18n.tr("Dependents")).build(), new Builder(proto()
+                        .numberOfGuarantors(), true).sortable(false).searchable(false).columnTitle(i18n.tr("Guarantors")).build(),
 
                 //TODO make this work
                 //new Builder(proto().currentTerm().version().tenants().$().leaseParticipant().customer().person().name().firstName(), false).build(),

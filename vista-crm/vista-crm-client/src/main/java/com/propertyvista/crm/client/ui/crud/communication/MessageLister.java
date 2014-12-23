@@ -8,11 +8,11 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Dec 20, 2011
- * @author stanp
- * @version $Id: MessageLister.java 21572 2014-12-13 16:48:45Z michaellif $
+ * @author igors
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -39,6 +39,7 @@ import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Button;
@@ -52,6 +53,7 @@ import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.communication.MessageCategory.TicketType;
 import com.propertyvista.domain.communication.SpecialDelivery.DeliveryMethod;
 import com.propertyvista.dto.MessageDTO;
+import com.propertyvista.dto.MessageDTO.ViewScope;
 
 public class MessageLister extends SiteDataTablePanel<MessageDTO> {
     private static final I18n i18n = I18n.get(MessageLister.class);
@@ -127,96 +129,43 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
         newButton.setPermission(DataModelPermission.permissionCreate(MessageDTO.class));
     }
 
-    public static ColumnDescriptor[] createColumnDescriptors(CategoryType category) {
+    public static List<ColumnDescriptor> createColumnDescriptors(CategoryType category) {
         final MessageDTO proto = EntityFactory.getEntityPrototype(MessageDTO.class);
 
+        //@formatter:off
+        List<ColumnDescriptor> columns = new ArrayList<>();
+        columns.add( new ColumnDescriptor.Builder(proto.star()).searchable(false).width("30px").formatter(
+                booleanField2Image(proto.star().getPath(),CrmImages.INSTANCE.fullStar(), CrmImages.INSTANCE.noStar()))
+                .columnTitleShown(false).build());
+
+        columns.add(new ColumnDescriptor.Builder(proto.highImportance()).searchable(false).width("30px").formatter(
+                booleanField2Image( proto.highImportance().getPath(),CrmImages.INSTANCE.messageImportant(), null))
+                .columnTitleShown(false).build());
+        columns.add(new ColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("30px").formatter(
+                booleanField2Image( proto.hasAttachments().getPath(),CrmImages.INSTANCE.attachement(), null))
+                .columnTitleShown(false).build());
+        columns.add(new ColumnDescriptor.Builder(proto.senderDTO().name()).columnTitle(i18n.tr("Sender")).searchable(false).width("200px").formatter(baseFieldViewOnIsRead(proto.senderDTO().name().getPath())).build());
+        columns.add(new ColumnDescriptor.Builder(proto.subject()).searchable(false).width("1000px").formatter(baseFieldViewOnIsRead(proto.subject().getPath())).build());
+        columns.add(new ColumnDescriptor.Builder(proto.date()).searchable(false).width("200px").build());
+
+        if (category != CategoryType.Ticket) {
+            columns.add(new ColumnDescriptor.Builder(proto.deliveryMethod()).searchable(true).width("300px").build());
+        }
+
+        columns.add(new ColumnDescriptor.Builder(proto.category(), false).searchable(false).width("300px").build());
+        columns.add(new ColumnDescriptor.Builder(proto.category().categoryType(), false).searchableOnly().columnTitle(i18n.tr("Category")).build());
+        columns.add(new ColumnDescriptor.Builder(proto.allowedReply()).searchable(false).width("100px").build());
+
+        if (category != CategoryType.Message) {
+            columns.add(new ColumnDescriptor.Builder(proto.thread().owner()).searchable(false).width("200px").build());
+            columns.add(new ColumnDescriptor.Builder(proto.ownerForList(), false).columnTitle(i18n.tr("Owner")).searchableOnly().build());
+            columns.add(new ColumnDescriptor.Builder(proto.status()).searchable(true).width("100px").build());
+        }
         if (category == null) {
-            return new ColumnDescriptor[] {//@formatter:off
-                    new ColumnDescriptor.Builder(proto.star()).searchable(false).width("25px").formatter(
-                            booleanField2Image(proto.star().getPath(),CrmImages.INSTANCE.fullStar(), CrmImages.INSTANCE.noStar()))
-                            .columnTitle("").build(),
-                    new ColumnDescriptor.Builder(proto.highImportance()).searchable(false).width("25px").formatter(
-                            booleanField2Image( proto.highImportance().getPath(),CrmImages.INSTANCE.messageImportant(), null))
-                            .columnTitle("").build(),
-                    new ColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("25px").formatter(
-                            booleanField2Image( proto.hasAttachments().getPath(),CrmImages.INSTANCE.attachement(), null))
-                            .columnTitle("").build(),
-                    new ColumnDescriptor.Builder(proto.senderDTO().name()).columnTitle(i18n.tr("Sender")).searchable(false).width("200px").formatter(baseFieldViewOnIsRead(proto.senderDTO().name().getPath())).build(),
-                    new ColumnDescriptor.Builder(proto.subject()).searchable(false).width("1000px").formatter(baseFieldViewOnIsRead(proto.subject().getPath())).build(),
-                    new ColumnDescriptor.Builder(proto.date()).searchable(false).width("200px").build(),
-                    new ColumnDescriptor.Builder(proto.deliveryMethod()).searchable(true).width("300px").build(),
-                    new ColumnDescriptor.Builder(proto.category(), false).searchable(false).width("300px").build(),
-                    new ColumnDescriptor.Builder(proto.category().categoryType(), false).searchableOnly().columnTitle(i18n.tr("Category")).build(),
-                    new ColumnDescriptor.Builder(proto.allowedReply()).searchable(false).width("100px").build(),
-                    new ColumnDescriptor.Builder(proto.thread().owner()).searchable(false).width("200px").build(),
-                    new ColumnDescriptor.Builder(proto.ownerForList(), false).columnTitle(i18n.tr("Owner")).searchableOnly().build(),
-                    new ColumnDescriptor.Builder(proto.status()).searchable(true).width("100px").build(),
-                    new ColumnDescriptor.Builder(proto.hidden(), false).searchableOnly().columnTitle(i18n.tr("Hidden")).build()};
+            columns.add(new ColumnDescriptor.Builder(proto.hidden(), false).searchableOnly().columnTitle(i18n.tr("Hidden")).build());
         }
-        else {
-        switch (category) {
-        case Ticket:
-            return new ColumnDescriptor[] {//@formatter:off
-                new ColumnDescriptor.Builder(proto.star()).searchable(false).width("25px").formatter(
-                        booleanField2Image( proto.star().getPath(),CrmImages.INSTANCE.fullStar(), CrmImages.INSTANCE.noStar()))
-                        .columnTitle("").build(),
-                new ColumnDescriptor.Builder(proto.highImportance()).searchable(false).width("25px").formatter(
-                        booleanField2Image( proto.highImportance().getPath(),CrmImages.INSTANCE.messageImportant(), null))
-                        .columnTitle("").build(),
-                new ColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("25px").formatter(
-                        booleanField2Image( proto.hasAttachments().getPath(),CrmImages.INSTANCE.attachement(), null))
-                        .columnTitle("").build(),
-                new ColumnDescriptor.Builder(proto.senderDTO().name()).columnTitle(i18n.tr("Sender")).searchable(false).width("200px").formatter(baseFieldViewOnIsRead(proto.senderDTO().name().getPath())).build(),
-                new ColumnDescriptor.Builder(proto.subject()).searchable(false).width("1000px").formatter(baseFieldViewOnIsRead(proto.subject().getPath())).build(),
-                new ColumnDescriptor.Builder(proto.date()).searchable(false).width("200px").build(),
-                new ColumnDescriptor.Builder(proto.category(), false).searchable(false).width("300px").build(),
-                new ColumnDescriptor.Builder(proto.category().categoryType(), false).searchableOnly().columnTitle(i18n.tr("Category")).build(),
-                new ColumnDescriptor.Builder(proto.allowedReply()).searchable(false).width("100px").build(),
-                new ColumnDescriptor.Builder(proto.thread().owner()).searchable(false).width("200px").build(),
-                new ColumnDescriptor.Builder(proto.ownerForList(), false).columnTitle(i18n.tr("Owner")).searchableOnly().build(),
-                new ColumnDescriptor.Builder(proto.status()).searchable(true).width("100px").build() };
-        case Message:
-            return new ColumnDescriptor[] {//@formatter:off
-                new ColumnDescriptor.Builder(proto.star()).searchable(false).width("25px").formatter(
-                        booleanField2Image( proto.star().getPath(),CrmImages.INSTANCE.fullStar(), CrmImages.INSTANCE.noStar()))
-                        .columnTitle("").build(),
-                new ColumnDescriptor.Builder(proto.highImportance()).searchable(false).width("25px").formatter(
-                        booleanField2Image( proto.highImportance().getPath(),CrmImages.INSTANCE.messageImportant(), null))
-                        .columnTitle("").build(),
-                new ColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("25px").formatter(
-                        booleanField2Image( proto.hasAttachments().getPath(),CrmImages.INSTANCE.attachement(), null))
-                        .columnTitle("").build(),
-                new ColumnDescriptor.Builder(proto.senderDTO().name()).columnTitle(i18n.tr("Sender")).searchable(false).width("200px").formatter(baseFieldViewOnIsRead(proto.senderDTO().name().getPath())).build(),
-                new ColumnDescriptor.Builder(proto.subject()).searchable(false).width("1000px").formatter(baseFieldViewOnIsRead(proto.subject().getPath())).build(),
-                new ColumnDescriptor.Builder(proto.date()).searchable(false).width("200px").build(),
-                 new ColumnDescriptor.Builder(proto.deliveryMethod()).searchable(true).width("300px").build(),
-                new ColumnDescriptor.Builder(proto.category(), false).searchable(false).width("300px").build(),
-                new ColumnDescriptor.Builder(proto.category().categoryType(), false).searchableOnly().columnTitle(i18n.tr("Category")).build(),
-                new ColumnDescriptor.Builder(proto.allowedReply()).searchable(false).width("100px").build() };
-     //@formatter:on
-            default:
-                return new ColumnDescriptor[] {//@formatter:off
-                    new ColumnDescriptor.Builder(proto.star()).searchable(false).width("25px").formatter(
-                            booleanField2Image( proto.star().getPath(),CrmImages.INSTANCE.fullStar(), CrmImages.INSTANCE.noStar()))
-                            .columnTitle("").build(),
-                    new ColumnDescriptor.Builder(proto.highImportance()).searchable(false).width("25px").formatter(
-                            booleanField2Image( proto.highImportance().getPath(),CrmImages.INSTANCE.messageImportant(), null))
-                            .columnTitle("").build(),
-                    new ColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("25px").formatter(
-                            booleanField2Image( proto.hasAttachments().getPath(),CrmImages.INSTANCE.attachement(), null))
-                            .columnTitle("").build(),
-                    new ColumnDescriptor.Builder(proto.senderDTO().name()).columnTitle(i18n.tr("Sender")).searchable(false).width("200px").formatter(baseFieldViewOnIsRead(proto.senderDTO().name().getPath())).build(),
-                    new ColumnDescriptor.Builder(proto.subject()).searchable(false).width("1000px").formatter(baseFieldViewOnIsRead(proto.subject().getPath())).build(),
-                    new ColumnDescriptor.Builder(proto.date()).searchable(false).width("200px").build(),
-                    new ColumnDescriptor.Builder(proto.deliveryMethod()).searchable(true).width("300px").build(),
-                    new ColumnDescriptor.Builder(proto.category(), false).searchable(false).width("300px").build(),
-                    new ColumnDescriptor.Builder(proto.category().categoryType(), false).searchableOnly().columnTitle(i18n.tr("Category")).build(),
-                    new ColumnDescriptor.Builder(proto.allowedReply()).searchable(false).width("100px").build(),
-                    new ColumnDescriptor.Builder(proto.thread().owner()).searchable(false).width("200px").build(),
-                    new ColumnDescriptor.Builder(proto.ownerForList(), false).columnTitle(i18n.tr("Owner")).searchableOnly().build(),
-                    new ColumnDescriptor.Builder(proto.status()).searchable(true).width("100px").build() };
-            }//@formatter:on
-        }
+
+        return columns;
     }
 
     @Override
@@ -232,6 +181,9 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
             newIVR.setVisible(true);
             newSMS.setVisible(true);
             newNotification.setVisible(true);
+
+            criteria.eq(criteria.proto().viewScope(), ViewScope.Direct);
+
         } else {
             if (placeCriteria instanceof CategoryType) {
                 criteria.eq(criteria.proto().category().categoryType(), category = (CategoryType) placeCriteria);
@@ -243,10 +195,15 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
                     category = mc.categoryType().getValue();
                 }
                 criteria.eq(criteria.proto().category(), mc);
+            } else if (placeCriteria instanceof UserVisit) {
+                criteria.eq(criteria.proto().category().categoryType(), category = CategoryType.Ticket);
+                criteria.eq(criteria.proto().category().dispatchers().$().user(), ((UserVisit) placeCriteria).getPrincipalPrimaryKey());
+                criteria.eq(criteria.proto().viewScope(), ViewScope.Dispatched);
+                setColumnDescriptors(createColumnDescriptors(category));
             }
 
             if (category != null) {
-                setAddNewActionEnabled(CategoryType.Message != category);
+                setAddNewActionEnabled(CategoryType.Message != category && !(placeCriteria instanceof UserVisit));
                 newButton.setVisible(CategoryType.Message == category);
                 newMessage.setVisible(CategoryType.Message == category);
                 newTicket.setVisible(false);

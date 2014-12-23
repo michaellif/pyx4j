@@ -16,10 +16,13 @@ import java.io.File;
 import java.util.Collections;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.config.server.EmptyNamespaceDataResolver;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.NamespaceResolver;
@@ -63,8 +66,8 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
-    public NamespaceResolver getNamespaceResolver() {
-        return new VistaTestsNamespaceResolver();
+    public NamespaceResolver getNamespaceResolver(HttpServletRequest httpRequest) {
+        return new EmptyNamespaceDataResolver();
     }
 
     @Override

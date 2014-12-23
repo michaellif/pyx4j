@@ -23,9 +23,9 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.images.FolderImages;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor.Builder;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.SecurityController;
@@ -50,26 +50,26 @@ public class LeaseLister extends SiteDataTablePanel<LeaseDTO> {
 
         List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>(Arrays.asList(
         //@formatter:off
-            new Builder(proto().leaseId()).columnTitle(i18n.tr("Id")).build(),
+            new Builder(proto().leaseId()).columnTitle(i18n.tr("Id")).width("80px").build(),
             new Builder(proto().type()).build(),
 
             new Builder(proto().unit().building().propertyCode()).build(),
             new Builder(proto().unit().building().info().name(), false).columnTitle(i18n.tr("Building Name")).build(),
             new Builder(proto().unit().building().info().address(), false).columnTitle(i18n.tr("Building Address")).searchable(false).build(),
-            new Builder(proto().unit().building().info().address().streetNumber(), false).columnTitle(i18n.tr("Building Street Number")).build(),
+            new Builder(proto().unit().building().info().address().streetNumber(), false).columnTitle(i18n.tr("Building Street Number")).width("80px").build(),
             new Builder(proto().unit().building().info().address().streetName(), false).columnTitle(i18n.tr("Building Street Name")).build(),
 
             new Builder(proto().unit()).searchable(false).build(),
-            new Builder(proto().unit().info().number()).columnTitle(proto().unit().getMeta().getCaption()).searchableOnly().build(),
+            new Builder(proto().unit().info().number()).columnTitle(proto().unit().getMeta().getCaption()).searchableOnly().width("80px").build(),
 
             new Builder(proto()._applicant().customer().person().name()).columnTitle(i18n.tr("Primary Tenant Name")).searchable(false).build(),
             new Builder(proto()._applicant().customer().person().name().firstName(), false).columnTitle(i18n.tr("Primary Tenant First Name")).build(),
             new Builder(proto()._applicant().customer().person().name().lastName(), false).columnTitle(i18n.tr("Primary Tenant Last Name")).build(),
-            new Builder(proto()._applicant().customer().registeredInPortal(), false).build(),
+            new Builder(proto()._applicant().customer().registeredInPortal(), false).width("80px").build(),
 
             new Builder(proto().leaseParticipants().$().customer().customerId(), false).searchableOnly().build(),
 
-            new Builder(proto().status()).build(),
+            new Builder(proto().status()).width("80px").build(),
             new Builder(proto().completion()).build(),
             new Builder(proto().billingAccount().accountNumber()).build(),
             new Builder(proto().preauthorizedPaymentPresent()).sortable(false).build(),

@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
@@ -27,7 +28,6 @@ import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.LifecycleListener;
 import com.pyx4j.config.server.LocaleResolver;
-import com.pyx4j.config.server.NamespaceResolver;
 import com.pyx4j.config.server.PropertiesConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.rpc.IServiceFactory;
@@ -57,6 +57,7 @@ import com.propertyvista.operations.domain.VistaSystemMaintenanceState;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.server.ci.bugs.MemoryLeakJAXBContextLifecycleListener;
 import com.propertyvista.server.common.security.VistaAntiBot;
+import com.propertyvista.server.config.filter.VistaNamespaceDataResolver;
 import com.propertyvista.server.security.VistaAccessControlList;
 import com.propertyvista.server.security.VistaAclRevalidator;
 import com.propertyvista.shared.config.VistaDemo;
@@ -234,8 +235,8 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
-    public NamespaceResolver getNamespaceResolver() {
-        return new VistaNamespaceResolver();
+    public VistaNamespaceDataResolver getNamespaceResolver(HttpServletRequest httpRequest) {
+        return VistaNamespaceDataResolver.create(httpRequest);
     }
 
     @Override

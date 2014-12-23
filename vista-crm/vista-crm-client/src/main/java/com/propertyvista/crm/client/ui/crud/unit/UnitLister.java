@@ -20,8 +20,8 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
@@ -42,15 +42,15 @@ public class UnitLister extends SiteDataTablePanel<AptUnitDTO> {
         setColumnDescriptors( //
                 new ColumnDescriptor.Builder(proto().buildingCode()).build(), //
 
-                new ColumnDescriptor.Builder(proto().floorplan().name()).width("200px").title(i18n.tr("Floorplan Name")).build(), //
-                new ColumnDescriptor.Builder(proto().floorplan().marketingName()).visible(false).title(i18n.tr("Floorplan Marketing Name")).build(), //
+                new ColumnDescriptor.Builder(proto().floorplan().name()).width("200px").columnTitle(i18n.tr("Floorplan Name")).build(), //
+                new ColumnDescriptor.Builder(proto().floorplan().marketingName()).visible(false).columnTitle(i18n.tr("Floorplan Marketing Name")).build(), //
 
-                new ColumnDescriptor.Builder(proto().info().floor()).build(), //
-                new ColumnDescriptor.Builder(proto().info().number()).build(), //
-                new ColumnDescriptor.Builder(proto().info().area()).build(), //
-                new ColumnDescriptor.Builder(proto().info().areaUnits()).visible(false).build(), //
-                new ColumnDescriptor.Builder(proto().info()._bedrooms()).build(), //
-                new ColumnDescriptor.Builder(proto().info()._bathrooms()).build(), //
+                new ColumnDescriptor.Builder(proto().info().floor()).width("50px").build(), //
+                new ColumnDescriptor.Builder(proto().info().number()).width("80px").build(), //
+                new ColumnDescriptor.Builder(proto().info().area()).width("80px").build(), //
+                new ColumnDescriptor.Builder(proto().info().areaUnits()).width("80px").visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().info()._bedrooms()).width("50px").build(), //
+                new ColumnDescriptor.Builder(proto().info()._bathrooms()).width("50px").build(), //
                 new ColumnDescriptor.Builder(proto().info().economicStatus()).visible(false).build(), //
 
                 new ColumnDescriptor.Builder(proto().financial()._unitRent()).build(), //

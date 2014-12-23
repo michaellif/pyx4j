@@ -40,8 +40,8 @@ public class UnitDetailsFactory extends AbstractListerDetailsFactory<AptUnitDTO,
         AptUnitDTO proto = EntityFactory.create(AptUnitDTO.class);
         DEFAULT_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
                 new ColumnDescriptor.Builder(proto.buildingCode()).build(),
-                new ColumnDescriptor.Builder(proto.floorplan().name()).title(i18n.tr("Floorplan Name")).build(),
-                new ColumnDescriptor.Builder(proto.floorplan().marketingName()).title(i18n.tr("Floorplan Marketing Name")).build(),
+                new ColumnDescriptor.Builder(proto.floorplan().name()).columnTitle(i18n.tr("Floorplan Name")).build(),
+                new ColumnDescriptor.Builder(proto.floorplan().marketingName()).columnTitle(i18n.tr("Floorplan Marketing Name")).build(),
                 new ColumnDescriptor.Builder(proto.info().economicStatus()).visible(false).build(),
                 new ColumnDescriptor.Builder(proto.info().floor()).build(),
                 new ColumnDescriptor.Builder(proto.info().number()).build(),

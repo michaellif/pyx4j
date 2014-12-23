@@ -32,6 +32,8 @@ import com.pyx4j.gwt.server.ServletUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.server.config.filter.namespace.VistaApplicationResolverHelper;
+import com.propertyvista.server.config.filter.utils.HttpRequestUtils;
 
 public class VistaApplicationDispatcherFilter implements Filter {
 
@@ -70,13 +72,13 @@ public class VistaApplicationDispatcherFilter implements Filter {
 
     public void map(final ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-        VistaURIDataResolver vistaURLDataResolver = new VistaURIDataResolver(request);
-
         HttpServletRequest httprequest = (HttpServletRequest) request;
 
+        VistaNamespaceDataResolver namespaceResolver = VistaNamespaceDataResolver.create(httprequest);
+
         if (debug) {
-            log.info("Complete URL Request -> {}", vistaURLDataResolver.getCompleteURLWithContextPath());
-            log.info("Complete URL Request without context -> {}", vistaURLDataResolver.getCompleteURLNoContextPath());
+            log.info("Complete URL Request -> {}", HttpRequestUtils.getCompleteURLWithContextPath(httprequest));
+            log.info("Complete URL Request without context -> {}", HttpRequestUtils.getCompleteURLNoContextPath(httprequest));
         }
 
         // For sample url -> http://vista-crm.dev.birchwoodsoftwaregroup.com:8888/vista/crm/tip.png?width=23
@@ -86,12 +88,12 @@ public class VistaApplicationDispatcherFilter implements Filter {
         String serverName = httprequest.getServerName(); // sample: vista-crm.dev.birchwoodsoftwaregroup.com
         serverName = serverName.toLowerCase(Locale.ENGLISH);
 
-        VistaApplication app = vistaURLDataResolver.getVistaApplication();
+        VistaApplication app = namespaceResolver.getVistaApplication();
 
         //TODO BASED ON PMC and APP, DO FORWARD OR REDIRECT
 
         if (debug) {
-            log.info(">>>>>>>>>>>>>>>>>>>> NAMESPACE: {} <<<<<<<<<<<<<<<<< ", vistaURLDataResolver.getVistaNamespace());
+            log.info(">>>>>>>>>>>>>>>>>>>> NAMESPACE: {} <<<<<<<<<<<<<<<<< ", namespaceResolver.getVistaNamespace());
         }
 
         if (app == null) {
@@ -99,16 +101,16 @@ public class VistaApplicationDispatcherFilter implements Filter {
                 log.info("***ADF*** NOT forwarding");
             }
             chain.doFilter(request, response);
-        } else if (isDeploymentHttps && vistaURLDataResolver.isHttpsRedirectionNeeded()) {
+        } else if (isDeploymentHttps && VistaApplicationResolverHelper.isHttpsRedirectionNeeded(httprequest, app)) {
             // TODO Redo and redirect only with information about PMC and APP
-            String httpsUrl = vistaURLDataResolver.getHttpsUrl();
+            String httpsUrl = HttpRequestUtils.getHttpsUrl(httprequest);
             if (debug) {
                 log.info("***ADF*** redirecting. Change protocol from 'http' to 'https'. Sending redirect to \"{}\" to browser", httpsUrl);
             }
             ((HttpServletResponse) response).sendRedirect(httpsUrl);
             return;
-        } else if (app == VistaApplication.prospect && vistaURLDataResolver.isRootAppRequest()) {
-            String urlToForward = vistaURLDataResolver.getCompleteURLToForward();
+        } else if (app == VistaApplication.prospect && VistaApplicationResolverHelper.isRootAppRequest(httprequest, app)) {
+            String urlToForward = VistaApplicationResolverHelper.getCompleteURLToForward(httprequest, app);
             if (debug) {
                 log.info("***ADF*** redirecting. Sending redirect from '/prospect' to \"{}\" to browser", urlToForward);
             }
@@ -116,14 +118,13 @@ public class VistaApplicationDispatcherFilter implements Filter {
             return;
         } else {
             httprequest.setAttribute(VistaApplication.class.getName(), app);
-            String forwardedPath = vistaURLDataResolver.getPathToForwarded();
+            String forwardedPath = VistaApplicationResolverHelper.getPathToForwarded(app);
             httprequest.setAttribute(ServletUtils.x_forwarded_path, forwardedPath);
-            String urlForward = vistaURLDataResolver.getNewURLRequest();
+            String urlForward = VistaApplicationResolverHelper.getNewURLRequest(httprequest, app);
             if (debug) {
                 log.info("***ADF*** \"{}\" forwarding to \"{}\" ", requestUri, urlForward);
             }
             request.getRequestDispatcher(urlForward).forward(request, response);
         }
     }
-
 }

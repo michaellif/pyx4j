@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Pro;perty Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2015 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
@@ -7,10 +7,10 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-12
- * @author vlads
+ * Created on Dec 19, 2014
+ * @author ernestog
  */
-package com.propertyvista.server.config;
+package com.propertyvista.server.config.filter.namespace;
 
 import java.util.HashSet;
 import java.util.Locale;
@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.config.server.NamespaceResolver;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.OrCriterion;
@@ -36,11 +35,11 @@ import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.portal.rpc.shared.SiteWasNotActivatedUserRuntimeException;
 
-public class VistaNamespaceResolver implements NamespaceResolver {
+public class VistaNamespaceResolverHelper {
 
-    private final static Logger log = LoggerFactory.getLogger(VistaNamespaceResolver.class);
+    private final static Logger log = LoggerFactory.getLogger(VistaNamespaceResolverHelper.class);
 
-    private static final I18n i18n = I18n.get(VistaNamespaceResolver.class);
+    private static final I18n i18n = I18n.get(VistaNamespaceResolverHelper.class);
 
     private final static Set<String> prodSystemDnsBase = new HashSet<String>();
 
@@ -75,8 +74,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         mapToNoNamespace.add("m");
     }
 
-    @Override
-    public String getNamespace(HttpServletRequest httprequest) {
+    public static String getNamespace(HttpServletRequest httprequest) {
         if (httprequest.getServletPath() != null) {
             String servletPath = httprequest.getServletPath();
             if ((servletPath.startsWith("/" + VistaApplication.operations) || servletPath.startsWith("/interfaces"))) {
@@ -128,7 +126,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         String pmcNamespace;
         try {
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
-            pmcNamespace = CacheService.get(VistaNamespaceResolver.class.getName() + "." + serverName);
+            pmcNamespace = CacheService.get(VistaNamespaceResolverHelper.class.getName() + "." + serverName);
             if (pmcNamespace == null) {
                 EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
                 if (namespaceProposal != null) {
@@ -151,7 +149,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                 } else {
                     pmcNamespace = VistaNamespace.noNamespace;
                 }
-                CacheService.put(VistaNamespaceResolver.class.getName() + "." + serverName, pmcNamespace);
+                CacheService.put(VistaNamespaceResolverHelper.class.getName() + "." + serverName, pmcNamespace);
             }
         } finally {
             NamespaceManager.remove();

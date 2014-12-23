@@ -42,11 +42,11 @@ public class CustomerCreditCheckReportWidget extends HTML implements IReportWidg
 
         CREDITCHECK_TABLE_COLUMNS = new ColumnDescriptor[] {
 
-        new ColumnDescriptor.Builder(proto.screening().screene().person().name()).title(i18n.tr("Tenant")).searchable(false).build(),
+        new ColumnDescriptor.Builder(proto.screening().screene().person().name()).columnTitle(i18n.tr("Tenant")).searchable(false).build(),
                 new ColumnDescriptor.Builder(proto.screening().screene().person().name().firstName()).searchableOnly().build(),
                 new ColumnDescriptor.Builder(proto.screening().screene().person().name().lastName()).searchableOnly().build(),
                 new ColumnDescriptor.Builder(proto.creditCheckDate()).build(),
-                new ColumnDescriptor.Builder(proto.createdBy().name()).title(i18n.tr("Created By")).build(),
+                new ColumnDescriptor.Builder(proto.createdBy().name()).columnTitle(i18n.tr("Created By")).build(),
                 new ColumnDescriptor.Builder(proto.createdBy().name().firstName()).searchableOnly().build(),
                 new ColumnDescriptor.Builder(proto.createdBy().name().lastName()).searchableOnly().build(),
                 new ColumnDescriptor.Builder(proto.amountChecked()).build(), new ColumnDescriptor.Builder(proto.riskCode()).build(),

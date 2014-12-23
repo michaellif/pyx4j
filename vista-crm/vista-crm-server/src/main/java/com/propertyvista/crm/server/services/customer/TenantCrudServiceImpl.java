@@ -37,6 +37,7 @@ import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.crm.server.services.financial.PreauthorizedPaymentsCommons;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
@@ -72,15 +73,15 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
         fillPreauthorizedPayments(to, retrieveTarget);
         fillInsuranceCertificates(to);
 
-        TenantInsurancePolicy insurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(bo.lease().unit(),
-                TenantInsurancePolicy.class);
+        PolicyNode policyNode = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(bo.lease());
+
+        TenantInsurancePolicy insurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, TenantInsurancePolicy.class);
         if (insurancePolicy.requireMinimumLiability().getValue(false)) {
             to.minimumRequiredLiability().setValue(insurancePolicy.minimumRequiredLiability().getValue());
         }
 
         if (retrieveTarget == RetrieveTarget.Edit) {
-            RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(bo.lease().unit(),
-                    RestrictionsPolicy.class);
+            RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, RestrictionsPolicy.class);
             if (restrictionsPolicy.enforceAgeOfMajority().getValue(false)) {
                 to.ageOfMajority().setValue((to.role().getValue() != Role.Dependent) ? restrictionsPolicy.ageOfMajority().getValue() : null);
             }

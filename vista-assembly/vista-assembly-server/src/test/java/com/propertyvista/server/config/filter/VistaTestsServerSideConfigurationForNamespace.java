@@ -10,7 +10,9 @@
  * Created on Oct 9, 2014
  * @author ernestog
  */
-package com.propertyvista.server.config;
+package com.propertyvista.server.config.filter;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.pyx4j.config.server.NamespaceResolver;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
@@ -24,8 +26,8 @@ public class VistaTestsServerSideConfigurationForNamespace extends VistaTestsSer
     }
 
     @Override
-    public NamespaceResolver getNamespaceResolver() {
-        return new VistaNamespaceResolver();
+    public NamespaceResolver getNamespaceResolver(HttpServletRequest httpRequest) {
+        return VistaNamespaceDataResolver.create(httpRequest);
     }
 
 }

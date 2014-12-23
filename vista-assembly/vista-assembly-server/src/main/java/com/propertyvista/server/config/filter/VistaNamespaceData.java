@@ -7,40 +7,34 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 3, 2014
+ * Created on Dec 19, 2014
  * @author ernestog
  */
 package com.propertyvista.server.config.filter;
 
-public class URIData<T> {
+import com.pyx4j.config.server.NamespaceData;
 
-    public String namespace;
+import com.propertyvista.domain.security.common.VistaApplication;
 
-    public T application;
+public class VistaNamespaceData extends NamespaceData {
 
-    public URIData() {
+    protected VistaApplication application;
 
+    public VistaNamespaceData() {
+        super(null);
     }
 
-    public URIData(T app, String namespace) {
+    public VistaNamespaceData(VistaApplication app, String namespace) {
+        super(namespace);
         this.application = app;
-        this.namespace = namespace;
     }
 
-    public T getApplication() {
+    public VistaApplication getApplication() {
         return application;
     }
 
-    public void setApplication(T app) {
+    public void setApplication(VistaApplication app) {
         this.application = app;
-    }
-
-    public String getNamespace() {
-        return namespace;
-    }
-
-    public void setNamespace(String namespace) {
-        this.namespace = namespace;
     }
 
 }

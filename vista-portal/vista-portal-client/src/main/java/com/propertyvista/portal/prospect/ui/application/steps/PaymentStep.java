@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -140,7 +140,7 @@ public class PaymentStep extends ApplicationWizardStep {
         get(proto().payment().selectPaymentMethod()).addValueChangeHandler(new ValueChangeHandler<PaymentSelect>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentSelect> event) {
-                paymentMethodEditor.reset();
+                paymentMethodEditor.clear();
                 paymentMethodEditor.setDefaultPaymentTypes();
 
                 if (event.getValue() != null) {
@@ -168,7 +168,7 @@ public class PaymentStep extends ApplicationWizardStep {
                     case Profiled:
                         paymentMethodEditor.setEditable(false);
 
-                        profiledPaymentMethodsCombo.reset();
+                        profiledPaymentMethodsCombo.clear();
                         setProfiledPaymentMethodsVisible(true);
                         if (!profiledPaymentMethodsCombo.getOptions().isEmpty()) {
                             profiledPaymentMethodsCombo.setValue(profiledPaymentMethodsCombo.getOptions().get(0));
@@ -239,7 +239,7 @@ public class PaymentStep extends ApplicationWizardStep {
                     public void onSuccess(Void result) {
                         boolean hasProfiledMethods = !profiledPaymentMethodsCombo.getOptions().isEmpty();
 
-                        get(proto().payment().selectPaymentMethod()).reset();
+                        get(proto().payment().selectPaymentMethod()).clear();
                         get(proto().payment().selectPaymentMethod()).setEnabled(hasProfiledMethods);
                         get(proto().payment().selectPaymentMethod()).setValue(hasProfiledMethods ? PaymentSelect.Profiled : PaymentSelect.New, true, populate);
                     }
@@ -248,7 +248,7 @@ public class PaymentStep extends ApplicationWizardStep {
         } else {
             paymentMethodPanel.setVisible(false);
             paymentMethodHolder.setWidget(noPaymentRequiredLabel);
-            paymentMethodEditor.reset();
+            paymentMethodEditor.clear();
         }
     }
 
