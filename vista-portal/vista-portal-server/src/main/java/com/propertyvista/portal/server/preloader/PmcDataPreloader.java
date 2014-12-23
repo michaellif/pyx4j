@@ -32,7 +32,6 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.preloader.BaseVistaDevDataPreloader;
-import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.blob.MediaFileBlob;
 import com.propertyvista.domain.company.Portfolio;
@@ -101,7 +100,7 @@ public class PmcDataPreloader extends BaseVistaDevDataPreloader {
             mediaConfig.mimizePreloadDataSize = true;
 
             // TODO remove after Demo of when implemented in importer
-            if (DemoData.vistaDemo) {
+            if (ApplicationMode.isDemo()) {
                 // create some portfolios:
                 List<Portfolio> portfolios = new Vector<Portfolio>();
                 for (String pname : new String[] { "GTA", "East region", "West region" }) {

@@ -49,7 +49,6 @@ import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.generator.SecurityGenerator;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.server.TaskRunner;
-import com.propertyvista.shared.config.VistaDemo;
 
 public class PmcCreator {
 
@@ -151,7 +150,7 @@ public class PmcCreator {
         if (password != null) {
             credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(password));
         }
-        if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
+        if (ApplicationMode.isDevelopment() || ApplicationMode.isDemo()) {
             SecurityGenerator.assignSecurityQuestion(credential);
         }
         credential.enabled().setValue(Boolean.TRUE);

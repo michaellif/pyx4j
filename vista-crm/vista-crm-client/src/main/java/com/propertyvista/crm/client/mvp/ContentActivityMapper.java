@@ -152,6 +152,8 @@ import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplica
 import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermEditorActivity;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermViewerActivity;
+import com.propertyvista.crm.client.activity.crud.lease.eviction.EvictionCaseEditorActivity;
+import com.propertyvista.crm.client.activity.crud.lease.eviction.EvictionCaseViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.financial.InvoiceCreditViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.financial.InvoiceDebitViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.financial.deposit.DepositLifecycleEditorActivity;
@@ -718,6 +720,17 @@ public class ContentActivityMapper implements AppActivityMapper {
                         }
 
 // - Legal-related:
+                    } else if (crudPlace instanceof LegalAndCollections.EvictionCase) {
+                        switch (crudPlace.getType()) {
+                        case viewer:
+                            activity = new EvictionCaseViewerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new EvictionCaseEditorActivity(crudPlace);
+                            break;
+                        default:
+                            break;
+                        }
                     } else if (crudPlace instanceof LegalAndCollections.N4GenerationTool) {
                         activity = new N4CreateBatchActivity(crudPlace);
 

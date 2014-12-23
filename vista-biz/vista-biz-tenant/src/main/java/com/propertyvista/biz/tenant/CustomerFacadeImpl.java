@@ -62,7 +62,6 @@ import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistration
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.common.security.AccessKey;
-import com.propertyvista.shared.config.VistaDemo;
 
 public class CustomerFacadeImpl implements CustomerFacade {
 
@@ -104,7 +103,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
         Persistence.service().merge(customer);
 
-        if (newUser && (ApplicationMode.isDevelopment() || VistaDemo.isDemo())) {
+        if (newUser && (ApplicationMode.isDevelopment() || ApplicationMode.isDemo())) {
             setCustomerPassword(customer, customer.user().email().getValue());
         }
     }

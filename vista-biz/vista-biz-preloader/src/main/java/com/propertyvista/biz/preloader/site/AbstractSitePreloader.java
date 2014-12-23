@@ -35,7 +35,6 @@ import com.pyx4j.i18n.server.ServerI18nFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.preloader.AbstractVistaDataPreloader;
-import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.HtmlContent;
@@ -80,7 +79,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         l.add(CompiledLocale.en);
         if (VistaFeatures.instance().countryOfOperation() != CountryOfOperation.UK) {
             l.add(CompiledLocale.fr);
-            if (ApplicationMode.isDevelopment() && !DemoData.vistaDemo) {
+            if (ApplicationMode.isDevelopment() && !ApplicationMode.isDemo()) {
                 l.add(CompiledLocale.ru);
             }
             l.add(CompiledLocale.es);

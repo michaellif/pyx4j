@@ -22,7 +22,7 @@ import com.propertyvista.shared.config.VistaSettings;
 public class VistaServerSideConfigurationProdCustomersDemo extends VistaServerSideConfigurationDevCustom {
 
     @Override
-    public boolean isVistaDemo() {
+    public boolean isDemoBehavior() {
         return true;
     }
 

@@ -37,7 +37,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.DemoData.UserType;
-import com.propertyvista.shared.config.VistaDemo;
 
 public abstract class AbstractLoginActivty extends AbstractActivity implements LoginView.Presenter {
 
@@ -137,7 +136,7 @@ public abstract class AbstractLoginActivty extends AbstractActivity implements L
     };
 
     protected boolean isDevLoginRequired() {
-        return ApplicationMode.isDevelopment() || VistaDemo.isDemo();
+        return ApplicationMode.isDevelopment() || ApplicationMode.isDemo();
     }
 
     protected String getApplicationModeName() {

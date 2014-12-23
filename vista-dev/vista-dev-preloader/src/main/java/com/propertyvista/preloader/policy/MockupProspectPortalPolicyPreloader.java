@@ -14,13 +14,13 @@ package com.propertyvista.preloader.policy;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.biz.preloader.policy.AbstractPolicyPreloader;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
-import com.propertyvista.shared.config.VistaDemo;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class MockupProspectPortalPolicyPreloader extends AbstractPolicyPreloader<ProspectPortalPolicy> {
@@ -38,7 +38,7 @@ public class MockupProspectPortalPolicyPreloader extends AbstractPolicyPreloader
         policy.unitAvailabilitySpan().setValue(20);
 
         // In case of demo and Canadian Buildings, Prospect Portal fee do not apply
-        boolean avoidFee = (VistaDemo.isDemo() && VistaFeatures.instance().countryOfOperation().equals(CountryOfOperation.Canada));
+        boolean avoidFee = (ApplicationMode.isDemo() && VistaFeatures.instance().countryOfOperation().equals(CountryOfOperation.Canada));
         if (avoidFee) {
             policy.feePayment().setValue(FeePayment.none);
         } else {

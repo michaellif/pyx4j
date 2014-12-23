@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.contexts.DevSession;
@@ -36,7 +37,6 @@ import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
-import com.propertyvista.shared.config.VistaDemo;
 
 @SuppressWarnings("serial")
 public class OpenIdServlet extends HttpServlet {
@@ -88,7 +88,7 @@ public class OpenIdServlet extends HttpServlet {
         String message;
         if (signIn) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            message = VistaDemo.isDemo() ? i18n.tr("Login using your PropertyVista CRM account") : i18n.tr("Login via PropertyVista Crowd account");
+            message = ApplicationMode.isDemo() ? i18n.tr("Login using your PropertyVista CRM account") : i18n.tr("Login via PropertyVista Crowd account");
         } else {
             message = i18n.tr("Login successful Continue to application");
         }
@@ -104,7 +104,7 @@ public class OpenIdServlet extends HttpServlet {
 
         String meta = "";
         boolean autoRedirect = false;
-        if (!VistaDemo.isDemo()) {
+        if (!ApplicationMode.isDemo()) {
             if ((!signIn) && isOurDeveloper()) {
                 meta = "<meta http-equiv=\"refresh\" content=\"1; url=" + location + "\">";
                 autoRedirect = true;
@@ -119,7 +119,7 @@ public class OpenIdServlet extends HttpServlet {
 
         body = body.replace("${head}", meta);
 
-        body = body.replace("${name}", VistaDemo.isDemo() ? "PropertyVista Demo " : "" + "Access " + (signIn ? " Restricted" : " Granted"));
+        body = body.replace("${name}", ApplicationMode.isDemo() ? "PropertyVista Demo " : "" + "Access " + (signIn ? " Restricted" : " Granted"));
 
         body = body.replace("${text}", "<a id=\"" + (signIn ? "googleSignIn" : "continue") + "\" tabindex=\"1\" autofocus=\"autofocus\" href=\"" + location
                 + "\">" + message + "</a>" + (autoRedirect ? "<br/><br/><b>You will be redirected automatically</b>" : ""));

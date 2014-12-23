@@ -12,10 +12,14 @@
  */
 package com.propertyvista.common.client.ui.components.folders;
 
+import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelHR;
+
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
@@ -33,6 +37,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
+import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
 import com.propertyvista.dto.PreauthorizedPaymentDTO;
 
 public class PapFolder extends VistaBoxFolder<PreauthorizedPaymentDTO> {
@@ -98,7 +103,19 @@ public class PapFolder extends VistaBoxFolder<PreauthorizedPaymentDTO> {
                     };
                 }
             }).decorate();
-            formPanel.append(Location.Dual, proto().coveredItemsDTO(), new PapCoveredItemDtoFolder());
+            formPanel.append(Location.Dual, proto().coveredItemsDTO(), new PapCoveredItemDtoFolder() {
+                @Override
+                public void onAmontValueChange() {
+                    fillTotal(getValue());
+                }
+            });
+
+            HTML separator = new HTML("&nbsp;");
+            separator.setStyleName(FormPanelHR.name());
+            separator.setWidth("22em");
+            formPanel.append(Location.Right, separator);
+            formPanel.append(Location.Right, proto().total()).decorate().componentWidth(180);
+
             formPanel.append(Location.Dual, proto().comments()).decorate();
 
             return formPanel;
@@ -114,6 +131,18 @@ public class PapFolder extends VistaBoxFolder<PreauthorizedPaymentDTO> {
             get(proto().updated()).setVisible(!getValue().updated().isNull());
 
             get(proto().comments()).setVisible(isEditable() || !getValue().comments().isNull());
+
+            fillTotal(getValue().coveredItemsDTO());
+        }
+
+        private void fillTotal(List<PreauthorizedPaymentCoveredItemDTO> items) {
+            BigDecimal total = BigDecimal.ZERO;
+            for (PreauthorizedPaymentCoveredItemDTO item : items) {
+                if (!item.amount().isNull()) {
+                    total = (total.add(item.amount().getValue()));
+                }
+            }
+            get(proto().total()).setValue(total);
         }
     }
 }

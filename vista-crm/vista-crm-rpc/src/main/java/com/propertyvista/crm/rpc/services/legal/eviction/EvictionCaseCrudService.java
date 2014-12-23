@@ -7,18 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 7, 2014
- * @author vlads
+ * Created on Dec 19, 2014
+ * @author stanp
  */
-package com.propertyvista.common.client.config.demo;
+package com.propertyvista.crm.rpc.services.legal.eviction;
 
-import com.pyx4j.config.client.ClientApplicationFeatureDefault;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-public class VistaClientApplicationFeatureDemo extends ClientApplicationFeatureDefault {
+import com.propertyvista.dto.EvictionCaseDTO;
 
-    @Override
-    public boolean developmentShortcutsEnabled() {
-        return true;
-    }
+public interface EvictionCaseCrudService extends AbstractCrudService<EvictionCaseDTO> {
 
 }

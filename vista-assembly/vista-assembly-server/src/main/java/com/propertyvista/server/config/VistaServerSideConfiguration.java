@@ -60,7 +60,6 @@ import com.propertyvista.server.common.security.VistaAntiBot;
 import com.propertyvista.server.config.filter.VistaNamespaceDataResolver;
 import com.propertyvista.server.security.VistaAccessControlList;
 import com.propertyvista.server.security.VistaAclRevalidator;
-import com.propertyvista.shared.config.VistaDemo;
 
 public class VistaServerSideConfiguration extends AbstractVistaServerSideConfiguration {
 
@@ -320,12 +319,12 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public boolean isDevelopmentBehavior() {
-        return true;
+        return getConfigProperties().getBooleanValue("isDevelopmentBehavior", true);
     }
 
     @Override
-    public boolean isVistaDemo() {
-        return false;
+    public boolean isDemoBehavior() {
+        return getConfigProperties().getBooleanValue("isDemoBehavior", false);
     }
 
     @Override
@@ -517,7 +516,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String walkMeJsAPIUrl(VistaApplication application) {
-        boolean production = (!ApplicationMode.isDevelopment()) || (VistaDemo.isDemo());
+        boolean production = (!ApplicationMode.isDevelopment()) || (ApplicationMode.isDemo());
 
         String testPart = "";
         if (!production) {

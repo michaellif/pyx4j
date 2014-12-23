@@ -7,18 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-07-18
- * @author vlads
+ * Created on 2014-02-20
+ * @author ArtyomB
  */
-package com.propertyvista.common.client.config.demo;
+package com.propertyvista.crm.rpc.services.legal.eviction;
 
-import com.propertyvista.shared.config.VistaDemo.VistaDemoConfiguration;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.gwt.rpc.upload.UploadService;
 
-public class VistaDemoConfigurationDefault implements VistaDemoConfiguration {
+import com.propertyvista.domain.blob.EvictionDocumentBlob;
 
-    @Override
-    public boolean isDemo() {
-        return false;
-    }
+public interface EvictionDocumentUploadService extends UploadService<IEntity, EvictionDocumentBlob> {
 
 }

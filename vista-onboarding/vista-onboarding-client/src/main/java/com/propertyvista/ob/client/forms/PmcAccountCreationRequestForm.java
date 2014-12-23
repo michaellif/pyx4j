@@ -36,8 +36,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -48,7 +48,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.ob.rpc.OnboardingSiteMap;
 import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
-import com.propertyvista.shared.config.VistaDemo;
 
 // TODO refactor this form with using a special decorator (same or similar to one that is used in login/singup forms in portal
 public class PmcAccountCreationRequestForm extends CForm<PmcAccountCreationRequest> {
@@ -261,7 +260,7 @@ public class PmcAccountCreationRequestForm extends CForm<PmcAccountCreationReque
         request.dnsName().setValue(id);
         request.firstName().setValue("F");
         request.lastName().setValue("L");
-        request.email().setValue(id + (VistaDemo.isDemo() ? "@propertyvista.com" : "@pyx4j.com"));
+        request.email().setValue(id + (ApplicationMode.isDemo() ? "@propertyvista.com" : "@pyx4j.com"));
         request.confirmEmail().setValue(request.email().getValue());
         request.countryOfOperation().setValue(CountryOfOperation.Canada);
 

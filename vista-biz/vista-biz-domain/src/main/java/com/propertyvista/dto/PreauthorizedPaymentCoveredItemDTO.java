@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -36,7 +36,7 @@ public interface PreauthorizedPaymentCoveredItemDTO extends AutopayAgreement.Aut
     IPrimitive<BigDecimal> covered();
 
     @ToString(index = 1)
-    @Format("#,##00")
+    @Format("#,##0")
     @Editor(type = EditorType.percentage)
     IPrimitive<BigDecimal> percent();
 }

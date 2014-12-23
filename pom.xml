@@ -562,12 +562,12 @@
         </profile>
 
         <profile>
-            <id>build-qa</id>
+            <id>full</id>
             <properties>
                 <gwt.compiler.force>true</gwt.compiler.force>
-                <gwtDraftCompile>false</gwtDraftCompile>
-                <appGWTModuleSufix>Qa</appGWTModuleSufix>
                 <gwtEnableAssertions>true</gwtEnableAssertions>
+                <gwtDraftCompile>false</gwtDraftCompile>
+                <appGWTModuleSufix></appGWTModuleSufix>
             </properties>
         </profile>
 
@@ -576,14 +576,6 @@
             <properties>
                 <gwtCompileReport>true</gwtCompileReport>
                 <appGWTModuleSufix>DeveloperWebKit</appGWTModuleSufix>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>soyce</id>
-            <properties>
-                <gwtCompileReport>true</gwtCompileReport>
-                <appGWTModuleSufix>DeveloperIE6</appGWTModuleSufix>
             </properties>
         </profile>
 
@@ -603,22 +595,6 @@
             <id>i18n-ru</id>
             <properties>
                 <i18n.translate>ru</i18n.translate>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>target-prod</id>
-            <properties>
-                <gwtDraftCompile>false</gwtDraftCompile>
-                <appGWTModuleSufix>Prod</appGWTModuleSufix>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>target-vista-demo</id>
-            <properties>
-                <gwtDraftCompile>false</gwtDraftCompile>
-                <appGWTModuleSufix>Demo</appGWTModuleSufix>
             </properties>
         </profile>
 

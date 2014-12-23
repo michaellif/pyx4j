@@ -29,6 +29,7 @@ import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.DepositLifecycleDTO;
+import com.propertyvista.dto.EvictionCaseDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
@@ -36,7 +37,7 @@ import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
-    private final Tab depositsTab, adjustmentsTab, chargesTab, billsTab, paymentsTab, financialTab, communicationTab;
+    private final Tab depositsTab, adjustmentsTab, chargesTab, billsTab, paymentsTab, financialTab, evictionHistoryTab, communicationTab;
 
     public LeaseForm(IPrimeFormView<LeaseDTO, ?> view) {
         super(LeaseDTO.class, view);
@@ -50,6 +51,8 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         paymentsTab = addTab(getParentView().getPaymentListerView().asWidget(), i18n.tr("Receipts"), DataModelPermission.permissionRead(PaymentRecordDTO.class));
         financialTab = addTab(createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"),
                 DataModelPermission.permissionRead(TransactionHistoryDTO.class));
+        evictionHistoryTab = addTab(getParentView().getEvictionCaseLister().asWidget(), i18n.tr("Eviction History"),
+                DataModelPermission.permissionRead(EvictionCaseDTO.class));
         communicationTab = addTab(createCommunicationsTab(), i18n.tr("Documents/Communication"), DataModelPermission.permissionRead(LegalLetter.class));
     }
 
@@ -67,6 +70,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
             setTabVisible(adjustmentsTab, false);
             setTabVisible(chargesTab, false);
             setTabVisible(billsTab, false);
+            setTabVisible(evictionHistoryTab, false);
         }
     }
 
@@ -86,6 +90,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
         setTabVisible(paymentsTab, !getValue().status().getValue().isDraft());
         setTabVisible(financialTab, !getValue().status().getValue().isDraft());
+        setTabVisible(evictionHistoryTab, isInternalMode && !getValue().status().getValue().isDraft());
     }
 
     private IsWidget createFinancialTransactionHistoryTab() {
