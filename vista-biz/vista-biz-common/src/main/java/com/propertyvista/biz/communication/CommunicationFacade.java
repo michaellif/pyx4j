@@ -47,6 +47,8 @@ public interface CommunicationFacade {
 
     void sendCrmPasswordRetrievalToken(CrmUser user) throws UserRuntimeException;
 
+    void sendCrmWelcomeEmailAction(CrmUser user) throws UserRuntimeException;
+
     /**
      * customer may be Guarantor as well
      */

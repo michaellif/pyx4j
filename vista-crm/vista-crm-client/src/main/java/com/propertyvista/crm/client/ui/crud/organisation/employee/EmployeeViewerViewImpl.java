@@ -71,7 +71,6 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
         addAction(accountRecoveryOptionsAction);
 
         addAction(new SecureMenuItem(i18n.tr("Clear Security Question"), new Command() {
-
             @Override
             public void execute() {
                 ((EmployeeViewerView.Presenter) getPresenter()).clearSecurityQuestionAction(new DefaultAsyncCallback<VoidSerializable>() {
@@ -91,13 +90,10 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
                     }
 
                 }, getForm().getValue().<EmployeeDTO> createIdentityStub());
-
             }
-
         }, new ActionPermission(CRMUserSecurityActions.class)));
 
         addAction(new SecureMenuItem(i18n.tr("Send Password Reset Email"), new Command() {
-
             @Override
             public void execute() {
                 ((EmployeeViewerView.Presenter) getPresenter()).sendPasswordResetEmailAction(new DefaultAsyncCallback<VoidSerializable>() {
@@ -115,12 +111,31 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
                             super.onFailure(caught);
                         }
                     }
-
                 }, getForm().getValue().<EmployeeDTO> createIdentityStub());
             }
-
         }, new ActionPermission(CRMUserSecurityActions.class)));
 
+        addAction(new SecureMenuItem(i18n.tr("Send Welcome Email"), new Command() {
+            @Override
+            public void execute() {
+                ((EmployeeViewerView.Presenter) getPresenter()).sendWelcomeEmailAction(new DefaultAsyncCallback<VoidSerializable>() {
+
+                    @Override
+                    public void onSuccess(VoidSerializable result) {
+                        MessageDialog.info(i18n.tr("Welcome Email has been sent successfully"));
+                    }
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        if (caught instanceof UserRuntimeException) {
+                            MessageDialog.error("", ((UserRuntimeException) caught).getMessage());
+                        } else {
+                            super.onFailure(caught);
+                        }
+                    }
+                }, getForm().getValue().<EmployeeDTO> createIdentityStub());
+            }
+        }, new ActionPermission(CRMUserSecurityActions.class)));
     }
 
     @Override

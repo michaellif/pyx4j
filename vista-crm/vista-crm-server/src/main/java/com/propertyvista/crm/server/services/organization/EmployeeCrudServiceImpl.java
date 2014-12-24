@@ -272,4 +272,13 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
         Persistence.service().commit();
         asyncCallback.onSuccess(null);
     }
+
+    @Override
+    public void sendWelcomeEmailAction(AsyncCallback<VoidSerializable> asyncCallback, EmployeeDTO employeeId) {
+        Employee emp = Persistence.service().retrieve(Employee.class, employeeId.getPrimaryKey());
+        Persistence.service().retrieve(emp.user());
+        ServerSideFactory.create(CommunicationFacade.class).sendCrmWelcomeEmailAction(emp.user());
+        Persistence.service().commit();
+        asyncCallback.onSuccess(null);
+    }
 }

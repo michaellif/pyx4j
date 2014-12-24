@@ -171,6 +171,12 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
+    public void sendCrmWelcomeEmailAction(CrmUser user) throws UserRuntimeException {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
     public void sendNewPmcEmail(OnboardingUser user, Pmc pmc) {
         MailMessage m = MessageTemplatesCrmNotification.createNewPmcEmail(user, pmc);
         m.setTo(user.email().getValue());
@@ -413,5 +419,4 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
             Mail.queue(m, null, null);
         }
     }
-
 }

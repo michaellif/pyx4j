@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -107,5 +107,10 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
     @Override
     public void sendPasswordResetEmailAction(DefaultAsyncCallback<VoidSerializable> asyncCallback, EmployeeDTO employeeId) {
         ((EmployeeCrudService) getService()).sendPasswordResetEmail(asyncCallback, employeeId);
+    }
+
+    @Override
+    public void sendWelcomeEmailAction(DefaultAsyncCallback<VoidSerializable> asyncCallback, EmployeeDTO employeeId) {
+        ((EmployeeCrudService) getService()).sendWelcomeEmailAction(asyncCallback, employeeId);
     }
 }

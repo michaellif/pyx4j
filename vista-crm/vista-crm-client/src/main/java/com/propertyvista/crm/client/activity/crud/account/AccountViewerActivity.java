@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -69,7 +69,8 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
     public void goToChangePassword(Key userId, String userName) {
         AppPlace passwordChangePlace = new CrmSiteMap.PasswordChange();
         passwordChangePlace.queryArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_PK_ARG, userId.toString());
-        passwordChangePlace.queryArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_CLASS, PasswordChangeView.PasswordChangePresenter.PrincipalClass.EMPLOYEE.toString());
+        passwordChangePlace.queryArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_CLASS,
+                PasswordChangeView.PasswordChangePresenter.PrincipalClass.EMPLOYEE.toString());
         AppSite.getPlaceController().goTo(passwordChangePlace);
     }
 
@@ -127,11 +128,16 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
 
     @Override
     public void clearSecurityQuestionAction(DefaultAsyncCallback<VoidSerializable> asyncCallback, EmployeeDTO employeeId) {
-        // this is never possible since canClearSecurityQuestion always will return false        
+        // this is never possible since canClearSecurityQuestion always will return false
     }
 
     @Override
     public void sendPasswordResetEmailAction(DefaultAsyncCallback<VoidSerializable> defaultAsyncCallback, EmployeeDTO employeeId) {
+        // do nothing: this is not permitted in this activity because it doesn't make a lot of sense
+    }
+
+    @Override
+    public void sendWelcomeEmailAction(DefaultAsyncCallback<VoidSerializable> defaultAsyncCallback, EmployeeDTO employeeId) {
         // do nothing: this is not permitted in this activity because it doesn't make a lot of sense
     }
 
