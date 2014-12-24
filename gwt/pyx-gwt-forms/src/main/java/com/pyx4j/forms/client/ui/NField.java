@@ -132,7 +132,9 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
     }
 
     protected void onEditorInit() {
-        setNativeValue(getCComponent().getValue());
+        if (getCComponent().isPopulated()) {
+            setNativeValue(getCComponent().getValue());
+        }
     }
 
     protected void onViewerCreate() {
@@ -140,7 +142,9 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
     }
 
     protected void onViewerInit() {
-        setNativeValue(getCComponent().getValue());
+        if (getCComponent().isPopulated()) {
+            setNativeValue(getCComponent().getValue());
+        }
     }
 
     @Override

@@ -167,7 +167,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     @Override
     public boolean isValidatable() {
-        return isVisible() && !isViewable();
+        return isVisible() && !isViewable() && isPopulated();
     }
 
     @Override

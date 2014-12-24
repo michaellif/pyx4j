@@ -68,6 +68,9 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     private static final I18n i18n = I18n.get(CComponent.class);
 
+    //VISTA-5729  and VISTA-5736
+    private static boolean TODO_ENFORCE_POPULATED = false;
+
     protected static final String DEV_ATTR = "devAttr";
 
     public static enum NoteStyle {
@@ -114,6 +117,8 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     private IDebugId debugIdSuffix;
 
     private String mandatoryValidationMessage = i18n.tr("This field can't be blank");
+
+    private boolean populated = false;
 
     private DATA_TYPE value = null;
 
@@ -496,9 +501,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     }
 
-    protected boolean isValidatable() {
-        return true;
-    }
+    protected abstract boolean isValidatable();
 
     /**
      * Use only when you abandon component and detaching from Editing model.
@@ -506,7 +509,8 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
      */
     public final void reset() {
         this.value = null;
-        setEditorValue(getValue());
+        this.populated = false;
+        setEditorValue(null);
         if (getParent() != null) {
             getParent().updateContainer(this);
         }
@@ -523,10 +527,16 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     }
 
     public final void setValue(DATA_TYPE value, boolean fireEvent, boolean populate) {
+        if (TODO_ENFORCE_POPULATED && !populate) {
+            assert populated : "Value should be populated before usage on component " + this.shortDebugInfo();
+        }
 
         //In case of CComponent model represented by IEntity, disable check for equality because value may be the same instance that is returned by getValue()
-        if (value instanceof IEntity || !isValuesEqual(getValue(), value)) {
+        if (value instanceof IEntity || populate || !isValuesEqual(this.value, value)) {
             this.value = preprocessValue(value, fireEvent, populate);
+            if (populate) {
+                populated = true;
+            }
             setEditorValue(this.value);
             revalidate();
             if (getParent() != null) {
@@ -589,6 +599,10 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     protected DATA_TYPE preprocessValue(DATA_TYPE value, boolean fireEvent, boolean populate) {
         return value;
+    }
+
+    public final boolean isPopulated() {
+        return populated;
     }
 
     public final DATA_TYPE getValue() {

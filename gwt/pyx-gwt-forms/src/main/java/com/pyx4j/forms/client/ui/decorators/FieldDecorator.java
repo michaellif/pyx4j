@@ -265,8 +265,8 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
 
     protected void renderMandatoryStar() {
         if (builder.mandatoryMarker && mandatoryImageHolder != null) {
-            if (component.isVisible() && component.isEditable() && component.isEnabled() && !component.isViewable() && component.isMandatory()
-                    && component.isValueEmpty()) {
+            if (component.isVisible() && component.isEditable() && component.isEnabled() && component.isPopulated() && !component.isViewable()
+                    && component.isMandatory() && component.isValueEmpty()) {
                 if (mandatoryImage == null) {
                     mandatoryImage = new Image();
                     mandatoryImage.setResource(ImageFactory.getImages().mandatory());
