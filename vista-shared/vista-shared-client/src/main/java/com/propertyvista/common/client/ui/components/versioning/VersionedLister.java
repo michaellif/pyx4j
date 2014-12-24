@@ -12,7 +12,9 @@
  */
 package com.propertyvista.common.client.ui.components.versioning;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -23,11 +25,11 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
-import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.widgets.client.OptionGroup.Layout;
+import com.pyx4j.widgets.client.RadioGroup;
 
 public abstract class VersionedLister<E extends IVersionedEntity<?>> extends SiteDataTablePanel<E> {
 
@@ -43,8 +45,9 @@ public abstract class VersionedLister<E extends IVersionedEntity<?>> extends Sit
 
     private VersionDisplayMode versionDisplayMode = VersionDisplayMode.displayFinal;
 
-    private final CRadioGroupEnum<VersionDisplayMode> displayModeButton = new CRadioGroupEnum<VersionDisplayMode>(VersionDisplayMode.class, Layout.HORISONTAL);
+    private final RadioGroup<VersionDisplayMode> displayModeButton = new RadioGroup<VersionDisplayMode>(Layout.HORISONTAL);
     {
+        displayModeButton.setOptions(new ArrayList<VersionDisplayMode>(EnumSet.allOf(VersionDisplayMode.class)));
         displayModeButton.setValue(versionDisplayMode);
         displayModeButton.addValueChangeHandler(new ValueChangeHandler<VersionDisplayMode>() {
             @Override

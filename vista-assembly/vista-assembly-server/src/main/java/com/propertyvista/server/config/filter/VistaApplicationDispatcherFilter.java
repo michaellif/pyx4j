@@ -43,7 +43,7 @@ public class VistaApplicationDispatcherFilter implements Filter {
 
     private boolean isDeploymentHttps = false;
 
-    private boolean debug = false; // temporary for local development
+    private boolean debug = true; // temporary for local development
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -76,10 +76,10 @@ public class VistaApplicationDispatcherFilter implements Filter {
 
         VistaNamespaceDataResolver namespaceResolver = VistaNamespaceDataResolver.create(httprequest);
 
-        if (debug) {
-            log.info("Complete URL Request -> {}", HttpRequestUtils.getCompleteURLWithContextPath(httprequest));
-            log.info("Complete URL Request without context -> {}", HttpRequestUtils.getCompleteURLNoContextPath(httprequest));
-        }
+//        if (debug) {
+//            log.debug("Complete URL Request -> {}", HttpRequestUtils.getCompleteURLWithContextPath(httprequest));
+//            log.debug("Complete URL Request without context -> {}", HttpRequestUtils.getCompleteURLNoContextPath(httprequest));
+//        }
 
         // For sample url -> http://vista-crm.dev.birchwoodsoftwaregroup.com:8888/vista/crm/tip.png?width=23
         String requestUri = httprequest.getRequestURI(); // sample: /vista/crm/tip.png
@@ -92,27 +92,27 @@ public class VistaApplicationDispatcherFilter implements Filter {
 
         //TODO BASED ON PMC and APP, DO FORWARD OR REDIRECT
 
-        if (debug) {
-            log.info(">>>>>>>>>>>>>>>>>>>> NAMESPACE: {} <<<<<<<<<<<<<<<<< ", namespaceResolver.getVistaNamespace());
-        }
+//        if (debug) {
+//            log.debug(">>>>>>>>>>>>>>>>>>>> NAMESPACE: {} <<<<<<<<<<<<<<<<< ", namespaceResolver.getVistaNamespace());
+//        }
 
         if (app == null) {
             if (debug) {
-                log.info("***ADF*** NOT forwarding");
+                log.debug("***ADF*** NOT forwarding");
             }
             chain.doFilter(request, response);
         } else if (isDeploymentHttps && VistaApplicationResolverHelper.isHttpsRedirectionNeeded(httprequest, app)) {
             // TODO Redo and redirect only with information about PMC and APP
             String httpsUrl = HttpRequestUtils.getHttpsUrl(httprequest);
             if (debug) {
-                log.info("***ADF*** redirecting. Change protocol from 'http' to 'https'. Sending redirect to \"{}\" to browser", httpsUrl);
+                log.debug("***ADF*** redirecting. Change protocol from 'http' to 'https'. Sending redirect to \"{}\" to browser", httpsUrl);
             }
             ((HttpServletResponse) response).sendRedirect(httpsUrl);
             return;
         } else if (app == VistaApplication.prospect && VistaApplicationResolverHelper.isRootAppRequest(httprequest, app)) {
             String urlToForward = VistaApplicationResolverHelper.getCompleteURLToForward(httprequest, app);
             if (debug) {
-                log.info("***ADF*** redirecting. Sending redirect from '/prospect' to \"{}\" to browser", urlToForward);
+                log.debug("***ADF*** redirecting. Sending redirect from '/prospect' to \"{}\" to browser", urlToForward);
             }
             ((HttpServletResponse) response).sendRedirect(urlToForward);
             return;
@@ -122,7 +122,7 @@ public class VistaApplicationDispatcherFilter implements Filter {
             httprequest.setAttribute(ServletUtils.x_forwarded_path, forwardedPath);
             String urlForward = VistaApplicationResolverHelper.getNewURLRequest(httprequest, app);
             if (debug) {
-                log.info("***ADF*** \"{}\" forwarding to \"{}\" ", requestUri, urlForward);
+                log.debug("***ADF*** \"{}\" forwarding to \"{}\" ", requestUri, urlForward);
             }
             request.getRequestDispatcher(urlForward).forward(request, response);
         }

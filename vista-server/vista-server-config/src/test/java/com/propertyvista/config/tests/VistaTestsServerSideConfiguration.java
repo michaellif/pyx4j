@@ -144,7 +144,7 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
-    public boolean isVistaDemo() {
+    public boolean isDemoBehavior() {
         return false;
     }
 

@@ -35,12 +35,6 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
     public static boolean devTestHttps = false;
 
     @Override
-    public boolean isVistaDemo() {
-        return false;
-        //return true;
-    }
-
-    @Override
     public boolean walkMeEnabled(VistaApplication application) {
         return false;
     }
@@ -99,11 +93,6 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
                 return Consts.MIN2MSEC;
             }
         };
-    }
-
-    @Override
-    public boolean isDevelopmentBehavior() {
-        return true;
     }
 
     @Override

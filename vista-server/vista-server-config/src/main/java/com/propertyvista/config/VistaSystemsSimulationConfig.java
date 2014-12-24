@@ -19,7 +19,6 @@ import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.operations.dto.VistaSystemsSimulationConfigDTO;
 import com.propertyvista.shared.VistaSystemIdentification;
-import com.propertyvista.shared.config.VistaDemo;
 
 public class VistaSystemsSimulationConfig {
 
@@ -27,7 +26,7 @@ public class VistaSystemsSimulationConfig {
 
     static {
         configuration = EntityFactory.create(VistaSystemsSimulationConfigDTO.class);
-        configuration.useEquifaxSimulator().setValue(VistaDemo.isDemo() || ApplicationMode.isDevelopment());
+        configuration.useEquifaxSimulator().setValue(ApplicationMode.isDemo() || ApplicationMode.isDevelopment());
         configuration.useFundsTransferSimulator().setValue(
                 !EnumSet.of(VistaSystemIdentification.production, VistaSystemIdentification.staging).contains(VistaDeployment.getSystemIdentification()));
         configuration.useCardServiceSimulator().setValue(configuration.useFundsTransferSimulator().getValue());

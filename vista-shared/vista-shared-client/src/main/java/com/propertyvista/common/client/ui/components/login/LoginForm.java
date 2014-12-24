@@ -55,7 +55,6 @@ import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 
 import com.propertyvista.common.client.ui.components.login.AbstractLoginViewImpl.DevLoginData;
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.shared.config.VistaDemo;
 
 // TODO Dev Login needs refactoring (populate devLoginData, and mode from outside, see portal LandingViewImpl for how to)
 @Deprecated
@@ -88,7 +87,7 @@ public class LoginForm extends CForm<AuthenticationRequest> {
         this.caption = caption;
         this.loginCommand = loginCommand;
         this.resetPasswordCommand = resetPasswordCommand;
-        if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
+        if (ApplicationMode.isDevelopment() || ApplicationMode.isDemo()) {
             resetDevLoginHistory();
             this.devLoginValues = devLoginValues;
         } else {
@@ -160,7 +159,7 @@ public class LoginForm extends CForm<AuthenticationRequest> {
         wallMessagePanel = new FlowPanel();
         main.add(wallMessagePanel);
 
-        if ((ApplicationMode.isDevelopment() || VistaDemo.isDemo()) && devLoginValues != null) {
+        if ((ApplicationMode.isDevelopment() || ApplicationMode.isDemo()) && devLoginValues != null) {
             main.add(createDevMessagePanel());
             main.addAttachHandler(new AttachEvent.Handler() {
                 private HandlerRegistration handlerRegistration;

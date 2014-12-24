@@ -46,7 +46,7 @@ public class VistaEncryptedStorageConfiguration implements EncryptedStorageConfi
 
     @Override
     public String automaticActivateDecryptionKeyPassword() {
-        if (ApplicationMode.isDevelopment() || com.propertyvista.shared.config.VistaDemo.isDemo()) {
+        if (ApplicationMode.isDevelopment() || ApplicationMode.isDemo()) {
             if (config.isVistaQa()) {
                 return null;
             } else {

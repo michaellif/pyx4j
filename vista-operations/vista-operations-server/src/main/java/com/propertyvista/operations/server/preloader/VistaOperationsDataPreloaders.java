@@ -18,7 +18,6 @@ import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.propertyvista.preloader.EquifaxSimulationPreloader;
 import com.propertyvista.preloader.QuickTipDevPreloader;
 import com.propertyvista.preloader.VisaDebitRangesPreloader;
-import com.propertyvista.shared.config.VistaDemo;
 
 public class VistaOperationsDataPreloaders extends DataPreloaderCollection {
 
@@ -29,7 +28,7 @@ public class VistaOperationsDataPreloaders extends DataPreloaderCollection {
             add(new V2BPreloader());
             add(new DevelopmentSecurityPreloader());
         }
-        if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
+        if (ApplicationMode.isDevelopment() || ApplicationMode.isDemo()) {
             add(new EquifaxSimulationPreloader());
             add(new VisaDebitRangesPreloader());
             add(new QuickTipDevPreloader());

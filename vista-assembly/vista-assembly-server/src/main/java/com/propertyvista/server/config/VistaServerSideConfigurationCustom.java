@@ -42,11 +42,6 @@ public class VistaServerSideConfigurationCustom extends VistaServerSideConfigura
     }
 
     @Override
-    public boolean isDevelopmentBehavior() {
-        return getConfigProperties().getBooleanValue("isDevelopmentBehavior", true);
-    }
-
-    @Override
     public boolean allowToBypassRpcServiceManifest() {
         return getConfigProperties().getBooleanValue("allowToBypassRpcServiceManifest", false);
     }

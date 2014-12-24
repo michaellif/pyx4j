@@ -82,7 +82,6 @@ import com.propertyvista.portal.server.preloader.PmcCreatorDev;
 import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
-import com.propertyvista.shared.config.VistaDemo;
 
 @SuppressWarnings("serial")
 public class DBResetServlet extends HttpServlet {
@@ -479,7 +478,7 @@ public class DBResetServlet extends HttpServlet {
     }
 
     private String prodPmcNameCorrections(String name) {
-        if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
+        if (ApplicationMode.isDevelopment() || ApplicationMode.isDemo()) {
             return name;
         } else {
             return name;

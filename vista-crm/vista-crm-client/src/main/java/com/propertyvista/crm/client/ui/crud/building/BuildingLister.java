@@ -37,7 +37,7 @@ public class BuildingLister extends SiteDataTablePanel<BuildingDTO> {
 
         setColumnDescriptors( //
                 new ColumnDescriptor.Builder(proto().propertyCode(), true).filterAlwaysShown(true).build(), //
-                new ColumnDescriptor.Builder(proto().complex()).width("150px").build(), //
+                new ColumnDescriptor.Builder(proto().complex().name()).columnTitle(proto().complex().getMeta().getCaption()).width("150px").build(), //
                 new ColumnDescriptor.Builder(proto().complexPrimary(), false).build(), //
                 new ColumnDescriptor.Builder(proto().externalId(), false).build(), //
                 new ColumnDescriptor.Builder(proto().integrationSystemId(), VistaFeatures.instance().yardiIntegration()).build(), //

@@ -50,6 +50,8 @@ public class VistaDBReset {
     private static final Logger log = LoggerFactory.getLogger(VistaDBReset.class);
 
     public static void main(String[] args) {
+        LoggerConfig.setContextName("vista");
+
         List<String> arguments = Arrays.asList(args);
 
         long totalStart = System.currentTimeMillis();
@@ -64,7 +66,6 @@ public class VistaDBReset {
             log.info("Use MySQL");
             conf = new VistaServerSideConfigurationDev();
         }
-        LoggerConfig.setContextName("vista");
         ServerSideConfiguration.setInstance(conf);
         Persistence.service().startBackgroundProcessTransaction();
         try {

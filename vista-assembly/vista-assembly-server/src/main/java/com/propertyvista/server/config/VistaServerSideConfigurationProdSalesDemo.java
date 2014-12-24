@@ -20,7 +20,7 @@ import com.propertyvista.domain.DemoData.DemoPmc;
 public class VistaServerSideConfigurationProdSalesDemo extends VistaServerSideConfigurationCustom {
 
     @Override
-    public boolean isVistaDemo() {
+    public boolean isDemoBehavior() {
         return true;
     }
 

@@ -53,7 +53,7 @@ public class VistaConfigInfoServlet extends ConfigInfoServlet {
         b.append("  openIdRequired                      : ").append(conf.openIdRequired()).append("\n");
         b.append("  openIdDomain                        : ").append(conf.openIdDomain()).append("\n");
         b.append("  openIdProviderDomain                : ").append(conf.openIdProviderDomain()).append("\n");
-        b.append("  isVistaDemo                         : ").append(conf.isVistaDemo()).append("\n");
+        b.append("  isVistaDemo                         : ").append(conf.isDemoBehavior()).append("\n");
         b.append("  isVistaQa                           : ").append(conf.isVistaQa()).append("\n");
         b.append("  interfaceSSHDPort                   : ").append(conf.interfaceSSHDPort()).append("\n");
         b.append("  rdateServer                         : ").append(conf.rdateServer()).append("\n");

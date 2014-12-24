@@ -19,7 +19,7 @@ import com.propertyvista.domain.ref.ISOCountry;
 public class PostalCodeFormatter implements IFormatter<String, String> {
 
     /** returns country name in English converted to lower case */
-    interface ICountryContextProvider {
+    public interface ICountryContextProvider {
 
         ISOCountry getCountry();
 

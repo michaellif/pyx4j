@@ -56,5 +56,4 @@ public interface PreauthorizedPaymentsDTO extends IEntity {
 
     @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> nextScheduledPaymentDate();
-
 }

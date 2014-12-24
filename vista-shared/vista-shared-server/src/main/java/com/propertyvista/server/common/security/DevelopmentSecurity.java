@@ -12,6 +12,7 @@
  */
 package com.propertyvista.server.common.security;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.OrCriterion;
@@ -23,7 +24,6 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.config.SystemConfig;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.operations.domain.dev.DevelopmentUser;
-import com.propertyvista.shared.config.VistaDemo;
 
 public class DevelopmentSecurity {
 
@@ -99,7 +99,7 @@ public class DevelopmentSecurity {
         EntityQueryCriteria<DevelopmentUser> criteria = EntityQueryCriteria.create(DevelopmentUser.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
         DevelopmentUser developmentUser = Persistence.service().retrieve(criteria);
-        if (VistaDemo.isDemo() && (developmentUser == null)) {
+        if (ApplicationMode.isDemo() && (developmentUser == null)) {
             developmentUser = EntityFactory.create(DevelopmentUser.class);
             developmentUser.email().setValue(email);
             developmentUser.forwardAll().setValue(Boolean.TRUE);

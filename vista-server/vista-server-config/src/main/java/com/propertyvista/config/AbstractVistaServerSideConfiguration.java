@@ -47,7 +47,7 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract Integer enviromentId();
 
-    public abstract boolean isVistaDemo();
+    public abstract boolean isDemoBehavior();
 
     public abstract boolean isVistaQa();
 
