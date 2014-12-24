@@ -96,7 +96,7 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TY
 
     @Override
     public boolean isValidatable() {
-        return isVisible() && isEditable() && isEnabled() && !isViewable() && (isVisited() || !isValueEmpty() || isEditingInProgress());
+        return isVisible() && isEditable() && isEnabled() && isPopulated() && !isViewable() && (isVisited() || !isValueEmpty() || isEditingInProgress());
     }
 
     @Override
@@ -148,7 +148,13 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TY
     @Override
     protected String getDebugInfo() {
         StringBuilder info = new StringBuilder(super.getDebugInfo());
-        info.append("value").append("=").append(getValue()).append(";");
+        info.append("value");
+        if (isPopulated()) {
+            info.append("=").append(getValue());
+        } else {
+            info.append(" not populated");
+        }
+        info.append(";");
         return info.toString();
     }
 
