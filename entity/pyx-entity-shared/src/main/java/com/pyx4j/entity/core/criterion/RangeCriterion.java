@@ -25,8 +25,9 @@ import java.util.Vector;
 
 import com.pyx4j.entity.core.IObject;
 
-@SuppressWarnings("serial")
 public class RangeCriterion implements Criterion {
+
+    private static final long serialVersionUID = 1L;
 
     private final Vector<PropertyCriterion> filters;
 
