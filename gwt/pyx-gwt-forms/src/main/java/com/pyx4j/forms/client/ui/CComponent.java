@@ -27,6 +27,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
@@ -65,6 +68,8 @@ import com.pyx4j.i18n.shared.I18n;
 
 public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TYPE, WIDGET_TYPE, DECORATOR_TYPE>, DATA_TYPE, WIDGET_TYPE extends INativeComponent<DATA_TYPE>, DECORATOR_TYPE extends IDecorator<? super SELF_TYPE>>
         implements HasHandlers, HasPropertyChangeHandlers, IsWidget, HasValueChangeHandlers<DATA_TYPE> {
+
+    private static final Logger log = LoggerFactory.getLogger(CComponent.class);
 
     private static final I18n i18n = I18n.get(CComponent.class);
 
@@ -527,8 +532,12 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     }
 
     public final void setValue(DATA_TYPE value, boolean fireEvent, boolean populate) {
-        if (TODO_ENFORCE_POPULATED && !populate) {
-            assert populated : "Value should be populated before usage on component " + this.shortDebugInfo();
+        if (!populate) {
+            if (TODO_ENFORCE_POPULATED) {
+                assert populated : "Value should be populated before usage on component " + this.shortDebugInfo();
+            } else {
+                log.error("The API will change soon", new Error("Value should be populated before usage on component " + this.shortDebugInfo()));
+            }
         }
 
         //In case of CComponent model represented by IEntity, disable check for equality because value may be the same instance that is returned by getValue()
