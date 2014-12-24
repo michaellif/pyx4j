@@ -43,7 +43,7 @@ public class VistaApplicationDispatcherFilter implements Filter {
 
     private boolean isDeploymentHttps = false;
 
-    private boolean debug = false; // temporary for local development
+    private boolean debug = true; // temporary for local development
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -76,10 +76,10 @@ public class VistaApplicationDispatcherFilter implements Filter {
 
         VistaNamespaceDataResolver namespaceResolver = VistaNamespaceDataResolver.create(httprequest);
 
-        if (debug) {
-            log.info("Complete URL Request -> {}", HttpRequestUtils.getCompleteURLWithContextPath(httprequest));
-            log.info("Complete URL Request without context -> {}", HttpRequestUtils.getCompleteURLNoContextPath(httprequest));
-        }
+//        if (debug) {
+//            log.info("Complete URL Request -> {}", HttpRequestUtils.getCompleteURLWithContextPath(httprequest));
+//            log.info("Complete URL Request without context -> {}", HttpRequestUtils.getCompleteURLNoContextPath(httprequest));
+//        }
 
         // For sample url -> http://vista-crm.dev.birchwoodsoftwaregroup.com:8888/vista/crm/tip.png?width=23
         String requestUri = httprequest.getRequestURI(); // sample: /vista/crm/tip.png
@@ -92,9 +92,9 @@ public class VistaApplicationDispatcherFilter implements Filter {
 
         //TODO BASED ON PMC and APP, DO FORWARD OR REDIRECT
 
-        if (debug) {
-            log.info(">>>>>>>>>>>>>>>>>>>> NAMESPACE: {} <<<<<<<<<<<<<<<<< ", namespaceResolver.getVistaNamespace());
-        }
+//        if (debug) {
+//            log.info(">>>>>>>>>>>>>>>>>>>> NAMESPACE: {} <<<<<<<<<<<<<<<<< ", namespaceResolver.getVistaNamespace());
+//        }
 
         if (app == null) {
             if (debug) {
