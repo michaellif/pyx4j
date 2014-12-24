@@ -43,6 +43,8 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
 
     private final boolean uploadable;
 
+    private final StatusHistoryFolder historyFolder = new StatusHistoryFolder();
+
     public EvictionCaseForm(IPrimeFormView<EvictionCaseDTO, ?> view, boolean uploadable) {
         super(EvictionCaseDTO.class, view);
         this.uploadable = uploadable;
@@ -56,7 +58,7 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
         formPanel.append(Location.Dual, proto().note()).decorate();
 
         formPanel.h1(i18n.tr("Status History"));
-        formPanel.append(Location.Dual, proto().history(), new StatusHistoryFolder());
+        formPanel.append(Location.Dual, proto().history(), historyFolder);
 
         selectTab(addTab(formPanel, i18n.tr("General")));
         setTabBarVisible(false);
@@ -72,6 +74,7 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
             get(proto().updatedOn()).setVisible(false);
             get(proto().closedOn()).setVisible(false);
         }
+        historyFolder.setAddable(!getValue().nextStep().isNull());
     }
 
     class StatusHistoryFolder extends VistaBoxFolder<EvictionStatus> {
@@ -82,6 +85,7 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
 
         @Override
         protected CForm<? extends EvictionStatus> createItemForm(IObject<?> member) {
+            this.setAddable(false);
             return new CForm<EvictionStatus>(EvictionStatus.class) {
 
                 @Override
@@ -103,8 +107,7 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
                 @Override
                 protected EvictionStatus preprocessValue(EvictionStatus value, boolean fireEvent, boolean populate) {
                     if (value.getPrimaryKey() == null) {
-                        // TODO - set next step from the case flow here
-                        // value.evictionStep().setValue(value);
+                        value.evictionStep().set(EvictionCaseForm.this.getValue().nextStep());
                     }
                     return super.preprocessValue(value, fireEvent, populate);
                 }

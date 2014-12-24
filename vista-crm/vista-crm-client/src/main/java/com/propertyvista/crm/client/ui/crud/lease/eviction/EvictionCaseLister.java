@@ -17,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.commons.Key;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
@@ -45,15 +46,15 @@ public class EvictionCaseLister extends SiteDataTablePanel<EvictionCaseDTO> {
 
     @Override
     protected void onItemNew() {
-        if (canCreateNewItem()) {
-            if (getDataSource().getParentEntityClass() != null) {
-                AppSite.getPlaceController().goTo(
-                        AppSite.getHistoryMapper().createPlace(getItemOpenPlaceClass())
-                                .formNewItemPlace(getDataSource().getParentEntityId(), getDataSource().getParentEntityClass()));
-            } else {
-                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(getItemOpenPlaceClass()).formNewItemPlace(leaseId));
+        ((EvictionCaseCrudService) getService()).hasEvictionFlow(new DefaultAsyncCallback<Boolean>() {
+
+            @Override
+            public void onSuccess(Boolean confirmed) {
+                if (confirmed && canCreateNewItem()) {
+                    AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(getItemOpenPlaceClass()).formNewItemPlace(leaseId));
+                }
             }
-        }
+        }, leaseId);
     }
 
 }

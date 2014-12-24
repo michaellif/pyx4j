@@ -14,6 +14,9 @@ package com.propertyvista.crm.server.services.legal.eviction;
 
 import java.util.List;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
@@ -53,16 +56,24 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
         bo.lease().set(initData.lease());
         // copy flow steps from the policy
         bo.evictionFlow().addAll(getEvictionFlowSteps(lease));
-        return binder.createTO(bo);
+        EvictionCaseDTO to = binder.createTO(bo);
+
+        if (!to.evictionFlow().isEmpty()) {
+            to.nextStep().set(to.evictionFlow().get(0));
+        }
+
+        return to;
+    }
+
+    @Override
+    public void hasEvictionFlow(AsyncCallback<Boolean> callback, Key leaseId) {
+        callback.onSuccess(!getEvictionFlowSteps(Persistence.service().retrieve(Lease.class, leaseId)).isEmpty());
     }
 
     @Override
     protected boolean persist(EvictionCase bo, EvictionCaseDTO to) {
         if (bo.createdBy().isNull()) {
             bo.createdBy().set(CrmAppContext.getCurrentUserEmployee());
-        }
-        if (bo.history().isEmpty()) {
-            // TODO add the first eviction flow step if none is found?
         }
 
         return super.persist(bo, to);
@@ -73,6 +84,8 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
         super.enhanceRetrieved(bo, to, retrieveTarget);
 
         Persistence.ensureRetrieve(to.createdBy(), AttachLevel.Attached);
+        to.nextStep().set(getNextEvictionStep(bo));
+        Persistence.ensureRetrieve(to.nextStep(), AttachLevel.Attached);
     }
 
     @Override
@@ -93,5 +106,13 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
             throw new Error("Cannot retrieve EvictionFlowPolicy for building: " + lease.unit().building().propertyCode().getValue());
         }
         return policy.evictionFlow();
+    }
+
+    private EvictionFlowStep getNextEvictionStep(EvictionCase bo) {
+        EvictionFlowStep nextStep = null;
+        if (bo.history().size() < bo.evictionFlow().size()) {
+            nextStep = bo.evictionFlow().get(bo.history().size());
+        }
+        return nextStep;
     }
 }

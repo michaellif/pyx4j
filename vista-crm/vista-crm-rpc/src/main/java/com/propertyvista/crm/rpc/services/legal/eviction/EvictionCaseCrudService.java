@@ -12,6 +12,9 @@
  */
 package com.propertyvista.crm.rpc.services.legal.eviction;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -23,4 +26,5 @@ public interface EvictionCaseCrudService extends AbstractCrudService<EvictionCas
         Lease lease();
     }
 
+    void hasEvictionFlow(AsyncCallback<Boolean> callback, Key leaseId);
 }
