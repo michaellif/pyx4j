@@ -14,8 +14,13 @@ package com.propertyvista.crm.rpc.services.legal.eviction;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.EvictionCaseDTO;
 
 public interface EvictionCaseCrudService extends AbstractCrudService<EvictionCaseDTO> {
+
+    public interface EvictionCaseInitData extends InitializationData {
+        Lease lease();
+    }
 
 }

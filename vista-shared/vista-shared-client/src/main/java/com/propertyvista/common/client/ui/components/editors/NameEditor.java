@@ -99,7 +99,7 @@ public class NameEditor extends CForm<Name> {
         super.onValueSet(populate);
 
         if (!isEditable()) {
-            viewComp.setValue(getValue());
+            viewComp.setValue(getValue(), true, populate);
         }
     }
 }

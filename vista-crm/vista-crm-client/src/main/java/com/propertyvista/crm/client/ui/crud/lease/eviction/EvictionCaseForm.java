@@ -16,6 +16,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -87,9 +88,11 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
                 protected IsWidget createContent() {
                     FormPanel formPanel = new FormPanel(this);
 
-                    formPanel.append(Location.Dual, proto().evictionStep()).decorate();
+                    formPanel.append(Location.Dual, proto().evictionStep(), new CEntityLabel<>()).decorate();
                     formPanel.append(Location.Dual, proto().addedOn()).decorate();
-                    formPanel.append(Location.Dual, proto().addedBy()).decorate();
+                    formPanel.append(Location.Dual, proto().addedBy(), new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class)))
+                            .decorate();
+                    formPanel.append(Location.Dual, proto().note()).decorate();
 
                     formPanel.h1(i18n.tr("Records"));
                     formPanel.append(Location.Dual, proto().statusRecords(), new StatusRecordFolder());
@@ -97,6 +100,25 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
                     return formPanel;
                 }
 
+                @Override
+                protected EvictionStatus preprocessValue(EvictionStatus value, boolean fireEvent, boolean populate) {
+                    if (value.getPrimaryKey() == null) {
+                        // TODO - set next step from the case flow here
+                        // value.evictionStep().setValue(value);
+                    }
+                    return super.preprocessValue(value, fireEvent, populate);
+                }
+
+                @Override
+                protected void onValueSet(boolean populate) {
+                    super.onValueSet(populate);
+
+                    boolean isNew = getValue().getPrimaryKey() == null;
+                    if (isNew) {
+                        get(proto().addedBy()).setVisible(false);
+                        get(proto().addedOn()).setVisible(false);
+                    }
+                }
             };
         }
     }

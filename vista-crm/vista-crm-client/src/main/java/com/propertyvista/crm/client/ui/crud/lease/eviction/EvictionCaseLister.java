@@ -14,14 +14,18 @@ package com.propertyvista.crm.client.ui.crud.lease.eviction;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.services.legal.eviction.EvictionCaseCrudService;
 import com.propertyvista.dto.EvictionCaseDTO;
 
 public class EvictionCaseLister extends SiteDataTablePanel<EvictionCaseDTO> {
+
+    private Key leaseId;
 
     public EvictionCaseLister() {
         super(EvictionCaseDTO.class, GWT.<EvictionCaseCrudService> create(EvictionCaseCrudService.class), true);
@@ -34,4 +38,22 @@ public class EvictionCaseLister extends SiteDataTablePanel<EvictionCaseDTO> {
 
         setDataTableModel(new DataTableModel<EvictionCaseDTO>());
     }
+
+    public void setLeaseId(Key leaseId) {
+        this.leaseId = leaseId;
+    }
+
+    @Override
+    protected void onItemNew() {
+        if (canCreateNewItem()) {
+            if (getDataSource().getParentEntityClass() != null) {
+                AppSite.getPlaceController().goTo(
+                        AppSite.getHistoryMapper().createPlace(getItemOpenPlaceClass())
+                                .formNewItemPlace(getDataSource().getParentEntityId(), getDataSource().getParentEntityClass()));
+            } else {
+                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(getItemOpenPlaceClass()).formNewItemPlace(leaseId));
+            }
+        }
+    }
+
 }

@@ -31,6 +31,7 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface EvictionCase extends IEntity {
@@ -62,4 +63,9 @@ public interface EvictionCase extends IEntity {
     @Owned
     @OrderBy(PrimaryKey.class)
     IList<EvictionStatus> history();
+
+    /** Flow steps copied from the policy in case policy changes afterwards */
+    @Detached
+    @OrderBy(PrimaryKey.class)
+    IList<EvictionFlowStep> evictionFlow();
 }

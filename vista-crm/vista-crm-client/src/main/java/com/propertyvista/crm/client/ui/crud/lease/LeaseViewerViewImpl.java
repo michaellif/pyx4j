@@ -610,6 +610,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         EntityFiltersBuilder<EvictionCaseDTO> evictionFilter = EntityFiltersBuilder.create(EvictionCaseDTO.class);
         evictionFilter.eq(evictionFilter.proto().lease(), value);
         evictionCaseLister.getDataSource().addPreDefinedFilter(evictionFilter);
+        evictionCaseLister.setLeaseId(value.getPrimaryKey());
         evictionCaseLister.populate();
         evictionCaseLister.setAddNewActionEnabled(!value.status().getValue().isFormer());
 
