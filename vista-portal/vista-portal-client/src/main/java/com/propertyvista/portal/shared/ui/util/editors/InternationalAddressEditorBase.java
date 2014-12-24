@@ -26,7 +26,6 @@ import com.pyx4j.site.client.backoffice.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.c.CCountryComboBox;
 import com.propertyvista.common.client.ui.components.c.CProvinceComboBox;
-import com.propertyvista.common.client.ui.components.editors.CountryContextCComponentProvider;
 import com.propertyvista.common.client.ui.components.editors.PostalCodeFormatter;
 import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
 import com.propertyvista.domain.contact.InternationalAddress;
@@ -67,7 +66,13 @@ public class InternationalAddressEditorBase<A extends InternationalAddress> exte
         CComponent<?, ISOCountry, ?, ?> country = get(proto().country());
         CTextField postalCode = (CTextField) get(proto().postalCode());
 
-        postalCode.setFormatter(new PostalCodeFormatter(new CountryContextCComponentProvider(country)));
+        postalCode.setFormatter(new PostalCodeFormatter(new PostalCodeFormatter.ICountryContextProvider() {
+            @Override
+            public ISOCountry getCountry() {
+                return getValue().country().getValue();
+            }
+        }));
+
         postalCode.addComponentValidator(new ZipCodeValueValidator(this, proto().country()));
 
         country.addValueChangeHandler(new RevalidationTrigger<ISOCountry>(postalCode));

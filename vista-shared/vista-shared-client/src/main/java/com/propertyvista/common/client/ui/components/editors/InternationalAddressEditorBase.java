@@ -66,7 +66,13 @@ public abstract class InternationalAddressEditorBase<A extends InternationalAddr
         CComponent<?, ISOCountry, ?, ?> country = get(proto().country());
         CTextField postalCode = (CTextField) get(proto().postalCode());
 
-        postalCode.setFormatter(new PostalCodeFormatter(new CountryContextCComponentProvider(country)));
+        postalCode.setFormatter(new PostalCodeFormatter(new PostalCodeFormatter.ICountryContextProvider() {
+            @Override
+            public ISOCountry getCountry() {
+                return getValue().country().getValue();
+            }
+        }));
+
         postalCode.addComponentValidator(new ZipCodeValueValidator(this, proto().country()));
 
         country.addValueChangeHandler(new RevalidationTrigger<ISOCountry>(postalCode));
