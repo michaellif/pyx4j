@@ -76,4 +76,9 @@ public class TextQueryFilterEditor extends FilterEditorBase implements IFilterEd
         super.onShown();
         queryBox.setFocus(true);
     }
+
+    @Override
+    public void clear() {
+        queryBox.setValue(null);
+    }
 }

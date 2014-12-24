@@ -38,7 +38,6 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
         super(item, new FilterItemFormatter(), item.isRemovable(), valuePanel);
         ColumnDescriptor columnDescriptor = item.getColumnDescriptor();
         editor = createFilterEditor(columnDescriptor.getMemeber());
-        editor.setCriterion(item.getCriterion());
         editor.asWidget().setWidth("200px");
         setEditor(editor);
     }
@@ -71,12 +70,14 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
     @Override
     protected void onEditorShown() {
         super.onEditorShown();
+        editor.setCriterion(getItem().getCriterion());
         editor.onShown();
     };
 
     @Override
     protected void onEditorHidden() {
         super.onEditorHidden();
+        editor.clear();
         editor.onHidden();
     };
 

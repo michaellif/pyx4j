@@ -117,4 +117,9 @@ public class MultiSelectFilterEditor extends FilterEditorBase implements IFilter
             checkGroup.setValue((Collection) propertyCriterion.getValue());
         }
     }
+
+    @Override
+    public void clear() {
+        checkGroup.setValue(null);
+    }
 }

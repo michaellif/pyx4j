@@ -45,4 +45,10 @@ public class DateFilterEditor extends FilterEditorBase implements IFilterEditor 
 
     }
 
+    @Override
+    public void clear() {
+        // TODO Auto-generated method stub
+
+    }
+
 }

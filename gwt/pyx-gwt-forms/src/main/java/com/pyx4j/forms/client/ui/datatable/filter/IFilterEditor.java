@@ -34,4 +34,6 @@ public interface IFilterEditor extends IsWidget {
 
     void onHidden();
 
+    void clear();
+
 }
