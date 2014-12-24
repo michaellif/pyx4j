@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.widgets.client.CheckGroup;
 import com.pyx4j.widgets.client.OptionGroup.Layout;
@@ -29,6 +33,13 @@ public class FilterItemAddDialog extends Dialog {
         super("Select Filter Items");
 
         checkGroup = new CheckGroup<>(Layout.VERTICAL);
+        checkGroup.setFormatter(new IFormatter<ColumnDescriptor, SafeHtml>() {
+
+            @Override
+            public SafeHtml format(ColumnDescriptor value) {
+                return SafeHtmlUtils.fromTrustedString(value.getColumnTitle());
+            }
+        });
 
         checkGroup.setHeight("400px");
         checkGroup.setWidth("100%");
@@ -41,7 +52,7 @@ public class FilterItemAddDialog extends Dialog {
         }
         checkGroup.setValue(descriptors);
 
-        setDialogPixelWidth(500);
+        setDialogPixelWidth(300);
         setBody(checkGroup);
     }
 

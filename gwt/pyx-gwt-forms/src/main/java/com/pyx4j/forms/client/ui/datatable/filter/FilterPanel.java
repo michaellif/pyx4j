@@ -48,7 +48,7 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
             @Override
             public SafeHtml format(FilterItem value) {
                 SafeHtmlBuilder builder = new SafeHtmlBuilder();
-                builder.appendHtmlConstant(SimpleMessageFormat.format("<div style=\"padding:2px;\">{0}</div>", value.toString()));
+                builder.appendHtmlConstant(SimpleMessageFormat.format("<div style=\"padding:2px;\">{0}</div>", value.getColumnDescriptor().getColumnTitle()));
                 return builder.toSafeHtml();
             }
         }, new ItemHolderFactory<FilterItem>() {

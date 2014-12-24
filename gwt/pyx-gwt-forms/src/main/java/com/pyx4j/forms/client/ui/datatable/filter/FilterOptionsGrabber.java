@@ -21,6 +21,7 @@ package com.pyx4j.forms.client.ui.datatable.filter;
 
 import java.util.ArrayList;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.widgets.client.selector.MultyWordSuggestOptionsGrabber;
@@ -44,7 +45,13 @@ public class FilterOptionsGrabber extends MultyWordSuggestOptionsGrabber<FilterI
             }
         }
 
-        setFormatter(new FilterItemFormatter());
+        setFormatter(new IFormatter<FilterItem, String>() {
+
+            @Override
+            public String format(FilterItem value) {
+                return value.getColumnDescriptor().getColumnTitle();
+            }
+        });
         setAllOptions(filterItems);
     }
 
