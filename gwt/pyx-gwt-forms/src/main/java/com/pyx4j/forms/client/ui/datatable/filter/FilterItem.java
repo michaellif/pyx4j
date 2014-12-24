@@ -19,6 +19,9 @@
  */
 package com.pyx4j.forms.client.ui.datatable.filter;
 
+import java.io.Serializable;
+
+import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -29,7 +32,7 @@ public class FilterItem implements Comparable<FilterItem> {
 
     private final ColumnDescriptor columnDescriptor;
 
-    private PropertyCriterion propertyCriterion;
+    private Criterion criterion;
 
     private final boolean removable;
 
@@ -46,12 +49,12 @@ public class FilterItem implements Comparable<FilterItem> {
         return this.columnDescriptor;
     }
 
-    public PropertyCriterion getPropertyCriterion() {
-        return propertyCriterion;
+    public Criterion getCriterion() {
+        return criterion;
     }
 
-    public void setPropertyCriterion(PropertyCriterion propertyCriterion) {
-        this.propertyCriterion = propertyCriterion;
+    public void setCriterion(Criterion criterion) {
+        this.criterion = criterion;
     }
 
     @Override
@@ -61,8 +64,14 @@ public class FilterItem implements Comparable<FilterItem> {
 
     @Override
     public String toString() {
-        return columnDescriptor.getColumnTitle() + ": \""
-                + ((propertyCriterion == null || propertyCriterion.getValue() == null) ? i18n.tr("All") : propertyCriterion.getValue()) + "\"";
+        if (criterion == null) {
+            return columnDescriptor.getColumnTitle() + ": \"" + i18n.tr("All") + "\"";
+        } else if (criterion instanceof PropertyCriterion) {
+            Serializable value = ((PropertyCriterion) criterion).getValue();
+            return columnDescriptor.getColumnTitle() + ": \"" + ((value == null) ? i18n.tr("All") : value) + "\"";
+        } else {
+            return columnDescriptor.getColumnTitle();
+        }
     }
 
     @Override

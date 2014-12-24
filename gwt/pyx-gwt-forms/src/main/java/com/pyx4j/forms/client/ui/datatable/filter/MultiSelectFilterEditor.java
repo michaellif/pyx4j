@@ -31,6 +31,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.i18n.shared.I18n;
@@ -80,7 +81,7 @@ public class MultiSelectFilterEditor extends FilterEditorBase implements IFilter
     }
 
     @Override
-    public PropertyCriterion getPropertyCriterion() {
+    public PropertyCriterion getCriterion() {
         if (checkGroup.getValue() == null || checkGroup.getValue().size() == 0) {
             return null;
         } else {
@@ -90,23 +91,30 @@ public class MultiSelectFilterEditor extends FilterEditorBase implements IFilter
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public void setPropertyCriterion(PropertyCriterion criterion) {
-        if (criterion == null || criterion.getValue() == null) {
+    public void setCriterion(Criterion criterion) {
+        if (criterion == null) {
             checkGroup.setValue(null);
         } else {
-            if (criterion.getRestriction() != PropertyCriterion.Restriction.IN || criterion.getRestriction() != PropertyCriterion.Restriction.EQUAL) {
+            if (!(criterion instanceof PropertyCriterion)) {
                 throw new Error("Filter criterion isn't supported by editor");
             }
 
-            if (!getMember().getPath().toString().equals(criterion.getPropertyPath())) {
+            PropertyCriterion propertyCriterion = (PropertyCriterion) criterion;
+
+            if (propertyCriterion.getRestriction() != PropertyCriterion.Restriction.IN
+                    || propertyCriterion.getRestriction() != PropertyCriterion.Restriction.EQUAL) {
+                throw new Error("Filter criterion isn't supported by editor");
+            }
+
+            if (!getMember().getPath().toString().equals(propertyCriterion.getPropertyPath())) {
                 throw new Error("Filter editor member doesn't mach filter criterion path");
             }
 
-            if (!(criterion.getValue() instanceof Collection)) {
-                throw new Error("Filter criterion value class is" + criterion.getValue().getClass().getSimpleName() + ". Collection is expected.");
+            if (!(propertyCriterion.getValue() instanceof Collection)) {
+                throw new Error("Filter criterion value class is" + propertyCriterion.getValue().getClass().getSimpleName() + ". Collection is expected.");
             }
 
-            checkGroup.setValue((Collection) criterion.getValue());
+            checkGroup.setValue((Collection) propertyCriterion.getValue());
         }
     }
 }

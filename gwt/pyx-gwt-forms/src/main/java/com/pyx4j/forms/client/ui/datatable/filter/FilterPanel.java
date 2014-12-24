@@ -32,6 +32,7 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
@@ -126,8 +127,11 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
         Collection<FilterItem> filterItems = getValue();
         List<Criterion> filters = new ArrayList<>();
         for (FilterItem filterItem : filterItems) {
-            if (filterItem.getPropertyCriterion() != null && filterItem.getPropertyCriterion().getValue() != null) {
-                filters.add(filterItem.getPropertyCriterion());
+            if (filterItem.getCriterion() != null) {
+                if (filterItem.getCriterion() instanceof PropertyCriterion && ((PropertyCriterion) filterItem.getCriterion()).getValue() == null) {
+                    continue;
+                }
+                filters.add(filterItem.getCriterion());
             }
         }
         return filters;

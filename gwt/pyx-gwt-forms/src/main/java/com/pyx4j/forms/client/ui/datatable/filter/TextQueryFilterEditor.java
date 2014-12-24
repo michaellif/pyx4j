@@ -21,6 +21,7 @@
 package com.pyx4j.forms.client.ui.datatable.filter;
 
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.widgets.client.StringBox;
 
@@ -35,7 +36,7 @@ public class TextQueryFilterEditor extends FilterEditorBase implements IFilterEd
     }
 
     @Override
-    public PropertyCriterion getPropertyCriterion() {
+    public PropertyCriterion getCriterion() {
         if (queryBox.getValue() == null || queryBox.getValue().trim().equals("")) {
             return null;
         } else {
@@ -44,23 +45,29 @@ public class TextQueryFilterEditor extends FilterEditorBase implements IFilterEd
     }
 
     @Override
-    public void setPropertyCriterion(PropertyCriterion criterion) {
-        if (criterion == null || criterion.getValue() == null) {
+    public void setCriterion(Criterion criterion) {
+        if (criterion == null) {
             queryBox.setValue(null);
         } else {
-            if (criterion.getRestriction() != PropertyCriterion.Restriction.RDB_LIKE) {
+            if (!(criterion instanceof PropertyCriterion)) {
                 throw new Error("Filter criterion isn't supported by editor");
             }
 
-            if (!getMember().getPath().toString().equals(criterion.getPropertyPath())) {
+            PropertyCriterion propertyCriterion = (PropertyCriterion) criterion;
+
+            if (propertyCriterion.getRestriction() != PropertyCriterion.Restriction.RDB_LIKE) {
+                throw new Error("Filter criterion isn't supported by editor");
+            }
+
+            if (!getMember().getPath().toString().equals(propertyCriterion.getPropertyPath())) {
                 throw new Error("Filter editor member doesn't mach filter criterion path");
             }
 
-            if (!(criterion.getValue() instanceof String)) {
-                throw new Error("Filter criterion value class is" + criterion.getValue().getClass().getSimpleName() + ". String is expected.");
+            if (!(propertyCriterion.getValue() instanceof String)) {
+                throw new Error("Filter criterion value class is" + propertyCriterion.getValue().getClass().getSimpleName() + ". String is expected.");
             }
 
-            queryBox.setValue((String) criterion.getValue());
+            queryBox.setValue((String) propertyCriterion.getValue());
         }
     }
 

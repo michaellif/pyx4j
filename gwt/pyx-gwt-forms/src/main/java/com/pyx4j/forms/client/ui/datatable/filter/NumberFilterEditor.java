@@ -23,6 +23,7 @@ package com.pyx4j.forms.client.ui.datatable.filter;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
@@ -49,13 +50,13 @@ public class NumberFilterEditor extends FilterEditorBase implements IFilterEdito
     }
 
     @Override
-    public PropertyCriterion getPropertyCriterion() {
+    public PropertyCriterion getCriterion() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void setPropertyCriterion(PropertyCriterion filterCriterion) {
+    public void setCriterion(Criterion filterCriterion) {
         // TODO Auto-generated method stub
 
     }
