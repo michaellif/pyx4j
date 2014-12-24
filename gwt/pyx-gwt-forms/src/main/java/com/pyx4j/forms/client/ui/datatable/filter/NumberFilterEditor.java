@@ -24,12 +24,28 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Label;
+import com.pyx4j.widgets.client.StringBox;
 
 public class NumberFilterEditor extends FilterEditorBase implements IFilterEditor {
 
+    private static final I18n i18n = I18n.get(NumberFilterEditor.class);
+
     public NumberFilterEditor(IObject<?> member) {
         super(member);
-        initWidget(new FlowPanel());
+        FlowPanel contentPanel = new FlowPanel();
+        initWidget(contentPanel);
+
+        contentPanel.add(new Label(i18n.tr("From:")));
+
+        StringBox fromBox = new StringBox();
+        contentPanel.add(fromBox);
+
+        contentPanel.add(new Label(i18n.tr("To:")));
+
+        StringBox toBox = new StringBox();
+        contentPanel.add(toBox);
     }
 
     @Override
