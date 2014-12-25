@@ -539,6 +539,11 @@ public class WidgetsTheme extends Theme {
         style.addProperty("cursor", "pointer");
         addStyle(style);
 
+        style = new Style(".", StyleName.SelectedItemHolder, "-", StyleDependent.editable, ":hover");
+        style.addProperty("background-color", ThemeColor.object1, 0.3);
+        style.addProperty("color", ThemeColor.foreground, 1.2);
+        addStyle(style);
+
         style = new Style(".", StyleName.SelectionPickerPanel);
         style.addProperty("background-color", "white");
         style.addProperty("padding", "4px");
