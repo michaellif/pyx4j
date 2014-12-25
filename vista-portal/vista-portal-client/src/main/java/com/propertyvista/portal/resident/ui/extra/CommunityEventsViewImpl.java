@@ -55,10 +55,9 @@ public class CommunityEventsViewImpl extends FlowPanel implements CommunityEvent
                 timeAndLocationHTML.setTitle(dateLocation);
                 add(timeAndLocationHTML);
 
-                HTML descriptionHTML = new HTML(event.description().getValue());
+                String description = event.description().getValue();
+                HTML descriptionHTML = new HTML((description.length() <= 80) ? description : description.substring(0, description.indexOf(" ", 80)) + "...");
                 descriptionHTML.setStyleName(ExtraGadgetsTheme.StyleName.CommunityEventDescription.name());
-                descriptionHTML.addStyleName(ExtraGadgetsTheme.StyleName.ellipsis.name());
-                descriptionHTML.addStyleName(ExtraGadgetsTheme.StyleName.ellipsis + ":after");
                 descriptionHTML.setTitle(event.description().getValue());
                 add(descriptionHTML);
 

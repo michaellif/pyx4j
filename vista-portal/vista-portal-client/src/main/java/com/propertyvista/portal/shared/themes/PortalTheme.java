@@ -60,7 +60,7 @@ public class PortalTheme extends Theme {
                 super.initStyles();
 
                 Style style = new Style(".", StyleName.FrontOfficeLayoutInlineExtraPanel);
-                style.addProperty("background", ThemeColor.foreground, 0.01);
+                style.addProperty("background", ThemeColor.formBackground);
                 style.addProperty("border-color", ThemeColor.object1, 0.9);
                 style.addProperty("border-style", "solid");
                 style.addProperty("border-width", "1px");
