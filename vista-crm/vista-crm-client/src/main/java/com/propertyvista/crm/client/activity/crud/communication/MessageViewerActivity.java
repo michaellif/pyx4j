@@ -54,14 +54,14 @@ public class MessageViewerActivity extends CrmViewerActivity<MessageDTO> impleme
     }
 
     @Override
-    public void assignOwnership(MessageDTO message, IEntity empoyee) {
+    public void assignOwnership(MessageDTO message, String additionalComment, IEntity empoyee) {
         ((MessageCrudService) getService()).assignOwnership(new DefaultAsyncCallback<MessageDTO>() {
             @Override
             public void onSuccess(MessageDTO result) {
                 getView().populate(result);
                 ClientEventBus.fireEvent(new CommunicationStatusUpdateEvent(CrmClientCommunicationManager.instance().getLatestCommunicationNotification()));
             }
-        }, message, empoyee);
+        }, message, additionalComment, empoyee);
     }
 
     @Override

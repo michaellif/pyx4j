@@ -29,11 +29,11 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.upload.FileUploadRegistry;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.communication.CommunicationMessageFacade;
@@ -57,6 +57,8 @@ import com.propertyvista.dto.MessageDTO;
 import com.propertyvista.dto.MessageDTO.ViewScope;
 
 public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, MessageDTO> implements MessageCrudService {
+    private final static I18n i18n = I18n.get(MessageCrudServiceImpl.class);
+
     public MessageCrudServiceImpl() {
         super(Message.class, MessageDTO.class);
     }
@@ -117,7 +119,6 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         PropertyCriterion ownerCiteria = toCriteria.getCriterion(toCriteria.proto().viewScope());
         if (ownerCiteria != null && ownerCiteria.getValue() != null) {
             ViewScope critValue = (ViewScope) ownerCiteria.getValue();
-            Restriction restr = ownerCiteria.getRestriction();
             toCriteria.getFilters().remove(ownerCiteria);
             if (ViewScope.Dispatched.equals(critValue)) {
                 boCriteria.eq(boCriteria.proto().thread().owner(),
@@ -125,6 +126,10 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             } else {
                 boCriteria.add(new OrCriterion(PropertyCriterion.eq(boCriteria.proto().thread().category().categoryType(), CategoryType.Message),
                         PropertyCriterion.eq(boCriteria.proto().thread().owner(), CrmAppContext.getCurrentUserEmployee())));
+                if (ViewScope.Direct.equals(critValue)) {
+                    boCriteria.add(new OrCriterion(PropertyCriterion.isNull(boCriteria.proto().isSystem()), PropertyCriterion.eq(boCriteria.proto().isSystem(),
+                            false)));
+                }
             }
         }
 
@@ -305,7 +310,23 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     private void saveAndUpdate(AsyncCallback<MessageDTO> callback, MessageDTO message, ThreadStatus threadStatus, boolean updateOwner) {
         Employee currentUser = CrmAppContext.getCurrentUserEmployee();
         if (message.date().isNull()) {
-            Message m = ServerSideFactory.create(CommunicationMessageFacade.class).saveMessage(message, threadStatus, currentUser, updateOwner);
+            CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
+            Message m = communicationFacade.saveMessage(message, threadStatus, currentUser, updateOwner);
+            EntityQueryCriteria<DeliveryHandle> dhCriteria = EntityQueryCriteria.create(DeliveryHandle.class);
+            dhCriteria.eq(dhCriteria.proto().recipient(), communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned));
+            dhCriteria.eq(dhCriteria.proto().message().thread(), m.thread());
+            dhCriteria.add(new OrCriterion(PropertyCriterion.isNull(dhCriteria.proto().message().isSystem()), PropertyCriterion.eq(dhCriteria.proto().message()
+                    .isSystem(), false)));
+            List<DeliveryHandle> dhs = Persistence.service().query(dhCriteria, AttachLevel.Attached);
+            if (message.thread().owner() != null && !message.thread().owner().isEmpty() && dhs != null && dhs.size() > 0) {
+                for (DeliveryHandle dh : dhs) {
+                    dh.recipient().set(message.thread().owner());
+                    dh.isRead().setValue(false);
+                    dh.star().setValue(false);
+                    Persistence.service().persist(dh);
+                }
+                Persistence.service().commit();
+            }
             retrieve(callback, m.getPrimaryKey(), RetrieveTarget.View);
         } else {
             EntityQueryCriteria<DeliveryHandle> dhCriteria = EntityQueryCriteria.create(DeliveryHandle.class);
@@ -322,7 +343,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     }
 
     @Override
-    public void assignOwnership(AsyncCallback<MessageDTO> callback, MessageDTO message, IEntity employee) {
+    public void assignOwnership(AsyncCallback<MessageDTO> callback, MessageDTO message, String additionalComment, IEntity employee) {
         CommunicationThread thread = Persistence.secureRetrieve(CommunicationThread.class, message.thread().id().getValue());
         CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
         Employee e = null;
@@ -345,8 +366,10 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         if (!CrmAppContext.getCurrentUserEmployee().equals(employee)) {
             MessageDTO dto = EntityFactory.create(MessageDTO.class);
             dto.to().add(message.owner());
-            dto.text().setValue("Ticket owner was changed to: " + message.owner().name().getStringView());
+            dto.text().setValue(
+                    additionalComment == null ? i18n.tr("Ticket owner was changed to") + ": " + message.owner().name().getStringView() : additionalComment);
             dto.thread().set(thread);
+            dto.isSystem().setValue(true);
             saveAndUpdate(callback, dto, null, false);
         } else {
             ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Long(0L));

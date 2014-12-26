@@ -47,7 +47,6 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap.Communication.Message;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
-import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.communication.MessageCategory.TicketType;
@@ -134,32 +133,32 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
 
         //@formatter:off
         List<ColumnDescriptor> columns = new ArrayList<>();
-        columns.add( new ColumnDescriptor.Builder(proto.star()).searchable(false).width("30px").formatter(
+        columns.add( new ColumnDescriptor.Builder(proto.star()).searchable(false).width("27px").formatter(
                 booleanField2Image(proto.star().getPath(),CrmImages.INSTANCE.fullStar(), CrmImages.INSTANCE.noStar()))
                 .columnTitleShown(false).build());
 
-        columns.add(new ColumnDescriptor.Builder(proto.highImportance()).searchable(false).width("30px").formatter(
+        columns.add(new ColumnDescriptor.Builder(proto.highImportance()).searchable(false).width("27px").formatter(
                 booleanField2Image( proto.highImportance().getPath(),CrmImages.INSTANCE.messageImportant(), null))
                 .columnTitleShown(false).build());
-        columns.add(new ColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("30px").formatter(
+        columns.add(new ColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("27px").formatter(
                 booleanField2Image( proto.hasAttachments().getPath(),CrmImages.INSTANCE.attachement(), null))
                 .columnTitleShown(false).build());
         columns.add(new ColumnDescriptor.Builder(proto.senderDTO().name()).columnTitle(i18n.tr("Sender")).searchable(false).width("200px").formatter(baseFieldViewOnIsRead(proto.senderDTO().name().getPath())).build());
-        columns.add(new ColumnDescriptor.Builder(proto.subject()).searchable(false).width("1000px").formatter(baseFieldViewOnIsRead(proto.subject().getPath())).build());
-        columns.add(new ColumnDescriptor.Builder(proto.date()).searchable(false).width("200px").build());
+        columns.add(new ColumnDescriptor.Builder(proto.subject()).searchable(false).width("600px").formatter(baseFieldViewOnIsRead(proto.subject().getPath())).build());
+        columns.add(new ColumnDescriptor.Builder(proto.date()).searchable(false).width("100px").build());
 
         if (category != CategoryType.Ticket) {
-            columns.add(new ColumnDescriptor.Builder(proto.deliveryMethod()).searchable(true).width("300px").build());
+            columns.add(new ColumnDescriptor.Builder(proto.deliveryMethod()).width("70px").searchable(true).build());
         }
 
-        columns.add(new ColumnDescriptor.Builder(proto.category(), false).searchable(false).width("300px").build());
+        columns.add(new ColumnDescriptor.Builder(proto.category(), false).searchable(false).build());
         columns.add(new ColumnDescriptor.Builder(proto.category().categoryType(), false).searchableOnly().columnTitle(i18n.tr("Category")).build());
-        columns.add(new ColumnDescriptor.Builder(proto.allowedReply()).searchable(false).width("100px").build());
+        columns.add(new ColumnDescriptor.Builder(proto.allowedReply()).searchable(false).width("70px").build());
 
         if (category != CategoryType.Message) {
             columns.add(new ColumnDescriptor.Builder(proto.thread().owner()).searchable(false).width("200px").build());
             columns.add(new ColumnDescriptor.Builder(proto.ownerForList(), false).columnTitle(i18n.tr("Owner")).searchableOnly().build());
-            columns.add(new ColumnDescriptor.Builder(proto.status()).searchable(true).width("100px").build());
+            columns.add(new ColumnDescriptor.Builder(proto.status()).searchable(true).width("70px").build());
         }
         if (category == null) {
             columns.add(new ColumnDescriptor.Builder(proto.hidden(), false).searchableOnly().columnTitle(i18n.tr("Hidden")).build());
@@ -255,8 +254,7 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
                     }
                     if (!CategoryType.Ticket.equals(v.category().categoryType().getValue()) && (isRead == null || !isRead.booleanValue())) {
                         messageField.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-                    } else if (CategoryType.Ticket.equals(v.category().categoryType().getValue()) && !v.isDirect().getValue(false).booleanValue()
-                            && ThreadStatus.Open.equals(v.status().getValue(null))) {
+                    } else if (CategoryType.Ticket.equals(v.category().categoryType().getValue()) && v.isDirect().getValue(false).booleanValue() && (isRead == null || !isRead.booleanValue())) {
                         messageField.getElement().getStyle().setFontWeight(FontWeight.BOLD);
                     }
 

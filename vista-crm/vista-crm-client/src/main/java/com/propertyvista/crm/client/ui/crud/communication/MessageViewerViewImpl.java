@@ -29,6 +29,10 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.backoffice.ui.prime.CEntitySelectorHyperlink;
+import com.pyx4j.site.client.ui.IShowable;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.PrintUtils;
@@ -66,33 +70,31 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
         assignToMeAction = new MenuItem(i18n.tr("Assign to Me"), new Command() {
             @Override
             public void execute() {
-                assignEmployee(ClientContext.visit(CrmUserVisit.class).getCurrentUser());
+                assignEmployee(ClientContext.visit(CrmUserVisit.class).getCurrentUser(), null);
             }
         });
         unassignAction = new MenuItem(i18n.tr("Unassign"), new Command() {
             @Override
             public void execute() {
-                assignEmployee(null);
+                assignEmployee(null, null);
             }
         });
         assignOwnershipAction = new MenuItem(i18n.tr("Assign Owner"), new Command() {
             @Override
             public void execute() {
-                new EmployeeSelectionDialog() {
+                new UpdateThreadStatusAndOwnerBox(form, form.getValue().status().getValue().toString(), null) {
                     @Override
                     public boolean onClickOk() {
-                        for (Employee selected : getSelectedItems()) {
-                            assignEmployee(getSelectedItem());
+                        if (validate()) {
+                            //getValue().thread().set(form.getValue().thread());
+                            assignEmployee(getEmployee(), getValue().text().getValue());
+                            return true;
+                        } else {
+                            return false;
                         }
-                        return true;
-                    }
-
-                    @Override
-                    protected void setFilters(List<Criterion> filters) {
-                        super.setFilters(filters);
-                        addFilter(new EmployeeEnabledCriteria(true));
                     }
                 }.show();
+
             }
         });
 
@@ -103,7 +105,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
             threadStatusActions.put(ts, new MenuItem(ThreadStatus.Open.equals(ts) ? ThreadStatus.Open.toString() : i18n.tr("Resolve"), new Command() {
                 @Override
                 public void execute() {
-                    new UpdateThreadStatusBox(form, form.getValue().status().getValue().toString(), ts.toString()) {
+                    new UpdateThreadStatusAndOwnerBox(form, form.getValue().status().getValue().toString(), ts.toString()) {
                         @Override
                         public boolean onClickOk() {
                             if (validate()) {
@@ -156,7 +158,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
     public void populate(MessageDTO value) {
         super.populate(value);
 
-        boolean invisible = !CategoryType.Ticket.equals(value.category().categoryType().getValue()) || value.isDirect().getValue(false).booleanValue();
+        boolean invisible = !CategoryType.Ticket.equals(value.category().categoryType().getValue());
         setActionVisible(assignOwnershipAction, !invisible || ClientContext.getUserVisit().getName().equals(value.owner().name().getValue()));
         for (ThreadStatus status : threadStatusActions.keySet()) {
             MenuItem action = threadStatusActions.get(status);
@@ -178,15 +180,15 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
         //setActionVisible(hideUnhideAction, !CategoryType.Ticket.equals(value.category().categoryType().getValue()));
     }
 
-    public void assignEmployee(IEntity e) {
-        ((MessageForm) getForm()).assignOwnership(e);
+    public void assignEmployee(IEntity e, String additionalComment) {
+        ((MessageForm) getForm()).assignOwnership(e, additionalComment);
     }
 
     public void hideUnhide() {
         ((MessageForm) getForm()).hideUnhide();
     }
 
-    static abstract class UpdateThreadStatusBox extends OkCancelDialog {
+    abstract class UpdateThreadStatusAndOwnerBox extends OkCancelDialog {
 
         private CForm<MessageDTO> content;
 
@@ -194,8 +196,10 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
 
         private final String newStatus;
 
-        public UpdateThreadStatusBox(final MessageForm form, String oldStatus, String newStatus) {
-            super(i18n.tr("Update Status to: ") + newStatus);
+        private Employee emp;
+
+        public UpdateThreadStatusAndOwnerBox(final MessageForm form, String oldStatus, String newStatus) {
+            super(newStatus == null ? i18n.tr("Assign Owner ") : i18n.tr("Update Status to: ") + newStatus);
             this.oldStatus = oldStatus;
             this.newStatus = newStatus;
             setBody(createBody(form));
@@ -208,6 +212,9 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
                 @Override
                 protected IsWidget createContent() {
                     FormPanel main = new FormPanel(this);
+                    if (newStatus == null) {
+                        main.append(Location.Dual, inject(proto().thread().owner(), new EmployeeSelector())).decorate();
+                    }
                     main.append(Location.Dual, inject(proto().text())).decorate().customLabel(i18n.tr("Comment"));
 
                     return main;
@@ -221,7 +228,10 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
 
             content.init();
             MessageDTO ms = EntityFactory.create(MessageDTO.class);
-            ms.text().setValue("Status was changed from '" + oldStatus + "' to '" + newStatus + "'.\r\nReason:\r\n");
+            //Ticket owner was changed to: Jacqueline Bouvier
+            if (newStatus != null) {
+                ms.text().setValue(i18n.tr("Status was changed from") + " '" + oldStatus + "' " + i18n.tr("to") + " '" + newStatus + "'.\r\nReason:\r\n");
+            }
             content.populate(ms);
             return content.asWidget();
         }
@@ -234,5 +244,36 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
             content.setVisitedRecursive();
             return getValue().text() != null && !getValue().text().isNull();
         }
+
+        public Employee getEmployee() {
+            return emp;
+        }
+
+        class EmployeeSelector extends CEntitySelectorHyperlink<Employee> {
+            @Override
+            protected AppPlace getTargetPlace() {
+                return AppPlaceEntityMapper.resolvePlace(Employee.class, getValue().getPrimaryKey());
+            }
+
+            @Override
+            protected IShowable getSelectorDialog() {
+                return new EmployeeSelectionDialog() {
+                    @Override
+                    public boolean onClickOk() {
+                        emp = getSelectedItem();
+                        setValue(emp);
+                        return true;
+                    }
+
+                    @Override
+                    protected void setFilters(List<Criterion> filters) {
+                        super.setFilters(filters);
+                        addFilter(new EmployeeEnabledCriteria(true));
+                    }
+                };
+            }
+
+        }
     }
+
 }

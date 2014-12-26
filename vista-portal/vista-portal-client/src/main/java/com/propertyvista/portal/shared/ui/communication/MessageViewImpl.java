@@ -104,17 +104,17 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
             getDataTable().setHasColumnClickSorting(false);
             MessageDTO proto = EntityFactory.getEntityPrototype(MessageDTO.class);
             setColumnDescriptors( //
-                    new ColumnDescriptor.Builder(proto.highImportance()).searchable(false).width("30px").formatter(//
+                    new ColumnDescriptor.Builder(proto.highImportance()).searchable(false).width("27px").formatter(//
                             booleanField2Image(proto.highImportance().getPath(), PortalImages.INSTANCE.messageImportance(), null))//
                             .columnTitleShown(false).build(),//
-                    new ColumnDescriptor.Builder(proto.star()).searchable(false).width("30px").formatter(//
+                    new ColumnDescriptor.Builder(proto.star()).searchable(false).width("27px").formatter(//
                             booleanField2Image(proto.star().getPath(), PortalImages.INSTANCE.fullStar(), PortalImages.INSTANCE.noStar()))//
                             .columnTitleShown(false).build(),//
-                    new ColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("30px").formatter(//
+                    new ColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("27px").formatter(//
                             booleanField2Image(proto.hasAttachments().getPath(), PortalImages.INSTANCE.attachement(), null))//
                             .columnTitleShown(false).build(), //
-                    new ColumnDescriptor.Builder(proto.senders()).width("200px").formatter(baseFieldViewOnIsRead(proto.senders().getPath())).build(),//
-                    new ColumnDescriptor.Builder(proto.subject()).width("100px").formatter(baseFieldViewOnIsRead(proto.subject().getPath())).build(),//
+                    new ColumnDescriptor.Builder(proto.senders()).width("100px").formatter(baseFieldViewOnIsRead(proto.senders().getPath())).build(),//
+                    new ColumnDescriptor.Builder(proto.subject()).width("200px").formatter(baseFieldViewOnIsRead(proto.subject().getPath())).build(),//
                     new ColumnDescriptor.Builder(proto().date()).width("100px").build(), //
                     new ColumnDescriptor.Builder(proto().messagesInThread()).width("100px").build());
 

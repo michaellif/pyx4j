@@ -24,7 +24,7 @@ public interface MessageViewerView extends IPrimeViewerView<MessageDTO> {
 
         void saveMessage(MessageDTO message, ThreadStatus threadStatus, boolean rePopulate);
 
-        void assignOwnership(MessageDTO source, IEntity empoyee);
+        void assignOwnership(MessageDTO source, String additionalComment, IEntity empoyee);
 
         void hideUnhide(MessageDTO source);
     }

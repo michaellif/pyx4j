@@ -13,6 +13,7 @@
 package com.propertyvista.crm.server.security.access;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
 
@@ -24,6 +25,6 @@ public class MessageCategoryAccessRule implements DatasetAccessRule<MessageCateg
 
     @Override
     public void applyRule(EntityQueryCriteria<MessageCategory> criteria) {
-        criteria.add(PropertyCriterion.eq(criteria.proto().deleted(), false));
+        criteria.add(new OrCriterion(PropertyCriterion.isNull(criteria.proto().deleted()), PropertyCriterion.eq(criteria.proto().deleted(), false)));
     }
 }

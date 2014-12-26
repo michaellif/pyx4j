@@ -94,8 +94,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         setEnabled(true);
     }
 
-    public void assignOwnership(IEntity employee) {
-        ((MessageViewerView.Presenter) getParentView().getPresenter()).assignOwnership(getValue(), employee);
+    public void assignOwnership(IEntity employee, String additionalComment) {
+        ((MessageViewerView.Presenter) getParentView().getPresenter()).assignOwnership(getValue(), additionalComment, employee);
     }
 
     public void hideUnhide() {

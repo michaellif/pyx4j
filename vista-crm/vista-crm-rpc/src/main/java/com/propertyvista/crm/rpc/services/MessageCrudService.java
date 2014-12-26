@@ -23,16 +23,16 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
-import com.propertyvista.domain.communication.SpecialDelivery.DeliveryMethod;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
+import com.propertyvista.domain.communication.SpecialDelivery.DeliveryMethod;
 import com.propertyvista.dto.MessageDTO;
 
 public interface MessageCrudService extends AbstractCrudService<MessageDTO> {
 
     void saveMessage(AsyncCallback<MessageDTO> callback, MessageDTO source, ThreadStatus threadStatus);
 
-    void assignOwnership(AsyncCallback<MessageDTO> callback, MessageDTO source, IEntity employee);
+    void assignOwnership(AsyncCallback<MessageDTO> callback, MessageDTO source, String additionalComment, IEntity employee);
 
     void listForHeader(AsyncCallback<EntitySearchResult<MessageDTO>> callback);
 

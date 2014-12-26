@@ -386,7 +386,7 @@ public class CommunicationManager {
 
         messageDTO.isInRecipients().setValue(false);
         for (DeliveryHandle dh : m.recipients()) {
-            if (!isForList && !dh.generatedFromGroup().getValue(false)) {
+            if (!dh.generatedFromGroup().getValue(false)) {
 
                 Persistence.ensureRetrieve(dh.recipient(), AttachLevel.Attached);
                 CommunicationEndpointDTO ep = communicationFacade.generateEndpointDTO(dh.recipient());
@@ -490,6 +490,7 @@ public class CommunicationManager {
             communicationFacade.buildRecipientList(dbo, dto, thread);
         }
         dbo.thread().set(thread);
+        dbo.isSystem().set(dto.isSystem());
         dbo.onBehalf().set(dto.onBehalf());
         dbo.onBehalfVisible().set(dto.onBehalfVisible());
         dbo.attachments().set(dto.attachments());

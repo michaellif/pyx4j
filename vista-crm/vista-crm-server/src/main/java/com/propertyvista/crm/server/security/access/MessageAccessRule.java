@@ -15,7 +15,6 @@ package com.propertyvista.crm.server.security.access;
 import java.util.List;
 
 import com.pyx4j.entity.core.AttachLevel;
-import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -35,9 +34,8 @@ public class MessageAccessRule implements DatasetAccessRule<Message> {
     public void applyRule(EntityQueryCriteria<Message> criteria) {
         Employee e = CrmAppContext.getCurrentUserEmployee();
         List<MessageCategory> userGroups = getUserGroups(e);
-        OrCriterion inboxOr = new OrCriterion(new AndCriterion(//
-                new OrCriterion(PropertyCriterion.eq(criteria.proto().sender(), e),//
-                        PropertyCriterion.eq(criteria.proto().recipients().$().recipient(), e)), PropertyCriterion.ne(criteria.proto().isSystem(), true)),//
+        OrCriterion inboxOr = new OrCriterion(new OrCriterion(PropertyCriterion.eq(criteria.proto().sender(), e),//
+                PropertyCriterion.eq(criteria.proto().recipients().$().recipient(), e)),//
                 PropertyCriterion.eq(criteria.proto().thread().owner(), e));//
         if (userGroups != null && userGroups.size() > 0) {
             criteria.or(PropertyCriterion.in(criteria.proto().thread().category(), userGroups), inboxOr);//
