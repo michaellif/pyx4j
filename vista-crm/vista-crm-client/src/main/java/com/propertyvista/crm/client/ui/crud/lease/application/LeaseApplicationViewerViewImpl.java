@@ -496,6 +496,11 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                     ((CCheckBox) get(proto().employmentConfirmation())).setDecorator(new CheckBoxDecorator());
                     ((CCheckBox) get(proto().landlordConfirmation())).setDecorator(new CheckBoxDecorator());
 
+                    ((CCheckBox) get(proto().informationCompleteness())).asWidget().getElement().getStyle().setProperty("textAlign", "left");
+                    ((CCheckBox) get(proto().creditCheck())).asWidget().getElement().getStyle().setProperty("textAlign", "left");
+                    ((CCheckBox) get(proto().employmentConfirmation())).asWidget().getElement().getStyle().setProperty("textAlign", "left");
+                    ((CCheckBox) get(proto().landlordConfirmation())).asWidget().getElement().getStyle().setProperty("textAlign", "left");
+
                     formPanel.h4(i18n.tr("Notes:"));
                     formPanel.append(Location.Left, notes);
                     notes.asWidget().setWidth("334px");
