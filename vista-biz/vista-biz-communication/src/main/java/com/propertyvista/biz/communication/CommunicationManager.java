@@ -478,8 +478,12 @@ public class CommunicationManager {
             }
 
             Persistence.service().persist(thread);
-            dbo.recipients()
-                    .add(communicationFacade.createDeliveryHandle(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned), false));
+            if (currentUser instanceof Employee) {
+                dbo.recipients().add(communicationFacade.createDeliveryHandle(currentUser, false));
+            } else {
+                dbo.recipients().add(
+                        communicationFacade.createDeliveryHandle(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned), false));
+            }
 
         } else {
             if (updateOwner && CategoryType.Ticket.equals(dto.category().categoryType().getValue())

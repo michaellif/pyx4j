@@ -262,6 +262,12 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
                     public boolean onClickOk() {
                         emp = getSelectedItem();
                         setValue(emp);
+                        if (emp != null) {
+                            MessageDTO ms = EntityFactory.create(MessageDTO.class);
+                            ms.text().setValue(i18n.tr("Ticket owner was changed to") + ": " + emp.name().getStringView());
+                            ms.thread().owner().set(emp);
+                            UpdateThreadStatusAndOwnerBox.this.content.populate(ms);
+                        }
                         return true;
                     }
 
