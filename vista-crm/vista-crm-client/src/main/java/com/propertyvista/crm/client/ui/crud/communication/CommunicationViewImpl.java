@@ -250,7 +250,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
             setStyleName(CommunicationCrmTheme.StyleName.CommMessage.name());
 
             photoImage = new Image(isDirect ? CrmImages.INSTANCE.userIcon().regular() : (message.category() == null
-                    || !MessageCategory.TicketType.Maintenance.equals(message.category().ticketType().getValue()) ? CrmImages.INSTANCE.alertsOn()
+                    || !MessageCategory.TicketType.Maintenance.equals(message.category().ticketType().getValue()) ? CrmImages.INSTANCE.ticketAlert()
                     : CrmImages.INSTANCE.maintenanceAlert()));
             subjectField = new Label(message.subject().getStringView());
             getElement().getStyle().setCursor(Cursor.POINTER);
