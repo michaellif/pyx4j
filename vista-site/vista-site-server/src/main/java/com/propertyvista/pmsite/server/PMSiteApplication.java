@@ -241,6 +241,10 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
                     if (request.getUrl().getQueryString().length() == 0) {
                         List<String> segments = request.getUrl().getSegments();
                         String last = segments.get(segments.size() - 1);
+                        // fix index.html ending (possible configuration issue)
+                        if ("index.html".equalsIgnoreCase(last)) {
+                            return new RenderPageRequestHandler(new PageProvider(LandingPage.class));
+                        }
                         for (CompiledLocale locale : CompiledLocale.values()) {
                             if (locale.getLanguage().equals(last)) {
                                 // no trailing slash - respond with redirect
