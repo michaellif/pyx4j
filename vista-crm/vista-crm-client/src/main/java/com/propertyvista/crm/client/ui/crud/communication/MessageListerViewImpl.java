@@ -35,7 +35,7 @@ public class MessageListerViewImpl extends AbstractListerView<MessageDTO> implem
         super.setPresenter(presenter);
         if (presenter != null && presenter.getPlace() != null) {
             AppPlace place = presenter.getPlace();
-            String caption = null;
+            String caption = i18n.tr("Messages");
             Object placeCriteria = place instanceof Message ? ((Message) place).getCriteria() : null;
             if (placeCriteria != null) {
                 CategoryType category = null;
@@ -55,7 +55,7 @@ public class MessageListerViewImpl extends AbstractListerView<MessageDTO> implem
                     MessageCategory mc = (MessageCategory) placeCriteria;
                     caption = mc.category().getValue();
                 } else if (placeCriteria instanceof UserVisit) {
-                    caption = i18n.tr("Tickets");
+                    caption = i18n.tr("Dispatch Queue");
                 }
             }
             if (caption != null) {

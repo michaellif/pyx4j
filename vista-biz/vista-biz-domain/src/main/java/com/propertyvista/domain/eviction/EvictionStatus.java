@@ -27,6 +27,8 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
@@ -35,6 +37,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
 
+@ToStringFormat("{0}: {1}, By {2}: {3}")
 public interface EvictionStatus extends IEntity {
 
     @Owner
@@ -47,18 +50,22 @@ public interface EvictionStatus extends IEntity {
 
     @ReadOnly
     @Indexed(group = { "c,2" })
+    @ToString(index = 0)
     EvictionFlowStep evictionStep();
 
     @ReadOnly
     @Timestamp(Update.Created)
+    @ToString(index = 1)
     IPrimitive<Date> addedOn();
 
     @ReadOnly
     @Detached
+    @ToString(index = 2)
     Employee addedBy();
 
     @NotNull
     @Editor(type = EditorType.textarea)
+    @ToString(index = 3)
     IPrimitive<String> note();
 
     @Owned

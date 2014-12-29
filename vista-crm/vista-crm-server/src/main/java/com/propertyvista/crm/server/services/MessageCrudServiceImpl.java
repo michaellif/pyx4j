@@ -311,6 +311,11 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         Employee currentUser = CrmAppContext.getCurrentUserEmployee();
         if (message.date().isNull()) {
             CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
+            if (threadStatus != null && message.thread().status().getValue() != null) {
+                String notification = i18n.tr("Status was changed from") + " '" + message.thread().status().getValue().toString() + "' " + i18n.tr("to") + " '"
+                        + threadStatus.toString() + "'.\r\nReason: \r\n";
+                message.text().setValue(notification + message.text().getValue(""));
+            }
             Message m = communicationFacade.saveMessage(message, threadStatus, currentUser, updateOwner);
             EntityQueryCriteria<DeliveryHandle> dhCriteria = EntityQueryCriteria.create(DeliveryHandle.class);
             dhCriteria.eq(dhCriteria.proto().recipient(), communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned));
@@ -366,8 +371,8 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         if (!CrmAppContext.getCurrentUserEmployee().equals(employee)) {
             MessageDTO dto = EntityFactory.create(MessageDTO.class);
             dto.to().add(message.owner());
-            dto.text().setValue(
-                    additionalComment == null ? i18n.tr("Ticket owner was changed to") + ": " + message.owner().name().getStringView() : additionalComment);
+            String systemNotification = i18n.tr("Ticket owner was changed to") + ": " + message.owner().name().getStringView() + ". ";
+            dto.text().setValue(additionalComment == null ? systemNotification : systemNotification + additionalComment);
             dto.thread().set(thread);
             dto.isSystem().setValue(true);
             saveAndUpdate(callback, dto, null, false);

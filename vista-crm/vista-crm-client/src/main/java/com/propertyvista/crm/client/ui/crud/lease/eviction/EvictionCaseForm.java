@@ -29,6 +29,7 @@ import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.legal.eviction.EvictionDocumentUploadService;
 import com.propertyvista.domain.company.Employee;
@@ -124,6 +125,13 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
                 }
             };
         }
+
+        @Override
+        public VistaBoxFolderItemDecorator<EvictionStatus> createItemDecorator() {
+            VistaBoxFolderItemDecorator<EvictionStatus> itemDecorator = super.createItemDecorator();
+            itemDecorator.setExpended(false);
+            return itemDecorator;
+        }
     }
 
     class StatusRecordFolder extends VistaBoxFolder<EvictionStatusRecord> {
@@ -142,7 +150,8 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
 
                     formPanel.append(Location.Dual, proto().note()).decorate();
                     formPanel.append(Location.Dual, proto().addedOn()).decorate();
-                    formPanel.append(Location.Dual, proto().addedBy()).decorate();
+                    formPanel.append(Location.Dual, proto().addedBy(), new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class)))
+                            .decorate();
 
                     formPanel.h1(i18n.tr("Attachments"));
                     formPanel.append(Location.Dual, proto().attachments(), new UploadableEvictionDocumentFolder());
@@ -152,6 +161,12 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
             };
         }
 
+        @Override
+        public VistaBoxFolderItemDecorator<EvictionStatusRecord> createItemDecorator() {
+            VistaBoxFolderItemDecorator<EvictionStatusRecord> itemDecorator = super.createItemDecorator();
+            itemDecorator.setExpended(false);
+            return itemDecorator;
+        }
     }
 
     class UploadableEvictionDocumentFolder extends VistaBoxFolder<EvictionDocument> {
@@ -185,6 +200,13 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
                     get(proto().file()).setMandatory(true);
                 }
             };
+        }
+
+        @Override
+        public VistaBoxFolderItemDecorator<EvictionDocument> createItemDecorator() {
+            VistaBoxFolderItemDecorator<EvictionDocument> itemDecorator = super.createItemDecorator();
+            itemDecorator.setExpended(false);
+            return itemDecorator;
         }
     }
 }

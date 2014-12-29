@@ -25,12 +25,15 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.shared.IHasFile;
 
 import com.propertyvista.domain.blob.EvictionDocumentBlob;
 
 @SecurityEnabled
+@ToStringFormat("Document Added On {0}: {1}")
 public interface EvictionDocument extends IHasFile<EvictionDocumentBlob> {
 
     @Owner
@@ -42,8 +45,10 @@ public interface EvictionDocument extends IHasFile<EvictionDocumentBlob> {
 
     @ReadOnly
     @Timestamp(Update.Created)
+    @ToString(index = 0)
     IPrimitive<Date> addedOn();
 
+    @ToString(index = 1)
     IPrimitive<String> title();
 
     @Editor(type = EditorType.textarea)

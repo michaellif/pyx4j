@@ -145,7 +145,7 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
                 .columnTitleShown(false).build());
         columns.add(new ColumnDescriptor.Builder(proto.senderDTO().name()).columnTitle(i18n.tr("Sender")).searchable(false).width("200px").formatter(baseFieldViewOnIsRead(proto.senderDTO().name().getPath())).build());
         columns.add(new ColumnDescriptor.Builder(proto.subject()).searchable(false).width("600px").formatter(baseFieldViewOnIsRead(proto.subject().getPath())).build());
-        columns.add(new ColumnDescriptor.Builder(proto.date()).searchable(false).width("100px").build());
+        columns.add(new ColumnDescriptor.Builder(proto.date()).formatter(baseFieldViewOnIsRead(proto.date().getPath())).searchable(false).width("100px").build());
 
         if (category != CategoryType.Ticket) {
             columns.add(new ColumnDescriptor.Builder(proto.deliveryMethod()).width("70px").searchable(true).build());

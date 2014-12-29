@@ -53,7 +53,6 @@ public interface EvictionCase extends IEntity {
     @ReadOnly
     IPrimitive<Date> closedOn();
 
-    @Detached
     Employee createdBy();
 
     @NotNull
