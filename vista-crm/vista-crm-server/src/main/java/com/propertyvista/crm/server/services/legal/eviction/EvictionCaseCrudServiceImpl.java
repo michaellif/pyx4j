@@ -27,8 +27,11 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.crm.rpc.services.legal.eviction.EvictionCaseCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.eviction.EvictionCase;
+import com.propertyvista.domain.eviction.EvictionStatus;
+import com.propertyvista.domain.eviction.EvictionStatusRecord;
 import com.propertyvista.domain.policy.policies.EvictionFlowPolicy;
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
 import com.propertyvista.domain.ref.ISOProvince;
@@ -72,8 +75,20 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
 
     @Override
     protected boolean persist(EvictionCase bo, EvictionCaseDTO to) {
+        // set signed-in employee as the author
+        Employee signedIn = CrmAppContext.getCurrentUserEmployee();
         if (bo.createdBy().isNull()) {
-            bo.createdBy().set(CrmAppContext.getCurrentUserEmployee());
+            bo.createdBy().set(signedIn);
+        }
+        for (EvictionStatus status : bo.history()) {
+            if (status.getPrimaryKey() == null) {
+                status.addedBy().set(signedIn);
+            }
+            for (EvictionStatusRecord record : status.statusRecords()) {
+                if (record.getPrimaryKey() == null) {
+                    record.addedBy().set(signedIn);
+                }
+            }
         }
 
         return super.persist(bo, to);
@@ -83,14 +98,22 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
     protected void enhanceRetrieved(EvictionCase bo, EvictionCaseDTO to, RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(bo, to, retrieveTarget);
 
-        Persistence.ensureRetrieve(to.createdBy(), AttachLevel.Attached);
+        for (EvictionStatus status : bo.history()) {
+            Persistence.ensureRetrieve(status.addedBy(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(status.statusRecords(), AttachLevel.Attached);
+            for (EvictionStatusRecord record : status.statusRecords()) {
+                Persistence.ensureRetrieve(record.addedBy(), AttachLevel.Attached);
+                Persistence.ensureRetrieve(record.attachments(), AttachLevel.Attached);
+            }
+        }
+
         to.nextStep().set(getNextEvictionStep(bo));
         Persistence.ensureRetrieve(to.nextStep(), AttachLevel.Attached);
     }
 
     @Override
     protected void enhanceListRetrieved(EvictionCase bo, EvictionCaseDTO to) {
-        Persistence.ensureRetrieve(to.createdBy(), AttachLevel.Attached);
+        // TODO ?
     }
 
     private List<EvictionFlowStep> getEvictionFlowSteps(Lease lease) {

@@ -142,7 +142,8 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
 
                     formPanel.append(Location.Dual, proto().note()).decorate();
                     formPanel.append(Location.Dual, proto().addedOn()).decorate();
-                    formPanel.append(Location.Dual, proto().addedBy()).decorate();
+                    formPanel.append(Location.Dual, proto().addedBy(), new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class)))
+                            .decorate();
 
                     formPanel.h1(i18n.tr("Attachments"));
                     formPanel.append(Location.Dual, proto().attachments(), new UploadableEvictionDocumentFolder());

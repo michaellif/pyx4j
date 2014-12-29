@@ -12,9 +12,9 @@
  */
 package com.propertyvista.portal.server.upload;
 
-import com.propertyvista.domain.blob.MessageAttachmentBlob;
 import com.propertyvista.domain.blob.CustomerPictureBlob;
 import com.propertyvista.domain.blob.EmployeeSignatureBlob;
+import com.propertyvista.domain.blob.EvictionDocumentBlob;
 import com.propertyvista.domain.blob.IdentificationDocumentBlob;
 import com.propertyvista.domain.blob.InsuranceCertificateScanBlob;
 import com.propertyvista.domain.blob.LandlordMediaBlob;
@@ -22,12 +22,14 @@ import com.propertyvista.domain.blob.LeaseApplicationDocumentBlob;
 import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
 import com.propertyvista.domain.blob.LegalLetterBlob;
 import com.propertyvista.domain.blob.MaintenanceRequestPictureBlob;
+import com.propertyvista.domain.blob.MessageAttachmentBlob;
 import com.propertyvista.domain.blob.NoteAttachmentBlob;
 import com.propertyvista.domain.blob.ProofOfAssetDocumentBlob;
 import com.propertyvista.domain.blob.ProofOfIncomeDocumentBlob;
 import com.propertyvista.domain.blob.operations.PmcDocumentBlob;
 import com.propertyvista.domain.communication.MessageAttachment;
 import com.propertyvista.domain.company.EmployeeSignature;
+import com.propertyvista.domain.eviction.EvictionDocument;
 import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPicture;
@@ -56,6 +58,7 @@ public class VistaFileAccessServlet extends VistaAbstractFileAccessServlet {
         register(IdentificationDocumentFile.class, IdentificationDocumentBlob.class);
         register(LegalLetter.class, LegalLetterBlob.class);
         register(N4LegalLetter.class, LegalLetterBlob.class);
+        register(EvictionDocument.class, EvictionDocumentBlob.class);
         register(LeaseTermAgreementDocument.class, LeaseTermAgreementDocumentBlob.class);
         register(LeaseApplicationDocument.class, LeaseApplicationDocumentBlob.class);
         register(LandlordMedia.class, LandlordMediaBlob.class);
