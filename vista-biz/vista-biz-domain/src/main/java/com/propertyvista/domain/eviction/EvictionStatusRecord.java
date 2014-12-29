@@ -26,12 +26,15 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.company.Employee;
 
+@ToStringFormat("{0}: {1}")
 public interface EvictionStatusRecord extends IEntity {
 
     @Owner
@@ -42,10 +45,12 @@ public interface EvictionStatusRecord extends IEntity {
     EvictionStatus evictionStatus();
 
     @Editor(type = EditorType.textarea)
+    @ToString(index = 1)
     IPrimitive<String> note();
 
     @ReadOnly
     @Timestamp(Update.Created)
+    @ToString(index = 0)
     IPrimitive<Date> addedOn();
 
     @ReadOnly
