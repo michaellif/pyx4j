@@ -50,6 +50,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.entity.core.criterion.RangeCriterion;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.rdb.PersistenceContext;
@@ -173,7 +174,8 @@ public class QueryBuilder<T extends IEntity> {
         return value.contains("*");
     }
 
-    private void appendFilters(StringBuilder criterionSql, QueryJoinBuilder joinBuilder, List<Criterion> filters, boolean firstInSentence, boolean required) {
+    private void appendFilters(StringBuilder criterionSql, QueryJoinBuilder joinBuilder, List<? extends Criterion> filters, boolean firstInSentence,
+            boolean required) {
         for (Criterion criterion : filters) {
             if (firstInSentence) {
                 firstInSentence = false;
@@ -197,6 +199,8 @@ public class QueryBuilder<T extends IEntity> {
             criterionSql.append(" ) OR ( ");
             appendFilters(criterionSql, joinBuilder, ((OrCriterion) criterion).getFiltersRight(), true, false);
             criterionSql.append(" )) ");
+        } else if (criterion instanceof RangeCriterion) {
+            appendFilters(criterionSql, joinBuilder, ((RangeCriterion) criterion).getFilters(), true, required);
         } else {
             throw new RuntimeException("Unsupported Operator " + criterion.getClass());
         }

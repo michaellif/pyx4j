@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Vector;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.commons.GWTSerializable;
 
 /**
  * For usage examples @see com.pyx4j.entity.rdb.QueryRDBTestCase#testCriterionAnd()
@@ -32,6 +33,7 @@ public class AndCriterion extends FiltersBuilder implements Criterion {
     private static final long serialVersionUID = 1L;
 
     //N.B. this is should final; but it is not to enable GWT serialization
+    @GWTSerializable
     private Vector<Criterion> filters;
 
     public AndCriterion() {

@@ -36,6 +36,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.criterion.RangeCriterion;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
@@ -138,7 +139,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
      * @deprecated TODO VladS switch to EntityQueryCriteriaBinder
      */
     @Deprecated
-    private Collection<Criterion> convertFilters(EntityListCriteria<BO> criteria, Collection<Criterion> toFilters) {
+    private Collection<Criterion> convertFilters(EntityListCriteria<BO> criteria, Collection<? extends Criterion> toFilters) {
         Collection<Criterion> boFilters = new ArrayList<Criterion>();
         for (Criterion cr : toFilters) {
             Criterion criterion = convertCriterion(criteria, cr);
@@ -170,6 +171,10 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         } else if (cr instanceof AndCriterion) {
             AndCriterion criterion = new AndCriterion();
             criterion.addAll(convertFilters(criteria, ((AndCriterion) cr).getFilters()));
+            return criterion;
+        } else if (cr instanceof RangeCriterion) {
+            AndCriterion criterion = new AndCriterion();
+            criterion.addAll(convertFilters(criteria, ((RangeCriterion) cr).getFilters()));
             return criterion;
         } else {
             throw new IllegalArgumentException("Can't convert " + cr.getClass() + " criteria");

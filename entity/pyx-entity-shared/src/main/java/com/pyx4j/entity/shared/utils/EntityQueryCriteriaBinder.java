@@ -35,6 +35,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.criterion.RangeCriterion;
 
 public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEntity> {
 
@@ -126,7 +127,7 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
         }
     }
 
-    private Collection<Criterion> convertFilters(Collection<Criterion> toFilters) {
+    private Collection<Criterion> convertFilters(Collection<? extends Criterion> toFilters) {
         Collection<Criterion> boFilters = new ArrayList<Criterion>();
         for (Criterion toCriterion : toFilters) {
             Criterion criterion = convertCriterion(toCriterion);
@@ -155,6 +156,10 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
         } else if (toCriterion instanceof AndCriterion) {
             AndCriterion criterion = new AndCriterion();
             criterion.addAll(convertFilters(((AndCriterion) toCriterion).getFilters()));
+            return criterion;
+        } else if (toCriterion instanceof RangeCriterion) {
+            AndCriterion criterion = new AndCriterion();
+            criterion.addAll(convertFilters(((RangeCriterion) toCriterion).getFilters()));
             return criterion;
         } else {
             throw new IllegalArgumentException("Can't convert " + toCriterion.getClass() + " criteria");

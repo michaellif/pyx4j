@@ -23,13 +23,20 @@ package com.pyx4j.entity.core.criterion;
 import java.io.Serializable;
 import java.util.Vector;
 
+import com.pyx4j.commons.GWTSerializable;
 import com.pyx4j.entity.core.IObject;
 
 public class RangeCriterion implements Criterion {
 
     private static final long serialVersionUID = 1L;
 
-    private final Vector<PropertyCriterion> filters;
+    ///Not final because of GWT
+    @GWTSerializable
+    private Vector<PropertyCriterion> filters;
+
+    @GWTSerializable
+    protected RangeCriterion() {
+    }
 
     public RangeCriterion(IObject<?> member, Serializable fromValue, Serializable toValue) {
         filters = new Vector<>();

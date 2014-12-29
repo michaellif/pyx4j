@@ -75,7 +75,7 @@ public class NumberFilterEditor extends FilterEditorBase implements IFilterEdito
             RangeCriterion rangeCriterion = (RangeCriterion) criterion;
 
             if (!getMember().getPath().toString().equals(rangeCriterion.getPropertyPath())) {
-                throw new Error("Filter editor member doesn't mach filter criterion path");
+                throw new Error("Filter editor member doesn't match filter criterion path");
             }
 
             if (!(rangeCriterion.getFromValue() instanceof String)) {
