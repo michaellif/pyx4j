@@ -228,10 +228,6 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
 
             content.init();
             MessageDTO ms = EntityFactory.create(MessageDTO.class);
-            //Ticket owner was changed to: Jacqueline Bouvier
-            if (newStatus != null) {
-                ms.text().setValue(i18n.tr("Status was changed from") + " '" + oldStatus + "' " + i18n.tr("to") + " '" + newStatus + "'.\r\nReason:\r\n");
-            }
             content.populate(ms);
             return content.asWidget();
         }
@@ -264,7 +260,6 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
                         setValue(emp);
                         if (emp != null) {
                             MessageDTO ms = EntityFactory.create(MessageDTO.class);
-                            ms.text().setValue(i18n.tr("Ticket owner was changed to") + ": " + emp.name().getStringView());
                             ms.thread().owner().set(emp);
                             UpdateThreadStatusAndOwnerBox.this.content.populate(ms);
                         }

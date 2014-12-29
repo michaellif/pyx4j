@@ -228,7 +228,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
             StringBuffer statusLabel = new StringBuffer();
             statusLabel.append(dispatchedMessagesNum);
             ticketsAnchor.setVisible(true);
-            ticketsAnchor.setText(i18n.tr("Dispatch Queue") + "(" + statusLabel.toString() + "), ");
+            ticketsAnchor.setText(i18n.tr("Dispatch Queue") + " (" + statusLabel.toString() + ")");
         } else {
             ticketsAnchor.setVisible(false);
         }

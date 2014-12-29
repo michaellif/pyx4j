@@ -115,7 +115,7 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
                             .columnTitleShown(false).build(), //
                     new ColumnDescriptor.Builder(proto.senders()).width("100px").formatter(baseFieldViewOnIsRead(proto.senders().getPath())).build(),//
                     new ColumnDescriptor.Builder(proto.subject()).width("200px").formatter(baseFieldViewOnIsRead(proto.subject().getPath())).build(),//
-                    new ColumnDescriptor.Builder(proto().date()).width("100px").build(), //
+                    new ColumnDescriptor.Builder(proto().date()).width("100px").formatter(baseFieldViewOnIsRead(proto.date().getPath())).build(), //
                     new ColumnDescriptor.Builder(proto().messagesInThread()).width("100px").build());
 
             setDataTableModel(new DataTableModel<MessageDTO>());
