@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,9 +58,9 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
     private E origEntity;
 
     // Bidirectional map CComponent to Path
-    private final Map<Path, CComponent<?, ?, ?, ?>> components = new HashMap<Path, CComponent<?, ?, ?, ?>>();
+    private final Map<Path, CComponent<?, ?, ?, ?>> components = new LinkedHashMap<Path, CComponent<?, ?, ?, ?>>();
 
-    private final Map<CComponent<?, ?, ?, ?>, Path> binding = new HashMap<CComponent<?, ?, ?, ?>, Path>();
+    private final Map<CComponent<?, ?, ?, ?>, Path> binding = new LinkedHashMap<CComponent<?, ?, ?, ?>, Path>();
 
     public CForm(Class<E> clazz) {
         this(clazz, null);

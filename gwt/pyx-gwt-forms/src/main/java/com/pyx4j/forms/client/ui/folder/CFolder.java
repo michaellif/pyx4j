@@ -340,9 +340,12 @@ public abstract class CFolder<DATA_TYPE extends IEntity> extends CContainer<CFol
 
                 if (item == null) {
                     item = createItemPrivate();
+                    adopt(item);
+                    item.populate(entity);
+                } else {
+                    adopt(item);
                 }
 
-                adopt(item);
                 item.setValue(entity, fireEvent, populate);
             }
 

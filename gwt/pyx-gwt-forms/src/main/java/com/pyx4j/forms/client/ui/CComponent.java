@@ -74,7 +74,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     private static final I18n i18n = I18n.get(CComponent.class);
 
     //VISTA-5729  and VISTA-5736
-    private static boolean TODO_ENFORCE_POPULATED = false;
+    private static boolean TODO_ENFORCE_POPULATED = true;
 
     protected static final String DEV_ATTR = "devAttr";
 
@@ -535,7 +535,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         if (!populate) {
             if (TODO_ENFORCE_POPULATED) {
                 assert populated : "Value should be populated before usage on component " + this.shortDebugInfo();
-            } else {
+            } else if (!populated) {
                 log.error("The API will change soon", new Error("Value should be populated before usage on component " + this.shortDebugInfo()));
             }
         }
