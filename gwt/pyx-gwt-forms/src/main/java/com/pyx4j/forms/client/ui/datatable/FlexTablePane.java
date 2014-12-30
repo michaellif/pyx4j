@@ -46,6 +46,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.gwt.commons.BrowserType;
@@ -277,7 +278,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
 
                     Widget contentHtml = new HTML(dataItem.getCellValue(columnDescriptor));
                     contentHtml.setStyleName(DataTableTheme.StyleName.DataTableCellContent.name());
-                    contentHtml.setTitle(dataItem.getCellValue(columnDescriptor).asString());
+                    contentHtml.setTitle(HtmlUtils.removeHtmlTags(dataItem.getCellValue(columnDescriptor).asString()));
 
                     SimplePanel contentHolder = new SimplePanel(contentHtml);
                     contentHolder.setStyleName(DataTableTheme.StyleName.DataTableCellHolder.name());
