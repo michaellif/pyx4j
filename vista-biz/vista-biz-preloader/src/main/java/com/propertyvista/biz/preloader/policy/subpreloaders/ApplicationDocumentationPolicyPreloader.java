@@ -63,7 +63,10 @@ public class ApplicationDocumentationPolicyPreloader extends AbstractPolicyPrelo
         id.importance().setValue(Importance.Optional);
         policy.allowedIDs().add(id);
 
-        // ---------------------------------------------------------
+        return updatePolicy(policy);
+    }
+
+    public ApplicationDocumentationPolicy updatePolicy(ApplicationDocumentationPolicy policy) {
 
         policy.mandatoryProofOfEmployment().setValue(true);
         {

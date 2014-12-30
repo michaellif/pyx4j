@@ -19,8 +19,10 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.preloader.policy.subpreloaders.ApplicationDocumentationPolicyPreloader;
 import com.propertyvista.biz.preloader.policy.subpreloaders.LegalQuestionsPolicyPreloader;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
+import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.operations.server.upgrade.UpgradeProcedure;
 
 public class UpgradeProcedure142 implements UpgradeProcedure {
@@ -60,7 +62,12 @@ public class UpgradeProcedure142 implements UpgradeProcedure {
     }
 
     private void runApplicationDocumentationPolicyUpdate() {
-        // TODO Auto-generated method stub
+        ApplicationDocumentationPolicyPreloader policyPreloader = new ApplicationDocumentationPolicyPreloader();
 
+        EntityQueryCriteria<ApplicationDocumentationPolicy> criteria = new EntityQueryCriteria<>(ApplicationDocumentationPolicy.class);
+        for (ApplicationDocumentationPolicy policy : Persistence.service().query(criteria)) {
+            policyPreloader.updatePolicy(policy);
+            Persistence.service().merge(policy);
+        }
     }
 }
