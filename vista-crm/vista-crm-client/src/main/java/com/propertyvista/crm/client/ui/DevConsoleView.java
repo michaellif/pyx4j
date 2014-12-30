@@ -16,9 +16,12 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.site.client.IsView;
 
+import com.propertyvista.shared.rpc.DevConsoleDataTO;
+
 public interface DevConsoleView extends IsWidget, IsView {
 
     public interface DevConsolePresenter {
     }
 
+    public void setData(DevConsoleDataTO data);
 }

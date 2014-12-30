@@ -194,6 +194,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
+import com.propertyvista.shared.services.dev.DevConsoleService;
 
 public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
@@ -217,6 +218,10 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         if (allowAllEntityDuringDevelopment) {
             grant(VistaAccessGrantedBehavior.CRM, new EntityPermission("*", ALL));
             grant(VistaAccessGrantedBehavior.CRM, new EntityPermission("*", READ));
+        }
+
+        if (ApplicationMode.isDevelopment() || ApplicationMode.isDemo()) {
+            grant(new IServiceExecutePermission(DevConsoleService.class));
         }
 
         grant(VistaBasicBehavior.PropertyVistaSupport, new IServiceExecutePermission("*"));

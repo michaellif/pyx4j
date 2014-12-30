@@ -23,6 +23,7 @@ import com.propertyvista.portal.resident.mvp.QuickTipActivityMapper;
 import com.propertyvista.portal.resident.mvp.SiteFeedbackMapper;
 import com.propertyvista.portal.resident.mvp.ToolbarActivityMapper;
 import com.propertyvista.portal.resident.mvp.WeatherActivityMapper;
+import com.propertyvista.portal.shared.mvp.DevConsoleActivityMapper;
 import com.propertyvista.portal.shared.mvp.FooterActivityMapper;
 import com.propertyvista.portal.shared.mvp.HeaderActivityMapper;
 import com.propertyvista.portal.shared.mvp.NotificationActivityMapper;
@@ -46,7 +47,7 @@ public class ResidentPortalRootPane extends PortalRootPane {
         bind(new WeatherActivityMapper(), asWidget().getDisplay(DisplayType.extra3));
         bind(new SiteFeedbackMapper(), asWidget().getDisplay(DisplayType.extra4));
         bind(new NotificationActivityMapper(), asWidget().getDisplay(DisplayType.notification));
-
+        bind(new DevConsoleActivityMapper(), asWidget().getDisplay(DisplayType.devConsole));
     }
 
 }

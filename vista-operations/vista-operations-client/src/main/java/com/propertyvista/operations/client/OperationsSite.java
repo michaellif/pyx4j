@@ -27,6 +27,7 @@ import com.pyx4j.site.shared.domain.Notification;
 
 import com.propertyvista.common.client.site.VistaBrowserRequirments;
 import com.propertyvista.common.client.site.VistaSite;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.operations.client.themes.OperationsPalette;
 import com.propertyvista.operations.client.themes.OperationsTheme;
 import com.propertyvista.operations.client.ui.OperationsRootPane;
@@ -36,7 +37,7 @@ import com.propertyvista.operations.rpc.services.OperationsAuthenticationService
 public class OperationsSite extends VistaSite {
 
     public OperationsSite() {
-        super("vista-operations", OperationsSiteMap.class, new SingletonViewFactory(), new OperationsSiteAppPlaceDispatcher());
+        super(VistaApplication.operations, OperationsSiteMap.class, new SingletonViewFactory(), new OperationsSiteAppPlaceDispatcher());
     }
 
     @Override

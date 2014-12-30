@@ -36,6 +36,7 @@ import com.pyx4j.site.shared.meta.SiteMap;
 import com.pyx4j.widgets.client.GlassPanel;
 
 import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public abstract class VistaSite extends AppSite {
@@ -44,12 +45,15 @@ public abstract class VistaSite extends AppSite {
 
     private static final I18n i18n = I18n.get(VistaSite.class);
 
-    public VistaSite(String appId, Class<? extends SiteMap> siteMapClass, ViewFactory viewFactory) {
-        this(appId, siteMapClass, viewFactory, null);
+    private final VistaApplication application;
+
+    public VistaSite(VistaApplication application, Class<? extends SiteMap> siteMapClass, ViewFactory viewFactory) {
+        this(application, siteMapClass, viewFactory, null);
     }
 
-    public VistaSite(String appId, Class<? extends SiteMap> siteMapClass, ViewFactory viewFactory, AppPlaceDispatcher dispatcher) {
-        super(appId, siteMapClass, viewFactory, dispatcher);
+    public VistaSite(VistaApplication application, Class<? extends SiteMap> siteMapClass, ViewFactory viewFactory, AppPlaceDispatcher dispatcher) {
+        super("vista-" + application.name(), siteMapClass, viewFactory, dispatcher);
+        this.application = application;
     }
 
     @Override
@@ -73,6 +77,10 @@ public abstract class VistaSite extends AppSite {
 
     public static VistaSite instance() {
         return (VistaSite) AppSite.instance();
+    }
+
+    public VistaApplication getApplication() {
+        return application;
     }
 
     protected abstract boolean isBrowserCompatible();
