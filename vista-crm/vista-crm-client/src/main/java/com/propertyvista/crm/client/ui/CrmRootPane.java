@@ -25,6 +25,7 @@ import com.pyx4j.site.shared.meta.PublicPlace;
 import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.crm.client.mvp.CommunicationActivityMapper;
 import com.propertyvista.crm.client.mvp.ContentActivityMapper;
+import com.propertyvista.crm.client.mvp.DevConsoleActivityMapper;
 import com.propertyvista.crm.client.mvp.FooterActivityMapper;
 import com.propertyvista.crm.client.mvp.HeaderActivityMapper;
 import com.propertyvista.crm.client.mvp.HelpActivityMapper;
@@ -58,6 +59,8 @@ public class CrmRootPane extends RootPane<BackOfficeLayoutPanel> {
         bind(new SiteFeedbackMapper(), asWidget().getDisplay(DisplayType.extra4));
         bind(new ContentActivityMapper(), asWidget().getDisplay(DisplayType.content));
         bind(new NotificationsActivityMapper(), asWidget().getDisplay(DisplayType.notification));
+        bind(new DevConsoleActivityMapper(), asWidget().getDisplay(DisplayType.devConsole));
+
     }
 
     public void allocateNotificationsSpace(int number) {

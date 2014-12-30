@@ -43,7 +43,7 @@ public class VistaApplicationDispatcherFilter implements Filter {
 
     private boolean isDeploymentHttps = false;
 
-    private boolean debug = true; // temporary for local development
+    private boolean debug = false; // temporary for local development
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
