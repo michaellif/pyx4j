@@ -41,10 +41,18 @@ public class FilterItemAddDialog extends Dialog {
             }
         });
 
-        checkGroup.setHeight("400px");
+        checkGroup.setHeight("200px");
         checkGroup.setWidth("100%");
 
-        checkGroup.setOptions(parent.getColumnDescriptors());
+        List<ColumnDescriptor> options = new ArrayList<>();
+
+        for (ColumnDescriptor cd : parent.getColumnDescriptors()) {
+            if (cd.isSearchable()) {
+                options.add(cd);
+            }
+        }
+
+        checkGroup.setOptions(options);
 
         List<ColumnDescriptor> descriptors = new ArrayList<>();
         for (FilterItem item : parent.getValue()) {
