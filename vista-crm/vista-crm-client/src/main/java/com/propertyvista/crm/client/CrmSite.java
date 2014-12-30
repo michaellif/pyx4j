@@ -77,7 +77,7 @@ public class CrmSite extends VistaSite {
     private static final I18n i18n = I18n.get(CrmSite.class);
 
     public CrmSite() {
-        super("vista-crm", CrmSiteMap.class, new SingletonViewFactory(), new CrmSiteAppPlaceDispatcher());
+        super(VistaApplication.crm, CrmSiteMap.class, new SingletonViewFactory(), new CrmSiteAppPlaceDispatcher());
     }
 
     @Override

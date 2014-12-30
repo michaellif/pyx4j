@@ -67,7 +67,7 @@ public abstract class PortalSite extends VistaSite {
 
     public PortalSite(VistaApplication application, Class<? extends PortalSiteMap> siteMapClass, RootPane<FrontOfficeLayoutPanel> rootPane,
             AppPlaceDispatcher placeDispatcher, PortalTheme portalTheme) {
-        super("vista-" + application.name(), siteMapClass, new SingletonViewFactory(), placeDispatcher);
+        super(application, siteMapClass, new SingletonViewFactory(), placeDispatcher);
         this.rootPane = rootPane;
         this.portalTheme = portalTheme;
         this.application = application;
@@ -82,7 +82,7 @@ public abstract class PortalSite extends VistaSite {
 
         getHistoryHandler().register(getPlaceController(), getEventBus());
 
-        RootLayoutPanel.get().add(rootPane);
+        setRootPane(rootPane);
 
         hideLoadingIndicator();
 

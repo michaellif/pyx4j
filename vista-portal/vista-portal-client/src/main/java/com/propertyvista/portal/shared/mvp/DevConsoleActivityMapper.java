@@ -10,13 +10,13 @@
  * Created on Dec 30, 2014
  * @author vlads
  */
-package com.propertyvista.crm.client.mvp;
+package com.propertyvista.portal.shared.mvp;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.crm.client.activity.DevConsoleActivity;
+import com.propertyvista.portal.shared.activity.DevConsoleActivity;
 
 public class DevConsoleActivityMapper implements ActivityMapper {
 

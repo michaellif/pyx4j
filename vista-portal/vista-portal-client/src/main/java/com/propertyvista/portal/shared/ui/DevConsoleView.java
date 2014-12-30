@@ -10,22 +10,18 @@
  * Created on Dec 30, 2014
  * @author vlads
  */
-package com.propertyvista.crm.client.mvp;
+package com.propertyvista.portal.shared.ui;
 
-import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.crm.client.activity.DevConsoleActivity;
+import com.pyx4j.site.client.IsView;
 
-public class DevConsoleActivityMapper implements ActivityMapper {
+import com.propertyvista.shared.rpc.DevConsoleDataTO;
 
-    public DevConsoleActivityMapper() {
+public interface DevConsoleView extends IsWidget, IsView {
+
+    public interface DevConsolePresenter {
     }
 
-    @Override
-    public Activity getActivity(Place place) {
-        return DevConsoleActivity.instance().withPlace(place);
-    }
-
+    public void setData(DevConsoleDataTO data);
 }

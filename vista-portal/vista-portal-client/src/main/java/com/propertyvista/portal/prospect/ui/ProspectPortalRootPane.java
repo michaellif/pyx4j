@@ -22,6 +22,7 @@ import com.propertyvista.portal.prospect.mvp.RentChargesActivityMapper;
 import com.propertyvista.portal.prospect.mvp.RentDetailsActivityMapper;
 import com.propertyvista.portal.prospect.mvp.SiteFeedbackMapper;
 import com.propertyvista.portal.prospect.mvp.ToolbarActivityMapper;
+import com.propertyvista.portal.shared.mvp.DevConsoleActivityMapper;
 import com.propertyvista.portal.shared.mvp.FooterActivityMapper;
 import com.propertyvista.portal.shared.mvp.HeaderActivityMapper;
 import com.propertyvista.portal.shared.mvp.NotificationActivityMapper;
@@ -44,6 +45,7 @@ public class ProspectPortalRootPane extends PortalRootPane {
         bind(new SiteFeedbackMapper(), asWidget().getDisplay(DisplayType.extra4));
         bind(new NotificationActivityMapper(), asWidget().getDisplay(DisplayType.notification));
         bind(new CommunicationActivityMapper(), asWidget().getDisplay(DisplayType.communication));
+        bind(new DevConsoleActivityMapper(), asWidget().getDisplay(DisplayType.devConsole));
     }
 
 }

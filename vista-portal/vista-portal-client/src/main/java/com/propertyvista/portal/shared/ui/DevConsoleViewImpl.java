@@ -10,7 +10,7 @@
  * Created on Dec 30, 2014
  * @author vlads
  */
-package com.propertyvista.crm.client.ui;
+package com.propertyvista.portal.shared.ui;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
@@ -23,6 +23,8 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.devconsole.AbstractDevConsole;
 
+import com.propertyvista.common.client.site.VistaSite;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.shared.rpc.DevConsoleDataTO;
 
 public class DevConsoleViewImpl extends AbstractDevConsole implements DevConsoleView {
@@ -38,9 +40,17 @@ public class DevConsoleViewImpl extends AbstractDevConsole implements DevConsole
         @Override
         protected IsWidget createContent() {
             FormPanel content = new FormPanel(this);
+            content.append(Location.Dual, proto().crmUrl()).decorate().componentWidth(300);
             content.append(Location.Dual, proto().residentUrl()).decorate().componentWidth(300);
             content.append(Location.Dual, proto().prospectUrl()).decorate().componentWidth(300);
             content.append(Location.Dual, proto().siteUrl()).decorate().componentWidth(300);
+
+            ((CField<?, ?>) get(proto().crmUrl())).setNavigationCommand(new Command() {
+                @Override
+                public void execute() {
+                    Window.open(getValue().crmUrl().getValue(), null, null);
+                }
+            });
 
             ((CField<?, ?>) get(proto().residentUrl())).setNavigationCommand(new Command() {
                 @Override
@@ -77,12 +87,13 @@ public class DevConsoleViewImpl extends AbstractDevConsole implements DevConsole
 
     @Override
     protected void setMockValues() {
-        setMockValues(((CrmRootPane) AppSite.instance().getRootPane()).asWidget());
+        setMockValues(((PortalRootPane) AppSite.instance().getRootPane()).asWidget());
     }
 
     @Override
     public void setData(DevConsoleDataTO data) {
         form.populate(data);
+        form.get(form.proto().residentUrl()).setVisible(VistaSite.instance().getApplication() == VistaApplication.prospect);
+        form.get(form.proto().prospectUrl()).setVisible(VistaSite.instance().getApplication() == VistaApplication.resident);
     }
-
 }

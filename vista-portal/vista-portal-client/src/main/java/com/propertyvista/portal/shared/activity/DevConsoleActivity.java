@@ -10,7 +10,7 @@
  * Created on Dec 30, 2014
  * @author vlads
  */
-package com.propertyvista.crm.client.activity;
+package com.propertyvista.portal.shared.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -22,13 +22,12 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ContextInitializeEvent;
 import com.pyx4j.security.client.ContextInitializeHandler;
 
-import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.ui.DevConsoleView;
-import com.propertyvista.crm.client.ui.DevConsoleView.DevConsolePresenter;
+import com.propertyvista.portal.shared.PortalSite;
+import com.propertyvista.portal.shared.ui.DevConsoleView;
 import com.propertyvista.shared.rpc.DevConsoleDataTO;
 import com.propertyvista.shared.services.dev.DevConsoleService;
 
-public class DevConsoleActivity extends AbstractActivity implements DevConsolePresenter {
+public class DevConsoleActivity extends AbstractActivity implements DevConsoleView.DevConsolePresenter {
 
     private final DevConsoleView view;
 
@@ -39,7 +38,7 @@ public class DevConsoleActivity extends AbstractActivity implements DevConsolePr
     }
 
     private DevConsoleActivity() {
-        view = CrmSite.getViewFactory().getView(DevConsoleView.class);
+        view = PortalSite.getViewFactory().getView(DevConsoleView.class);
     }
 
     public DevConsoleActivity withPlace(Place place) {

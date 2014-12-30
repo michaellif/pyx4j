@@ -39,6 +39,7 @@ import com.pyx4j.site.shared.domain.Notification;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.site.VistaBrowserRequirments;
 import com.propertyvista.common.client.site.VistaSite;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.ob.client.mvp.OnboardingActivityMapper;
 import com.propertyvista.ob.client.themes.OnboardingPalette;
 import com.propertyvista.ob.client.themes.OnboardingStyles;
@@ -51,7 +52,7 @@ public class OnboardingSite extends VistaSite {
     public static final String ONBOARDING_INSERTION_ID = "vista.ob";
 
     public OnboardingSite() {
-        super("vista-onboarding", OnboardingSiteMap.class, new SingletonViewFactory(), new OnboardingAppPlaceDispatcher());
+        super(VistaApplication.onboarding, OnboardingSiteMap.class, new SingletonViewFactory(), new OnboardingAppPlaceDispatcher());
     }
 
     @Override

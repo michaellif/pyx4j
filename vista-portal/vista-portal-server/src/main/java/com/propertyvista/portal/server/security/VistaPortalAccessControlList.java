@@ -94,9 +94,9 @@ import com.propertyvista.portal.rpc.portal.shared.services.PortalPasswordResetSe
 import com.propertyvista.portal.rpc.portal.shared.services.PortalPolicyRetrieveService;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalTermsAndPoliciesService;
 import com.propertyvista.portal.rpc.portal.shared.services.SiteThemeServices;
+import com.propertyvista.portal.rpc.portal.shared.services.communityevent.CommunityEventCrudService;
 import com.propertyvista.portal.rpc.portal.shared.services.profile.CustomerAccountCrudService;
 import com.propertyvista.portal.rpc.portal.shared.services.profile.CustomerPreferencesCrudService;
-import com.propertyvista.portal.rpc.portal.shared.services.communityevent.CommunityEventCrudService;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
 import com.propertyvista.portal.server.security.access.prospect.CustomerPictureProspectDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.prospect.CustomerPreferencesDatasetAccessRule;
@@ -119,6 +119,7 @@ import com.propertyvista.portal.server.security.access.resident.MaintenanceReque
 import com.propertyvista.portal.server.security.access.resident.MessagePortalAccessRule;
 import com.propertyvista.portal.server.security.access.resident.PaymentRecordTenantDatasetAccessRule;
 import com.propertyvista.server.common.security.UserEntityInstanceAccess;
+import com.propertyvista.shared.services.dev.DevConsoleService;
 import com.propertyvista.shared.services.dev.MockDataGenerator;
 
 public class VistaPortalAccessControlList extends UIAclBuilder {
@@ -341,7 +342,10 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         // Dev
         if (ApplicationMode.isDevelopment()) {
             grant(new IServiceExecutePermission(MockDataGenerator.class));
-            grant(new IServiceExecutePermission(MockDataGenerator.class));
+        }
+
+        if (ApplicationMode.isDevelopment() || ApplicationMode.isDemo()) {
+            grant(new IServiceExecutePermission(DevConsoleService.class));
         }
 
         // Data Access
