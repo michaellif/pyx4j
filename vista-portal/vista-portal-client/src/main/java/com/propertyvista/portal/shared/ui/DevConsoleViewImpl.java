@@ -40,36 +40,36 @@ public class DevConsoleViewImpl extends AbstractDevConsole implements DevConsole
         @Override
         protected IsWidget createContent() {
             FormPanel content = new FormPanel(this);
-            content.append(Location.Dual, proto().crmUrl()).decorate().componentWidth(300);
-            content.append(Location.Dual, proto().residentUrl()).decorate().componentWidth(300);
-            content.append(Location.Dual, proto().prospectUrl()).decorate().componentWidth(300);
-            content.append(Location.Dual, proto().siteUrl()).decorate().componentWidth(300);
+            content.append(Location.Left, proto().crmUrl()).decorate().componentWidth(450).labelWidth(80);
+            content.append(Location.Left, proto().residentUrl()).decorate().componentWidth(450).labelWidth(80);
+            content.append(Location.Left, proto().prospectUrl()).decorate().componentWidth(450).labelWidth(80);
+            content.append(Location.Left, proto().siteUrl()).decorate().componentWidth(450).labelWidth(80);
 
             ((CField<?, ?>) get(proto().crmUrl())).setNavigationCommand(new Command() {
                 @Override
                 public void execute() {
-                    Window.open(getValue().crmUrl().getValue(), null, null);
+                    Window.open(getValue().crmUrl().getValue(), "_self", null);
                 }
             });
 
             ((CField<?, ?>) get(proto().residentUrl())).setNavigationCommand(new Command() {
                 @Override
                 public void execute() {
-                    Window.open(getValue().residentUrl().getValue(), null, null);
+                    Window.open(getValue().residentUrl().getValue(), "_self", null);
                 }
             });
 
             ((CField<?, ?>) get(proto().prospectUrl())).setNavigationCommand(new Command() {
                 @Override
                 public void execute() {
-                    Window.open(getValue().prospectUrl().getValue(), null, null);
+                    Window.open(getValue().prospectUrl().getValue(), "_self", null);
                 }
             });
 
             ((CField<?, ?>) get(proto().siteUrl())).setNavigationCommand(new Command() {
                 @Override
                 public void execute() {
-                    Window.open(getValue().siteUrl().getValue(), null, null);
+                    Window.open(getValue().siteUrl().getValue(), "_self", null);
                 }
             });
 

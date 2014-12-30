@@ -12,6 +12,7 @@
  */
 package com.propertyvista.shared.rpc;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
@@ -24,15 +25,19 @@ import com.pyx4j.i18n.annotations.I18n;
 public interface DevConsoleDataTO extends IEntity {
 
     @Editor(type = EditorType.label)
+    @Caption(name = "CRM")
     IPrimitive<String> crmUrl();
 
     @Editor(type = EditorType.label)
+    @Caption(name = "Resident")
     IPrimitive<String> residentUrl();
 
     @Editor(type = EditorType.label)
+    @Caption(name = "Prospect")
     IPrimitive<String> prospectUrl();
 
     @Editor(type = EditorType.label)
+    @Caption(name = "Site")
     IPrimitive<String> siteUrl();
 
 }
