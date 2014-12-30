@@ -25,6 +25,10 @@ public class ContextInitializeEvent extends GwtEvent<ContextInitializeHandler> {
 
     static Type<ContextInitializeHandler> TYPE = new Type<ContextInitializeHandler>();
 
+    public static Type<ContextInitializeHandler> getType() {
+        return TYPE;
+    }
+
     public ContextInitializeEvent() {
     }
 
