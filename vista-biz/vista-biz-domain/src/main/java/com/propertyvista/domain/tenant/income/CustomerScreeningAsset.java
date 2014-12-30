@@ -30,7 +30,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.i18n.annotations.Translate;
+import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
@@ -39,30 +39,23 @@ import com.propertyvista.domain.tenant.CustomerScreening;
 @Caption(name = "Personal Asset(s)")
 public interface CustomerScreeningAsset extends IEntity {
 
+    @I18n
     public enum AssetType {
 
-        @Translate("Bank Accounts")
         bankAccounts,
 
-        @Translate("Real Estate Properties")
         realEstateProperties,
 
-        @Translate("Insurance Policies")
         insurancePolicies,
 
-        @Translate("Shares")
         shares,
 
-        @Translate("Unit Trusts")
         unitTrusts,
 
-        @Translate("Businesses")
         businesses,
 
-        @Translate("Cars")
         cars,
 
-        @Translate("Other")
         other;
 
         @Override

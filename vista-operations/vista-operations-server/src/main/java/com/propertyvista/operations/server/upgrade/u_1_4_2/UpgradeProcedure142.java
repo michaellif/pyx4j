@@ -29,7 +29,7 @@ public class UpgradeProcedure142 implements UpgradeProcedure {
 
     @Override
     public int getUpgradeStepsCount() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -37,6 +37,9 @@ public class UpgradeProcedure142 implements UpgradeProcedure {
         switch (upgradeStep) {
         case 1:
             runLegalQuestionsPolicyPreloaderGeneration();
+            break;
+        case 2:
+            runApplicationDocumentationPolicyUpdate();
             break;
         default:
             throw new IllegalArgumentException();
@@ -56,4 +59,8 @@ public class UpgradeProcedure142 implements UpgradeProcedure {
         log.info("Finished policy creation: " + policyCreationLog);
     }
 
+    private void runApplicationDocumentationPolicyUpdate() {
+        // TODO Auto-generated method stub
+
+    }
 }

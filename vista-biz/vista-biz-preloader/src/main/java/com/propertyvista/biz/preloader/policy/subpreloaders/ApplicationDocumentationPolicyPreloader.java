@@ -69,17 +69,19 @@ public class ApplicationDocumentationPolicyPreloader extends AbstractPolicyPrelo
         {
             ProofOfEmploymentDocumentType poe = EntityFactory.create(ProofOfEmploymentDocumentType.class);
             poe.incomeSource().setValue(IncomeSource.fulltime);
-            poe.notes().setValue(i18n.tr("Letter of Employment and Pay Stub are required"));
+            poe.notes().setValue(
+                    i18n.tr("Letter of Employment (salary or hourly wage and hours worked per week, and length of employment) and Pay Stub are required"));
             policy.allowedEmploymentDocuments().add(poe);
 
             poe = EntityFactory.create(ProofOfEmploymentDocumentType.class);
             poe.incomeSource().setValue(IncomeSource.parttime);
-            poe.notes().setValue(i18n.tr("Letter of Employment (salary or hourly wage and hours worked per week) and Pay Stub are required"));
+            poe.notes().setValue(
+                    i18n.tr("Letter of Employment (salary or hourly wage and hours worked per week, and length of employment) and Pay Stub are required"));
             policy.allowedEmploymentDocuments().add(poe);
 
             poe = EntityFactory.create(ProofOfEmploymentDocumentType.class);
             poe.incomeSource().setValue(IncomeSource.seasonallyEmployed);
-            poe.notes().setValue(i18n.tr("Letter of Employment is required"));
+            poe.notes().setValue(i18n.tr("Last Letter of Employment is required"));
             policy.allowedEmploymentDocuments().add(poe);
 
             poe = EntityFactory.create(ProofOfEmploymentDocumentType.class);
@@ -103,8 +105,13 @@ public class ApplicationDocumentationPolicyPreloader extends AbstractPolicyPrelo
             policy.allowedIncomeDocuments().add(poi);
 
             poi = EntityFactory.create(ProofOfIncomeDocumentType.class);
+            poi.incomeSource().setValue(IncomeSource.disabilitySupport);
+            poi.notes().setValue(i18n.tr("Benefit Statement is required"));
+            policy.allowedIncomeDocuments().add(poi);
+
+            poi = EntityFactory.create(ProofOfIncomeDocumentType.class);
             poi.incomeSource().setValue(IncomeSource.student);
-            poi.notes().setValue(i18n.tr("Social Assistance Confirmation is required"));
+            poi.notes().setValue(i18n.tr("Student Loan Confirmation is required"));
             policy.allowedIncomeDocuments().add(poi);
         }
 
@@ -114,7 +121,7 @@ public class ApplicationDocumentationPolicyPreloader extends AbstractPolicyPrelo
         {
             ProofOfAssetDocumentType poa = EntityFactory.create(ProofOfAssetDocumentType.class);
             poa.assetType().setValue(AssetType.bankAccounts);
-            poa.notes().setValue(i18n.tr("Bank Statement (for every account) is required"));
+            poa.notes().setValue(i18n.tr("Bank Statement is required"));
             policy.allowedAssetDocuments().add(poa);
 
             poa = EntityFactory.create(ProofOfAssetDocumentType.class);
@@ -122,6 +129,7 @@ public class ApplicationDocumentationPolicyPreloader extends AbstractPolicyPrelo
             poa.notes().setValue(i18n.tr("Business registration is required"));
             policy.allowedAssetDocuments().add(poa);
         }
+
         return policy;
     }
 }
