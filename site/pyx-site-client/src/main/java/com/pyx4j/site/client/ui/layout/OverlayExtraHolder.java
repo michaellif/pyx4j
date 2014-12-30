@@ -23,6 +23,9 @@ import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.security.client.ContextInitializeEvent;
+import com.pyx4j.security.client.ContextInitializeHandler;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.devconsole.AbstractDevConsole;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
@@ -60,6 +63,14 @@ public class OverlayExtraHolder extends AbstractOverlayHolder {
         overlayExtra4Holder.getElement().getStyle().setTextAlign(TextAlign.CENTER);
         addTab(overlayExtra4Holder, extra4Caption == null ? "" : extra4Caption);
         setTabVisible(getTabIndex(overlayExtra4Holder), false);
+
+        AppSite.getEventBus().addHandler(ContextInitializeEvent.getType(), new ContextInitializeHandler() {
+
+            @Override
+            public void onContextInitialize(ContextInitializeEvent event) {
+                layout();
+            }
+        });
 
     }
 
