@@ -53,8 +53,12 @@ public class Toolbar implements IsWidget, HasSecureConcern {
         secureConcerns.add(widget);
     }
 
+    public SimplePanel getItemHolder(int index) {
+        return (SimplePanel) panel.getWidget(index);
+    }
+
     public IsWidget getItem(int index) {
-        return panel.getWidget(index);
+        return getItemHolder(index).getWidget();
     }
 
     public int getItemCount() {

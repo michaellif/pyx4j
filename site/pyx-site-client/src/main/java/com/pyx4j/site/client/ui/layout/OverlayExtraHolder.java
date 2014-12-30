@@ -30,6 +30,8 @@ public class OverlayExtraHolder extends AbstractOverlayHolder {
 
     private final ResponsiveLayoutPanel parent;
 
+    private final LayoutPanel overlayDevConsoleHolder;
+
     private final LayoutPanel overlayExtra1Holder;
 
     private final LayoutPanel overlayExtra2Holder;
@@ -38,11 +40,11 @@ public class OverlayExtraHolder extends AbstractOverlayHolder {
 
     public OverlayExtraHolder(ResponsiveLayoutPanel parent, String extra1Caption, String extra2Caption, String extra4Caption, AbstractDevConsole devConsole) {
         this.parent = parent;
-        if (ApplicationMode.isDevelopment()) {
-            addTab(devConsole, "Dev.");
-        } else if (ApplicationMode.isDemo()) {
-            addTab(devConsole, "Demo");
-        }
+
+        overlayDevConsoleHolder = new LayoutPanel();
+        overlayDevConsoleHolder.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        addTab(overlayDevConsoleHolder, "Dev./Demo");
+        setTabVisible(getTabIndex(overlayDevConsoleHolder), false);
 
         overlayExtra1Holder = new LayoutPanel();
         overlayExtra1Holder.getElement().getStyle().setTextAlign(TextAlign.CENTER);
@@ -63,6 +65,16 @@ public class OverlayExtraHolder extends AbstractOverlayHolder {
 
     public void layout() {
         hide();
+        if (ApplicationMode.isDevelopment() || ApplicationMode.isDemo()) {
+            if (parent.getDisplay(DisplayType.devConsole).getWidget() != null) {
+                setTabLabel(getTabIndex(overlayDevConsoleHolder), ApplicationMode.isDemo() ? "Demo" : "Dev.");
+                setTabVisible(getTabIndex(overlayDevConsoleHolder), true);
+                if (overlayDevConsoleHolder.getWidgetCount() == 0) {
+                    overlayDevConsoleHolder.add(parent.getDisplay(DisplayType.devConsole));
+                }
+            }
+        }
+
         if (parent.getDisplay(DisplayType.extra1).getWidget() != null) {
             setTabVisible(getTabIndex(overlayExtra1Holder), true);
             if (overlayExtra1Holder.getWidgetCount() == 0) {

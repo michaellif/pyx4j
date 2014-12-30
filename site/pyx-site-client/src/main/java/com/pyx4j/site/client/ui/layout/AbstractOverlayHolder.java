@@ -102,9 +102,9 @@ public abstract class AbstractOverlayHolder implements IsWidget {
 
         for (int i = 0; i < tabBar.getItemCount(); i++) {
             if (i == index) {
-                tabBar.getItem(i).asWidget().addStyleDependentName(ResponsiveLayoutTheme.StyleDependent.selected.name());
+                tabBar.getItemHolder(i).asWidget().addStyleDependentName(ResponsiveLayoutTheme.StyleDependent.selected.name());
             } else {
-                tabBar.getItem(i).asWidget().removeStyleDependentName(ResponsiveLayoutTheme.StyleDependent.selected.name());
+                tabBar.getItemHolder(i).asWidget().removeStyleDependentName(ResponsiveLayoutTheme.StyleDependent.selected.name());
             }
         }
     }
@@ -113,7 +113,11 @@ public abstract class AbstractOverlayHolder implements IsWidget {
         if (!visible && (tabPanel.getVisibleWidgetIndex() == index)) {
             setTabSelected(-1);
         }
-        tabBar.getItem(index).asWidget().setVisible(visible);
+        tabBar.getItemHolder(index).asWidget().setVisible(visible);
+    }
+
+    public void setTabLabel(int index, String tabText) {
+        ((Button) tabBar.getItem(index)).setTextLabel(tabText);
     }
 
     public int getTabIndex(IsWidget widget) {
