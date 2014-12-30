@@ -38,7 +38,7 @@ public class UpgradeProcedure142 implements UpgradeProcedure {
     public String runUpgradeStep(int upgradeStep) {
         switch (upgradeStep) {
         case 1:
-            runLegalQuestionsPolicyPreloaderGeneration();
+            runLegalQuestionsPolicyPreload();
             break;
         case 2:
             runApplicationDocumentationPolicyUpdate();
@@ -49,7 +49,7 @@ public class UpgradeProcedure142 implements UpgradeProcedure {
         return null;
     }
 
-    private void runLegalQuestionsPolicyPreloaderGeneration() {
+    private void runLegalQuestionsPolicyPreload() {
         log.info("Creating LegalQuestionsPolicy and setting its scope to 'Organization'");
         LegalQuestionsPolicyPreloader policyPreloader = new LegalQuestionsPolicyPreloader();
         OrganizationPoliciesNode organizationNode = Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class));
