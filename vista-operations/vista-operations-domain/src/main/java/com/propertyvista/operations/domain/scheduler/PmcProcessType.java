@@ -133,6 +133,9 @@ public enum PmcProcessType implements Serializable {
 
     vistaHeathMonitor(PmcProcessOptions.RunForDay),
 
+    @Translate("Reset data for preselected Demo PMCs")
+    resetDemoPMC,
+
     // Used for scheduler testing
     test;
 

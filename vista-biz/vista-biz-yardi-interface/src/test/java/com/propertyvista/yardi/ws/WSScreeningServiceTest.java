@@ -33,7 +33,11 @@ import com.propertyvista.yardi.beans.Messages;
 
 public class WSScreeningServiceTest extends WSTestBase {
 
+    //TODO  Not used here TODO find where ScreeningService.wsdl is used?
     URL wsdlURL = WSScreeningServiceTest.class.getClassLoader().getResource("ScreeningService.wsdl");
+
+    ///TODO,  see super System.getProperty("bamboo.agentOffsetNo")
+    //URL wsdlURL = new URL(getAddress());
 
     @Before
     public void init() throws Exception {

@@ -40,7 +40,12 @@ public class WSTestBase {
     }
 
     protected String getAddress() {
-        return getAddress(7771);
+        int port = 7771;
+        if (System.getProperty("bamboo.agentOffsetNo") != null) {
+            //TODO enable this
+            //port += Integer.valueOf(System.getProperty("bamboo.agentOffsetNo"));
+        }
+        return getAddress(port);
     }
 
     void publish(Class<?> serviceClass) throws Exception {
