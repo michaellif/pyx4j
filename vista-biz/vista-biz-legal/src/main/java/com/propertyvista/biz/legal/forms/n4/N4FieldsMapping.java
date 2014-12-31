@@ -67,8 +67,8 @@ public class N4FieldsMapping extends LtbFormFieldsMapping<N4FormFieldsData> {
                         Arrays.<LtbFormFieldsMapping<RentOwingForPeriod>> asList(new LtbFormFieldsMapping<RentOwingForPeriod>(RentOwingForPeriod.class) {
                             @Override
                             protected void configure() {
-                                date(proto().from()).mapTo(datePartition("@@b12c96nfn4_a1_start")).define();
-                                date(proto().to()).mapTo(datePartition("@@b12c96nfn4_a1_end")).define();
+                                date(proto().fromDate()).mapTo(datePartition("@@b12c96nfn4_a1_start")).define();
+                                date(proto().toDate()).mapTo(datePartition("@@b12c96nfn4_a1_end")).define();
                                 money(proto().rentCharged()).mapTo(fieldsPartition("@@b12c96nfn4_a1_charged", 1, 3, 2)).define();
                                 money(proto().rentPaid()).mapTo(fieldsPartition("@@b12c96nfn4_a1_paid", 1, 3, 2)).define();
                                 money(proto().rentOwing()).mapTo(fieldsPartition("@@b12c96nfn4_a1_owing", 1, 3, 2)).define();
@@ -76,8 +76,8 @@ public class N4FieldsMapping extends LtbFormFieldsMapping<N4FormFieldsData> {
                         }, new LtbFormFieldsMapping<RentOwingForPeriod>(RentOwingForPeriod.class) {
                             @Override
                             protected void configure() {
-                                date(proto().from()).mapTo(datePartition("@@b12c96nfn4_a2_start")).define();
-                                date(proto().to()).mapTo(datePartition("@@b12c96nfn4_a2_end")).define();
+                                date(proto().fromDate()).mapTo(datePartition("@@b12c96nfn4_a2_start")).define();
+                                date(proto().toDate()).mapTo(datePartition("@@b12c96nfn4_a2_end")).define();
                                 money(proto().rentCharged()).mapTo(fieldsPartition("@@b12c96nfn4_a2_charged", 1, 3, 2)).define();
                                 money(proto().rentPaid()).mapTo(fieldsPartition("@@b12c96nfn4_a2_paid", 1, 3, 2)).define();
                                 money(proto().rentOwing()).mapTo(fieldsPartition("@@b12c96nfn4_a2_owing", 1, 3, 2)).define();
@@ -85,8 +85,8 @@ public class N4FieldsMapping extends LtbFormFieldsMapping<N4FormFieldsData> {
                         }, new LtbFormFieldsMapping<RentOwingForPeriod>(RentOwingForPeriod.class) {
                             @Override
                             protected void configure() {
-                                date(proto().from()).mapTo(datePartition("@@b12c96nfn4_a3_start")).define();
-                                date(proto().to()).mapTo(datePartition("@@b12c96nfn4_a3_end")).define();
+                                date(proto().fromDate()).mapTo(datePartition("@@b12c96nfn4_a3_start")).define();
+                                date(proto().toDate()).mapTo(datePartition("@@b12c96nfn4_a3_end")).define();
                                 money(proto().rentCharged()).mapTo(fieldsPartition("@@b12c96nfn4_a3_charged", 1, 3, 2)).define();
                                 money(proto().rentPaid()).mapTo(fieldsPartition("@@b12c96nfn4_a3_paid", 1, 3, 2)).define();
                                 money(proto().rentOwing()).mapTo(fieldsPartition("@@b12c96nfn4_a3_owing", 1, 3, 2)).define();

@@ -70,9 +70,9 @@ import com.propertyvista.domain.legal.LegalStatus.Status;
 import com.propertyvista.domain.legal.LegalStatusN4;
 import com.propertyvista.domain.legal.errors.FormFillError;
 import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
-import com.propertyvista.domain.legal.n4.N4BatchData;
+import com.propertyvista.domain.legal.n4.N4Batch;
+import com.propertyvista.domain.legal.n4.N4BatchItem;
 import com.propertyvista.domain.legal.n4.N4FormFieldsData;
-import com.propertyvista.domain.legal.n4.N4LeaseData;
 import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.legal.n4cs.N4CSFormFieldsData;
 import com.propertyvista.domain.legal.n4cs.N4CSServiceMethod.ServiceMethod;
@@ -143,12 +143,13 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         final Date batchGenerationDate = SystemDateManager.getDate();
 
         List<Pair<Lease, Exception>> failed = new LinkedList<>();
+        final N4Batch batch = makeBatchData(batchRequest);
         for (final Lease leaseId : batchRequest.targetDelinquentLeases()) {
             try {
                 new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.Web).execute(new Executable<Void, Exception>() {
                     @Override
                     public Void execute() throws Exception {
-                        issueN4ForLease(leaseId, makeBatchData(batchRequest), relevantArCodes, batchGenerationDate);
+                        issueN4ForLease(leaseId, batch, relevantArCodes, batchGenerationDate);
                         return null;
                     }
                 });
@@ -158,6 +159,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
             }
             progress.set(progress.get() + 1);
         }
+        Persistence.service().persist(batch);
         return failed;
     }
 
@@ -179,28 +181,30 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         return n4s;
     }
 
-    private void issueN4ForLease(Lease leaseId, N4BatchData batchData, Collection<ARCode> relevantArCodes, Date generationTime) throws FormFillError {
-        N4LeaseData n4LeaseData = ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId, batchData.noticeDate().getValue(),
-                batchData.deliveryMethod().getValue(), relevantArCodes);
-        N4FormFieldsData n4FormData = ServerSideFactory.create(N4GenerationFacade.class).prepareFormData(n4LeaseData, batchData);
-        N4CSFormFieldsData n4csFormData = ServerSideFactory.create(N4CSGenerationFacade.class).prepareN4CSData(n4FormData, ServiceMethod.M);
+    private void issueN4ForLease(Lease leaseId, N4Batch batchData, Collection<ARCode> relevantArCodes, Date generationTime) throws FormFillError {
+        N4BatchItem n4LeaseData = (N4BatchItem) ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId,
+                batchData.noticeDate().getValue(), batchData.deliveryMethod().getValue(), relevantArCodes);
+        batchData.items().add(n4LeaseData);
+        if (false) {
+            N4FormFieldsData n4FormData = ServerSideFactory.create(N4GenerationFacade.class).prepareFormData(n4LeaseData, batchData);
+            N4CSFormFieldsData n4csFormData = ServerSideFactory.create(N4CSGenerationFacade.class).prepareN4CSData(n4FormData, ServiceMethod.M);
 
-        byte[] n4LetterBinary = ServerSideFactory.create(N4GenerationFacade.class).generateN4Letter(n4FormData);
-        byte[] n4csLetterBinary = ServerSideFactory.create(N4CSGenerationFacade.class).generateN4CSLetter(n4csFormData);
+            byte[] n4LetterBinary = ServerSideFactory.create(N4GenerationFacade.class).generateN4Letter(n4FormData);
+            byte[] n4csLetterBinary = ServerSideFactory.create(N4CSGenerationFacade.class).generateN4CSLetter(n4csFormData);
 
-        LegalLetterBlob blob = EntityFactory.create(LegalLetterBlob.class);
-        blob.data().setValue(n4LetterBinary);
-        blob.contentType().setValue("application/pdf");
-        Persistence.service().persist(blob);
-
+            LegalLetterBlob blob = EntityFactory.create(LegalLetterBlob.class);
+            blob.data().setValue(n4LetterBinary);
+            blob.contentType().setValue("application/pdf");
+            Persistence.service().persist(blob);
+        }
         N4LegalLetter n4Letter = EntityFactory.create(N4LegalLetter.class);
         n4Letter.lease().set(leaseId);
         n4Letter.amountOwed().setValue(n4LeaseData.totalRentOwning().getValue());
         n4Letter.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
         n4Letter.generatedOn().setValue(generationTime);
 
-        n4Letter.file().blobKey().setValue(blob.getPrimaryKey());
-        n4Letter.file().fileSize().setValue(n4LetterBinary.length);
+        // n4Letter.file().blobKey().setValue(blob.getPrimaryKey());
+        // n4Letter.file().fileSize().setValue(n4LetterBinary.length);
         n4Letter.file().fileName().setValue(MessageFormat.format("n4-notice-{0,date,yyyy-MM-dd}.pdf", generationTime));
 
         Persistence.service().persist(n4Letter);
@@ -229,7 +233,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         /* The same steps to write certificate stream to the database and create corresponding records for further use */
 
         LegalLetterBlob csBlob = EntityFactory.create(LegalLetterBlob.class);
-        csBlob.data().setValue(n4csLetterBinary);
+//        csBlob.data().setValue(n4csLetterBinary);
         csBlob.contentType().setValue("application/pdf");
         Persistence.service().persist(csBlob);
 
@@ -240,7 +244,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         n4csLetter.generatedOn().setValue(generationTime);
 
         n4csLetter.file().blobKey().setValue(csBlob.getPrimaryKey());
-        n4csLetter.file().fileSize().setValue(n4csLetterBinary.length);
+//        n4csLetter.file().fileSize().setValue(n4csLetterBinary.length);
         n4csLetter.file().fileName().setValue(MessageFormat.format("n4-notice-certificate-{0,date,yyyy-MM-dd}.pdf", generationTime));
 
         Persistence.service().persist(n4csLetter);
@@ -297,8 +301,10 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         }
     }
 
-    private N4BatchData makeBatchData(N4BatchRequestDTO batchRequest) {
-        N4BatchData batchData = EntityFactory.create(N4BatchData.class);
+    private N4Batch makeBatchData(N4BatchRequestDTO batchRequest) {
+        N4Batch batchData = EntityFactory.create(N4Batch.class);
+        // TODO batchData.name().set(batchRequest.batchName());
+
         batchData.noticeDate().setValue(batchRequest.noticeDate().getValue());
         batchData.deliveryMethod().setValue(batchRequest.deliveryMethod().getValue());
         batchData.companyLegalName().setValue(batchRequest.companyName().getValue());

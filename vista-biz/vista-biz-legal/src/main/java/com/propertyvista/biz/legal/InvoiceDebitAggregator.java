@@ -55,8 +55,8 @@ public class InvoiceDebitAggregator {
 
         for (Map.Entry<BillingCycle, List<InvoiceDebit>> billingCycleDebits : agregatedDebits.entrySet()) {
             RentOwingForPeriod rentOwingForPeriod = EntityFactory.create(RentOwingForPeriod.class);
-            rentOwingForPeriod.from().setValue(billingCycleDebits.getKey().billingCycleStartDate().getValue());
-            rentOwingForPeriod.to().setValue(billingCycleDebits.getKey().billingCycleEndDate().getValue());
+            rentOwingForPeriod.fromDate().setValue(billingCycleDebits.getKey().billingCycleStartDate().getValue());
+            rentOwingForPeriod.toDate().setValue(billingCycleDebits.getKey().billingCycleEndDate().getValue());
 
             rentOwingForPeriod.rentCharged().setValue(BigDecimal.ZERO);
             rentOwingForPeriod.rentPaid().setValue(BigDecimal.ZERO);
@@ -74,7 +74,7 @@ public class InvoiceDebitAggregator {
         Collections.sort(debitsForPeriod, new Comparator<RentOwingForPeriod>() {
             @Override
             public int compare(RentOwingForPeriod o1, RentOwingForPeriod o2) {
-                return o1.from().getValue().compareTo(o2.from().getValue());
+                return o1.fromDate().getValue().compareTo(o2.fromDate().getValue());
             }
         });
         if (debitsForPeriod.size() > 3) {
@@ -96,7 +96,7 @@ public class InvoiceDebitAggregator {
                 currentAggregated += 1;
 
                 if (currentAggregated == aggregatedCount) {
-                    rentOwingForPeriodAccumulator.to().setValue(rentOwingForPeriod.to().getValue());
+                    rentOwingForPeriodAccumulator.toDate().setValue(rentOwingForPeriod.toDate().getValue());
                 }
             }
 

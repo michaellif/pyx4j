@@ -104,24 +104,24 @@ public class MockL1FormDataFactory {
         // Part4
 
         RentOwingForPeriod period1Owing = fieldsData.owedRent().rentOwingBreakdown().$();
-        period1Owing.from().setValue(new LogicalDate(DateUtils.detectDateformat("2009-01-01")));
-        period1Owing.to().setValue(new LogicalDate(DateUtils.detectDateformat("2009-01-31")));
+        period1Owing.fromDate().setValue(new LogicalDate(DateUtils.detectDateformat("2009-01-01")));
+        period1Owing.toDate().setValue(new LogicalDate(DateUtils.detectDateformat("2009-01-31")));
         period1Owing.rentCharged().setValue(new BigDecimal("1111.99"));
         period1Owing.rentPaid().setValue(new BigDecimal("2222.88"));
         period1Owing.rentOwing().setValue(new BigDecimal("3333.77"));
         fieldsData.owedRent().rentOwingBreakdown().add(period1Owing);
 
         RentOwingForPeriod period2Owing = fieldsData.owedRent().rentOwingBreakdown().$();
-        period2Owing.from().setValue(new LogicalDate(DateUtils.detectDateformat("2010-01-01")));
-        period2Owing.to().setValue(new LogicalDate(DateUtils.detectDateformat("2010-01-31")));
+        period2Owing.fromDate().setValue(new LogicalDate(DateUtils.detectDateformat("2010-01-01")));
+        period2Owing.toDate().setValue(new LogicalDate(DateUtils.detectDateformat("2010-01-31")));
         period2Owing.rentCharged().setValue(new BigDecimal("1111.11"));
         period2Owing.rentPaid().setValue(new BigDecimal("2222.22"));
         period2Owing.rentOwing().setValue(new BigDecimal("3333.33"));
         fieldsData.owedRent().rentOwingBreakdown().add(period2Owing);
 
         RentOwingForPeriod period3Owing = fieldsData.owedRent().rentOwingBreakdown().$();
-        period3Owing.from().setValue(new LogicalDate(DateUtils.detectDateformat("2011-01-01")));
-        period3Owing.to().setValue(new LogicalDate(DateUtils.detectDateformat("2011-01-31")));
+        period3Owing.fromDate().setValue(new LogicalDate(DateUtils.detectDateformat("2011-01-01")));
+        period3Owing.toDate().setValue(new LogicalDate(DateUtils.detectDateformat("2011-01-31")));
         period3Owing.rentCharged().setValue(new BigDecimal("1111.00"));
         period3Owing.rentPaid().setValue(new BigDecimal("2222.66"));
         period3Owing.rentOwing().setValue(new BigDecimal("3333.44"));

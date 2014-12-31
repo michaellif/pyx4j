@@ -42,8 +42,8 @@ public class LtbRentOwedBreakdownFolder extends VistaTableFolder<RentOwingForPer
     @Override
     public List<FolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new FolderColumnDescriptor(proto().from(), "150px"),
-                new FolderColumnDescriptor(proto().to(), "150px"),
+                new FolderColumnDescriptor(proto().fromDate(), "150px"),
+                new FolderColumnDescriptor(proto().toDate(), "150px"),
                 new FolderColumnDescriptor(proto().rentCharged(), "150px"),                
                 new FolderColumnDescriptor(proto().rentPaid(), "150px"),
                 new FolderColumnDescriptor(proto().rentOwing(), "150px")
@@ -56,14 +56,14 @@ public class LtbRentOwedBreakdownFolder extends VistaTableFolder<RentOwingForPer
 
             @Override
             protected CField<?, ?> createCell(FolderColumnDescriptor column) {
-                if (proto().from() == column.getObject()) {
+                if (proto().fromDate() == column.getObject()) {
                     CDatePicker datePicker = new CDatePicker();
                     datePicker.setMandatory(true);
-                    return inject(proto().from(), datePicker);
-                } else if (proto().to() == column.getObject()) {
+                    return inject(proto().fromDate(), datePicker);
+                } else if (proto().toDate() == column.getObject()) {
                     CDatePicker datePicker = new CDatePicker();
                     datePicker.setMandatory(true);
-                    return inject(proto().to(), datePicker);
+                    return inject(proto().toDate(), datePicker);
                 } else if (proto().rentCharged() == column.getObject()) {
                     CMoneyField field = new CMoneyField();
                     return inject(proto().rentCharged(), field);
