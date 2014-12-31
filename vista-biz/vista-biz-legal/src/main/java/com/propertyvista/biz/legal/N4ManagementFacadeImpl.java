@@ -69,11 +69,11 @@ import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.legal.LegalStatus.Status;
 import com.propertyvista.domain.legal.LegalStatusN4;
 import com.propertyvista.domain.legal.errors.FormFillError;
-import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
 import com.propertyvista.domain.legal.n4.N4Batch;
 import com.propertyvista.domain.legal.n4.N4BatchItem;
 import com.propertyvista.domain.legal.n4.N4FormFieldsData;
 import com.propertyvista.domain.legal.n4.N4LegalLetter;
+import com.propertyvista.domain.legal.n4.N4RentOwingForPeriod;
 import com.propertyvista.domain.legal.n4cs.N4CSFormFieldsData;
 import com.propertyvista.domain.legal.n4cs.N4CSServiceMethod.ServiceMethod;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
@@ -276,10 +276,10 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(billingAccount);
         List<InvoiceDebit> filteredDebits = N4GenerationUtils.filterDebits(debits, acceptableArCodes, asOf);
         InvoiceDebitAggregator debitAggregator = new InvoiceDebitAggregator();
-        List<RentOwingForPeriod> rentOwingBreakdown = debitAggregator.debitsForPeriod(debitAggregator.aggregate(filteredDebits));
+        List<N4RentOwingForPeriod> rentOwingBreakdown = debitAggregator.debitsForPeriod(debitAggregator.aggregate(filteredDebits));
 
         BigDecimal amountOwed = BigDecimal.ZERO;
-        for (RentOwingForPeriod rentOwingForPeriod : rentOwingBreakdown) {
+        for (N4RentOwingForPeriod rentOwingForPeriod : rentOwingBreakdown) {
             amountOwed = amountOwed.add(rentOwingForPeriod.rentOwing().getValue());
         }
         return amountOwed;

@@ -10,7 +10,7 @@
  * Created on 2013-11-20
  * @author ArtyomB
  */
-package com.propertyvista.domain.legal.ltbcommon;
+package com.propertyvista.domain.legal.n4;
 
 import java.math.BigDecimal;
 
@@ -23,9 +23,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.legal.n4.N4BatchItem;
-
-public interface RentOwingForPeriod extends IEntity {
+public interface N4RentOwingForPeriod extends IEntity {
 
     @Owner
     @JoinColumn

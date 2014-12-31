@@ -19,10 +19,12 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.legal.n4.N4RentOwingForPeriod;
+
 @Transient
 public interface LtbOwedRent extends IEntity {
 
-    IList<RentOwingForPeriod> rentOwingBreakdown();
+    IList<N4RentOwingForPeriod> rentOwingBreakdown();
 
     IPrimitive<BigDecimal> totalRentOwing();
 

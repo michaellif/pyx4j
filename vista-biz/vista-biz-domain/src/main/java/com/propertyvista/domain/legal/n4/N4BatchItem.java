@@ -24,8 +24,6 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
-
 public interface N4BatchItem extends N4LeaseData {
 
     @Owner
@@ -39,7 +37,7 @@ public interface N4BatchItem extends N4LeaseData {
     @Owned
     @Detached
     @OrderBy(PrimaryKey.class)
-    IList<RentOwingForPeriod> rentOwingBreakdown();
+    IList<N4RentOwingForPeriod> rentOwingBreakdown();
 
     @ReadOnly
     IPrimitive<Date> serviced();

@@ -38,7 +38,7 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
-import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.N4RentOwingForPeriod;
 
 public class InvoiceDebitAggregatorTest {
 
@@ -116,7 +116,7 @@ public class InvoiceDebitAggregatorTest {
                         createInvoiceDebit(billingCycleB, "3000", "2000")
         ));//@formaterr:on
         
-        List<RentOwingForPeriod> debitsForPeriod = new InvoiceDebitAggregator().debitsForPeriod(aggregatedDebits);
+        List<N4RentOwingForPeriod> debitsForPeriod = new InvoiceDebitAggregator().debitsForPeriod(aggregatedDebits);
         Assert.assertEquals(3, debitsForPeriod.size());
         
         Assert.assertEquals(new BigDecimal("6"), debitsForPeriod.get(2).rentCharged().getValue());
@@ -171,7 +171,7 @@ public class InvoiceDebitAggregatorTest {
                 createInvoiceDebit(billingCycleE, "1000", "100")                
         ));//@formaterr:on
         
-        List<RentOwingForPeriod> debitsForPeriod = new InvoiceDebitAggregator().debitsForPeriod(aggregatedDebits);
+        List<N4RentOwingForPeriod> debitsForPeriod = new InvoiceDebitAggregator().debitsForPeriod(aggregatedDebits);
         Assert.assertEquals(3, debitsForPeriod.size());
 
         Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-08-01")), debitsForPeriod.get(0).fromDate().getValue());
