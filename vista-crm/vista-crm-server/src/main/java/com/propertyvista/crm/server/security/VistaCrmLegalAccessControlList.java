@@ -30,6 +30,7 @@ import com.propertyvista.domain.eviction.EvictionDocument;
 import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.dto.EvictionCaseDTO;
 import com.propertyvista.dto.LeaseLegalStateDTO;
+import com.propertyvista.dto.N4BatchDTO;
 
 class VistaCrmLegalAccessControlList extends UIAclBuilder {
 
@@ -49,6 +50,8 @@ class VistaCrmLegalAccessControlList extends UIAclBuilder {
         grant(LegalCollectionsBasic, EvictionCaseDTO.class, READ);
         grant(LegalCollectionsBasic, EvictionDocument.class, READ);
 
+        grant(LegalCollectionsBasic, N4BatchDTO.class, READ);
+
         grant(LegalCollectionsFull, LegalLetter.class, READ | CREATE);
         grant(LegalCollectionsFull, LeaseLegalStateDTO.class, READ | UPDATE);
         grant(LegalCollectionsFull, LegalNoticeCandidateDTO.class, ALL);
@@ -57,5 +60,6 @@ class VistaCrmLegalAccessControlList extends UIAclBuilder {
         grant(LegalCollectionsFull, EvictionDocument.class, READ | CREATE | UPDATE);
         grant(LegalCollectionsFull, new IServiceExecutePermission(EvictionDocumentUploadService.class));
 
+        grant(LegalCollectionsFull, N4BatchDTO.class, READ | CREATE | UPDATE);
     }
 }

@@ -41,5 +41,6 @@ public interface N4BatchItem extends N4LeaseData {
     @OrderBy(PrimaryKey.class)
     IList<RentOwingForPeriod> rentOwingBreakdown();
 
+    @ReadOnly
     IPrimitive<Date> serviced();
 }

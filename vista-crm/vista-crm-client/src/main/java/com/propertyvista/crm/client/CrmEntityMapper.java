@@ -110,6 +110,7 @@ import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
 import com.propertyvista.dto.MessageDTO;
+import com.propertyvista.dto.N4BatchDTO;
 
 public class CrmEntityMapper {
 
@@ -211,6 +212,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(LeaseDTO.class, Tenants.Lease.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseApplicationDTO.class, Tenants.LeaseApplication.class, defaultImage);
         AppPlaceEntityMapper.register(EvictionCaseDTO.class, LegalAndCollections.EvictionCase.class, defaultImage);
+        AppPlaceEntityMapper.register(N4BatchDTO.class, LegalAndCollections.N4Batches.class, defaultImage);
 
         AppPlaceEntityMapper.register(LeaseParticipantScreeningTO.class, Tenants.Screening.class, defaultImage);
 
