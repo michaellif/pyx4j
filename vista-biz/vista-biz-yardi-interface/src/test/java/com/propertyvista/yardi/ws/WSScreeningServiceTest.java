@@ -33,7 +33,8 @@ import com.propertyvista.yardi.beans.Messages;
 
 public class WSScreeningServiceTest extends WSTestBase {
 
-    URL wsdlURL = WSScreeningServiceTest.class.getClassLoader().getResource("ScreeningService.wsdl");
+    // Not used here TODO find where ScreeningService.wsdl is used?
+    // URL wsdlURL = WSScreeningServiceTest.class.getClassLoader().getResource("ScreeningService.wsdl");
 
     @Before
     public void init() throws Exception {
@@ -48,7 +49,7 @@ public class WSScreeningServiceTest extends WSTestBase {
     @Test
     public void testGetScreeningReportErrorRequestContent() throws Exception {
 
-        ScreeningService client = new ScreeningService(wsdlURL);
+        ScreeningService client = new ScreeningService(new URL(getAddress()));
 
         WSScreeningService service = client.getWSScreeningService();
 
@@ -65,7 +66,7 @@ public class WSScreeningServiceTest extends WSTestBase {
     @Test
     public void testGetScreeningReportEmptyRequest() throws Exception {
 
-        ScreeningService client = new ScreeningService(wsdlURL);
+        ScreeningService client = new ScreeningService(new URL(getAddress()));
 
         WSScreeningService service = client.getWSScreeningService();
 
