@@ -73,7 +73,7 @@ public class N4BatchForm extends CrmEntityForm<N4BatchDTO> {
         @Override
         public List<FolderColumnDescriptor> columns() {
             return Arrays.asList( //
-                    new FolderColumnDescriptor(proto().terminationDate(), "9em"), //
+                    new FolderColumnDescriptor(proto().lease(), "20em", true), //
                     new FolderColumnDescriptor(proto().totalRentOwning(), "10em"));
         }
 

@@ -185,26 +185,26 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         N4BatchItem n4LeaseData = (N4BatchItem) ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId,
                 batchData.noticeDate().getValue(), batchData.deliveryMethod().getValue(), relevantArCodes);
         batchData.items().add(n4LeaseData);
-        if (false) {
-            N4FormFieldsData n4FormData = ServerSideFactory.create(N4GenerationFacade.class).prepareFormData(n4LeaseData, batchData);
-            N4CSFormFieldsData n4csFormData = ServerSideFactory.create(N4CSGenerationFacade.class).prepareN4CSData(n4FormData, ServiceMethod.M);
 
-            byte[] n4LetterBinary = ServerSideFactory.create(N4GenerationFacade.class).generateN4Letter(n4FormData);
-            byte[] n4csLetterBinary = ServerSideFactory.create(N4CSGenerationFacade.class).generateN4CSLetter(n4csFormData);
+        N4FormFieldsData n4FormData = ServerSideFactory.create(N4GenerationFacade.class).prepareFormData(n4LeaseData, batchData);
+        N4CSFormFieldsData n4csFormData = ServerSideFactory.create(N4CSGenerationFacade.class).prepareN4CSData(n4FormData, ServiceMethod.M);
 
-            LegalLetterBlob blob = EntityFactory.create(LegalLetterBlob.class);
-            blob.data().setValue(n4LetterBinary);
-            blob.contentType().setValue("application/pdf");
-            Persistence.service().persist(blob);
-        }
+        byte[] n4LetterBinary = ServerSideFactory.create(N4GenerationFacade.class).generateN4Letter(n4FormData);
+        byte[] n4csLetterBinary = ServerSideFactory.create(N4CSGenerationFacade.class).generateN4CSLetter(n4csFormData);
+
+        LegalLetterBlob blob = EntityFactory.create(LegalLetterBlob.class);
+        blob.data().setValue(n4LetterBinary);
+        blob.contentType().setValue("application/pdf");
+        Persistence.service().persist(blob);
+
         N4LegalLetter n4Letter = EntityFactory.create(N4LegalLetter.class);
         n4Letter.lease().set(leaseId);
         n4Letter.amountOwed().setValue(n4LeaseData.totalRentOwning().getValue());
         n4Letter.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
         n4Letter.generatedOn().setValue(generationTime);
 
-        // n4Letter.file().blobKey().setValue(blob.getPrimaryKey());
-        // n4Letter.file().fileSize().setValue(n4LetterBinary.length);
+        n4Letter.file().blobKey().setValue(blob.getPrimaryKey());
+        n4Letter.file().fileSize().setValue(n4LetterBinary.length);
         n4Letter.file().fileName().setValue(MessageFormat.format("n4-notice-{0,date,yyyy-MM-dd}.pdf", generationTime));
 
         Persistence.service().persist(n4Letter);
@@ -233,7 +233,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         /* The same steps to write certificate stream to the database and create corresponding records for further use */
 
         LegalLetterBlob csBlob = EntityFactory.create(LegalLetterBlob.class);
-//        csBlob.data().setValue(n4csLetterBinary);
+        csBlob.data().setValue(n4csLetterBinary);
         csBlob.contentType().setValue("application/pdf");
         Persistence.service().persist(csBlob);
 
@@ -244,7 +244,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         n4csLetter.generatedOn().setValue(generationTime);
 
         n4csLetter.file().blobKey().setValue(csBlob.getPrimaryKey());
-//        n4csLetter.file().fileSize().setValue(n4csLetterBinary.length);
+        n4csLetter.file().fileSize().setValue(n4csLetterBinary.length);
         n4csLetter.file().fileName().setValue(MessageFormat.format("n4-notice-certificate-{0,date,yyyy-MM-dd}.pdf", generationTime));
 
         Persistence.service().persist(n4csLetter);

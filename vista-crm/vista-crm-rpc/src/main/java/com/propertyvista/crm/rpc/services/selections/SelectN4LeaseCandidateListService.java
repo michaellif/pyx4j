@@ -7,20 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 31, 2014
+ * Created on Jan 2, 2015
  * @author stanp
  */
-package com.propertyvista.crm.rpc.services.legal.eviction;
+package com.propertyvista.crm.rpc.services.selections;
 
-import com.pyx4j.entity.core.IList;
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 
-import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.dto.N4BatchDTO;
+import com.propertyvista.dto.N4LeaseCandidateDTO;
 
-public interface N4BatchCrudService extends AbstractCrudService<N4BatchDTO> {
-
-    public interface N4BatchInitData extends InitializationData {
-        IList<Lease> leaseCandidates();
-    }
+public interface SelectN4LeaseCandidateListService extends AbstractListCrudService<N4LeaseCandidateDTO> {
 }
