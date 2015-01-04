@@ -6,6 +6,7 @@
 ***     ===========================================================================================================
 **/                                                     
 
+
 CREATE OR REPLACE FUNCTION _dba_.change_charge_description() RETURNS VOID AS
 $$
 DECLARE 
@@ -28,6 +29,14 @@ BEGIN
 END;
 $$
 LANGUAGE plpgsql VOLATILE;
+
+BEGIN TRANSACTION;
+
+    UPDATE  nepm.merchant_account 
+    SET charge_description = '25 Mabelle Ave/177 Redpath Av'
+    WHERE   id = 198;
+
+COMMIT;
 
 BEGIN TRANSACTION;
 
