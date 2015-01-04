@@ -82,7 +82,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
         assignOwnershipAction = new MenuItem(i18n.tr("Assign Owner"), new Command() {
             @Override
             public void execute() {
-                new UpdateThreadStatusAndOwnerBox(form, form.getValue().status().getValue().toString(), null) {
+                new UpdateThreadStatusAndOwnerBox(form, null) {
                     @Override
                     public boolean onClickOk() {
                         if (validate()) {
@@ -105,7 +105,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
             threadStatusActions.put(ts, new MenuItem(ThreadStatus.Open.equals(ts) ? ThreadStatus.Open.toString() : i18n.tr("Resolve"), new Command() {
                 @Override
                 public void execute() {
-                    new UpdateThreadStatusAndOwnerBox(form, form.getValue().status().getValue().toString(), ts.toString()) {
+                    new UpdateThreadStatusAndOwnerBox(form, ts.toString()) {
                         @Override
                         public boolean onClickOk() {
                             if (validate()) {
@@ -171,8 +171,10 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
             }
         }
         setActionVisible(assignToMeAction, !invisible && !ClientContext.getUserVisit().getName().equals(value.owner().name().getValue()));
-        setActionVisible(unassignAction, (!invisible && !ContactType.System.equals(value.owner().type().getValue()))
-                || ClientContext.getUserVisit().getName().equals(value.owner().name().getValue()));
+        setActionVisible(unassignAction, (!invisible && (!ContactType.System.equals(value.owner().type().getValue())) || ClientContext.getUserVisit().getName()
+                .equals(value.owner().name().getValue()))
+                && !ThreadStatus.Open.equals(value.status().getValue()));
+
         setCaption(value.deliveryMethod() == null || value.deliveryMethod().isNull() ? value.category().categoryType().getValue().toString() : value
                 .deliveryMethod().getValue().toString());
 
@@ -192,15 +194,12 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
 
         private CForm<MessageDTO> content;
 
-        private final String oldStatus;
-
         private final String newStatus;
 
         private Employee emp;
 
-        public UpdateThreadStatusAndOwnerBox(final MessageForm form, String oldStatus, String newStatus) {
+        public UpdateThreadStatusAndOwnerBox(final MessageForm form, String newStatus) {
             super(newStatus == null ? i18n.tr("Assign Owner ") : i18n.tr("Update Status to: ") + newStatus);
-            this.oldStatus = oldStatus;
             this.newStatus = newStatus;
             setBody(createBody(form));
         }

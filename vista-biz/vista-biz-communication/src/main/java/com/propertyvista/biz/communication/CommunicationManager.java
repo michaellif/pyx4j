@@ -243,7 +243,7 @@ public class CommunicationManager {
         List<MessageCategory> userGroups = getUserGroups(currentUser);
         if (userGroups != null && userGroups.size() > 0) {
             final EntityListCriteria<CommunicationThread> dispatchedCriteria = EntityListCriteria.create(CommunicationThread.class);
-            dispatchedCriteria.in(dispatchedCriteria.proto().status(), ThreadStatus.Open, ThreadStatus.Resolved);
+            dispatchedCriteria.in(dispatchedCriteria.proto().status(), ThreadStatus.Open);
 
             AndCriterion newDispatchedCriteria = new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().owner(),
                     ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned)),
@@ -256,7 +256,7 @@ public class CommunicationManager {
 
     private EntityListCriteria<CommunicationThread> getDispatchedCriteria(boolean includeByRoles, Employee currentUser) {
         final EntityListCriteria<CommunicationThread> dispatchedCriteria = EntityListCriteria.create(CommunicationThread.class);
-        dispatchedCriteria.in(dispatchedCriteria.proto().status(), ThreadStatus.Open, ThreadStatus.Resolved);
+        dispatchedCriteria.in(dispatchedCriteria.proto().status(), ThreadStatus.Open);
 
         dispatchedCriteria.eq(dispatchedCriteria.proto().owner(),
                 ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned));

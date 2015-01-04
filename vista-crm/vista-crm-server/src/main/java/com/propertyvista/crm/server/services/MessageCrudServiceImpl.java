@@ -40,6 +40,7 @@ import com.propertyvista.biz.communication.CommunicationMessageFacade;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
+import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
@@ -53,6 +54,7 @@ import com.propertyvista.domain.communication.SpecialDelivery;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.communication.ThreadPolicyHandle;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.dto.MessageDTO;
 import com.propertyvista.dto.MessageDTO.ViewScope;
 
@@ -121,15 +123,9 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             ViewScope critValue = (ViewScope) ownerCiteria.getValue();
             toCriteria.getFilters().remove(ownerCiteria);
             if (ViewScope.Dispatched.equals(critValue)) {
+                boCriteria.eq(boCriteria.proto().thread().status(), ThreadStatus.Open);
                 boCriteria.eq(boCriteria.proto().thread().owner(),
                         ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned));
-            } else {
-                boCriteria.add(new OrCriterion(PropertyCriterion.eq(boCriteria.proto().thread().category().categoryType(), CategoryType.Message),
-                        PropertyCriterion.eq(boCriteria.proto().thread().owner(), CrmAppContext.getCurrentUserEmployee())));
-                if (ViewScope.Direct.equals(critValue)) {
-                    boCriteria.add(new OrCriterion(PropertyCriterion.isNull(boCriteria.proto().isSystem()), PropertyCriterion.eq(boCriteria.proto().isSystem(),
-                            false)));
-                }
             }
         }
 
@@ -351,6 +347,12 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     public void assignOwnership(AsyncCallback<MessageDTO> callback, MessageDTO message, String additionalComment, IEntity employee) {
         CommunicationThread thread = Persistence.secureRetrieve(CommunicationThread.class, message.thread().id().getValue());
         CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
+
+        CommunicationEndpointDTO prevOwner = null;
+        if (thread.owner() != null && !thread.owner().isNull()) {
+            Persistence.ensureRetrieve(thread.owner(), AttachLevel.Attached);
+            prevOwner = communicationFacade.generateEndpointDTO(thread.owner());
+        }
         Employee e = null;
         if (employee != null) {
             if (employee.getInstanceValueClass().equals(Employee.class)) {
@@ -370,11 +372,16 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         message.status().set(thread.status());
         if (!CrmAppContext.getCurrentUserEmployee().equals(employee)) {
             MessageDTO dto = EntityFactory.create(MessageDTO.class);
-            dto.to().add(message.owner());
             String systemNotification = i18n.tr("Ticket owner was changed to") + ": " + message.owner().name().getStringView() + ". ";
             dto.text().setValue(additionalComment == null ? systemNotification : systemNotification + additionalComment);
             dto.thread().set(thread);
             dto.isSystem().setValue(true);
+            if (prevOwner != null && ContactType.Employee.equals(prevOwner.type().getValue())) {
+                dto.to().add(prevOwner);
+            }
+            if (e != null || dto.to().size() < 1) {
+                dto.to().add(message.owner());
+            }
             saveAndUpdate(callback, dto, null, false);
         } else {
             ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Long(0L));
