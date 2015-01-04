@@ -109,6 +109,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         inject(proto().deliveryMethod());
 
         formPanel.append(Location.Dual, proto().subject(), threadLabel);
+        formPanel.append(Location.Left, proto().thread().id()).decorate();
         formPanel.br();
 
         formPanel.append(Location.Left, proto().category()).decorate();
@@ -144,6 +145,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             get(proto().header()).setVisible(false);
             get(proto().to()).setVisible(false);
         } else {
+            get(proto().thread().id()).setVisible(CategoryType.Ticket.equals(getValue().category().categoryType().getValue()));
             get(proto().owner().name()).setVisible(CategoryType.Ticket.equals(getValue().category().categoryType().getValue()));
             get(proto().status()).setVisible(CategoryType.Ticket.equals(getValue().category().categoryType().getValue()));
             get(proto().associated()).setVisible(
