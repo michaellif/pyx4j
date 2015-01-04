@@ -30,6 +30,9 @@ public class POFileWriter {
 
     public boolean writeBom = true;
 
+    /**
+     * Set output page width, N.B. poEdit counts CR.
+     */
     public int pageWidth = 78;
 
     public boolean wrapLines = true;
@@ -92,8 +95,30 @@ public class POFileWriter {
         }
 
         if (entry.references != null) {
+            boolean cr = false;
+            int lineSize = 0;
+
             for (final String str : entry.references) {
-                writer.println("#: " + str);
+                if (!wrapLines) {
+                    writer.println("#: " + str);
+                    cr = true;
+                } else {
+                    if ((lineSize != 0) && (lineSize + str.length() + 1 > pageWidth)) {
+                        lineSize = 0;
+                        writer.println();
+                    }
+                    if (lineSize == 0) {
+                        writer.print("#:");
+                        lineSize += 2;
+                    }
+                    writer.print(" ");
+                    writer.print(str);
+                    lineSize += str.length() + 1;
+                }
+            }
+
+            if (!cr) {
+                writer.println();
             }
         }
 
@@ -131,30 +156,37 @@ public class POFileWriter {
         writeString(writer, entry.translated, "msgstr ".length());
     }
 
-    private void writeString(PrintWriter writer, String str, int firstLnePrefixLen) {
+    void writeString(PrintWriter writer, String str, int firstLnePrefixLen) {
         if (str == null) {
             writer.print("\"\"");
         } else {
             str = str.replace("\\", "\\\\").replace("\"", "\\\"").replace("\t", "\\t");
             if (str.contains("\n") || (wrapLines && (str.length() > pageWidth - 2 - firstLnePrefixLen))) {
-                writer.print("\"\"");
-
                 int lineSize = 0;
+                // ignore case of single last CR in string
+                if (str.indexOf("\n") == str.length() - 1) {
+                    lineSize = firstLnePrefixLen;
+                    writer.print("\"");
+                } else {
+                    writer.print("\"\"");
+                }
+
                 StringTokenizer t = new StringTokenizer(str, wrapLines ? " \n" : "\n", true);
                 while (t.hasMoreTokens()) {
                     if (lineSize == 0) {
                         writer.println();
                         writer.print("\"");
+                        lineSize = 1;
                     }
                     String token = t.nextToken();
                     if (token.equals("\n")) {
                         writer.print("\\n\"");
                         lineSize = 0;
                     } else {
-                        if (wrapLines && (lineSize + token.length() > pageWidth - 2)) {
+                        if (wrapLines && (lineSize + token.length() > pageWidth - 1)) {
                             writer.println("\"");
                             writer.print("\"");
-                            lineSize = 0;
+                            lineSize = 1;
                         }
                         writer.print(token);
                         lineSize += token.length();
