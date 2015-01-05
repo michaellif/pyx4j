@@ -67,6 +67,10 @@ public class N4BatchLister extends SiteDataTablePanel<N4BatchDTO> {
         new EntitySelectorTableDialog<N4LeaseCandidateDTO>(N4LeaseCandidateDTO.class, false, true, Collections.<N4LeaseCandidateDTO> emptySet(),
                 i18n.tr("Select Leases")) {
 
+            {
+                this.setDialogPixelWidth(700);
+            }
+
             @Override
             public boolean onClickOk() {
                 N4BatchInitData initData = EntityFactory.create(N4BatchInitData.class);

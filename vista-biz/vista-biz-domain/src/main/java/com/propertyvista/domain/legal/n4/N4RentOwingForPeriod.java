@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -36,10 +37,14 @@ public interface N4RentOwingForPeriod extends IEntity {
 
     IPrimitive<LogicalDate> toDate();
 
+    @Format("$#,##0.00")
     IPrimitive<BigDecimal> rentCharged();
 
+    @Format("$#,##0.00")
     IPrimitive<BigDecimal> rentPaid();
 
+    @ReadOnly
+    @Format("$#,##0.00")
     IPrimitive<BigDecimal> rentOwing();
 
 }

@@ -29,6 +29,7 @@ import com.propertyvista.biz.legal.InvoiceDebitAggregator;
 import com.propertyvista.biz.legal.forms.n4.N4GenerationUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.crm.rpc.services.legal.eviction.N4BatchCrudService;
+import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
@@ -37,6 +38,7 @@ import com.propertyvista.domain.legal.n4.N4BatchItem;
 import com.propertyvista.domain.legal.n4.N4RentOwingForPeriod;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.N4Policy;
+import com.propertyvista.domain.policy.policies.N4Policy.EmployeeSelectionMethod;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.N4BatchDTO;
 
@@ -53,6 +55,10 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
     protected N4BatchDTO init(InitializationData initializationData) {
         N4BatchDTO dto = EntityFactory.create(N4BatchDTO.class);
 
+        if (EmployeeSelectionMethod.ByLoggedInUser.equals(n4policy.agentSelectionMethod().getValue())) {
+            dto.signingEmployee().set(CrmAppContext.getCurrentUserEmployee());
+        }
+        dto.created().setValue(SystemDateManager.getDate());
         dto.companyLegalName().setValue(n4policy.companyName().getValue());
         dto.companyAddress().set(n4policy.mailingAddress().duplicate(InternationalAddress.class));
         dto.companyPhoneNumber().setValue(n4policy.phoneNumber().getValue());
@@ -73,6 +79,7 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
 
             dto.items().add(item);
         }
+        generateBatchName(dto);
         return dto;
     }
 
@@ -81,11 +88,23 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
         super.enhanceRetrieved(bo, to, retrieveTarget);
 
         Persistence.ensureRetrieve(to.items(), AttachLevel.Attached);
+        for (N4BatchItem item : to.items()) {
+            Persistence.ensureRetrieve(item.rentOwingBreakdown(), AttachLevel.Attached);
+
+            Persistence.ensureRetrieve(item.lease().unit().building(), AttachLevel.Attached);
+        }
     }
 
     @Override
     protected void enhanceListRetrieved(N4Batch bo, N4BatchDTO to) {
         super.enhanceListRetrieved(bo, to);
+
+        Persistence.ensureRetrieve(to.items(), AttachLevel.Attached);
+    }
+
+    // -------- internals -----------
+    private void generateBatchName(N4BatchDTO dto) {
+        dto.name().setValue(dto.created().getStringView().replaceAll(" ", "_"));
     }
 
     // TODO - copied from SelectN4LeaseCandidateListServiceImpl; move to a facade

@@ -20,6 +20,7 @@ import java.util.List;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -54,7 +55,7 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
                 bind(toProto.leaseId(), boProto);
                 bind(toProto.propertyCode(), boProto.unit().building().propertyCode());
                 bind(toProto.unitNo(), boProto.unit().info().number());
-                bind(toProto.moveIn(), boProto.actualMoveIn());
+                bind(toProto.moveIn(), boProto.expectedMoveIn());
                 bind(toProto.moveOut(), boProto.expectedMoveOut());
             }
         });
@@ -65,7 +66,10 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
     protected void enhanceListCriteria(EntityListCriteria<Lease> boCriteria, EntityListCriteria<N4LeaseCandidateDTO> toCriteria) {
         super.enhanceListCriteria(boCriteria, toCriteria);
 
+        // save criteria to access later (see below)
         this.toCriteria = toCriteria;
+
+        boCriteria.eq(boCriteria.proto().status(), Lease.Status.Active);
         // TODO - add property code search criteria to boCriteria
     }
 
@@ -81,6 +85,13 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
             }
         }
         return result;
+    }
+
+    @Override
+    protected void retrievedForList(Lease bo) {
+        super.retrievedForList(bo);
+
+        Persistence.ensureRetrieve(bo.unit().building(), AttachLevel.Attached);
     }
 
     @Override

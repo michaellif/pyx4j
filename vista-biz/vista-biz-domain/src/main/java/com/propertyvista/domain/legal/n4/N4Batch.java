@@ -15,6 +15,7 @@ package com.propertyvista.domain.legal.n4;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -28,6 +29,7 @@ public interface N4Batch extends N4BatchData {
     IPrimitive<String> name();
 
     @ReadOnly
+    @Format("yyyy-MM-dd HH:mm:ss")
     @Timestamp(Update.Created)
     IPrimitive<Date> created();
 
