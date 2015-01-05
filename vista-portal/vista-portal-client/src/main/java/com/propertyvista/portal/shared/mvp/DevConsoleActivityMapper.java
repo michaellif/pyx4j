@@ -16,6 +16,8 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.config.shared.ApplicationMode;
+
 import com.propertyvista.portal.shared.activity.DevConsoleActivity;
 
 public class DevConsoleActivityMapper implements ActivityMapper {
@@ -25,7 +27,11 @@ public class DevConsoleActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        return DevConsoleActivity.instance().withPlace(place);
+        if (ApplicationMode.isDevelopment() || ApplicationMode.isDemo()) {
+            return DevConsoleActivity.instance().withPlace(place);
+        } else {
+            return null;
+        }
     }
 
 }
