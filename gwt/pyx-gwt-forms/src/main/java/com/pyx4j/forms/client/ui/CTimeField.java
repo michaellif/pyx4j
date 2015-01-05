@@ -53,7 +53,7 @@ public class CTimeField extends CTextFieldBase<Time, NTextBox<Time>> {
 
     public void setTimeFormat(String format) {
         setFormatter(new TimeFormat(format));
-        setParser(new TimeParser());
+        setParser(new TimeParser(format));
     }
 
     public static class TimeFormat implements IFormatter<Time, String> {
@@ -77,8 +77,11 @@ public class CTimeField extends CTextFieldBase<Time, NTextBox<Time>> {
 
         final List<DateTimeFormat> parsers;
 
-        public TimeParser() {
-            parsers = Arrays.asList(DateTimeFormat.getFormat("h:mm a"), DateTimeFormat.getFormat("h:mma"));
+        final String pattern;
+
+        public TimeParser(final String pattern) {
+            parsers = Arrays.asList(DateTimeFormat.getFormat(pattern), DateTimeFormat.getFormat("h:mm a"), DateTimeFormat.getFormat("h:mma"));
+            this.pattern = pattern;
         }
 
         @Override
@@ -93,7 +96,7 @@ public class CTimeField extends CTextFieldBase<Time, NTextBox<Time>> {
                         continue;
                     }
                 }
-                throw new ParseException(i18n.tr("Invalid time format. Use 12:00 AM/PM format"), 0);
+                throw new ParseException(i18n.tr("Invalid time format. Use " + pattern + " format"), 0);
             }
         }
     }
