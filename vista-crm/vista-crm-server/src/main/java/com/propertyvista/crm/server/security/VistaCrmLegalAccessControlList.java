@@ -26,11 +26,13 @@ import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseCompletion;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseNotice;
 import com.propertyvista.crm.rpc.services.legal.eviction.EvictionDocumentUploadService;
+import com.propertyvista.crm.rpc.services.selections.SelectN4LeaseCandidateListService;
 import com.propertyvista.domain.eviction.EvictionDocument;
 import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.dto.EvictionCaseDTO;
 import com.propertyvista.dto.LeaseLegalStateDTO;
 import com.propertyvista.dto.N4BatchDTO;
+import com.propertyvista.dto.N4LeaseCandidateDTO;
 
 class VistaCrmLegalAccessControlList extends UIAclBuilder {
 
@@ -51,6 +53,9 @@ class VistaCrmLegalAccessControlList extends UIAclBuilder {
         grant(LegalCollectionsBasic, EvictionDocument.class, READ);
 
         grant(LegalCollectionsBasic, N4BatchDTO.class, READ);
+        grant(LegalCollectionsBasic, N4LeaseCandidateDTO.class, READ);
+
+        grant(LegalCollectionsBasic, new IServiceExecutePermission(SelectN4LeaseCandidateListService.class));
 
         grant(LegalCollectionsFull, LegalLetter.class, READ | CREATE);
         grant(LegalCollectionsFull, LeaseLegalStateDTO.class, READ | UPDATE);
@@ -58,8 +63,11 @@ class VistaCrmLegalAccessControlList extends UIAclBuilder {
 
         grant(LegalCollectionsFull, EvictionCaseDTO.class, READ | CREATE | UPDATE);
         grant(LegalCollectionsFull, EvictionDocument.class, READ | CREATE | UPDATE);
-        grant(LegalCollectionsFull, new IServiceExecutePermission(EvictionDocumentUploadService.class));
 
         grant(LegalCollectionsFull, N4BatchDTO.class, READ | CREATE | UPDATE);
+        grant(LegalCollectionsFull, N4LeaseCandidateDTO.class, READ);
+
+        grant(LegalCollectionsFull, new IServiceExecutePermission(SelectN4LeaseCandidateListService.class));
+        grant(LegalCollectionsFull, new IServiceExecutePermission(EvictionDocumentUploadService.class));
     }
 }
