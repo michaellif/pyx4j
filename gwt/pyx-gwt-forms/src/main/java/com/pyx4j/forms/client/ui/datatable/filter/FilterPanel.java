@@ -119,8 +119,30 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
     }
 
     public void setFilters(List<Criterion> filters) {
-        // TODO Auto-generated method stub
-
+        List<FilterItem> items = new ArrayList<>();
+        List<ColumnDescriptor> columnDescriptors = dataTablePanel.getDataTable().getColumnDescriptors();
+        for (ColumnDescriptor columnDescriptor : columnDescriptors) {
+            if (columnDescriptor.isFilterAlwaysShown()) {
+                items.add(new FilterItem(columnDescriptor));
+            }
+        }
+        for (Criterion criterion : filters) {
+            if (criterion instanceof PropertyCriterion) {
+                String propertyPath = ((PropertyCriterion) criterion).getPropertyPath();
+                for (ColumnDescriptor columnDescriptor : columnDescriptors) {
+                    if (propertyPath.equals(columnDescriptor.getColumnPath().toString())) {
+                        FilterItem item = new FilterItem(columnDescriptor);
+                        if (items.contains(item)) {
+                            items.get(items.indexOf(item)).setCriterion(criterion);
+                        } else {
+                            item.setCriterion(criterion);
+                            items.add(item);
+                        }
+                    }
+                }
+            }
+        }
+        setValue(items);
     }
 
     public List<Criterion> getFilters() {

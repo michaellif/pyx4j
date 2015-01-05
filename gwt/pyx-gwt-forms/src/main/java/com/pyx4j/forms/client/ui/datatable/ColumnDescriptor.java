@@ -43,10 +43,6 @@ import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.shared.IUserPreferences;
-import com.pyx4j.forms.client.ui.datatable.filter.DateFilterEditor;
-import com.pyx4j.forms.client.ui.datatable.filter.MultiSelectFilterEditor;
-import com.pyx4j.forms.client.ui.datatable.filter.NumberFilterEditor;
-import com.pyx4j.forms.client.ui.datatable.filter.TextQueryFilterEditor;
 import com.pyx4j.security.shared.Context;
 
 public class ColumnDescriptor {
