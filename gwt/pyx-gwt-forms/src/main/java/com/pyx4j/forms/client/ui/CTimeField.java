@@ -96,7 +96,7 @@ public class CTimeField extends CTextFieldBase<Time, NTextBox<Time>> {
                         continue;
                     }
                 }
-                throw new ParseException(i18n.tr("Invalid time format. Use " + pattern + " format"), 0);
+                throw new ParseException(i18n.tr("Invalid time format. Use {0} format", pattern), 0);
             }
         }
     }
