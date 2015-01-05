@@ -21,6 +21,8 @@ package com.pyx4j.forms.client.ui;
 
 import java.sql.Time;
 import java.text.ParseException;
+import java.util.Arrays;
+import java.util.List;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 
@@ -51,18 +53,15 @@ public class CTimeField extends CTextFieldBase<Time, NTextBox<Time>> {
 
     public void setTimeFormat(String format) {
         setFormatter(new TimeFormat(format));
-        setParser(new TimeParser(format));
+        setParser(new TimeParser());
     }
 
     public static class TimeFormat implements IFormatter<Time, String> {
 
-        final String timeFormat;
+        final DateTimeFormat formatter;
 
-        final DateTimeFormat parser;
-
-        public TimeFormat(final String format) {
-            this.timeFormat = format;
-            parser = DateTimeFormat.getFormat(format);
+        public TimeFormat(final String pattern) {
+            formatter = DateTimeFormat.getFormat(pattern);
         }
 
         @Override
@@ -70,14 +69,16 @@ public class CTimeField extends CTextFieldBase<Time, NTextBox<Time>> {
             if (value == null) {
                 return null;
             }
-            return parser.format(value);
+            return formatter.format(value);
         }
     }
 
-    public static class TimeParser extends TimeFormat implements IParser<Time> {
+    public static class TimeParser implements IParser<Time> {
 
-        public TimeParser(final String format) {
-            super(format);
+        final List<DateTimeFormat> parsers;
+
+        public TimeParser() {
+            parsers = Arrays.asList(DateTimeFormat.getFormat("h:mm a"), DateTimeFormat.getFormat("h:mma"));
         }
 
         @Override
@@ -85,15 +86,14 @@ public class CTimeField extends CTextFieldBase<Time, NTextBox<Time>> {
             if (CommonsStringUtils.isEmpty(string)) {
                 return null; // empty value case
             } else {
-                try {
-                    return TimeUtils.logicalTime(parser.parseStrict(string));
-                } catch (IllegalArgumentException e) {
-                    if (timeFormat.equals(defaultTimeFormat)) {
-                        throw new ParseException(i18n.tr("Invalid time format. Use 12:00 AM/PM format"), 0);
-                    } else {
-                        throw new ParseException(i18n.tr("Invalid time format. Use {0} format", timeFormat), 0);
+                for (DateTimeFormat parser : parsers) {
+                    try {
+                        return TimeUtils.logicalTime(parser.parseStrict(string));
+                    } catch (IllegalArgumentException e) {
+                        continue;
                     }
                 }
+                throw new ParseException(i18n.tr("Invalid time format. Use 12:00 AM/PM format"), 0);
             }
         }
     }
