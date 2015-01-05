@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.domain.property.asset.CommunityEvent;
 import com.propertyvista.portal.resident.themes.ExtraGadgetsTheme;
@@ -44,9 +45,18 @@ public class CommunityEventsViewImpl extends FlowPanel implements CommunityEvent
         if (events != null && events.size() > 0) {
             int i = 1;
             for (final CommunityEvent event : events) {
-                HTML captionHTML = new HTML(event.caption().getValue());
+                Label captionHTML = new Label(event.caption().getValue());
                 captionHTML.setStyleName(ExtraGadgetsTheme.StyleName.CommunityEventCaption.name());
                 captionHTML.setTitle(event.caption().getValue());
+                captionHTML.addClickHandler(new ClickHandler() {
+
+                    @Override
+                    public void onClick(ClickEvent clickEvent) {
+                        presenter.showEvent(event.getPrimaryKey());
+
+                    }
+
+                });
                 add(captionHTML);
 
                 String dateLocation = createDateAndLocation(event);
@@ -57,11 +67,12 @@ public class CommunityEventsViewImpl extends FlowPanel implements CommunityEvent
 
                 String description = event.description().getValue();
                 HTML descriptionHTML = new HTML((description.length() <= 80) ? description : description.substring(0, description.indexOf(" ", 80)) + "...");
-                descriptionHTML.setStyleName(ExtraGadgetsTheme.StyleName.CommunityEventDescription.name());
+                descriptionHTML.setStyleName(ExtraGadgetsTheme.StyleName.CommunityEventExtraDescription.name());
                 descriptionHTML.setTitle(event.description().getValue());
                 add(descriptionHTML);
 
                 Anchor more = new Anchor("Read more>>");
+                more.setStyleName(ExtraGadgetsTheme.StyleName.CommunityEventReadMore.name());
                 more.addClickHandler(new ClickHandler() {
 
                     @Override
