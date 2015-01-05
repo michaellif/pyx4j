@@ -137,21 +137,9 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
             break;
         }
 
-        switch (getLayoutType()) {
-
-        case huge:
-            overlayExtraHolder.hide();
-
-            inlineExtraHolder.layout();
-            pageHolder.setWidgetSize(inlineExtraHolder, inlineExtraHolder.isEmpty() ? 0 : 200);
-
-            break;
-        default:
-            inlineExtraHolder.clear();
-            pageHolder.setWidgetSize(inlineExtraHolder, 0);
-            overlayExtraHolder.layout();
-            break;
-        }
+        inlineExtraHolder.layout();
+        pageHolder.setWidgetSize(inlineExtraHolder, inlineExtraHolder.isEmpty() ? 0 : 200);
+        overlayExtraHolder.layout();
 
         Layer menuLayer = (Layer) sideMenuHolder.getLayoutData();
         Layer commLayer = (Layer) sideCommHolder.getLayoutData();

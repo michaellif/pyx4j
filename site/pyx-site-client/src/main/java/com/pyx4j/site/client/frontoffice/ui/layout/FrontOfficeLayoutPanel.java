@@ -216,16 +216,8 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
             break;
         }
 
-        switch (getLayoutType()) {
-        case huge:
-            overlayExtraHolder.hide();
-            inlineExtraHolder.layout();
-            break;
-        default:
-            inlineExtraHolder.hide();
-            overlayExtraHolder.layout();
-            break;
-        }
+        inlineExtraHolder.layout();
+        overlayExtraHolder.layout();
 
         Layer menuLayer = (Layer) sideMenuHolder.getLayoutData();
         Layer commLayer = (Layer) sideCommHolder.getLayoutData();

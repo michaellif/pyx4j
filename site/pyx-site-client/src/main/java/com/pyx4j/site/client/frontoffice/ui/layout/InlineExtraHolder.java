@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutTheme;
 
@@ -55,24 +56,29 @@ public class InlineExtraHolder extends SimplePanel {
     }
 
     public void layout() {
-        contentPanel.clear();
-        contentPanel.setVisible(true);
 
-        if (parent.getDisplay(DisplayType.extra1).getWidget() != null) {
-            contentPanel.add(new ExtraPanel(parent.getDisplay(DisplayType.extra1), extra1Caption, ResponsiveLayoutTheme.StyleDependent.extra1.name()));
+        switch (LayoutType.getLayoutType(Window.getClientWidth())) {
+        case huge:
+            contentPanel.clear();
+            contentPanel.setVisible(true);
+
+            if (parent.getDisplay(DisplayType.extra1).getWidget() != null) {
+                contentPanel.add(new ExtraPanel(parent.getDisplay(DisplayType.extra1), extra1Caption, ResponsiveLayoutTheme.StyleDependent.extra1.name()));
+            }
+
+            if (parent.getDisplay(DisplayType.extra2).getWidget() != null) {
+                contentPanel.add(new ExtraPanel(parent.getDisplay(DisplayType.extra2), extra2Caption, ResponsiveLayoutTheme.StyleDependent.extra2.name()));
+            }
+
+            if (parent.getDisplay(DisplayType.extra3).getWidget() != null) {
+                contentPanel.add(new ExtraPanel(parent.getDisplay(DisplayType.extra3), null, ResponsiveLayoutTheme.StyleDependent.extra3.name()));
+            }
+            break;
+        default:
+            contentPanel.setVisible(false);
+            break;
         }
 
-        if (parent.getDisplay(DisplayType.extra2).getWidget() != null) {
-            contentPanel.add(new ExtraPanel(parent.getDisplay(DisplayType.extra2), extra2Caption, ResponsiveLayoutTheme.StyleDependent.extra2.name()));
-        }
-
-        if (parent.getDisplay(DisplayType.extra3).getWidget() != null) {
-            contentPanel.add(new ExtraPanel(parent.getDisplay(DisplayType.extra3), null, ResponsiveLayoutTheme.StyleDependent.extra3.name()));
-        }
-    }
-
-    public void hide() {
-        contentPanel.setVisible(false);
     }
 
     public void onPositionChange() {

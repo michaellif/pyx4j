@@ -20,10 +20,12 @@
 package com.pyx4j.site.client.backoffice.ui.layout;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
 public class InlineExtraHolder extends DockLayoutPanel {
@@ -45,40 +47,43 @@ public class InlineExtraHolder extends DockLayoutPanel {
     }
 
     public void layout() {
-        clear();
-        IsWidget extra1Widget = parent.getDisplay(DisplayType.extra1).getWidget();
-        IsWidget extra2Widget = parent.getDisplay(DisplayType.extra2).getWidget();
-        IsWidget extra3Widget = parent.getDisplay(DisplayType.extra3).getWidget();
-        empty = false;
-        if (extra1Widget != null) {
-            if (extra2Widget != null) {
-                addSouth(new ExtraPanel(parent.getDisplay(DisplayType.extra2), extra2Caption), 40);
-            }
-            if (extra3Widget != null) {
-                addSouth(new ExtraPanel(parent.getDisplay(DisplayType.extra3), null), 30);
-            }
-            add(new ExtraPanel(parent.getDisplay(DisplayType.extra1), extra1Caption));
 
-        } else if (extra2Widget != null) {
-            if (extra3Widget != null) {
-                addSouth(new ExtraPanel(parent.getDisplay(DisplayType.extra3), null), 40);
+        clear();
+        empty = true;
+
+        switch (LayoutType.getLayoutType(Window.getClientWidth())) {
+        case huge:
+            IsWidget extra1Widget = parent.getDisplay(DisplayType.extra1).getWidget();
+            IsWidget extra2Widget = parent.getDisplay(DisplayType.extra2).getWidget();
+            IsWidget extra3Widget = parent.getDisplay(DisplayType.extra3).getWidget();
+            empty = false;
+            if (extra1Widget != null) {
+                if (extra2Widget != null) {
+                    addSouth(new ExtraPanel(parent.getDisplay(DisplayType.extra2), extra2Caption), 40);
+                }
+                if (extra3Widget != null) {
+                    addSouth(new ExtraPanel(parent.getDisplay(DisplayType.extra3), null), 30);
+                }
+                add(new ExtraPanel(parent.getDisplay(DisplayType.extra1), extra1Caption));
+
+            } else if (extra2Widget != null) {
+                if (extra3Widget != null) {
+                    addSouth(new ExtraPanel(parent.getDisplay(DisplayType.extra3), null), 40);
+                }
+                add(new ExtraPanel(parent.getDisplay(DisplayType.extra2), extra2Caption));
+            } else if (extra3Widget != null) {
+                add(new ExtraPanel(parent.getDisplay(DisplayType.extra3), null));
+            } else {
+                empty = true;
             }
-            add(new ExtraPanel(parent.getDisplay(DisplayType.extra2), extra2Caption));
-        } else if (extra3Widget != null) {
-            add(new ExtraPanel(parent.getDisplay(DisplayType.extra3), null));
-        } else {
-            empty = true;
+            break;
+        default:
+            break;
         }
     }
 
     public boolean isEmpty() {
         return empty;
-    }
-
-    @Override
-    public void clear() {
-        super.clear();
-        empty = true;
     }
 
     class ExtraPanel extends DockLayoutPanel {

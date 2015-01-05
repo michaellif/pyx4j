@@ -20,12 +20,11 @@
 package com.pyx4j.site.client.ui.layout;
 
 import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.security.client.ContextInitializeEvent;
-import com.pyx4j.security.client.ContextInitializeHandler;
-import com.pyx4j.site.client.AppSite;
+import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.ui.devconsole.AbstractDevConsole;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
@@ -46,7 +45,7 @@ public class OverlayExtraHolder extends AbstractOverlayHolder {
 
         overlayDevConsoleHolder = new LayoutPanel();
         overlayDevConsoleHolder.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-        addTab(overlayDevConsoleHolder, "Dev./Demo");
+        addTab(overlayDevConsoleHolder, ApplicationMode.isDemo() ? "Demo" : "Dev.");
         setTabVisible(getTabIndex(overlayDevConsoleHolder), false);
 
         overlayExtra1Holder = new LayoutPanel();
@@ -64,51 +63,56 @@ public class OverlayExtraHolder extends AbstractOverlayHolder {
         addTab(overlayExtra4Holder, extra4Caption == null ? "" : extra4Caption);
         setTabVisible(getTabIndex(overlayExtra4Holder), false);
 
-        AppSite.getEventBus().addHandler(ContextInitializeEvent.getType(), new ContextInitializeHandler() {
-
-            @Override
-            public void onContextInitialize(ContextInitializeEvent event) {
-                layout();
-            }
-        });
-
     }
 
     public void layout() {
-        hide();
-        if (ApplicationMode.isDevelopment() || ApplicationMode.isDemo()) {
-            if (parent.getDisplay(DisplayType.devConsole).getWidget() != null) {
-                setTabLabel(getTabIndex(overlayDevConsoleHolder), ApplicationMode.isDemo() ? "Demo" : "Dev.");
-                setTabVisible(getTabIndex(overlayDevConsoleHolder), true);
-                if (overlayDevConsoleHolder.getWidgetCount() == 0) {
-                    overlayDevConsoleHolder.add(parent.getDisplay(DisplayType.devConsole));
+
+        if (parent.getDisplay(DisplayType.devConsole).getWidget() != null) {
+            setTabVisible(getTabIndex(overlayDevConsoleHolder), true);
+            if (overlayDevConsoleHolder.getWidgetCount() == 0) {
+                overlayDevConsoleHolder.add(parent.getDisplay(DisplayType.devConsole));
+            }
+        } else {
+            setTabVisible(getTabIndex(overlayDevConsoleHolder), false);
+        }
+
+        switch (LayoutType.getLayoutType(Window.getClientWidth())) {
+
+        case huge:
+            setTabVisible(getTabIndex(overlayExtra1Holder), false);
+            setTabVisible(getTabIndex(overlayExtra2Holder), false);
+            setTabVisible(getTabIndex(overlayExtra4Holder), false);
+            break;
+        default:
+            if (parent.getDisplay(DisplayType.extra1).getWidget() != null) {
+                setTabVisible(getTabIndex(overlayExtra1Holder), true);
+                if (overlayExtra1Holder.getWidgetCount() == 0) {
+                    overlayExtra1Holder.add(parent.getDisplay(DisplayType.extra1));
                 }
+            } else {
+                setTabVisible(getTabIndex(overlayExtra1Holder), false);
             }
+
+            if (parent.getDisplay(DisplayType.extra2).getWidget() != null) {
+                setTabVisible(getTabIndex(overlayExtra2Holder), true);
+                if (overlayExtra2Holder.getWidgetCount() == 0) {
+                    overlayExtra2Holder.add(parent.getDisplay(DisplayType.extra2));
+                }
+            } else {
+                setTabVisible(getTabIndex(overlayExtra2Holder), false);
+            }
+
+            if (parent.getDisplay(DisplayType.extra4).getWidget() != null) {
+                setTabVisible(getTabIndex(overlayExtra4Holder), true);
+                if (overlayExtra4Holder.getWidgetCount() == 0) {
+                    overlayExtra4Holder.add(parent.getDisplay(DisplayType.extra4));
+                }
+            } else {
+                setTabVisible(getTabIndex(overlayExtra4Holder), false);
+            }
+            break;
         }
 
-        if (parent.getDisplay(DisplayType.extra1).getWidget() != null) {
-            setTabVisible(getTabIndex(overlayExtra1Holder), true);
-            if (overlayExtra1Holder.getWidgetCount() == 0) {
-                overlayExtra1Holder.add(parent.getDisplay(DisplayType.extra1));
-            }
-        }
-        if (parent.getDisplay(DisplayType.extra2).getWidget() != null) {
-            setTabVisible(getTabIndex(overlayExtra2Holder), true);
-            if (overlayExtra2Holder.getWidgetCount() == 0) {
-                overlayExtra2Holder.add(parent.getDisplay(DisplayType.extra2));
-            }
-        }
-        if (parent.getDisplay(DisplayType.extra4).getWidget() != null) {
-            setTabVisible(getTabIndex(overlayExtra4Holder), true);
-            if (overlayExtra4Holder.getWidgetCount() == 0) {
-                overlayExtra4Holder.add(parent.getDisplay(DisplayType.extra4));
-            }
-        }
-    }
-
-    public void hide() {
-        setTabVisible(getTabIndex(overlayExtra1Holder), false);
-        setTabVisible(getTabIndex(overlayExtra2Holder), false);
     }
 
 }
