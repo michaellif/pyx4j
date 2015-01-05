@@ -33,6 +33,7 @@ public class PopupPanel extends com.google.gwt.user.client.ui.PopupPanel {
 
     public PopupPanel(boolean autoHide, boolean modal) {
         super(autoHide, modal);
+        getElement().getStyle().setZIndex(50);
     }
 
     @Override

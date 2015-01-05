@@ -84,7 +84,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     private final DataTableActionsBar bottomActionsBar;
 
-    private FilterPanel newFilterPanel;
+    private FilterPanel filterPanel;
 
     private WidgetsImages images;
 
@@ -116,8 +116,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         topActionsBar = new DataTableActionsBar(this, false);
         add(topActionsBar);
 
-        newFilterPanel = new FilterPanel(this);
-        add(newFilterPanel);
+        filterPanel = new FilterPanel(this);
+        add(filterPanel);
 
         dataTable = new DataTable<E>();
         dataTableScroll = new DataTableScrollPanel();
@@ -148,7 +148,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     public void setColumnDescriptors(List<ColumnDescriptor> columnDescriptors) {
         dataTable.setColumnDescriptors(columnDescriptors);
-        newFilterPanel.resetFilters();
+        filterPanel.resetFilters();
     }
 
     public void setDataTableModel(DataTableModel<E> model) {
@@ -288,7 +288,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         if (getDataTableModel() != null) {
             getDataTableModel().clearData();
         }
-        newFilterPanel.resetFilters();
+        filterPanel.resetFilters();
     }
 
     public int getPageSize() {
@@ -316,14 +316,14 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     }
 
     public List<Criterion> getFilters() {
-        return newFilterPanel.getFilters();
+        return filterPanel.getFilters();
     }
 
     public void setFilters(List<Criterion> filters) {
         if (filters == null || filters.isEmpty()) {
-            newFilterPanel.resetFilters();
+            filterPanel.resetFilters();
         } else {
-            newFilterPanel.setFilters(filters);
+            filterPanel.setFilters(filters);
         }
     }
 
@@ -332,7 +332,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     }
 
     public void setFilteringEnabled(boolean enabled) {
-
+        filterPanel.setVisible(enabled);
     }
 
     @Override
