@@ -47,13 +47,9 @@ import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.images.FolderImages;
-import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
-import com.pyx4j.forms.client.ui.datatable.filter.CriteriaEditableComponentFactory;
-import com.pyx4j.forms.client.ui.datatable.filter.DataTableFilterItem;
-import com.pyx4j.forms.client.ui.datatable.filter.DataTableFilterPanel;
 import com.pyx4j.forms.client.ui.datatable.filter.FilterPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -68,9 +64,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     private static final Logger log = LoggerFactory.getLogger(DataTablePanel.class);
 
-    private static final I18n i18n = I18n.get(DataTableFilterItem.class);
-
-    private static final Boolean USE_NEW_FILTERS = true;
+    private static final I18n i18n = I18n.get(DataTablePanel.class);
 
     public static int PAGESIZE_SMALL = 10;
 
@@ -90,11 +84,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     private final DataTableActionsBar bottomActionsBar;
 
-    private DataTableFilterPanel<E> filterPanel;
-
     private FilterPanel newFilterPanel;
-
-    private IEditableComponentFactory compFactory = new CriteriaEditableComponentFactory();
 
     private WidgetsImages images;
 
@@ -103,8 +93,6 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     private String addButtonCaption;
 
     private Button delButton;
-
-    private Button filterButton;
 
     private final Class<E> clazz;
 
@@ -128,13 +116,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         topActionsBar = new DataTableActionsBar(this, false);
         add(topActionsBar);
 
-        if (USE_NEW_FILTERS) {
-            newFilterPanel = new FilterPanel(this);
-            add(newFilterPanel);
-        } else {
-            filterPanel = new DataTableFilterPanel<E>(this);
-            add(filterPanel);
-        }
+        newFilterPanel = new FilterPanel(this);
+        add(newFilterPanel);
 
         dataTable = new DataTable<E>();
         dataTableScroll = new DataTableScrollPanel();
@@ -143,17 +126,6 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
         bottomActionsBar = new DataTableActionsBar(this, true);
         add(bottomActionsBar);
-
-        filterButton = new Button(i18n.tr("Filter"), new Command() {
-
-            @Override
-            public void execute() {
-                filterPanel.setFilters(null);
-            }
-        });
-        if (!USE_NEW_FILTERS) {
-            topActionsBar.getToolbar().addItem(filterButton);
-        }
 
         getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
             @Override
@@ -197,24 +169,12 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         dataTable.setItemZoomInCommand(itemZoomInCommand);
     }
 
-    public Button getFilterButton() {
-        return filterButton;
-    }
-
     public EntityMeta getEntityMeta() {
         return entityPrototype.getEntityMeta();
     }
 
     public E proto() {
         return entityPrototype;
-    }
-
-    public void setFilterComponentFactory(IEditableComponentFactory compFactory) {
-        this.compFactory = compFactory;
-    }
-
-    public IEditableComponentFactory getFilterComponentFactory() {
-        return compFactory;
     }
 
     public void setDeleteActionEnabled(boolean enabled) {
@@ -276,10 +236,6 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     protected void onItemsDelete(Collection<E> items) {
     }
 
-    public void setFilterApplyCommand(Command filterActionCommand) {
-        filterPanel.setFilterApplyCommand(filterActionCommand);
-    }
-
     public void setFirstActionHandler(Command firstActionCommand) {
         bottomActionsBar.setFirstActionCommand(firstActionCommand);
     }
@@ -332,11 +288,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         if (getDataTableModel() != null) {
             getDataTableModel().clearData();
         }
-        if (USE_NEW_FILTERS) {
-            newFilterPanel.resetFilters();
-        } else {
-            filterPanel.resetFilters();
-        }
+        newFilterPanel.resetFilters();
     }
 
     public int getPageSize() {
@@ -364,26 +316,14 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     }
 
     public List<Criterion> getFilters() {
-        if (USE_NEW_FILTERS) {
-            return newFilterPanel.getFilters();
-        } else {
-            return filterPanel.getFilters();
-        }
+        return newFilterPanel.getFilters();
     }
 
     public void setFilters(List<Criterion> filters) {
-        if (USE_NEW_FILTERS) {
-            if (filters == null || filters.isEmpty()) {
-                newFilterPanel.resetFilters();
-            } else {
-                newFilterPanel.setFilters(filters);
-            }
+        if (filters == null || filters.isEmpty()) {
+            newFilterPanel.resetFilters();
         } else {
-            if (filters == null || filters.isEmpty()) {
-                filterPanel.resetFilters();
-            } else {
-                filterPanel.setFilters(filters);
-            }
+            newFilterPanel.setFilters(filters);
         }
     }
 
@@ -392,7 +332,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     }
 
     public void setFilteringEnabled(boolean enabled) {
-        filterButton.setVisible(enabled);
+
     }
 
     @Override
