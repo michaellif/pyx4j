@@ -21,7 +21,7 @@ import com.pyx4j.commons.css.ThemeId;
 public class ExtraGadgetsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        CommunityEventCaption, CommunityEventTimeAndLocation, CommunityEventDescription,
+        CommunityEventCaption, CommunityEventTimeAndLocation, CommunityEventExtraDescription, CommunityEventDescription, CommunityEventReadMore,
 
         WeatherIcon, WeatherText, WeatherTemperature, WeatherType, ellipsis
 
@@ -30,13 +30,17 @@ public class ExtraGadgetsTheme extends Theme {
     public ExtraGadgetsTheme() {
         Style style = new Style(".", StyleName.CommunityEventCaption);
         style.addProperty("font-weight", "bolder");
-        style.addProperty("text-decoration", "underline");
         style.addProperty("padding-top", "5px");
         style.addProperty("text-overflow", "ellipsis");
         style.addProperty("white-space", "nowrap");
         style.addProperty("overflow", "hidden");
         style.addProperty("text-align", "left");
+        addStyle(style);
 
+        style = new Style(".", StyleName.CommunityEventCaption + ":" + "hover");
+        style.addProperty("text-align", "left");
+        style.addProperty("text-decoration", "underline");
+        style.addProperty("cursor", "pointer");
         addStyle(style);
 
         style = new Style(".", StyleName.CommunityEventTimeAndLocation);
@@ -51,6 +55,19 @@ public class ExtraGadgetsTheme extends Theme {
 
         style = new Style(".", StyleName.CommunityEventDescription);
         style.addProperty("overflow", "hidden");
+        addStyle(style);
+
+        style = new Style(".", StyleName.CommunityEventExtraDescription);
+        style.addProperty("text-align", "left");
+        style.addProperty("font-size", "0.8em");
+        style.addProperty("overflow", "hidden");
+        addStyle(style);
+
+        style = new Style(".", StyleName.CommunityEventReadMore);
+        style.addProperty("display", "block");
+        style.addProperty("text-align", "right");
+        style.addProperty("font-size", "0.8em");
+        style.addProperty("font-style", "italic");
         addStyle(style);
 
         style = new Style(".", StyleName.ellipsis);

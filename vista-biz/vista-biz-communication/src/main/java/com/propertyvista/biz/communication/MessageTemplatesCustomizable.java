@@ -70,7 +70,7 @@ class MessageTemplatesCustomizable {
 
     /**
      * Warning: can return <code>null</code> if the policy is not found.
-     * 
+     *
      * @param type
      * @param building
      * @return
@@ -473,6 +473,10 @@ class MessageTemplatesCustomizable {
                 contentHtml,
                 footerHtml
             ));//@formatter:on
+
+        // TODO
+        // What emails are problematic? (payments communications, tenantsure communications, operations communications...)
+        //email.setTextBody(Jsoup.parse(email.getHtmlBody()).text());
     }
 
 }
