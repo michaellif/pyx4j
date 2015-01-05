@@ -160,6 +160,7 @@ public class EftReportSettingsForm extends CForm<EftReportMetadata> {
 
     private CComboBox<ReportOrderColumnMetadata> makeOrderByComboBox() {
         CComboBox<ReportOrderColumnMetadata> orderByComboBox = new CComboBox<ReportOrderColumnMetadata>();
+        orderByComboBox.populate(null);
 
         ArrayList<ReportOrderColumnMetadata> reportColumnOptions = new ArrayList<ReportOrderColumnMetadata>();
         EftReportRecordDTO reportRecordProto = EntityFactory.getEntityPrototype(EftReportRecordDTO.class);

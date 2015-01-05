@@ -27,8 +27,8 @@ import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.scalers.Address
 import com.propertyvista.domain.legal.ltbcommon.LtbAgentContactInfo;
 import com.propertyvista.domain.legal.ltbcommon.LtbOwedRent;
 import com.propertyvista.domain.legal.ltbcommon.LtbRentalUnitAddress;
-import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
 import com.propertyvista.domain.legal.n4.N4FormFieldsData;
+import com.propertyvista.domain.legal.n4.N4RentOwingForPeriod;
 import com.propertyvista.domain.legal.n4.N4Signature;
 
 public class N4FieldsMapping extends LtbFormFieldsMapping<N4FormFieldsData> {
@@ -64,29 +64,29 @@ public class N4FieldsMapping extends LtbFormFieldsMapping<N4FormFieldsData> {
             @Override
             protected void configure() {
                 table(proto().rentOwingBreakdown()).rowMapping(
-                        Arrays.<LtbFormFieldsMapping<RentOwingForPeriod>> asList(new LtbFormFieldsMapping<RentOwingForPeriod>(RentOwingForPeriod.class) {
+                        Arrays.<LtbFormFieldsMapping<N4RentOwingForPeriod>> asList(new LtbFormFieldsMapping<N4RentOwingForPeriod>(N4RentOwingForPeriod.class) {
                             @Override
                             protected void configure() {
-                                date(proto().from()).mapTo(datePartition("@@b12c96nfn4_a1_start")).define();
-                                date(proto().to()).mapTo(datePartition("@@b12c96nfn4_a1_end")).define();
+                                date(proto().fromDate()).mapTo(datePartition("@@b12c96nfn4_a1_start")).define();
+                                date(proto().toDate()).mapTo(datePartition("@@b12c96nfn4_a1_end")).define();
                                 money(proto().rentCharged()).mapTo(fieldsPartition("@@b12c96nfn4_a1_charged", 1, 3, 2)).define();
                                 money(proto().rentPaid()).mapTo(fieldsPartition("@@b12c96nfn4_a1_paid", 1, 3, 2)).define();
                                 money(proto().rentOwing()).mapTo(fieldsPartition("@@b12c96nfn4_a1_owing", 1, 3, 2)).define();
                             }
-                        }, new LtbFormFieldsMapping<RentOwingForPeriod>(RentOwingForPeriod.class) {
+                        }, new LtbFormFieldsMapping<N4RentOwingForPeriod>(N4RentOwingForPeriod.class) {
                             @Override
                             protected void configure() {
-                                date(proto().from()).mapTo(datePartition("@@b12c96nfn4_a2_start")).define();
-                                date(proto().to()).mapTo(datePartition("@@b12c96nfn4_a2_end")).define();
+                                date(proto().fromDate()).mapTo(datePartition("@@b12c96nfn4_a2_start")).define();
+                                date(proto().toDate()).mapTo(datePartition("@@b12c96nfn4_a2_end")).define();
                                 money(proto().rentCharged()).mapTo(fieldsPartition("@@b12c96nfn4_a2_charged", 1, 3, 2)).define();
                                 money(proto().rentPaid()).mapTo(fieldsPartition("@@b12c96nfn4_a2_paid", 1, 3, 2)).define();
                                 money(proto().rentOwing()).mapTo(fieldsPartition("@@b12c96nfn4_a2_owing", 1, 3, 2)).define();
                             }
-                        }, new LtbFormFieldsMapping<RentOwingForPeriod>(RentOwingForPeriod.class) {
+                        }, new LtbFormFieldsMapping<N4RentOwingForPeriod>(N4RentOwingForPeriod.class) {
                             @Override
                             protected void configure() {
-                                date(proto().from()).mapTo(datePartition("@@b12c96nfn4_a3_start")).define();
-                                date(proto().to()).mapTo(datePartition("@@b12c96nfn4_a3_end")).define();
+                                date(proto().fromDate()).mapTo(datePartition("@@b12c96nfn4_a3_start")).define();
+                                date(proto().toDate()).mapTo(datePartition("@@b12c96nfn4_a3_end")).define();
                                 money(proto().rentCharged()).mapTo(fieldsPartition("@@b12c96nfn4_a3_charged", 1, 3, 2)).define();
                                 money(proto().rentPaid()).mapTo(fieldsPartition("@@b12c96nfn4_a3_paid", 1, 3, 2)).define();
                                 money(proto().rentOwing()).mapTo(fieldsPartition("@@b12c96nfn4_a3_owing", 1, 3, 2)).define();

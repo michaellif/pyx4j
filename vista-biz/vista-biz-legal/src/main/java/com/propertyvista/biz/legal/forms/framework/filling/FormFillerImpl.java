@@ -39,6 +39,7 @@ import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.TextField;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
@@ -222,6 +223,11 @@ public class FormFillerImpl implements FormFiller {
                     // TODO this alg. is not nice (I have to think about it again)
                     IObject<?> childMember = ((IEntity) field).getMember(memberName);
                     if (childMember instanceof IEntity) {
+                        // TODO - this is just a workaround! Need a clear rules (and validation) to work with IEntities here
+                        // ignore reference members 
+                        if (((IEntity) field).getEntityMeta().getMemberMeta(memberName).getAnnotation(JoinColumn.class) != null) {
+                            continue;
+                        }
                         fill(mapping.getChildMapping((IEntity) childMember), childMember);
                     } else {
                         fill(mapping, childMember);

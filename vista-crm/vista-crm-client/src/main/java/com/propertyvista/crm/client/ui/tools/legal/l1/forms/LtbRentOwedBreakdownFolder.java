@@ -30,20 +30,20 @@ import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.N4RentOwingForPeriod;
 
-public class LtbRentOwedBreakdownFolder extends VistaTableFolder<RentOwingForPeriod> {
+public class LtbRentOwedBreakdownFolder extends VistaTableFolder<N4RentOwingForPeriod> {
 
     public LtbRentOwedBreakdownFolder() {
-        super(RentOwingForPeriod.class);
+        super(N4RentOwingForPeriod.class);
         setOrderable(false);
     }
 
     @Override
     public List<FolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new FolderColumnDescriptor(proto().from(), "150px"),
-                new FolderColumnDescriptor(proto().to(), "150px"),
+                new FolderColumnDescriptor(proto().fromDate(), "150px"),
+                new FolderColumnDescriptor(proto().toDate(), "150px"),
                 new FolderColumnDescriptor(proto().rentCharged(), "150px"),                
                 new FolderColumnDescriptor(proto().rentPaid(), "150px"),
                 new FolderColumnDescriptor(proto().rentOwing(), "150px")
@@ -51,19 +51,19 @@ public class LtbRentOwedBreakdownFolder extends VistaTableFolder<RentOwingForPer
     }
 
     @Override
-    protected CForm<? extends RentOwingForPeriod> createItemForm(IObject<?> member) {
-        return new CFolderRowEditor<RentOwingForPeriod>(RentOwingForPeriod.class, columns()) {
+    protected CForm<? extends N4RentOwingForPeriod> createItemForm(IObject<?> member) {
+        return new CFolderRowEditor<N4RentOwingForPeriod>(N4RentOwingForPeriod.class, columns()) {
 
             @Override
             protected CField<?, ?> createCell(FolderColumnDescriptor column) {
-                if (proto().from() == column.getObject()) {
+                if (proto().fromDate() == column.getObject()) {
                     CDatePicker datePicker = new CDatePicker();
                     datePicker.setMandatory(true);
-                    return inject(proto().from(), datePicker);
-                } else if (proto().to() == column.getObject()) {
+                    return inject(proto().fromDate(), datePicker);
+                } else if (proto().toDate() == column.getObject()) {
                     CDatePicker datePicker = new CDatePicker();
                     datePicker.setMandatory(true);
-                    return inject(proto().to(), datePicker);
+                    return inject(proto().toDate(), datePicker);
                 } else if (proto().rentCharged() == column.getObject()) {
                     CMoneyField field = new CMoneyField();
                     return inject(proto().rentCharged(), field);
@@ -112,9 +112,9 @@ public class LtbRentOwedBreakdownFolder extends VistaTableFolder<RentOwingForPer
 
     @Override
     public void addValidations() {
-        addValueChangeHandler(new ValueChangeHandler<IList<RentOwingForPeriod>>() {
+        addValueChangeHandler(new ValueChangeHandler<IList<N4RentOwingForPeriod>>() {
             @Override
-            public void onValueChange(ValueChangeEvent<IList<RentOwingForPeriod>> event) {
+            public void onValueChange(ValueChangeEvent<IList<N4RentOwingForPeriod>> event) {
                 setAddable(getValue().size() < 3);
             }
         });

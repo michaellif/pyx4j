@@ -255,6 +255,10 @@ public class CrmSiteMap implements SiteMap {
         public static class EvictionCase extends CrmCrudAppPlace {
         }
 
+        @PlaceProperties(navigLabel = "N4")
+        public static class N4Batches extends CrmCrudAppPlace {
+        }
+
         @PlaceProperties(navigLabel = "N4 Create Batch")
         public static class N4GenerationTool extends CrmCrudAppPlace {
 

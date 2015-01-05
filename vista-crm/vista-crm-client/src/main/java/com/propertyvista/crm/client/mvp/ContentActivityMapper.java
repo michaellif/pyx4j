@@ -154,6 +154,9 @@ import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermEditorAc
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.eviction.EvictionCaseEditorActivity;
 import com.propertyvista.crm.client.activity.crud.lease.eviction.EvictionCaseViewerActivity;
+import com.propertyvista.crm.client.activity.crud.lease.eviction.n4.N4BatchEditorActivity;
+import com.propertyvista.crm.client.activity.crud.lease.eviction.n4.N4BatchListerActivity;
+import com.propertyvista.crm.client.activity.crud.lease.eviction.n4.N4BatchViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.financial.InvoiceCreditViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.financial.InvoiceDebitViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.financial.deposit.DepositLifecycleEditorActivity;
@@ -729,6 +732,18 @@ public class ContentActivityMapper implements AppActivityMapper {
                             activity = new EvictionCaseEditorActivity(crudPlace);
                             break;
                         default:
+                            break;
+                        }
+                    } else if (crudPlace instanceof LegalAndCollections.N4Batches) {
+                        switch (crudPlace.getType()) {
+                        case viewer:
+                            activity = new N4BatchViewerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new N4BatchEditorActivity(crudPlace);
+                            break;
+                        case lister:
+                            activity = new N4BatchListerActivity(crudPlace);
                             break;
                         }
                     } else if (crudPlace instanceof LegalAndCollections.N4GenerationTool) {

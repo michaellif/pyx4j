@@ -32,6 +32,7 @@ public class PortalRootPane extends RootPane<FrontOfficeLayoutPanel> {
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
             public void execute() {
+                asWidget().forceLayout(0);
                 asWidget().scrollToTop(originalSchrollPosition);
             }
         });

@@ -134,6 +134,8 @@ public class PmcProcessFactory {
             return new CleanupPmcProcess();
         case updateArrears:
             return new UpdateArrearsProcess();
+        case resetDemoPMC:
+            return new ResetDemoPmcProcess();
         case updatePaymentsSummary:
             // TODO: not sure if it should happen: return new PaymentsSummarySnapshotProcess();
 

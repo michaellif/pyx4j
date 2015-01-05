@@ -71,6 +71,7 @@ import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.MessageDTO;
+import com.propertyvista.dto.N4BatchDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.shared.i18n.CompiledLocale;
@@ -226,6 +227,8 @@ public class NavigViewImpl extends Composite implements NavigView {
 
             root.addMenuItem(new SideMenuFolderItem(sideMenuList, i18n.tr("Legal & Collections"), CrmImages.INSTANCE.legalIcon()));
 
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4Batches(), DataModelPermission
+                    .permissionCreate(N4BatchDTO.class)));
             sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4GenerationTool(), DataModelPermission
                     .permissionCreate(LegalNoticeCandidateDTO.class)));
             sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4DownloadTool(), DataModelPermission

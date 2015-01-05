@@ -38,7 +38,7 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
-import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.N4RentOwingForPeriod;
 
 public class InvoiceDebitAggregatorTest {
 
@@ -116,26 +116,26 @@ public class InvoiceDebitAggregatorTest {
                         createInvoiceDebit(billingCycleB, "3000", "2000")
         ));//@formaterr:on
         
-        List<RentOwingForPeriod> debitsForPeriod = new InvoiceDebitAggregator().debitsForPeriod(aggregatedDebits);
+        List<N4RentOwingForPeriod> debitsForPeriod = new InvoiceDebitAggregator().debitsForPeriod(aggregatedDebits);
         Assert.assertEquals(3, debitsForPeriod.size());
         
         Assert.assertEquals(new BigDecimal("6"), debitsForPeriod.get(2).rentCharged().getValue());
         Assert.assertEquals(new BigDecimal("4"), debitsForPeriod.get(2).rentPaid().getValue());
         Assert.assertEquals(new BigDecimal("2"), debitsForPeriod.get(2).rentOwing().getValue());
-        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-12-01")), debitsForPeriod.get(2).from().getValue());
-        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-12-31")), debitsForPeriod.get(2).to().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-12-01")), debitsForPeriod.get(2).fromDate().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-12-31")), debitsForPeriod.get(2).toDate().getValue());
         
         Assert.assertEquals(new BigDecimal("600"), debitsForPeriod.get(1).rentCharged().getValue());
         Assert.assertEquals(new BigDecimal("400"), debitsForPeriod.get(1).rentPaid().getValue());
         Assert.assertEquals(new BigDecimal("200"), debitsForPeriod.get(1).rentOwing().getValue());
-        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-11-01")), debitsForPeriod.get(1).from().getValue());
-        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-11-30")), debitsForPeriod.get(1).to().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-11-01")), debitsForPeriod.get(1).fromDate().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-11-30")), debitsForPeriod.get(1).toDate().getValue());
 
         Assert.assertEquals(new BigDecimal("6000"), debitsForPeriod.get(0).rentCharged().getValue());
         Assert.assertEquals(new BigDecimal("4000"), debitsForPeriod.get(0).rentPaid().getValue());
         Assert.assertEquals(new BigDecimal("2000"), debitsForPeriod.get(0).rentOwing().getValue());
-        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-10-01")), debitsForPeriod.get(0).from().getValue());
-        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-10-31")), debitsForPeriod.get(0).to().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-10-01")), debitsForPeriod.get(0).fromDate().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-10-31")), debitsForPeriod.get(0).toDate().getValue());
 
     }
     
@@ -171,11 +171,11 @@ public class InvoiceDebitAggregatorTest {
                 createInvoiceDebit(billingCycleE, "1000", "100")                
         ));//@formaterr:on
         
-        List<RentOwingForPeriod> debitsForPeriod = new InvoiceDebitAggregator().debitsForPeriod(aggregatedDebits);
+        List<N4RentOwingForPeriod> debitsForPeriod = new InvoiceDebitAggregator().debitsForPeriod(aggregatedDebits);
         Assert.assertEquals(3, debitsForPeriod.size());
 
-        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-08-01")), debitsForPeriod.get(0).from().getValue());
-        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-10-31")), debitsForPeriod.get(0).to().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-08-01")), debitsForPeriod.get(0).fromDate().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-10-31")), debitsForPeriod.get(0).toDate().getValue());
         Assert.assertEquals(new BigDecimal("3000"), debitsForPeriod.get(0).rentCharged().getValue());
         Assert.assertEquals(new BigDecimal("300"), debitsForPeriod.get(0).rentPaid().getValue());
         Assert.assertEquals(new BigDecimal("2700"), debitsForPeriod.get(0).rentOwing().getValue());
@@ -183,11 +183,11 @@ public class InvoiceDebitAggregatorTest {
         Assert.assertEquals(new BigDecimal("600"), debitsForPeriod.get(1).rentCharged().getValue());
         Assert.assertEquals(new BigDecimal("400"), debitsForPeriod.get(1).rentPaid().getValue());
         Assert.assertEquals(new BigDecimal("200"), debitsForPeriod.get(1).rentOwing().getValue());
-        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-11-01")), debitsForPeriod.get(1).from().getValue());
-        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-11-30")), debitsForPeriod.get(1).to().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-11-01")), debitsForPeriod.get(1).fromDate().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-11-30")), debitsForPeriod.get(1).toDate().getValue());
         
-        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-12-01")), debitsForPeriod.get(2).from().getValue());
-        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-12-31")), debitsForPeriod.get(2).to().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-12-01")), debitsForPeriod.get(2).fromDate().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-12-31")), debitsForPeriod.get(2).toDate().getValue());
         Assert.assertEquals(new BigDecimal("6"), debitsForPeriod.get(2).rentCharged().getValue());
         Assert.assertEquals(new BigDecimal("4"), debitsForPeriod.get(2).rentPaid().getValue());
         Assert.assertEquals(new BigDecimal("2"), debitsForPeriod.get(2).rentOwing().getValue());

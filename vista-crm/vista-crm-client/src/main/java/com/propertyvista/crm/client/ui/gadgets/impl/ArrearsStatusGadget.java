@@ -149,12 +149,6 @@ public class ArrearsStatusGadget extends GadgetInstanceBase<ArrearsStatusGadgetM
         .init();
         //@formatter:on
 
-        dataTablePanel.setFilterApplyCommand(new Command() {
-            @Override
-            public void execute() {
-                populate(false);
-            }
-        });
         dataTablePanel.setFirstActionHandler(new Command() {
             @Override
             public void execute() {

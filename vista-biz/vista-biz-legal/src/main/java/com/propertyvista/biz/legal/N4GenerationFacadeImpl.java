@@ -44,11 +44,12 @@ import com.propertyvista.domain.contact.LegalAddress;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.errors.FormFillError;
-import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
 import com.propertyvista.domain.legal.n4.N4BatchData;
+import com.propertyvista.domain.legal.n4.N4BatchItem;
 import com.propertyvista.domain.legal.n4.N4DeliveryMethod;
 import com.propertyvista.domain.legal.n4.N4FormFieldsData;
 import com.propertyvista.domain.legal.n4.N4LeaseData;
+import com.propertyvista.domain.legal.n4.N4RentOwingForPeriod;
 import com.propertyvista.domain.legal.n4.N4Signature.SignedBy;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.ref.ISOProvince;
@@ -127,7 +128,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     @Override
     public N4LeaseData prepareN4LeaseData(Lease leaseId, LogicalDate noticeDate, N4DeliveryMethod deliveryMethod, Collection<ARCode> acceptableArCodes) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
-        N4LeaseData n4LeaseData = EntityFactory.create(N4LeaseData.class);
+        N4BatchItem n4LeaseData = EntityFactory.create(N4BatchItem.class);
 
         for (LeaseTermTenant termTenantIdStub : lease.currentTerm().version().tenants()) {
             LeaseTermTenant termTenant = Persistence.service().retrieve(LeaseTermTenant.class, termTenantIdStub.getPrimaryKey());
@@ -142,7 +143,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         n4LeaseData.rentOwingBreakdown().addAll(debitAggregator.debitsForPeriod(debitAggregator.aggregate(filteredDebits)));
 
         BigDecimal totalRentOwning = BigDecimal.ZERO;
-        for (RentOwingForPeriod rentOwingForPeriod : n4LeaseData.rentOwingBreakdown()) {
+        for (N4RentOwingForPeriod rentOwingForPeriod : n4LeaseData.rentOwingBreakdown()) {
             totalRentOwning = totalRentOwning.add(rentOwingForPeriod.rentOwing().getValue());
         }
         n4LeaseData.totalRentOwning().setValue(totalRentOwning);
