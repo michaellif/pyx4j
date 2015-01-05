@@ -143,6 +143,7 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
         columns.add(new ColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("27px").formatter(
                 booleanField2Image( proto.hasAttachments().getPath(),CrmImages.INSTANCE.attachement(), null))
                 .columnTitleShown(false).build());
+        columns.add(new ColumnDescriptor.Builder(proto.thread().id()).columnTitle(i18n.tr("Id")).searchable(true).width("100px").formatter(showHideId()).build());
         columns.add(new ColumnDescriptor.Builder(proto.senderDTO().name()).columnTitle(i18n.tr("Sender")).searchable(false).width("200px").formatter(baseFieldViewOnIsRead(proto.senderDTO().name().getPath())).build());
         columns.add(new ColumnDescriptor.Builder(proto.subject()).searchable(false).width("600px").formatter(baseFieldViewOnIsRead(proto.subject().getPath())).build());
         columns.add(new ColumnDescriptor.Builder(proto.date()).formatter(baseFieldViewOnIsRead(proto.date().getPath())).searchable(false).width("100px").build());
@@ -249,6 +250,34 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
                     Boolean isRead = v.isRead().getValue();
                     String s = value.getMember(path).getValue().toString();
                     Label messageField = new Label(s);
+                    if (v.hidden().getValue(false)) {
+                        messageField.getElement().getStyle().setTextDecoration(TextDecoration.LINE_THROUGH);
+                    }
+                    if (!CategoryType.Ticket.equals(v.category().categoryType().getValue()) && (isRead == null || !isRead.booleanValue())) {
+                        messageField.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+                    } else if (CategoryType.Ticket.equals(v.category().categoryType().getValue()) && v.isDirect().getValue(false).booleanValue() && (isRead == null || !isRead.booleanValue())) {
+                        messageField.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+                    }
+
+                    builder.appendHtmlConstant(messageField.toString());
+
+                }
+                return builder.toSafeHtml();
+            }
+        };
+    }
+
+
+    private static IFormatter<IEntity, SafeHtml> showHideId() {
+        return new IFormatter<IEntity, SafeHtml>() {
+            @Override
+            public SafeHtml format(IEntity value) {
+                SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                if (value != null) {
+                    MessageDTO v = (MessageDTO) value;
+                    Boolean isRead = v.isRead().getValue();
+                    String s = v.thread().id().getStringView();
+                    Label messageField = CategoryType.Ticket.equals(v.category().categoryType().getValue()) ? new Label(s):new Label("");
                     if (v.hidden().getValue(false)) {
                         messageField.getElement().getStyle().setTextDecoration(TextDecoration.LINE_THROUGH);
                     }

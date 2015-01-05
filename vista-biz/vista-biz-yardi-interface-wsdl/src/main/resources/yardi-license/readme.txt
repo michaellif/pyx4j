@@ -9,7 +9,7 @@ YSIInstall-Collections.lic
 BillingAndPayments  License [PIN 100052673] License is good through 12/31/2015
 YSIInstall-BillingAndPayments.lic
 
-Service Request Data Exchange Interface [PIN 100055548]  License is good through 02/28/2015
+Service Request Data Exchange Interface [PIN 100055548]  License is good through 02/29/2016
 YSIInstall-Maintenance.lic
 
 
