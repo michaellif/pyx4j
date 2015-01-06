@@ -301,7 +301,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
 
                 @Override
                 public void onKeyUp(KeyUpEvent event) {
-                    setValue(getTextBoxWidget().getText(), true, null);
+                    updateTextBox(getTextBoxWidget().getText(), true, null);
                 }
             });
 
@@ -309,7 +309,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
 
                 @Override
                 public void onPaste(PasteEvent event) {
-                    setValue(getTextBoxWidget().getText(), true, null);
+                    updateTextBox(getTextBoxWidget().getText(), true, null);
                 }
             });
         }

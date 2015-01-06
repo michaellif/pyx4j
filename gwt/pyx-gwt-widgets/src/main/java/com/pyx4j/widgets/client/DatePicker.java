@@ -175,7 +175,7 @@ public class DatePicker extends ValueBoxBase<LogicalDate> implements HasValueCha
                         value = new LogicalDate(value.getYear(), value.getMonth(), value.getDate());
                     }
 
-                    DatePicker.this.setValue(value, true, null);
+                    DatePicker.this.updateTextBox(value, true, null);
                     hideDatePicker();
                 }
             });

@@ -137,9 +137,9 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
             @Override
             public void onValueChange(ValueChangeEvent<String> event) {
                 try {
-                    setValue(getParser().parse(event.getValue()), true, null);
+                    updateTextBox(getParser().parse(event.getValue()), true, null);
                 } catch (ParseException e) {
-                    setValue(null, false, e.getMessage());
+                    updateTextBox(null, false, e.getMessage());
                 }
             }
         });
@@ -171,7 +171,7 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
 
     }
 
-    protected void setValue(E value, boolean parsedOk, String parseExceptionMessage) {
+    protected void updateTextBox(E value, boolean parsedOk, String parseExceptionMessage) {
         if (this.parsedOk == parsedOk) {
             if (this.value == null && value == null) {
                 return;
