@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -12,9 +12,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.legal;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
@@ -24,6 +25,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.activity.crud.lease.legal.LeaseLegalStateController;
 import com.propertyvista.domain.legal.LegalStatus;
@@ -37,16 +39,19 @@ public class LeaseLegalStateForm extends CForm<LeaseLegalStateDTO> {
 
     public LeaseLegalStateForm(LeaseLegalStateController controller) {
         super(LeaseLegalStateDTO.class);
-        setViewable(true);
         this.controller = controller;
+        setViewable(true);
     }
 
     @Override
     protected IsWidget createContent() {
         FormPanel formPanel = new FormPanel(this);
+
         formPanel.h1(i18n.tr("Current Status"));
         formPanel.append(Location.Dual, proto().current(), new LegalStatusForm(false));
+
         formPanel.append(Location.Dual, createCommandBar());
+
         formPanel.h1(i18n.tr("History"));
         formPanel.append(Location.Dual, proto().historical(), new LegalStatusHistoryFolder() {
             @Override
@@ -54,13 +59,12 @@ public class LeaseLegalStateForm extends CForm<LeaseLegalStateDTO> {
                 LeaseLegalStateForm.this.deleteStatus(item);
             }
         });
+
         return formPanel;
     }
 
     private IsWidget createCommandBar() {
-        HorizontalPanel panel = new HorizontalPanel();
-        panel.setWidth("100%");
-        panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        FlowPanel panel = new FlowPanel();
 
         panel.add(new Button(i18n.tr("Update..."), new Command() {
             @Override
@@ -68,12 +72,22 @@ public class LeaseLegalStateForm extends CForm<LeaseLegalStateDTO> {
                 LeaseLegalStateForm.this.controller.updateStatus();
             }
         }, DataModelPermission.permissionUpdate(LeaseLegalStateDTO.class)));
-        panel.add(new Button(i18n.tr("Clear"), new Command() {
+
+        panel.add(new HTML("&nbsp"));
+        panel.getWidget(panel.getWidgetCount() - 1).getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+        panel.add(new Button(i18n.tr("Clear Status"), new Command() {
             @Override
             public void execute() {
-                LeaseLegalStateForm.this.controller.clearStatus();
+                MessageDialog.confirm(i18n.tr("Clear Status"), i18n.tr("Do you really want to clear current status?"), new Command() {
+                    @Override
+                    public void execute() {
+                        LeaseLegalStateForm.this.controller.clearStatus();
+                    }
+                });
             }
         }, DataModelPermission.permissionUpdate(LeaseLegalStateDTO.class)));
+
         return panel;
     }
 
