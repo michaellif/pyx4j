@@ -157,7 +157,7 @@ public class ConfirmationStep extends ApplicationWizardStep {
             }
         }
 
-        MiscUtils.setPanelSpacing(panel, 4);
+        MiscUtils.setPanelSpacing(panel, 8);
         return panel;
     }
 

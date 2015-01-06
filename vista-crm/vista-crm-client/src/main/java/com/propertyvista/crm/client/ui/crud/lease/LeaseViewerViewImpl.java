@@ -829,7 +829,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             body.add(new HTML(i18n.tr("Recipient(s):")));
             body.add(super.initBody(isMultiselectAllowed, data));
 
-            MiscUtils.setPanelSpacing(body, 4);
+            MiscUtils.setPanelSpacing(body, 8);
             body.setWidth("100%");
             return body;
         }
@@ -962,7 +962,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             body.add(new HTML(i18n.tr("Select new Lease End date:")));
             body.add(endLeaseDate);
 
-            MiscUtils.setPanelSpacing(body, 4);
+            MiscUtils.setPanelSpacing(body, 8);
             body.setWidth("100%");
             return body;
         }

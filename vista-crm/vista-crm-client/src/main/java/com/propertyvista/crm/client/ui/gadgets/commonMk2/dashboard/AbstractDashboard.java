@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -102,7 +102,7 @@ public abstract class AbstractDashboard extends ResizeComposite {
         this.actionsPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.actionsPanel);
         this.actionsPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         this.actionsPanel.setWidth("100%");
-        this.actionsPanel.add(new HTML()); // just for %-tage cells alignment...        
+        this.actionsPanel.add(new HTML()); // just for %-tage cells alignment...
         this.actionsPanel.add(createActionsWidget(layoutManagers));
 
         this.dashboardPanel.addNorth(actionsPanel, 2);
@@ -116,7 +116,7 @@ public abstract class AbstractDashboard extends ResizeComposite {
 
     /**
      * Fills the dashboard with gadgets.
-     * 
+     *
      * @param dashboardMetadata
      *            a valid dashboard metadata with well defined {@link DashboardMetadata#encodedLayout()} and gadget metadata inside
      *            {@link DashboardMetadata#gadgetMetadataList()}.
@@ -153,7 +153,7 @@ public abstract class AbstractDashboard extends ResizeComposite {
 
     /**
      * Defines if the layout can be changed by user interaction.
-     * 
+     *
      * @param isReadOnly
      *            when <code>true</code> doesn't allow to rearrange or to add new gadgets interactively.
      */
@@ -318,7 +318,7 @@ public abstract class AbstractDashboard extends ResizeComposite {
 
         actionsWidget.add(printButton);
 
-        MiscUtils.setPanelSpacing(actionsWidget, 4);
+        MiscUtils.setPanelSpacing(actionsWidget, 8);
 
         return actionsWidget;
     }

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -81,12 +81,12 @@ public class TenantSecurityViewImpl extends AbstractPrimePaneView implements Ten
 
         protected Widget createBody() {
             VerticalPanel body = new VerticalPanel();
+            body.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
             body.add(new HTML(i18n.tr("Select Email template to send to unregistered tenants:")));
             body.add(emailType);
 
-            body.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-            MiscUtils.setPanelSpacing(body, 4);
+            MiscUtils.setPanelSpacing(body, 8);
             body.setWidth("100%");
             return body;
         }
