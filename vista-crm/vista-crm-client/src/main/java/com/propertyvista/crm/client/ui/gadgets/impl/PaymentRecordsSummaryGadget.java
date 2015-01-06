@@ -184,12 +184,6 @@ public class PaymentRecordsSummaryGadget extends GadgetInstanceBase<PaymentsSumm
         .init();
         //@formatter:on
 
-        paymentsSummaryTablePanel.setFilterApplyCommand(new Command() {
-            @Override
-            public void execute() {
-                populate(false);
-            }
-        });
         paymentsSummaryTablePanel.setFirstActionHandler(new Command() {
             @Override
             public void execute() {

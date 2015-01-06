@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -87,8 +87,8 @@ public class ConfirmationStep extends ApplicationWizardStep {
         cSignature.setSignatureCompletionValidator(new AbstractComponentValidator<ISignature>() {
             @Override
             public BasicValidationError isValid() {
-                return (getCComponent().getValue() == null || !getCComponent().getValue().agree().getValue(false) ? new BasicValidationError(getCComponent(), i18n
-                        .tr("Please agree to all applicable Terms and Conditions and our Privacy Policy in order to submit your payment.")) : null);
+                return (getCComponent().getValue() == null || !getCComponent().getValue().agree().getValue(false) ? new BasicValidationError(getCComponent(),
+                        i18n.tr("Please agree to all applicable Terms and Conditions and our Privacy Policy in order to submit your payment.")) : null);
             }
         });
         cSignature.setDecorator(new SignatureDecorator());
@@ -107,15 +107,17 @@ public class ConfirmationStep extends ApplicationWizardStep {
     public void onStepVizible(boolean flag) {
         super.onStepVizible(flag);
 
-        get(proto().payment().amount()).setValue(calculatePaymentAmount());
+        if (flag) {
+            get(proto().payment().amount()).setValue(calculatePaymentAmount());
 
-        paymentDetailsHolder.clear();
-        paymentDetailsHeader.setVisible(false);
-        get(proto().payment().convenienceFeeSignature()).setVisible(false);
+            paymentDetailsHolder.clear();
+            paymentDetailsHeader.setVisible(false);
+            get(proto().payment().convenienceFeeSignature()).setVisible(false);
 
-        if (!get(proto().payment().amount()).getValue().equals(BigDecimal.ZERO)) {
-            paymentDetailsHeader.setVisible(true);
-            paymentDetailsHolder.setWidget(createPaymentDetailsPanel());
+            if (!get(proto().payment().amount()).getValue().equals(BigDecimal.ZERO)) {
+                paymentDetailsHeader.setVisible(true);
+                paymentDetailsHolder.setWidget(createPaymentDetailsPanel());
+            }
         }
     }
 

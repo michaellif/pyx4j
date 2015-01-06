@@ -81,8 +81,10 @@ public class AvailabilityReportWidget extends FlowPanel implements IReportWidget
     @Override
     public void restoreState(IMementoInput memento) {
         ScrollBarPositionMemento scrollBarPosition = (ScrollBarPositionMemento) memento.read();
-        getElement().setScrollLeft(scrollBarPosition.posX);
-        getElement().setScrollTop(scrollBarPosition.posY);
+        if (scrollBarPosition != null) {
+            getElement().setScrollLeft(scrollBarPosition.posX);
+            getElement().setScrollTop(scrollBarPosition.posY);
+        }
     }
 
 }

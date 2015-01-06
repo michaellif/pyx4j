@@ -1,7 +1,7 @@
 /**
 ***     =====================================================================================================================
 ***
-***             _admin_ schema changes for v. 1.4.2
+***             _admin_ schema changes for v. 0.0.0
 ***
 ***     =====================================================================================================================
 **/
@@ -30,11 +30,6 @@ SET search_path = '_admin_';
         ***
         ***     ======================================================================================================
         **/
-
-        -- check constraints
-        
-        ALTER TABLE audit_record DROP CONSTRAINT audit_record_event_e_ck;
-        ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_type_e_ck;
 
        
 
@@ -66,26 +61,6 @@ SET search_path = '_admin_';
         ***     =======================================================================================================
         **/
 
-        -- admin_pmc_payment_method
-        
-        ALTER TABLE admin_pmc_payment_method RENAME COLUMN creation_date TO created;
-        
-        
-        -- dev_card_service_simulation_reconciliation_record
-        
-        ALTER TABLE dev_card_service_simulation_reconciliation_record ADD COLUMN created TIMESTAMP;
-        
-        -- development_user
-        
-        ALTER TABLE development_user ADD COLUMN walk_me_disabled BOOLEAN;
-        
-        -- tenant_sure_merchant_account
-        
-        ALTER TABLE tenant_sure_merchant_account ALTER COLUMN charge_description TYPE VARCHAR(30);
-        
-        -- vista_merchant_account
-        
-        ALTER TABLE vista_merchant_account ALTER COLUMN charge_description TYPE VARCHAR(30);
       
         
 
@@ -117,35 +92,8 @@ SET search_path = '_admin_';
         ***     ========================================================================================================
         **/
 
-        -- check constraints
-        
-        ALTER TABLE audit_record ADD CONSTRAINT audit_record_event_e_ck 
-            CHECK ((event) IN ('Create', 'CredentialUpdate', 'Delete', 'EquifaxReadReport', 'EquifaxRequest', 'Info', 'Login', 
-            'LoginFailed', 'Logout', 'OpenIdLogin', 'PermitionsUpdate', 'Read', 'SessionExpiration', 'System', 'Update'));
-        ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
-            CHECK ((trigger_type) IN ('billing', 'cleanup', 'depositInterestAdjustment', 'depositRefund', 'equifaxRetention', 
-            'ilsEmailFeed', 'ilsUpdate', 'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion', 'leaseRenewal', 
-            'paymentsBmoReceive', 'paymentsCardsPostRejected', 'paymentsCardsSend', 'paymentsDbpProcess', 
-            'paymentsDbpProcessAcknowledgment', 'paymentsDbpProcessReconciliation', 'paymentsDbpSend', 'paymentsIssue', 
-            'paymentsLastMonthSuspend', 'paymentsPadProcessAcknowledgment', 'paymentsPadProcessReconciliation', 'paymentsPadSend', 
-            'paymentsProcessCardsReconciliation', 'paymentsReceiveAcknowledgment', 'paymentsReceiveCardsReconciliation', 
-            'paymentsReceiveReconciliation', 'paymentsScheduledCards', 'paymentsScheduledEcheck', 'paymentsTenantSure', 
-            'resetDemoPMC', 'tenantSureBusinessReport', 'tenantSureCancellation', 'tenantSureHQUpdate', 'tenantSureRenewal', 
-            'tenantSureReports', 'tenantSureTransactionReports', 'test', 'updateArrears', 'updatePaymentsSummary', 
-            'vistaBusinessReport', 'vistaCaleonReport', 'vistaHeathMonitor', 'yardiARDateVerification', 'yardiImportProcess'));
 
         
-        -- not null
-        
-        ALTER TABLE admin_pmc_vista_features ALTER COLUMN country_of_operation SET NOT NULL;
-        ALTER TABLE admin_pmc_vista_features ALTER COLUMN online_application SET NOT NULL;
-        ALTER TABLE admin_pmc_vista_features ALTER COLUMN tenant_email_enabled SET NOT NULL;
-        ALTER TABLE admin_pmc_vista_features ALTER COLUMN tenant_sure_integration SET NOT NULL;
-        ALTER TABLE admin_pmc_vista_features ALTER COLUMN white_label_portal SET NOT NULL;
-        ALTER TABLE admin_pmc_vista_features ALTER COLUMN yardi_integration SET NOT NULL;
-        ALTER TABLE admin_pmc_vista_features ALTER COLUMN yardi_maintenance SET NOT NULL;
-        
-
 
         /**
         ***     ============================================================================================================
