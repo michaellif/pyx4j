@@ -812,7 +812,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             getOkButton().setTextLabel(i18n.tr("Send"));
 
             if (emailType.getOptions().size() == 1) {
-                emailType.setValue(emailType.getOptions().get(0), true);
+                emailType.setValue(emailType.getOptions().get(0), true, true);
                 emailType.setEditable(false);
             }
         }
@@ -825,8 +825,10 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             body.add(initEmailTypes(Arrays.asList(EmailTemplateType.TenantInvitation)));
 
             body.add(new HTML("&nbsp"));
-
             body.add(new HTML(i18n.tr("Recipient(s):")));
+
+            MiscUtils.setPanelPaddingLeft(body, 8);
+
             body.add(super.initBody(isMultiselectAllowed, data));
 
             MiscUtils.setPanelSpacing(body, 8);

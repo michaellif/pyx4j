@@ -28,6 +28,18 @@ public class MiscUtils {
         }
     }
 
+    public static void setPanelPaddingLeft(VerticalPanel panel, int spacing) {
+        for (int i = 0; i < panel.getWidgetCount(); ++i) {
+            DOM.getParent(panel.getWidget(i).getElement()).getStyle().setPaddingLeft(spacing, Unit.PX);
+        }
+    }
+
+    public static void setPanelPaddingRight(VerticalPanel panel, int spacing) {
+        for (int i = 0; i < panel.getWidgetCount(); ++i) {
+            DOM.getParent(panel.getWidget(i).getElement()).getStyle().setPaddingRight(spacing, Unit.PX);
+        }
+    }
+
     public static void setPanelSpacing(HorizontalPanel panel, int spacing) {
         for (int i = 0; i < panel.getWidgetCount(); ++i) {
             DOM.getParent(panel.getWidget(i).getElement()).getStyle().setPaddingLeft(spacing, Unit.PX);
