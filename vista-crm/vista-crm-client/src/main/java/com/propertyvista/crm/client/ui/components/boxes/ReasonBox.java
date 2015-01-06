@@ -12,6 +12,7 @@
  */
 package com.propertyvista.crm.client.ui.components.boxes;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -43,6 +44,8 @@ public abstract class ReasonBox extends OkCancelDialog {
         content.add(reason);
 
         MiscUtils.setPanelSpacing(content, 8);
+        reason.asWidget().getElement().getStyle().setPaddingLeft(6, Unit.PX);
+        reason.asWidget().getElement().getStyle().setPaddingRight(8, Unit.PX);
         content.setWidth("100%");
         return content.asWidget();
     }
