@@ -13,6 +13,7 @@
 package com.propertyvista.crm.server.services.legal.eviction;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -77,6 +78,8 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
             item.totalRentOwning().setValue(amountOwed);
             item.lease().set(leaseId);
 
+            Persistence.ensureRetrieve(item.lease()._applicant(), AttachLevel.Attached);
+
             dto.items().add(item);
         }
         generateBatchName(dto);
@@ -92,6 +95,7 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
             Persistence.ensureRetrieve(item.rentOwingBreakdown(), AttachLevel.Attached);
 
             Persistence.ensureRetrieve(item.lease().unit().building(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(item.lease()._applicant(), AttachLevel.Attached);
         }
     }
 
@@ -116,8 +120,25 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
         LogicalDate today = SystemDateManager.getLogicalDate();
 
         List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(lease.billingAccount());
-        List<InvoiceDebit> filteredDebits = N4GenerationUtils.filterDebits(debits, acceptableArCodes, today);
-        InvoiceDebitAggregator debitCalc = new InvoiceDebitAggregator();
-        return debitCalc.debitsForPeriod(debitCalc.aggregate(filteredDebits));
+        if (false) {
+            // TODO - looks like we don't need this aggregation here - just convert each debit into N4RentOwingForPeriod record
+            List<InvoiceDebit> filteredDebits = N4GenerationUtils.filterDebits(debits, acceptableArCodes, today);
+            InvoiceDebitAggregator debitCalc = new InvoiceDebitAggregator();
+            return debitCalc.debitsForPeriod(debitCalc.aggregate(filteredDebits));
+        } else {
+            List<N4RentOwingForPeriod> owings = new ArrayList<>();
+            for (InvoiceDebit debit : debits) {
+                N4RentOwingForPeriod owing = EntityFactory.create(N4RentOwingForPeriod.class);
+                owing.fromDate().setValue(debit.billingCycle().billingCycleStartDate().getValue());
+                owing.toDate().setValue(debit.billingCycle().billingCycleEndDate().getValue());
+                owing.rentCharged().setValue(owing.rentCharged().getValue(BigDecimal.ZERO).add(debit.amount().getValue()));
+                owing.rentCharged().setValue(owing.rentCharged().getValue().add(debit.taxTotal().getValue()));
+                owing.rentOwing().setValue(owing.rentOwing().getValue(BigDecimal.ZERO).add(debit.outstandingDebit().getValue()));
+                owing.rentPaid().setValue(owing.rentCharged().getValue().subtract(owing.rentOwing().getValue()));
+                owing.arCode().set(debit.arCode());
+                owings.add(owing);
+            }
+            return owings;
+        }
     }
 }

@@ -21,9 +21,15 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.financial.ARCode;
+
+@ToStringFormat("${0,number,#,##0.00}: {1} {2} - {3}")
 public interface N4RentOwingForPeriod extends IEntity {
 
     @Owner
@@ -33,18 +39,28 @@ public interface N4RentOwingForPeriod extends IEntity {
     @Detached
     N4BatchItem parent();
 
+    @NotNull
+    @ToString(index = 2)
     IPrimitive<LogicalDate> fromDate();
 
+    @NotNull
+    @ToString(index = 3)
     IPrimitive<LogicalDate> toDate();
 
+    @NotNull
     @Format("$#,##0.00")
     IPrimitive<BigDecimal> rentCharged();
 
+    @NotNull
     @Format("$#,##0.00")
     IPrimitive<BigDecimal> rentPaid();
 
-    @ReadOnly
+    @NotNull
+    @ToString(index = 0)
     @Format("$#,##0.00")
     IPrimitive<BigDecimal> rentOwing();
 
+    @NotNull
+    @ToString(index = 1)
+    ARCode arCode();
 }
