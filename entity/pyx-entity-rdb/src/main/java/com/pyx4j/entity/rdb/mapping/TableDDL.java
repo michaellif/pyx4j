@@ -308,21 +308,29 @@ class TableDDL {
         sql.append(" (");
         List<String> discriminators = new ArrayList<String>(member.getSubclassDiscriminators());
         Collections.sort(discriminators);
+        
+        sql.append(" ((");
+        boolean firstDescr = true;
         for (String discriminator : discriminators) {
-            sql.append(" (");
+            if (!firstDescr) {
+                sql.append(" OR ");
+            }
             sql.append(dialect.sqlDiscriminatorColumnName()).append(" = '").append(discriminator).append("'");
-            sql.append(" AND ");
-            sql.append(sqlName).append(" IS NOT NULL");
-            sql.append(")");
-
-            sql.append(" OR (");
-            sql.append(dialect.sqlDiscriminatorColumnName()).append(" != '").append(discriminator).append("'");
-            sql.append(" AND ");
-            sql.append(sqlName).append(" IS NULL");
-            sql.append(")");
+            firstDescr = false;
         }
+        sql.append(") AND ");
+        sql.append(sqlName).append(" IS NOT NULL");
         sql.append(")");
 
+        sql.append(" OR (");
+        for (String discriminator : discriminators) {
+            sql.append(dialect.sqlDiscriminatorColumnName()).append(" != '").append(discriminator).append("'");
+            sql.append(" AND ");
+        }
+        sql.append(sqlName).append(" IS NULL");
+        sql.append(")");
+        sql.append(")");
+        
         return sql.toString();
     }
 
