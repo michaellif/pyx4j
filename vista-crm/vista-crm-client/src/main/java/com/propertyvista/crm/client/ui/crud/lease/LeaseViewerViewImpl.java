@@ -953,7 +953,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             setBody(createBody());
             setDialogPixelWidth(250);
 
-            endLeaseDate.setValue(getForm().getValue().currentTerm().termTo().getValue());
+            endLeaseDate.populate(getForm().getValue().currentTerm().termTo().getValue());
             endLeaseDate.asWidget().setWidth("9em");
         }
 
