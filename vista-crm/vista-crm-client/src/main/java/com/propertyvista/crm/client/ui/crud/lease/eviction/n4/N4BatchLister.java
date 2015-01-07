@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.lease.eviction.n4;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 
@@ -25,12 +26,14 @@ import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.crm.rpc.services.legal.eviction.N4BatchCrudService;
-import com.propertyvista.crm.rpc.services.legal.eviction.N4BatchCrudService.N4BatchInitData;
 import com.propertyvista.crm.rpc.services.selections.SelectN4LeaseCandidateListService;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.N4BatchDTO;
 import com.propertyvista.dto.N4LeaseCandidateDTO;
 
@@ -63,7 +66,6 @@ public class N4BatchLister extends SiteDataTablePanel<N4BatchDTO> {
     @Override
     protected void onItemNew() {
         // open lease candidate selection dialog
-        // TODO add filter by Portfolio, Buildings, Amount owing
         new EntitySelectorTableDialog<N4LeaseCandidateDTO>(N4LeaseCandidateDTO.class, false, true, Collections.<N4LeaseCandidateDTO> emptySet(),
                 i18n.tr("Select Leases")) {
 
@@ -73,22 +75,31 @@ public class N4BatchLister extends SiteDataTablePanel<N4BatchDTO> {
 
             @Override
             public boolean onClickOk() {
-                N4BatchInitData initData = EntityFactory.create(N4BatchInitData.class);
+                Vector<Lease> leaseCandidates = new Vector<>();
                 for (N4LeaseCandidateDTO candidate : getSelectedItems()) {
-                    initData.leaseCandidates().add(candidate.leaseId());
+                    leaseCandidates.add(EntityFactory.createIdentityStub(Lease.class, candidate.leaseId().getPrimaryKey()));
                 }
-                editNew(getItemOpenPlaceClass(), initData);
+                ((N4BatchCrudService) getService()).createBatches(new DefaultAsyncCallback<N4BatchDTO>() {
+                    @Override
+                    public void onSuccess(N4BatchDTO result) {
+                        if (result != null) {
+                            // open editor with the returned batch
+                            AppSite.getPlaceController().goTo(
+                                    AppSite.getHistoryMapper().createPlace(getItemOpenPlaceClass()).formEditorPlace(result.getPrimaryKey()));
+                        }
+                    }
+                }, leaseCandidates);
                 return true;
             }
 
             @Override
             protected List<ColumnDescriptor> defineColumnDescriptors() {
                 return Arrays.asList( //
-                        new ColumnDescriptor.Builder(proto().propertyCode()).build(), //
+                        new ColumnDescriptor.Builder(proto().propertyCode()).filterAlwaysShown(true).build(), //
                         new ColumnDescriptor.Builder(proto().unitNo()).build(), //
                         new ColumnDescriptor.Builder(proto().moveIn()).build(), //
                         new ColumnDescriptor.Builder(proto().moveOut()).build(), //
-                        new ColumnDescriptor.Builder(proto().amountOwed()).build(), //
+                        new ColumnDescriptor.Builder(proto().amountOwed()).filterAlwaysShown(true).build(), //
                         new ColumnDescriptor.Builder(proto().lastNotice()).build() //
                         );
             }

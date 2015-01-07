@@ -12,7 +12,10 @@
  */
 package com.propertyvista.crm.rpc.services.legal.eviction;
 
-import com.pyx4j.entity.core.IList;
+import java.util.Vector;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -20,7 +23,6 @@ import com.propertyvista.dto.N4BatchDTO;
 
 public interface N4BatchCrudService extends AbstractCrudService<N4BatchDTO> {
 
-    public interface N4BatchInitData extends InitializationData {
-        IList<Lease> leaseCandidates();
-    }
+    void createBatches(AsyncCallback<N4BatchDTO> callback, Vector<Lease> leaseCandidates);
+
 }
