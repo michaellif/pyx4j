@@ -22,6 +22,7 @@ package com.pyx4j.site.client.ui.layout;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.layout.LayoutType;
@@ -40,6 +41,8 @@ public class OverlayExtraHolder extends AbstractOverlayHolder {
 
     private final LayoutPanel overlayExtra4Holder;
 
+    private final ScrollPanel overlayExtra1ScrollPanel;
+
     public OverlayExtraHolder(ResponsiveLayoutPanel parent, String extra1Caption, String extra2Caption, String extra4Caption, AbstractDevConsole devConsole) {
         this.parent = parent;
 
@@ -50,6 +53,8 @@ public class OverlayExtraHolder extends AbstractOverlayHolder {
 
         overlayExtra1Holder = new LayoutPanel();
         overlayExtra1Holder.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        overlayExtra1ScrollPanel = new ScrollPanel();
+        overlayExtra1Holder.add(overlayExtra1ScrollPanel);
         addTab(overlayExtra1Holder, extra1Caption == null ? "" : extra1Caption);
         setTabVisible(getTabIndex(overlayExtra1Holder), false);
 
@@ -86,8 +91,8 @@ public class OverlayExtraHolder extends AbstractOverlayHolder {
         default:
             if (parent.getDisplay(DisplayType.extra1).getWidget() != null) {
                 setTabVisible(getTabIndex(overlayExtra1Holder), true);
-                if (overlayExtra1Holder.getWidgetCount() == 0) {
-                    overlayExtra1Holder.add(parent.getDisplay(DisplayType.extra1));
+                if (overlayExtra1ScrollPanel.getWidget() == null) {
+                    overlayExtra1ScrollPanel.setWidget(parent.getDisplay(DisplayType.extra1));
                 }
             } else {
                 setTabVisible(getTabIndex(overlayExtra1Holder), false);
