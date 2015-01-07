@@ -43,7 +43,7 @@ public class ReportsAppPlace<R extends ReportTemplate> extends CrudAppPlace {
         this.metadataClass = metadataClass;
     }
 
-    public ReportsAppPlace<R> define(R metadata) {
+    public ReportsAppPlace<R> setReportMetadata(R metadata) {
         this.metadata = metadata;
         if (!this.metadata.reportTemplateName().isNull()) {
             this.queryArg(ARG_NAME_ID, this.metadata.reportTemplateName().getValue());
@@ -51,7 +51,7 @@ public class ReportsAppPlace<R extends ReportTemplate> extends CrudAppPlace {
         return this;
     }
 
-    public ReportTemplate getReportMetadata() {
+    public R getReportMetadata() {
         return metadata;
     }
 

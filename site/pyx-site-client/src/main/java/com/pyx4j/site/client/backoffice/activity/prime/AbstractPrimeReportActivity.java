@@ -58,7 +58,8 @@ import com.pyx4j.site.rpc.customization.ICustomizationPersistenceService;
 import com.pyx4j.site.rpc.reports.IReportsService;
 import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
-public abstract class AbstractPrimeReportActivity<R extends ReportTemplate> extends AbstractPrimeActivity<IPrimeReportView<?>> implements IPrimeReportPresenter<R> {
+public abstract class AbstractPrimeReportActivity<R extends ReportTemplate> extends AbstractPrimeActivity<IPrimeReportView<?>> implements
+        IPrimeReportPresenter<R> {
 
     private static final I18n i18n = I18n.get(AbstractPrimeReportActivity.class);
 
@@ -112,16 +113,18 @@ public abstract class AbstractPrimeReportActivity<R extends ReportTemplate> exte
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(getView());
+
         if (getPlace().getReportMetadata() == null) {
             if (getPlace().getReportMetadataId() != null) {
                 loadReportMetadata(getPlace().getReportMetadataId());
-                return;
             } else {
-                getPlace().define(createDefaultReportMetadata());
+                setReportMetadata(createDefaultReportMetadata());
             }
+            return;
         }
+
         MementoManager.restoreState(getView(), getPlace());
-        onReportMetadataSet((R) getPlace().getReportMetadata());
+        onReportMetadataSet(getPlace().getReportMetadata());
     }
 
     @Override
@@ -204,15 +207,19 @@ public abstract class AbstractPrimeReportActivity<R extends ReportTemplate> exte
     @Override
     public void loadReportMetadata(final String reportMetadataId) {
         reportsSettingsPersistenceService.load(new DefaultAsyncCallback<ReportTemplate>() {
-
+            @SuppressWarnings("unchecked")
             @Override
             public void onSuccess(ReportTemplate reportMetadata) {
-                getPlace().define((R) reportMetadata);
-                getView().setReportMetadata((R) reportMetadata);
-                onReportMetadataSet((R) reportMetadata);
+                setReportMetadata((R) reportMetadata);
             }
 
         }, reportMetadataId, EntityFactory.getEntityPrototype(reportMetadataClass));
+    }
+
+    private void setReportMetadata(R reportMetadata) {
+        getPlace().setReportMetadata(reportMetadata);
+        getView().setReportMetadata(reportMetadata);
+        onReportMetadataSet(reportMetadata);
     }
 
     @Override
