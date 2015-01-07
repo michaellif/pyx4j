@@ -403,7 +403,234 @@ BEGIN
                                                 ADD COLUMN permission_granted_by_default BOOLEAN,
                                                 ADD COLUMN scheduling_window_time_from TIME,
                                                 ADD COLUMN scheduling_window_time_to TIME;
+                                                
+        -- maintenance_request_policy$tenant_preferred_windows
         
+        CREATE TABLE maintenance_request_policy$tenant_preferred_windows
+        (
+            id                              BIGINT              NOT NULL,
+            owner                           BIGINT,
+            value                           BIGINT,
+            seq                             INTEGER,
+                CONSTRAINT maintenance_request_policy$tenant_preferred_windows_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE maintenance_request_policy$tenant_preferred_windows OWNER TO vista;
+        
+        
+        -- maintenance_request_window
+        
+        CREATE TABLE maintenance_request_window
+        (
+            id                              BIGINT              NOT NULL,
+            time_from                       TIME,
+            time_to                         TIME,
+                CONSTRAINT maintenance_request_window_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE maintenance_request_window OWNER TO vista;
+        
+        
+        -- maintenance_request_work_order
+        
+        CREATE TABLE maintenance_request_work_order
+        (
+            id                              BIGINT              NOT NULL,
+            request                         BIGINT              NOT NULL,
+            created                         TIMESTAMP,
+            updated                         TIMESTAMP,
+            scheduled_date                  DATE,
+            scheduled_time_time_from        TIME,
+            scheduled_time_time_to          TIME,
+            work_description                VARCHAR(500),
+            progress_note                   VARCHAR(500),
+            is_emergency_work               BOOLEAN,
+            notice_of_entry_text            VARCHAR(10000),
+            notice_of_entry_message_date    VARCHAR(500),
+            notice_of_entry_message_id      VARCHAR(500),
+                CONSTRAINT maintenance_request_work_order_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE maintenance_request_work_order OWNER TO vista;
+        
+        
+        -- n4_batch
+        
+        CREATE TABLE n4_batch
+        (
+            id                              BIGINT              NOT NULL,
+            notice_date                     DATE,
+            delivery_method                 VARCHAR(50),
+            company_legal_name              VARCHAR(500),
+            company_address_street_number   VARCHAR(500),
+            company_address_street_name     VARCHAR(500),
+            company_address_suite_number    VARCHAR(500),
+            company_address_city            VARCHAR(500),
+            company_address_province        VARCHAR(500),
+            company_address_country         VARCHAR(50),
+            company_address_postal_code     VARCHAR(500),
+            company_phone_number            VARCHAR(500),
+            company_fax_number              VARCHAR(500),
+            company_email_address           VARCHAR(500),
+            is_landlord                     BOOLEAN,
+            signature_date                  DATE,
+            signing_employee                BIGINT,
+            signature                       BYTEA,
+            name                            VARCHAR(500),
+            created                         TIMESTAMP,
+                CONSTRAINT n4_batch_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE n4_batch OWNER TO vista;
+        
+        
+        -- n4_batch_init_data
+        
+        CREATE TABLE n4_batch_init_data
+        (
+            id                              BIGINT              NOT NULL,
+                CONSTRAINT n4_batch_init_data_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE n4_batch_init_data OWNER TO vista;
+        
+        -- n4_batch_init_data$lease_candidates
+        
+        CREATE TABLE n4_batch_init_data$lease_candidates
+        (
+            id                              BIGINT              NOT NULL,
+            owner                           BIGINT,
+            value                           BIGINT,
+            seq                             INTEGER,
+                CONSTRAINT n4_batch_init_data$lease_candidates_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE n4_batch_init_data$lease_candidates OWNER TO vista;
+        
+        
+        -- n4_batch_item
+        
+        CREATE TABLE n4_batch_item
+        (
+            id                              BIGINT              NOT NULL,
+            landlord_name                   VARCHAR(500),
+            landlord_address_street_number  VARCHAR(500),
+            landlord_address_street_name    VARCHAR(500),
+            landlord_address_suite_number   VARCHAR(500),
+            landlord_address_city           VARCHAR(500),
+            landlord_address_province       VARCHAR(500),
+            landlord_address_country        VARCHAR(50),
+            landlord_address_postal_code    VARCHAR(500),
+            rental_unit_address_street_number   VARCHAR(500),
+            rental_unit_address_street_name     VARCHAR(500),
+            rental_unit_address_suite_number    VARCHAR(500),
+            rental_unit_address_city            VARCHAR(500),
+            rental_unit_address_province        VARCHAR(500),
+            rental_unit_address_country         VARCHAR(50),
+            rental_unit_address_postal_code     VARCHAR(500),
+            rental_unit_address_street_type     VARCHAR(500),
+            rental_unit_address_street_direction    VARCHAR(500),
+            total_rent_owning               NUMERIC(18,2),
+            batch                           BIGINT,
+            lease                           BIGINT,
+            termination_date                DATE,
+            serviced                        TIMESTAMP,
+                CONSTRAINT n4_batch_item_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE n4_batch_item OWNER TO vista;
+        
+        -- n4_batch_item$lease_tenants
+        
+        CREATE TABLE n4_batch_item$lease_tenants
+        (
+            id                              BIGINT              NOT NULL,
+            owner                           BIGINT,
+            value                           BIGINT,
+            value_discriminator             VARCHAR(50),
+            seq                             INTEGER,
+                CONSTRAINT n4_batch_item$lease_tenants_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE n4_batch_item$lease_tenants OWNER TO vista;
+        
+        -- n4_csdocument_type
+        
+        CREATE TABLE n4_csdocument_type
+        (
+            id                              BIGINT              NOT NULL,
+            doc_type                        VARCHAR(50),
+            application                     VARCHAR(500),
+            termination                     VARCHAR(500),
+            other                           VARCHAR(500),
+                CONSTRAINT n4_csdocument_type_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE n4_csdocument_type OWNER TO vista;
+        
+        
+        -- n4_csservice_method
+        
+        CREATE TABLE n4_csservice_method
+        (
+            id                              BIGINT              NOT NULL,
+            method                          VARCHAR(50),
+            fax                             VARCHAR(500),
+            last_addr                       VARCHAR(500),
+            different_method                VARCHAR(500),
+                CONSTRAINT n4_csservice_method_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE n4_csservice_method OWNER TO vista;
+        
+        -- n4_cssignature
+        
+        CREATE TABLE n4_cssignature
+        (
+            id                              BIGINT              NOT NULL,
+            signed_by                       VARCHAR(50),
+            signature                       BYTEA,
+            signature_date                  DATE,
+            firstname                       VARCHAR(500),
+            lastname                        VARCHAR(500),
+            phone                           VARCHAR(500),
+                CONSTRAINT n4_cssignature_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE n4_cssignature OWNER TO vista;
+        
+        -- n4_csto_person_info
+        
+        CREATE TABLE n4_csto_person_info
+        (
+            id                              BIGINT              NOT NULL,
+            name                            VARCHAR(500),
+            tp_type                         VARCHAR(50),
+                CONSTRAINT n4_csto_person_info_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE n4_csto_person_info OWNER TO vista;
+        
+        -- n4_policy
+        
+        ALTER TABLE n4_policy ADD COLUMN agent_selection_method VARCHAR(50);
+        
+        
+        -- n4_rent_owing_for_period
+        
+        CREATE TABLE n4_rent_owing_for_period
+        (
+            id                              BIGINT              NOT NULL,
+            parent                          BIGINT,
+            from_date                       DATE,
+            to_date                         DATE,
+            rent_charged                    NUMERIC(18,2),
+            rent_paid                       NUMERIC(18,2),
+            rent_owing                      NUMERIC(18,2),
+                CONSTRAINT n4_rent_owing_for_period_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE n4_rent_owing_for_period OWNER TO vista;
         
         /**
         ***     =====================================================================================================
