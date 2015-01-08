@@ -38,7 +38,7 @@ public class ARPolicyForm extends PolicyDTOTabPanelBasedForm<ARPolicyDTO> {
         formPanel.append(Location.Left, proto().creditDebitRule()).decorate().componentWidth(200);
 
         formPanel.br();
-        formPanel.append(Location.Left, new HTML(CrmResources.INSTANCE.arPolicyRuleDescription().getText()));
+        formPanel.append(Location.Dual, new HTML(CrmResources.INSTANCE.arPolicyRuleDescription().getText()));
 
         return formPanel;
     }
