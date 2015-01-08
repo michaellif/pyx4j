@@ -296,9 +296,21 @@ public class EntityDiff {
 
         private void getChanges(IList<IEntity> value1, IList<IEntity> value2, DiffPath path) {
             Iterator<IEntity> iter1 = value1.iterator();
-            Iterator<IEntity> iter2 = value2.iterator();
-            for (; iter1.hasNext() && iter2.hasNext();) {
-                getChanges(iter1.next(), iter2.next(), path);
+            List<IEntity> value2copy = new Vector<IEntity>(value2);
+            while (iter1.hasNext()) {
+                IEntity ent1 = iter1.next();
+                if (value2copy.contains(ent1)) {
+                    IEntity ent2 = value2.get(ent1);
+                    value2copy.remove(ent1);
+                    getChanges(ent1, ent2, path);
+                } else {
+                    // removed
+                    addChangesAction(path, null, false, "removed", safeStringView(ent1));
+                }
+            }
+            // Added
+            for (IEntity ent2 : value2copy) {
+                addChangesAction(path, null, false, "added", safeStringView(ent2));
             }
         }
 
