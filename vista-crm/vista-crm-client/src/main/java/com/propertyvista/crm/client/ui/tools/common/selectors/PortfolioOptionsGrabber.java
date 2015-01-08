@@ -12,8 +12,6 @@
  */
 package com.propertyvista.crm.client.ui.tools.common.selectors;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -22,21 +20,16 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.selector.IOptionsGrabber;
+import com.pyx4j.widgets.client.selector.SingleWordSuggestOptionsGrabber;
 
 import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
 import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
 import com.propertyvista.domain.company.Portfolio;
 
-public class PortfolioOptionsGrabber implements IOptionsGrabber<PortfolioForSelectionDTO> {
-
-    private final SelectPortfolioListService service;
-
-    private List<PortfolioForSelectionDTO> filtered;
+public class PortfolioOptionsGrabber extends SingleWordSuggestOptionsGrabber<PortfolioForSelectionDTO> {
 
     public PortfolioOptionsGrabber() {
-        service = //createCachingProxy(
-        GWT.<SelectPortfolioListService> create(SelectPortfolioListService.class);
-        filtered = new LinkedList<PortfolioForSelectionDTO>();
+        super(GWT.<SelectPortfolioListService> create(SelectPortfolioListService.class));
     }
 
     @Override
@@ -53,28 +46,16 @@ public class PortfolioOptionsGrabber implements IOptionsGrabber<PortfolioForSele
 
         EntityListCriteria<Portfolio> criteria = EntityListCriteria.create(Portfolio.class);
         criteria.setPageSize(request.getLimit());
-        service.getPortfoliosForSelection(callbackOptionsGrabber, criteria);
+        ((SelectPortfolioListService) service).getPortfoliosForSelection(callbackOptionsGrabber, criteria);
 
     }
 
+    @Override
     protected int evaluate(PortfolioForSelectionDTO item, String suggestion) {
         if (item.name().getValue().toLowerCase().contains(suggestion)) {
             return 1;
         } else {
             return 0;
-        }
-    }
-
-    private void filter(Vector<PortfolioForSelectionDTO> result, String suggestion) {
-        filtered = new LinkedList<PortfolioForSelectionDTO>();
-        if ("".equals(suggestion)) {
-            filtered.addAll(result);
-        } else {
-            for (PortfolioForSelectionDTO item : result) {
-                if (evaluate(item, suggestion) > 0) {
-                    filtered.add(item);
-                }
-            }
         }
     }
 }
