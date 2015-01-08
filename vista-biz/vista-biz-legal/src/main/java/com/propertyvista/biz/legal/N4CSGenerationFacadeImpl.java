@@ -19,7 +19,7 @@ import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.biz.legal.forms.framework.filling.FormFillerImpl;
 import com.propertyvista.biz.legal.forms.n4cs.N4CSFieldsMapping;
-import com.propertyvista.domain.legal.n4.N4FormFieldsData;
+import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
 import com.propertyvista.domain.legal.n4cs.N4CSDocumentType.DocumentType;
 import com.propertyvista.domain.legal.n4cs.N4CSFormFieldsData;
 import com.propertyvista.domain.legal.n4cs.N4CSServiceMethod.ServiceMethod;

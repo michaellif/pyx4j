@@ -41,7 +41,7 @@ import com.propertyvista.domain.legal.l1.NsfChargeDetails;
 import com.propertyvista.domain.legal.ltbcommon.LtbAgentContactInfo;
 import com.propertyvista.domain.legal.ltbcommon.LtbOwedRent;
 import com.propertyvista.domain.legal.ltbcommon.LtbRentalUnitAddress;
-import com.propertyvista.domain.legal.n4.N4RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.pdf.N4RentOwingForPeriod;
 
 public class L1FieldsMapping extends LtbFormFieldsMapping<L1FormFieldsData> {
 
@@ -49,7 +49,6 @@ public class L1FieldsMapping extends LtbFormFieldsMapping<L1FormFieldsData> {
         super(L1FormFieldsData.class);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected void configure() {//@formatter:off        
         money(proto().totalRentOwing()).mapTo(fieldsPartition("@@b12c96nfl1_rentOwn", 2, 3, 2)).define();        

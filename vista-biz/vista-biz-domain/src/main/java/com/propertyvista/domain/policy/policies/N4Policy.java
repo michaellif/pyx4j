@@ -44,6 +44,9 @@ public interface N4Policy extends Policy {
     }
 
     @NotNull
+    IPrimitive<String> evictionFlowStep();
+
+    @NotNull
     IPrimitive<EmployeeSelectionMethod> agentSelectionMethod();
 
     @Caption(description = "Signature image taken from Employee's profile")

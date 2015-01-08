@@ -34,11 +34,16 @@ public class EvictionFlowPolicyForm extends PolicyDTOTabPanelBasedForm<EvictionF
     public EvictionFlowPolicyForm(IPrimeFormView<EvictionFlowPolicyDTO, ?> view) {
         super(EvictionFlowPolicyDTO.class, view);
 
-        FormPanel evictionStepsPanel = new FormPanel(this);
-        evictionStepsPanel.h1(i18n.tr("Steps that define your Eviction Flow"));
-        evictionStepsPanel.append(Location.Dual, proto().evictionFlow(), new EvictionStepFolder());
+        addTab(getEvictionStepsTab(), i18n.tr("Eviction Steps"));
+    }
 
-        addTab(evictionStepsPanel, i18n.tr("Eviction Steps"));
+    private IsWidget getEvictionStepsTab() {
+        FormPanel tabPanel = new FormPanel(this);
+
+        tabPanel.h1(i18n.tr("Steps that define your Eviction Flow"));
+        tabPanel.append(Location.Dual, proto().evictionFlow(), new EvictionStepFolder());
+
+        return tabPanel;
     }
 
     public static class EvictionStepFolder extends VistaBoxFolder<EvictionFlowStep> {

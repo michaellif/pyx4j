@@ -30,12 +30,12 @@ import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.domain.legal.n4.N4RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.N4UnpaidCharge;
 
-public class LtbRentOwedBreakdownFolder extends VistaTableFolder<N4RentOwingForPeriod> {
+public class LtbRentOwedBreakdownFolder extends VistaTableFolder<N4UnpaidCharge> {
 
     public LtbRentOwedBreakdownFolder() {
-        super(N4RentOwingForPeriod.class);
+        super(N4UnpaidCharge.class);
         setOrderable(false);
     }
 
@@ -51,8 +51,8 @@ public class LtbRentOwedBreakdownFolder extends VistaTableFolder<N4RentOwingForP
     }
 
     @Override
-    protected CForm<? extends N4RentOwingForPeriod> createItemForm(IObject<?> member) {
-        return new CFolderRowEditor<N4RentOwingForPeriod>(N4RentOwingForPeriod.class, columns()) {
+    protected CForm<? extends N4UnpaidCharge> createItemForm(IObject<?> member) {
+        return new CFolderRowEditor<N4UnpaidCharge>(N4UnpaidCharge.class, columns()) {
 
             @Override
             protected CField<?, ?> createCell(FolderColumnDescriptor column) {
@@ -112,9 +112,9 @@ public class LtbRentOwedBreakdownFolder extends VistaTableFolder<N4RentOwingForP
 
     @Override
     public void addValidations() {
-        addValueChangeHandler(new ValueChangeHandler<IList<N4RentOwingForPeriod>>() {
+        addValueChangeHandler(new ValueChangeHandler<IList<N4UnpaidCharge>>() {
             @Override
-            public void onValueChange(ValueChangeEvent<IList<N4RentOwingForPeriod>> event) {
+            public void onValueChange(ValueChangeEvent<IList<N4UnpaidCharge>> event) {
                 setAddable(getValue().size() < 3);
             }
         });

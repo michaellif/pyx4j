@@ -7,41 +7,42 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-11-22
+ * Created on 2013-11-20
  * @author ArtyomB
  */
-package com.propertyvista.domain.legal.n4;
+package com.propertyvista.domain.legal.n4.pdf;
 
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.legal.ltbcommon.LtbAgentContactInfo;
-import com.propertyvista.domain.legal.ltbcommon.LtbOwedRent;
-import com.propertyvista.domain.legal.ltbcommon.LtbRentalUnitAddress;
-
 @Transient
-public interface N4FormFieldsData extends IEntity {
+public interface N4RentOwingForPeriod extends IEntity {
 
-    /** Tenant names and address */
-    IPrimitive<String> to();
+    @NotNull
+    @ToString(index = 2)
+    IPrimitive<LogicalDate> fromDate();
 
-    /** Landlord's name */
-    IPrimitive<String> from();
+    @NotNull
+    @ToString(index = 3)
+    IPrimitive<LogicalDate> toDate();
 
-    LtbRentalUnitAddress rentalUnitAddress();
+    @NotNull
+    @Format("$#,##0.00")
+    IPrimitive<BigDecimal> rentCharged();
 
-    IPrimitive<LogicalDate> terminationDate();
+    @NotNull
+    @Format("$#,##0.00")
+    IPrimitive<BigDecimal> rentPaid();
 
-    IPrimitive<BigDecimal> totalRentOwed();
-
-    LtbOwedRent owedRent();
-
-    N4Signature signature();
-
-    LtbAgentContactInfo landlordsContactInfo();
-
+    @NotNull
+    @ToString(index = 0)
+    @Format("$#,##0.00")
+    IPrimitive<BigDecimal> rentOwing();
 }
