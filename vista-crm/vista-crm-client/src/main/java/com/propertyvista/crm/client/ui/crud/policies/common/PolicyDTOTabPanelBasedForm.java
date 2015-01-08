@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
-import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
@@ -155,9 +154,9 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
      */
     private class PolicyNodeEditor extends CForm<PolicyNode> {
 
-        private final Map<Class<? extends PolicyNode>, CField<? extends PolicyNode, ?>> nodeTypeToComponentMap = new HashMap<>();
+        private final Map<Class<? extends PolicyNode>, CEntityComboBox<? extends PolicyNode>> nodeTypeToComponentMap = new HashMap<>();
 
-        private CField<? extends PolicyNode, ?> currentComp = null;
+        private CEntityComboBox<? extends PolicyNode> currentComp = null;
 
         public PolicyNodeEditor() {
             super(PolicyNode.class);
@@ -169,7 +168,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
             prepareNodeComponents();
 
             FormPanel formPanel = new FormPanel(this);
-            for (CField<? extends PolicyNode, ?> nodeComponent : nodeTypeToComponentMap.values()) {
+            for (CEntityComboBox<? extends PolicyNode> nodeComponent : nodeTypeToComponentMap.values()) {
                 formPanel.append(Location.Left, nodeComponent).decorate().componentWidth(200).customLabel(i18n.tr("Applied to"));
             }
 
@@ -181,7 +180,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
             super.onReset();
 
             setCurrentComponent(null);
-            for (CField<? extends PolicyNode, ?> nodeComponent : nodeTypeToComponentMap.values()) {
+            for (CEntityComboBox<? extends PolicyNode> nodeComponent : nodeTypeToComponentMap.values()) {
                 nodeComponent.setVisible(false);
                 nodeComponent.reset();
             }
@@ -193,7 +192,14 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
             super.onValueSet(populate);
 
             if (populate && setCurrentComponent(getValue()) != null) {
-                ((CField<PolicyNode, ?>) currentComp).populate(getValue().<PolicyNode> cast());
+                ((CEntityComboBox<PolicyNode>) currentComp).populate(getValue());
+                currentComp.setEditable(PolicyDTOTabPanelBasedForm.this.isNewEntity());
+                if (PolicyDTOTabPanelBasedForm.this.isNewEntity()) {
+                    // remove already used nodes:
+                    for (PolicyNode node : PolicyDTOTabPanelBasedForm.this.getValue().usedNodes()) {
+                        ((CEntityComboBox<PolicyNode>) currentComp).removeOption(node);
+                    }
+                }
             }
         }
 
@@ -251,7 +257,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
             super.setValue(value);
         }
 
-        private CField<? extends PolicyNode, ?> setCurrentComponent(PolicyNode value) {
+        private CEntityComboBox<? extends PolicyNode> setCurrentComponent(PolicyNode value) {
             if (currentComp != null) {
                 currentComp.setVisible(false);
                 abandon(currentComp);
