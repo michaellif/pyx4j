@@ -12,8 +12,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication.selector;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -22,20 +20,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.selector.IOptionsGrabber;
+import com.pyx4j.widgets.client.selector.SingleWordSuggestOptionsGrabber;
 
 import com.propertyvista.crm.rpc.services.selections.SelectCommunicationEndpointListService;
 import com.propertyvista.dto.CommunicationEndpointDTO;
 
-public class CommunicationEndpointOptionsGrabber implements IOptionsGrabber<CommunicationEndpointDTO> {
-
-    private final SelectCommunicationEndpointListService service;
-
-    private List<CommunicationEndpointDTO> filtered;
+public class CommunicationEndpointOptionsGrabber extends SingleWordSuggestOptionsGrabber<CommunicationEndpointDTO> {
 
     public CommunicationEndpointOptionsGrabber() {
-        service = //createCachingProxy(
-        GWT.<SelectCommunicationEndpointListService> create(SelectCommunicationEndpointListService.class);
-        filtered = new LinkedList<CommunicationEndpointDTO>();
+        super(GWT.<SelectCommunicationEndpointListService> create(SelectCommunicationEndpointListService.class));
     }
 
     @Override
@@ -49,32 +42,19 @@ public class CommunicationEndpointOptionsGrabber implements IOptionsGrabber<Comm
             }
 
         };
-
         EntityListCriteria<CommunicationEndpointDTO> criteria = EntityListCriteria.create(CommunicationEndpointDTO.class);
         criteria.setPageSize(request.getLimit());
         criteria.eq(criteria.proto().name(), request.getQuery().toLowerCase());
-        service.getEndpointForSelection(callbackOptionsGrabber, criteria);
+        ((SelectCommunicationEndpointListService) service).getEndpointForSelection(callbackOptionsGrabber, criteria);
 
     }
 
+    @Override
     protected int evaluate(CommunicationEndpointDTO item, String suggestion) {
         if (item.name().getValue().toLowerCase().contains(suggestion)) {
             return 1;
         } else {
             return 0;
-        }
-    }
-
-    private void filter(Vector<CommunicationEndpointDTO> result, String suggestion) {
-        filtered = new LinkedList<CommunicationEndpointDTO>();
-        if ("".equals(suggestion)) {
-            filtered.addAll(result);
-        } else {
-            for (CommunicationEndpointDTO item : result) {
-                if (evaluate(item, suggestion) > 0) {
-                    filtered.add(item);
-                }
-            }
         }
     }
 }
