@@ -115,8 +115,8 @@ public class NameEditor extends CForm<Name> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        if (!isEditable()) {
-            viewComp.setValue(getValue(), true, populate);
+        if (isViewable()) {
+            viewComp.populate(getValue());
         }
     }
 }
