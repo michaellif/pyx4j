@@ -10,7 +10,7 @@
  * Created on 2013-11-22
  * @author ArtyomB
  */
-package com.propertyvista.domain.legal.n4;
+package com.propertyvista.domain.legal.n4.pdf;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;

@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.domain.legal.ltbcommon.LtbOwedRent;
-import com.propertyvista.domain.legal.n4.N4RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.pdf.N4RentOwingForPeriod;
 
 public class LtbOwedRentForm extends CForm<LtbOwedRent> {
 

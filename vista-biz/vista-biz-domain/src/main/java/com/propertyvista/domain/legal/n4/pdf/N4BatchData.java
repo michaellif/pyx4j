@@ -10,7 +10,7 @@
  * Created on 2013-09-20
  * @author ArtyomB
  */
-package com.propertyvista.domain.legal.n4;
+package com.propertyvista.domain.legal.n4.pdf;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.RpcTransient;
@@ -20,6 +20,7 @@ import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.contact.InternationalAddress;
+import com.propertyvista.domain.legal.n4.N4DeliveryMethod;
 
 /** This is data common to all N4 forms filled in a single batch */
 @Transient

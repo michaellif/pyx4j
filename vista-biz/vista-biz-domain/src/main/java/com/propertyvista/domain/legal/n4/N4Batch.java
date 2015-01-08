@@ -14,6 +14,7 @@ package com.propertyvista.domain.legal.n4;
 
 import java.util.Date;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.OrderBy;
@@ -21,10 +22,14 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
-public interface N4Batch extends N4BatchData {
+import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.contact.InternationalAddress;
+
+public interface N4Batch extends IEntity {
 
     IPrimitive<String> name();
 
@@ -32,6 +37,29 @@ public interface N4Batch extends N4BatchData {
     @Format("yyyy-MM-dd HH:mm:ss")
     @Timestamp(Update.Created)
     IPrimitive<Date> created();
+
+    IPrimitive<LogicalDate> noticeDate();
+
+    IPrimitive<N4DeliveryMethod> deliveryMethod();
+
+    IPrimitive<String> companyLegalName();
+
+    InternationalAddress companyAddress();
+
+    /** must have the following format: (XXX) XXX-XXXX */
+    IPrimitive<String> companyPhoneNumber();
+
+    /** optional, but must have the following format: (XXX) XXX-XXXX */
+    IPrimitive<String> companyFaxNumber();
+
+    IPrimitive<String> companyEmailAddress();
+
+    /** Determines if its Landlord's or Agent's signature */
+    IPrimitive<Boolean> isLandlord();
+
+    IPrimitive<LogicalDate> signatureDate();
+
+    Employee signingEmployee();
 
     @Owned
     @Detached

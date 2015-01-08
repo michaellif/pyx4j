@@ -28,10 +28,10 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.legal.N4GenerationFacadeImpl;
-import com.propertyvista.domain.legal.n4.N4FormFieldsData;
-import com.propertyvista.domain.legal.n4.N4LeaseData;
-import com.propertyvista.domain.legal.n4.N4RentOwingForPeriod;
-import com.propertyvista.domain.legal.n4.N4Signature.SignedBy;
+import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
+import com.propertyvista.domain.legal.n4.pdf.N4LeaseData;
+import com.propertyvista.domain.legal.n4.pdf.N4RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.pdf.N4Signature.SignedBy;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 public class MockN4FormDataFactory {

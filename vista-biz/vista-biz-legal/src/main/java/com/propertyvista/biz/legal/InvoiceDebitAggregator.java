@@ -32,7 +32,7 @@ import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
-import com.propertyvista.domain.legal.n4.N4RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.pdf.N4RentOwingForPeriod;
 
 public class InvoiceDebitAggregator {
 

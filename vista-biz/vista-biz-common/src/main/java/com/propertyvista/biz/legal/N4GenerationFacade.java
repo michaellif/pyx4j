@@ -18,10 +18,10 @@ import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.legal.errors.FormFillError;
-import com.propertyvista.domain.legal.n4.N4BatchData;
 import com.propertyvista.domain.legal.n4.N4DeliveryMethod;
-import com.propertyvista.domain.legal.n4.N4FormFieldsData;
-import com.propertyvista.domain.legal.n4.N4LeaseData;
+import com.propertyvista.domain.legal.n4.pdf.N4BatchData;
+import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
+import com.propertyvista.domain.legal.n4.pdf.N4LeaseData;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface N4GenerationFacade {

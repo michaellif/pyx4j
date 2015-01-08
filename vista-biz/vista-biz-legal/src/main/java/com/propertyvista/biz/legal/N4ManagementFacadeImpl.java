@@ -69,11 +69,11 @@ import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.legal.LegalStatus.Status;
 import com.propertyvista.domain.legal.LegalStatusN4;
 import com.propertyvista.domain.legal.errors.FormFillError;
-import com.propertyvista.domain.legal.n4.N4Batch;
-import com.propertyvista.domain.legal.n4.N4BatchItem;
-import com.propertyvista.domain.legal.n4.N4FormFieldsData;
 import com.propertyvista.domain.legal.n4.N4LegalLetter;
-import com.propertyvista.domain.legal.n4.N4RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.pdf.N4BatchData;
+import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
+import com.propertyvista.domain.legal.n4.pdf.N4LeaseData;
+import com.propertyvista.domain.legal.n4.pdf.N4RentOwingForPeriod;
 import com.propertyvista.domain.legal.n4cs.N4CSFormFieldsData;
 import com.propertyvista.domain.legal.n4cs.N4CSServiceMethod.ServiceMethod;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
@@ -143,7 +143,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         final Date batchGenerationDate = SystemDateManager.getDate();
 
         List<Pair<Lease, Exception>> failed = new LinkedList<>();
-        final N4Batch batch = makeBatchData(batchRequest);
+        final N4BatchData batch = makeBatchData(batchRequest);
         for (final Lease leaseId : batchRequest.targetDelinquentLeases()) {
             try {
                 new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.Web).execute(new Executable<Void, Exception>() {
@@ -181,10 +181,9 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         return n4s;
     }
 
-    private void issueN4ForLease(Lease leaseId, N4Batch batchData, Collection<ARCode> relevantArCodes, Date generationTime) throws FormFillError {
-        N4BatchItem n4LeaseData = (N4BatchItem) ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId,
-                batchData.noticeDate().getValue(), batchData.deliveryMethod().getValue(), relevantArCodes);
-        batchData.items().add(n4LeaseData);
+    private void issueN4ForLease(Lease leaseId, N4BatchData batchData, Collection<ARCode> relevantArCodes, Date generationTime) throws FormFillError {
+        N4LeaseData n4LeaseData = ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId, batchData.noticeDate().getValue(),
+                batchData.deliveryMethod().getValue(), relevantArCodes);
 
         N4FormFieldsData n4FormData = ServerSideFactory.create(N4GenerationFacade.class).prepareFormData(n4LeaseData, batchData);
         N4CSFormFieldsData n4csFormData = ServerSideFactory.create(N4CSGenerationFacade.class).prepareN4CSData(n4FormData, ServiceMethod.M);
@@ -301,8 +300,8 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         }
     }
 
-    private N4Batch makeBatchData(N4BatchRequestDTO batchRequest) {
-        N4Batch batchData = EntityFactory.create(N4Batch.class);
+    private N4BatchData makeBatchData(N4BatchRequestDTO batchRequest) {
+        N4BatchData batchData = EntityFactory.create(N4BatchData.class);
         // TODO batchData.name().set(batchRequest.batchName());
 
         batchData.noticeDate().setValue(batchRequest.noticeDate().getValue());

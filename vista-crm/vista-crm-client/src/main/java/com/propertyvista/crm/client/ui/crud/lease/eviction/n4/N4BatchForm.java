@@ -43,7 +43,7 @@ import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorato
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.legal.n4.N4BatchItem;
-import com.propertyvista.domain.legal.n4.N4RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.N4UnpaidCharge;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.N4BatchDTO;
 
@@ -120,7 +120,7 @@ public class N4BatchForm extends CrmEntityForm<N4BatchDTO> {
                     formPanel.append(Location.Left, proto().lease(), leaseLabel).decorate();
                     formPanel.append(Location.Right, proto().totalRentOwning(), new CMoneyLabel()).decorate();
 
-                    formPanel.append(Location.Dual, proto().rentOwingBreakdown(), new BatchItemChargesFolder(this));
+                    formPanel.append(Location.Dual, proto().unpaidCharges(), new BatchItemChargesFolder(this));
 
                     return formPanel;
                 }
@@ -151,19 +151,19 @@ public class N4BatchForm extends CrmEntityForm<N4BatchDTO> {
 
     }
 
-    class BatchItemChargesFolder extends VistaBoxFolder<N4RentOwingForPeriod> {
+    class BatchItemChargesFolder extends VistaBoxFolder<N4UnpaidCharge> {
 
         private final CForm<N4BatchItem> parent;
 
         public BatchItemChargesFolder(CForm<N4BatchItem> parent) {
-            super(N4RentOwingForPeriod.class);
+            super(N4UnpaidCharge.class);
             this.parent = parent;
 
             setOrderable(false);
         }
 
         @Override
-        protected void addItem(N4RentOwingForPeriod newEntity) {
+        protected void addItem(N4UnpaidCharge newEntity) {
             newEntity.rentCharged().setValue(new BigDecimal("0.00"));
             newEntity.rentPaid().setValue(new BigDecimal("0.00"));
             newEntity.rentOwing().setValue(new BigDecimal("0.00"));
@@ -171,17 +171,17 @@ public class N4BatchForm extends CrmEntityForm<N4BatchDTO> {
         }
 
         @Override
-        public VistaBoxFolderItemDecorator<N4RentOwingForPeriod> createItemDecorator() {
-            VistaBoxFolderItemDecorator<N4RentOwingForPeriod> itemDecorator = super.createItemDecorator();
+        public VistaBoxFolderItemDecorator<N4UnpaidCharge> createItemDecorator() {
+            VistaBoxFolderItemDecorator<N4UnpaidCharge> itemDecorator = super.createItemDecorator();
             itemDecorator.setExpended(false);
             return itemDecorator;
         }
 
         @Override
-        protected CForm<? extends N4RentOwingForPeriod> createItemForm(IObject<?> member) {
-            return new CForm<N4RentOwingForPeriod>(N4RentOwingForPeriod.class) {
+        protected CForm<? extends N4UnpaidCharge> createItemForm(IObject<?> member) {
+            return new CForm<N4UnpaidCharge>(N4UnpaidCharge.class) {
 
-                private CForm<N4RentOwingForPeriod> getForm() {
+                private CForm<N4UnpaidCharge> getForm() {
                     return this;
                 }
 
@@ -190,14 +190,14 @@ public class N4BatchForm extends CrmEntityForm<N4BatchDTO> {
                     @Override
                     public void onValueChange(ValueChangeEvent<BigDecimal> event) {
                         // update charge total
-                        N4RentOwingForPeriod item = getForm().getValue();
+                        N4UnpaidCharge item = getForm().getValue();
                         item.rentOwing().setValue(item.rentCharged().getValue().subtract(item.rentPaid().getValue()));
                         getForm().refresh(false);
 
                         // update parent with grand total
                         N4BatchItem rec = parent.getValue();
                         BigDecimal total = BigDecimal.ZERO;
-                        for (N4RentOwingForPeriod owing : rec.rentOwingBreakdown()) {
+                        for (N4UnpaidCharge owing : rec.unpaidCharges()) {
                             total = total.add(owing.rentOwing().getValue());
                         }
                         rec.totalRentOwning().setValue(total);

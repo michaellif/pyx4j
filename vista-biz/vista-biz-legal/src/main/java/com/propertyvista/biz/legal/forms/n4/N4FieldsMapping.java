@@ -27,9 +27,9 @@ import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.scalers.Address
 import com.propertyvista.domain.legal.ltbcommon.LtbAgentContactInfo;
 import com.propertyvista.domain.legal.ltbcommon.LtbOwedRent;
 import com.propertyvista.domain.legal.ltbcommon.LtbRentalUnitAddress;
-import com.propertyvista.domain.legal.n4.N4FormFieldsData;
-import com.propertyvista.domain.legal.n4.N4RentOwingForPeriod;
-import com.propertyvista.domain.legal.n4.N4Signature;
+import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
+import com.propertyvista.domain.legal.n4.pdf.N4RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.pdf.N4Signature;
 
 public class N4FieldsMapping extends LtbFormFieldsMapping<N4FormFieldsData> {
 

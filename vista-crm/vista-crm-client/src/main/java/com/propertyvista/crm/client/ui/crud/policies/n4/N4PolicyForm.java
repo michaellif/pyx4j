@@ -48,47 +48,63 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
     public N4PolicyForm(IPrimeFormView<N4PolicyDTO, ?> view) {
         super(N4PolicyDTO.class, view);
 
-        FormPanel signatureFormPanel = new FormPanel(this);
-        FormPanel companyNameAndPhonesFormPanel = new FormPanel(this);
-
-        signatureFormPanel.append(Location.Left, proto().includeSignature()).decorate();
-        signatureFormPanel.append(Location.Left, proto().agentSelectionMethod()).decorate();
-        signatureFormPanel.h1(i18n.tr("The following information will be used for signing N4 letters:"));
-
-        companyNameAndPhonesFormPanel.append(Location.Left, proto().companyName()).decorate();
-        companyNameAndPhonesFormPanel.append(Location.Right, proto().emailAddress()).decorate();
-        companyNameAndPhonesFormPanel.append(Location.Left, proto().phoneNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
-        companyNameAndPhonesFormPanel.append(Location.Right, proto().faxNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
-
-        signatureFormPanel.append(Location.Dual, companyNameAndPhonesFormPanel);
-
-        signatureFormPanel.append(Location.Dual, proto().mailingAddress(), new InternationalAddressEditor());
-
-        FormPanel arCodesFormPanel = new FormPanel(this);
-        arCodesFormPanel.h1(i18n.tr("Use the following AR Codes for calculation of charged vs. owed rent amount:"));
-        arCodesFormPanel.append(Location.Dual, proto().arCodes(), arCodeFolder = new ARCodeFolder());
-
-        FormPanel deliveryFormPanel = new FormPanel(this);
-        deliveryFormPanel.h1(i18n.tr("Termination date calculation:"));
-        deliveryFormPanel.append(Location.Left, proto().terminationDateAdvanceDaysLongRentPeriod()).decorate();
-        deliveryFormPanel.append(Location.Left, proto().terminationDateAdvanceDaysShortRentPeriod()).decorate();
-
-        deliveryFormPanel.h1(i18n.tr("Additional advance days based on delivery method:"));
-        deliveryFormPanel.append(Location.Left, proto().handDeliveryAdvanceDays()).decorate();
-        deliveryFormPanel.append(Location.Left, proto().mailDeliveryAdvanceDays()).decorate();
-        deliveryFormPanel.append(Location.Left, proto().courierDeliveryAdvanceDays()).decorate();
-
-        addTab(signatureFormPanel, i18n.tr("Signature"));
-        addTab(arCodesFormPanel, i18n.tr("AR Codes"));
-        addTab(deliveryFormPanel, i18n.tr("Delivery"));
-        addTab(createAutoCancellationPanel(), i18n.tr("Auto Cancellation"));
+        addTab(getEvictionFlowTab(), i18n.tr("Eviction Flow"));
+        addTab(getSignatureTab(), i18n.tr("Signature"));
+        addTab(getArCodesTab(), i18n.tr("AR Codes"));
+        addTab(getDeliveryTab(), i18n.tr("Delivery"));
+        addTab(getAutoCancellationTab(), i18n.tr("Auto Cancellation"));
     }
 
     public void setARCodeOptions(List<ARCode> arCodeOptions) {
         arCodeFolder.setARCodeOptions(arCodeOptions);
     }
 
-    private IsWidget createAutoCancellationPanel() {
+    private IsWidget getEvictionFlowTab() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Left, proto().evictionStep()).decorate();
+        return formPanel;
+    }
+
+    private IsWidget getSignatureTab() {
+        FormPanel formPanel = new FormPanel(this);
+
+        formPanel.append(Location.Left, proto().includeSignature()).decorate();
+        formPanel.append(Location.Right, proto().agentSelectionMethod()).decorate();
+
+        formPanel.h1(i18n.tr("The following information will be used for signing N4 letters:"));
+        formPanel.append(Location.Left, proto().companyName()).decorate();
+        formPanel.append(Location.Right, proto().emailAddress()).decorate();
+        formPanel.append(Location.Left, proto().phoneNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
+        formPanel.append(Location.Right, proto().faxNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
+
+        formPanel.append(Location.Dual, proto().mailingAddress(), new InternationalAddressEditor());
+
+        return formPanel;
+    }
+
+    private IsWidget getArCodesTab() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.h1(i18n.tr("Use the following AR Codes for calculation of charged vs. owed rent amount:"));
+        formPanel.append(Location.Dual, proto().arCodes(), arCodeFolder = new ARCodeFolder());
+        return formPanel;
+    }
+
+    private IsWidget getDeliveryTab() {
+        FormPanel formPanel = new FormPanel(this);
+
+        formPanel.h1(i18n.tr("Termination date calculation:"));
+        formPanel.append(Location.Left, proto().terminationDateAdvanceDaysLongRentPeriod()).decorate();
+        formPanel.append(Location.Left, proto().terminationDateAdvanceDaysShortRentPeriod()).decorate();
+
+        formPanel.h1(i18n.tr("Additional advance days based on delivery method:"));
+        formPanel.append(Location.Left, proto().handDeliveryAdvanceDays()).decorate();
+        formPanel.append(Location.Left, proto().mailDeliveryAdvanceDays()).decorate();
+        formPanel.append(Location.Left, proto().courierDeliveryAdvanceDays()).decorate();
+
+        return formPanel;
+    }
+
+    private IsWidget getAutoCancellationTab() {
         FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, proto().cancellationThreshold()).decorate();
         formPanel.append(Location.Left, proto().expiryDays()).decorate();

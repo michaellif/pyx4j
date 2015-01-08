@@ -31,9 +31,9 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
-import com.propertyvista.biz.legal.InvoiceDebitAggregator;
 import com.propertyvista.biz.legal.forms.n4.N4GenerationUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.crm.rpc.services.legal.eviction.N4BatchCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.contact.InternationalAddress;
@@ -41,7 +41,8 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.n4.N4Batch;
 import com.propertyvista.domain.legal.n4.N4BatchItem;
-import com.propertyvista.domain.legal.n4.N4RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.N4UnpaidCharge;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.policy.policies.N4Policy.EmployeeSelectionMethod;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -58,15 +59,16 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
     /** Generate a batch per building; return the first batch in the list */
     public void createBatches(AsyncCallback<N4BatchDTO> callback, Vector<Lease> leaseCandidates) {
         Map<Building, N4Batch> n4batches = new HashMap<>();
-        Map<Building, N4Policy> n4policies = new HashMap<>();
+        Map<PolicyNode, N4Policy> n4policies = new HashMap<>();
 
         for (Lease leaseId : leaseCandidates) {
             Persistence.ensureRetrieve(leaseId.unit().building(), AttachLevel.Attached);
             Building building = leaseId.unit().building();
             N4Batch bo = n4batches.get(building);
-            N4Policy n4policy = n4policies.get(building);
+            PolicyNode node = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(leaseId);
+            N4Policy n4policy = n4policies.get(node);
             if (bo == null) {
-                n4policies.put(building, n4policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, N4Policy.class));
+                n4policies.put(node, n4policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, N4Policy.class));
                 n4batches.put(building, bo = createBatch(building, n4policy));
                 generateBatchName(bo, building);
                 Persistence.service().persist(bo);
@@ -74,12 +76,12 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
 
             N4BatchItem item = EntityFactory.create(N4BatchItem.class);
 
-            List<N4RentOwingForPeriod> unpaidCharges = getUnpaidCharges(leaseId, new HashSet<ARCode>(n4policy.relevantARCodes()));
+            List<N4UnpaidCharge> unpaidCharges = getUnpaidCharges(leaseId, new HashSet<ARCode>(n4policy.relevantARCodes()));
             BigDecimal amountOwed = BigDecimal.ZERO;
-            for (N4RentOwingForPeriod rentOwingForPeriod : unpaidCharges) {
+            for (N4UnpaidCharge rentOwingForPeriod : unpaidCharges) {
                 amountOwed = amountOwed.add(rentOwingForPeriod.rentOwing().getValue());
             }
-            item.rentOwingBreakdown().addAll(unpaidCharges);
+            item.unpaidCharges().addAll(unpaidCharges);
             item.totalRentOwning().setValue(amountOwed);
             item.lease().set(leaseId);
 
@@ -104,7 +106,7 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
 
         Persistence.ensureRetrieve(to.items(), AttachLevel.Attached);
         for (N4BatchItem item : to.items()) {
-            Persistence.ensureRetrieve(item.rentOwingBreakdown(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(item.unpaidCharges(), AttachLevel.Attached);
 
             Persistence.ensureRetrieve(item.lease().unit().building(), AttachLevel.Attached);
             Persistence.ensureRetrieve(item.lease()._applicant(), AttachLevel.Attached);
@@ -142,7 +144,7 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
     }
 
     // TODO - copied from SelectN4LeaseCandidateListServiceImpl; move to a facade
-    private List<N4RentOwingForPeriod> getUnpaidCharges(Lease lease, HashSet<ARCode> acceptableArCodes) {
+    private List<N4UnpaidCharge> getUnpaidCharges(Lease lease, HashSet<ARCode> acceptableArCodes) {
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
 
@@ -150,24 +152,18 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
 
         List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(lease.billingAccount());
         List<InvoiceDebit> filteredDebits = N4GenerationUtils.filterDebits(debits, acceptableArCodes, today);
-        if (false) {
-            // TODO - looks like we don't need this aggregation here - just convert each debit into N4RentOwingForPeriod record
-            InvoiceDebitAggregator debitCalc = new InvoiceDebitAggregator();
-            return debitCalc.debitsForPeriod(debitCalc.aggregate(filteredDebits));
-        } else {
-            List<N4RentOwingForPeriod> owings = new ArrayList<>();
-            for (InvoiceDebit debit : filteredDebits) {
-                N4RentOwingForPeriod owing = EntityFactory.create(N4RentOwingForPeriod.class);
-                owing.fromDate().setValue(debit.billingCycle().billingCycleStartDate().getValue());
-                owing.toDate().setValue(debit.billingCycle().billingCycleEndDate().getValue());
-                owing.rentCharged().setValue(owing.rentCharged().getValue(BigDecimal.ZERO).add(debit.amount().getValue()));
-                owing.rentCharged().setValue(owing.rentCharged().getValue().add(debit.taxTotal().getValue()));
-                owing.rentOwing().setValue(owing.rentOwing().getValue(BigDecimal.ZERO).add(debit.outstandingDebit().getValue()));
-                owing.rentPaid().setValue(owing.rentCharged().getValue().subtract(owing.rentOwing().getValue()));
-                owing.arCode().set(debit.arCode());
-                owings.add(owing);
-            }
-            return owings;
+        List<N4UnpaidCharge> owings = new ArrayList<>();
+        for (InvoiceDebit debit : filteredDebits) {
+            N4UnpaidCharge owing = EntityFactory.create(N4UnpaidCharge.class);
+            owing.fromDate().setValue(debit.billingCycle().billingCycleStartDate().getValue());
+            owing.toDate().setValue(debit.billingCycle().billingCycleEndDate().getValue());
+            owing.rentCharged().setValue(owing.rentCharged().getValue(BigDecimal.ZERO).add(debit.amount().getValue()));
+            owing.rentCharged().setValue(owing.rentCharged().getValue().add(debit.taxTotal().getValue()));
+            owing.rentOwing().setValue(owing.rentOwing().getValue(BigDecimal.ZERO).add(debit.outstandingDebit().getValue()));
+            owing.rentPaid().setValue(owing.rentCharged().getValue().subtract(owing.rentOwing().getValue()));
+            owing.arCode().set(debit.arCode());
+            owings.add(owing);
         }
+        return owings;
     }
 }

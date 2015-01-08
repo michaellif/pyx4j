@@ -15,9 +15,11 @@ package com.propertyvista.crm.server.services.selections;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
@@ -38,14 +40,14 @@ import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
-import com.propertyvista.biz.legal.InvoiceDebitAggregator;
 import com.propertyvista.biz.legal.forms.n4.N4GenerationUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.crm.rpc.services.selections.SelectN4LeaseCandidateListService;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
-import com.propertyvista.domain.legal.n4.N4RentOwingForPeriod;
-import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
+import com.propertyvista.domain.legal.n4.N4UnpaidCharge;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.N4LeaseCandidateDTO;
@@ -54,7 +56,7 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
 
     private EntityListCriteria<N4LeaseCandidateDTO> toCriteria;
 
-    private final N4Policy n4policy;
+    private final Map<PolicyNode, N4Policy> policyCache;
 
     public SelectN4LeaseCandidateListServiceImpl() {
         super(new CrudEntityBinder<Lease, N4LeaseCandidateDTO>(Lease.class, N4LeaseCandidateDTO.class) {
@@ -68,16 +70,17 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
                 bind(toProto.moveOut(), boProto.expectedMoveOut());
             }
         });
-        n4policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class), N4Policy.class);
+
+        policyCache = new HashMap<>();
     }
 
     @Override
     protected Criterion convertCriterion(EntityListCriteria<Lease> criteria, Criterion cr) {
         if (cr instanceof PropertyCriterion && toProto.amountOwed().getPath().equals(new Path(((PropertyCriterion) cr).getPropertyPath()))) {
             /*
-             * TODO - this is a hack; N4LeaseCandidateDTO.amountOwed() criteria is coming from the Lister UI, but this
-             * TO-property can not be bound to any of the BO (Lease) properties. So, to avoid failure we must return
-             * any relevant criteria that is always TRUE.
+             * TODO - this is a hack; N4LeaseCandidateDTO.amountOwed() criteria is coming from the Lister UI Filters,
+             * but this TO-property can not be bound to any of the BO (Lease) properties. So, to avoid failure we must
+             * return any relevant criteria that is always TRUE.
              */
             return PropertyCriterion.isNotNull(boProto.id());
         } else {
@@ -89,11 +92,10 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
     protected void enhanceListCriteria(EntityListCriteria<Lease> boCriteria, EntityListCriteria<N4LeaseCandidateDTO> toCriteria) {
         super.enhanceListCriteria(boCriteria, toCriteria);
 
-        // save criteria to access later (see below)
+        // save criteria to access later - see getMinAmountOwingFromSearchCriteria()
         this.toCriteria = toCriteria;
 
         boCriteria.eq(boCriteria.proto().status(), Lease.Status.Active);
-        // TODO - add property code search criteria to boCriteria
     }
 
     @Override
@@ -112,13 +114,14 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
                 it.remove();
             }
         }
-        // update properties of the result
-        int pageTo = (pageNumber + 1) * pageSize;
+        // update properties of the result set
+        int pageFrom = pageNumber * pageSize;
+        int pageTo = pageFrom + pageSize;
         result.setTotalRows(result.getData().size());
         result.hasMoreData(result.getTotalRows() > pageTo);
         // extract requested page
-        int toIndex = Math.min(pageTo, result.getTotalRows());
-        result.setData(new Vector<Lease>(result.getData().subList(pageTo - pageSize, toIndex)));
+        pageTo = result.hasMoreData() ? pageTo : result.getTotalRows();
+        result.setData(new Vector<Lease>(result.getData().subList(pageFrom, pageTo)));
 
         return result;
     }
@@ -175,20 +178,31 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
         return false;
     }
 
-    private List<N4RentOwingForPeriod> getUnpaidCharges(Lease lease) {
-        HashSet<ARCode> acceptableArCodes = new HashSet<ARCode>(n4policy.relevantARCodes());
+    private List<N4UnpaidCharge> getUnpaidCharges(Lease lease) {
+        HashSet<ARCode> acceptableArCodes = new HashSet<ARCode>(getPolicy(lease).relevantARCodes());
         LogicalDate today = SystemDateManager.getLogicalDate();
 
         List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(lease.billingAccount());
         List<InvoiceDebit> filteredDebits = N4GenerationUtils.filterDebits(debits, acceptableArCodes, today);
-        InvoiceDebitAggregator debitCalc = new InvoiceDebitAggregator();
-        return debitCalc.debitsForPeriod(debitCalc.aggregate(filteredDebits));
+        List<N4UnpaidCharge> owings = new ArrayList<>();
+        for (InvoiceDebit debit : filteredDebits) {
+            N4UnpaidCharge owing = EntityFactory.create(N4UnpaidCharge.class);
+            owing.fromDate().setValue(debit.billingCycle().billingCycleStartDate().getValue());
+            owing.toDate().setValue(debit.billingCycle().billingCycleEndDate().getValue());
+            owing.rentCharged().setValue(owing.rentCharged().getValue(BigDecimal.ZERO).add(debit.amount().getValue()));
+            owing.rentCharged().setValue(owing.rentCharged().getValue().add(debit.taxTotal().getValue()));
+            owing.rentOwing().setValue(owing.rentOwing().getValue(BigDecimal.ZERO).add(debit.outstandingDebit().getValue()));
+            owing.rentPaid().setValue(owing.rentCharged().getValue().subtract(owing.rentOwing().getValue()));
+            owing.arCode().set(debit.arCode());
+            owings.add(owing);
+        }
+        return owings;
     }
 
     private BigDecimal getAmountOwed(Lease lease) {
         BigDecimal amountOwed = BigDecimal.ZERO;
 
-        for (N4RentOwingForPeriod rentOwingForPeriod : getUnpaidCharges(lease)) {
+        for (N4UnpaidCharge rentOwingForPeriod : getUnpaidCharges(lease)) {
             amountOwed = amountOwed.add(rentOwingForPeriod.rentOwing().getValue());
         }
         return amountOwed;
@@ -198,4 +212,12 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
         return getAmountOwed(lease).compareTo(minAmountOwed) > 0;
     }
 
+    private N4Policy getPolicy(Lease lease) {
+        PolicyNode node = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(lease);
+        N4Policy policy = policyCache.get(node);
+        if (policy == null) {
+            policyCache.put(node, policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, N4Policy.class));
+        }
+        return policy;
+    }
 }

@@ -30,7 +30,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.propertyvista.domain.financial.ARCode;
 
 @ToStringFormat("${0,number,#,##0.00}: {1} {2} - {3}")
-public interface N4RentOwingForPeriod extends IEntity {
+public interface N4UnpaidCharge extends IEntity {
 
     @Owner
     @JoinColumn
