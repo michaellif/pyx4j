@@ -129,6 +129,7 @@ public class NameEditor extends AccessoryEntityForm<Name> {
     @Override
     public void generateMockData() {
         get(proto().firstName()).setMockValue("Jane");
+        get(proto().middleName()).setMockValue("W.");
         get(proto().lastName()).setMockValue("Doe");
     }
 

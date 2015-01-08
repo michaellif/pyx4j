@@ -200,9 +200,9 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
         @Override
         public boolean isValid() {
             if (currentComp != null) {
-                return (currentComp.isValid() && super.isValid());
+                currentComp.isValid();
             }
-            return super.isValid();
+            return true;
         }
 
         @Override

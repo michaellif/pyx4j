@@ -12,8 +12,6 @@
  */
 package com.propertyvista.crm.client.ui.tools.common.selectors;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -22,21 +20,16 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.selector.IOptionsGrabber;
+import com.pyx4j.widgets.client.selector.SingleWordSuggestOptionsGrabber;
 
 import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class BuildingOptionsGrabber implements IOptionsGrabber<BuildingForSelectionDTO> {
-
-    private final SelectBuildingListService service;
-
-    private List<BuildingForSelectionDTO> filtered;
+public class BuildingOptionsGrabber extends SingleWordSuggestOptionsGrabber<BuildingForSelectionDTO> {
 
     public BuildingOptionsGrabber() {
-        service = //createCachingProxy(
-        GWT.<SelectBuildingListService> create(SelectBuildingListService.class);
-        filtered = new LinkedList<BuildingForSelectionDTO>();
+        super(GWT.<SelectBuildingListService> create(SelectBuildingListService.class));
     }
 
     @Override
@@ -53,28 +46,16 @@ public class BuildingOptionsGrabber implements IOptionsGrabber<BuildingForSelect
 
         EntityListCriteria<Building> criteria = EntityListCriteria.create(Building.class);
         criteria.setPageSize(request.getLimit());
-        service.getBuildingsForSelection(callbackOptionsGrabber, criteria);
+        ((SelectBuildingListService) service).getBuildingsForSelection(callbackOptionsGrabber, criteria);
 
     }
 
+    @Override
     protected int evaluate(BuildingForSelectionDTO item, String suggestion) {
         if (item.name().getValue().toLowerCase().contains(suggestion)) {
             return 1;
         } else {
             return 0;
-        }
-    }
-
-    private void filter(Vector<BuildingForSelectionDTO> result, String suggestion) {
-        filtered = new LinkedList<BuildingForSelectionDTO>();
-        if ("".equals(suggestion)) {
-            filtered.addAll(result);
-        } else {
-            for (BuildingForSelectionDTO item : result) {
-                if (evaluate(item, suggestion) > 0) {
-                    filtered.add(item);
-                }
-            }
         }
     }
 }
