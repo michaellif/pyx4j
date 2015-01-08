@@ -18,8 +18,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
@@ -27,6 +29,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.common.client.ui.MiscUtils;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.boxes.CustomerSelectionDialog;
@@ -139,26 +142,27 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
 
     private abstract class AddParticipantBox extends OkCancelDialog {
 
-        CRadioGroupEnum<AddParticipantSelection> selection = new CRadioGroupEnum<>(AddParticipantSelection.class, RadioGroup.Layout.HORISONTAL);
+        private final CRadioGroupEnum<AddParticipantSelection> selection = new CRadioGroupEnum<>(AddParticipantSelection.class, RadioGroup.Layout.HORISONTAL);
 
         public AddParticipantBox() {
             super(getAddItemDialogCaption());
+
+            selection.populate(AddParticipantSelection.New);
+
             setBody(createBody());
-            selection.setValue(AddParticipantSelection.New);
             setDialogPixelWidth(300);
         }
 
         protected Widget createBody() {
-            FlowPanel content = new FlowPanel();
-            content.setWidth("100%");
+            VerticalPanel content = new VerticalPanel();
+            content.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+            selection.asWidget().getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
-            Label label = new Label(getAddItemDialogSelectionText());
-            content.add(label);
-            label.getElement().getStyle().setProperty("padding", "20px 20px 0");
-
+            content.add(new HTML(getAddItemDialogSelectionText()));
             content.add(selection);
-            selection.asWidget().getElement().getStyle().setProperty("padding", "20px");
 
+            MiscUtils.setPanelSpacing(content, 8);
+            content.setWidth("100%");
             return content.asWidget();
         }
 

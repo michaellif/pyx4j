@@ -98,6 +98,13 @@ SET search_path = '_admin_';
         **/
 
 
+        -- cleanup for orpaned records in admin_pmc_vista_features
+        
+        DELETE FROM admin_pmc_vista_features
+        WHERE   id NOT IN (SELECT features FROM admin_pmc);
+        
+        SET CONSTRAINTS ALL IMMEDIATE;
+
 
         /**
         ***     ==========================================================================================================

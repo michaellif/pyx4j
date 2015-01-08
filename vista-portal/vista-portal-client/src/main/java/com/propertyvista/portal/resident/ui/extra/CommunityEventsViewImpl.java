@@ -72,7 +72,7 @@ public class CommunityEventsViewImpl extends FlowPanel implements CommunityEvent
                 add(descriptionHTML);
 
                 Anchor more = new Anchor("Read more>>");
-                more.setStyleName(ExtraGadgetsTheme.StyleName.CommunityEventReadMore.name());
+                more.setStyleName(ExtraGadgetsTheme.StyleName.ExtraAnchor.name());
                 more.addClickHandler(new ClickHandler() {
 
                     @Override

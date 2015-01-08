@@ -14,14 +14,38 @@ package com.propertyvista.common.client.ui;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class MiscUtils {
 
-    @SuppressWarnings("deprecation")
-    public static void setPanelSpacing(ComplexPanel panel, int spacing) {
+    public static void setPanelSpacing(VerticalPanel panel, int spacing) {
         for (int i = 0; i < panel.getWidgetCount(); ++i) {
-            DOM.getParent(panel.getWidget(i).getElement()).getStyle().setPadding(spacing, Unit.PX);
+            DOM.getParent(panel.getWidget(i).getElement()).getStyle().setPaddingTop(spacing, Unit.PX);
+        }
+        if (panel.getWidgetCount() > 0) {
+            DOM.getParent(panel.getWidget(panel.getWidgetCount() - 1).getElement()).getStyle().setPaddingBottom(spacing, Unit.PX);
+        }
+    }
+
+    public static void setPanelPaddingLeft(VerticalPanel panel, int spacing) {
+        for (int i = 0; i < panel.getWidgetCount(); ++i) {
+            DOM.getParent(panel.getWidget(i).getElement()).getStyle().setPaddingLeft(spacing, Unit.PX);
+        }
+    }
+
+    public static void setPanelPaddingRight(VerticalPanel panel, int spacing) {
+        for (int i = 0; i < panel.getWidgetCount(); ++i) {
+            DOM.getParent(panel.getWidget(i).getElement()).getStyle().setPaddingRight(spacing, Unit.PX);
+        }
+    }
+
+    public static void setPanelSpacing(HorizontalPanel panel, int spacing) {
+        for (int i = 0; i < panel.getWidgetCount(); ++i) {
+            DOM.getParent(panel.getWidget(i).getElement()).getStyle().setPaddingLeft(spacing, Unit.PX);
+        }
+        if (panel.getWidgetCount() > 0) {
+            DOM.getParent(panel.getWidget(panel.getWidgetCount() - 1).getElement()).getStyle().setPaddingRight(spacing, Unit.PX);
         }
     }
 }

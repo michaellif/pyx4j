@@ -16,12 +16,13 @@ import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 
 public class ExtraGadgetsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        CommunityEventCaption, CommunityEventTimeAndLocation, CommunityEventExtraDescription, CommunityEventDescription, CommunityEventReadMore,
+        CommunityEventCaption, CommunityEventTimeAndLocation, CommunityEventExtraDescription, CommunityEventDescription, ExtraAnchor,
 
         WeatherIcon, WeatherText, WeatherTemperature, WeatherType, ellipsis
 
@@ -50,7 +51,8 @@ public class ExtraGadgetsTheme extends Theme {
         style.addProperty("white-space", "nowrap");
         style.addProperty("overflow", "hidden");
         style.addProperty("text-align", "right");
-        style.addProperty("padding", "5px");
+        style.addProperty("padding-bottom", "8px");
+        style.addProperty("padding-top", "5px");
         addStyle(style);
 
         style = new Style(".", StyleName.CommunityEventDescription);
@@ -63,7 +65,8 @@ public class ExtraGadgetsTheme extends Theme {
         style.addProperty("overflow", "hidden");
         addStyle(style);
 
-        style = new Style(".", StyleName.CommunityEventReadMore);
+        style = new Style(".", StyleName.ExtraAnchor); // This style is also added to the QuickTipDevPreloader.java in constant
+        style.addProperty("color", ThemeColor.contrast2, 1);
         style.addProperty("display", "block");
         style.addProperty("text-align", "right");
         style.addProperty("font-size", "0.8em");

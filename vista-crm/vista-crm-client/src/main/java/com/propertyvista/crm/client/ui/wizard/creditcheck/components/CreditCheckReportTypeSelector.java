@@ -148,7 +148,7 @@ public class CreditCheckReportTypeSelector extends Composite implements IFocusWi
         typeSelectorPanel.add(panel);
         typeSelectorPanel.setCellWidth(panel, "50%");
 
-        MiscUtils.setPanelSpacing(typeSelectorPanel, 5);
+        MiscUtils.setPanelSpacing(typeSelectorPanel, 8);
         initWidget(typeSelectorPanel);
     }
 

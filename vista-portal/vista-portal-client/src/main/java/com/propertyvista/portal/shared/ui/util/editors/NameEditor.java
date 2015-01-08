@@ -12,23 +12,28 @@
  */
 package com.propertyvista.portal.shared.ui.util.editors;
 
+import java.text.ParseException;
+
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.Key;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.person.Name.Prefix;
 import com.propertyvista.portal.shared.ui.AccessoryEntityForm;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class NameEditor extends AccessoryEntityForm<Name> {
 
@@ -106,6 +111,18 @@ public class NameEditor extends AccessoryEntityForm<Name> {
             }
         });
 
+        // abbreviate middle name in case of Yardi:
+        if (VistaFeatures.instance().yardiIntegration()) {
+            @SuppressWarnings("unchecked")
+            CTextComponent<String, ?> mnComp = ((CTextComponent<String, ?>) get(proto().middleName()));
+            mnComp.setParser(new IParser<String>() {
+                @Override
+                public String parse(String string) throws ParseException {
+                    return (!string.isEmpty() ? string.substring(0, 1).toUpperCase() + '.' : string);
+                }
+            });
+        }
+
         return formPanel;
     }
 
@@ -138,6 +155,7 @@ public class NameEditor extends AccessoryEntityForm<Name> {
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
+
         if (isViewable()) {
             nameComp.populate(getValue());
         }

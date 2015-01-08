@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -12,6 +12,7 @@
  */
 package com.propertyvista.crm.client.ui.components.boxes;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -42,8 +43,9 @@ public abstract class ReasonBox extends OkCancelDialog {
         content.add(new HTML(i18n.tr("Please fill the reason") + ":"));
         content.add(reason);
 
-        MiscUtils.setPanelSpacing(content, 3);
-        reason.asWidget().setWidth("100%");
+        MiscUtils.setPanelSpacing(content, 8);
+        reason.asWidget().getElement().getStyle().setPaddingLeft(6, Unit.PX);
+        reason.asWidget().getElement().getStyle().setPaddingRight(8, Unit.PX);
         content.setWidth("100%");
         return content.asWidget();
     }

@@ -76,12 +76,12 @@ public class CardServiceSimulationReconciliationCreateDialog extends OkCancelDia
 
     private IsWidget createBody() {
         VerticalPanel body = new VerticalPanel();
-
         body.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+
         body.add(new HTML("Select Report interval"));
         body.add(form);
 
-        MiscUtils.setPanelSpacing(body, 4);
+        MiscUtils.setPanelSpacing(body, 8);
         body.setWidth("100%");
         return body;
     }

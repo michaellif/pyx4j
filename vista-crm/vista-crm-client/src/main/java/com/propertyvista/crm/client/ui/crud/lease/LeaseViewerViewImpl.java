@@ -812,7 +812,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             getOkButton().setTextLabel(i18n.tr("Send"));
 
             if (emailType.getOptions().size() == 1) {
-                emailType.setValue(emailType.getOptions().get(0), true);
+                emailType.setValue(emailType.getOptions().get(0), true, true);
                 emailType.setEditable(false);
             }
         }
@@ -825,11 +825,13 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             body.add(initEmailTypes(Arrays.asList(EmailTemplateType.TenantInvitation)));
 
             body.add(new HTML("&nbsp"));
-
             body.add(new HTML(i18n.tr("Recipient(s):")));
+
+            MiscUtils.setPanelPaddingLeft(body, 8);
+
             body.add(super.initBody(isMultiselectAllowed, data));
 
-            MiscUtils.setPanelSpacing(body, 4);
+            MiscUtils.setPanelSpacing(body, 8);
             body.setWidth("100%");
             return body;
         }
@@ -951,7 +953,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             setBody(createBody());
             setDialogPixelWidth(250);
 
-            endLeaseDate.setValue(getForm().getValue().currentTerm().termTo().getValue());
+            endLeaseDate.populate(getForm().getValue().currentTerm().termTo().getValue());
             endLeaseDate.asWidget().setWidth("9em");
         }
 
@@ -962,7 +964,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             body.add(new HTML(i18n.tr("Select new Lease End date:")));
             body.add(endLeaseDate);
 
-            MiscUtils.setPanelSpacing(body, 4);
+            MiscUtils.setPanelSpacing(body, 8);
             body.setWidth("100%");
             return body;
         }

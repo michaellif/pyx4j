@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.visor.notes;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -48,9 +47,7 @@ import com.pyx4j.site.client.backoffice.ui.visor.AbstractVisorPaneView;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Toolbar;
-import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -182,20 +179,17 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPaneView {
 
             @Override
             protected void removeItem(final CFolderItem<NotesAndAttachments> item) {
-                Dialog confirm = new OkCancelDialog(i18n.tr("Delete Note")) {
+                MessageDialog.confirm(i18n.tr("Delete Note"), i18n.tr("Are you sure you want to permanently delete this note?"), new Command() {
                     @Override
-                    public boolean onClickOk() {
+                    public void execute() {
                         getController().remove(item.getValue(), new DefaultAsyncCallback<Boolean>() {
                             @Override
                             public void onSuccess(Boolean result) {
                                 NotesAndAttachmentsFolder.super.removeItem(item);
                             }
                         });
-                        return true;
                     }
-                };
-                confirm.setBody(new HTML(i18n.tr("This Note will be permanently deleted!")));
-                confirm.show();
+                });
             }
 
             private class NoteEditor extends CForm<NotesAndAttachments> {
@@ -243,7 +237,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPaneView {
                         public void execute() {
                             setVisitedRecursive();
                             if (!isValid()) {
-                                MessageDialog.error(i18n.tr("Error"), i18n.tr("There has been an error. Please check your data and try again."));
+                                MessageDialog.error(i18n.tr("Edit Note"), i18n.tr("There has been an error. Please check your data and try again."));
                             } else {
                                 if (getValue().created().getValue() == null) {
                                     CrmUser user = EntityFactory.create(CrmUser.class);
@@ -272,14 +266,12 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPaneView {
                             if (getValue().getPrimaryKey() == null) {
                                 ((NotesAndAttachmentsFolder) getParent().getParent()).removeItem((CFolderItem<NotesAndAttachments>) getParent());
                             } else {
-                                MessageDialog.confirm(i18n.tr("Confirm"),
-                                        i18n.tr("Are you sure you want to cancel your changes?\n\nPress Yes to continue, or No to stay on the current page."),
-                                        new Command() {
-                                            @Override
-                                            public void execute() {
-                                                setViewableMode(true);
-                                            }
-                                        });
+                                MessageDialog.confirm(i18n.tr("Edit Note"), i18n.tr("Are you sure you want to cancel your changes?"), new Command() {
+                                    @Override
+                                    public void execute() {
+                                        setViewableMode(true);
+                                    }
+                                });
                             }
                         }
                     });
