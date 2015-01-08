@@ -119,4 +119,12 @@ public class NameEditor extends CForm<Name> {
             viewComp.populate(getValue());
         }
     }
+
+    @Override
+    public void generateMockData() {
+        get(proto().firstName()).setMockValue("Jane");
+        get(proto().middleName()).setMockValue("W.");
+        get(proto().lastName()).setMockValue("Doe");
+    }
+
 }
