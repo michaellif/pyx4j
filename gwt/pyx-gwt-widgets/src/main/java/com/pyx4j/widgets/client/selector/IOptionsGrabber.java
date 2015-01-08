@@ -23,6 +23,10 @@ import java.util.Collection;
 
 public interface IOptionsGrabber<E> {
 
+    public enum SelectType {
+        Single, Multy
+    }
+
     public interface Callback<E> {
         void onOptionsReady(Request request, Response<E> response);
     }
@@ -80,5 +84,7 @@ public interface IOptionsGrabber<E> {
     }
 
     void grabOptions(Request request, Callback<E> callback);
+
+    public SelectType getSelectType();
 
 }

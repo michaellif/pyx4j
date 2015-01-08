@@ -178,7 +178,8 @@ public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E>
                 super();
                 this.value = value;
                 SafeHtml formattedValue = optionFormatter.format(value);
-                label = new HTML((query.equals("") ? formattedValue : OptionQueryHighlighter.highlight(formattedValue, query)));
+                label = new HTML((query.equals("") ? formattedValue : OptionQueryHighlighter.highlight(formattedValue, query,
+                        SimplePickerPanel.this.optionsGrabber.getSelectType())));
                 label.setStyleName(WidgetsTheme.StyleName.SelectionPickerPanelItem.name());
                 label.addMouseOverHandler(new ItemMouseEventHandler());
                 label.addMouseOutHandler(new ItemMouseEventHandler());

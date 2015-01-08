@@ -28,10 +28,21 @@ import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
 import com.google.gwt.xml.client.impl.DOMParseException;
 
+import com.pyx4j.widgets.client.selector.IOptionsGrabber.SelectType;
+
 public class OptionQueryHighlighter {
 
-    public static SafeHtml highlight(SafeHtml html, String query) {
+    public static SafeHtml highlight(SafeHtml html, String query, SelectType type) {
 
+        if (type.equals(SelectType.Single)) {
+            return highlightSingleWordQuery(html, query);
+        } else {
+            return highlightMultyWordQuery(html, query);
+        }
+
+    }
+
+    private static SafeHtml highlightSingleWordQuery(SafeHtml html, String query) {
         Document parser;
         try {
             parser = XMLParser.parse(html.asString());
@@ -44,7 +55,10 @@ public class OptionQueryHighlighter {
         } catch (DOMParseException ex) {
             return new SafeHtmlBuilder().appendHtmlConstant(highlightQueryInString(html.asString(), query)).toSafeHtml();
         }
+    }
 
+    private static SafeHtml highlightMultyWordQuery(SafeHtml html, String query) {
+        return new SafeHtmlBuilder().appendHtmlConstant(highlightQueryInString(html.asString(), query)).toSafeHtml();
     }
 
     private static void recursiveHighlightQuery(Node node, String query) {

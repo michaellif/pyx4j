@@ -71,4 +71,9 @@ public class MultyWordSuggestOptionsGrabber<E> implements IOptionsGrabber<E> {
         callback.onOptionsReady(request, response);
     }
 
+    @Override
+    public SelectType getSelectType() {
+        return SelectType.Multy;
+    }
+
 }
