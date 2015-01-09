@@ -32,4 +32,6 @@ public abstract interface PolicyDTOBase extends Policy {
     IPrimitive<String> lowestNodeType();
 
     IList<PolicyNode> usedNodes();
+
+    IPrimitive<Boolean> organizationNodeUsed();
 }

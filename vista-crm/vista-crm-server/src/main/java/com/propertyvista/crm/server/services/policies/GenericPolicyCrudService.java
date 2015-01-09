@@ -51,6 +51,11 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
         EntityQueryCriteria<POLICY> criteria = new EntityQueryCriteria<>(boClass);
         for (Policy item : Persistence.service().query(criteria)) {
             dto.usedNodes().add(item.node());
+
+            // marks usage of organization node:
+            if (OrganizationPoliciesNode.class.equals(item.node().getInstanceValueClass())) {
+                dto.organizationNodeUsed().setValue(true);
+            }
         }
     }
 
@@ -60,8 +65,6 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
 
         setLowestNodeType(policyDTO);
         retrieveUsedNodes(policyDTO);
-
-        policyDTO.node().set(EntityFactory.create(OrganizationPoliciesNode.class));
 
         return policyDTO;
     }
