@@ -23,6 +23,7 @@ import java.io.Serializable;
 
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.criterion.RangeCriterion;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -69,6 +70,10 @@ public class FilterItem implements Comparable<FilterItem> {
         } else if (criterion instanceof PropertyCriterion) {
             Serializable value = ((PropertyCriterion) criterion).getValue();
             return columnDescriptor.getColumnTitle() + ": \"" + ((value == null) ? i18n.tr("All") : value) + "\"";
+        } else if (criterion instanceof RangeCriterion) {
+            Serializable fromValue = ((RangeCriterion) criterion).getFromValue();
+            Serializable toValue = ((RangeCriterion) criterion).getToValue();
+            return columnDescriptor.getColumnTitle() + ": \"" + ((fromValue == null && toValue == null) ? i18n.tr("All") : (fromValue + "-" + toValue)) + "\"";
         } else {
             return columnDescriptor.getColumnTitle();
         }

@@ -14,26 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 22, 2014
+ * Created on Jan 6, 2015
  * @author michaellif
  * @version $Id: code-templates.xml 12647 2013-05-01 18:01:19Z vlads $
  */
 package com.pyx4j.forms.client.ui.datatable.filter;
 
-import com.google.gwt.user.client.ui.IsWidget;
+public class CriterionInitializationException extends Exception {
 
-import com.pyx4j.entity.core.criterion.Criterion;
+    private static final long serialVersionUID = 1L;
 
-public interface IFilterEditor extends IsWidget {
-
-    Criterion getCriterion() throws CriterionInitializationException;
-
-    void setCriterion(Criterion filterCriterion);
-
-    void onShown();
-
-    void onHidden();
-
-    void clear();
-
+    public CriterionInitializationException(String message) {
+        super(message);
+    }
 }

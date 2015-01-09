@@ -43,9 +43,13 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
     }
 
     @Override
-    protected void onEditingComplete() {
-        getItem().setCriterion(editor.getCriterion());
-        super.onEditingComplete();
+    protected boolean onEditingComplete() {
+        try {
+            getItem().setCriterion(editor.getCriterion());
+            return super.onEditingComplete();
+        } catch (CriterionInitializationException e) {
+            return false;
+        }
     }
 
     private IFilterEditor createFilterEditor(IObject<?> member) {
