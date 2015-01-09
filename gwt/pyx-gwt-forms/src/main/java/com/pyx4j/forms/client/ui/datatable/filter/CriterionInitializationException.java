@@ -24,7 +24,7 @@ public class CriterionInitializationException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
-    public CriterionInitializationException(String message) {
-        super(message);
+    public CriterionInitializationException() {
+        super();
     }
 }

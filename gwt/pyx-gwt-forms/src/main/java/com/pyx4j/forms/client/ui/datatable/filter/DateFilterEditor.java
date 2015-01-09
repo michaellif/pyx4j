@@ -20,35 +20,112 @@
  */
 package com.pyx4j.forms.client.ui.datatable.filter;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.criterion.RangeCriterion;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.DatePicker;
+import com.pyx4j.widgets.client.Label;
 
 public class DateFilterEditor extends FilterEditorBase implements IFilterEditor {
 
+    private static final I18n i18n = I18n.get(DateFilterEditor.class);
+
+    private final DatePicker fromBox;
+
+    private final DatePicker toBox;
+
+    private final ValidationLabel fromBoxValidationLabel;
+
+    private final ValidationLabel toBoxValidationLabel;
+
     public DateFilterEditor(IObject<?> member) {
         super(member);
-        initWidget(new FlowPanel());
+        FlowPanel contentPanel = new FlowPanel();
+        initWidget(contentPanel);
+
+        contentPanel.add(new Label(i18n.tr("From:")));
+
+        fromBox = new DatePicker();
+        contentPanel.add(fromBox);
+        fromBoxValidationLabel = new ValidationLabel(fromBox);
+        fromBoxValidationLabel.getElement().getStyle().setColor("red");
+        contentPanel.add(fromBoxValidationLabel);
+
+        fromBox.addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
+                fromBoxValidationLabel.setMessage(fromBox.isParsedOk() ? null : fromBox.getParseExceptionMessage());
+            }
+        });
+
+        contentPanel.add(new Label(i18n.tr("To:")));
+
+        toBox = new DatePicker();
+        contentPanel.add(toBox);
+        toBoxValidationLabel = new ValidationLabel(toBox);
+        toBoxValidationLabel.getElement().getStyle().setColor("red");
+        contentPanel.add(toBoxValidationLabel);
+
+        toBox.addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
+                toBoxValidationLabel.setMessage(toBox.isParsedOk() ? null : toBox.getParseExceptionMessage());
+            }
+        });
     }
 
     @Override
-    public PropertyCriterion getCriterion() {
-        // TODO Auto-generated method stub
-        return null;
+    public RangeCriterion getCriterion() throws CriterionInitializationException {
+        if (fromBox.isParsedOk() && fromBox.getValue() == null && toBox.isParsedOk() && toBox.getValue() == null) {
+            return null;
+        } else if (!fromBox.isParsedOk() || !toBox.isParsedOk()) {
+            throw new CriterionInitializationException();
+        } else {
+            return new RangeCriterion(getMember(), fromBox.getValue(), toBox.getValue());
+        }
     }
 
     @Override
-    public void setCriterion(Criterion filterCriterion) {
-        // TODO Auto-generated method stub
+    public void setCriterion(Criterion criterion) {
+        if (criterion == null) {
+            fromBox.setValue(null);
+            toBox.setValue(null);
+        } else {
+            if (!(criterion instanceof RangeCriterion)) {
+                throw new Error("Filter criterion isn't supported by editor");
+            }
 
+            RangeCriterion rangeCriterion = (RangeCriterion) criterion;
+
+            if (!getMember().getPath().toString().equals(rangeCriterion.getPropertyPath())) {
+                throw new Error("Filter editor member doesn't match filter criterion path");
+            }
+
+            fromBox.setValue((LogicalDate) rangeCriterion.getFromValue());
+            toBox.setValue((LogicalDate) rangeCriterion.getToValue());
+        }
+    }
+
+    @Override
+    public void onShown() {
+        super.onShown();
+        fromBox.setFocus(true);
     }
 
     @Override
     public void clear() {
-        // TODO Auto-generated method stub
-
+        fromBox.setValue(null);
+        toBox.setValue(null);
+        fromBoxValidationLabel.setMessage(null);
+        toBoxValidationLabel.setMessage(null);
     }
 
 }

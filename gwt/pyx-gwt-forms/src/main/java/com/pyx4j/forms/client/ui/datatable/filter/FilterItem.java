@@ -66,14 +66,14 @@ public class FilterItem implements Comparable<FilterItem> {
     @Override
     public String toString() {
         if (criterion == null) {
-            return columnDescriptor.getColumnTitle() + ": \"" + i18n.tr("All") + "\"";
+            return columnDescriptor.getColumnTitle() + ": '" + i18n.tr("All") + "'";
         } else if (criterion instanceof PropertyCriterion) {
             Serializable value = ((PropertyCriterion) criterion).getValue();
-            return columnDescriptor.getColumnTitle() + ": \"" + ((value == null) ? i18n.tr("All") : value) + "\"";
+            return columnDescriptor.getColumnTitle() + ": '" + ((value == null) ? i18n.tr("All") : value) + "'";
         } else if (criterion instanceof RangeCriterion) {
             Serializable fromValue = ((RangeCriterion) criterion).getFromValue();
             Serializable toValue = ((RangeCriterion) criterion).getToValue();
-            return columnDescriptor.getColumnTitle() + ": \"" + ((fromValue == null && toValue == null) ? i18n.tr("All") : (fromValue + "-" + toValue)) + "\"";
+            return columnDescriptor.getColumnTitle() + ": '" + ((fromValue == null && toValue == null) ? i18n.tr("All") : (fromValue + "'-'" + toValue)) + "'";
         } else {
             return columnDescriptor.getColumnTitle();
         }
