@@ -40,6 +40,8 @@ public class UnitLister extends SiteDataTablePanel<AptUnitDTO> {
         setAddNewActionCaption(i18n.tr("New Unit"));
 
         setColumnDescriptors( //
+                new ColumnDescriptor.Builder(proto().building()).build(), //
+
                 new ColumnDescriptor.Builder(proto().buildingCode()).build(), //
 
                 new ColumnDescriptor.Builder(proto().floorplan().name()).width("200px").columnTitle(i18n.tr("Floorplan Name")).build(), //

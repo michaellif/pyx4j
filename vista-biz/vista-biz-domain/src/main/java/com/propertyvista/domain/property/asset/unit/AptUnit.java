@@ -54,7 +54,7 @@ public interface AptUnit extends BuildingElement, PolicyNode, HasNotesAndAttachm
     @MemberColumn(notNull = true)
     @NotNull
     @ReadOnly
-    @Detached
+    @Detached(level = AttachLevel.ToStringMembers)
     @Caption(name = "Building")
     @XmlTransient
     @JoinColumn
