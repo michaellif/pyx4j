@@ -112,18 +112,18 @@ public class OptionQueryHighlighter {
         List<String> nodeTokens = Arrays.asList(node.getNodeValue().split(WHITESPACE_STRING));
 
         parent.removeChild(node);
-
+        Node newNode = document.createElement("div");
         for (String nodeToken : nodeTokens) {
             boolean isHighlighted = false;
             for (String queryToken : queryTokens) {
                 if (nodeToken.toLowerCase().startsWith(queryToken.toLowerCase())) {
                     Node tokenNode = document.createElement("b");
                     tokenNode.appendChild(document.createTextNode(nodeToken.substring(0, queryToken.length())));
-                    parent.appendChild(tokenNode);
+                    newNode.appendChild(tokenNode);
                     if (nodeTokens.indexOf(nodeToken) != nodeTokens.size() - 1) {
-                        parent.appendChild(document.createTextNode(nodeToken.substring(queryToken.length(), nodeToken.length()) + " "));
+                        newNode.appendChild(document.createTextNode(nodeToken.substring(queryToken.length(), nodeToken.length()) + " "));
                     } else {
-                        parent.appendChild(document.createTextNode(nodeToken.substring(queryToken.length(), nodeToken.length())));
+                        newNode.appendChild(document.createTextNode(nodeToken.substring(queryToken.length(), nodeToken.length())));
                     }
 
                     isHighlighted = true;
@@ -132,12 +132,13 @@ public class OptionQueryHighlighter {
             }
             if (!isHighlighted) {
                 if (nodeTokens.indexOf(nodeToken) != nodeTokens.size() - 1) {
-                    parent.appendChild(document.createTextNode(nodeToken + " "));
+                    newNode.appendChild(document.createTextNode(nodeToken + " "));
                 } else {
-                    parent.appendChild(document.createTextNode(nodeToken));
+                    newNode.appendChild(document.createTextNode(nodeToken));
                 }
             }
         }
+        parent.appendChild(newNode);
     }
 
     private static String highlightQueryInString(String inputText, String query) {
