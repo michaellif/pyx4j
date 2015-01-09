@@ -47,25 +47,24 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     // This list MUST be ordered in descending order by the NodeType hierarchy
-    private static final List<NodeType> AVAILABLE_NODE_TYPES = Arrays.asList( //
+    private static final List<NodeType<?>> AVAILABLE_NODE_TYPES = Arrays.<NodeType<?>> asList( //
             new NodeType.Builder(OrganizationPoliciesNode.class).hasOnlyOneInstance().build(), //
             new NodeType.Builder(ProvincePolicyNode.class).build(), //
             new NodeType.Builder(Complex.class).build(), //
             new NodeType.Builder(Building.class).build() //
             );
 
-    @SuppressWarnings("rawtypes")
-    private final CComboBox<NodeType> selectPolicyScopeBox = new CComboBox<NodeType>(true);
+    private final CComboBox<NodeType<?>> selectPolicyScopeBox = new CComboBox<NodeType<?>>(true);
 
     public PolicyDTOTabPanelBasedForm(Class<POLICY_DTO> policyDTOClass, final IPrimeFormView<POLICY_DTO, ?> view) {
         super(policyDTOClass, view);
 
+        selectPolicyScopeBox.setMandatory(true);
         selectPolicyScopeBox.setViewable(isViewable());
 
         selectTab(addTab(createScopeTab(), i18n.tr("Scope")));
     }
 
-    @SuppressWarnings("rawtypes")
     private IsWidget createScopeTab() {
         FormPanel formPanel = new FormPanel(this);
 
@@ -73,13 +72,12 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
         formPanel.append(Location.Dual, proto().node(), new PolicyNodeEditor());
 
         // add value change handler that resets the node when node type is changed
-        selectPolicyScopeBox.addValueChangeHandler(new ValueChangeHandler<NodeType>() {
+        selectPolicyScopeBox.addValueChangeHandler(new ValueChangeHandler<NodeType<?>>() {
             @Override
-            public void onValueChange(ValueChangeEvent<NodeType> event) {
+            public void onValueChange(ValueChangeEvent<NodeType<?>> event) {
                 get(proto().node()).reset();
 
                 if (event.getValue() != null) {
-                    @SuppressWarnings("unchecked")
                     Class<? extends PolicyNode> selectedNodeType = event.getValue().getType();
                     if (!selectedNodeType.equals(OrganizationPoliciesNode.class)) {
                         get(proto().node()).populate(EntityFactory.create(selectedNodeType));
@@ -101,12 +99,11 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
         }
     }
 
-    @SuppressWarnings("unchecked")
     private void populateScopeSelector() {
         NodeType<?> policyScope = null;
-        Class<? extends PolicyNode> populatedType = OrganizationPoliciesNode.class;
+        Class<?> populatedType = null;
         if (getValue() != null && !getValue().node().isNull()) {
-            populatedType = (Class<? extends PolicyNode>) getValue().node().getInstanceValueClass();
+            populatedType = getValue().node().getInstanceValueClass();
         }
         for (NodeType<?> nodeType : AVAILABLE_NODE_TYPES) {
             if (nodeType.getType().equals(populatedType)) {
@@ -114,37 +111,53 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
                 break;
             }
         }
-        if (policyScope == null) {
-            throw new Error("got unsupported or unknown policy scope:" + getValue().getInstanceValueClass().getName());
-        }
-
+        selectPolicyScopeBox.reset();
         selectPolicyScopeBox.populate(policyScope);
-        selectPolicyScopeBox.setOptions(assignableTypes(AVAILABLE_NODE_TYPES));
-        selectPolicyScopeBox.setEditable(isNewEntity() && selectPolicyScopeBox.getOptions().size() > 1);
+        selectPolicyScopeBox.setOptions(assignableTypes());
+        selectPolicyScopeBox.setEditable(isNewEntity());
     }
 
     private boolean isNewEntity() {
         return getValue().getPrimaryKey() == null;
     }
 
-    @SuppressWarnings("rawtypes")
-    private Collection<NodeType> assignableTypes(List<NodeType> availableNodeTypes) {
-        List<NodeType> assignableTypes = null;
+    private Collection<NodeType<?>> assignableTypes() {
+        List<NodeType<?>> assignableTypes = null;
 
         if (getValue().lowestNodeType().isNull()) {
-            assignableTypes = availableNodeTypes;
+            assignableTypes = AVAILABLE_NODE_TYPES;
         } else {
-            String lowestNodeType = getValue().lowestNodeType().getValue();
-            assignableTypes = new ArrayList<NodeType>();
-            for (NodeType<?> t : availableNodeTypes) {
+            assignableTypes = new ArrayList<NodeType<?>>();
+            for (NodeType<?> t : AVAILABLE_NODE_TYPES) {
                 assignableTypes.add(t);
-                if (t.getType().getName().equals(lowestNodeType)) {
+                if (t.getType().getName().equals(getValue().lowestNodeType().getValue())) {
                     break;
                 }
             }
         }
 
+        if (isNewEntity() && getValue().organizationNodeUsed().getValue(false)) {
+            // remove Organization node type if already used:
+            assignableTypes.remove(AVAILABLE_NODE_TYPES.get(0));
+        }
+
         return assignableTypes;
+    }
+
+    @Override
+    public boolean isValid() {
+        if (selectPolicyScopeBox != null) {
+            return (selectPolicyScopeBox.isValid() && super.isValid());
+        }
+        return super.isValid();
+    }
+
+    @Override
+    public void setVisited(boolean visited) {
+        if (selectPolicyScopeBox != null) {
+            selectPolicyScopeBox.setVisited(visited);
+        }
+        super.setVisited(visited);
     }
 
     /**
