@@ -76,15 +76,15 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
         selectPolicyScopeBox.addValueChangeHandler(new ValueChangeHandler<NodeType>() {
             @Override
             public void onValueChange(ValueChangeEvent<NodeType> event) {
+                get(proto().node()).reset();
+
                 if (event.getValue() != null) {
                     @SuppressWarnings("unchecked")
                     Class<? extends PolicyNode> selectedNodeType = event.getValue().getType();
-                    get(proto().node()).reset();
-                    get(proto().node()).populate(EntityFactory.create(selectedNodeType));
-                    get(proto().node()).setVisible(!selectedNodeType.equals(OrganizationPoliciesNode.class));
-                } else {
-                    get(proto().node()).reset();
-                    get(proto().node()).setVisible(false);
+                    if (!selectedNodeType.equals(OrganizationPoliciesNode.class)) {
+                        get(proto().node()).populate(EntityFactory.create(selectedNodeType));
+                        get(proto().node()).setVisible(true);
+                    }
                 }
             }
         });
