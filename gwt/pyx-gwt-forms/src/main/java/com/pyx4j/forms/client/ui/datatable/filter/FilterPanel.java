@@ -87,6 +87,9 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
                                 items.add(item);
                             }
                         }
+                        if (items.size() > 0) {
+                            items.get(items.size() - 1).setEditorShownOnAttach(true);
+                        }
                         FilterPanel.this.setValue(items);
                         return true;
                     }
@@ -163,6 +166,12 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
             }
         }
         return filters;
+    }
+
+    @Override
+    public void setSelection(FilterItem item) {
+        item.setEditorShownOnAttach(true);
+        super.setSelection(item);
     }
 
 }

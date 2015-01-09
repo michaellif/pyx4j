@@ -144,7 +144,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
     @Override
     public void resetQuery() {
-        listBox.showValue(value);
+        listBox.clearQueryBox();
     }
 
     @Override

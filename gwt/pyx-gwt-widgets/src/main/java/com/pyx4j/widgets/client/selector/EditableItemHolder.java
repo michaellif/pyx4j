@@ -105,4 +105,6 @@ public abstract class EditableItemHolder<E> extends ItemHolder<E> {
         parent.getItemEditorPopup().hide();
     }
 
+    public abstract boolean isEditorShownOnAttach();
+
 }

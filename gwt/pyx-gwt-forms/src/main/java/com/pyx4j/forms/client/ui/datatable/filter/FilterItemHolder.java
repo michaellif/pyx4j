@@ -85,4 +85,8 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
         editor.onHidden();
     };
 
+    @Override
+    public boolean isEditorShownOnAttach() {
+        return getItem().isEditorShownOnAttach();
+    }
 }

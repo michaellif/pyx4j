@@ -128,10 +128,19 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
                     ItemHolder<E> itemHolder = itemHolderFactory.createItemHolder(item, this);
                     itemHolder.setSelectorListBoxValuePanel(this);
                     this.itemsPanel.insert(itemHolder, itemsPanel.getWidgetCount() - 1);
+                    if (itemHolder instanceof EditableItemHolder) {
+                        if (((EditableItemHolder<E>) itemHolder).isEditorShownOnAttach()) {
+                            ((EditableItemHolder<E>) itemHolder).showEditor();
+                        }
+                    }
                 }
             }
         }
 
+        clearQueryBox();
+    }
+
+    public void clearQueryBox() {
         queryBox.setValue("");
     }
 

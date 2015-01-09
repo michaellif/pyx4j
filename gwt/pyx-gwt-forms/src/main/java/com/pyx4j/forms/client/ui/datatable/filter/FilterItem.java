@@ -37,8 +37,15 @@ public class FilterItem implements Comparable<FilterItem> {
 
     private final boolean removable;
 
+    private boolean editorShownOnAttach;
+
     public FilterItem(ColumnDescriptor columnDescriptor) {
+        this(columnDescriptor, false);
+    }
+
+    public FilterItem(ColumnDescriptor columnDescriptor, boolean editorShownOnAttach) {
         this.columnDescriptor = columnDescriptor;
+        this.editorShownOnAttach = editorShownOnAttach;
         this.removable = !columnDescriptor.isFilterAlwaysShown();
     }
 
@@ -95,4 +102,11 @@ public class FilterItem implements Comparable<FilterItem> {
         return 31 + ((columnDescriptor == null) ? 0 : columnDescriptor.hashCode());
     }
 
+    public boolean isEditorShownOnAttach() {
+        return editorShownOnAttach;
+    }
+
+    public void setEditorShownOnAttach(boolean editorShownOnAttach) {
+        this.editorShownOnAttach = editorShownOnAttach;
+    }
 }
