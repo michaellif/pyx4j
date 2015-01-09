@@ -33,6 +33,7 @@ import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.criterion.RangeCriterion;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
@@ -127,8 +128,13 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
             }
         }
         for (Criterion criterion : filters) {
+            String propertyPath = null;
             if (criterion instanceof PropertyCriterion) {
-                String propertyPath = ((PropertyCriterion) criterion).getPropertyPath();
+                propertyPath = ((PropertyCriterion) criterion).getPropertyPath();
+            } else if (criterion instanceof RangeCriterion) {
+                propertyPath = ((RangeCriterion) criterion).getPropertyPath();
+            }
+            if (propertyPath != null) {
                 for (ColumnDescriptor columnDescriptor : columnDescriptors) {
                     if (propertyPath.equals(columnDescriptor.getColumnPath().toString())) {
                         FilterItem item = new FilterItem(columnDescriptor);

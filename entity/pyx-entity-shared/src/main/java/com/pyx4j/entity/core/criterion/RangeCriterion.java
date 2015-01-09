@@ -40,8 +40,8 @@ public class RangeCriterion implements Criterion {
 
     public RangeCriterion(IObject<?> member, Serializable fromValue, Serializable toValue) {
         filters = new Vector<>();
-        filters.add(PropertyCriterion.le(member, fromValue));
-        filters.add(PropertyCriterion.ge(member, toValue));
+        filters.add(PropertyCriterion.ge(member, fromValue));
+        filters.add(PropertyCriterion.le(member, toValue));
     }
 
     public Vector<? extends Criterion> getFilters() {
