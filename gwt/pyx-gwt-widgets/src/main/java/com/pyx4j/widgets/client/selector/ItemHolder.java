@@ -75,6 +75,7 @@ public class ItemHolder<E> extends Composite {
 
     protected void setLabel(String text) {
         label.setText(text);
+        label.setTitle(text);
     }
 
     public void setSelectorListBoxValuePanel(SelectorListBoxValuePanel<E> parent) {

@@ -101,8 +101,7 @@ public class MultiSelectFilterEditor extends FilterEditorBase implements IFilter
 
             PropertyCriterion propertyCriterion = (PropertyCriterion) criterion;
 
-            if (propertyCriterion.getRestriction() != PropertyCriterion.Restriction.IN
-                    || propertyCriterion.getRestriction() != PropertyCriterion.Restriction.EQUAL) {
+            if (!(propertyCriterion.getRestriction() == PropertyCriterion.Restriction.IN || propertyCriterion.getRestriction() == PropertyCriterion.Restriction.EQUAL)) {
                 throw new Error("Filter criterion isn't supported by editor");
             }
 
