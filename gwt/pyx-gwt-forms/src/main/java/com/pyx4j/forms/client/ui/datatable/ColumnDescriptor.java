@@ -65,12 +65,11 @@ public class ColumnDescriptor {
 
     public boolean isSearchable() {
         Class<?> valueClass = builder.member.getValueClass();
-        if (valueClass.isEnum() || valueClass.equals(Boolean.class)) {
+        if (builder.member.getMeta().isEntity()) {
+            return builder.searchable;
+        } else if (valueClass.isEnum() || valueClass.equals(Boolean.class)) {
             return builder.searchable;
         } else if (valueClass.equals(String.class)) {
-            return builder.searchable;
-        } else if ((builder.member.getMeta().getObjectClassType() == ObjectClassType.EntityList)
-                || (builder.member.getMeta().getObjectClassType() == ObjectClassType.EntitySet)) {
             return builder.searchable;
         } else if (valueClass.equals(Date.class) || valueClass.equals(java.sql.Date.class) || valueClass.equals(LogicalDate.class)) {
             return builder.searchable;
