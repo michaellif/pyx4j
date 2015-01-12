@@ -174,4 +174,10 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
         super.setSelection(item);
     }
 
+    @Override
+    public void removeItem(FilterItem item) {
+        super.removeItem(item);
+        item.setCriterion(null);
+    }
+
 }
