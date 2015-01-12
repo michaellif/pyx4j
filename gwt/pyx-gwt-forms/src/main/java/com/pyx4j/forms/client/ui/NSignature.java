@@ -155,7 +155,7 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
                     break;
                 case FullName:
                 case Initials:
-                    signature.agree().setValue(!getEditor().textBox.getValue().isEmpty());
+                    signature.agree().setValue(getEditor().textBox.getValue() != null && !getEditor().textBox.getValue().isEmpty());
                     break;
                 }
             }
