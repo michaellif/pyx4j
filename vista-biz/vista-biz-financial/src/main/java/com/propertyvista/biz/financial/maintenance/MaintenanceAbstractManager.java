@@ -42,10 +42,10 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequest.ContactPhoneType;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
-import com.propertyvista.domain.maintenance.MaintenanceRequestWorkOrder;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatusRecord;
+import com.propertyvista.domain.maintenance.MaintenanceRequestWorkOrder;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -167,6 +167,8 @@ public abstract class MaintenanceAbstractManager {
                 // save email messageID to identify the schedule object in NoticeOfEntryDeliveryCallback
                 schedule.noticeOfEntry().messageId().setValue(email.getMailMessageObjectId());
             }
+        } else {
+            email = ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestUpdated(request);
         }
         ServerSideFactory.create(CommunicationMessageFacade.class).associationChange2Message(request, requestReporter, extractMailBody(email));
 

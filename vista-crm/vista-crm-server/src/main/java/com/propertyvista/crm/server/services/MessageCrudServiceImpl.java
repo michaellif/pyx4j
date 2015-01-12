@@ -27,7 +27,6 @@ import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
@@ -123,9 +122,8 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             ViewScope critValue = (ViewScope) ownerCiteria.getValue();
             toCriteria.getFilters().remove(ownerCiteria);
             if (ViewScope.Dispatched.equals(critValue)) {
-                boCriteria.eq(boCriteria.proto().thread().status(), ThreadStatus.Open);
-                boCriteria.eq(boCriteria.proto().thread().owner(),
-                        ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned));
+                boCriteria.eq(boCriteria.proto().thread().content().$().recipients().$().recipient(), ServerSideFactory
+                        .create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned));
             }
         }
 
@@ -313,21 +311,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
                 message.text().setValue(notification + message.text().getValue(""));
             }
             Message m = communicationFacade.saveMessage(message, threadStatus, currentUser, updateOwner);
-            EntityQueryCriteria<DeliveryHandle> dhCriteria = EntityQueryCriteria.create(DeliveryHandle.class);
-            dhCriteria.eq(dhCriteria.proto().recipient(), communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned));
-            dhCriteria.eq(dhCriteria.proto().message().thread(), m.thread());
-            dhCriteria.add(new OrCriterion(PropertyCriterion.isNull(dhCriteria.proto().message().isSystem()), PropertyCriterion.eq(dhCriteria.proto().message()
-                    .isSystem(), false)));
-            List<DeliveryHandle> dhs = Persistence.service().query(dhCriteria, AttachLevel.Attached);
-            if (message.thread().owner() != null && !message.thread().owner().isEmpty() && dhs != null && dhs.size() > 0) {
-                for (DeliveryHandle dh : dhs) {
-                    dh.recipient().set(message.thread().owner());
-                    dh.isRead().setValue(false);
-                    dh.star().setValue(false);
-                    Persistence.service().persist(dh);
-                }
-                Persistence.service().commit();
-            }
+
             retrieve(callback, m.getPrimaryKey(), RetrieveTarget.View);
         } else {
             EntityQueryCriteria<DeliveryHandle> dhCriteria = EntityQueryCriteria.create(DeliveryHandle.class);
