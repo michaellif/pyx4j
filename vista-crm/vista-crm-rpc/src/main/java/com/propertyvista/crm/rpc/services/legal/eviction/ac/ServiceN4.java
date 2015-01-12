@@ -7,19 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 31, 2014
+ * Created on Jan 9, 2015
  * @author stanp
  */
-package com.propertyvista.crm.client.ui.crud.lease.eviction.n4;
+package com.propertyvista.crm.rpc.services.legal.eviction.ac;
 
-import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
+import com.pyx4j.security.annotations.ActionId;
 
-import com.propertyvista.dto.N4BatchDTO;
+public class ServiceN4 implements ActionId {
 
-public interface N4BatchViewerView extends IPrimeViewerView<N4BatchDTO> {
-
-    interface Presenter extends IPrimeViewerView.IPrimeViewerPresenter {
-        void serviceBatch();
-    }
+    private static final long serialVersionUID = 1L;
 
 }

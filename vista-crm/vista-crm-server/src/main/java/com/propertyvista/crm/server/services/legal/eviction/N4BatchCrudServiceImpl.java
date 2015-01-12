@@ -101,6 +101,11 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
     }
 
     @Override
+    public void serviceBatch(AsyncCallback<Boolean> callback, N4Batch batchId) {
+
+    }
+
+    @Override
     protected void enhanceRetrieved(N4Batch bo, N4BatchDTO to, RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(bo, to, retrieveTarget);
 

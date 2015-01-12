@@ -15,10 +15,17 @@ package com.propertyvista.crm.client.ui.crud.policies.n4;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.forms.client.events.OptionsChangeEvent;
+import com.pyx4j.forms.client.events.OptionsChangeHandler;
+import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPhoneField;
@@ -37,11 +44,15 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.YardiChargeCode;
 import com.propertyvista.domain.policy.dto.N4PolicyDTO;
 import com.propertyvista.domain.policy.dto.N4PolicyDTOARCodeHolderDTO;
+import com.propertyvista.domain.policy.framework.PolicyNode;
+import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
     public static final I18n i18n = I18n.get(N4PolicyForm.class);
+
+    private final EvictionStepSelector stepSelector = new EvictionStepSelector();
 
     private ARCodeFolder arCodeFolder;
 
@@ -53,6 +64,23 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         addTab(getArCodesTab(), i18n.tr("AR Codes"));
         addTab(getDeliveryTab(), i18n.tr("Delivery"));
         addTab(getAutoCancellationTab(), i18n.tr("Auto Cancellation"));
+
+        get(proto().node()).addValueChangeHandler(new ValueChangeHandler<PolicyNode>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<PolicyNode> event) {
+                stepSelector.setPolicyNode(event.getValue(), true);
+            }
+        });
+    }
+
+    @Override
+    protected void onValuePropagation(N4PolicyDTO value, boolean fireEvent, boolean populate) {
+        if (value != null) {
+            stepSelector.setPolicyNode(value.node(), false);
+        }
+
+        super.onValuePropagation(value, fireEvent, populate);
     }
 
     public void setARCodeOptions(List<ARCode> arCodeOptions) {
@@ -61,7 +89,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
     private IsWidget getEvictionFlowTab() {
         FormPanel formPanel = new FormPanel(this);
-        formPanel.append(Location.Left, proto().evictionStep()).decorate();
+        formPanel.append(Location.Left, proto().evictionStep(), stepSelector).decorate();
         return formPanel;
     }
 
@@ -207,6 +235,36 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
                             i18n.tr("Includes the following Yardi charge codes: {0}", yardiChargeCodesLabel(getValue().arCode().yardiChargeCodes())));
                 } else {
                     get(proto().arCode()).setNote(null);
+                }
+            }
+        }
+    }
+
+    static class EvictionStepSelector extends CEntityComboBox<EvictionFlowStep> {
+
+        private PolicyNode node;
+
+        public EvictionStepSelector() {
+            super(EvictionFlowStep.class);
+
+            addOptionsChangeHandler(new OptionsChangeHandler<List<EvictionFlowStep>>() {
+
+                @Override
+                public void onOptionsChange(OptionsChangeEvent<List<EvictionFlowStep>> event) {
+                    if (event.getOptions() == null || event.getOptions().isEmpty()) {
+                        throw new UserRuntimeException(i18n.tr("Eviction Steps or Eviction Flow Policy not found for " + node.getStringView()));
+                    }
+                }
+            });
+        }
+
+        public void setPolicyNode(PolicyNode node, boolean refresh) {
+            this.node = node;
+            if (node != null) {
+                resetCriteria();
+                addCriterion(PropertyCriterion.eq(proto().policy().node(), node));
+                if (refresh) {
+                    refreshOptions();
                 }
             }
         }
