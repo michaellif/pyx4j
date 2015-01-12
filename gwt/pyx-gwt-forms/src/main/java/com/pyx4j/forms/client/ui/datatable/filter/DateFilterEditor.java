@@ -32,7 +32,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.DatePicker;
 import com.pyx4j.widgets.client.Label;
 
-public class DateFilterEditor extends FilterEditorBase implements IFilterEditor {
+public class DateFilterEditor extends FilterEditorBase {
 
     private static final I18n i18n = I18n.get(DateFilterEditor.class);
 

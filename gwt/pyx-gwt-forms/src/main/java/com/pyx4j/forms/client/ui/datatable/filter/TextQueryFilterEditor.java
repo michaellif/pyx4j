@@ -25,7 +25,7 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.widgets.client.StringBox;
 
-public class TextQueryFilterEditor extends FilterEditorBase implements IFilterEditor {
+public class TextQueryFilterEditor extends FilterEditorBase {
 
     private final StringBox queryBox;
 

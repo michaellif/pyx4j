@@ -38,7 +38,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.CheckGroup;
 import com.pyx4j.widgets.client.OptionGroup.Layout;
 
-public class MultiSelectFilterEditor extends FilterEditorBase implements IFilterEditor {
+public class MultiSelectFilterEditor extends FilterEditorBase {
 
     private static final I18n i18n = I18n.get(MultiSelectFilterEditor.class);
 

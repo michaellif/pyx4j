@@ -43,7 +43,7 @@ import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.StringBox;
 import com.pyx4j.widgets.client.TextBox;
 
-public class NumberFilterEditor extends FilterEditorBase implements IFilterEditor {
+public class NumberFilterEditor extends FilterEditorBase {
 
     @com.pyx4j.i18n.annotations.I18n
     public enum NumberType {
