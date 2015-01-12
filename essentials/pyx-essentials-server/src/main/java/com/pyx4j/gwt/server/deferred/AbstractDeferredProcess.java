@@ -57,7 +57,14 @@ public abstract class AbstractDeferredProcess implements IDeferredProcess {
 
     @Override
     public DeferredProcessProgressResponse status() {
-        DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
+        return updateProgressResponse(createProgressResponse());
+    }
+
+    protected DeferredProcessProgressResponse createProgressResponse() {
+        return new DeferredProcessProgressResponse();
+    }
+
+    protected DeferredProcessProgressResponse updateProgressResponse(DeferredProcessProgressResponse r) {
         r.setProgress(progress.progress.get());
         r.setProgressMaximum(progress.progressMaximum.get());
         if (completed) {
@@ -68,6 +75,5 @@ public abstract class AbstractDeferredProcess implements IDeferredProcess {
             r.setMessage(progress.progressStatusMessage.get());
         }
         return r;
-
     }
 }
