@@ -19,7 +19,7 @@ import com.propertyvista.dto.N4BatchDTO;
 public interface N4BatchViewerView extends IPrimeViewerView<N4BatchDTO> {
 
     interface Presenter extends IPrimeViewerView.IPrimeViewerPresenter {
-        void serviceBatch();
+        void serviceBatch(N4BatchDTO batch);
     }
 
 }

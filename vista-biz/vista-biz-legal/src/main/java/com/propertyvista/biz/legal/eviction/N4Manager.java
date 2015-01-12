@@ -164,6 +164,7 @@ public class N4Manager {
         n4LeaseData.rentalUnitAddress().set(AddressRetriever.getUnitLegalAddress(item.lease().unit()));
         n4LeaseData.terminationDate().setValue(computeTerminationDate(item.lease(), noticeDate, deliveryMethod));
 
+        Persistence.ensureRetrieve(item.unpaidCharges(), AttachLevel.Attached);
         n4LeaseData.rentOwingBreakdown().addAll(aggregateCharges(item.unpaidCharges()));
 
         BigDecimal totalRentOwning = BigDecimal.ZERO;

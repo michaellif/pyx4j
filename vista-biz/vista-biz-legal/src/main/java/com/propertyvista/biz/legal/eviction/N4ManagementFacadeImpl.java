@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
@@ -35,6 +36,7 @@ import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.legal.errors.FormFillError;
 import com.propertyvista.domain.legal.n4.N4Batch;
 import com.propertyvista.domain.legal.n4.N4BatchItem;
+import com.propertyvista.domain.legal.n4.N4DeliveryMethod;
 import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -53,6 +55,10 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
 
     @Override
     public void issueN4(final N4Batch batch, ExecutionMonitor monitor) throws IllegalStateException, FormFillError {
+        Persistence.ensureRetrieve(batch, AttachLevel.Attached);
+        batch.deliveryMethod().setValue(N4DeliveryMethod.Mail); // TODO - should be selected in UI
+        batch.noticeDate().setValue(new LogicalDate(batch.created().getValue())); // TODO - either created() or batchGenerationDate
+
         final Date batchGenerationDate = SystemDateManager.getDate();
 
         monitor.setExpectedTotal(N4_REPORT_SECTION, batch.items().size());

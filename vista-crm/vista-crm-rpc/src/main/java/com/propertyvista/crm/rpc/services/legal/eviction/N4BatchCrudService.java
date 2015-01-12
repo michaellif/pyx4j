@@ -26,5 +26,5 @@ public interface N4BatchCrudService extends AbstractCrudService<N4BatchDTO> {
 
     void createBatches(AsyncCallback<N4BatchDTO> callback, Vector<Lease> leaseCandidates);
 
-    void serviceBatch(AsyncCallback<Boolean> callback, N4Batch batchId);
+    void serviceBatch(AsyncCallback<String> callback, N4Batch batchId);
 }

@@ -15,7 +15,6 @@ package com.propertyvista.crm.server.services.legal.eviction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.Pair;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.server.download.Downloadable;
@@ -54,9 +53,11 @@ public class N4GenerationDeferredProcess extends AbstractDeferredProcess {
             ServerSideFactory.create(N4ManagementFacade.class).issueN4(batch, monitor);
 
             if (monitor.getErred() > 0) {
-                Pair<byte[], DownloadFormat> report = makeErredReport(monitor);
-                Downloadable errorReport = new Downloadable(report.getA(), MimeMap.getContentType(report.getB()));
-                errorReport.save(fileName = "failed-n4s-report-" + System.currentTimeMillis() + "." + report.getB().getExtension());
+                String report = monitor.getTextMessages(CompletionType.erred, CompletionType.failed);
+                if (report != null && !report.isEmpty()) {
+                    Downloadable errorDownload = new Downloadable(report.getBytes(), MimeMap.getContentType(DownloadFormat.TXT));
+                    errorDownload.save(fileName = "failed-n4s-report-" + System.currentTimeMillis() + "." + DownloadFormat.TXT.getExtension());
+                }
             }
         } catch (Exception e) {
             error = e;
@@ -67,24 +68,25 @@ public class N4GenerationDeferredProcess extends AbstractDeferredProcess {
     }
 
     @Override
-    public DeferredProcessProgressResponse status() {
-        DeferredProcessProgressResponse status = super.status();
-        DeferredReportProcessProgressResponse r = new DeferredReportProcessProgressResponse();
-        if (!status.isCompleted() && !status.isCanceled()) {
-            r.setProgress((int) (monitor.getTotalCounter(N4ManagementFacade.N4_REPORT_SECTION) / monitor.getExpectedTotal(N4ManagementFacade.N4_REPORT_SECTION)));
-            r.setProgressMaximum(100);
-            if (fileName != null) {
-                r.setDownloadLink(System.currentTimeMillis() + "/" + fileName);
-            }
-        } else if (monitor.getErred() > 0) {
-            r.setErrorStatusMessage(monitor.getTextMessages(CompletionType.erred, CompletionType.failed));
-        } else if (error != null) {
-            r.setMessage(error.getMessage());
-        }
-        return r;
+    protected DeferredProcessProgressResponse createProgressResponse() {
+        return new DeferredReportProcessProgressResponse();
     }
 
-    private Pair<byte[], DownloadFormat> makeErredReport(ExecutionMonitor monitor) {
-        return new Pair<byte[], DownloadFormat>(monitor.getTextMessages(CompletionType.erred, CompletionType.failed).getBytes(), DownloadFormat.TXT);
+    @Override
+    protected DeferredProcessProgressResponse updateProgressResponse(DeferredProcessProgressResponse r) {
+        DeferredReportProcessProgressResponse rRep = (DeferredReportProcessProgressResponse) super.updateProgressResponse(r);
+        if (!rRep.isCompleted() && !rRep.isCanceled()) {
+            rRep.setProgress((int) (100 * monitor.getTotalCounter(N4ManagementFacade.N4_REPORT_SECTION) / monitor
+                    .getExpectedTotal(N4ManagementFacade.N4_REPORT_SECTION)));
+            rRep.setProgressMaximum(100);
+        } else if (monitor.getErred() > 0) {
+            rRep.setErrorStatusMessage(monitor.getTextMessages(CompletionType.erred, CompletionType.failed));
+        } else if (error != null) {
+            rRep.setMessage(error.getMessage());
+        }
+        if (fileName != null) {
+            rRep.setDownloadLink(System.currentTimeMillis() + "/" + fileName);
+        }
+        return rRep;
     }
 }

@@ -27,16 +27,14 @@ public class N4BatchViewerViewImpl extends CrmViewerViewImplBase<N4BatchDTO> imp
 
     private static final I18n i18n = I18n.get(N4BatchViewerViewImpl.class);
 
-    private SecureMenuItem serviceN4Action;
-
     public N4BatchViewerViewImpl() {
         setForm(new N4BatchForm(this));
 
-        addAction(serviceN4Action = new SecureMenuItem(i18n.tr("Service N4 Batch"), new Command() {
+        addAction(new SecureMenuItem(i18n.tr("Service N4 Batch"), new Command() {
             @Override
             public void execute() {
                 if (getForm().getValue().isReadyForService().getValue(false)) {
-                    ((N4BatchViewerView.Presenter) getPresenter()).serviceBatch();
+                    ((N4BatchViewerView.Presenter) getPresenter()).serviceBatch(getForm().getValue());
                 } else {
                     MessageDialog.error(i18n.tr("Batch Not Ready"), i18n.tr("Batch must be 'Ready For Service'"));
                 }
