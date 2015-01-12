@@ -24,6 +24,8 @@ package com.pyx4j.widgets.client.datepicker;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventHandler;
@@ -72,7 +74,7 @@ public class DatePickerComposite extends Composite implements HasHandlers {
 
     HandlerManager handlerManager;
 
-    HorizontalPanel panel = new HorizontalPanel();
+    HorizontalPanel panel;
 
     ArrayList<DatePickerExtended> pickers = new ArrayList<>();
 
@@ -91,6 +93,15 @@ public class DatePickerComposite extends Composite implements HasHandlers {
     }
 
     private void init(int numberOfMonths, LogicalDate starting, LogicalDate minDate, LogicalDate maxDate, ArrayList<LogicalDate> disabledDates) {
+        panel = new HorizontalPanel();
+        panel.addHandler(new MouseDownHandler() {
+
+            @Override
+            public void onMouseDown(MouseDownEvent event) {
+                event.preventDefault();
+            }
+        }, MouseDownEvent.getType());
+
         DatePickerExtended picker;
         this.disabledDates = disabledDates;
         handlerManager = new HandlerManager(this);

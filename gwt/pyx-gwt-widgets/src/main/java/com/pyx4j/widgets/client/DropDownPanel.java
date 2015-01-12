@@ -19,6 +19,8 @@
  */
 package com.pyx4j.widgets.client;
 
+import java.util.ArrayList;
+
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Window;
@@ -43,6 +45,8 @@ public class DropDownPanel extends PopupPanel {
             }
         });
     }
+
+    private static ArrayList<PopupPanel> openDropDowns = new ArrayList<>();
 
     private Widget anchor;
 
@@ -80,6 +84,31 @@ public class DropDownPanel extends PopupPanel {
             super.showRelativeTo(anchor);
         } else {
             setPopupPositionAndShow(positionCallback);
+        }
+    }
+
+    @Override
+    public void show() {
+        if (isShowing()) {
+            return;
+        }
+        if (openDropDowns.size() > 0) {
+            openDropDowns.get(openDropDowns.size() - 1).setAutoHideEnabled(false);
+        }
+        setAutoHideEnabled(true);
+        openDropDowns.add(this);
+        super.show();
+    }
+
+    @Override
+    public void hide(boolean autoClosed) {
+        if (!isShowing()) {
+            return;
+        }
+        super.hide(autoClosed);
+        openDropDowns.remove(this);
+        if (openDropDowns.size() > 0) {
+            openDropDowns.get(openDropDowns.size() - 1).setAutoHideEnabled(true);
         }
     }
 }

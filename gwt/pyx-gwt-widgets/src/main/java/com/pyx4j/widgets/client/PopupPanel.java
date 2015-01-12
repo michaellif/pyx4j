@@ -25,7 +25,7 @@ public class PopupPanel extends com.google.gwt.user.client.ui.PopupPanel {
 
     // Set of open panels so we can close them on window resize, because resizing
     // the window is equivalent to the user clicking outside the widget.
-    private static ArrayList<PopupPanel> openPopups;
+    private static ArrayList<PopupPanel> openPopups = new ArrayList<>();
 
     static ArrayList<PopupPanel> getOpenPopups() {
         return openPopups;
@@ -34,6 +34,15 @@ public class PopupPanel extends com.google.gwt.user.client.ui.PopupPanel {
     public PopupPanel(boolean autoHide, boolean modal) {
         super(autoHide, modal);
         getElement().getStyle().setZIndex(50);
+    }
+
+    @Override
+    public void show() {
+        if (isShowing()) {
+            return;
+        }
+        openPopups.add(this);
+        super.show();
     }
 
     @Override
@@ -47,33 +56,14 @@ public class PopupPanel extends com.google.gwt.user.client.ui.PopupPanel {
             return;
         }
         super.hide(autoClosed);
-
-        // Removes this from the list of open panels.
-        if (openPopups != null) {
-            openPopups.remove(this);
-        }
+        openPopups.remove(this);
     }
 
     public static void hideAll() {
-        if (openPopups != null) {
-            ArrayList<PopupPanel> popups = new ArrayList<>(openPopups);
-            for (PopupPanel popupPanel : popups) {
-                popupPanel.hide(true);
-            }
+        ArrayList<PopupPanel> popups = new ArrayList<>(openPopups);
+        for (PopupPanel popupPanel : popups) {
+            popupPanel.hide(true);
         }
-    }
-
-    @Override
-    public void show() {
-        if (isShowing()) {
-            return;
-        }
-        // Add this to the set of open panels.
-        if (openPopups == null) {
-            openPopups = new ArrayList<>();
-        }
-        openPopups.add(this);
-        super.show();
     }
 
 }
