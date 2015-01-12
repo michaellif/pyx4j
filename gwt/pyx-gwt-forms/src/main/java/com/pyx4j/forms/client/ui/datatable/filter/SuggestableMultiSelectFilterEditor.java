@@ -20,16 +20,8 @@
  */
 package com.pyx4j.forms.client.ui.datatable.filter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.EnumSet;
 
-import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-
-import com.pyx4j.commons.IFormatter;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -38,45 +30,18 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.CheckGroup;
 import com.pyx4j.widgets.client.OptionGroup.Layout;
 
-public class MultiSelectFilterEditor extends FilterEditorBase {
+public class SuggestableMultiSelectFilterEditor extends FilterEditorBase {
 
-    private static final I18n i18n = I18n.get(MultiSelectFilterEditor.class);
+    private static final I18n i18n = I18n.get(SuggestableMultiSelectFilterEditor.class);
 
     private CheckGroup<?> checkGroup;
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public MultiSelectFilterEditor(IObject<?> member) {
+    public SuggestableMultiSelectFilterEditor(IObject<?> member) {
         super(member);
         MemberMeta mm = member.getMeta();
-        if (mm.getValueClass().isEnum()) {
+        if (mm.isEntity()) {
             checkGroup = new CheckGroup<>(Layout.VERTICAL);
-            checkGroup.setOptions(new ArrayList(EnumSet.allOf((Class<Enum>) mm.getValueClass())));
-        } else if (mm.getValueClass().equals(Boolean.class)) {
-
-            CheckGroup<Boolean> booleanGroup = new CheckGroup<>(Layout.HORISONTAL);
-            booleanGroup.setFormatter(new IFormatter<Boolean, SafeHtml>() {
-
-                @Override
-                public SafeHtml format(Boolean value) {
-                    String title;
-                    if (value == null) {
-                        title = i18n.tr("Empty");
-                    } else if (value) {
-                        title = i18n.tr("Yes");
-                    } else {
-                        title = i18n.tr("No");
-                    }
-                    return SafeHtmlUtils.fromTrustedString(title);
-                }
-            });
-            if (mm.isAnnotationPresent(NotNull.class)) {
-                booleanGroup.setOptions(Arrays.asList(new Boolean[] { Boolean.FALSE, Boolean.TRUE }));
-            } else {
-                booleanGroup.setOptions(Arrays.asList(new Boolean[] { Boolean.FALSE, Boolean.TRUE, null }));
-            }
-            checkGroup = booleanGroup;
         }
-
         initWidget(checkGroup);
     }
 

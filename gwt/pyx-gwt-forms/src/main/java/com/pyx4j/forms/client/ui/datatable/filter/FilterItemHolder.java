@@ -54,13 +54,12 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
 
     private IFilterEditor createFilterEditor(IObject<?> member) {
         Class<?> valueClass = member.getValueClass();
-        if (valueClass.isEnum() || valueClass.equals(Boolean.class)) {
+        if (member.getMeta().isEntity()) {
+            return new SuggestableMultiSelectFilterEditor(member);
+        } else if (valueClass.isEnum() || valueClass.equals(Boolean.class)) {
             return new MultiSelectFilterEditor(member);
         } else if (valueClass.equals(String.class)) {
             return new TextQueryFilterEditor(member);
-        } else if ((member.getMeta().getObjectClassType() == ObjectClassType.EntityList)
-                || (member.getMeta().getObjectClassType() == ObjectClassType.EntitySet)) {
-            return new MultiSelectFilterEditor(member);
         } else if (valueClass.equals(Date.class) || valueClass.equals(java.sql.Date.class) || valueClass.equals(LogicalDate.class)) {
             return new DateFilterEditor(member);
         } else if (valueClass.equals(BigDecimal.class) || valueClass.equals(Key.class) || member.getMeta().isNumberValueClass()) {
