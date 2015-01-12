@@ -131,6 +131,7 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
     private N4Batch createBatch(Building building, N4Policy n4policy) {
         N4Batch batch = EntityFactory.create(N4Batch.class);
 
+        batch.building().set(building);
         batch.created().setValue(SystemDateManager.getDate());
         batch.companyLegalName().setValue(n4policy.companyName().getValue());
         batch.companyAddress().set(n4policy.mailingAddress().duplicate(InternationalAddress.class));

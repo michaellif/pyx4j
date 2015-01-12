@@ -43,7 +43,6 @@ import com.propertyvista.biz.legal.N4GenerationFacadeImpl;
 import com.propertyvista.biz.legal.forms.framework.filling.FormFillerImpl;
 import com.propertyvista.biz.legal.forms.n4.N4FieldsMapping;
 import com.propertyvista.biz.legal.forms.n4cs.N4CSFieldsMapping;
-import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.domain.blob.EmployeeSignatureBlob;
 import com.propertyvista.domain.blob.LegalLetterBlob;
@@ -83,8 +82,8 @@ public class N4Manager {
 
     private static final String N4_CS_FORM_FILE = "n4cs.pdf";
 
-    void issueN4ForLease(N4BatchItem item, N4Batch batch, Date generationTime) throws FormFillError {
-        N4LeaseData n4LeaseData = prepareN4LeaseData(item, batch.noticeDate().getValue(), batch.deliveryMethod().getValue());
+    void issueN4ForLease(N4BatchItem item, N4Batch batch, N4Policy policy, LogicalDate deliveryDate, Date generationDate) throws FormFillError {
+        N4LeaseData n4LeaseData = prepareN4LeaseData(item, deliveryDate, policy);
 
         N4FormFieldsData n4FormData = prepareFormData(n4LeaseData, batch);
         N4CSFormFieldsData n4csFormData = prepareN4CSData(n4FormData, ServiceMethod.M);
@@ -99,14 +98,14 @@ public class N4Manager {
         n4Letter.lease().set(item.lease());
         n4Letter.amountOwed().setValue(n4LeaseData.totalRentOwning().getValue());
         n4Letter.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
-        n4Letter.generatedOn().setValue(generationTime);
+        n4Letter.generatedOn().setValue(generationDate);
         n4Letter.file().blobKey().setValue(blob.getPrimaryKey());
         n4Letter.file().fileSize().setValue(blob.data().getValue().length);
         n4Letter.file().fileName().setValue(MessageFormat.format( //
-                "n4_{0}_{1}_{2,date,yyyy-MM-dd}.pdf", //
+                "n4_{0}_{1}_{2,date,yyyy-MM-dd_HH-mm-ss}.pdf", //
                 item.lease().unit().building().propertyCode().getValue(), //
                 item.lease().unit().info().number().getValue(), //
-                generationTime //
+                generationDate //
                 ));
         Persistence.service().persist(n4Letter);
 
@@ -120,14 +119,14 @@ public class N4Manager {
         n4csLetter.lease().set(item.lease());
         n4csLetter.amountOwed().setValue(n4LeaseData.totalRentOwning().getValue());
         n4csLetter.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
-        n4csLetter.generatedOn().setValue(generationTime);
+        n4csLetter.generatedOn().setValue(generationDate);
         n4csLetter.file().blobKey().setValue(csBlob.getPrimaryKey());
         n4csLetter.file().fileSize().setValue(csBlob.data().getValue().length);
         n4csLetter.file().fileName().setValue(MessageFormat.format( //
-                "n4cs_{0}_{1}_{2,date,yyyy-MM-dd}.pdf", //
+                "n4cs_{0}_{1}_{2,date,yyyy-MM-dd_HH-mm-ss}.pdf", //
                 item.lease().unit().building().propertyCode().getValue(), //
                 item.lease().unit().info().number().getValue(), //
-                generationTime //
+                generationDate //
                 ));
         Persistence.service().persist(n4csLetter);
 
@@ -135,9 +134,8 @@ public class N4Manager {
         if (false) {
             LegalStatusN4 n4Status = EntityFactory.create(LegalStatusN4.class);
             n4Status.status().setValue(Status.N4);
-            N4Policy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(item.lease().unit().building(), N4Policy.class);
             GregorianCalendar cal = new GregorianCalendar();
-            cal.setTime(generationTime);
+            cal.setTime(generationDate);
             cal.add(GregorianCalendar.DAY_OF_YEAR, policy.expiryDays().getValue());
             n4Status.expiry().setValue(cal.getTime());
             n4Status.cancellationThreshold().setValue(policy.cancellationThreshold().getValue());
@@ -145,14 +143,14 @@ public class N4Manager {
 
             n4Status.notes().setValue("created via N4 notice batch");
             n4Status.setBy().set(EntityFactory.createIdentityStub(CrmUser.class, VistaContext.getCurrentUserPrimaryKey()));
-            n4Status.setOn().setValue(generationTime);
+            n4Status.setOn().setValue(generationDate);
 
             ServerSideFactory.create(LeaseLegalFacade.class).setLegalStatus(item.lease(), n4Status, Arrays.<LegalLetter> asList(n4Letter));
         }
     }
 
     // ------ internals -----------
-    private N4LeaseData prepareN4LeaseData(N4BatchItem item, LogicalDate noticeDate, N4DeliveryMethod deliveryMethod) {
+    private N4LeaseData prepareN4LeaseData(N4BatchItem item, LogicalDate deliveryDate, N4Policy policy) {
         Persistence.ensureRetrieve(item.lease(), AttachLevel.Attached);
         N4LeaseData n4LeaseData = EntityFactory.create(N4LeaseData.class);
 
@@ -162,7 +160,7 @@ public class N4Manager {
         }
 
         n4LeaseData.rentalUnitAddress().set(AddressRetriever.getUnitLegalAddress(item.lease().unit()));
-        n4LeaseData.terminationDate().setValue(computeTerminationDate(item.lease(), noticeDate, deliveryMethod));
+        n4LeaseData.terminationDate().setValue(calculateTerminationDate(item.lease(), deliveryDate, policy));
 
         Persistence.ensureRetrieve(item.unpaidCharges(), AttachLevel.Attached);
         n4LeaseData.rentOwingBreakdown().addAll(aggregateCharges(item.unpaidCharges()));
@@ -205,7 +203,7 @@ public class N4Manager {
         Collections.sort(keys, new Comparator<LongRange>() {
             @Override
             public int compare(LongRange o1, LongRange o2) {
-                return (int) (o1.getMaximumLong() - o2.getMaximumLong());
+                return (int) (o2.getMaximumLong() - o1.getMaximumLong());
             }
         });
         // we only accept the max of 3 entries in the result, so combine the all but last 2 into one
@@ -215,7 +213,7 @@ public class N4Manager {
             if (i == 0 || i >= keys.size() - 2) {
                 result.add(item);
             } else {
-                N4RentOwingForPeriod base = owingMap.get(0);
+                N4RentOwingForPeriod base = result.get(0);
                 // extend period if needed and combine amounts
                 if (base.fromDate().isNull() || base.fromDate().getValue().after(item.fromDate().getValue())) {
                     base.fromDate().set(item.fromDate());
@@ -411,22 +409,25 @@ public class N4Manager {
         return suiteNumber.replaceFirst("^[^\\d]*", ""); // remove all non starting digits, i.e. "Suite, Apt, APARTMENT, #" etc.
     }
 
-    private LogicalDate computeTerminationDate(Lease lease, LogicalDate noticeDate, N4DeliveryMethod deliveryMethod) {
-        int advanceDays = terminationAdvanceDaysForDeliveryMethod(deliveryMethod, lease) + terminationAdvanceDaysForLeaseType(lease);
+    LogicalDate calculateDeliveryDate(LogicalDate noticeDate, N4DeliveryMethod deliveryMethod, N4Policy policy) {
+        int advanceDays = terminationAdvanceDaysForDeliveryMethod(deliveryMethod, policy);
 
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(noticeDate);
         cal.add(GregorianCalendar.DAY_OF_YEAR, advanceDays);
-        LogicalDate terminationDate = new LogicalDate(cal.getTime());
-
-        return terminationDate;
+        return new LogicalDate(cal.getTime());
     }
 
-    private int terminationAdvanceDaysForDeliveryMethod(N4DeliveryMethod deliveryMethod, Lease lease) {
-        N4Policy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit(), N4Policy.class);
-        if (policy == null) {
-            throw new RuntimeException("Failed to compute n4 termination date advance days for lease '" + lease.getPrimaryKey() + "': N4 Policy wasn't found");
-        }
+    private LogicalDate calculateTerminationDate(Lease lease, LogicalDate deliveryDate, N4Policy policy) {
+        int advanceDays = terminationAdvanceDaysForLeaseType(lease, policy);
+
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(deliveryDate);
+        cal.add(GregorianCalendar.DAY_OF_YEAR, advanceDays);
+        return new LogicalDate(cal.getTime());
+    }
+
+    private int terminationAdvanceDaysForDeliveryMethod(N4DeliveryMethod deliveryMethod, N4Policy policy) {
         switch (deliveryMethod) {
         case Hand:
             return policy.handDeliveryAdvanceDays().getValue();
@@ -440,11 +441,8 @@ public class N4Manager {
 
     }
 
-    private int terminationAdvanceDaysForLeaseType(Lease leaseId) {
-        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
-        N4Policy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit(), N4Policy.class);
-
-        // TODO this is value for Yearly or Month-to-Month lease (we don't have other kinds of leases therefore it's fine now, but later can become a problem)
+    // TODO - this value may depend on lease term (month-to-month vs 12 months)
+    private int terminationAdvanceDaysForLeaseType(Lease leaseId, N4Policy policy) {
         return policy.terminationDateAdvanceDaysLongRentPeriod().getValue();
     }
 

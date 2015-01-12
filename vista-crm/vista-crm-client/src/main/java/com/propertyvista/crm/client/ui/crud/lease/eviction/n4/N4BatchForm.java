@@ -62,8 +62,7 @@ public class N4BatchForm extends CrmEntityForm<N4BatchDTO> {
         formPanel.append(Location.Left, proto().name()).decorate();
         formPanel.append(Location.Left, proto().created()).decorate();
 
-        formPanel.append(Location.Right, proto().noticeDate()).decorate();
-        // TODO - use link viewer new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class))
+        formPanel.append(Location.Right, proto().noticeIssueDate()).decorate();
         CField<Employee, ?> employeeBox = isEditable() ? new CEntityComboBox<>(Employee.class) : //
                 new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class));
         formPanel.append(Location.Right, proto().signingEmployee(), employeeBox).decorate();
@@ -109,7 +108,8 @@ public class N4BatchForm extends CrmEntityForm<N4BatchDTO> {
                 protected IsWidget createContent() {
                     FormPanel formPanel = new FormPanel(this);
 
-                    CEntityLabel<Lease> leaseLabel = new CEntityLabel<Lease>();
+                    CEntityLabel<Lease> leaseLabel = isEditable() ? new CEntityLabel<Lease>() : new CEntityCrudHyperlink<Lease>(
+                            AppPlaceEntityMapper.resolvePlace(Lease.class));
                     leaseLabel.setFormatter(new IFormatter<Lease, String>() {
 
                         @Override
@@ -119,9 +119,9 @@ public class N4BatchForm extends CrmEntityForm<N4BatchDTO> {
                                     value.unit().building().propertyCode(), value.unit(), value.type(), value._applicant());
                         }
                     });
+
                     formPanel.append(Location.Left, proto().lease(), leaseLabel).decorate();
                     formPanel.append(Location.Right, proto().totalRentOwning(), new CMoneyLabel()).decorate();
-
                     formPanel.append(Location.Dual, proto().unpaidCharges(), new BatchItemChargesFolder(this));
 
                     return formPanel;

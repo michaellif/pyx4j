@@ -17,6 +17,8 @@ import java.util.Date;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -29,8 +31,15 @@ import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.contact.InternationalAddress;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public interface N4Batch extends IEntity {
+
+    @JoinColumn
+    @Indexed
+    @ReadOnly
+    @Detached
+    Building building();
 
     @NotNull
     IPrimitive<String> name();
@@ -42,9 +51,13 @@ public interface N4Batch extends IEntity {
 
     IPrimitive<Boolean> isReadyForService();
 
-    IPrimitive<LogicalDate> noticeDate();
+    IPrimitive<LogicalDate> serviceDate();
 
     IPrimitive<N4DeliveryMethod> deliveryMethod();
+
+    IPrimitive<LogicalDate> deliveryDate();
+
+    IPrimitive<LogicalDate> noticeIssueDate();
 
     IPrimitive<String> companyLegalName();
 

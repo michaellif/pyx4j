@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.ConnectionTarget;
@@ -32,12 +33,14 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.legal.errors.FormFillError;
 import com.propertyvista.domain.legal.n4.N4Batch;
 import com.propertyvista.domain.legal.n4.N4BatchItem;
 import com.propertyvista.domain.legal.n4.N4DeliveryMethod;
 import com.propertyvista.domain.legal.n4.N4LegalLetter;
+import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -56,10 +59,17 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
     @Override
     public void issueN4(final N4Batch batch, ExecutionMonitor monitor) throws IllegalStateException, FormFillError {
         Persistence.ensureRetrieve(batch, AttachLevel.Attached);
-        batch.deliveryMethod().setValue(N4DeliveryMethod.Mail); // TODO - should be selected in UI
-        batch.noticeDate().setValue(new LogicalDate(batch.created().getValue())); // TODO - either created() or batchGenerationDate
 
-        final Date batchGenerationDate = SystemDateManager.getDate();
+        final Date batchServiceDate = SystemDateManager.getDate();
+
+        batch.deliveryMethod().setValue(N4DeliveryMethod.Mail); // TODO - should be selected in UI
+        batch.noticeIssueDate().setValue(new LogicalDate(batch.created().getValue())); // TODO - either created() or batchGenerationDate
+
+        final N4Policy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(batch.building(), N4Policy.class);
+        final LogicalDate deliveryDate = new N4Manager().calculateDeliveryDate(batch.noticeIssueDate().getValue(), batch.deliveryMethod().getValue(), policy);
+
+        batch.deliveryDate().setValue(deliveryDate);
+        batch.serviceDate().setValue(new LogicalDate(batchServiceDate));
 
         monitor.setExpectedTotal(N4_REPORT_SECTION, batch.items().size());
         for (final N4BatchItem item : batch.items()) {
@@ -67,7 +77,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
                 new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.Web).execute(new Executable<Void, Exception>() {
                     @Override
                     public Void execute() throws Exception {
-                        new N4Manager().issueN4ForLease(item, batch, batchGenerationDate);
+                        new N4Manager().issueN4ForLease(item, batch, policy, deliveryDate, batchServiceDate);
                         return null;
                     }
                 });
