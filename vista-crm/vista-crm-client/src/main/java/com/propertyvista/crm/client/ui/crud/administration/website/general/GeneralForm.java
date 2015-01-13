@@ -75,7 +75,7 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
         // =====================================================================================================================
 
         formPanel = new FormPanel(this);
-        formPanel.append(Location.Dual, proto().locales(), new AvailableLocaleFolder(isEditable()));
+        formPanel.append(Location.Left, proto().locales(), new AvailableLocaleFolder(isEditable()));
         addTab(formPanel, proto().locales().getMeta().getCaption());
 
         formPanel = new FormPanel(this);

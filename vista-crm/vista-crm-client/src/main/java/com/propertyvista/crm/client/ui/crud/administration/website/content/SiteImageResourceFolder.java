@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -33,7 +33,7 @@ import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
 import com.propertyvista.common.client.SiteImageResourceFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.AvailableLocaleSelectorDialog;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.SiteLogoImageResource;
@@ -117,11 +117,9 @@ public class SiteImageResourceFolder extends VistaBoxFolder<SiteLogoImageResourc
         protected IsWidget createContent() {
             FormPanel formPanel = new FormPanel(this);
 
-            CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
-            locale.setEditable(false);
-            formPanel.append(Location.Left, proto().locale()).decorate();
+            formPanel.append(Location.Left, proto().locale(), new CEntityLabel<AvailableLocale>()).decorate();
             formPanel.append(Location.Left, proto().small().file(), smallLogo).decorate().customLabel(i18n.tr("Small Logo"));
-            formPanel.append(Location.Left, proto().logoLabel().file(), smallLogo).decorate().customLabel(i18n.tr("Logo Label"));
+            formPanel.append(Location.Left, proto().logoLabel().file(), logoLabel).decorate().customLabel(i18n.tr("Logo Label"));
             formPanel.append(Location.Dual, proto().large().file(), largeLogo).decorate().customLabel(i18n.tr("Large Logo"));
 
             return formPanel;

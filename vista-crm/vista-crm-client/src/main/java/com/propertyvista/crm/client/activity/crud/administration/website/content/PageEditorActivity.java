@@ -21,8 +21,8 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
+import com.propertyvista.crm.client.ui.components.boxes.AvailableLocaleSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.administration.website.content.pages.PageEditor;
-import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService.PageDescriptorInitializationData;
 import com.propertyvista.domain.site.AvailableLocale;

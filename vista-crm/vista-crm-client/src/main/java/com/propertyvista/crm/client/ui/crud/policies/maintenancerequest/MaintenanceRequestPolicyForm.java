@@ -94,13 +94,18 @@ public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<Mai
         }
 
         @Override
-        public IsWidget createEditorContent(CForm<PermissionToEnterNote> editor) {
-            FormPanel formPanel = new FormPanel(editor);
+        protected CForm<? extends PermissionToEnterNote> createItemForm(IObject<?> member) {
+            return new CForm<PermissionToEnterNote>(PermissionToEnterNote.class) {
+                @Override
+                protected IsWidget createContent() {
+                    FormPanel formPanel = new FormPanel(this);
 
-            formPanel.append(Location.Dual, proto().locale(), new CLabel<CompiledLocale>()).decorate().componentWidth(120);
-            formPanel.append(Location.Dual, proto().text()).decorate();
+                    formPanel.append(Location.Dual, proto().locale(), new CLabel<CompiledLocale>()).decorate().componentWidth(120);
+                    formPanel.append(Location.Dual, proto().text()).decorate();
 
-            return formPanel;
+                    return formPanel;
+                }
+            };
         }
     }
 
@@ -111,14 +116,20 @@ public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<Mai
         }
 
         @Override
-        public IsWidget createEditorContent(CForm<EntryInstructionsNote> editor) {
-            FormPanel formPanel = new FormPanel(editor);
+        protected CForm<? extends EntryInstructionsNote> createItemForm(IObject<?> member) {
+            return new CForm<EntryInstructionsNote>(EntryInstructionsNote.class) {
 
-            formPanel.append(Location.Dual, proto().locale(), new CLabel<CompiledLocale>()).decorate().componentWidth(120);
-            formPanel.append(Location.Dual, proto().caption()).decorate();
-            formPanel.append(Location.Dual, proto().text()).decorate();
+                @Override
+                protected IsWidget createContent() {
+                    FormPanel formPanel = new FormPanel(this);
 
-            return formPanel;
+                    formPanel.append(Location.Dual, proto().locale(), new CLabel<CompiledLocale>()).decorate().componentWidth(120);
+                    formPanel.append(Location.Dual, proto().caption()).decorate();
+                    formPanel.append(Location.Dual, proto().text()).decorate();
+
+                    return formPanel;
+                }
+            };
         }
     }
 
@@ -129,14 +140,21 @@ public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<Mai
         }
 
         @Override
-        public IsWidget createEditorContent(CForm<EntryNotGrantedAlert> editor) {
-            FormPanel formPanel = new FormPanel(editor);
+        protected CForm<? extends EntryNotGrantedAlert> createItemForm(IObject<?> member) {
+            // TODO Auto-generated method stub
+            return new CForm<EntryNotGrantedAlert>(EntryNotGrantedAlert.class) {
 
-            formPanel.append(Location.Dual, proto().locale(), new CLabel<CompiledLocale>()).decorate().componentWidth(120);
-            formPanel.append(Location.Dual, proto().title()).decorate();
-            formPanel.append(Location.Dual, proto().text()).decorate();
+                @Override
+                protected IsWidget createContent() {
+                    FormPanel formPanel = new FormPanel(this);
 
-            return formPanel;
+                    formPanel.append(Location.Dual, proto().locale(), new CLabel<CompiledLocale>()).decorate().componentWidth(120);
+                    formPanel.append(Location.Dual, proto().title()).decorate();
+                    formPanel.append(Location.Dual, proto().text()).decorate();
+
+                    return formPanel;
+                }
+            };
         }
     }
 

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -33,13 +33,10 @@ import com.propertyvista.domain.site.PageDescriptor;
 
 class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
 
-    private final SiteForm parent;
-
     private final SiteViewer viewer;
 
     public PageDescriptorFolder(SiteForm parent) {
         super(PageDescriptor.class, parent.isEditable());
-        this.parent = parent;
         this.viewer = (!parent.isEditable() ? (SiteViewer) parent.getParentView() : null);
         setAddable(false);
     }
@@ -47,7 +44,7 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
     @Override
     public List<FolderColumnDescriptor> columns() {
         ArrayList<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
-        columns.add(new FolderColumnDescriptor(proto().name(), "25em"));
+        columns.add(new FolderColumnDescriptor(proto().name(), "30em"));
         return columns;
     }
 

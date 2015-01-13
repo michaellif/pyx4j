@@ -35,7 +35,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.SiteImageResourceFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.AvailableLocaleSelectorDialog;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PortalBannerImage;

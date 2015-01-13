@@ -10,7 +10,7 @@
  * Created on Mar 7, 2012
  * @author stanp
  */
-package com.propertyvista.crm.client.ui.crud.administration.website.general;
+package com.propertyvista.crm.client.ui.components.boxes;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -22,7 +22,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.commons.IFormatter;
 import com.pyx4j.forms.client.events.AsyncValueChangeEvent;
 import com.pyx4j.forms.client.events.AsyncValueChangeHandler;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
@@ -35,9 +34,8 @@ import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public abstract class AvailableLocaleSelectorDialog extends Dialog implements OkCancelOption {
-    private final static I18n i18n = I18n.get(AvailableLocaleSelectorDialog.class);
 
-    private final static String title = i18n.tr("Select Locale");
+    private final static I18n i18n = I18n.get(AvailableLocaleSelectorDialog.class);
 
     private final SimplePanel panel = new SimplePanel();
 
@@ -62,23 +60,16 @@ public abstract class AvailableLocaleSelectorDialog extends Dialog implements Ok
     }
 
     public AvailableLocaleSelectorDialog(final Set<CompiledLocale> usedLocales) {
-        super(title);
-        setDialogPixelWidth(400);
+        super(i18n.tr("Locale Selection"));
+        setDialogPixelWidth(350);
         setDialogOptions(this);
 
         this.usedLocales = usedLocales;
 
         final CEntityComboBox<AvailableLocale> localeSelector = new CEntityComboBox<AvailableLocale>(AvailableLocale.class);
-        localeSelector.asWidget().setWidth("100%");
-        localeSelector.setFormat(new IFormatter<AvailableLocale, String>() {
-
-            @Override
-            public String format(AvailableLocale value) {
-                return value != null ? value.toString() : title;
-            }
-        });
-
-        // this triggers option load
+        localeSelector.setMandatory(true);
+        localeSelector.populate(null);
+        // this triggers option load:
         localeSelector.setValueByString("");
         if (localeSelector.isOptionsLoaded()) {
             setContentPanel(localeSelector);
@@ -96,8 +87,10 @@ public abstract class AvailableLocaleSelectorDialog extends Dialog implements Ok
             @Override
             public void onValueChange(ValueChangeEvent<AvailableLocale> event) {
                 selectedLocale = event.getValue();
+                getOkButton().setEnabled(true);
             }
         });
+        getOkButton().setEnabled(false);
 
         panel.getElement().getStyle().setPadding(1, Unit.EM);
         setBody(panel);
@@ -113,9 +106,8 @@ public abstract class AvailableLocaleSelectorDialog extends Dialog implements Ok
             });
         }
 
-        int optSize = localeSelector.getOptions().size();
-        if (optSize == 0) {
-            panel.setWidget(new Label("Sorry, no more items to choose from."));
+        if (localeSelector.getOptions().isEmpty()) {
+            panel.setWidget(new Label(i18n.tr("Sorry, no more Locales to choose from.")));
             getOkButton().setVisible(false);
         } else {
             panel.setWidget(localeSelector);

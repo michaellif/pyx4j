@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.AvailableLocaleSelectorDialog;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PageMetaTags;
 
@@ -90,10 +90,8 @@ class MetaTagsFolder extends VistaBoxFolder<PageMetaTags> {
         protected IsWidget createContent() {
             FormPanel formPanel = new FormPanel(this);
 
-            CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
-            locale.setEditable(false);
-            formPanel.append(Location.Left, proto().locale(), locale).decorate().componentWidth(120);
-            formPanel.append(Location.Left, proto().title()).decorate();
+            formPanel.append(Location.Left, proto().locale(), new CEntityLabel<AvailableLocale>()).decorate();
+            formPanel.append(Location.Dual, proto().title()).decorate();
             formPanel.append(Location.Dual, proto().description()).decorate();
             formPanel.append(Location.Dual, proto().keywords()).decorate();
             return formPanel;

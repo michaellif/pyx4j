@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -15,30 +15,27 @@ package com.propertyvista.crm.client.ui.crud.administration.website.general;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RadioButton;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
+import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.site.AvailableLocale;
@@ -70,7 +67,7 @@ class AvailableLocaleFolder extends VistaTableFolder<AvailableLocale> {
     @Override
     public CField<?, ?> create(IObject<?> member) {
         if (proto().lang().getPath().equals(member.getPath())) {
-            return new CLabel();
+            return new CLabel<>();
         }
         return super.create(member);
     }
@@ -93,7 +90,13 @@ class AvailableLocaleFolder extends VistaTableFolder<AvailableLocale> {
     protected void addItem() {
         new LocaleSelectorDialog() {
             @Override
-            public boolean onClickCancel() {
+            public boolean onClickOk() {
+                CompiledLocale compiledLocale = getSelectedLocale();
+                if (compiledLocale != null) {
+                    AvailableLocale locale = EntityFactory.create(AvailableLocale.class);
+                    locale.lang().setValue(compiledLocale);
+                    AvailableLocaleFolder.super.addItem(locale);
+                }
                 return true;
             }
         }.show();
@@ -106,45 +109,48 @@ class AvailableLocaleFolder extends VistaTableFolder<AvailableLocale> {
         }
     }
 
-    abstract class LocaleSelectorDialog extends Dialog implements CancelOption, ClickHandler {
+    private abstract class LocaleSelectorDialog extends Dialog implements OkCancelOption {
 
-        private final String LocaleRadioGroup = "LocaleSelector";
-
-        private final VerticalPanel panel = new VerticalPanel();
+        private CompiledLocale selectedLocale;
 
         public LocaleSelectorDialog() {
-            super("Select Locale");
-            setDialogPixelWidth(400);
+            super(i18n.tr("Locale Selection"));
+            setDialogPixelWidth(350);
             setDialogOptions(this);
+
+            SimplePanel panel = new SimplePanel();
 
             EnumSet<CompiledLocale> availLocales = CompiledLocale.getSupportedLocales();
             availLocales.removeAll(usedLocales);
-            if (availLocales.size() == 0) {
-                panel.add(new Label(i18n.tr("Sorry, no more items to choose from.")));
+            if (availLocales.isEmpty()) {
+                panel.setWidget(new Label(i18n.tr("Sorry, no more Locales to choose from.")));
+                getOkButton().setVisible(false);
             } else {
-                for (CompiledLocale locale : availLocales) {
-                    RadioButton radio = new RadioButton(LocaleRadioGroup, locale.toString());
-                    radio.setFormValue(locale.name());
-                    radio.addClickHandler(this);
-                    panel.add(radio);
-                }
+                CComboBox<CompiledLocale> localeSelector = new CComboBox<>();
+                localeSelector.setMandatory(true);
+                localeSelector.populate(null);
+                localeSelector.setOptions(availLocales);
+                localeSelector.addValueChangeHandler(new ValueChangeHandler<CompiledLocale>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<CompiledLocale> event) {
+                        selectedLocale = event.getValue();
+                        getOkButton().setEnabled(true);
+                    }
+                });
+                getOkButton().setEnabled(false);
+                panel.setWidget(localeSelector);
             }
+            panel.getElement().getStyle().setPadding(1, Unit.EM);
             setBody(panel);
         }
 
         @Override
-        public void onClick(ClickEvent event) {
-            RadioButton radio = null;
-            Iterator<Widget> widgets = panel.iterator();
-            while ((radio = (RadioButton) widgets.next()) != null) {
-                if (event.getSource().equals(radio)) {
-                    AvailableLocale locale = EntityFactory.create(AvailableLocale.class);
-                    locale.lang().setValue(CompiledLocale.valueOf(radio.getFormValue()));
-                    AvailableLocaleFolder.super.addItem(locale);
-                    hide(false);
-                    break;
-                }
-            }
+        public boolean onClickCancel() {
+            return true;
+        }
+
+        public CompiledLocale getSelectedLocale() {
+            return selectedLocale;
         }
     }
 }

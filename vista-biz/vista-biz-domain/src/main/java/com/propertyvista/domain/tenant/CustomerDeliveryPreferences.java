@@ -14,6 +14,8 @@ package com.propertyvista.domain.tenant;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -21,14 +23,26 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 public interface CustomerDeliveryPreferences extends IEntity {
 
-    @I18n
+    @I18n(context = "DeliveryType")
+    @XmlType(name = "DeliveryType")
     public enum DeliveryType implements Serializable {
 
-        Daily, Weekly, Individual, DoNotSend;
+        @Translate("Daily")
+        Daily,
+
+        @Translate("Weekly")
+        Weekly,
+
+        @Translate("Real-time")
+        Individual,
+
+        @Translate("Do not send")
+        DoNotSend;
 
         @Override
         public String toString() {

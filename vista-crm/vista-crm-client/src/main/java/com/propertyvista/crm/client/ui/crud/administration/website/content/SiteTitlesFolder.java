@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.AvailableLocaleSelectorDialog;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.SiteTitles;
 
@@ -90,14 +90,14 @@ class SiteTitlesFolder extends VistaBoxFolder<SiteTitles> {
         protected IsWidget createContent() {
             FormPanel formPanel = new FormPanel(this);
 
-            CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
-            locale.setEditable(false);
-            formPanel.append(Location.Left, proto().locale()).decorate().componentWidth(120);
-            formPanel.append(Location.Left, proto().crmHeader()).decorate();
-            formPanel.append(Location.Left, proto().prospectPortalTitle()).decorate();
-            formPanel.append(Location.Left, proto().residentPortalTitle()).decorate();
-            formPanel.append(Location.Left, proto().sitePromoTitle()).decorate();
-            formPanel.append(Location.Left, proto().copyright()).decorate();
+            formPanel.append(Location.Left, proto().locale(), new CEntityLabel<AvailableLocale>()).decorate();
+
+            formPanel.append(Location.Dual, proto().crmHeader()).decorate();
+            formPanel.append(Location.Dual, proto().prospectPortalTitle()).decorate();
+            formPanel.append(Location.Dual, proto().residentPortalTitle()).decorate();
+            formPanel.append(Location.Dual, proto().sitePromoTitle()).decorate();
+            formPanel.append(Location.Dual, proto().copyright()).decorate();
+
             return formPanel;
         }
     }
