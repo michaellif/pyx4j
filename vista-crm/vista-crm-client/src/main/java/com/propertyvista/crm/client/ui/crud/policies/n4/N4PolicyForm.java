@@ -54,6 +54,8 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
     private final EvictionStepSelector stepSelector = new EvictionStepSelector();
 
+    private FormPanel contactPanel;
+
     private ARCodeFolder arCodeFolder;
 
     public N4PolicyForm(IPrimeFormView<N4PolicyDTO, ?> view) {
@@ -96,15 +98,28 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
     private IsWidget getSignatureTab() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().includeSignature()).decorate();
-        formPanel.append(Location.Right, proto().agentSelectionMethod()).decorate();
+        formPanel.h1(i18n.tr("Agent Info"));
+        formPanel.append(Location.Left, proto().agentSelectionMethod()).decorate();
+        formPanel.append(Location.Right, proto().includeSignature()).decorate();
 
-        formPanel.h1(i18n.tr("The following information will be used for signing N4 letters:"));
+        formPanel.h1(i18n.tr("Contact Info"));
         formPanel.append(Location.Left, proto().companyName()).decorate();
-        formPanel.append(Location.Right, proto().emailAddress()).decorate();
-        formPanel.append(Location.Left, proto().phoneNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
-        formPanel.append(Location.Right, proto().faxNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
+        formPanel.append(Location.Left, proto().useAgentContactInfo()).decorate();
+        get(proto().useAgentContactInfo()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                contactPanel.setVisible(!event.getValue());
+            }
+        });
+
+        contactPanel = new FormPanel(this);
+        contactPanel.append(Location.Left, proto().emailAddress()).decorate();
+        contactPanel.append(Location.Left, proto().phoneNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
+        contactPanel.append(Location.Left, proto().faxNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
+        formPanel.append(Location.Right, contactPanel);
+
+        formPanel.h1(i18n.tr("Mailing Address"));
         formPanel.append(Location.Dual, proto().mailingAddress(), new InternationalAddressEditor());
 
         return formPanel;
@@ -138,6 +153,13 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         formPanel.append(Location.Left, proto().expiryDays()).decorate();
 
         return formPanel;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        contactPanel.setVisible(!getValue().useAgentContactInfo().getValue(false));
     }
 
     public static class ARCodeFolder extends VistaBoxFolder<N4PolicyDTOARCodeHolderDTO> {

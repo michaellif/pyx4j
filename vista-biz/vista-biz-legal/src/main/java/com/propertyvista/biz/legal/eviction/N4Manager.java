@@ -176,57 +176,6 @@ public class N4Manager {
         return n4LeaseData;
     }
 
-    private List<N4RentOwingForPeriod> aggregateCharges(List<N4UnpaidCharge> charges) {
-        List<N4RentOwingForPeriod> result = new ArrayList<>();
-        Map<LongRange, N4RentOwingForPeriod> owingMap = new HashMap<>();
-        for (N4UnpaidCharge charge : charges) {
-            LongRange period = new LongRange(charge.fromDate().getValue().getTime(), charge.toDate().getValue().getTime());
-            N4RentOwingForPeriod owing = owingMap.get(period);
-            if (owing == null) {
-                owing = EntityFactory.create(N4RentOwingForPeriod.class);
-                owing.fromDate().set(charge.fromDate());
-                owing.toDate().set(charge.toDate());
-                owing.rentCharged().set(charge.rentCharged());
-                owing.rentPaid().set(charge.rentPaid());
-                owing.rentOwing().set(charge.rentOwing());
-                owingMap.put(period, owing);
-            } else {
-                owing.rentCharged().setValue(owing.rentCharged().getValue().add(charge.rentCharged().getValue()));
-                owing.rentPaid().setValue(owing.rentPaid().getValue().add(charge.rentPaid().getValue()));
-                owing.rentOwing().setValue(owing.rentOwing().getValue().add(charge.rentOwing().getValue()));
-            }
-        }
-        // sort by period
-        List<LongRange> keys = new ArrayList<>(owingMap.keySet());
-        Collections.sort(keys, new Comparator<LongRange>() {
-            @Override
-            public int compare(LongRange o1, LongRange o2) {
-                return (int) (o2.getMaximumLong() - o1.getMaximumLong());
-            }
-        });
-        // we only accept the max of 3 entries in the result, so combine the all but last 2 into one
-        for (int i = 0; i < keys.size(); i++) {
-            LongRange key = keys.get(i);
-            N4RentOwingForPeriod item = owingMap.get(key);
-            if (i == 0 || i >= keys.size() - 2) {
-                result.add(item);
-            } else {
-                N4RentOwingForPeriod base = result.get(0);
-                // extend period if needed and combine amounts
-                if (base.fromDate().isNull() || base.fromDate().getValue().after(item.fromDate().getValue())) {
-                    base.fromDate().set(item.fromDate());
-                }
-                if (base.toDate().isNull() || base.toDate().getValue().before(item.toDate().getValue())) {
-                    base.toDate().set(item.toDate());
-                }
-                base.rentCharged().setValue(base.rentCharged().getValue().add(item.rentCharged().getValue()));
-                base.rentPaid().setValue(base.rentPaid().getValue().add(item.rentPaid().getValue()));
-                base.rentOwing().setValue(base.rentOwing().getValue().add(item.rentOwing().getValue()));
-            }
-        }
-        return result;
-    }
-
     private N4FormFieldsData prepareFormData(N4LeaseData leaseData, N4Batch batchData) throws FormFillError {
         N4FormFieldsData fieldsData = EntityFactory.create(N4FormFieldsData.class);
         fieldsData.to().setValue(formatTo(leaseData.leaseTenants(), leaseData.rentalUnitAddress()));
@@ -405,6 +354,57 @@ public class N4Manager {
 
     private String sanitzeSuiteNumber(String suiteNumber) {
         return suiteNumber.replaceFirst("^[^\\d]*", ""); // remove all non starting digits, i.e. "Suite, Apt, APARTMENT, #" etc.
+    }
+
+    private List<N4RentOwingForPeriod> aggregateCharges(List<N4UnpaidCharge> charges) {
+        List<N4RentOwingForPeriod> result = new ArrayList<>();
+        Map<LongRange, N4RentOwingForPeriod> owingMap = new HashMap<>();
+        for (N4UnpaidCharge charge : charges) {
+            LongRange period = new LongRange(charge.fromDate().getValue().getTime(), charge.toDate().getValue().getTime());
+            N4RentOwingForPeriod owing = owingMap.get(period);
+            if (owing == null) {
+                owing = EntityFactory.create(N4RentOwingForPeriod.class);
+                owing.fromDate().set(charge.fromDate());
+                owing.toDate().set(charge.toDate());
+                owing.rentCharged().set(charge.rentCharged());
+                owing.rentPaid().set(charge.rentPaid());
+                owing.rentOwing().set(charge.rentOwing());
+                owingMap.put(period, owing);
+            } else {
+                owing.rentCharged().setValue(owing.rentCharged().getValue().add(charge.rentCharged().getValue()));
+                owing.rentPaid().setValue(owing.rentPaid().getValue().add(charge.rentPaid().getValue()));
+                owing.rentOwing().setValue(owing.rentOwing().getValue().add(charge.rentOwing().getValue()));
+            }
+        }
+        // sort by period
+        List<LongRange> keys = new ArrayList<>(owingMap.keySet());
+        Collections.sort(keys, new Comparator<LongRange>() {
+            @Override
+            public int compare(LongRange o1, LongRange o2) {
+                return (int) (o2.getMaximumLong() - o1.getMaximumLong());
+            }
+        });
+        // we only accept the max of 3 entries in the result, so combine the all but last 2 into one
+        for (int i = 0; i < keys.size(); i++) {
+            LongRange key = keys.get(i);
+            N4RentOwingForPeriod item = owingMap.get(key);
+            if (i == 0 || i >= keys.size() - 2) {
+                result.add(item);
+            } else {
+                N4RentOwingForPeriod base = result.get(0);
+                // extend period if needed and combine amounts
+                if (base.fromDate().isNull() || base.fromDate().getValue().after(item.fromDate().getValue())) {
+                    base.fromDate().set(item.fromDate());
+                }
+                if (base.toDate().isNull() || base.toDate().getValue().before(item.toDate().getValue())) {
+                    base.toDate().set(item.toDate());
+                }
+                base.rentCharged().setValue(base.rentCharged().getValue().add(item.rentCharged().getValue()));
+                base.rentPaid().setValue(base.rentPaid().getValue().add(item.rentPaid().getValue()));
+                base.rentOwing().setValue(base.rentOwing().getValue().add(item.rentOwing().getValue()));
+            }
+        }
+        return result;
     }
 
     LogicalDate calculateDeliveryDate(LogicalDate noticeDate, N4DeliveryMethod deliveryMethod, N4Policy policy) {

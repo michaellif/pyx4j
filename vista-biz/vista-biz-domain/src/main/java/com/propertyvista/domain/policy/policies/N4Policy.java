@@ -58,6 +58,8 @@ public interface N4Policy extends Policy {
     @EmbeddedEntity
     InternationalAddress mailingAddress();
 
+    IPrimitive<Boolean> useAgentContactInfo();
+
     @Editor(type = EditorType.phone)
     IPrimitive<String> phoneNumber();
 
