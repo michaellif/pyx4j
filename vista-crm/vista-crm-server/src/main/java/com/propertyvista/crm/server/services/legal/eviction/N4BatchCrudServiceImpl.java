@@ -111,10 +111,10 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
     protected void enhanceRetrieved(N4Batch bo, N4BatchDTO to, RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(bo, to, retrieveTarget);
 
+        Persistence.ensureRetrieve(to.building(), AttachLevel.ToStringMembers);
         Persistence.ensureRetrieve(to.items(), AttachLevel.Attached);
         for (N4BatchItem item : to.items()) {
             Persistence.ensureRetrieve(item.unpaidCharges(), AttachLevel.Attached);
-
             Persistence.ensureRetrieve(item.lease().unit().building(), AttachLevel.Attached);
             Persistence.ensureRetrieve(item.lease()._applicant(), AttachLevel.Attached);
         }
@@ -124,6 +124,7 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
     protected void enhanceListRetrieved(N4Batch bo, N4BatchDTO to) {
         super.enhanceListRetrieved(bo, to);
 
+        Persistence.ensureRetrieve(to.building(), AttachLevel.ToStringMembers);
         Persistence.ensureRetrieve(to.items(), AttachLevel.Attached);
     }
 
@@ -135,13 +136,17 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
         batch.created().setValue(SystemDateManager.getDate());
         batch.companyLegalName().setValue(n4policy.companyName().getValue());
         batch.companyAddress().set(n4policy.mailingAddress().duplicate(InternationalAddress.class));
-        // TODO use Employee  contact if so configured in policy
-        batch.companyPhoneNumber().setValue(n4policy.phoneNumber().getValue());
-        batch.companyFaxNumber().setValue(n4policy.faxNumber().getValue());
-        batch.companyEmailAddress().setValue(n4policy.emailAddress().getValue());
 
         if (EmployeeSelectionMethod.ByLoggedInUser.equals(n4policy.agentSelectionMethod().getValue())) {
             batch.signingEmployee().set(CrmAppContext.getCurrentUserEmployee());
+        }
+
+        if (n4policy.useAgentContactInfo().getValue(false) && !batch.signingEmployee().isNull()) {
+            // TODO use Employee  contact if so configured in policy; has no fax though...
+        } else {
+            batch.companyPhoneNumber().setValue(n4policy.phoneNumber().getValue());
+            batch.companyFaxNumber().setValue(n4policy.faxNumber().getValue());
+            batch.companyEmailAddress().setValue(n4policy.emailAddress().getValue());
         }
 
         return batch;
@@ -154,7 +159,6 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
     // TODO - copied from SelectN4LeaseCandidateListServiceImpl; move to a facade
     private List<N4UnpaidCharge> getUnpaidCharges(Lease lease, HashSet<ARCode> acceptableArCodes) {
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
-        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
 
         LogicalDate today = SystemDateManager.getLogicalDate();
 
