@@ -552,21 +552,21 @@ public class YardiLeaseProcessor {
 
     public static void setLeaseChargesComaptibleIds(Lease lease) {
         List<BillableItem> allBillableItems = new ArrayList<>();
-        allBillableItems.add(lease.currentTerm().version().leaseProducts().serviceItem());
-        for (BillableItem bi : lease.currentTerm().version().leaseProducts().featureItems()) {
-            allBillableItems.add(bi);
+
+        if (!lease.currentTerm().version().leaseProducts().serviceItem().item().isEmpty()) {
+            allBillableItems.add(lease.currentTerm().version().leaseProducts().serviceItem());
+            for (BillableItem bi : lease.currentTerm().version().leaseProducts().featureItems()) {
+                allBillableItems.add(bi);
+            }
         }
 
         Map<String, Integer> chargeCodeItemsCount = new HashMap<>();
 
         for (BillableItem bi : allBillableItems) {
-            String chargeCode;
-
-            Validate.isTrue(bi.item().product().holder().code().yardiChargeCodes().size() > 0, "yardiChargeCodes are not mapped to product {0}", bi.item()
+            Validate.isTrue(!bi.item().product().holder().code().yardiChargeCodes().isEmpty(), "yardiChargeCodes are not mapped to product {0}", bi.item()
                     .product().holder());
 
-            chargeCode = bi.item().product().holder().code().yardiChargeCodes().get(0).yardiChargeCode().getValue();
-
+            String chargeCode = bi.item().product().holder().code().yardiChargeCodes().get(0).yardiChargeCode().getValue();
             Integer chargeCodeItemNo = chargeCodeItemsCount.get(chargeCode);
             if (chargeCodeItemNo == null) {
                 chargeCodeItemNo = 1;
