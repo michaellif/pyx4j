@@ -115,8 +115,8 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
         this.value.clear();
         if (value != null) {
             this.value.addAll(value);
-            listBox.showValue(value);
         }
+        listBox.showValue(this.value);
     }
 
     public Collection<E> getValue() {
