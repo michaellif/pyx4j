@@ -69,16 +69,9 @@ public abstract class AvailableLocaleSelectorDialog extends Dialog implements Ok
         this.usedLocales = usedLocales;
 
         final CEntityComboBox<AvailableLocale> localeSelector = new CEntityComboBox<AvailableLocale>(AvailableLocale.class);
-        localeSelector.asWidget().setWidth("100%");
-        localeSelector.setFormat(new IFormatter<AvailableLocale, String>() {
-
-            @Override
-            public String format(AvailableLocale value) {
-                return value != null ? value.toString() : title;
-            }
-        });
 
         // this triggers option load
+        localeSelector.populate(null);
         localeSelector.setValueByString("");
         if (localeSelector.isOptionsLoaded()) {
             setContentPanel(localeSelector);
@@ -99,6 +92,14 @@ public abstract class AvailableLocaleSelectorDialog extends Dialog implements Ok
             }
         });
 
+        localeSelector.setFormat(new IFormatter<AvailableLocale, String>() {
+            @Override
+            public String format(AvailableLocale value) {
+                return (value != null ? value.toString() : title);
+            }
+        });
+
+        localeSelector.asWidget().setWidth("100%");
         panel.getElement().getStyle().setPadding(1, Unit.EM);
         setBody(panel);
     }
@@ -115,7 +116,7 @@ public abstract class AvailableLocaleSelectorDialog extends Dialog implements Ok
 
         int optSize = localeSelector.getOptions().size();
         if (optSize == 0) {
-            panel.setWidget(new Label("Sorry, no more items to choose from."));
+            panel.setWidget(new Label("Sorry, no more Locales to choose from."));
             getOkButton().setVisible(false);
         } else {
             panel.setWidget(localeSelector);

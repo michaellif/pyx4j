@@ -57,7 +57,7 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
         addTab(formPanel, proto().metaTags().getMeta().getCaption());
 
         formPanel = new FormPanel(this);
-        formPanel.append(Location.Dual, proto().childPages(), new PageDescriptorFolder(this));
+        formPanel.append(Location.Left, proto().childPages(), new PageDescriptorFolder(this));
         selectTab(addTab(formPanel, proto().childPages().getMeta().getCaption()));
 
         formPanel = new FormPanel(this);
@@ -73,12 +73,10 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.h4(i18n.tr("Narrow Page Gadgets:"));
-        formPanel.append(Location.Dual, proto().homePageGadgetsNarrow(), new HomePageGadgetFolder(isEditable()));
-
+        formPanel.append(Location.Left, proto().homePageGadgetsNarrow(), new HomePageGadgetFolder(isEditable()));
         formPanel.br();
-
         formPanel.h4(i18n.tr("Wide Page Gadgets:"));
-        formPanel.append(Location.Dual, proto().homePageGadgetsWide(), new HomePageGadgetFolder(isEditable()));
+        formPanel.append(Location.Left, proto().homePageGadgetsWide(), new HomePageGadgetFolder(isEditable()));
 
         return formPanel;
     }

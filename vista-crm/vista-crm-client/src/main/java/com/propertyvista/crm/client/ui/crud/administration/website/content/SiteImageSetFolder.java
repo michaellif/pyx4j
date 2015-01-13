@@ -158,9 +158,7 @@ public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
         protected IsWidget createContent() {
             FormPanel formPanel = new FormPanel(this);
 
-            CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
-            locale.setEditable(false);
-            formPanel.append(Location.Left, proto().locale(), locale).decorate();
+            formPanel.append(Location.Left, proto().locale(), new CEntityLabel<AvailableLocale>()).decorate();
             formPanel.append(Location.Left, proto().imageSet(), imageHolder).decorate();
 
             return formPanel;
