@@ -61,7 +61,7 @@ public abstract class AvailableLocaleSelectorDialog extends Dialog implements Ok
 
     public AvailableLocaleSelectorDialog(final Set<CompiledLocale> usedLocales) {
         super(i18n.tr("Locale Selection"));
-        setDialogPixelWidth(400);
+        setDialogPixelWidth(350);
         setDialogOptions(this);
 
         this.usedLocales = usedLocales;
@@ -92,7 +92,6 @@ public abstract class AvailableLocaleSelectorDialog extends Dialog implements Ok
         });
         getOkButton().setEnabled(false);
 
-        localeSelector.asWidget().setWidth("100%");
         panel.getElement().getStyle().setPadding(1, Unit.EM);
         setBody(panel);
     }

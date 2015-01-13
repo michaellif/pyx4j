@@ -115,7 +115,7 @@ class AvailableLocaleFolder extends VistaTableFolder<AvailableLocale> {
 
         public LocaleSelectorDialog() {
             super(i18n.tr("Locale Selection"));
-            setDialogPixelWidth(400);
+            setDialogPixelWidth(350);
             setDialogOptions(this);
 
             SimplePanel panel = new SimplePanel();
@@ -138,7 +138,6 @@ class AvailableLocaleFolder extends VistaTableFolder<AvailableLocale> {
                     }
                 });
                 getOkButton().setEnabled(false);
-                localeSelector.asWidget().setWidth("100%");
                 panel.setWidget(localeSelector);
             }
             panel.getElement().getStyle().setPadding(1, Unit.EM);

@@ -17,13 +17,13 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
@@ -36,8 +36,8 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
+import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.site.SocialLink;
@@ -74,7 +74,18 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
 
     @Override
     protected void addItem() {
-        new SocialSiteSelector().show();
+        new SocialSiteSelector() {
+            @Override
+            public boolean onClickOk() {
+                SocialSite socialSite = getSelectedSocialSite();
+                if (socialSite != null) {
+                    SocialLink link = EntityFactory.create(SocialLink.class);
+                    link.socialSite().setValue(socialSite);
+                    SocialLinkFolder.super.addItem(link);
+                }
+                return true;
+            }
+        }.show();
     }
 
     @Override
@@ -82,42 +93,40 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
         return new SocialLinkEditor();
     }
 
-    class SocialSiteSelector extends Dialog implements CancelOption {
+    private abstract class SocialSiteSelector extends Dialog implements OkCancelOption {
+
+        private SocialSite selectedSocialSite;
+
         public SocialSiteSelector() {
-            super("Select Social Site");
+            super(i18n.tr("Social Site Selection"));
+            setDialogPixelWidth(350);
             setDialogOptions(this);
 
-            VerticalPanel panel = new VerticalPanel();
+            SimplePanel panel = new SimplePanel();
             CComboBox<SocialSite> selector = new CComboBox<SocialSite>();
-            selector.setFormat(new IFormatter<SocialLink.SocialSite, String>() {
-
-                @Override
-                public String format(SocialSite value) {
-                    return value != null ? value.toString() : i18n.tr("Select Social Site");
-                }
-            });
+            selector.setMandatory(true);
 
             ArrayList<SocialSite> options = new ArrayList<SocialSite>(Arrays.asList(SocialSite.values()));
             options.removeAll(usedSites);
+
+            selector.populate(null);
             selector.setOptions(options);
             int optSize = options.size();
             if (optSize > 0) {
                 selector.addValueChangeHandler(new ValueChangeHandler<SocialSite>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<SocialSite> event) {
-                        SocialLink link = EntityFactory.create(SocialLink.class);
-                        link.socialSite().setValue(event.getValue());
-                        SocialLinkFolder.super.addItem(link);
-                        hide(false);
+                        selectedSocialSite = event.getValue();
+                        getOkButton().setEnabled(true);
                     }
                 });
-                panel.add(selector);
-                selector.getNativeComponent().getEditor().setVisibleItemCount(optSize + 1);
-                selector.getNativeComponent().getEditor().setHeight("100px");
+                getOkButton().setEnabled(false);
+                panel.setWidget(selector);
             } else {
-                panel.add(new Label(i18n.tr("Sorry, no more items to choose from.")));
+                panel.setWidget(new Label(i18n.tr("Sorry, no more items to choose from.")));
             }
 
+            panel.getElement().getStyle().setPadding(1, Unit.EM);
             setBody(panel);
         }
 
@@ -125,9 +134,13 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
         public boolean onClickCancel() {
             return true;
         }
+
+        public SocialSite getSelectedSocialSite() {
+            return selectedSocialSite;
+        }
     }
 
-    class SocialLinkEditor extends CForm<SocialLink> {
+    private class SocialLinkEditor extends CForm<SocialLink> {
 
         public SocialLinkEditor() {
             super(SocialLink.class);
@@ -139,8 +152,8 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
 
             CLabel<String> site = new CLabel<String>();
             site.setEditable(false);
-            formPanel.append(Location.Left, proto().socialSite(), site).decorate().componentWidth(120);
-            formPanel.append(Location.Left, proto().siteUrl()).decorate();
+            formPanel.append(Location.Left, proto().socialSite(), site).decorate();
+            formPanel.append(Location.Dual, proto().siteUrl()).decorate();
             get(proto().siteUrl()).addComponentValidator(new AbstractComponentValidator<String>() {
                 @Override
                 public BasicValidationError isValid() {
