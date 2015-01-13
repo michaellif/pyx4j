@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -17,12 +17,9 @@ import java.util.Set;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
-import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.ILocalizedEntity;
@@ -74,24 +71,5 @@ public abstract class LocalizedContentFolderBase<E extends ILocalizedEntity> ext
                 return true;
             }
         }.show();
-    }
-
-    @Override
-    protected CForm<E> createItemForm(IObject<?> member) {
-        return new LocalizedContentEditor();
-    }
-
-    public abstract IsWidget createEditorContent(CForm<E> editor);
-
-    class LocalizedContentEditor extends CForm<E> {
-
-        public LocalizedContentEditor() {
-            super(entityClass);
-        }
-
-        @Override
-        protected IsWidget createContent() {
-            return createEditorContent(this);
-        }
     }
 }

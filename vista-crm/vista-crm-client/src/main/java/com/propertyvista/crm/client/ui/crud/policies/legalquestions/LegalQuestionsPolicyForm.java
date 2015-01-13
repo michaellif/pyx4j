@@ -14,6 +14,7 @@ package com.propertyvista.crm.client.ui.crud.policies.legalquestions;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -53,13 +54,19 @@ public class LegalQuestionsPolicyForm extends PolicyDTOTabPanelBasedForm<LegalQu
         }
 
         @Override
-        public IsWidget createEditorContent(CForm<LegalQuestionsPolicyItem> editor) {
-            FormPanel formPanel = new FormPanel(editor);
+        protected CForm<? extends LegalQuestionsPolicyItem> createItemForm(IObject<?> member) {
+            return new CForm<LegalQuestionsPolicyItem>(LegalQuestionsPolicyItem.class) {
 
-            formPanel.append(Location.Dual, proto().locale(), new CLabel<CompiledLocale>()).decorate();
-            formPanel.append(Location.Dual, proto().question()).decorate();
+                @Override
+                protected IsWidget createContent() {
+                    FormPanel formPanel = new FormPanel(this);
 
-            return formPanel;
+                    formPanel.append(Location.Dual, proto().locale(), new CLabel<CompiledLocale>()).decorate();
+                    formPanel.append(Location.Dual, proto().question()).decorate();
+
+                    return formPanel;
+                }
+            };
         }
     }
 }
