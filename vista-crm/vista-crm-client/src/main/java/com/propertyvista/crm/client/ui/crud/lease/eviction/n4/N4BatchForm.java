@@ -61,17 +61,21 @@ public class N4BatchForm extends CrmEntityForm<N4BatchDTO> {
         formPanel.h1(i18n.tr("General"));
         formPanel.append(Location.Left, proto().name()).decorate();
         formPanel.append(Location.Left, proto().created()).decorate();
+        formPanel.append(Location.Left, proto().noticeIssueDate()).decorate();
+        formPanel.append(Location.Left, proto().serviceDate()).decorate();
 
-        formPanel.append(Location.Right, proto().noticeIssueDate()).decorate();
         CField<Employee, ?> employeeBox = isEditable() ? new CEntityComboBox<>(Employee.class) : //
                 new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class));
         formPanel.append(Location.Right, proto().signingEmployee(), employeeBox).decorate();
+        formPanel.append(Location.Right, proto().deliveryMethod()).decorate();
+        formPanel.append(Location.Right, proto().deliveryDate()).decorate();
 
         formPanel.h1(i18n.tr("Contact Information"));
         formPanel.append(Location.Left, proto().companyLegalName()).decorate().customLabel(i18n.tr("Legal Name"));
         formPanel.append(Location.Left, proto().companyEmailAddress()).decorate().customLabel(i18n.tr("Email Address"));
         formPanel.append(Location.Right, proto().companyPhoneNumber(), new CPhoneField(PhoneType.northAmerica)).decorate().customLabel(i18n.tr("Phone Number"));
         formPanel.append(Location.Right, proto().companyFaxNumber(), new CPhoneField(PhoneType.northAmerica)).decorate().customLabel(i18n.tr("Fax Number"));
+
         formPanel.h3(i18n.tr("Mailing Address"));
         formPanel.append(Location.Dual, proto().companyAddress(), new InternationalAddressEditor());
 

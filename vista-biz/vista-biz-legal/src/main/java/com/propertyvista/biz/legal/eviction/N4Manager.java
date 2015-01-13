@@ -38,8 +38,6 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.legal.LeaseLegalFacade;
-import com.propertyvista.biz.legal.N4CSGenerationFacadeImpl;
-import com.propertyvista.biz.legal.N4GenerationFacadeImpl;
 import com.propertyvista.biz.legal.forms.framework.filling.FormFillerImpl;
 import com.propertyvista.biz.legal.forms.n4.N4FieldsMapping;
 import com.propertyvista.biz.legal.forms.n4cs.N4CSFieldsMapping;
@@ -276,7 +274,7 @@ public class N4Manager {
     private byte[] generateN4Letter(N4FormFieldsData formData) {
         byte[] filledForm = null;
         try {
-            byte[] formTemplate = IOUtils.toByteArray(N4GenerationFacadeImpl.class.getResourceAsStream(N4_FORM_FILE));
+            byte[] formTemplate = IOUtils.toByteArray(N4Manager.class.getResourceAsStream(N4_FORM_FILE));
             filledForm = new FormFillerImpl().fillForm(formTemplate, new N4FieldsMapping(), formData, true);
         } catch (Throwable e) {
             throw new RuntimeException(e);
@@ -332,7 +330,7 @@ public class N4Manager {
     private byte[] generateN4CSLetter(N4CSFormFieldsData formData) {
         byte[] filledForm = null;
         try {
-            byte[] formTemplate = IOUtils.toByteArray(N4CSGenerationFacadeImpl.class.getResourceAsStream(N4_CS_FORM_FILE));
+            byte[] formTemplate = IOUtils.toByteArray(N4Manager.class.getResourceAsStream(N4_CS_FORM_FILE));
             filledForm = new FormFillerImpl().fillForm(formTemplate, new N4CSFieldsMapping(), formData, true);
         } catch (Throwable e) {
             throw new RuntimeException(e);

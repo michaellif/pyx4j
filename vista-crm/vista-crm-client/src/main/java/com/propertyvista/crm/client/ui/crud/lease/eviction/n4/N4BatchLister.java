@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
@@ -27,11 +28,15 @@ import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.rpc.services.legal.eviction.N4BatchCrudService;
+import com.propertyvista.crm.rpc.services.legal.eviction.ac.ServiceN4;
 import com.propertyvista.crm.rpc.services.selections.SelectN4LeaseCandidateListService;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.N4BatchDTO;
@@ -46,6 +51,34 @@ public class N4BatchLister extends SiteDataTablePanel<N4BatchDTO> {
 
         setColumnDescriptors(createColumnDescriptors());
         setDataTableModel(new DataTableModel<N4BatchDTO>());
+        getDataTableModel().setMultipleSelection(true);
+
+        addUpperActionItem(new Button(i18n.tr("Print Forms"), new Command() {
+            @Override
+            public void execute() {
+                if (getDataTable().getSelectedItems().isEmpty()) {
+                    showEmptySelectionError();
+                }
+            }
+        }, new ActionPermission(ServiceN4.class)));
+
+        addUpperActionItem(new Button(i18n.tr("Print with Summary"), new Command() {
+            @Override
+            public void execute() {
+                if (getDataTable().getSelectedItems().isEmpty()) {
+                    showEmptySelectionError();
+                }
+            }
+        }, new ActionPermission(ServiceN4.class)));
+
+        addUpperActionItem(new Button(i18n.tr("Service by AutoMail"), new Command() {
+            @Override
+            public void execute() {
+                if (getDataTable().getSelectedItems().isEmpty()) {
+                    showEmptySelectionError();
+                }
+            }
+        }, new ActionPermission(ServiceN4.class)));
     }
 
     public static ColumnDescriptor[] createColumnDescriptors() {
@@ -114,5 +147,9 @@ public class N4BatchLister extends SiteDataTablePanel<N4BatchDTO> {
             }
 
         }.show();
+    }
+
+    private void showEmptySelectionError() {
+        MessageDialog.error(i18n.tr("Selection Is Empty"), i18n.tr("Please select items to process..."));
     }
 }
