@@ -39,10 +39,6 @@ public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
 
     private static final I18n i18n = I18n.get(EmergencyContactFolder.class);
 
-    private boolean isMandatory = false;
-
-    private int contactsAmount = 1;
-
     public EmergencyContactFolder() {
         this(true);
 
@@ -51,11 +47,6 @@ public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
 
     public EmergencyContactFolder(boolean modifiable) {
         super(EmergencyContact.class, i18n.tr("Emergency Contact"), modifiable);
-    }
-
-    public void setRestrictions(boolean isMandatory, int contactsAmount) {
-        this.isMandatory = isMandatory;
-        this.contactsAmount = contactsAmount;
     }
 
     @Override
@@ -80,14 +71,6 @@ public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
         this.addComponentValidator(new AbstractComponentValidator<IList<EmergencyContact>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getValue() == null) {
-                    return null;
-                }
-
-                if (isMandatory && getValue().size() < contactsAmount) {
-                    return new BasicValidationError(getCComponent(), i18n.tr("At least {0} Emergency Contact(s) should be specified", contactsAmount));
-                }
-
                 return !EntityGraph.hasBusinessDuplicates(getValue()) ? null : new BasicValidationError(getCComponent(), i18n
                         .tr("Duplicate Emergency Contacts specified"));
             }
@@ -96,7 +79,6 @@ public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
 
     @Override
     public void generateMockData() {
-
         if (getItemCount() == 0) {
             EmergencyContact contact = EntityFactory.create(EmergencyContact.class);
             addItem(contact);

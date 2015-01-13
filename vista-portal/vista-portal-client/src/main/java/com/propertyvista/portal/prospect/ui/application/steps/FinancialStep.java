@@ -12,12 +12,10 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
-import java.util.List;
-
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
@@ -38,6 +36,10 @@ public class FinancialStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(FinancialStep.class);
 
+    private final PersonalIncomeFolder personalIncomeFolder = new PersonalIncomeFolder();
+
+    private final PersonalAssetFolder personalAssetFolder = new PersonalAssetFolder();
+
     private Widget guarantorsHeader;
 
     public FinancialStep() {
@@ -49,7 +51,7 @@ public class FinancialStep extends ApplicationWizardStep {
         FormPanel formPanel = new FormPanel(getWizard());
 
         formPanel.h3(i18n.tr("Income"));
-        formPanel.append(Location.Left, proto().applicantData().incomes(), new PersonalIncomeFolder());
+        formPanel.append(Location.Left, proto().applicantData().incomes(), personalIncomeFolder);
 
         formPanel.h3(i18n.tr("Assets"));
         formPanel.append(Location.Left, proto().applicantData().assets(), new PersonalAssetFolder());
@@ -72,12 +74,9 @@ public class FinancialStep extends ApplicationWizardStep {
         }
 
         if (getWizard().isEditable()) {
-            ((PersonalIncomeFolder) (CComponent<?, ?, ?, ?>) get(proto().applicantData().incomes())).setRestrictionsPolicy(getValue().applicantData()
-                    .restrictionsPolicy());
-            ((PersonalIncomeFolder) (CComponent<?, ?, ?, ?>) get(proto().applicantData().incomes())).setDocumentationPolicy(getValue().applicantData()
-                    .documentsPolicy());
-            ((PersonalAssetFolder) (CComponent<?, ?, ?, ?>) get(proto().applicantData().assets())).setDocumentationPolicy(getValue().applicantData()
-                    .documentsPolicy());
+            personalIncomeFolder.setRestrictionsPolicy(getValue().applicantData().restrictionsPolicy());
+            personalIncomeFolder.setDocumentationPolicy(getValue().applicantData().documentsPolicy());
+            personalAssetFolder.setDocumentationPolicy(getValue().applicantData().documentsPolicy());
         }
     }
 
@@ -85,24 +84,22 @@ public class FinancialStep extends ApplicationWizardStep {
     public void addValidations() {
         super.addValidations();
 
-        get(proto().applicantData().incomes()).addComponentValidator(new AbstractComponentValidator<List<CustomerScreeningIncome>>() {
+        personalIncomeFolder.addComponentValidator(new AbstractComponentValidator<IList<CustomerScreeningIncome>>() {
             @Override
             public BasicValidationError isValid() {
                 return (getValue().applicantData().assets().size() > 0) || (getValue().applicantData().incomes().size() > 0) ? null : new BasicValidationError(
                         getCComponent(), i18n.tr("Incomes and/or Assets are required"));
             }
         });
-        get(proto().applicantData().assets()).addValueChangeHandler(
-                new RevalidationTrigger<List<CustomerScreeningAsset>>(get(proto().applicantData().incomes())));
+        personalAssetFolder.addValueChangeHandler(new RevalidationTrigger<IList<CustomerScreeningAsset>>(get(proto().applicantData().incomes())));
 
-        get(proto().applicantData().assets()).addComponentValidator(new AbstractComponentValidator<List<CustomerScreeningAsset>>() {
+        personalAssetFolder.addComponentValidator(new AbstractComponentValidator<IList<CustomerScreeningAsset>>() {
             @Override
             public BasicValidationError isValid() {
                 return (getValue().applicantData().assets().size() > 0) || (getValue().applicantData().incomes().size() > 0) ? null : new BasicValidationError(
                         getCComponent(), i18n.tr("Assets and/or Incomes are required"));
             }
         });
-        get(proto().applicantData().incomes()).addValueChangeHandler(
-                new RevalidationTrigger<List<CustomerScreeningIncome>>(get(proto().applicantData().assets())));
+        personalIncomeFolder.addValueChangeHandler(new RevalidationTrigger<IList<CustomerScreeningIncome>>(get(proto().applicantData().assets())));
     }
 }

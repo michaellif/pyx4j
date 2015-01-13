@@ -14,14 +14,21 @@ package com.propertyvista.portal.prospect.ui.application.steps;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.BasicValidationError;
+import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.shared.ui.util.folders.EmergencyContactFolder;
 
 public class EmergencyContactsStep extends ApplicationWizardStep {
+
+    private static final I18n i18n = I18n.get(EmergencyContactsStep.class);
 
     private final EmergencyContactFolder emergencyContactFolder = new EmergencyContactFolder();
 
@@ -37,10 +44,18 @@ public class EmergencyContactsStep extends ApplicationWizardStep {
     }
 
     @Override
-    public void onValueSet(boolean populate) {
-        super.onValueSet(populate);
+    public void addValidations() {
+        super.addValidations();
 
-        emergencyContactFolder.setRestrictions(getValue().emergencyContactsIsMandatory().getValue(false), getValue().emergencyContactsNumberRequired()
-                .getValue());
+        emergencyContactFolder.addComponentValidator(new AbstractComponentValidator<IList<EmergencyContact>>() {
+            @Override
+            public BasicValidationError isValid() {
+                int contactsAmount = getValue().emergencyContactsNumberRequired().getValue(1);
+                if (getValue().emergencyContactsIsMandatory().getValue(false) && getCComponent().getValue().size() < contactsAmount) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("At least {0} Emergency Contact(s) should be specified", contactsAmount));
+                }
+                return null;
+            }
+        });
     }
 }
