@@ -25,7 +25,6 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
 import com.propertyvista.domain.ILocalizedEntity;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.shared.i18n.CompiledLocale;

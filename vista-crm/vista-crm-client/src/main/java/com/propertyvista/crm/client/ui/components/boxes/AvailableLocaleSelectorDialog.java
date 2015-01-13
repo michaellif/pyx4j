@@ -10,7 +10,7 @@
  * Created on Mar 7, 2012
  * @author stanp
  */
-package com.propertyvista.crm.client.ui.crud.administration.website.general;
+package com.propertyvista.crm.client.ui.components.boxes;
 
 import java.util.Collection;
 import java.util.HashSet;

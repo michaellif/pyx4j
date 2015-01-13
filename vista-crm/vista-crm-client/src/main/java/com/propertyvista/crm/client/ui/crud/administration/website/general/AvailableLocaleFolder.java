@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -70,7 +71,7 @@ class AvailableLocaleFolder extends VistaTableFolder<AvailableLocale> {
     @Override
     public CField<?, ?> create(IObject<?> member) {
         if (proto().lang().getPath().equals(member.getPath())) {
-            return new CLabel();
+            return new CLabel<>();
         }
         return super.create(member);
     }
@@ -129,6 +130,7 @@ class AvailableLocaleFolder extends VistaTableFolder<AvailableLocale> {
                     panel.add(radio);
                 }
             }
+            panel.getElement().getStyle().setPadding(1, Unit.EM);
             setBody(panel);
         }
 
