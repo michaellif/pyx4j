@@ -143,7 +143,7 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
         columns.add(new ColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("27px").formatter(
                 booleanField2Image( proto.hasAttachments().getPath(),CrmImages.INSTANCE.attachement(), null))
                 .columnTitleShown(false).build());
-        columns.add(new ColumnDescriptor.Builder(proto.thread().id()).columnTitle(i18n.tr("Id")).searchable(true).width("100px").formatter(showHideId()).build());
+        columns.add(new ColumnDescriptor.Builder(proto.thread().id()).columnTitle(i18n.tr("Ticket Id")).searchable(true).width("100px").formatter(showHideId()).build());
         columns.add(new ColumnDescriptor.Builder(proto.senderDTO().name()).columnTitle(i18n.tr("Sender")).searchable(false).width("200px").formatter(baseFieldViewOnIsRead(proto.senderDTO().name().getPath())).build());
         columns.add(new ColumnDescriptor.Builder(proto.subject()).searchable(false).width("600px").formatter(baseFieldViewOnIsRead(proto.subject().getPath())).build());
         columns.add(new ColumnDescriptor.Builder(proto.date()).formatter(baseFieldViewOnIsRead(proto.date().getPath())).searchable(false).width("100px").build());

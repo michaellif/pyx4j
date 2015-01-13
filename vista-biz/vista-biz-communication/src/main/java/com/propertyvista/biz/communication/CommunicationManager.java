@@ -47,6 +47,7 @@ import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
+import com.propertyvista.domain.communication.MessageCategory.TicketType;
 import com.propertyvista.domain.communication.NotificationDelivery;
 import com.propertyvista.domain.communication.SpecialDelivery.DeliveryMethod;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
@@ -243,9 +244,8 @@ public class CommunicationManager {
         List<MessageCategory> userGroups = getUserGroups(currentUser);
         if (userGroups != null && userGroups.size() > 0) {
             final EntityListCriteria<CommunicationThread> dispatchedCriteria = EntityListCriteria.create(CommunicationThread.class);
-            dispatchedCriteria.in(dispatchedCriteria.proto().status(), ThreadStatus.Open);
 
-            AndCriterion newDispatchedCriteria = new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().owner(),
+            AndCriterion newDispatchedCriteria = new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().content().$().recipients().$().recipient(),
                     ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned)),
                     PropertyCriterion.in(dispatchedCriteria.proto().category(), userGroups));
             dispatchedCriteria.add(newDispatchedCriteria);
@@ -256,10 +256,9 @@ public class CommunicationManager {
 
     private EntityListCriteria<CommunicationThread> getDispatchedCriteria(boolean includeByRoles, Employee currentUser) {
         final EntityListCriteria<CommunicationThread> dispatchedCriteria = EntityListCriteria.create(CommunicationThread.class);
-        dispatchedCriteria.in(dispatchedCriteria.proto().status(), ThreadStatus.Open);
+        dispatchedCriteria.eq(dispatchedCriteria.proto().content().$().recipients().$().recipient(), ServerSideFactory.create(CommunicationMessageFacade.class)
+                .getSystemEndpointFromCache(SystemEndpointName.Unassigned));
 
-        dispatchedCriteria.eq(dispatchedCriteria.proto().owner(),
-                ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned));
         List<MessageCategory> userGroups = getUserGroups(currentUser);
         dispatchedCriteria.in(dispatchedCriteria.proto().category(), userGroups);
 
@@ -469,7 +468,7 @@ public class CommunicationManager {
         if (threadStatus != null) {
             dto.status().setValue(threadStatus);
             thread.status().setValue(threadStatus);
-            if (currentUser instanceof Employee) {
+            if (currentUser instanceof Employee && thread.owner().equals(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned))) {
                 thread.owner().set(currentUser);
             } else if (updateOwner && CategoryType.Ticket.equals(dto.category().categoryType().getValue())
                     && thread.owner().equals(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned))) {
@@ -477,9 +476,17 @@ public class CommunicationManager {
                 thread.allowedReply().setValue(false);
             }
 
+            if (ThreadStatus.Resolved.equals(threadStatus) && TicketType.Maintenance.equals(dto.category().ticketType().getValue())) {
+                thread.allowedReply().setValue(false);
+            }
+
             Persistence.service().persist(thread);
             if (currentUser instanceof Employee) {
                 dbo.recipients().add(communicationFacade.createDeliveryHandle(currentUser, false));
+                if (!thread.owner().equals(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned))
+                        && !thread.owner().equals(currentUser)) {
+                    dbo.recipients().add(communicationFacade.createDeliveryHandle(thread.owner(), false));
+                }
             } else {
                 dbo.recipients().add(
                         communicationFacade.createDeliveryHandle(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned), false));
@@ -493,6 +500,7 @@ public class CommunicationManager {
             }
             communicationFacade.buildRecipientList(dbo, dto, thread);
         }
+
         dbo.thread().set(thread);
         dbo.isSystem().set(dto.isSystem());
         dbo.onBehalf().set(dto.onBehalf());
@@ -503,6 +511,23 @@ public class CommunicationManager {
         dbo.text().set(dto.text());
         dbo.highImportance().setValue(false);
         Persistence.service().persist(dbo);
+
+        EntityQueryCriteria<DeliveryHandle> dhCriteria = EntityQueryCriteria.create(DeliveryHandle.class);
+        dhCriteria.eq(dhCriteria.proto().recipient(), communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned));
+        dhCriteria.eq(dhCriteria.proto().message().thread(), thread);
+        dhCriteria.add(new OrCriterion(PropertyCriterion.isNull(dhCriteria.proto().message().isSystem()), PropertyCriterion.eq(dhCriteria.proto().message()
+                .isSystem(), false)));
+        List<DeliveryHandle> dhs = Persistence.service().query(dhCriteria, AttachLevel.Attached);
+        if (dhs != null && dhs.size() > 0) {
+            for (DeliveryHandle dh : dhs) {
+                dh.recipient().set(thread.owner());
+                dh.isRead().setValue(false);
+                dh.star().setValue(false);
+                Persistence.service().persist(dh);
+            }
+            Persistence.service().commit();
+        }
+
         Persistence.service().commit();
 
         return dbo;

@@ -15,34 +15,20 @@ package com.propertyvista.domain.legal.n4.pdf;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 @Transient
 public interface N4RentOwingForPeriod extends IEntity {
 
-    @NotNull
-    @ToString(index = 2)
     IPrimitive<LogicalDate> fromDate();
 
-    @NotNull
-    @ToString(index = 3)
     IPrimitive<LogicalDate> toDate();
 
-    @NotNull
-    @Format("$#,##0.00")
     IPrimitive<BigDecimal> rentCharged();
 
-    @NotNull
-    @Format("$#,##0.00")
     IPrimitive<BigDecimal> rentPaid();
 
-    @NotNull
-    @ToString(index = 0)
-    @Format("$#,##0.00")
     IPrimitive<BigDecimal> rentOwing();
 }

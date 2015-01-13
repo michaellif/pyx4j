@@ -18,6 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
+import com.propertyvista.domain.legal.n4.N4Batch;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.N4BatchDTO;
 
@@ -25,4 +26,5 @@ public interface N4BatchCrudService extends AbstractCrudService<N4BatchDTO> {
 
     void createBatches(AsyncCallback<N4BatchDTO> callback, Vector<Lease> leaseCandidates);
 
+    void serviceBatch(AsyncCallback<String> callback, N4Batch batchId);
 }

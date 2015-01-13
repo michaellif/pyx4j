@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
@@ -31,12 +32,15 @@ import com.propertyvista.domain.contact.InternationalAddress;
 
 public interface N4Batch extends IEntity {
 
+    @NotNull
     IPrimitive<String> name();
 
     @ReadOnly
     @Format("yyyy-MM-dd HH:mm:ss")
     @Timestamp(Update.Created)
     IPrimitive<Date> created();
+
+    IPrimitive<Boolean> isReadyForService();
 
     IPrimitive<LogicalDate> noticeDate();
 

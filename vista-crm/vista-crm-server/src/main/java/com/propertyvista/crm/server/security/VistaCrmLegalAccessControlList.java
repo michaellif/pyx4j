@@ -26,6 +26,7 @@ import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseCompletion;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseNotice;
 import com.propertyvista.crm.rpc.services.legal.eviction.EvictionDocumentUploadService;
+import com.propertyvista.crm.rpc.services.legal.eviction.ac.ServiceN4;
 import com.propertyvista.crm.rpc.services.selections.SelectN4LeaseCandidateListService;
 import com.propertyvista.domain.eviction.EvictionDocument;
 import com.propertyvista.domain.legal.LegalLetter;
@@ -69,5 +70,8 @@ class VistaCrmLegalAccessControlList extends UIAclBuilder {
 
         grant(LegalCollectionsFull, new IServiceExecutePermission(SelectN4LeaseCandidateListService.class));
         grant(LegalCollectionsFull, new IServiceExecutePermission(EvictionDocumentUploadService.class));
+
+        grant(LegalCollectionsFull, ServiceN4.class);
+
     }
 }

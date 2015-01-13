@@ -29,11 +29,13 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.legal.forms.n4.N4GenerationUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
+import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.services.legal.eviction.N4BatchCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.contact.InternationalAddress;
@@ -98,6 +100,11 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
         }
 
         callback.onSuccess(to);
+    }
+
+    @Override
+    public void serviceBatch(AsyncCallback<String> callback, N4Batch batchId) {
+        callback.onSuccess(DeferredProcessRegistry.fork(new N4GenerationDeferredProcess(batchId), ThreadPoolNames.IMPORTS));
     }
 
     @Override

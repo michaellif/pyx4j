@@ -15,7 +15,6 @@ package com.propertyvista.domain.legal.n4.pdf;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
@@ -38,7 +37,6 @@ public interface N4LeaseData extends IEntity {
 
     IPrimitive<LogicalDate> terminationDate();
 
-    @Format("$#,##0.00")
     IPrimitive<BigDecimal> totalRentOwning();
 
     IList<N4RentOwingForPeriod> rentOwingBreakdown();
