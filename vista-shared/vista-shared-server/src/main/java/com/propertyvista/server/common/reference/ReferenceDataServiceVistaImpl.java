@@ -12,6 +12,8 @@
  */
 package com.propertyvista.server.common.reference;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.core.IEntity;
@@ -30,11 +32,12 @@ import com.propertyvista.domain.site.AvailableLocale;
  */
 public class ReferenceDataServiceVistaImpl extends ReferenceDataServiceImpl {
 
+    @SuppressWarnings("unchecked")
     @Override
-    public <T extends IEntity> void query(AsyncCallback<EntitySearchResult<T>> callback, EntityQueryCriteria<T> criteria) {
+    public void query(AsyncCallback<EntitySearchResult<? extends IEntity>> callback, EntityQueryCriteria<? extends IEntity> criteria) {
         if (criteria.getEntityClass() == AvailableLocale.class) {
-            EntitySearchResult<T> result = new EntitySearchResult<T>();
-            result.setData(Persistence.secureQuery(criteria));
+            EntitySearchResult<IEntity> result = new EntitySearchResult<>();
+            result.setData((Vector<IEntity>) Persistence.secureQuery(criteria));
             callback.onSuccess(result);
         } else {
             super.query(callback, criteria);
