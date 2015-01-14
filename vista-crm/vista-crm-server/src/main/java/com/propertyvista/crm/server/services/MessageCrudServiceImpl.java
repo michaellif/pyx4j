@@ -121,7 +121,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         if (ownerCiteria != null && ownerCiteria.getValue() != null) {
             ViewScope critValue = (ViewScope) ownerCiteria.getValue();
             toCriteria.getFilters().remove(ownerCiteria);
-            if (ViewScope.Dispatched.equals(critValue)) {
+            if (ViewScope.DispatchQueue.equals(critValue)) {
                 boCriteria.eq(boCriteria.proto().thread().content().$().recipients().$().recipient(), ServerSideFactory
                         .create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned));
             }

@@ -10,7 +10,7 @@
  * Created on Dec 20, 2011
  * @author igors
  */
-package com.propertyvista.crm.client.ui.crud.communication;
+package com.propertyvista.crm.client.ui.crud.communication.listers;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.UserVisit;
@@ -27,7 +27,11 @@ public class MessageListerViewImpl extends AbstractListerView<MessageDTO> implem
     private static final I18n i18n = I18n.get(MessageListerViewImpl.class);
 
     public MessageListerViewImpl() {
-        setDataTablePanel(new MessageLister(this));
+        setDataTablePanel();
+    }
+
+    protected void setDataTablePanel() {
+        super.setDataTablePanel(new MessageLister(this, null));
     }
 
     @Override

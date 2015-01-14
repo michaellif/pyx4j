@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2015 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
@@ -7,15 +7,10 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 20, 2011
- * @author stanp
+ * Created on Jan 13, 2015
+ * @author smolka
  */
-package com.propertyvista.crm.client.ui.crud.communication;
+package com.propertyvista.crm.client.ui.crud.communication.listers;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView;
-
-import com.propertyvista.dto.MessageDTO;
-
-public interface MessageListerView extends IPrimeListerView<MessageDTO> {
-
+public interface MessageListerViewTicketCategory extends MessageListerView {
 }

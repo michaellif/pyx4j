@@ -17,10 +17,13 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
@@ -28,6 +31,7 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.CustomerPicture;
+import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentProfileDTO;
 import com.propertyvista.portal.rpc.portal.shared.services.CustomerPicturePortalUploadService;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
@@ -75,15 +79,19 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
     }
 
     @Override
-    protected void onValueSet(boolean populate) {
-        super.onValueSet(populate);
-
-        emergencyContactFolder.setRestrictions(getValue().emergencyContactsIsMandatory().getValue(), getValue().emergencyContactsNumberRequired().getValue());
-    }
-
-    @Override
     public void addValidations() {
         get(proto().person().email()).setMandatory(true);
         get(proto().person().birthDate()).addComponentValidator(new PastDateIncludeTodayValidator());
+
+        emergencyContactFolder.addComponentValidator(new AbstractComponentValidator<IList<EmergencyContact>>() {
+            @Override
+            public BasicValidationError isValid() {
+                int contactsAmount = getValue().emergencyContactsNumberRequired().getValue(1);
+                if (getValue().emergencyContactsIsMandatory().getValue(false) && getCComponent().getValue().size() < contactsAmount) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("At least {0} Emergency Contact(s) should be specified", contactsAmount));
+                }
+                return null;
+            }
+        });
     }
 }

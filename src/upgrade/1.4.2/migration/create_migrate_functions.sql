@@ -21,6 +21,39 @@ BEGIN
         ***     ======================================================================================================
         **/
         
+        -- foreign keys
+        
+        ALTER TABLE charge_line_list$charges DROP CONSTRAINT charge_line_list$charges_owner_fk;
+        ALTER TABLE charge_line_list$charges DROP CONSTRAINT charge_line_list$charges_value_fk;
+        ALTER TABLE customer_screening_personal_asset DROP CONSTRAINT customer_screening_personal_asset_owner_fk;
+        ALTER TABLE customer_screening_v DROP CONSTRAINT customer_screening_v_legal_questions_fk;
+        ALTER TABLE identification_document_folder DROP CONSTRAINT identification_document_folder_id_type_fk;
+        ALTER TABLE identification_document_folder DROP CONSTRAINT identification_document_folder_owner_fk;
+        ALTER TABLE identification_document_file DROP CONSTRAINT identification_document_file_owner_fk;
+        ALTER TABLE lease_billing_type_policy_item DROP CONSTRAINT lease_billing_type_policy_item_lease_billing_policy_fk;
+        ALTER TABLE maintenance_request_schedule DROP CONSTRAINT maintenance_request_schedule_request_fk;
+        ALTER TABLE permission_to_enter_note DROP CONSTRAINT permission_to_enter_note_locale_fk;
+        ALTER TABLE proof_of_asset_document_file DROP CONSTRAINT proof_of_asset_document_file_owner_fk;
+        ALTER TABLE proof_of_asset_document_folder DROP CONSTRAINT proof_of_asset_document_folder_owner_fk;
+        ALTER TABLE proof_of_income_document_file DROP CONSTRAINT proof_of_income_document_file_owner_fk;
+        ALTER TABLE proof_of_income_document_folder DROP CONSTRAINT proof_of_income_document_folder_owner_fk;
+        
+        -- primary keys
+        
+        ALTER TABLE charge_line DROP CONSTRAINT charge_line_pk;
+        ALTER TABLE charge_line_list DROP CONSTRAINT charge_line_list_pk;
+        ALTER TABLE charge_line_list$charges DROP CONSTRAINT charge_line_list$charges_pk;
+        ALTER TABLE charge_old DROP CONSTRAINT charge_old_pk;
+        ALTER TABLE customer_screening_personal_asset DROP CONSTRAINT customer_screening_personal_asset_pk;
+        ALTER TABLE customer_screening_legal_questions DROP CONSTRAINT customer_screening_legal_questions_pk;
+        ALTER TABLE identification_document_folder DROP CONSTRAINT identification_document_folder_pk;
+        ALTER TABLE maintenance_request_schedule DROP CONSTRAINT maintenance_request_schedule_pk;
+        ALTER TABLE proof_of_asset_document_folder DROP CONSTRAINT proof_of_asset_document_folder_pk;
+        ALTER TABLE proof_of_income_document_folder DROP CONSTRAINT proof_of_income_document_folder_pk;
+        
+        
+
+
 
         /**
         ***     ======================================================================================================
@@ -459,8 +492,12 @@ BEGIN
         CREATE TABLE n4_batch
         (
             id                              BIGINT              NOT NULL,
-            notice_date                     DATE,
+            building                        BIGINT,
+            notice_issue_date               DATE,
             delivery_method                 VARCHAR(50),
+            delivery_date                   DATE,
+            is_ready_for_service            BOOLEAN,
+            service_date                    DATE,
             company_legal_name              VARCHAR(500),
             company_address_street_number   VARCHAR(500),
             company_address_street_name     VARCHAR(500),
@@ -557,6 +594,7 @@ BEGIN
         -- n4_policy
         
         ALTER TABLE n4_policy   ADD COLUMN agent_selection_method VARCHAR(50),
+                                ADD COLUMN use_agent_contact_info BOOLEAN,
                                 ADD COLUMN eviction_flow_step VARCHAR(500);
                                 
                                 
@@ -734,6 +772,97 @@ BEGIN
         ***     =======================================================================================================
         **/
         
+        -- primary keys
+        
+        ALTER TABLE customer_screening_asset ADD CONSTRAINT customer_screening_asset_pk PRIMARY KEY(id);
+        ALTER TABLE identification_document ADD CONSTRAINT identification_document_pk PRIMARY KEY(id);
+
+        -- foreign keys
+        
+        ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_special_delivery_fk FOREIGN KEY(special_delivery) 
+            REFERENCES special_delivery(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE crm_user_delivery_preferences ADD CONSTRAINT crm_user_delivery_preferences_user_preferences_fk FOREIGN KEY(user_preferences) 
+            REFERENCES crm_user_preferences(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE crm_user_preferences ADD CONSTRAINT crm_user_preferences_crm_user_fk FOREIGN KEY(crm_user) 
+            REFERENCES crm_user(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE customer_delivery_preferences ADD CONSTRAINT customer_delivery_preferences_user_preferences_fk FOREIGN KEY(user_preferences) 
+            REFERENCES customer_preferences(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE customer_screening_asset ADD CONSTRAINT customer_screening_asset_owner_fk FOREIGN KEY(owner) 
+            REFERENCES customer_screening_v(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE customer_screening_legal_question ADD CONSTRAINT customer_screening_legal_question_owner_fk FOREIGN KEY(owner) 
+            REFERENCES customer_screening_v(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE entry_instructions_note ADD CONSTRAINT entry_instructions_note_policy_fk FOREIGN KEY(policy) 
+            REFERENCES maintenance_request_policy(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE entry_not_granted_alert ADD CONSTRAINT entry_not_granted_alert_policy_fk FOREIGN KEY(policy) 
+            REFERENCES maintenance_request_policy(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE eviction_case ADD CONSTRAINT eviction_case_created_by_fk FOREIGN KEY(created_by) 
+            REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE eviction_case ADD CONSTRAINT eviction_case_lease_fk FOREIGN KEY(lease) 
+            REFERENCES lease(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE eviction_case$eviction_flow ADD CONSTRAINT eviction_case$eviction_flow_owner_fk FOREIGN KEY(owner) 
+            REFERENCES eviction_case(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE eviction_case$eviction_flow ADD CONSTRAINT eviction_case$eviction_flow_value_fk FOREIGN KEY(value) 
+            REFERENCES eviction_flow_step(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE eviction_case_init_data ADD CONSTRAINT eviction_case_init_data_lease_fk FOREIGN KEY(lease) 
+            REFERENCES lease(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE eviction_document ADD CONSTRAINT eviction_document_record_fk FOREIGN KEY(record) 
+            REFERENCES eviction_status_record(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE eviction_flow_step ADD CONSTRAINT eviction_flow_step_policy_fk FOREIGN KEY(policy) 
+            REFERENCES eviction_flow_policy(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE eviction_status ADD CONSTRAINT eviction_status_added_by_fk FOREIGN KEY(added_by) 
+            REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE eviction_status ADD CONSTRAINT eviction_status_eviction_case_fk FOREIGN KEY(eviction_case) 
+            REFERENCES eviction_case(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE eviction_status ADD CONSTRAINT eviction_status_eviction_step_fk FOREIGN KEY(eviction_step) 
+            REFERENCES eviction_flow_step(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE eviction_status_record ADD CONSTRAINT eviction_status_record_added_by_fk FOREIGN KEY(added_by) 
+            REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE eviction_status_record ADD CONSTRAINT eviction_status_record_eviction_status_fk FOREIGN KEY(eviction_status) 
+            REFERENCES eviction_status(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE identification_document ADD CONSTRAINT identification_document_id_type_fk FOREIGN KEY(id_type) 
+            REFERENCES identification_document_type(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE identification_document ADD CONSTRAINT identification_document_owner_fk FOREIGN KEY(owner) 
+            REFERENCES customer_screening_v(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE identification_document_file ADD CONSTRAINT identification_document_file_verified_by_fk FOREIGN KEY(verified_by) 
+            REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE identification_document_file ADD CONSTRAINT identification_document_file_owner_fk FOREIGN KEY(owner) 
+            REFERENCES identification_document(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_billing_type_policy_item ADD CONSTRAINT lease_billing_type_policy_item_policy_fk FOREIGN KEY(policy) 
+            REFERENCES lease_billing_policy(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE legal_questions_policy_item ADD CONSTRAINT legal_questions_policy_item_policy_fk FOREIGN KEY(policy) 
+            REFERENCES legal_questions_policy(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE maintenance_request_policy$tenant_preferred_windows ADD CONSTRAINT maintenance_request_policy$tenant_preferred_windows_owner_fk FOREIGN KEY(owner) 
+            REFERENCES maintenance_request_policy(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE maintenance_request_policy$tenant_preferred_windows ADD CONSTRAINT maintenance_request_policy$tenant_preferred_windows_value_fk FOREIGN KEY(value) 
+            REFERENCES maintenance_request_window(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE maintenance_request_work_order ADD CONSTRAINT maintenance_request_work_order_request_fk FOREIGN KEY(request) 
+            REFERENCES maintenance_request(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE n4_batch ADD CONSTRAINT n4_batch_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE n4_batch ADD CONSTRAINT n4_batch_signing_employee_fk FOREIGN KEY(signing_employee) 
+            REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE n4_batch_item ADD CONSTRAINT n4_batch_item_batch_fk FOREIGN KEY(batch) 
+            REFERENCES n4_batch(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE n4_batch_item ADD CONSTRAINT n4_batch_item_lease_fk FOREIGN KEY(lease) 
+            REFERENCES lease(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE n4_unpaid_charge ADD CONSTRAINT n4_unpaid_charge_ar_code_fk FOREIGN KEY(ar_code) 
+            REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE n4_unpaid_charge ADD CONSTRAINT n4_unpaid_charge_parent_fk FOREIGN KEY(parent) 
+            REFERENCES n4_batch_item(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE proof_of_asset_document_file ADD CONSTRAINT proof_of_asset_document_file_owner_fk FOREIGN KEY(owner) 
+            REFERENCES customer_screening_asset(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE proof_of_asset_document_file ADD CONSTRAINT proof_of_asset_document_file_verified_by_fk FOREIGN KEY(verified_by) 
+            REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE proof_of_asset_document_type ADD CONSTRAINT proof_of_asset_document_type_policy_fk FOREIGN KEY(policy) 
+            REFERENCES application_documentation_policy(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE proof_of_employment_document_type ADD CONSTRAINT proof_of_employment_document_type_policy_fk FOREIGN KEY(policy) 
+            REFERENCES application_documentation_policy(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE proof_of_income_document_file ADD CONSTRAINT proof_of_income_document_file_owner_fk FOREIGN KEY(owner) 
+            REFERENCES customer_screening_income(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE proof_of_income_document_file ADD CONSTRAINT proof_of_income_document_file_verified_by_fk FOREIGN KEY(verified_by) 
+            REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE proof_of_income_document_type ADD CONSTRAINT proof_of_income_document_type_policy_fk FOREIGN KEY(policy) 
+            REFERENCES application_documentation_policy(id)  DEFERRABLE INITIALLY DEFERRED;
+
         
         -- not null
         
