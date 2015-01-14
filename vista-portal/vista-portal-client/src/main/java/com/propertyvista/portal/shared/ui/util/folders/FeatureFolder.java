@@ -146,7 +146,7 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
             get(proto().description()).setVisible(!getValue().description().isNull());
         }
 
-        private boolean isMandatoryFeature(Product.ProductV product) {
+        private boolean isMandatoryFeature(Product.ProductV<?> product) {
             return product.isInstanceOf(Feature.FeatureV.class) && ((Feature.FeatureV) product.cast()).mandatory().getValue(false);
         }
 

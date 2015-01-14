@@ -773,7 +773,10 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     private void saveUnitOptionsData(OnlineApplication bo, OnlineApplicationDTO to) {
         if (to.unitSelection().isNull()) {
-            return; // currently - do nothing if non-unit-selection mode!
+            if (!SecurityController.check(PortalProspectBehavior.Guarantor)) {
+                saveFeaturesExtraData(bo, to);
+            }
+            return; // non-unit-selection mode!
         }
 
         if (!to.unitOptionsSelection().isNull()) {
@@ -964,14 +967,13 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 leaseTerm.termTo().setValue(new LogicalDate(DateUtils.daysAdd(leaseTerm.termTo().getValue(), -1)));
             }
 
-            saveFeaturesExtraData(bo, to);
-
             saveUnitOptionsData(bo, to);
             saveOccupants(bo, to);
             saveGuarantors(bo, to);
             break;
 
         case CoApplicant:
+            saveUnitOptionsData(bo, to);
             saveGuarantors(bo, to);
             break;
 
