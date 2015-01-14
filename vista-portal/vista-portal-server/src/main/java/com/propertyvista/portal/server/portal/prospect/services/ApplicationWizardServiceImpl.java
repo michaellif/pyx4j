@@ -1006,7 +1006,10 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         LeaseTerm leaseTerm = bo.masterOnlineApplication().leaseApplication().lease().currentTerm();
 
         for (BillableItem item : to.leaseChargesData().selectedFeatures()) {
-            leaseTerm.version().leaseProducts().featureItems().get(item).extraData().set(item.extraData());
+            BillableItem leaseItem = leaseTerm.version().leaseProducts().featureItems().get(item);
+            if (leaseItem != null) {
+                leaseItem.extraData().set(item.extraData());
+            }
         }
     }
 
