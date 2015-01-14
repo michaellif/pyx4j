@@ -29,6 +29,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
@@ -39,13 +40,10 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.forms.client.ui.AsyncOptionLoadingDelegate;
 import com.pyx4j.forms.client.ui.EntityDataSource;
 import com.pyx4j.forms.client.ui.ReferenceDataManager;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.selector.MultyWordSuggestOptionsGrabber;
 import com.pyx4j.widgets.client.selector.SelectorListBox;
 
 public class SuggestableMultiSelectFilterEditor extends FilterEditorBase {
-
-    private static final I18n i18n = I18n.get(SuggestableMultiSelectFilterEditor.class);
 
     private SelectorListBox<IEntity> selector;
 
@@ -58,8 +56,11 @@ public class SuggestableMultiSelectFilterEditor extends FilterEditorBase {
 
                 @Override
                 public String format(IEntity value) {
-                    // TODO Auto-generated method stub
-                    return value.getStringView();
+                    if (value.getAttachLevel() == AttachLevel.IdOnly) {
+                        return value.toString();
+                    } else {
+                        return value.getStringView();
+                    }
                 }
 
             }, new IFormatter<IEntity, SafeHtml>() {
@@ -109,8 +110,12 @@ public class SuggestableMultiSelectFilterEditor extends FilterEditorBase {
                 throw new Error("Filter criterion value class is" + propertyCriterion.getValue().getClass().getSimpleName() + ". Collection is expected.");
             }
 
-            selector.setValue((Collection) propertyCriterion.getValue());
+            selector.setValue(enhanceEntityCollection((Collection<IEntity>) propertyCriterion.getValue()));
         }
+    }
+
+    private Collection<IEntity> enhanceEntityCollection(Collection<IEntity> value) {
+        return value;
     }
 
     @Override
@@ -120,12 +125,10 @@ public class SuggestableMultiSelectFilterEditor extends FilterEditorBase {
 
     class EntitySuggestOptionsGrabber extends MultyWordSuggestOptionsGrabber<IEntity> {
 
-        private MemberMeta memberMeta;
-
         AsyncOptionLoadingDelegate<IEntity> asyncOptionDelegate;
 
+        @SuppressWarnings("unchecked")
         EntitySuggestOptionsGrabber(MemberMeta memberMeta) {
-            this.memberMeta = memberMeta;
 
             setFormatter(new IFormatter<IEntity, String>() {
                 @Override
@@ -144,7 +147,7 @@ public class SuggestableMultiSelectFilterEditor extends FilterEditorBase {
 
             });
 
-            EntityDataSource<IEntity> optionsDataSource = ReferenceDataManager.<IEntity> getDataSource(true);
+            EntityDataSource<IEntity> optionsDataSource = ReferenceDataManager.<IEntity> getDataSource();
             optionsDataSource.obtain(new EntityQueryCriteria<IEntity>((Class<IEntity>) memberMeta.getObjectClass()),
                     new AsyncCallback<EntitySearchResult<IEntity>>() {
 

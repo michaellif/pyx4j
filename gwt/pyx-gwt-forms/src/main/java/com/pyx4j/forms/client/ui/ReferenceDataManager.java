@@ -73,7 +73,7 @@ public class ReferenceDataManager {
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public static <T extends IEntity> AsyncLoadingHandler obtain(EntityQueryCriteria<T> criteria, AsyncCallback<List<T>> handlingCallback, boolean background) {
+    public static <T extends IEntity> AsyncLoadingHandler obtain(EntityQueryCriteria<T> criteria, AsyncCallback<List<T>> handlingCallback) {
         AsyncLoadingHandler handler = new AsyncLoadingHandler((AsyncCallback) handlingCallback);
         final boolean inCache = cache.containsKey(criteria);
         if (!inCache) {
@@ -86,10 +86,10 @@ public class ReferenceDataManager {
             }
             loading.add(handler);
 
-            AsyncCallback<EntitySearchResult<? extends IEntity>> callback = new RecoverableAsyncCallback<EntitySearchResult<? extends IEntity>>() {
+            AsyncCallback<EntitySearchResult<T>> callback = new RecoverableAsyncCallback<EntitySearchResult<T>>() {
 
                 @Override
-                public void onSuccess(final EntitySearchResult<?> result) {
+                public void onSuccess(final EntitySearchResult<T> result) {
                     try {
                         cache.put(originalCriteria, result.getData());
                         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
@@ -131,11 +131,7 @@ public class ReferenceDataManager {
             };
 
             ReferenceDataService service = GWT.create(ReferenceDataService.class);
-            if (background) {
-                service.queryNonBlocking(callback, criteria);
-            } else {
-                service.query(callback, criteria);
-            }
+            service.query(callback, criteria);
         } else {
             handler.onSuccess(cache.get(criteria));
         }
@@ -243,7 +239,7 @@ public class ReferenceDataManager {
 
     }
 
-    public static <E extends IEntity> EntityDataSource<E> getDataSource(final boolean async) {
+    public static <E extends IEntity> EntityDataSource<E> getDataSource() {
         return new EntityDataSource<E>() {
 
             @Override
@@ -261,7 +257,7 @@ public class ReferenceDataManager {
                         result.setData(new Vector<E>(data));
                         handlingCallback.onSuccess(result);
                     }
-                }, async);
+                });
             }
 
             @Override

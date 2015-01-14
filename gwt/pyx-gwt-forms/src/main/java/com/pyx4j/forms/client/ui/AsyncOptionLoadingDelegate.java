@@ -47,7 +47,7 @@ public class AsyncOptionLoadingDelegate<E extends IEntity> {
     public AsyncOptionLoadingDelegate(Class<E> entityClass, AsyncOptionsReadyCallback<E> delegator, EntityDataSource<E> optionsDataSource) {
         this.delegator = delegator;
         this.criteria = new EntityQueryCriteria<E>(entityClass);
-        this.optionsDataSource = optionsDataSource == null ? ReferenceDataManager.<E> getDataSource(true) : optionsDataSource;
+        this.optionsDataSource = optionsDataSource == null ? ReferenceDataManager.<E> getDataSource() : optionsDataSource;
         // register option data change handler in case options change on the source
         this.optionsDataSource.addDataChangeHandler(new ValueChangeHandler<Class<E>>() {
             @Override

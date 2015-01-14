@@ -25,7 +25,6 @@ import java.util.Date;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.widgets.client.selector.EditableItemHolder;
 import com.pyx4j.widgets.client.selector.SelectorListBoxValuePanel;

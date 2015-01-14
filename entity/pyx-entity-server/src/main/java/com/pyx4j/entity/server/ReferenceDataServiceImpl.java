@@ -29,23 +29,14 @@ import com.pyx4j.entity.rpc.ReferenceDataService;
 
 public class ReferenceDataServiceImpl implements ReferenceDataService {
 
-    protected <T extends IEntity> EntitySearchResult<T> query(EntityQueryCriteria<T> criteria) {
+    @Override
+    public <T extends IEntity> void query(AsyncCallback<EntitySearchResult<T>> callback, EntityQueryCriteria<T> criteria) {
         EntitySearchResult<T> result = new EntitySearchResult<T>();
         for (T entity : Persistence.secureQuery(criteria, AttachLevel.ToStringMembers)) {
             entity.setAttachLevel(AttachLevel.ToStringMembers);
             result.getData().add(entity);
         }
-        return result;
-    }
-
-    @Override
-    public final void queryNonBlocking(AsyncCallback<EntitySearchResult<? extends IEntity>> callback, EntityQueryCriteria<? extends IEntity> criteria) {
-        callback.onSuccess(query(criteria));
-    }
-
-    @Override
-    public final void query(AsyncCallback<EntitySearchResult<? extends IEntity>> callback, EntityQueryCriteria<? extends IEntity> criteria) {
-        callback.onSuccess(query(criteria));
+        callback.onSuccess(result);
     }
 
 }
