@@ -14,8 +14,8 @@ package com.propertyvista.crm.client.ui.crud.policies.legalquestions;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
@@ -32,8 +32,6 @@ public class LegalQuestionsPolicyListerViewImpl extends AbstractListerView<Legal
 
         public LegalQuestionsPolicyLister() {
             super(LegalQuestionsPolicyDTO.class, GWT.<LegalQuestionsPolicyCrudService> create(LegalQuestionsPolicyCrudService.class));
-            setAddNewActionEnabled(false);
-            setDeleteActionEnabled(false);
 
             setColumnDescriptors( //
                     new ColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
