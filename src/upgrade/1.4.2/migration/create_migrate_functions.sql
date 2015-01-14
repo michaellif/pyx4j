@@ -492,9 +492,12 @@ BEGIN
         CREATE TABLE n4_batch
         (
             id                              BIGINT              NOT NULL,
-            notice_date                     DATE,
+            building                        BIGINT,
+            notice_issue_date               DATE,
             delivery_method                 VARCHAR(50),
+            delivery_date                   DATE,
             is_ready_for_service            BOOLEAN,
+            service_date                    DATE,
             company_legal_name              VARCHAR(500),
             company_address_street_number   VARCHAR(500),
             company_address_street_name     VARCHAR(500),
@@ -591,6 +594,7 @@ BEGIN
         -- n4_policy
         
         ALTER TABLE n4_policy   ADD COLUMN agent_selection_method VARCHAR(50),
+                                ADD COLUMN use_agent_contact_info BOOLEAN,
                                 ADD COLUMN eviction_flow_step VARCHAR(500);
                                 
                                 
@@ -833,6 +837,7 @@ BEGIN
             REFERENCES maintenance_request_window(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE maintenance_request_work_order ADD CONSTRAINT maintenance_request_work_order_request_fk FOREIGN KEY(request) 
             REFERENCES maintenance_request(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE n4_batch ADD CONSTRAINT n4_batch_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE n4_batch ADD CONSTRAINT n4_batch_signing_employee_fk FOREIGN KEY(signing_employee) 
             REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE n4_batch_item ADD CONSTRAINT n4_batch_item_batch_fk FOREIGN KEY(batch) 

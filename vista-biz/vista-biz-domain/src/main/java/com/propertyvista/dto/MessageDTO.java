@@ -43,8 +43,7 @@ import com.propertyvista.domain.company.Employee;
 public interface MessageDTO extends Message {
 
     public enum ViewScope {
-
-        Dispatched, Direct;
+        DispatchQueue, Messages, MessageCategory, TicketCategory
     }
 
     @Transient

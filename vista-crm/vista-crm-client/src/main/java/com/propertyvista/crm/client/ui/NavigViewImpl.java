@@ -271,10 +271,11 @@ public class NavigViewImpl extends Composite implements NavigView {
             sideMenuList = new SideMenuList();
             root.addMenuItem(new SideMenuFolderItem(sideMenuList, i18n.tr("Message Center"), CrmImages.INSTANCE.messageCenterIcon()));
 
-            sideMenuList.addMenuItem(dispatchedQueue = new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(ClientContext.getUserVisit()), i18n
-                    .tr("Dispatch Queue"), null, DataModelPermission.permissionRead(MessageDTO.class)));
-            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(), i18n.tr("Messages"), null, DataModelPermission
-                    .permissionRead(MessageDTO.class)));
+            sideMenuList.addMenuItem(dispatchedQueue = new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(ClientContext.getUserVisit()).queryArg(
+                    MessageDTO.ViewScope.class.getSimpleName(), MessageDTO.ViewScope.DispatchQueue.toString()), i18n.tr("Dispatch Queue"), null,
+                    DataModelPermission.permissionRead(MessageDTO.class)));
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message().queryArg(MessageDTO.ViewScope.class.getSimpleName(),
+                    MessageDTO.ViewScope.Messages.toString()), i18n.tr("Messages"), null, DataModelPermission.permissionRead(MessageDTO.class)));
             communicationGroups = new SideMenuList();
             sideMenuList.addMenuItem(new SideMenuFolderItem(communicationGroups, i18n.tr("Groups"), null, null, DataModelPermission
                     .permissionRead(MessageCategory.class)));
@@ -347,7 +348,10 @@ public class NavigViewImpl extends Composite implements NavigView {
                 for (Employee emp : metadata.dispatchers()) {
                     if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(emp.user().getPrimaryKey())) {
                         dispatchedQueue.setVisible(true);
-                        place = new CrmSiteMap.Communication.Message(metadata).formListerPlace();
+                        place = new CrmSiteMap.Communication.Message(metadata).formListerPlace().queryArg(
+                                MessageDTO.ViewScope.class.getSimpleName(),
+                                CategoryType.Message.equals(cat) ? MessageDTO.ViewScope.MessageCategory.toString() : MessageDTO.ViewScope.TicketCategory
+                                        .toString(), metadata.getPrimaryKey().toString());
                         communicationGroups.addMenuItem(new SideMenuAppPlaceItem(place, metadata.category().getStringView(), null));
                         added = true;
                     }
@@ -356,7 +360,10 @@ public class NavigViewImpl extends Composite implements NavigView {
             if (!added && metadata.roles() != null) {
                 for (CrmRole role : metadata.roles()) {
                     if (cat != null && SecurityController.check(role.behaviors())) {
-                        place = new CrmSiteMap.Communication.Message(metadata).formListerPlace();
+                        place = new CrmSiteMap.Communication.Message(metadata).formListerPlace().queryArg(
+                                MessageDTO.ViewScope.class.getSimpleName(),
+                                CategoryType.Message.equals(cat) ? MessageDTO.ViewScope.MessageCategory.toString() : MessageDTO.ViewScope.TicketCategory
+                                        .toString(), metadata.getPrimaryKey().toString());
                         communicationGroups.addMenuItem(new SideMenuAppPlaceItem(place, metadata.category().getStringView(), null));
                         break;
                     }

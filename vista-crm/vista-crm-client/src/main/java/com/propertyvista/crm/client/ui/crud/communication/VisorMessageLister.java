@@ -33,6 +33,7 @@ import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.crm.client.ui.crud.communication.listers.MessageLister;
 import com.propertyvista.crm.rpc.CrmSiteMap.Communication.Message;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
@@ -62,9 +63,6 @@ public class VisorMessageLister extends SiteDataTablePanel<MessageDTO> {
 
         this.presenter = presenter;
 
-        setColumnDescriptors(MessageLister.createColumnDescriptors(CategoryType.Message));
-        setDataTableModel(new DataTableModel<MessageDTO>());
-
         setFilteringEnabled(true);
         // No sorting work for it
         getDataTable().setHasColumnClickSorting(false);
@@ -84,6 +82,10 @@ public class VisorMessageLister extends SiteDataTablePanel<MessageDTO> {
 
         newTicket.setPermission(DataModelPermission.permissionCreate(MessageDTO.class));
         newMessage.setPermission(DataModelPermission.permissionCreate(MessageDTO.class));
+
+        setColumnDescriptors(MessageLister.createColumnDescriptors(null));
+        setDataTableModel(new DataTableModel<MessageDTO>());
+
     }
 
     @Override
@@ -122,9 +124,6 @@ public class VisorMessageLister extends SiteDataTablePanel<MessageDTO> {
                 criteria.eq(criteria.proto().category(), mc);
             }
         }
-
-        setColumnDescriptors(MessageLister.createColumnDescriptors(category));
-        setDataTableModel(new DataTableModel<MessageDTO>());
 
         EntityListCriteria<MessageDTO> result = super.updateCriteria(criteria);
         if (placeCriteria == null) {
