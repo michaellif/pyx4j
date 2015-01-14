@@ -18,7 +18,7 @@ public class MessageListerViewAllMessageImpl extends MessageListerViewImpl imple
 
     @Override
     protected void setDataTablePanel() {
-        super.setDataTablePanel(new MessageLister(this, ViewScope.AllMessages));
+        super.setDataTablePanel(new MessageLister(this, ViewScope.Messages));
     }
 
 }

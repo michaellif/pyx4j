@@ -277,7 +277,7 @@ public class NavigViewImpl extends Composite implements NavigView {
                     MessageDTO.ViewScope.class.getSimpleName(), MessageDTO.ViewScope.DispatchQueue.toString()), i18n.tr("Dispatch Queue"), null,
                     DataModelPermission.permissionRead(MessageDTO.class)));
             sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message().queryArg(MessageDTO.ViewScope.class.getSimpleName(),
-                    MessageDTO.ViewScope.AllMessages.toString()), i18n.tr("Messages"), null, DataModelPermission.permissionRead(MessageDTO.class)));
+                    MessageDTO.ViewScope.Messages.toString()), i18n.tr("Messages"), null, DataModelPermission.permissionRead(MessageDTO.class)));
             communicationGroups = new SideMenuList();
             sideMenuList.addMenuItem(new SideMenuFolderItem(communicationGroups, i18n.tr("Groups"), null, null, DataModelPermission
                     .permissionRead(MessageCategory.class)));
