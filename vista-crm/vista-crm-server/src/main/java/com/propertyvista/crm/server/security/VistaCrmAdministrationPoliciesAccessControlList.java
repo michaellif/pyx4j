@@ -27,6 +27,7 @@ import com.propertyvista.crm.rpc.services.admin.ac.CrmAdministrationPolicesFinan
 import com.propertyvista.crm.rpc.services.admin.ac.CrmAdministrationPolicesOtherAccess;
 import com.propertyvista.crm.rpc.services.policies.emailtemplates.EmailTemplateManagerService;
 import com.propertyvista.crm.rpc.services.policies.policy.ARPolicyCrudService;
+import com.propertyvista.crm.rpc.services.policies.policy.ApplicationApprovalChecklistPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.ApplicationDocumentationPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.AutoPayPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.BackgroundCheckPolicyCrudService;
@@ -54,6 +55,7 @@ import com.propertyvista.crm.rpc.services.policies.policy.TenantInsurancePolicyC
 import com.propertyvista.crm.rpc.services.policies.policy.YardiInterfacePolicyCrudService;
 import com.propertyvista.crm.rpc.services.selections.SelectTaxListService;
 import com.propertyvista.domain.policy.policies.ARPolicy;
+import com.propertyvista.domain.policy.policies.ApplicationApprovalChecklistPolicy;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
@@ -83,6 +85,9 @@ class VistaCrmAdministrationPoliciesAccessControlList extends UIAclBuilder {
     VistaCrmAdministrationPoliciesAccessControlList() {
         grant(AdminGeneral, CrmAdministrationPolicesOtherAccess.class);
         grant(AdminFinancial, CrmAdministrationPolicesFinancialAccess.class);
+
+        grant(AdminGeneral, new IServiceExecutePermission(ApplicationApprovalChecklistPolicyCrudService.class));
+        grant(AdminGeneral, new EntityPermission(ApplicationApprovalChecklistPolicy.class, ALL));
 
         grant(AdminGeneral, new IServiceExecutePermission(ApplicationDocumentationPolicyCrudService.class));
         grant(AdminGeneral, new EntityPermission(ApplicationDocumentationPolicy.class, ALL));

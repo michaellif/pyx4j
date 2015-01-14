@@ -192,6 +192,9 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardManagementLister
 import com.propertyvista.crm.client.activity.dashboard.DashboardManagementViewerActivity;
 import com.propertyvista.crm.client.activity.login.LoginActivity;
 import com.propertyvista.crm.client.activity.login.LoginWithTokenActivity;
+import com.propertyvista.crm.client.activity.policies.applicationapprovalchecklist.ApplicationApprovalChecklistPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.applicationapprovalchecklist.ApplicationApprovalChecklistPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.applicationapprovalchecklist.ApplicationApprovalChecklistPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyViewerActivity;
@@ -1098,6 +1101,19 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 // - Policies:
+                    } else if (crudPlace instanceof Administration.Policies.ApplicationApprovalChecklist) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new ApplicationApprovalChecklistPolicyListerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new ApplicationApprovalChecklistPolicyEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new ApplicationApprovalChecklistPolicyViewerActivity(crudPlace);
+                            break;
+                        }
+
                     } else if (crudPlace instanceof Administration.Policies.ApplicationDocumentation) {
                         switch (crudPlace.getType()) {
                         case lister:
