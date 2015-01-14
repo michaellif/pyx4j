@@ -111,6 +111,12 @@ import com.propertyvista.crm.client.activity.crud.building.catalog.FeatureEditor
 import com.propertyvista.crm.client.activity.crud.building.catalog.FeatureViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceEditorActivity;
 import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceViewerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.BroadcustEventEditorActivity;
+import com.propertyvista.crm.client.activity.crud.communication.BroadcustEventListerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.BroadcustEventViewerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.BroadcustTemplateEditorActivity;
+import com.propertyvista.crm.client.activity.crud.communication.BroadcustTemplateListerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.BroadcustTemplateViewerActivity;
 import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryEditorActivity;
 import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryListerActivity;
 import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryViewActivity;
@@ -1522,9 +1528,9 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new EftVarianceReportActivity((ReportsAppPlace<EftVarianceReportMetadata>) place);
                     } else if (place instanceof Reports.ResidentInsurance) {
                         activity = new ResidentInsuranceReportActivity((ReportsAppPlace<ResidentInsuranceReportMetadata>) place);
-                    }
-                    // Communication
-                    else if (crudPlace instanceof Communication.Message) {
+
+                        // Communication
+                    } else if (crudPlace instanceof Communication.Message) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new MessageListerActivity(crudPlace);
@@ -1534,6 +1540,32 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         case editor:
                             activity = new MessageEditorActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (crudPlace instanceof Communication.BroadcustTemplate) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new BroadcustTemplateListerActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new BroadcustTemplateViewerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new BroadcustTemplateEditorActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (crudPlace instanceof Communication.BroadcustEvent) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new BroadcustEventListerActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new BroadcustEventViewerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new BroadcustEventEditorActivity(crudPlace);
                             break;
                         }
 

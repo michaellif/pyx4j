@@ -664,6 +664,12 @@ public class CrmSiteMap implements SiteMap {
                 return forwardedMessage;
             }
         }
+
+        public static class BroadcustTemplate extends CrmCrudAppPlace {
+        }
+
+        public static class BroadcustEvent extends CrmCrudAppPlace {
+        }
     }
 
     // Communication Ended --------------

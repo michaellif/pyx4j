@@ -54,6 +54,8 @@ import com.propertyvista.crm.rpc.services.customer.ac.PotentialTenantListAction;
 import com.propertyvista.crm.rpc.services.customer.ac.TenantListAction;
 import com.propertyvista.crm.rpc.services.lease.ac.FormerLeaseListAction;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsMapper;
+import com.propertyvista.domain.communication.BroadcustEvent;
+import com.propertyvista.domain.communication.BroadcustTemplate;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.company.Employee;
@@ -279,6 +281,15 @@ public class NavigViewImpl extends Composite implements NavigView {
             communicationGroups = new SideMenuList();
             sideMenuList.addMenuItem(new SideMenuFolderItem(communicationGroups, i18n.tr("Groups"), null, null, DataModelPermission
                     .permissionRead(MessageCategory.class)));
+
+            SideMenuList broadcustFolder = new SideMenuList();
+            sideMenuList.addMenuItem(new SideMenuFolderItem(broadcustFolder, i18n.tr("Broadcust"), null, null, DataModelPermission
+                    .permissionRead(BroadcustTemplate.class)));
+
+            broadcustFolder.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.BroadcustTemplate(), DataModelPermission
+                    .permissionRead(BroadcustTemplate.class)));
+            broadcustFolder.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.BroadcustEvent(), DataModelPermission
+                    .permissionRead(BroadcustEvent.class)));
         }
 
         {//Reports
