@@ -27,6 +27,34 @@ import com.propertyvista.domain.policy.policies.EvictionFlowPolicy;
 
 public interface EvictionFlowStep extends IEntity {
 
+    public enum OntarioFlow {
+        N4,
+
+        L1,
+
+        HearingDate,
+
+        Order(true),
+
+        Sheriff(true),
+
+        SetAside(true),
+
+        RequestToReviewOrder(true),
+
+        StayOrder(true);
+
+        public final boolean flexible;
+
+        private OntarioFlow() {
+            this(false);
+        }
+
+        private OntarioFlow(boolean flexible) {
+            this.flexible = flexible;
+        }
+    }
+
     @Owner
     @MemberColumn(notNull = true)
     @JoinColumn
@@ -40,4 +68,6 @@ public interface EvictionFlowStep extends IEntity {
     IPrimitive<String> name();
 
     IPrimitive<String> description();
+
+    IPrimitive<Boolean> isFlexible();
 }
