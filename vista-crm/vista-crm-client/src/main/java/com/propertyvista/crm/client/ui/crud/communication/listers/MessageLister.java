@@ -10,7 +10,7 @@
  * Created on Dec 20, 2011
  * @author igors
  */
-package com.propertyvista.crm.client.ui.crud.communication;
+package com.propertyvista.crm.client.ui.crud.communication.listers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,17 +69,16 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
 
     private MenuItem newNotification;
 
-    private final MessageListerView view;
-
     protected MessageDTO messageDTO;
 
-    public MessageLister(MessageListerView view) {
+    private final MessageDTO.ViewScope viewScope;
+
+    private final MessageListerView view;
+
+    public MessageLister(MessageListerView view, MessageDTO.ViewScope viewScope) {
         super(MessageDTO.class, GWT.<AbstractCrudService<MessageDTO>> create(MessageCrudService.class), true);
-
+        this.viewScope = viewScope;
         this.view = view;
-
-        setColumnDescriptors(createColumnDescriptors(CategoryType.Message));
-        setDataTableModel(new DataTableModel<MessageDTO>());
 
         setFilteringEnabled(true);
         // No sorting work for it
@@ -126,9 +125,11 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
         }));
         newButton.setMenu(subMenu);
         newButton.setPermission(DataModelPermission.permissionCreate(MessageDTO.class));
+
+        initByCategoryType();
     }
 
-    public static List<ColumnDescriptor> createColumnDescriptors(CategoryType category) {
+    public static List<ColumnDescriptor> createColumnDescriptors(ViewScope viewScope) {
         final MessageDTO proto = EntityFactory.getEntityPrototype(MessageDTO.class);
 
         //@formatter:off
@@ -143,12 +144,14 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
         columns.add(new ColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("27px").formatter(
                 booleanField2Image( proto.hasAttachments().getPath(),CrmImages.INSTANCE.attachement(), null))
                 .columnTitleShown(false).build());
-        columns.add(new ColumnDescriptor.Builder(proto.thread().id()).columnTitle(i18n.tr("Ticket Id")).searchable(true).width("100px").formatter(showHideId()).build());
+        if (viewScope != ViewScope.MessageCategory) {
+            columns.add(new ColumnDescriptor.Builder(proto.thread().id()).columnTitle(i18n.tr("Ticket Id")).searchable(true).width("100px").formatter(showHideId()).build());
+        }
         columns.add(new ColumnDescriptor.Builder(proto.senderDTO().name()).columnTitle(i18n.tr("Sender")).searchable(false).width("200px").formatter(baseFieldViewOnIsRead(proto.senderDTO().name().getPath())).build());
         columns.add(new ColumnDescriptor.Builder(proto.subject()).searchable(false).width("600px").formatter(baseFieldViewOnIsRead(proto.subject().getPath())).build());
         columns.add(new ColumnDescriptor.Builder(proto.date()).formatter(baseFieldViewOnIsRead(proto.date().getPath())).searchable(false).width("100px").build());
 
-        if (category != CategoryType.Ticket) {
+        if (viewScope != ViewScope.TicketCategory && viewScope != ViewScope.DispatchQueue) {
             columns.add(new ColumnDescriptor.Builder(proto.deliveryMethod()).width("70px").searchable(true).build());
         }
 
@@ -156,21 +159,51 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
         columns.add(new ColumnDescriptor.Builder(proto.category().categoryType(), false).searchableOnly().columnTitle(i18n.tr("Category")).build());
         columns.add(new ColumnDescriptor.Builder(proto.allowedReply()).searchable(false).width("70px").build());
 
-        if (category != CategoryType.Message) {
+        if (viewScope != ViewScope.MessageCategory) {
             columns.add(new ColumnDescriptor.Builder(proto.thread().owner()).searchable(false).width("200px").build());
             columns.add(new ColumnDescriptor.Builder(proto.ownerForList(), false).columnTitle(i18n.tr("Owner")).searchableOnly().build());
             columns.add(new ColumnDescriptor.Builder(proto.status()).searchable(true).width("70px").build());
         }
-        if (category == null) {
+        if (ViewScope.MessageCategory == viewScope) {
             columns.add(new ColumnDescriptor.Builder(proto.hidden(), false).searchableOnly().columnTitle(i18n.tr("Hidden")).build());
         }
 
         return columns;
     }
 
+    private AppPlace evaluateAppPlace() {
+        AppPlace place = view.getPresenter() ==null? null : view.getPresenter().getPlace();
+        return place;
+    }
+
     @Override
     protected EntityListCriteria<MessageDTO> updateCriteria(EntityListCriteria<MessageDTO> criteria) {
-        AppPlace place = view.getPresenter().getPlace();
+        AppPlace place = evaluateAppPlace();
+        Object placeCriteria = place instanceof Message ? ((Message) place).getCriteria() : null;
+
+        if (placeCriteria == null) {
+            criteria.eq(criteria.proto().viewScope(), ViewScope.AllMessages);
+        } else {
+            if (placeCriteria instanceof CategoryType) {
+                criteria.eq(criteria.proto().category().categoryType(),(CategoryType) placeCriteria);
+            } else if (placeCriteria instanceof MessageCategory) {
+                MessageCategory mc = (MessageCategory) placeCriteria;
+                 criteria.eq(criteria.proto().category(), mc);
+            } else if (placeCriteria instanceof UserVisit) {
+                criteria.eq(criteria.proto().category().categoryType(),CategoryType.Ticket);
+                criteria.eq(criteria.proto().category().dispatchers().$().user(), ((UserVisit) placeCriteria).getPrincipalPrimaryKey());
+                criteria.eq(criteria.proto().viewScope(), ViewScope.DispatchQueue);
+            }
+        }
+        EntityListCriteria<MessageDTO> result = super.updateCriteria(criteria);
+        if (placeCriteria == null) {
+            addOrIgnoreHidden(criteria);
+        }
+        return result;
+    }
+
+    private void initByCategoryType() {
+        AppPlace place = evaluateAppPlace();
         Object placeCriteria = place instanceof Message ? ((Message) place).getCriteria() : null;
         CategoryType category = null;
         newButton.setVisible(true);
@@ -181,12 +214,9 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
             newIVR.setVisible(true);
             newSMS.setVisible(true);
             newNotification.setVisible(true);
-
-            criteria.eq(criteria.proto().viewScope(), ViewScope.Direct);
-
         } else {
             if (placeCriteria instanceof CategoryType) {
-                criteria.eq(criteria.proto().category().categoryType(), category = (CategoryType) placeCriteria);
+                category = (CategoryType) placeCriteria;
             } else if (placeCriteria instanceof MessageCategory) {
                 MessageCategory mc = (MessageCategory) placeCriteria;
                 if (TicketType.Maintenance.equals(mc.ticketType().getValue())) {
@@ -194,12 +224,6 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
                 } else {
                     category = mc.categoryType().getValue();
                 }
-                criteria.eq(criteria.proto().category(), mc);
-            } else if (placeCriteria instanceof UserVisit) {
-                criteria.eq(criteria.proto().category().categoryType(), category = CategoryType.Ticket);
-                criteria.eq(criteria.proto().category().dispatchers().$().user(), ((UserVisit) placeCriteria).getPrincipalPrimaryKey());
-                criteria.eq(criteria.proto().viewScope(), ViewScope.Dispatched);
-                setColumnDescriptors(createColumnDescriptors(category));
             }
 
             if (category != null) {
@@ -212,14 +236,8 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
                 newNotification.setVisible(CategoryType.Message == category);
             }
         }
-        setColumnDescriptors(createColumnDescriptors(category));
+        setColumnDescriptors(createColumnDescriptors(viewScope));
         setDataTableModel(new DataTableModel<MessageDTO>());
-
-        EntityListCriteria<MessageDTO> result = super.updateCriteria(criteria);
-        if (placeCriteria == null) {
-            addOrIgnoreHidden(criteria);
-        }
-        return result;
     }
 
     private static IFormatter<IEntity, SafeHtml> booleanField2Image(final Path path, final ImageResource trueValueResource,
@@ -329,7 +347,7 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
 
     @Override
     protected void onItemNew() {
-        AppPlace place = view.getPresenter().getPlace();
+        AppPlace place = evaluateAppPlace();
         Object placeCriteria = place instanceof Message ? ((Message) place).getCriteria() : null;
         editNewEntity(placeCriteria, null);
     }
