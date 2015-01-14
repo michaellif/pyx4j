@@ -33,7 +33,7 @@ public class ApplicationApprovalChecklistPolicyForm extends PolicyDTOTabPanelBas
     public ApplicationApprovalChecklistPolicyForm(IPrimeFormView<ApplicationApprovalChecklistPolicyDTO, ?> view) {
         super(ApplicationApprovalChecklistPolicyDTO.class, view);
 
-        addTab(createGeneralTab(), i18n.tr("Legal Questions"));
+        addTab(createGeneralTab(), i18n.tr("Checklist Items"));
     }
 
     private IsWidget createGeneralTab() {

@@ -79,10 +79,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
 
                 if (event.getValue() != null) {
                     Class<? extends PolicyNode> selectedNodeType = event.getValue().getType();
-                    if (!selectedNodeType.equals(OrganizationPoliciesNode.class)) {
-                        get(proto().node()).populate(EntityFactory.create(selectedNodeType));
-                        get(proto().node()).setVisible(true);
-                    }
+                    get(proto().node()).populate(EntityFactory.create(selectedNodeType));
                 }
             }
         });

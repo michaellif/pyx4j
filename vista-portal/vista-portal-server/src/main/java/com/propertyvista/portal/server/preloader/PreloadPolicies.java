@@ -15,6 +15,7 @@ package com.propertyvista.portal.server.preloader;
 import com.propertyvista.biz.preloader.policy.AbstractPoliciesPreloader;
 import com.propertyvista.biz.preloader.policy.OrganizationPoliciesNodePreloader;
 import com.propertyvista.biz.preloader.policy.subpreloaders.ARPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.ApplicationApprovalChecklistPolicyPreloader;
 import com.propertyvista.biz.preloader.policy.subpreloaders.ApplicationDocumentationPolicyPreloader;
 import com.propertyvista.biz.preloader.policy.subpreloaders.AutoPayPolicyPreloader;
 import com.propertyvista.biz.preloader.policy.subpreloaders.BackgroundCheckPolicyPreloader;
@@ -49,6 +50,7 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
         add(new OrganizationPoliciesNodePreloader());
         add(new ARPolicyPreloader());
         add(new MaintenanceRequestPolicyPreloader());
+        add(new ApplicationApprovalChecklistPolicyPreloader());
         add(new ApplicationDocumentationPolicyPreloader());
         add(new EmailTemplatesPolicyPreloader());
         add(new IdAssignmentPolicyPreloader());
