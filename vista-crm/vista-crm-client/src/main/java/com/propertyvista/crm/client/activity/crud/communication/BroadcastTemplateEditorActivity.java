@@ -19,16 +19,16 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
-import com.propertyvista.crm.client.ui.crud.communication.BroadcustTemplateEditorView;
-import com.propertyvista.crm.client.ui.crud.communication.BroadcustTemplateEditorView.BroadcustTemplateEditorPresenter;
+import com.propertyvista.crm.client.ui.crud.communication.BroadcastTemplateEditorView;
+import com.propertyvista.crm.client.ui.crud.communication.BroadcastTemplateEditorView.BroadcastTemplateEditorPresenter;
 import com.propertyvista.crm.rpc.services.MessageCategoryCrudService;
-import com.propertyvista.domain.communication.BroadcustTemplate;
+import com.propertyvista.domain.communication.BroadcastTemplate;
 
-public class BroadcustTemplateEditorActivity extends CrmEditorActivity<BroadcustTemplate> implements BroadcustTemplateEditorPresenter {
+public class BroadcastTemplateEditorActivity extends CrmEditorActivity<BroadcastTemplate> implements BroadcastTemplateEditorPresenter {
 
-    public BroadcustTemplateEditorActivity(CrudAppPlace place) {
-        super(BroadcustTemplate.class, place, CrmSite.getViewFactory().getView(BroadcustTemplateEditorView.class), GWT
-                .<AbstractCrudService<BroadcustTemplate>> create(MessageCategoryCrudService.class));
+    public BroadcastTemplateEditorActivity(CrudAppPlace place) {
+        super(BroadcastTemplate.class, place, CrmSite.getViewFactory().getView(BroadcastTemplateEditorView.class), GWT
+                .<AbstractCrudService<BroadcastTemplate>> create(MessageCategoryCrudService.class));
     }
 
 }

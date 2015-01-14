@@ -14,11 +14,11 @@ package com.propertyvista.crm.client.ui.crud.communication;
 
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
-import com.propertyvista.domain.communication.BroadcustEvent;
+import com.propertyvista.domain.communication.BroadcastTemplate;
 
-public interface BroadcustEventViewerView extends IPrimeViewerView<BroadcustEvent> {
+public interface BroadcastTemplateViewerView extends IPrimeViewerView<BroadcastTemplate> {
 
-    public interface BroadcustEventViewerPresenter extends IPrimeViewerPresenter {
+    public interface BroadcastTemplateViewerPresenter extends IPrimeViewerPresenter {
 
     }
 }

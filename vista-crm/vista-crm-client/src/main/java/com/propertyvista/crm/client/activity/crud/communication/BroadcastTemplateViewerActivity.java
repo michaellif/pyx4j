@@ -19,15 +19,15 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
-import com.propertyvista.crm.client.ui.crud.communication.BroadcustEventViewerView;
-import com.propertyvista.crm.client.ui.crud.communication.BroadcustEventViewerView.BroadcustEventViewerPresenter;
+import com.propertyvista.crm.client.ui.crud.communication.BroadcastTemplateViewerView;
+import com.propertyvista.crm.client.ui.crud.communication.BroadcastTemplateViewerView.BroadcastTemplateViewerPresenter;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
-import com.propertyvista.domain.communication.BroadcustEvent;
+import com.propertyvista.domain.communication.BroadcastTemplate;
 
-public class BroadcustEventViewerActivity extends CrmViewerActivity<BroadcustEvent> implements BroadcustEventViewerPresenter {
+public class BroadcastTemplateViewerActivity extends CrmViewerActivity<BroadcastTemplate> implements BroadcastTemplateViewerPresenter {
 
-    public BroadcustEventViewerActivity(CrudAppPlace place) {
-        super(BroadcustEvent.class, place, CrmSite.getViewFactory().getView(BroadcustEventViewerView.class), GWT
-                .<AbstractCrudService<BroadcustEvent>> create(MessageCrudService.class));
+    public BroadcastTemplateViewerActivity(CrudAppPlace place) {
+        super(BroadcastTemplate.class, place, CrmSite.getViewFactory().getView(BroadcastTemplateViewerView.class), GWT
+                .<AbstractCrudService<BroadcastTemplate>> create(MessageCrudService.class));
     }
 }

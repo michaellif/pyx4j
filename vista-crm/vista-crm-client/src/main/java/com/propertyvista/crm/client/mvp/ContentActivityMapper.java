@@ -111,12 +111,12 @@ import com.propertyvista.crm.client.activity.crud.building.catalog.FeatureEditor
 import com.propertyvista.crm.client.activity.crud.building.catalog.FeatureViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceEditorActivity;
 import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceViewerActivity;
-import com.propertyvista.crm.client.activity.crud.communication.BroadcustEventEditorActivity;
-import com.propertyvista.crm.client.activity.crud.communication.BroadcustEventListerActivity;
-import com.propertyvista.crm.client.activity.crud.communication.BroadcustEventViewerActivity;
-import com.propertyvista.crm.client.activity.crud.communication.BroadcustTemplateEditorActivity;
-import com.propertyvista.crm.client.activity.crud.communication.BroadcustTemplateListerActivity;
-import com.propertyvista.crm.client.activity.crud.communication.BroadcustTemplateViewerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.BroadcastEventEditorActivity;
+import com.propertyvista.crm.client.activity.crud.communication.BroadcastEventListerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.BroadcastEventViewerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.BroadcastTemplateEditorActivity;
+import com.propertyvista.crm.client.activity.crud.communication.BroadcastTemplateListerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.BroadcastTemplateViewerActivity;
 import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryEditorActivity;
 import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryListerActivity;
 import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryViewActivity;
@@ -1543,29 +1543,29 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof Communication.BroadcustTemplate) {
+                    } else if (crudPlace instanceof Communication.BroadcastTemplate) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new BroadcustTemplateListerActivity(crudPlace);
+                            activity = new BroadcastTemplateListerActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new BroadcustTemplateViewerActivity(crudPlace);
+                            activity = new BroadcastTemplateViewerActivity(crudPlace);
                             break;
                         case editor:
-                            activity = new BroadcustTemplateEditorActivity(crudPlace);
+                            activity = new BroadcastTemplateEditorActivity(crudPlace);
                             break;
                         }
 
-                    } else if (crudPlace instanceof Communication.BroadcustEvent) {
+                    } else if (crudPlace instanceof Communication.BroadcastEvent) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new BroadcustEventListerActivity(crudPlace);
+                            activity = new BroadcastEventListerActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new BroadcustEventViewerActivity(crudPlace);
+                            activity = new BroadcastEventViewerActivity(crudPlace);
                             break;
                         case editor:
-                            activity = new BroadcustEventEditorActivity(crudPlace);
+                            activity = new BroadcastEventEditorActivity(crudPlace);
                             break;
                         }
 

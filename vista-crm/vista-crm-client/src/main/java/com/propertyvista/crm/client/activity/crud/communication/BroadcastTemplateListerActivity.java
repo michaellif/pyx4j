@@ -16,13 +16,13 @@ import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivi
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.ui.crud.communication.BroadcustTemplateListerView;
-import com.propertyvista.domain.communication.BroadcustTemplate;
+import com.propertyvista.crm.client.ui.crud.communication.BroadcastTemplateListerView;
+import com.propertyvista.domain.communication.BroadcastTemplate;
 
-public class BroadcustTemplateListerActivity extends AbstractPrimeListerActivity<BroadcustTemplate> {
+public class BroadcastTemplateListerActivity extends AbstractPrimeListerActivity<BroadcastTemplate> {
 
-    public BroadcustTemplateListerActivity(AppPlace place) {
-        super(BroadcustTemplate.class, place, CrmSite.getViewFactory().getView(BroadcustTemplateListerView.class));
+    public BroadcastTemplateListerActivity(AppPlace place) {
+        super(BroadcastTemplate.class, place, CrmSite.getViewFactory().getView(BroadcastTemplateListerView.class));
     }
 
 }

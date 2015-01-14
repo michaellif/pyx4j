@@ -14,6 +14,6 @@ package com.propertyvista.domain.communication;
 
 import com.pyx4j.entity.core.IEntity;
 
-public interface BroadcustTemplate extends IEntity {
+public interface BroadcastTemplate extends IEntity {
 
 }

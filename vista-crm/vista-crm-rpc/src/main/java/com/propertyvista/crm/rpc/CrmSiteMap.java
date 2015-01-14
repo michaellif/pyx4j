@@ -665,10 +665,12 @@ public class CrmSiteMap implements SiteMap {
             }
         }
 
-        public static class BroadcustTemplate extends CrmCrudAppPlace {
+        @PlaceProperties(navigLabel = "Templates")
+        public static class BroadcastTemplate extends CrmCrudAppPlace {
         }
 
-        public static class BroadcustEvent extends CrmCrudAppPlace {
+        @PlaceProperties(navigLabel = "Events")
+        public static class BroadcastEvent extends CrmCrudAppPlace {
         }
     }
 

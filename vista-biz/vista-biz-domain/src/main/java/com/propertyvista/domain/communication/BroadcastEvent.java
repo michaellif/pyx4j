@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2015 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
@@ -7,15 +7,13 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 20, 2011
- * @author stanp
+ * Created on Jan 14, 2015
+ * @author michaellif
  */
-package com.propertyvista.crm.client.ui.crud.communication;
+package com.propertyvista.domain.communication;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView;
+import com.pyx4j.entity.core.IEntity;
 
-import com.propertyvista.domain.communication.BroadcustTemplate;
-
-public interface BroadcustTemplateListerView extends IPrimeListerView<BroadcustTemplate> {
+public interface BroadcastEvent extends IEntity {
 
 }

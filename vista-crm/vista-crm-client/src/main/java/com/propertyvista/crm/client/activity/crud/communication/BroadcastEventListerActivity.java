@@ -16,13 +16,13 @@ import com.pyx4j.site.client.backoffice.activity.prime.AbstractPrimeListerActivi
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.ui.crud.communication.BroadcustEventListerView;
-import com.propertyvista.domain.communication.BroadcustEvent;
+import com.propertyvista.crm.client.ui.crud.communication.BroadcastEventListerView;
+import com.propertyvista.domain.communication.BroadcastEvent;
 
-public class BroadcustEventListerActivity extends AbstractPrimeListerActivity<BroadcustEvent> {
+public class BroadcastEventListerActivity extends AbstractPrimeListerActivity<BroadcastEvent> {
 
-    public BroadcustEventListerActivity(AppPlace place) {
-        super(BroadcustEvent.class, place, CrmSite.getViewFactory().getView(BroadcustEventListerView.class));
+    public BroadcastEventListerActivity(AppPlace place) {
+        super(BroadcastEvent.class, place, CrmSite.getViewFactory().getView(BroadcastEventListerView.class));
     }
 
 }
