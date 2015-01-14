@@ -40,13 +40,13 @@ import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements HasValueChangeHandlers<Collection<E>>, IFocusWidget, IWatermarkWidget {
 
-    private final ArrayList<E> value;
+    protected final ArrayList<E> value;
 
-    private final SelectorListBoxValuePanel<E> listBox;
+    protected final SelectorListBoxValuePanel<E> listBox;
 
     private final IPickerPanel<E> picker;
 
-    private IOptionsGrabber<E> optionsGrabber;
+    protected IOptionsGrabber<E> optionsGrabber;
 
     public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, SafeHtml> optionFormatter) {
         this(optionsGrabber, null, optionFormatter, valueFormatter);

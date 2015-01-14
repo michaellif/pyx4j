@@ -24,6 +24,7 @@ import java.util.Date;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.widgets.client.selector.EditableItemHolder;
@@ -54,7 +55,7 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
     private IFilterEditor createFilterEditor(IObject<?> member) {
         Class<?> valueClass = member.getValueClass();
         if (member.getMeta().isEntity()) {
-            return new SuggestableMultiSelectFilterEditor(member);
+            return new SuggestableMultiSelectFilterEditor<>((IEntity) member);
         } else if (valueClass.isEnum() || valueClass.equals(Boolean.class)) {
             return new MultiSelectFilterEditor(member);
         } else if (valueClass.equals(String.class)) {

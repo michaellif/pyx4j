@@ -29,6 +29,6 @@ import com.pyx4j.rpc.shared.ServiceExecution;
 public interface ReferenceDataService extends IService {
 
     @ServiceExecution(operationType = ServiceExecution.OperationType.NonBlocking)
-    public <T extends IEntity> void query(AsyncCallback<EntitySearchResult<T>> callback, EntityQueryCriteria<T> criteria);
+    public void query(AsyncCallback<EntitySearchResult<? extends IEntity>> callback, EntityQueryCriteria<? extends IEntity> criteria);
 
 }

@@ -21,58 +21,23 @@
 package com.pyx4j.forms.client.ui.datatable.filter;
 
 import java.util.Collection;
-import java.util.Comparator;
 
-import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.IFormatter;
-import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.meta.MemberMeta;
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.forms.client.ui.AsyncOptionLoadingDelegate;
-import com.pyx4j.forms.client.ui.EntityDataSource;
-import com.pyx4j.forms.client.ui.ReferenceDataManager;
-import com.pyx4j.widgets.client.selector.MultyWordSuggestOptionsGrabber;
-import com.pyx4j.widgets.client.selector.SelectorListBox;
+import com.pyx4j.forms.client.ui.selector.EntitySelectorListBox;
 
-public class SuggestableMultiSelectFilterEditor extends FilterEditorBase {
+public class SuggestableMultiSelectFilterEditor<E extends IEntity> extends FilterEditorBase {
 
-    private SelectorListBox<IEntity> selector;
+    private EntitySelectorListBox<E> selector;
 
-    public SuggestableMultiSelectFilterEditor(IObject<?> member) {
+    public SuggestableMultiSelectFilterEditor(E member) {
         super(member);
         MemberMeta mm = member.getMeta();
 
         if (mm.isEntity()) {
-            selector = new SelectorListBox<IEntity>(new EntitySuggestOptionsGrabber(mm), new IFormatter<IEntity, String>() {
-
-                @Override
-                public String format(IEntity value) {
-                    if (value.getAttachLevel() == AttachLevel.IdOnly) {
-                        return value.toString();
-                    } else {
-                        return value.getStringView();
-                    }
-                }
-
-            }, new IFormatter<IEntity, SafeHtml>() {
-
-                @Override
-                public SafeHtml format(IEntity value) {
-                    SafeHtmlBuilder builder = new SafeHtmlBuilder();
-                    builder.appendHtmlConstant(SimpleMessageFormat.format("<div>{0}</div>", value.getStringView()));
-                    return builder.toSafeHtml();
-                }
-
-            });
+            selector = new EntitySelectorListBox<>(member);
         }
         initWidget(selector);
     }
@@ -110,60 +75,12 @@ public class SuggestableMultiSelectFilterEditor extends FilterEditorBase {
                 throw new Error("Filter criterion value class is" + propertyCriterion.getValue().getClass().getSimpleName() + ". Collection is expected.");
             }
 
-            selector.setValue(enhanceEntityCollection((Collection<IEntity>) propertyCriterion.getValue()));
+            selector.setValue((Collection<E>) propertyCriterion.getValue());
         }
-    }
-
-    private Collection<IEntity> enhanceEntityCollection(Collection<IEntity> value) {
-        return value;
     }
 
     @Override
     public void clear() {
         selector.setValue(null);
-    }
-
-    class EntitySuggestOptionsGrabber extends MultyWordSuggestOptionsGrabber<IEntity> {
-
-        AsyncOptionLoadingDelegate<IEntity> asyncOptionDelegate;
-
-        @SuppressWarnings("unchecked")
-        EntitySuggestOptionsGrabber(MemberMeta memberMeta) {
-
-            setFormatter(new IFormatter<IEntity, String>() {
-                @Override
-                public String format(IEntity value) {
-                    return value.getStringView();
-                }
-
-            });
-
-            setComparator(new Comparator<IEntity>() {
-
-                @Override
-                public int compare(IEntity o1, IEntity o2) {
-                    return o1.getStringView().compareTo(o2.getStringView());
-                }
-
-            });
-
-            EntityDataSource<IEntity> optionsDataSource = ReferenceDataManager.<IEntity> getDataSource();
-            optionsDataSource.obtain(new EntityQueryCriteria<IEntity>((Class<IEntity>) memberMeta.getObjectClass()),
-                    new AsyncCallback<EntitySearchResult<IEntity>>() {
-
-                        @Override
-                        public void onFailure(Throwable caught) {
-                            setAllOptions(null);
-                            //TODO log
-                        }
-
-                        @Override
-                        public void onSuccess(EntitySearchResult<IEntity> result) {
-                            setAllOptions(result.getData());
-                        }
-
-                    });
-
-        }
     }
 }

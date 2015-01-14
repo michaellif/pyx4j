@@ -20,6 +20,7 @@
 package com.pyx4j.forms.client.ui.datatable.filter;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -76,7 +77,12 @@ public class FilterItem implements Comparable<FilterItem> {
             return columnDescriptor.getColumnTitle() + ": '" + i18n.tr("All") + "'";
         } else if (criterion instanceof PropertyCriterion) {
             Serializable value = ((PropertyCriterion) criterion).getValue();
-            return columnDescriptor.getColumnTitle() + ": '" + ((value == null) ? i18n.tr("All") : value) + "'";
+            if (value instanceof Collection) {
+                return columnDescriptor.getColumnTitle() + ": '" + ((Collection) value).size() + "'";
+            } else {
+                return columnDescriptor.getColumnTitle() + ": '" + ((value == null) ? i18n.tr("All") : value) + "'";
+            }
+
         } else if (criterion instanceof RangeCriterion) {
             Serializable fromValue = ((RangeCriterion) criterion).getFromValue();
             Serializable toValue = ((RangeCriterion) criterion).getToValue();
