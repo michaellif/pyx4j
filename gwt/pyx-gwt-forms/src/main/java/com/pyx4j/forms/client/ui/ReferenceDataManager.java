@@ -86,10 +86,10 @@ public class ReferenceDataManager {
             }
             loading.add(handler);
 
-            AsyncCallback<EntitySearchResult<T>> callback = new RecoverableAsyncCallback<EntitySearchResult<T>>() {
+            AsyncCallback<EntitySearchResult<? extends IEntity>> callback = new RecoverableAsyncCallback<EntitySearchResult<? extends IEntity>>() {
 
                 @Override
-                public void onSuccess(final EntitySearchResult<T> result) {
+                public void onSuccess(final EntitySearchResult<? extends IEntity> result) {
                     try {
                         cache.put(originalCriteria, result.getData());
                         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
