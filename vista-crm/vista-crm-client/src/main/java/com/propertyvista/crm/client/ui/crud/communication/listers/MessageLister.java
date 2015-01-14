@@ -126,7 +126,9 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
         newButton.setMenu(subMenu);
         newButton.setPermission(DataModelPermission.permissionCreate(MessageDTO.class));
 
-        initByCategoryType();
+        setColumnDescriptors(createColumnDescriptors(viewScope));
+        setDataTableModel(new DataTableModel<MessageDTO>());
+
     }
 
     public static List<ColumnDescriptor> createColumnDescriptors(ViewScope viewScope) {
@@ -180,50 +182,34 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
     protected EntityListCriteria<MessageDTO> updateCriteria(EntityListCriteria<MessageDTO> criteria) {
         AppPlace place = evaluateAppPlace();
         Object placeCriteria = place instanceof Message ? ((Message) place).getCriteria() : null;
-
-        if (placeCriteria == null) {
-            criteria.eq(criteria.proto().viewScope(), ViewScope.AllMessages);
-        } else {
-            if (placeCriteria instanceof CategoryType) {
-                criteria.eq(criteria.proto().category().categoryType(),(CategoryType) placeCriteria);
-            } else if (placeCriteria instanceof MessageCategory) {
-                MessageCategory mc = (MessageCategory) placeCriteria;
-                 criteria.eq(criteria.proto().category(), mc);
-            } else if (placeCriteria instanceof UserVisit) {
-                criteria.eq(criteria.proto().category().categoryType(),CategoryType.Ticket);
-                criteria.eq(criteria.proto().category().dispatchers().$().user(), ((UserVisit) placeCriteria).getPrincipalPrimaryKey());
-                criteria.eq(criteria.proto().viewScope(), ViewScope.DispatchQueue);
-            }
-        }
-        EntityListCriteria<MessageDTO> result = super.updateCriteria(criteria);
-        if (placeCriteria == null) {
-            addOrIgnoreHidden(criteria);
-        }
-        return result;
-    }
-
-    private void initByCategoryType() {
-        AppPlace place = evaluateAppPlace();
-        Object placeCriteria = place instanceof Message ? ((Message) place).getCriteria() : null;
         CategoryType category = null;
         newButton.setVisible(true);
         setAddNewActionEnabled(false);
+
         if (placeCriteria == null) {
             newMessage.setVisible(true);
             newTicket.setVisible(true);
             newIVR.setVisible(true);
             newSMS.setVisible(true);
             newNotification.setVisible(true);
+            if (viewScope!= null){
+                criteria.eq(criteria.proto().viewScope(), ViewScope.Messages);
+            }
         } else {
             if (placeCriteria instanceof CategoryType) {
-                category = (CategoryType) placeCriteria;
+                criteria.eq(criteria.proto().category().categoryType(),category =(CategoryType) placeCriteria);
             } else if (placeCriteria instanceof MessageCategory) {
                 MessageCategory mc = (MessageCategory) placeCriteria;
+                criteria.eq(criteria.proto().category(), mc);
                 if (TicketType.Maintenance.equals(mc.ticketType().getValue())) {
                     newButton.setVisible(false);
                 } else {
                     category = mc.categoryType().getValue();
                 }
+            } else if (placeCriteria instanceof UserVisit) {
+                criteria.eq(criteria.proto().category().categoryType(),CategoryType.Ticket);
+                criteria.eq(criteria.proto().category().dispatchers().$().user(), ((UserVisit) placeCriteria).getPrincipalPrimaryKey());
+                criteria.eq(criteria.proto().viewScope(), ViewScope.DispatchQueue);
             }
 
             if (category != null) {
@@ -236,9 +222,13 @@ public class MessageLister extends SiteDataTablePanel<MessageDTO> {
                 newNotification.setVisible(CategoryType.Message == category);
             }
         }
-        setColumnDescriptors(createColumnDescriptors(viewScope));
-        setDataTableModel(new DataTableModel<MessageDTO>());
+        EntityListCriteria<MessageDTO> result = super.updateCriteria(criteria);
+        if (placeCriteria == null) {
+            addOrIgnoreHidden(criteria);
+        }
+        return result;
     }
+
 
     private static IFormatter<IEntity, SafeHtml> booleanField2Image(final Path path, final ImageResource trueValueResource,
             final ImageResource falseValueResource) {

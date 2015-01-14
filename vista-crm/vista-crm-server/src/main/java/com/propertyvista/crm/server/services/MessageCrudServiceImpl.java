@@ -27,6 +27,7 @@ import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
@@ -112,9 +113,10 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             toCriteria.desc(toCriteria.proto().date());
         }
         PropertyCriterion recipientCiteria = toCriteria.getCriterion(toCriteria.proto().thread().content().$().recipients().$().recipient());
+        Employee e = CrmAppContext.getCurrentUserEmployee();
         if (recipientCiteria != null) {
             toCriteria.getFilters().remove(recipientCiteria);
-            boCriteria.eq(boCriteria.proto().recipients().$().recipient(), CrmAppContext.getCurrentUserEmployee());
+            boCriteria.eq(boCriteria.proto().recipients().$().recipient(), e);
         }
 
         PropertyCriterion ownerCiteria = toCriteria.getCriterion(toCriteria.proto().viewScope());
@@ -122,8 +124,12 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             ViewScope critValue = (ViewScope) ownerCiteria.getValue();
             toCriteria.getFilters().remove(ownerCiteria);
             if (ViewScope.DispatchQueue.equals(critValue)) {
-                boCriteria.eq(boCriteria.proto().thread().content().$().recipients().$().recipient(), ServerSideFactory
-                        .create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned));
+                boCriteria.eq(boCriteria.proto().recipients().$().recipient(), ServerSideFactory.create(CommunicationMessageFacade.class)
+                        .getSystemEndpointFromCache(SystemEndpointName.Unassigned));
+            } else if (ViewScope.Messages.equals(critValue)) {
+                boCriteria.add(new OrCriterion(new OrCriterion(PropertyCriterion.eq(boCriteria.proto().sender(), e),//
+                        PropertyCriterion.eq(boCriteria.proto().recipients().$().recipient(), e)),//
+                        PropertyCriterion.eq(boCriteria.proto().thread().owner(), e)));
             }
         }
 
