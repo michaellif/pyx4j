@@ -540,6 +540,9 @@ public class CrmSiteMap implements SiteMap {
 
         public static class Policies extends AppPlace {
 
+            public static class ApplicationApprovalChecklist extends CrmCrudAppPlace {
+            }
+
             public static class ApplicationDocumentation extends CrmCrudAppPlace {
             }
 

@@ -181,6 +181,8 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
             sideMenuList = new SideMenuList();
             root.addMenuItem(new SideMenuFolderItem(sideMenuList, i18n.tr("Policies"), null));
 
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.ApplicationApprovalChecklist(),
+                    CrmAdministrationPolicesOtherAccess.class));
             sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.ApplicationDocumentation(),
                     CrmAdministrationPolicesOtherAccess.class));
             if (!VistaFeatures.instance().yardiIntegration()) {
