@@ -54,6 +54,8 @@ import com.propertyvista.crm.rpc.services.customer.ac.PotentialTenantListAction;
 import com.propertyvista.crm.rpc.services.customer.ac.TenantListAction;
 import com.propertyvista.crm.rpc.services.lease.ac.FormerLeaseListAction;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsMapper;
+import com.propertyvista.domain.communication.BroadcastEvent;
+import com.propertyvista.domain.communication.BroadcastTemplate;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.company.Employee;
@@ -279,6 +281,15 @@ public class NavigViewImpl extends Composite implements NavigView {
             communicationGroups = new SideMenuList();
             sideMenuList.addMenuItem(new SideMenuFolderItem(communicationGroups, i18n.tr("Groups"), null, null, DataModelPermission
                     .permissionRead(MessageCategory.class)));
+
+            SideMenuList broadcastFolder = new SideMenuList();
+            sideMenuList.addMenuItem(new SideMenuFolderItem(broadcastFolder, i18n.tr("Broadcast"), null, null, DataModelPermission
+                    .permissionRead(BroadcastTemplate.class)));
+
+            broadcastFolder.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.BroadcastTemplate(), DataModelPermission
+                    .permissionRead(BroadcastTemplate.class)));
+            broadcastFolder.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.BroadcastEvent(), DataModelPermission
+                    .permissionRead(BroadcastEvent.class)));
         }
 
         {//Reports

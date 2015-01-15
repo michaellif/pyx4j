@@ -7,25 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 22, 2011
+ * Created on Dec 20, 2011
  * @author stanp
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView;
 
-import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
-import com.propertyvista.dto.MessageDTO;
+import com.propertyvista.domain.communication.BroadcastEvent;
 
-public interface MessageViewerView extends IPrimeViewerView<MessageDTO> {
+public interface BroadcastEventViewerView extends IPrimeViewerView<BroadcastEvent> {
 
-    interface Presenter extends IPrimeViewerPresenter {
+    public interface BroadcastEventViewerPresenter extends IPrimeViewerPresenter {
 
-        void saveMessage(MessageDTO message, ThreadStatus threadStatus, boolean rePopulate);
-
-        void assignOwnership(MessageDTO source, String additionalComment, IEntity empoyee);
-
-        void hideUnhide(MessageDTO source);
     }
 }

@@ -667,6 +667,14 @@ public class CrmSiteMap implements SiteMap {
                 return forwardedMessage;
             }
         }
+
+        @PlaceProperties(navigLabel = "Templates")
+        public static class BroadcastTemplate extends CrmCrudAppPlace {
+        }
+
+        @PlaceProperties(navigLabel = "Events")
+        public static class BroadcastEvent extends CrmCrudAppPlace {
+        }
     }
 
     // Communication Ended --------------
