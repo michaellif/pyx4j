@@ -152,7 +152,7 @@ public class OptionsStep extends ApplicationWizardStep {
             if (!getValue().restrictions().isEmpty()) {
                 petFolder.setMaxCount(getValue().restrictions().maxPets().getValue());
                 parkingFolder.setMaxCount(getValue().restrictions().maxParkingSpots().getValue());
-                lockerFolder.setMaxCount(getValue().restrictions().maxParkingSpots().getValue());
+                lockerFolder.setMaxCount(getValue().restrictions().maxLockers().getValue());
             }
         }
     }
