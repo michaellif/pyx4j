@@ -27,6 +27,10 @@ BEGIN TRANSACTION;
     DROP SEQUENCE proof_of_income_document_folder_seq;
     
     -- New sequences
+    CREATE SEQUENCE application_approval_checklist_policy_item_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+    CREATE SEQUENCE application_approval_checklist_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+    CREATE SEQUENCE broadcast_event_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+    CREATE SEQUENCE broadcast_template_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE crm_user_delivery_preferences_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE crm_user_preferences_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE customer_delivery_preferences_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -58,9 +62,14 @@ BEGIN TRANSACTION;
     CREATE SEQUENCE proof_of_employment_document_type_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE proof_of_income_document_type_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE special_delivery_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+    CREATE SEQUENCE status_selection_item_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     
     
      -- Change owner to vista
+    ALTER SEQUENCE application_approval_checklist_policy_item_seq OWNER TO vista ;
+    ALTER SEQUENCE application_approval_checklist_policy_seq OWNER TO vista ;
+    ALTER SEQUENCE broadcast_event_seq OWNER TO vista ;
+    ALTER SEQUENCE broadcast_template_seq OWNER TO vista ;
     ALTER SEQUENCE crm_user_delivery_preferences_seq OWNER TO vista ;
     ALTER SEQUENCE crm_user_preferences_seq OWNER TO vista ;
     ALTER SEQUENCE customer_delivery_preferences_seq OWNER TO vista ;
@@ -94,6 +103,7 @@ BEGIN TRANSACTION;
     ALTER SEQUENCE proof_of_employment_document_type_seq OWNER TO vista ;
     ALTER SEQUENCE proof_of_income_document_type_seq OWNER TO vista ;
     ALTER SEQUENCE special_delivery_seq OWNER TO vista ;
+    ALTER SEQUENCE status_selection_item_seq OWNER TO vista ;
 
         
 COMMIT;

@@ -63,7 +63,11 @@ BEGIN
         ***     ======================================================================================================
         **/
         
-      
+        
+        DROP INDEX charge_line_list$charges_owner_idx;
+        DROP INDEX lease_billing_type_policy_item_lease_billing_policy_idx;
+        DROP INDEX maintenance_request_schedule_request_idx;
+
         
         /**
         ***    ======================================================================================================
@@ -94,6 +98,33 @@ BEGIN
         ***
         ***     ======================================================================================================
         **/
+        
+        -- application_approval_checklist_policy
+        
+        CREATE TABLE application_approval_checklist_policy
+        (
+            id                              BIGINT              NOT NULL,
+            node                            BIGINT,
+            node_discriminator              VARCHAR(50),
+            updated                         TIMESTAMP,
+                CONSTRAINT application_approval_checklist_policy_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE application_approval_checklist_policy OWNER TO vista;
+        
+        
+        -- application_approval_checklist_policy_item
+        
+        CREATE TABLE application_approval_checklist_policy_item
+        (
+            id                              BIGINT              NOT NULL,
+            policy                          BIGINT              NOT NULL,
+            order_in_policy                 INTEGER,
+            item_to_check                   VARCHAR(500),
+                CONSTRAINT application_approval_checklist_policy_item_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE application_approval_checklist_policy_item OWNER TO vista;
         
         -- application_documentation_policy
         
@@ -733,6 +764,19 @@ BEGIN
         
         ALTER TABLE special_delivery OWNER TO vista;
         
+        -- status_selection_item
+        
+        CREATE TABLE status_selection_item
+        (
+            id                              BIGINT              NOT NULL,
+            checklist_item                  BIGINT              NOT NULL,
+            order_in_checklist_item         INTEGER,
+            status_selection                VARCHAR(500),
+                CONSTRAINT status_selection_item_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE status_selection_item OWNER TO vista;
+        
         /**
         ***     =====================================================================================================
         ***
@@ -779,6 +823,8 @@ BEGIN
 
         -- foreign keys
         
+        ALTER TABLE application_approval_checklist_policy_item ADD CONSTRAINT application_approval_checklist_policy_item_policy_fk FOREIGN KEY(policy) 
+            REFERENCES application_approval_checklist_policy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_special_delivery_fk FOREIGN KEY(special_delivery) 
             REFERENCES special_delivery(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE crm_user_delivery_preferences ADD CONSTRAINT crm_user_delivery_preferences_user_preferences_fk FOREIGN KEY(user_preferences) 
@@ -862,6 +908,9 @@ BEGIN
             REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE proof_of_income_document_type ADD CONSTRAINT proof_of_income_document_type_policy_fk FOREIGN KEY(policy) 
             REFERENCES application_documentation_policy(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE status_selection_item ADD CONSTRAINT status_selection_item_checklist_item_fk FOREIGN KEY(checklist_item) 
+            REFERENCES application_approval_checklist_policy_item(id)  DEFERRABLE INITIALLY DEFERRED;
+
 
         
         -- not null
@@ -881,6 +930,25 @@ BEGIN
         ***     ====================================================================================================
         **/
         
+        
+        CREATE INDEX eviction_case$eviction_flow_owner_idx ON eviction_case$eviction_flow USING btree (owner);
+        CREATE INDEX maintenance_request_policy$tenant_preferred_windows_owner_idx ON maintenance_request_policy$tenant_preferred_windows USING btree (owner);
+        CREATE INDEX application_approval_checklist_policy_item_policy_idx ON application_approval_checklist_policy_item USING btree (policy);
+        CREATE INDEX entry_instructions_note_policy_idx ON entry_instructions_note USING btree (policy);
+        CREATE INDEX entry_not_granted_alert_policy_idx ON entry_not_granted_alert USING btree (policy);
+        CREATE INDEX eviction_case_lease_idx ON eviction_case USING btree (lease);
+        CREATE INDEX eviction_flow_step_policy_name_idx ON eviction_flow_step USING btree (policy, name);
+        CREATE INDEX eviction_status_eviction_case_eviction_step_idx ON eviction_status USING btree (eviction_case, eviction_step);
+        CREATE INDEX legal_questions_policy_item_policy_idx ON legal_questions_policy_item USING btree (policy);
+        CREATE UNIQUE INDEX lease_billing_type_policy_item_policy_billing_period_idx ON lease_billing_type_policy_item USING btree (policy, billing_period);
+        CREATE INDEX maintenance_request_work_order_request_idx ON maintenance_request_work_order USING btree (request);
+        CREATE INDEX n4_batch_building_idx ON n4_batch USING btree (building);
+        CREATE INDEX n4_batch_item_batch_idx ON n4_batch_item USING btree (batch);
+        CREATE INDEX n4_batch_item_lease_idx ON n4_batch_item USING btree (lease);
+        CREATE INDEX n4_unpaid_charge_parent_idx ON n4_unpaid_charge USING btree (parent);
+        CREATE INDEX status_selection_item_checklist_item_idx ON status_selection_item USING btree (checklist_item);
+        
+
        
         -- billing_arrears_snapshot -GiST index!
         
