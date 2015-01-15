@@ -72,7 +72,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
                 @Override
                 public void onValueChange(ValueChangeEvent<PolicyNode> event) {
-                    stepSelector.setPolicyNode(event.getValue(), true);
+                    stepSelector.setPolicyNode(event.getValue());
                 }
             });
         }
@@ -81,7 +81,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
     @Override
     protected void onValuePropagation(N4PolicyDTO value, boolean fireEvent, boolean populate) {
         if (value != null && isEditable()) {
-            stepSelector.setPolicyNode(value.node(), true);
+            stepSelector.setPolicyNode(value.node());
         }
 
         super.onValuePropagation(value, fireEvent, populate);
@@ -282,15 +282,13 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
             });
         }
 
-        void setPolicyNode(PolicyNode node, boolean refresh) {
+        void setPolicyNode(PolicyNode node) {
             this.node = node;
             this.noteSeen = false;
             if (node != null && isEditable()) {
                 resetCriteria();
                 addCriterion(PropertyCriterion.eq(proto().policy().node(), node));
-                if (refresh) {
-                    refreshOptions();
-                }
+                refreshOptions();
             }
         }
 
