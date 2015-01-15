@@ -19,6 +19,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.preloader.policy.subpreloaders.ApplicationApprovalChecklistPolicyPreloader;
 import com.propertyvista.biz.preloader.policy.subpreloaders.ApplicationDocumentationPolicyPreloader;
 import com.propertyvista.biz.preloader.policy.subpreloaders.LegalQuestionsPolicyPreloader;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
@@ -31,7 +32,7 @@ public class UpgradeProcedure142 implements UpgradeProcedure {
 
     @Override
     public int getUpgradeStepsCount() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -41,6 +42,9 @@ public class UpgradeProcedure142 implements UpgradeProcedure {
             runLegalQuestionsPolicyPreload();
             break;
         case 2:
+            runApplicationApprovalChecklistPolicyPreload();
+            break;
+        case 3:
             runApplicationDocumentationPolicyUpdate();
             break;
         default:
@@ -54,7 +58,19 @@ public class UpgradeProcedure142 implements UpgradeProcedure {
         LegalQuestionsPolicyPreloader policyPreloader = new LegalQuestionsPolicyPreloader();
         OrganizationPoliciesNode organizationNode = Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class));
         if (organizationNode == null) {
-            throw new UserRuntimeException("Organizational Policy Was not found");
+            throw new UserRuntimeException("Organizational Policy node Was not found");
+        }
+        policyPreloader.setTopNode(organizationNode);
+        String policyCreationLog = policyPreloader.create();
+        log.info("Finished policy creation: " + policyCreationLog);
+    }
+
+    private void runApplicationApprovalChecklistPolicyPreload() {
+        log.info("Creating ApplicationApprovalChecklistPolicy and setting its scope to 'Organization'");
+        ApplicationApprovalChecklistPolicyPreloader policyPreloader = new ApplicationApprovalChecklistPolicyPreloader();
+        OrganizationPoliciesNode organizationNode = Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class));
+        if (organizationNode == null) {
+            throw new UserRuntimeException("Organizational Policy Node Was not found");
         }
         policyPreloader.setTopNode(organizationNode);
         String policyCreationLog = policyPreloader.create();

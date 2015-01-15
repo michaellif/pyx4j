@@ -14,10 +14,10 @@ package com.propertyvista.crm.client.ui.crud.policies.idassignment;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
+
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
 import com.propertyvista.crm.rpc.services.policies.policy.IdAssignmentPolicyCrudService;
 import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
@@ -32,8 +32,6 @@ public class IdAssignmentPolicyListerViewImpl extends AbstractListerView<IdAssig
 
         public IdAssignmentPolicyLister() {
             super(IdAssignmentPolicyDTO.class, GWT.<IdAssignmentPolicyCrudService> create(IdAssignmentPolicyCrudService.class));
-            setAddNewActionEnabled(false);
-            setDeleteActionEnabled(false);
 
             setColumnDescriptors( //
                     new ColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //

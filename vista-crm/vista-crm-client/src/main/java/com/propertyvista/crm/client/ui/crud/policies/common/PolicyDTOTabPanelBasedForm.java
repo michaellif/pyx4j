@@ -122,12 +122,11 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
     }
 
     private Collection<NodeType<?>> assignableTypes() {
-        List<NodeType<?>> assignableTypes = null;
+        List<NodeType<?>> assignableTypes = new ArrayList<NodeType<?>>();
 
         if (getValue().lowestNodeType().isNull()) {
-            assignableTypes = AVAILABLE_NODE_TYPES;
+            assignableTypes.addAll(AVAILABLE_NODE_TYPES);
         } else {
-            assignableTypes = new ArrayList<NodeType<?>>();
             for (NodeType<?> t : AVAILABLE_NODE_TYPES) {
                 assignableTypes.add(t);
                 if (t.getType().getName().equals(getValue().lowestNodeType().getValue())) {

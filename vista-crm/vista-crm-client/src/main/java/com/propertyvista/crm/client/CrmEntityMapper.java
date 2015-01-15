@@ -53,6 +53,7 @@ import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.policy.policies.ARPolicy;
+import com.propertyvista.domain.policy.policies.ApplicationApprovalChecklistPolicy;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
@@ -178,6 +179,7 @@ public class CrmEntityMapper {
         // TODO add report place mapping here
 
         // policies
+        AppPlaceEntityMapper.register(ApplicationApprovalChecklistPolicy.class, Administration.Policies.ApplicationApprovalChecklist.class, defaultImage);
         AppPlaceEntityMapper.register(ApplicationDocumentationPolicy.class, Administration.Policies.ApplicationDocumentation.class, defaultImage);
         AppPlaceEntityMapper.register(BackgroundCheckPolicy.class, Administration.Policies.BackgroundCheck.class, defaultImage);
         AppPlaceEntityMapper.register(DepositPolicy.class, Administration.Policies.Deposits.class, defaultImage);

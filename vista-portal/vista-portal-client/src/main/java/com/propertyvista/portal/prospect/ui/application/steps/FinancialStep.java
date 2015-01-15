@@ -54,7 +54,7 @@ public class FinancialStep extends ApplicationWizardStep {
         formPanel.append(Location.Left, proto().applicantData().incomes(), personalIncomeFolder);
 
         formPanel.h3(i18n.tr("Assets"));
-        formPanel.append(Location.Left, proto().applicantData().assets(), new PersonalAssetFolder());
+        formPanel.append(Location.Left, proto().applicantData().assets(), personalAssetFolder);
 
         if (!SecurityController.check(PortalProspectBehavior.Guarantor)) {
             guarantorsHeader = formPanel.h3(i18n.tr("Guarantors"));
@@ -91,8 +91,8 @@ public class FinancialStep extends ApplicationWizardStep {
                         getCComponent(), i18n.tr("Incomes and/or Assets are required"));
             }
         });
-        personalAssetFolder.addValueChangeHandler(new RevalidationTrigger<IList<CustomerScreeningAsset>>(get(proto().applicantData().incomes())));
-
+        personalAssetFolder.addValueChangeHandler(new RevalidationTrigger<IList<CustomerScreeningAsset>>(personalIncomeFolder));
+        // --------------------------------------------------------------------------------------------------------------------
         personalAssetFolder.addComponentValidator(new AbstractComponentValidator<IList<CustomerScreeningAsset>>() {
             @Override
             public BasicValidationError isValid() {
@@ -100,6 +100,6 @@ public class FinancialStep extends ApplicationWizardStep {
                         getCComponent(), i18n.tr("Assets and/or Incomes are required"));
             }
         });
-        personalIncomeFolder.addValueChangeHandler(new RevalidationTrigger<IList<CustomerScreeningIncome>>(get(proto().applicantData().assets())));
+        personalIncomeFolder.addValueChangeHandler(new RevalidationTrigger<IList<CustomerScreeningIncome>>(personalAssetFolder));
     }
 }

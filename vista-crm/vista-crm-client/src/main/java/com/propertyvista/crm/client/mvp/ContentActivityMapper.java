@@ -111,6 +111,12 @@ import com.propertyvista.crm.client.activity.crud.building.catalog.FeatureEditor
 import com.propertyvista.crm.client.activity.crud.building.catalog.FeatureViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceEditorActivity;
 import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceViewerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.BroadcastEventEditorActivity;
+import com.propertyvista.crm.client.activity.crud.communication.BroadcastEventListerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.BroadcastEventViewerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.BroadcastTemplateEditorActivity;
+import com.propertyvista.crm.client.activity.crud.communication.BroadcastTemplateListerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.BroadcastTemplateViewerActivity;
 import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryEditorActivity;
 import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryListerActivity;
 import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryViewActivity;
@@ -186,6 +192,9 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardManagementLister
 import com.propertyvista.crm.client.activity.dashboard.DashboardManagementViewerActivity;
 import com.propertyvista.crm.client.activity.login.LoginActivity;
 import com.propertyvista.crm.client.activity.login.LoginWithTokenActivity;
+import com.propertyvista.crm.client.activity.policies.applicationapprovalchecklist.ApplicationApprovalChecklistPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.applicationapprovalchecklist.ApplicationApprovalChecklistPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.applicationapprovalchecklist.ApplicationApprovalChecklistPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyViewerActivity;
@@ -1092,6 +1101,19 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 // - Policies:
+                    } else if (crudPlace instanceof Administration.Policies.ApplicationApprovalChecklist) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new ApplicationApprovalChecklistPolicyListerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new ApplicationApprovalChecklistPolicyEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new ApplicationApprovalChecklistPolicyViewerActivity(crudPlace);
+                            break;
+                        }
+
                     } else if (crudPlace instanceof Administration.Policies.ApplicationDocumentation) {
                         switch (crudPlace.getType()) {
                         case lister:
@@ -1522,9 +1544,9 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new EftVarianceReportActivity((ReportsAppPlace<EftVarianceReportMetadata>) place);
                     } else if (place instanceof Reports.ResidentInsurance) {
                         activity = new ResidentInsuranceReportActivity((ReportsAppPlace<ResidentInsuranceReportMetadata>) place);
-                    }
-                    // Communication
-                    else if (crudPlace instanceof Communication.Message) {
+
+                        // Communication
+                    } else if (crudPlace instanceof Communication.Message) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new MessageListerActivity(crudPlace);
@@ -1534,6 +1556,32 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         case editor:
                             activity = new MessageEditorActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (crudPlace instanceof Communication.BroadcastTemplate) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new BroadcastTemplateListerActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new BroadcastTemplateViewerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new BroadcastTemplateEditorActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (crudPlace instanceof Communication.BroadcastEvent) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new BroadcastEventListerActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new BroadcastEventViewerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new BroadcastEventEditorActivity(crudPlace);
                             break;
                         }
 

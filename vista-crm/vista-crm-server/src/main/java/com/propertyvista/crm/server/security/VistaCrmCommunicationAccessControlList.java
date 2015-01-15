@@ -27,6 +27,8 @@ import com.propertyvista.crm.server.security.access.CommunicationThreadAccessRul
 import com.propertyvista.crm.server.security.access.MessageAccessRule;
 import com.propertyvista.crm.server.security.access.MessageCategoryAccessRule;
 import com.propertyvista.crm.server.security.access.ThreadPolicyHandleAccessRule;
+import com.propertyvista.domain.communication.BroadcastEvent;
+import com.propertyvista.domain.communication.BroadcastTemplate;
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.IVRDelivery;
 import com.propertyvista.domain.communication.Message;
@@ -61,6 +63,12 @@ class VistaCrmCommunicationAccessControlList extends UIAclBuilder {
 
         grant(VistaAccessGrantedBehavior.CRM, MessageCategory.class, READ);
         grant(VistaAccessGrantedBehavior.CRM, MessageDTO.class, ALL);
+
+        grant(VistaAccessGrantedBehavior.CRM, BroadcastTemplate.class, ALL);
+        grant(VistaAccessGrantedBehavior.CRM, BroadcastEvent.class, ALL);
+
+        grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(BroadcastTemplate.class, ALL));
+        grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(BroadcastEvent.class, ALL));
 
         // Administration is granted in VistaCrmAdministrationAccessControlList
     }

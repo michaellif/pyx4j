@@ -50,8 +50,6 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter {
 
     private final NavigView view;
 
-    private Place place;
-
     public NavigActivity() {
         view = CrmSite.getViewFactory().getView(NavigView.class);
         view.setPresenter(this);
@@ -75,8 +73,6 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter {
     }
 
     public void withPlace(Place place) {
-        this.place = place;
-
         view.updateUserName(ClientContext.getUserVisit().getName());
 
         if (place instanceof AppPlace) {

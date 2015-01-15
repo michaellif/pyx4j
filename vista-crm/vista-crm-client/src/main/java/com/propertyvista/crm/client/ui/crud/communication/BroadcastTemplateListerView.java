@@ -8,17 +8,14 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Dec 20, 2011
- * @author igors
+ * @author stanp
  */
-package com.propertyvista.crm.client.ui.crud.communication.listers;
+package com.propertyvista.crm.client.ui.crud.communication;
 
-import com.propertyvista.dto.MessageDTO.ViewScope;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView;
 
-public class MessageListerViewTicketCategoryImpl extends MessageListerViewImpl implements MessageListerViewTicketCategory {
+import com.propertyvista.domain.communication.BroadcastTemplate;
 
-    @Override
-    protected void setDataTablePanel() {
-        super.setDataTablePanel(new MessageLister(this, ViewScope.TicketCategory));
-    }
+public interface BroadcastTemplateListerView extends IPrimeListerView<BroadcastTemplate> {
 
 }

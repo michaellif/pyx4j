@@ -54,6 +54,8 @@ import com.propertyvista.crm.rpc.services.customer.ac.PotentialTenantListAction;
 import com.propertyvista.crm.rpc.services.customer.ac.TenantListAction;
 import com.propertyvista.crm.rpc.services.lease.ac.FormerLeaseListAction;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsMapper;
+import com.propertyvista.domain.communication.BroadcastEvent;
+import com.propertyvista.domain.communication.BroadcastTemplate;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.company.Employee;
@@ -275,10 +277,19 @@ public class NavigViewImpl extends Composite implements NavigView {
                     MessageDTO.ViewScope.class.getSimpleName(), MessageDTO.ViewScope.DispatchQueue.toString()), i18n.tr("Dispatch Queue"), null,
                     DataModelPermission.permissionRead(MessageDTO.class)));
             sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message().queryArg(MessageDTO.ViewScope.class.getSimpleName(),
-                    MessageDTO.ViewScope.AllMessages.toString()), i18n.tr("Messages"), null, DataModelPermission.permissionRead(MessageDTO.class)));
+                    MessageDTO.ViewScope.Messages.toString()), i18n.tr("Messages"), null, DataModelPermission.permissionRead(MessageDTO.class)));
             communicationGroups = new SideMenuList();
             sideMenuList.addMenuItem(new SideMenuFolderItem(communicationGroups, i18n.tr("Groups"), null, null, DataModelPermission
                     .permissionRead(MessageCategory.class)));
+
+            SideMenuList broadcastFolder = new SideMenuList();
+            sideMenuList.addMenuItem(new SideMenuFolderItem(broadcastFolder, i18n.tr("Broadcast"), null, null, DataModelPermission
+                    .permissionRead(BroadcastTemplate.class)));
+
+            broadcastFolder.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.BroadcastTemplate(), DataModelPermission
+                    .permissionRead(BroadcastTemplate.class)));
+            broadcastFolder.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.BroadcastEvent(), DataModelPermission
+                    .permissionRead(BroadcastEvent.class)));
         }
 
         {//Reports

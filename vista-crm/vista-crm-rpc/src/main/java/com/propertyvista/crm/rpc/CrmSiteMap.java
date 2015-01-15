@@ -540,6 +540,9 @@ public class CrmSiteMap implements SiteMap {
 
         public static class Policies extends AppPlace {
 
+            public static class ApplicationApprovalChecklist extends CrmCrudAppPlace {
+            }
+
             public static class ApplicationDocumentation extends CrmCrudAppPlace {
             }
 
@@ -663,6 +666,14 @@ public class CrmSiteMap implements SiteMap {
             public MessageDTO getForwardedMessage() {
                 return forwardedMessage;
             }
+        }
+
+        @PlaceProperties(navigLabel = "Templates")
+        public static class BroadcastTemplate extends CrmCrudAppPlace {
+        }
+
+        @PlaceProperties(navigLabel = "Events")
+        public static class BroadcastEvent extends CrmCrudAppPlace {
         }
     }
 

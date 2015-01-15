@@ -7,18 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 20, 2011
- * @author igors
+ * Created on Jan 14, 2015
+ * @author VladL
  */
-package com.propertyvista.crm.client.ui.crud.communication.listers;
+package com.propertyvista.crm.client.ui.crud.policies.applicationapprovalchecklist;
 
-import com.propertyvista.dto.MessageDTO.ViewScope;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView;
 
-public class MessageListerViewTicketCategoryImpl extends MessageListerViewImpl implements MessageListerViewTicketCategory {
+import com.propertyvista.domain.policy.dto.ApplicationApprovalChecklistPolicyDTO;
 
-    @Override
-    protected void setDataTablePanel() {
-        super.setDataTablePanel(new MessageLister(this, ViewScope.TicketCategory));
-    }
+public interface ApplicationApprovalChecklistPolicyEditorView extends IPrimeEditorView<ApplicationApprovalChecklistPolicyDTO> {
 
 }
