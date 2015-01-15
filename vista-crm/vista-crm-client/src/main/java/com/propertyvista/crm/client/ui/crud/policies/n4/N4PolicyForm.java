@@ -19,7 +19,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -36,6 +35,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog.Formatter;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -54,7 +54,9 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
     private final EvictionStepSelector stepSelector = new EvictionStepSelector();
 
-    private FormPanel contactPanel;
+    private FormPanel contactPanelN4;
+
+    private FormPanel contactPanelCS;
 
     private ARCodeFolder arCodeFolder;
 
@@ -67,19 +69,21 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         addTab(getDeliveryTab(), i18n.tr("Delivery"));
         addTab(getAutoCancellationTab(), i18n.tr("Auto Cancellation"));
 
-        get(proto().node()).addValueChangeHandler(new ValueChangeHandler<PolicyNode>() {
+        if (isEditable()) {
+            get(proto().node()).addValueChangeHandler(new ValueChangeHandler<PolicyNode>() {
 
-            @Override
-            public void onValueChange(ValueChangeEvent<PolicyNode> event) {
-                stepSelector.setPolicyNode(event.getValue(), true);
-            }
-        });
+                @Override
+                public void onValueChange(ValueChangeEvent<PolicyNode> event) {
+                    stepSelector.setPolicyNode(event.getValue());
+                }
+            });
+        }
     }
 
     @Override
     protected void onValuePropagation(N4PolicyDTO value, boolean fireEvent, boolean populate) {
-        if (value != null) {
-            stepSelector.setPolicyNode(value.node(), false);
+        if (value != null && isEditable()) {
+            stepSelector.setPolicyNode(value.node());
         }
 
         super.onValuePropagation(value, fireEvent, populate);
@@ -98,28 +102,40 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
     private IsWidget getSignatureTab() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.h1(i18n.tr("Agent Info"));
-        formPanel.append(Location.Left, proto().agentSelectionMethod()).decorate();
-        formPanel.append(Location.Right, proto().includeSignature()).decorate();
+        formPanel.h1(i18n.tr("N4 Agent Info"));
+        formPanel.append(Location.Left, proto().agentSelectionMethodN4()).decorate();
+        formPanel.append(Location.Left, proto().useAgentSignatureN4()).decorate();
+        formPanel.append(Location.Left, proto().useAgentContactInfoN4()).decorate();
 
-        formPanel.h1(i18n.tr("Contact Info"));
-        formPanel.append(Location.Left, proto().companyName()).decorate();
-        formPanel.append(Location.Left, proto().useAgentContactInfo()).decorate();
-        get(proto().useAgentContactInfo()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+        formPanel.append(Location.Right, contactPanelN4 = new FormPanel(this));
+        contactPanelN4.append(Location.Left, proto().emailAddress()).decorate();
+        contactPanelN4.append(Location.Left, proto().phoneNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
+        contactPanelN4.append(Location.Left, proto().faxNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
+        get(proto().useAgentContactInfoN4()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
-                contactPanel.setVisible(!event.getValue());
+                contactPanelN4.setVisible(!event.getValue());
             }
         });
 
-        contactPanel = new FormPanel(this);
-        contactPanel.append(Location.Left, proto().emailAddress()).decorate();
-        contactPanel.append(Location.Left, proto().phoneNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
-        contactPanel.append(Location.Left, proto().faxNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
-        formPanel.append(Location.Right, contactPanel);
+        formPanel.h1(i18n.tr("CS Agent Info"));
+        formPanel.append(Location.Left, proto().agentSelectionMethodCS()).decorate();
+        formPanel.append(Location.Left, proto().useAgentSignatureCS()).decorate();
+        formPanel.append(Location.Left, proto().useAgentContactInfoCS()).decorate();
 
-        formPanel.h1(i18n.tr("Mailing Address"));
+        formPanel.append(Location.Right, contactPanelCS = new FormPanel(this));
+        contactPanelCS.append(Location.Left, proto().phoneNumberCS(), new CPhoneField(PhoneType.northAmerica)).decorate();
+        get(proto().useAgentContactInfoCS()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                contactPanelCS.setVisible(!event.getValue());
+            }
+        });
+
+        formPanel.h1(i18n.tr("Company Info"));
+        formPanel.append(Location.Dual, proto().companyName()).decorate();
         formPanel.append(Location.Dual, proto().mailingAddress(), new InternationalAddressEditor());
 
         return formPanel;
@@ -159,7 +175,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        contactPanel.setVisible(!getValue().useAgentContactInfo().getValue(false));
+        contactPanelN4.setVisible(!getValue().useAgentContactInfoN4().getValue(false));
     }
 
     public static class ARCodeFolder extends VistaBoxFolder<N4PolicyDTOARCodeHolderDTO> {
@@ -266,6 +282,8 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
         private PolicyNode node;
 
+        private boolean noteSeen = false;
+
         public EvictionStepSelector() {
             super(EvictionFlowStep.class);
 
@@ -273,21 +291,34 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
                 @Override
                 public void onOptionsChange(OptionsChangeEvent<List<EvictionFlowStep>> event) {
-                    if (event.getOptions() == null || event.getOptions().isEmpty()) {
-                        throw new UserRuntimeException(i18n.tr("Eviction Steps or Eviction Flow Policy not found for " + node.getStringView()));
-                    }
+                    validatePolicySetup();
                 }
             });
         }
 
-        public void setPolicyNode(PolicyNode node, boolean refresh) {
+        void setPolicyNode(PolicyNode node) {
             this.node = node;
-            if (node != null) {
+            this.noteSeen = false;
+            if (node != null && isEditable()) {
                 resetCriteria();
                 addCriterion(PropertyCriterion.eq(proto().policy().node(), node));
-                if (refresh) {
-                    refreshOptions();
-                }
+                refreshOptions();
+            }
+        }
+
+        @Override
+        protected void onEditingStop() {
+            super.onEditingStop();
+            this.noteSeen = false;
+
+            validatePolicySetup();
+        }
+
+        private void validatePolicySetup() {
+            if (!noteSeen && node != null && isEditable() && (getOptions() == null || getOptions().isEmpty())) {
+                noteSeen = true;
+                MessageDialog.error(i18n.tr("Eviction Flow Undefined"),
+                        i18n.tr("Eviction Steps or Eviction Flow Policy not found for {0}", node.getStringView()));
             }
         }
     }

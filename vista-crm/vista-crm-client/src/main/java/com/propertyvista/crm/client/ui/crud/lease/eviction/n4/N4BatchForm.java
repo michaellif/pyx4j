@@ -66,7 +66,7 @@ public class N4BatchForm extends CrmEntityForm<N4BatchDTO> {
 
         CField<Employee, ?> employeeBox = isEditable() ? new CEntityComboBox<>(Employee.class) : //
                 new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class));
-        formPanel.append(Location.Right, proto().signingEmployee(), employeeBox).decorate();
+        formPanel.append(Location.Right, proto().signingAgent(), employeeBox).decorate();
         formPanel.append(Location.Right, proto().deliveryMethod()).decorate();
         formPanel.append(Location.Right, proto().deliveryDate()).decorate();
 
@@ -92,8 +92,8 @@ public class N4BatchForm extends CrmEntityForm<N4BatchDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        if (isEditable() && !getValue().signingEmployee().isNull()) {
-            get(proto().signingEmployee()).setEditable(false);
+        if (isEditable() && !getValue().signingAgent().isNull()) {
+            get(proto().signingAgent()).setEditable(false);
         }
     }
 

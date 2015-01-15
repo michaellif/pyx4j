@@ -28,7 +28,7 @@ public class N4PolicyPreloader extends AbstractPolicyPreloader<N4Policy> {
     @Override
     protected N4Policy createPolicy(StringBuilder log) {
         N4Policy policy = EntityFactory.create(N4Policy.class);
-        policy.includeSignature().setValue(true);
+        policy.useAgentSignatureN4().setValue(true);
 
         policy.terminationDateAdvanceDaysLongRentPeriod().setValue(14);
         policy.terminationDateAdvanceDaysShortRentPeriod().setValue(7);

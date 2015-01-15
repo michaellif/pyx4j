@@ -76,7 +76,9 @@ public interface N4Batch extends IEntity {
 
     IPrimitive<LogicalDate> signatureDate();
 
-    Employee signingEmployee();
+    Employee signingAgent();
+
+    Employee servicingAgent();
 
     @Owned
     @Detached
