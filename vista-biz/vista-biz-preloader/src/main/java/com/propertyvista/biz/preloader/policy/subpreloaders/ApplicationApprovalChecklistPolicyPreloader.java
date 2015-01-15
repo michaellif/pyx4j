@@ -28,22 +28,45 @@ public class ApplicationApprovalChecklistPolicyPreloader extends AbstractPolicyP
     protected ApplicationApprovalChecklistPolicy createPolicy(StringBuilder log) {
         ApplicationApprovalChecklistPolicy policy = EntityFactory.create(ApplicationApprovalChecklistPolicy.class);
 
-        ApplicationApprovalChecklistPolicyItem item = policy.itemsToCheck().$();
-        item.itemToCheck().setValue("Information Completeness");
-        policy.itemsToCheck().add(item);
+        ApplicationApprovalChecklistPolicyItem item = addItem(policy, "Credit Check");
+        addStatus(item, "Completed - OK");
+        addStatus(item, "Complete - No Hit");
+        addStatus(item, "Complete - Declined");
+        addStatus(item, "Missing - Information");
+        addStatus(item, "Missing - Guarantor");
 
-        item = policy.itemsToCheck().$();
-        item.itemToCheck().setValue("Credit Check");
-        policy.itemsToCheck().add(item);
+        item = addItem(policy, "Reference");
+        addStatus(item, "Called - Confirmed");
+        addStatus(item, "Called - Not Confirmed");
+        addStatus(item, "Called - Left Message");
+        addStatus(item, "Called - Bad Reference");
 
-        item = policy.itemsToCheck().$();
-        item.itemToCheck().setValue("Employment Confirmation");
-        policy.itemsToCheck().add(item);
+        item = addItem(policy, "Employment Confirmation");
+        addStatus(item, "Called - Confirmed");
+        addStatus(item, "Called - Left Message");
+        addStatus(item, "Called - Not Confirmed");
+        addStatus(item, "Called - Bad Reference");
+        addStatus(item, "Called - Not Working there");
 
-        item = policy.itemsToCheck().$();
-        item.itemToCheck().setValue("landlord Confirmation");
-        policy.itemsToCheck().add(item);
+        item = addItem(policy, "Documents");
+        addStatus(item, "Checked - All OK");
+        addStatus(item, "Checked - Missing");
+        addStatus(item, "Checked - Not Legible");
+        addStatus(item, "Checked - Insufficient");
 
         return policy;
+    }
+
+    private ApplicationApprovalChecklistPolicyItem addItem(ApplicationApprovalChecklistPolicy policy, String item) {
+        ApplicationApprovalChecklistPolicyItem policyItem = policy.itemsToCheck().$();
+        policyItem.itemToCheck().setValue(item);
+        policy.itemsToCheck().add(policyItem);
+        return policyItem;
+    }
+
+    private void addStatus(ApplicationApprovalChecklistPolicyItem item, String status) {
+        ApplicationApprovalChecklistPolicyItem.StatusSelectionItem statusItem = item.statusesToSelect().$();
+        statusItem.statusSelection().setValue(status);
+        item.statusesToSelect().add(statusItem);
     }
 }
