@@ -91,7 +91,7 @@ public class N4BatchLister extends SiteDataTablePanel<N4BatchDTO> {
                 new ColumnDescriptor.Builder(proto.serviceDate()).build(), //
                 new ColumnDescriptor.Builder(proto.deliveryMethod()).build(), //
                 new ColumnDescriptor.Builder(proto.deliveryDate()).build(), //
-                new ColumnDescriptor.Builder(proto.signingEmployee()).columnTitle(i18n.tr("Agent")).build() //                
+                new ColumnDescriptor.Builder(proto.signingAgent()).columnTitle(i18n.tr("Agent")).build() //                
         };
     }
 

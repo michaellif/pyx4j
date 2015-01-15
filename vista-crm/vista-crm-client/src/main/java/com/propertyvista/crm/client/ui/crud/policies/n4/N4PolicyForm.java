@@ -54,7 +54,9 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
     private final EvictionStepSelector stepSelector = new EvictionStepSelector();
 
-    private FormPanel contactPanel;
+    private FormPanel contactPanelN4;
+
+    private FormPanel contactPanelCS;
 
     private ARCodeFolder arCodeFolder;
 
@@ -100,28 +102,40 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
     private IsWidget getSignatureTab() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.h1(i18n.tr("Agent Info"));
-        formPanel.append(Location.Left, proto().agentSelectionMethod()).decorate();
-        formPanel.append(Location.Right, proto().includeSignature()).decorate();
+        formPanel.h1(i18n.tr("N4 Agent Info"));
+        formPanel.append(Location.Left, proto().agentSelectionMethodN4()).decorate();
+        formPanel.append(Location.Left, proto().useAgentSignatureN4()).decorate();
+        formPanel.append(Location.Left, proto().useAgentContactInfoN4()).decorate();
 
-        formPanel.h1(i18n.tr("Contact Info"));
-        formPanel.append(Location.Left, proto().companyName()).decorate();
-        formPanel.append(Location.Left, proto().useAgentContactInfo()).decorate();
-        get(proto().useAgentContactInfo()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+        formPanel.append(Location.Right, contactPanelN4 = new FormPanel(this));
+        contactPanelN4.append(Location.Left, proto().emailAddress()).decorate();
+        contactPanelN4.append(Location.Left, proto().phoneNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
+        contactPanelN4.append(Location.Left, proto().faxNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
+        get(proto().useAgentContactInfoN4()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
-                contactPanel.setVisible(!event.getValue());
+                contactPanelN4.setVisible(!event.getValue());
             }
         });
 
-        contactPanel = new FormPanel(this);
-        contactPanel.append(Location.Left, proto().emailAddress()).decorate();
-        contactPanel.append(Location.Left, proto().phoneNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
-        contactPanel.append(Location.Left, proto().faxNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
-        formPanel.append(Location.Right, contactPanel);
+        formPanel.h1(i18n.tr("CS Agent Info"));
+        formPanel.append(Location.Left, proto().agentSelectionMethodCS()).decorate();
+        formPanel.append(Location.Left, proto().useAgentSignatureCS()).decorate();
+        formPanel.append(Location.Left, proto().useAgentContactInfoCS()).decorate();
 
-        formPanel.h1(i18n.tr("Mailing Address"));
+        formPanel.append(Location.Right, contactPanelCS = new FormPanel(this));
+        contactPanelCS.append(Location.Left, proto().phoneNumberCS(), new CPhoneField(PhoneType.northAmerica)).decorate();
+        get(proto().useAgentContactInfoCS()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                contactPanelCS.setVisible(!event.getValue());
+            }
+        });
+
+        formPanel.h1(i18n.tr("Company Info"));
+        formPanel.append(Location.Dual, proto().companyName()).decorate();
         formPanel.append(Location.Dual, proto().mailingAddress(), new InternationalAddressEditor());
 
         return formPanel;
@@ -161,7 +175,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        contactPanel.setVisible(!getValue().useAgentContactInfo().getValue(false));
+        contactPanelN4.setVisible(!getValue().useAgentContactInfoN4().getValue(false));
     }
 
     public static class ARCodeFolder extends VistaBoxFolder<N4PolicyDTOARCodeHolderDTO> {

@@ -137,11 +137,11 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
         batch.companyLegalName().setValue(n4policy.companyName().getValue());
         batch.companyAddress().set(n4policy.mailingAddress().duplicate(InternationalAddress.class));
 
-        if (EmployeeSelectionMethod.ByLoggedInUser.equals(n4policy.agentSelectionMethod().getValue())) {
-            batch.signingEmployee().set(CrmAppContext.getCurrentUserEmployee());
+        if (EmployeeSelectionMethod.ByLoggedInUser.equals(n4policy.agentSelectionMethodN4().getValue())) {
+            batch.signingAgent().set(CrmAppContext.getCurrentUserEmployee());
         }
 
-        if (n4policy.useAgentContactInfo().getValue(false) && !batch.signingEmployee().isNull()) {
+        if (n4policy.useAgentContactInfoN4().getValue(false) && !batch.signingAgent().isNull()) {
             // TODO use Employee  contact if so configured in policy; has no fax though...
         } else {
             batch.companyPhoneNumber().setValue(n4policy.phoneNumber().getValue());

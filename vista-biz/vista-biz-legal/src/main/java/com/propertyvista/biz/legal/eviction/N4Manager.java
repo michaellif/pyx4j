@@ -198,11 +198,11 @@ public class N4Manager {
         fieldsData.owedRent().totalRentOwing().setValue(leaseData.totalRentOwning().getValue());
 
         fieldsData.signature().signedBy().setValue(batchData.isLandlord().getValue(false) ? N4Signature.SignedBy.Landlord : N4Signature.SignedBy.Agent);
-        fieldsData.signature().signature().setValue(retrieveSignature(batchData.signingEmployee()));
+        fieldsData.signature().signature().setValue(retrieveSignature(batchData.signingAgent()));
         fieldsData.signature().signatureDate().setValue(batchData.signatureDate().getValue());
 
-        fieldsData.landlordsContactInfo().firstName().setValue(batchData.signingEmployee().name().firstName().getStringView());
-        fieldsData.landlordsContactInfo().lastName().setValue(batchData.signingEmployee().name().lastName().getStringView());
+        fieldsData.landlordsContactInfo().firstName().setValue(batchData.signingAgent().name().firstName().getStringView());
+        fieldsData.landlordsContactInfo().lastName().setValue(batchData.signingAgent().name().lastName().getStringView());
         fieldsData.landlordsContactInfo().companyName().setValue(batchData.companyLegalName().getStringView());
 
         fieldsData.landlordsContactInfo().mailingAddress().setValue(formatStreetAddress(batchData.companyAddress()));

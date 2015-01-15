@@ -46,28 +46,49 @@ public interface N4Policy extends Policy {
     @NotNull
     IPrimitive<String> evictionFlowStep();
 
+    // N4 Signing Agent data
     @NotNull
-    IPrimitive<EmployeeSelectionMethod> agentSelectionMethod();
+    @Caption(name = "Agent Selection Method")
+    IPrimitive<EmployeeSelectionMethod> agentSelectionMethodN4();
 
-    @Caption(description = "Signature image taken from Employee's profile")
-    IPrimitive<Boolean> includeSignature();
+    @Caption(name = "Use Agent Signature")
+    IPrimitive<Boolean> useAgentSignatureN4();
+
+    @Caption(name = "Use Agent Contact Info")
+    IPrimitive<Boolean> useAgentContactInfoN4();
+
+    @Editor(type = EditorType.phone)
+    @Caption(name = "Phone")
+    IPrimitive<String> phoneNumber();
+
+    @Editor(type = EditorType.phone)
+    @Caption(name = "Fax")
+    IPrimitive<String> faxNumber();
+
+    @Editor(type = EditorType.email)
+    @Caption(name = "E-Mail")
+    IPrimitive<String> emailAddress();
+
+    // N4 Servicing Agent data
+    @NotNull
+    @Caption(name = "Agent Selection Method")
+    IPrimitive<EmployeeSelectionMethod> agentSelectionMethodCS();
+
+    @Caption(name = "Use Agent Signature")
+    IPrimitive<Boolean> useAgentSignatureCS();
+
+    @Caption(name = "Use Agent Contact Info")
+    IPrimitive<Boolean> useAgentContactInfoCS();
+
+    @Editor(type = EditorType.phone)
+    @Caption(name = "Phone")
+    IPrimitive<String> phoneNumberCS();
 
     @NotNull
     IPrimitive<String> companyName();
 
     @EmbeddedEntity
     InternationalAddress mailingAddress();
-
-    IPrimitive<Boolean> useAgentContactInfo();
-
-    @Editor(type = EditorType.phone)
-    IPrimitive<String> phoneNumber();
-
-    @Editor(type = EditorType.phone)
-    IPrimitive<String> faxNumber();
-
-    @Editor(type = EditorType.email)
-    IPrimitive<String> emailAddress();
 
     @RpcTransient
     IList<ARCode> relevantARCodes();
