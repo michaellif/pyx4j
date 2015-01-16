@@ -191,12 +191,12 @@ public interface LeaseApplication extends IEntity {
         @Editor(type = EditorType.label)
         IPrimitive<LogicalDate> decisionDate();
 
-        @ReadOnly
-        @Editor(type = EditorType.label)
-        IPrimitive<String> itemToCheck();
+        IPrimitive<String> notes();
 
         @Editor(type = EditorType.label)
-        IPrimitive<String> itemStatus();
+        IPrimitive<String> task();
+
+        IPrimitive<String> status();
 
         @Owned
         IList<StatusSelectionItem> statusesToSelect();

@@ -1377,7 +1377,7 @@ public abstract class LeaseAbstractManager {
         for (ApplicationApprovalChecklistPolicyItem item : policy.itemsToCheck()) {
             ApprovalChecklistItem checklistItem = EntityFactory.create(ApprovalChecklistItem.class);
 
-            checklistItem.itemToCheck().setValue(item.itemToCheck().getValue());
+            checklistItem.task().setValue(item.itemToCheck().getValue());
 
             for (ApplicationApprovalChecklistPolicyItem.StatusSelectionPolicyItem status : item.statusesToSelect()) {
                 ApprovalChecklistItem.StatusSelectionItem statusItem = EntityFactory.create(ApprovalChecklistItem.StatusSelectionItem.class);

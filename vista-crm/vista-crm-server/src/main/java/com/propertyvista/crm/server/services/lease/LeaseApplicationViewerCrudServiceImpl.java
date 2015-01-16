@@ -146,6 +146,8 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         to.applicationId().setValue(to.leaseApplication().applicationId().getValue());
         to.yardiApplicationId().setValue(to.leaseApplication().yardiApplicationId().getValue());
         to.unit().info().legalAddress().set(AddressRetriever.getUnitLegalAddress(lease.unit()));
+
+        Persistence.service().retrieveMember(to.leaseApplication().approvalChecklist());
     }
 
     private void enhanceRetrievedCommon(Lease in, LeaseApplicationDTO dto) {
