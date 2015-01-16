@@ -30,7 +30,7 @@ import com.propertyvista.domain.policy.policies.ApplicationApprovalChecklistPoli
 
 public interface ApplicationApprovalChecklistPolicyItem extends IEntity {
 
-    public interface StatusSelectionItem extends IEntity {
+    public interface StatusSelectionPolicyItem extends IEntity {
 
         @Owner
         @NotNull
@@ -64,5 +64,5 @@ public interface ApplicationApprovalChecklistPolicyItem extends IEntity {
     IPrimitive<String> itemToCheck();
 
     @Owned
-    IList<StatusSelectionItem> statusesToSelect();
+    IList<StatusSelectionPolicyItem> statusesToSelect();
 }

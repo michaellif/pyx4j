@@ -65,7 +65,7 @@ public class ApplicationApprovalChecklistPolicyPreloader extends AbstractPolicyP
     }
 
     private void addStatus(ApplicationApprovalChecklistPolicyItem item, String status) {
-        ApplicationApprovalChecklistPolicyItem.StatusSelectionItem statusItem = item.statusesToSelect().$();
+        ApplicationApprovalChecklistPolicyItem.StatusSelectionPolicyItem statusItem = item.statusesToSelect().$();
         statusItem.statusSelection().setValue(status);
         item.statusesToSelect().add(statusItem);
     }

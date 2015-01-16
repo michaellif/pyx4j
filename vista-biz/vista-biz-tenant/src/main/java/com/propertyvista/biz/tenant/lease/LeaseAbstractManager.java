@@ -68,9 +68,11 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.PolicyNode;
+import com.propertyvista.domain.policy.policies.ApplicationApprovalChecklistPolicy;
 import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.domain.policy.policies.LeaseAgreementLegalPolicy;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
+import com.propertyvista.domain.policy.policies.domain.ApplicationApprovalChecklistPolicyItem;
 import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -86,6 +88,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
+import com.propertyvista.domain.tenant.lease.LeaseApplication.ApprovalChecklistItem;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
@@ -346,6 +349,8 @@ public abstract class LeaseAbstractManager {
         lease.leaseApplication().submission().decidedBy().set(decidedBy);
         lease.leaseApplication().submission().decisionReason().setValue(decisionReason);
         lease.leaseApplication().submission().decisionDate().setValue(SystemDateManager.getLogicalDate());
+
+        initializeApprovalChecklist(lease.leaseApplication());
 
         Persistence.service().merge(lease);
         addLeaseNote(lease, "Submit Application", decisionReason, decidedBy);
@@ -1361,6 +1366,28 @@ public abstract class LeaseAbstractManager {
             }
 
             throw new Error();
+        }
+    }
+
+    private void initializeApprovalChecklist(LeaseApplication leaseApplication) {
+        ApplicationApprovalChecklistPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
+                getLeasePolicyNode(leaseApplication.lease()), ApplicationApprovalChecklistPolicy.class);
+
+        leaseApplication.approvalChecklist().clear();
+        for (ApplicationApprovalChecklistPolicyItem item : policy.itemsToCheck()) {
+            ApprovalChecklistItem checklistItem = EntityFactory.create(ApprovalChecklistItem.class);
+
+            checklistItem.itemToCheck().setValue(item.itemToCheck().getValue());
+
+            for (ApplicationApprovalChecklistPolicyItem.StatusSelectionPolicyItem status : item.statusesToSelect()) {
+                ApprovalChecklistItem.StatusSelectionItem statusItem = EntityFactory.create(ApprovalChecklistItem.StatusSelectionItem.class);
+
+                statusItem.statusSelection().setValue(status.statusSelection().getValue());
+
+                checklistItem.statusesToSelect().add(statusItem);
+            }
+
+            leaseApplication.approvalChecklist().add(checklistItem);
         }
     }
 }

@@ -30,7 +30,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.ApplicationApprovalChecklistPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.ApplicationApprovalChecklistPolicyItem;
-import com.propertyvista.domain.policy.policies.domain.ApplicationApprovalChecklistPolicyItem.StatusSelectionItem;
+import com.propertyvista.domain.policy.policies.domain.ApplicationApprovalChecklistPolicyItem.StatusSelectionPolicyItem;
 
 public class ApplicationApprovalChecklistPolicyForm extends PolicyDTOTabPanelBasedForm<ApplicationApprovalChecklistPolicyDTO> {
 
@@ -70,10 +70,10 @@ public class ApplicationApprovalChecklistPolicyForm extends PolicyDTOTabPanelBas
                     return formPanel;
                 }
 
-                class StatusSelectionItemFolder extends VistaTableFolder<StatusSelectionItem> {
+                class StatusSelectionItemFolder extends VistaTableFolder<StatusSelectionPolicyItem> {
 
                     public StatusSelectionItemFolder(boolean editable) {
-                        super(StatusSelectionItem.class, editable);
+                        super(StatusSelectionPolicyItem.class, editable);
                     }
 
                     @Override
