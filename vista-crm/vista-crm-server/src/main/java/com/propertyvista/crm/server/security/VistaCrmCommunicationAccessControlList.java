@@ -19,6 +19,7 @@ import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.UIAclBuilder;
 
+import com.propertyvista.crm.rpc.services.BroadcastTemplateCrudService;
 import com.propertyvista.crm.rpc.services.MessageAttachmentUploadService;
 import com.propertyvista.crm.rpc.services.MessageCategoryCrudService;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
@@ -48,6 +49,7 @@ class VistaCrmCommunicationAccessControlList extends UIAclBuilder {
         grant(VistaAccessGrantedBehavior.CRM, new MessageCategoryAccessRule(), MessageCategory.class);
         grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(SystemEndpoint.class, READ));
         grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(MessageCrudService.class));
+        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(BroadcastTemplateCrudService.class));
         grant(VistaAccessGrantedBehavior.CRM, new MessageAccessRule(), Message.class);
         grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(Message.class, ALL));
         grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(MessageAttachment.class, ALL));
