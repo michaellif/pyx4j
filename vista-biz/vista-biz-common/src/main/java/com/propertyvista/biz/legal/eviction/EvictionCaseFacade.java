@@ -17,7 +17,6 @@ import java.util.List;
 import com.propertyvista.domain.eviction.EvictionCase;
 import com.propertyvista.domain.eviction.EvictionDocument;
 import com.propertyvista.domain.eviction.EvictionStatus;
-import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 /**
@@ -25,12 +24,16 @@ import com.propertyvista.domain.tenant.lease.Lease;
  */
 public interface EvictionCaseFacade {
 
-    EvictionStatus getCurrentEvictionStatus(Lease leaseId);
+    EvictionCase openEvictionCase(Lease leaseId, String note);
+
+    void closeEvictionCase(EvictionCase caseId, String note);
 
     EvictionCase getCurrentEvictionCase(Lease leaseId);
 
-    List<EvictionCase> getEvictionHistory(Lease leaseId);
+    EvictionStatus getCurrentEvictionStatus(EvictionCase evictionCase);
 
-    void addEvictionStatusDetails(Lease leaseId, EvictionFlowStep evictionStep, String note, List<EvictionDocument> attachments);
+    void addEvictionStatusDetails(EvictionCase evictionCase, String statusName, String note, List<EvictionDocument> attachments);
+
+    List<EvictionCase> getEvictionHistory(Lease leaseId);
 
 }
