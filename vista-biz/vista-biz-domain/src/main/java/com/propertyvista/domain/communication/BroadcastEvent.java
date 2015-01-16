@@ -29,6 +29,8 @@ import com.pyx4j.entity.core.IPrimitive;
 
 public interface BroadcastEvent extends IEntity {
 
+    BroadcastTemplate template();
+
     @MemberColumn(name = "messageDate")
     @ToString(index = 0)
     @Format("MM/dd/yyyy")

@@ -21,29 +21,29 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
-import com.propertyvista.crm.rpc.services.BroadcastTemplateCrudService;
-import com.propertyvista.domain.communication.BroadcastTemplate;
+import com.propertyvista.crm.rpc.services.BroadcastEventCrudService;
+import com.propertyvista.domain.communication.BroadcastEvent;
 
-public class BroadcastTemplateLister extends SiteDataTablePanel<BroadcastTemplate> {
+public class BroadcastEventLister extends SiteDataTablePanel<BroadcastEvent> {
 
-    public BroadcastTemplateLister() {
-        super(BroadcastTemplate.class, GWT.<AbstractCrudService<BroadcastTemplate>> create(BroadcastTemplateCrudService.class), true, true);
+    public BroadcastEventLister() {
+        super(BroadcastEvent.class, GWT.<AbstractCrudService<BroadcastEvent>> create(BroadcastEventCrudService.class), true, true);
 
         setColumnDescriptors(new ColumnDescriptor[] { //
-        new ColumnDescriptor.Builder(proto().name()).build(), //
-                new ColumnDescriptor.Builder(proto().subject()).build(), //
-                new ColumnDescriptor.Builder(proto().category()).build(), //
-                new ColumnDescriptor.Builder(proto().highImportance()).build() //
+        new ColumnDescriptor.Builder(proto().date()).build(), //
+                new ColumnDescriptor.Builder(proto().template().name()).build(), //
+                new ColumnDescriptor.Builder(proto().template().subject()).build(), //
+                new ColumnDescriptor.Builder(proto().template().category()).build(), //
+                new ColumnDescriptor.Builder(proto().template().highImportance()).build() //
         });
 
-        setDataTableModel(new DataTableModel<BroadcastTemplate>());
+        setDataTableModel(new DataTableModel<BroadcastEvent>());
     }
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().name(), false));
+        return Arrays.asList(new Sort(proto().date(), false));
     }
 }

@@ -36,8 +36,6 @@ public class MessageCategoryForm extends CrmEntityForm<MessageCategory> {
 
     private static final I18n i18n = I18n.get(MessageCategoryForm.class);
 
-    private final IsWidget mainTab;
-
     private EmployeeFolder dispatcherFolder;
 
     private Widget dispatcherHeader;
@@ -45,9 +43,8 @@ public class MessageCategoryForm extends CrmEntityForm<MessageCategory> {
     public MessageCategoryForm(IPrimeFormView<MessageCategory, ?> view) {
         super(MessageCategory.class, view);
 
-        mainTab = createInfoTab();
         setTabBarVisible(false);
-        selectTab(addTab(mainTab, i18n.tr("Message Category Properties")));
+        selectTab(addTab(createInfoTab(), i18n.tr("Message Category Properties")));
 
     }
 

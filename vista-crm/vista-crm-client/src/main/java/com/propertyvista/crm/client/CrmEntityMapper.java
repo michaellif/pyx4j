@@ -31,6 +31,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap.Tenants;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
+import com.propertyvista.domain.communication.BroadcastTemplate;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
@@ -225,5 +226,8 @@ public class CrmEntityMapper {
 
         AppPlaceEntityMapper.register(MessageDTO.class, Communication.Message.class, defaultImage);
         AppPlaceEntityMapper.register(MessageCategory.class, CrmSiteMap.Administration.Settings.MessageCategory.class, defaultImage);
+
+        AppPlaceEntityMapper.register(BroadcastTemplate.class, Communication.BroadcastTemplate.class, defaultImage);
+
     }
 }
