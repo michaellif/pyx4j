@@ -32,7 +32,7 @@ import com.propertyvista.domain.policy.policies.EvictionFlowPolicy;
 public interface EvictionFlowStep extends IEntity {
 
     @I18n
-    public enum EvictionStepBase {
+    public enum EvictionStepType {
 
         Custom, // user defines the Name
 
@@ -69,7 +69,7 @@ public interface EvictionFlowStep extends IEntity {
     EvictionFlowPolicy policy();
 
     @NotNull
-    IPrimitive<EvictionStepBase> base();
+    IPrimitive<EvictionStepType> stepType();
 
     @NotNull
     @ToString

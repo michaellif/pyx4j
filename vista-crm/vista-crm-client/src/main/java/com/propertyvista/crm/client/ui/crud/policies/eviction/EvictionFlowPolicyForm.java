@@ -35,7 +35,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.EvictionFlowPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
-import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep.EvictionStepBase;
+import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep.EvictionStepType;
 
 public class EvictionFlowPolicyForm extends PolicyDTOTabPanelBasedForm<EvictionFlowPolicyDTO> {
 
@@ -66,18 +66,18 @@ public class EvictionFlowPolicyForm extends PolicyDTOTabPanelBasedForm<EvictionF
         protected CForm<EvictionFlowStep> createItemForm(IObject<?> member) {
             return new CForm<EvictionFlowStep>(EvictionFlowStep.class) {
 
-                private final CComboBox<EvictionStepBase> stepBaseSelector = new CComboBox<EvictionStepBase>() {
+                private final CComboBox<EvictionStepType> stepBaseSelector = new CComboBox<EvictionStepType>() {
 
                     @Override
                     protected void onEditingStart() {
-                        Set<EvictionStepBase> availableSteps = EnumSet.allOf(EvictionStepBase.class);
-                        Set<EvictionStepBase> dontRemove = EnumSet.of(EvictionStepBase.Custom);
+                        Set<EvictionStepType> availableSteps = EnumSet.allOf(EvictionStepType.class);
+                        Set<EvictionStepType> dontRemove = EnumSet.of(EvictionStepType.Custom);
                         if (getValue() != null) {
                             dontRemove.add(getValue());
                         }
                         for (EvictionFlowStep step : EvictionStepFolder.this.getValue()) {
-                            if (!dontRemove.contains(step.base().getValue())) {
-                                availableSteps.remove(step.base().getValue());
+                            if (!dontRemove.contains(step.stepType().getValue())) {
+                                availableSteps.remove(step.stepType().getValue());
                             }
                         }
                         setOptions(availableSteps);
@@ -90,16 +90,16 @@ public class EvictionFlowPolicyForm extends PolicyDTOTabPanelBasedForm<EvictionF
                 protected IsWidget createContent() {
                     FormPanel panel = new FormPanel(this);
 
-                    panel.append(Location.Left, proto().base(), stepBaseSelector).decorate();
+                    panel.append(Location.Left, proto().stepType(), stepBaseSelector).decorate();
                     panel.append(Location.Right, proto().name()).decorate();
                     panel.append(Location.Dual, proto().description()).decorate();
 
                     if (isEditable()) {
-                        get(proto().base()).addValueChangeHandler(new ValueChangeHandler<EvictionFlowStep.EvictionStepBase>() {
+                        get(proto().stepType()).addValueChangeHandler(new ValueChangeHandler<EvictionFlowStep.EvictionStepType>() {
 
                             @Override
-                            public void onValueChange(ValueChangeEvent<EvictionStepBase> event) {
-                                if (EvictionStepBase.Custom.equals(event.getValue())) {
+                            public void onValueChange(ValueChangeEvent<EvictionStepType> event) {
+                                if (EvictionStepType.Custom.equals(event.getValue())) {
                                     get(proto().name()).setEditable(true);
                                     get(proto().name()).clear();
                                 } else {
