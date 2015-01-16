@@ -13,8 +13,8 @@
 package com.propertyvista.biz.legal;
 
 import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
-import com.propertyvista.domain.legal.n4cs.N4CSFormFieldsData;
-import com.propertyvista.domain.legal.n4cs.N4CSServiceMethod.ServiceMethod;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSFormFieldsData;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSServiceMethod.ServiceMethod;
 
 public interface N4CSGenerationFacade {
 

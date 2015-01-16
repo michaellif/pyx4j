@@ -45,6 +45,9 @@ public interface LegalStatus extends IEntity {
 
         None,
 
+        @Translate("N4CP")
+        N4CP,
+
         @Translate("N4CS")
         N4CS,
 
