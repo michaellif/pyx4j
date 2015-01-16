@@ -13,12 +13,21 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.eviction;
 
+import java.util.EnumSet;
+import java.util.Set;
+
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.AbstractValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
@@ -26,6 +35,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.EvictionFlowPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
+import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep.EvictionStepBase;
 
 public class EvictionFlowPolicyForm extends PolicyDTOTabPanelBasedForm<EvictionFlowPolicyDTO> {
 
@@ -46,7 +56,7 @@ public class EvictionFlowPolicyForm extends PolicyDTOTabPanelBasedForm<EvictionF
         return tabPanel;
     }
 
-    public static class EvictionStepFolder extends VistaBoxFolder<EvictionFlowStep> {
+    class EvictionStepFolder extends VistaBoxFolder<EvictionFlowStep> {
 
         public EvictionStepFolder() {
             super(EvictionFlowStep.class, true);
@@ -56,13 +66,65 @@ public class EvictionFlowPolicyForm extends PolicyDTOTabPanelBasedForm<EvictionF
         protected CForm<EvictionFlowStep> createItemForm(IObject<?> member) {
             return new CForm<EvictionFlowStep>(EvictionFlowStep.class) {
 
+                private final CComboBox<EvictionStepBase> stepBaseSelector = new CComboBox<EvictionStepBase>() {
+
+                    @Override
+                    protected void onEditingStart() {
+                        Set<EvictionStepBase> availableSteps = EnumSet.allOf(EvictionStepBase.class);
+                        Set<EvictionStepBase> dontRemove = EnumSet.of(EvictionStepBase.Custom);
+                        if (getValue() != null) {
+                            dontRemove.add(getValue());
+                        }
+                        for (EvictionFlowStep step : EvictionStepFolder.this.getValue()) {
+                            if (!dontRemove.contains(step.base().getValue())) {
+                                availableSteps.remove(step.base().getValue());
+                            }
+                        }
+                        setOptions(availableSteps);
+
+                        super.onEditingStart();
+                    }
+                };
+
                 @Override
                 protected IsWidget createContent() {
                     FormPanel panel = new FormPanel(this);
 
-                    panel.append(Location.Dual, proto().name()).decorate();
+                    panel.append(Location.Left, proto().base(), stepBaseSelector).decorate();
+                    panel.append(Location.Right, proto().name()).decorate();
                     panel.append(Location.Dual, proto().description()).decorate();
 
+                    if (isEditable()) {
+                        get(proto().base()).addValueChangeHandler(new ValueChangeHandler<EvictionFlowStep.EvictionStepBase>() {
+
+                            @Override
+                            public void onValueChange(ValueChangeEvent<EvictionStepBase> event) {
+                                if (EvictionStepBase.Custom.equals(event.getValue())) {
+                                    get(proto().name()).setEditable(true);
+                                    get(proto().name()).clear();
+                                } else {
+                                    get(proto().name()).setEditable(false);
+                                    get(proto().name()).setValue(event.getValue() == null ? "" : event.getValue().toString());
+                                }
+                            }
+                        });
+
+                        get(proto().name()).addComponentValidator(new AbstractComponentValidator<String>() {
+
+                            @Override
+                            public AbstractValidationError isValid() {
+                                for (EvictionFlowStep step : EvictionStepFolder.this.getValue()) {
+                                    if (step.equals(getValue())) {
+                                        continue;
+                                    }
+                                    if (step.name().getValue().equalsIgnoreCase(getCComponent().getValue())) {
+                                        return new BasicValidationError(getCComponent(), i18n.tr("Duplicate Step Name"));
+                                    }
+                                }
+                                return null;
+                            }
+                        });
+                    }
                     return panel;
                 }
             };
