@@ -10,7 +10,7 @@
  * Created on Nov 11, 2014
  * @author arminea
  */
-package com.propertyvista.domain.legal.n4cs;
+package com.propertyvista.domain.legal.n4cs.pdf;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;

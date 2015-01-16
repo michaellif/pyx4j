@@ -20,9 +20,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
@@ -38,6 +40,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.legal.forms.n4.N4GenerationUtils;
@@ -48,11 +51,18 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.n4.N4UnpaidCharge;
 import com.propertyvista.domain.policy.framework.PolicyNode;
+import com.propertyvista.domain.policy.policies.EvictionFlowPolicy;
 import com.propertyvista.domain.policy.policies.N4Policy;
+import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
+import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep.EvictionStepType;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.N4LeaseCandidateDTO;
+import com.propertyvista.portal.rpc.shared.PolicyNotFoundException;
 
 public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDtoImpl<Lease, N4LeaseCandidateDTO> implements SelectN4LeaseCandidateListService {
+
+    public static final I18n i18n = I18n.get(SelectN4LeaseCandidateListServiceImpl.class);
 
     private EntityListCriteria<N4LeaseCandidateDTO> toCriteria;
 
@@ -78,7 +88,7 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
     protected Criterion convertCriterion(EntityListCriteria<Lease> criteria, Criterion cr) {
         if (cr instanceof PropertyCriterion && toProto.amountOwed().getPath().equals(new Path(((PropertyCriterion) cr).getPropertyPath()))) {
             /*
-             * TODO - this is a hack; N4LeaseCandidateDTO.amountOwed() criteria is coming from the Lister UI Filters,
+             * TODO - need a better way; N4LeaseCandidateDTO.amountOwed() criteria is coming from the Lister UI Filters,
              * but this TO-property can not be bound to any of the BO (Lease) properties. So, to avoid failure we must
              * return any relevant criteria that is always TRUE.
              */
@@ -96,6 +106,7 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
         this.toCriteria = toCriteria;
 
         boCriteria.eq(boCriteria.proto().status(), Lease.Status.Active);
+        boCriteria.in(boCriteria.proto().unit().building(), getApplicableBuildings());
     }
 
     @Override
@@ -219,5 +230,25 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
             policyCache.put(node, policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, N4Policy.class));
         }
         return policy;
+    }
+
+    private Set<Building> getApplicableBuildings() {
+        Set<Building> result = new HashSet<>();
+        for (Building building : Persistence.service().query(EntityListCriteria.create(Building.class))) {
+            try {
+                EvictionFlowPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, EvictionFlowPolicy.class);
+                for (EvictionFlowStep step : policy.evictionFlow()) {
+                    if (EvictionStepType.N4.equals(step.stepType().getValue())) {
+                        result.add(building);
+                    }
+                }
+            } catch (PolicyNotFoundException ignore) {
+                // see empty result handling below
+            }
+        }
+        if (result.isEmpty()) {
+            throw new UserRuntimeException(i18n.tr("N4 not configured in Eviction Flow Policy"));
+        }
+        return result;
     }
 }

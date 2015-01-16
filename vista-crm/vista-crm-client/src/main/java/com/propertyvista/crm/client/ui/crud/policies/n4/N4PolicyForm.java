@@ -21,10 +21,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.events.OptionsChangeEvent;
-import com.pyx4j.forms.client.events.OptionsChangeHandler;
-import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPhoneField;
@@ -35,7 +31,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog.Formatter;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -44,15 +39,11 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.YardiChargeCode;
 import com.propertyvista.domain.policy.dto.N4PolicyDTO;
 import com.propertyvista.domain.policy.dto.N4PolicyDTOARCodeHolderDTO;
-import com.propertyvista.domain.policy.framework.PolicyNode;
-import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
     public static final I18n i18n = I18n.get(N4PolicyForm.class);
-
-    private final EvictionStepSelector stepSelector = new EvictionStepSelector();
 
     private FormPanel contactPanelN4;
 
@@ -63,40 +54,14 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
     public N4PolicyForm(IPrimeFormView<N4PolicyDTO, ?> view) {
         super(N4PolicyDTO.class, view);
 
-        addTab(getEvictionFlowTab(), i18n.tr("Eviction Flow"));
         addTab(getSignatureTab(), i18n.tr("Signature"));
         addTab(getArCodesTab(), i18n.tr("AR Codes"));
         addTab(getDeliveryTab(), i18n.tr("Delivery"));
         addTab(getAutoCancellationTab(), i18n.tr("Auto Cancellation"));
-
-        if (isEditable()) {
-            get(proto().node()).addValueChangeHandler(new ValueChangeHandler<PolicyNode>() {
-
-                @Override
-                public void onValueChange(ValueChangeEvent<PolicyNode> event) {
-                    stepSelector.setPolicyNode(event.getValue());
-                }
-            });
-        }
-    }
-
-    @Override
-    protected void onValuePropagation(N4PolicyDTO value, boolean fireEvent, boolean populate) {
-        if (value != null && isEditable()) {
-            stepSelector.setPolicyNode(value.node());
-        }
-
-        super.onValuePropagation(value, fireEvent, populate);
     }
 
     public void setARCodeOptions(List<ARCode> arCodeOptions) {
         arCodeFolder.setARCodeOptions(arCodeOptions);
-    }
-
-    private IsWidget getEvictionFlowTab() {
-        FormPanel formPanel = new FormPanel(this);
-        formPanel.append(Location.Left, proto().evictionStep(), stepSelector).decorate();
-        return formPanel;
     }
 
     private IsWidget getSignatureTab() {
@@ -274,51 +239,6 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
                 } else {
                     get(proto().arCode()).setNote(null);
                 }
-            }
-        }
-    }
-
-    static class EvictionStepSelector extends CEntityComboBox<EvictionFlowStep> {
-
-        private PolicyNode node;
-
-        private boolean noteSeen = false;
-
-        public EvictionStepSelector() {
-            super(EvictionFlowStep.class);
-
-            addOptionsChangeHandler(new OptionsChangeHandler<List<EvictionFlowStep>>() {
-
-                @Override
-                public void onOptionsChange(OptionsChangeEvent<List<EvictionFlowStep>> event) {
-                    validatePolicySetup();
-                }
-            });
-        }
-
-        void setPolicyNode(PolicyNode node) {
-            this.node = node;
-            this.noteSeen = false;
-            if (node != null && isEditable()) {
-                resetCriteria();
-                addCriterion(PropertyCriterion.eq(proto().policy().node(), node));
-                refreshOptions();
-            }
-        }
-
-        @Override
-        protected void onEditingStop() {
-            super.onEditingStop();
-            this.noteSeen = false;
-
-            validatePolicySetup();
-        }
-
-        private void validatePolicySetup() {
-            if (!noteSeen && node != null && isEditable() && (getOptions() == null || getOptions().isEmpty())) {
-                noteSeen = true;
-                MessageDialog.error(i18n.tr("Eviction Flow Undefined"),
-                        i18n.tr("Eviction Steps or Eviction Flow Policy not found for {0}", node.getStringView()));
             }
         }
     }

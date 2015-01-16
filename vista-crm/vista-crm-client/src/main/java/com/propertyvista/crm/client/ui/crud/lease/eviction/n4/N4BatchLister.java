@@ -29,7 +29,6 @@ import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.ActionPermission;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.widgets.client.Button;
@@ -119,11 +118,8 @@ public class N4BatchLister extends SiteDataTablePanel<N4BatchDTO> {
                 ((N4BatchCrudService) getService()).createBatches(new DefaultAsyncCallback<N4BatchDTO>() {
                     @Override
                     public void onSuccess(N4BatchDTO result) {
-                        if (result != null) {
-                            // open editor with the returned batch
-                            AppSite.getPlaceController().goTo(
-                                    AppSite.getHistoryMapper().createPlace(getItemOpenPlaceClass()).formEditorPlace(result.getPrimaryKey()));
-                        }
+                        hide(true);
+                        N4BatchLister.this.populate();
                     }
                 }, leaseCandidates);
                 return true;
@@ -145,7 +141,6 @@ public class N4BatchLister extends SiteDataTablePanel<N4BatchDTO> {
             protected AbstractListCrudService<N4LeaseCandidateDTO> getSelectService() {
                 return GWT.<AbstractListCrudService<N4LeaseCandidateDTO>> create(SelectN4LeaseCandidateListService.class);
             }
-
         }.show();
     }
 
