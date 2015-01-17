@@ -1387,6 +1387,9 @@ public abstract class LeaseAbstractManager {
                 checklistItem.statusesToSelect().add(statusItem);
             }
 
+            checklistItem.leaseApplication().set(leaseApplication);
+            Persistence.service().persist(checklistItem);
+
             leaseApplication.approvalChecklist().add(checklistItem);
         }
     }

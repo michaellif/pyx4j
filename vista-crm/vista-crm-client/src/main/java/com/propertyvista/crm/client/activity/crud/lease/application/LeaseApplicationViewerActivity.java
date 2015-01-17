@@ -45,6 +45,7 @@ import com.propertyvista.crm.rpc.services.lease.BlankApplicationDocumentDownload
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
+import com.propertyvista.domain.tenant.lease.LeaseApplication.ApprovalChecklistItem;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.dto.LeaseApplicationDTO;
@@ -216,6 +217,16 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
     }
 
     @Override
+    public void updateApprovalTaskItem(final AsyncCallback<ApprovalChecklistItem> callback, ApprovalChecklistItem value) {
+        ((LeaseApplicationViewerCrudService) getService()).updateApprovalTaskItem(new DefaultAsyncCallback<ApprovalChecklistItem>() {
+            @Override
+            public void onSuccess(ApprovalChecklistItem result) {
+                callback.onSuccess(result);
+            }
+        }, value);
+    }
+
+    @Override
     public void downloadBlankLeaseApplicationDocument(LeaseTermParticipant<?> participantId) {
         ReportDialog reportDialog = new ReportDialog(i18n.tr("Creating Lease Application Document for Signing"), "");
         reportDialog.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
@@ -228,4 +239,5 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
 
         reportDialog.start(GWT.<BlankApplicationDocumentDownloadService> create(BlankApplicationDocumentDownloadService.class), request);
     }
+
 }

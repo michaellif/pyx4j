@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.lease.application;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
@@ -28,7 +29,9 @@ import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -124,13 +127,17 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
     private IsWidget createInfoTab() {
         FormPanel formPanel = new FormPanel(this);
+
         formPanel.append(Location.Dual, inject(proto().tenantInfo(), createTenantView()));
+
         return formPanel;
     }
 
     private IsWidget createFinancialTab() {
         FormPanel formPanel = new FormPanel(this);
+
         formPanel.append(Location.Dual, inject(proto().tenantFinancials(), createFinancialView()));
+
         return formPanel;
     }
 
@@ -220,7 +227,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     private class ApprovalChecklistItemFolder extends VistaBoxFolder<ApprovalChecklistItem> {
 
         public ApprovalChecklistItemFolder() {
-            super(ApprovalChecklistItem.class, true);
+            super(ApprovalChecklistItem.class, false);
         }
 
         public void setActive(boolean active) {
@@ -238,6 +245,19 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
             private final CComboBox<String> statusSelector = new CComboBox<>();
 
+            private final Button updateStatus = new Button(i18n.tr("Update Status"), new Command() {
+                @Override
+                public void execute() {
+                    ((LeaseApplicationViewerView.Presenter) getParentView().getPresenter()).updateApprovalTaskItem(
+                            new DefaultAsyncCallback<ApprovalChecklistItem>() {
+                                @Override
+                                public void onSuccess(ApprovalChecklistItem result) {
+                                    setValue(result);
+                                }
+                            }, getValue());
+                }
+            });
+
             public ApprovalChecklistItemEditor() {
                 super((ApprovalChecklistItem.class));
             }
@@ -247,19 +267,21 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
                 FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().task()).decorate();
-                formPanel.append(Location.Left, proto().status(), statusSelector).decorate();
 
-                formPanel.append(Location.Right, proto().decidedBy()).decorate();
-                formPanel.append(Location.Right, proto().decisionDate()).decorate();
+                formPanel.append(Location.Left, proto().decidedBy()).decorate();
+                formPanel.append(Location.Left, proto().decisionDate()).decorate();
 
-                formPanel.append(Location.Dual, proto().notes()).decorate();
+                formPanel.append(Location.Right, proto().status(), statusSelector).decorate();
+                formPanel.append(Location.Right, proto().notes()).decorate();
+
+                formPanel.append(Location.Left, updateStatus);
 
                 // tweaks:
-                get(proto().status()).inheritEditable(false);
-                get(proto().notes()).inheritEditable(false);
-
                 get(proto().status()).inheritViewable(false);
+                get(proto().status()).inheritEditable(false);
+
                 get(proto().notes()).inheritViewable(false);
+                get(proto().notes()).inheritEditable(false);
 
                 return formPanel;
             }
@@ -279,10 +301,12 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
             public void setActive(boolean active) {
                 get(proto().status()).setViewable(!active);
-                get(proto().notes()).setViewable(!active);
-
                 get(proto().status()).setEditable(active);
+
+                get(proto().notes()).setViewable(!active);
                 get(proto().notes()).setEditable(active);
+
+                statusSelector.setVisible(active);
             }
         }
     }
@@ -333,6 +357,5 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
             return formPanel;
         }
-
     }
 }

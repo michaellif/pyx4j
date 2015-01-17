@@ -22,6 +22,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
@@ -58,6 +59,7 @@ import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseApplication.ApprovalChecklistItem;
 import com.propertyvista.domain.tenant.lease.LeaseApplication.Status;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -433,5 +435,17 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         Persistence.service().commit();
 
         callback.onSuccess(null);
+    }
+
+    @Override
+    public void updateApprovalTaskItem(AsyncCallback<ApprovalChecklistItem> callback, ApprovalChecklistItem value) {
+
+        value.decidedBy().set(CrmAppContext.getCurrentUserEmployee());
+        value.decisionDate().setValue(SystemDateManager.getLogicalDate());
+
+        Persistence.service().merge(value);
+        Persistence.service().commit();
+
+        callback.onSuccess(value);
     }
 }
