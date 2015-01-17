@@ -7,18 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 10, 2014
+ * Created on Nov 11, 2014
  * @author arminea
  */
-package com.propertyvista.biz.legal;
+package com.propertyvista.domain.legal.n4cs.pdf;
 
-import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSFormFieldsData;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSServiceMethod.ServiceMethod;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
-public interface N4CSGenerationFacade {
+public interface N4CSServiceMethod extends IEntity {
 
-    byte[] generateN4CSLetter(N4CSFormFieldsData formData);
+    public enum ServiceMethod {
+        H, A, P, L, D, C, F, M, O
+    }
 
-    N4CSFormFieldsData prepareN4CSData(N4FormFieldsData n4Data, ServiceMethod serviceMethod);
+    IPrimitive<ServiceMethod> method();
+
+    IPrimitive<String> fax();
+
+    IPrimitive<String> lastAddr();
+
+    IPrimitive<String> differentMethod();
+
 }

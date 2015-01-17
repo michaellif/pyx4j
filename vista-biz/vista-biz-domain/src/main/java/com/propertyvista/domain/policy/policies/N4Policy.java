@@ -43,9 +43,6 @@ public interface N4Policy extends Policy {
         }
     }
 
-    @NotNull
-    IPrimitive<String> evictionFlowStep();
-
     // N4 Signing Agent data
     @NotNull
     @Caption(name = "Agent Selection Method")

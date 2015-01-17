@@ -20,11 +20,11 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.propertyvista.biz.legal.forms.framework.filling.FormFillerImpl;
 import com.propertyvista.biz.legal.forms.n4cs.N4CSFieldsMapping;
 import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
-import com.propertyvista.domain.legal.n4cs.N4CSDocumentType.DocumentType;
-import com.propertyvista.domain.legal.n4cs.N4CSFormFieldsData;
-import com.propertyvista.domain.legal.n4cs.N4CSServiceMethod.ServiceMethod;
-import com.propertyvista.domain.legal.n4cs.N4CSSignature.SignedBy;
-import com.propertyvista.domain.legal.n4cs.N4CSToPersonInfo.ToType;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSFormFieldsData;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSDocumentType.DocumentType;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSServiceMethod.ServiceMethod;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSSignature.SignedBy;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSToPersonInfo.ToType;
 
 public class N4CSGenerationFacadeImpl implements N4CSGenerationFacade {
 

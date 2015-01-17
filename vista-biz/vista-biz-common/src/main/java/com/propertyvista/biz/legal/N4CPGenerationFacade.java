@@ -7,26 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 11, 2014
+ * Created on Nov 10, 2014
  * @author arminea
  */
-package com.propertyvista.domain.legal.n4cs;
+package com.propertyvista.biz.legal;
 
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IPrimitive;
+import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
+import com.propertyvista.domain.legal.n4cp.pdf.N4CPFormFieldsData;
 
-public interface N4CSDocumentType extends IEntity {
+public interface N4CPGenerationFacade {
 
-    public enum DocumentType {
-        TT, AA, AH, OS, OR, OO
-    }
+    byte[] generateN4CPLetter(N4CPFormFieldsData formData);
 
-    IPrimitive<DocumentType> docType();
-
-    IPrimitive<String> application();
-
-    IPrimitive<String> termination();
-
-    IPrimitive<String> other();
-
+    N4CPFormFieldsData prepareN4CPData(N4FormFieldsData n4Data);
 }

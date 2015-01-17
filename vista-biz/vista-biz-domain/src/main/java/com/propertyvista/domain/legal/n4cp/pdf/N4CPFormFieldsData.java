@@ -10,36 +10,19 @@
  * Created on 2013-11-22
  * @author ArtyomB
  */
-package com.propertyvista.domain.legal.n4cs;
+package com.propertyvista.domain.legal.n4cp.pdf;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
+
 @Transient
-public interface N4CSFormFieldsData extends IEntity {
+public interface N4CPFormFieldsData extends N4FormFieldsData {
+    /** daily batch number */
+    IPrimitive<String> dailyBatchNumber();
 
-    /** Tenant name */
-
-    IPrimitive<String> street();
-
-    IPrimitive<String> unit();
-
-    IPrimitive<String> municipality();
-
-    IPrimitive<String> postalCode();
-
-    IPrimitive<String> reporter();
-
-    N4CSDocumentType document();
-
-    IPrimitive<LogicalDate> issueDate();
-
-    N4CSSignature signature();
-
-    N4CSToPersonInfo passedTo();
-
-    N4CSServiceMethod service();
+    /** sequens number in batch */
+    IPrimitive<String> sequenceNumberInBatch();
 
 }

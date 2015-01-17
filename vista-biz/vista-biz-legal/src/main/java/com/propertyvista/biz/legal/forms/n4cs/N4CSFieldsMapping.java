@@ -20,11 +20,11 @@
 package com.propertyvista.biz.legal.forms.n4cs;
 
 import com.propertyvista.biz.legal.forms.ltbcommon.LtbFormFieldsMapping;
-import com.propertyvista.domain.legal.n4cs.N4CSDocumentType;
-import com.propertyvista.domain.legal.n4cs.N4CSFormFieldsData;
-import com.propertyvista.domain.legal.n4cs.N4CSServiceMethod;
-import com.propertyvista.domain.legal.n4cs.N4CSSignature;
-import com.propertyvista.domain.legal.n4cs.N4CSToPersonInfo;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSDocumentType;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSFormFieldsData;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSServiceMethod;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSSignature;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSToPersonInfo;
 
 public class N4CSFieldsMapping extends LtbFormFieldsMapping<N4CSFormFieldsData> {
 

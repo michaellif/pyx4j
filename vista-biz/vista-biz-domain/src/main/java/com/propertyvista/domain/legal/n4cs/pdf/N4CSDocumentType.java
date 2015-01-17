@@ -10,23 +10,23 @@
  * Created on Nov 11, 2014
  * @author arminea
  */
-package com.propertyvista.domain.legal.n4cs;
+package com.propertyvista.domain.legal.n4cs.pdf;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
-public interface N4CSServiceMethod extends IEntity {
+public interface N4CSDocumentType extends IEntity {
 
-    public enum ServiceMethod {
-        H, A, P, L, D, C, F, M, O
+    public enum DocumentType {
+        TT, AA, AH, OS, OR, OO
     }
 
-    IPrimitive<ServiceMethod> method();
+    IPrimitive<DocumentType> docType();
 
-    IPrimitive<String> fax();
+    IPrimitive<String> application();
 
-    IPrimitive<String> lastAddr();
+    IPrimitive<String> termination();
 
-    IPrimitive<String> differentMethod();
+    IPrimitive<String> other();
 
 }

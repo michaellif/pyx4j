@@ -7,18 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 10, 2014
- * @author arminea
+ * Created on Jan 16, 2015
+ * @author michaellif
  */
-package com.propertyvista.biz.legal;
+package com.propertyvista.crm.rpc.services;
 
-import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSFormFieldsData;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSServiceMethod.ServiceMethod;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-public interface N4CSGenerationFacade {
+import com.propertyvista.domain.communication.BroadcastEvent;
 
-    byte[] generateN4CSLetter(N4CSFormFieldsData formData);
+public interface BroadcastEventCrudService extends AbstractCrudService<BroadcastEvent> {
 
-    N4CSFormFieldsData prepareN4CSData(N4FormFieldsData n4Data, ServiceMethod serviceMethod);
 }

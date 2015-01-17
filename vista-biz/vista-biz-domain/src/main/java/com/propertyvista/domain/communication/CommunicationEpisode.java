@@ -7,22 +7,13 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 11, 2014
- * @author arminea
+ * Created on Jan 16, 2015
+ * @author michaellif
  */
-package com.propertyvista.domain.legal.n4cs;
+package com.propertyvista.domain.communication;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IPrimitive;
 
-public interface N4CSToPersonInfo extends IEntity {
-
-    public enum ToType {
-        Tenant, Landlord, Other
-    }
-
-    IPrimitive<String> name();
-
-    IPrimitive<ToType> tpType();
+public interface CommunicationEpisode extends IEntity {
 
 }

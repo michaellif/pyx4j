@@ -7,18 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 10, 2014
- * @author arminea
+ * Created on Jan 16, 2015
+ * @author michaellif
  */
-package com.propertyvista.biz.legal;
+package com.propertyvista.crm.client.ui.crud.communication;
 
-import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSFormFieldsData;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSServiceMethod.ServiceMethod;
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.domain.communication.BroadcastTemplate;
 
-public interface N4CSGenerationFacade {
+public class BroadcastTemplateEditorViewImpl extends CrmEditorViewImplBase<BroadcastTemplate> implements BroadcastTemplateEditorView {
 
-    byte[] generateN4CSLetter(N4CSFormFieldsData formData);
+    public BroadcastTemplateEditorViewImpl() {
+        setForm(new BroadcastTemplateForm(this));
+    }
 
-    N4CSFormFieldsData prepareN4CSData(N4FormFieldsData n4Data, ServiceMethod serviceMethod);
 }

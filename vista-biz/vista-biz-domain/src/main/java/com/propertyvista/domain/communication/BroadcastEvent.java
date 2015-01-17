@@ -12,8 +12,36 @@
  */
 package com.propertyvista.domain.communication;
 
+import java.util.Date;
+
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderBy;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
 
 public interface BroadcastEvent extends IEntity {
+
+    BroadcastTemplate template();
+
+    @MemberColumn(name = "messageDate")
+    @ToString(index = 0)
+    @Format("MM/dd/yyyy")
+    @Timestamp(Timestamp.Update.Created)
+    @ReadOnly
+    IPrimitive<Date> date();
+
+    @NotNull
+    @Owned
+    @Detached
+    @OrderBy(PrimaryKey.class)
+    IList<CommunicationThread> threads();
 
 }

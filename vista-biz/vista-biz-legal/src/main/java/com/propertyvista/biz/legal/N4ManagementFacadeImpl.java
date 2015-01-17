@@ -74,8 +74,9 @@ import com.propertyvista.domain.legal.n4.pdf.N4BatchData;
 import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
 import com.propertyvista.domain.legal.n4.pdf.N4LeaseData;
 import com.propertyvista.domain.legal.n4.pdf.N4RentOwingForPeriod;
-import com.propertyvista.domain.legal.n4cs.N4CSFormFieldsData;
-import com.propertyvista.domain.legal.n4cs.N4CSServiceMethod.ServiceMethod;
+import com.propertyvista.domain.legal.n4cp.pdf.N4CPFormFieldsData;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSFormFieldsData;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSServiceMethod.ServiceMethod;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -187,9 +188,11 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
 
         N4FormFieldsData n4FormData = ServerSideFactory.create(N4GenerationFacade.class).prepareFormData(n4LeaseData, batchData);
         N4CSFormFieldsData n4csFormData = ServerSideFactory.create(N4CSGenerationFacade.class).prepareN4CSData(n4FormData, ServiceMethod.M);
+        N4CPFormFieldsData n4cpFormData = ServerSideFactory.create(N4CPGenerationFacade.class).prepareN4CPData(n4FormData);
 
         byte[] n4LetterBinary = ServerSideFactory.create(N4GenerationFacade.class).generateN4Letter(n4FormData);
         byte[] n4csLetterBinary = ServerSideFactory.create(N4CSGenerationFacade.class).generateN4CSLetter(n4csFormData);
+        byte[] n4cpLetterBinary = ServerSideFactory.create(N4CPGenerationFacade.class).generateN4CPLetter(n4cpFormData);
 
         LegalLetterBlob blob = EntityFactory.create(LegalLetterBlob.class);
         blob.data().setValue(n4LetterBinary);
@@ -267,6 +270,44 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
                     leaseId,
                     n4csStatus,
                     Arrays.<LegalLetter>asList(n4csLetter)
+            );//@formatter:on
+
+        LegalLetterBlob n4cpblob = EntityFactory.create(LegalLetterBlob.class);
+        n4cpblob.data().setValue(n4LetterBinary);
+        n4cpblob.contentType().setValue("application/pdf");
+        Persistence.service().persist(n4cpblob);
+
+        N4LegalLetter n4cpLetter = EntityFactory.create(N4LegalLetter.class);
+        n4cpLetter.lease().set(leaseId);
+        n4cpLetter.amountOwed().setValue(n4LeaseData.totalRentOwning().getValue());
+        n4cpLetter.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
+        n4cpLetter.generatedOn().setValue(generationTime);
+
+        n4cpLetter.file().blobKey().setValue(n4cpblob.getPrimaryKey());
+        n4cpLetter.file().fileSize().setValue(n4LetterBinary.length);
+        n4cpLetter.file().fileName().setValue(MessageFormat.format("n4-notice-{0,date,yyyy-MM-dd}.pdf", generationTime));
+
+        Persistence.service().persist(n4Letter);
+
+        LegalStatusN4 n4cpStatus = EntityFactory.create(LegalStatusN4.class);
+        n4cpStatus.status().setValue(Status.N4CP);
+
+        N4Policy policyCp = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit(leaseId), N4Policy.class);
+        GregorianCalendar calCp = new GregorianCalendar();
+        calCp.setTime(generationTime);
+        calCp.add(GregorianCalendar.DAY_OF_YEAR, policyCp.expiryDays().getValue());
+        n4cpStatus.expiry().setValue(cal.getTime());
+        n4cpStatus.cancellationThreshold().setValue(policyCp.cancellationThreshold().getValue());
+        n4cpStatus.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
+
+        n4cpStatus.notes().setValue("created via N4 notice batch");
+        n4cpStatus.setBy().set(EntityFactory.createIdentityStub(CrmUser.class, VistaContext.getCurrentUserPrimaryKey()));
+        n4cpStatus.setOn().setValue(generationTime);
+
+        ServerSideFactory.create(LeaseLegalFacade.class).setLegalStatus(//@formatter:off
+                    leaseId,
+                    n4cpStatus,
+                    Arrays.<LegalLetter>asList(n4cpLetter)
             );//@formatter:on
 
     }
