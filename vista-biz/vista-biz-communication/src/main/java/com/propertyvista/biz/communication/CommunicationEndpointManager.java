@@ -46,8 +46,8 @@ import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.dto.CommunicationEndpointDTO;
-import com.propertyvista.dto.MessageDTO;
+import com.propertyvista.dto.communication.CommunicationEndpointDTO;
+import com.propertyvista.dto.communication.MessageDTO;
 
 public class CommunicationEndpointManager {
 

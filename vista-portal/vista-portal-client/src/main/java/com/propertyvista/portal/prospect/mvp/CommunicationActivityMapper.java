@@ -16,7 +16,7 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.portal.shared.activity.communication.CommunicationActivity;
+import com.propertyvista.portal.shared.activity.communication.CommunicationAlertActivity;
 
 public class CommunicationActivityMapper implements ActivityMapper {
 
@@ -25,7 +25,7 @@ public class CommunicationActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        return new CommunicationActivity(place);
+        return new CommunicationAlertActivity(place);
     }
 
 }

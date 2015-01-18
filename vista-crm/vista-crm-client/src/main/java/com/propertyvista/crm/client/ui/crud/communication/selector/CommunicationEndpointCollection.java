@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.communication.selector;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 
-import com.propertyvista.dto.CommunicationEndpointDTO;
+import com.propertyvista.dto.communication.CommunicationEndpointDTO;
 
 public interface CommunicationEndpointCollection extends IEntity {
 

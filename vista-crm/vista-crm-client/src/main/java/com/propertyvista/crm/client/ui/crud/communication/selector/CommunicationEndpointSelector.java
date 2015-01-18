@@ -17,7 +17,7 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.forms.client.ui.CSelectorListBox;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
-import com.propertyvista.dto.CommunicationEndpointDTO;
+import com.propertyvista.dto.communication.CommunicationEndpointDTO;
 
 public class CommunicationEndpointSelector extends CSelectorListBox<CommunicationEndpointDTO> {
 

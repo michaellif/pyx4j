@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.dto.CommunicationEndpointDTO;
+import com.propertyvista.dto.communication.CommunicationEndpointDTO;
 
 public class CommunicationEndpointCollectionFolder extends CFolder<CommunicationEndpointDTO> {
 

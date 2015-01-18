@@ -87,7 +87,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.dto.MessageDTO;
+import com.propertyvista.dto.communication.CommunicationThreadDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO> {
@@ -357,7 +357,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 public void execute() {
                     Message value = getValue();
                     if (value != null && value.getPrimaryKey() != null) {
-                        AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(MessageDTO.class).formViewerPlace(value.getPrimaryKey()));
+                        AppSite.getPlaceController().goTo(
+                                AppPlaceEntityMapper.resolvePlace(CommunicationThreadDTO.class).formViewerPlace(value.thread().getPrimaryKey()));
 
                     }
                 }
@@ -532,7 +533,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 @Override
                 protected List<ColumnDescriptor> defineColumnDescriptors() {
                     return Arrays.asList( //
-                            // building data                
+                            // building data
                             new ColumnDescriptor.Builder(proto().building().propertyCode(), true).build(), //
                             // unit data
                             new ColumnDescriptor.Builder(proto().info().number(), true).build(), //

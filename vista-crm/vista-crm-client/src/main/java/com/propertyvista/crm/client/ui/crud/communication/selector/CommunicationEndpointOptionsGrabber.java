@@ -23,7 +23,7 @@ import com.pyx4j.widgets.client.selector.IOptionsGrabber;
 import com.pyx4j.widgets.client.selector.SingleWordSuggestOptionsGrabber;
 
 import com.propertyvista.crm.rpc.services.selections.SelectCommunicationEndpointListService;
-import com.propertyvista.dto.CommunicationEndpointDTO;
+import com.propertyvista.dto.communication.CommunicationEndpointDTO;
 
 public class CommunicationEndpointOptionsGrabber extends SingleWordSuggestOptionsGrabber<CommunicationEndpointDTO> {
 

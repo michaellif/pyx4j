@@ -18,14 +18,14 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.ui.crud.communication.CommunicationView;
+import com.propertyvista.crm.client.ui.crud.communication.CommunicationAlertView;
 
-public class CommunicationActivity extends AbstractActivity implements CommunicationView.CommunicationPresenter {
+public class CommunicationActivity extends AbstractActivity implements CommunicationAlertView.CommunicationPresenter {
 
-    private final CommunicationView view;
+    private final CommunicationAlertView view;
 
     public CommunicationActivity(Place place) {
-        view = CrmSite.getViewFactory().getView(CommunicationView.class);
+        view = CrmSite.getViewFactory().getView(CommunicationAlertView.class);
     }
 
     @Override

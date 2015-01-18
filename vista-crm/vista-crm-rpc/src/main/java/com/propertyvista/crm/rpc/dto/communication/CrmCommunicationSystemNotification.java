@@ -16,7 +16,7 @@ import java.io.Serializable;
 
 import com.pyx4j.entity.rpc.EntitySearchResult;
 
-import com.propertyvista.dto.MessageDTO;
+import com.propertyvista.dto.communication.MessageDTO;
 
 @SuppressWarnings("serial")
 public class CrmCommunicationSystemNotification implements Serializable {

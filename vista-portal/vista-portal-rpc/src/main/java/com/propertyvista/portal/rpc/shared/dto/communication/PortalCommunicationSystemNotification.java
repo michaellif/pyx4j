@@ -16,7 +16,7 @@ import java.io.Serializable;
 
 import com.pyx4j.entity.rpc.EntitySearchResult;
 
-import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
+import com.propertyvista.dto.communication.MessageDTO;
 
 @SuppressWarnings("serial")
 public class PortalCommunicationSystemNotification implements Serializable {

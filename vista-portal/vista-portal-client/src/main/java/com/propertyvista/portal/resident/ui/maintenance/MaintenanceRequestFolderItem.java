@@ -68,7 +68,7 @@ public class MaintenanceRequestFolderItem extends CForm<MaintenanceRequestStatus
 
             @Override
             public void execute() {
-                AppSite.getPlaceController().goTo(new PortalSiteMap.Message.MessagePage(getValue().message().getPrimaryKey()));
+                AppSite.getPlaceController().goTo(new PortalSiteMap.Message.MessagePage(getValue().message().thread().getPrimaryKey()));
             }
         });
         formPanel.append(Location.Left, communicationLink);

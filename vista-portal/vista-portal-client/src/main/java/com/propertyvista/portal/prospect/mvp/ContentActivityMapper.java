@@ -33,9 +33,9 @@ import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.Applic
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.Registration;
 import com.propertyvista.portal.shared.activity.NotificationPageActivity;
 import com.propertyvista.portal.shared.activity.account.AccountPageActivity;
-import com.propertyvista.portal.shared.activity.communication.MessagePageActivity;
-import com.propertyvista.portal.shared.activity.communication.MessageViewActivity;
-import com.propertyvista.portal.shared.activity.communication.MessageWizardActivity;
+import com.propertyvista.portal.shared.activity.communication.CommunicationPageActivity;
+import com.propertyvista.portal.shared.activity.communication.CommunicationViewActivity;
+import com.propertyvista.portal.shared.activity.communication.CommunicationWizardActivity;
 import com.propertyvista.portal.shared.activity.login.LoginWithTokenActivity;
 import com.propertyvista.portal.shared.activity.login.LogoutActivity;
 import com.propertyvista.portal.shared.activity.login.PasswordResetRequestWizardActivity;
@@ -106,11 +106,11 @@ public class ContentActivityMapper implements AppActivityMapper {
                     }
                     // Communication
                     else if (place instanceof PortalSiteMap.Message.MessageWizard) {
-                        activity = new MessageWizardActivity(appPlace);
+                        activity = new CommunicationWizardActivity(appPlace);
                     } else if (place instanceof PortalSiteMap.Message.MessagePage) {
-                        activity = new MessagePageActivity(appPlace);
+                        activity = new CommunicationPageActivity(appPlace);
                     } else if (place instanceof PortalSiteMap.Message.MessageView) {
-                        activity = new MessageViewActivity();
+                        activity = new CommunicationViewActivity();
 //Internals
                     }
 

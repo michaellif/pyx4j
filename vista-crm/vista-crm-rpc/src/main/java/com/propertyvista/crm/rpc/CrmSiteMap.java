@@ -27,7 +27,7 @@ import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 import com.propertyvista.domain.reports.EftReportMetadata;
 import com.propertyvista.domain.reports.EftVarianceReportMetadata;
 import com.propertyvista.domain.reports.ResidentInsuranceReportMetadata;
-import com.propertyvista.dto.MessageDTO;
+import com.propertyvista.dto.communication.MessageDTO;
 
 public class CrmSiteMap implements SiteMap {
 

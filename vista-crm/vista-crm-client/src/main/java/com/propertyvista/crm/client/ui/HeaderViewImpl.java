@@ -45,7 +45,7 @@ import com.propertyvista.crm.rpc.CrmUserVisit;
 import com.propertyvista.crm.rpc.dto.communication.CrmCommunicationSystemNotification;
 import com.propertyvista.crm.rpc.services.admin.ac.CrmAdministrationAccess;
 import com.propertyvista.crm.rpc.services.organization.ac.EmployeeSelfAccountAndSettings;
-import com.propertyvista.dto.MessageDTO;
+import com.propertyvista.dto.communication.MessageDTO;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class HeaderViewImpl extends FlowPanel implements HeaderView {

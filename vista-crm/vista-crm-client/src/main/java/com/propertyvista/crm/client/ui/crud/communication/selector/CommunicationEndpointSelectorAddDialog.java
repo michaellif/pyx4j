@@ -18,7 +18,7 @@ import java.util.Collection;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
-import com.propertyvista.dto.CommunicationEndpointDTO;
+import com.propertyvista.dto.communication.CommunicationEndpointDTO;
 
 public class CommunicationEndpointSelectorAddDialog extends Dialog implements OkCancelOption {
 

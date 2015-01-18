@@ -28,18 +28,18 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.domain.security.PortalProspectBehavior;
+import com.propertyvista.dto.communication.CommunicationThreadDTO;
 import com.propertyvista.portal.prospect.ui.ToolbarView;
 import com.propertyvista.portal.prospect.ui.ToolbarView.ToolbarPresenter;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
+import com.propertyvista.portal.rpc.portal.resident.services.CommunicationPortalCrudService;
 import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
 import com.propertyvista.portal.shared.CommunicationStatusUpdateEvent;
 import com.propertyvista.portal.shared.CommunicationStatusUpdateHandler;
 import com.propertyvista.portal.shared.PortalSite;
 import com.propertyvista.portal.shared.activity.PortalClientCommunicationManager;
-import com.propertyvista.portal.shared.ui.communication.CommunicationView;
+import com.propertyvista.portal.shared.ui.communication.CommunicationAlertView;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
@@ -49,13 +49,13 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarPresente
 
     private final Place place;
 
-    private final MessagePortalCrudService communicationService;
+    private final CommunicationPortalCrudService communicationService;
 
     public ToolbarActivity(Place place) {
         this.place = place;
         this.view = PortalSite.getViewFactory().getView(ToolbarView.class);
         assert (view != null);
-        communicationService = (MessagePortalCrudService) GWT.create(MessagePortalCrudService.class);
+        communicationService = (CommunicationPortalCrudService) GWT.create(CommunicationPortalCrudService.class);
         view.setPresenter(this);
     }
 
@@ -116,12 +116,12 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarPresente
 
     @Override
     public void loadMessages() {
-        final CommunicationView cview = PortalSite.getViewFactory().getView(CommunicationView.class);
+        final CommunicationAlertView cview = PortalSite.getViewFactory().getView(CommunicationAlertView.class);
 
-        communicationService.listForHeader(new AsyncCallback<EntitySearchResult<MessageDTO>>() {
+        communicationService.listForHeader(new AsyncCallback<EntitySearchResult<CommunicationThreadDTO>>() {
 
             @Override
-            public void onSuccess(EntitySearchResult<MessageDTO> result) {
+            public void onSuccess(EntitySearchResult<CommunicationThreadDTO> result) {
                 if (cview != null) {
                     cview.populate(result == null || result.getData() == null ? null : result.getData());
                 }

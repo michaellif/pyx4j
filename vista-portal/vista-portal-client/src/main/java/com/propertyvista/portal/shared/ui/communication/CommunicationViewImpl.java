@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
@@ -7,243 +7,170 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 1, 2013
- * @author Mykola
+ * Created on Apr 24, 2012
+ * @author ArtyomB
  */
 package com.propertyvista.portal.shared.ui.communication;
 
-import java.util.Vector;
+import java.util.Arrays;
+import java.util.List;
 
-import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Overflow;
-import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.dom.client.Style.TextOverflow;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.WhiteSpace;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RequiresResize;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.commons.HtmlUtils;
-import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
-import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
-import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
-import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
-import com.pyx4j.gwt.commons.layout.LayoutType;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
+import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.domain.security.PortalResidentBehavior;
+import com.propertyvista.dto.communication.CommunicationThreadDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
-import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
+import com.propertyvista.portal.shared.themes.DashboardTheme;
+import com.propertyvista.portal.shared.ui.AbstractGadget;
 
-public class CommunicationViewImpl extends FlowPanel implements CommunicationView, RequiresResize {
+public class CommunicationViewImpl extends SimplePanel implements CommunicationView {
 
-    private final DockLayoutPanel contentPanel;
+    private final static I18n i18n = I18n.get(CommunicationViewImpl.class);
 
-    private final HeaderHolder headerHolder;
+    private final MessageLister lister;
 
-    private final FlowPanel mainHolder;
-
-    private final HTML calloutHandler;
+    private Presenter presenter;
 
     public CommunicationViewImpl() {
+        setStyleName(DashboardTheme.StyleName.Dashboard.name());
 
-        setStyleName(PortalRootPaneTheme.StyleName.Comm.name());
+        lister = new MessageLister();
+        MessageGadget gadget = new MessageGadget(lister);
 
-        calloutHandler = new HTML("<svg style='width: 38px;' xmlns='http://www.w3.org/2000/svg' version='1.1'><polyline points='16,0 0,16 32,16' class='"
-                + PortalRootPaneTheme.StyleName.CommCallout.name() + "'/></svg>");
-        calloutHandler.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        calloutHandler.getElement().getStyle().setProperty("right", "0");
-        calloutHandler.getElement().getStyle().setProperty("top", "0");
-
-        headerHolder = new HeaderHolder();
-        mainHolder = new FlowPanel();
-
-        contentPanel = new DockLayoutPanel(Unit.PX);
-        contentPanel.setStyleName(PortalRootPaneTheme.StyleName.CommContent.name());
-
-        add(calloutHandler);
-        add(contentPanel);
-
-        contentPanel.addNorth(headerHolder, 60);
-
-        contentPanel.add(new ScrollPanel(mainHolder));
-
-        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
-
-        AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
-
-            @Override
-            public void onLayoutChangeRerquest(LayoutChangeEvent event) {
-                doLayout(event.getLayoutType());
-            }
-
-        });
-    }
-
-    private void doLayout(LayoutType layoutType) {
-        switch (layoutType) {
-        case phonePortrait:
-        case phoneLandscape:
-            calloutHandler.setVisible(false);
-            addStyleDependentName(PortalRootPaneTheme.StyleDependent.sideComm.name());
-            break;
-        case tabletPortrait:
-        case tabletLandscape:
-        case monitor:
-        case huge:
-            calloutHandler.setVisible(true);
-            removeStyleDependentName(PortalRootPaneTheme.StyleDependent.sideComm.name());
-            break;
-        }
+        setWidget(gadget);
     }
 
     @Override
-    public void populate(Vector<MessageDTO> messages) {
-        mainHolder.clear();
-        int messagesNum = messages == null || messages.isEmpty() ? 0 : messages.size();
-        headerHolder.setNumberOfMessages(messagesNum);
-        if (messagesNum > 0) {
-            for (final MessageDTO message : messages) {
-                mainHolder.add(new MessagePanel(message));
-            }
-        }
-    }
-
-    private void doToggleHandler() {
-        LayoutType layout = LayoutType.getLayoutType(Window.getClientWidth());
-        if (LayoutType.phonePortrait.equals(layout) || LayoutType.phoneLandscape.equals(layout) || LayoutType.tabletPortrait.equals(layout)) {
-            AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideComm));
-        }
-    }
-
-    class MessagePanel extends FlexTable {
-
-        private final Image photoImage;
-
-        private final Label subjectField;
-
-        private final Label messageField;
-
-        private final Label dateField;
-
-        private final Label senderField;
-
-        public MessagePanel(final MessageDTO message) {
-            setStyleName(PortalRootPaneTheme.StyleName.CommMessage.name());
-
-            photoImage = new Image(PortalImages.INSTANCE.avatar2());
-            subjectField = new Label(message.subject().getStringView());
-            getElement().getStyle().setCursor(Cursor.POINTER);
-            addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    doToggleHandler();
-                    AppSite.getPlaceController().goTo(new PortalSiteMap.Message.MessagePage(message.getPrimaryKey()));
-                }
-            });
-
-            messageField = new Label(HtmlUtils.removeHtmlTags(message.text().getStringView()));
-            messageField.getElement().getStyle().setWidth(350, Unit.PX);
-            messageField.getElement().getStyle().setWhiteSpace(WhiteSpace.NOWRAP);
-            messageField.getElement().getStyle().setOverflow(Overflow.HIDDEN);
-            messageField.getElement().getStyle().setTextOverflow(TextOverflow.ELLIPSIS);
-
-            dateField = new Label(message.date().getStringView());
-            senderField = new Label(message.sender().getStringView());
-
-            setWidget(0, 0, photoImage);
-
-            if (message.highImportance().getValue(false)) {
-                FlexTable fp = new FlexTable();
-                fp.setWidget(0, 0, photoImage);
-                fp.setWidget(0, 1, new Image(PortalImages.INSTANCE.messageImportance()));
-                setWidget(0, 0, fp);
-            } else {
-                setWidget(0, 0, photoImage);
-            }
-            getFlexCellFormatter().setRowSpan(0, 0, 2);
-            getFlexCellFormatter().setWidth(0, 0, "1px");
-
-            setWidget(0, 1, senderField);
-
-            setWidget(0, 2, dateField);
-            getFlexCellFormatter().setWidth(0, 2, "1px");
-
-            setWidget(1, 0, subjectField);
-            getFlexCellFormatter().setColSpan(1, 0, 2);
-            setWidget(2, 0, messageField);
-            getFlexCellFormatter().setColSpan(2, 0, 3);
-
-        }
-    }
-
-    class HeaderHolder extends FlowPanel {
-
-        private final Anchor messagesAnchor;
-
-        private final Image writeActionImage;
-
-        public HeaderHolder() {
-
-            setStyleName(PortalRootPaneTheme.StyleName.CommHeader.name());
-
-            getElement().getStyle().setPosition(Position.RELATIVE);
-
-            messagesAnchor = new Anchor("Messages", new Command() {
-
-                @Override
-                public void execute() {
-                    doToggleHandler();
-                    AppSite.getPlaceController().goTo(new PortalSiteMap.Message.MessageView());
-                }
-            });
-            messagesAnchor.setStyleName(PortalRootPaneTheme.StyleName.CommHeaderTitle.name());
-            messagesAnchor.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-
-            writeActionImage = new Image(PortalImages.INSTANCE.writeMessage());
-            writeActionImage.setStyleName(PortalRootPaneTheme.StyleName.CommHeaderWriteAction.name());
-            writeActionImage.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            writeActionImage.getElement().getStyle().setCursor(Cursor.POINTER);
-            writeActionImage.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    doToggleHandler();
-                    AppSite.getPlaceController().goTo(new PortalSiteMap.Message.MessageWizard());
-                }
-            });
-            add(messagesAnchor);
-            add(writeActionImage);
-
-            writeActionImage.setVisible(SecurityController.check(PortalResidentBehavior.CommunicationCreateMessages));
-
-        }
-
-        public void setNumberOfMessages(int number) {
-            if (number > 0) {
-                messagesAnchor.setText("Messages (" + String.valueOf(number) + ")");
-            } else {
-                messagesAnchor.setText("Messages");
-            }
-        }
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
     }
 
     @Override
-    public void onResize() {
-        contentPanel.onResize();
+    public void populate() {
+        lister.setDataSource(new ListerDataSource<CommunicationThreadDTO>(CommunicationThreadDTO.class, presenter.getService()));
+        lister.populate();
+    }
+
+    class MessageGadget extends AbstractGadget<CommunicationViewImpl> {
+
+        MessageGadget(final MessageLister lister) {
+            super(CommunicationViewImpl.this, null, i18n.tr("Tenant Communication"), ThemeColor.foreground, 0.3);
+            lister.setWidth("100%");
+            lister.getDataTable().setColumnSelectorVisible(true);
+
+            lister.addItemSelectionHandler(new ItemSelectionHandler() {
+                @Override
+                public void onChange() {
+                    AppSite.getPlaceController().goTo(new PortalSiteMap.Message.MessagePage(lister.getSelectedItem().getPrimaryKey()));
+
+                }
+
+            });
+
+            setContent(lister);
+        }
+
+    }
+
+    private static class MessageLister extends DataTablePanel<CommunicationThreadDTO> {
+
+        public MessageLister() {
+            super(CommunicationThreadDTO.class, SecurityController.check(PortalResidentBehavior.CommunicationCreateMessages), false);
+            setFilteringEnabled(false);
+            //getDataTablePanel().getAddButton().asWidget().setStyleName(DataTableTheme.StyleName.ListerButton.name());
+            // No filtering work for it
+            getDataTable().setHasColumnClickSorting(false);
+            CommunicationThreadDTO proto = EntityFactory.getEntityPrototype(CommunicationThreadDTO.class);
+            setColumnDescriptors( //
+                    new ColumnDescriptor.Builder(proto.highImportance()).searchable(false).width("27px").formatter(//
+                            booleanField2Image(proto.highImportance().getPath(), PortalImages.INSTANCE.messageImportance(), null))//
+                            .columnTitleShown(false).build(),//
+                    new ColumnDescriptor.Builder(proto.star()).searchable(false).width("27px").formatter(//
+                            booleanField2Image(proto.star().getPath(), PortalImages.INSTANCE.fullStar(), PortalImages.INSTANCE.noStar()))//
+                            .columnTitleShown(false).build(),//
+                    new ColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("27px").formatter(//
+                            booleanField2Image(proto.hasAttachments().getPath(), PortalImages.INSTANCE.attachement(), null))//
+                            .columnTitleShown(false).build(), //
+                    new ColumnDescriptor.Builder(proto.senders()).width("100px").formatter(baseFieldViewOnIsRead(proto.senders().getPath())).build(),//
+                    new ColumnDescriptor.Builder(proto.subject()).width("200px").formatter(baseFieldViewOnIsRead(proto.subject().getPath())).build(),//
+                    new ColumnDescriptor.Builder(proto().date()).width("100px").formatter(baseFieldViewOnIsRead(proto.date().getPath())).build(), //
+                    new ColumnDescriptor.Builder(proto().messagesInThread()).width("100px").build());
+
+            setDataTableModel(new DataTableModel<CommunicationThreadDTO>());
+
+        }
+
+        @Override
+        protected void onItemNew() {
+            AppSite.getPlaceController().goTo(new PortalSiteMap.Message.MessageWizard());
+
+        }
+
+        @Override
+        public List<Sort> getDefaultSorting() {
+            return Arrays.asList(new Sort(proto().date(), true), new Sort(proto().isRead(), false), new Sort(proto().highImportance(), true));
+        }
+
+        private static IFormatter<IEntity, SafeHtml> booleanField2Image(final Path path, final ImageResource trueValueResource,
+                final ImageResource falseValueResource) {
+            return new IFormatter<IEntity, SafeHtml>() {
+                @Override
+                public SafeHtml format(IEntity value) {
+                    SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                    Boolean v = (Boolean) value.getMember(path).getValue();
+                    if (v != null && v.booleanValue()) {
+                        builder.appendHtmlConstant(new Image(trueValueResource).toString());
+                    } else if (falseValueResource != null) {
+                        builder.appendHtmlConstant(new Image(falseValueResource).toString());
+                    }
+
+                    return builder.toSafeHtml();
+                }
+            };
+        }
+
+        private static IFormatter<IEntity, SafeHtml> baseFieldViewOnIsRead(final Path path) {
+            return new IFormatter<IEntity, SafeHtml>() {
+                @Override
+                public SafeHtml format(IEntity value) {
+                    SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                    if (value != null) {
+                        CommunicationThreadDTO v = (CommunicationThreadDTO) value;
+                        Boolean isRead = v.isRead().getValue();
+                        String s = value.getMember(path).getValue().toString();
+                        if ((isRead == null || !isRead.booleanValue())) {
+                            Label messageField = new Label(s);
+                            messageField.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+                            builder.appendHtmlConstant(messageField.toString());
+                        } else {
+                            builder.appendHtmlConstant(s);
+                        }
+                    }
+                    return builder.toSafeHtml();
+                }
+            };
+        }
     }
 }

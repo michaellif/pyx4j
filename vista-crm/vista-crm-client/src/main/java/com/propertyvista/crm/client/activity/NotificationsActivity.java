@@ -36,9 +36,10 @@ import com.propertyvista.crm.client.event.CommunicationStatusUpdateEvent;
 import com.propertyvista.crm.client.event.CommunicationStatusUpdateHandler;
 import com.propertyvista.crm.client.ui.NotificationsView;
 import com.propertyvista.crm.rpc.dto.communication.CrmCommunicationSystemNotification;
-import com.propertyvista.crm.rpc.services.MessageCrudService;
+import com.propertyvista.crm.rpc.services.CommunicationCrudService;
 import com.propertyvista.domain.communication.NotificationDelivery;
-import com.propertyvista.dto.MessageDTO;
+import com.propertyvista.dto.communication.CommunicationThreadDTO;
+import com.propertyvista.dto.communication.MessageDTO;
 
 public class NotificationsActivity extends AbstractActivity implements NotificationsView.NotificationsPresenter {
 
@@ -98,10 +99,10 @@ public class NotificationsActivity extends AbstractActivity implements Notificat
         MessageDTO m = notifications.get(notification);
         if (m != null) {
             m.isRead().setValue(true);
-            GWT.<MessageCrudService> create(MessageCrudService.class).saveMessage(new AsyncCallback<MessageDTO>() {
+            GWT.<CommunicationCrudService> create(CommunicationCrudService.class).saveMessage(new AsyncCallback<CommunicationThreadDTO>() {
 
                 @Override
-                public void onSuccess(MessageDTO result) {
+                public void onSuccess(CommunicationThreadDTO result) {
                 }
 
                 @Override
@@ -155,7 +156,7 @@ public class NotificationsActivity extends AbstractActivity implements Notificat
                     nt = NotificationType.STATUS;
                     break;
                 }
-                addMessage(new Notification(m.text().getValue(), m.subject().getValue(), nt), m);
+                addMessage(new Notification(m.text().getValue(), m.thread().subject().getValue(), nt), m);
             }
         }
     }
