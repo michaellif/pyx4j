@@ -345,7 +345,10 @@ public class SeleniumExtended extends WebDriverWrapper {
         //To fix the focus reset problem from the previous element we have to use additional clickAndHold action for buttons and divs.
         //This is the fix for Selenium FireFox Drive bug. Was tested on FirefoxDrive and ChromeDrive.
         if (element.getTagName().equals("div") || element.getTagName().equals("button")) {
-            new Actions(driver).moveToElement(element).clickAndHold(element).click().perform();
+            Actions actions = new Actions(driver);
+            actions.moveToElement(element).clickAndHold(element).click();
+            actions.release();
+            actions.perform();
         } else {
             element.click();
         }
