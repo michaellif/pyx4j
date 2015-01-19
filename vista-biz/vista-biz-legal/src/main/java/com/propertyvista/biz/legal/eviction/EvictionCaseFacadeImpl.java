@@ -12,9 +12,12 @@
  */
 package com.propertyvista.biz.legal.eviction;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
@@ -22,18 +25,25 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.system.VistaContext;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.eviction.EvictionCase;
 import com.propertyvista.domain.eviction.EvictionDocument;
 import com.propertyvista.domain.eviction.EvictionStatus;
+import com.propertyvista.domain.eviction.EvictionStatusN4;
 import com.propertyvista.domain.eviction.EvictionStatusRecord;
+import com.propertyvista.domain.policy.policies.EvictionFlowPolicy;
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
-import com.propertyvista.domain.security.common.AbstractUser;
+import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep.EvictionStepType;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class EvictionCaseFacadeImpl implements EvictionCaseFacade {
 
     private static final I18n i18n = I18n.get(EvictionCaseFacadeImpl.class);
+
+    private final Map<Building, EvictionFlowPolicy> policyCache = new HashMap<>();
 
     @Override
     public EvictionCase openEvictionCase(Lease leaseId, String note) {
@@ -44,6 +54,8 @@ public class EvictionCaseFacadeImpl implements EvictionCaseFacade {
         EvictionCase evictionCase = EntityFactory.create(EvictionCase.class);
         evictionCase.lease().set(leaseId);
         evictionCase.note().setValue(note);
+        evictionCase.evictionFlowPolicy().set(getEvictionFlowPolicy(leaseId));
+        evictionCase.createdBy().set(getLoggedEmployee());
         Persistence.service().persist(evictionCase);
         return evictionCase;
     }
@@ -83,10 +95,10 @@ public class EvictionCaseFacadeImpl implements EvictionCaseFacade {
     }
 
     @Override
-    public void addEvictionStatusDetails(EvictionCase evictionCase, String statusName, String note, List<EvictionDocument> attachments) {
+    public EvictionStatus addEvictionStatusDetails(EvictionCase evictionCase, String statusName, String note, List<EvictionDocument> attachments) {
         // - check that the case is not closed
         if (!evictionCase.closedOn().isNull()) {
-            return;
+            return null;
         }
         Persistence.ensureRetrieve(evictionCase.evictionFlowPolicy(), AttachLevel.Attached);
         EvictionFlowStep flowStep = null;
@@ -108,22 +120,54 @@ public class EvictionCaseFacadeImpl implements EvictionCaseFacade {
             }
         }
         // - if not found, add the new status
-        AbstractUser user = VistaContext.getCurrentUser();
+        Employee employee = getLoggedEmployee();
         if (evictionStatus == null) {
-            evictionStatus = EntityFactory.create(EvictionStatus.class);
+            evictionStatus = createEvictionStatus(flowStep.stepType().getValue());
             evictionStatus.evictionStep().set(flowStep);
-            evictionStatus.addedBy().set(user);
-            evictionStatus.note().setValue(i18n.tr("Auto-generated"));
+            evictionStatus.addedBy().set(employee);
+            evictionStatus.note().setValue(i18n.tr("Auto-generated for Eviction Status update"));
             evictionCase.history().add(evictionStatus);
         }
         // - add new details to the case status
         EvictionStatusRecord record = EntityFactory.create(EvictionStatusRecord.class);
-        record.addedBy().set(user);
+        record.addedBy().set(employee);
         record.note().setValue(note);
         if (attachments != null) {
             record.attachments().addAll(attachments);
         }
         evictionStatus.statusRecords().add(record);
         Persistence.service().persist(evictionCase);
+
+        return evictionStatus;
+    }
+
+    private Employee getLoggedEmployee() {
+        EntityQueryCriteria<Employee> crit = EntityQueryCriteria.create(Employee.class);
+        crit.eq(crit.proto().user(), VistaContext.getCurrentUser());
+        return Persistence.service().retrieve(crit);
+    }
+
+    private EvictionFlowPolicy getEvictionFlowPolicy(Lease lease) {
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
+
+        Building building = lease.unit().building();
+        EvictionFlowPolicy policy = policyCache.get(building);
+        if (policy == null) {
+            policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, EvictionFlowPolicy.class);
+            policyCache.put(building, policy);
+        }
+        if (policy == null) {
+            throw new Error("Cannot find EvictionFlowPolicy for building: " + building.propertyCode().getValue());
+        }
+        return policy;
+    }
+
+    private EvictionStatus createEvictionStatus(EvictionStepType flowStep) {
+        switch (flowStep) {
+        case N4:
+            return EntityFactory.create(EvictionStatusN4.class);
+        default:
+            return EntityFactory.create(EvictionStatus.class);
+        }
     }
 }

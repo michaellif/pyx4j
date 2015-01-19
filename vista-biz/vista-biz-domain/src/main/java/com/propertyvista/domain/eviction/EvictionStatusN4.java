@@ -7,14 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 18, 2014
+ * Created on Jan 19, 2015
  * @author stanp
- * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
 package com.propertyvista.domain.eviction;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-@DiscriminatorValue("General")
-public interface EvictionStatus extends EvictionCaseStatus {
+import com.propertyvista.domain.legal.n4.N4LeaseArrears;
+
+@DiscriminatorValue("N4")
+public interface EvictionStatusN4 extends EvictionStatus {
+
+    @Detached
+    N4LeaseArrears leaseArrears();
 }

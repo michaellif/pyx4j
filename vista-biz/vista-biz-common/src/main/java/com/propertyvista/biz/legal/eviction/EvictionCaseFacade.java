@@ -32,7 +32,7 @@ public interface EvictionCaseFacade {
 
     EvictionStatus getCurrentEvictionStatus(EvictionCase evictionCase);
 
-    void addEvictionStatusDetails(EvictionCase evictionCase, String statusName, String note, List<EvictionDocument> attachments);
+    EvictionStatus addEvictionStatusDetails(EvictionCase evictionCase, String statusName, String note, List<EvictionDocument> attachments);
 
     List<EvictionCase> getEvictionHistory(Lease leaseId);
 
