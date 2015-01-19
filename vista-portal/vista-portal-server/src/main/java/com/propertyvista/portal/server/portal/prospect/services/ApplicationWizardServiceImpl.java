@@ -272,6 +272,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         Persistence.ensureRetrieve(term.version().tenants(), AttachLevel.Attached);
         to.tenants().addAll(term.version().tenants());
+
+        to.refSource().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseApplication().refSource().getValue());
     }
 
     public LeaseChargesDataDTO createLeaseChargesData(LeaseTerm term) {
@@ -335,7 +337,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.applicantData().set(to.applicantData().person(), customer.person());
         to.applicantData().set(to.applicantData().picture(), customer.picture());
         to.applicantData().set(to.applicantData().emergencyContacts(), customer.emergencyContacts());
-        to.applicantData().refSource().setValue(customer.refSource().getValue());
 
         // screening:
         CustomerScreening screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftForEdit(customer, to.policyNode());
@@ -399,7 +400,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         customer.set(customer.person(), to.applicantData().person());
         customer.set(customer.picture(), to.applicantData().picture());
         customer.emergencyContacts().set(to.applicantData().emergencyContacts());
-        customer.refSource().setValue(to.applicantData().refSource().getValue());
 
         //DataDump.dump("customer", customer);
 
@@ -969,6 +969,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 leaseTerm.termTo().setValue(new LogicalDate(DateUtils.yearsAdd(leaseTerm.termFrom().getValue(), 1)));
                 leaseTerm.termTo().setValue(new LogicalDate(DateUtils.daysAdd(leaseTerm.termTo().getValue(), -1)));
             }
+
+            bo.masterOnlineApplication().leaseApplication().lease().leaseApplication().refSource().setValue(to.refSource().getValue());
 
             saveUnitOptionsData(bo, to);
             saveOccupants(bo, to);
