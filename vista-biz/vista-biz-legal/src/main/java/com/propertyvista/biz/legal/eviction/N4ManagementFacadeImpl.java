@@ -77,7 +77,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
                 new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.Web).execute(new Executable<Void, Exception>() {
                     @Override
                     public Void execute() throws Exception {
-                        new N4Manager().issueN4ForLease(item, batch, policy, deliveryDate, batchServiceDate);
+                        new N4Manager().issueN4ForLease(item, policy, deliveryDate, batchServiceDate);
                         return null;
                     }
                 });

@@ -12,8 +12,15 @@
  */
 package com.propertyvista.domain.eviction;
 
+import java.math.BigDecimal;
+
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.legal.n4.N4LeaseArrears;
 
@@ -22,4 +29,14 @@ public interface EvictionStatusN4 extends EvictionStatus {
 
     @Detached
     N4LeaseArrears leaseArrears();
+
+    @NotNull
+    IPrimitive<LogicalDate> terminationDate();
+
+    @NotNull
+    IPrimitive<LogicalDate> expiryDate();
+
+    @Editor(type = EditorType.money)
+    @NotNull
+    IPrimitive<BigDecimal> cancellationBalance();
 }

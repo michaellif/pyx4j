@@ -22,6 +22,7 @@ import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.legal.LegalStatus;
 
 @Transient
+@Deprecated
 public interface LegalStatusDTO extends LegalStatus {
 
     IList<LegalLetter> letters();

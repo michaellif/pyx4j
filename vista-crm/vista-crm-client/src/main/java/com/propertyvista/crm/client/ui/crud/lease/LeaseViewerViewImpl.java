@@ -408,7 +408,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         showCommunicationAction = new MenuItem(i18n.tr("Communication Report"), new Command() {
             @Override
             public void execute() {
-                (new CommunicationReportDialog(LeaseViewerViewImpl.this, ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).getAllLeaseParticipants())).show();
+                (new CommunicationReportDialog(LeaseViewerViewImpl.this, ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).getAllLeaseParticipants()))
+                        .show();
             }
         });
         addView(showCommunicationAction);
@@ -609,6 +610,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
         EntityFiltersBuilder<EvictionCaseDTO> evictionFilter = EntityFiltersBuilder.create(EvictionCaseDTO.class);
         evictionFilter.eq(evictionFilter.proto().lease(), value);
+        evictionCaseLister.getDataSource().clearPreDefinedFilters();
         evictionCaseLister.getDataSource().addPreDefinedFilter(evictionFilter);
         evictionCaseLister.setLeaseId(value.getPrimaryKey());
         evictionCaseLister.populate();

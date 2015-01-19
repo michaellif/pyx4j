@@ -15,7 +15,6 @@ package com.propertyvista.biz.legal.eviction;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -30,27 +29,23 @@ import org.apache.commons.lang.math.LongRange;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.legal.LeaseLegalFacade;
 import com.propertyvista.biz.legal.forms.framework.filling.FormFillerImpl;
 import com.propertyvista.biz.legal.forms.n4.N4FieldsMapping;
 import com.propertyvista.biz.legal.forms.n4cs.N4CSFieldsMapping;
-import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.domain.blob.EmployeeSignatureBlob;
 import com.propertyvista.domain.blob.LegalLetterBlob;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.EmployeeSignature;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.contact.LegalAddress;
-import com.propertyvista.domain.legal.LegalLetter;
-import com.propertyvista.domain.legal.LegalStatus.Status;
-import com.propertyvista.domain.legal.LegalStatusN4;
+import com.propertyvista.domain.eviction.EvictionStatusN4;
 import com.propertyvista.domain.legal.errors.FormFillError;
 import com.propertyvista.domain.legal.n4.N4Batch;
 import com.propertyvista.domain.legal.n4.N4BatchItem;
@@ -61,14 +56,13 @@ import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
 import com.propertyvista.domain.legal.n4.pdf.N4LeaseData;
 import com.propertyvista.domain.legal.n4.pdf.N4RentOwingForPeriod;
 import com.propertyvista.domain.legal.n4.pdf.N4Signature;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSFormFieldsData;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSSignature;
 import com.propertyvista.domain.legal.n4cs.pdf.N4CSDocumentType.DocumentType;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSFormFieldsData;
 import com.propertyvista.domain.legal.n4cs.pdf.N4CSServiceMethod.ServiceMethod;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSSignature;
 import com.propertyvista.domain.legal.n4cs.pdf.N4CSToPersonInfo.ToType;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.ref.ISOProvince;
-import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -80,10 +74,10 @@ public class N4Manager {
 
     private static final String N4_CS_FORM_FILE = "n4cs.pdf";
 
-    void issueN4ForLease(N4BatchItem item, N4Batch batch, N4Policy policy, LogicalDate deliveryDate, Date generationDate) throws FormFillError {
+    void issueN4ForLease(N4BatchItem item, N4Policy policy, LogicalDate deliveryDate, Date generationDate) throws FormFillError {
         N4LeaseData n4LeaseData = prepareN4LeaseData(item, deliveryDate, policy);
 
-        N4FormFieldsData n4FormData = prepareFormData(n4LeaseData, batch);
+        N4FormFieldsData n4FormData = prepareFormData(n4LeaseData, item.batch());
         N4CSFormFieldsData n4csFormData = prepareN4CSData(n4FormData, ServiceMethod.M);
 
         // generate N4
@@ -128,23 +122,12 @@ public class N4Manager {
                 ));
         Persistence.service().persist(n4csLetter);
 
-        // TODO - review eviction status concept
-        if (false) {
-            LegalStatusN4 n4Status = EntityFactory.create(LegalStatusN4.class);
-            n4Status.status().setValue(Status.N4);
-            GregorianCalendar cal = new GregorianCalendar();
-            cal.setTime(generationDate);
-            cal.add(GregorianCalendar.DAY_OF_YEAR, policy.expiryDays().getValue());
-            n4Status.expiry().setValue(cal.getTime());
-            n4Status.cancellationThreshold().setValue(policy.cancellationThreshold().getValue());
-            n4Status.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
-
-            n4Status.notes().setValue("created via N4 notice batch");
-            n4Status.setBy().set(EntityFactory.createIdentityStub(CrmUser.class, VistaContext.getCurrentUserPrimaryKey()));
-            n4Status.setOn().setValue(generationDate);
-
-            ServerSideFactory.create(LeaseLegalFacade.class).setLegalStatus(item.lease(), n4Status, Arrays.<LegalLetter> asList(n4Letter));
-        }
+        // update N4 status with the 
+        EntityQueryCriteria<EvictionStatusN4> n4crit = EntityQueryCriteria.create(EvictionStatusN4.class);
+        n4crit.eq(n4crit.proto().leaseArrears(), item.leaseArrears());
+        EvictionStatusN4 n4status = Persistence.service().retrieve(n4crit);
+        n4status.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
+        Persistence.service().persist(n4status);
     }
 
     // ------ internals -----------

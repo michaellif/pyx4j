@@ -39,6 +39,7 @@ public interface LegalLetter extends IHasFile<LegalLetterBlob> {
     Lease lease();
 
     @Detached
+    /** TODO to be removed */
     LegalStatus status();
 
     @Editor(type = EditorType.textarea)
