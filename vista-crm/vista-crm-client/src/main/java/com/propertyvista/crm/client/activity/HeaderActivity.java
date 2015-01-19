@@ -38,11 +38,11 @@ import com.propertyvista.crm.client.event.CommunicationStatusUpdateEvent;
 import com.propertyvista.crm.client.event.CommunicationStatusUpdateHandler;
 import com.propertyvista.crm.client.ui.HeaderView;
 import com.propertyvista.crm.client.ui.HeaderView.HeaderPresenter;
-import com.propertyvista.crm.client.ui.crud.communication.CommunicationView;
+import com.propertyvista.crm.client.ui.crud.communication.CommunicationAlertView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.communication.CrmCommunicationSystemNotification;
-import com.propertyvista.crm.rpc.services.MessageCrudService;
-import com.propertyvista.dto.MessageDTO;
+import com.propertyvista.crm.rpc.services.CommunicationCrudService;
+import com.propertyvista.dto.communication.CommunicationThreadDTO;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class HeaderActivity extends AbstractActivity implements HeaderPresenter {
@@ -51,14 +51,14 @@ public class HeaderActivity extends AbstractActivity implements HeaderPresenter 
 
     private final Place place;
 
-    private final MessageCrudService communicationService;
+    private final CommunicationCrudService communicationService;
 
     public HeaderActivity(Place place) {
         this.place = place;
         view = CrmSite.getViewFactory().getView(HeaderView.class);
         view.setPresenter(this);
 
-        communicationService = (MessageCrudService) GWT.create(MessageCrudService.class);
+        communicationService = (CommunicationCrudService) GWT.create(CommunicationCrudService.class);
     }
 
     @Override
@@ -129,12 +129,12 @@ public class HeaderActivity extends AbstractActivity implements HeaderPresenter 
 
     @Override
     public void loadMessages() {
-        final CommunicationView cview = CrmSite.getViewFactory().getView(CommunicationView.class);
+        final CommunicationAlertView cview = CrmSite.getViewFactory().getView(CommunicationAlertView.class);
 
-        communicationService.listForHeader(new AsyncCallback<EntitySearchResult<MessageDTO>>() {
+        communicationService.listForHeader(new AsyncCallback<EntitySearchResult<CommunicationThreadDTO>>() {
 
             @Override
-            public void onSuccess(EntitySearchResult<MessageDTO> result) {
+            public void onSuccess(EntitySearchResult<CommunicationThreadDTO> result) {
                 if (cview != null) {
                     cview.populate(result == null || result.getData() == null ? null : result.getData());
                 }

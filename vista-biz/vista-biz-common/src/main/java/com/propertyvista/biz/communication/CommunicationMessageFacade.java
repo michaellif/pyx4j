@@ -34,15 +34,16 @@ import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.dto.CommunicationEndpointDTO;
-import com.propertyvista.dto.MessageDTO;
+import com.propertyvista.dto.communication.CommunicationEndpointDTO;
+import com.propertyvista.dto.communication.CommunicationThreadDTO;
+import com.propertyvista.dto.communication.MessageDTO;
 
 public interface CommunicationMessageFacade {
 
     // Communication text builder -----------------------------------------------------------------
     String buildForwardSubject(MessageDTO forwardedMessage);
 
-    String buildForwardText(MessageDTO forwardedMessage);
+    String buildForwardText(MessageDTO forwardedMessage, String subject);
 
     // Communication category management -------------------------------------------------------
     MessageCategory getMessageCategoryFromCache(TicketType mgCategory);
@@ -67,6 +68,8 @@ public interface CommunicationMessageFacade {
     // Communication entity common management -------------------------------------------------------
     EntitySearchResult<Message> query(EntityListCriteria<Message> criteria);
 
+    EntitySearchResult<CommunicationThread> queryThread(EntityListCriteria<CommunicationThread> criteria);
+
     Serializable getCommunicationStatus();
 
     boolean isDispatchedThread(Key threadKey, boolean includeByRoles, Employee e);
@@ -75,7 +78,7 @@ public interface CommunicationMessageFacade {
 
     List<CommunicationThread> getDispathcedThreads(Employee e);
 
-    void enhanceMessageDbo(Message bo, MessageDTO to, boolean isForList, CommunicationEndpoint currentUser);
+    void enhanceThreadDbo(CommunicationThread bo, CommunicationThreadDTO to, boolean isForList, CommunicationEndpoint currentUser);
 
     Message saveMessage(MessageDTO message, ThreadStatus threadStatus, CommunicationEndpoint currentUser, boolean updateOwner);
 

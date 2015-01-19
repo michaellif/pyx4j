@@ -35,7 +35,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority.PriorityLevel;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.dto.MessageDTO;
+import com.propertyvista.dto.communication.MessageDTO;
 
 public class CommunicationAssociationManager {
     private final static I18n i18n = I18n.get(CommunicationAssociationManager.class);
@@ -200,10 +200,7 @@ public class CommunicationAssociationManager {
             dto.date().setValue(SystemDateManager.getDate());
             dto.isRead().setValue(false);
             dto.highImportance().setValue(false);
-            dto.allowedReply().setValue(true);
             dto.text().setValue(messageBody == null ? association2Body(ca) : messageBody);
-            dto.category().set(communicationFacade.getMessageCategoryFromCache(TicketType.Maintenance));
-
             Message newMessage = communicationFacade.saveMessage(dto, association2Status(ca), association2Sender(ca, currentUser), true);
             association2Recipient(newMessage, ca, currentUser);
             Persistence.service().persist(newMessage);

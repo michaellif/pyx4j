@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.communication.selector;
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
-import com.propertyvista.dto.CommunicationEndpointDTO;
+import com.propertyvista.dto.communication.CommunicationEndpointDTO;
 
 public class CommunicationEndpointForSelectionCell extends AbstractCell<CommunicationEndpointDTO> {
 

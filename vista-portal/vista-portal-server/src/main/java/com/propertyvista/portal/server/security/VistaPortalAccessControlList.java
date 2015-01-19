@@ -69,7 +69,7 @@ import com.propertyvista.portal.rpc.portal.resident.ac.HelpAction;
 import com.propertyvista.portal.rpc.portal.resident.services.ExtraActivityPortalService;
 import com.propertyvista.portal.rpc.portal.resident.services.LeaseContextSelectionService;
 import com.propertyvista.portal.rpc.portal.resident.services.MessageAttachmentUploadPortalService;
-import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
+import com.propertyvista.portal.rpc.portal.resident.services.CommunicationPortalCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.QuickTipService;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentSelfRegistrationService;
@@ -233,7 +233,7 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
 
         grant(new IServiceExecutePermission(ExtraActivityPortalService.class));
         grant(new IServiceExecutePermission(CommunityEventCrudService.class));
-        grant(new IServiceExecutePermission(MessagePortalCrudService.class));
+        grant(new IServiceExecutePermission(CommunicationPortalCrudService.class));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(DeferredProcessService.class));
 

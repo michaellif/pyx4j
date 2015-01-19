@@ -46,7 +46,7 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.dto.CommunicationEndpointDTO;
+import com.propertyvista.dto.communication.CommunicationEndpointDTO;
 
 public class SelectRecipientsDialogForm extends HorizontalPanel {
 

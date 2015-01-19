@@ -34,7 +34,7 @@ import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.dto.CommunicationEndpointDTO;
+import com.propertyvista.dto.communication.CommunicationEndpointDTO;
 
 public class SelectCommunicationEndpointListServiceImpl extends AbstractListServiceImpl<CommunicationEndpoint> implements
         SelectCommunicationEndpointListService {
