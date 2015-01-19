@@ -13,6 +13,7 @@
 package com.propertyvista.crm.client.ui.crud.lease.application;
 
 import java.math.BigDecimal;
+import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,9 +43,11 @@ import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
+import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.Button.SecureMenuItem;
@@ -72,6 +75,7 @@ import com.propertyvista.crm.rpc.services.lease.ac.CreditCheckRun;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.tenant.RefSource;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseApplication.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
@@ -112,6 +116,8 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     private final MenuItem declineAction;
 
     private final MenuItem cancelAction;
+
+    private final MenuItem refSourceAction;
 
     public LeaseApplicationViewerViewImpl() {
         setForm(new LeaseApplicationForm(this));
@@ -261,6 +267,14 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             }
         }, new ActionPermission(ApplicationCancel.class));
         addAction(cancelAction);
+
+        refSourceAction = new SecureMenuItem(i18n.tr("Set Reference Source"), new Command() {
+            @Override
+            public void execute() {
+                refSourceActionExecuter();
+            }
+        }, DataModelPermission.permissionUpdate(LeaseApplicationDTO.class));
+        addAction(refSourceAction);
     }
 
     private void inviteActionExecuter() {
@@ -373,6 +387,21 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         }.show();
     }
 
+    private void refSourceActionExecuter() {
+        new SelectEnumDialog<RefSource>(i18n.tr("Select Reference Source"), EnumSet.allOf(RefSource.class)) {
+            @Override
+            public boolean onClickOk() {
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).updateRefSource(new DefaultAsyncCallback<VoidSerializable>() {
+                    @Override
+                    public void onSuccess(VoidSerializable result) {
+                        getForm().get(getForm().proto().leaseApplication().refSource()).setValue(getSelectedType());
+                    }
+                }, getSelectedType());
+                return true;
+            }
+        }.show();
+    }
+
     @Override
     public void reset() {
         setViewVisible(viewLease, false);
@@ -387,6 +416,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setActionVisible(approveAction, false);
         setActionVisible(declineAction, false);
         setActionVisible(cancelAction, false);
+        setActionVisible(refSourceAction, false);
 
         editButton.setVisible(false);
 
@@ -427,7 +457,9 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setActionHighlighted(approveAction, approveAction.isVisible());
 
         // edit/view terms enabling logic:
-        editButton.setVisible(status.isDraft() && status != Status.PendingDecision && (!isOnlineApplication || noPtAppProgress));
+        boolean isEditable = (status.isDraft() && status != Status.PendingDecision && (!isOnlineApplication || noPtAppProgress));
+        setActionVisible(refSourceAction, isEditable);
+        editButton.setVisible(isEditable);
         termsButton.setVisible(!status.isDraft());
 
         // yardi mode overrides:
@@ -637,7 +669,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         private final SelectParticipantForm form;
 
         public DownloadApplicationDocumentDialog(List<LeaseTermParticipant<?>> participants) {
-            super(i18n.tr("Download Blank Application Document "));
+            super(i18n.tr("Download Blank Application Document"));
             form = new SelectParticipantForm(participants);
             form.init();
             form.populateNew();
@@ -750,5 +782,4 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         return !participant.isNull() ? participant.leaseParticipant().customer().person().name().getStringView() + " ("
                 + participant.role().getValue().toString() + ")" : "";
     }
-
 }

@@ -56,6 +56,7 @@ import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.domain.tenant.RefSource;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -447,5 +448,16 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         Persistence.service().commit();
 
         callback.onSuccess(value);
+    }
+
+    @Override
+    public void updateRefSource(AsyncCallback<VoidSerializable> callback, Key entityId, RefSource value) {
+        Lease lease = Persistence.secureRetrieve(Lease.class, entityId);
+        lease.leaseApplication().refSource().setValue(value);
+
+        Persistence.service().persist(lease);
+        Persistence.service().commit();
+
+        callback.onSuccess(null);
     }
 }

@@ -25,6 +25,7 @@ import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.lease.ac.CreditCheckRun;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
+import com.propertyvista.domain.tenant.RefSource;
 import com.propertyvista.domain.tenant.lease.LeaseApplication.ApprovalChecklistItem;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
@@ -54,4 +55,6 @@ public interface LeaseApplicationViewerCrudService extends LeaseViewerCrudServic
     void saveApplicationDocument(AsyncCallback<VoidSerializable> callback, LeaseApplicationDocument value);
 
     void updateApprovalTaskItem(AsyncCallback<ApprovalChecklistItem> callback, ApprovalChecklistItem value);
+
+    void updateRefSource(AsyncCallback<VoidSerializable> callback, Key entityId, RefSource value);
 }
