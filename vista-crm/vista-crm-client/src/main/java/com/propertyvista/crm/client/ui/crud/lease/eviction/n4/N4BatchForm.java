@@ -125,8 +125,8 @@ public class N4BatchForm extends CrmEntityForm<N4BatchDTO> {
                     });
 
                     formPanel.append(Location.Left, proto().lease(), leaseLabel).decorate();
-                    formPanel.append(Location.Right, proto().totalRentOwning(), new CMoneyLabel()).decorate();
-                    formPanel.append(Location.Dual, proto().unpaidCharges(), new BatchItemChargesFolder(this));
+                    formPanel.append(Location.Right, proto().leaseArrears().totalRentOwning(), new CMoneyLabel()).decorate();
+                    formPanel.append(Location.Dual, proto().leaseArrears().unpaidCharges(), new BatchItemChargesFolder(this));
 
                     return formPanel;
                 }
@@ -147,7 +147,7 @@ public class N4BatchForm extends CrmEntityForm<N4BatchDTO> {
                             value.lease().unit(), //
                             value.lease().expectedMoveIn(), //
                             value.lease().expectedMoveOut(), //
-                            value.totalRentOwning(), //
+                            value.leaseArrears().totalRentOwning(), //
                             value.lease()._applicant()) //
                             );
                 }
@@ -203,10 +203,10 @@ public class N4BatchForm extends CrmEntityForm<N4BatchDTO> {
                         // update parent with grand total
                         N4BatchItem rec = parent.getValue();
                         BigDecimal total = BigDecimal.ZERO;
-                        for (N4UnpaidCharge owing : rec.unpaidCharges()) {
+                        for (N4UnpaidCharge owing : rec.leaseArrears().unpaidCharges()) {
                             total = total.add(owing.rentOwing().getValue());
                         }
-                        rec.totalRentOwning().setValue(total);
+                        rec.leaseArrears().totalRentOwning().setValue(total);
                         parent.refresh(false);
                     }
                 };

@@ -29,6 +29,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.PersonRelationship;
+import com.propertyvista.domain.tenant.RefSource;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
@@ -73,6 +74,7 @@ public class LeaseGenerator extends DataGenerator {
         LogicalDate expectedMoveIn = leaseFrom; // for simplicity's sake
 
         Lease lease = ServerSideFactory.create(LeaseFacade.class).create(Lease.Status.Application);
+        lease.leaseApplication().refSource().setValue(RandomUtil.randomEnum(RefSource.class));
 
         lease.currentTerm().termFrom().setValue(leaseFrom);
         lease.currentTerm().termTo().setValue(leaseTo);

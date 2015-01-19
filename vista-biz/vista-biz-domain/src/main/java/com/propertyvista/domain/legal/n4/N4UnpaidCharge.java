@@ -37,7 +37,7 @@ public interface N4UnpaidCharge extends IEntity {
     @Indexed
     @ReadOnly
     @Detached
-    N4BatchItem parent();
+    N4LeaseArrears parent();
 
     @NotNull
     @ToString(index = 2)

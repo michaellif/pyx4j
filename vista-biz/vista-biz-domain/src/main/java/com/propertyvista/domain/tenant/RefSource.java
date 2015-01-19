@@ -7,14 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 18, 2014
- * @author stanp
- * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
+ * Created on Jan 19, 2015
+ * @author VladL
  */
-package com.propertyvista.domain.eviction;
+package com.propertyvista.domain.tenant;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
-@DiscriminatorValue("General")
-public interface EvictionStatus extends EvictionCaseStatus {
+@I18n
+public enum RefSource {
+    Internet, Newspaper, Radio, Referral, TV, Import, LocatorServices, DirectMail, Other;
+
+    @Override
+    public String toString() {
+        return I18nEnum.toString(this);
+    }
 }

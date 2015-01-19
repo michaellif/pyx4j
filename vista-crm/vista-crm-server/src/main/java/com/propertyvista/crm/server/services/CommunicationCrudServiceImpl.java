@@ -26,7 +26,6 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -99,10 +98,7 @@ public class CommunicationCrudServiceImpl extends AbstractCrudServiceDtoImpl<Com
 
     @Override
     protected void enhanceListCriteria(EntityListCriteria<CommunicationThread> boCriteria, EntityListCriteria<CommunicationThreadDTO> toCriteria) {
-        List<Sort> sorts = toCriteria.getSorts();
-        if (sorts == null || sorts.isEmpty()) {
-            toCriteria.desc(toCriteria.proto().content().$().date());
-        }
+
         PropertyCriterion recipientCiteria = toCriteria.getCriterion(toCriteria.proto().content().$().recipients().$().recipient());
         Employee e = CrmAppContext.getCurrentUserEmployee();
         if (recipientCiteria != null) {
@@ -129,7 +125,7 @@ public class CommunicationCrudServiceImpl extends AbstractCrudServiceDtoImpl<Com
 
     @Override
     protected EntitySearchResult<CommunicationThread> query(EntityListCriteria<CommunicationThread> criteria) {
-        return ServerSideFactory.create(CommunicationMessageFacade.class).queryThread(criteria);
+        return ServerSideFactory.create(CommunicationMessageFacade.class).query(criteria);
     }
 
     @Override
@@ -293,7 +289,6 @@ public class CommunicationCrudServiceImpl extends AbstractCrudServiceDtoImpl<Com
     @Override
     protected void enhanceRetrieved(CommunicationThread bo, CommunicationThreadDTO to, RetrieveTarget retrieveTarget) {
         ServerSideFactory.create(CommunicationMessageFacade.class).enhanceThreadDbo(bo, to, false, CrmAppContext.getCurrentUserEmployee());
-        //ServerSideFactory.create(CommunicationMessageFacade.class).enhanceMessageDbo(bo, to, false, CrmAppContext.getCurrentUserEmployee());
     }
 
     @Override

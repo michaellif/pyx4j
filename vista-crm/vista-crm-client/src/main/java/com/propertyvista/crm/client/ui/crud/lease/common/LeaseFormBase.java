@@ -202,6 +202,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         formPanel.h1(i18n.tr("Tenant Insurance"));
         formPanel.append(Location.Dual, proto().tenantInsuranceCertificates(), new TenantInsuranceCertificateFolder(true));
 
+        formPanel.append(Location.Dual, proto().leaseApplication().refSource()).decorate().componentWidth(180);
+
         return formPanel;
     }
 

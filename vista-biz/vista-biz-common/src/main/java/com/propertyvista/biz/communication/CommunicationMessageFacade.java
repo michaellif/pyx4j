@@ -66,9 +66,7 @@ public interface CommunicationMessageFacade {
     void buildRecipientsList4UnitLeaseParticipants(Message message, AptUnit unit, boolean includeGuarantors);
 
     // Communication entity common management -------------------------------------------------------
-    EntitySearchResult<Message> query(EntityListCriteria<Message> criteria);
-
-    EntitySearchResult<CommunicationThread> queryThread(EntityListCriteria<CommunicationThread> criteria);
+    EntitySearchResult<CommunicationThread> query(EntityListCriteria<CommunicationThread> criteria);
 
     Serializable getCommunicationStatus();
 

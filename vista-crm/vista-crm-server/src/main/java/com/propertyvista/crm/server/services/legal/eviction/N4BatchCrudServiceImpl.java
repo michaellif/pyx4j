@@ -30,65 +30,76 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.legal.eviction.EvictionCaseFacade;
 import com.propertyvista.biz.legal.forms.n4.N4GenerationUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.services.legal.eviction.N4BatchCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.contact.InternationalAddress;
+import com.propertyvista.domain.eviction.EvictionCase;
+import com.propertyvista.domain.eviction.EvictionStatusN4;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.n4.N4Batch;
 import com.propertyvista.domain.legal.n4.N4BatchItem;
+import com.propertyvista.domain.legal.n4.N4LeaseArrears;
 import com.propertyvista.domain.legal.n4.N4UnpaidCharge;
-import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.policy.policies.N4Policy.EmployeeSelectionMethod;
+import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep.EvictionStepType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.N4BatchDTO;
 
 public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, N4BatchDTO> implements N4BatchCrudService {
 
+    private static final I18n i18n = I18n.get(N4BatchCrudServiceImpl.class);
+
     public N4BatchCrudServiceImpl() {
         super(N4Batch.class, N4BatchDTO.class);
     }
 
     @Override
-    /** Generate a batch per building; return the first batch in the list */
+    /**
+     * Generate a batch per building; return the first batch in the list.
+     * For each affected lease open EvictionCase and add N4 step.
+     */
     public void createBatches(AsyncCallback<N4BatchDTO> callback, Vector<Lease> leaseCandidates) {
         Map<Building, N4Batch> n4batches = new HashMap<>();
-        Map<PolicyNode, N4Policy> n4policies = new HashMap<>();
+        Map<Building, N4Policy> n4policies = new HashMap<>();
 
         for (Lease leaseId : leaseCandidates) {
             Persistence.ensureRetrieve(leaseId.unit().building(), AttachLevel.Attached);
             Building building = leaseId.unit().building();
             N4Batch bo = n4batches.get(building);
-            PolicyNode node = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(leaseId);
-            N4Policy n4policy = n4policies.get(node);
+            N4Policy n4policy = n4policies.get(building);
             if (bo == null) {
-                n4policies.put(node, n4policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, N4Policy.class));
+                n4policies.put(building, n4policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, N4Policy.class));
                 n4batches.put(building, bo = createBatch(building, n4policy));
                 generateBatchName(bo, building);
                 Persistence.service().persist(bo);
             }
 
             N4BatchItem item = EntityFactory.create(N4BatchItem.class);
-
-            List<N4UnpaidCharge> unpaidCharges = getUnpaidCharges(leaseId, new HashSet<ARCode>(n4policy.relevantARCodes()));
-            BigDecimal amountOwed = BigDecimal.ZERO;
-            for (N4UnpaidCharge rentOwingForPeriod : unpaidCharges) {
-                amountOwed = amountOwed.add(rentOwingForPeriod.rentOwing().getValue());
-            }
-            item.unpaidCharges().addAll(unpaidCharges);
-            item.totalRentOwning().setValue(amountOwed);
+            item.leaseArrears().set(getLeaseArrears(leaseId, new HashSet<ARCode>(n4policy.relevantARCodes())));
             item.lease().set(leaseId);
 
             bo.items().add(item);
+            Persistence.service().persist(item.leaseArrears());
             Persistence.service().persist(item);
+
+            // open eviction case for the lease and add the reference to Lease Arrears data
+            EvictionCase evictionCase = ServerSideFactory.create(EvictionCaseFacade.class).getCurrentEvictionCase(leaseId);
+            if (evictionCase == null) {
+                evictionCase = ServerSideFactory.create(EvictionCaseFacade.class).openEvictionCase(leaseId, i18n.tr("Created by N4 Batch process"));
+            }
+            EvictionStatusN4 n4status = (EvictionStatusN4) ServerSideFactory.create(EvictionCaseFacade.class).addEvictionStatusDetails(evictionCase,
+                    EvictionStepType.N4.toString(), i18n.tr("Added by N4 Batch process"), null);
+            n4status.leaseArrears().set(item.leaseArrears());
         }
         Persistence.service().commit();
 
@@ -114,7 +125,7 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
         Persistence.ensureRetrieve(to.building(), AttachLevel.ToStringMembers);
         Persistence.ensureRetrieve(to.items(), AttachLevel.Attached);
         for (N4BatchItem item : to.items()) {
-            Persistence.ensureRetrieve(item.unpaidCharges(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(item.leaseArrears().unpaidCharges(), AttachLevel.Attached);
             Persistence.ensureRetrieve(item.lease().unit().building(), AttachLevel.Attached);
             Persistence.ensureRetrieve(item.lease()._applicant(), AttachLevel.Attached);
         }
@@ -126,6 +137,15 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
 
         Persistence.ensureRetrieve(to.building(), AttachLevel.ToStringMembers);
         Persistence.ensureRetrieve(to.items(), AttachLevel.Attached);
+    }
+
+    @Override
+    protected boolean persist(N4Batch bo, N4BatchDTO to) {
+        for (N4BatchItem item : to.items()) {
+            // not owned - persist explicitly
+            Persistence.service().persist(item.leaseArrears());
+        }
+        return super.persist(bo, to);
     }
 
     // -------- internals -----------
@@ -156,8 +176,7 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
         batch.name().setValue(building.propertyCode().getValue() + "_" + batch.created().getStringView().replaceAll(" ", "_"));
     }
 
-    // TODO - copied from SelectN4LeaseCandidateListServiceImpl; move to a facade
-    private List<N4UnpaidCharge> getUnpaidCharges(Lease lease, HashSet<ARCode> acceptableArCodes) {
+    private N4LeaseArrears getLeaseArrears(Lease lease, HashSet<ARCode> acceptableArCodes) {
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
 
         LogicalDate today = SystemDateManager.getLogicalDate();
@@ -165,7 +184,9 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
         List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(lease.billingAccount());
         List<InvoiceDebit> filteredDebits = N4GenerationUtils.filterDebits(debits, acceptableArCodes, today);
         List<N4UnpaidCharge> owings = new ArrayList<>();
+        BigDecimal amountOwed = BigDecimal.ZERO;
         for (InvoiceDebit debit : filteredDebits) {
+            // TODO - copied from SelectN4LeaseCandidateListServiceImpl; may want to move to a facade
             N4UnpaidCharge owing = EntityFactory.create(N4UnpaidCharge.class);
             owing.fromDate().setValue(debit.billingCycle().billingCycleStartDate().getValue());
             owing.toDate().setValue(debit.billingCycle().billingCycleEndDate().getValue());
@@ -175,7 +196,13 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
             owing.rentPaid().setValue(owing.rentCharged().getValue().subtract(owing.rentOwing().getValue()));
             owing.arCode().set(debit.arCode());
             owings.add(owing);
+            amountOwed = amountOwed.add(owing.rentOwing().getValue());
         }
-        return owings;
+        N4LeaseArrears leaseArrears = EntityFactory.create(N4LeaseArrears.class);
+        leaseArrears.lease().set(lease);
+        leaseArrears.unpaidCharges().addAll(owings);
+        leaseArrears.totalRentOwning().setValue(amountOwed);
+
+        return leaseArrears;
     }
 }
