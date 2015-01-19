@@ -24,6 +24,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.List;
@@ -37,8 +38,8 @@ import com.pyx4j.commons.CompareHelper;
 
 public abstract class HostConfig {
 
-	private final static Logger log = LoggerFactory.getLogger(HostConfig.class);
-	
+    private final static Logger log = LoggerFactory.getLogger(HostConfig.class);
+
     public static class ProxyConfig {
 
         private String host;
@@ -154,7 +155,7 @@ public abstract class HostConfig {
             throw new Error(e);
         }
     }
-    
+
     public static String getNetworkInfo() {
         StringBuilder b = new StringBuilder();
         try {
@@ -164,7 +165,7 @@ public abstract class HostConfig {
                 NetworkInterface itf = en.nextElement();
                 interfaces.add(itf);
             }
-            interfaces.sort(new Comparator<NetworkInterface>() {
+            Collections.sort(interfaces, new Comparator<NetworkInterface>() {
                 @Override
                 public int compare(NetworkInterface i1, NetworkInterface i2) {
                     int cmp = Boolean.valueOf(isUp(i2)).compareTo(Boolean.valueOf(isUp(i1)));
@@ -201,7 +202,7 @@ public abstract class HostConfig {
         }
         return b.toString();
     }
-    
+
     static boolean isUp(NetworkInterface itf) {
         try {
             return itf.isUp();
@@ -211,9 +212,9 @@ public abstract class HostConfig {
     }
 
     static String macToString(byte[] mac) {
-    	 if (mac == null) {
-             return "";
-         }
+        if (mac == null) {
+            return "";
+        }
         StringBuilder sb = new StringBuilder(18);
         for (byte b : mac) {
             if (sb.length() > 0)
