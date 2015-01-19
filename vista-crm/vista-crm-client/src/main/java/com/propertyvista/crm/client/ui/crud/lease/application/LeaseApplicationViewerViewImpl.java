@@ -411,7 +411,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setActionVisible(submitAction, (status == Status.InProgress || status == Status.PendingFurtherInformation) && (!isOnlineApplication || noPtAppProgress));
         setActionVisible(moreInfoAction, status == Status.Submitted || status == Status.PendingDecision);
 
-        setActionVisible(creditCheckAction, status == Status.Submitted);
+        setActionVisible(creditCheckAction, status.isDraft());
 
         setActionVisible(completeAction, status == Status.Submitted);
 
