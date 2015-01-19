@@ -12,6 +12,7 @@
  */
 package com.propertyvista.domain.legal.n4cp.pdf;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IPrimitive;
 
@@ -22,7 +23,22 @@ public interface N4CPFormFieldsData extends N4FormFieldsData {
     /** daily batch number */
     IPrimitive<String> dailyBatchNumber();
 
-    /** sequens number in batch */
+    /** sequence number in batch */
     IPrimitive<String> sequenceNumberInBatch();
+
+    /** return address - duplicate of N4's from */
+    IPrimitive<String> returnAddress();
+
+    /** return name - duplicate of N4's landlord */
+    IPrimitive<String> returnName();
+
+    /** return name - duplicate of N4's to */
+    IPrimitive<String> cpTo();
+
+    /** generation date */
+    IPrimitive<LogicalDate> cpDate();
+
+    /** footer date */
+    IPrimitive<LogicalDate> cpFooterDate();
 
 }

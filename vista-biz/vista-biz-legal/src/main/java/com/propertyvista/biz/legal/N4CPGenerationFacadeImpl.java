@@ -47,6 +47,11 @@ public class N4CPGenerationFacadeImpl implements N4CPGenerationFacade {
     public N4CPFormFieldsData prepareN4CPData(N4FormFieldsData n4) {
 
         N4CPFormFieldsData n4cp = EntityFactory.create(N4CPFormFieldsData.class);
+        n4cp.returnName().setValue(n4.landlordsContactInfo().companyName().getValue());
+        n4cp.cpDate().setValue(n4.signature().signatureDate().getValue());
+        n4cp.cpFooterDate().setValue(n4.signature().signatureDate().getValue());
+        n4cp.cpTo().setValue(n4.to().getValue());
+
         n4cp.from().setValue(n4.from().getValue());
         n4cp.to().setValue(n4.to().getValue());
         n4cp.terminationDate().setValue(n4.terminationDate().getValue());
@@ -79,6 +84,21 @@ public class N4CPGenerationFacadeImpl implements N4CPGenerationFacade {
         n4cp.landlordsContactInfo().faxNumber().setValue(n4.landlordsContactInfo().faxNumber().getValue());
         n4cp.landlordsContactInfo().email().setValue(n4.landlordsContactInfo().email().getValue());
 
+        StringBuilder address = new StringBuilder();
+        if (n4.landlordsContactInfo().mailingAddress().getValue() != null && !n4.landlordsContactInfo().mailingAddress().getValue().equals("")) {
+            address.append(n4.landlordsContactInfo().mailingAddress().getValue());
+        }
+        if (n4.landlordsContactInfo().municipality().getValue() != null && !n4.landlordsContactInfo().municipality().getValue().equals("")) {
+            address.append(" " + n4.landlordsContactInfo().municipality().getValue());
+        }
+        if (n4.landlordsContactInfo().province().getValue() != null && !n4.landlordsContactInfo().province().getValue().equals("")) {
+            address.append(" " + n4.landlordsContactInfo().province().getValue());
+        }
+        if (n4.landlordsContactInfo().postalCode().getValue() != null && !n4.landlordsContactInfo().postalCode().getValue().equals("")) {
+            address.append(" " + n4.landlordsContactInfo().postalCode().getValue());
+        }
+
+        n4cp.returnAddress().setValue(address.toString());
         return n4cp;
 
     }
