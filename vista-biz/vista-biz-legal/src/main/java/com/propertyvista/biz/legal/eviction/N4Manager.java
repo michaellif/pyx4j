@@ -15,6 +15,7 @@ package com.propertyvista.biz.legal.eviction;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -29,12 +30,14 @@ import org.apache.commons.lang.math.LongRange;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.legal.forms.framework.filling.FormFillerImpl;
 import com.propertyvista.biz.legal.forms.n4.N4FieldsMapping;
@@ -45,12 +48,12 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.EmployeeSignature;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.contact.LegalAddress;
+import com.propertyvista.domain.eviction.EvictionDocument;
 import com.propertyvista.domain.eviction.EvictionStatusN4;
 import com.propertyvista.domain.legal.errors.FormFillError;
 import com.propertyvista.domain.legal.n4.N4Batch;
 import com.propertyvista.domain.legal.n4.N4BatchItem;
 import com.propertyvista.domain.legal.n4.N4DeliveryMethod;
-import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.legal.n4.N4UnpaidCharge;
 import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
 import com.propertyvista.domain.legal.n4.pdf.N4LeaseData;
@@ -69,6 +72,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class N4Manager {
+    private static final I18n i18n = I18n.get(N4Manager.class);
 
     private static final String N4_FORM_FILE = "n4.pdf";
 
@@ -78,7 +82,7 @@ public class N4Manager {
         N4LeaseData n4LeaseData = prepareN4LeaseData(item, deliveryDate, policy);
 
         N4FormFieldsData n4FormData = prepareFormData(n4LeaseData, item.batch());
-        N4CSFormFieldsData n4csFormData = prepareN4CSData(n4FormData, ServiceMethod.M);
+        N4CSFormFieldsData n4csFormData = prepareN4CSData(n4LeaseData, item.batch());
 
         // generate N4
         LegalLetterBlob blob = EntityFactory.create(LegalLetterBlob.class);
@@ -86,11 +90,9 @@ public class N4Manager {
         blob.contentType().setValue("application/pdf");
         Persistence.service().persist(blob);
 
-        N4LegalLetter n4Letter = EntityFactory.create(N4LegalLetter.class);
+        EvictionDocument n4Letter = EntityFactory.create(EvictionDocument.class);
+        n4Letter.title().setValue(i18n.tr("Lease Termination Notice - N4"));
         n4Letter.lease().set(item.lease());
-        n4Letter.amountOwed().setValue(n4LeaseData.totalRentOwning().getValue());
-        n4Letter.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
-        n4Letter.generatedOn().setValue(generationDate);
         n4Letter.file().blobKey().setValue(blob.getPrimaryKey());
         n4Letter.file().fileSize().setValue(blob.data().getValue().length);
         n4Letter.file().fileName().setValue(MessageFormat.format( //
@@ -107,11 +109,9 @@ public class N4Manager {
         csBlob.contentType().setValue("application/pdf");
         Persistence.service().persist(csBlob);
 
-        N4LegalLetter n4csLetter = EntityFactory.create(N4LegalLetter.class);
+        EvictionDocument n4csLetter = EntityFactory.create(EvictionDocument.class);
+        n4csLetter.title().setValue(i18n.tr("Certificate of Service"));
         n4csLetter.lease().set(item.lease());
-        n4csLetter.amountOwed().setValue(n4LeaseData.totalRentOwning().getValue());
-        n4csLetter.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
-        n4csLetter.generatedOn().setValue(generationDate);
         n4csLetter.file().blobKey().setValue(csBlob.getPrimaryKey());
         n4csLetter.file().fileSize().setValue(csBlob.data().getValue().length);
         n4csLetter.file().fileName().setValue(MessageFormat.format( //
@@ -127,6 +127,10 @@ public class N4Manager {
         n4crit.eq(n4crit.proto().leaseArrears(), item.leaseArrears());
         EvictionStatusN4 n4status = Persistence.service().retrieve(n4crit);
         n4status.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
+        // add status record
+        ServerSideFactory.create(EvictionCaseFacade.class).addEvictionStatusDetails(n4status, i18n.tr("N4 has been served"),
+                Arrays.asList(n4Letter, n4csLetter));
+
         Persistence.service().persist(n4status);
     }
 
@@ -165,7 +169,6 @@ public class N4Manager {
         fieldsData.from().setValue(
                 SimpleMessageFormat.format("{0}\n{1}", leaseData.landlordName().getValue(), formatBuildingOwnerAddress(leaseData.landlordAddress())));
 
-        // TODO review this: refactor to eliminate unnecessary code duplication
         fieldsData.rentalUnitAddress().streetNumber().setValue(leaseData.rentalUnitAddress().streetNumber().getStringView());
         fieldsData.rentalUnitAddress().streetName().setValue(leaseData.rentalUnitAddress().streetName().getStringView());
         fieldsData.rentalUnitAddress().streetType().setValue(leaseData.rentalUnitAddress().streetType().getStringView());
@@ -195,9 +198,9 @@ public class N4Manager {
                 .setValue(ISOProvince.forName(batchData.companyAddress().province().getValue(), batchData.companyAddress().country().getValue()).code);
         fieldsData.landlordsContactInfo().postalCode().setValue(batchData.companyAddress().postalCode().getValue());
 
+        // TODO - switch between company and agent contact info
         fieldsData.landlordsContactInfo().phoneNumber().setValue(batchData.companyPhoneNumber().getValue());
         fieldsData.landlordsContactInfo().faxNumber().setValue(batchData.companyFaxNumber().getValue());
-
         fieldsData.landlordsContactInfo().email().setValue(batchData.companyEmailAddress().getValue());
 
         return fieldsData;
@@ -214,46 +217,35 @@ public class N4Manager {
         return filledForm;
     }
 
-    private N4CSFormFieldsData prepareN4CSData(N4FormFieldsData n4, ServiceMethod serviceMethod) {
+    private N4CSFormFieldsData prepareN4CSData(N4LeaseData leaseData, N4Batch batchData) {
 
         N4CSFormFieldsData n4cs = EntityFactory.create(N4CSFormFieldsData.class);
-        n4cs.reporter().setValue(n4.landlordsContactInfo().firstName().getValue() + " " + n4.landlordsContactInfo().lastName().getValue());
+        n4cs.reporter().setValue(
+                batchData.servicingAgent().name().firstName().getStringView() + " " + batchData.servicingAgent().name().lastName().getStringView());
         n4cs.document().termination().setValue("N4");
         n4cs.document().docType().setValue(DocumentType.TT);
-        StringBuilder address = new StringBuilder();
-        if (n4.rentalUnitAddress().streetNumber().getValue() != null && !n4.rentalUnitAddress().streetNumber().getValue().equals("")) {
-            address.append(n4.rentalUnitAddress().streetNumber().getValue());
-        }
-        if (n4.rentalUnitAddress().streetName().getValue() != null && !n4.rentalUnitAddress().streetName().getValue().equals("")) {
-            address.append(" " + n4.rentalUnitAddress().streetName().getValue());
-        }
-        if (n4.rentalUnitAddress().streetType().getValue() != null && !n4.rentalUnitAddress().streetType().getValue().equals("")) {
-            address.append(" " + n4.rentalUnitAddress().streetType().getValue());
-        }
-        if (n4.rentalUnitAddress().direction().getValue() != null && !n4.rentalUnitAddress().direction().getValue().equals("")) {
-            address.append(" " + n4.rentalUnitAddress().direction().getValue());
-        }
 
-        n4cs.street().setValue(address.toString());
-        n4cs.unit().setValue(n4.rentalUnitAddress().unit().getValue());
-        n4cs.municipality().setValue(n4.rentalUnitAddress().municipality().getValue());
-        n4cs.postalCode().setValue(n4.rentalUnitAddress().postalCode().getValue());
+        n4cs.street().setValue(formatStreetAddress(leaseData.rentalUnitAddress()));
+        n4cs.unit().setValue(leaseData.rentalUnitAddress().suiteNumber().getStringView());
+        n4cs.municipality().setValue(leaseData.rentalUnitAddress().city().getValue());
+        n4cs.postalCode().setValue(leaseData.rentalUnitAddress().postalCode().getValue());
+
         n4cs.issueDate().setValue(SystemDateManager.getLogicalDate());
-        n4cs.signature().firstname().setValue(n4.landlordsContactInfo().firstName().getValue());
-        n4cs.signature().lastname().setValue(n4.landlordsContactInfo().lastName().getValue());
-        n4cs.signature().phone().setValue(n4.landlordsContactInfo().phoneNumber().getValue());
-        n4cs.signature().signedBy().setValue(N4CSSignature.SignedBy.RA);
-        n4cs.signature().signature().setValue(n4.signature().signature().getValue());
-        n4cs.signature().signatureDate().setValue(SystemDateManager.getLogicalDate());
-        n4cs.passedTo().tpType().setValue(ToType.Tenant);
-        n4cs.passedTo().name().setValue(n4.to().getStringView());
-        n4cs.service().method().setValue(serviceMethod);
-        if (serviceMethod.equals(ServiceMethod.M)) {
-            StringBuilder lastAddress = new StringBuilder(n4.rentalUnitAddress().unit().getValue());
-            lastAddress.append(" - " + address);
-            n4cs.service().lastAddr().setValue(lastAddress.toString());
 
-        }
+        n4cs.signature().signedBy().setValue(N4CSSignature.SignedBy.RA);
+        n4cs.signature().signature().setValue(retrieveSignature(batchData.servicingAgent()));
+        n4cs.signature().firstname().setValue(batchData.servicingAgent().name().firstName().getStringView());
+        n4cs.signature().lastname().setValue(batchData.servicingAgent().name().lastName().getValue());
+        // TODO - switch between company and agent contact info
+        n4cs.signature().phone().setValue(batchData.companyPhoneNumber().getValue());
+        n4cs.signature().signatureDate().setValue(batchData.signatureDate().getValue());
+
+        n4cs.passedTo().tpType().setValue(ToType.Tenant);
+        n4cs.passedTo().name().setValue(formatTo(leaseData.leaseTenants(), leaseData.rentalUnitAddress()));
+
+        // TODO - set from the batchData
+        n4cs.service().method().setValue(ServiceMethod.M);
+        n4cs.service().lastAddr().setValue(formatLegalAddress(leaseData.rentalUnitAddress()));
 
         return n4cs;
 

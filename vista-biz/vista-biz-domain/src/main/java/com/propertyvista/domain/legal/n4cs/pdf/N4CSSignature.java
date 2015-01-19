@@ -13,9 +13,11 @@
 package com.propertyvista.domain.legal.n4cs.pdf;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
+@Transient
 public interface N4CSSignature extends IEntity {
     public enum SignedBy {
 

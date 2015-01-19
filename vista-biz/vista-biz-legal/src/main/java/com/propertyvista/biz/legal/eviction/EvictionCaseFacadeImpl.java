@@ -120,25 +120,37 @@ public class EvictionCaseFacadeImpl implements EvictionCaseFacade {
             }
         }
         // - if not found, add the new status
-        Employee employee = getLoggedEmployee();
         if (evictionStatus == null) {
             evictionStatus = createEvictionStatus(flowStep.stepType().getValue());
             evictionStatus.evictionStep().set(flowStep);
-            evictionStatus.addedBy().set(employee);
+            evictionStatus.addedBy().set(getLoggedEmployee());
             evictionStatus.note().setValue(i18n.tr("Auto-generated for Eviction Status update"));
             evictionCase.history().add(evictionStatus);
         }
         // - add new details to the case status
-        EvictionStatusRecord record = EntityFactory.create(EvictionStatusRecord.class);
-        record.addedBy().set(employee);
-        record.note().setValue(note);
-        if (attachments != null) {
-            record.attachments().addAll(attachments);
-        }
-        evictionStatus.statusRecords().add(record);
+        addEvictionStatusDetails(evictionStatus, note, attachments);
+
         Persistence.service().persist(evictionCase);
 
         return evictionStatus;
+    }
+
+    @Override
+    public void addEvictionStatusDetails(EvictionStatus evictionStatus, String note, List<EvictionDocument> attachments) {
+        EvictionStatusRecord record = EntityFactory.create(EvictionStatusRecord.class);
+        record.addedBy().set(getLoggedEmployee());
+        record.note().setValue(note);
+        evictionStatus.statusRecords().add(record);
+        Persistence.service().persist(evictionStatus);
+
+        if (attachments != null) {
+            for (EvictionDocument doc : attachments) {
+                doc.record().set(record);
+            }
+            record.attachments().addAll(attachments);
+            Persistence.service().persist(record.attachments());
+        }
+
     }
 
     private Employee getLoggedEmployee() {

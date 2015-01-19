@@ -31,13 +31,19 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.shared.IHasFile;
 
 import com.propertyvista.domain.blob.EvictionDocumentBlob;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 @SecurityEnabled
 @ToStringFormat("Document Added On {0}: {1}")
 public interface EvictionDocument extends IHasFile<EvictionDocumentBlob> {
 
     @Owner
+    @JoinColumn
     @MemberColumn(notNull = true)
+    @ReadOnly
+    @Detached
+    Lease lease();
+
     @JoinColumn
     @ReadOnly
     @Detached
