@@ -38,7 +38,6 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.RefSource;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
@@ -331,7 +330,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             }
 
             if (lease.leaseApplication().status().getValue() == LeaseApplication.Status.InProgress) {
-                lease.leaseApplication().refSource().setValue(RandomUtil.randomEnum(RefSource.class));
                 LeaseTermParticipant<? extends LeaseParticipant<?>> leaseTermParticipant = lease.currentTerm().version().tenants().get(0);
                 LeasePreloaderHelper.addDefaultPaymentToLeaseApplication(leaseTermParticipant);
             }
@@ -361,7 +359,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             }
 
             if (lease.leaseApplication().status().getValue() == LeaseApplication.Status.InProgress) {
-                lease.leaseApplication().refSource().setValue(RandomUtil.randomEnum(RefSource.class));
                 LeaseTermParticipant<? extends LeaseParticipant<?>> leaseTermParticipant = lease.currentTerm().version().tenants().get(0);
                 LeasePreloaderHelper.addDefaultPaymentToLeaseApplication(leaseTermParticipant);
             }
