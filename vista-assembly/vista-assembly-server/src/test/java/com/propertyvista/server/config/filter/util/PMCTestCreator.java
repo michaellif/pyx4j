@@ -25,23 +25,14 @@ import com.propertyvista.domain.pmc.PmcDnsName.DnsNameTarget;
 
 public class PMCTestCreator {
 
-    private String namespace;
-
-    private PmcStatus status;
-
-    private List<PmcDnsName> aliases;
-
     private PMCTestCreator(PMCTestCreatorBuilder builder) {
-        this.namespace = builder.namespace;
-        this.status = builder.status;
-
         Pmc pmc = EntityFactory.create(Pmc.class);
 
         // Set NOT_NULL property values
-        pmc.name().setValue("nameSpaceFor" + namespace);
-        pmc.dnsName().setValue(namespace);
-        pmc.namespace().setValue(namespace);
-        pmc.status().setValue(status);
+        pmc.name().setValue("nameSpaceFor" + builder.namespace);
+        pmc.dnsName().setValue(builder.namespace);
+        pmc.namespace().setValue(builder.namespace);
+        pmc.status().setValue(builder.status);
 
         if (builder.aliases != null && !builder.aliases.isEmpty()) {
             for (PmcDnsName dnsAlias : builder.aliases) {
@@ -53,6 +44,10 @@ public class PMCTestCreator {
         Persistence.service().persist(pmc);
     }
 
+    public static PMCTestCreatorBuilder createPMC(String namespace, PmcStatus status) {
+        return new PMCTestCreatorBuilder(namespace, status);
+    }
+
     public static class PMCTestCreatorBuilder {
         private String namespace;
 
@@ -60,7 +55,7 @@ public class PMCTestCreator {
 
         private List<PmcDnsName> aliases;
 
-        public PMCTestCreatorBuilder(String namespace, PmcStatus status) {
+        private PMCTestCreatorBuilder(String namespace, PmcStatus status) {
             this.namespace = namespace;
             this.status = status;
         }
@@ -80,7 +75,7 @@ public class PMCTestCreator {
             return this;
         }
 
-        public PMCTestCreator build() {
+        public PMCTestCreator save() {
             return new PMCTestCreator(this);
         }
     }

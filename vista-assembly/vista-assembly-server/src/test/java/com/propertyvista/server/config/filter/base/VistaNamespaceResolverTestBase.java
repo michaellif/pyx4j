@@ -57,23 +57,23 @@ public class VistaNamespaceResolverTestBase extends TestCase {
     }
 
     private void createActivePMC(String namespace) {
-        new PMCTestCreator.PMCTestCreatorBuilder(namespace, PmcStatus.Active).build();
+        PMCTestCreator.createPMC(namespace, PmcStatus.Active).save();
     }
 
     private void createInactivePMC(String namespace) {
-        new PMCTestCreator.PMCTestCreatorBuilder(namespace, PmcStatus.Activating).build();
+        PMCTestCreator.createPMC(namespace, PmcStatus.Activating).save();
     }
 
     private void createActivePMCWithActiveAlias(String namespace, String dnsAlias, DnsNameTarget targetApp) {
-        new PMCTestCreator.PMCTestCreatorBuilder(namespace, PmcStatus.Active).addDNSAlias(dnsAlias, targetApp, true).build();
+        PMCTestCreator.createPMC(namespace, PmcStatus.Active).addDNSAlias(dnsAlias, targetApp, true).save();
     }
 
     private void createInactivePMCWithActiveAlias(String namespace, String dnsAlias, DnsNameTarget targetApp) {
-        new PMCTestCreator.PMCTestCreatorBuilder(namespace, PmcStatus.Activating).addDNSAlias(dnsAlias, targetApp, true).build();
+        PMCTestCreator.createPMC(namespace, PmcStatus.Activating).addDNSAlias(dnsAlias, targetApp, true).save();
     }
 
     private void createActivePMCWithInactiveAlias(String namespace, String dnsAlias, DnsNameTarget targetApp) {
-        new PMCTestCreator.PMCTestCreatorBuilder(namespace, PmcStatus.Active).addDNSAlias(dnsAlias, DnsNameTarget.crm, false).build();
+        PMCTestCreator.createPMC(namespace, PmcStatus.Active).addDNSAlias(dnsAlias, targetApp, false).save();
     }
 
 }
