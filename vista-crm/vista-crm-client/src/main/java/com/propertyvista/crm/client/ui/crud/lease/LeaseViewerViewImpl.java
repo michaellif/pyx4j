@@ -61,7 +61,7 @@ import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectionDialog;
 import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentLister;
-import com.propertyvista.crm.client.ui.crud.communication.MessageReportDialog;
+import com.propertyvista.crm.client.ui.crud.communication.CommunicationReportDialog;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.eviction.EvictionCaseLister;
@@ -408,7 +408,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         showCommunicationAction = new MenuItem(i18n.tr("Communication Report"), new Command() {
             @Override
             public void execute() {
-                (new MessageReportDialog(LeaseViewerViewImpl.this, ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).getAllLeaseParticipants())).show();
+                (new CommunicationReportDialog(LeaseViewerViewImpl.this, ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).getAllLeaseParticipants())).show();
             }
         });
         addView(showCommunicationAction);

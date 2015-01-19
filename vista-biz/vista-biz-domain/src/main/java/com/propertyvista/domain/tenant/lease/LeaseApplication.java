@@ -31,6 +31,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
@@ -153,6 +154,7 @@ public interface LeaseApplication extends IEntity {
 
     // ----------------------------------------------------
 
+    @ToStringFormat("{0}{1,choice,null#|!null#: {1}, {2} }")
     public interface ApprovalChecklistItem extends IEntity {
 
         public interface StatusSelectionItem extends IEntity {
@@ -188,21 +190,24 @@ public interface LeaseApplication extends IEntity {
         @Editor(type = EditorType.label)
         Employee decidedBy();
 
+        @ToString(index = 2)
         @Editor(type = EditorType.label)
         IPrimitive<LogicalDate> decisionDate();
 
-        @ReadOnly
-        @Editor(type = EditorType.label)
-        IPrimitive<String> itemToCheck();
+        @Editor(type = EditorType.textarea)
+        IPrimitive<String> notes();
 
+        @ToString(index = 0)
         @Editor(type = EditorType.label)
-        IPrimitive<String> itemStatus();
+        IPrimitive<String> task();
+
+        @ToString(index = 1)
+        IPrimitive<String> status();
 
         @Owned
         IList<StatusSelectionItem> statusesToSelect();
     }
 
-    @Owned
     @Detached
     IList<ApprovalChecklistItem> approvalChecklist();
 }

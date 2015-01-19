@@ -18,12 +18,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.commons.collections4.set.ListOrderedSet;
+
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -57,8 +60,9 @@ import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.dto.CommunicationEndpointDTO;
-import com.propertyvista.dto.MessageDTO;
+import com.propertyvista.dto.communication.CommunicationEndpointDTO;
+import com.propertyvista.dto.communication.CommunicationThreadDTO;
+import com.propertyvista.dto.communication.MessageDTO;
 import com.propertyvista.portal.rpc.portal.PortalUserVisit;
 import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
 import com.propertyvista.shared.VistaUserVisit;
@@ -73,6 +77,53 @@ public class CommunicationManager {
 
     static CommunicationManager instance() {
         return SingletonHolder.INSTANCE;
+    }
+
+    public EntitySearchResult<CommunicationThread> queryThread(EntityListCriteria<CommunicationThread> criteria) {
+        EntityListCriteria<CommunicationThread> replaceCriteria = EntityListCriteria.create(CommunicationThread.class);
+        int pageSize = criteria.getPageSize();
+        int totalRetrive = pageSize * (criteria.getPageNumber() + 1);
+        //replaceCriteria.setSorts(criteria.getSorts());
+        if (criteria.getFilters() != null) {
+            replaceCriteria.addAll(criteria.getFilters());
+        }
+        if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())
+                || VistaApplication.prospect.equals(Context.visit(VistaUserVisit.class).getApplication())) {
+            replaceCriteria.add(new OrCriterion(PropertyCriterion.isNull(replaceCriteria.proto().deliveryMethod()), PropertyCriterion.ne(replaceCriteria
+                    .proto().deliveryMethod(), DeliveryMethod.Notification)));
+        }
+        replaceCriteria.setVersionedCriteria(criteria.getVersionedCriteria());
+
+        EntitySearchResult<CommunicationThread> r = new EntitySearchResult<CommunicationThread>();
+        final ICursorIterator<CommunicationThread> unfiltered = Persistence.secureQuery(null, replaceCriteria, AttachLevel.Attached);
+        final HashSet<Key> visitedThreads = new HashSet<Key>();
+        try {
+            int i = 0;
+            while (unfiltered.hasNext()) {
+                CommunicationThread ent = unfiltered.next();
+                if (visitedThreads.contains(ent.getPrimaryKey())) {
+                    continue;
+                }
+                if (pageSize <= 0) {
+                    r.add(ent);
+                } else if (totalRetrive - pageSize <= i && i < totalRetrive) {
+                    r.add(ent);
+                }
+                i++;
+                visitedThreads.add(ent.getPrimaryKey());
+                if ((pageSize > 0) && visitedThreads.size() > totalRetrive) {
+                    break;
+                }
+            }
+            // The position is important, hasNext may retrieve one more row.
+            r.setEncodedCursorReference(unfiltered.encodedCursorReference());
+            r.hasMoreData(unfiltered.hasNext());
+        } finally {
+            unfiltered.close();
+        }
+
+        setRowsCount(r);
+        return r;
     }
 
     public EntitySearchResult<Message> query(EntityListCriteria<Message> criteria) {
@@ -122,7 +173,7 @@ public class CommunicationManager {
         return r;
     }
 
-    private void setRowsCount(EntitySearchResult<Message> r) {
+    private void setRowsCount(EntitySearchResult<? extends IEntity> r) {
         EntityListCriteria<CommunicationThread> threadCriteria = EntityListCriteria.create(CommunicationThread.class);
         SecurityController.assertPermission(new EntityPermission(threadCriteria.getEntityClass(), EntityPermission.READ));
         Persistence.applyDatasetAccessRule(threadCriteria);
@@ -159,18 +210,16 @@ public class CommunicationManager {
         return null;
     }
 
-    private EntitySearchResult<com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO> getPortalNotifications(
-            EntitySearchResult<MessageDTO> notifications) {
+    private EntitySearchResult<MessageDTO> getPortalNotifications(EntitySearchResult<MessageDTO> notifications) {
         if (notifications == null || notifications.getData() == null) {
-            return new EntitySearchResult<com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO>();
+            return new EntitySearchResult<MessageDTO>();
         }
-        EntitySearchResult<com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO> result = new EntitySearchResult<>();
+        EntitySearchResult<MessageDTO> result = new EntitySearchResult<>();
         for (MessageDTO m : notifications.getData()) {
-            com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO dto = EntityFactory
-                    .create(com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO.class);
+            MessageDTO dto = EntityFactory.create(MessageDTO.class);
             dto.id().set(m.id());
             dto.date().set(m.date());
-            dto.subject().set(m.subject());
+            dto.thread().set(m.thread());
             dto.text().set(m.text());
             dto.notificationType().set(m.notificationType());
 
@@ -210,7 +259,7 @@ public class CommunicationManager {
                 MessageDTO dto = EntityFactory.create(MessageDTO.class);
                 dto.id().set(thread.content().get(0).id());
                 dto.date().set(thread.content().get(0).date());
-                dto.subject().set(thread.subject());
+                dto.thread().set(thread);
                 dto.text().set(nd.deliveredText());
                 dto.notificationType().set(nd.notificationType());
 
@@ -308,16 +357,24 @@ public class CommunicationManager {
         return null;
     }
 
-    public void enhanceMessageDbo(Message bo, MessageDTO to, boolean isForList, CommunicationEndpoint currentUser) {
+    public void enhanceThreadDbo(CommunicationThread bo, CommunicationThreadDTO to, boolean isForList, CommunicationEndpoint currentUser) {
         EntityListCriteria<Message> visibleMessageCriteria = EntityListCriteria.create(Message.class);
-        visibleMessageCriteria.eq(visibleMessageCriteria.proto().thread(), bo.thread());
+        visibleMessageCriteria.eq(visibleMessageCriteria.proto().thread(), bo);
+        visibleMessageCriteria.asc(visibleMessageCriteria.proto().date());
         final Vector<Message> ms = Persistence.secureQuery(visibleMessageCriteria, AttachLevel.Attached);
 
-        Persistence.ensureRetrieve(bo.thread(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(bo.thread().category(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(bo.thread().owner(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(bo.thread().specialDelivery(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(bo.recipients(), AttachLevel.Attached);
+        //Persistence.ensureRetrieve(bo, AttachLevel.Attached);
+        Persistence.ensureRetrieve(bo.category(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(bo.owner(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(bo.specialDelivery(), AttachLevel.Attached);
+
+        if (bo.owner().getInstanceValueClass().equals(Employee.class)) {
+            to.owner().set(bo.owner());
+        }
+        to.category().set(bo.category());
+        to.specialDelivery().set(bo.specialDelivery());
+
+        //Persistence.ensureRetrieve(bo.recipients(), AttachLevel.Attached);
         if (ms != null && ms.size() > 0) {
             boolean star = false;
             boolean isRead = true;
@@ -325,7 +382,9 @@ public class CommunicationManager {
             boolean hasAttachment = false;
             Message lastMessage = null;
             CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
+            ListOrderedSet<CommunicationEndpoint> senders = new ListOrderedSet<CommunicationEndpoint>();
             for (Message m : ms) {
+
                 Persistence.ensureRetrieve(m.recipients(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(m.sender(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(m.onBehalf(), AttachLevel.Attached);
@@ -334,8 +393,13 @@ public class CommunicationManager {
                     Persistence.ensureRetrieve(m.attachments(), AttachLevel.Attached);
                 }
                 hasAttachment = hasAttachment || m.attachments().size() > 0;
-                MessageDTO currentDTO = copyChildDTO(bo.thread(), m, EntityFactory.create(MessageDTO.class), isForList, communicationFacade, currentUser);
-                to.content().add(currentDTO);
+                MessageDTO currentDTO = copyChildMessageDTO(bo, m, EntityFactory.create(MessageDTO.class), communicationFacade, currentUser);
+                if (to.representingMessage() == null || to.representingMessage().isNull() || to.representingMessage().isEmpty()) {
+                    to.representingMessage().set(currentDTO);
+                }
+                to.content().add(m);
+                senders.add(m.sender());
+                to.childMessages().add(currentDTO);
                 if (currentDTO.star().getValue(false)) {
                     star = true;
                 }
@@ -345,41 +409,40 @@ public class CommunicationManager {
                 if (currentDTO.highImportance().getValue(false)) {
                     isHighImportance = true;
                 }
-                if (to.id().equals(currentDTO.id())) {
-                    lastMessage = m;
-                } else if (isForList) {
-                    lastMessage = m;
-                }
+                lastMessage = m;
             }
-            copyChildDTO(bo.thread(), lastMessage, to, isForList, communicationFacade, currentUser);
+            //copyChildDTO(bo, lastMessage, to.firstMessage(), isForList, communicationFacade, currentUser);
             if (isHighImportance) {
                 to.highImportance().setValue(true);
             }
             if (star) {
                 to.star().setValue(true);
             }
-            if (!isRead) {
-                to.isRead().setValue(false);
-            }
+            to.isRead().setValue(isRead);
+
             to.hasAttachments().setValue(hasAttachment);
 
             if (currentUser instanceof Employee) {
-                to.isDirect().setValue(!communicationFacade.isDispatchedThread(bo.thread().getPrimaryKey(), true, (Employee) currentUser));
+                to.isDirect().setValue(!communicationFacade.isDispatchedThread(bo.getPrimaryKey(), true, (Employee) currentUser));
             }
-            evaluateHiddenProperty(bo, to);
+            evaluateHiddenPropertyThread(bo, to);
+            to.specialDelivery().set(bo.specialDelivery());
+            to.date().set(lastMessage.date());
+            to.senders().setValue(communicationFacade.sendersAsStringView(senders));
+            to.messagesInThread().setValue(ms.size());
         }
     }
 
-    private void evaluateHiddenProperty(Message bo, MessageDTO to) {
+    private void evaluateHiddenPropertyThread(CommunicationThread bo, CommunicationThreadDTO to) {
         EntityQueryCriteria<ThreadPolicyHandle> policyCriteria = EntityQueryCriteria.create(ThreadPolicyHandle.class);
-        policyCriteria.eq(policyCriteria.proto().thread(), bo.thread());
+        policyCriteria.eq(policyCriteria.proto().thread(), bo);
 
         ThreadPolicyHandle ph = Persistence.secureRetrieve(policyCriteria);
         to.hidden().setValue(ph != null && !ph.isNull() && ph.hidden().getValue(false));
     }
 
-    private MessageDTO copyChildDTO(CommunicationThread thread, Message m, MessageDTO messageDTO, boolean isForList,
-            CommunicationMessageFacade communicationFacade, CommunicationEndpoint currentUser) {
+    private MessageDTO copyChildMessageDTO(CommunicationThread thread, Message m, MessageDTO messageDTO, CommunicationMessageFacade communicationFacade,
+            CommunicationEndpoint currentUser) {
         boolean star = false;
         boolean isRead = true;
 
@@ -415,7 +478,6 @@ public class CommunicationManager {
         }
 
         messageDTO.id().set(m.id());
-        messageDTO.subject().set(thread.subject());
         messageDTO.deliveryMethod().set(thread.deliveryMethod());
         if (thread.specialDelivery() != null && !thread.specialDelivery().isNull()) {
             messageDTO.deliveredText().set(thread.specialDelivery().deliveredText());
@@ -426,14 +488,7 @@ public class CommunicationManager {
             }
         }
 
-        messageDTO.allowedReply().set(thread.allowedReply());
-        messageDTO.status().set(thread.status());
         Persistence.ensureRetrieve(thread.owner(), AttachLevel.Attached);
-        messageDTO.owner().set((communicationFacade.generateEndpointDTO(thread.owner())));
-        if (isForList && thread.owner().getInstanceValueClass().equals(Employee.class)) {
-            messageDTO.ownerForList().set((thread.owner()));
-        }
-        messageDTO.ownerForList();
 
         messageDTO.text().set(m.text());
         messageDTO.date().set(m.date());
@@ -447,11 +502,7 @@ public class CommunicationManager {
         messageDTO.senderDTO().set((communicationFacade.generateEndpointDTO(m.sender())));
         messageDTO.isRead().setValue(isRead);
         messageDTO.star().setValue(star);
-        messageDTO.category().set(thread.category());
         messageDTO.header().sender().setValue(communicationFacade.extractEndpointName(m.sender()));
-        if (!isForList) {
-            messageDTO.associated().set(thread.associated());
-        }
         messageDTO.header().date().set(m.date());
         if (m.onBehalf() != null && !m.onBehalf().isNull()) {
             messageDTO.header().onBehalf().setValue(communicationFacade.extractEndpointName(m.onBehalf()));
@@ -464,19 +515,19 @@ public class CommunicationManager {
         CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
 
         CommunicationThread thread = Persistence.secureRetrieve(CommunicationThread.class, dto.thread().id().getValue());
+        Persistence.ensureRetrieve(thread.category(), AttachLevel.Attached);
         Message dbo = EntityFactory.create(Message.class);
         if (threadStatus != null) {
-            dto.status().setValue(threadStatus);
             thread.status().setValue(threadStatus);
             if (currentUser instanceof Employee && thread.owner().equals(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned))) {
                 thread.owner().set(currentUser);
-            } else if (updateOwner && CategoryType.Ticket.equals(dto.category().categoryType().getValue())
+            } else if (updateOwner && CategoryType.Ticket.equals(thread.category().categoryType().getValue())
                     && thread.owner().equals(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned))) {
                 thread.owner().set(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Archive));
                 thread.allowedReply().setValue(false);
             }
 
-            if (ThreadStatus.Resolved.equals(threadStatus) && TicketType.Maintenance.equals(dto.category().ticketType().getValue())) {
+            if (ThreadStatus.Resolved.equals(threadStatus) && TicketType.Maintenance.equals(dto.thread().category().ticketType().getValue())) {
                 thread.allowedReply().setValue(false);
             }
 
@@ -493,7 +544,7 @@ public class CommunicationManager {
             }
 
         } else {
-            if (updateOwner && CategoryType.Ticket.equals(dto.category().categoryType().getValue())
+            if (updateOwner && CategoryType.Ticket.equals(dto.thread().category().categoryType().getValue())
                     && thread.owner().equals(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned))) {
                 thread.owner().set(currentUser);
                 Persistence.service().persist(thread);

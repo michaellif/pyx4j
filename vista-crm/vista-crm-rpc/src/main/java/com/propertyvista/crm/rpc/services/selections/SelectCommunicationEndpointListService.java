@@ -20,7 +20,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 
 import com.propertyvista.domain.communication.CommunicationEndpoint;
-import com.propertyvista.dto.CommunicationEndpointDTO;
+import com.propertyvista.dto.communication.CommunicationEndpointDTO;
 
 public interface SelectCommunicationEndpointListService extends AbstractListCrudService<CommunicationEndpoint> {
 

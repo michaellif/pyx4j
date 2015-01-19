@@ -12,8 +12,8 @@
  */
 package com.propertyvista.biz.communication;
 
-import com.propertyvista.dto.CommunicationEndpointDTO;
-import com.propertyvista.dto.MessageDTO;
+import com.propertyvista.dto.communication.CommunicationEndpointDTO;
+import com.propertyvista.dto.communication.MessageDTO;
 
 public class MessageTextBuilder {
 
@@ -34,7 +34,7 @@ public class MessageTextBuilder {
         return "Fwd: " + result;
     }
 
-    public static String buildForwardText(MessageDTO forwardedMessage) {
+    public static String buildForwardText(MessageDTO forwardedMessage, String subject) {
         if (forwardedMessage == null) {
             return null;
         }
@@ -55,7 +55,7 @@ public class MessageTextBuilder {
         bodyText.append("\nDate: ");
         bodyText.append(forwardedMessage.date().getStringView());
         bodyText.append("\nSubject: ");
-        bodyText.append(forwardedMessage.subject().getValue());
+        bodyText.append(subject);
         if (buffer != null) {
             bodyText.append("\nTo: ");
             bodyText.append(buffer.toString());

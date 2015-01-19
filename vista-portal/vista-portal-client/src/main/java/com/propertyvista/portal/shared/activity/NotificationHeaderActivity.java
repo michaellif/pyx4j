@@ -32,8 +32,8 @@ import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.domain.Notification.NotificationType;
 
 import com.propertyvista.domain.communication.NotificationDelivery;
-import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
+import com.propertyvista.dto.communication.MessageDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.CommunicationPortalCrudService;
 import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
 import com.propertyvista.portal.shared.CommunicationStatusUpdateEvent;
 import com.propertyvista.portal.shared.CommunicationStatusUpdateHandler;
@@ -77,7 +77,7 @@ public class NotificationHeaderActivity extends AbstractActivity implements Noti
         MessageDTO m = notifications.get(notification);
         if (m != null) {
             m.isRead().setValue(true);
-            GWT.<MessagePortalCrudService> create(MessagePortalCrudService.class).saveChildMessage(new AsyncCallback<MessageDTO>() {
+            GWT.<CommunicationPortalCrudService> create(CommunicationPortalCrudService.class).saveChildMessage(new AsyncCallback<MessageDTO>() {
 
                 @Override
                 public void onSuccess(MessageDTO result) {
@@ -134,7 +134,7 @@ public class NotificationHeaderActivity extends AbstractActivity implements Noti
                     nt = NotificationType.STATUS;
                     break;
                 }
-                addMessage(new Notification(m.text().getValue(), m.subject().getValue(), nt), m);
+                addMessage(new Notification(m.text().getValue(), m.thread().subject().getValue(), nt), m);
             }
         }
     }

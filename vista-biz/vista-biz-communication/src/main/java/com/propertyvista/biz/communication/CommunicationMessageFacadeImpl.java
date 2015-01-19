@@ -34,8 +34,9 @@ import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.dto.CommunicationEndpointDTO;
-import com.propertyvista.dto.MessageDTO;
+import com.propertyvista.dto.communication.CommunicationEndpointDTO;
+import com.propertyvista.dto.communication.CommunicationThreadDTO;
+import com.propertyvista.dto.communication.MessageDTO;
 
 public class CommunicationMessageFacadeImpl implements CommunicationMessageFacade {
 
@@ -46,8 +47,8 @@ public class CommunicationMessageFacadeImpl implements CommunicationMessageFacad
     }
 
     @Override
-    public String buildForwardText(MessageDTO forwardedMessage) {
-        return MessageTextBuilder.buildForwardText(forwardedMessage);
+    public String buildForwardText(MessageDTO forwardedMessage, String subject) {
+        return MessageTextBuilder.buildForwardText(forwardedMessage, subject);
     }
 
     // Communication category management -------------------------------------------------------
@@ -104,6 +105,11 @@ public class CommunicationMessageFacadeImpl implements CommunicationMessageFacad
     }
 
     @Override
+    public EntitySearchResult<CommunicationThread> queryThread(EntityListCriteria<CommunicationThread> criteria) {
+        return CommunicationManager.instance().queryThread(criteria);
+    }
+
+    @Override
     public Serializable getCommunicationStatus() {
         return CommunicationManager.instance().getCommunicationStatus();
     }
@@ -124,8 +130,8 @@ public class CommunicationMessageFacadeImpl implements CommunicationMessageFacad
     }
 
     @Override
-    public void enhanceMessageDbo(Message bo, MessageDTO to, boolean isForList, CommunicationEndpoint currentUser) {
-        CommunicationManager.instance().enhanceMessageDbo(bo, to, isForList, currentUser);
+    public void enhanceThreadDbo(CommunicationThread bo, CommunicationThreadDTO to, boolean isForList, CommunicationEndpoint currentUser) {
+        CommunicationManager.instance().enhanceThreadDbo(bo, to, isForList, currentUser);
     }
 
     @Override

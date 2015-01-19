@@ -31,6 +31,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap.Tenants;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
+import com.propertyvista.domain.communication.BroadcastTemplate;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
@@ -110,8 +111,8 @@ import com.propertyvista.dto.EvictionCaseDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
-import com.propertyvista.dto.MessageDTO;
 import com.propertyvista.dto.N4BatchDTO;
+import com.propertyvista.dto.communication.CommunicationThreadDTO;
 
 public class CrmEntityMapper {
 
@@ -223,7 +224,10 @@ public class CrmEntityMapper {
 
         AppPlaceEntityMapper.register(MoneyInBatchDTO.class, Finance.MoneyIn.Batch.class, defaultImage);
 
-        AppPlaceEntityMapper.register(MessageDTO.class, Communication.Message.class, defaultImage);
+        AppPlaceEntityMapper.register(CommunicationThreadDTO.class, Communication.Message.class, defaultImage);
         AppPlaceEntityMapper.register(MessageCategory.class, CrmSiteMap.Administration.Settings.MessageCategory.class, defaultImage);
+
+        AppPlaceEntityMapper.register(BroadcastTemplate.class, Communication.BroadcastTemplate.class, defaultImage);
+
     }
 }

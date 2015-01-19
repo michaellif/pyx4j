@@ -19,9 +19,11 @@ import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.UIAclBuilder;
 
+import com.propertyvista.crm.rpc.services.BroadcastEventCrudService;
+import com.propertyvista.crm.rpc.services.BroadcastTemplateCrudService;
 import com.propertyvista.crm.rpc.services.MessageAttachmentUploadService;
 import com.propertyvista.crm.rpc.services.MessageCategoryCrudService;
-import com.propertyvista.crm.rpc.services.MessageCrudService;
+import com.propertyvista.crm.rpc.services.CommunicationCrudService;
 import com.propertyvista.crm.rpc.services.selections.SelectCommunicationEndpointListService;
 import com.propertyvista.crm.server.security.access.CommunicationThreadAccessRule;
 import com.propertyvista.crm.server.security.access.MessageAccessRule;
@@ -39,7 +41,8 @@ import com.propertyvista.domain.communication.SMSDelivery;
 import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.communication.ThreadPolicyHandle;
 import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
-import com.propertyvista.dto.MessageDTO;
+import com.propertyvista.dto.communication.CommunicationThreadDTO;
+import com.propertyvista.dto.communication.MessageDTO;
 
 class VistaCrmCommunicationAccessControlList extends UIAclBuilder {
 
@@ -47,7 +50,9 @@ class VistaCrmCommunicationAccessControlList extends UIAclBuilder {
         grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(MessageCategoryCrudService.class));
         grant(VistaAccessGrantedBehavior.CRM, new MessageCategoryAccessRule(), MessageCategory.class);
         grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(SystemEndpoint.class, READ));
-        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(MessageCrudService.class));
+        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(CommunicationCrudService.class));
+        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(BroadcastTemplateCrudService.class));
+        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(BroadcastEventCrudService.class));
         grant(VistaAccessGrantedBehavior.CRM, new MessageAccessRule(), Message.class);
         grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(Message.class, ALL));
         grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(MessageAttachment.class, ALL));
@@ -63,6 +68,7 @@ class VistaCrmCommunicationAccessControlList extends UIAclBuilder {
 
         grant(VistaAccessGrantedBehavior.CRM, MessageCategory.class, READ);
         grant(VistaAccessGrantedBehavior.CRM, MessageDTO.class, ALL);
+        grant(VistaAccessGrantedBehavior.CRM, CommunicationThreadDTO.class, ALL);
 
         grant(VistaAccessGrantedBehavior.CRM, BroadcastTemplate.class, ALL);
         grant(VistaAccessGrantedBehavior.CRM, BroadcastEvent.class, ALL);

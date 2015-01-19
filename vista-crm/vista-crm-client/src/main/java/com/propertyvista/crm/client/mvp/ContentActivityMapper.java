@@ -120,9 +120,9 @@ import com.propertyvista.crm.client.activity.crud.communication.BroadcastTemplat
 import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryEditorActivity;
 import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryListerActivity;
 import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryViewActivity;
-import com.propertyvista.crm.client.activity.crud.communication.MessageEditorActivity;
-import com.propertyvista.crm.client.activity.crud.communication.MessageListerActivity;
-import com.propertyvista.crm.client.activity.crud.communication.MessageViewerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.CommunicationEditorActivity;
+import com.propertyvista.crm.client.activity.crud.communication.CommunicationListerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.CommunicationViewerActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexEditorActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexListerActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexViewerActivity;
@@ -1549,13 +1549,13 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (crudPlace instanceof Communication.Message) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new MessageListerActivity(crudPlace);
+                            activity = new CommunicationListerActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new MessageViewerActivity(crudPlace);
+                            activity = new CommunicationViewerActivity(crudPlace);
                             break;
                         case editor:
-                            activity = new MessageEditorActivity(crudPlace);
+                            activity = new CommunicationEditorActivity(crudPlace);
                             break;
                         }
 
