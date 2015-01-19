@@ -24,6 +24,7 @@ import com.pyx4j.unit.server.mock.MockHttpServletRequest;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.portal.rpc.shared.SiteWasNotActivatedUserRuntimeException;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
+import com.propertyvista.server.config.filter.base.VistaNamespaceResolverTestBase;
 
 public class VistaNamespaceResolverTest extends VistaNamespaceResolverTestBase {//extends TestCase {
 
