@@ -54,7 +54,7 @@ public interface BroadcastTemplate extends IEntity {
     @Owned
     @Detached
     @OrderBy(PrimaryKey.class)
-    IList<BroadcastMessageAttachment> attachments();
+    IList<BroadcastAttachment> attachments();
 
     //TODO make hierarchy common parent for BroadcastTemplate, CommunicationThread and BroadcastEvent
 //    @Owned

@@ -36,7 +36,13 @@ public class BroadcastTemplateForm extends CrmEntityForm<BroadcastTemplate> {
 
     private IsWidget createInfoTab() {
         FormPanel formPanel = new FormPanel(this);
-        formPanel.append(Location.Left, proto().category()).decorate();
+        formPanel.append(Location.Left, proto().name()).decorate();
+        formPanel.append(Location.Right, proto().category()).decorate();
+        formPanel.append(Location.Left, proto().allowedReply()).decorate();
+        formPanel.append(Location.Right, proto().highImportance()).decorate();
+        formPanel.append(Location.Dual, proto().subject()).decorate();
+        formPanel.append(Location.Dual, proto().text()).decorate();
+
         return formPanel;
     }
 

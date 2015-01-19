@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.IHasFile;
 import com.propertyvista.domain.blob.MessageAttachmentBlob;
 
 @Table(prefix = "communication")
-public interface BroadcastMessageAttachment extends IHasFile<MessageAttachmentBlob> {
+public interface BroadcastAttachment extends IHasFile<MessageAttachmentBlob> {
 
     @Owner
     @Detached
