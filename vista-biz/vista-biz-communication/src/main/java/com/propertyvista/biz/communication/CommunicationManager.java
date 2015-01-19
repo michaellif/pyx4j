@@ -26,14 +26,12 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
@@ -79,71 +77,32 @@ public class CommunicationManager {
         return SingletonHolder.INSTANCE;
     }
 
-    public EntitySearchResult<CommunicationThread> queryThread(EntityListCriteria<CommunicationThread> criteria) {
-        EntityListCriteria<CommunicationThread> replaceCriteria = EntityListCriteria.create(CommunicationThread.class);
-        int pageSize = criteria.getPageSize();
-        int totalRetrive = pageSize * (criteria.getPageNumber() + 1);
-        //replaceCriteria.setSorts(criteria.getSorts());
+    public EntitySearchResult<CommunicationThread> query(EntityListCriteria<CommunicationThread> criteria) {
+
+        // get all threads by criteria; potentially memory explosion
+        EntityListCriteria<CommunicationThread> replace4ThreadCriteria = EntityListCriteria.create(CommunicationThread.class);
         if (criteria.getFilters() != null) {
-            replaceCriteria.addAll(criteria.getFilters());
-        }
-        if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())
-                || VistaApplication.prospect.equals(Context.visit(VistaUserVisit.class).getApplication())) {
-            replaceCriteria.add(new OrCriterion(PropertyCriterion.isNull(replaceCriteria.proto().deliveryMethod()), PropertyCriterion.ne(replaceCriteria
-                    .proto().deliveryMethod(), DeliveryMethod.Notification)));
-        }
-        replaceCriteria.setVersionedCriteria(criteria.getVersionedCriteria());
-
-        EntitySearchResult<CommunicationThread> r = new EntitySearchResult<CommunicationThread>();
-        final ICursorIterator<CommunicationThread> unfiltered = Persistence.secureQuery(null, replaceCriteria, AttachLevel.Attached);
-        final HashSet<Key> visitedThreads = new HashSet<Key>();
-        try {
-            int i = 0;
-            while (unfiltered.hasNext()) {
-                CommunicationThread ent = unfiltered.next();
-                if (visitedThreads.contains(ent.getPrimaryKey())) {
-                    continue;
-                }
-                if (pageSize <= 0) {
-                    r.add(ent);
-                } else if (totalRetrive - pageSize <= i && i < totalRetrive) {
-                    r.add(ent);
-                }
-                i++;
-                visitedThreads.add(ent.getPrimaryKey());
-                if ((pageSize > 0) && visitedThreads.size() > totalRetrive) {
-                    break;
-                }
-            }
-            // The position is important, hasNext may retrieve one more row.
-            r.setEncodedCursorReference(unfiltered.encodedCursorReference());
-            r.hasMoreData(unfiltered.hasNext());
-        } finally {
-            unfiltered.close();
+            replace4ThreadCriteria.addAll(criteria.getFilters());
         }
 
-        setRowsCount(r);
-        return r;
-    }
+        final List<CommunicationThread> allThreadsByCriteria = Persistence.secureQuery(replace4ThreadCriteria, AttachLevel.IdOnly);
 
-    public EntitySearchResult<Message> query(EntityListCriteria<Message> criteria) {
+        // filter messages by threads + order by date
         EntityListCriteria<Message> replaceCriteria = EntityListCriteria.create(Message.class);
         int pageSize = criteria.getPageSize();
         int totalRetrive = pageSize * (criteria.getPageNumber() + 1);
-        replaceCriteria.setSorts(criteria.getSorts());
-        if (criteria.getFilters() != null) {
-            replaceCriteria.addAll(criteria.getFilters());
-        }
+        replaceCriteria.desc(replaceCriteria.proto().date());
+        replaceCriteria.in(replaceCriteria.proto().thread(), allThreadsByCriteria);
         if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())
                 || VistaApplication.prospect.equals(Context.visit(VistaUserVisit.class).getApplication())) {
             replaceCriteria.add(new OrCriterion(PropertyCriterion.isNull(replaceCriteria.proto().thread().deliveryMethod()), PropertyCriterion.ne(
                     replaceCriteria.proto().thread().deliveryMethod(), DeliveryMethod.Notification)));
         }
         replaceCriteria.setVersionedCriteria(criteria.getVersionedCriteria());
-
-        EntitySearchResult<Message> r = new EntitySearchResult<Message>();
-        final ICursorIterator<Message> unfiltered = Persistence.secureQuery(null, replaceCriteria, AttachLevel.Attached);
         final HashSet<Key> visitedThreads = new HashSet<Key>();
+
+        EntitySearchResult<CommunicationThread> r = new EntitySearchResult<CommunicationThread>();
+        final ICursorIterator<Message> unfiltered = Persistence.secureQuery(null, replaceCriteria, AttachLevel.Attached);
         try {
             int i = 0;
             while (unfiltered.hasNext()) {
@@ -151,10 +110,11 @@ public class CommunicationManager {
                 if (visitedThreads.contains(ent.thread().getPrimaryKey())) {
                     continue;
                 }
+                // bad performance
                 if (pageSize <= 0) {
-                    r.add(ent);
+                    r.add(Persistence.secureRetrieve(CommunicationThread.class, ent.thread().getPrimaryKey()));
                 } else if (totalRetrive - pageSize <= i && i < totalRetrive) {
-                    r.add(ent);
+                    r.add(Persistence.secureRetrieve(CommunicationThread.class, ent.thread().getPrimaryKey()));
                 }
                 i++;
                 visitedThreads.add(ent.thread().getPrimaryKey());
@@ -169,16 +129,8 @@ public class CommunicationManager {
             unfiltered.close();
         }
 
-        setRowsCount(r);
+        r.setTotalRows(allThreadsByCriteria.size());
         return r;
-    }
-
-    private void setRowsCount(EntitySearchResult<? extends IEntity> r) {
-        EntityListCriteria<CommunicationThread> threadCriteria = EntityListCriteria.create(CommunicationThread.class);
-        SecurityController.assertPermission(new EntityPermission(threadCriteria.getEntityClass(), EntityPermission.READ));
-        Persistence.applyDatasetAccessRule(threadCriteria);
-
-        r.setTotalRows(Persistence.service().count(threadCriteria));
     }
 
     public Serializable getCommunicationStatus() {
@@ -363,7 +315,6 @@ public class CommunicationManager {
         visibleMessageCriteria.asc(visibleMessageCriteria.proto().date());
         final Vector<Message> ms = Persistence.secureQuery(visibleMessageCriteria, AttachLevel.Attached);
 
-        //Persistence.ensureRetrieve(bo, AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.category(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.owner(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.specialDelivery(), AttachLevel.Attached);
@@ -374,7 +325,6 @@ public class CommunicationManager {
         to.category().set(bo.category());
         to.specialDelivery().set(bo.specialDelivery());
 
-        //Persistence.ensureRetrieve(bo.recipients(), AttachLevel.Attached);
         if (ms != null && ms.size() > 0) {
             boolean star = false;
             boolean isRead = true;

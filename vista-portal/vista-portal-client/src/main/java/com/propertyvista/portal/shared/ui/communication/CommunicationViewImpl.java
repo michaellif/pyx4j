@@ -99,6 +99,7 @@ public class CommunicationViewImpl extends SimplePanel implements CommunicationV
         public MessageLister() {
             super(CommunicationThreadDTO.class, SecurityController.check(PortalResidentBehavior.CommunicationCreateMessages), false);
             setFilteringEnabled(false);
+            setAddNewActionCaption(i18n.tr("New Message"));
             //getDataTablePanel().getAddButton().asWidget().setStyleName(DataTableTheme.StyleName.ListerButton.name());
             // No filtering work for it
             getDataTable().setHasColumnClickSorting(false);
