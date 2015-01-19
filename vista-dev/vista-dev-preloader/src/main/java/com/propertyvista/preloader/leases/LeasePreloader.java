@@ -361,6 +361,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             }
 
             if (lease.leaseApplication().status().getValue() == LeaseApplication.Status.InProgress) {
+                lease.leaseApplication().refSource().setValue(RandomUtil.randomEnum(RefSource.class));
                 LeaseTermParticipant<? extends LeaseParticipant<?>> leaseTermParticipant = lease.currentTerm().version().tenants().get(0);
                 LeasePreloaderHelper.addDefaultPaymentToLeaseApplication(leaseTermParticipant);
             }
