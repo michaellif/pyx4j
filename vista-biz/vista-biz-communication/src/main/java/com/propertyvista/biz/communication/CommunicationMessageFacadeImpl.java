@@ -100,13 +100,8 @@ public class CommunicationMessageFacadeImpl implements CommunicationMessageFacad
 
     // Communication entity common management -------------------------------------------------------
     @Override
-    public EntitySearchResult<Message> query(EntityListCriteria<Message> criteria) {
+    public EntitySearchResult<CommunicationThread> query(EntityListCriteria<CommunicationThread> criteria) {
         return CommunicationManager.instance().query(criteria);
-    }
-
-    @Override
-    public EntitySearchResult<CommunicationThread> queryThread(EntityListCriteria<CommunicationThread> criteria) {
-        return CommunicationManager.instance().queryThread(criteria);
     }
 
     @Override

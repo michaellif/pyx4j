@@ -12,7 +12,8 @@
  */
 package com.propertyvista.crm.server.services.legal.eviction;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -20,7 +21,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
@@ -28,25 +28,27 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.crm.rpc.services.legal.eviction.EvictionCaseCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.eviction.EvictionCase;
 import com.propertyvista.domain.eviction.EvictionStatus;
 import com.propertyvista.domain.eviction.EvictionStatusRecord;
 import com.propertyvista.domain.policy.policies.EvictionFlowPolicy;
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
-import com.propertyvista.domain.ref.ISOProvince;
-import com.propertyvista.domain.ref.ProvincePolicyNode;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.EvictionCaseDTO;
 
 public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<EvictionCase, EvictionCaseDTO> implements EvictionCaseCrudService {
 
+    private final Map<Building, EvictionFlowPolicy> policyCache;
+
     public EvictionCaseCrudServiceImpl() {
         super(EvictionCase.class, EvictionCaseDTO.class);
+        policyCache = new HashMap<>();
     }
 
     @Override
     protected EvictionCaseDTO init(InitializationData initializationData) {
+        // TODO - use EvictionCaseFacade
         EvictionCase bo = EntityFactory.create(EvictionCase.class);
         EvictionCaseInitData initData = (EvictionCaseInitData) initializationData;
         if (initData.isNull()) {
@@ -58,11 +60,11 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
         }
         bo.lease().set(initData.lease());
         // copy flow steps from the policy
-        bo.evictionFlow().addAll(getEvictionFlowSteps(lease));
+        bo.evictionFlowPolicy().set(getEvictionFlowPolicy(lease));
         EvictionCaseDTO to = binder.createTO(bo);
 
-        if (!to.evictionFlow().isEmpty()) {
-            to.nextStep().set(to.evictionFlow().get(0));
+        if (!to.evictionFlowPolicy().evictionFlow().isEmpty()) {
+            to.nextStep().set(to.evictionFlowPolicy().evictionFlow().get(0));
         }
 
         return to;
@@ -70,7 +72,7 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
 
     @Override
     public void hasEvictionFlow(AsyncCallback<Boolean> callback, Key leaseId) {
-        callback.onSuccess(!getEvictionFlowSteps(Persistence.service().retrieve(Lease.class, leaseId)).isEmpty());
+        callback.onSuccess(!getEvictionFlowPolicy(Persistence.service().retrieve(Lease.class, leaseId)).evictionFlow().isEmpty());
     }
 
     @Override
@@ -116,25 +118,25 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
         // TODO ?
     }
 
-    private List<EvictionFlowStep> getEvictionFlowSteps(Lease lease) {
+    private EvictionFlowPolicy getEvictionFlowPolicy(Lease lease) {
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
 
-        InternationalAddress addr = lease.unit().building().info().address();
-        ISOProvince prov = ISOProvince.forName(addr.province().getValue(), addr.country().getValue());
-        EntityQueryCriteria<ProvincePolicyNode> nodeQuery = EntityQueryCriteria.create(ProvincePolicyNode.class);
-        nodeQuery.eq(nodeQuery.proto().province(), prov);
-        ProvincePolicyNode policyNode = Persistence.service().retrieve(nodeQuery);
-        EvictionFlowPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, EvictionFlowPolicy.class);
+        Building building = lease.unit().building();
+        EvictionFlowPolicy policy = policyCache.get(building);
         if (policy == null) {
-            throw new Error("Cannot retrieve EvictionFlowPolicy for building: " + lease.unit().building().propertyCode().getValue());
+            policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, EvictionFlowPolicy.class);
+            policyCache.put(building, policy);
         }
-        return policy.evictionFlow();
+        if (policy == null) {
+            throw new Error("Cannot find EvictionFlowPolicy for building: " + building.propertyCode().getValue());
+        }
+        return policy;
     }
 
     private EvictionFlowStep getNextEvictionStep(EvictionCase bo) {
         EvictionFlowStep nextStep = null;
-        if (bo.history().size() < bo.evictionFlow().size()) {
-            nextStep = bo.evictionFlow().get(bo.history().size());
+        if (bo.history().size() < bo.evictionFlowPolicy().evictionFlow().size()) {
+            nextStep = bo.evictionFlowPolicy().evictionFlow().get(bo.history().size());
         }
         return nextStep;
     }

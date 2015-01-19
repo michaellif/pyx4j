@@ -24,7 +24,6 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
@@ -46,7 +45,8 @@ import com.propertyvista.dto.communication.MessageDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.CommunicationPortalCrudService;
 import com.propertyvista.portal.server.portal.shared.PortalVistaContext;
 
-public class CommunicationPortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<CommunicationThread, CommunicationThreadDTO> implements CommunicationPortalCrudService {
+public class CommunicationPortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<CommunicationThread, CommunicationThreadDTO> implements
+        CommunicationPortalCrudService {
 
     public CommunicationPortalCrudServiceImpl() {
         super(new CrudEntityBinder<CommunicationThread, CommunicationThreadDTO>(CommunicationThread.class, CommunicationThreadDTO.class) {
@@ -87,10 +87,6 @@ public class CommunicationPortalCrudServiceImpl extends AbstractCrudServiceDtoIm
 
     @Override
     protected void enhanceListCriteria(EntityListCriteria<CommunicationThread> boCriteria, EntityListCriteria<CommunicationThreadDTO> toCriteria) {
-        List<Sort> sorts = toCriteria.getSorts();
-        if (sorts == null || sorts.isEmpty()) {
-            toCriteria.desc(toCriteria.proto().date());
-        }
         PropertyCriterion recipientCiteria = toCriteria.getCriterion(toCriteria.proto().content().$().recipients().$().recipient());
         if (recipientCiteria != null) {
             toCriteria.getFilters().remove(recipientCiteria);
@@ -159,7 +155,7 @@ public class CommunicationPortalCrudServiceImpl extends AbstractCrudServiceDtoIm
 
     @Override
     protected EntitySearchResult<CommunicationThread> query(EntityListCriteria<CommunicationThread> criteria) {
-        return ServerSideFactory.create(CommunicationMessageFacade.class).queryThread(criteria);
+        return ServerSideFactory.create(CommunicationMessageFacade.class).query(criteria);
     }
 
     @Override

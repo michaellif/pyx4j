@@ -42,7 +42,7 @@ public interface EvictionStatusRecord extends IEntity {
     @JoinColumn
     @ReadOnly
     @Detached
-    EvictionStatus evictionStatus();
+    EvictionCaseStatus evictionStatus();
 
     @Editor(type = EditorType.textarea)
     @ToString(index = 1)
