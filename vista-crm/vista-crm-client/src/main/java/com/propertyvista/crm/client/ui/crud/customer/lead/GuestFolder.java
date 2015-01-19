@@ -52,8 +52,8 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
             @Override
             public BasicValidationError isValid() {
                 if (getCComponent().getValue() != null) {
-                    return (getCComponent().getValue().isEmpty() ? new BasicValidationError(getCComponent(), i18n.tr("At least one guest data should be entered"))
-                            : null);
+                    return (getCComponent().getValue().isEmpty() ? new BasicValidationError(getCComponent(), i18n
+                            .tr("At least one guest data should be entered")) : null);
                 }
                 return null;
             }
@@ -79,10 +79,11 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
 
             formPanel.br();
 
-            formPanel.append(Location.Left, proto().person().homePhone()).decorate().componentWidth(180);
-            formPanel.append(Location.Left, proto().person().mobilePhone()).decorate().componentWidth(180);
-            formPanel.append(Location.Left, proto().person().workPhone()).decorate().componentWidth(180);
-            formPanel.append(Location.Right, proto().person().email()).decorate().componentWidth(200);
+            formPanel.append(Location.Left, proto().person().email()).decorate().componentWidth(200);
+
+            formPanel.append(Location.Right, proto().person().homePhone()).decorate().componentWidth(180);
+            formPanel.append(Location.Right, proto().person().mobilePhone()).decorate().componentWidth(180);
+            formPanel.append(Location.Right, proto().person().workPhone()).decorate().componentWidth(180);
 
             return formPanel;
         }
