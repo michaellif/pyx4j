@@ -15,13 +15,21 @@ package com.propertyvista.domain.legal.n4;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @I18n(context = "Delivery Method")
 @XmlType(name = "DeliveryMethod")
 public enum N4DeliveryMethod {
 
-    Hand, Mail, Courier;
+    @Translate(value = "Handing by Hand")
+    Hand,
+
+    @Translate(value = "Sending by Mail")
+    Mail,
+
+    @Translate(value = "Sending by Courier")
+    Courier;
 
     @Override
     public String toString() {

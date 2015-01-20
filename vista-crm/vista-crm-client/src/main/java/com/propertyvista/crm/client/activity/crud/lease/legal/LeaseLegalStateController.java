@@ -28,6 +28,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseLegalStateDTO;
 import com.propertyvista.dto.LegalStatusDTO;
 
+@Deprecated
 public class LeaseLegalStateController implements IVisor.Controller {
 
     private final LeaseLegalStateVisor legalStateVisor = new LeaseLegalStateVisor(this);

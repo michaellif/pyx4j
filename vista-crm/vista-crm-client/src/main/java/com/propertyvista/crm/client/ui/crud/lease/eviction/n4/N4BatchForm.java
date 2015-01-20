@@ -28,8 +28,6 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
-import com.pyx4j.forms.client.ui.CPhoneField;
-import com.pyx4j.forms.client.ui.CPhoneField.PhoneType;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -60,23 +58,28 @@ public class N4BatchForm extends CrmEntityForm<N4BatchDTO> {
 
         formPanel.h1(i18n.tr("General"));
         formPanel.append(Location.Left, proto().name()).decorate();
-        formPanel.append(Location.Left, proto().created()).decorate();
-        formPanel.append(Location.Left, proto().noticeIssueDate()).decorate();
+        formPanel.append(Location.Left, proto().issueDate()).decorate();
         formPanel.append(Location.Left, proto().serviceDate()).decorate();
 
-        CField<Employee, ?> employeeBox = isEditable() ? new CEntityComboBox<>(Employee.class) : //
-                new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class));
-        formPanel.append(Location.Right, proto().signingAgent(), employeeBox).decorate();
         formPanel.append(Location.Right, proto().deliveryMethod()).decorate();
         formPanel.append(Location.Right, proto().deliveryDate()).decorate();
 
-        formPanel.h1(i18n.tr("Contact Information"));
-        formPanel.append(Location.Left, proto().companyLegalName()).decorate().customLabel(i18n.tr("Legal Name"));
-        formPanel.append(Location.Left, proto().companyEmailAddress()).decorate().customLabel(i18n.tr("Email Address"));
-        formPanel.append(Location.Right, proto().companyPhoneNumber(), new CPhoneField(PhoneType.northAmerica)).decorate().customLabel(i18n.tr("Phone Number"));
-        formPanel.append(Location.Right, proto().companyFaxNumber(), new CPhoneField(PhoneType.northAmerica)).decorate().customLabel(i18n.tr("Fax Number"));
+        formPanel.h1(i18n.tr("Agent Information"));
+        CField<Employee, ?> signingAgentBox = isEditable() ? new CEntityComboBox<>(Employee.class) : //
+                new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class));
+        formPanel.append(Location.Left, proto().signingAgent(), signingAgentBox).decorate();
 
-        formPanel.h3(i18n.tr("Mailing Address"));
+        formPanel.append(Location.Left, proto().phoneNumber()).decorate();
+        formPanel.append(Location.Left, proto().faxNumber()).decorate();
+        formPanel.append(Location.Left, proto().emailAddress()).decorate();
+
+        CField<Employee, ?> servicingAgentBox = isEditable() ? new CEntityComboBox<>(Employee.class) : //
+                new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class));
+        formPanel.append(Location.Right, proto().servicingAgent(), servicingAgentBox).decorate();
+        formPanel.append(Location.Right, proto().phoneNumberCS()).decorate();
+
+        formPanel.h1(i18n.tr("Company Info"));
+        formPanel.append(Location.Left, proto().companyLegalName()).decorate().customLabel(i18n.tr("Legal Name"));
         formPanel.append(Location.Dual, proto().companyAddress(), new InternationalAddressEditor());
 
         formPanel.h1(i18n.tr("Batch Records"));
@@ -91,10 +94,6 @@ public class N4BatchForm extends CrmEntityForm<N4BatchDTO> {
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-
-        if (isEditable() && !getValue().signingAgent().isNull()) {
-            get(proto().signingAgent()).setEditable(false);
-        }
     }
 
     class N4BatchItemFolder extends VistaBoxFolder<N4BatchItem> {

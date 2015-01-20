@@ -166,8 +166,7 @@ public class N4Manager {
     private N4FormFieldsData prepareFormData(N4LeaseData leaseData, N4Batch batchData) throws FormFillError {
         N4FormFieldsData fieldsData = EntityFactory.create(N4FormFieldsData.class);
         fieldsData.to().setValue(formatTo(leaseData.leaseTenants(), leaseData.rentalUnitAddress()));
-        fieldsData.from().setValue(
-                SimpleMessageFormat.format("{0}\n{1}", leaseData.landlordName().getValue(), formatBuildingOwnerAddress(leaseData.landlordAddress())));
+        fieldsData.from().setValue(formatFrom(leaseData.landlordName().getValue(), leaseData.landlordAddress()));
 
         fieldsData.rentalUnitAddress().streetNumber().setValue(leaseData.rentalUnitAddress().streetNumber().getStringView());
         fieldsData.rentalUnitAddress().streetName().setValue(leaseData.rentalUnitAddress().streetName().getStringView());
@@ -198,10 +197,9 @@ public class N4Manager {
                 .setValue(ISOProvince.forName(batchData.companyAddress().province().getValue(), batchData.companyAddress().country().getValue()).code);
         fieldsData.landlordsContactInfo().postalCode().setValue(batchData.companyAddress().postalCode().getValue());
 
-        // TODO - switch between company and agent contact info
-        fieldsData.landlordsContactInfo().phoneNumber().setValue(batchData.companyPhoneNumber().getValue());
-        fieldsData.landlordsContactInfo().faxNumber().setValue(batchData.companyFaxNumber().getValue());
-        fieldsData.landlordsContactInfo().email().setValue(batchData.companyEmailAddress().getValue());
+        fieldsData.landlordsContactInfo().phoneNumber().setValue(batchData.phoneNumber().getValue());
+        fieldsData.landlordsContactInfo().faxNumber().setValue(batchData.faxNumber().getValue());
+        fieldsData.landlordsContactInfo().email().setValue(batchData.emailAddress().getValue());
 
         return fieldsData;
     }
@@ -235,16 +233,15 @@ public class N4Manager {
         n4cs.signature().signedBy().setValue(N4CSSignature.SignedBy.RA);
         n4cs.signature().signature().setValue(retrieveSignature(batchData.servicingAgent()));
         n4cs.signature().firstname().setValue(batchData.servicingAgent().name().firstName().getStringView());
-        n4cs.signature().lastname().setValue(batchData.servicingAgent().name().lastName().getValue());
-        // TODO - switch between company and agent contact info
-        n4cs.signature().phone().setValue(batchData.companyPhoneNumber().getValue());
+        n4cs.signature().lastname().setValue(batchData.servicingAgent().name().lastName().getStringView());
+
+        n4cs.signature().phone().setValue(batchData.phoneNumberCS().getValue());
         n4cs.signature().signatureDate().setValue(batchData.signatureDate().getValue());
 
         n4cs.passedTo().tpType().setValue(ToType.Tenant);
         n4cs.passedTo().name().setValue(formatTo(leaseData.leaseTenants(), leaseData.rentalUnitAddress()));
 
-        // TODO - set from the batchData
-        n4cs.service().method().setValue(ServiceMethod.M);
+        n4cs.service().method().setValue(getServiceMethod(batchData.deliveryMethod().getValue()));
         n4cs.service().lastAddr().setValue(formatLegalAddress(leaseData.rentalUnitAddress()));
 
         return n4cs;
@@ -303,8 +300,8 @@ public class N4Manager {
         return formattedAddress.toString();
     }
 
-    private String formatBuildingOwnerAddress(InternationalAddress address) {
-        return address.getStringView(); // TODO maybe use same function as "format street address"
+    private String formatFrom(String name, InternationalAddress address) {
+        return SimpleMessageFormat.format("{0}\n{1}", name, address.getStringView());
     }
 
     private String formatLegalAddress(LegalAddress address) {
@@ -382,7 +379,7 @@ public class N4Manager {
         return result;
     }
 
-    LogicalDate calculateDeliveryDate(LogicalDate noticeDate, N4DeliveryMethod deliveryMethod, N4Policy policy) {
+    LogicalDate calculateDeliveryDate(Date noticeDate, N4DeliveryMethod deliveryMethod, N4Policy policy) {
         int advanceDays = terminationAdvanceDaysForDeliveryMethod(deliveryMethod, policy);
 
         GregorianCalendar cal = new GregorianCalendar();
@@ -412,6 +409,19 @@ public class N4Manager {
             throw new RuntimeException("Unknown delivery method: " + deliveryMethod);
         }
 
+    }
+
+    private ServiceMethod getServiceMethod(N4DeliveryMethod deliveryMethod) {
+        switch (deliveryMethod) {
+        case Hand:
+            return ServiceMethod.H;
+        case Mail:
+            return ServiceMethod.M;
+        case Courier:
+            return ServiceMethod.C;
+        default:
+            return null;
+        }
     }
 
     // TODO - this value may depend on lease term (month-to-month vs 12 months)

@@ -138,6 +138,7 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
 
         public StatusRecordFolder() {
             super(EvictionStatusRecord.class);
+            setOrderable(false);
         }
 
         @Override
@@ -173,6 +174,7 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
 
         public UploadableEvictionDocumentFolder() {
             super(EvictionDocument.class);
+            setOrderable(false);
         }
 
         @Override

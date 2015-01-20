@@ -31,6 +31,7 @@ import com.propertyvista.crm.client.activity.crud.lease.legal.LeaseLegalStateCon
 import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.dto.LeaseLegalStateDTO;
 
+@Deprecated
 public class LeaseLegalStateForm extends CForm<LeaseLegalStateDTO> {
 
     private static final I18n i18n = I18n.get(LeaseLegalStateForm.class);

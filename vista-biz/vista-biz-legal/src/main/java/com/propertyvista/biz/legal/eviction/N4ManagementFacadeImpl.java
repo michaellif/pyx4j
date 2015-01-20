@@ -63,10 +63,9 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         final Date batchServiceDate = SystemDateManager.getDate();
 
         batch.deliveryMethod().setValue(N4DeliveryMethod.Mail); // TODO - should be selected in UI
-        batch.noticeIssueDate().setValue(new LogicalDate(batch.created().getValue())); // TODO - either created() or batchGenerationDate
 
         final N4Policy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(batch.building(), N4Policy.class);
-        final LogicalDate deliveryDate = new N4Manager().calculateDeliveryDate(batch.noticeIssueDate().getValue(), batch.deliveryMethod().getValue(), policy);
+        final LogicalDate deliveryDate = new N4Manager().calculateDeliveryDate(batch.issueDate().getValue(), batch.deliveryMethod().getValue(), policy);
 
         batch.deliveryDate().setValue(deliveryDate);
         batch.serviceDate().setValue(new LogicalDate(batchServiceDate));

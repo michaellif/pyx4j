@@ -71,6 +71,12 @@ public class EvictionCaseFacadeImpl implements EvictionCaseFacade {
     }
 
     @Override
+    public EvictionStatus getCurrentEvictionStatus(Lease leaseId) {
+        EvictionCase evictionCase = getCurrentEvictionCase(leaseId);
+        return evictionCase == null ? null : getCurrentEvictionStatus(evictionCase);
+    }
+
+    @Override
     public EvictionStatus getCurrentEvictionStatus(EvictionCase evictionCase) {
         if (evictionCase.history().isEmpty() || !evictionCase.closedOn().isNull()) {
             return null;

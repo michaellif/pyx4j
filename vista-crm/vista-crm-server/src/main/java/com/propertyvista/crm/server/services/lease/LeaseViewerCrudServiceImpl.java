@@ -43,6 +43,7 @@ import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.legal.LeaseLegalFacade;
+import com.propertyvista.biz.legal.eviction.EvictionCaseFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementSigningProgressFacade;
@@ -54,6 +55,7 @@ import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudService
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.eviction.EvictionStatus;
 import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.legal.LegalStatus.Status;
@@ -135,7 +137,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         to.isMoveOutWithinNextBillingCycle().setValue(ServerSideFactory.create(LeaseFacade.class).isMoveOutWithinNextBillingCycle(in));
         to.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(in));
 
-        loadcurrentLegalStatus(to);
+        loadCurrentLegalStatus(to);
     }
 
     @Override
@@ -491,12 +493,11 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         callback.onSuccess(null);
     }
 
-    private void loadcurrentLegalStatus(LeaseDTO lease) {
-        LegalStatus current = ServerSideFactory.create(LeaseLegalFacade.class).getCurrentLegalStatus(lease.<LeaseDTO> createIdentityStub());
-        if (current.status().getValue() != LegalStatus.Status.None) {
-            lease.currentLegalStatus().setValue(SimpleMessageFormat.format("{0} ({1})", current.status().getValue().toString(), current.details().getValue()));
+    private void loadCurrentLegalStatus(LeaseDTO lease) {
+        EvictionStatus status = ServerSideFactory.create(EvictionCaseFacade.class).getCurrentEvictionStatus(lease);
+        if (status != null) {
+            lease.currentLegalStatus().set(status.evictionStep().name());
         }
-
     }
 
 }
