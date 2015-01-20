@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
@@ -32,7 +31,9 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -256,6 +257,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
             private final Button save = new Button(i18n.tr("Save"), new Command() {
                 @Override
                 public void execute() {
+                    setActive(false);
+
                     ((LeaseApplicationViewerView.Presenter) getParentView().getPresenter()).updateApprovalTaskItem(
                             new DefaultAsyncCallback<ApprovalChecklistItem>() {
                                 @Override
@@ -263,19 +266,17 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
                                     setValue(result);
                                 }
                             }, getValue());
-
-                    setActive(false);
                 }
             });
 
-            private final Button cancel = new Button(i18n.tr("Cancel"), new Command() {
+            private final Anchor cancel = new Anchor(i18n.tr("Cancel"), new Command() {
                 @Override
                 public void execute() {
                     setActive(false);
                 }
             });
 
-            private final FlowPanel buttons = new FlowPanel();
+            private final Toolbar buttons = new Toolbar();
 
             public ApprovalChecklistItemEditor() {
                 super((ApprovalChecklistItem.class));
@@ -295,8 +296,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
                 formPanel.append(Location.Left, updateStatus);
 
-                buttons.add(save);
-                buttons.add(cancel);
+                buttons.addItem(save);
+                buttons.addItem(cancel);
                 formPanel.append(Location.Left, buttons);
 
                 // tweaks:
@@ -337,7 +338,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
                 get(proto().notes()).setEditable(active);
 
                 updateStatus.setVisible(!active);
-                buttons.setVisible(active);
+                buttons.asWidget().setVisible(active);
             }
         }
     }
