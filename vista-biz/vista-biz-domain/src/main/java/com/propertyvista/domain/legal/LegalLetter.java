@@ -29,6 +29,8 @@ import com.pyx4j.entity.shared.IHasFile;
 import com.propertyvista.domain.blob.LegalLetterBlob;
 import com.propertyvista.domain.tenant.lease.Lease;
 
+@Deprecated
+/** Deprecated - use EvictionDocument */
 @SecurityEnabled
 @AbstractEntity
 @Inheritance(strategy = InheritanceStrategy.SINGLE_TABLE)
@@ -39,6 +41,7 @@ public interface LegalLetter extends IHasFile<LegalLetterBlob> {
     Lease lease();
 
     @Detached
+    /** TODO to be removed */
     LegalStatus status();
 
     @Editor(type = EditorType.textarea)

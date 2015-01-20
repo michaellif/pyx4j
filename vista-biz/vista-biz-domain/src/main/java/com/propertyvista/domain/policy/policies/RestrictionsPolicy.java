@@ -68,4 +68,6 @@ public interface RestrictionsPolicy extends Policy, TenantsAccessiblePolicy {
 
     @NotNull
     IPrimitive<Integer> emergencyContactsNumber();
+
+    IPrimitive<Boolean> referenceSourceIsMandatory();
 }

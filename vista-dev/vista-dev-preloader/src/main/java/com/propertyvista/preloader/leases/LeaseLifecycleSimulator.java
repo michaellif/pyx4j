@@ -61,7 +61,7 @@ import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.tenant.RefSource;
+import com.propertyvista.domain.tenant.ReferenceSource;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
@@ -292,7 +292,7 @@ public class LeaseLifecycleSimulator {
         public void exec() {
             lease.status().setValue(Status.Application);
             lease.currentTerm().type().setValue((random.nextInt() % 10 < 7) ? Type.Fixed : Type.FixedEx);
-            lease.leaseApplication().refSource().setValue(RandomUtil.randomEnum(RefSource.class));
+            lease.leaseApplication().referenceSource().setValue(RandomUtil.randomEnum(ReferenceSource.class));
             lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
             Persistence.service().retrieveMember(lease.leaseParticipants());
 

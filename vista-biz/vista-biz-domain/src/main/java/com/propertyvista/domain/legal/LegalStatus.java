@@ -34,6 +34,8 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.lease.Lease;
 
+@Deprecated
+/** Deprecated - Use EvictionStatus instead */
 @DiscriminatorValue("LegalStatus")
 @Inheritance(strategy = InheritanceStrategy.SINGLE_TABLE)
 @ToStringFormat("{0}{1,choice,null#|!null#, since {1}}{2,choice,null#|!null#, expiry {2}}")

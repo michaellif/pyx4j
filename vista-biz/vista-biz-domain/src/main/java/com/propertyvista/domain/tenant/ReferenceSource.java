@@ -16,7 +16,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @I18n
-public enum RefSource {
+public enum ReferenceSource {
     Internet, Newspaper, Radio, Referral, TV, Import, LocatorServices, DirectMail, Other;
 
     @Override

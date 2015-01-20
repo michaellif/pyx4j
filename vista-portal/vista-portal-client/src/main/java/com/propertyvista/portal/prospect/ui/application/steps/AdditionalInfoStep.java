@@ -37,7 +37,6 @@ import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.prospect.ui.application.components.LegalQuestionFolder;
 import com.propertyvista.portal.prospect.ui.application.components.PriorAddressEditor;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.decorators.RadioButtonGroupDecoratorBuilder;
 
 public class AdditionalInfoStep extends ApplicationWizardStep {
@@ -76,7 +75,7 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
 
         if (SecurityController.check(PortalProspectBehavior.Applicant)) {
             formPanel.h3(i18n.tr("How Did You Hear About Us?"));
-            formPanel.append(Location.Left, inject(proto().refSource(), new FieldDecoratorBuilder(180).build()));
+            formPanel.append(Location.Left, proto().referenceSource()).decorate().componentWidth(150);
         }
 
         return formPanel;
@@ -87,6 +86,8 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
         super.onValueSet(populate);
 
         enablePreviousAddress();
+
+        get(proto().referenceSource()).setMandatory(getValue().referenceSourceIsMandatory().getValue(false));
     }
 
     @Override

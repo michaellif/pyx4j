@@ -18,8 +18,8 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor.Builder;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
@@ -36,21 +36,14 @@ public class LeaseApplicationLister extends SiteDataTablePanel<LeaseApplicationD
 
         setColumnDescriptors(
                 //
-                new Builder(proto().leaseApplication().applicationId()).columnTitle(i18n.tr("Id")).build(), new Builder(proto().type()).build(),
+                new Builder(proto().leaseApplication().applicationId()).columnTitle(i18n.tr("Id")).build(), new Builder(proto().type()).build(), new Builder(
+                        proto().unit().building().propertyCode()).build(), new Builder(proto().unit()).build(),
+                new Builder(proto().leaseApplication().status()).filterAlwaysShown(true).build(),
 
-                new Builder(proto().unit().building().propertyCode()).build(), new Builder(proto().unit()).build(),
-
-                new Builder(proto().leaseApplication().status()).build(),
-
-                new Builder(proto().currentTerm().termFrom()).build(), new Builder(proto().currentTerm().termTo()).build(),
-
-                new Builder(proto().expectedMoveIn()).build(), new Builder(proto().expectedMoveOut(), false).build(),
-                new Builder(proto().actualMoveIn(), false).build(), new Builder(proto().actualMoveOut(), false).build(), new Builder(proto()
-                        .moveOutSubmissionDate(), false).build(),
-
-                new Builder(proto().creationDate(), false).build(),
-
-                new Builder(proto().onlineApplication()).sortable(false).searchable(false).build(),
+                new Builder(proto().currentTerm().termFrom()).build(), new Builder(proto().currentTerm().termTo()).build(), new Builder(proto()
+                        .expectedMoveIn()).build(), new Builder(proto().expectedMoveOut(), false).build(), new Builder(proto().actualMoveIn(), false).build(),
+                new Builder(proto().actualMoveOut(), false).build(), new Builder(proto().moveOutSubmissionDate(), false).build(), new Builder(proto()
+                        .creationDate(), false).build(), new Builder(proto().onlineApplication()).sortable(false).searchable(false).build(),
 
                 new Builder(proto()._applicant().customer().person().name()).columnTitle(i18n.tr("Primary Tenant Name")).searchable(false).build(),
                 new Builder(proto()._applicant().customer().person().name().firstName(), false).columnTitle(i18n.tr("Primary Tenant First Name")).build(),

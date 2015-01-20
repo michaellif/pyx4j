@@ -273,7 +273,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         Persistence.ensureRetrieve(term.version().tenants(), AttachLevel.Attached);
         to.tenants().addAll(term.version().tenants());
 
-        to.refSource().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseApplication().refSource().getValue());
+        to.referenceSource().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseApplication().referenceSource().getValue());
     }
 
     public LeaseChargesDataDTO createLeaseChargesData(LeaseTerm term) {
@@ -970,7 +970,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 leaseTerm.termTo().setValue(new LogicalDate(DateUtils.daysAdd(leaseTerm.termTo().getValue(), -1)));
             }
 
-            bo.masterOnlineApplication().leaseApplication().lease().leaseApplication().refSource().setValue(to.refSource().getValue());
+            bo.masterOnlineApplication().leaseApplication().lease().leaseApplication().referenceSource().setValue(to.referenceSource().getValue());
 
             saveUnitOptionsData(bo, to);
             saveOccupants(bo, to);
@@ -1030,6 +1030,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.yearsToForcingPreviousAddress().setValue(restrictionsPolicy.yearsToForcingPreviousAddress().getValue());
         to.emergencyContactsIsMandatory().setValue(restrictionsPolicy.emergencyContactsIsMandatory().getValue());
         to.emergencyContactsNumberRequired().setValue(restrictionsPolicy.emergencyContactsNumber().getValue());
+        to.referenceSourceIsMandatory().setValue(restrictionsPolicy.referenceSourceIsMandatory().getValue());
     }
 
     // ================================================================================================================

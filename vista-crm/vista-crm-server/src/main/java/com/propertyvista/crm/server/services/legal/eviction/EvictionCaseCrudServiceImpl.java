@@ -21,6 +21,8 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
@@ -116,6 +118,11 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
     @Override
     protected void enhanceListRetrieved(EvictionCase bo, EvictionCaseDTO to) {
         // TODO ?
+    }
+
+    @Override
+    public void list(AsyncCallback<EntitySearchResult<EvictionCaseDTO>> callback, EntityListCriteria<EvictionCaseDTO> dtoCriteria) {
+        super.list(callback, dtoCriteria);
     }
 
     private EvictionFlowPolicy getEvictionFlowPolicy(Lease lease) {

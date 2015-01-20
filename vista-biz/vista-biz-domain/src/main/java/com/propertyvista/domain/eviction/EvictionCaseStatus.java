@@ -52,6 +52,7 @@ public interface EvictionCaseStatus extends IEntity {
     @Indexed(group = { "c,1" })
     EvictionCase evictionCase();
 
+    @JoinColumn
     @ReadOnly
     @Indexed(group = { "c,2" })
     @ToString(index = 0)

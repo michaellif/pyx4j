@@ -21,6 +21,8 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 
+@Deprecated
+/** Deprecated - Use EvictionStatusN4 instead */
 @DiscriminatorValue("LegalStatusN4")
 public interface LegalStatusN4 extends LegalStatus {
 
