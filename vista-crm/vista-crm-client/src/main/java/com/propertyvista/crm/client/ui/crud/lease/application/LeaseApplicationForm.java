@@ -95,7 +95,6 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
     @Override
     protected void onValueSet(boolean populate) {
-
         super.onValueSet(populate);
 
         // dynamic tabs visibility management:
@@ -247,7 +246,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
             private final CComboBox<String> statusSelector = new CComboBox<>();
 
-            private final Button updateStatus = new Button(i18n.tr("Update Status"), new Command() {
+            private final Anchor update = new Anchor(i18n.tr("Update Status"), new Command() {
                 @Override
                 public void execute() {
                     setActive(true);
@@ -280,6 +279,10 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
             public ApprovalChecklistItemEditor() {
                 super((ApprovalChecklistItem.class));
+
+                buttons.addItem(update);
+                buttons.addItem(save);
+                buttons.addItem(cancel);
             }
 
             @Override
@@ -294,10 +297,6 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
                 formPanel.append(Location.Right, proto().status(), statusSelector).decorate();
                 formPanel.append(Location.Right, proto().notes()).decorate();
 
-                formPanel.append(Location.Left, updateStatus);
-
-                buttons.addItem(save);
-                buttons.addItem(cancel);
                 formPanel.append(Location.Left, buttons);
 
                 // tweaks:
@@ -327,7 +326,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
             }
 
             public void setModifyable(boolean modifyable) {
-                updateStatus.setVisible(modifyable);
+                buttons.asWidget().setVisible(modifyable);
             }
 
             public void setActive(boolean active) {
@@ -337,8 +336,9 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
                 get(proto().notes()).setViewable(!active);
                 get(proto().notes()).setEditable(active);
 
-                updateStatus.setVisible(!active);
-                buttons.asWidget().setVisible(active);
+                update.setVisible(!active);
+                save.setVisible(active);
+                cancel.setVisible(active);
             }
         }
     }
