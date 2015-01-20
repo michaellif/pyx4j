@@ -15,9 +15,14 @@ package com.propertyvista.server.config.filter.namespace;
 import javax.servlet.http.HttpServletRequest;
 
 import com.pyx4j.entity.cache.CacheService;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.pmc.Pmc.PmcStatus;
+import com.propertyvista.domain.pmc.PmcDnsName;
+import com.propertyvista.domain.pmc.PmcDnsName.DnsNameTarget;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.server.config.filter.utils.HttpRequestUtils;
 
@@ -39,13 +44,11 @@ public class VistaApplicationResolverHelper {
             if (app != null) {
                 return app;
             } else {
-                String[] serverNameParts = serverName.split("\\.");
-                if (serverNameParts.length > 0) {
-                    String appByDomain = serverNameParts[0];
-                    app = getAppByDomainOrPath(appByDomain, requestPath, rootServletPath);
-                }
+                app = getAppByDomainOrPath(serverName, requestPath, rootServletPath);
 
-                CacheService.put(HttpRequestUtils.getAppCacheKey(httpRequest), app);
+                if (app != null) {
+                    CacheService.put(HttpRequestUtils.getAppCacheKey(httpRequest), app);
+                }
 
                 return app;
             }
@@ -58,58 +61,91 @@ public class VistaApplicationResolverHelper {
     /**
      * Gets application name based on domain name and request path
      *
-     * @param appByDomain
-     *            first part of domain name until first '.'
+     * @param domain
+     *            domain name
      * @param path
      *            request path for this request
      * @return Vista application
      */
-    private static VistaApplication getAppByDomainOrPath(String appByDomain, String path, String rootServletPath) {
+    private static VistaApplication getAppByDomainOrPath(String domain, String path, String rootServletPath) {
         // TODO Extract method to a new class. Create new return type including data from VistaApplication and PMC. Redo vistaNameSpace resolver (common tasks)
-        String[] appByDomainTokens = appByDomain.split("-");
         VistaApplication app = null;
+        String[] serverNameParts = domain.split("\\.");
 
-        // Domains type : http://XXX.dev.birchwoodsoftwaregroup.com:8888
-        if (appByDomainTokens.length == 1) {
-            if (appByDomain.equalsIgnoreCase("static")) {
-                return VistaApplication.noApp;
+        if (serverNameParts.length > 0) {
+            String appByDomain = serverNameParts[0];
+            String[] appByDomainTokens = appByDomain.split("-");
+
+            // Domains type : http://XXX.dev.birchwoodsoftwaregroup.com:8888
+            if (appByDomainTokens.length == 1) {
+                if (appByDomain.equalsIgnoreCase("static")) {
+                    return VistaApplication.noApp;
+                }
+
+                try {
+                    app = VistaApplication.valueOf(appByDomain);
+                } catch (IllegalArgumentException e) {
+                    // do nothing, app = null
+                }
             }
 
-            try {
-                app = VistaApplication.valueOf(appByDomain);
-            } catch (IllegalArgumentException e) {
-                // do nothing, app = null
+            // Domains type : http://PMC-XXX.dev.birchwoodsoftwaregroup.com:8888,
+            //http://XXX-nn.dev.birchwoodsoftwaregroup.com:8888 and
+            //http://PMC-XXX-nn.birchwoodsoftwaregroup.com:8888
+            if (appByDomainTokens.length >= 2) {
+                if (appByDomainTokens[1].equalsIgnoreCase("portal")) {
+
+                    // If request path starts with "/prospect", portal is prospect
+                    if (rootServletPath.equalsIgnoreCase("prospect")) {
+                        return VistaApplication.prospect;
+                    }
+
+                    // Default "portal" application is "resident" (no request path required)
+                    return VistaApplication.resident;
+                }
+
+                try {
+                    int index = appByDomainTokens[1].matches(regExTwoDigits) ? 0 : 1;
+                    if (appByDomainTokens[index].equalsIgnoreCase("static")) {
+                        return VistaApplication.noApp;
+                    }
+                    app = VistaApplication.valueOf(appByDomainTokens[index]);
+                } catch (IllegalArgumentException e) {
+                    // do nothing, app = null
+                }
+
             }
         }
 
-        // Domains type : http://PMC-XXX.dev.birchwoodsoftwaregroup.com:8888,
-        //http://XXX-nn.dev.birchwoodsoftwaregroup.com:8888 and
-        //http://PMC-XXX-nn.birchwoodsoftwaregroup.com:8888
-        if (appByDomainTokens.length >= 2) {
-            if (appByDomainTokens[1].equalsIgnoreCase("portal")) {
-
-                // If request path starts with "/prospect", portal is prospect
-                if (rootServletPath.equalsIgnoreCase("prospect")) {
-                    return VistaApplication.prospect;
-                }
-
-                // Default "portal" application is "resident" (no request path required)
-                return VistaApplication.resident;
-            }
-
-            try {
-                int index = appByDomainTokens[1].matches(regExTwoDigits) ? 0 : 1;
-                if (appByDomainTokens[index].equalsIgnoreCase("static")) {
-                    return VistaApplication.noApp;
-                }
-                app = VistaApplication.valueOf(appByDomainTokens[index]);
-            } catch (IllegalArgumentException e) {
-                // do nothing, app = null
-            }
-
+        // TODO Do we look up for custom DNS resolution before checking regular DNS formats??
+        // Try look up custom DNS Name
+        if (app == null) {
+            app = lookUpCustomDNS(domain, rootServletPath);
         }
 
         return app;
+    }
+
+    private static VistaApplication lookUpCustomDNS(String domain, String rootServletPath) {
+        EntityQueryCriteria<PmcDnsName> criteria = EntityQueryCriteria.create(PmcDnsName.class);
+        criteria.eq(criteria.proto().enabled(), Boolean.TRUE);
+        criteria.eq(criteria.proto().dnsName(), domain);
+        criteria.eq(criteria.proto().pmc().status(), PmcStatus.Active);
+
+        PmcDnsName pmcDns = Persistence.service().retrieve(criteria);
+
+        if (pmcDns != null) {
+            if (pmcDns.target().getValue().equals(DnsNameTarget.portal)) {
+                if (rootServletPath.equalsIgnoreCase("prospect")) {
+                    return VistaApplication.prospect;
+                }
+                return VistaApplication.resident;
+            }
+
+            return VistaApplication.valueOf(pmcDns.target().getValue().name());
+        }
+
+        return null;
     }
 
     public static boolean isHttpsRedirectionNeeded(HttpServletRequest httpRequest) {

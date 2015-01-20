@@ -18,6 +18,8 @@ import javax.servlet.ServletException;
 
 import org.junit.Test;
 
+import com.propertyvista.server.config.filter.base.VistaApplicationDispatcherFilterTestBase;
+
 public class VistaApplicationDispatcherFilterFollowChainTest extends VistaApplicationDispatcherFilterTestBase {
 
     @Override

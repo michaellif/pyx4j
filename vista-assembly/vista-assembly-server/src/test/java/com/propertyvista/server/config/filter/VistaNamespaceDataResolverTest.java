@@ -23,6 +23,7 @@ import com.pyx4j.unit.server.mock.MockHttpServletRequest;
 
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.server.config.filter.base.VistaNamespaceResolverTestBase;
 
 public class VistaNamespaceDataResolverTest extends VistaNamespaceResolverTestBase {
 
@@ -41,6 +42,26 @@ public class VistaNamespaceDataResolverTest extends VistaNamespaceResolverTestBa
         // Test 3
         req = new MockHttpServletRequest("http://operations.dev.devpv.com:80/operations/operations.nocache.js");
         testRetrievingData(req, VistaApplication.operations, VistaNamespace.operationsNamespace);
+
+        // Test 4: test active PMC with active DNS Alias for CRM
+        req = new MockHttpServletRequest("http://custom.crm.server.canada.com:80/index.html");
+        testDNSAlias(req, VistaApplication.crm);
+
+        // Test 5: test active PMC with active DNS Alias for PORTAL - RESIDENT
+        req = new MockHttpServletRequest("http://portalito.canada.com:8888/index.html");
+        testDNSAlias(req, VistaApplication.resident);
+
+        // Test 6: test active PMC with active DNS Alias for SITE
+        req = new MockHttpServletRequest("http://mysite-bestseller.canada.com:8990/srv/request.html");
+        testDNSAlias(req, VistaApplication.site);
+
+        // Test 7: test Inactive PMC with active DNS Alias
+        req = new MockHttpServletRequest("http://customizableportal.server.canada.com:8990/srv/request.html");
+        testDNSAlias(req, null);
+
+        // Test 8: test Active PMC with Inactive DNS Alias
+        req = new MockHttpServletRequest("http://customer.site.client-custom.canada.com:8990/srv/request.html");
+        testDNSAlias(req, null);
 
     }
 
@@ -62,6 +83,10 @@ public class VistaNamespaceDataResolverTest extends VistaNamespaceResolverTestBa
         VistaNamespaceData nsData = (VistaNamespaceData) getResolver(req).getNamespaceData();
         Assert.assertTrue(nsData.getApplication() == app);
         Assert.assertTrue(nsData.getNamespace().equalsIgnoreCase(ns));
+    }
+
+    private void testDNSAlias(HttpServletRequest req, VistaApplication app) {
+        Assert.assertTrue(getResolver(req).getVistaApplication() == app);
     }
 
     private VistaNamespaceDataResolver getResolver(HttpServletRequest req) {

@@ -111,7 +111,6 @@ import com.propertyvista.crm.client.activity.crud.building.catalog.FeatureEditor
 import com.propertyvista.crm.client.activity.crud.building.catalog.FeatureViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceEditorActivity;
 import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceViewerActivity;
-import com.propertyvista.crm.client.activity.crud.communication.BroadcastEventEditorActivity;
 import com.propertyvista.crm.client.activity.crud.communication.BroadcastEventListerActivity;
 import com.propertyvista.crm.client.activity.crud.communication.BroadcastEventViewerActivity;
 import com.propertyvista.crm.client.activity.crud.communication.BroadcastTemplateEditorActivity;
@@ -1580,8 +1579,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new BroadcastEventViewerActivity(crudPlace);
                             break;
-                        case editor:
-                            activity = new BroadcastEventEditorActivity(crudPlace);
+                        default:
                             break;
                         }
 
