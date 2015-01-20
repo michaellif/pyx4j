@@ -40,9 +40,15 @@ public class N4CPFieldsMapping extends LtbFormFieldsMapping<N4CPFormFieldsData> 
     @Override
     protected void configure() {
 
-        field(proto().to()).mapTo("cp_to_address").scaleBy(new AddressLabelScaler()).define();//for the cover page
-
         // multi-line text - scale to fit
+        field(proto().returnName()).mapTo("cp_return_name").define();//for the cover page
+        field(proto().returnAddress()).mapTo("cp_return_address").scaleBy(new AddressLabelScaler()).define();//for the cover page
+
+        field(proto().cpTo()).mapTo("cp_to_address").scaleBy(new AddressLabelScaler()).define();//for the cover page
+
+        date(proto().cpDate()).partitionBy(null).mapTo("cp_date").define();// for the cover page
+        date(proto().cpFooterDate()).partitionBy(null).mapTo("cp_footer_date").define();// for the cover page footer
+
         field(proto().to()).mapTo("Text1{0}").scaleBy(new AddressLabelScaler()).define();
         field(proto().from()).mapTo("Text2{0}").scaleBy(new AddressLabelScaler()).define();
 
@@ -107,8 +113,6 @@ public class N4CPFieldsMapping extends LtbFormFieldsMapping<N4CPFormFieldsData> 
                 field(proto().signedBy()).states("PL", "RA").mapTo("b12c96nfn4_signed_by").define();
                 field(proto().signature()).mapTo("b12c96nmn4_signature").define();
                 date(proto().signatureDate()).partitionBy(null).mapTo("Text3").define();
-                date(proto().signatureDate()).partitionBy(null).mapTo("cp_date").define();// for the cover page
-                date(proto().signatureDate()).partitionBy(null).mapTo("cp_footer_date").define();// for the cover page footer
             }
         });
 
@@ -118,9 +122,7 @@ public class N4CPFieldsMapping extends LtbFormFieldsMapping<N4CPFormFieldsData> 
                 text(proto().firstName()).mapTo("b12c96nfn4_personnel_first_name").define();
                 text(proto().lastName()).mapTo("b12c96nfn4_personnel_last_name").define();
                 text(proto().companyName()).mapTo("b12c96nfn4_org_name").define();
-                text(proto().companyName()).mapTo("cp_return_name").define(); //for the cover page
                 text(proto().mailingAddress()).mapTo("b12c96nfn4_org_address").define();
-                field(proto().mailingAddress()).mapTo("cp_from_address").scaleBy(new AddressLabelScaler()).define();//for the cover page
                 text(proto().unit()).mapTo("b12c96nfn4_org_unit_no").define();
                 text(proto().municipality()).mapTo("b12c96nfn4_org_city").define();
                 text(proto().province()).mapTo("b12c96nfn4_org_prov").define();

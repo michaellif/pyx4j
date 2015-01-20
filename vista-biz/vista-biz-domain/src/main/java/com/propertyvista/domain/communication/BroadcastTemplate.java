@@ -27,6 +27,10 @@ import com.pyx4j.entity.core.IPrimitive;
 
 public interface BroadcastTemplate extends IEntity {
 
+    enum AudienceType {
+        Tenant, Prospect, Employee
+    }
+
     @NotNull
     @Length(78)
     @ToString(index = 0)
@@ -36,6 +40,8 @@ public interface BroadcastTemplate extends IEntity {
     @Length(78)
     @ToString(index = 0)
     IPrimitive<String> subject();
+
+    IPrimitive<AudienceType> audienceType();
 
     @Length(48000)
     @Editor(type = Editor.EditorType.richtextarea)
@@ -54,7 +60,7 @@ public interface BroadcastTemplate extends IEntity {
     @Owned
     @Detached
     @OrderBy(PrimaryKey.class)
-    IList<BroadcastMessageAttachment> attachments();
+    IList<BroadcastAttachment> attachments();
 
     //TODO make hierarchy common parent for BroadcastTemplate, CommunicationThread and BroadcastEvent
 //    @Owned

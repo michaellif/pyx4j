@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
@@ -25,6 +26,7 @@ import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.RefSource;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepStatus;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationConfirmationTerm;
@@ -98,4 +100,8 @@ public interface OnlineApplicationDTO extends IEntity {
     IPrimitive<FeePayment> feePaymentPolicy();
 
     PaymentDTO payment();
+
+    @NotNull
+    @Caption(name = "How did you find us")
+    IPrimitive<RefSource> refSource();
 }

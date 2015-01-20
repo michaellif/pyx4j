@@ -74,10 +74,9 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
         formPanel.h3(i18n.tr("General Questions"));
         formPanel.append(Location.Left, proto().applicantData().legalQuestions(), new LegalQuestionFolder());
 
-        // TODO currently removed, then rethink:
-        if (false && !SecurityController.check(PortalProspectBehavior.Guarantor)) {
+        if (SecurityController.check(PortalProspectBehavior.Applicant)) {
             formPanel.h3(i18n.tr("How Did You Hear About Us?"));
-            formPanel.append(Location.Left, inject(proto().applicantData().refSource(), new FieldDecoratorBuilder(180).build()));
+            formPanel.append(Location.Left, inject(proto().refSource(), new FieldDecoratorBuilder(180).build()));
         }
 
         return formPanel;

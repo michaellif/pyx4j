@@ -273,7 +273,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
             );//@formatter:on
 
         LegalLetterBlob n4cpblob = EntityFactory.create(LegalLetterBlob.class);
-        n4cpblob.data().setValue(n4LetterBinary);
+        n4cpblob.data().setValue(n4cpLetterBinary);
         n4cpblob.contentType().setValue("application/pdf");
         Persistence.service().persist(n4cpblob);
 

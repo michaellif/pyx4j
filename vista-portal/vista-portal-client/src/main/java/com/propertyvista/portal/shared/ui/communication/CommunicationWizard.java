@@ -47,7 +47,7 @@ public class CommunicationWizard extends CPortalEntityWizard<CommunicationThread
         FormPanel content = new FormPanel(this);
 
         content.append(Location.Left, proto().subject()).decorate();
-        content.append(Location.Left, proto().highImportance(), new CCheckBox()).decorate();
+        content.append(Location.Left, proto().representingMessage().highImportance(), new CCheckBox()).decorate();
         content.hr();
 
         content.append(Location.Dual, proto().representingMessage().text(), new CRichTextArea());

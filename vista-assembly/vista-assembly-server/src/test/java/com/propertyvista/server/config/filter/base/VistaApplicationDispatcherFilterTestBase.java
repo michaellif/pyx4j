@@ -10,7 +10,7 @@
  * Created on Oct 14, 2014
  * @author ernestog
  */
-package com.propertyvista.server.config.filter;
+package com.propertyvista.server.config.filter.base;
 
 import java.io.IOException;
 
@@ -28,19 +28,21 @@ import com.pyx4j.unit.server.mock.filter.MockFilterChain;
 import com.pyx4j.unit.server.mock.filter.MockHttpServletRequestFilter;
 
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.server.config.filter.VistaApplicationDispatcherFilter;
+import com.propertyvista.server.config.filter.VistaTestDBSetupForNamespace;
 import com.propertyvista.server.config.filter.namespace.VistaApplicationResolverHelper;
 
 public class VistaApplicationDispatcherFilterTestBase {
 
     protected final static Logger log = LoggerFactory.getLogger(VistaApplicationDispatcherFilterTestBase.class);
 
-    VistaApplicationDispatcherFilter filterUnderTest;
+    protected VistaApplicationDispatcherFilter filterUnderTest;
 
-    MockHttpServletRequest req;
+    protected MockHttpServletRequest req;
 
-    MockHttpServletResponse resp;
+    protected MockHttpServletResponse resp;
 
-    MockFilterChain mockChain;
+    protected MockFilterChain mockChain;
 
     @Before
     public void setUp() throws Exception {

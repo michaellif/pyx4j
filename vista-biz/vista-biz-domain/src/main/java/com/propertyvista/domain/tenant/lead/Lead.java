@@ -39,21 +39,12 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.tenant.RefSource;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @SecurityEnabled
 @I18nComment(value = "Potential customer", target = I18nComment.I18nCommentTarget.This)
 public interface Lead extends IEntity {
-
-    @I18n
-    public enum RefSource {
-        Internet, Newspaper, Radio, Referral, TV, Import, LocatorServices, DirectMail, Other;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
 
     @I18n
     public enum LeaseTerm {
@@ -92,7 +83,7 @@ public interface Lead extends IEntity {
 
         closed,
 
-        rented; // corresponds to Lease.Status.Active 
+        rented; // corresponds to Lease.Status.Active
 
         @Override
         public String toString() {
@@ -148,7 +139,7 @@ public interface Lead extends IEntity {
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> comments();
 
-    @Caption(name = "How did you hear about us")
+    @Caption(name = "How did you find us")
     IPrimitive<RefSource> refSource();
 
     // Preferred appointments:

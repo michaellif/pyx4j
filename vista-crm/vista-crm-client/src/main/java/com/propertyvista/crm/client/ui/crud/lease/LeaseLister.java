@@ -69,7 +69,7 @@ public class LeaseLister extends SiteDataTablePanel<LeaseDTO> {
 
             new Builder(proto().leaseParticipants().$().customer().customerId(), false).searchableOnly().build(),
 
-            new Builder(proto().status()).width("80px").build(),
+            new Builder(proto().status()).filterAlwaysShown(true).width("80px").build(),
             new Builder(proto().completion()).build(),
             new Builder(proto().billingAccount().accountNumber()).build(),
             new Builder(proto().preauthorizedPaymentPresent()).sortable(false).build(),

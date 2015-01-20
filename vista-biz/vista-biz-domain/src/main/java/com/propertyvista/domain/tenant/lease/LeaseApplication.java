@@ -18,6 +18,7 @@ import java.util.EnumSet;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -41,6 +42,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.tenant.RefSource;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 
 public interface LeaseApplication extends IEntity {
@@ -210,4 +212,7 @@ public interface LeaseApplication extends IEntity {
 
     @Detached
     IList<ApprovalChecklistItem> approvalChecklist();
+
+    @Caption(name = "How did you find us")
+    IPrimitive<RefSource> refSource();
 }

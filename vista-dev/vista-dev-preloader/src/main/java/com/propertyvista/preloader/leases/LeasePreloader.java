@@ -335,7 +335,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             }
 
             SystemDateManager.resetDate();
-
         }
 
         TenantsEquifaxTestCasesGenerator tenantsEquifaxTestCasesGenerator = new TenantsEquifaxTestCasesGenerator();

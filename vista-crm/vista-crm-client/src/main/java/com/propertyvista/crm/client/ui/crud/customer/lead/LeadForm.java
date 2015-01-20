@@ -72,26 +72,15 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
         get(proto().guests()).addComponentValidator(new AbstractComponentValidator<List<Guest>>() {
 
-
-
-
-
-
-
-
-
-
-
-
             @Override
             public BasicValidationError isValid() {
                 Boolean hasContact = false;
                 if (getCComponent().getValue() != null) {
                     for (Guest g : getCComponent().getValue()) {
                         //@formatter:off
-                        if (!g.person().email().isNull() || 
-                            !g.person().homePhone().isNull() || 
-                            !g.person().workPhone().isNull() || 
+                        if (!g.person().email().isNull() ||
+                            !g.person().homePhone().isNull() ||
+                            !g.person().workPhone().isNull() ||
                             !g.person().mobilePhone().isNull()) {
                         //@formatter:on
                             hasContact = true;

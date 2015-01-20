@@ -45,6 +45,7 @@ import com.propertyvista.crm.rpc.services.lease.BlankApplicationDocumentDownload
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
+import com.propertyvista.domain.tenant.RefSource;
 import com.propertyvista.domain.tenant.lease.LeaseApplication.ApprovalChecklistItem;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
@@ -224,6 +225,16 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
                 callback.onSuccess(result);
             }
         }, value);
+    }
+
+    @Override
+    public void updateRefSource(final AsyncCallback<VoidSerializable> callback, RefSource value) {
+        ((LeaseApplicationViewerCrudService) getService()).updateRefSource(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                callback.onSuccess(result);
+            }
+        }, getEntityId(), value);
     }
 
     @Override
