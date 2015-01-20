@@ -81,7 +81,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         addTab(createFinancialTab(), i18n.tr("Financial"), DataModelPermission.permissionRead(TenantFinancialDTO.class));
         addTab(createApplicationDocumentsTab(), i18n.tr("Application Documents"), DataModelPermission.permissionRead(LeaseApplicationDocument.class));
         addTab(createSummaryTab(), i18n.tr("Summary"));
-        approvalTab = addTab(createApprovalChecklistTab(), i18n.tr("Approval"));
+        approvalTab = addTab(createApprovalChecklistTab(), i18n.tr("Approval Checklist"));
     }
 
     @Override
