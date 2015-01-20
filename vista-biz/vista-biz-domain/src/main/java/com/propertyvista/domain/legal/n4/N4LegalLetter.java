@@ -22,6 +22,7 @@ import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.legal.LegalLetter;
 
+@Deprecated
 @DiscriminatorValue("N4LegalLetter")
 public interface N4LegalLetter extends LegalLetter {
 

@@ -20,6 +20,7 @@ import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 
+@Deprecated
 @Transient
 public interface LegalNoticeCandidate extends IEntity {
 

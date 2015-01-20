@@ -14,6 +14,7 @@ package com.propertyvista.crm.server.services.legal.eviction;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -98,8 +99,15 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
                 evictionCase = ServerSideFactory.create(EvictionCaseFacade.class).openEvictionCase(leaseId, i18n.tr("Created by N4 Batch process"));
             }
             EvictionStatusN4 n4status = (EvictionStatusN4) ServerSideFactory.create(EvictionCaseFacade.class).addEvictionStatusDetails(evictionCase,
-                    EvictionStepType.N4.toString(), i18n.tr("Added by N4 Batch process"), null);
+                    EvictionStepType.N4.toString(), i18n.tr("N4 Batch created: {0}", bo.name().getValue()), null);
             n4status.leaseArrears().set(item.leaseArrears());
+            n4status.cancellationBalance().setValue(n4policy.cancellationThreshold().getValue());
+            // set expiry date by N4Policy
+            GregorianCalendar expiryDate = new GregorianCalendar();
+            expiryDate.setTime(bo.created().getValue());
+            expiryDate.add(GregorianCalendar.DAY_OF_YEAR, n4policy.expiryDays().getValue());
+            n4status.expiryDate().setValue(new LogicalDate(expiryDate.getTime()));
+            Persistence.service().persist(n4status);
         }
         Persistence.service().commit();
 
