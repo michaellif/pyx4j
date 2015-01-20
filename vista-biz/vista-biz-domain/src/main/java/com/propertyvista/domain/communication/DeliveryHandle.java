@@ -30,10 +30,17 @@ import com.pyx4j.entity.core.IPrimitive;
 @Table(prefix = "communication")
 public interface DeliveryHandle extends IEntity {
 
+    public static enum MessageType {
+        Informational, Promotional, Legal, CommercialActivity, Organizational
+    }
+
     @NotNull
     @Detached
     @MemberColumn(notNull = true)
     CommunicationEndpoint recipient();
+
+    //TODO @NotNull
+    IPrimitive<MessageType> messageType();
 
     @NotNull
     @ReadOnly

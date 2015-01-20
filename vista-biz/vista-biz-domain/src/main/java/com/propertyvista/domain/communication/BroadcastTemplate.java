@@ -25,6 +25,8 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.communication.DeliveryHandle.MessageType;
+
 public interface BroadcastTemplate extends IEntity {
 
     enum AudienceType {
@@ -42,6 +44,9 @@ public interface BroadcastTemplate extends IEntity {
     IPrimitive<String> subject();
 
     IPrimitive<AudienceType> audienceType();
+
+    @NotNull
+    IPrimitive<MessageType> messageType();
 
     @Length(48000)
     @Editor(type = Editor.EditorType.richtextarea)

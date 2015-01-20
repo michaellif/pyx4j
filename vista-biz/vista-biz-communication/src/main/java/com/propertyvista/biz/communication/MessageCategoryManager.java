@@ -21,6 +21,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.communication.MessageCategory;
+import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.communication.MessageCategory.TicketType;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmUser;
@@ -48,7 +49,7 @@ public class MessageCategoryManager {
 
     private void cacheMessageCategories() {
         EntityQueryCriteria<MessageCategory> criteria = EntityQueryCriteria.create(MessageCategory.class);
-        criteria.ne(criteria.proto().ticketType(), TicketType.NotTicket);
+        criteria.eq(criteria.proto().categoryType(), CategoryType.Ticket);
         List<MessageCategory> predefinedEps = Persistence.service().query(criteria);
         if (predefinedEps != null) {
             for (MessageCategory ep : predefinedEps)
