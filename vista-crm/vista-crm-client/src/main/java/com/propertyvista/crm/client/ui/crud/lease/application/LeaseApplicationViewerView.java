@@ -22,7 +22,7 @@ import com.pyx4j.site.client.IsView;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
-import com.propertyvista.domain.tenant.RefSource;
+import com.propertyvista.domain.tenant.ReferenceSource;
 import com.propertyvista.domain.tenant.lease.LeaseApplication.ApprovalChecklistItem;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
@@ -54,7 +54,7 @@ public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApp
 
         void updateApprovalTaskItem(AsyncCallback<ApprovalChecklistItem> callback, ApprovalChecklistItem value);
 
-        void updateRefSource(AsyncCallback<VoidSerializable> callback, RefSource value);
+        void updateRefSource(AsyncCallback<VoidSerializable> callback, ReferenceSource value);
 
         void downloadBlankLeaseApplicationDocument(LeaseTermParticipant<?> participantId);
 

@@ -204,7 +204,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         // Misc: ----------------------------------------------------------------------------------------------------------------
         formPanel.h1(i18n.tr("Miscellaneous"));
-        formPanel.append(Location.Dual, proto().leaseApplication().refSource()).decorate().componentWidth(180);
+        formPanel.append(Location.Dual, proto().leaseApplication().referenceSource()).decorate().componentWidth(180);
 
         return formPanel;
     }

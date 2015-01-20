@@ -81,6 +81,10 @@ public class RestrictionsPolicyForm extends PolicyDTOTabPanelBasedForm<Restricti
         formPanel.append(Location.Dual, proto().emergencyContactsIsMandatory()).decorate().componentWidth(40).labelWidth(300);
         formPanel.append(Location.Dual, proto().emergencyContactsNumber()).decorate().componentWidth(40).labelWidth(300);
 
+        formPanel.br();
+
+        formPanel.append(Location.Dual, proto().referenceSourceIsMandatory()).decorate().componentWidth(40).labelWidth(300);
+
         return formPanel;
     }
 }

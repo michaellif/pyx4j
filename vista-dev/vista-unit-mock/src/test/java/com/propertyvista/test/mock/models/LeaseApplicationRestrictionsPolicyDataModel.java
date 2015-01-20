@@ -42,6 +42,8 @@ public class LeaseApplicationRestrictionsPolicyDataModel extends MockDataModel<R
         policy.emergencyContactsIsMandatory().setValue(true);
         policy.emergencyContactsNumber().setValue(1);
 
+        policy.referenceSourceIsMandatory().setValue(true);
+
         policy.node().set(getDataModel(PmcDataModel.class).getOrgNode());
         Persistence.service().persist(policy);
         addItem(policy);

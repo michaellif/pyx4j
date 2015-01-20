@@ -46,7 +46,7 @@ import com.propertyvista.biz.tenant.LeadFacade;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.RefSource;
+import com.propertyvista.domain.tenant.ReferenceSource;
 import com.propertyvista.domain.tenant.lead.Guest;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.pmsite.server.PMSiteApplication;
@@ -159,7 +159,7 @@ public class InquiryPanel extends Panel {
         form.add(new DateInput("appointmentDate2", leadModel.bind(lead.appointmentDate2())));
         form.add(new RadioChoice<Lead.DayPart>("appointmentTime2", leadModel.bind(lead.appointmentTime2()), Arrays.asList(Lead.DayPart.values())));
         // ref source
-        form.add(new WicketUtils.DropDownList<RefSource>("refSource", leadModel.bind(lead.refSource()), Arrays.asList(RefSource.values()), true,
+        form.add(new WicketUtils.DropDownList<ReferenceSource>("refSource", leadModel.bind(lead.refSource()), Arrays.asList(ReferenceSource.values()), true,
                 false));
         // comments
         form.add(new TextArea<String>("comments", leadModel.bind(lead.comments())));

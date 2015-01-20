@@ -39,7 +39,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.tenant.RefSource;
+import com.propertyvista.domain.tenant.ReferenceSource;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @SecurityEnabled
@@ -140,7 +140,7 @@ public interface Lead extends IEntity {
     IPrimitive<String> comments();
 
     @Caption(name = "How did you find us")
-    IPrimitive<RefSource> refSource();
+    IPrimitive<ReferenceSource> refSource();
 
     // Preferred appointments:
 

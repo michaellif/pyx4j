@@ -114,6 +114,8 @@ public class RestrictionsPolicyPreloader extends AbstractPolicyPreloader<Restric
         policy.emergencyContactsIsMandatory().setValue(true);
         policy.emergencyContactsNumber().setValue(EMERGENCY_CONTACTS_NUM);
 
+        policy.referenceSourceIsMandatory().setValue(true);
+
         log.append(policy.getStringView());
 
         return policy;

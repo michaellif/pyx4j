@@ -75,7 +75,7 @@ import com.propertyvista.crm.rpc.services.lease.ac.CreditCheckRun;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.domain.tenant.RefSource;
+import com.propertyvista.domain.tenant.ReferenceSource;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseApplication.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
@@ -388,13 +388,13 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     }
 
     private void refSourceActionExecuter() {
-        new SelectEnumDialog<RefSource>(i18n.tr("Select Reference Source"), EnumSet.allOf(RefSource.class)) {
+        new SelectEnumDialog<ReferenceSource>(i18n.tr("Select Reference Source"), EnumSet.allOf(ReferenceSource.class)) {
             @Override
             public boolean onClickOk() {
                 ((LeaseApplicationViewerView.Presenter) getPresenter()).updateRefSource(new DefaultAsyncCallback<VoidSerializable>() {
                     @Override
                     public void onSuccess(VoidSerializable result) {
-                        getForm().get(getForm().proto().leaseApplication().refSource()).setValue(getSelectedType());
+                        getForm().get(getForm().proto().leaseApplication().referenceSource()).setValue(getSelectedType());
                     }
                 }, getSelectedType());
                 return true;

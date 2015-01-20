@@ -26,7 +26,7 @@ import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.RefSource;
+import com.propertyvista.domain.tenant.ReferenceSource;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepStatus;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationConfirmationTerm;
@@ -72,6 +72,8 @@ public interface OnlineApplicationDTO extends IEntity {
 
     IPrimitive<Integer> emergencyContactsNumberRequired();
 
+    IPrimitive<Boolean> referenceSourceIsMandatory();
+
     //--------------------------------------------
     // read and update data:
 
@@ -103,5 +105,5 @@ public interface OnlineApplicationDTO extends IEntity {
 
     @NotNull
     @Caption(name = "How did you find us")
-    IPrimitive<RefSource> refSource();
+    IPrimitive<ReferenceSource> referenceSource();
 }
