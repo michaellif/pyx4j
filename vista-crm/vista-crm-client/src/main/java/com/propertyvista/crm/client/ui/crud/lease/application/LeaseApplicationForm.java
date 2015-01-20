@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
@@ -100,7 +101,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         chargesTab.setTabVisible(!VistaFeatures.instance().yardiIntegration() && getValue().status().getValue().isDraft()
                 && !getValue().billingPreview().isNull());
         approvalTab.setTabVisible(!getValue().leaseApplication().approvalChecklist().isEmpty());
-        approvalChecklistFolder.setActive(approvalTab.isTabVisible() && getValue().status().getValue().isDraft());
+        approvalChecklistFolder.setModifyable(approvalTab.isTabVisible() && getValue().status().getValue().isDraft());
 
         get(proto().leaseApplication().applicationId()).setVisible(true);
         get(proto().leaseApplication().yardiApplicationId()).setVisible(VistaFeatures.instance().yardiIntegration());
@@ -230,9 +231,9 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
             super(ApprovalChecklistItem.class, false);
         }
 
-        public void setActive(boolean active) {
+        public void setModifyable(boolean modifyable) {
             for (CComponent<?, ?, ?, ?> item : getComponents()) {
-                ((ApprovalChecklistItemEditor) ((CFolderItem<?>) item).getComponents().iterator().next()).setActive(active);
+                ((ApprovalChecklistItemEditor) ((CFolderItem<?>) item).getComponents().iterator().next()).setModifyable(modifyable);
             }
         }
 
@@ -248,6 +249,13 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
             private final Button updateStatus = new Button(i18n.tr("Update Status"), new Command() {
                 @Override
                 public void execute() {
+                    setActive(true);
+                }
+            });
+
+            private final Button save = new Button(i18n.tr("Save"), new Command() {
+                @Override
+                public void execute() {
                     ((LeaseApplicationViewerView.Presenter) getParentView().getPresenter()).updateApprovalTaskItem(
                             new DefaultAsyncCallback<ApprovalChecklistItem>() {
                                 @Override
@@ -255,8 +263,19 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
                                     setValue(result);
                                 }
                             }, getValue());
+
+                    setActive(false);
                 }
             });
+
+            private final Button cancel = new Button(i18n.tr("Cancel"), new Command() {
+                @Override
+                public void execute() {
+                    setActive(false);
+                }
+            });
+
+            private final FlowPanel buttons = new FlowPanel();
 
             public ApprovalChecklistItemEditor() {
                 super((ApprovalChecklistItem.class));
@@ -276,12 +295,19 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
                 formPanel.append(Location.Left, updateStatus);
 
+                buttons.add(save);
+                buttons.add(cancel);
+                formPanel.append(Location.Left, buttons);
+
                 // tweaks:
                 get(proto().status()).inheritViewable(false);
                 get(proto().status()).inheritEditable(false);
 
                 get(proto().notes()).inheritViewable(false);
                 get(proto().notes()).inheritEditable(false);
+
+                setModifyable(false);
+                setActive(false);
 
                 return formPanel;
             }
@@ -299,6 +325,10 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
                 }
             }
 
+            public void setModifyable(boolean modifyable) {
+                updateStatus.setVisible(modifyable);
+            }
+
             public void setActive(boolean active) {
                 get(proto().status()).setViewable(!active);
                 get(proto().status()).setEditable(active);
@@ -306,7 +336,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
                 get(proto().notes()).setViewable(!active);
                 get(proto().notes()).setEditable(active);
 
-                statusSelector.setVisible(active);
+                updateStatus.setVisible(!active);
+                buttons.setVisible(active);
             }
         }
     }
