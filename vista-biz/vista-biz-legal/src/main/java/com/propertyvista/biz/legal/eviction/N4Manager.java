@@ -43,7 +43,7 @@ import com.propertyvista.biz.legal.forms.framework.filling.FormFillerImpl;
 import com.propertyvista.biz.legal.forms.n4.N4FieldsMapping;
 import com.propertyvista.biz.legal.forms.n4cs.N4CSFieldsMapping;
 import com.propertyvista.domain.blob.EmployeeSignatureBlob;
-import com.propertyvista.domain.blob.LegalLetterBlob;
+import com.propertyvista.domain.blob.EvictionDocumentBlob;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.EmployeeSignature;
 import com.propertyvista.domain.contact.InternationalAddress;
@@ -85,7 +85,7 @@ public class N4Manager {
         N4CSFormFieldsData n4csFormData = prepareN4CSData(n4LeaseData, item.batch());
 
         // generate N4
-        LegalLetterBlob blob = EntityFactory.create(LegalLetterBlob.class);
+        EvictionDocumentBlob blob = EntityFactory.create(EvictionDocumentBlob.class);
         blob.data().setValue(generateN4Letter(n4FormData));
         blob.contentType().setValue("application/pdf");
         Persistence.service().persist(blob);
@@ -104,7 +104,7 @@ public class N4Manager {
         Persistence.service().persist(n4Letter);
 
         // generate Certificate of Service
-        LegalLetterBlob csBlob = EntityFactory.create(LegalLetterBlob.class);
+        EvictionDocumentBlob csBlob = EntityFactory.create(EvictionDocumentBlob.class);
         csBlob.data().setValue(generateN4CSLetter(n4csFormData));
         csBlob.contentType().setValue("application/pdf");
         Persistence.service().persist(csBlob);
