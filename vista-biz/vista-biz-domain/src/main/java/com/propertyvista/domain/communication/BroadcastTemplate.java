@@ -21,16 +21,25 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.i18n.annotations.Translate;
 
 import com.propertyvista.domain.communication.DeliveryHandle.MessageType;
 
 public interface BroadcastTemplate extends IEntity {
 
-    enum AudienceType {
-        Tenant, Prospect, Employee
+    public enum AudienceType {
+        @Translate("Tenant")
+        Tenant,
+
+        @Translate("Prospect")
+        Prospect,
+
+        @Translate("Employee")
+        Employee
     }
 
     @NotNull
@@ -56,7 +65,7 @@ public interface BroadcastTemplate extends IEntity {
     IPrimitive<Boolean> allowedReply();
 
     @NotNull
-    @Detached
+    @Detached(level = AttachLevel.ToStringMembers)
     @MemberColumn(notNull = true)
     MessageCategory category();
 

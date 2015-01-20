@@ -21,13 +21,13 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.communication.BroadcastTemplateViewerView;
 import com.propertyvista.crm.client.ui.crud.communication.BroadcastTemplateViewerView.BroadcastTemplateViewerPresenter;
-import com.propertyvista.crm.rpc.services.CommunicationCrudService;
+import com.propertyvista.crm.rpc.services.BroadcastTemplateCrudService;
 import com.propertyvista.domain.communication.BroadcastTemplate;
 
 public class BroadcastTemplateViewerActivity extends CrmViewerActivity<BroadcastTemplate> implements BroadcastTemplateViewerPresenter {
 
     public BroadcastTemplateViewerActivity(CrudAppPlace place) {
         super(BroadcastTemplate.class, place, CrmSite.getViewFactory().getView(BroadcastTemplateViewerView.class), GWT
-                .<AbstractCrudService<BroadcastTemplate>> create(CommunicationCrudService.class));
+                .<AbstractCrudService<BroadcastTemplate>> create(BroadcastTemplateCrudService.class));
     }
 }

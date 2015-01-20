@@ -40,9 +40,11 @@ public class BroadcastTemplateForm extends CrmEntityForm<BroadcastTemplate> {
         formPanel.append(Location.Right, proto().category()).decorate();
         formPanel.append(Location.Left, proto().allowedReply()).decorate();
         formPanel.append(Location.Right, proto().highImportance()).decorate();
+        formPanel.append(Location.Left, proto().audienceType()).decorate();
+        formPanel.append(Location.Left, proto().messageType()).decorate();
         formPanel.append(Location.Dual, proto().subject()).decorate();
         formPanel.append(Location.Dual, proto().text()).decorate();
-
+        get(proto().audienceType()).setEditable(false);
         return formPanel;
     }
 
