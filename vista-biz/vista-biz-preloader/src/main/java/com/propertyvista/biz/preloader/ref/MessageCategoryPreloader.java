@@ -34,7 +34,7 @@ public class MessageCategoryPreloader extends AbstractDataPreloader {
         createCategory(CategoryType.Ticket, TicketType.Landlord, TicketType.Landlord.toString(), CrmRolesPreloader.getDefaultRole());
         createCategory(CategoryType.Ticket, TicketType.Vendor, TicketType.Vendor.toString(), CrmRolesPreloader.getDefaultRole());
         createCategory(CategoryType.Ticket, TicketType.Maintenance, TicketType.Maintenance.toString(), CrmRolesPreloader.getDefaultRole());
-        createCategory(CategoryType.Message, TicketType.NotTicket, "General Message", CrmRolesPreloader.getDefaultRole());
+        createCategory(CategoryType.Message, null, "General Message", CrmRolesPreloader.getDefaultRole());
         return null;
     }
 

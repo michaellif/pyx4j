@@ -14,10 +14,22 @@ package com.propertyvista.server.config.filter.utils;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.propertyvista.domain.security.common.VistaApplication;
+
 public class HttpRequestUtils {
 
     public static String getAppCacheKey(HttpServletRequest httpRequest) {
-        return httpRequest.getServerName() + "/" + getRootServletPath(httpRequest);
+
+        StringBuffer appCacheKey = new StringBuffer();
+        appCacheKey.append(httpRequest.getServerName());
+
+        String rootServletPath = getRootServletPath(httpRequest);
+        if (rootServletPath.equals(VistaApplication.prospect.name())) {
+            appCacheKey.append("/");
+            appCacheKey.append(rootServletPath);
+        }
+
+        return appCacheKey.toString();
     }
 
     /**

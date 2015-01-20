@@ -39,11 +39,8 @@ public interface MessageCategory extends IEntity {
     @I18n(context = "MessageGroup")
     @XmlType(name = "Type")
     public enum CategoryType {
-        @Translate("Message")
-        Message,
 
-        @Translate("Ticket")
-        Ticket;
+        Message, Ticket;
 
         @Override
         public String toString() {
@@ -62,9 +59,6 @@ public interface MessageCategory extends IEntity {
 
         @Translate("Vendor")
         Vendor,
-
-        @Translate("NotTicket")
-        NotTicket,
 
         @Translate("Maintenance")
         Maintenance;

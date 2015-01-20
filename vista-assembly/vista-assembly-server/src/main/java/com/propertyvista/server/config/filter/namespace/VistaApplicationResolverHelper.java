@@ -34,7 +34,6 @@ public class VistaApplicationResolverHelper {
         VistaApplication app = null;
 
         String serverName = httpRequest.getServerName();
-        String requestPath = httpRequest.getServletPath();
         String rootServletPath = HttpRequestUtils.getRootServletPath(httpRequest);
 
         try {
@@ -44,7 +43,7 @@ public class VistaApplicationResolverHelper {
             if (app != null) {
                 return app;
             } else {
-                app = getAppByDomainOrPath(serverName, requestPath, rootServletPath);
+                app = getAppByDomainOrPath(serverName, rootServletPath);
 
                 if (app != null) {
                     CacheService.put(HttpRequestUtils.getAppCacheKey(httpRequest), app);
@@ -67,7 +66,7 @@ public class VistaApplicationResolverHelper {
      *            request path for this request
      * @return Vista application
      */
-    private static VistaApplication getAppByDomainOrPath(String domain, String path, String rootServletPath) {
+    private static VistaApplication getAppByDomainOrPath(String domain, String rootServletPath) {
         // TODO Extract method to a new class. Create new return type including data from VistaApplication and PMC. Redo vistaNameSpace resolver (common tasks)
         VistaApplication app = null;
         String[] serverNameParts = domain.split("\\.");
