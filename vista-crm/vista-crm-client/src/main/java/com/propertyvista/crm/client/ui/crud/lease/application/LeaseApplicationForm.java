@@ -30,6 +30,7 @@ import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
@@ -297,7 +298,9 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
                 formPanel.append(Location.Right, proto().status(), statusSelector).decorate();
                 formPanel.append(Location.Right, proto().notes()).decorate();
 
-                formPanel.append(Location.Left, buttons);
+                if (SecurityController.check(DataModelPermission.permissionUpdate(LeaseApplicationDTO.class))) {
+                    formPanel.append(Location.Left, buttons);
+                }
 
                 // tweaks:
                 get(proto().status()).inheritViewable(false);
@@ -329,7 +332,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
                 buttons.asWidget().setVisible(modifyable);
             }
 
-            public void setActive(boolean active) {
+            private void setActive(boolean active) {
                 get(proto().status()).setViewable(!active);
                 get(proto().status()).setEditable(active);
 
