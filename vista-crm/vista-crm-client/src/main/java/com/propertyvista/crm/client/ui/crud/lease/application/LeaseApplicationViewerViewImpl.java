@@ -173,6 +173,14 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         // Actions:
         setUnitReservationPermission(new ActionPermission(ApplicationReserveUnit.class));
 
+        refSourceAction = new SecureMenuItem(i18n.tr("Set Reference Source"), new Command() {
+            @Override
+            public void execute() {
+                refSourceActionExecuter();
+            }
+        }, DataModelPermission.permissionUpdate(LeaseApplicationDTO.class));
+        addAction(refSourceAction);
+
         createOnlineApplication = new SecureMenuItem(i18n.tr("Start Online Application"), new Command() {
             @Override
             public void execute() {
@@ -267,14 +275,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             }
         }, new ActionPermission(ApplicationCancel.class));
         addAction(cancelAction);
-
-        refSourceAction = new SecureMenuItem(i18n.tr("Set Reference Source"), new Command() {
-            @Override
-            public void execute() {
-                refSourceActionExecuter();
-            }
-        }, DataModelPermission.permissionUpdate(LeaseApplicationDTO.class));
-        addAction(refSourceAction);
     }
 
     private void inviteActionExecuter() {
