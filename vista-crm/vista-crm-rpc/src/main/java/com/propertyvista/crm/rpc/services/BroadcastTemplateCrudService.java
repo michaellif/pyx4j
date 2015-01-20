@@ -12,10 +12,22 @@
  */
 package com.propertyvista.crm.rpc.services;
 
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.communication.BroadcastTemplate;
+import com.propertyvista.domain.communication.BroadcastTemplate.AudienceType;
+import com.propertyvista.domain.communication.DeliveryHandle.MessageType;
 
 public interface BroadcastTemplateCrudService extends AbstractCrudService<BroadcastTemplate> {
+
+    @Transient
+    public static interface BroadcastTemplateInitializationData extends InitializationData {
+
+        IPrimitive<AudienceType> audienceType();
+
+        IPrimitive<MessageType> messageType();
+    }
 
 }
