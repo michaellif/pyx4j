@@ -100,7 +100,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         });
 
         formPanel.h1(i18n.tr("Company Info"));
-        formPanel.append(Location.Dual, proto().companyName()).decorate();
+        formPanel.append(Location.Left, proto().companyName()).decorate();
         formPanel.append(Location.Dual, proto().mailingAddress(), new InternationalAddressEditor());
 
         return formPanel;

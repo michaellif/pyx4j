@@ -15,7 +15,10 @@ package com.propertyvista.domain.legal.n4;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -47,29 +50,41 @@ public interface N4Batch extends IEntity {
     @ReadOnly
     @Format("yyyy-MM-dd HH:mm:ss")
     @Timestamp(Update.Created)
-    IPrimitive<Date> created();
+    IPrimitive<Date> issueDate();
 
     IPrimitive<Boolean> isReadyForService();
 
+    @ReadOnly
+    @Format("yyyy-MM-dd HH:mm:ss")
     IPrimitive<LogicalDate> serviceDate();
 
     IPrimitive<N4DeliveryMethod> deliveryMethod();
 
+    @ReadOnly
+    @Format("yyyy-MM-dd HH:mm:ss")
     IPrimitive<LogicalDate> deliveryDate();
-
-    IPrimitive<LogicalDate> noticeIssueDate();
 
     IPrimitive<String> companyLegalName();
 
     InternationalAddress companyAddress();
 
     /** must have the following format: (XXX) XXX-XXXX */
-    IPrimitive<String> companyPhoneNumber();
+    @Editor(type = EditorType.phone)
+    @Caption(name = "Phone")
+    IPrimitive<String> phoneNumber();
 
     /** optional, but must have the following format: (XXX) XXX-XXXX */
-    IPrimitive<String> companyFaxNumber();
+    @Editor(type = EditorType.phone)
+    @Caption(name = "Fax")
+    IPrimitive<String> faxNumber();
 
-    IPrimitive<String> companyEmailAddress();
+    @Editor(type = EditorType.email)
+    @Caption(name = "E-Mail")
+    IPrimitive<String> emailAddress();
+
+    @Editor(type = EditorType.phone)
+    @Caption(name = "Phone")
+    IPrimitive<String> phoneNumberCS();
 
     /** Determines if its Landlord's or Agent's signature */
     IPrimitive<Boolean> isLandlord();

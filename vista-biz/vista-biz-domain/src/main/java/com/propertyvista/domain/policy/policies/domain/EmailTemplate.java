@@ -13,24 +13,21 @@
 package com.propertyvista.domain.policy.policies.domain;
 
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.communication.MessageTemplate;
 import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
 
-public interface EmailTemplate extends IEntity {
+public interface EmailTemplate extends MessageTemplate {
 
     @Owner
     @NotNull
@@ -41,24 +38,15 @@ public interface EmailTemplate extends IEntity {
     @Indexed(uniqueConstraint = true, group = { "UPT,1" })
     EmailTemplatesPolicy policy();
 
-    @OrderColumn
-    IPrimitive<Integer> orderInPolicy();
-
-    @NotNull
-    IPrimitive<String> subject();
+    @Override
+    @ToString
+    @Indexed(uniqueConstraint = true, group = { "UPT,2" })
+    IPrimitive<EmailTemplateType> templateType();
 
     IPrimitive<Boolean> useHeader();
 
     IPrimitive<Boolean> useFooter();
 
-    @NotNull
-    @Owned
-    @Length(20845)
-    @Editor(type = Editor.EditorType.richtextarea)
-    IPrimitive<String> content();
-
-    @MemberColumn(name = "templateType")
-    @ToString
-    @Indexed(uniqueConstraint = true, group = { "UPT,2" })
-    IPrimitive<EmailTemplateType> type();
+    @OrderColumn
+    IPrimitive<Integer> orderInPolicy();
 }

@@ -50,7 +50,7 @@ public interface Message extends IEntity {
 
     @Length(48000)
     @Editor(type = Editor.EditorType.richtextarea)
-    IPrimitive<String> text();
+    IPrimitive<String> content();
 
     @MemberColumn(name = "messageDate")
     @ToString(index = 0)

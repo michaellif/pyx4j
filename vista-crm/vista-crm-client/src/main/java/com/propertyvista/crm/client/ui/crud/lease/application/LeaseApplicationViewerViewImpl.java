@@ -356,7 +356,13 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     }
 
     private void approveActionExecuter() {
-        new ApproveDialog().show();
+        new ActionBox(i18n.tr("Approve")) {
+            @Override
+            public boolean onClickOk() {
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(actionValue(Action.Approve));
+                return true;
+            }
+        }.show();
     }
 
     private void declineActionExecuter() {
@@ -501,97 +507,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         IPrimitive<Boolean> employmentConfirmation();
 
         IPrimitive<Boolean> landlordConfirmation();
-    }
-
-    private class ApproveDialog extends OkCancelDialog {
-
-        private final CForm<ApprovalChecklist> form;
-
-        private final CTextArea notes = new CTextArea();
-
-        public ApproveDialog() {
-            super(i18n.tr("Application Approval Checklist"));
-
-            form = new CForm<ApprovalChecklist>(ApprovalChecklist.class) {
-
-                @Override
-                protected IsWidget createContent() {
-                    FormPanel formPanel = new FormPanel(this);
-
-                    formPanel.append(Location.Left, proto().informationCompleteness());
-                    formPanel.append(Location.Left, proto().creditCheck());
-                    formPanel.append(Location.Left, proto().employmentConfirmation());
-                    formPanel.append(Location.Left, proto().landlordConfirmation());
-
-                    ((CCheckBox) get(proto().informationCompleteness())).setDecorator(new CheckBoxDecorator());
-                    ((CCheckBox) get(proto().creditCheck())).setDecorator(new CheckBoxDecorator());
-                    ((CCheckBox) get(proto().employmentConfirmation())).setDecorator(new CheckBoxDecorator());
-                    ((CCheckBox) get(proto().landlordConfirmation())).setDecorator(new CheckBoxDecorator());
-
-                    ((CCheckBox) get(proto().informationCompleteness())).asWidget().getElement().getStyle().setProperty("textAlign", "left");
-                    ((CCheckBox) get(proto().creditCheck())).asWidget().getElement().getStyle().setProperty("textAlign", "left");
-                    ((CCheckBox) get(proto().employmentConfirmation())).asWidget().getElement().getStyle().setProperty("textAlign", "left");
-                    ((CCheckBox) get(proto().landlordConfirmation())).asWidget().getElement().getStyle().setProperty("textAlign", "left");
-
-                    formPanel.h4(i18n.tr("Notes:"));
-                    formPanel.append(Location.Left, notes);
-                    notes.asWidget().setWidth("334px");
-
-                    return formPanel;
-                }
-
-                @Override
-                public void addValidations() {
-                    super.addValidations();
-
-                    get(proto().informationCompleteness()).addComponentValidator(new CheckValidator());
-                    get(proto().creditCheck()).addComponentValidator(new CheckValidator());
-                    get(proto().employmentConfirmation()).addComponentValidator(new CheckValidator());
-                    get(proto().landlordConfirmation()).addComponentValidator(new CheckValidator());
-                }
-
-                class CheckValidator extends AbstractComponentValidator<Boolean> {
-                    @Override
-                    public AbstractValidationError isValid() {
-                        Boolean value = getCComponent().getValue();
-                        return ((value == null || value == Boolean.FALSE) ? new BasicValidationError(getCComponent(), i18n.tr("Should be marked!")) : null);
-                    }
-                }
-            };
-
-            form.init();
-            form.reset();
-
-            ApprovalChecklist ac = EntityFactory.create(ApprovalChecklist.class);
-            ac.informationCompleteness().setValue(false);
-            ac.creditCheck().setValue(false);
-            ac.employmentConfirmation().setValue(false);
-            ac.landlordConfirmation().setValue(false);
-
-            form.populate(ac);
-
-            setBody(form);
-            setDialogPixelWidth(350);
-        }
-
-        @Override
-        public boolean onClickOk() {
-            form.setVisitedRecursive();
-            if (form.isValid()) {
-                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(actionValue(Action.Approve));
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        public LeaseApplicationActionDTO actionValue(Action status) {
-            LeaseApplicationActionDTO action = EntityFactory.create(LeaseApplicationActionDTO.class);
-            action.leaseId().set(getForm().getValue().createIdentityStub());
-            action.decisionReason().setValue(notes.getValue());
-            action.action().setValue(status);
-            return action;
-        }
     }
 
     @Override

@@ -81,6 +81,7 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
         void signingProgressOrUploadAgreement();
 
+        @Deprecated
         void legalState();
 
         List<LeaseParticipant<?>> getAllLeaseParticipants();

@@ -159,7 +159,7 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
 
         Message c = EntityFactory.create(Message.class);
         c.sender().set(from);
-        c.text().setValue(msgContent);
+        c.content().setValue(msgContent);
         c.date().setValue(new Date());
         c.highImportance().setValue(false);
 

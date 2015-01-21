@@ -35,7 +35,11 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends SiteData
     protected List<ColumnDescriptor> defaultColumns;
 
     public PolicyListerBase(Class<P> clazz, AbstractListCrudService<P> service) {
-        super(clazz, service, true, true);
+        this(clazz, service, true, true);
+    }
+
+    public PolicyListerBase(Class<P> clazz, AbstractListCrudService<P> service, boolean allowAddNew, boolean allowDelete) {
+        super(clazz, service, allowAddNew, allowDelete);
         setFilteringEnabled(false);
     }
 

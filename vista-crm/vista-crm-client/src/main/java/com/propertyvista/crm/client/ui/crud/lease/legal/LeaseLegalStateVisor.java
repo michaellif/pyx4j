@@ -26,6 +26,7 @@ import com.propertyvista.dto.LeaseLegalStateDTO;
 import com.propertyvista.dto.LegalStatusDTO;
 import com.propertyvista.dto.LegalStatusN4DTO;
 
+@Deprecated
 public class LeaseLegalStateVisor extends AbstractVisorViewer<LeaseLegalStateDTO> {
 
     private static final I18n i18n = I18n.get(LeaseLegalStateVisor.class);

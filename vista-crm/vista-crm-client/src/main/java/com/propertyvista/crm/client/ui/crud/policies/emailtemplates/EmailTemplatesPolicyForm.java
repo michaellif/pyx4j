@@ -120,7 +120,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
             protected IsWidget createContent() {
                 FormPanel formPanel = new FormPanel(this);
                 //content.setH1(++row, 0, 1, proto().type().getMeta().getCaption());
-                formPanel.append(Location.Dual, proto().type()).decorate();
+                formPanel.append(Location.Dual, proto().templateType()).decorate();
                 formPanel.append(Location.Dual, proto().subject()).decorate();
                 formPanel.append(Location.Dual, proto().useHeader()).decorate();
                 formPanel.append(Location.Dual, proto().useFooter()).decorate();
@@ -151,7 +151,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
                         }
                     });
                     // change template object list when template type selection changes
-                    final CComponent<?, EmailTemplateType, ?, ?> comp = get(proto().type());
+                    final CComponent<?, EmailTemplateType, ?, ?> comp = get(proto().templateType());
                     comp.addValueChangeHandler(new ValueChangeHandler<EmailTemplateType>() {
                         @Override
                         public void onValueChange(ValueChangeEvent<EmailTemplateType> event) {

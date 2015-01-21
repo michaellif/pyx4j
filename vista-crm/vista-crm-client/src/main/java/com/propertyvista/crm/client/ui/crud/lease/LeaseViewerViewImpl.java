@@ -142,6 +142,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem showCommunicationAction;
 
+    @Deprecated
     private final MenuItem legalStateAction;
 
     private final MenuItem deletedPapsAction;
@@ -631,7 +632,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(deletedPapsAction, status.isCurrent());
 
         setActionVisible(maintenanceView, !status.isDraft());
-        setActionVisible(legalStateAction, !status.isFormer());
+        setActionVisible(legalStateAction, false && !status.isFormer());
 
         setActionVisible(noticeAction, status == Status.Active && completion == null);
         setActionVisible(cancelNoticeAction, completion == CompletionType.Notice && value.actualMoveOut().isNull() && !status.isFormer());

@@ -104,7 +104,7 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
             n4status.cancellationBalance().setValue(n4policy.cancellationThreshold().getValue());
             // set expiry date by N4Policy
             GregorianCalendar expiryDate = new GregorianCalendar();
-            expiryDate.setTime(bo.created().getValue());
+            expiryDate.setTime(bo.issueDate().getValue());
             expiryDate.add(GregorianCalendar.DAY_OF_YEAR, n4policy.expiryDays().getValue());
             n4status.expiryDate().setValue(new LogicalDate(expiryDate.getTime()));
             Persistence.service().persist(n4status);
@@ -161,27 +161,39 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
         N4Batch batch = EntityFactory.create(N4Batch.class);
 
         batch.building().set(building);
-        batch.created().setValue(SystemDateManager.getDate());
+        batch.issueDate().setValue(SystemDateManager.getDate());
         batch.companyLegalName().setValue(n4policy.companyName().getValue());
         batch.companyAddress().set(n4policy.mailingAddress().duplicate(InternationalAddress.class));
 
+        // signing Agent
         if (EmployeeSelectionMethod.ByLoggedInUser.equals(n4policy.agentSelectionMethodN4().getValue())) {
             batch.signingAgent().set(CrmAppContext.getCurrentUserEmployee());
         }
 
         if (n4policy.useAgentContactInfoN4().getValue(false) && !batch.signingAgent().isNull()) {
-            // TODO use Employee  contact if so configured in policy; has no fax though...
+            batch.phoneNumber().set(batch.signingAgent().workPhone());
         } else {
-            batch.companyPhoneNumber().setValue(n4policy.phoneNumber().getValue());
-            batch.companyFaxNumber().setValue(n4policy.faxNumber().getValue());
-            batch.companyEmailAddress().setValue(n4policy.emailAddress().getValue());
+            batch.phoneNumber().setValue(n4policy.phoneNumber().getValue());
+            batch.faxNumber().setValue(n4policy.faxNumber().getValue());
+            batch.emailAddress().setValue(n4policy.emailAddress().getValue());
+        }
+
+        // servicing Agent
+        if (EmployeeSelectionMethod.ByLoggedInUser.equals(n4policy.agentSelectionMethodCS().getValue())) {
+            batch.servicingAgent().set(CrmAppContext.getCurrentUserEmployee());
+        }
+
+        if (n4policy.useAgentContactInfoCS().getValue(false) && !batch.servicingAgent().isNull()) {
+            batch.phoneNumberCS().set(batch.servicingAgent().workPhone());
+        } else {
+            batch.phoneNumberCS().setValue(n4policy.phoneNumberCS().getValue());
         }
 
         return batch;
     }
 
     private void generateBatchName(N4Batch batch, Building building) {
-        batch.name().setValue(building.propertyCode().getValue() + "_" + batch.created().getStringView().replaceAll(" ", "_"));
+        batch.name().setValue(building.propertyCode().getValue() + "_" + batch.issueDate().getStringView().replaceAll(" ", "_"));
     }
 
     private N4LeaseArrears getLeaseArrears(Lease lease, HashSet<ARCode> acceptableArCodes) {

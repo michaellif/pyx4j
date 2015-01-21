@@ -31,7 +31,7 @@ public class LegalTermsPolicyListerViewImpl extends AbstractListerView<LegalTerm
     public static class LegalDocumentationPolicyLister extends PolicyListerBase<LegalTermsPolicyDTO> {
 
         public LegalDocumentationPolicyLister() {
-            super(LegalTermsPolicyDTO.class, GWT.<LegalDocumentationPolicyCrudService> create(LegalDocumentationPolicyCrudService.class));
+            super(LegalTermsPolicyDTO.class, GWT.<LegalDocumentationPolicyCrudService> create(LegalDocumentationPolicyCrudService.class), false, false);
 
             setColumnDescriptors( //
                     new ColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //

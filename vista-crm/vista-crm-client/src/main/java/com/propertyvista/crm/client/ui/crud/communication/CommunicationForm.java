@@ -123,7 +123,7 @@ public class CommunicationForm extends CrmEntityForm<CommunicationThreadDTO> {
         formPanel.append(Location.Dual, proto().deliveredText()).decorate();
         formPanel.append(Location.Left, proto().dateFrom()).decorate().customLabel(i18n.tr("Notification Date"));
         formPanel.append(Location.Right, proto().dateTo()).decorate().customLabel(i18n.tr("Expiration Date"));
-        formPanel.append(Location.Dual, proto().representingMessage().text(), new CRichTextArea()).decorate();
+        formPanel.append(Location.Dual, proto().representingMessage().content(), new CRichTextArea()).decorate();
 
         formPanel.append(Location.Dual, proto().childMessages(), messagesFolder);
         formPanel.br();
@@ -142,7 +142,7 @@ public class CommunicationForm extends CrmEntityForm<CommunicationThreadDTO> {
             get(proto().dateFrom()).setVisible(false);
             get(proto().dateTo()).setVisible(false);
             get(proto().deliveredText()).setVisible(false);
-            get(proto().representingMessage().text()).setVisible(false);
+            get(proto().representingMessage().content()).setVisible(false);
             get(proto().representingMessage().header()).setVisible(false);
             get(proto().representingMessage().to()).setVisible(false);
         } else {
@@ -167,12 +167,12 @@ public class CommunicationForm extends CrmEntityForm<CommunicationThreadDTO> {
             if (!isEmpty && !isDeliveryMethodEmpty) {
                 get(proto().deliveredText()).setTitle(getValue().deliveryMethod().getValue().toString());
                 get(proto().deliveredText()).setVisible(true);
-                get(proto().representingMessage().text()).setTitle(i18n.tr("Fallback"));
-                get(proto().representingMessage().text()).setVisible(!isNotification);
+                get(proto().representingMessage().content()).setTitle(i18n.tr("Fallback"));
+                get(proto().representingMessage().content()).setVisible(!isNotification);
             } else {
                 get(proto().deliveredText()).setVisible(false);
-                get(proto().representingMessage().text()).setVisible(false);
-                get(proto().representingMessage().text()).setTitle(i18n.tr("Text"));
+                get(proto().representingMessage().content()).setVisible(false);
+                get(proto().representingMessage().content()).setTitle(i18n.tr("Text"));
             }
         }
     }
@@ -232,7 +232,7 @@ public class CommunicationForm extends CrmEntityForm<CommunicationThreadDTO> {
                 @Override
                 public SafeHtml format(MessageDTO value) {
 
-                    Label messageField = new Label(HtmlUtils.removeHtmlTags(value.text().getValue("")));
+                    Label messageField = new Label(HtmlUtils.removeHtmlTags(value.content().getValue("")));
                     messageField.getElement().getStyle().setWidth(100, Unit.PCT);
                     messageField.getElement().getStyle().setWhiteSpace(WhiteSpace.NOWRAP);
                     messageField.getElement().getStyle().setOverflow(Overflow.HIDDEN);
@@ -316,7 +316,7 @@ public class CommunicationForm extends CrmEntityForm<CommunicationThreadDTO> {
         }
 
         public void setFocusForEditingText() {
-            get(proto().text()).asWidget().getElement().focus();
+            get(proto().content()).asWidget().getElement().focus();
         }
 
         @Override
@@ -364,7 +364,7 @@ public class CommunicationForm extends CrmEntityForm<CommunicationThreadDTO> {
 
             formPanel.append(Location.Dual, proto().highImportance(), new CCheckBox()).decorate();
 
-            formPanel.append(Location.Dual, proto().text(), new CRichTextArea()).decorate().labelWidth(0).customLabel("").useLabelSemicolon(false);
+            formPanel.append(Location.Dual, proto().content(), new CRichTextArea()).decorate().labelWidth(0).customLabel("").useLabelSemicolon(false);
 
             attachmentCaption = formPanel.h3("Attachments");
             formPanel.append(Location.Dual, proto().attachments(), attachemnts = new MessageAttachmentFolder());
@@ -437,7 +437,7 @@ public class CommunicationForm extends CrmEntityForm<CommunicationThreadDTO> {
                         MessageDTO currentMessage = getCurrent();
                         parentFolder.addItem();
                         CFolderItem<MessageDTO> newItem = parentFolder.getItem(parentFolder.getItemCount() - 1);
-                        newItem.getValue().text().setValue(currentMessage == null ? null : "\nRe:\n" + currentMessage.text().getValue(""));
+                        newItem.getValue().content().setValue(currentMessage == null ? null : "\nRe:\n" + currentMessage.content().getValue(""));
 
                         if (!ClientContext.getUserVisit().getName().equals(currentMessage.header().sender().getValue())) {
                             newItem.getValue().to().add(currentMessage.senderDTO());

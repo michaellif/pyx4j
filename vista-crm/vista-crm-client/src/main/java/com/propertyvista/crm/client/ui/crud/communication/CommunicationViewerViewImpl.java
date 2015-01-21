@@ -88,7 +88,7 @@ public class CommunicationViewerViewImpl extends CrmViewerViewImplBase<Communica
                     public boolean onClickOk() {
                         if (validate()) {
                             //getValue().thread().set(form.getValue().thread());
-                            assignEmployee(getEmployee(), getValue().text().getValue());
+                            assignEmployee(getEmployee(), getValue().content().getValue());
                             return true;
                         } else {
                             return false;
@@ -215,7 +215,7 @@ public class CommunicationViewerViewImpl extends CrmViewerViewImplBase<Communica
                     if (newStatus == null) {
                         main.append(Location.Dual, inject(proto().thread().owner(), new EmployeeSelector())).decorate();
                     }
-                    main.append(Location.Dual, inject(proto().text())).decorate().customLabel(i18n.tr("Comment"));
+                    main.append(Location.Dual, inject(proto().content())).decorate().customLabel(i18n.tr("Comment"));
 
                     return main;
                 }
@@ -238,7 +238,7 @@ public class CommunicationViewerViewImpl extends CrmViewerViewImplBase<Communica
 
         public boolean validate() {
             content.setVisitedRecursive();
-            return getValue().text() != null && !getValue().text().isNull();
+            return getValue().content() != null && !getValue().content().isNull();
         }
 
         public Employee getEmployee() {

@@ -14,6 +14,7 @@ package com.propertyvista.crm.client.ui.crud.communication;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -21,6 +22,8 @@ import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.communication.BroadcastTemplate;
+import com.propertyvista.domain.communication.BroadcastTemplate.AudienceType;
+import com.propertyvista.domain.communication.DeliveryHandle.MessageType;
 
 public class BroadcastTemplateForm extends CrmEntityForm<BroadcastTemplate> {
 
@@ -40,10 +43,22 @@ public class BroadcastTemplateForm extends CrmEntityForm<BroadcastTemplate> {
         formPanel.append(Location.Right, proto().category()).decorate();
         formPanel.append(Location.Left, proto().allowedReply()).decorate();
         formPanel.append(Location.Right, proto().highImportance()).decorate();
+        formPanel.append(Location.Left, proto().audienceType()).decorate();
+        formPanel.append(Location.Left, proto().messageType()).decorate();
         formPanel.append(Location.Dual, proto().subject()).decorate();
-        formPanel.append(Location.Dual, proto().text()).decorate();
-
+        formPanel.append(Location.Dual, proto().content()).decorate();
+        get(proto().audienceType()).setEditable(false);
         return formPanel;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        get(proto().messageType()).setEditable(!AudienceType.Employee.equals(getValue().audienceType().getValue()));
+        if (!AudienceType.Employee.equals(getValue().audienceType().getValue())) {
+            ((CComboBox<MessageType>) get(proto().messageType())).removeOption(MessageType.CommercialActivity);
+            ((CComboBox<MessageType>) get(proto().messageType())).removeOption(MessageType.Organizational);
+        }
+    }
 }
