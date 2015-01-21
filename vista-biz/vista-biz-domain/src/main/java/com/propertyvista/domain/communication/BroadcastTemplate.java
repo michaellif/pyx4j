@@ -32,8 +32,14 @@ import com.propertyvista.domain.communication.DeliveryHandle.MessageType;
 public interface BroadcastTemplate extends IEntity {
 
     public enum AudienceType {
+        @Translate("Customer")
+        Customer,
+
         @Translate("Tenant")
         Tenant,
+
+        @Translate("Guarantor")
+        Guarantor,
 
         @Translate("Prospect")
         Prospect,
