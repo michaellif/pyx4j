@@ -333,7 +333,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "{7}<br/>"+
                 "{8}<br/>",
                 templateFacade.getVarname(appT.CoApplicant().FirstName()),
-                templateFacade.getVarname(appT.Applicant().Name()),
+                templateFacade.getVarname(appT.Applicant().FullName()),
                 templateFacade.getVarname(appT.UnitAddress()),
                 templateFacade.getVarname(bldT.Administrator().Phone()),
                 templateFacade.getVarname(appT.ReferenceNumber()),
@@ -389,7 +389,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "{7}<br/>"+
                 "{8}<br/>",
                 templateFacade.getVarname(appT.Guarantor().FirstName()),
-                templateFacade.getVarname(appT.GuarantorRequester().Name()),
+                templateFacade.getVarname(appT.GuarantorRequester().FullName()),
                 templateFacade.getVarname(appT.UnitAddress()),
                 templateFacade.getVarname(bldT.Administrator().Phone()),
                 templateFacade.getVarname(appT.ReferenceNumber()),

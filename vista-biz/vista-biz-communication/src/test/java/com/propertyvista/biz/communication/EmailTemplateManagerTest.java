@@ -626,7 +626,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
                 BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
                 String[] args = {
-                    EmailTemplateManager.getVarname(appT.Applicant().Name()),
+                    EmailTemplateManager.getVarname(appT.Applicant().FullName()),
                     EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                     EmailTemplateManager.getVarname(appT.SignUpUrl()),
                     EmailTemplateManager.getVarname(bldT.MainOffice().Phone()),
@@ -651,7 +651,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
                 BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
                 String[] args = {
-                    EmailTemplateManager.getVarname(appT.CoApplicant().Name()),
+                    EmailTemplateManager.getVarname(appT.CoApplicant().FullName()),
                     EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                     EmailTemplateManager.getVarname(appT.SignUpUrl()),
                     EmailTemplateManager.getVarname(bldT.MainOffice().Phone()),
@@ -676,7 +676,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
                 BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
                 String[] args = {
-                    EmailTemplateManager.getVarname(appT.Guarantor().Name()),
+                    EmailTemplateManager.getVarname(appT.Guarantor().FullName()),
                     EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                     EmailTemplateManager.getVarname(appT.SignUpUrl()),
                     EmailTemplateManager.getVarname(bldT.MainOffice().Phone()),
@@ -704,7 +704,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
                 LeaseT leaseT = EmailTemplateManager.getProto(type, LeaseT.class);
                 String[] args = {
-                    EmailTemplateManager.getVarname(appT.Applicant().Name()),
+                    EmailTemplateManager.getVarname(appT.Applicant().FullName()),
                     EmailTemplateManager.getVarname(leaseT.StartDateWeekDay()),
                     EmailTemplateManager.getVarname(leaseT.StartDate()),
                     EmailTemplateManager.getVarname(portalT.SiteHomeUrl()),
@@ -730,7 +730,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
                 BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
                 String[] args = {
-                    EmailTemplateManager.getVarname(appT.Applicant().Name()),
+                    EmailTemplateManager.getVarname(appT.Applicant().FullName()),
                     EmailTemplateManager.getVarname(portalT.ProspectPortalUrl()),
                     EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                     EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),

@@ -35,6 +35,10 @@ import com.propertyvista.biz.communication.template.model.ApplicationT;
 import com.propertyvista.biz.communication.template.model.AutopayAgreementT;
 import com.propertyvista.biz.communication.template.model.BuildingT;
 import com.propertyvista.biz.communication.template.model.CompanyInfoT;
+import com.propertyvista.biz.communication.template.model.CustomerT;
+import com.propertyvista.biz.communication.template.model.EmployeeT;
+import com.propertyvista.biz.communication.template.model.LastBillT;
+import com.propertyvista.biz.communication.template.model.LeadT;
 import com.propertyvista.biz.communication.template.model.LeaseT;
 import com.propertyvista.biz.communication.template.model.MaintenanceRequestT;
 import com.propertyvista.biz.communication.template.model.MaintenanceRequestWOT;
@@ -43,6 +47,7 @@ import com.propertyvista.biz.communication.template.model.PasswordRequestProspec
 import com.propertyvista.biz.communication.template.model.PasswordRequestTenantT;
 import com.propertyvista.biz.communication.template.model.PaymentT;
 import com.propertyvista.biz.communication.template.model.PortalLinksT;
+import com.propertyvista.biz.communication.template.model.ProspectT;
 import com.propertyvista.biz.communication.template.model.TenantT;
 import com.propertyvista.domain.communication.EmailTemplateType;
 
@@ -128,6 +133,22 @@ public class EmailTemplateManager {
         case DirectDebitAccountChanged:
             values.add(EntityFactory.create(TenantT.class));
             values.add(EntityFactory.create(LeaseT.class));
+            break;
+        case MessageBroadcastEmployee:
+            values.add(EntityFactory.create(EmployeeT.class));
+            break;
+        case MessageBroadcastCustomer:
+            values.add(EntityFactory.create(CustomerT.class));
+            break;
+        case MessageBroadcastTenant:
+            values.add(EntityFactory.create(TenantT.class));
+            values.add(EntityFactory.create(LeaseT.class));
+            values.add(EntityFactory.create(LastBillT.class));
+            break;
+        case MessageBroadcastProspect:
+            values.add(EntityFactory.create(ProspectT.class));
+            values.add(EntityFactory.create(ApplicationT.class));
+            values.add(EntityFactory.create(LeadT.class));
             break;
         default:
             throw new Error("Unknown EmailTemplateType: " + template.name());

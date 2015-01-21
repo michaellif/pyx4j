@@ -21,6 +21,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.security.common.AbstractUser;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -32,6 +33,8 @@ public interface EmailTemplateContext extends IEntity {
     IPrimitive<String> accessToken();
 
     AbstractUser user();
+
+    Customer customer();
 
     Lease lease();
 
