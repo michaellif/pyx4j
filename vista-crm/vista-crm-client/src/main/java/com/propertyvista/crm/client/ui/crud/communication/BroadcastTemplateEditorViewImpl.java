@@ -12,13 +12,27 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
+import com.pyx4j.i18n.shared.I18n;
+
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.domain.communication.BroadcastTemplate;
 
 public class BroadcastTemplateEditorViewImpl extends CrmEditorViewImplBase<BroadcastTemplate> implements BroadcastTemplateEditorView {
 
+    private static final I18n i18n = I18n.get(BroadcastTemplateEditorViewImpl.class);
+
     public BroadcastTemplateEditorViewImpl() {
         setForm(new BroadcastTemplateForm(this));
+    }
+
+    @Override
+    public void populate(BroadcastTemplate value) {
+        super.populate(value);
+        String caption = i18n.tr("New")
+                + (((BroadcastTemplateEditorView.BroadcastTemplateEditorPresenter) getForm().getParentView().getPresenter()).getType() != null ? " "
+                        + ((BroadcastTemplateEditorView.BroadcastTemplateEditorPresenter) getForm().getParentView().getPresenter()).getType() : "")
+                + " Broadcast Template";
+        setCaption(caption);
     }
 
 }

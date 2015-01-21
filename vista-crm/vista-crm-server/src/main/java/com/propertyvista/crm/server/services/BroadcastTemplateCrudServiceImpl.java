@@ -23,4 +23,15 @@ public class BroadcastTemplateCrudServiceImpl extends AbstractCrudServiceImpl<Br
         super(BroadcastTemplate.class);
     }
 
+    @Override
+    protected BroadcastTemplate init(InitializationData initializationData) {
+
+        BroadcastTemplate result = super.init(initializationData);
+        result.audienceType().setValue(((BroadcastTemplateCrudService.BroadcastTemplateInitializationData) initializationData).audienceType().getValue());
+        result.messageType().setValue(((BroadcastTemplateCrudService.BroadcastTemplateInitializationData) initializationData).messageType().getValue());
+
+        return result;
+
+    }
+
 }

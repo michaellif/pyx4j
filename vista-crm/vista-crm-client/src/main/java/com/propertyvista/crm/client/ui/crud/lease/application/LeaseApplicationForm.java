@@ -30,8 +30,11 @@ import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -76,9 +79,9 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         addTab(((LeaseApplicationViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"),
                 DataModelPermission.permissionRead(PaymentRecordDTO.class));
         addTab(createFinancialTab(), i18n.tr("Financial"), DataModelPermission.permissionRead(TenantFinancialDTO.class));
-        addTab(createApplicationDocumentsTab(), i18n.tr("Application Documents"), DataModelPermission.permissionRead(LeaseApplicationDocument.class));
+        addTab(createApplicationDocumentsTab(), i18n.tr("Documents"), DataModelPermission.permissionRead(LeaseApplicationDocument.class));
         addTab(createSummaryTab(), i18n.tr("Summary"));
-        approvalTab = addTab(createApprovalChecklistTab(), i18n.tr("Approval"));
+        approvalTab = addTab(createApprovalChecklistTab(), i18n.tr("Approval Checklist"));
     }
 
     @Override
@@ -93,14 +96,13 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
     @Override
     protected void onValueSet(boolean populate) {
-
         super.onValueSet(populate);
 
         // dynamic tabs visibility management:
         chargesTab.setTabVisible(!VistaFeatures.instance().yardiIntegration() && getValue().status().getValue().isDraft()
                 && !getValue().billingPreview().isNull());
         approvalTab.setTabVisible(!getValue().leaseApplication().approvalChecklist().isEmpty());
-        approvalChecklistFolder.setActive(approvalTab.isTabVisible() && getValue().status().getValue().isDraft());
+        approvalChecklistFolder.setModifyable(approvalTab.isTabVisible() && getValue().status().getValue().isDraft());
 
         get(proto().leaseApplication().applicationId()).setVisible(true);
         get(proto().leaseApplication().yardiApplicationId()).setVisible(VistaFeatures.instance().yardiIntegration());
@@ -230,9 +232,9 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
             super(ApprovalChecklistItem.class, false);
         }
 
-        public void setActive(boolean active) {
+        public void setModifyable(boolean modifyable) {
             for (CComponent<?, ?, ?, ?> item : getComponents()) {
-                ((ApprovalChecklistItemEditor) ((CFolderItem<?>) item).getComponents().iterator().next()).setActive(active);
+                ((ApprovalChecklistItemEditor) ((CFolderItem<?>) item).getComponents().iterator().next()).setModifyable(modifyable);
             }
         }
 
@@ -245,9 +247,18 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
             private final CComboBox<String> statusSelector = new CComboBox<>();
 
-            private final Button updateStatus = new Button(i18n.tr("Update Status"), new Command() {
+            private final Anchor update = new Anchor(i18n.tr("Update Status"), new Command() {
                 @Override
                 public void execute() {
+                    setActive(true);
+                }
+            });
+
+            private final Button save = new Button(i18n.tr("Save"), new Command() {
+                @Override
+                public void execute() {
+                    setActive(false);
+
                     ((LeaseApplicationViewerView.Presenter) getParentView().getPresenter()).updateApprovalTaskItem(
                             new DefaultAsyncCallback<ApprovalChecklistItem>() {
                                 @Override
@@ -258,8 +269,21 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
                 }
             });
 
+            private final Anchor cancel = new Anchor(i18n.tr("Cancel"), new Command() {
+                @Override
+                public void execute() {
+                    setActive(false);
+                }
+            });
+
+            private final Toolbar buttons = new Toolbar();
+
             public ApprovalChecklistItemEditor() {
                 super((ApprovalChecklistItem.class));
+
+                buttons.addItem(update);
+                buttons.addItem(save);
+                buttons.addItem(cancel);
             }
 
             @Override
@@ -274,7 +298,9 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
                 formPanel.append(Location.Right, proto().status(), statusSelector).decorate();
                 formPanel.append(Location.Right, proto().notes()).decorate();
 
-                formPanel.append(Location.Left, updateStatus);
+                if (SecurityController.check(DataModelPermission.permissionUpdate(LeaseApplicationDTO.class))) {
+                    formPanel.append(Location.Left, buttons);
+                }
 
                 // tweaks:
                 get(proto().status()).inheritViewable(false);
@@ -282,6 +308,9 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
                 get(proto().notes()).inheritViewable(false);
                 get(proto().notes()).inheritEditable(false);
+
+                setModifyable(false);
+                setActive(false);
 
                 return formPanel;
             }
@@ -299,14 +328,20 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
                 }
             }
 
-            public void setActive(boolean active) {
+            public void setModifyable(boolean modifyable) {
+                buttons.asWidget().setVisible(modifyable);
+            }
+
+            private void setActive(boolean active) {
                 get(proto().status()).setViewable(!active);
                 get(proto().status()).setEditable(active);
 
                 get(proto().notes()).setViewable(!active);
                 get(proto().notes()).setEditable(active);
 
-                statusSelector.setVisible(active);
+                update.setVisible(!active);
+                save.setVisible(active);
+                cancel.setVisible(active);
             }
         }
     }

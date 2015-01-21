@@ -21,6 +21,7 @@ import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.communication.BroadcastTemplate;
+import com.propertyvista.domain.communication.BroadcastTemplate.AudienceType;
 
 public class BroadcastTemplateForm extends CrmEntityForm<BroadcastTemplate> {
 
@@ -40,10 +41,18 @@ public class BroadcastTemplateForm extends CrmEntityForm<BroadcastTemplate> {
         formPanel.append(Location.Right, proto().category()).decorate();
         formPanel.append(Location.Left, proto().allowedReply()).decorate();
         formPanel.append(Location.Right, proto().highImportance()).decorate();
+        formPanel.append(Location.Left, proto().audienceType()).decorate();
+        formPanel.append(Location.Left, proto().messageType()).decorate();
         formPanel.append(Location.Dual, proto().subject()).decorate();
         formPanel.append(Location.Dual, proto().text()).decorate();
-
+        get(proto().audienceType()).setEditable(false);
         return formPanel;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        get(proto().messageType()).setEditable(!AudienceType.Employee.equals(getValue().audienceType().getValue()));
     }
 
 }

@@ -23,12 +23,23 @@ import com.propertyvista.crm.client.ui.crud.communication.BroadcastTemplateEdito
 import com.propertyvista.crm.client.ui.crud.communication.BroadcastTemplateEditorView.BroadcastTemplateEditorPresenter;
 import com.propertyvista.crm.rpc.services.BroadcastTemplateCrudService;
 import com.propertyvista.domain.communication.BroadcastTemplate;
+import com.propertyvista.domain.communication.BroadcastTemplate.AudienceType;
 
 public class BroadcastTemplateEditorActivity extends CrmEditorActivity<BroadcastTemplate> implements BroadcastTemplateEditorPresenter {
+
+    AudienceType type;
 
     public BroadcastTemplateEditorActivity(CrudAppPlace place) {
         super(BroadcastTemplate.class, place, CrmSite.getViewFactory().getView(BroadcastTemplateEditorView.class), GWT
                 .<AbstractCrudService<BroadcastTemplate>> create(BroadcastTemplateCrudService.class));
+
+        this.type = (place.getInitializationData() != null ? ((BroadcastTemplateCrudService.BroadcastTemplateInitializationData) place.getInitializationData())
+                .audienceType().getValue() : null);
+    }
+
+    @Override
+    public AudienceType getType() {
+        return type;
     }
 
 }
