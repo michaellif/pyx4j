@@ -17,10 +17,9 @@
  * Created on Apr 22, 2013
  * @author michaellif
  */
-package com.pyx4j.site.client.frontoffice.ui.layout;
+package com.pyx4j.site.client.website.ui.layout;
 
 import com.google.gwt.dom.client.Style.Overflow;
-import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ScrollEvent;
@@ -30,22 +29,18 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.frontoffice.ui.FrontOfficeDevConsole;
 import com.pyx4j.site.client.ui.layout.OverlayExtraHolder;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel;
 import com.pyx4j.site.client.ui.layout.SidePanelHolder;
-import com.pyx4j.widgets.client.DropDownPanel;
 import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 
-public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
+public class WebSiteLayoutPanel extends ResponsiveLayoutPanel {
 
     public static final int MAX_WIDTH = 1200;
 
@@ -61,15 +56,7 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     private final StickyToolbarHolder stickyToolbarHolder;
 
-    private final InlineMenuHolder inlineMenuHolder;
-
     private final SidePanelHolder sideMenuHolder;
-
-    private final DropDownPanel popupCommHolder;
-
-    private final SidePanelHolder sideCommHolder;
-
-    private final InlineExtraHolder inlineExtraHolder;
 
     private final OverlayExtraHolder overlayExtraHolder;
 
@@ -85,17 +72,14 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     private boolean sideMenuVisible = false;
 
-    private boolean sideCommVisible = false;
-
-    public FrontOfficeLayoutPanel(String extra1Caption, String extra2Caption, String extra4Caption) {
-
+    public WebSiteLayoutPanel(String extra1Caption, String extra2Caption, String extra4Caption) {
         pageHolder = new FlowPanel();
 
         pagePanel = new FlowPanel();
-        pagePanel.setStyleName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutMainHolder.name());
+        pagePanel.setStyleName(WebSiteLayoutTheme.StyleName.WebSiteLayoutMainHolder.name());
 
         headerHolder = new SimplePanel(getDisplay(DisplayType.header));
-        headerHolder.setStyleName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutHeaderHolder.name());
+        headerHolder.setStyleName(WebSiteLayoutTheme.StyleName.WebSiteLayoutHeaderHolder.name());
 
         pageScroll = new ScrollPanel(pagePanel);
         pageScroll.getElement().getStyle().setOverflowY(Overflow.SCROLL);
@@ -107,12 +91,10 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         stickyToolbarHolder = new StickyToolbarHolder(this);
         pageHolder.add(stickyToolbarHolder);
 
-        inlineExtraHolder = new InlineExtraHolder(this, extra1Caption, extra2Caption);
-
         getDisplay(DisplayType.notification).getElement().getStyle().setTextAlign(TextAlign.CENTER);
         getDisplay(DisplayType.content).getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
-        getDisplay(DisplayType.toolbar).getElement().getStyle().setProperty("maxWidth", FrontOfficeLayoutPanel.MAX_WIDTH + "px");
+        getDisplay(DisplayType.toolbar).getElement().getStyle().setProperty("maxWidth", WebSiteLayoutPanel.MAX_WIDTH + "px");
         getDisplay(DisplayType.toolbar).addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
 
         contentHolder = new ContentHolder(this);
@@ -123,28 +105,17 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
             contentHolder.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
         }
 
-        FlowPanel contentPanel = new FlowPanel();
-        contentPanel.ensureDebugId(getClass().getSimpleName() + ".contentPanel");
-        contentPanel.getElement().getStyle().setPosition(Position.RELATIVE);
-
-        contentPanel.add(contentHolder);
-        contentPanel.add(inlineExtraHolder);
-
-        inlineMenuHolder = new InlineMenuHolder(this);
-
-        centerPanel = new CenterPanel(contentPanel, inlineMenuHolder);
+        centerPanel = new CenterPanel(contentHolder);
 
         pageScroll.addScrollHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {
-                FrontOfficeLayoutPanel.this.onScroll();
+                WebSiteLayoutPanel.this.onScroll();
             }
         });
 
-        popupCommHolder = new DropDownPanel();
-
         footerHolder = new SimplePanel(getDisplay(DisplayType.footer));
-        footerHolder.setStyleName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutFooterHolder.name());
+        footerHolder.setStyleName(WebSiteLayoutTheme.StyleName.WebSiteLayoutFooterHolder.name());
         getDisplay(DisplayType.footer).getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
         getDisplay(DisplayType.footer).addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
 
@@ -153,7 +124,7 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         pagePanel.add(centerPanel);
         pagePanel.add(footerHolder);
 
-        overlayExtraHolder = new OverlayExtraHolder(this, extra1Caption, extra2Caption, extra4Caption, new FrontOfficeDevConsole(this));
+        overlayExtraHolder = new OverlayExtraHolder(this, extra1Caption, extra2Caption, extra4Caption, null);
 
         pageHolder.add(overlayExtraHolder);
 
@@ -176,21 +147,10 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
             adopt(sideMenuHolder);
         }
 
-        // ============ Side Communication Layer ============
-        {
-
-            sideCommHolder = new SidePanelHolder();
-            Layer layer = getLayout().attachChild(sideCommHolder.asWidget().getElement(), sideCommHolder);
-            sideCommHolder.setLayoutData(layer);
-            getChildren().add(sideCommHolder);
-            adopt(sideCommHolder);
-        }
-
         AppSite.getEventBus().addHandler(LayoutChangeRequestEvent.TYPE, this);
 
         forceLayout(0);
         onScroll();
-
     }
 
     SimplePanel getFooterHolder() {
@@ -204,36 +164,24 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         case phonePortrait:
         case phoneLandscape:
             sideMenuHolder.setDisplay(getDisplay(DisplayType.menu));
-            sideCommHolder.setDisplay(getDisplay(DisplayType.communication));
             headerHolder.setVisible(false);
             break;
         default:
             setSideMenuVisible(false);
-            setSideCommVisible(false);
-            inlineMenuHolder.setMenuDisplay(getDisplay(DisplayType.menu));
-            popupCommHolder.setWidget(getDisplay(DisplayType.communication));
             headerHolder.setVisible(true);
             break;
         }
 
-        inlineExtraHolder.layout();
         overlayExtraHolder.layout();
 
         Layer menuLayer = (Layer) sideMenuHolder.getLayoutData();
-        Layer commLayer = (Layer) sideCommHolder.getLayoutData();
         Layer mainLayer = (Layer) pageHolder.getLayoutData();
 
         if (sideMenuVisible) {
             menuLayer.setLeftWidth(0.0, Unit.PCT, 75.0, Unit.PCT);
-            commLayer.setLeftWidth(175.0, Unit.PCT, 75.0, Unit.PCT);
             mainLayer.setLeftWidth(75.0, Unit.PCT, 100.0, Unit.PCT);
-        } else if (sideCommVisible) {
-            menuLayer.setLeftWidth(-150.0, Unit.PCT, 75.0, Unit.PCT);
-            commLayer.setLeftWidth(25.0, Unit.PCT, 75.0, Unit.PCT);
-            mainLayer.setLeftWidth(-75.0, Unit.PCT, 100.0, Unit.PCT);
         } else {
             menuLayer.setLeftWidth(-75.0, Unit.PCT, 75.0, Unit.PCT);
-            commLayer.setLeftWidth(100.0, Unit.PCT, 75.0, Unit.PCT);
             mainLayer.setLeftWidth(0.0, Unit.PCT, 100.0, Unit.PCT);
         }
 
@@ -246,9 +194,6 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
     }
 
     protected void onScroll() {
-        inlineMenuHolder.onPositionChange();
-        inlineExtraHolder.onPositionChange();
-
         if (inlineToolbarHolder.getAbsoluteTop() > 0) {
             if (inlineToolbarHolder.getWidget() == null) {
                 inlineToolbarHolder.setDisplay();
@@ -265,20 +210,6 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
     protected void resizeComponents() {
 
         onScroll();
-
-        contentHolder.getElement().getStyle().setPaddingLeft(inlineMenuHolder.getMenuWidth(), Unit.PX);
-
-        switch (getLayoutType()) {
-        case huge:
-            int contentHolderWidth = centerPanel.getOffsetWidth() - inlineMenuHolder.getMenuWidth() - inlineExtraHolder.getOffsetWidth();
-            contentHolder.setWidth((contentHolderWidth > 0 ? --contentHolderWidth : 0) + "px");
-            inlineExtraHolder.layout();
-            break;
-        default:
-            contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getMenuWidth()) + "px");
-            overlayExtraHolder.layout();
-            break;
-        }
 
         for (DisplayType displayType : DisplayType.values()) {
             getDisplay(displayType).onResize();
@@ -309,27 +240,6 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         }
     }
 
-    private void setSideCommVisible(boolean visible) {
-        if (this.sideCommVisible != visible) {
-            this.sideCommVisible = visible;
-            forceLayout(ResponsiveLayoutPanel.ANIMATION_TIME);
-        }
-    }
-
-    private void togglePopupCommVisible(final Widget anchor) {
-        if (!popupCommHolder.isShowing()) {
-            popupCommHolder.showRelativeTo(anchor, new PositionCallback() {
-                @Override
-                public void setPosition(int offsetWidth, int offsetHeight) {
-                    popupCommHolder.setPopupPosition(anchor.getAbsoluteLeft() + anchor.getOffsetWidth() - popupCommHolder.getOffsetWidth(),
-                            anchor.getAbsoluteTop() + anchor.getOffsetHeight());
-                }
-            });
-        } else {
-            popupCommHolder.hide();
-        }
-    }
-
     @Override
     public void onLayoutChangeRequest(LayoutChangeRequestEvent event) {
         switch (event.getChangeType()) {
@@ -341,16 +251,6 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         case toggleSideMenu:
             if (isSideMenuEnabled()) {
                 setSideMenuVisible(!sideMenuVisible);
-            }
-            break;
-        case toggleSideComm:
-            if (isSideCommEnabled()) {
-                setSideCommVisible(!sideCommVisible);
-            }
-            break;
-        case togglePopupComm:
-            if (isPopupCommEnabled()) {
-                togglePopupCommVisible(event.getPopupCommAnchor());
             }
             break;
         case resizeComponents:

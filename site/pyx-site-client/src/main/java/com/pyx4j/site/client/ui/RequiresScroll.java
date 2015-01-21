@@ -17,7 +17,7 @@
  * Created on Oct 17, 2014
  * @author michaellif
  */
-package com.pyx4j.site.client.frontoffice.ui.layout;
+package com.pyx4j.site.client.ui;
 
 public interface RequiresScroll {
 
