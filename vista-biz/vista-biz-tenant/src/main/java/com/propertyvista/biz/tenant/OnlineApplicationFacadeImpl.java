@@ -245,8 +245,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
             masterApplication.status().setValue(MasterOnlineApplication.Status.Submitted);
             Persistence.service().merge(masterApplication);
 
-            masterApplication.leaseApplication().status().setValue(LeaseApplication.Status.Submitted);
-            Persistence.service().merge(masterApplication.leaseApplication());
+            ServerSideFactory.create(LeaseFacade.class).submitApplication(masterApplication.leaseApplication().lease(), null, null);
         }
     }
 

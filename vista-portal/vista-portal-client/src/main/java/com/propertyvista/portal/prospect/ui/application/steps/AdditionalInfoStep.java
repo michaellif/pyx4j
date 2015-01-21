@@ -87,7 +87,9 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
 
         enablePreviousAddress();
 
-        get(proto().referenceSource()).setMandatory(getValue().referenceSourceIsMandatory().getValue(false));
+        if (SecurityController.check(PortalProspectBehavior.Applicant)) {
+            get(proto().referenceSource()).setMandatory(getValue().referenceSourceIsMandatory().getValue(false));
+        }
     }
 
     @Override

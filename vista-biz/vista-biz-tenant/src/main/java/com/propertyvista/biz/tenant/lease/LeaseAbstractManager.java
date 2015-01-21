@@ -346,26 +346,30 @@ public abstract class LeaseAbstractManager {
         Lease lease = load(leaseId, false);
 
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Submitted);
-        lease.leaseApplication().submission().decidedBy().set(decidedBy);
-        lease.leaseApplication().submission().decisionReason().setValue(decisionReason);
-        lease.leaseApplication().submission().decisionDate().setValue(SystemDateManager.getLogicalDate());
-
         initializeApprovalChecklist(lease.leaseApplication());
 
+        if (decidedBy != null) {
+            lease.leaseApplication().submission().decidedBy().set(decidedBy);
+            lease.leaseApplication().submission().decisionReason().setValue(decisionReason);
+            lease.leaseApplication().submission().decisionDate().setValue(SystemDateManager.getLogicalDate());
+            addLeaseNote(lease, "Submit Application", decisionReason, decidedBy);
+        }
+
         Persistence.service().merge(lease);
-        addLeaseNote(lease, "Submit Application", decisionReason, decidedBy);
     }
 
     public void completeApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = load(leaseId, false);
 
         lease.leaseApplication().status().setValue(LeaseApplication.Status.PendingDecision);
-        lease.leaseApplication().validation().decidedBy().set(decidedBy);
-        lease.leaseApplication().validation().decisionReason().setValue(decisionReason);
-        lease.leaseApplication().validation().decisionDate().setValue(SystemDateManager.getLogicalDate());
+        if (decidedBy != null) {
+            lease.leaseApplication().validation().decidedBy().set(decidedBy);
+            lease.leaseApplication().validation().decisionReason().setValue(decisionReason);
+            lease.leaseApplication().validation().decisionDate().setValue(SystemDateManager.getLogicalDate());
+            addLeaseNote(lease, "Complete Application", decisionReason, decidedBy);
+        }
 
         Persistence.service().merge(lease);
-        addLeaseNote(lease, "Complete Application", decisionReason, decidedBy);
     }
 
     public void declineApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
@@ -375,14 +379,15 @@ public abstract class LeaseAbstractManager {
         // TODO Review the status
         lease.status().setValue(Lease.Status.Cancelled);
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Declined);
-        lease.leaseApplication().approval().decidedBy().set(decidedBy);
-        lease.leaseApplication().approval().decisionReason().setValue(decisionReason);
-        lease.leaseApplication().approval().decisionDate().setValue(SystemDateManager.getLogicalDate());
-
+        if (decidedBy != null) {
+            lease.leaseApplication().approval().decidedBy().set(decidedBy);
+            lease.leaseApplication().approval().decisionReason().setValue(decisionReason);
+            lease.leaseApplication().approval().decisionDate().setValue(SystemDateManager.getLogicalDate());
+            addLeaseNote(lease, "Decline Application", decisionReason, decidedBy);
+        }
         recordApplicationData(lease.currentTerm());
 
         Persistence.service().merge(lease);
-        addLeaseNote(lease, "Decline Application", decisionReason, decidedBy);
 
         releaseUnit(lease, status);
 
@@ -407,12 +412,14 @@ public abstract class LeaseAbstractManager {
 
         lease.status().setValue(Lease.Status.Cancelled);
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Cancelled);
-        lease.leaseApplication().approval().decidedBy().set(decidedBy);
-        lease.leaseApplication().approval().decisionReason().setValue(decisionReason);
-        lease.leaseApplication().approval().decisionDate().setValue(SystemDateManager.getLogicalDate());
+        if (decidedBy != null) {
+            lease.leaseApplication().approval().decidedBy().set(decidedBy);
+            lease.leaseApplication().approval().decisionReason().setValue(decisionReason);
+            lease.leaseApplication().approval().decisionDate().setValue(SystemDateManager.getLogicalDate());
+            addLeaseNote(lease, "Cancel Application", decisionReason, decidedBy);
+        }
 
         Persistence.service().merge(lease);
-        addLeaseNote(lease, "Cancel Application", decisionReason, decidedBy);
 
         releaseUnit(lease, status);
     }

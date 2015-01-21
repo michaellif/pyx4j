@@ -31,7 +31,7 @@ public class IdAssignmentPolicyListerViewImpl extends AbstractListerView<IdAssig
     public static class IdAssignmentPolicyLister extends PolicyListerBase<IdAssignmentPolicyDTO> {
 
         public IdAssignmentPolicyLister() {
-            super(IdAssignmentPolicyDTO.class, GWT.<IdAssignmentPolicyCrudService> create(IdAssignmentPolicyCrudService.class));
+            super(IdAssignmentPolicyDTO.class, GWT.<IdAssignmentPolicyCrudService> create(IdAssignmentPolicyCrudService.class), false, false);
 
             setColumnDescriptors( //
                     new ColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(), //
