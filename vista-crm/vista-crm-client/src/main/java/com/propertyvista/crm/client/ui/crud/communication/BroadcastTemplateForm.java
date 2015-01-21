@@ -12,18 +12,30 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.RichTextArea.Formatter;
+import com.google.gwt.user.client.ui.UIObject;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
+import com.pyx4j.widgets.client.richtext.RichTextTemplateAction;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.gadgets.components.TemplateInsertSelector;
 import com.propertyvista.domain.communication.BroadcastTemplate;
 import com.propertyvista.domain.communication.BroadcastTemplate.AudienceType;
 import com.propertyvista.domain.communication.DeliveryHandle.MessageType;
+import com.propertyvista.domain.communication.EmailTemplateType;
 
 public class BroadcastTemplateForm extends CrmEntityForm<BroadcastTemplate> {
 
@@ -46,7 +58,7 @@ public class BroadcastTemplateForm extends CrmEntityForm<BroadcastTemplate> {
         formPanel.append(Location.Left, proto().audienceType()).decorate();
         formPanel.append(Location.Left, proto().messageType()).decorate();
         formPanel.append(Location.Dual, proto().subject()).decorate();
-        formPanel.append(Location.Dual, proto().content()).decorate();
+        formPanel.append(Location.Dual, proto().content(), getContentEditor()).decorate();
         get(proto().audienceType()).setEditable(false);
         return formPanel;
     }
@@ -59,6 +71,64 @@ public class BroadcastTemplateForm extends CrmEntityForm<BroadcastTemplate> {
         if (!AudienceType.Employee.equals(getValue().audienceType().getValue())) {
             ((CComboBox<MessageType>) get(proto().messageType())).removeOption(MessageType.CommercialActivity);
             ((CComboBox<MessageType>) get(proto().messageType())).removeOption(MessageType.Organizational);
+        }
+    }
+
+    CRichTextArea getContentEditor() {
+        CRichTextArea editor = new CRichTextArea();
+
+        if (isEditable()) {
+            final TemplateInsertSelector vm = new TemplateInsertSelector();
+            editor.getNativeComponent().getEditor().setTemplateAction(new RichTextTemplateAction() {
+                @Override
+                public void perform(final Formatter formatter, final Command onComplete, final UIObject target) {
+                    if (vm.isShowing()) {
+                        vm.hide();
+                    } else {
+                        vm.setSelectionHandler(new Command() {
+                            @Override
+                            public void execute() {
+                                formatter.insertHTML(vm.getSelectedValue());
+                                onComplete.execute();
+                            }
+                        });
+                        vm.showBelow(target);
+                    }
+                }
+            });
+            // change template object list when template type selection changes
+            final CComponent<?, AudienceType, ?, ?> comp = get(proto().audienceType());
+            comp.addValueChangeHandler(new ValueChangeHandler<AudienceType>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<AudienceType> event) {
+                    vm.setItems(vm.getTemplateObjects(toTemplateType(event.getValue())));
+                }
+            });
+            comp.addPropertyChangeHandler(new PropertyChangeHandler() {
+                @Override
+                public void onPropertyChange(PropertyChangeEvent event) {
+                    if (event.isEventOfType(PropertyChangeEvent.PropertyName.repopulated)) {
+                        vm.setItems(vm.getTemplateObjects(toTemplateType(comp.getValue())));
+                    }
+                }
+            });
+        }
+
+        return editor;
+    }
+
+    EmailTemplateType toTemplateType(AudienceType type) {
+        switch (type) {
+        case Customer:
+            return EmailTemplateType.MessageBroadcastCustomer;
+        case Employee:
+            return EmailTemplateType.MessageBroadcastEmployee;
+        case Prospect:
+            return EmailTemplateType.MessageBroadcastProspect;
+        case Tenant:
+            return EmailTemplateType.MessageBroadcastTenant;
+        default:
+            throw new Error("Type not supported: " + (type == null ? "null" : type));
         }
     }
 }
