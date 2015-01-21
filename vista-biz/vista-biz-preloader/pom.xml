@@ -39,6 +39,14 @@
         </dependency>
 
         <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-quartz</artifactId>
+            <version>${pyxVersion}</version>
+            <!-- <scope>test</scope> -->
+            <!-- <optional>true</optional> -->
+        </dependency>
+
+        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <scope>test</scope>

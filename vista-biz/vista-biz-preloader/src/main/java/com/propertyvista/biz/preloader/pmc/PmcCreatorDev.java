@@ -10,7 +10,7 @@
  * Created on 2012-05-30
  * @author vlads
  */
-package com.propertyvista.portal.server.preloader;
+package com.propertyvista.biz.preloader.pmc;
 
 import java.math.BigDecimal;
 
