@@ -42,6 +42,7 @@ public class BroadcastTemplateLister extends SiteDataTablePanel<BroadcastTemplat
 
     public BroadcastTemplateLister() {
         super(BroadcastTemplate.class, GWT.<AbstractCrudService<BroadcastTemplate>> create(BroadcastTemplateCrudService.class));
+
         addUpperActionItem(newButton = new Button(FolderImages.INSTANCE.addIcon(), i18n.tr("New Broadcast Template"), new Command() {
             @Override
             public void execute() {
@@ -71,6 +72,7 @@ public class BroadcastTemplateLister extends SiteDataTablePanel<BroadcastTemplat
         newButton.setMenu(subMenu);
         newButton.setPermission(DataModelPermission.permissionCreate(BroadcastTemplate.class));
 
+        setDeleteActionEnabled(true);
         setColumnDescriptors(new ColumnDescriptor[] { //
         new ColumnDescriptor.Builder(proto().name()).build(), //
                 new ColumnDescriptor.Builder(proto().subject()).build(), //
