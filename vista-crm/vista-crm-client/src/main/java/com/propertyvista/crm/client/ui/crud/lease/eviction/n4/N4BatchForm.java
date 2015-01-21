@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
@@ -59,7 +60,7 @@ public class N4BatchForm extends CrmEntityForm<N4BatchDTO> {
         formPanel.h1(i18n.tr("General"));
         formPanel.append(Location.Left, proto().name()).decorate();
         formPanel.append(Location.Left, proto().issueDate()).decorate();
-        formPanel.append(Location.Left, proto().serviceDate()).decorate();
+        formPanel.append(Location.Left, proto().serviceDate(), new CDateLabel()).decorate();
 
         formPanel.append(Location.Right, proto().deliveryMethod()).decorate();
         formPanel.append(Location.Right, proto().deliveryDate()).decorate();
@@ -94,6 +95,9 @@ public class N4BatchForm extends CrmEntityForm<N4BatchDTO> {
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
+
+        get(proto().serviceDate()).setVisible(!getValue().serviceDate().isNull());
+        get(proto().deliveryDate()).setVisible(!getValue().serviceDate().isNull());
     }
 
     class N4BatchItemFolder extends VistaBoxFolder<N4BatchItem> {
