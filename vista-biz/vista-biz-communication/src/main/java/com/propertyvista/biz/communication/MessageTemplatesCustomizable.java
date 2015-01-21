@@ -104,7 +104,7 @@ class MessageTemplatesCustomizable {
 
     private static EmailTemplate fetchEmailTemplate(EmailTemplateType type, EmailTemplatesPolicy policy) {
         for (EmailTemplate emt : policy.templates()) {
-            if (emt.type().getValue() == type)
+            if (emt.templateType().getValue() == type)
                 return emt;
         }
         return null;

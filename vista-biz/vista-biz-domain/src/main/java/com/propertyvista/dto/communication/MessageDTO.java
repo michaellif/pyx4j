@@ -51,7 +51,7 @@ public interface MessageDTO extends Message {
     @NotNull
     @Length(48000)
     @Editor(type = Editor.EditorType.richtextarea)
-    IPrimitive<String> text();
+    IPrimitive<String> content();
 
     @NotNull
     @ReadOnly

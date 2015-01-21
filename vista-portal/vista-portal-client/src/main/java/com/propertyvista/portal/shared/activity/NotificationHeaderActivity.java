@@ -134,7 +134,7 @@ public class NotificationHeaderActivity extends AbstractActivity implements Noti
                     nt = NotificationType.STATUS;
                     break;
                 }
-                addMessage(new Notification(m.text().getValue(), m.thread().subject().getValue(), nt), m);
+                addMessage(new Notification(m.content().getValue(), m.thread().subject().getValue(), nt), m);
             }
         }
     }

@@ -156,7 +156,7 @@ public class CommunicationPage extends CPortalEntityForm<CommunicationThreadDTO>
                 @Override
                 public SafeHtml format(MessageDTO value) {
 
-                    Label messageField = new Label(HtmlUtils.removeHtmlTags(value.text().getValue("")));
+                    Label messageField = new Label(HtmlUtils.removeHtmlTags(value.content().getValue("")));
                     messageField.getElement().getStyle().setWidth(100, Unit.PCT);
                     messageField.getElement().getStyle().setWhiteSpace(WhiteSpace.NOWRAP);
                     messageField.getElement().getStyle().setOverflow(Overflow.HIDDEN);
@@ -287,7 +287,7 @@ public class CommunicationPage extends CPortalEntityForm<CommunicationThreadDTO>
             formPanel.append(Location.Left, proto().highImportance(), new CCheckBox()).decorate();
             formPanel.hr();
 
-            formPanel.append(Location.Left, proto().text(), new CRichTextArea());
+            formPanel.append(Location.Left, proto().content(), new CRichTextArea());
 
             attachmentBr = formPanel.br();
             attachmentCaption = formPanel.h3("Attachments");
@@ -295,14 +295,14 @@ public class CommunicationPage extends CPortalEntityForm<CommunicationThreadDTO>
             formPanel.br();
             formPanel.append(Location.Left, createLowerToolbar());
 
-            get(proto().text()).asWidget().getElement().getStyle().setWidth(100, Unit.PCT);
+            get(proto().content()).asWidget().getElement().getStyle().setWidth(100, Unit.PCT);
             get(proto().header()).asWidget().getElement().getStyle().setWidth(100, Unit.PCT);
 
             return formPanel;
         }
 
         public void setFocusForEditingText() {
-            get(proto().text()).asWidget().getElement().focus();
+            get(proto().content()).asWidget().getElement().focus();
         }
 
         protected Toolbar createLowerToolbar() {
@@ -337,7 +337,7 @@ public class CommunicationPage extends CPortalEntityForm<CommunicationThreadDTO>
                         MessageDTO currentMessage = getCurrent();
                         messagesFolder.addItem();
                         CFolderItem<MessageDTO> newItem = messagesFolder.getItem(messagesFolder.getItemCount() - 1);
-                        newItem.getValue().text().setValue(text);
+                        newItem.getValue().content().setValue(text);
                         if (!MessageCategory.CategoryType.Ticket.equals(CommunicationPage.this.getValue().category().getValue())) {
                             if (!ClientContext.getUserVisit().getName().equals(currentMessage.header().sender().getValue())) {
                                 DeliveryHandle dh = EntityFactory.create(DeliveryHandle.class);
@@ -403,9 +403,9 @@ public class CommunicationPage extends CPortalEntityForm<CommunicationThreadDTO>
         private String buildReplyForwardText(boolean isForward) {
             CFolderItem<MessageDTO> current = (CFolderItem<MessageDTO>) getParent();
             if (isForward) {
-                return current == null ? null : "\nFwd:\n" + current.getValue().text().getValue("");
+                return current == null ? null : "\nFwd:\n" + current.getValue().content().getValue("");
             }
-            return current == null ? null : "\nRe:\n" + current.getValue().text().getValue("");
+            return current == null ? null : "\nRe:\n" + current.getValue().content().getValue("");
         }
 
         private MessageDTO getCurrent() {

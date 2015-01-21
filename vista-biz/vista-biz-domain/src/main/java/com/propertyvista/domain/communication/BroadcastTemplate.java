@@ -13,7 +13,6 @@
 package com.propertyvista.domain.communication;
 
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
@@ -22,14 +21,13 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.AttachLevel;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.Translate;
 
 import com.propertyvista.domain.communication.DeliveryHandle.MessageType;
 
-public interface BroadcastTemplate extends IEntity {
+public interface BroadcastTemplate extends MessageTemplate {
 
     public enum AudienceType {
         @Translate("Customer")
@@ -53,19 +51,15 @@ public interface BroadcastTemplate extends IEntity {
     @ToString(index = 0)
     IPrimitive<String> name();
 
+    @Override
     @NotNull
-    @Length(78)
-    @ToString(index = 0)
+    @ToString(index = 1)
     IPrimitive<String> subject();
 
     IPrimitive<AudienceType> audienceType();
 
     @NotNull
     IPrimitive<MessageType> messageType();
-
-    @Length(48000)
-    @Editor(type = Editor.EditorType.richtextarea)
-    IPrimitive<String> text();
 
     @ReadOnly
     IPrimitive<Boolean> allowedReply();

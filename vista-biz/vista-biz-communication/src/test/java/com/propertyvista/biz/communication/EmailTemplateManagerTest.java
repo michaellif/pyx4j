@@ -1322,7 +1322,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             EmailTemplate template = EntityFactory.create(EmailTemplate.class);
             template.useHeader().setValue(Boolean.TRUE);
             template.useFooter().setValue(Boolean.TRUE);
-            template.type().setValue(type);
+            template.templateType().setValue(type);
             template.subject().setValue(type.toString());
             template.content().setValue(getTemplateContent(type, false));
             policy.templates().add(template);

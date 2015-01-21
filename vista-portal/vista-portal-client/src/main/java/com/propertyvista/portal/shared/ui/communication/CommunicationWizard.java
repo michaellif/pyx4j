@@ -50,13 +50,13 @@ public class CommunicationWizard extends CPortalEntityWizard<CommunicationThread
         content.append(Location.Left, proto().representingMessage().highImportance(), new CCheckBox()).decorate();
         content.hr();
 
-        content.append(Location.Dual, proto().representingMessage().text(), new CRichTextArea());
+        content.append(Location.Dual, proto().representingMessage().content(), new CRichTextArea());
 
         content.br();
         content.h3("Attachments");
         content.append(Location.Left, proto().representingMessage().attachments(), new MessageAttachmentFolder());
         content.br();
-        get(proto().representingMessage().text()).asWidget().getElement().getStyle().setWidth(100, Unit.PCT);
+        get(proto().representingMessage().content()).asWidget().getElement().getStyle().setWidth(100, Unit.PCT);
         return content;
     }
 }

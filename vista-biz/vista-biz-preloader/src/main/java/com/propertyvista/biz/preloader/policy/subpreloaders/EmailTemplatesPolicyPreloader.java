@@ -135,7 +135,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("New Password Retrieval"));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/>\n" +
@@ -158,7 +158,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("New Password Retrieval"));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/>\n" +
@@ -181,7 +181,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("New Password Retrieval"));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/>\n" +
@@ -205,7 +205,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("Start your Application"));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/>"+
@@ -251,7 +251,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("Start your Application"));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/>"+
@@ -301,7 +301,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("Start your Application"));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/>"+
@@ -355,7 +355,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("Start your Guarantor's Application"));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/>"+
@@ -413,7 +413,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("Congratulations!"));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0}<br/>"+
@@ -465,7 +465,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("Application Declined"));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0}<br/>"+
@@ -503,7 +503,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("Visit our new site"));
         template.content().setValue(i18n.tr(//@formatter:off
                 "<h3>Welcome {0}!</h3><br/><br/>" +
@@ -538,7 +538,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr(//@formatter:off
                 "New Work Order - {0}{1,choice,!null#, ${1}}",
                 templateFacade.getVarname(requestT.propertyCode()),
@@ -589,7 +589,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("Maintenance Request Received!"));
         template.content().setValue(i18n.tr(//@formatter:off
                 "<h3>Dear {2},</h3><br/>" + // TODO - is this the same as reporter?
@@ -670,7 +670,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("NOTICE OF ENTRY"));
         template.content().setValue(i18n.tr(//@formatter:off
                 "<h3>Dear {2},</h3><br/>" +
@@ -733,7 +733,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("Maintenance Request Updated"));
         template.content().setValue(i18n.tr(//@formatter:off
                 "<h3>Dear {2},</h3><br/>" + // TODO - is this the same as reporter?
@@ -792,7 +792,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("Maintenance Request Completed"));
         template.content().setValue(i18n.tr(//@formatter:off
                 "<h3>Dear {2},</h3><br/>" + // TODO - is this the same as reporter?
@@ -858,7 +858,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("Maintenance Request Cancelled"));
         template.content().setValue(i18n.tr(//@formatter:off
                 "<h3>Dear {2},</h3><br/>" + // TODO - is this the same as reporter?
@@ -920,7 +920,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("{0} - Your payment has been Submitted", templateFacade.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/>" +
@@ -958,7 +958,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("{0} - Your payment has been Processed", templateFacade.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
@@ -989,7 +989,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("{0} - Your payment has been Processed", templateFacade.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
@@ -1021,7 +1021,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("{0} - Your payment has not been processed", templateFacade.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
@@ -1055,7 +1055,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("{0} - AutoPay Setup Confirmation", templateFacade.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
@@ -1083,7 +1083,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("{0} - AutoPay Change Confirmation", templateFacade.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
@@ -1111,7 +1111,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("{0} - AutoPay Change Confirmation", templateFacade.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
@@ -1137,7 +1137,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
-        template.type().setValue(type);
+        template.templateType().setValue(type);
         template.subject().setValue(i18n.tr("Direct Debit Account Changed", templateFacade.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +

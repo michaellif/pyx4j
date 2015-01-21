@@ -107,7 +107,7 @@ public class CommunicationPortalCrudServiceImpl extends AbstractCrudServiceDtoIm
         dto.allowedReply().setValue(true);
         m.sender().set(PortalVistaContext.getLeaseParticipant());
         if (initializationData instanceof MessageInitializationData) {
-            m.text().set(((MessageInitializationData) initializationData).initalizedText());
+            m.content().set(((MessageInitializationData) initializationData).initalizedText());
         }
 
         return dto;
@@ -121,7 +121,7 @@ public class CommunicationPortalCrudServiceImpl extends AbstractCrudServiceDtoIm
         message.attachments().set(to.representingMessage().attachments());
         message.date().setValue(SystemDateManager.getDate());
         message.sender().set(PortalVistaContext.getLeaseParticipant());
-        message.text().set(to.representingMessage().text());
+        message.content().set(to.representingMessage().content());
         message.highImportance().set(to.representingMessage().highImportance());
         message.recipients()
                 .add(communicationFacade.createDeliveryHandle(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned), false));
@@ -178,7 +178,7 @@ public class CommunicationPortalCrudServiceImpl extends AbstractCrudServiceDtoIm
             m.attachments().set(message.attachments());
             m.date().setValue(SystemDateManager.getDate());
             m.sender().set(PortalVistaContext.getLeaseParticipant());
-            m.text().set(message.text());
+            m.content().set(message.content());
             m.highImportance().set(message.highImportance());
             if (message.recipients() != null && message.recipients().size() > 0) {
                 m.recipients().add(message.recipients().get(0));

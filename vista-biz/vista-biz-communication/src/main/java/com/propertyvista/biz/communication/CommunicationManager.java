@@ -172,7 +172,7 @@ public class CommunicationManager {
             dto.id().set(m.id());
             dto.date().set(m.date());
             dto.thread().set(m.thread());
-            dto.text().set(m.text());
+            dto.content().set(m.content());
             dto.notificationType().set(m.notificationType());
 
             result.add(dto);
@@ -212,7 +212,7 @@ public class CommunicationManager {
                 dto.id().set(thread.content().get(0).id());
                 dto.date().set(thread.content().get(0).date());
                 dto.thread().set(thread);
-                dto.text().set(nd.deliveredText());
+                dto.content().set(nd.deliveredText());
                 dto.notificationType().set(nd.notificationType());
 
                 result.add(dto);
@@ -440,7 +440,7 @@ public class CommunicationManager {
 
         Persistence.ensureRetrieve(thread.owner(), AttachLevel.Attached);
 
-        messageDTO.text().set(m.text());
+        messageDTO.content().set(m.content());
         messageDTO.date().set(m.date());
         messageDTO.thread().setAttachLevel(AttachLevel.Attached);
         messageDTO.thread().set(thread);
@@ -509,7 +509,7 @@ public class CommunicationManager {
         dbo.attachments().set(dto.attachments());
         dbo.date().setValue(SystemDateManager.getDate());
         dbo.sender().set(currentUser);
-        dbo.text().set(dto.text());
+        dbo.content().set(dto.content());
         dbo.highImportance().setValue(false);
         Persistence.service().persist(dbo);
 
