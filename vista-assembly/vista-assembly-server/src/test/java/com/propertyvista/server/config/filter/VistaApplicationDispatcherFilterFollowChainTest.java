@@ -38,15 +38,15 @@ public class VistaApplicationDispatcherFilterFollowChainTest extends VistaApplic
     @Test
     public final void testFollowChain() throws IOException, ServletException {
 
-        testChain("https://portale-22.birchwoodsoftwaregroup.com/prospect");
+        testChain("https://vista-22.birchwoodsoftwaregroup.com/index.html");
 
-        testChain("https://portal-vista-22.birchwoodsoftwaregroup.com/");
+        testChain("https://vista-vista-22.birchwoodsoftwaregroup.com/index.html");
 
-        testChain("https://site-vista-999.birchwoodsoftwaregroup.com/");
+        testChain("https://port-vista-999.birchwoodsoftwaregroup.com/demo/");
 
-        testChain("http://onboardingg.dev.birchwoodsoftwaregroup.com:8888/");
+        testChain("http://onboardingg.dev.birchwoodsoftwaregroup.com:8888/index.html");
 
-        testChain("https://env-99.devpv.com/");
+        testChain("https://env-99.devpv.com/index.html");
 
     }
 }

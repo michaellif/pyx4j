@@ -14,12 +14,9 @@ package com.propertyvista.server.config.filter.namespace;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.pmc.PmcDnsName.DnsNameTarget;
@@ -29,31 +26,31 @@ import com.propertyvista.server.config.filter.utils.HttpRequestUtils;
 public class VistaApplicationResolverHelper {
     private static final String regExTwoDigits = "\\d\\d";
 
-    public static VistaApplication getApplication(HttpServletRequest httpRequest) {
+    static VistaApplication getApplication(HttpServletRequest httpRequest) {
 
         VistaApplication app = null;
 
         String serverName = httpRequest.getServerName();
         String rootServletPath = HttpRequestUtils.getRootServletPath(httpRequest);
 
-        try {
-            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
-            app = CacheService.get(HttpRequestUtils.getAppCacheKey(httpRequest));
+//        try {
+//            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
+//            app = CacheService.get(HttpRequestUtils.getAppCacheKey(httpRequest));
+//
+//            if (app != null) {
+//                return app;
+//            } else {
+        app = getAppByDomainOrPath(serverName, rootServletPath);
 
-            if (app != null) {
-                return app;
-            } else {
-                app = getAppByDomainOrPath(serverName, rootServletPath);
+//        if (app != null) {
+//            CacheService.put(HttpRequestUtils.getAppCacheKey(httpRequest), app);
+//        }
 
-                if (app != null) {
-                    CacheService.put(HttpRequestUtils.getAppCacheKey(httpRequest), app);
-                }
-
-                return app;
-            }
-        } finally {
-            NamespaceManager.remove();
-        }
+        return app;
+//            }
+//        } finally {
+//            NamespaceManager.remove();
+//        }
 
     }
 
@@ -126,6 +123,7 @@ public class VistaApplicationResolverHelper {
     }
 
     private static VistaApplication lookUpCustomDNS(String domain, String rootServletPath) {
+
         EntityQueryCriteria<PmcDnsName> criteria = EntityQueryCriteria.create(PmcDnsName.class);
         criteria.eq(criteria.proto().enabled(), Boolean.TRUE);
         criteria.eq(criteria.proto().dnsName(), domain);

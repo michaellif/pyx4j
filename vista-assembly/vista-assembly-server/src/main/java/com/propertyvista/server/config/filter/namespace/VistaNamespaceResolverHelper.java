@@ -21,13 +21,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
@@ -74,7 +72,7 @@ public class VistaNamespaceResolverHelper {
         mapToNoNamespace.add("m");
     }
 
-    public static String getNamespace(HttpServletRequest httprequest) {
+    static String getNamespace(HttpServletRequest httprequest) {
         if (httprequest.getServletPath() != null) {
             String servletPath = httprequest.getServletPath();
             if ((servletPath.startsWith("/" + VistaApplication.operations) || servletPath.startsWith("/interfaces"))) {
@@ -124,36 +122,37 @@ public class VistaNamespaceResolverHelper {
         }
 
         String pmcNamespace;
-        try {
-            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
-            pmcNamespace = CacheService.get(VistaNamespaceResolverHelper.class.getName() + "." + serverName);
-            if (pmcNamespace == null) {
-                EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-                if (namespaceProposal != null) {
-                    OrCriterion or = criteria.or();
-                    or.left(PropertyCriterion.eq(criteria.proto().dnsName(), namespaceProposal));
-                    or.right(PropertyCriterion.eq(criteria.proto().dnsNameAliases().$().enabled(), Boolean.TRUE));
-                    or.right(PropertyCriterion.eq(criteria.proto().dnsNameAliases().$().dnsName(), serverName));
-                } else {
-                    criteria.eq(criteria.proto().dnsNameAliases().$().enabled(), Boolean.TRUE);
-                    criteria.eq(criteria.proto().dnsNameAliases().$().dnsName(), serverName);
-                }
-                Pmc pmc = Persistence.service().retrieve(criteria);
-                if (pmc != null) {
-                    if (pmc.status().getValue() != PmcStatus.Active) {
-                        // Avoid Query for every request
-                        pmcNamespace = VistaNamespace.noNamespace;
-                    } else {
-                        pmcNamespace = pmc.namespace().getValue();
-                    }
-                } else {
-                    pmcNamespace = VistaNamespace.noNamespace;
-                }
-                CacheService.put(VistaNamespaceResolverHelper.class.getName() + "." + serverName, pmcNamespace);
-            }
-        } finally {
-            NamespaceManager.remove();
+        // TODO Check if this will be invoked from other places than VistaNamespaceDataResolver to ensure or not ensure namespace
+//        try {
+//            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
+//            pmcNamespace = CacheService.get(VistaNamespaceResolverHelper.class.getName() + "." + serverName);
+//            if (pmcNamespace == null) {
+        EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+        if (namespaceProposal != null) {
+            OrCriterion or = criteria.or();
+            or.left(PropertyCriterion.eq(criteria.proto().dnsName(), namespaceProposal));
+            or.right(PropertyCriterion.eq(criteria.proto().dnsNameAliases().$().enabled(), Boolean.TRUE));
+            or.right(PropertyCriterion.eq(criteria.proto().dnsNameAliases().$().dnsName(), serverName));
+        } else {
+            criteria.eq(criteria.proto().dnsNameAliases().$().enabled(), Boolean.TRUE);
+            criteria.eq(criteria.proto().dnsNameAliases().$().dnsName(), serverName);
         }
+        Pmc pmc = Persistence.service().retrieve(criteria);
+        if (pmc != null) {
+            if (pmc.status().getValue() != PmcStatus.Active) {
+                // Avoid Query for every request
+                pmcNamespace = VistaNamespace.noNamespace;
+            } else {
+                pmcNamespace = pmc.namespace().getValue();
+            }
+        } else {
+            pmcNamespace = VistaNamespace.noNamespace;
+        }
+//            CacheService.put(VistaNamespaceResolverHelper.class.getName() + "." + serverName, pmcNamespace);
+//            }
+//        } finally {
+//            NamespaceManager.remove();
+//        }
 
         if ((pmcNamespace == null) || (VistaNamespace.noNamespace.equals(pmcNamespace))) {
             log.warn("accessing host {}, {}, path {}", serverName, namespaceProposal, httprequest.getServletPath());

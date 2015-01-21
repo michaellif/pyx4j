@@ -40,10 +40,10 @@ public class VistaApplicationDispatcherFilterInterfacesTest extends VistaApplica
         // Local        ->  http://secure-interfaces.local.devpv.com/  & http://interfaces.local.devpv.com/
         // ***********************************************************************************************
 
-        testForward("https://secure-interfaces.propertyvista.com/", VistaApplication.interfaces);
-        testForward("http://secure-interfaces-99.local.devpv.com/", VistaApplication.interfaces);
-        testForward("http://secure-interfaces.local.devpv.com/", VistaApplication.interfaces);
-        testForward("http://interfaces.local.devpv.com/", VistaApplication.interfaces);
+        testForward("https://secure-interfaces.propertyvista.com/interfaces", VistaApplication.interfaces);
+        testForward("http://secure-interfaces-99.local.devpv.com/interfaces", VistaApplication.interfaces);
+        testForward("http://secure-interfaces.local.devpv.com/interfaces", VistaApplication.interfaces);
+        testForward("http://interfaces.local.devpv.com/interfaces", VistaApplication.interfaces);
     }
 
 }

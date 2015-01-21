@@ -18,13 +18,17 @@ import com.propertyvista.domain.security.common.VistaApplication;
 
 public class HttpRequestUtils {
 
-    public static String getAppCacheKey(HttpServletRequest httpRequest) {
+    public static String getNamespaceDataCacheKey(HttpServletRequest httpRequest) {
 
         StringBuffer appCacheKey = new StringBuffer();
+        appCacheKey.append(HttpRequestUtils.class.getName());
+        appCacheKey.append("/");
         appCacheKey.append(httpRequest.getServerName());
 
         String rootServletPath = getRootServletPath(httpRequest);
-        if (rootServletPath.equals(VistaApplication.prospect.name())) {
+        if (rootServletPath.equals(VistaApplication.prospect.name()) //
+                || rootServletPath.equals(VistaApplication.operations.name()) //
+                || rootServletPath.equals(VistaApplication.interfaces.name())) {
             appCacheKey.append("/");
             appCacheKey.append(rootServletPath);
         }

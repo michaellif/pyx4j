@@ -18,6 +18,7 @@ import com.pyx4j.config.server.NamespaceResolver;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
+import com.propertyvista.server.config.filter.namespace.VistaNamespaceDataResolver;
 
 public class VistaTestsServerSideConfigurationForNamespace extends VistaTestsServerSideConfiguration {
 
