@@ -269,8 +269,8 @@ public class DepositFacadeImpl implements DepositFacade {
      */
     private Deposit makeDeposit(ProductDeposit productDeposit, BillableItem billableItem) {
         if (VistaFeatures.instance().yardiIntegration()) {
-            if (productDeposit.chargeCode().yardiChargeCodes().isEmpty()) {
-                return null; // no deposit for arcode not mapped to yardi charge code!..
+            if (productDeposit.chargeCode().yardiChargeCodes().isEmpty() && billableItem.item().yardiDepositLMR().isNull()) {
+                return null; // no deposit for arcode not mapped to yardi charge code (except imported yardi LMR)!..
             }
         }
 
