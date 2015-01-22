@@ -81,13 +81,11 @@ public class VistaNamespaceDataResolver extends NamespaceDataResolver {
                 namespaceData.setNamespace(VistaNamespace.noNamespace);
                 return;
             default:
-                namespaceData.setNamespace(VistaNamespaceResolverHelper.getNamespace(httpRequest));
-                return;
+                break;
             }
-        } else {
-            namespaceData.setNamespace(VistaNamespace.noNamespace);
-            return;
         }
+
+        namespaceData.setNamespace(VistaNamespaceResolverHelper.getNamespace(httpRequest));
 
     }
 }
