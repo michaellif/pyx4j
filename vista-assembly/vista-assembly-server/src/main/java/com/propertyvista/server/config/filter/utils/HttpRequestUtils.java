@@ -26,9 +26,7 @@ public class HttpRequestUtils {
         appCacheKey.append(httpRequest.getServerName());
 
         String rootServletPath = getRootServletPath(httpRequest);
-        if (rootServletPath.equals(VistaApplication.prospect.name()) //
-                || rootServletPath.equals(VistaApplication.operations.name()) //
-                || rootServletPath.equals(VistaApplication.interfaces.name())) {
+        if (rootServletPath.equals(VistaApplication.prospect.name())) {
             appCacheKey.append("/");
             appCacheKey.append(rootServletPath);
         }

@@ -19,6 +19,7 @@ import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.server.config.filter.utils.HttpRequestUtils;
 
 public class VistaNamespaceDataResolver extends NamespaceDataResolver {
@@ -64,10 +65,29 @@ public class VistaNamespaceDataResolver extends NamespaceDataResolver {
     private void initNamespaceData() {
         namespaceData = new VistaNamespaceData();
 
+        VistaApplication app = VistaApplicationResolverHelper.getApplication(httpRequest);
         // Resolve application
-        namespaceData.setApplication(VistaApplicationResolverHelper.getApplication(httpRequest));
-        // TODO Set namespace based or solved app??
-        namespaceData.setNamespace(VistaNamespaceResolverHelper.getNamespace(httpRequest));
-    }
+        namespaceData.setApplication(app);
 
+        // Based on resolved application, set namespace in some cases
+        if (app != null) {
+            switch (app) {
+            case operations:
+            case interfaces:
+                namespaceData.setNamespace(VistaNamespace.operationsNamespace);
+                return;
+            case noApp:
+            case onboarding:
+                namespaceData.setNamespace(VistaNamespace.noNamespace);
+                return;
+            default:
+                namespaceData.setNamespace(VistaNamespaceResolverHelper.getNamespace(httpRequest));
+                return;
+            }
+        } else {
+            namespaceData.setNamespace(VistaNamespace.noNamespace);
+            return;
+        }
+
+    }
 }

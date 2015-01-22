@@ -33,24 +33,9 @@ public class VistaApplicationResolverHelper {
         String serverName = httpRequest.getServerName();
         String rootServletPath = HttpRequestUtils.getRootServletPath(httpRequest);
 
-//        try {
-//            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
-//            app = CacheService.get(HttpRequestUtils.getAppCacheKey(httpRequest));
-//
-//            if (app != null) {
-//                return app;
-//            } else {
         app = getAppByDomainOrPath(serverName, rootServletPath);
 
-//        if (app != null) {
-//            CacheService.put(HttpRequestUtils.getAppCacheKey(httpRequest), app);
-//        }
-
         return app;
-//            }
-//        } finally {
-//            NamespaceManager.remove();
-//        }
 
     }
 

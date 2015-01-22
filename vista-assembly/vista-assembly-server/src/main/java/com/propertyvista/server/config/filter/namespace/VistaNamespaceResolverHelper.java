@@ -30,7 +30,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
-import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.portal.rpc.shared.SiteWasNotActivatedUserRuntimeException;
 
 public class VistaNamespaceResolverHelper {
@@ -73,17 +72,17 @@ public class VistaNamespaceResolverHelper {
     }
 
     static String getNamespace(HttpServletRequest httprequest) {
-        if (httprequest.getServletPath() != null) {
-            String servletPath = httprequest.getServletPath();
-            if ((servletPath.startsWith("/" + VistaApplication.operations) || servletPath.startsWith("/interfaces"))) {
-                return VistaNamespace.operationsNamespace;
-            }
-            if (servletPath.startsWith("/public/schema") || servletPath.startsWith("/public/version") || servletPath.startsWith("/static/")
-                    || servletPath.startsWith("/demo/") || servletPath.startsWith("/public/verify") || servletPath.startsWith("/public/status")
-                    || servletPath.startsWith("/o/") || servletPath.equals("/index.html") || servletPath.startsWith("/" + VistaApplication.onboarding)) {
-                return VistaNamespace.noNamespace;
-            }
-        }
+//        if (httprequest.getServletPath() != null) {
+//            String servletPath = httprequest.getServletPath();
+//            if ((servletPath.startsWith("/" + VistaApplication.operations) || servletPath.startsWith("/interfaces"))) {
+//                return VistaNamespace.operationsNamespace;
+//            }
+//            if (servletPath.startsWith("/public/schema") || servletPath.startsWith("/public/version") || servletPath.startsWith("/static/")
+//                    || servletPath.startsWith("/demo/") || servletPath.startsWith("/public/verify") || servletPath.startsWith("/public/status")
+//                    || servletPath.startsWith("/o/") || servletPath.equals("/index.html") || servletPath.startsWith("/" + VistaApplication.onboarding)) {
+//                return VistaNamespace.noNamespace;
+//            }
+//        }
 
         // Dev: Get the 4th part of URL.
         // {PMC}-crm.local.devpv.com
@@ -122,11 +121,6 @@ public class VistaNamespaceResolverHelper {
         }
 
         String pmcNamespace;
-        // TODO Check if this will be invoked from other places than VistaNamespaceDataResolver to ensure or not ensure namespace
-//        try {
-//            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
-//            pmcNamespace = CacheService.get(VistaNamespaceResolverHelper.class.getName() + "." + serverName);
-//            if (pmcNamespace == null) {
         EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
         if (namespaceProposal != null) {
             OrCriterion or = criteria.or();
@@ -148,11 +142,6 @@ public class VistaNamespaceResolverHelper {
         } else {
             pmcNamespace = VistaNamespace.noNamespace;
         }
-//            CacheService.put(VistaNamespaceResolverHelper.class.getName() + "." + serverName, pmcNamespace);
-//            }
-//        } finally {
-//            NamespaceManager.remove();
-//        }
 
         if ((pmcNamespace == null) || (VistaNamespace.noNamespace.equals(pmcNamespace))) {
             log.warn("accessing host {}, {}, path {}", serverName, namespaceProposal, httprequest.getServletPath());
