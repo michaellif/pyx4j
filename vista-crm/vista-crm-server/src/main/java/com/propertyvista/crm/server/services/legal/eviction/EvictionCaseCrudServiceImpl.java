@@ -65,10 +65,6 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
         bo.evictionFlowPolicy().set(getEvictionFlowPolicy(lease));
         EvictionCaseDTO to = binder.createTO(bo);
 
-        if (!to.evictionFlowPolicy().evictionFlow().isEmpty()) {
-            to.nextStep().set(to.evictionFlowPolicy().evictionFlow().get(0));
-        }
-
         return to;
     }
 
@@ -110,9 +106,7 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
                 Persistence.ensureRetrieve(record.attachments(), AttachLevel.Attached);
             }
         }
-
-        to.nextStep().set(getNextEvictionStep(bo));
-        Persistence.ensureRetrieve(to.nextStep(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(to.evictionFlowPolicy(), AttachLevel.Attached);
     }
 
     @Override

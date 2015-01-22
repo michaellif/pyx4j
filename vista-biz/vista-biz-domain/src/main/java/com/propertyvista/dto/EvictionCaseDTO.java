@@ -17,11 +17,9 @@ import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.eviction.EvictionCase;
-import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
 
 @Transient
 @ExtendsBO
 @SecurityEnabled
 public interface EvictionCaseDTO extends EvictionCase {
-    EvictionFlowStep nextStep();
 }
