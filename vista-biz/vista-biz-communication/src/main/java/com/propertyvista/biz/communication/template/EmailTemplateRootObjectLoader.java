@@ -32,7 +32,11 @@ import com.propertyvista.biz.communication.template.model.ApplicationT;
 import com.propertyvista.biz.communication.template.model.AutopayAgreementT;
 import com.propertyvista.biz.communication.template.model.BuildingT;
 import com.propertyvista.biz.communication.template.model.CompanyInfoT;
+import com.propertyvista.biz.communication.template.model.CustomerT;
 import com.propertyvista.biz.communication.template.model.EmailTemplateContext;
+import com.propertyvista.biz.communication.template.model.EmployeeT;
+import com.propertyvista.biz.communication.template.model.LastBillT;
+import com.propertyvista.biz.communication.template.model.LeadT;
 import com.propertyvista.biz.communication.template.model.LeaseT;
 import com.propertyvista.biz.communication.template.model.MaintenanceRequestT;
 import com.propertyvista.biz.communication.template.model.MaintenanceRequestWOT;
@@ -41,11 +45,14 @@ import com.propertyvista.biz.communication.template.model.PasswordRequestProspec
 import com.propertyvista.biz.communication.template.model.PasswordRequestTenantT;
 import com.propertyvista.biz.communication.template.model.PaymentT;
 import com.propertyvista.biz.communication.template.model.PortalLinksT;
+import com.propertyvista.biz.communication.template.model.ProspectT;
 import com.propertyvista.biz.communication.template.model.TenantT;
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.contact.InternationalAddress;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestWorkOrder;
@@ -59,6 +66,7 @@ import com.propertyvista.domain.settings.PmcCompanyInfoContact;
 import com.propertyvista.domain.settings.PmcCompanyInfoContact.CompanyInfoContactType;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
@@ -198,26 +206,26 @@ public class EmailTemplateRootObjectLoader {
             Validate.isTrue(!context.lease().currentTerm().version().isEmpty(), "Lease Term is empty");
 
             if (context.leaseTermParticipant().role().getValue() == Role.Applicant) {
-                t.Applicant().Name().setValue(customer.person().name().getStringView());
+                t.Applicant().FullName().setValue(customer.person().name().getStringView());
                 t.Applicant().FirstName().setValue(customer.person().name().firstName().getStringView());
                 t.Applicant().LastName().setValue(customer.person().name().lastName().getStringView());
             } else if (context.leaseTermParticipant().role().getValue() == Role.CoApplicant) {
-                t.CoApplicant().Name().setValue(customer.person().name().getStringView());
+                t.CoApplicant().FullName().setValue(customer.person().name().getStringView());
                 t.CoApplicant().FirstName().setValue(customer.person().name().firstName().getStringView());
                 t.CoApplicant().LastName().setValue(customer.person().name().lastName().getStringView());
             } else if (context.leaseTermParticipant().role().getValue() == Role.Guarantor) {
-                t.Guarantor().Name().setValue(customer.person().name().getStringView());
+                t.Guarantor().FullName().setValue(customer.person().name().getStringView());
                 t.Guarantor().FirstName().setValue(customer.person().name().firstName().getStringView());
                 t.Guarantor().LastName().setValue(customer.person().name().lastName().getStringView());
 
                 LeaseTermGuarantor leaseTermGuarantor = context.leaseTermParticipant().cast();
-                t.GuarantorRequester().Name().setValue(leaseTermGuarantor.tenant().customer().person().name().getStringView());
+                t.GuarantorRequester().FullName().setValue(leaseTermGuarantor.tenant().customer().person().name().getStringView());
                 t.GuarantorRequester().FirstName().setValue(leaseTermGuarantor.tenant().customer().person().name().firstName().getStringView());
                 t.GuarantorRequester().LastName().setValue(leaseTermGuarantor.tenant().customer().person().name().lastName().getStringView());
             }
             if (t.Applicant().isNull()) {
                 Persistence.ensureRetrieve(context.lease()._applicant(), AttachLevel.Attached);
-                t.Applicant().Name().setValue(context.lease()._applicant().customer().person().name().getStringView());
+                t.Applicant().FullName().setValue(context.lease()._applicant().customer().person().name().getStringView());
                 t.Applicant().FirstName().setValue(context.lease()._applicant().customer().person().name().firstName().getStringView());
                 t.Applicant().LastName().setValue(context.lease()._applicant().customer().person().name().lastName().getStringView());
             }
@@ -259,9 +267,76 @@ public class EmailTemplateRootObjectLoader {
             } else {
                 throw new Error("LeaseParticipant or LeaseTermParticipant should be provided in context");
             }
-            t.Name().setValue(customer.person().name().getStringView());
+            t.FullName().setValue(customer.person().name().getStringView());
             t.FirstName().setValue(customer.person().name().firstName().getStringView());
             t.LastName().setValue(customer.person().name().lastName().getStringView());
+            t.DateOfBirth().setValue(customer.person().birthDate().getStringView());
+        } else if (tObj instanceof ProspectT) {
+            ProspectT t = (ProspectT) tObj;
+            Customer customer;
+            if (!context.customer().isNull()) {
+                Persistence.ensureRetrieve(context.customer(), AttachLevel.Attached);
+                customer = context.customer();
+            } else {
+                throw new Error("Customer should be provided in context");
+            }
+            t.FullName().setValue(customer.person().name().getStringView());
+            t.FirstName().setValue(customer.person().name().firstName().getStringView());
+            t.LastName().setValue(customer.person().name().lastName().getStringView());
+        } else if (tObj instanceof EmployeeT) {
+            EmployeeT t = (EmployeeT) tObj;
+            Customer customer;
+            if (!context.customer().isNull()) {
+                Persistence.ensureRetrieve(context.customer(), AttachLevel.Attached);
+                customer = context.customer();
+            } else {
+                throw new Error("Customer should be provided in context");
+            }
+            t.FullName().setValue(customer.person().name().getStringView());
+            t.FirstName().setValue(customer.person().name().firstName().getStringView());
+            t.LastName().setValue(customer.person().name().lastName().getStringView());
+            t.DateOfBirth().setValue(customer.person().birthDate().getStringView());
+        } else if (tObj instanceof CustomerT) {
+            CustomerT t = (CustomerT) tObj;
+            Customer customer;
+            if (!context.customer().isNull()) {
+                Persistence.ensureRetrieve(context.customer(), AttachLevel.Attached);
+                customer = context.customer();
+            } else {
+                throw new Error("Customer should be provided in context");
+            }
+            t.FullName().setValue(customer.person().name().getStringView());
+            t.FirstName().setValue(customer.person().name().firstName().getStringView());
+            t.LastName().setValue(customer.person().name().lastName().getStringView());
+        } else if (tObj instanceof LeadT) {
+            LeadT t = (LeadT) tObj;
+            Lead lead;
+            if (!context.customer().isNull()) {
+                EntityQueryCriteria<Lead> crit = EntityQueryCriteria.create(Lead.class);
+                crit.eq(crit.proto().guests().$().person(), context.customer().person());
+                lead = Persistence.service().retrieve(crit);
+            } else {
+                throw new Error("Customer should be provided in context");
+            }
+            t.MoveInDate().setValue(lead.moveInDate().getStringView());
+            t.LeaseTerm().setValue(lead.leaseTerm().getStringView());
+            t.Floorplan().setValue(lead.floorplan().getStringView());
+            t.Created().setValue(lead.createDate().getStringView());
+            t.Status().setValue(lead.status().getStringView());
+            t.AgentName().setValue(lead.agent().name().getStringView());
+        } else if (tObj instanceof LastBillT) {
+            LastBillT t = (LastBillT) tObj;
+            Bill bill;
+            if (context.lease().isNull()) {
+                context.lease().set(getLease(context.leaseTermParticipant()));
+            }
+            bill = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(context.lease());
+            t.Status().setValue(bill.billStatus().getStringView());
+            t.StartDate().setValue(bill.billingPeriodStartDate().getStringView());
+            t.EndDate().setValue(bill.billingPeriodEndDate().getStringView());
+            t.DueDate().setValue(bill.dueDate().getStringView());
+            t.PastDueAmount().setValue(bill.pastDueAmount().getStringView());
+            t.TotalDueAmount().setValue(bill.totalDueAmount().getStringView());
         } else if (tObj instanceof LeaseT) {
             LeaseT t = (LeaseT) tObj;
             if (context.lease().isNull()) {

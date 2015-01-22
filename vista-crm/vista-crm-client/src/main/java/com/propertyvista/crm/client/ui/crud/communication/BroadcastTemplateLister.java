@@ -50,10 +50,23 @@ public class BroadcastTemplateLister extends SiteDataTablePanel<BroadcastTemplat
         }));
 
         Button.ButtonMenuBar subMenu = new Button.ButtonMenuBar();
+
+        subMenu.addItem(new MenuItem(i18n.tr("Customer"), new Command() {
+            @Override
+            public void execute() {
+                editNewEntity(AudienceType.Customer);
+            }
+        }));
         subMenu.addItem(new MenuItem(i18n.tr("Tenant"), new Command() {
             @Override
             public void execute() {
                 editNewEntity(AudienceType.Tenant);
+            }
+        }));
+        subMenu.addItem(new MenuItem(i18n.tr("Guarantor"), new Command() {
+            @Override
+            public void execute() {
+                editNewEntity(AudienceType.Guarantor);
             }
         }));
         subMenu.addItem(new MenuItem(i18n.tr("Prospect"), new Command() {

@@ -61,7 +61,7 @@ public class MessageTextBuilder {
             bodyText.append(buffer.toString());
         }
         bodyText.append("\n\nFwd:\n");
-        bodyText.append(forwardedMessage.text().getValue(""));
+        bodyText.append(forwardedMessage.content().getValue(""));
 
         return bodyText.toString();
     }

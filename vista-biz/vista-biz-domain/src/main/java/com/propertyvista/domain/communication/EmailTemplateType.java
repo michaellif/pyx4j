@@ -67,11 +67,24 @@ public enum EmailTemplateType {
 
     PaymentReturned,
 
-    DirectDebitAccountChanged;
+    DirectDebitAccountChanged,
+
+    // Message Broadcast templates
+    MessageBroadcastEmployee,
+
+    MessageBroadcastCustomer,
+
+    MessageBroadcastTenant,
+
+    MessageBroadcastProspect;
 
     public static Set<EmailTemplateType> maintenanceTemplates() {
         return EnumSet.of(MaintenanceRequestCreatedPMC, MaintenanceRequestCreatedTenant, MaintenanceRequestUpdated, //
                 MaintenanceRequestCompleted, MaintenanceRequestCancelled, MaintenanceRequestEntryNotice);
+    }
+
+    public static Set<EmailTemplateType> broadcastTemplates() {
+        return EnumSet.of(MessageBroadcastEmployee, MessageBroadcastCustomer, MessageBroadcastTenant, MessageBroadcastProspect);
     }
 
     @Override

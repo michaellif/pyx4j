@@ -179,7 +179,7 @@ public class CommunicationCrudServiceImpl extends AbstractCrudServiceDtoImpl<Com
                 MessageDTO forwardedMessage = data.forwardedMessage();
                 if (forwardedMessage != null) {
                     result.subject().setValue(communicationFacade.buildForwardSubject(forwardedMessage));
-                    dto.text().setValue(communicationFacade.buildForwardText(forwardedMessage, result.subject().getValue()));
+                    dto.content().setValue(communicationFacade.buildForwardText(forwardedMessage, result.subject().getValue()));
                     dto.hasAttachments().set(forwardedMessage.hasAttachments());
 
                     if (forwardedMessage.hasAttachments().getValue(false).booleanValue()) {
@@ -229,7 +229,7 @@ public class CommunicationCrudServiceImpl extends AbstractCrudServiceDtoImpl<Com
         message.sender().set(CrmAppContext.getCurrentUserEmployee());
         message.onBehalf().set(to.representingMessage().onBehalf());
         message.onBehalfVisible().set(to.representingMessage().onBehalfVisible());
-        message.text().set(to.representingMessage().text());
+        message.content().set(to.representingMessage().content());
         message.highImportance().set(to.highImportance());
         communicationFacade.buildRecipientList(message, to.representingMessage(), null);
 
@@ -308,7 +308,7 @@ public class CommunicationCrudServiceImpl extends AbstractCrudServiceDtoImpl<Com
             if (threadStatus != null && message.thread().status().getValue() != null) {
                 String notification = i18n.tr("Status was changed from") + " '" + message.thread().status().getValue().toString() + "' " + i18n.tr("to") + " '"
                         + threadStatus.toString() + "'.\r\nReason: \r\n";
-                message.text().setValue(notification + message.text().getValue(""));
+                message.content().setValue(notification + message.content().getValue(""));
             }
             Message m = communicationFacade.saveMessage(message, threadStatus, currentUser, updateOwner);
             retrieve(callback, message.thread().getPrimaryKey(), RetrieveTarget.View);
@@ -356,7 +356,7 @@ public class CommunicationCrudServiceImpl extends AbstractCrudServiceDtoImpl<Com
         if (!CrmAppContext.getCurrentUserEmployee().equals(employee)) {
             MessageDTO dto = EntityFactory.create(MessageDTO.class);
             String systemNotification = i18n.tr("Ticket owner was changed to") + ": " + message.owner().name().getStringView() + ". ";
-            dto.text().setValue(additionalComment == null ? systemNotification : systemNotification + additionalComment);
+            dto.content().setValue(additionalComment == null ? systemNotification : systemNotification + additionalComment);
             dto.thread().set(thread);
             dto.isSystem().setValue(true);
             if (prevOwner != null && ContactType.Employee.equals(prevOwner.type().getValue())) {

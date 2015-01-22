@@ -170,7 +170,7 @@ public class CommunicationAssociationManager {
         CommunicationMessageFacade facade = ServerSideFactory.create(CommunicationMessageFacade.class);
         m.highImportance().setValue(association2Importance(ca));
         m.sender().set(association2Sender(ca, currentUser));
-        m.text().setValue(messageBody == null ? association2Body(ca) : messageBody);
+        m.content().setValue(messageBody == null ? association2Body(ca) : messageBody);
         association2Recipient(m, ca, currentUser);
 
         CommunicationThread t = EntityFactory.create(CommunicationThread.class);
@@ -200,7 +200,7 @@ public class CommunicationAssociationManager {
             dto.date().setValue(SystemDateManager.getDate());
             dto.isRead().setValue(false);
             dto.highImportance().setValue(false);
-            dto.text().setValue(messageBody == null ? association2Body(ca) : messageBody);
+            dto.content().setValue(messageBody == null ? association2Body(ca) : messageBody);
             Message newMessage = communicationFacade.saveMessage(dto, association2Status(ca), association2Sender(ca, currentUser), true);
             association2Recipient(newMessage, ca, currentUser);
             Persistence.service().persist(newMessage);

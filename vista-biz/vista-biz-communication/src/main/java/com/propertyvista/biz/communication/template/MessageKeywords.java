@@ -89,7 +89,7 @@ public class MessageKeywords {
 
 // EmailTemplate
             } else if (entity instanceof EmailTemplate) {
-                keywords.add(prefix + ((EmailTemplate) entity).type().getStringView());
+                keywords.add(prefix + ((EmailTemplate) entity).templateType().getStringView());
 
 // PaymentRecord
             } else if (entity instanceof PaymentRecord) {

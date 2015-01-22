@@ -121,7 +121,7 @@ public class CommunicationEditForm extends CrmEntityForm<CommunicationThreadDTO>
         formPanel.append(Location.Dual, proto().subject()).decorate();
 
         formPanel.append(Location.Dual, proto().deliveredText()).decorate();
-        formPanel.append(Location.Dual, proto().representingMessage().text(), new CRichTextArea()).decorate();
+        formPanel.append(Location.Dual, proto().representingMessage().content(), new CRichTextArea()).decorate();
 
         formPanel.append(Location.Dual, proto().representingMessage().attachments(), new MessageAttachmentFolder());
         formPanel.br();
@@ -136,7 +136,7 @@ public class CommunicationEditForm extends CrmEntityForm<CommunicationThreadDTO>
             DeliveryMethod dm = presenter.getDeliveryMethod();
             if (dm == null) {
                 setVisibility(true, false);
-                get(proto().representingMessage().text()).setTitle(i18n.tr("Text"));
+                get(proto().representingMessage().content()).setTitle(i18n.tr("Text"));
                 MessageCategory mc = presenter.getCategory();
                 if (mc != null && !mc.isNull()) {
                     get(proto().category()).setEditable(false);
@@ -145,7 +145,7 @@ public class CommunicationEditForm extends CrmEntityForm<CommunicationThreadDTO>
                 }
             } else {
                 setVisibility(false, DeliveryMethod.Notification.equals(dm));
-                get(proto().representingMessage().text()).setTitle(i18n.tr("Fallback"));
+                get(proto().representingMessage().content()).setTitle(i18n.tr("Fallback"));
                 get(proto().deliveredText()).setTitle(dm.toString());
             }
         }
@@ -161,7 +161,7 @@ public class CommunicationEditForm extends CrmEntityForm<CommunicationThreadDTO>
         get(proto().representingMessage().attachments()).setVisible(isVisible);
         get(proto().deliveredText()).setVisible(!isVisible);
         get(proto().deliveredText()).setMandatory(!isVisible);
-        get(proto().representingMessage().text()).setVisible(!isForNotification);
+        get(proto().representingMessage().content()).setVisible(!isForNotification);
         get(proto().dateFrom()).setVisible(isForNotification);
         get(proto().dateTo()).setVisible(isForNotification);
         get(proto().notificationType()).setVisible(isForNotification);

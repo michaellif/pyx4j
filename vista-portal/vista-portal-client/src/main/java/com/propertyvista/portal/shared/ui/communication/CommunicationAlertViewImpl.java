@@ -157,7 +157,7 @@ public class CommunicationAlertViewImpl extends FlowPanel implements Communicati
                 }
             });
 
-            messageField = new Label(HtmlUtils.removeHtmlTags(message.representingMessage().text().getStringView()));
+            messageField = new Label(HtmlUtils.removeHtmlTags(message.representingMessage().content().getStringView()));
             messageField.getElement().getStyle().setWidth(350, Unit.PX);
             messageField.getElement().getStyle().setWhiteSpace(WhiteSpace.NOWRAP);
             messageField.getElement().getStyle().setOverflow(Overflow.HIDDEN);
