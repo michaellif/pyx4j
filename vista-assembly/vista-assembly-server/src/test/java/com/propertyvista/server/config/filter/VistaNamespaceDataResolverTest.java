@@ -58,14 +58,12 @@ public class VistaNamespaceDataResolverTest extends VistaNamespaceResolverTestBa
         testDNSAlias(req, VistaApplication.site);
 
         // Test 7: test Inactive PMC with active DNS Alias
-        req = new MockHttpServletRequest("http://customizableportal.server.canada.com:8990/robots.txt");
+		req = new MockHttpServletRequest("http://customizableportal.server.canada.com:8990/robots.txt");
         testDNSAlias(req, null);
-
         // Test 8: test Active PMC with Inactive DNS Alias
-        req = new MockHttpServletRequest("http://customer.site.client-custom.canada.com:8990/robots.txt");
-        testDNSAlias(req, null);
-
-    }
+		req = new MockHttpServletRequest("http://customer.site.client-custom.canada.com:8990/robots.txt");
+        testDNSAlias(req, null);    
+	}
 
     /**
      * Test three different scenarios accesing data:
