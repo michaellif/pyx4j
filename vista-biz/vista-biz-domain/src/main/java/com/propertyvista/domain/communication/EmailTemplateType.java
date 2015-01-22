@@ -76,6 +76,8 @@ public enum EmailTemplateType {
 
     MessageBroadcastTenant,
 
+    MessageBroadcastGuarantor,
+
     MessageBroadcastProspect;
 
     public static Set<EmailTemplateType> maintenanceTemplates() {
@@ -84,7 +86,7 @@ public enum EmailTemplateType {
     }
 
     public static Set<EmailTemplateType> broadcastTemplates() {
-        return EnumSet.of(MessageBroadcastEmployee, MessageBroadcastCustomer, MessageBroadcastTenant, MessageBroadcastProspect);
+        return EnumSet.of(MessageBroadcastEmployee, MessageBroadcastCustomer, MessageBroadcastTenant, MessageBroadcastGuarantor, MessageBroadcastProspect);
     }
 
     @Override

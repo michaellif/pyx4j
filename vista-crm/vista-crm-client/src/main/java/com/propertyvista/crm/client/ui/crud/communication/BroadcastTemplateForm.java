@@ -12,17 +12,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RichTextArea.Formatter;
 import com.google.gwt.user.client.ui.UIObject;
 
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
@@ -41,6 +36,8 @@ public class BroadcastTemplateForm extends CrmEntityForm<BroadcastTemplate> {
 
     private static final I18n i18n = I18n.get(BroadcastTemplateForm.class);
 
+    private ContentEditor contentEditor;
+
     public BroadcastTemplateForm(IPrimeFormView<BroadcastTemplate, ?> view) {
         super(BroadcastTemplate.class, view);
 
@@ -58,7 +55,7 @@ public class BroadcastTemplateForm extends CrmEntityForm<BroadcastTemplate> {
         formPanel.append(Location.Left, proto().audienceType()).decorate();
         formPanel.append(Location.Left, proto().messageType()).decorate();
         formPanel.append(Location.Dual, proto().subject()).decorate();
-        formPanel.append(Location.Dual, proto().content(), getContentEditor()).decorate();
+        formPanel.append(Location.Dual, proto().content(), contentEditor = new ContentEditor()).decorate();
         get(proto().audienceType()).setEditable(false);
         return formPanel;
     }
@@ -72,52 +69,49 @@ public class BroadcastTemplateForm extends CrmEntityForm<BroadcastTemplate> {
             ((CComboBox<MessageType>) get(proto().messageType())).removeOption(MessageType.CommercialActivity);
             ((CComboBox<MessageType>) get(proto().messageType())).removeOption(MessageType.Organizational);
         }
+
+        contentEditor.setAudienceType(getValue().audienceType().getValue());
     }
 
-    CRichTextArea getContentEditor() {
-        CRichTextArea editor = new CRichTextArea();
+    static class ContentEditor extends CRichTextArea {
 
-        if (isEditable()) {
-            final TemplateInsertSelector vm = new TemplateInsertSelector();
-            editor.getNativeComponent().getEditor().setTemplateAction(new RichTextTemplateAction() {
-                @Override
-                public void perform(final Formatter formatter, final Command onComplete, final UIObject target) {
-                    if (vm.isShowing()) {
-                        vm.hide();
-                    } else {
-                        vm.setSelectionHandler(new Command() {
-                            @Override
-                            public void execute() {
-                                formatter.insertHTML(vm.getSelectedValue());
-                                onComplete.execute();
-                            }
-                        });
-                        vm.showBelow(target);
+        private TemplateInsertSelector vm;
+
+        public ContentEditor() {
+
+            if (isEditable()) {
+                if (vm == null) {
+                    vm = new TemplateInsertSelector();
+                }
+                getNativeComponent().getEditor().setTemplateAction(new RichTextTemplateAction() {
+                    @Override
+                    public void perform(final Formatter formatter, final Command onComplete, final UIObject target) {
+                        if (vm.isShowing()) {
+                            vm.hide();
+                        } else {
+                            vm.setSelectionHandler(new Command() {
+                                @Override
+                                public void execute() {
+                                    formatter.insertHTML(vm.getSelectedValue());
+                                    onComplete.execute();
+                                }
+                            });
+                            vm.showBelow(target);
+                        }
                     }
-                }
-            });
-            // change template object list when template type selection changes
-            final CComponent<?, AudienceType, ?, ?> comp = get(proto().audienceType());
-            comp.addValueChangeHandler(new ValueChangeHandler<AudienceType>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<AudienceType> event) {
-                    vm.setItems(vm.getTemplateObjects(toTemplateType(event.getValue())));
-                }
-            });
-            comp.addPropertyChangeHandler(new PropertyChangeHandler() {
-                @Override
-                public void onPropertyChange(PropertyChangeEvent event) {
-                    if (event.isEventOfType(PropertyChangeEvent.PropertyName.repopulated)) {
-                        vm.setItems(vm.getTemplateObjects(toTemplateType(comp.getValue())));
-                    }
-                }
-            });
+                });
+            }
+
         }
 
-        return editor;
+        public void setAudienceType(AudienceType type) {
+            if (vm != null) {
+                vm.setItems(vm.getTemplateObjects(toTemplateType(type)));
+            }
+        }
     }
 
-    EmailTemplateType toTemplateType(AudienceType type) {
+    private static EmailTemplateType toTemplateType(AudienceType type) {
         switch (type) {
         case Customer:
             return EmailTemplateType.MessageBroadcastCustomer;
@@ -125,6 +119,8 @@ public class BroadcastTemplateForm extends CrmEntityForm<BroadcastTemplate> {
             return EmailTemplateType.MessageBroadcastEmployee;
         case Prospect:
             return EmailTemplateType.MessageBroadcastProspect;
+        case Guarantor:
+            return EmailTemplateType.MessageBroadcastGuarantor;
         case Tenant:
             return EmailTemplateType.MessageBroadcastTenant;
         default:

@@ -37,6 +37,7 @@ import com.propertyvista.biz.communication.template.model.BuildingT;
 import com.propertyvista.biz.communication.template.model.CompanyInfoT;
 import com.propertyvista.biz.communication.template.model.CustomerT;
 import com.propertyvista.biz.communication.template.model.EmployeeT;
+import com.propertyvista.biz.communication.template.model.GuarantorT;
 import com.propertyvista.biz.communication.template.model.LastBillT;
 import com.propertyvista.biz.communication.template.model.LeadT;
 import com.propertyvista.biz.communication.template.model.LeaseT;
@@ -139,6 +140,9 @@ public class EmailTemplateManager {
             break;
         case MessageBroadcastCustomer:
             values.add(EntityFactory.create(CustomerT.class));
+            break;
+        case MessageBroadcastGuarantor:
+            values.add(EntityFactory.create(GuarantorT.class));
             break;
         case MessageBroadcastTenant:
             values.add(EntityFactory.create(TenantT.class));

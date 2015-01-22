@@ -35,6 +35,7 @@ import com.propertyvista.biz.communication.template.model.CompanyInfoT;
 import com.propertyvista.biz.communication.template.model.CustomerT;
 import com.propertyvista.biz.communication.template.model.EmailTemplateContext;
 import com.propertyvista.biz.communication.template.model.EmployeeT;
+import com.propertyvista.biz.communication.template.model.GuarantorT;
 import com.propertyvista.biz.communication.template.model.LastBillT;
 import com.propertyvista.biz.communication.template.model.LeadT;
 import com.propertyvista.biz.communication.template.model.LeaseT;
@@ -273,6 +274,18 @@ public class EmailTemplateRootObjectLoader {
             t.DateOfBirth().setValue(customer.person().birthDate().getStringView());
         } else if (tObj instanceof ProspectT) {
             ProspectT t = (ProspectT) tObj;
+            Customer customer;
+            if (!context.customer().isNull()) {
+                Persistence.ensureRetrieve(context.customer(), AttachLevel.Attached);
+                customer = context.customer();
+            } else {
+                throw new Error("Customer should be provided in context");
+            }
+            t.FullName().setValue(customer.person().name().getStringView());
+            t.FirstName().setValue(customer.person().name().firstName().getStringView());
+            t.LastName().setValue(customer.person().name().lastName().getStringView());
+        } else if (tObj instanceof GuarantorT) {
+            GuarantorT t = (GuarantorT) tObj;
             Customer customer;
             if (!context.customer().isNull()) {
                 Persistence.ensureRetrieve(context.customer(), AttachLevel.Attached);
