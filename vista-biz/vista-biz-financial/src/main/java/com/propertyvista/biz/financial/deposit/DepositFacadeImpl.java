@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -104,7 +104,7 @@ public class DepositFacadeImpl implements DepositFacade {
                     return (int) (o1.getPrimaryKey().asLong() - o2.getPrimaryKey().asLong());
                 }
             });
-            return deposits.get(0); // get the very first version of the deposit 
+            return deposits.get(0); // get the very first version of the deposit
         }
 
         throw new IllegalArgumentException();
@@ -262,7 +262,29 @@ public class DepositFacadeImpl implements DepositFacade {
         }
     }
 
+    /**
+     * @param productDeposit
+     * @param billableItem
+     * @return - can return null value if deposit not applicable for supplied parameters!
+     */
     private Deposit makeDeposit(ProductDeposit productDeposit, BillableItem billableItem) {
+
+        // preconditions:
+        if (VistaFeatures.instance().yardiIntegration()) {
+            if (productDeposit.chargeCode().yardiChargeCodes().isEmpty() && billableItem.item().yardiDepositLMR().isNull()) {
+                return null; // no deposit for arcode not mapped to yardi charge code (except imported yardi LMR)!..
+            }
+        }
+
+        BigDecimal depositAmount = getProductItemDepositAmount(productDeposit, billableItem.item());
+        if (depositAmount == null) {
+            depositAmount = getProductDepositAmount(productDeposit, billableItem.agreedPrice().getValue(BigDecimal.ZERO));
+        }
+        if (depositAmount == null) {
+            return null; // no deposit for null deposit value!..
+        }
+
+        // actual deposit construction:
         Deposit deposit = EntityFactory.create(Deposit.class);
 
         deposit.chargeCode().set(productDeposit.chargeCode());
@@ -270,17 +292,7 @@ public class DepositFacadeImpl implements DepositFacade {
         deposit.isProcessed().setValue(false);
         deposit.description().set(productDeposit.description());
         deposit.billableItem().set(billableItem);
-
-        BigDecimal depositAmount = getProductItemDepositAmount(productDeposit, billableItem.item());
-        if (depositAmount == null) {
-            depositAmount = getProductDepositAmount(productDeposit, billableItem.agreedPrice().getValue(BigDecimal.ZERO));
-        }
-
-        if (depositAmount != null) {
-            deposit.amount().setValue(depositAmount);
-        } else {
-            deposit = null; // no deposit for null deposit value!..
-        }
+        deposit.amount().setValue(depositAmount);
 
         return deposit;
     }

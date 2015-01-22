@@ -286,12 +286,6 @@ public class BillableItemEditor extends CForm<BillableItem> {
 
 //            adjustmentPanel.setVisible(((isEditable() && !getValue().item().isEmpty()) || !getValue().adjustments().isEmpty()));
             adjustmentPanel.setVisible(false); // always invisible in Yardi mode!
-
-            if (getValue().item().product().isInstanceOf(Service.ServiceV.class)) {
-                setDepositsVisible(((isEditable() && !getValue().item().isEmpty()) || !getValue().deposits().isEmpty()));
-            } else if (getValue().item().product().isInstanceOf(Feature.FeatureV.class)) {
-                setDepositsVisible(false);
-            }
         }
     }
 
@@ -519,7 +513,7 @@ public class BillableItemEditor extends CForm<BillableItem> {
     private class DepositFolder extends VistaTableFolder<Deposit> {
 
         public DepositFolder() {
-            super(Deposit.class, i18n.tr("Deposit"), !VistaFeatures.instance().yardiIntegration() && !BillableItemEditor.this.isViewable());
+            super(Deposit.class, i18n.tr("Deposit"), !BillableItemEditor.this.isViewable());
         }
 
         @Override

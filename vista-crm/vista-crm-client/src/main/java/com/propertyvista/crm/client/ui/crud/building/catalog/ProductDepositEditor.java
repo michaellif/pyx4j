@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -23,6 +23,8 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMoneyPercentCombo;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductDeposit;
@@ -37,11 +39,15 @@ public class ProductDepositEditor extends CForm<ProductDeposit> {
     protected IsWidget createContent() {
         FormPanel formPanel = new FormPanel(this);
 
-        CEntityComboBox<ARCode> chargeCodeSelector;
-
         formPanel.append(Location.Left, proto().enabled()).decorate().componentWidth(100);
         formPanel.append(Location.Left, proto().depositType()).decorate();
-        formPanel.append(Location.Left, proto().chargeCode(), chargeCodeSelector = new CEntityComboBox<ARCode>(ARCode.class)).decorate();
+        if (isViewable()) {
+            formPanel.append(Location.Left, proto().chargeCode(), new CEntityCrudHyperlink<ARCode>(AppPlaceEntityMapper.resolvePlace(ARCode.class))).decorate();
+        } else {
+            CEntityComboBox<ARCode> chargeCodeSelector;
+            formPanel.append(Location.Left, proto().chargeCode(), chargeCodeSelector = new CEntityComboBox<ARCode>(ARCode.class)).decorate();
+            chargeCodeSelector.addCriterion(PropertyCriterion.in(chargeCodeSelector.proto().type(), ARCode.Type.deposits()));
+        }
 
         formPanel.append(Location.Right, proto().valueType()).decorate().componentWidth(100);
         formPanel.append(Location.Right, proto().value(), new CMoneyPercentCombo()).decorate().componentWidth(100);
@@ -49,8 +55,6 @@ public class ProductDepositEditor extends CForm<ProductDeposit> {
         formPanel.append(Location.Dual, proto().description()).decorate();
 
         // tweaks:
-        chargeCodeSelector.addCriterion(PropertyCriterion.in(chargeCodeSelector.proto().type(), ARCode.Type.deposits()));
-
         get(proto().valueType()).addValueChangeHandler(new ValueChangeHandler<ValueType>() {
             @Override
             public void onValueChange(ValueChangeEvent<ValueType> event) {
