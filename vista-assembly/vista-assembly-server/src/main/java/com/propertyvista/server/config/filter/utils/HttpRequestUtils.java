@@ -18,9 +18,11 @@ import com.propertyvista.domain.security.common.VistaApplication;
 
 public class HttpRequestUtils {
 
-    public static String getAppCacheKey(HttpServletRequest httpRequest) {
+    public static String getNamespaceDataCacheKey(HttpServletRequest httpRequest) {
 
         StringBuffer appCacheKey = new StringBuffer();
+        appCacheKey.append(HttpRequestUtils.class.getName());
+        appCacheKey.append("/");
         appCacheKey.append(httpRequest.getServerName());
 
         String rootServletPath = getRootServletPath(httpRequest);

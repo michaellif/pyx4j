@@ -33,6 +33,7 @@ import com.pyx4j.gwt.server.ServletUtils;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.server.config.filter.namespace.VistaApplicationResolverHelper;
+import com.propertyvista.server.config.filter.namespace.VistaNamespaceDataResolver;
 import com.propertyvista.server.config.filter.utils.HttpRequestUtils;
 
 public class VistaApplicationDispatcherFilter implements Filter {
@@ -88,7 +89,8 @@ public class VistaApplicationDispatcherFilter implements Filter {
         String serverName = httprequest.getServerName(); // sample: vista-crm.dev.birchwoodsoftwaregroup.com
         serverName = serverName.toLowerCase(Locale.ENGLISH);
 
-        VistaApplication app = namespaceResolver.getVistaApplication();
+//        VistaApplication app = namespaceResolver.getVistaApplication();
+        VistaApplication app = namespaceResolver.getNamespaceData().getApplication();
 
         //TODO BASED ON PMC and APP, DO FORWARD OR REDIRECT
 

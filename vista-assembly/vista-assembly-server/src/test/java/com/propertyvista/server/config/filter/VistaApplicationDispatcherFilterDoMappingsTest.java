@@ -18,14 +18,21 @@ import javax.servlet.ServletException;
 
 import org.junit.Test;
 
+import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.server.config.filter.base.VistaApplicationDispatcherFilterTestBase;
+import com.propertyvista.server.config.filter.util.PMCTestCreator;
 
 public class VistaApplicationDispatcherFilterDoMappingsTest extends VistaApplicationDispatcherFilterTestBase {
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
+
+        // Since NamespaceData contains also Namespace information,
+        // we have to create at least the pmc for the address to test
+        PMCTestCreator.createPMC("vista", PmcStatus.Active).save();
+
         log.info("VistaApplicationDispatcherFilterDoMappingsTest initialized");
     }
 

@@ -10,7 +10,7 @@
  * Created on Dec 19, 2014
  * @author ernestog
  */
-package com.propertyvista.server.config.filter;
+package com.propertyvista.server.config.filter.namespace;
 
 import com.pyx4j.config.server.NamespaceData;
 
