@@ -27,10 +27,13 @@ import com.pyx4j.unit.server.mock.MockHttpServletResponse;
 import com.pyx4j.unit.server.mock.filter.MockFilterChain;
 import com.pyx4j.unit.server.mock.filter.MockHttpServletRequestFilter;
 
+import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.portal.rpc.shared.SiteWasNotActivatedUserRuntimeException;
 import com.propertyvista.server.config.filter.VistaApplicationDispatcherFilter;
 import com.propertyvista.server.config.filter.VistaTestDBSetupForNamespace;
 import com.propertyvista.server.config.filter.namespace.VistaApplicationResolverHelper;
+import com.propertyvista.server.config.filter.util.PMCTestCreator;
 
 public class VistaApplicationDispatcherFilterTestBase {
 
@@ -48,6 +51,7 @@ public class VistaApplicationDispatcherFilterTestBase {
     public void setUp() throws Exception {
         // Init HSQL DB
         VistaTestDBSetupForNamespace.init();
+        PMCTestCreator.createPMC("vista", PmcStatus.Active).save();
 
         mockChain = new MockFilterChain();
         filterUnderTest = new VistaApplicationDispatcherFilter();
@@ -133,7 +137,15 @@ public class VistaApplicationDispatcherFilterTestBase {
     protected void testMapping(String url, boolean followChain, VistaApplication app) throws IOException, ServletException {
         req = new MockHttpServletRequestFilter(url);
         mockChain.setExpectedInvocation(followChain);
-        filterUnderTest.map(req, resp, mockChain);
+        try {
+            filterUnderTest.map(req, resp, mockChain);
+        } catch (SiteWasNotActivatedUserRuntimeException e) {
+            // If followChain, SiteWasNotActivatedUserRuntimeException is expected
+            if (!followChain) {
+                throw e;
+            }
+        }
+
         mockChain.verify();
 
         if ((!followChain) && (app != null)) {
