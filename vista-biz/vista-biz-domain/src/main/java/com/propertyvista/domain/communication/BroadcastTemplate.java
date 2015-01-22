@@ -12,6 +12,8 @@
  */
 package com.propertyvista.domain.communication;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -23,27 +25,21 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.i18n.annotations.Translate;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.communication.DeliveryHandle.MessageType;
 
 public interface BroadcastTemplate extends MessageTemplate {
 
+    @I18n(context = "Broadcast Template Audience Type")
+    @XmlType(name = "Audience Type")
     public enum AudienceType {
-        @Translate("Customer")
-        Customer,
-
-        @Translate("Tenant")
-        Tenant,
-
-        @Translate("Guarantor")
-        Guarantor,
-
-        @Translate("Prospect")
-        Prospect,
-
-        @Translate("Employee")
-        Employee
+        Customer, Tenant, Guarantor, Prospect, Employee;
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
     }
 
     @NotNull
