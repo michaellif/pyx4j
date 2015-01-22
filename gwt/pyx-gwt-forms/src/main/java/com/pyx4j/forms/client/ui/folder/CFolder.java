@@ -115,10 +115,11 @@ public abstract class CFolder<DATA_TYPE extends IEntity> extends CContainer<CFol
     protected IList<DATA_TYPE> preprocessValue(IList<DATA_TYPE> value, boolean fireEvent, boolean populate) {
         if (!populate && value != null) {
             IList<DATA_TYPE> boundList = getValue();
-//            if (boundList != null) {
-            boundList.clear();
-            boundList.addAll(value);
-//            }
+            // Avoid self cleaning
+            if (boundList != value) {
+                boundList.clear();
+                boundList.addAll(value);
+            }
             value = boundList;
         }
         return super.preprocessValue(value, fireEvent, populate);
