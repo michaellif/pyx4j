@@ -268,6 +268,8 @@ public class DepositFacadeImpl implements DepositFacade {
      * @return - can return null value if deposit not applicable for supplied parameters!
      */
     private Deposit makeDeposit(ProductDeposit productDeposit, BillableItem billableItem) {
+
+        // preconditions:
         if (VistaFeatures.instance().yardiIntegration()) {
             if (productDeposit.chargeCode().yardiChargeCodes().isEmpty() && billableItem.item().yardiDepositLMR().isNull()) {
                 return null; // no deposit for arcode not mapped to yardi charge code (except imported yardi LMR)!..
