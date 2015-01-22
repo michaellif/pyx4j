@@ -223,16 +223,6 @@ public class WebSiteLayoutPanel extends ResponsiveLayoutPanel {
         return LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType;
     }
 
-    private boolean isSideCommEnabled() {
-        LayoutType layoutType = LayoutType.getLayoutType(Window.getClientWidth());
-        return LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType;
-    }
-
-    private boolean isPopupCommEnabled() {
-        LayoutType layoutType = LayoutType.getLayoutType(Window.getClientWidth());
-        return !(LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType);
-    }
-
     private void setSideMenuVisible(boolean visible) {
         if (this.sideMenuVisible != visible) {
             this.sideMenuVisible = visible;
