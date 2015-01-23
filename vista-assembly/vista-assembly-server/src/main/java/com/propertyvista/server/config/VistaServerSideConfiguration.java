@@ -57,7 +57,7 @@ import com.propertyvista.operations.domain.VistaSystemMaintenanceState;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.server.ci.bugs.MemoryLeakJAXBContextLifecycleListener;
 import com.propertyvista.server.common.security.VistaAntiBot;
-import com.propertyvista.server.config.filter.VistaNamespaceDataResolver;
+import com.propertyvista.server.config.filter.namespace.VistaNamespaceDataResolver;
 import com.propertyvista.server.security.VistaAccessControlList;
 import com.propertyvista.server.security.VistaAclRevalidator;
 

@@ -14,6 +14,8 @@ package com.propertyvista.crm.client.activity.crud.communication;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -21,13 +23,36 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.communication.BroadcastTemplateViewerView;
 import com.propertyvista.crm.client.ui.crud.communication.BroadcastTemplateViewerView.BroadcastTemplateViewerPresenter;
+import com.propertyvista.crm.client.visor.scheduler.SchedulerVisorController;
 import com.propertyvista.crm.rpc.services.BroadcastTemplateCrudService;
 import com.propertyvista.domain.communication.BroadcastTemplate;
 
 public class BroadcastTemplateViewerActivity extends CrmViewerActivity<BroadcastTemplate> implements BroadcastTemplateViewerPresenter {
 
+    private SchedulerVisorController schedulerVisorController;
+
+    private Key currentBroadcastTemplateId;
+
     public BroadcastTemplateViewerActivity(CrudAppPlace place) {
         super(BroadcastTemplate.class, place, CrmSite.getViewFactory().getView(BroadcastTemplateViewerView.class), GWT
                 .<AbstractCrudService<BroadcastTemplate>> create(BroadcastTemplateCrudService.class));
+    }
+
+    @Override
+    public void onPopulateSuccess(BroadcastTemplate result) {
+        super.onPopulateSuccess(result);
+
+        currentBroadcastTemplateId = result.id().getValue();
+
+    }
+
+    @Override
+    public SchedulerVisorController getSchedulerVisorController() {
+        if (schedulerVisorController == null) {
+
+            schedulerVisorController = new SchedulerVisorController(getView(), EntityFactory.createIdentityStub(BroadcastTemplate.class,
+                    currentBroadcastTemplateId));
+        }
+        return schedulerVisorController;
     }
 }

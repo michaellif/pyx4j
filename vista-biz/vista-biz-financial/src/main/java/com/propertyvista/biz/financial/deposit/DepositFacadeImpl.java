@@ -70,6 +70,14 @@ public class DepositFacadeImpl implements DepositFacade {
             Deposit deposit = createDeposit(type, billableItem);
             if (deposit != null) {
                 deposits.add(deposit);
+
+                if (VistaFeatures.instance().yardiIntegration()) {
+                    if (deposit.type().getValue() == DepositType.LastMonthDeposit && !billableItem.item().yardiDepositLMR().isNull()) {
+                        deposits.clear();
+                        deposits.add(deposit);
+                        break; // no more deposits in case of yardi imported deposit value for LMR
+                    }
+                }
             }
         }
 

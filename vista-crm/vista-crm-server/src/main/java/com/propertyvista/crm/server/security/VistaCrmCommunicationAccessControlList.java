@@ -21,9 +21,11 @@ import com.pyx4j.security.server.UIAclBuilder;
 
 import com.propertyvista.crm.rpc.services.BroadcastEventCrudService;
 import com.propertyvista.crm.rpc.services.BroadcastTemplateCrudService;
+import com.propertyvista.crm.rpc.services.CommunicationCrudService;
 import com.propertyvista.crm.rpc.services.MessageAttachmentUploadService;
 import com.propertyvista.crm.rpc.services.MessageCategoryCrudService;
-import com.propertyvista.crm.rpc.services.CommunicationCrudService;
+import com.propertyvista.crm.rpc.services.communication.broadcasttemplate.SchedulerCrudService;
+import com.propertyvista.crm.rpc.services.communication.broadcasttemplate.ac.Scheduler;
 import com.propertyvista.crm.rpc.services.selections.SelectCommunicationEndpointListService;
 import com.propertyvista.crm.server.security.access.CommunicationThreadAccessRule;
 import com.propertyvista.crm.server.security.access.MessageAccessRule;
@@ -75,6 +77,9 @@ class VistaCrmCommunicationAccessControlList extends UIAclBuilder {
 
         grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(BroadcastTemplate.class, ALL));
         grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(BroadcastEvent.class, ALL));
+
+        grant(VistaAccessGrantedBehavior.CRM, Scheduler.class);
+        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(SchedulerCrudService.class));
 
         // Administration is granted in VistaCrmAdministrationAccessControlList
     }

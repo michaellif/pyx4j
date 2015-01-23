@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -76,6 +76,7 @@ public class OAPIFilter implements Filter {
                                 log.warn("invalid credentials format");
                             } else {
 
+                                //TODO fix this. credentials[1]  is PMC DNS name.  We need to query PMC by DNS name to get Namespace.
                                 NamespaceManager.setNamespace(credentials[1]);
 
                                 AuthenticationRequest authenticationRequest = EntityFactory.create(AuthenticationRequest.class);
