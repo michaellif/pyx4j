@@ -160,6 +160,12 @@ public abstract class CFolder<DATA_TYPE extends IEntity> extends CContainer<CFol
         calculateActionsState();
     }
 
+    public void setModifyable(boolean modifyable) {
+        setAddable(modifyable);
+        setRemovable(modifyable);
+        setOrderable(modifyable);
+    }
+
     public void setNoDataLabel(String text) {
         noDataNotificationHolder.setWidget(new Label(text));
     }
