@@ -12,7 +12,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,6 +24,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -142,17 +142,8 @@ public class BillableItemEditor extends CForm<BillableItem> {
         formPanel.append(Location.Left, proto().yardiChargeCode()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().agreedPrice()).decorate().componentWidth(120);
 
-        if (VistaFeatures.instance().yardiIntegration()) {
-            get(proto().agreedPrice()).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<BigDecimal> event) {
-                    recalculateDeposits();
-                }
-            });
-        } else {
-            formPanel.append(Location.Right, recalculateDeposits);
-            recalculateDeposits.getElement().getStyle().setMarginLeft(150, Unit.PX);
-        }
+        formPanel.append(Location.Right, recalculateDeposits);
+        recalculateDeposits.getElement().getStyle().setMarginLeft(150, Unit.PX);
 
         formPanel.append(Location.Right, proto().effectiveDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().expirationDate()).decorate().componentWidth(120);
@@ -276,16 +267,21 @@ public class BillableItemEditor extends CForm<BillableItem> {
             get(proto().yardiChargeCode()).setVisible(!getValue().yardiChargeCode().isNull());
             get(proto().item()).setVisible(isEditable() || !getValue().item().isNull());
 
-            if (getValue().item().product().isInstanceOf(Feature.FeatureV.class)) {
-                get(proto().agreedPrice()).setEditable(false);
-                get(proto().agreedPrice()).setMandatory(false);
-            }
-
             get(proto().effectiveDate()).setVisible(!getValue().effectiveDate().isNull());
             get(proto().expirationDate()).setVisible(!getValue().expirationDate().isNull());
 
 //            adjustmentPanel.setVisible(((isEditable() && !getValue().item().isEmpty()) || !getValue().adjustments().isEmpty()));
             adjustmentPanel.setVisible(false); // always invisible in Yardi mode!
+
+            boolean isDepositsEditable = leaseTerm.getValue().version().leaseProducts().serviceItem().item().yardiDepositLMR().isNull();
+
+//            recalculateDeposits.setVisible(isDepositsEditable);
+            depositFolder.setModifyable(isDepositsEditable);
+
+            if (getValue().item().product().isInstanceOf(Feature.FeatureV.class)) {
+                setDepositsVisible(isDepositsEditable);
+                depositFolder.clear();
+            }
         }
     }
 
@@ -526,6 +522,12 @@ public class BillableItemEditor extends CForm<BillableItem> {
         }
 
         @Override
+        protected IList<Deposit> preprocessValue(IList<Deposit> value, boolean fireEvent, boolean populate) {
+            // TODO Auto-generated method stub
+            return super.preprocessValue(value, fireEvent, populate);
+        }
+
+        @Override
         protected void addItem() {
             assert (leaseTermEditorView != null);
             ((LeaseTermEditorView.Presenter) leaseTermEditorView.getPresenter()).retirveAvailableDeposits(new DefaultAsyncCallback<DepositListDTO>() {
@@ -553,19 +555,19 @@ public class BillableItemEditor extends CForm<BillableItem> {
 
             public DepositEditor() {
                 super(Deposit.class, columns());
-
-                if (VistaFeatures.instance().yardiIntegration()) {
-                    setEditable(false);
-                }
             }
 
             @Override
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
 
-                if (!VistaFeatures.instance().yardiIntegration()) {
-                    // disable editing of finalized deposits:
-                    setEditable(getValue().lifecycle().isNull());
+                // disable editing of finalized deposits:
+                setEditable(getValue().lifecycle().isNull());
+
+                // correct amount editing for Yardi mode:
+                if (VistaFeatures.instance().yardiIntegration() && getValue().lifecycle().isNull()) {
+                    get(proto().amount()).setEditable(BillableItemEditor.this.getValue().item().yardiDepositLMR().isNull());
+                    get(proto().description()).setEditable(true);
                 }
             }
 
@@ -574,17 +576,7 @@ public class BillableItemEditor extends CForm<BillableItem> {
                 if (column.getObject() == proto().type()) {
                     return inject(column.getObject(), new CEnumLabel());
                 }
-
-                CField<?, ?> comp = super.createCell(column);
-
-                if (VistaFeatures.instance().yardiIntegration()) {
-                    if (column.getObject() == proto().description()) {
-                        comp.setEditable(true);
-                        comp.inheritEditable(false);
-                    }
-                }
-
-                return comp;
+                return super.createCell(column);
             }
         }
     }
