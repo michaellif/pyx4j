@@ -19,6 +19,7 @@
  */
 package com.pyx4j.site.client.website.ui.layout;
 
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -32,7 +33,7 @@ public class InlineToolbarHolder extends SimplePanel {
         this.parent = parent;
 
         setStyleName(WebSiteLayoutTheme.StyleName.WebSiteLayoutInlineToolbarHolder.name());
-
+        getElement().getStyle().setPosition(Position.RELATIVE);
     }
 
     public void setDisplay() {
