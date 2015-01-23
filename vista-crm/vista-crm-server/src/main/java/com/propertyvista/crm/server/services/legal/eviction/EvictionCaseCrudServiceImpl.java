@@ -106,6 +106,7 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
                 Persistence.ensureRetrieve(record.attachments(), AttachLevel.Attached);
             }
         }
+        Persistence.ensureRetrieve(to.lease(), AttachLevel.ToStringMembers);
         Persistence.ensureRetrieve(to.evictionFlowPolicy(), AttachLevel.Attached);
     }
 

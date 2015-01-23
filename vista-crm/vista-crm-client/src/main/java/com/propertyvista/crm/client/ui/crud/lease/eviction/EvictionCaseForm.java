@@ -22,6 +22,8 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -32,7 +34,7 @@ import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.crud.lease.eviction.EvictionStatusEditor.EvictionStepSelectionHandler;
+import com.propertyvista.crm.client.ui.crud.lease.eviction.EvictionStatusEditorBase.EvictionStepSelectionHandler;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.eviction.EvictionStatus;
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
@@ -84,6 +86,18 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
 
     class StatusHistoryFolder extends VistaBoxFolder<EvictionStatus> {
 
+        private final EvictionStepSelectionHandler stepSelectionHandler = new EvictionStepSelectionHandler() {
+
+            @Override
+            public Set<EvictionFlowStep> getAvailableSteps() {
+                Set<EvictionFlowStep> availableSteps = new HashSet<>(EvictionCaseForm.this.getValue().evictionFlowPolicy().evictionFlow());
+                for (EvictionStatus status : getValue()) {
+                    availableSteps.remove(status.evictionStep());
+                }
+                return availableSteps;
+            }
+        };
+
         public StatusHistoryFolder() {
             super(EvictionStatus.class);
             addValueChangeHandler(new ValueChangeHandler<IList<EvictionStatus>>() {
@@ -96,21 +110,15 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
         }
 
         @Override
-        protected CForm<? extends EvictionStatus> createItemForm(IObject<?> member) {
-            return new EvictionStatusEditor( //
-                    new EvictionStepSelectionHandler() {
+        protected CFolderItem<EvictionStatus> createItem(boolean first) {
+            // need own folder item implementation to handle polymorphic EvictionStatus entity
+            return new StatusHistoryFolderItem();
+        }
 
-                        @Override
-                        public Set<EvictionFlowStep> getAvailableSteps() {
-                            Set<EvictionFlowStep> availableSteps = new HashSet<>(EvictionCaseForm.this.getValue().evictionFlowPolicy().evictionFlow());
-                            for (EvictionStatus status : StatusHistoryFolder.this.getValue()) {
-                                if (!status.evictionStep().equals(getValue())) {
-                                    availableSteps.remove(status.evictionStep());
-                                }
-                            }
-                            return availableSteps;
-                        }
-                    }, uploadable);
+        @Override
+        protected CForm<? extends EvictionStatus> createItemForm(IObject<?> member) {
+            // not used - the item form is created by StatusHistoryFolderItem
+            return null;
         }
 
         @Override
@@ -123,6 +131,62 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
         private boolean hasMoreSteps() {
             EvictionCaseDTO evictionCase = EvictionCaseForm.this.getValue();
             return evictionCase == null ? false : evictionCase.evictionFlowPolicy().evictionFlow().size() > getValue().size();
+        }
+
+        class StatusHistoryFolderItem extends CFolderItem<EvictionStatus> {
+
+            private EvictionStatusEditorBase<? extends EvictionStatus> statusEditor;
+
+            public StatusHistoryFolderItem() {
+                super(EvictionStatus.class);
+            }
+
+            @Override
+            public IFolderItemDecorator<EvictionStatus> createItemDecorator() {
+                return StatusHistoryFolder.this.createItemDecorator();
+            }
+
+            @Override
+            protected CForm<? extends EvictionStatus> createItemForm(IObject<?> member) {
+                EvictionStatusEditorBase<? extends EvictionStatus> itemForm = null;
+                if (statusEditor == null) {
+                    itemForm = new EvictionStatusEditorBase<EvictionStatus>(EvictionStatus.class, stepSelectionHandler);
+                } else {
+                    itemForm = statusEditor;
+                }
+                // trigger editor revalidation via preprocessValue() on flow step change
+                itemForm.getStepSelector().addValueChangeHandler(new ValueChangeHandler<EvictionFlowStep>() {
+
+                    @Override
+                    public void onValueChange(ValueChangeEvent<EvictionFlowStep> event) {
+                        EvictionStatus value = getValue();
+                        reset();
+                        populate(value);
+                    }
+                });
+
+                return itemForm;
+            }
+
+            @Override
+            protected EvictionStatus preprocessValue(EvictionStatus value, boolean fireEvent, boolean populate) {
+                if (statusEditor == null && value != null && !value.evictionStep().stepType().isNull()) {
+                    switch (value.evictionStep().stepType().getValue()) {
+                    case N4:
+                        statusEditor = new EvictionStatusN4Editor(stepSelectionHandler, uploadable);
+                        break;
+                    default:
+                        statusEditor = new EvictionStatusEditor<EvictionStatus>(EvictionStatus.class, stepSelectionHandler, uploadable);
+                        break;
+                    }
+
+                    // replace content
+                    createContent();
+                    getNativeComponent().setContent(statusEditor);
+                    addValidations();
+                }
+                return super.preprocessValue(value, fireEvent, populate);
+            }
         }
     }
 }

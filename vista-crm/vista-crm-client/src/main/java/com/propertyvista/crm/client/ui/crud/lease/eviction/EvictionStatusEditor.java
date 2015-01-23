@@ -12,15 +12,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.eviction;
 
-import java.util.Set;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CComboBox.NotInOptionsPolicy;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -38,53 +33,33 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.eviction.EvictionDocument;
 import com.propertyvista.domain.eviction.EvictionStatus;
 import com.propertyvista.domain.eviction.EvictionStatusRecord;
-import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
 
-public class EvictionStatusEditor extends CForm<EvictionStatus> {
+public class EvictionStatusEditor<S extends EvictionStatus> extends EvictionStatusEditorBase<S> {
 
     private static final I18n i18n = I18n.get(EvictionStatusEditor.class);
 
-    public interface EvictionStepSelectionHandler {
-        Set<EvictionFlowStep> getAvailableSteps();
-    }
-
-    private final EvictionStepSelectionHandler stepSelectionHandler;
-
     private final boolean canUploadDocuments;
 
-    public EvictionStatusEditor(EvictionStepSelectionHandler stepSelectionHandler, boolean canUploadDocuments) {
-        super(EvictionStatus.class);
-        this.stepSelectionHandler = stepSelectionHandler;
+    public EvictionStatusEditor(Class<S> entityClass, EvictionStepSelectionHandler stepSelectionHandler, boolean canUploadDocuments) {
+        super(entityClass, stepSelectionHandler);
         this.canUploadDocuments = canUploadDocuments;
     }
 
-    private final CComboBox<EvictionFlowStep> stepSelector = new CComboBox<EvictionFlowStep>( //
-            NotInOptionsPolicy.DISCARD, //
-            new IFormatter<EvictionFlowStep, String>() {
-
-                @Override
-                public String format(EvictionFlowStep value) {
-                    return value == null || value.name().isNull() ? "" : value.name().getValue();
-                }
-            } //
-    ) {
-        @Override
-        protected void onEditingStart() {
-            setOptions(stepSelectionHandler.getAvailableSteps());
-
-            super.onEditingStart();
-        }
-    };
-
     @Override
-    protected IsWidget createContent() {
-        FormPanel formPanel = new FormPanel(this);
-
-        formPanel.append(Location.Dual, proto().evictionStep(), stepSelector).decorate();
-        formPanel.append(Location.Dual, proto().addedOn()).decorate();
-        formPanel.append(Location.Dual, proto().addedBy(), new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class))).decorate();
+    protected FormPanel getPropertyPanel() {
+        FormPanel formPanel = super.getPropertyPanel();
+        // add status properties here
+        formPanel.append(Location.Left, proto().addedOn()).decorate();
+        formPanel.append(Location.Right, proto().addedBy(), new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class))).decorate();
         formPanel.append(Location.Dual, proto().note()).decorate();
 
+        return formPanel;
+    }
+
+    @Override
+    protected FormPanel createContent() {
+        FormPanel formPanel = super.createContent();
+        // add status records at the end
         formPanel.h1(i18n.tr("Records"));
         formPanel.append(Location.Dual, proto().statusRecords(), new StatusRecordFolder());
 
