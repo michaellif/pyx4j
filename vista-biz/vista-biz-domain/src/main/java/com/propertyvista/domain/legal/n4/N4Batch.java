@@ -55,13 +55,13 @@ public interface N4Batch extends IEntity {
     IPrimitive<Boolean> isReadyForService();
 
     @ReadOnly
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd")
     IPrimitive<LogicalDate> serviceDate();
 
     IPrimitive<N4DeliveryMethod> deliveryMethod();
 
     @ReadOnly
-    @Format("yyyy-MM-dd HH:mm:ss")
+    @Format("yyyy-MM-dd")
     IPrimitive<LogicalDate> deliveryDate();
 
     IPrimitive<String> companyLegalName();

@@ -71,6 +71,15 @@ public class EvictionCaseFacadeImpl implements EvictionCaseFacade {
     }
 
     @Override
+    public EvictionCase getLastEvictionCase(Lease leaseId) {
+        EntityQueryCriteria<EvictionCase> crit = EntityQueryCriteria.create(EvictionCase.class);
+        crit.eq(crit.proto().lease(), leaseId);
+        crit.isNotNull(crit.proto().closedOn());
+        crit.desc(crit.proto().closedOn());
+        return Persistence.service().retrieve(crit);
+    }
+
+    @Override
     public EvictionStatus getCurrentEvictionStatus(Lease leaseId) {
         EvictionCase evictionCase = getCurrentEvictionCase(leaseId);
         return evictionCase == null ? null : getCurrentEvictionStatus(evictionCase);
@@ -97,6 +106,7 @@ public class EvictionCaseFacadeImpl implements EvictionCaseFacade {
     public List<EvictionCase> getEvictionHistory(Lease leaseId) {
         EntityQueryCriteria<EvictionCase> crit = EntityQueryCriteria.create(EvictionCase.class);
         crit.eq(crit.proto().lease(), leaseId);
+        crit.asc(crit.proto().closedOn());
         return Persistence.service().query(crit);
     }
 

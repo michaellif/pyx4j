@@ -15,36 +15,26 @@ package com.propertyvista.crm.client.ui.crud.lease.eviction;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CComboBox.NotInOptionsPolicy;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 
-import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.rpc.services.legal.eviction.EvictionDocumentUploadService;
+import com.propertyvista.crm.client.ui.crud.lease.eviction.EvictionStatusEditor.EvictionStepSelectionHandler;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.eviction.EvictionDocument;
 import com.propertyvista.domain.eviction.EvictionStatus;
-import com.propertyvista.domain.eviction.EvictionStatusRecord;
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.EvictionCaseDTO;
@@ -90,14 +80,13 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
             get(proto().updatedOn()).setVisible(false);
             get(proto().closedOn()).setVisible(false);
         }
-// TODO        historyFolder.setAddable(!getValue().moreSteps().isEmpty());
     }
 
     class StatusHistoryFolder extends VistaBoxFolder<EvictionStatus> {
 
         public StatusHistoryFolder() {
             super(EvictionStatus.class);
-            this.addValueChangeHandler(new ValueChangeHandler<IList<EvictionStatus>>() {
+            addValueChangeHandler(new ValueChangeHandler<IList<EvictionStatus>>() {
 
                 @Override
                 public void onValueChange(ValueChangeEvent<IList<EvictionStatus>> event) {
@@ -108,63 +97,20 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
 
         @Override
         protected CForm<? extends EvictionStatus> createItemForm(IObject<?> member) {
-            // TODO setAddable(false);
-            return new CForm<EvictionStatus>(EvictionStatus.class) {
+            return new EvictionStatusEditor( //
+                    new EvictionStepSelectionHandler() {
 
-                private final CComboBox<EvictionFlowStep> stepSelector = new CComboBox<EvictionFlowStep>( //
-                        NotInOptionsPolicy.DISCARD, //
-                        new IFormatter<EvictionFlowStep, String>() {
-
-                            @Override
-                            public String format(EvictionFlowStep value) {
-                                return value == null || value.name().isNull() ? "" : value.name().getValue();
+                        @Override
+                        public Set<EvictionFlowStep> getAvailableSteps() {
+                            Set<EvictionFlowStep> availableSteps = new HashSet<>(EvictionCaseForm.this.getValue().evictionFlowPolicy().evictionFlow());
+                            for (EvictionStatus status : StatusHistoryFolder.this.getValue()) {
+                                if (!status.evictionStep().equals(getValue())) {
+                                    availableSteps.remove(status.evictionStep());
+                                }
                             }
-                        } //
-                ) {
-                    @Override
-                    protected void onEditingStart() {
-                        Set<EvictionFlowStep> availableSteps = new HashSet<>(EvictionCaseForm.this.getValue().evictionFlowPolicy().evictionFlow());
-                        for (EvictionStatus status : StatusHistoryFolder.this.getValue()) {
-                            if (!status.evictionStep().equals(getValue())) {
-                                availableSteps.remove(status.evictionStep());
-                            }
+                            return availableSteps;
                         }
-
-                        setOptions(availableSteps);
-
-                        super.onEditingStart();
-                    }
-                };
-
-                @Override
-                protected IsWidget createContent() {
-                    FormPanel formPanel = new FormPanel(this);
-
-                    formPanel.append(Location.Dual, proto().evictionStep(), stepSelector).decorate();
-                    formPanel.append(Location.Dual, proto().addedOn()).decorate();
-                    formPanel.append(Location.Dual, proto().addedBy(), new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class)))
-                            .decorate();
-                    formPanel.append(Location.Dual, proto().note()).decorate();
-
-                    formPanel.h1(i18n.tr("Records"));
-                    formPanel.append(Location.Dual, proto().statusRecords(), new StatusRecordFolder());
-
-                    return formPanel;
-                }
-
-                @Override
-                protected void onValueSet(boolean populate) {
-                    super.onValueSet(populate);
-
-                    boolean isNew = getValue().getPrimaryKey() == null;
-                    if (isNew) {
-                        get(proto().addedBy()).setVisible(false);
-                        get(proto().addedOn()).setVisible(false);
-                    } else {
-                        get(proto().evictionStep()).setEditable(false);
-                    }
-                }
-            };
+                    }, uploadable);
         }
 
         @Override
@@ -175,88 +121,8 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
         }
 
         private boolean hasMoreSteps() {
-            if (EvictionCaseForm.this.getValue() == null) {
-                return false;
-            }
-            return EvictionCaseForm.this.getValue().evictionFlowPolicy().evictionFlow().size() > getValue().size();
-        }
-    }
-
-    class StatusRecordFolder extends VistaBoxFolder<EvictionStatusRecord> {
-
-        public StatusRecordFolder() {
-            super(EvictionStatusRecord.class);
-            setOrderable(false);
-        }
-
-        @Override
-        protected CForm<? extends EvictionStatusRecord> createItemForm(IObject<?> member) {
-            return new CForm<EvictionStatusRecord>(EvictionStatusRecord.class) {
-
-                @Override
-                protected IsWidget createContent() {
-                    FormPanel formPanel = new FormPanel(this);
-
-                    formPanel.append(Location.Dual, proto().note()).decorate();
-                    formPanel.append(Location.Dual, proto().addedOn()).decorate();
-                    formPanel.append(Location.Dual, proto().addedBy(), new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class)))
-                            .decorate();
-
-                    formPanel.h1(i18n.tr("Attachments"));
-                    formPanel.append(Location.Dual, proto().attachments(), new UploadableEvictionDocumentFolder());
-
-                    return formPanel;
-                }
-            };
-        }
-
-        @Override
-        public VistaBoxFolderItemDecorator<EvictionStatusRecord> createItemDecorator() {
-            VistaBoxFolderItemDecorator<EvictionStatusRecord> itemDecorator = super.createItemDecorator();
-            itemDecorator.setExpended(false);
-            return itemDecorator;
-        }
-    }
-
-    class UploadableEvictionDocumentFolder extends VistaBoxFolder<EvictionDocument> {
-
-        public UploadableEvictionDocumentFolder() {
-            super(EvictionDocument.class);
-            setOrderable(false);
-        }
-
-        @Override
-        protected CForm<EvictionDocument> createItemForm(IObject<?> member) {
-            return new CForm<EvictionDocument>(EvictionDocument.class) {
-
-                @Override
-                protected IsWidget createContent() {
-                    FormPanel formPanel = new FormPanel(this);
-
-                    formPanel.append(Location.Dual, proto().title()).decorate();
-                    formPanel.append(Location.Dual, proto().note()).decorate();
-                    formPanel.append(Location.Dual, proto().addedOn()).decorate();
-                    formPanel.append(Location.Dual, proto().file(), new CFile( //
-                            uploadable ? GWT.<UploadService<?, ?>> create(EvictionDocumentUploadService.class) : null, //
-                            new VistaFileURLBuilder(EvictionDocument.class) //
-                            )).decorate();
-
-                    return formPanel;
-                }
-
-                @Override
-                public void addValidations() {
-                    super.addValidations();
-                    get(proto().file()).setMandatory(true);
-                }
-            };
-        }
-
-        @Override
-        public VistaBoxFolderItemDecorator<EvictionDocument> createItemDecorator() {
-            VistaBoxFolderItemDecorator<EvictionDocument> itemDecorator = super.createItemDecorator();
-            itemDecorator.setExpended(false);
-            return itemDecorator;
+            EvictionCaseDTO evictionCase = EvictionCaseForm.this.getValue();
+            return evictionCase == null ? false : evictionCase.evictionFlowPolicy().evictionFlow().size() > getValue().size();
         }
     }
 }

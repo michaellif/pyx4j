@@ -28,6 +28,8 @@ public interface EvictionCaseFacade {
 
     void closeEvictionCase(EvictionCase caseId, String note);
 
+    EvictionCase getLastEvictionCase(Lease leaseId);
+
     EvictionCase getCurrentEvictionCase(Lease leaseId);
 
     EvictionStatus getCurrentEvictionStatus(EvictionCase evictionCase);

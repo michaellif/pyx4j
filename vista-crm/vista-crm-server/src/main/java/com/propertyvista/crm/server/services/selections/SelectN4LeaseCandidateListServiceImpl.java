@@ -43,10 +43,12 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.legal.eviction.EvictionCaseFacade;
 import com.propertyvista.biz.legal.forms.n4.N4GenerationUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.crm.rpc.services.selections.SelectN4LeaseCandidateListService;
+import com.propertyvista.domain.eviction.EvictionCase;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.n4.N4UnpaidCharge;
@@ -148,8 +150,7 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
     protected void enhanceListRetrieved(Lease bo, N4LeaseCandidateDTO to) {
         super.enhanceListRetrieved(bo, to);
         to.amountOwed().setValue(getAmountOwed(bo));
-        // TODO - find out lastNotice date
-        to.lastNotice().setValue(null);
+        to.lastNotice().setValue(getLastEvictionCaseCloseDate(bo));
     }
 
     // ----- internals ----------
@@ -185,10 +186,6 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
         return minOwing;
     }
 
-    private boolean hasOpenCase(Lease lease) {
-        return false;
-    }
-
     private List<N4UnpaidCharge> getUnpaidCharges(Lease lease) {
         HashSet<ARCode> acceptableArCodes = new HashSet<ARCode>(getPolicy(lease).relevantARCodes());
         LogicalDate today = SystemDateManager.getLogicalDate();
@@ -208,6 +205,20 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
             owings.add(owing);
         }
         return owings;
+    }
+
+    private boolean hasOpenCase(Lease lease) {
+        return ServerSideFactory.create(EvictionCaseFacade.class).getCurrentEvictionCase(lease) != null;
+    }
+
+    private LogicalDate getLastEvictionCaseCloseDate(Lease lease) {
+        EvictionCase evictionCase = ServerSideFactory.create(EvictionCaseFacade.class).getLastEvictionCase(lease);
+        if (evictionCase != null && !evictionCase.closedOn().isNull()) {
+            return new LogicalDate(evictionCase.closedOn().getValue());
+        } else {
+            return null;
+        }
+
     }
 
     private BigDecimal getAmountOwed(Lease lease) {

@@ -63,7 +63,7 @@ public interface EvictionCase extends IEntity {
     @OrderBy(PrimaryKey.class)
     IList<EvictionStatus> history();
 
-    /** Keep the copy of the policy until the case is closed */
+    /** Will use the copy of the policy until the case is closed */
     @JoinColumn
     @Indexed
     @ReadOnly
