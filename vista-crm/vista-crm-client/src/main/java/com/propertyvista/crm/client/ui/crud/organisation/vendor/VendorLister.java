@@ -33,7 +33,7 @@ public class VendorLister extends SiteDataTablePanel<Vendor> {
 
         setColumnDescriptors( //
                 new ColumnDescriptor.Builder(proto().name()).filterAlwaysShown(true).build(), //
-                new ColumnDescriptor.Builder(proto().type()).build() //
+                new ColumnDescriptor.Builder(proto().type()).filterAlwaysShown(true).build() //
         );
 
         setDataTableModel(new DataTableModel<Vendor>());
