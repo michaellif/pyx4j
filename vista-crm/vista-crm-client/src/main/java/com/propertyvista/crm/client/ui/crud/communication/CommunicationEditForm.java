@@ -74,11 +74,14 @@ public class CommunicationEditForm extends CrmEntityForm<CommunicationThreadDTO>
                         retriveOptionsPrivate(callback);
                     } else {
                         final PropertyCriterion critType = PropertyCriterion.eq(proto().categoryType(), categoryType);
-                        final PropertyCriterion critTicketType = PropertyCriterion.ne(proto().ticketType(), TicketType.Maintenance);
 
                         resetCriteria();
                         addCriterion(critType);
-                        addCriterion(critTicketType);
+
+                        if (categoryType.equals(CategoryType.Ticket)) {
+                            final PropertyCriterion critTicketType = PropertyCriterion.ne(proto().ticketType(), TicketType.Maintenance);
+                            addCriterion(critTicketType);
+                        }
 
                         resetOptions();
                         retriveOptionsPrivate(callback);
