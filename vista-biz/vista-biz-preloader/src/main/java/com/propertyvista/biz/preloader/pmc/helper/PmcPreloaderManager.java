@@ -79,7 +79,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
         return SingletonHolder.INSTANCE;
     }
 
-    public synchronized void clearPmc(String pmcDnsName, long start) {
+    public synchronized void clearPmc(String pmcDnsName, long processStartTimeInMillis) {
         stopCommunications();
         try {
             RDBUtils.deleteFromAllEntityTables();
@@ -89,7 +89,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
             Persistence.service().delete(criteria);
             Persistence.service().commit();
 
-            PmcPreloaderManager.recordOperation(ResetType.clearPmc, start);
+            PmcPreloaderManager.recordOperation(ResetType.clearPmc, processStartTimeInMillis);
 
         } catch (Throwable t) {
             log.error("", t);
@@ -100,44 +100,44 @@ public class PmcPreloaderManager implements CommunicationsHandler {
         }
     }
 
-    public synchronized void resetPmcCache(OutputHolder out) {
+    public synchronized void resetPmcCache(OutputHolder output) {
         try {
             CacheService.reset();
-            PmcPreloaderManager.writeToOutput(out, "\nCacheService.reset Ok");
+            PmcPreloaderManager.writeToOutput(output, "\nCacheService.reset Ok");
         } catch (Throwable t) {
-            logError(out, t);
+            logError(output, t);
         } finally {
             performResetFinallyActions();
         }
     }
 
-    public synchronized void resetAllCache(OutputHolder out) {
+    public synchronized void resetAllCache(OutputHolder output) {
         try {
             CacheService.resetAll();
-            PmcPreloaderManager.writeToOutput(out, "\nCacheService.resetAll Ok");
+            PmcPreloaderManager.writeToOutput(output, "\nCacheService.resetAll Ok");
         } catch (Throwable t) {
-            logError(out, t);
+            logError(output, t);
         } finally {
             performResetFinallyActions();
         }
     }
 
-    public synchronized void dropForeignKeys(OutputHolder out, long start) {
+    public synchronized void dropForeignKeys(OutputHolder output, long processStartTimeInMillis) {
         stopCommunications();
         try {
             RDBUtils.dropAllForeignKeys();
-            PmcPreloaderManager.recordOperation(ResetType.dropForeignKeys, start);
+            PmcPreloaderManager.recordOperation(ResetType.dropForeignKeys, processStartTimeInMillis);
         } catch (Throwable t) {
 //            log.error("", t);
             Persistence.service().rollback();
-            logError(out, t);
+            logError(output, t);
         } finally {
             startCommunications();
             performResetFinallyActions();
         }
     }
 
-    public synchronized void resetPmcTables(String pmcDnsName, long start, boolean isExplicitTransaction) {
+    public synchronized void resetPmcTables(String pmcDnsName, long processStartTimeInMillis, boolean isExplicitTransaction) {
         stopCommunications();
 
         try {
@@ -155,7 +155,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
             } finally {
                 NamespaceManager.setNamespace(requestNamespace);
             }
-            PmcPreloaderManager.recordOperation(ResetType.resetPmc, start);
+            PmcPreloaderManager.recordOperation(ResetType.resetPmc, processStartTimeInMillis);
         } catch (Throwable t) {
             log.error("", t);
             Persistence.service().rollback();
@@ -167,7 +167,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
 
     }
 
-    public synchronized void preloadPmc(String pmcDnsName, ResetType type, Map<String, String[]> params, OutputHolder out, long start,
+    public synchronized void preloadPmc(String pmcDnsName, ResetType type, Map<String, String[]> params, OutputHolder output, long processStartTimeInMillis,
             boolean isExplicitTransacion) {
         stopCommunications();
         try {
@@ -188,7 +188,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
 
             NamespaceManager.setNamespace(pmc.namespace().getValue());
 
-            writeToOutput(out, "\n--- Preload  " + pmcDnsName + " ---\n");
+            writeToOutput(output, "\n--- Preload  " + pmcDnsName + " ---\n");
             if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
                 RDBUtils.ensureNamespace();
                 RDBUtils.initAllEntityTables();
@@ -197,7 +197,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
                         Persistence.service().commit();
                     }
                 }
-                writeToOutput(out, "PMC Tables created ", TimeUtils.secSince(pmcStart));
+                writeToOutput(output, "PMC Tables created ", TimeUtils.secSince(pmcStart));
             }
 
             if (!EnumSet.of(ResetType.all, ResetType.allMini, ResetType.vistaMini, ResetType.vista, ResetType.vistaMax3000, ResetType.addPmcMockup,
@@ -262,9 +262,9 @@ public class PmcPreloaderManager implements CommunicationsHandler {
                     }
                 }
 
-                writeToOutput(out, preloaders.exectutePreloadersCreate(dpisRun));
+                writeToOutput(output, preloaders.exectutePreloadersCreate(dpisRun));
             } else {
-                writeToOutput(out, preloaders.preloadAll());
+                writeToOutput(output, preloaders.preloadAll());
             }
 
             if (pmcDnsName.equals(DemoPmc.star.name()) && (type == ResetType.all)) {
@@ -280,10 +280,10 @@ public class PmcPreloaderManager implements CommunicationsHandler {
             CacheService.reset();
 
             log.info("Preloaded PMC '{}' {}", pmcDnsName, TimeUtils.secSince(pmcStart));
-            writeToOutput(out, "Preloaded PMC '" + pmcDnsName + "' " + TimeUtils.secSince(pmcStart));
+            writeToOutput(output, "Preloaded PMC '" + pmcDnsName + "' " + TimeUtils.secSince(pmcStart));
             ServerSideFactory.create(OperationsAlertFacade.class).record(pmc, "Preloaded PMC ''{0}'' {1}", pmcDnsName, TimeUtils.secSince(pmcStart));
 
-            PmcPreloaderManager.recordOperation(type, start);
+            PmcPreloaderManager.recordOperation(type, processStartTimeInMillis);
         } catch (Throwable t) {
             log.error("", t);
             Persistence.service().rollback();
@@ -321,7 +321,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
         }
     }
 
-    public synchronized void resetAll(OutputHolder out, long start, DataPreloaderCollection operationPreloaders) {
+    public synchronized void resetAll(OutputHolder output, long processStartTimeInMillis, DataPreloaderCollection operationPreloaders) {
         stopCommunications();
         try {
             final String requestNamespace = NamespaceManager.getNamespace();
@@ -329,7 +329,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
             SchedulerHelper.shutdown();
             RDBUtils.resetDatabase();
             SchedulerHelper.dbReset();
-            writeToOutput(out, "DB Dropped: " + TimeUtils.secSince(start));
+            writeToOutput(output, "DB Dropped: " + TimeUtils.secSince(processStartTimeInMillis));
             Thread.sleep(150);
             SchedulerHelper.init();
             SchedulerHelper.setActive(true);
@@ -337,13 +337,13 @@ public class PmcPreloaderManager implements CommunicationsHandler {
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
             try {
                 RDBUtils.ensureNamespace();
-                long astart = System.currentTimeMillis();
+                long resetStartTimeInMillis = System.currentTimeMillis();
                 if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
                     RDBUtils.initNameSpaceSpecificEntityTables();
-                    writeToOutput(out, "Admin tables created: " + TimeUtils.secSince(astart));
+                    writeToOutput(output, "Admin tables created: " + TimeUtils.secSince(resetStartTimeInMillis));
                 } else {
                     RDBUtils.initAllEntityTables();
-                    writeToOutput(out, "All tables created: " + TimeUtils.secSince(astart));
+                    writeToOutput(output, "All tables created: " + TimeUtils.secSince(resetStartTimeInMillis));
                 }
                 if (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType() == DatabaseType.PostgreSQL) {
                     Persistence.service().commit();
@@ -434,8 +434,9 @@ public class PmcPreloaderManager implements CommunicationsHandler {
         ServerSideFactory.create(PmcFacade.class).deleteAllPmcData(Persistence.service().retrieve(criteria));
     }
 
-    public static void recordOperation(ResetType type, long start) {
-        ServerSideFactory.create(OperationsAlertFacade.class).record(null, "DB operation {0} completed {1}", type.name(), TimeUtils.secSince(start));
+    public static void recordOperation(ResetType type, long processStartTimeInMillis) {
+        ServerSideFactory.create(OperationsAlertFacade.class).record(null, "DB operation {0} completed {1}", type.name(),
+                TimeUtils.secSince(processStartTimeInMillis));
     }
 
     public void performResetFinallyActions() {
@@ -443,10 +444,10 @@ public class PmcPreloaderManager implements CommunicationsHandler {
         CacheService.reset();
     }
 
-    private static void logError(OutputHolder out, Throwable t) throws Error {
-        PmcPreloaderManager.writeToOutput(out, "\nDB reset error:");
-        PmcPreloaderManager.writeToOutput(out, t.getMessage());
-        if (null != out) {
+    private static void logError(OutputHolder output, Throwable t) throws Error {
+        PmcPreloaderManager.writeToOutput(output, "\nDB reset error:");
+        PmcPreloaderManager.writeToOutput(output, t.getMessage());
+        if (null != output) {
             throw new Error(t);
         }
     }
