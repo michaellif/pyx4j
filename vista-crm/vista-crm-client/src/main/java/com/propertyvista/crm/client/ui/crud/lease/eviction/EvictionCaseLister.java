@@ -32,7 +32,7 @@ public class EvictionCaseLister extends SiteDataTablePanel<EvictionCaseDTO> {
         super(EvictionCaseDTO.class, GWT.<EvictionCaseCrudService> create(EvictionCaseCrudService.class), true);
 
         setColumnDescriptors( //
-                new ColumnDescriptor.Builder(proto().createdOn()).build(), //
+                new ColumnDescriptor.Builder(proto().createdOn()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().createdBy()).build(), //
                 new ColumnDescriptor.Builder(proto().closedOn()).build(), //
                 new ColumnDescriptor.Builder(proto().note()).build());

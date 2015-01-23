@@ -21,8 +21,8 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.security.DataModelPermission;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
@@ -44,9 +44,9 @@ public class EmployeeLister extends SiteDataTablePanel<EmployeeDTO> {
         cd.add(new ColumnDescriptor.Builder(proto().employeeId()).build());
         cd.add(new ColumnDescriptor.Builder(proto().name()).searchable(false).build());
         cd.add(new ColumnDescriptor.Builder(proto().title()).build());
-        cd.add(new ColumnDescriptor.Builder(proto().name().firstName()).searchableOnly().build());
-        cd.add(new ColumnDescriptor.Builder(proto().name().lastName()).searchableOnly().build());
-        cd.add(new ColumnDescriptor.Builder(proto().email()).build());
+        cd.add(new ColumnDescriptor.Builder(proto().name().firstName()).searchableOnly().filterAlwaysShown(true).build());
+        cd.add(new ColumnDescriptor.Builder(proto().name().lastName()).searchableOnly().filterAlwaysShown(true).build());
+        cd.add(new ColumnDescriptor.Builder(proto().email()).filterAlwaysShown(true).build());
         cd.add(new ColumnDescriptor.Builder(proto().updated(), false).build());
 
         if (SecurityController.check(DataModelPermission.permissionRead(EmployeePrivilegesDTO.class))) {

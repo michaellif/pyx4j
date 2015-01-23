@@ -20,8 +20,8 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
@@ -41,11 +41,11 @@ public class UnitLister extends SiteDataTablePanel<AptUnitDTO> {
 
         setColumnDescriptors( //
                 new ColumnDescriptor.Builder(proto().info().floor()).build(), //
-                new ColumnDescriptor.Builder(proto().info().number()).build(), //
+                new ColumnDescriptor.Builder(proto().info().number()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().info().area()).build(), //
                 new ColumnDescriptor.Builder(proto().info().areaUnits()).visible(false).build(), //
-                new ColumnDescriptor.Builder(proto().info()._bedrooms()).build(), //
-                new ColumnDescriptor.Builder(proto().info()._bathrooms()).build(), //
+                new ColumnDescriptor.Builder(proto().info()._bedrooms()).filterAlwaysShown(true).build(), //
+                new ColumnDescriptor.Builder(proto().info()._bathrooms()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().info().economicStatus()).visible(false).build(), //
 
                 new ColumnDescriptor.Builder(proto().buildingCode()).visible(false).build(), //

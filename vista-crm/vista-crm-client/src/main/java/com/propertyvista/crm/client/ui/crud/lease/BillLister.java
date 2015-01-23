@@ -19,8 +19,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
@@ -44,7 +44,7 @@ public class BillLister extends SiteDataTablePanel<BillDataDTO> {
                 new ColumnDescriptor.Builder(proto().bill().billType()).build(), //
 
                 new ColumnDescriptor.Builder(proto().bill().executionDate()).build(), //
-                new ColumnDescriptor.Builder(proto().bill().billingPeriodStartDate()).build(), //
+                new ColumnDescriptor.Builder(proto().bill().billingPeriodStartDate()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().bill().billingPeriodEndDate()).build(), //
                 new ColumnDescriptor.Builder(proto().bill().dueDate()).build(), //
 

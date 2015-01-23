@@ -34,15 +34,15 @@ public class TenantLister extends LeaseParticipantLister<TenantDTO> {
                 new Builder(proto().role()).sortable(false).searchable(false).width("80px").build(), //
 
                 new Builder(proto().customer().person().name()).searchable(false).build(), //
-                new Builder(proto().customer().person().name().firstName(), false).build(), //
-                new Builder(proto().customer().person().name().lastName(), false).build(), //
+                new Builder(proto().customer().person().name().firstName(), false).filterAlwaysShown(true).build(), //
+                new Builder(proto().customer().person().name().lastName(), false).filterAlwaysShown(true).build(), //
                 new Builder(proto().customer().person().sex(), false).build(), //
                 new Builder(proto().customer().person().birthDate()).build(), //
 
                 new Builder(proto().customer().person().homePhone()).build(), //
                 new Builder(proto().customer().person().mobilePhone(), false).build(), //
                 new Builder(proto().customer().person().workPhone(), false).build(), //
-                new Builder(proto().customer().person().email()).width("180px").build(), //
+                new Builder(proto().customer().person().email()).width("180px").filterAlwaysShown(true).build(), //
                 new Builder(proto().customer().registeredInPortal()).visible(false).width("50px").build(), //
 
                 new Builder(proto().lease()).searchable(false).width("180px").build(), //

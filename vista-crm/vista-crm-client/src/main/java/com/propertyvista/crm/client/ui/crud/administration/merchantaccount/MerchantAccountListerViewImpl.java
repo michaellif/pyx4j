@@ -15,11 +15,11 @@ package com.propertyvista.crm.client.ui.crud.administration.merchantaccount;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractListCrudService;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.crm.rpc.services.admin.MerchantAccountCrudService;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -36,8 +36,8 @@ public class MerchantAccountListerViewImpl extends AbstractListerView<MerchantAc
             super(MerchantAccount.class, GWT.<AbstractListCrudService<MerchantAccount>> create(MerchantAccountCrudService.class), true);
 
             setColumnDescriptors( //
-                    new ColumnDescriptor.Builder(proto().accountName()).build(),//
-                    new ColumnDescriptor.Builder(proto().bankId()).build(),//
+                    new ColumnDescriptor.Builder(proto().accountName()).filterAlwaysShown(true).build(),//
+                    new ColumnDescriptor.Builder(proto().bankId()).filterAlwaysShown(true).build(),//
                     new ColumnDescriptor.Builder(proto().branchTransitNumber()).build(),//
                     new ColumnDescriptor.Builder(proto().accountNumber()).build(),//
                     new ColumnDescriptor.Builder(proto().paymentsStatus()).searchable(false).sortable(false).build());

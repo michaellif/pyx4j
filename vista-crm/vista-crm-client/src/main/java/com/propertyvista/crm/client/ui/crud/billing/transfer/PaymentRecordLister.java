@@ -19,8 +19,8 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
@@ -43,16 +43,15 @@ public class PaymentRecordLister extends SiteDataTablePanel<PaymentRecordDTO> {
             cd.add(new ColumnDescriptor.Builder(proto().externalBatchNumberReversal(), false).sortable(false).searchable(false).build());
         }
         cd.add(new ColumnDescriptor.Builder(proto().billingAccount().lease().unit().building().propertyCode()).columnTitle(i18n.tr("Property Code"))
-                .visible(true).build());
-        cd.add(new ColumnDescriptor.Builder(proto().padBillingCycle().billingCycleStartDate()).columnTitle(i18n.tr("Pre-Authorized Payment Cycle"))
-                .build());
+                .visible(true).filterAlwaysShown(true).build());
+        cd.add(new ColumnDescriptor.Builder(proto().padBillingCycle().billingCycleStartDate()).columnTitle(i18n.tr("Pre-Authorized Payment Cycle")).build());
         cd.add(new ColumnDescriptor.Builder(proto().padBillingCycle().id(), false).columnTitle(i18n.tr("Pre-Authorized Payment Cycle Id")).build());
         cd.add(new ColumnDescriptor.Builder(proto().billingAccount().lease().unit().info().number()).columnTitle(i18n.tr("Unit")).visible(false).build());
         cd.add(new ColumnDescriptor.Builder(proto().billingAccount().lease().leaseId()).columnTitle(i18n.tr("Lease")).visible(true).build());
         cd.add(new ColumnDescriptor.Builder(proto().billingAccount().accountNumber()).visible(false).build());
         cd.add(new ColumnDescriptor.Builder(proto().paymentMethod().customer()).visible(false).build());
         cd.add(new ColumnDescriptor.Builder(proto().leaseTermParticipant().role()).columnTitle(i18n.tr("Lease role")).visible(false).build());
-        cd.add(new ColumnDescriptor.Builder(proto().amount()).build());
+        cd.add(new ColumnDescriptor.Builder(proto().amount()).filterAlwaysShown(true).build());
         cd.add(new ColumnDescriptor.Builder(proto().paymentMethod().type()).build());
         cd.add(new ColumnDescriptor.Builder(proto().created()).build());
         cd.add(new ColumnDescriptor.Builder(proto().receivedDate()).build());

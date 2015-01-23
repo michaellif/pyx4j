@@ -33,8 +33,8 @@ public class BroadcastEventLister extends SiteDataTablePanel<BroadcastEvent> {
 
         setColumnDescriptors(new ColumnDescriptor[] { //
         new ColumnDescriptor.Builder(proto().date()).build(), //
-                new ColumnDescriptor.Builder(proto().template().name()).build(), //
-                new ColumnDescriptor.Builder(proto().template().subject()).build(), //
+                new ColumnDescriptor.Builder(proto().template().name()).filterAlwaysShown(true).build(), //
+                new ColumnDescriptor.Builder(proto().template().subject()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().template().category()).build(), //
                 new ColumnDescriptor.Builder(proto().template().highImportance()).build() //
         });

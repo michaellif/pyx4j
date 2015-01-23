@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -18,8 +18,8 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.services.security.CrmAuditRecordsListerService;
@@ -32,11 +32,11 @@ public class CrmAuditRecordLister extends SiteDataTablePanel<AuditRecordDTO> {
 
         setColumnDescriptors( //
                 new ColumnDescriptor.Builder(proto().when()).build(), //
-                new ColumnDescriptor.Builder(proto().application()).build(), //
+                new ColumnDescriptor.Builder(proto().application()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().userName()).searchable(false).sortable(false).build(), //
                 new ColumnDescriptor.Builder(proto().remoteAddr()).build(), //
-                new ColumnDescriptor.Builder(proto().event()).build(), //
-                new ColumnDescriptor.Builder(proto().targetEntity()).build(), //
+                new ColumnDescriptor.Builder(proto().event()).filterAlwaysShown(true).build(), //
+                new ColumnDescriptor.Builder(proto().targetEntity()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().targetEntityId()).build(), //
                 new ColumnDescriptor.Builder(proto().details()).build());
 

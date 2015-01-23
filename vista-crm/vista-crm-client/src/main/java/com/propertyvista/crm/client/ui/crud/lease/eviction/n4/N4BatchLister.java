@@ -85,12 +85,12 @@ public class N4BatchLister extends SiteDataTablePanel<N4BatchDTO> {
 
         return new ColumnDescriptor[] { //
         new ColumnDescriptor.Builder(proto.name()).build(), //
-                new ColumnDescriptor.Builder(proto.building()).build(), //
+                new ColumnDescriptor.Builder(proto.building()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto.issueDate()).build(), //
                 new ColumnDescriptor.Builder(proto.serviceDate()).build(), //
                 new ColumnDescriptor.Builder(proto.deliveryMethod()).build(), //
                 new ColumnDescriptor.Builder(proto.deliveryDate()).build(), //
-                new ColumnDescriptor.Builder(proto.signingAgent()).columnTitle(i18n.tr("Agent")).build() //                
+                new ColumnDescriptor.Builder(proto.signingAgent()).columnTitle(i18n.tr("Agent")).build() //
         };
     }
 

@@ -19,8 +19,8 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
@@ -32,8 +32,8 @@ public class GlCodeCategoryLister extends SiteDataTablePanel<GlCodeCategory> {
         super(GlCodeCategory.class, GWT.<AbstractListCrudService<GlCodeCategory>> create(GlCodeCategoryCrudService.class), true, true);
 
         setColumnDescriptors( //
-                new ColumnDescriptor.Builder(proto().categoryId()).build(), //
-                new ColumnDescriptor.Builder(proto().description()).build(), //
+                new ColumnDescriptor.Builder(proto().categoryId()).filterAlwaysShown(true).build(), //
+                new ColumnDescriptor.Builder(proto().description()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().glCodes()).build());
 
         setDataTableModel(new DataTableModel<GlCodeCategory>());

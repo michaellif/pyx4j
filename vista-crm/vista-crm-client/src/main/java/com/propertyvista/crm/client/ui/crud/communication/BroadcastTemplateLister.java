@@ -87,8 +87,8 @@ public class BroadcastTemplateLister extends SiteDataTablePanel<BroadcastTemplat
 
         setDeleteActionEnabled(true);
         setColumnDescriptors(new ColumnDescriptor[] { //
-        new ColumnDescriptor.Builder(proto().name()).build(), //
-                new ColumnDescriptor.Builder(proto().subject()).build(), //
+        new ColumnDescriptor.Builder(proto().name()).filterAlwaysShown(true).build(), //
+                new ColumnDescriptor.Builder(proto().subject()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().category()).build(), //
                 new ColumnDescriptor.Builder(proto().highImportance()).build() //
         });

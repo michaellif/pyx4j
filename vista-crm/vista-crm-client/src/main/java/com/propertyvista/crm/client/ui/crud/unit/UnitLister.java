@@ -40,7 +40,7 @@ public class UnitLister extends SiteDataTablePanel<AptUnitDTO> {
         setAddNewActionCaption(i18n.tr("New Unit"));
 
         setColumnDescriptors( //
-                new ColumnDescriptor.Builder(proto().building()).build(), //
+                new ColumnDescriptor.Builder(proto().building()).filterAlwaysShown(true).build(), //
 
                 new ColumnDescriptor.Builder(proto().buildingCode()).build(), //
 
@@ -48,11 +48,11 @@ public class UnitLister extends SiteDataTablePanel<AptUnitDTO> {
                 new ColumnDescriptor.Builder(proto().floorplan().marketingName()).visible(false).columnTitle(i18n.tr("Floorplan Marketing Name")).build(), //
 
                 new ColumnDescriptor.Builder(proto().info().floor()).width("50px").build(), //
-                new ColumnDescriptor.Builder(proto().info().number()).width("80px").build(), //
+                new ColumnDescriptor.Builder(proto().info().number()).width("80px").filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().info().area()).width("80px").build(), //
                 new ColumnDescriptor.Builder(proto().info().areaUnits()).width("80px").visible(false).build(), //
-                new ColumnDescriptor.Builder(proto().info()._bedrooms()).width("50px").build(), //
-                new ColumnDescriptor.Builder(proto().info()._bathrooms()).width("50px").build(), //
+                new ColumnDescriptor.Builder(proto().info()._bedrooms()).width("50px").filterAlwaysShown(true).build(), //
+                new ColumnDescriptor.Builder(proto().info()._bathrooms()).width("50px").filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().info().economicStatus()).visible(false).build(), //
 
                 new ColumnDescriptor.Builder(proto().financial()._unitRent()).build(), //

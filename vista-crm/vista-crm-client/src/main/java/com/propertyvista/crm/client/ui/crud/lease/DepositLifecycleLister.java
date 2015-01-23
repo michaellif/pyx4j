@@ -18,8 +18,8 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
@@ -41,7 +41,7 @@ public class DepositLifecycleLister extends SiteDataTablePanel<DepositLifecycleD
                 new ColumnDescriptor.Builder(proto().status()).build(), //
                 new ColumnDescriptor.Builder(proto().depositDate(), false).build(), //
                 new ColumnDescriptor.Builder(proto().refundDate()).build(), //
-                new ColumnDescriptor.Builder(proto().currentAmount()).build());
+                new ColumnDescriptor.Builder(proto().currentAmount()).filterAlwaysShown(true).build());
 
         setDataTableModel(new DataTableModel<DepositLifecycleDTO>());
     }
