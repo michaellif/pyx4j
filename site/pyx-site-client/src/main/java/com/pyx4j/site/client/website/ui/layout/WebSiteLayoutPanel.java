@@ -35,7 +35,6 @@ import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.OverlayExtraHolder;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel;
 import com.pyx4j.site.client.ui.layout.SidePanelHolder;
 import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
@@ -124,7 +123,7 @@ public class WebSiteLayoutPanel extends ResponsiveLayoutPanel {
         pagePanel.add(centerPanel);
         pagePanel.add(footerHolder);
 
-        overlayExtraHolder = new OverlayExtraHolder(this, extra1Caption, extra2Caption, extra4Caption, null);
+        overlayExtraHolder = new OverlayExtraHolder(this, extra1Caption, extra2Caption);
 
         pageHolder.add(overlayExtraHolder);
 
