@@ -13,12 +13,16 @@
 package com.propertyvista.crm.client.visor.scheduler;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -41,14 +45,20 @@ import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.domain.communication.BroadcastTemplateSchedules;
 import com.propertyvista.domain.communication.Schedule;
+import com.propertyvista.domain.communication.Schedule.Frequency;
 
 public class SchedulerVisorView extends AbstractVisorPaneView {
     private static final I18n i18n = I18n.get(SchedulerVisorView.class);
 
     private final SchedulerForm form;
+
+    private enum WeekdayNames {
+        Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+    }
 
     public SchedulerVisorView(SchedulerVisorController controller) {
         super(controller);
@@ -115,7 +125,7 @@ public class SchedulerVisorView extends AbstractVisorPaneView {
                 final CFolderItem<Schedule> item = super.createItem(first);
                 item.addAction(ActionType.Cust1, i18n.tr("Edit Schedule"), CrmImages.INSTANCE.editButton(), new Command() {
 
-                    @SuppressWarnings("rawtypes")
+                    @SuppressWarnings({ "rawtypes" })
                     @Override
                     public void execute() {
                         item.setViewable(false);
@@ -125,6 +135,41 @@ public class SchedulerVisorView extends AbstractVisorPaneView {
                 });
 
                 return item;
+            }
+
+            @Override
+            public VistaBoxFolderItemDecorator<Schedule> createItemDecorator() {
+                VistaBoxFolderItemDecorator<Schedule> decor = super.createItemDecorator();
+                decor.setCaptionFormatter(new IFormatter<Schedule, SafeHtml>() {
+                    @Override
+                    public SafeHtml format(final Schedule value) {
+                        StringBuilder stringBuilder = new StringBuilder();
+
+                        final Frequency frequency = value.frequency().getValue();
+                        if (frequency != null) {
+
+                            stringBuilder.append(frequency.toString());
+
+                            if (frequency.equals(Frequency.Monthly) && value.onDate().getValue() != null) {
+                                stringBuilder.append(" on every " + value.onDate().getValue().getDate());
+                            } else if (frequency.equals(Frequency.Weekly) && value.onDate().getValue() != null) {
+                                stringBuilder.append(" on every " + WeekdayNames.values()[value.onDate().getValue().getDay()]);
+                            }
+                            if (value.startDate().getValue() != null) {
+                                stringBuilder.append(" starting from " + value.startDate().getValue().toString());
+                            }
+                            if (value.endDate().getValue() != null) {
+                                stringBuilder.append(" to " + value.endDate().getValue().toString());
+                            }
+                        }
+                        final SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                        return builder.appendHtmlConstant(SimpleMessageFormat.format("<div>{0}</div>", stringBuilder.toString())).toSafeHtml();
+                    }
+
+                });
+
+                decor.setExpended(false);
+                return decor;
             }
 
             @Override
@@ -158,9 +203,10 @@ public class SchedulerVisorView extends AbstractVisorPaneView {
                 @Override
                 protected IsWidget createContent() {
                     FormPanel content = new FormPanel(this);
-                    content.append(Location.Dual, proto().caption()).decorate();
                     content.append(Location.Left, proto().frequency()).decorate();
-                    content.append(Location.Right, proto().startDate()).decorate().componentWidth(120);
+                    content.append(Location.Right, proto().onDate()).decorate().componentWidth(120);
+                    content.append(Location.Left, proto().startDate()).decorate().componentWidth(120);
+                    content.append(Location.Right, proto().endDate()).decorate().componentWidth(120);
                     content.append(Location.Dual, createLowerToolbar());
                     return content;
                 }
@@ -244,6 +290,7 @@ public class SchedulerVisorView extends AbstractVisorPaneView {
                     setButtonsVisible(!isViewable);
                     setViewable(isViewable);
                 }
+
             }
         }
     }
