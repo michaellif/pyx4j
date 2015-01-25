@@ -99,11 +99,6 @@ public class WebSiteLayoutPanel extends ResponsiveLayoutPanel {
         contentHolder = new ContentHolder(this);
         contentHolder.ensureDebugId(getClass().getSimpleName() + ".contentHolder");
 
-        // Fix for MCO footer position in IE8
-        if (!BrowserType.isIE8()) {
-            contentHolder.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
-        }
-
         centerPanel = new CenterPanel(contentHolder);
 
         pageScroll.addScrollHandler(new ScrollHandler() {

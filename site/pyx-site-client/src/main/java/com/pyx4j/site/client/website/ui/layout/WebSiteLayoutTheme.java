@@ -94,6 +94,7 @@ public class WebSiteLayoutTheme extends ResponsiveLayoutTheme {
 
         style = new Style(".", StyleName.WebSiteLayoutContentHolder);
         style.addProperty("min-height", "500px");
+        style.addProperty("padding", "40px 0");
         addStyle(style);
 
     }
