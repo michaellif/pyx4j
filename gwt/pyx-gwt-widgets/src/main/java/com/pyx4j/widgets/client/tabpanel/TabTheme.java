@@ -86,7 +86,7 @@ public class TabTheme extends Theme {
         style.addProperty("color", ThemeColor.foreground, 1);
         addStyle(style);
 
-        style = new Style(StyleName.TabBarItem, StyleDependent.hover);
+        style = new Style(".", StyleName.TabBarItem, "-", StyleDependent.hover);
         style.addProperty("background", ThemeColor.foreground, 0.05);
         addStyle(style);
 
@@ -140,7 +140,7 @@ public class TabTheme extends Theme {
         style.addProperty("cursor", "default");
         addStyle(style);
 
-        style = new Style((IStyleName) StyleName.TabBarItemLabel);
+        style = new Style(".", StyleName.TabBarItemLabel);
         style.addProperty("margin", "3px");
         addStyle(style);
 

@@ -26,33 +26,20 @@ import com.pyx4j.commons.css.GradientProperty.GradientDirection;
 
 public class Style {
 
+    private AtRule atRule;
+
     private String selector;
 
     private Selector selectorNew;
 
     private final List<Property> properties = new ArrayList<Property>();
 
-    public Style(IStyleName styleName) {
-        this.selectorNew = new Selector.Builder(styleName).build();
-    }
-
-    public Style(IStyleName styleName, IStyleDependent dependent) {
-        this.selectorNew = new Selector.Builder(styleName).dependent(dependent).build();
-    }
-
-    public Style(String discriminator, IStyleName styleName, IStyleDependent dependent) {
-        this.selectorNew = new Selector.Builder(styleName).discriminator(discriminator).dependent(dependent).build();
-    }
-
-    public Style(Selector selector) {
-        this.selectorNew = selector;
-    }
-
-    public Style(String selector) {
-        this.selectorNew = new Selector(selector);
-    }
-
     public Style(Object... selector) {
+        this(null, selector);
+    }
+
+    public Style(AtRule atRule, Object... selector) {
+        this.atRule = atRule;
         StringBuilder builder = new StringBuilder();
         for (Object object : selector) {
             builder.append(object);
@@ -107,8 +94,8 @@ public class Style {
     public String getCss(Theme theme, Palette palette) {
         StringBuilder builder = new StringBuilder();
 
-        if (theme.getDiscriminator() != null) {
-            builder.append(theme.getDiscriminator()).append(" ");
+        if (atRule != null) {
+            builder.append("@").append(atRule.getKeyword()).append(" ").append(atRule.getDirective()).append(" {\n");
         }
 
         if (selectorNew != null) {
@@ -120,6 +107,11 @@ public class Style {
             builder.append("  ").append(property.toString(theme, palette)).append("\n");
         }
         builder.append("}\n");
+
+        if (atRule != null) {
+            builder.append("}\n");
+        }
+
         return builder.toString();
     }
 

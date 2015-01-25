@@ -26,8 +26,6 @@ import java.util.List;
 
 public abstract class Theme {
 
-    private final ThemeDescriminator discriminator;
-
     private final List<String> atRules;
 
     private final List<Style> styles;
@@ -35,12 +33,6 @@ public abstract class Theme {
     private final HashMap<ThemeId, Theme> mixinThemes;
 
     public Theme() {
-        this(null);
-    }
-
-    public Theme(ThemeDescriminator discriminator) {
-        this.discriminator = discriminator;
-
         atRules = new ArrayList<String>();
         styles = new ArrayList<Style>();
         mixinThemes = new LinkedHashMap<ThemeId, Theme>();
@@ -85,10 +77,6 @@ public abstract class Theme {
             return this.getClass().equals(((Theme) obj).getClass());
         }
         return false;
-    }
-
-    public ThemeDescriminator getDiscriminator() {
-        return discriminator;
     }
 
     public String getCss(Palette palette) {
