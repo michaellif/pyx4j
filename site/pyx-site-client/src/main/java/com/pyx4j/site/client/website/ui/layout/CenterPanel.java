@@ -43,7 +43,11 @@ public class CenterPanel extends FlowPanel {
         backgroundPanel.setStyleName(WebSiteLayoutTheme.StyleName.WebSiteLayoutContentBackground.name());
         add(backgroundPanel);
 
-        add(contentPanel);
+        FlowPanel containerPanel = new FlowPanel();
+        containerPanel.ensureDebugId(getClass().getSimpleName() + ".containerPanel");
+        add(containerPanel);
+
+        containerPanel.add(contentPanel);
     }
 
 }
