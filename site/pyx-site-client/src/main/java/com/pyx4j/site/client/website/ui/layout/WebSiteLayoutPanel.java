@@ -20,6 +20,7 @@
 package com.pyx4j.site.client.website.ui.layout;
 
 import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ScrollEvent;
@@ -31,7 +32,6 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
-import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
@@ -99,7 +99,13 @@ public class WebSiteLayoutPanel extends ResponsiveLayoutPanel {
         contentHolder = new ContentHolder(this);
         contentHolder.ensureDebugId(getClass().getSimpleName() + ".contentHolder");
 
-        centerPanel = new CenterPanel(contentHolder);
+        FlowPanel contentPanel = new FlowPanel();
+        contentPanel.ensureDebugId(getClass().getSimpleName() + ".contentPanel");
+        contentPanel.getElement().getStyle().setPosition(Position.RELATIVE);
+
+        contentPanel.add(contentHolder);
+
+        centerPanel = new CenterPanel(contentPanel);
 
         pageScroll.addScrollHandler(new ScrollHandler() {
             @Override
