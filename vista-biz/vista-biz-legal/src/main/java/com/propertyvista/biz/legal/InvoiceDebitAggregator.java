@@ -32,7 +32,7 @@ import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
-import com.propertyvista.domain.legal.n4.pdf.N4RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfRentOwingForPeriod;
 
 public class InvoiceDebitAggregator {
 
@@ -50,11 +50,11 @@ public class InvoiceDebitAggregator {
 
     }
 
-    public List<N4RentOwingForPeriod> debitsForPeriod(Map<BillingCycle, List<InvoiceDebit>> agregatedDebits) {
-        List<N4RentOwingForPeriod> debitsForPeriod = new LinkedList<N4RentOwingForPeriod>();
+    public List<N4PdfRentOwingForPeriod> debitsForPeriod(Map<BillingCycle, List<InvoiceDebit>> agregatedDebits) {
+        List<N4PdfRentOwingForPeriod> debitsForPeriod = new LinkedList<N4PdfRentOwingForPeriod>();
 
         for (Map.Entry<BillingCycle, List<InvoiceDebit>> billingCycleDebits : agregatedDebits.entrySet()) {
-            N4RentOwingForPeriod rentOwingForPeriod = EntityFactory.create(N4RentOwingForPeriod.class);
+            N4PdfRentOwingForPeriod rentOwingForPeriod = EntityFactory.create(N4PdfRentOwingForPeriod.class);
             rentOwingForPeriod.fromDate().setValue(billingCycleDebits.getKey().billingCycleStartDate().getValue());
             rentOwingForPeriod.toDate().setValue(billingCycleDebits.getKey().billingCycleEndDate().getValue());
 
@@ -71,21 +71,21 @@ public class InvoiceDebitAggregator {
 
             debitsForPeriod.add(rentOwingForPeriod);
         }
-        Collections.sort(debitsForPeriod, new Comparator<N4RentOwingForPeriod>() {
+        Collections.sort(debitsForPeriod, new Comparator<N4PdfRentOwingForPeriod>() {
             @Override
-            public int compare(N4RentOwingForPeriod o1, N4RentOwingForPeriod o2) {
+            public int compare(N4PdfRentOwingForPeriod o1, N4PdfRentOwingForPeriod o2) {
                 return o1.fromDate().getValue().compareTo(o2.fromDate().getValue());
             }
         });
         if (debitsForPeriod.size() > 3) {
-            ListIterator<N4RentOwingForPeriod> li = debitsForPeriod.listIterator();
-            N4RentOwingForPeriod rentOwingForPeriodAccumulator = li.next();
+            ListIterator<N4PdfRentOwingForPeriod> li = debitsForPeriod.listIterator();
+            N4PdfRentOwingForPeriod rentOwingForPeriodAccumulator = li.next();
 
             int aggregatedCount = debitsForPeriod.size() - 3;
             int currentAggregated = 0;
 
             while (currentAggregated != aggregatedCount) {
-                N4RentOwingForPeriod rentOwingForPeriod = li.next();
+                N4PdfRentOwingForPeriod rentOwingForPeriod = li.next();
                 li.remove();
                 rentOwingForPeriodAccumulator.rentCharged().setValue(
                         rentOwingForPeriodAccumulator.rentCharged().getValue().add(rentOwingForPeriod.rentCharged().getValue()));

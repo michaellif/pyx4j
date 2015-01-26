@@ -23,12 +23,16 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.legal.n4.N4LeaseArrears;
+import com.propertyvista.domain.legal.n4.N4LeaseData;
 
 @DiscriminatorValue("N4")
 public interface EvictionStatusN4 extends EvictionStatus {
 
     @Detached
     N4LeaseArrears leaseArrears();
+
+    @Detached
+    N4LeaseData n4Data();
 
     @NotNull
     IPrimitive<LogicalDate> terminationDate();

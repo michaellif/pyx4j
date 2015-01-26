@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 30, 2014
+ * Created on Jan 26, 2015
  * @author stanp
  */
 package com.propertyvista.domain.legal.n4;
@@ -15,30 +15,18 @@ package com.propertyvista.domain.legal.n4;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.OrderBy;
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.core.IList;
-import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.Lease;
 
-public interface N4Batch extends N4Data {
+public interface N4LeaseData extends N4Data {
 
+    @Owner
     @JoinColumn
     @Indexed
     @ReadOnly
     @Detached
-    Building building();
+    Lease lease();
 
-    @NotNull
-    IPrimitive<String> name();
-
-    IPrimitive<Boolean> isReadyForService();
-
-    @Owned
-    @Detached
-    @OrderBy(PrimaryKey.class)
-    IList<N4BatchItem> items();
 }

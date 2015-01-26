@@ -20,7 +20,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 @Transient
-public interface N4RentOwingForPeriod extends IEntity {
+public interface N4PdfRentOwingForPeriod extends IEntity {
 
     IPrimitive<LogicalDate> fromDate();
 

@@ -55,15 +55,15 @@ import com.propertyvista.domain.legal.n4.N4Batch;
 import com.propertyvista.domain.legal.n4.N4BatchItem;
 import com.propertyvista.domain.legal.n4.N4DeliveryMethod;
 import com.propertyvista.domain.legal.n4.N4UnpaidCharge;
-import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
-import com.propertyvista.domain.legal.n4.pdf.N4LeaseData;
-import com.propertyvista.domain.legal.n4.pdf.N4RentOwingForPeriod;
-import com.propertyvista.domain.legal.n4.pdf.N4Signature;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSDocumentType.DocumentType;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSFormFieldsData;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSServiceMethod.ServiceMethod;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSSignature;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSToPersonInfo.ToType;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfFormData;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfLeaseData;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfRentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfSignature;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSPdfDocumentType.DocumentType;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSPdfFormData;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSPdfServiceMethod.ServiceMethod;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSPdfSignature;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSPdfToPersonInfo.ToType;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -79,10 +79,10 @@ public class N4Manager {
     private static final String N4_CS_FORM_FILE = "n4cs.pdf";
 
     void issueN4ForLease(N4BatchItem item, N4Policy policy, LogicalDate deliveryDate, Date generationDate) throws FormFillError {
-        N4LeaseData n4LeaseData = prepareN4LeaseData(item, deliveryDate, policy);
+        N4PdfLeaseData n4LeaseData = prepareN4LeaseData(item, deliveryDate, policy);
 
-        N4FormFieldsData n4FormData = prepareFormData(n4LeaseData, item.batch());
-        N4CSFormFieldsData n4csFormData = prepareN4CSData(n4LeaseData, item.batch());
+        N4PdfFormData n4FormData = prepareFormData(n4LeaseData, item.batch());
+        N4CSPdfFormData n4csFormData = prepareN4CSData(n4LeaseData, item.batch());
 
         // generate N4
         EvictionDocumentBlob blob = EntityFactory.create(EvictionDocumentBlob.class);
@@ -137,9 +137,9 @@ public class N4Manager {
     }
 
     // ------ internals -----------
-    private N4LeaseData prepareN4LeaseData(N4BatchItem item, LogicalDate deliveryDate, N4Policy policy) {
+    private N4PdfLeaseData prepareN4LeaseData(N4BatchItem item, LogicalDate deliveryDate, N4Policy policy) {
         Persistence.ensureRetrieve(item.lease(), AttachLevel.Attached);
-        N4LeaseData n4LeaseData = EntityFactory.create(N4LeaseData.class);
+        N4PdfLeaseData n4LeaseData = EntityFactory.create(N4PdfLeaseData.class);
 
         for (LeaseTermTenant termTenantIdStub : item.lease().currentTerm().version().tenants()) {
             LeaseTermTenant termTenant = Persistence.service().retrieve(LeaseTermTenant.class, termTenantIdStub.getPrimaryKey());
@@ -153,7 +153,7 @@ public class N4Manager {
         n4LeaseData.rentOwingBreakdown().addAll(aggregateCharges(item.leaseArrears().unpaidCharges()));
 
         BigDecimal totalRentOwning = BigDecimal.ZERO;
-        for (N4RentOwingForPeriod rentOwingForPeriod : n4LeaseData.rentOwingBreakdown()) {
+        for (N4PdfRentOwingForPeriod rentOwingForPeriod : n4LeaseData.rentOwingBreakdown()) {
             totalRentOwning = totalRentOwning.add(rentOwingForPeriod.rentOwing().getValue());
         }
         n4LeaseData.totalRentOwning().setValue(totalRentOwning);
@@ -165,8 +165,8 @@ public class N4Manager {
         return n4LeaseData;
     }
 
-    private N4FormFieldsData prepareFormData(N4LeaseData leaseData, N4Batch batchData) throws FormFillError {
-        N4FormFieldsData fieldsData = EntityFactory.create(N4FormFieldsData.class);
+    private N4PdfFormData prepareFormData(N4PdfLeaseData leaseData, N4Batch batchData) throws FormFillError {
+        N4PdfFormData fieldsData = EntityFactory.create(N4PdfFormData.class);
         fieldsData.to().setValue(formatTo(leaseData.leaseTenants(), leaseData.rentalUnitAddress()));
         fieldsData.from().setValue(formatFrom(leaseData.landlordName().getValue(), leaseData.landlordAddress()));
 
@@ -184,7 +184,7 @@ public class N4Manager {
         fieldsData.owedRent().rentOwingBreakdown().addAll(leaseData.rentOwingBreakdown());
         fieldsData.owedRent().totalRentOwing().setValue(leaseData.totalRentOwning().getValue());
 
-        fieldsData.signature().signedBy().setValue(batchData.isLandlord().getValue(false) ? N4Signature.SignedBy.Landlord : N4Signature.SignedBy.Agent);
+        fieldsData.signature().signedBy().setValue(batchData.isLandlord().getValue(false) ? N4PdfSignature.SignedBy.Landlord : N4PdfSignature.SignedBy.Agent);
         fieldsData.signature().signature().setValue(retrieveSignature(batchData.signingAgent()));
         fieldsData.signature().signatureDate().setValue(batchData.signatureDate().getValue());
 
@@ -206,7 +206,7 @@ public class N4Manager {
         return fieldsData;
     }
 
-    private byte[] generateN4Letter(N4FormFieldsData formData) {
+    private byte[] generateN4Letter(N4PdfFormData formData) {
         byte[] filledForm = null;
         try {
             byte[] formTemplate = IOUtils.toByteArray(N4Manager.class.getResourceAsStream(N4_FORM_FILE));
@@ -217,9 +217,9 @@ public class N4Manager {
         return filledForm;
     }
 
-    private N4CSFormFieldsData prepareN4CSData(N4LeaseData leaseData, N4Batch batchData) {
+    private N4CSPdfFormData prepareN4CSData(N4PdfLeaseData leaseData, N4Batch batchData) {
 
-        N4CSFormFieldsData n4cs = EntityFactory.create(N4CSFormFieldsData.class);
+        N4CSPdfFormData n4cs = EntityFactory.create(N4CSPdfFormData.class);
         n4cs.reporter().setValue(
                 batchData.servicingAgent().name().firstName().getStringView() + " " + batchData.servicingAgent().name().lastName().getStringView());
         n4cs.document().termination().setValue("N4");
@@ -232,7 +232,7 @@ public class N4Manager {
 
         n4cs.issueDate().setValue(SystemDateManager.getLogicalDate());
 
-        n4cs.signature().signedBy().setValue(N4CSSignature.SignedBy.RA);
+        n4cs.signature().signedBy().setValue(N4CSPdfSignature.SignedBy.RA);
         n4cs.signature().signature().setValue(retrieveSignature(batchData.servicingAgent()));
         n4cs.signature().firstname().setValue(batchData.servicingAgent().name().firstName().getStringView());
         n4cs.signature().lastname().setValue(batchData.servicingAgent().name().lastName().getStringView());
@@ -250,7 +250,7 @@ public class N4Manager {
 
     }
 
-    private byte[] generateN4CSLetter(N4CSFormFieldsData formData) {
+    private byte[] generateN4CSLetter(N4CSPdfFormData formData) {
         byte[] filledForm = null;
         try {
             byte[] formTemplate = IOUtils.toByteArray(N4Manager.class.getResourceAsStream(N4_CS_FORM_FILE));
@@ -330,14 +330,14 @@ public class N4Manager {
         return suiteNumber.replaceFirst("^[^\\d]*", ""); // remove all non starting digits, i.e. "Suite, Apt, APARTMENT, #" etc.
     }
 
-    private List<N4RentOwingForPeriod> aggregateCharges(List<N4UnpaidCharge> charges) {
-        List<N4RentOwingForPeriod> result = new ArrayList<>();
-        Map<LongRange, N4RentOwingForPeriod> owingMap = new HashMap<>();
+    private List<N4PdfRentOwingForPeriod> aggregateCharges(List<N4UnpaidCharge> charges) {
+        List<N4PdfRentOwingForPeriod> result = new ArrayList<>();
+        Map<LongRange, N4PdfRentOwingForPeriod> owingMap = new HashMap<>();
         for (N4UnpaidCharge charge : charges) {
             LongRange period = new LongRange(charge.fromDate().getValue().getTime(), charge.toDate().getValue().getTime());
-            N4RentOwingForPeriod owing = owingMap.get(period);
+            N4PdfRentOwingForPeriod owing = owingMap.get(period);
             if (owing == null) {
-                owing = EntityFactory.create(N4RentOwingForPeriod.class);
+                owing = EntityFactory.create(N4PdfRentOwingForPeriod.class);
                 owing.fromDate().set(charge.fromDate());
                 owing.toDate().set(charge.toDate());
                 owing.rentCharged().set(charge.rentCharged());
@@ -361,11 +361,11 @@ public class N4Manager {
         // we only accept the max of 3 entries in the result, so combine the all but last 2 into one
         for (int i = 0; i < keys.size(); i++) {
             LongRange key = keys.get(i);
-            N4RentOwingForPeriod item = owingMap.get(key);
+            N4PdfRentOwingForPeriod item = owingMap.get(key);
             if (i == 0 || i >= keys.size() - 2) {
                 result.add(item);
             } else {
-                N4RentOwingForPeriod base = result.get(0);
+                N4PdfRentOwingForPeriod base = result.get(0);
                 // extend period if needed and combine amounts
                 if (base.fromDate().isNull() || base.fromDate().getValue().after(item.fromDate().getValue())) {
                     base.fromDate().set(item.fromDate());

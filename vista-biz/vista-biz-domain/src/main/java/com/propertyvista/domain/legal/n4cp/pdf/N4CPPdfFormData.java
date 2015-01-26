@@ -16,10 +16,10 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfFormData;
 
 @Transient
-public interface N4CPFormFieldsData extends N4FormFieldsData {
+public interface N4CPPdfFormData extends N4PdfFormData {
     /** daily batch number */
     IPrimitive<String> dailyBatchNumber();
 
