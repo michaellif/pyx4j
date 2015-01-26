@@ -35,6 +35,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.lease.eviction.EvictionStatusEditorBase.EvictionStepSelectionHandler;
+import com.propertyvista.crm.client.ui.crud.lease.eviction.n4.N4EvictionStatusEditor;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.eviction.EvictionStatus;
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
@@ -173,7 +174,7 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
                 if (statusEditor == null && value != null && !value.evictionStep().stepType().isNull()) {
                     switch (value.evictionStep().stepType().getValue()) {
                     case N4:
-                        statusEditor = new EvictionStatusN4Editor(stepSelectionHandler, uploadable);
+                        statusEditor = new N4EvictionStatusEditor(stepSelectionHandler, uploadable);
                         break;
                     default:
                         statusEditor = new EvictionStatusEditor<EvictionStatus>(EvictionStatus.class, stepSelectionHandler, uploadable);

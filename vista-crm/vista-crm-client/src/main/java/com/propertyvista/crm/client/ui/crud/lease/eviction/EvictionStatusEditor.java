@@ -60,7 +60,7 @@ public class EvictionStatusEditor<S extends EvictionStatus> extends EvictionStat
     protected FormPanel createContent() {
         FormPanel formPanel = super.createContent();
         // add status records at the end
-        formPanel.h1(i18n.tr("Records"));
+        formPanel.h1(i18n.tr("Status Records"));
         formPanel.append(Location.Dual, proto().statusRecords(), new StatusRecordFolder());
 
         return formPanel;

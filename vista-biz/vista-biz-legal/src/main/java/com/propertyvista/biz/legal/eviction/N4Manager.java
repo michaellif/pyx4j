@@ -92,6 +92,7 @@ public class N4Manager {
 
         EvictionDocument n4Letter = EntityFactory.create(EvictionDocument.class);
         n4Letter.title().setValue(i18n.tr("Lease Termination Notice - N4"));
+        n4Letter.note().setValue(i18n.tr("Generated from N4 Batch: {0}", item.batch().name().getValue()));
         n4Letter.lease().set(item.lease());
         n4Letter.file().blobKey().setValue(blob.getPrimaryKey());
         n4Letter.file().fileSize().setValue(blob.data().getValue().length);
@@ -111,6 +112,7 @@ public class N4Manager {
 
         EvictionDocument n4csLetter = EntityFactory.create(EvictionDocument.class);
         n4csLetter.title().setValue(i18n.tr("Certificate of Service"));
+        n4csLetter.note().setValue(i18n.tr("Generated from N4 Batch: {0}", item.batch().name().getValue()));
         n4csLetter.lease().set(item.lease());
         n4csLetter.file().blobKey().setValue(csBlob.getPrimaryKey());
         n4csLetter.file().fileSize().setValue(csBlob.data().getValue().length);

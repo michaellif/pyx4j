@@ -32,6 +32,7 @@ import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.eviction.EvictionCase;
 import com.propertyvista.domain.eviction.EvictionStatus;
+import com.propertyvista.domain.eviction.EvictionStatusN4;
 import com.propertyvista.domain.eviction.EvictionStatusRecord;
 import com.propertyvista.domain.policy.policies.EvictionFlowPolicy;
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
@@ -104,6 +105,11 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
             for (EvictionStatusRecord record : status.statusRecords()) {
                 Persistence.ensureRetrieve(record.addedBy(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(record.attachments(), AttachLevel.Attached);
+            }
+            // N4
+            if (status instanceof EvictionStatusN4) {
+                EvictionStatusN4 statusN4 = (EvictionStatusN4) status;
+                Persistence.ensureRetrieve(statusN4.leaseArrears().unpaidCharges(), AttachLevel.Attached);
             }
         }
         Persistence.ensureRetrieve(to.lease(), AttachLevel.ToStringMembers);
