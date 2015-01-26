@@ -42,6 +42,11 @@ public class VistaServerSideConfiguration44 extends VistaServerSideConfiguration
     }
 
     @Override
+    public boolean openIdRequired() {
+        return getConfigProperties().getBooleanValue("openIdrequired", true);
+    }
+
+    @Override
     public int interfaceSSHDPort() {
         return 8824;
     }
