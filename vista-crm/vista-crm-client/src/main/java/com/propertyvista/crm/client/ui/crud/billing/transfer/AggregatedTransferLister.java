@@ -19,8 +19,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.widgets.client.Button;
@@ -35,17 +35,18 @@ public class AggregatedTransferLister extends SiteDataTablePanel<AggregatedTrans
     public AggregatedTransferLister() {
         super(AggregatedTransfer.class, GWT.<AggregatedTransferCrudService> create(AggregatedTransferCrudService.class), false);
 
-        setColumnDescriptors( //
+        setColumnDescriptors(
+                //
                 new ColumnDescriptor.Builder(proto().paymentDate()).build(), //
                 new ColumnDescriptor.Builder(proto().status()).build(), //
 
-                new ColumnDescriptor.Builder(proto().merchantAccount().accountNumber()).searchableOnly().columnTitle(i18n.tr("Merchant Account Number"))
-                        .build(), //
+                new ColumnDescriptor.Builder(proto().merchantAccount().accountNumber()).searchableOnly().filterAlwaysShown(true)
+                        .columnTitle(i18n.tr("Merchant Account Number")).build(), //
                 new ColumnDescriptor.Builder(proto().merchantAccount()).searchable(false).build(), //
                 new ColumnDescriptor.Builder(proto().fundsTransferType()).build(), //
 
-                new ColumnDescriptor.Builder(proto().netAmount()).build(), //
-                new ColumnDescriptor.Builder(proto().grossPaymentAmount()).build(), //
+                new ColumnDescriptor.Builder(proto().netAmount()).filterAlwaysShown(true).build(), //
+                new ColumnDescriptor.Builder(proto().grossPaymentAmount()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().grossPaymentFee()).build(), //
                 new ColumnDescriptor.Builder(proto().grossPaymentCount()).build(), //
 

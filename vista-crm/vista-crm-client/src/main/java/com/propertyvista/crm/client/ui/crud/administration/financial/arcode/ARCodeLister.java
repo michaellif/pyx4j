@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -23,8 +23,8 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
@@ -41,8 +41,8 @@ public class ARCodeLister extends SiteDataTablePanel<ARCode> {
 
         List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>(Arrays.asList(
         //@formatter:off
-            new ColumnDescriptor.Builder(proto().name()).build(),
-            new ColumnDescriptor.Builder(proto().type()).build(),
+            new ColumnDescriptor.Builder(proto().name()).filterAlwaysShown(true).build(),
+            new ColumnDescriptor.Builder(proto().type()).filterAlwaysShown(true).build(),
             new ColumnDescriptor.Builder(proto().type()).searchable(false).sortable(false).columnTitle(i18n.tr("Debit/Credit")).formatter(new IFormatter<IEntity, SafeHtml>() {
                 @Override
                 public SafeHtml format(IEntity value) {

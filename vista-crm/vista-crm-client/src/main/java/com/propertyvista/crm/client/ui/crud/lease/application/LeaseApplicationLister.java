@@ -35,30 +35,39 @@ public class LeaseApplicationLister extends SiteDataTablePanel<LeaseApplicationD
         super(LeaseApplicationDTO.class, GWT.<LeaseApplicationViewerCrudService> create(LeaseApplicationViewerCrudService.class), true);
 
         setColumnDescriptors(
-                //
-                new Builder(proto().leaseApplication().applicationId()).columnTitle(i18n.tr("Id")).build(), new Builder(proto().type()).build(), new Builder(
-                        proto().unit().building().propertyCode()).build(), new Builder(proto().unit()).build(),
-                new Builder(proto().leaseApplication().status()).filterAlwaysShown(true).build(),
+        //
+                new Builder(proto().leaseApplication().applicationId()).columnTitle(i18n.tr("Id")).build(),//
+                new Builder(proto().type()).build(),//
+                new Builder(proto().unit().building().propertyCode()).filterAlwaysShown(true).build(),//
+                new Builder(proto().unit()).filterAlwaysShown(true).build(),//
+                new Builder(proto().leaseApplication().status()).filterAlwaysShown(true).build(),//
 
-                new Builder(proto().currentTerm().termFrom()).build(), new Builder(proto().currentTerm().termTo()).build(), new Builder(proto()
-                        .expectedMoveIn()).build(), new Builder(proto().expectedMoveOut(), false).build(), new Builder(proto().actualMoveIn(), false).build(),
-                new Builder(proto().actualMoveOut(), false).build(), new Builder(proto().moveOutSubmissionDate(), false).build(), new Builder(proto()
-                        .creationDate(), false).build(), new Builder(proto().onlineApplication()).sortable(false).searchable(false).build(),
+                new Builder(proto().currentTerm().termFrom()).build(),//
+                new Builder(proto().currentTerm().termTo()).build(),//
+                new Builder(proto().expectedMoveIn()).build(),//
+                new Builder(proto().expectedMoveOut(), false).build(),//
+                new Builder(proto().actualMoveIn(), false).build(),//
+                new Builder(proto().actualMoveOut(), false).build(),//
+                new Builder(proto().moveOutSubmissionDate(), false).build(),//
+                new Builder(proto().creationDate(), false).build(),//
+                new Builder(proto().onlineApplication()).sortable(false).searchable(false).build(),//
 
-                new Builder(proto()._applicant().customer().person().name()).columnTitle(i18n.tr("Primary Tenant Name")).searchable(false).build(),
-                new Builder(proto()._applicant().customer().person().name().firstName(), false).columnTitle(i18n.tr("Primary Tenant First Name")).build(),
-                new Builder(proto()._applicant().customer().person().name().lastName(), false).columnTitle(i18n.tr("Primary Tenant Last Name")).build(),
+                new Builder(proto()._applicant().customer().person().name()).columnTitle(i18n.tr("Primary Tenant Name")).searchable(false).build(),//
+                new Builder(proto()._applicant().customer().person().name().firstName(), false).columnTitle(i18n.tr("Primary Tenant First Name"))
+                        .filterAlwaysShown(true).build(),//
+                new Builder(proto()._applicant().customer().person().name().lastName(), false).columnTitle(i18n.tr("Primary Tenant Last Name"))
+                        .filterAlwaysShown(true).build(),//
 
-                new Builder(proto().leaseParticipants().$().customer().customerId(), false).searchableOnly().build(),
+                new Builder(proto().leaseParticipants().$().customer().customerId(), false).searchableOnly().build(),//
 
-                new Builder(proto().numberOfOccupants(), false).sortable(false).searchable(false).columnTitle(i18n.tr("Occupants")).build(), new Builder(
-                        proto().numberOfApplicants(), true).sortable(false).searchable(false).columnTitle(i18n.tr("Applicants")).build(), new Builder(proto()
-                        .numberOfDepentands(), true).sortable(false).searchable(false).columnTitle(i18n.tr("Dependents")).build(), new Builder(proto()
-                        .numberOfGuarantors(), true).sortable(false).searchable(false).columnTitle(i18n.tr("Guarantors")).build(),
+                new Builder(proto().numberOfOccupants(), false).sortable(false).searchable(false).columnTitle(i18n.tr("Occupants")).build(),//
+                new Builder(proto().numberOfApplicants(), true).sortable(false).searchable(false).columnTitle(i18n.tr("Applicants")).build(),//
+                new Builder(proto().numberOfDepentands(), true).sortable(false).searchable(false).columnTitle(i18n.tr("Dependents")).build(),//
+                new Builder(proto().numberOfGuarantors(), true).sortable(false).searchable(false).columnTitle(i18n.tr("Guarantors")).build(),//
 
                 //TODO make this work
-                //new Builder(proto().currentTerm().version().tenants().$().leaseParticipant().customer().person().name().firstName(), false).build(),
-                //new Builder(proto().currentTerm().version().tenants().$().leaseParticipant().customer().person().name().lastName(), false).build(),
+                //new Builder(proto().currentTerm().version().tenants().$().leaseParticipant().customer().person().name().firstName(), false).build(),//
+                //new Builder(proto().currentTerm().version().tenants().$().leaseParticipant().customer().person().name().lastName(), false).build(),//
                 new Builder(proto().currentTerm().version().tenants()).searchable(false).build());
 
         setDataTableModel(new DataTableModel<LeaseApplicationDTO>());

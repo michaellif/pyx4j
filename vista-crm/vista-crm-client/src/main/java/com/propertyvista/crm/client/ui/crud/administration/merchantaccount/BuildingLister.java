@@ -19,8 +19,8 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
@@ -36,18 +36,18 @@ public class BuildingLister extends SiteDataTablePanel<Building> {
         super(Building.class, GWT.<AbstractListCrudService<Building>> create(SelectBuildingListService.class), false);
 
         setColumnDescriptors( //
-                new ColumnDescriptor.Builder(proto().propertyCode(), true).build(), //
+                new ColumnDescriptor.Builder(proto().propertyCode(), true).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().complex(), false).build(), //
                 new ColumnDescriptor.Builder(proto().externalId(), false).build(), //
                 new ColumnDescriptor.Builder(proto().integrationSystemId(), VistaFeatures.instance().yardiIntegration()).build(), //
-                new ColumnDescriptor.Builder(proto().info().name(), true).build(), //
+                new ColumnDescriptor.Builder(proto().info().name(), true).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().info().type(), true).build(), //
                 new ColumnDescriptor.Builder(proto().info().shape(), false).build(), //
                 new ColumnDescriptor.Builder(proto().info().address().streetNumber(), false).build(), //
                 new ColumnDescriptor.Builder(proto().info().address().streetName(), false).build(), //
-                new ColumnDescriptor.Builder(proto().info().address().city(), true).build(), //
-                new ColumnDescriptor.Builder(proto().info().address().province(), true).build(), //
-                new ColumnDescriptor.Builder(proto().info().address().country(), false).build(), //
+                new ColumnDescriptor.Builder(proto().info().address().city(), true).filterAlwaysShown(true).build(), //
+                new ColumnDescriptor.Builder(proto().info().address().province(), true).filterAlwaysShown(true).build(), //
+                new ColumnDescriptor.Builder(proto().info().address().country(), false).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().marketing().visibility(), false).build(), //
                 new ColumnDescriptor.Builder(proto().info().totalStoreys(), false).build(), //
                 new ColumnDescriptor.Builder(proto().info().residentialStoreys(), false).build(), //

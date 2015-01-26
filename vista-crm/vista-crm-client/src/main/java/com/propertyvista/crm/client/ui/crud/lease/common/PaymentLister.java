@@ -19,8 +19,8 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.services.billing.PaymentRecordCrudService;
@@ -41,18 +41,18 @@ public class PaymentLister extends SiteDataTablePanel<PaymentRecordDTO> {
         cd.add(new ColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().customerId()).build());
         cd.add(new ColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().person().name()).searchable(false).build());
         cd.add(new ColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().person().name().firstName()).searchableOnly()
-                .build());
+                .filterAlwaysShown(true).build());
         cd.add(new ColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().person().name().lastName()).searchableOnly()
-                .build());
+                .filterAlwaysShown(true).build());
         cd.add(new ColumnDescriptor.Builder(proto().leaseTermParticipant().role()).build());
-        cd.add(new ColumnDescriptor.Builder(proto().amount()).build());
+        cd.add(new ColumnDescriptor.Builder(proto().amount()).filterAlwaysShown(true).build());
         cd.add(new ColumnDescriptor.Builder(proto().convenienceFee(), false).build());
         cd.add(new ColumnDescriptor.Builder(proto().paymentMethod().type()).build());
         cd.add(new ColumnDescriptor.Builder(proto().created()).build());
         cd.add(new ColumnDescriptor.Builder(proto().receivedDate()).build());
         cd.add(new ColumnDescriptor.Builder(proto().lastStatusChangeDate()).build());
         cd.add(new ColumnDescriptor.Builder(proto().targetDate()).build());
-        cd.add(new ColumnDescriptor.Builder(proto().paymentStatus()).build());
+        cd.add(new ColumnDescriptor.Builder(proto().paymentStatus()).filterAlwaysShown(true).build());
         cd.add(new ColumnDescriptor.Builder(proto().finalizedDate(), false).build());
         cd.add(new ColumnDescriptor.Builder(proto().rejectedWithNSF()).visible(false).build());
         cd.add(new ColumnDescriptor.Builder(proto().transactionErrorMessage()).visible(false).build());

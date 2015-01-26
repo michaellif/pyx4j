@@ -38,7 +38,7 @@ public class MoneyInBatchListerViewImpl extends AbstractListerView<MoneyInBatchD
             super(MoneyInBatchDTO.class, GWT.<MoneyInBatchCrudService> create(MoneyInBatchCrudService.class), false, false);
 
             setColumnDescriptors( //
-                    new ColumnDescriptor.Builder(proto().building()).build(), //
+                    new ColumnDescriptor.Builder(proto().building()).filterAlwaysShown(true).build(), //
                     new ColumnDescriptor.Builder(proto().depositDate()).build(), //
                     new ColumnDescriptor.Builder(proto().bankAccountName()).build(), //
                     new ColumnDescriptor.Builder(proto().bankId()).visible(false).build(), //
@@ -47,7 +47,7 @@ public class MoneyInBatchListerViewImpl extends AbstractListerView<MoneyInBatchD
                     new ColumnDescriptor.Builder(proto().depositSlipNumber()).displayOnly().build(), //
                     new ColumnDescriptor.Builder(proto().totalReceivedAmount()).displayOnly().build(), //
                     new ColumnDescriptor.Builder(proto().numberOfReceipts()).displayOnly().build(), //
-                    new ColumnDescriptor.Builder(proto().postingStatus()).build());
+                    new ColumnDescriptor.Builder(proto().postingStatus()).filterAlwaysShown(true).build());
 
             setDataTableModel(new DataTableModel<MoneyInBatchDTO>());
         }

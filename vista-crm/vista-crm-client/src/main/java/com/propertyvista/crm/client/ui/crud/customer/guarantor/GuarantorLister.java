@@ -14,8 +14,8 @@ package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor.Builder;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantLister;
@@ -33,15 +33,15 @@ public class GuarantorLister extends LeaseParticipantLister<GuarantorDTO> {
                 new Builder(proto().participantId()).build(), //
 
                 new Builder(proto().customer().person().name()).searchable(false).build(), //
-                new Builder(proto().customer().person().name().firstName(), false).build(), //
-                new Builder(proto().customer().person().name().lastName(), false).build(), //
+                new Builder(proto().customer().person().name().firstName(), false).filterAlwaysShown(true).build(), //
+                new Builder(proto().customer().person().name().lastName(), false).filterAlwaysShown(true).build(), //
                 new Builder(proto().customer().person().sex()).build(), //
                 new Builder(proto().customer().person().birthDate()).build(), //
 
                 new Builder(proto().customer().person().homePhone()).build(), //
                 new Builder(proto().customer().person().mobilePhone()).build(), //
                 new Builder(proto().customer().person().workPhone()).build(), //
-                new Builder(proto().customer().person().email()).build(), //
+                new Builder(proto().customer().person().email()).filterAlwaysShown(true).build(), //
 
                 new Builder(proto().lease()).searchable(false).build(), //
                 new Builder(proto().lease().leaseId()).columnTitle(i18n.tr("Lease Id")).searchableOnly().build(), //

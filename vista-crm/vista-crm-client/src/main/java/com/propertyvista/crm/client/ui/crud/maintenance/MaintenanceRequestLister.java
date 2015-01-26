@@ -25,8 +25,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
@@ -52,7 +52,7 @@ public class MaintenanceRequestLister extends SiteDataTablePanel<MaintenanceRequ
 
         return new ColumnDescriptor[] {
                 new ColumnDescriptor.Builder(proto.requestId()).build(),
-                new ColumnDescriptor.Builder(proto.building().propertyCode()).columnTitle(i18n.tr("Building")).build(),
+                new ColumnDescriptor.Builder(proto.building().propertyCode()).columnTitle(i18n.tr("Building")).filterAlwaysShown(true).build(),
                 new ColumnDescriptor.Builder(proto.building().info().address()).formatter(new IFormatter<IEntity, SafeHtml>() {
 
                     @Override
@@ -67,7 +67,7 @@ public class MaintenanceRequestLister extends SiteDataTablePanel<MaintenanceRequ
                     }
                 }).searchable(false).build(),
                 new ColumnDescriptor.Builder(proto.building().info().address().city()).searchableOnly().build(),
-                new ColumnDescriptor.Builder(proto.unit()).build(),
+                new ColumnDescriptor.Builder(proto.unit()).filterAlwaysShown(true).build(),
                 new ColumnDescriptor.Builder(proto.category()).formatter(new IFormatter<IEntity, SafeHtml>() {
 
                     @Override
@@ -98,8 +98,8 @@ public class MaintenanceRequestLister extends SiteDataTablePanel<MaintenanceRequ
                 new ColumnDescriptor.Builder(proto.status()).build(),
                 new ColumnDescriptor.Builder(proto.updated()).build(),
                 new ColumnDescriptor.Builder(proto.surveyResponse().rating()).build(),
-                new ColumnDescriptor.Builder(proto.surveyResponse().description()).visible(false)
-                        .columnTitle(proto.surveyResponse().getMeta().getCaption()).build() };
+                new ColumnDescriptor.Builder(proto.surveyResponse().description()).visible(false).columnTitle(proto.surveyResponse().getMeta().getCaption())
+                        .build() };
     }
 
     @Override

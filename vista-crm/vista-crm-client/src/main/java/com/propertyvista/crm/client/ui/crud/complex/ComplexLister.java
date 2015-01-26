@@ -19,8 +19,8 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.services.building.ComplexCrudService;
@@ -32,7 +32,7 @@ public class ComplexLister extends SiteDataTablePanel<ComplexDTO> {
         super(ComplexDTO.class, GWT.<AbstractCrudService<ComplexDTO>> create(ComplexCrudService.class), true);
 
         setColumnDescriptors( //
-                new ColumnDescriptor.Builder(proto().name()).build(), //
+                new ColumnDescriptor.Builder(proto().name()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().address().city()).sortable(false).searchable(false).build(), //
                 new ColumnDescriptor.Builder(proto().address().province()).sortable(false).searchable(false).build(), //
                 new ColumnDescriptor.Builder(proto().address().country()).sortable(false).searchable(false).build(), //

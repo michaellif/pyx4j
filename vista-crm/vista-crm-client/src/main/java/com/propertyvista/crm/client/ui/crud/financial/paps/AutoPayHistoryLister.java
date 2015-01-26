@@ -18,8 +18,8 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
@@ -41,10 +41,11 @@ public class AutoPayHistoryLister extends SiteDataTablePanel<AutoPayHistoryDTO> 
                 new ColumnDescriptor.Builder(proto().payment()).searchable(false).sortable(false).build(), //
 
                 new ColumnDescriptor.Builder(proto().tenant().lease()).searchable(false).build(), //
-                new ColumnDescriptor.Builder(proto().tenant().lease().leaseId()).searchableOnly().build(), //
+                new ColumnDescriptor.Builder(proto().tenant().lease().leaseId()).searchableOnly().filterAlwaysShown(true).build(), //
 
                 new ColumnDescriptor.Builder(proto().tenant()).searchable(false).build(), //
-                new ColumnDescriptor.Builder(proto().tenant().participantId()).columnTitle(i18n.tr("Tenant Id")).searchableOnly().build(), //
+                new ColumnDescriptor.Builder(proto().tenant().participantId()).columnTitle(i18n.tr("Tenant Id")).searchableOnly().filterAlwaysShown(true)
+                        .build(), //
 
                 new ColumnDescriptor.Builder(proto().tenant().lease().unit().building()).searchable(false).build(), //
                 new ColumnDescriptor.Builder(proto().tenant().lease().unit().building().propertyCode()).searchableOnly().build(), //

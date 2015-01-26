@@ -44,13 +44,13 @@ public class BuildingLister extends SiteDataTablePanel<BuildingDTO> {
                 new ColumnDescriptor.Builder(proto().suspended(), false).build(), //
                 new ColumnDescriptor.Builder(proto().updated(), false).build(), //
 
-                new ColumnDescriptor.Builder(proto().info().name(), true).width("150px").build(), //
+                new ColumnDescriptor.Builder(proto().info().name(), true).width("150px").filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().info().type(), true).build(), //
                 new ColumnDescriptor.Builder(proto().info().shape(), false).build(), //
                 new ColumnDescriptor.Builder(proto().info().address().streetNumber(), false).build(), //
                 new ColumnDescriptor.Builder(proto().info().address().streetName(), false).build(), //
                 new ColumnDescriptor.Builder(proto().info().address().city(), true).filterAlwaysShown(true).build(), //
-                new ColumnDescriptor.Builder(proto().info().address().province(), true).build(), //
+                new ColumnDescriptor.Builder(proto().info().address().province(), true).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().info().address().country(), false).build(), //
                 new ColumnDescriptor.Builder(proto().marketing().visibility(), false).build(), //
                 new ColumnDescriptor.Builder(proto().info().totalStoreys(), false).build(), //

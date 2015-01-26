@@ -20,8 +20,6 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -29,7 +27,6 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @DiscriminatorValue("Schedule")
-@ToStringFormat("{0}")
 public interface Schedule extends IEntity {
     @I18n(context = "Schedule Frequency")
     @XmlType(name = "Frequency")
@@ -43,12 +40,14 @@ public interface Schedule extends IEntity {
         }
     }
 
-    @ToString(index = 0)
-    IPrimitive<String> caption();
-
+    @NotNull
     IPrimitive<Frequency> frequency();
 
     IPrimitive<LogicalDate> startDate();
+
+    IPrimitive<LogicalDate> endDate();
+
+    IPrimitive<LogicalDate> onDate();
 
     @Owner
     @Detached
