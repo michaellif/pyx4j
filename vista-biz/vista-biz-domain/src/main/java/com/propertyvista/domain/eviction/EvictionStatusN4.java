@@ -19,9 +19,13 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.legal.n4.N4Batch;
 import com.propertyvista.domain.legal.n4.N4LeaseArrears;
 import com.propertyvista.domain.legal.n4.N4LeaseData;
 
@@ -31,8 +35,21 @@ public interface EvictionStatusN4 extends EvictionStatus {
     @Detached
     N4LeaseArrears leaseArrears();
 
+    /**
+     * This property is only created if the entity is edited and saved;
+     * otherwise the originating batch data is used
+     */
     @Detached
     N4LeaseData n4Data();
+
+    /**
+     * N4Batch reference is only available if the status record is created by N4 Batch process
+     */
+    @JoinColumn
+    @Indexed
+    @ReadOnly
+    @Detached
+    N4Batch originatingBatch();
 
     @NotNull
     IPrimitive<LogicalDate> terminationDate();

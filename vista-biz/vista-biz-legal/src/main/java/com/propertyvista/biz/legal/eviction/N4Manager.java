@@ -124,9 +124,9 @@ public class N4Manager {
                 ));
         Persistence.service().persist(n4csLetter);
 
-        // update N4 status with the 
+        // update N4 status with the new info
         EntityQueryCriteria<EvictionStatusN4> n4crit = EntityQueryCriteria.create(EvictionStatusN4.class);
-        n4crit.eq(n4crit.proto().leaseArrears(), item.leaseArrears());
+        n4crit.eq(n4crit.proto().originatingBatch(), item.batch());
         EvictionStatusN4 n4status = Persistence.service().retrieve(n4crit);
         n4status.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
         // add status record

@@ -101,6 +101,7 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
             EvictionStatusN4 n4status = (EvictionStatusN4) ServerSideFactory.create(EvictionCaseFacade.class).addEvictionStatusDetails(evictionCase,
                     EvictionStepType.N4.toString(), i18n.tr("N4 Batch created: {0}", bo.name().getValue()), null);
             n4status.leaseArrears().set(item.leaseArrears());
+            n4status.originatingBatch().set(item.batch());
             n4status.cancellationBalance().setValue(n4policy.cancellationThreshold().getValue());
             // set expiry date by N4Policy
             GregorianCalendar expiryDate = new GregorianCalendar();

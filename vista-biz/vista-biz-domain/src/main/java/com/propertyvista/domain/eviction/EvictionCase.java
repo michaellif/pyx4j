@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
@@ -36,6 +37,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface EvictionCase extends IEntity {
 
+    @Owner
     @JoinColumn
     @Indexed
     @ReadOnly

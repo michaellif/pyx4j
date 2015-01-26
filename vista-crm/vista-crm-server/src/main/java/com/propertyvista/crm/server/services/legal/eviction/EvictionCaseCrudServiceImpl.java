@@ -34,6 +34,8 @@ import com.propertyvista.domain.eviction.EvictionCase;
 import com.propertyvista.domain.eviction.EvictionStatus;
 import com.propertyvista.domain.eviction.EvictionStatusN4;
 import com.propertyvista.domain.eviction.EvictionStatusRecord;
+import com.propertyvista.domain.legal.n4.N4Batch;
+import com.propertyvista.domain.legal.n4.N4LeaseData;
 import com.propertyvista.domain.policy.policies.EvictionFlowPolicy;
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -90,6 +92,10 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
                     record.addedBy().set(signedIn);
                 }
             }
+            // N4
+            if (status instanceof EvictionStatusN4) {
+                Persistence.service().persist(((EvictionStatusN4) status).n4Data());
+            }
         }
 
         return super.persist(bo, to);
@@ -99,7 +105,7 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
     protected void enhanceRetrieved(EvictionCase bo, EvictionCaseDTO to, RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(bo, to, retrieveTarget);
 
-        for (EvictionStatus status : bo.history()) {
+        for (EvictionStatus status : to.history()) {
             Persistence.ensureRetrieve(status.addedBy(), AttachLevel.Attached);
             Persistence.ensureRetrieve(status.statusRecords(), AttachLevel.Attached);
             for (EvictionStatusRecord record : status.statusRecords()) {
@@ -110,6 +116,29 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
             if (status instanceof EvictionStatusN4) {
                 EvictionStatusN4 statusN4 = (EvictionStatusN4) status;
                 Persistence.ensureRetrieve(statusN4.leaseArrears().unpaidCharges(), AttachLevel.Attached);
+                if (statusN4.n4Data().isNull()) {
+                    statusN4.n4Data().set(EntityFactory.create(N4LeaseData.class));
+                    if (statusN4.originatingBatch().getPrimaryKey() != null) {
+                        N4Batch batch = Persistence.service().retrieve(N4Batch.class, statusN4.originatingBatch().getPrimaryKey());
+                        // copy n4 data
+                        statusN4.n4Data().issueDate().set(batch.issueDate());
+                        statusN4.n4Data().serviceDate().set(batch.serviceDate());
+                        statusN4.n4Data().deliveryMethod().set(batch.deliveryMethod());
+                        statusN4.n4Data().deliveryDate().set(batch.deliveryDate());
+                        statusN4.n4Data().companyLegalName().set(batch.companyLegalName());
+                        statusN4.n4Data().companyAddress().set(batch.companyAddress());
+                        statusN4.n4Data().phoneNumber().set(batch.phoneNumber());
+                        statusN4.n4Data().faxNumber().set(batch.faxNumber());
+                        statusN4.n4Data().emailAddress().set(batch.emailAddress());
+                        statusN4.n4Data().phoneNumberCS().set(batch.phoneNumberCS());
+                        statusN4.n4Data().isLandlord().set(batch.isLandlord());
+                        statusN4.n4Data().signatureDate().set(batch.signatureDate());
+                        statusN4.n4Data().signingAgent().set(batch.signingAgent());
+                        statusN4.n4Data().servicingAgent().set(batch.servicingAgent());
+                    }
+                } else {
+                    Persistence.ensureRetrieve(statusN4.n4Data(), AttachLevel.Attached);
+                }
             }
         }
         Persistence.ensureRetrieve(to.lease(), AttachLevel.ToStringMembers);
