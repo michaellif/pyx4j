@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.domain.legal.ltbcommon.LtbOwedRent;
-import com.propertyvista.domain.legal.n4.pdf.N4RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfRentOwingForPeriod;
 
 public class LtbOwedRentForm extends CForm<LtbOwedRent> {
 
@@ -49,7 +49,7 @@ public class LtbOwedRentForm extends CForm<LtbOwedRent> {
 
     private void updateTotal() {
         BigDecimal total = BigDecimal.ZERO;
-        for (N4RentOwingForPeriod rentOwingForPeriod : getValue().rentOwingBreakdown()) {
+        for (N4PdfRentOwingForPeriod rentOwingForPeriod : getValue().rentOwingBreakdown()) {
             total = total.add(rentOwingForPeriod.rentOwing().getValue(BigDecimal.ZERO));
         }
         get(proto().totalRentOwing()).setValue(total, false, true);

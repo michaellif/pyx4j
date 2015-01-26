@@ -19,12 +19,12 @@ import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.biz.legal.forms.framework.filling.FormFillerImpl;
 import com.propertyvista.biz.legal.forms.n4cs.N4CSFieldsMapping;
-import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSFormFieldsData;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSDocumentType.DocumentType;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSServiceMethod.ServiceMethod;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSSignature.SignedBy;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSToPersonInfo.ToType;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfFormData;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSPdfFormData;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSPdfDocumentType.DocumentType;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSPdfServiceMethod.ServiceMethod;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSPdfSignature.SignedBy;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSPdfToPersonInfo.ToType;
 
 public class N4CSGenerationFacadeImpl implements N4CSGenerationFacade {
 
@@ -37,7 +37,7 @@ public class N4CSGenerationFacadeImpl implements N4CSGenerationFacade {
     }
 
     @Override
-    public byte[] generateN4CSLetter(N4CSFormFieldsData formData) {
+    public byte[] generateN4CSLetter(N4CSPdfFormData formData) {
         byte[] filledForm = null;
         try {
             byte[] formTemplate = IOUtils.toByteArray(N4CSGenerationFacadeImpl.class.getResourceAsStream(N4_CS_FORM_FILE));
@@ -49,9 +49,9 @@ public class N4CSGenerationFacadeImpl implements N4CSGenerationFacade {
     }
 
     @Override
-    public N4CSFormFieldsData prepareN4CSData(N4FormFieldsData n4, ServiceMethod serviceMethod) {
+    public N4CSPdfFormData prepareN4CSData(N4PdfFormData n4, ServiceMethod serviceMethod) {
 
-        N4CSFormFieldsData n4cs = EntityFactory.create(N4CSFormFieldsData.class);
+        N4CSPdfFormData n4cs = EntityFactory.create(N4CSPdfFormData.class);
         n4cs.reporter().setValue(n4.landlordsContactInfo().firstName().getValue() + " " + n4.landlordsContactInfo().lastName().getValue());
         n4cs.document().termination().setValue("N4");
         n4cs.document().docType().setValue(DocumentType.TT);

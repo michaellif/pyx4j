@@ -18,8 +18,8 @@ import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.biz.legal.forms.framework.filling.FormFillerImpl;
 import com.propertyvista.biz.legal.forms.n4cp.N4CPFieldsMapping;
-import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
-import com.propertyvista.domain.legal.n4cp.pdf.N4CPFormFieldsData;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfFormData;
+import com.propertyvista.domain.legal.n4cp.pdf.N4CPPdfFormData;
 
 public class N4CPGenerationFacadeImpl implements N4CPGenerationFacade {
 
@@ -32,7 +32,7 @@ public class N4CPGenerationFacadeImpl implements N4CPGenerationFacade {
     }
 
     @Override
-    public byte[] generateN4CPLetter(N4CPFormFieldsData formData) {
+    public byte[] generateN4CPLetter(N4CPPdfFormData formData) {
         byte[] filledForm = null;
         try {
             byte[] formTemplate = IOUtils.toByteArray(N4CPGenerationFacadeImpl.class.getResourceAsStream(N4_CP_FORM_FILE));
@@ -44,9 +44,9 @@ public class N4CPGenerationFacadeImpl implements N4CPGenerationFacade {
     }
 
     @Override
-    public N4CPFormFieldsData prepareN4CPData(N4FormFieldsData n4) {
+    public N4CPPdfFormData prepareN4CPData(N4PdfFormData n4) {
 
-        N4CPFormFieldsData n4cp = EntityFactory.create(N4CPFormFieldsData.class);
+        N4CPPdfFormData n4cp = EntityFactory.create(N4CPPdfFormData.class);
         n4cp.returnName().setValue(n4.landlordsContactInfo().companyName().getValue());
         n4cp.cpDate().setValue(n4.signature().signatureDate().getValue());
         n4cp.cpFooterDate().setValue(n4.signature().signatureDate().getValue());

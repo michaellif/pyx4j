@@ -12,12 +12,12 @@
  */
 package com.propertyvista.biz.legal;
 
-import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
-import com.propertyvista.domain.legal.n4cp.pdf.N4CPFormFieldsData;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfFormData;
+import com.propertyvista.domain.legal.n4cp.pdf.N4CPPdfFormData;
 
 public interface N4CPGenerationFacade {
 
-    byte[] generateN4CPLetter(N4CPFormFieldsData formData);
+    byte[] generateN4CPLetter(N4CPPdfFormData formData);
 
-    N4CPFormFieldsData prepareN4CPData(N4FormFieldsData n4Data);
+    N4CPPdfFormData prepareN4CPData(N4PdfFormData n4Data);
 }

@@ -45,11 +45,11 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.errors.FormFillError;
 import com.propertyvista.domain.legal.n4.N4DeliveryMethod;
-import com.propertyvista.domain.legal.n4.pdf.N4BatchData;
-import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
-import com.propertyvista.domain.legal.n4.pdf.N4LeaseData;
-import com.propertyvista.domain.legal.n4.pdf.N4RentOwingForPeriod;
-import com.propertyvista.domain.legal.n4.pdf.N4Signature.SignedBy;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfBatchData;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfFormData;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfLeaseData;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfRentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfSignature.SignedBy;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -68,7 +68,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     }
 
     @Override
-    public byte[] generateN4Letter(N4FormFieldsData formData) {
+    public byte[] generateN4Letter(N4PdfFormData formData) {
         byte[] filledForm = null;
         try {
             byte[] formTemplate = IOUtils.toByteArray(N4GenerationFacadeImpl.class.getResourceAsStream(N4_FORM_FILE));
@@ -80,8 +80,8 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     }
 
     @Override
-    public N4FormFieldsData prepareFormData(N4LeaseData leaseData, N4BatchData batchData) throws FormFillError {
-        N4FormFieldsData fieldsData = EntityFactory.create(N4FormFieldsData.class);
+    public N4PdfFormData prepareFormData(N4PdfLeaseData leaseData, N4PdfBatchData batchData) throws FormFillError {
+        N4PdfFormData fieldsData = EntityFactory.create(N4PdfFormData.class);
         fieldsData.to().setValue(formatTo(leaseData.leaseTenants(), leaseData.rentalUnitAddress()));
         fieldsData.from().setValue(
                 SimpleMessageFormat.format("{0}\n{1}", leaseData.landlordName().getValue(), formatBuildingOwnerAddress(leaseData.landlordAddress())));
@@ -125,9 +125,9 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     }
 
     @Override
-    public N4LeaseData prepareN4LeaseData(Lease leaseId, LogicalDate noticeDate, N4DeliveryMethod deliveryMethod, Collection<ARCode> acceptableArCodes) {
+    public N4PdfLeaseData prepareN4LeaseData(Lease leaseId, LogicalDate noticeDate, N4DeliveryMethod deliveryMethod, Collection<ARCode> acceptableArCodes) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
-        N4LeaseData n4LeaseData = EntityFactory.create(N4LeaseData.class);
+        N4PdfLeaseData n4LeaseData = EntityFactory.create(N4PdfLeaseData.class);
 
         for (LeaseTermTenant termTenantIdStub : lease.currentTerm().version().tenants()) {
             LeaseTermTenant termTenant = Persistence.service().retrieve(LeaseTermTenant.class, termTenantIdStub.getPrimaryKey());
@@ -142,7 +142,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         n4LeaseData.rentOwingBreakdown().addAll(debitAggregator.debitsForPeriod(debitAggregator.aggregate(filteredDebits)));
 
         BigDecimal totalRentOwning = BigDecimal.ZERO;
-        for (N4RentOwingForPeriod rentOwingForPeriod : n4LeaseData.rentOwingBreakdown()) {
+        for (N4PdfRentOwingForPeriod rentOwingForPeriod : n4LeaseData.rentOwingBreakdown()) {
             totalRentOwning = totalRentOwning.add(rentOwingForPeriod.rentOwing().getValue());
         }
         n4LeaseData.totalRentOwning().setValue(totalRentOwning);

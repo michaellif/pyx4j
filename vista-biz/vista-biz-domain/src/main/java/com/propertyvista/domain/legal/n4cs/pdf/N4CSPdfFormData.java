@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011-2015 All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
@@ -7,28 +7,39 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 11, 2014
- * @author arminea
+ * Created on 2013-11-22
+ * @author ArtyomB
  */
 package com.propertyvista.domain.legal.n4cs.pdf;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 @Transient
-public interface N4CSServiceMethod extends IEntity {
+public interface N4CSPdfFormData extends IEntity {
 
-    public enum ServiceMethod {
-        H, A, P, L, D, C, F, M, O
-    }
+    /** Tenant name */
 
-    IPrimitive<ServiceMethod> method();
+    IPrimitive<String> street();
 
-    IPrimitive<String> fax();
+    IPrimitive<String> unit();
 
-    IPrimitive<String> lastAddr();
+    IPrimitive<String> municipality();
 
-    IPrimitive<String> differentMethod();
+    IPrimitive<String> postalCode();
+
+    IPrimitive<String> reporter();
+
+    N4CSPdfDocumentType document();
+
+    IPrimitive<LogicalDate> issueDate();
+
+    N4CSPdfSignature signature();
+
+    N4CSPdfToPersonInfo passedTo();
+
+    N4CSPdfServiceMethod service();
 
 }

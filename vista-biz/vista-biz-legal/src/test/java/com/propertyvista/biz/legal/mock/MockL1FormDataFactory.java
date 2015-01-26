@@ -41,7 +41,7 @@ import com.propertyvista.domain.legal.l1.L1SignatureData;
 import com.propertyvista.domain.legal.l1.L1TenantInfo;
 import com.propertyvista.domain.legal.l1.L1TenantInfo.Gender;
 import com.propertyvista.domain.legal.l1.NsfChargeDetails;
-import com.propertyvista.domain.legal.n4.pdf.N4RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfRentOwingForPeriod;
 
 public class MockL1FormDataFactory {
 
@@ -103,7 +103,7 @@ public class MockL1FormDataFactory {
 
         // Part4
 
-        N4RentOwingForPeriod period1Owing = fieldsData.owedRent().rentOwingBreakdown().$();
+        N4PdfRentOwingForPeriod period1Owing = fieldsData.owedRent().rentOwingBreakdown().$();
         period1Owing.fromDate().setValue(new LogicalDate(DateUtils.detectDateformat("2009-01-01")));
         period1Owing.toDate().setValue(new LogicalDate(DateUtils.detectDateformat("2009-01-31")));
         period1Owing.rentCharged().setValue(new BigDecimal("1111.99"));
@@ -111,7 +111,7 @@ public class MockL1FormDataFactory {
         period1Owing.rentOwing().setValue(new BigDecimal("3333.77"));
         fieldsData.owedRent().rentOwingBreakdown().add(period1Owing);
 
-        N4RentOwingForPeriod period2Owing = fieldsData.owedRent().rentOwingBreakdown().$();
+        N4PdfRentOwingForPeriod period2Owing = fieldsData.owedRent().rentOwingBreakdown().$();
         period2Owing.fromDate().setValue(new LogicalDate(DateUtils.detectDateformat("2010-01-01")));
         period2Owing.toDate().setValue(new LogicalDate(DateUtils.detectDateformat("2010-01-31")));
         period2Owing.rentCharged().setValue(new BigDecimal("1111.11"));
@@ -119,7 +119,7 @@ public class MockL1FormDataFactory {
         period2Owing.rentOwing().setValue(new BigDecimal("3333.33"));
         fieldsData.owedRent().rentOwingBreakdown().add(period2Owing);
 
-        N4RentOwingForPeriod period3Owing = fieldsData.owedRent().rentOwingBreakdown().$();
+        N4PdfRentOwingForPeriod period3Owing = fieldsData.owedRent().rentOwingBreakdown().$();
         period3Owing.fromDate().setValue(new LogicalDate(DateUtils.detectDateformat("2011-01-01")));
         period3Owing.toDate().setValue(new LogicalDate(DateUtils.detectDateformat("2011-01-31")));
         period3Owing.rentCharged().setValue(new BigDecimal("1111.00"));

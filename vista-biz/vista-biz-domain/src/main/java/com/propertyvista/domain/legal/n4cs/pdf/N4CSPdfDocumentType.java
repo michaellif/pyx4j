@@ -12,29 +12,23 @@
  */
 package com.propertyvista.domain.legal.n4cs.pdf;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 @Transient
-public interface N4CSSignature extends IEntity {
-    public enum SignedBy {
+public interface N4CSPdfDocumentType extends IEntity {
 
-        PL, PT, RA, PO
-
+    public enum DocumentType {
+        TT, AA, AH, OS, OR, OO
     }
 
-    IPrimitive<SignedBy> signedBy();
+    IPrimitive<DocumentType> docType();
 
-    IPrimitive<byte[]> signature();
+    IPrimitive<String> application();
 
-    IPrimitive<LogicalDate> signatureDate();
+    IPrimitive<String> termination();
 
-    IPrimitive<String> firstname();
-
-    IPrimitive<String> lastname();
-
-    IPrimitive<String> phone();
+    IPrimitive<String> other();
 
 }
