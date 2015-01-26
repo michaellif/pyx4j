@@ -17,18 +17,18 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 @Transient
-public interface N4CSDocumentType extends IEntity {
+public interface N4CSPdfServiceMethod extends IEntity {
 
-    public enum DocumentType {
-        TT, AA, AH, OS, OR, OO
+    public enum ServiceMethod {
+        H, A, P, L, D, C, F, M, O
     }
 
-    IPrimitive<DocumentType> docType();
+    IPrimitive<ServiceMethod> method();
 
-    IPrimitive<String> application();
+    IPrimitive<String> fax();
 
-    IPrimitive<String> termination();
+    IPrimitive<String> lastAddr();
 
-    IPrimitive<String> other();
+    IPrimitive<String> differentMethod();
 
 }

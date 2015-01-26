@@ -12,36 +12,23 @@
  */
 package com.propertyvista.domain.legal.n4.pdf;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.legal.ltbcommon.LtbAgentContactInfo;
-import com.propertyvista.domain.legal.ltbcommon.LtbOwedRent;
-import com.propertyvista.domain.legal.ltbcommon.LtbRentalUnitAddress;
-
 @Transient
-public interface N4FormFieldsData extends IEntity {
+public interface N4PdfSignature extends IEntity {
 
-    /** Tenant names and address */
-    IPrimitive<String> to();
+    public enum SignedBy {
 
-    /** Landlord's name */
-    IPrimitive<String> from();
+        Landlord, Agent
 
-    LtbRentalUnitAddress rentalUnitAddress();
+    }
 
-    IPrimitive<LogicalDate> terminationDate();
+    IPrimitive<SignedBy> signedBy();
 
-    IPrimitive<BigDecimal> totalRentOwed();
+    IPrimitive<byte[]> signature();
 
-    LtbOwedRent owedRent();
-
-    N4Signature signature();
-
-    LtbAgentContactInfo landlordsContactInfo();
-
+    IPrimitive<LogicalDate> signatureDate();
 }

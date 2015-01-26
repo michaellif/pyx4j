@@ -12,13 +12,13 @@
  */
 package com.propertyvista.biz.legal;
 
-import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSFormFieldsData;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSServiceMethod.ServiceMethod;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfFormData;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSPdfFormData;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSPdfServiceMethod.ServiceMethod;
 
 public interface N4CSGenerationFacade {
 
-    byte[] generateN4CSLetter(N4CSFormFieldsData formData);
+    byte[] generateN4CSLetter(N4CSPdfFormData formData);
 
-    N4CSFormFieldsData prepareN4CSData(N4FormFieldsData n4Data, ServiceMethod serviceMethod);
+    N4CSPdfFormData prepareN4CSData(N4PdfFormData n4Data, ServiceMethod serviceMethod);
 }

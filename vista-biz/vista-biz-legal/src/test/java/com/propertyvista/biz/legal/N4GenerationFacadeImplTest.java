@@ -22,11 +22,11 @@ package com.propertyvista.biz.legal;
 import org.junit.Test;
 
 import com.propertyvista.biz.legal.mock.MockN4FormDataFactory;
-import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfFormData;
 
 public class N4GenerationFacadeImplTest {
 
-    private final N4FormFieldsData mockFormData;
+    private final N4PdfFormData mockFormData;
 
     public N4GenerationFacadeImplTest() {
         mockFormData = MockN4FormDataFactory.makeMockN4FormFieldsData("Tenant Tenantovic");

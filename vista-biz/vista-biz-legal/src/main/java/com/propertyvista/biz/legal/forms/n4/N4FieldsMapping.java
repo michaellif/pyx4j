@@ -27,14 +27,14 @@ import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.scalers.Address
 import com.propertyvista.domain.legal.ltbcommon.LtbAgentContactInfo;
 import com.propertyvista.domain.legal.ltbcommon.LtbOwedRent;
 import com.propertyvista.domain.legal.ltbcommon.LtbRentalUnitAddress;
-import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
-import com.propertyvista.domain.legal.n4.pdf.N4RentOwingForPeriod;
-import com.propertyvista.domain.legal.n4.pdf.N4Signature;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfFormData;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfRentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfSignature;
 
-public class N4FieldsMapping extends LtbFormFieldsMapping<N4FormFieldsData> {
+public class N4FieldsMapping extends LtbFormFieldsMapping<N4PdfFormData> {
 
     public N4FieldsMapping() {
-        super(N4FormFieldsData.class);
+        super(N4PdfFormData.class);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class N4FieldsMapping extends LtbFormFieldsMapping<N4FormFieldsData> {
             @Override
             protected void configure() {
                 table(proto().rentOwingBreakdown()).rowMapping(
-                        Arrays.<LtbFormFieldsMapping<N4RentOwingForPeriod>> asList(new LtbFormFieldsMapping<N4RentOwingForPeriod>(N4RentOwingForPeriod.class) {
+                        Arrays.<LtbFormFieldsMapping<N4PdfRentOwingForPeriod>> asList(new LtbFormFieldsMapping<N4PdfRentOwingForPeriod>(N4PdfRentOwingForPeriod.class) {
                             @Override
                             protected void configure() {
                                 date(proto().fromDate()).mapTo(datePartition("@@b12c96nfn4_a1_start")).define();
@@ -73,7 +73,7 @@ public class N4FieldsMapping extends LtbFormFieldsMapping<N4FormFieldsData> {
                                 money(proto().rentPaid()).mapTo(fieldsPartition("@@b12c96nfn4_a1_paid", 1, 3, 2)).define();
                                 money(proto().rentOwing()).mapTo(fieldsPartition("@@b12c96nfn4_a1_owing", 1, 3, 2)).define();
                             }
-                        }, new LtbFormFieldsMapping<N4RentOwingForPeriod>(N4RentOwingForPeriod.class) {
+                        }, new LtbFormFieldsMapping<N4PdfRentOwingForPeriod>(N4PdfRentOwingForPeriod.class) {
                             @Override
                             protected void configure() {
                                 date(proto().fromDate()).mapTo(datePartition("@@b12c96nfn4_a2_start")).define();
@@ -82,7 +82,7 @@ public class N4FieldsMapping extends LtbFormFieldsMapping<N4FormFieldsData> {
                                 money(proto().rentPaid()).mapTo(fieldsPartition("@@b12c96nfn4_a2_paid", 1, 3, 2)).define();
                                 money(proto().rentOwing()).mapTo(fieldsPartition("@@b12c96nfn4_a2_owing", 1, 3, 2)).define();
                             }
-                        }, new LtbFormFieldsMapping<N4RentOwingForPeriod>(N4RentOwingForPeriod.class) {
+                        }, new LtbFormFieldsMapping<N4PdfRentOwingForPeriod>(N4PdfRentOwingForPeriod.class) {
                             @Override
                             protected void configure() {
                                 date(proto().fromDate()).mapTo(datePartition("@@b12c96nfn4_a3_start")).define();
@@ -98,7 +98,7 @@ public class N4FieldsMapping extends LtbFormFieldsMapping<N4FormFieldsData> {
             }
         });
 
-        mapping(proto().signature(), new LtbFormFieldsMapping<N4Signature>(N4Signature.class) {
+        mapping(proto().signature(), new LtbFormFieldsMapping<N4PdfSignature>(N4PdfSignature.class) {
             @Override
             protected void configure() {
                 field(proto().signedBy()).states("PL", "RA").mapTo("b12c96nfn4_signed_by").define();

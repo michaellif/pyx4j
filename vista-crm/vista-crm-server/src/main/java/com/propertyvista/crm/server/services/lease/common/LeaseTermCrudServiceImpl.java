@@ -204,33 +204,31 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     }
 
     private LeaseTermDTO setSelectedUnit(AptUnit unitId, LeaseTermDTO currentValue) {
-        LeaseTermDTO result = EntityFactory.create(LeaseTermDTO.class);
-        result.set(ServerSideFactory.create(LeaseFacade.class).setUnit(currentValue.duplicate(LeaseTerm.class), unitId).duplicate(LeaseTermDTO.class));
-        result.building().set(currentValue.unit().building());
+        ServerSideFactory.create(LeaseFacade.class).setUnit(currentValue, unitId);
+        currentValue.building().set(currentValue.unit().building());
 
-        loadDetachedProducts(result);
+        loadDetachedProducts(currentValue);
 
         // fill runtime editor data:
-        fillServiceEligibilityData(result);
-        fillServiceItems(result);
+        fillServiceEligibilityData(currentValue);
+        fillServiceItems(currentValue);
 
-        checkUnitMoveOut(result);
-        setAgeRestrictions(result);
+        checkUnitMoveOut(currentValue);
+        setAgeRestrictions(currentValue);
 
-        return result;
+        return currentValue;
     }
 
     @Override
     public void setSelectedService(AsyncCallback<LeaseTermDTO> callback, ProductItem serviceId, LeaseTermDTO currentValue) {
-        LeaseTermDTO result = EntityFactory.create(LeaseTermDTO.class);
-        result.set(ServerSideFactory.create(LeaseFacade.class).setService(currentValue, serviceId).duplicate(LeaseTermDTO.class));
+        ServerSideFactory.create(LeaseFacade.class).setService(currentValue, serviceId);
 
-        loadDetachedProducts(result);
+        loadDetachedProducts(currentValue);
 
         // fill runtime editor data:
-        fillServiceEligibilityData(result);
+        fillServiceEligibilityData(currentValue);
 
-        callback.onSuccess(result);
+        callback.onSuccess(currentValue);
     }
 
     @Override

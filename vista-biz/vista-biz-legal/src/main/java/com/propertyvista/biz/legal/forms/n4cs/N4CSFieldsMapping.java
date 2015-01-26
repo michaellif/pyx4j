@@ -20,16 +20,16 @@
 package com.propertyvista.biz.legal.forms.n4cs;
 
 import com.propertyvista.biz.legal.forms.ltbcommon.LtbFormFieldsMapping;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSDocumentType;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSFormFieldsData;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSServiceMethod;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSSignature;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSToPersonInfo;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSPdfDocumentType;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSPdfFormData;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSPdfServiceMethod;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSPdfSignature;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSPdfToPersonInfo;
 
-public class N4CSFieldsMapping extends LtbFormFieldsMapping<N4CSFormFieldsData> {
+public class N4CSFieldsMapping extends LtbFormFieldsMapping<N4CSPdfFormData> {
 
     public N4CSFieldsMapping() {
-        super(N4CSFormFieldsData.class);
+        super(N4CSPdfFormData.class);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class N4CSFieldsMapping extends LtbFormFieldsMapping<N4CSFormFieldsData> 
         field(proto().postalCode()).mapTo("b12c96nmpostal_code").define();
         field(proto().reporter()).mapTo("b12c96nmname").define();
 
-        mapping(proto().document(), new LtbFormFieldsMapping<N4CSDocumentType>(N4CSDocumentType.class) {
+        mapping(proto().document(), new LtbFormFieldsMapping<N4CSPdfDocumentType>(N4CSPdfDocumentType.class) {
             @Override
             protected void configure() {
                 text(proto().application()).mapTo("appliction_form").define();
@@ -52,7 +52,7 @@ public class N4CSFieldsMapping extends LtbFormFieldsMapping<N4CSFormFieldsData> 
             }
         });
 
-        mapping(proto().passedTo(), new LtbFormFieldsMapping<N4CSToPersonInfo>(N4CSToPersonInfo.class) {
+        mapping(proto().passedTo(), new LtbFormFieldsMapping<N4CSPdfToPersonInfo>(N4CSPdfToPersonInfo.class) {
             @Override
             protected void configure() {
                 field(proto().tpType()).states("Tenant", "Landlord", "Other").mapTo("b12c96nfChoice_4").define();
@@ -60,7 +60,7 @@ public class N4CSFieldsMapping extends LtbFormFieldsMapping<N4CSFormFieldsData> 
             }
         });
 
-        mapping(proto().service(), new LtbFormFieldsMapping<N4CSServiceMethod>(N4CSServiceMethod.class) {
+        mapping(proto().service(), new LtbFormFieldsMapping<N4CSPdfServiceMethod>(N4CSPdfServiceMethod.class) {
             @Override
             protected void configure() {
                 field(proto().method()).states("H", "A", "P", "L", "D", "C", "F", "M", "O").mapTo("b12c96nfmethod_of_service").define();
@@ -70,7 +70,7 @@ public class N4CSFieldsMapping extends LtbFormFieldsMapping<N4CSFormFieldsData> 
             }
         });
 
-        mapping(proto().signature(), new LtbFormFieldsMapping<N4CSSignature>(N4CSSignature.class) {
+        mapping(proto().signature(), new LtbFormFieldsMapping<N4CSPdfSignature>(N4CSPdfSignature.class) {
             @Override
             protected void configure() {
                 field(proto().signedBy()).states("PL", "PT", "RA", "PO").mapTo("b12c96nfsigned_by").define();

@@ -25,7 +25,7 @@ import com.propertyvista.domain.contact.LegalAddress;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 @Transient
-public interface N4LeaseData extends IEntity {
+public interface N4PdfLeaseData extends IEntity {
 
     IPrimitive<String> landlordName();
 
@@ -39,6 +39,6 @@ public interface N4LeaseData extends IEntity {
 
     IPrimitive<BigDecimal> totalRentOwning();
 
-    IList<N4RentOwingForPeriod> rentOwingBreakdown();
+    IList<N4PdfRentOwingForPeriod> rentOwingBreakdown();
 
 }

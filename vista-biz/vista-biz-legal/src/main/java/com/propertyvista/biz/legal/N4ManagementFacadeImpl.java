@@ -70,13 +70,13 @@ import com.propertyvista.domain.legal.LegalStatus.Status;
 import com.propertyvista.domain.legal.LegalStatusN4;
 import com.propertyvista.domain.legal.errors.FormFillError;
 import com.propertyvista.domain.legal.n4.N4LegalLetter;
-import com.propertyvista.domain.legal.n4.pdf.N4BatchData;
-import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
-import com.propertyvista.domain.legal.n4.pdf.N4LeaseData;
-import com.propertyvista.domain.legal.n4.pdf.N4RentOwingForPeriod;
-import com.propertyvista.domain.legal.n4cp.pdf.N4CPFormFieldsData;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSFormFieldsData;
-import com.propertyvista.domain.legal.n4cs.pdf.N4CSServiceMethod.ServiceMethod;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfBatchData;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfFormData;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfLeaseData;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfRentOwingForPeriod;
+import com.propertyvista.domain.legal.n4cp.pdf.N4CPPdfFormData;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSPdfFormData;
+import com.propertyvista.domain.legal.n4cs.pdf.N4CSPdfServiceMethod.ServiceMethod;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -144,7 +144,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         final Date batchGenerationDate = SystemDateManager.getDate();
 
         List<Pair<Lease, Exception>> failed = new LinkedList<>();
-        final N4BatchData batch = makeBatchData(batchRequest);
+        final N4PdfBatchData batch = makeBatchData(batchRequest);
         for (final Lease leaseId : batchRequest.targetDelinquentLeases()) {
             try {
                 new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.Web).execute(new Executable<Void, Exception>() {
@@ -182,13 +182,13 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         return n4s;
     }
 
-    private void issueN4ForLease(Lease leaseId, N4BatchData batchData, Collection<ARCode> relevantArCodes, Date generationTime) throws FormFillError {
-        N4LeaseData n4LeaseData = ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId, batchData.noticeDate().getValue(),
+    private void issueN4ForLease(Lease leaseId, N4PdfBatchData batchData, Collection<ARCode> relevantArCodes, Date generationTime) throws FormFillError {
+        N4PdfLeaseData n4LeaseData = ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId, batchData.noticeDate().getValue(),
                 batchData.deliveryMethod().getValue(), relevantArCodes);
 
-        N4FormFieldsData n4FormData = ServerSideFactory.create(N4GenerationFacade.class).prepareFormData(n4LeaseData, batchData);
-        N4CSFormFieldsData n4csFormData = ServerSideFactory.create(N4CSGenerationFacade.class).prepareN4CSData(n4FormData, ServiceMethod.M);
-        N4CPFormFieldsData n4cpFormData = ServerSideFactory.create(N4CPGenerationFacade.class).prepareN4CPData(n4FormData);
+        N4PdfFormData n4FormData = ServerSideFactory.create(N4GenerationFacade.class).prepareFormData(n4LeaseData, batchData);
+        N4CSPdfFormData n4csFormData = ServerSideFactory.create(N4CSGenerationFacade.class).prepareN4CSData(n4FormData, ServiceMethod.M);
+        N4CPPdfFormData n4cpFormData = ServerSideFactory.create(N4CPGenerationFacade.class).prepareN4CPData(n4FormData);
 
         byte[] n4LetterBinary = ServerSideFactory.create(N4GenerationFacade.class).generateN4Letter(n4FormData);
         byte[] n4csLetterBinary = ServerSideFactory.create(N4CSGenerationFacade.class).generateN4CSLetter(n4csFormData);
@@ -316,10 +316,10 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(billingAccount);
         List<InvoiceDebit> filteredDebits = N4GenerationUtils.filterDebits(debits, acceptableArCodes, asOf);
         InvoiceDebitAggregator debitAggregator = new InvoiceDebitAggregator();
-        List<N4RentOwingForPeriod> rentOwingBreakdown = debitAggregator.debitsForPeriod(debitAggregator.aggregate(filteredDebits));
+        List<N4PdfRentOwingForPeriod> rentOwingBreakdown = debitAggregator.debitsForPeriod(debitAggregator.aggregate(filteredDebits));
 
         BigDecimal amountOwed = BigDecimal.ZERO;
-        for (N4RentOwingForPeriod rentOwingForPeriod : rentOwingBreakdown) {
+        for (N4PdfRentOwingForPeriod rentOwingForPeriod : rentOwingBreakdown) {
             amountOwed = amountOwed.add(rentOwingForPeriod.rentOwing().getValue());
         }
         return amountOwed;
@@ -341,8 +341,8 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         }
     }
 
-    private N4BatchData makeBatchData(N4BatchRequestDTO batchRequest) {
-        N4BatchData batchData = EntityFactory.create(N4BatchData.class);
+    private N4PdfBatchData makeBatchData(N4BatchRequestDTO batchRequest) {
+        N4PdfBatchData batchData = EntityFactory.create(N4PdfBatchData.class);
         // TODO batchData.name().set(batchRequest.batchName());
 
         batchData.noticeDate().setValue(batchRequest.noticeDate().getValue());

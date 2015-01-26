@@ -28,18 +28,18 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.legal.N4GenerationFacadeImpl;
-import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
-import com.propertyvista.domain.legal.n4.pdf.N4LeaseData;
-import com.propertyvista.domain.legal.n4.pdf.N4RentOwingForPeriod;
-import com.propertyvista.domain.legal.n4.pdf.N4Signature.SignedBy;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfFormData;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfLeaseData;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfRentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfSignature.SignedBy;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 public class MockN4FormDataFactory {
 
     private final static String SIGNATURE = "mock-signature.jpg";
 
-    public static N4FormFieldsData makeMockN4FormFieldsData(String tenantName) {
-        N4FormFieldsData mockFormData = EntityFactory.create(N4FormFieldsData.class);
+    public static N4PdfFormData makeMockN4FormFieldsData(String tenantName) {
+        N4PdfFormData mockFormData = EntityFactory.create(N4PdfFormData.class);
         mockFormData.to().setValue(tenantName + "\n11-2222 Bathurst Street Toronto ON A9A 9A9");
         mockFormData.from().setValue("RedRiDge");
 
@@ -55,7 +55,7 @@ public class MockN4FormDataFactory {
         mockFormData.totalRentOwed().setValue(new BigDecimal("11234.99"));
 
         mockFormData.owedRent().totalRentOwing().setValue(new BigDecimal("21234.99"));
-        N4RentOwingForPeriod period1 = mockFormData.owedRent().rentOwingBreakdown().$();
+        N4PdfRentOwingForPeriod period1 = mockFormData.owedRent().rentOwingBreakdown().$();
         period1.fromDate().setValue(new LogicalDate(DateUtils.detectDateformat("2012-01-01")));
         period1.toDate().setValue(new LogicalDate(DateUtils.detectDateformat("2013-12-31")));
         period1.rentCharged().setValue(new BigDecimal("1155.00"));
@@ -63,7 +63,7 @@ public class MockN4FormDataFactory {
         period1.rentOwing().setValue(new BigDecimal("1234.55"));
         mockFormData.owedRent().rentOwingBreakdown().add(period1);
 
-        N4RentOwingForPeriod period2 = mockFormData.owedRent().rentOwingBreakdown().$();
+        N4PdfRentOwingForPeriod period2 = mockFormData.owedRent().rentOwingBreakdown().$();
         period2.fromDate().setValue(new LogicalDate(DateUtils.detectDateformat("2013-01-01")));
         period2.toDate().setValue(new LogicalDate(DateUtils.detectDateformat("2014-12-31")));
         period2.rentCharged().setValue(new BigDecimal("5555.55"));
@@ -71,7 +71,7 @@ public class MockN4FormDataFactory {
         period2.rentOwing().setValue(new BigDecimal("1234.55"));
         mockFormData.owedRent().rentOwingBreakdown().add(period2);
 
-        N4RentOwingForPeriod period3 = mockFormData.owedRent().rentOwingBreakdown().$();
+        N4PdfRentOwingForPeriod period3 = mockFormData.owedRent().rentOwingBreakdown().$();
         period3.fromDate().setValue(new LogicalDate(DateUtils.detectDateformat("2015-01-01")));
         period3.toDate().setValue(new LogicalDate(DateUtils.detectDateformat("2016-12-31")));
         period3.rentCharged().setValue(new BigDecimal("7777.77"));
@@ -103,8 +103,8 @@ public class MockN4FormDataFactory {
         return mockFormData;
     }
 
-    public static N4LeaseData makeLeaseData() {
-        N4LeaseData leaseData = EntityFactory.create(N4LeaseData.class);
+    public static N4PdfLeaseData makeLeaseData() {
+        N4PdfLeaseData leaseData = EntityFactory.create(N4PdfLeaseData.class);
         LeaseTermTenant tenant1 = EntityFactory.create(LeaseTermTenant.class);
         tenant1.leaseParticipant().customer().person().name().firstName().setValue("Tenant");
         tenant1.leaseParticipant().customer().person().name().lastName().setValue("Tenantovic");

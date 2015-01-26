@@ -19,16 +19,16 @@ import com.pyx4j.commons.LogicalDate;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.legal.errors.FormFillError;
 import com.propertyvista.domain.legal.n4.N4DeliveryMethod;
-import com.propertyvista.domain.legal.n4.pdf.N4BatchData;
-import com.propertyvista.domain.legal.n4.pdf.N4FormFieldsData;
-import com.propertyvista.domain.legal.n4.pdf.N4LeaseData;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfBatchData;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfFormData;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfLeaseData;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface N4GenerationFacade {
 
-    byte[] generateN4Letter(N4FormFieldsData formData);
+    byte[] generateN4Letter(N4PdfFormData formData);
 
-    N4FormFieldsData prepareFormData(N4LeaseData leaseData, N4BatchData batchData) throws FormFillError;
+    N4PdfFormData prepareFormData(N4PdfLeaseData leaseData, N4PdfBatchData batchData) throws FormFillError;
 
-    N4LeaseData prepareN4LeaseData(Lease leaseId, LogicalDate noticeDate, N4DeliveryMethod deliveryMethod, Collection<ARCode> acceptedARCodes);
+    N4PdfLeaseData prepareN4LeaseData(Lease leaseId, LogicalDate noticeDate, N4DeliveryMethod deliveryMethod, Collection<ARCode> acceptedARCodes);
 }

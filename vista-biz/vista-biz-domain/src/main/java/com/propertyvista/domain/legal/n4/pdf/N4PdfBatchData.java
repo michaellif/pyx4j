@@ -24,7 +24,7 @@ import com.propertyvista.domain.legal.n4.N4DeliveryMethod;
 
 /** This is data common to all N4 forms filled in a single batch */
 @Transient
-public interface N4BatchData extends IEntity {
+public interface N4PdfBatchData extends IEntity {
 
     IPrimitive<LogicalDate> noticeDate();
 
