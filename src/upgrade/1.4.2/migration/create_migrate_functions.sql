@@ -282,19 +282,6 @@ BEGIN
         ALTER TABLE eviction_case OWNER TO vista;
         
         
-        -- eviction_case$eviction_flow
-        
-        CREATE TABLE eviction_case$eviction_flow
-        (
-            id                          BIGINT                  NOT NULL,
-            owner                       BIGINT,
-            value                       BIGINT,
-            seq                         INTEGER,
-                CONSTRAINT eviction_case$eviction_flow_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE eviction_case$eviction_flow OWNER TO vista;
-        
         
         -- eviction_case_init_data
         
@@ -371,21 +358,6 @@ BEGIN
         
         ALTER TABLE eviction_flow_step OWNER TO vista;
         
-        
-        -- eviction_status
-        
-        CREATE TABLE eviction_status
-        (
-            id                          BIGINT                  NOT NULL,
-            eviction_case               BIGINT                  NOT NULL,
-            eviction_step               BIGINT,
-            added_on                    TIMESTAMP,
-            added_by                    BIGINT,
-            note                        VARCHAR(500),
-                CONSTRAINT eviction_status_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE eviction_status OWNER TO vista;
         
         
         -- eviction_status_record
@@ -845,26 +817,14 @@ BEGIN
             REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE eviction_case ADD CONSTRAINT eviction_case_lease_fk FOREIGN KEY(lease) 
             REFERENCES lease(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE eviction_case$eviction_flow ADD CONSTRAINT eviction_case$eviction_flow_owner_fk FOREIGN KEY(owner) 
-            REFERENCES eviction_case(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE eviction_case$eviction_flow ADD CONSTRAINT eviction_case$eviction_flow_value_fk FOREIGN KEY(value) 
-            REFERENCES eviction_flow_step(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE eviction_case_init_data ADD CONSTRAINT eviction_case_init_data_lease_fk FOREIGN KEY(lease) 
             REFERENCES lease(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE eviction_document ADD CONSTRAINT eviction_document_record_fk FOREIGN KEY(record) 
             REFERENCES eviction_status_record(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE eviction_flow_step ADD CONSTRAINT eviction_flow_step_policy_fk FOREIGN KEY(policy) 
             REFERENCES eviction_flow_policy(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE eviction_status ADD CONSTRAINT eviction_status_added_by_fk FOREIGN KEY(added_by) 
-            REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE eviction_status ADD CONSTRAINT eviction_status_eviction_case_fk FOREIGN KEY(eviction_case) 
-            REFERENCES eviction_case(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE eviction_status ADD CONSTRAINT eviction_status_eviction_step_fk FOREIGN KEY(eviction_step) 
-            REFERENCES eviction_flow_step(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE eviction_status_record ADD CONSTRAINT eviction_status_record_added_by_fk FOREIGN KEY(added_by) 
             REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE eviction_status_record ADD CONSTRAINT eviction_status_record_eviction_status_fk FOREIGN KEY(eviction_status) 
-            REFERENCES eviction_status(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE identification_document ADD CONSTRAINT identification_document_id_type_fk FOREIGN KEY(id_type) 
             REFERENCES identification_document_type(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE identification_document ADD CONSTRAINT identification_document_owner_fk FOREIGN KEY(owner) 
@@ -931,14 +891,12 @@ BEGIN
         **/
         
         
-        CREATE INDEX eviction_case$eviction_flow_owner_idx ON eviction_case$eviction_flow USING btree (owner);
         CREATE INDEX maintenance_request_policy$tenant_preferred_windows_owner_idx ON maintenance_request_policy$tenant_preferred_windows USING btree (owner);
         CREATE INDEX application_approval_checklist_policy_item_policy_idx ON application_approval_checklist_policy_item USING btree (policy);
         CREATE INDEX entry_instructions_note_policy_idx ON entry_instructions_note USING btree (policy);
         CREATE INDEX entry_not_granted_alert_policy_idx ON entry_not_granted_alert USING btree (policy);
         CREATE INDEX eviction_case_lease_idx ON eviction_case USING btree (lease);
         CREATE INDEX eviction_flow_step_policy_name_idx ON eviction_flow_step USING btree (policy, name);
-        CREATE INDEX eviction_status_eviction_case_eviction_step_idx ON eviction_status USING btree (eviction_case, eviction_step);
         CREATE INDEX legal_questions_policy_item_policy_idx ON legal_questions_policy_item USING btree (policy);
         CREATE UNIQUE INDEX lease_billing_type_policy_item_policy_billing_period_idx ON lease_billing_type_policy_item USING btree (policy, billing_period);
         CREATE INDEX maintenance_request_work_order_request_idx ON maintenance_request_work_order USING btree (request);
