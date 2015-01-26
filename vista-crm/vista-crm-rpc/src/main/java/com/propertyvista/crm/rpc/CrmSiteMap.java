@@ -540,12 +540,15 @@ public class CrmSiteMap implements SiteMap {
 
         public static class Policies extends AppPlace {
 
+            @PlaceProperties(caption = "Approval Checklist")
             public static class ApplicationApprovalChecklist extends CrmCrudAppPlace {
             }
 
+            @PlaceProperties(caption = "Documentation")
             public static class ApplicationDocumentation extends CrmCrudAppPlace {
             }
 
+            @PlaceProperties(caption = "AR Settings")
             public static class AR extends CrmCrudAppPlace {
             }
 
@@ -564,6 +567,7 @@ public class CrmSiteMap implements SiteMap {
             public static class Deposits extends CrmCrudAppPlace {
             }
 
+            @PlaceProperties(navigLabel = "Email")
             public static class EmailTemplates extends CrmCrudAppPlace {
             }
 
@@ -590,10 +594,11 @@ public class CrmSiteMap implements SiteMap {
             public static class LeaseApplicationTerms extends CrmCrudAppPlace {
             }
 
-            @PlaceProperties(caption = "Portal Terms and Privacy")
+            @PlaceProperties(caption = "Terms and Conditions")
             public static class LegalDocumentation extends CrmCrudAppPlace {
             }
 
+            @PlaceProperties(caption = "Questions")
             public static class LegalQuestions extends CrmCrudAppPlace {
 
             }
@@ -604,7 +609,7 @@ public class CrmSiteMap implements SiteMap {
             public static class EvictionFlow extends CrmCrudAppPlace {
             }
 
-            @PlaceProperties(caption = "N4")
+            @PlaceProperties(caption = "Ontario N4")
             public static class N4 extends CrmCrudAppPlace {
             }
 
@@ -617,15 +622,18 @@ public class CrmSiteMap implements SiteMap {
             public static class ProductTax extends CrmCrudAppPlace {
             }
 
+            @PlaceProperties(caption = "Online Availability")
             public static class ProspectPortal extends CrmCrudAppPlace {
             }
 
+            @PlaceProperties(caption = "Communication")
             public static class ResidentPortal extends CrmCrudAppPlace {
             }
 
             public static class Restrictions extends CrmCrudAppPlace {
             }
 
+            @PlaceProperties(caption = "Renters Insurance")
             public static class TenantInsurance extends CrmCrudAppPlace {
             }
 
