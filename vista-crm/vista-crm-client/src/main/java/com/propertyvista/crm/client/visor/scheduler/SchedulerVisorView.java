@@ -36,6 +36,7 @@ import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.backoffice.ui.visor.AbstractVisorPaneView;
@@ -291,6 +292,30 @@ public class SchedulerVisorView extends AbstractVisorPaneView {
                     setViewable(isViewable);
                 }
 
+                @Override
+                public boolean isValid() {
+                    if (getValue() != null && !getValue().isNull() && !getValue().isEmpty() && !getValue().isPrototype()) {
+                        if (Frequency.Monthly.equals(getValue().frequency().getValue())) {
+                            if ((getValue().onDate() == null || getValue().onDate().isNull())) {
+                                validationErrors.add(new BasicValidationError(this, i18n.tr("Please specify the day of month for the template processing.")));
+                            } else {
+                                if (getValue().onDate().getValue().getDate() > 28) {
+                                    validationErrors.add(new BasicValidationError(this, i18n
+                                            .tr("Please specify the day of month for the template processing before 29th.")));
+                                }
+                            }
+                        } else if (Frequency.Weekly.equals(getValue().frequency().getValue())
+                                && ((getValue().onDate() == null || getValue().onDate().isNull()))) {
+                            validationErrors.add(new BasicValidationError(this, i18n.tr("Please specify the day of week for the template processing.")));
+                        }
+
+                        if (getValue().startDate() != null && !getValue().startDate().isNull() && getValue().endDate() != null
+                                && !getValue().endDate().isNull() && getValue().startDate().getValue().ge(getValue().endDate().getValue())) {
+                            validationErrors.add(new BasicValidationError(this, i18n.tr("Please specify the end date of schedule later than the start date.")));
+                        }
+                    }
+                    return super.isValid();
+                }
             }
         }
     }
