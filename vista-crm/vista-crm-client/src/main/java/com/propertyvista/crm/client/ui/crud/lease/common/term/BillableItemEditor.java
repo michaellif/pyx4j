@@ -275,7 +275,7 @@ public class BillableItemEditor extends CForm<BillableItem> {
 
             boolean isDepositsEditable = leaseTerm.getValue().version().leaseProducts().serviceItem().item().yardiDepositLMR().isNull();
 
-//            recalculateDeposits.setVisible(isDepositsEditable);
+            recalculateDeposits.setVisible(isDepositsEditable);
             depositFolder.setModifyable(isDepositsEditable);
 
             if (getValue().item().product().isInstanceOf(Feature.FeatureV.class)) {
