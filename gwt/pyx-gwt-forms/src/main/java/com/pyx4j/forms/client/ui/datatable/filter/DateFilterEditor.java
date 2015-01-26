@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui.datatable.filter;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -49,7 +50,7 @@ public class DateFilterEditor extends FilterEditorBase {
         FlowPanel contentPanel = new FlowPanel();
         initWidget(contentPanel);
 
-        contentPanel.add(new Label(i18n.tr("From:")));
+        contentPanel.add(new Label(i18n.tr("Between")));
 
         fromBox = new DatePicker();
         contentPanel.add(fromBox);
@@ -65,7 +66,7 @@ public class DateFilterEditor extends FilterEditorBase {
             }
         });
 
-        contentPanel.add(new Label(i18n.tr("To:")));
+        contentPanel.add(new Label(i18n.tr("and")));
 
         toBox = new DatePicker();
         contentPanel.add(toBox);
@@ -80,6 +81,7 @@ public class DateFilterEditor extends FilterEditorBase {
                 toBoxValidationLabel.setMessage(toBox.isParsedOk() ? null : toBox.getParseExceptionMessage());
             }
         });
+
     }
 
     @Override

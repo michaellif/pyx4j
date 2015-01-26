@@ -25,14 +25,13 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.ParseException;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.RangeCriterion;
@@ -40,7 +39,6 @@ import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.widgets.client.Label;
-import com.pyx4j.widgets.client.StringBox;
 import com.pyx4j.widgets.client.TextBox;
 
 public class NumberFilterEditor extends FilterEditorBase {
@@ -101,6 +99,10 @@ public class NumberFilterEditor extends FilterEditorBase {
                 toBoxValidationLabel.setMessage(toBox.isParsedOk() ? null : toBox.getParseExceptionMessage());
             }
         });
+
+        Label descrLabel = new Label(i18n.tr("Enter a minimum, maximum or range limit"));
+        descrLabel.getElement().getStyle().setPaddingTop(10, Unit.PX);
+        contentPanel.add(descrLabel);
     }
 
     @Override
@@ -156,7 +158,7 @@ public class NumberFilterEditor extends FilterEditorBase {
 
                 @Override
                 public Serializable parse(String string) throws ParseException {
-                    if (string == null) {
+                    if (string == null || string.trim().equals("")) {
                         return null;
                     }
 

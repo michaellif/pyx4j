@@ -25,38 +25,49 @@ import java.util.Vector;
 
 import com.pyx4j.commons.GWTSerializable;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 
 public class RangeCriterion implements Criterion {
 
     private static final long serialVersionUID = 1L;
 
-    ///Not final because of GWT
-    @GWTSerializable
-    private Vector<PropertyCriterion> filters;
+    private String propertyPath;
+
+    private Serializable fromValue;
+
+    private Serializable toValue;
 
     @GWTSerializable
     protected RangeCriterion() {
     }
 
     public RangeCriterion(IObject<?> member, Serializable fromValue, Serializable toValue) {
-        filters = new Vector<>();
-        filters.add(PropertyCriterion.ge(member, fromValue));
-        filters.add(PropertyCriterion.le(member, toValue));
+        this.propertyPath = member.getPath().toString();
+        this.fromValue = fromValue;
+        this.toValue = toValue;
     }
 
     public Vector<? extends Criterion> getFilters() {
+        Vector<Criterion> filters = new Vector<>();
+        if (fromValue != null) {
+            filters.add(new PropertyCriterion(new Path(propertyPath), Restriction.GREATER_THAN_OR_EQUAL, fromValue));
+        }
+        if (toValue != null) {
+            filters.add(new PropertyCriterion(new Path(propertyPath), Restriction.LESS_THAN_OR_EQUAL, toValue));
+        }
         return filters;
     }
 
     public String getPropertyPath() {
-        return filters.get(0).getPropertyPath();
+        return propertyPath;
     }
 
     public Serializable getFromValue() {
-        return filters.get(0).getValue();
+        return fromValue;
     }
 
     public Serializable getToValue() {
-        return filters.get(1).getValue();
+        return toValue;
     }
 }
