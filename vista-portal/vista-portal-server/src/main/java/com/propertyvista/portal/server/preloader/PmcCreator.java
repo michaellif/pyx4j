@@ -37,9 +37,9 @@ import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.preloader.CrmRolesPreloader;
+import com.propertyvista.biz.preloader.PmcPreloaderFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
-import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.CrmRole;
@@ -72,9 +72,14 @@ public class PmcCreator {
 
                 });
 
-                AbstractDataPreloader preloader = VistaDataPreloaders.productionPmcPreloaders();
-                preloader.setParameterValue(VistaDataPreloaderParameter.pmcName.name(), pmc.name().getStringView());
-                log.info("Preload {}", preloader.create());
+//                if (ApplicationMode.isDemo()) {
+                if (true) {
+                    ServerSideFactory.create(PmcPreloaderFacade.class).preloadExistingPmc(pmc);
+                } else {
+                    AbstractDataPreloader preloader = VistaDataPreloaders.productionPmcPreloaders();
+                    preloader.setParameterValue(VistaDataPreloaderParameter.pmcName.name(), pmc.name().getStringView());
+                    log.info("Preload {}", preloader.create());
+                }
 
                 CrmRole defaultRole = CrmRolesPreloader.getDefaultRole();
 
@@ -86,12 +91,12 @@ public class PmcCreator {
                 // Create support account by default
                 createVistaSupportUsers();
 
-                if (ApplicationMode.isDevelopment()) {
-                    for (int i = 1; i <= DemoData.UserType.PM.getDefaultMax(); i++) {
-                        String email = DemoData.UserType.PM.getEmail(i);
-                        createCrmEmployee(email, email, email, email, null, defaultRole);
-                    }
-                }
+//                if (ApplicationMode.isDevelopment()) {
+//                    for (int i = 1; i <= DemoData.UserType.PM.getDefaultMax(); i++) {
+//                        String email = DemoData.UserType.PM.getEmail(i);
+//                        createCrmEmployee(email, email, email, email, null, defaultRole);
+//                    }
+//                }
 
                 return null;
             }

@@ -18,7 +18,6 @@ import java.util.EnumSet;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
@@ -58,14 +57,16 @@ public class TriggerPreloader extends AbstractDataPreloader {
             }
 
             if (pmcProcessType.equals(PmcProcessType.resetDemoPMC)) {
-                if (ApplicationMode.isDemo()) {
-                    trigger.scheduleSuspended().setValue(false);
-                    trigger.schedules().add(createNightlySchedule());
-                    trigger.populationType().setValue(TriggerPmcSelectionType.manual);
-                    trigger.population().addAll(getDefaultResetDemoPMCs(trigger));
-                } else {
-                    continue;
-                }
+//                if (ApplicationMode.isDemo()) {
+                trigger.scheduleSuspended().setValue(false);
+                trigger.schedules().add(createNightlySchedule());
+                trigger.populationType().setValue(TriggerPmcSelectionType.none); //Instead of 'manual'
+                // TODO PMCs are not created when TriggerPreloader is executed. Move default PMCs to reset to ResetDemoPmcProcess?
+                // TODO Should PMCs be shown at user interface to be editable?
+                trigger.population().addAll(getDefaultResetDemoPMCs(trigger));
+//                } else {
+//                    continue;
+//                }
             }
 
             Persistence.service().persist(trigger);
