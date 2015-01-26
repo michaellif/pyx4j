@@ -116,7 +116,7 @@ public abstract class CFolder<DATA_TYPE extends IEntity> extends CContainer<CFol
         if (!populate && value != null) {
             IList<DATA_TYPE> boundList = getValue();
             // Avoid self cleaning
-            if (boundList != value) {
+            if ((boundList != value) && (boundList.getValue() != value.getValue())) {
                 boundList.clear();
                 boundList.addAll(value);
             }
