@@ -181,67 +181,85 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
             sideMenuList = new SideMenuList();
             root.addMenuItem(new SideMenuFolderItem(sideMenuList, i18n.tr("Policies"), null));
 
-            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.ApplicationApprovalChecklist(),
+            SideMenuList applicationLeasingList = new SideMenuList();
+            sideMenuList.addMenuItem(new SideMenuFolderItem(applicationLeasingList, i18n.tr("Application/Leasing"), null));
+
+            applicationLeasingList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.ApplicationApprovalChecklist(),
                     CrmAdministrationPolicesOtherAccess.class));
-            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.ApplicationDocumentation(),
-                    CrmAdministrationPolicesOtherAccess.class));
-            if (!VistaFeatures.instance().yardiIntegration()) {
-                sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.AR(), CrmAdministrationPolicesFinancialAccess.class));
-            }
-            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.AutoPay(), CrmAdministrationPolicesFinancialAccess.class));
             if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-                sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.BackgroundCheck(),
+                applicationLeasingList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.BackgroundCheck(),
                         CrmAdministrationPolicesOtherAccess.class));
             }
-            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.Billing(), CrmAdministrationPolicesFinancialAccess.class));
-            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.Dates(), CrmAdministrationPolicesOtherAccess.class));
-            sideMenuList
-                    .addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.Deposits(), CrmAdministrationPolicesFinancialAccess.class));
-            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.EmailTemplates(),
+            applicationLeasingList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.ApplicationDocumentation(),
                     CrmAdministrationPolicesOtherAccess.class));
-            sideMenuList
-                    .addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.IdAssignment(), CrmAdministrationPolicesOtherAccess.class));
-            // TODO VISTA-2187       list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Settings.Policies.LeaseTermination());
+            applicationLeasingList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.AgreementLegalTerms(),
+                    CrmAdministrationPolicesOtherAccess.class));
+            applicationLeasingList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.LeaseApplicationTerms(),
+                    CrmAdministrationPolicesOtherAccess.class));
+            applicationLeasingList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.LegalQuestions(),
+                    CrmAdministrationPolicesOtherAccess.class));
+            applicationLeasingList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.ProspectPortal(),
+                    CrmAdministrationPolicesOtherAccess.class));
+            applicationLeasingList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.Restrictions(),
+                    CrmAdministrationPolicesOtherAccess.class));
+
+            SideMenuList templatesList = new SideMenuList();
+            sideMenuList.addMenuItem(new SideMenuFolderItem(templatesList, i18n.tr("Templates"), null));
+
+            templatesList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.EmailTemplates(),
+                    CrmAdministrationPolicesOtherAccess.class));
+
+            SideMenuList financeList = new SideMenuList();
+            sideMenuList.addMenuItem(new SideMenuFolderItem(financeList, i18n.tr("Finance"), null));
+
             if (!VistaFeatures.instance().yardiIntegration()) {
-                sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.LeaseAdjustment(),
+                financeList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.AR(), CrmAdministrationPolicesFinancialAccess.class));
+            }
+            financeList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.AutoPay(), CrmAdministrationPolicesFinancialAccess.class));
+            financeList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.Billing(), CrmAdministrationPolicesFinancialAccess.class));
+            financeList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.Deposits(), CrmAdministrationPolicesFinancialAccess.class));
+            if (!VistaFeatures.instance().yardiIntegration()) {
+                financeList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.LeaseAdjustment(),
+                        CrmAdministrationPolicesFinancialAccess.class));
+            }
+            if (!VistaFeatures.instance().yardiIntegration()) {
+                financeList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.ProductTax(),
                         CrmAdministrationPolicesFinancialAccess.class));
             }
 
-            SideMenuList legalList = new SideMenuList();
-            sideMenuList.addMenuItem(new SideMenuFolderItem(legalList, i18n.tr("Legal"), null));
+            SideMenuList legalOntarioList = new SideMenuList();
+            sideMenuList.addMenuItem(new SideMenuFolderItem(legalOntarioList, i18n.tr("Legal - Ontario"), null));
 
-            legalList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.AgreementLegalTerms(),
-                    CrmAdministrationPolicesOtherAccess.class));
-            legalList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.LeaseApplicationTerms(),
-                    CrmAdministrationPolicesOtherAccess.class));
-            legalList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.LegalDocumentation(),
-                    CrmAdministrationPolicesOtherAccess.class));
-            legalList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.LegalQuestions(), CrmAdministrationPolicesOtherAccess.class));
+            legalOntarioList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.N4(), CrmAdministrationPolicesOtherAccess.class));
 
-            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.MaintenanceRequest(),
-                    CrmAdministrationPolicesOtherAccess.class));
             sideMenuList
                     .addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.EvictionFlow(), CrmAdministrationPolicesOtherAccess.class));
-            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.N4(), CrmAdministrationPolicesOtherAccess.class));
-//          list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Settings.Policies.Pet(), CrmAdministrationPolicesOtherAccess.class));
-            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.PaymentTypeSelection(),
-                    CrmAdministrationPolicesFinancialAccess.class));
-            if (!VistaFeatures.instance().yardiIntegration()) {
-                sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.ProductTax(),
-                        CrmAdministrationPolicesFinancialAccess.class));
-            }
+
+            SideMenuList systemSettingsList = new SideMenuList();
+            sideMenuList.addMenuItem(new SideMenuFolderItem(systemSettingsList, i18n.tr("System Settings"), null));
+
+            systemSettingsList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.Dates(), CrmAdministrationPolicesOtherAccess.class));
+            systemSettingsList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.IdAssignment(),
+                    CrmAdministrationPolicesOtherAccess.class));
+            // TODO VISTA-2187       list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Settings.Policies.LeaseTermination());
 
             SideMenuList portalsList = new SideMenuList();
-            sideMenuList.addMenuItem(new SideMenuFolderItem(portalsList, i18n.tr("Portal"), null));
-            portalsList
-                    .addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.ProspectPortal(), CrmAdministrationPolicesOtherAccess.class));
+            sideMenuList.addMenuItem(new SideMenuFolderItem(portalsList, i18n.tr("Portals"), null));
+
             portalsList
                     .addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.ResidentPortal(), CrmAdministrationPolicesOtherAccess.class));
+            portalsList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.MaintenanceRequest(),
+                    CrmAdministrationPolicesOtherAccess.class));
+            portalsList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.LegalDocumentation(),
+                    CrmAdministrationPolicesOtherAccess.class));
+            //          list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Settings.Policies.Pet(), CrmAdministrationPolicesOtherAccess.class));
 
-            sideMenuList
-                    .addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.Restrictions(), CrmAdministrationPolicesOtherAccess.class));
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.PaymentTypeSelection(),
+                    CrmAdministrationPolicesFinancialAccess.class));
+
             sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.TenantInsurance(),
                     CrmAdministrationPolicesOtherAccess.class));
+
             if (VistaFeatures.instance().yardiIntegration()) {
                 sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.YardiInterface(),
                         CrmAdministrationPolicesOtherAccess.class));
