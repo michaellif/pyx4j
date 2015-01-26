@@ -29,9 +29,13 @@ public class JulMemoryLeakReducer {
     /**
      * JDK-6543126 : Level.known can leak memory, http://bugs.java.com/view_bug.do?bug_id=6543126
      * 
-     * example OracleLog$OracleLevel
+     * example OracleLog$OracleLevel, com.bea.logging.LogLevel
      */
     public static void shutdown() {
+        clearClassLoaderRefferences(JulMemoryLeakReducer.class.getClassLoader());
+    }
+
+    public static void clearClassLoaderRefferences(ClassLoader classLoader) {
         try {
             Class<?> type = Class.forName(java.util.logging.Level.class.getName() + "$KnownLevel");
             Field levelObjectField = type.getDeclaredField("levelObject");
@@ -47,7 +51,7 @@ public class JulMemoryLeakReducer {
                 while (it.hasNext()) {
                     Object knownLevel = it.next();
                     Object customeLevel = levelObjectField.get(knownLevel);
-                    if (customeLevel.getClass().getClassLoader() == JulMemoryLeakReducer.class.getClassLoader()) {
+                    if (customeLevel.getClass().getClassLoader() == classLoader) {
                         it.remove();
                     }
                 }
@@ -63,12 +67,14 @@ public class JulMemoryLeakReducer {
                 while (it.hasNext()) {
                     Object knownLevel = it.next();
                     Object customeLevel = levelObjectField.get(knownLevel);
-                    if (customeLevel.getClass().getClassLoader() == JulMemoryLeakReducer.class.getClassLoader()) {
+                    if (customeLevel.getClass().getClassLoader() == classLoader) {
                         it.remove();
                     }
                 }
             }
         } catch (Throwable ignore) {
+            System.err.println("Unable to clear custom java.util.logging.Level references, expect Memory leaks");
+            ignore.printStackTrace();
         }
     }
 }
