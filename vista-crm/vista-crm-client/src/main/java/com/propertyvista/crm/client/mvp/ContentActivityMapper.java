@@ -116,12 +116,12 @@ import com.propertyvista.crm.client.activity.crud.communication.BroadcastEventVi
 import com.propertyvista.crm.client.activity.crud.communication.BroadcastTemplateEditorActivity;
 import com.propertyvista.crm.client.activity.crud.communication.BroadcastTemplateListerActivity;
 import com.propertyvista.crm.client.activity.crud.communication.BroadcastTemplateViewerActivity;
-import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryEditorActivity;
-import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryListerActivity;
-import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryViewActivity;
 import com.propertyvista.crm.client.activity.crud.communication.CommunicationEditorActivity;
 import com.propertyvista.crm.client.activity.crud.communication.CommunicationListerActivity;
 import com.propertyvista.crm.client.activity.crud.communication.CommunicationViewerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryEditorActivity;
+import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryListerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryViewActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexEditorActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexListerActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexViewerActivity;
@@ -160,6 +160,8 @@ import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermViewerAc
 import com.propertyvista.crm.client.activity.crud.lease.eviction.EvictionCaseEditorActivity;
 import com.propertyvista.crm.client.activity.crud.lease.eviction.EvictionCaseViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.eviction.n4.N4BatchEditorActivity;
+import com.propertyvista.crm.client.activity.crud.lease.eviction.n4.N4BatchItemEditorActivity;
+import com.propertyvista.crm.client.activity.crud.lease.eviction.n4.N4BatchItemViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.eviction.n4.N4BatchListerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.eviction.n4.N4BatchViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.financial.InvoiceCreditViewerActivity;
@@ -738,6 +740,17 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         case editor:
                             activity = new EvictionCaseEditorActivity(crudPlace);
+                            break;
+                        default:
+                            break;
+                        }
+                    } else if (crudPlace instanceof LegalAndCollections.N4BatchItem) {
+                        switch (crudPlace.getType()) {
+                        case viewer:
+                            activity = new N4BatchItemViewerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new N4BatchItemEditorActivity(crudPlace);
                             break;
                         default:
                             break;

@@ -259,6 +259,9 @@ public class CrmSiteMap implements SiteMap {
         public static class N4Batches extends CrmCrudAppPlace {
         }
 
+        public static class N4BatchItem extends CrmCrudAppPlace {
+        }
+
         @PlaceProperties(navigLabel = "N4 Create Batch")
         public static class N4GenerationTool extends CrmCrudAppPlace {
 

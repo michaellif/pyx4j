@@ -51,6 +51,8 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.tax.Tax;
+import com.propertyvista.domain.legal.n4.N4Batch;
+import com.propertyvista.domain.legal.n4.N4BatchItem;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.policy.policies.ARPolicy;
@@ -216,6 +218,8 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(LeaseApplicationDTO.class, Tenants.LeaseApplication.class, defaultImage);
         AppPlaceEntityMapper.register(EvictionCaseDTO.class, LegalAndCollections.EvictionCase.class, defaultImage);
         AppPlaceEntityMapper.register(N4BatchDTO.class, LegalAndCollections.N4Batches.class, defaultImage);
+        AppPlaceEntityMapper.register(N4Batch.class, LegalAndCollections.N4Batches.class, defaultImage);
+        AppPlaceEntityMapper.register(N4BatchItem.class, LegalAndCollections.N4BatchItem.class, defaultImage);
 
         AppPlaceEntityMapper.register(LeaseParticipantScreeningTO.class, Tenants.Screening.class, defaultImage);
 

@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
@@ -32,6 +33,7 @@ public interface N4Batch extends N4Data {
     @Detached
     Building building();
 
+    @ToString
     @NotNull
     IPrimitive<String> name();
 
