@@ -26,26 +26,21 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.widgets.client.selector.EditableItemHolder;
 import com.pyx4j.widgets.client.selector.SelectorListBoxValuePanel;
 
 public class FilterItemHolder extends EditableItemHolder<FilterItem> {
 
-    private final IFilterEditor editor;
+    private IFilterEditor editor;
 
     public FilterItemHolder(FilterItem item, SelectorListBoxValuePanel<FilterItem> valuePanel) {
         super(item, new FilterItemFormatter(), item.isRemovable(), valuePanel);
-        ColumnDescriptor columnDescriptor = item.getColumnDescriptor();
-        editor = createFilterEditor(columnDescriptor.getMemeber());
-        editor.asWidget().setWidth("200px");
-        setEditor(editor);
     }
 
     @Override
     protected boolean onEditingComplete() {
         try {
-            getItem().setCriterion(editor.getCriterion());
+            getItem().setCriterion(getEditor().getCriterion());
             return super.onEditingComplete();
         } catch (CriterionInitializationException e) {
             return false;
@@ -71,8 +66,18 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
     }
 
     @Override
+    public IFilterEditor getEditor() {
+        if (editor == null) {
+            editor = createFilterEditor(getItem().getColumnDescriptor().getMemeber());
+            editor.asWidget().setWidth("200px");
+        }
+        return editor;
+    }
+
+    @Override
     protected void onEditorShown() {
         super.onEditorShown();
+        IFilterEditor editor = getEditor();
         editor.setCriterion(getItem().getCriterion());
         editor.onShown();
     };
@@ -80,6 +85,7 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
     @Override
     protected void onEditorHidden() {
         super.onEditorHidden();
+        IFilterEditor editor = getEditor();
         editor.clear();
         editor.onHidden();
     };

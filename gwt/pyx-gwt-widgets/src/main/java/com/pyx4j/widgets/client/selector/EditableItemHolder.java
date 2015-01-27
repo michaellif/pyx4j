@@ -33,10 +33,6 @@ import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public abstract class EditableItemHolder<E> extends ItemHolder<E> {
 
-    private IsWidget editor;
-
-    private HandlerRegistration clickHandlerRegistration;
-
     private final SelectorListBoxValuePanel<E> parent;
 
     private HandlerRegistration popupCloseHandlerRegistration;
@@ -44,23 +40,14 @@ public abstract class EditableItemHolder<E> extends ItemHolder<E> {
     public EditableItemHolder(E item, IFormatter<E, String> valueFormatter, boolean removable, SelectorListBoxValuePanel<E> parent) {
         super(item, valueFormatter, removable);
         this.parent = parent;
-    }
+        addDomHandler(new ClickHandler() {
 
-    public void setEditor(IsWidget editor) {
-        if (editor == null && this.editor != null) {
-            clickHandlerRegistration.removeHandler();
-            clickHandlerRegistration = null;
-        } else if (editor != null && this.editor == null) {
-            clickHandlerRegistration = addDomHandler(new ClickHandler() {
-
-                @Override
-                public void onClick(ClickEvent event) {
-                    showEditor();
-                }
-            }, ClickEvent.getType());
-            addStyleDependentName(WidgetsTheme.StyleDependent.editable.name());
-        }
-        this.editor = editor;
+            @Override
+            public void onClick(ClickEvent event) {
+                showEditor();
+            }
+        }, ClickEvent.getType());
+        addStyleDependentName(WidgetsTheme.StyleDependent.editable.name());
     }
 
     protected void showEditor() {
@@ -85,10 +72,6 @@ public abstract class EditableItemHolder<E> extends ItemHolder<E> {
         removeStyleDependentName(WidgetsTheme.StyleDependent.editing.name());
     }
 
-    public IsWidget getEditor() {
-        return editor;
-    }
-
     /**
      * 
      * @return true if item was edited successfully
@@ -106,5 +89,7 @@ public abstract class EditableItemHolder<E> extends ItemHolder<E> {
     }
 
     public abstract boolean isEditorShownOnAttach();
+
+    public abstract IsWidget getEditor();
 
 }
