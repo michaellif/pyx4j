@@ -1201,9 +1201,14 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 availabilityRightBound);
 
         unitSelection.potentialUnits().clear();
-        for (AptUnit unit : Persistence.service().query(criteria)) {
+        for (final AptUnit unit : Persistence.service().query(criteria)) {
             if (unitSelection.potentialUnits().size() < policy.maxPartialMatchUnits().getValue()) {
-                if (!unitSelection.availableUnits().contains(unit)) {
+                if (CollectionUtils.find(unitSelection.availableUnits(), new Predicate<UnitTO>() {
+                    @Override
+                    public boolean evaluate(UnitTO arg0) {
+                        return unit.getPrimaryKey().equals(arg0.getPrimaryKey());
+                    }
+                }) == null) {
                     unitSelection.potentialUnits().add(createUnitDTO(unit));
                 }
             } else {
