@@ -36,11 +36,12 @@ public class N4DataEditorPanel<E extends N4Data> extends FormPanel {
         super(parent);
         this.parent = parent;
 
-        append(Location.Left, proto().issueDate()).decorate();
+        append(Location.Left, proto().created(), new CDateLabel()).decorate();
         append(Location.Left, proto().serviceDate(), new CDateLabel()).decorate();
 
         append(Location.Right, proto().deliveryMethod()).decorate();
         append(Location.Right, proto().deliveryDate()).decorate();
+        append(Location.Right, proto().terminationDateOption()).decorate();
 
         h1(i18n.tr("Agent Information"));
         CField<Employee, ?> signingAgentBox = isEditable() ? new CEntityComboBox<>(Employee.class) : //

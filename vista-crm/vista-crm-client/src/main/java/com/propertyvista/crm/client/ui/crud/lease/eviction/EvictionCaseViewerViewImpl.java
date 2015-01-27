@@ -12,13 +12,58 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.eviction;
 
+import com.google.gwt.user.client.Command;
+
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.ActionPermission;
+import com.pyx4j.widgets.client.Button.SecureMenuItem;
+
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.rpc.services.legal.eviction.ac.ServiceN4;
+import com.propertyvista.domain.eviction.EvictionStatus;
+import com.propertyvista.domain.eviction.EvictionStatusN4;
+import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep.EvictionStepType;
 import com.propertyvista.dto.EvictionCaseDTO;
 
 public class EvictionCaseViewerViewImpl extends CrmViewerViewImplBase<EvictionCaseDTO> implements EvictionCaseViewerView {
 
+    private static final I18n i18n = I18n.get(EvictionCaseViewerViewImpl.class);
+
+    private final SecureMenuItem issueN4Action;
+
     public EvictionCaseViewerViewImpl() {
         setForm(new EvictionCaseForm(this, true));
+
+        // Issue N4
+        addAction(issueN4Action = new SecureMenuItem(i18n.tr("Issue N4"), new Command() {
+            @Override
+            public void execute() {
+                ((EvictionCaseViewerView.Presenter) getPresenter()).issueN4(getForm().getValue());
+            }
+        }, new ActionPermission(ServiceN4.class)));
+        issueN4Action.setVisible(false);
     }
 
+    @Override
+    public void populate(EvictionCaseDTO value) {
+        super.populate(value);
+
+        issueN4Action.setVisible(canIssueN4(value));
+    }
+
+    private boolean canIssueN4(EvictionCaseDTO evictionCase) {
+        if (!evictionCase.closedOn().isNull()) {
+            return false;
+        }
+
+        boolean hasArrears = false;
+        for (EvictionStatus status : evictionCase.history()) {
+            if (EvictionStepType.N4.equals(status.evictionStep().stepType().getValue())) {
+                EvictionStatusN4 statusN4 = (EvictionStatusN4) status;
+                hasArrears = !statusN4.leaseArrears().isEmpty();
+                break;
+            }
+        }
+        return hasArrears;
+    }
 }

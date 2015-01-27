@@ -27,10 +27,13 @@ public class N4BatchViewerViewImpl extends CrmViewerViewImplBase<N4BatchDTO> imp
 
     private static final I18n i18n = I18n.get(N4BatchViewerViewImpl.class);
 
+    private final N4BatchItemLister itemLister = new N4BatchItemLister();
+
     public N4BatchViewerViewImpl() {
         setForm(new N4BatchForm(this));
 
-        addAction(new SecureMenuItem(i18n.tr("Service N4 Batch"), new Command() {
+        // Issue Forms
+        addAction(new SecureMenuItem(i18n.tr("Issue Forms"), new Command() {
             @Override
             public void execute() {
                 if (getForm().getValue().isReadyForService().getValue(false)) {
@@ -40,5 +43,29 @@ public class N4BatchViewerViewImpl extends CrmViewerViewImplBase<N4BatchDTO> imp
                 }
             }
         }, new ActionPermission(ServiceN4.class)));
+
+        addAction(new SecureMenuItem(i18n.tr("Download Forms"), new Command() {
+            @Override
+            public void execute() {
+                if (!getForm().getValue().serviceDate().isNull()) {
+                    // TODO - implement
+                } else {
+                    MessageDialog.error(i18n.tr("Forms Not Issued"), i18n.tr("Issue Forms before downloading"));
+                }
+            }
+        }, new ActionPermission(ServiceN4.class)));
+    }
+
+    @Override
+    public N4BatchItemLister getItemLister() {
+        return itemLister;
+    }
+
+    @Override
+    public void populate(N4BatchDTO value) {
+        super.populate(value);
+
+        itemLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        itemLister.populate();
     }
 }

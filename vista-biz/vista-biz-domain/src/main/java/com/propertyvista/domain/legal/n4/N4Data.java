@@ -23,6 +23,7 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
@@ -32,10 +33,17 @@ import com.propertyvista.domain.contact.InternationalAddress;
 @AbstractEntity
 public interface N4Data extends IEntity {
 
+    public enum TerminationDateOption {
+        Calculate, LeaveBlank;
+    }
+
+    @NotNull
+    IPrimitive<TerminationDateOption> terminationDateOption();
+
     @ReadOnly
     @Format("yyyy-MM-dd HH:mm:ss")
     @Timestamp(Update.Created)
-    IPrimitive<Date> issueDate();
+    IPrimitive<Date> created();
 
     @ReadOnly
     @Format("yyyy-MM-dd")

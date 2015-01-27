@@ -25,8 +25,10 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.services.legal.eviction.EvictionCaseCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
@@ -37,7 +39,6 @@ import com.propertyvista.domain.eviction.EvictionStatusRecord;
 import com.propertyvista.domain.legal.n4.N4Batch;
 import com.propertyvista.domain.legal.n4.N4LeaseData;
 import com.propertyvista.domain.policy.policies.EvictionFlowPolicy;
-import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.EvictionCaseDTO;
@@ -121,7 +122,7 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
                     if (statusN4.originatingBatch().getPrimaryKey() != null) {
                         N4Batch batch = Persistence.service().retrieve(N4Batch.class, statusN4.originatingBatch().getPrimaryKey());
                         // copy n4 data
-                        statusN4.n4Data().issueDate().set(batch.issueDate());
+                        statusN4.n4Data().created().set(batch.created());
                         statusN4.n4Data().serviceDate().set(batch.serviceDate());
                         statusN4.n4Data().deliveryMethod().set(batch.deliveryMethod());
                         statusN4.n4Data().deliveryDate().set(batch.deliveryDate());
@@ -170,11 +171,8 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
         return policy;
     }
 
-    private EvictionFlowStep getNextEvictionStep(EvictionCase bo) {
-        EvictionFlowStep nextStep = null;
-        if (bo.history().size() < bo.evictionFlowPolicy().evictionFlow().size()) {
-            nextStep = bo.evictionFlowPolicy().evictionFlow().get(bo.history().size());
-        }
-        return nextStep;
+    @Override
+    public void issueN4(AsyncCallback<String> callback, EvictionCase caseId) {
+        callback.onSuccess(DeferredProcessRegistry.fork(new N4LeaseGenerationDeferredProcess(caseId), ThreadPoolNames.IMPORTS));
     }
 }

@@ -28,9 +28,9 @@ import com.propertyvista.biz.legal.eviction.N4ManagementFacade;
 import com.propertyvista.domain.legal.n4.N4Batch;
 import com.propertyvista.operations.domain.scheduler.CompletionType;
 
-public class N4GenerationDeferredProcess extends AbstractDeferredProcess {
+public class N4BatchGenerationDeferredProcess extends AbstractDeferredProcess {
 
-    private static final Logger log = LoggerFactory.getLogger(N4GenerationDeferredProcess.class);
+    private static final Logger log = LoggerFactory.getLogger(N4BatchGenerationDeferredProcess.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -42,7 +42,7 @@ public class N4GenerationDeferredProcess extends AbstractDeferredProcess {
 
     private String fileName;
 
-    public N4GenerationDeferredProcess(N4Batch batch) {
+    public N4BatchGenerationDeferredProcess(N4Batch batch) {
         this.batch = batch;
         monitor = new ExecutionMonitor();
     }
