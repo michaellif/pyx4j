@@ -38,6 +38,7 @@ public class SuggestableMultiSelectFilterEditor<E extends IEntity> extends Filte
 
         if (mm.isEntity()) {
             selector = new EntitySelectorListBox<>(member);
+            selector.setWatermark("+ Add item");
         }
         initWidget(selector);
     }
