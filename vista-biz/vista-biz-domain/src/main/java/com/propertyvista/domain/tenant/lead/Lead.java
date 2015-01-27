@@ -140,7 +140,7 @@ public interface Lead extends IEntity {
     IPrimitive<String> comments();
 
     @Caption(name = "How did you find us")
-    IPrimitive<ReferenceSource> refSource();
+    IPrimitive<ReferenceSource> referenceSource();
 
     // Preferred appointments:
 

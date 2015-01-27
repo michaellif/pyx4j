@@ -108,7 +108,7 @@ public class TenantsGenerator {
         item.leaseType().setValue(RandomUtil.randomEnum(ARCode.Type.class));
 
         item.comments().setValue(CommonsGenerator.lipsum());
-        item.refSource().setValue(RandomUtil.randomEnum(ReferenceSource.class));
+        item.referenceSource().setValue(RandomUtil.randomEnum(ReferenceSource.class));
 
         item.appointmentDate1().setValue(RandomUtil.randomLogicalDate(2011, 2012));
         item.appointmentTime1().setValue(RandomUtil.randomEnum(Lead.DayPart.class));
