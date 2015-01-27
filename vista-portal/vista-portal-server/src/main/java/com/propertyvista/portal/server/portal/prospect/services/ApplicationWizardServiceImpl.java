@@ -67,7 +67,6 @@ import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
-import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -178,17 +177,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     @Override
     public void getAvailableUnits(AsyncCallback<UnitSelectionDTO> callback, UnitSelectionDTO unitSelection) {
-        unitSelection.availableUnits().clear();
-        unitSelection.availableUnits().addAll(
-                retriveAvailableUnits(unitSelection.building(), unitSelection.bedrooms().getValue(), unitSelection.bathrooms().getValue(), unitSelection
-                        .moveIn().getValue()));
-
-        unitSelection.potentialUnits().clear();
-        unitSelection.potentialUnits().addAll(
-                retrivePotentialUnits(unitSelection.building(), unitSelection.bedrooms().getValue(), unitSelection.bathrooms().getValue(), unitSelection
-                        .moveIn().getValue()));
-
-        excludeAvailbleFromPotential(unitSelection);
+        retriveAvailableUnits(unitSelection);
+        retrivePotentialUnits(unitSelection);
 
         callback.onSuccess(unitSelection);
     }
@@ -687,9 +677,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
             if (!unitSelection.floorplan().isNull()) {
                 updateBedsDensBaths(unitSelection);
-                unitSelection.availableUnits().addAll(retriveAvailableUnits(unitSelection.floorplan(), unitSelection.moveIn().getValue()));
-                unitSelection.potentialUnits().addAll(retrivePotentialUnits(unitSelection.floorplan(), unitSelection.moveIn().getValue()));
-                excludeAvailbleFromPotential(unitSelection);
+
+                retriveAvailableUnits(unitSelection);
+                retrivePotentialUnits(unitSelection);
             }
 
             to.unitSelection().set(unitSelection);
@@ -1100,31 +1090,24 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         return res.toString();
     }
 
-    private List<UnitTO> retriveAvailableUnits(Floorplan floorplanId, LogicalDate leaseFrom) {
-        UnitSelectionDTO unitSelection = EntityFactory.create(UnitSelectionDTO.class);
-        unitSelection.floorplan().set(Persistence.service().retrieve(Floorplan.class, floorplanId.getPrimaryKey()));
-        updateBedsDensBaths(unitSelection);
-
-        return retriveAvailableUnits(unitSelection.floorplan().building(), unitSelection.bedrooms().getValue(), unitSelection.bathrooms().getValue(), leaseFrom);
-    }
-
-    private List<UnitTO> retriveAvailableUnits(Building building, BedroomNumber beds, BathroomNumber baths, LogicalDate leaseFrom) {
-        if (leaseFrom == null) {
-            leaseFrom = SystemDateManager.getLogicalDate();
+    private void retriveAvailableUnits(UnitSelectionDTO unitSelection) {
+        if (unitSelection.moveIn().isNull()) {
+            unitSelection.moveIn().setValue(SystemDateManager.getLogicalDate());
         }
-        if (baths == null) {
-            baths = BathroomNumber.Any;
+        if (unitSelection.bedrooms().isNull()) {
+            unitSelection.bedrooms().setValue(BedroomNumber.Any);
         }
-        if (beds == null) {
-            beds = BedroomNumber.Any;
+        if (unitSelection.bathrooms().isNull()) {
+            unitSelection.bathrooms().setValue(BathroomNumber.Any);
         }
 
-        ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ProspectPortalPolicy.class);
-        LogicalDate availabilityDeadline = DateUtils.daysAdd(leaseFrom, -policy.unitAvailabilitySpan().getValue());
+        ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unitSelection.building(), ProspectPortalPolicy.class);
+        LogicalDate availabilityDeadline = DateUtils.daysAdd(unitSelection.moveIn().getValue(), -policy.unitAvailabilitySpan().getValue());
 
-        EntityQueryCriteria<AptUnit> criteria = buildUnitRetriveCriteria(building, leaseFrom, availabilityDeadline, leaseFrom);
+        EntityQueryCriteria<AptUnit> criteria = buildUnitRetriveCriteria(unitSelection.building(), unitSelection.moveIn().getValue(), availabilityDeadline,
+                unitSelection.moveIn().getValue());
 
-        switch (beds) {
+        switch (unitSelection.bedrooms().getValue()) {
         case Any:
             break;
 
@@ -1178,7 +1161,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             break;
         }
 
-        switch (baths) {
+        switch (unitSelection.bathrooms().getValue()) {
         case Any:
             break;
         case One:
@@ -1195,47 +1178,38 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             break;
         }
 
-        List<UnitTO> availableUnits = new ArrayList<UnitTO>();
+        unitSelection.availableUnits().clear();
         for (AptUnit unit : Persistence.service().query(criteria)) {
-            if (availableUnits.size() < policy.maxExactMatchUnits().getValue()) {
-                availableUnits.add(createUnitDTO(unit));
+            if (unitSelection.availableUnits().size() < policy.maxExactMatchUnits().getValue()) {
+                unitSelection.availableUnits().add(createUnitDTO(unit));
             } else {
                 break; // list no more
             }
         }
-
-        return availableUnits;
     }
 
-    private List<UnitTO> retrivePotentialUnits(Floorplan floorplanId, LogicalDate leaseFrom) {
-        UnitSelectionDTO unitSelection = EntityFactory.create(UnitSelectionDTO.class);
-        unitSelection.floorplan().set(Persistence.service().retrieve(Floorplan.class, floorplanId.getPrimaryKey()));
-        updateBedsDensBaths(unitSelection);
-
-        return retrivePotentialUnits(unitSelection.floorplan().building(), unitSelection.bedrooms().getValue(), unitSelection.bathrooms().getValue(), leaseFrom);
-    }
-
-    private List<UnitTO> retrivePotentialUnits(Building building, BedroomNumber beds, BathroomNumber baths, LogicalDate leaseFrom) {
-        if (leaseFrom == null) {
-            leaseFrom = SystemDateManager.getLogicalDate();
+    private void retrivePotentialUnits(UnitSelectionDTO unitSelection) {
+        if (unitSelection.moveIn().isNull()) {
+            unitSelection.moveIn().setValue(SystemDateManager.getLogicalDate());
         }
 
-        ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ProspectPortalPolicy.class);
-        LogicalDate availabilityDeadline = DateUtils.daysAdd(leaseFrom, -policy.unitAvailabilitySpan().getValue());
-        LogicalDate availabilityRightBound = DateUtils.monthAdd(leaseFrom, 2);
+        ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unitSelection.building(), ProspectPortalPolicy.class);
+        LogicalDate availabilityDeadline = DateUtils.daysAdd(unitSelection.moveIn().getValue(), -policy.unitAvailabilitySpan().getValue());
+        LogicalDate availabilityRightBound = DateUtils.monthAdd(unitSelection.moveIn().getValue(), 2);
 
-        EntityQueryCriteria<AptUnit> criteria = buildUnitRetriveCriteria(building, leaseFrom, availabilityDeadline, availabilityRightBound);
+        EntityQueryCriteria<AptUnit> criteria = buildUnitRetriveCriteria(unitSelection.building(), unitSelection.moveIn().getValue(), availabilityDeadline,
+                availabilityRightBound);
 
-        List<UnitTO> availableUnits = new ArrayList<UnitTO>();
+        unitSelection.potentialUnits().clear();
         for (AptUnit unit : Persistence.service().query(criteria)) {
-            if (availableUnits.size() < policy.maxPartialMatchUnits().getValue()) {
-                availableUnits.add(createUnitDTO(unit));
+            if (unitSelection.potentialUnits().size() < policy.maxPartialMatchUnits().getValue()) {
+                if (!unitSelection.availableUnits().contains(unit)) {
+                    unitSelection.potentialUnits().add(createUnitDTO(unit));
+                }
             } else {
                 break; // list no more
             }
         }
-
-        return availableUnits;
     }
 
     private EntityQueryCriteria<AptUnit> buildUnitRetriveCriteria(Building building, LogicalDate leaseFrom, LogicalDate availabilityDeadline,
@@ -1256,15 +1230,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         criteria.sort(new Sort(criteria.proto().availability().availableForRent(), false));
 
         return criteria;
-    }
-
-    private void excludeAvailbleFromPotential(UnitSelectionDTO unitSelection) {
-        List<UnitTO> potential = new ArrayList<UnitTO>(unitSelection.potentialUnits());
-
-        potential.removeAll(unitSelection.availableUnits());
-
-        unitSelection.potentialUnits().clear();
-        unitSelection.potentialUnits().addAll(potential);
     }
 
     private UnitOptionsSelectionDTO retriveCurrentUnitOptions(Lease lease) {
