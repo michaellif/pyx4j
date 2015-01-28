@@ -17,7 +17,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 @I18n
 public enum ReferenceSource {
-    Internet, Newspaper, Radio, Referral, TV, Import, LocatorServices, DirectMail, Other;
+    Internet, Newspaper, Radio, Referral, TV, DirectMail, Other;
 
     @Override
     public String toString() {

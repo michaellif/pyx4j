@@ -159,7 +159,7 @@ public class InquiryPanel extends Panel {
         form.add(new DateInput("appointmentDate2", leadModel.bind(lead.appointmentDate2())));
         form.add(new RadioChoice<Lead.DayPart>("appointmentTime2", leadModel.bind(lead.appointmentTime2()), Arrays.asList(Lead.DayPart.values())));
         // ref source
-        form.add(new WicketUtils.DropDownList<ReferenceSource>("refSource", leadModel.bind(lead.refSource()), Arrays.asList(ReferenceSource.values()), true,
+        form.add(new WicketUtils.DropDownList<ReferenceSource>("refSource", leadModel.bind(lead.referenceSource()), Arrays.asList(ReferenceSource.values()), true,
                 false));
         // comments
         form.add(new TextArea<String>("comments", leadModel.bind(lead.comments())));

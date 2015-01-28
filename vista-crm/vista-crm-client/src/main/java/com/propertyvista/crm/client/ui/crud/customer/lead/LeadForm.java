@@ -101,7 +101,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
         formPanel.br();
 
-        formPanel.append(Location.Left, proto().refSource()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().referenceSource()).decorate().componentWidth(180);
         formPanel.append(Location.Dual, proto().comments()).decorate();
 
         return formPanel;

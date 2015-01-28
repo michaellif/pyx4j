@@ -138,9 +138,15 @@ public class ProductCatalogGenerator {
         service.defaultCatalogItem().setValue(false);
 
         service.code().set(arCode);
-        service.version().name().setValue(createNameBasedOnARCode(arCode));
-        service.version().description().setValue("Service description");
-        service.version().price().setValue(new BigDecimal(1000.10));
+        if (onlineUse) {
+            service.version().name().setValue(createNameBasedOnARCode(arCode) + " (online use)");
+            service.version().description().setValue("Service description (online use)");
+            service.version().price().setValue(new BigDecimal(1100.10));
+        } else {
+            service.version().name().setValue(createNameBasedOnARCode(arCode));
+            service.version().description().setValue("Service description");
+            service.version().price().setValue(new BigDecimal(1000.10));
+        }
         service.version().availableOnline().setValue(onlineUse);
 
         service.version().depositLMR().enabled().setValue(RandomUtil.randomBoolean());
