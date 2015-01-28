@@ -100,6 +100,7 @@ public class N4Manager {
 
         // update N4 status with the new info
         EntityQueryCriteria<EvictionStatusN4> n4crit = EntityQueryCriteria.create(EvictionStatusN4.class);
+        n4crit.eq(n4crit.proto().evictionCase().lease(), leaseArrears.lease());
         if (n4data instanceof N4Batch) {
             // N4Batch
             n4crit.eq(n4crit.proto().originatingBatch(), n4data);
@@ -424,8 +425,11 @@ public class N4Manager {
     }
 
     private LogicalDate calculateTerminationDate(Lease lease, LogicalDate deliveryDate, N4Policy policy) {
-        int advanceDays = terminationAdvanceDaysForLeaseType(lease, policy);
+        if (deliveryDate == null) {
+            return null;
+        }
 
+        int advanceDays = terminationAdvanceDaysForLeaseType(lease, policy);
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(deliveryDate);
         cal.add(GregorianCalendar.DAY_OF_YEAR, advanceDays);

@@ -55,7 +55,7 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
 
     @Override
     protected EvictionCaseDTO init(InitializationData initializationData) {
-        // TODO - use EvictionCaseFacade
+        // TODO - use EvictionCaseFacade to create new case
         EvictionCase bo = EntityFactory.create(EvictionCase.class);
         EvictionCaseInitData initData = (EvictionCaseInitData) initializationData;
         if (initData.isNull()) {

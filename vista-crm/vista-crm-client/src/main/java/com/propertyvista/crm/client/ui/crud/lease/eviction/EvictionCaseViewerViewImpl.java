@@ -31,6 +31,8 @@ public class EvictionCaseViewerViewImpl extends CrmViewerViewImplBase<EvictionCa
 
     private final SecureMenuItem issueN4Action;
 
+    private final SecureMenuItem downloadN4Action;
+
     public EvictionCaseViewerViewImpl() {
         setForm(new EvictionCaseForm(this, true));
 
@@ -41,14 +43,24 @@ public class EvictionCaseViewerViewImpl extends CrmViewerViewImplBase<EvictionCa
                 ((EvictionCaseViewerView.Presenter) getPresenter()).issueN4(getForm().getValue());
             }
         }, new ActionPermission(ServiceN4.class)));
-        issueN4Action.setVisible(false);
+        setActionVisible(issueN4Action, false);
+
+        addAction(downloadN4Action = new SecureMenuItem(i18n.tr("Download Forms"), new Command() {
+            @Override
+            public void execute() {
+                // TODO - implement
+            }
+        }, new ActionPermission(ServiceN4.class)));
+        setActionVisible(downloadN4Action, false);
     }
 
     @Override
     public void populate(EvictionCaseDTO value) {
         super.populate(value);
 
-        issueN4Action.setVisible(canIssueN4(value));
+        boolean canIssueN4 = canIssueN4(value);
+        setActionVisible(issueN4Action, canIssueN4);
+        setActionVisible(downloadN4Action, canIssueN4);
     }
 
     private boolean canIssueN4(EvictionCaseDTO evictionCase) {
