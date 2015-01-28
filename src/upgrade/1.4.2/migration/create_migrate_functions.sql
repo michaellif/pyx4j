@@ -131,11 +131,123 @@ BEGIN
         ALTER TABLE application_documentation_policy    ADD COLUMN mandatory_proof_of_asset BOOLEAN,
                                                         ADD COLUMN mandatory_proof_of_employment BOOLEAN;
                                                         
+        -- approval_checklist_item
+        
+        CREATE TABLE approval_checklist_item
+        (
+            id                              BIGINT              NOT NULL,
+            lease_application               BIGINT              NOT NULL,
+            order_in_lease_application      INTEGER,
+            decided_by                      BIGINT,
+            decision_date                   DATE,
+            notes                           VARCHAR(500),
+            task                            VARCHAR(500),
+            status                          VARCHAR(500),
+                CONSTRAINT approval_checklist_item_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE approval_checklist_item OWNER TO vista;
+        
+                                                        
                                                         
         -- autopay_agreement
         
         ALTER TABLE autopay_agreement   RENAME COLUMN creation_date TO created;
+        
+        
+        -- broadcast_event
+        
+        CREATE TABLE broadcast_event
+        (
+            id                              BIGINT              NOT NULL,
+            template                        BIGINT,
+            message_date                    TIMESTAMP,
+                CONSTRAINT broadcast_event_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE broadcast_event OWNER TO vista;
+        
+        
+        -- broadcast_event$threads
+        
+        CREATE TABLE broadcast_event$threads
+        (
+            id                              BIGINT              NOT NULL,
+            owner                           BIGINT,
+            value                           BIGINT,
+            seq                             INTEGER,
+                CONSTRAINT broadcast_event$threads_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE broadcast_event$threads OWNER TO vista;
+        
+        
+        -- broadcast_template
+        
+        CREATE TABLE broadcast_template
+        (
+            id                              BIGINT              NOT NULL,
+            content                         VARCHAR(48000),
+            template_type                   VARCHAR(50),
+            name                            VARCHAR(78),
+            subject                         VARCHAR(500),
+            audience_type                   VARCHAR(50),
+            message_type                    VARCHAR(50),
+            allowed_reply                   BOOLEAN,
+            category                        BIGINT              NOT NULL,
+            high_importance                 BOOLEAN,
+                CONSTRAINT broadcast_template_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE broadcast_template OWNER TO vista;
        
+        
+        --  broadcast_template_schedules
+        
+        CREATE TABLE  broadcast_template_schedules
+        (
+            id                              BIGINT              NOT NULL
+        );
+        
+        ALTER TABLE  broadcast_template_schedules OWNER TO vista;
+        
+        
+        -- broadcast_template_schedules$schedules
+        
+        CREATE TABLE broadcast_template_schedules$schedules
+        (
+            id                              BIGINT              NOT NULL,
+            owner                           BIGINT,
+            value                           BIGINT,
+            seq                             INTEGER,
+                CONSTRAINT broadcast_template_schedules$schedules_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE broadcast_template_schedules$schedules OWNER TO vista;
+        
+        
+        -- communication_broadcast_attachment
+        
+        CREATE TABLE communication_broadcast_attachment
+        (
+            id                              BIGINT              NOT NULL,
+            file_file_name                  VARCHAR(500),
+            file_updated_timestamp          BIGINT,
+            file_cache_version              INTEGER,
+            file_file_size                  INTEGER,
+            file_content_mime_type          VARCHAR(500),
+            file_blob_key                   BIGINT,
+            template                        BIGINT,
+            description                     VARCHAR(500),
+                CONSTRAINT communication_broadcast_attachment_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE communication_broadcast_attachment OWNER TO vista;
+        
+        -- communication_delivery_handle
+        
+        ALTER TABLE communication_delivery_handle ADD COLUMN message_type VARCHAR(50);
+        
         
         -- communication_message
         
@@ -391,6 +503,14 @@ BEGIN
         ALTER TABLE identification_document_type ADD COLUMN notes VARCHAR(500);
         
         
+        -- lead
+        
+        ALTER TABLE lead RENAME COLUMN ref_source TO reference_source;
+        
+        -- lease_application
+        
+        ALTER TABLE lease_application ADD COLUMN reference_source VARCHAR(50);
+        
         -- lease_billing_type_policy_item
         
         ALTER TABLE lease_billing_type_policy_item RENAME COLUMN lease_billing_policy TO policy;
@@ -537,62 +657,7 @@ BEGIN
         
         ALTER TABLE n4_batch_item OWNER TO vista;
         
-        -- n4_csdocument_type
         
-        CREATE TABLE n4_csdocument_type
-        (
-            id                              BIGINT              NOT NULL,
-            doc_type                        VARCHAR(50),
-            application                     VARCHAR(500),
-            termination                     VARCHAR(500),
-            other                           VARCHAR(500),
-                CONSTRAINT n4_csdocument_type_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE n4_csdocument_type OWNER TO vista;
-        
-        
-        -- n4_csservice_method
-        
-        CREATE TABLE n4_csservice_method
-        (
-            id                              BIGINT              NOT NULL,
-            method                          VARCHAR(50),
-            fax                             VARCHAR(500),
-            last_addr                       VARCHAR(500),
-            different_method                VARCHAR(500),
-                CONSTRAINT n4_csservice_method_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE n4_csservice_method OWNER TO vista;
-        
-        -- n4_cssignature
-        
-        CREATE TABLE n4_cssignature
-        (
-            id                              BIGINT              NOT NULL,
-            signed_by                       VARCHAR(50),
-            signature                       BYTEA,
-            signature_date                  DATE,
-            firstname                       VARCHAR(500),
-            lastname                        VARCHAR(500),
-            phone                           VARCHAR(500),
-                CONSTRAINT n4_cssignature_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE n4_cssignature OWNER TO vista;
-        
-        -- n4_csto_person_info
-        
-        CREATE TABLE n4_csto_person_info
-        (
-            id                              BIGINT              NOT NULL,
-            name                            VARCHAR(500),
-            tp_type                         VARCHAR(50),
-                CONSTRAINT n4_csto_person_info_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE n4_csto_person_info OWNER TO vista;
         
         -- n4_policy
         
