@@ -20,6 +20,9 @@
  */
 package com.pyx4j.forms.client.ui.datatable.filter;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -74,7 +77,12 @@ public class TextQueryFilterEditor extends FilterEditorBase {
     @Override
     public void onShown() {
         super.onShown();
-        queryBox.setFocus(true);
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                queryBox.setFocus(true);
+            }
+        });
     }
 
     @Override

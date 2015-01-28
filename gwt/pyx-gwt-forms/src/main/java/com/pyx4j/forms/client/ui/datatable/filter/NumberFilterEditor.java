@@ -25,6 +25,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.ParseException;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -140,7 +142,12 @@ public class NumberFilterEditor extends FilterEditorBase {
     @Override
     public void onShown() {
         super.onShown();
-        fromBox.setFocus(true);
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                fromBox.setFocus(true);
+            }
+        });
     }
 
     @Override

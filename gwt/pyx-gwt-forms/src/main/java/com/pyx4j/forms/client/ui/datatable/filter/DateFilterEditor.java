@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.ui.datatable.filter;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -119,7 +121,12 @@ public class DateFilterEditor extends FilterEditorBase {
     @Override
     public void onShown() {
         super.onShown();
-        fromBox.setFocus(true);
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                fromBox.setFocus(true);
+            }
+        });
     }
 
     @Override

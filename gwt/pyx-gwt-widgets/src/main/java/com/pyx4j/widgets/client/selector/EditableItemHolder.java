@@ -52,6 +52,7 @@ public abstract class EditableItemHolder<E> extends ItemHolder<E> {
 
     protected void showEditor() {
         addStyleDependentName(WidgetsTheme.StyleDependent.editing.name());
+        parent.getItemEditorPopup().hide();
         parent.getItemEditorPopup().show(EditableItemHolder.this);
         parent.getItemEditorPopup().setFocus(true);
         popupCloseHandlerRegistration = parent.getItemEditorPopup().addCloseHandler(new CloseHandler<PopupPanel>() {

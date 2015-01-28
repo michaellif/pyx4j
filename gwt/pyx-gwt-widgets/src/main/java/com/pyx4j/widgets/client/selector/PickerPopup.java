@@ -89,9 +89,7 @@ public class PickerPopup<E> extends DropDownPanel implements Focusable, HasAllFo
 
     public void pickSelection() {
         if (pickerPanel != null && pickerPanel.getSelection() != null) {
-            selectorWidget.setSelection(pickerPanel.getSelection());
-
-            //Wait for focus to be set on selectorWidget
+            //Wait for focus to be set on selectorWidget.
             Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                 @Override
                 public void execute() {
@@ -99,6 +97,7 @@ public class PickerPopup<E> extends DropDownPanel implements Focusable, HasAllFo
                     hide();
                 }
             });
+            selectorWidget.setSelection(pickerPanel.getSelection());
         }
     }
 

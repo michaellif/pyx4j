@@ -32,6 +32,7 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Tree;
@@ -39,9 +40,12 @@ import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IFormatter;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
+
+    private static final I18n i18n = I18n.get(SimplePickerPanel.class);
 
     private static TreeImages images = GWT.create(TreeImages.class);
 
@@ -50,6 +54,8 @@ public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E>
     private final IOptionsGrabber<E> optionsGrabber;
 
     private final IFormatter<E, SafeHtml> optionFormatter;
+
+    private final HTML noMatchesLabel;
 
     private final int limit = 20;
 
@@ -61,6 +67,8 @@ public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E>
         this.optionsGrabber = optionsGrabber;
         this.optionFormatter = optionFormatter;
 
+        FlowPanel optionsHolder = new FlowPanel();
+
         setStyleName(WidgetsTheme.StyleName.SelectionPickerPanel.name());
 
         if (optionFormatter == null) {
@@ -68,8 +76,14 @@ public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E>
         } else {
             tree = new PickerTree();
         }
+        optionsHolder.add(tree);
 
-        setWidget(tree);
+        noMatchesLabel = new HTML(i18n.tr("No Matches"));
+        noMatchesLabel.setStyleName(WidgetsTheme.StyleName.SelectionPickerPanelNoMatchesLabel.name());
+
+        optionsHolder.add(noMatchesLabel);
+
+        setWidget(optionsHolder);
 
         getElement().getStyle().setProperty("maxHeight", "200px");
 
@@ -106,7 +120,7 @@ public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E>
     }
 
     protected void showOptions(Collection<E> options, String query, Collection<E> ignoreOptions) {
-        setVisible(false);
+        noMatchesLabel.setVisible(false);
 
         if (ignoreOptions != null && ignoreOptions.size() != 0 && options != null) {
             options.removeAll(ignoreOptions);
@@ -117,8 +131,11 @@ public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E>
         tree.setOptions(suggestions.subList(0, suggestions.size() < SUGGESTIONS_PER_PAGE ? suggestions.size() : SUGGESTIONS_PER_PAGE), query);
 
         if (options.size() > 0) {
-            setVisible(true);
+            noMatchesLabel.setVisible(false);
+        } else {
+            noMatchesLabel.setVisible(true);
         }
+
     }
 
     @Override

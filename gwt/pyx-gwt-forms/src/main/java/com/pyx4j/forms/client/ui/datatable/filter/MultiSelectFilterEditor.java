@@ -25,6 +25,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 
@@ -115,6 +117,17 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
 
             checkGroup.setValue((Collection) propertyCriterion.getValue());
         }
+    }
+
+    @Override
+    public void onShown() {
+        super.onShown();
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                checkGroup.setFocus(true);
+            }
+        });
     }
 
     @Override

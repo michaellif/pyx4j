@@ -65,7 +65,7 @@ public class WidgetsTheme extends Theme {
 
         CollapsablePanel, CollapsablePanelImage,
 
-        SuggestBoxPopup, SelectionPickerPanel, SelectionPickerPanelItem,
+        SuggestBoxPopup, SelectionPickerPanel, SelectionPickerPanelItem, SelectionPickerPanelNoMatchesLabel,
 
         SelectedItemClose, SelectedItemHolder, SelectedItemHolderLabel, SelectorListBoxValuePanel,
 
@@ -565,6 +565,15 @@ public class WidgetsTheme extends Theme {
         style.addProperty("overflow", "hidden");
         style.addProperty("text-overflow", "ellipsis");
         style.addProperty("white-space", "nowrap");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SelectionPickerPanelNoMatchesLabel);
+        style.addProperty("color", ThemeColor.foreground, 1.2);
+        style.addProperty("font-size", "1.1em");
+        style.addProperty("font-weight", "bolder");
+        style.addProperty("font-style", "italic");
+        style.addProperty("background", ThemeColor.foreground, 0.3);
+        style.addProperty("padding", "5px");
         addStyle(style);
 
         style = new Style(".", StyleName.SelectedItemClose);

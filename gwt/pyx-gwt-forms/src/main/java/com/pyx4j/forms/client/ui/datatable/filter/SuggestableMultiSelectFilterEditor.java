@@ -22,6 +22,9 @@ package com.pyx4j.forms.client.ui.datatable.filter;
 
 import java.util.Collection;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -78,6 +81,17 @@ public class SuggestableMultiSelectFilterEditor<E extends IEntity> extends Filte
 
             selector.setValue((Collection<E>) propertyCriterion.getValue());
         }
+    }
+
+    @Override
+    public void onShown() {
+        super.onShown();
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                selector.setFocus(true);
+            }
+        });
     }
 
     @Override
