@@ -15,14 +15,11 @@ package com.propertyvista.crm.client.ui.crud.policies.leasebilling;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.EntityFactory;
@@ -42,8 +39,6 @@ import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
-import com.pyx4j.widgets.client.dialog.CancelOption;
-import com.pyx4j.widgets.client.dialog.Dialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -77,6 +72,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
     private IsWidget createBillingPanel() {
         FormPanel formPanel = new FormPanel(this);
+
         formPanel.append(Location.Left, proto().prorationMethod()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().confirmationMethod()).decorate().componentWidth(120);
 
@@ -124,6 +120,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
     private void syncMaxTotalFeeType(MaxTotalFeeType type) {
         maxTotalFee.setAmountType(MaxTotalFeeType.PercentMonthlyRent.equals(type) ? ValueType.Percentage : ValueType.Monetary);
         maxTotalFee.setVisible(!MaxTotalFeeType.Unlimited.equals(type));
+
         if (MaxTotalFeeType.Unlimited.equals(type) && maxTotalFee.getValue() != null) {
             maxTotalFee.getValue().amount().setValue(null);
             maxTotalFee.getValue().percent().setValue(null);
@@ -132,6 +129,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
     private IsWidget createNsfFeesPanel() {
         FormPanel formPanel = new FormPanel(this);
+
         formPanel.append(Location.Left, proto().nsfFees(), new NsfFeeItemFolder(isEditable()));
 
         return formPanel;
@@ -150,39 +148,18 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
     class LeaseBillingTypeFolder extends VistaBoxFolder<LeaseBillingTypePolicyItem> {
 
-        private final Set<BillingPeriod> usedFrequencies = new HashSet<BillingPeriod>();
-
         public LeaseBillingTypeFolder() {
-            super(LeaseBillingTypePolicyItem.class);
-            if (VistaFeatures.instance().yardiIntegration()) {
-                // The only Yardi Billing type (default) will be added in onValueSet()
-                setAddable(false);
-                setRemovable(false);
-            } else {
-                addValueChangeHandler(new ValueChangeHandler<IList<LeaseBillingTypePolicyItem>>() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent<IList<LeaseBillingTypePolicyItem>> event) {
-                        updateUsedFrequencies();
-                    }
-                });
-                addComponentValidator(new AbstractComponentValidator<IList<LeaseBillingTypePolicyItem>>() {
-                    @Override
-                    public AbstractValidationError isValid() {
-                        if (getValue() == null) {
-                            return null;
-                        } else {
-                            return getValue().size() > 0 ? null : new BasicValidationError(LeaseBillingTypeFolder.this, i18n.tr("No Billing Types added."));
-                        }
-                    }
-                });
-            }
-        }
+            super(LeaseBillingTypePolicyItem.class, !VistaFeatures.instance().yardiIntegration());
 
-        private void updateUsedFrequencies() {
-            usedFrequencies.clear();
-            for (LeaseBillingTypePolicyItem item : getValue()) {
-                usedFrequencies.add(item.billingPeriod().getValue());
-            }
+            addComponentValidator(new AbstractComponentValidator<IList<LeaseBillingTypePolicyItem>>() {
+                @Override
+                public AbstractValidationError isValid() {
+                    if (getValue() != null) {
+                        return getValue().size() > 0 ? null : new BasicValidationError(LeaseBillingTypeFolder.this, i18n.tr("No Billing Types added."));
+                    }
+                    return null;
+                }
+            });
         }
 
         @Override
@@ -193,29 +170,34 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                 // Add default Yardi Billing Type
                 if (getValue().size() == 0) {
                     LeaseBillingTypePolicyItem item = EntityFactory.create(LeaseBillingTypePolicyItem.class);
+
                     item.billingPeriod().setValue(BillingPeriod.Monthly);
                     item.billingCycleStartDay().setValue(1);
                     item.paymentDueDayOffset().setValue(0);
                     item.finalDueDayOffset().setValue(15);
                     item.billExecutionDayOffset().setValue(-15);
                     item.autopayExecutionDayOffset().setValue(0);
+
                     LeaseBillingTypeFolder.super.addItem(item);
                 }
-            } else {
-                updateUsedFrequencies();
             }
         }
 
         @Override
         protected void addItem() {
-            new PaymentFrequencySelectorDialog(usedFrequencies, new ValueChangeHandler<BillingPeriod>() {
+            EnumSet<BillingPeriod> options = EnumSet.allOf(BillingPeriod.class);
+            for (LeaseBillingTypePolicyItem item : getValue()) {
+                options.remove(item.billingPeriod().getValue());
+            }
+            new SelectEnumDialog<BillingPeriod>(i18n.tr("Select Payment Frequency"), options) {
                 @Override
-                public void onValueChange(ValueChangeEvent<BillingPeriod> event) {
+                public boolean onClickOk() {
                     LeaseBillingTypePolicyItem item = EntityFactory.create(LeaseBillingTypePolicyItem.class);
-                    item.billingPeriod().setValue(event.getValue());
-                    LeaseBillingTypeFolder.super.addItem(item);
+                    item.billingPeriod().setValue(getSelectedType());
+                    addItem(item);
+                    return true;
                 }
-            }).show();
+            }.show();
         }
 
         @Override
@@ -225,46 +207,51 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
         class LeaseBillingTypeEditor extends CForm<LeaseBillingTypePolicyItem> {
 
-            private final CComboBox<Integer> startDay;
+            private final CComboBox<Integer> startDay = new CComboBox<Integer>();
 
-            private final CComboBox<Integer> dueDayOffset;
+            private final CComboBox<Integer> dueDayOffset = new CComboBox<Integer>();
 
-            private final CComboBox<Integer> finalDueDayOffset;
+            private final CComboBox<Integer> finalDueDayOffset = new CComboBox<Integer>();
 
-            private final CComboBox<Integer> billDayOffset;
+            private final CComboBox<Integer> billDayOffset = new CComboBox<Integer>();
 
-            private final CComboBox<Integer> padExecDayOffset;
+            private final CComboBox<Integer> padExecDayOffset = new CComboBox<Integer>();
 
             public LeaseBillingTypeEditor() {
                 super(LeaseBillingTypePolicyItem.class);
 
-                startDay = new CComboBox<Integer>();
-                startDay.setFormat(new IFormatter<Integer, String>() {
-
-                    @Override
-                    public String format(Integer value) {
-                        return value == null ? i18n.tr("Same as Lease Start Day") : value.toString();
-                    }
-                });
-                dueDayOffset = new CComboBox<Integer>();
-                finalDueDayOffset = new CComboBox<Integer>();
-                billDayOffset = new CComboBox<Integer>();
-                padExecDayOffset = new CComboBox<Integer>();
+                // populate first time:
+                startDay.populate(0);
+                dueDayOffset.populate(0);
+                finalDueDayOffset.populate(0);
+                billDayOffset.populate(0);
+                padExecDayOffset.populate(0);
             }
 
             @Override
             protected IsWidget createContent() {
                 FormPanel formPanel = new FormPanel(this);
-                formPanel.append(Location.Left, proto().billingPeriod(), new CLabel<BillingPeriod>()).decorate().componentWidth(200).labelWidth(250);
-                formPanel.append(Location.Left, proto().billingCycleStartDay(), startDay).decorate().componentWidth(200).labelWidth(250);
-                formPanel.append(Location.Left, proto().paymentDueDayOffset(), dueDayOffset).decorate().componentWidth(200).labelWidth(250);
-                formPanel.append(Location.Left, proto().finalDueDayOffset(), finalDueDayOffset).decorate().componentWidth(200).labelWidth(250);
-                formPanel.append(Location.Left, proto().billExecutionDayOffset(), billDayOffset).decorate().componentWidth(200).labelWidth(250);
-                formPanel.append(Location.Left, proto().autopayExecutionDayOffset(), padExecDayOffset).decorate().componentWidth(200).labelWidth(250);
+
+                formPanel.append(Location.Left, proto().billingPeriod(), new CLabel<BillingPeriod>()).decorate();
+                formPanel.append(Location.Left, proto().billingCycleStartDay(), startDay).decorate().componentWidth(180);
+
+                formPanel.append(Location.Right, proto().paymentDueDayOffset(), dueDayOffset).decorate().labelWidth(200).componentWidth(60);
+                formPanel.append(Location.Right, proto().finalDueDayOffset(), finalDueDayOffset).decorate().labelWidth(200).componentWidth(60);
+                formPanel.append(Location.Right, proto().billExecutionDayOffset(), billDayOffset).decorate().labelWidth(200).componentWidth(60);
+                formPanel.append(Location.Right, proto().autopayExecutionDayOffset(), padExecDayOffset).decorate().labelWidth(200).componentWidth(60);
+
+                // tweak:
+                startDay.setFormat(new IFormatter<Integer, String>() {
+                    @Override
+                    public String format(Integer value) {
+                        return value == null ? i18n.tr("Same as Lease Start Day") : value.toString();
+                    }
+                });
 
                 if (!VistaFeatures.instance().yardiIntegration()) {
                     get(proto().finalDueDayOffset()).setVisible(false);
                 }
+
                 return formPanel;
             }
 
@@ -273,6 +260,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                 if (getValue() != null) {
                     int cycles = getValue().billingPeriod().getValue().getNumOfCycles();
                     startDay.setOptions(makeList(1, cycles));
+
                     int maxOffset = cycles - 1;
                     dueDayOffset.setOptions(makeList(0, maxOffset / 2));
                     finalDueDayOffset.setOptions(makeList(0, maxOffset));
@@ -282,47 +270,15 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
             }
 
             private List<Integer> makeList(int min, int max) {
-                int step = max > min ? 1 : -1;
                 ArrayList<Integer> options = new ArrayList<Integer>();
+
+                int step = max > min ? 1 : -1;
                 for (int i = min; i != max; i += step) {
                     options.add(i);
                 }
                 options.add(max);
+
                 return options;
-            }
-        }
-
-        class PaymentFrequencySelectorDialog extends Dialog implements CancelOption {
-            public PaymentFrequencySelectorDialog(final Set<BillingPeriod> usedFrequencies, final ValueChangeHandler<BillingPeriod> selectHandler) {
-                super(i18n.tr("Select Payment Frequency"));
-                setDialogOptions(this);
-
-                CComboBox<BillingPeriod> selector = new CComboBox<BillingPeriod>();
-                selector.setMandatory(true);
-                Set<BillingPeriod> options = EnumSet.allOf(BillingPeriod.class);
-                options.removeAll(usedFrequencies);
-                selector.setOptions(options);
-
-                selector.addValueChangeHandler(new ValueChangeHandler<BillingPeriod>() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent<BillingPeriod> event) {
-                        selectHandler.onValueChange(event);
-                        hide(false);
-                    }
-                });
-
-                if (options.size() == 0) {
-                    setBody(new Label(i18n.tr("Sorry, no more items to choose from.")));
-                } else {
-                    setBody(selector);
-                    selector.getNativeComponent().getEditor().setVisibleItemCount(options.size());
-                    selector.getNativeComponent().getEditor().setHeight("100px");
-                }
-            }
-
-            @Override
-            public boolean onClickCancel() {
-                return true;
             }
         }
     }
@@ -336,20 +292,18 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         @Override
         public List<FolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off
-                new FolderColumnDescriptor(proto().paymentType(), "10em", true),
-                new FolderColumnDescriptor(proto().fee(), "6em")
+                new FolderColumnDescriptor(proto().paymentType(), "200px", true),
+                new FolderColumnDescriptor(proto().fee(), "100px")
             );//@formatter:on
         }
 
         @Override
         protected void addItem() {
-            EnumSet<PaymentType> values = PaymentType.availableForNsf();
+            EnumSet<PaymentType> options = PaymentType.availableForNsf();
             for (NsfFeeItem item : getValue()) {
-                if (values.contains(item.paymentType().getValue())) {
-                    values.remove(item.paymentType().getValue());
-                }
+                options.remove(item.paymentType().getValue());
             }
-            new SelectEnumDialog<PaymentType>(i18n.tr("Select Payment Type"), values) {
+            new SelectEnumDialog<PaymentType>(i18n.tr("Select Payment Type"), options) {
                 @Override
                 public boolean onClickOk() {
                     NsfFeeItem item = EntityFactory.create(NsfFeeItem.class);
