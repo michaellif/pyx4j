@@ -30,8 +30,11 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.selector.EntitySelectorListBox;
+import com.pyx4j.i18n.shared.I18n;
 
 public class SuggestableMultiSelectFilterEditor<E extends IEntity> extends FilterEditorBase {
+
+    private static final I18n i18n = I18n.get(SuggestableMultiSelectFilterEditor.class);
 
     private EntitySelectorListBox<E> selector;
 
@@ -41,7 +44,7 @@ public class SuggestableMultiSelectFilterEditor<E extends IEntity> extends Filte
 
         if (mm.isEntity()) {
             selector = new EntitySelectorListBox<>(member);
-            selector.setWatermark("+ Add item");
+            selector.setWatermark(i18n.tr("+ Add item"));
         }
         initWidget(selector);
     }

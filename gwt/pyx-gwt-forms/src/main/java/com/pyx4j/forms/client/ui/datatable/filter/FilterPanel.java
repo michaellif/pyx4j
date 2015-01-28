@@ -36,12 +36,15 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.RangeCriterion;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.selector.ItemHolderFactory;
 import com.pyx4j.widgets.client.selector.SelectorListBox;
 import com.pyx4j.widgets.client.selector.SelectorListBoxValuePanel;
 
 public class FilterPanel extends SelectorListBox<FilterItem> {
+
+    private static final I18n i18n = I18n.get(FilterPanel.class);
 
     private DataTablePanel<?> dataTablePanel;
 
@@ -103,6 +106,7 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
             }
         });
 
+        setWatermark(i18n.tr("+ Add item"));
     }
 
     public List<ColumnDescriptor> getColumnDescriptors() {
