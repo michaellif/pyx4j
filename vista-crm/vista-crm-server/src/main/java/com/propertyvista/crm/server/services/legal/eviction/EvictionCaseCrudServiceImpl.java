@@ -42,6 +42,7 @@ import com.propertyvista.domain.policy.policies.EvictionFlowPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.EvictionCaseDTO;
+import com.propertyvista.server.common.util.N4DataConverter;
 
 public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<EvictionCase, EvictionCaseDTO> implements EvictionCaseCrudService {
 
@@ -121,21 +122,7 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
                     statusN4.n4Data().set(EntityFactory.create(N4LeaseData.class));
                     if (statusN4.originatingBatch().getPrimaryKey() != null) {
                         N4Batch batch = Persistence.service().retrieve(N4Batch.class, statusN4.originatingBatch().getPrimaryKey());
-                        // copy n4 data
-                        statusN4.n4Data().created().set(batch.created());
-                        statusN4.n4Data().serviceDate().set(batch.serviceDate());
-                        statusN4.n4Data().deliveryMethod().set(batch.deliveryMethod());
-                        statusN4.n4Data().deliveryDate().set(batch.deliveryDate());
-                        statusN4.n4Data().companyLegalName().set(batch.companyLegalName());
-                        statusN4.n4Data().companyAddress().set(batch.companyAddress());
-                        statusN4.n4Data().phoneNumber().set(batch.phoneNumber());
-                        statusN4.n4Data().faxNumber().set(batch.faxNumber());
-                        statusN4.n4Data().emailAddress().set(batch.emailAddress());
-                        statusN4.n4Data().phoneNumberCS().set(batch.phoneNumberCS());
-                        statusN4.n4Data().isLandlord().set(batch.isLandlord());
-                        statusN4.n4Data().signatureDate().set(batch.signatureDate());
-                        statusN4.n4Data().signingAgent().set(batch.signingAgent());
-                        statusN4.n4Data().servicingAgent().set(batch.servicingAgent());
+                        N4DataConverter.copyN4BatchToLeaseData(batch, statusN4.n4Data());
                     }
                 } else {
                     Persistence.ensureRetrieve(statusN4.n4Data(), AttachLevel.Attached);
@@ -173,6 +160,7 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
 
     @Override
     public void issueN4(AsyncCallback<String> callback, EvictionCase caseId) {
-        callback.onSuccess(DeferredProcessRegistry.fork(new N4LeaseGenerationDeferredProcess(caseId), ThreadPoolNames.IMPORTS));
+        EvictionCase evictionCase = Persistence.service().retrieve(EvictionCase.class, caseId.getPrimaryKey());
+        callback.onSuccess(DeferredProcessRegistry.fork(new N4LeaseGenerationDeferredProcess(evictionCase), ThreadPoolNames.IMPORTS));
     }
 }

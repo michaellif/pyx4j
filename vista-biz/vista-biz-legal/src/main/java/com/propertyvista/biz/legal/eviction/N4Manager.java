@@ -82,20 +82,19 @@ public class N4Manager {
     private static final String N4_CS_FORM_FILE = "n4cs.pdf";
 
     void issueN4ForBatchItem(N4BatchItem item, N4Policy policy, LogicalDate deliveryDate, Date generationDate) throws FormFillError {
-        String note = i18n.tr("Generated from N4 Batch: {0}", item.batch().name().getValue());
-        issueN4(item.batch(), item.leaseArrears(), policy, deliveryDate, generationDate, note);
+        issueN4(item.batch(), item.leaseArrears(), policy, deliveryDate, generationDate, item.batch().name().getStringView());
     }
 
     void issueN4ForLease(N4Data n4data, N4LeaseArrears leaseArrears, N4Policy policy, LogicalDate deliveryDate, Date generationDate) throws FormFillError {
-        String note = i18n.tr("Generated from Lease");
-        issueN4(n4data, leaseArrears, policy, deliveryDate, generationDate, note);
+        issueN4(n4data, leaseArrears, policy, deliveryDate, generationDate, null);
     }
 
     // ------ internals -----------
-    private void issueN4(N4Data n4data, N4LeaseArrears leaseArrears, N4Policy policy, LogicalDate deliveryDate, Date generationDate, String note)
+    private void issueN4(N4Data n4data, N4LeaseArrears leaseArrears, N4Policy policy, LogicalDate deliveryDate, Date generationDate, String batchName)
             throws FormFillError {
         N4PdfLeaseData n4LeaseData = prepareN4LeaseData(n4data, leaseArrears, deliveryDate, policy);
 
+        String note = batchName == null ? i18n.tr("Generated for Lease") : i18n.tr("Generated from N4 Batch: {0}", batchName);
         EvictionDocument n4Letter = generateN4Letter(prepareFormData(n4LeaseData, n4data), leaseArrears.lease(), generationDate, note);
         EvictionDocument n4csLetter = generateN4CSLetter(prepareN4CSData(n4LeaseData, n4data), leaseArrears.lease(), generationDate, note);
 
@@ -109,10 +108,10 @@ public class N4Manager {
             n4crit.eq(n4crit.proto().n4Data(), n4data);
         }
         EvictionStatusN4 n4status = Persistence.service().retrieve(n4crit);
-        n4status.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
+        n4status.terminationDate().set(n4LeaseData.terminationDate());
         // add status record
-        ServerSideFactory.create(EvictionCaseFacade.class).addEvictionStatusDetails(n4status, i18n.tr("N4 has been served"),
-                Arrays.asList(n4Letter, n4csLetter));
+        note = batchName == null ? i18n.tr("N4 issued for Lease") : i18n.tr("N4 issued from Batch: {0}", batchName);
+        ServerSideFactory.create(EvictionCaseFacade.class).addEvictionStatusDetails(n4status, note, Arrays.asList(n4Letter, n4csLetter));
 
         Persistence.service().persist(n4status);
     }
@@ -272,7 +271,9 @@ public class N4Manager {
         n4cs.passedTo().tpType().setValue(ToType.Tenant);
         n4cs.passedTo().name().setValue(formatTo(leaseData.leaseTenants(), leaseData.rentalUnitAddress()));
 
-        n4cs.service().method().setValue(getServiceMethod(batchData.deliveryMethod().getValue()));
+        if (!batchData.deliveryMethod().isNull()) {
+            n4cs.service().method().setValue(getServiceMethod(batchData.deliveryMethod().getValue()));
+        }
         n4cs.service().lastAddr().setValue(formatLegalAddress(leaseData.rentalUnitAddress()));
 
         return n4cs;
@@ -411,8 +412,11 @@ public class N4Manager {
     }
 
     LogicalDate calculateDeliveryDate(Date noticeDate, N4DeliveryMethod deliveryMethod, N4Policy policy) {
-        int advanceDays = terminationAdvanceDaysForDeliveryMethod(deliveryMethod, policy);
+        if (deliveryMethod == null) {
+            return null;
+        }
 
+        int advanceDays = terminationAdvanceDaysForDeliveryMethod(deliveryMethod, policy);
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(noticeDate);
         cal.add(GregorianCalendar.DAY_OF_YEAR, advanceDays);

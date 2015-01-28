@@ -25,6 +25,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
@@ -41,11 +42,13 @@ import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.legal.errors.FormFillError;
 import com.propertyvista.domain.legal.n4.N4Batch;
 import com.propertyvista.domain.legal.n4.N4BatchItem;
+import com.propertyvista.domain.legal.n4.N4LeaseData;
 import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep.EvictionStepType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.server.common.util.N4DataConverter;
 
 public class N4ManagementFacadeImpl implements N4ManagementFacade {
 
@@ -97,7 +100,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
     }
 
     @Override
-    public void issueN4(final EvictionCase evictionCase, ExecutionMonitor monitor) throws IllegalStateException, FormFillError {
+    public void issueN4(EvictionCase evictionCase, ExecutionMonitor monitor) throws IllegalStateException, FormFillError {
         Persistence.ensureRetrieve(evictionCase, AttachLevel.Attached);
 
         // validate preconditions
@@ -106,32 +109,32 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
             for (EvictionStatus status : evictionCase.history()) {
                 if (EvictionStepType.N4.equals(status.evictionStep().stepType().getValue())) {
                     statusN4 = (EvictionStatusN4) status;
+                    Persistence.ensureRetrieve(statusN4.leaseArrears(), AttachLevel.Attached);
                     break;
                 }
             }
         }
-        if (statusN4 == null) {
-            String msg = "N4 Status not found for Eviction Case pk='" + evictionCase.getPrimaryKey() + "'";
-            log.warn(msg);
-            monitor.addErredEvent(N4_REPORT_SECTION, msg);
-        } else if (statusN4.leaseArrears().isEmpty()) {
-            String msg = "Lease Arrears not found for Eviction Case pk='" + evictionCase.getPrimaryKey() + "'";
-            log.warn(msg);
-            monitor.addErredEvent(N4_REPORT_SECTION, msg);
-        }
 
-        final Date serviceDate = SystemDateManager.getDate();
-
-        final N4Policy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(evictionCase.lease().unit().building(), N4Policy.class);
-        final LogicalDate deliveryDate = new N4Manager().calculateDeliveryDate(statusN4.n4Data().serviceDate().getValue(), statusN4.n4Data().deliveryMethod()
-                .getValue(), policy);
-
-        statusN4.n4Data().deliveryDate().setValue(deliveryDate);
-        statusN4.n4Data().serviceDate().setValue(new LogicalDate(serviceDate));
-
-        final EvictionStatusN4 statusN4final = statusN4;
-        monitor.setExpectedTotal(N4_REPORT_SECTION, 1);
         try {
+            if (statusN4 == null) {
+                throw new Error("N4 Status not found for Eviction Case pk='" + evictionCase.getPrimaryKey() + "'");
+            } else if (statusN4.leaseArrears().isEmpty()) {
+                throw new Error("Lease Arrears not found for Eviction Case pk='" + evictionCase.getPrimaryKey() + "'");
+            }
+
+            final Date serviceDate = SystemDateManager.getDate();
+
+            ensureN4LeaseData(statusN4);
+
+            Persistence.ensureRetrieve(evictionCase.lease().unit().building(), AttachLevel.Attached);
+            final N4Policy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(evictionCase.lease().unit().building(), N4Policy.class);
+            final LogicalDate deliveryDate = new N4Manager().calculateDeliveryDate(serviceDate, statusN4.n4Data().deliveryMethod().getValue(), policy);
+
+            statusN4.n4Data().deliveryDate().setValue(deliveryDate);
+            statusN4.n4Data().serviceDate().setValue(new LogicalDate(serviceDate));
+
+            final EvictionStatusN4 statusN4final = statusN4;
+            monitor.setExpectedTotal(N4_REPORT_SECTION, 1);
             new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.Web).execute(new Executable<Void, Exception>() {
                 @Override
                 public Void execute() throws Exception {
@@ -144,7 +147,20 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
             monitor.addErredEvent(N4_REPORT_SECTION, errorMessage(e));
         }
         monitor.addProcessedEvent(N4_REPORT_SECTION);
-        Persistence.service().persist(evictionCase);
+    }
+
+    private void ensureN4LeaseData(EvictionStatusN4 statusN4) {
+        if (statusN4.n4Data().isNull()) {
+            N4LeaseData n4data = EntityFactory.create(N4LeaseData.class);
+            if (!statusN4.originatingBatch().isNull()) {
+                N4DataConverter.copyN4BatchToLeaseData(statusN4.originatingBatch(), n4data);
+            }
+            statusN4.n4Data().set(n4data);
+            Persistence.service().persist(n4data);
+            Persistence.service().persist(statusN4);
+        } else {
+            Persistence.ensureRetrieve(statusN4.n4Data(), AttachLevel.Attached);
+        }
     }
 
     private String errorMessage(Exception e) {
