@@ -626,9 +626,14 @@ public class WidgetsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.SelectedItemHolder, "-", StyleDependent.editing);
+        style.addProperty("background-color", "white");
         style.addProperty("border-bottom-right-radius", "0px");
         style.addProperty("border-bottom-left-radius", "0px");
         style.addProperty("border-bottom-width", "0");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SelectedItemHolder, "-", StyleDependent.editing, ":hover");
+        style.addProperty("background-color", "white");
         addStyle(style);
 
     }
