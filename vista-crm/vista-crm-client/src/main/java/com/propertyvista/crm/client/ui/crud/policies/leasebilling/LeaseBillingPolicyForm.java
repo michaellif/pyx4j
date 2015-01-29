@@ -91,10 +91,10 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().lateFee().baseFeeType()).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().lateFee().baseFee(), baseFee).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().lateFee().baseFee(), baseFee).decorate().componentWidth(100);
 
         formPanel.append(Location.Left, proto().lateFee().maxTotalFeeType()).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().lateFee().maxTotalFee(), maxTotalFee).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().lateFee().maxTotalFee(), maxTotalFee).decorate().componentWidth(100);
 
         // add fee type control dependencies
         get(proto().lateFee().baseFeeType()).addValueChangeHandler(new ValueChangeHandler<BaseFeeType>() {
@@ -226,7 +226,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                 FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().billingPeriod(), new CLabel<BillingPeriod>()).decorate();
-                formPanel.append(Location.Left, proto().billingCycleStartDay(), startDay).decorate().componentWidth(180);
+                formPanel.append(Location.Left, proto().billingCycleStartDay(), startDay).decorate().componentWidth(170);
 
                 formPanel.append(Location.Right, proto().paymentDueDayOffset(), dueDayOffset).decorate().labelWidth(200).componentWidth(60);
                 formPanel.append(Location.Right, proto().finalDueDayOffset(), finalDueDayOffset).decorate().labelWidth(200).componentWidth(60);
