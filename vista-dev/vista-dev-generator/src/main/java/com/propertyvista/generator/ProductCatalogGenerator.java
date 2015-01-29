@@ -298,7 +298,11 @@ public class ProductCatalogGenerator {
             item.element().set(buildingElement);
             item.name().setValue(arCode.name().getValue());
             item.description().setValue(arCode.type().getStringView() + " description");
-            item.price().setValue(price); // This value may not be used in all cases and overridden later in generator
+            if (service.version().availableOnline().getValue(false)) {
+                item.price().setValue(price.multiply(new BigDecimal(1.1))); // roughly: + 10% ;)
+            } else {
+                item.price().setValue(price); // This value may not be used in all cases and overridden later in generator
+            }
 
             item.depositLMR().setValue(getDepositAmount(service.version().depositLMR(), item));
             item.depositMoveIn().setValue(getDepositAmount(service.version().depositMoveIn(), item));
