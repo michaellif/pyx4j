@@ -36,34 +36,39 @@ public class N4BatchGenerationDeferredProcess extends AbstractDeferredProcess {
 
     private final ExecutionMonitor monitor;
 
-    private final N4Batch batch;
+    private final N4Batch[] batches;
 
     private Exception error;
 
     private String fileName;
 
-    public N4BatchGenerationDeferredProcess(N4Batch batch) {
-        this.batch = batch;
+    public N4BatchGenerationDeferredProcess(N4Batch... batches) {
+        this.batches = batches;
         monitor = new ExecutionMonitor();
+        monitor.setExpectedTotal(N4ManagementFacade.N4_REPORT_SECTION, 1); // preset to avoid NPE or math errors
     }
 
     @Override
     public void execute() {
-        try {
-            ServerSideFactory.create(N4ManagementFacade.class).issueN4(batch, monitor);
-
-            if (monitor.getErred() > 0) {
-                String report = monitor.getTextMessages(CompletionType.erred, CompletionType.failed);
-                if (report != null && !report.isEmpty()) {
-                    Downloadable errorDownload = new Downloadable(report.getBytes(), MimeMap.getContentType(DownloadFormat.TXT));
-                    errorDownload.save(fileName = "failed-n4s-report-" + System.currentTimeMillis() + "." + DownloadFormat.TXT.getExtension());
-                }
+        for (N4Batch batch : batches) {
+            try {
+                ServerSideFactory.create(N4ManagementFacade.class).issueN4(batch, monitor);
+            } catch (Exception e) {
+                error = e;
+                String msg = "N4 generation failed for batch: " + batch.name().getStringView();
+                log.error(msg, e);
+                monitor.addFailedEvent(N4ManagementFacade.N4_REPORT_SECTION, msg, e);
+            } finally {
+                completed = true;
             }
-        } catch (Exception e) {
-            error = e;
-            log.error("N4 generation failed", e);
-        } finally {
-            completed = true;
+        }
+
+        if (monitor.getErred() > 0) {
+            String report = monitor.getTextMessages(CompletionType.erred, CompletionType.failed);
+            if (report != null && !report.isEmpty()) {
+                Downloadable errorDownload = new Downloadable(report.getBytes(), MimeMap.getContentType(DownloadFormat.TXT));
+                errorDownload.save(fileName = "failed-n4s-report-" + System.currentTimeMillis() + "." + DownloadFormat.TXT.getExtension());
+            }
         }
     }
 
