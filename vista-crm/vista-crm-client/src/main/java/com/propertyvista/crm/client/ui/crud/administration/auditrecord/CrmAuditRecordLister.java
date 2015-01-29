@@ -41,6 +41,8 @@ public class CrmAuditRecordLister extends SiteDataTablePanel<AuditRecordDTO> {
                 new ColumnDescriptor.Builder(proto().details()).build());
 
         setDataTableModel(new DataTableModel<AuditRecordDTO>());
+
+        setItemZoomInCommand(null);
     }
 
     @Override
