@@ -168,7 +168,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
             if (VistaFeatures.instance().yardiIntegration()) {
                 // Add default Yardi Billing Type
-                if (getValue().size() == 0) {
+                if (isEditable() && getValue().size() == 0) {
                     LeaseBillingTypePolicyItem item = EntityFactory.create(LeaseBillingTypePolicyItem.class);
 
                     item.billingPeriod().setValue(BillingPeriod.Monthly);
@@ -219,13 +219,6 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
             public LeaseBillingTypeEditor() {
                 super(LeaseBillingTypePolicyItem.class);
-
-                // populate first time:
-                startDay.populate(0);
-                dueDayOffset.populate(0);
-                finalDueDayOffset.populate(0);
-                billDayOffset.populate(0);
-                padExecDayOffset.populate(0);
             }
 
             @Override
@@ -241,6 +234,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                 formPanel.append(Location.Right, proto().autopayExecutionDayOffset(), padExecDayOffset).decorate().labelWidth(200).componentWidth(60);
 
                 // tweak:
+                startDay.populate(0); // populate first time before set format!
                 startDay.setFormat(new IFormatter<Integer, String>() {
                     @Override
                     public String format(Integer value) {
