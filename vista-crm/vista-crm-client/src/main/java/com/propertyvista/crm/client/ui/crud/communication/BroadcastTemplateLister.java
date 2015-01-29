@@ -30,6 +30,7 @@ import com.pyx4j.commons.IParser;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.DataModelPermission;
@@ -164,6 +165,10 @@ public class BroadcastTemplateLister extends SiteDataTablePanel<BroadcastTemplat
                 nameBoxValidationLabel.setMessage(i18n.tr("The template name cannot be blank"));
                 return false;
             } else {
+
+                EntityListCriteria<BroadcastTemplate> criteria = new EntityListCriteria<>(BroadcastTemplate.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().name(), inputNameTextBox.getValue().trim()));
+
                 getService().list(new AsyncCallback<EntitySearchResult<BroadcastTemplate>>() {
 
                     @Override
@@ -202,11 +207,10 @@ public class BroadcastTemplateLister extends SiteDataTablePanel<BroadcastTemplat
                             throw new UnrecoverableClientError(caught);
                         }
                     }
-                }, new EntityListCriteria<BroadcastTemplate>(BroadcastTemplate.class));
+                }, criteria);
             }
             return false;
         }
-
     }
 
 }
