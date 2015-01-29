@@ -24,9 +24,7 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.propertyvista.common.client.ui.components.TransactionHistoryViewerYardi;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
 import com.propertyvista.crm.client.ui.crud.lease.financial.TransactionHistoryViewer;
-import com.propertyvista.crm.client.ui.crud.lease.legal.LegalLetterFolder;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
-import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.EvictionCaseDTO;
@@ -37,7 +35,7 @@ import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
-    private final Tab depositsTab, adjustmentsTab, chargesTab, billsTab, paymentsTab, financialTab, evictionHistoryTab, communicationTab;
+    private final Tab depositsTab, adjustmentsTab, chargesTab, billsTab, paymentsTab, financialTab, evictionHistoryTab;
 
     public LeaseForm(IPrimeFormView<LeaseDTO, ?> view) {
         super(LeaseDTO.class, view);
@@ -53,7 +51,6 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
                 DataModelPermission.permissionRead(TransactionHistoryDTO.class));
         evictionHistoryTab = addTab(getParentView().getEvictionCaseLister().asWidget(), i18n.tr("Eviction History"),
                 DataModelPermission.permissionRead(EvictionCaseDTO.class));
-        communicationTab = addTab(createCommunicationsTab(), i18n.tr("Documents/Communication"), DataModelPermission.permissionRead(LegalLetter.class));
     }
 
     @Override
@@ -101,12 +98,6 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         formPanel.append(Location.Dual, proto().transactionHistory(), transactionHistoryViewer);
         transactionHistoryViewer.asWidget().setWidth("100%");
 
-        return formPanel;
-    }
-
-    private IsWidget createCommunicationsTab() {
-        FormPanel formPanel = new FormPanel(this);
-        formPanel.append(Location.Dual, proto().letters(), new LegalLetterFolder());
         return formPanel;
     }
 }

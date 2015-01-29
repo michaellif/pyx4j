@@ -78,9 +78,6 @@ import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.crm.rpc.services.lease.financial.InvoiceCreditCrudService;
 import com.propertyvista.crm.rpc.services.lease.financial.InvoiceDebitCrudService;
 import com.propertyvista.crm.rpc.services.legal.L1FormDataReviewWizardService;
-import com.propertyvista.crm.rpc.services.legal.LegalLetterUploadService;
-import com.propertyvista.crm.rpc.services.legal.N4CreateBatchService;
-import com.propertyvista.crm.rpc.services.legal.N4DownloadToolService;
 import com.propertyvista.crm.rpc.services.legal.eviction.EvictionCaseCrudService;
 import com.propertyvista.crm.rpc.services.legal.eviction.N4BatchCrudService;
 import com.propertyvista.crm.rpc.services.legal.eviction.N4BatchItemCrudService;
@@ -139,7 +136,6 @@ import com.propertyvista.crm.server.security.access.LeaseDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.LeaseParticipantDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.LeaseTermParticipantDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.MaintenanceRequestDatasetAccessRule;
-import com.propertyvista.crm.server.security.access.N4LegalLetterDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.PaymentRecordDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.UnitAvailabilityStatusDatasetAccessRule;
 import com.propertyvista.domain.company.Company;
@@ -158,7 +154,6 @@ import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.note.NoteAttachment;
 import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
@@ -250,11 +245,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(CrmReportsSettingsPersistenceService.class));
 
 // - Legal:
-        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(LegalLetterUploadService.class));
-
-        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(N4CreateBatchService.class));
-        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(N4DownloadToolService.class));
-
         grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(L1FormDataReviewWizardService.class));
 
 // - Building-related:
@@ -471,8 +461,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaDataAccessBehavior.BuildingsAssigned, new PaymentRecordDatasetAccessRule(), PaymentRecord.class);
         grant(VistaDataAccessBehavior.BuildingsAssigned, new BillingCycleDatasetAccessRule(), BillingCycle.class);
         grant(VistaDataAccessBehavior.BuildingsAssigned, new BillingAccountDatasetAccessRule(), BillingAccount.class);
-
-        grant(VistaDataAccessBehavior.BuildingsAssigned, new N4LegalLetterDatasetAccessRule(), N4LegalLetter.class);
 
         /***************** this is new List **************** */
 

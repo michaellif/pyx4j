@@ -29,7 +29,6 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.legal.LegalStatus;
 
 @Table(prefix = "billing")
 @DiscriminatorValue("LeaseArrearsSnapshot")
@@ -53,7 +52,7 @@ public interface LeaseArrearsSnapshot extends ArrearsSnapshot<LeaseAgingBuckets>
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> lmrToUnitRentDifference();
 
-    IPrimitive<LegalStatus.Status> legalStatus();
+    IPrimitive<String> legalStatus();
 
     IPrimitive<Date> legalStatusDate();
 

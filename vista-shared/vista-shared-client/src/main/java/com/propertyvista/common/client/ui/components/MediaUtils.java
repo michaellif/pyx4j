@@ -21,7 +21,6 @@ import com.propertyvista.common.client.PublicMediaURLBuilder;
 import com.propertyvista.common.client.SiteImageResourceFileURLBuilder;
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.domain.MediaFile;
-import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.pmc.info.PmcDocumentFile;
 import com.propertyvista.domain.site.SiteImageResource;
@@ -67,10 +66,6 @@ public class MediaUtils {
 
     public static String createCustomerPictureUrl(CustomerPicture picture) {
         return new VistaFileURLBuilder(CustomerPicture.class).getUrl(picture.file());
-    }
-
-    public static String createLegalLetterDocumentUrl(LegalLetter legalLetter) {
-        return new VistaFileURLBuilder(LegalLetter.class).getUrl(legalLetter.file());
     }
 
     public static String createPmcDocumentUrl(PmcDocumentFile file) {

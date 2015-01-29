@@ -12,10 +12,7 @@
  */
 package com.propertyvista.biz.legal.eviction;
 
-import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,16 +35,12 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.eviction.EvictionCase;
 import com.propertyvista.domain.eviction.EvictionStatus;
 import com.propertyvista.domain.eviction.EvictionStatusN4;
-import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.legal.errors.FormFillError;
 import com.propertyvista.domain.legal.n4.N4Batch;
 import com.propertyvista.domain.legal.n4.N4BatchItem;
 import com.propertyvista.domain.legal.n4.N4LeaseData;
-import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep.EvictionStepType;
-import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.common.util.N4DataConverter;
 
 public class N4ManagementFacadeImpl implements N4ManagementFacade {
@@ -55,18 +48,6 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
     private static final Logger log = LoggerFactory.getLogger(N4ManagementFacadeImpl.class);
 
     private static final I18n i18n = I18n.get(N4ManagementFacadeImpl.class);
-
-    @Override
-    public List<LegalNoticeCandidate> getN4Candidates(BigDecimal minAmountOwed, List<Building> buildingIds, ExecutionMonitor progressMonitor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Map<Lease, List<N4LegalLetter>> getN4(List<Lease> leaseIds, LogicalDate generatedCutOffDate) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
     @Override
     public void issueN4(final N4Batch batch, ExecutionMonitor monitor) throws IllegalStateException, FormFillError {

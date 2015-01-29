@@ -40,12 +40,10 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.lease.agreement.LeaseAgreementDocumentSigningController;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivityBase;
-import com.propertyvista.crm.client.activity.crud.lease.legal.LeaseLegalStateController;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
 import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
@@ -226,18 +224,6 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     @Override
-    public void issueN4(N4BatchRequestDTO n4GenerationQuery) {
-        n4GenerationQuery.targetDelinquentLeases().add(EntityFactory.createIdentityStub(Lease.class, getEntityId()));
-
-        ((LeaseViewerCrudService) getService()).issueN4(new DefaultAsyncCallback<VoidSerializable>() {
-            @Override
-            public void onSuccess(VoidSerializable result) {
-                populate();
-            }
-        }, n4GenerationQuery);
-    }
-
-    @Override
     public void viewDeletedPaps(final Tenant tenantId) {
         AutopayAgreement argProto = EntityFactory.getEntityPrototype(AutopayAgreement.class);
         CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(AutopayAgreement.class);
@@ -264,17 +250,6 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
         MaintenanceCrudService.MaintenanceInitializationData id = EntityFactory.create(MaintenanceCrudService.MaintenanceInitializationData.class);
         id.unit().set(EntityFactory.createIdentityStub(AptUnit.class, currentValue.unit().getPrimaryKey()));
         AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.MaintenanceRequest().formNewItemPlace(id));
-    }
-
-    @Override
-    public void legalState() {
-        new LeaseLegalStateController(this.getView(), EntityFactory.createIdentityStub(Lease.class, getEntityId())) {
-            @Override
-            public void hide() {
-                super.hide();
-                populate(); // refresh legal status (well, it's crude, but I'm lazy right now)
-            };
-        }.show();
     }
 
     @Override

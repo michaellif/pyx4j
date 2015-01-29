@@ -106,7 +106,7 @@ public class N4BatchLister extends SiteDataTablePanel<N4BatchDTO> {
             }
         }, new ActionPermission(ServiceN4.class)));
 
-        addUpperActionItem(new Button(i18n.tr("Download Forms"), new Command() {
+        addUpperActionItem(new Button(i18n.tr("Print Forms"), new Command() {
             @Override
             public void execute() {
                 if (getDataTable().getSelectedItems().isEmpty()) {

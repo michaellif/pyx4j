@@ -14,13 +14,11 @@ package com.propertyvista.crm.server.services.lease.common;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
-import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -59,8 +57,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         for (LeaseTermGuarantor item : to.currentTerm().version().guarantors()) {
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers, false);
         }
-
-        loadCommunicationLetters(to);
     }
 
     @Override
@@ -98,13 +94,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         for (InsuranceCertificate<?> certificate : lease.tenantInsuranceCertificates()) {
             Persistence.ensureRetrieve(certificate.insurancePolicy().tenant().customer().person().name(), AttachLevel.ToStringMembers);
         }
-    }
-
-    private void loadCommunicationLetters(LeaseDTO lease) {
-        EntityQueryCriteria<LegalLetter> criteria = EntityQueryCriteria.create(LegalLetter.class);
-        criteria.eq(criteria.proto().lease(), lease.getPrimaryKey());
-        criteria.asc(criteria.proto().generatedOn());
-        lease.letters().addAll(Persistence.service().query(criteria));
     }
 
     private void fillPreauthorizedPayments(LeaseTermTenant item) {

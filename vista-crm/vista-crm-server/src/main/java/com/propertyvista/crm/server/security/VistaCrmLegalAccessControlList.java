@@ -14,7 +14,6 @@ package com.propertyvista.crm.server.security;
 
 import static com.propertyvista.domain.security.VistaCrmBehavior.LegalCollectionsBasic;
 import static com.propertyvista.domain.security.VistaCrmBehavior.LegalCollectionsFull;
-import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.CREATE;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
@@ -22,16 +21,13 @@ import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.UIAclBuilder;
 
-import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseCompletion;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseNotice;
 import com.propertyvista.crm.rpc.services.legal.eviction.EvictionDocumentUploadService;
 import com.propertyvista.crm.rpc.services.legal.eviction.ac.ServiceN4;
 import com.propertyvista.crm.rpc.services.selections.SelectN4LeaseCandidateListService;
 import com.propertyvista.domain.eviction.EvictionDocument;
-import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.dto.EvictionCaseDTO;
-import com.propertyvista.dto.LeaseLegalStateDTO;
 import com.propertyvista.dto.N4BatchDTO;
 import com.propertyvista.dto.N4LeaseCandidateDTO;
 
@@ -46,10 +42,6 @@ class VistaCrmLegalAccessControlList extends UIAclBuilder {
         grant(LegalCollectionsFull, LeaseCompletion.class);
 
         // Legal documents:
-        grant(LegalCollectionsBasic, LegalLetter.class, READ);
-        grant(LegalCollectionsBasic, LeaseLegalStateDTO.class, READ);
-        grant(LegalCollectionsBasic, LegalNoticeCandidateDTO.class, READ);
-
         grant(LegalCollectionsBasic, EvictionCaseDTO.class, READ);
         grant(LegalCollectionsBasic, EvictionDocument.class, READ);
 
@@ -57,10 +49,6 @@ class VistaCrmLegalAccessControlList extends UIAclBuilder {
         grant(LegalCollectionsBasic, N4LeaseCandidateDTO.class, READ);
 
         grant(LegalCollectionsBasic, new IServiceExecutePermission(SelectN4LeaseCandidateListService.class));
-
-        grant(LegalCollectionsFull, LegalLetter.class, READ | CREATE);
-        grant(LegalCollectionsFull, LeaseLegalStateDTO.class, READ | UPDATE);
-        grant(LegalCollectionsFull, LegalNoticeCandidateDTO.class, ALL);
 
         grant(LegalCollectionsFull, EvictionCaseDTO.class, READ | CREATE | UPDATE);
         grant(LegalCollectionsFull, EvictionDocument.class, READ | CREATE | UPDATE);

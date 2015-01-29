@@ -10,7 +10,7 @@
  * Created on Nov 10, 2014
  * @author arminea
  */
-package com.propertyvista.biz.legal;
+package com.propertyvista.biz.legal.eviction;
 
 import com.propertyvista.domain.legal.n4.pdf.N4PdfFormData;
 import com.propertyvista.domain.legal.n4cp.pdf.N4CPPdfFormData;

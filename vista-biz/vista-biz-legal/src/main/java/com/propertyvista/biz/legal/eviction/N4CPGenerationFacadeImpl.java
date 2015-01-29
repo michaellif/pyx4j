@@ -10,12 +10,14 @@
  * Created on Nov 10, 2014
  * @author arminea
  */
-package com.propertyvista.biz.legal;
+package com.propertyvista.biz.legal.eviction;
 
 import org.apache.commons.io.IOUtils;
 
 import com.pyx4j.entity.core.EntityFactory;
 
+import com.propertyvista.biz.legal.InternalBillingInvoiceDebitFetcherImpl;
+import com.propertyvista.biz.legal.eviction.N4CPGenerationFacade;
 import com.propertyvista.biz.legal.forms.framework.filling.FormFillerImpl;
 import com.propertyvista.biz.legal.forms.n4cp.N4CPFieldsMapping;
 import com.propertyvista.domain.legal.n4.pdf.N4PdfFormData;

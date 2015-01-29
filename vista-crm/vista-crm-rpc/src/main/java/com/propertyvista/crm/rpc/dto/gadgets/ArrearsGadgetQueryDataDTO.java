@@ -21,7 +21,6 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
@@ -35,6 +34,6 @@ public interface ArrearsGadgetQueryDataDTO extends IEntity {
     @NotNull
     IPrimitive<ARCode.Type> category();
 
-    IPrimitive<LegalStatus.Status> legalStatus();
+    IPrimitive<String> legalStatus();
 
 }

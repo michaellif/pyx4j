@@ -89,7 +89,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.EvictionCaseDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.dto.LeaseLegalStateDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -141,9 +140,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     private final MenuItem renewAction;
 
     private final MenuItem showCommunicationAction;
-
-    @Deprecated
-    private final MenuItem legalStateAction;
 
     private final MenuItem deletedPapsAction;
 
@@ -245,13 +241,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         if (!VistaFeatures.instance().yardiIntegration()) {
             addAction(runBillAction);
         }
-
-        addAction(legalStateAction = new SecureMenuItem(i18n.tr("Manage Legal State"), new Command() {
-            @Override
-            public void execute() {
-                ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).legalState();
-            }
-        }, DataModelPermission.permissionRead(LeaseLegalStateDTO.class)));
 
         noticeAction = new SecureMenuItem(i18n.tr("Notice..."), new Command() {
             @Override
@@ -632,7 +621,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(deletedPapsAction, status.isCurrent());
 
         setActionVisible(maintenanceView, !status.isDraft());
-        setActionVisible(legalStateAction, false && !status.isFormer());
 
         setActionVisible(noticeAction, status == Status.Active && completion == null);
         setActionVisible(cancelNoticeAction, completion == CompletionType.Notice && value.actualMoveOut().isNull() && !status.isFormer());
@@ -930,20 +918,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }
             }
         });
-    }
-
-    private void issueN4() {
-        new N4GenerationQueryDialog() {
-            @Override
-            public boolean onClickOk() {
-                if (super.onClickOk()) {
-                    ((LeaseViewerView.LeaseViewerPresenter) getPresenter()).issueN4(getValue());
-                    return true;
-                } else {
-                    return false;
-                }
-            };
-        }.show();
     }
 
     private abstract class RenewLeaseBox extends OkCancelDialog {

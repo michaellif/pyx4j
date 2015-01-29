@@ -25,7 +25,6 @@ import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.client.ui.crud.lease.eviction.EvictionCaseLister;
 import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -69,8 +68,6 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
          */
         void simpleLeaseRenew(LogicalDate leaseEndDate);
 
-        void issueN4(N4BatchRequestDTO n4GenerationQuery); // TODO move this to LegalStateVisor
-
         void viewApplication();
 
         void viewDeletedPaps(Tenant tenantId);
@@ -80,9 +77,6 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
         void downloadAgreementForSigning();
 
         void signingProgressOrUploadAgreement();
-
-        @Deprecated
-        void legalState();
 
         List<LeaseParticipant<?>> getAllLeaseParticipants();
 
