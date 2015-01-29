@@ -52,6 +52,7 @@ public interface BroadcastTemplate extends MessageTemplate {
     @ToString(index = 1)
     IPrimitive<String> subject();
 
+    @NotNull
     IPrimitive<AudienceType> audienceType();
 
     @NotNull

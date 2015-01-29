@@ -25,9 +25,12 @@ public interface BroadcastTemplateCrudService extends AbstractCrudService<Broadc
     @Transient
     public static interface BroadcastTemplateInitializationData extends InitializationData {
 
+        IPrimitive<String> name();
+
         IPrimitive<AudienceType> audienceType();
 
         IPrimitive<MessageType> messageType();
+
     }
 
 }
