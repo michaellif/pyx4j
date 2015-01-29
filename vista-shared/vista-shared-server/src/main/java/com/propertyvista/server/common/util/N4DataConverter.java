@@ -22,6 +22,7 @@ public class N4DataConverter {
 
     public static void copyN4BatchToLeaseData(N4Batch n4batch, N4LeaseData n4data) {
         Persistence.ensureRetrieve(n4batch, AttachLevel.Attached);
+        n4data.terminationDateOption().set(n4batch.terminationDateOption());
         n4data.serviceDate().set(n4batch.serviceDate());
         n4data.deliveryMethod().set(n4batch.deliveryMethod());
         n4data.deliveryDate().set(n4batch.deliveryDate());

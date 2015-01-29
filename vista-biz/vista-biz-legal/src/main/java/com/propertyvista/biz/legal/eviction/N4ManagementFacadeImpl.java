@@ -70,12 +70,12 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
 
     @Override
     public void issueN4(final N4Batch batch, ExecutionMonitor monitor) throws IllegalStateException, FormFillError {
-        Persistence.ensureRetrieve(batch, AttachLevel.Attached);
+        Persistence.ensureRetrieve(batch.items(), AttachLevel.Attached);
 
         final Date batchServiceDate = SystemDateManager.getDate();
 
         final N4Policy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(batch.building(), N4Policy.class);
-        final LogicalDate deliveryDate = new N4Manager().calculateDeliveryDate(batch.serviceDate().getValue(), batch.deliveryMethod().getValue(), policy);
+        final LogicalDate deliveryDate = new N4Manager().calculateDeliveryDate(batchServiceDate, batch.deliveryMethod().getValue(), policy);
 
         batch.deliveryDate().setValue(deliveryDate);
         batch.serviceDate().setValue(new LogicalDate(batchServiceDate));
@@ -91,8 +91,10 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
                     }
                 });
             } catch (Exception e) {
-                log.error("Failed to generate n4 for lease pk='" + item.lease().getPrimaryKey() + "'", e);
-                monitor.addErredEvent(N4_REPORT_SECTION, item.lease().getStringView() + ": " + errorMessage(e));
+                item.lease().setAttachLevel(AttachLevel.Attached);
+                String msg = "Failed to generate n4 for lease pk='" + item.lease().getPrimaryKey() + "'";
+                log.error(msg, e);
+                monitor.addErredEvent(N4_REPORT_SECTION, msg + ": " + errorMessage(e));
             }
             monitor.addProcessedEvent(N4_REPORT_SECTION);
         }
