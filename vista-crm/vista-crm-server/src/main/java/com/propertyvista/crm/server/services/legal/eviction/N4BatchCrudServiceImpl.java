@@ -105,7 +105,7 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
             n4status.cancellationBalance().setValue(n4policy.cancellationThreshold().getValue());
             // set expiry date by N4Policy
             GregorianCalendar expiryDate = new GregorianCalendar();
-            expiryDate.setTime(bo.issueDate().getValue());
+            expiryDate.setTime(bo.created().getValue());
             expiryDate.add(GregorianCalendar.DAY_OF_YEAR, n4policy.expiryDays().getValue());
             n4status.expiryDate().setValue(new LogicalDate(expiryDate.getTime()));
             Persistence.service().persist(n4status);
@@ -124,7 +124,7 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
 
     @Override
     public void serviceBatch(AsyncCallback<String> callback, N4Batch batchId) {
-        callback.onSuccess(DeferredProcessRegistry.fork(new N4GenerationDeferredProcess(batchId), ThreadPoolNames.IMPORTS));
+        callback.onSuccess(DeferredProcessRegistry.fork(new N4BatchGenerationDeferredProcess(batchId), ThreadPoolNames.IMPORTS));
     }
 
     @Override
@@ -162,7 +162,7 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
         N4Batch batch = EntityFactory.create(N4Batch.class);
 
         batch.building().set(building);
-        batch.issueDate().setValue(SystemDateManager.getDate());
+        batch.created().setValue(SystemDateManager.getDate());
         batch.companyLegalName().setValue(n4policy.companyName().getValue());
         batch.companyAddress().set(n4policy.mailingAddress().duplicate(InternationalAddress.class));
 
@@ -194,7 +194,7 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
     }
 
     private void generateBatchName(N4Batch batch, Building building) {
-        batch.name().setValue(building.propertyCode().getValue() + "_" + batch.issueDate().getStringView().replaceAll(" ", "_"));
+        batch.name().setValue(building.propertyCode().getValue() + "_" + batch.created().getStringView().replaceAll(" ", "_"));
     }
 
     private N4LeaseArrears getLeaseArrears(Lease lease, HashSet<ARCode> acceptableArCodes) {

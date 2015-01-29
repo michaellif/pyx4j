@@ -12,12 +12,17 @@
  */
 package com.propertyvista.domain.legal.n4;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IList;
@@ -32,6 +37,11 @@ public interface N4Batch extends N4Data {
     @ReadOnly
     @Detached
     Building building();
+
+    @ReadOnly
+    @Format("yyyy-MM-dd HH:mm:ss")
+    @Timestamp(Update.Created)
+    IPrimitive<Date> created();
 
     @ToString
     @NotNull

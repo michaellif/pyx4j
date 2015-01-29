@@ -17,6 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
+import com.propertyvista.domain.eviction.EvictionCase;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.EvictionCaseDTO;
 
@@ -27,4 +28,6 @@ public interface EvictionCaseCrudService extends AbstractCrudService<EvictionCas
     }
 
     void hasEvictionFlow(AsyncCallback<Boolean> callback, Key leaseId);
+
+    void issueN4(AsyncCallback<String> callback, EvictionCase caseId);
 }

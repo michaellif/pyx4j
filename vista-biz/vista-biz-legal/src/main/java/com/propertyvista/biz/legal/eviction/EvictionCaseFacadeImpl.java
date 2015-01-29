@@ -157,16 +157,16 @@ public class EvictionCaseFacadeImpl implements EvictionCaseFacade {
         record.addedBy().set(getLoggedEmployee());
         record.note().setValue(note);
         evictionStatus.statusRecords().add(record);
-        Persistence.service().persist(evictionStatus);
 
         if (attachments != null) {
+            Persistence.ensureRetrieve(evictionStatus.evictionCase().lease(), AttachLevel.IdOnly);
             for (EvictionDocument doc : attachments) {
-                doc.record().set(record);
+                doc.lease().set(evictionStatus.evictionCase().lease());
             }
             record.attachments().addAll(attachments);
-            Persistence.service().persist(record.attachments());
         }
 
+        Persistence.service().persist(evictionStatus);
     }
 
     private Employee getLoggedEmployee() {

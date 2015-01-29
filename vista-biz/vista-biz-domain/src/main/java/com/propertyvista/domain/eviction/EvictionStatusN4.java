@@ -51,7 +51,6 @@ public interface EvictionStatusN4 extends EvictionStatus {
     @Detached
     N4Batch originatingBatch();
 
-    @NotNull
     IPrimitive<LogicalDate> terminationDate();
 
     @NotNull

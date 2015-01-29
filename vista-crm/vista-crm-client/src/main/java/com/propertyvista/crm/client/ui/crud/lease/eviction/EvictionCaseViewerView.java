@@ -18,4 +18,9 @@ import com.propertyvista.dto.EvictionCaseDTO;
 
 public interface EvictionCaseViewerView extends IPrimeViewerView<EvictionCaseDTO> {
 
+    interface Presenter extends IPrimeViewerView.IPrimeViewerPresenter {
+
+        void issueN4(EvictionCaseDTO evictionCase);
+    }
+
 }

@@ -42,12 +42,12 @@ public interface EvictionDocument extends IHasFile<EvictionDocumentBlob> {
     @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
-    Lease lease();
+    EvictionStatusRecord record();
 
     @JoinColumn
     @ReadOnly
     @Detached
-    EvictionStatusRecord record();
+    Lease lease();
 
     @ReadOnly
     @Timestamp(Update.Created)

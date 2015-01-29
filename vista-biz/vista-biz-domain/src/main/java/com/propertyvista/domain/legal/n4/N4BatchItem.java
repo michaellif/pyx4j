@@ -42,5 +42,5 @@ public interface N4BatchItem extends IEntity {
     N4LeaseArrears leaseArrears();
 
     @ReadOnly
-    IPrimitive<Date> serviced();
+    IPrimitive<Date> serviceDate();
 }
