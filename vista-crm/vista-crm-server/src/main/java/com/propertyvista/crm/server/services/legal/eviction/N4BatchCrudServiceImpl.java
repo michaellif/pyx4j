@@ -23,11 +23,13 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
@@ -225,5 +227,17 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
         leaseArrears.totalRentOwning().setValue(amountOwed);
 
         return leaseArrears;
+    }
+
+    @Override
+    public void serviceBatches(AsyncCallback<String> callback, Vector<Key> batchIds) {
+        EntityQueryCriteria<N4Batch> crit = EntityQueryCriteria.create(N4Batch.class);
+        crit.in(crit.proto().id(), batchIds);
+        List<N4Batch> batches = Persistence.service().query(crit);
+        for (N4Batch batch : batches) {
+            // TODO
+            // ensureReadyForService(batch) should default all missing but required N4Data values (or use bulk editor)
+        }
+        callback.onSuccess(DeferredProcessRegistry.fork(new N4BatchGenerationDeferredProcess(batches.toArray(new N4Batch[0])), ThreadPoolNames.IMPORTS));
     }
 }

@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -46,7 +45,6 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.legal.eviction.EvictionCaseFacade;
 import com.propertyvista.biz.legal.forms.n4.N4GenerationUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.crm.rpc.services.selections.SelectN4LeaseCandidateListService;
 import com.propertyvista.domain.eviction.EvictionCase;
 import com.propertyvista.domain.financial.ARCode;
@@ -118,13 +116,12 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
         int pageNumber = criteria.getPageNumber();
         criteria.setPageSize(-1);
         criteria.setPageNumber(0);
-        EntitySearchResult<Lease> result = Persistence.secureQuery(criteria);
         BigDecimal minAmountOwed = getMinAmountOwingFromSearchCriteria();
-        for (Iterator<Lease> it = result.getData().iterator(); it.hasNext();) {
+        EntitySearchResult<Lease> result = new EntitySearchResult<>();
+        for (Lease lease : Persistence.service().query(criteria, AttachLevel.IdOnly)) {
             // filter leases - remove ones with open eviction case or not enough owing
-            Lease lease = it.next();
-            if (hasOpenCase(lease) || !hasAmountOwed(lease, minAmountOwed)) {
-                it.remove();
+            if (!hasOpenCase(lease) && hasAmountOwed(lease, minAmountOwed)) {
+                result.add(lease);
             }
         }
         // update properties of the result set
@@ -143,7 +140,7 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
     protected void retrievedForList(Lease bo) {
         super.retrievedForList(bo);
 
-        Persistence.ensureRetrieve(bo.unit().building(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(bo.unit().building(), AttachLevel.IdOnly);
     }
 
     @Override
@@ -235,7 +232,8 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
     }
 
     private N4Policy getPolicy(Lease lease) {
-        PolicyNode node = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(lease);
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.IdOnly);
+        PolicyNode node = lease.unit().building();
         N4Policy policy = policyCache.get(node);
         if (policy == null) {
             policyCache.put(node, policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, N4Policy.class));
@@ -245,7 +243,7 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
 
     private Set<Building> getApplicableBuildings() {
         Set<Building> result = new HashSet<>();
-        for (Building building : Persistence.service().query(EntityListCriteria.create(Building.class))) {
+        for (Building building : Persistence.service().query(EntityListCriteria.create(Building.class), AttachLevel.IdOnly)) {
             try {
                 EvictionFlowPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, EvictionFlowPolicy.class);
                 for (EvictionFlowStep step : policy.evictionFlow()) {
@@ -254,7 +252,7 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
                     }
                 }
             } catch (PolicyNotFoundException ignore) {
-                // see empty result handling below
+                // empty result is handled below
             }
         }
         if (result.isEmpty()) {
