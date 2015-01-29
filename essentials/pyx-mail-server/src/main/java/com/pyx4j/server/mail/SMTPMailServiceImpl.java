@@ -191,17 +191,24 @@ class SMTPMailServiceImpl implements IMailService {
                 content.addBodyPart(bodyPart);
                 message.setContent(content);
             } else {
+
                 content = new MimeMultipart("alternative");
                 message.setHeader("Content-Type", content.getContentType());
 
+                // Set text/plain part
+                MimeBodyPart textPart = new MimeBodyPart();
                 if (!CommonsStringUtils.isEmpty(mailMessage.getTextBody())) {
-                    MimeBodyPart textPart = new MimeBodyPart();
                     textPart.setText(mailMessage.getTextBody());
-                    textPart.setHeader("MIME-Version", "1.0");
-                    textPart.setHeader("Content-Type", "text/plain; charset=\"utf-8\"");
-                    content.addBodyPart(textPart);
+                } else {
+                    textPart.setText(HtmlUtils.getPlainTextFromHtml(mailMessage.getHtmlBody()), "utf-8");
                 }
 
+                textPart.setHeader("MIME-Version", "1.0");
+                textPart.setHeader("Content-Type", "text/plain; charset=\"utf-8\"");
+                textPart.setHeader("Content-Transfer-Encoding", "quoted-printable");
+                content.addBodyPart(textPart);
+
+                // Set text/html part
                 MimeBodyPart htmlPart = new MimeBodyPart();
                 htmlPart.setContent(mailMessage.getHtmlBody(), "text/html");
                 htmlPart.setHeader("MIME-Version", "1.0");
@@ -280,4 +287,5 @@ class SMTPMailServiceImpl implements IMailService {
             }
         }
     }
+
 }
