@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.pyx4j.commons.LogicalDate;
@@ -28,6 +29,10 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.legal.eviction.EvictionCaseFacade;
+import com.propertyvista.domain.eviction.EvictionCase;
+import com.propertyvista.domain.eviction.EvictionDocument;
+import com.propertyvista.domain.eviction.EvictionStatus;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
@@ -43,9 +48,56 @@ public abstract class ArrearsSnapshotTestBase extends LeaseFinancialTestBase {
 
     private LogicalDate prevFromDate;
 
+    public static class EvictionCaseFacadeMockImpl implements EvictionCaseFacade {
+
+        @Override
+        public EvictionCase openEvictionCase(Lease leaseId, String note) {
+            return null;
+        }
+
+        @Override
+        public void closeEvictionCase(EvictionCase caseId, String note) {
+        }
+
+        @Override
+        public EvictionCase getLastEvictionCase(Lease leaseId) {
+            return null;
+        }
+
+        @Override
+        public EvictionCase getCurrentEvictionCase(Lease leaseId) {
+            return null;
+        }
+
+        @Override
+        public EvictionStatus getCurrentEvictionStatus(EvictionCase evictionCase) {
+            return null;
+        }
+
+        @Override
+        public EvictionStatus getCurrentEvictionStatus(Lease leaseId) {
+            return null;
+        }
+
+        @Override
+        public void addEvictionStatusDetails(EvictionStatus evictionStatus, String note, List<EvictionDocument> attachments) {
+        }
+
+        @Override
+        public EvictionStatus addEvictionStatusDetails(EvictionCase evictionCase, String statusName, String note, List<EvictionDocument> attachments) {
+            return null;
+        }
+
+        @Override
+        public List<EvictionCase> getEvictionHistory(Lease leaseId) {
+            return null;
+        }
+    }
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        ServerSideFactory.register(EvictionCaseFacade.class, EvictionCaseFacadeMockImpl.class);
         cleanUp();
         preloadData();
     }

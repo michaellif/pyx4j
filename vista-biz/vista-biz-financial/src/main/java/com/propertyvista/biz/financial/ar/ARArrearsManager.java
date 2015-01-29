@@ -260,8 +260,10 @@ public class ARArrearsManager {
         Persistence.ensureRetrieve(billingAccount.lease(), AttachLevel.Attached);
         EvictionStatus evictionStatus = ServerSideFactory.create(EvictionCaseFacade.class).getCurrentEvictionStatus(
                 billingAccount.lease().<Lease> createIdentityStub());
-        arrearsSnapshot.legalStatus().set(evictionStatus.evictionStep().name());
-        arrearsSnapshot.legalStatusDate().setValue(evictionStatus.addedOn().getValue());
+        if (evictionStatus != null) {
+            arrearsSnapshot.legalStatus().set(evictionStatus.evictionStep().name());
+            arrearsSnapshot.legalStatusDate().setValue(evictionStatus.addedOn().getValue());
+        }
         return arrearsSnapshot;
     }
 
