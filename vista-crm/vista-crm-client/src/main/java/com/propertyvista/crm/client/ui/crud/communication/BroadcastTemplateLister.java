@@ -47,7 +47,9 @@ import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.BroadcastTemplateCrudService;
+import com.propertyvista.crm.rpc.services.BroadcastTemplateCrudService.BroadcastTemplateInitializationData;
 import com.propertyvista.domain.communication.BroadcastTemplate;
 import com.propertyvista.domain.communication.BroadcastTemplate.AudienceType;
 import com.propertyvista.domain.communication.DeliveryHandle.MessageType;
@@ -68,36 +70,11 @@ public class BroadcastTemplateLister extends SiteDataTablePanel<BroadcastTemplat
 
         Button.ButtonMenuBar subMenu = new Button.ButtonMenuBar();
 
-        subMenu.addItem(new MenuItem(i18n.tr("Customer"), new Command() {
-            @Override
-            public void execute() {
-                editNewEntity(AudienceType.Customer);
-            }
-        }));
-        subMenu.addItem(new MenuItem(i18n.tr("Tenant"), new Command() {
-            @Override
-            public void execute() {
-                editNewEntity(AudienceType.Tenant);
-            }
-        }));
-        subMenu.addItem(new MenuItem(i18n.tr("Guarantor"), new Command() {
-            @Override
-            public void execute() {
-                editNewEntity(AudienceType.Guarantor);
-            }
-        }));
-        subMenu.addItem(new MenuItem(i18n.tr("Prospect"), new Command() {
-            @Override
-            public void execute() {
-                editNewEntity(AudienceType.Prospect);
-            }
-        }));
-        subMenu.addItem(new MenuItem(i18n.tr("Employee"), new Command() {
-            @Override
-            public void execute() {
-                editNewEntity(AudienceType.Employee);
-            }
-        }));
+        subMenu.addItem(new CreateTemplateMenuItem(AudienceType.Customer));
+        subMenu.addItem(new CreateTemplateMenuItem(AudienceType.Tenant));
+        subMenu.addItem(new CreateTemplateMenuItem(AudienceType.Guarantor));
+        subMenu.addItem(new CreateTemplateMenuItem(AudienceType.Prospect));
+        subMenu.addItem(new CreateTemplateMenuItem(AudienceType.Employee));
 
         newButton.setMenu(subMenu);
         newButton.setPermission(DataModelPermission.permissionCreate(BroadcastTemplate.class));
@@ -118,71 +95,29 @@ public class BroadcastTemplateLister extends SiteDataTablePanel<BroadcastTemplat
         return Arrays.asList(new Sort(proto().name(), false));
     }
 
-    private void editNewEntity(final Object placeCriteria) {
-        new TemplateNameInputDialog("Template name") {
-            @Override
-            public boolean onClickOk() {
-                if (inputNameTextBox.getValue() == null || inputNameTextBox.getValue().trim().equals("")) {
-                    nameBoxValidationLabel.setMessage(i18n.tr("The template name cannot be blank"));
-                    return false;
-                } else {
-                    getService().list(new AsyncCallback<EntitySearchResult<BroadcastTemplate>>() {
+    private class CreateTemplateMenuItem extends MenuItem {
 
-                        @Override
-                        public void onSuccess(EntitySearchResult<BroadcastTemplate> result) {
-                            for (BroadcastTemplate current : result.getData()) {
-                                if (current.name().getValue().equals(inputNameTextBox.getValue())) {
-                                    nameBoxValidationLabel.setMessage(i18n.tr("The template name {0} already exists. Please change template name.",
-                                            inputNameTextBox.getValue()));
-                                    return;
-                                }
-                            }
-                            nameBoxValidationLabel.clear();
-                            editNew(inputNameTextBox.getValue(), placeCriteria);
-                            hide(true);
-                        }
-
-                        @Override
-                        public void onFailure(Throwable caught) {
-                            if (caught instanceof IntegrityConstraintUserRuntimeException) {
-                                MessageDialog.error(i18n.tr("Get Broadcast templates"), caught.getMessage());
-                            } else {
-                                throw new UnrecoverableClientError(caught);
-                            }
-                        }
-                    }, new EntityListCriteria<BroadcastTemplate>(BroadcastTemplate.class));
+        CreateTemplateMenuItem(final AudienceType audienceType) {
+            super(audienceType.toString(), new Command() {
+                @Override
+                public void execute() {
+                    new TemplateNameInputDialog(audienceType).show();
                 }
-                return false;
-            }
-        }.show();
-    }
-
-    private void editNew(String inputValue, final Object placeCriteria) {
-        final BroadcastTemplateCrudService.BroadcastTemplateInitializationData initData = EntityFactory
-                .create(BroadcastTemplateCrudService.BroadcastTemplateInitializationData.class);
-        initData.name().setValue(inputValue);
-        if (placeCriteria != null) {
-            initData.audienceType().setValue((AudienceType) placeCriteria);
-            if (((AudienceType) placeCriteria).equals(AudienceType.Employee)) {
-                initData.messageType().setValue(MessageType.Organizational);
-            } else {
-                initData.messageType().setValue(MessageType.Informational);
-            }
-        } else {
-            initData.audienceType().setValue(null); // should not appear
-            initData.messageType().setValue(null);
+            });
         }
-        editNew(com.propertyvista.crm.rpc.CrmSiteMap.Communication.BroadcastTemplate.class, initData);
     }
 
     private class TemplateNameInputDialog extends OkCancelDialog {
 
-        protected final TextBox<String> inputNameTextBox;
+        private final TextBox<String> inputNameTextBox;
 
-        protected final ValidationLabel nameBoxValidationLabel;
+        private final ValidationLabel nameBoxValidationLabel;
 
-        public TemplateNameInputDialog(String caption) {
-            super(caption);
+        private AudienceType audienceType;
+
+        public TemplateNameInputDialog(AudienceType audienceType) {
+            super(i18n.tr("Template name"));
+            this.audienceType = audienceType;
             FlowPanel contentPanel = new FlowPanel();
             //           initWidget(contentPanel);
             contentPanel.add(new Label(i18n.tr("Template Name")));
@@ -225,8 +160,53 @@ public class BroadcastTemplateLister extends SiteDataTablePanel<BroadcastTemplat
 
         @Override
         public boolean onClickOk() {
+            if (inputNameTextBox.getValue() == null || inputNameTextBox.getValue().trim().equals("")) {
+                nameBoxValidationLabel.setMessage(i18n.tr("The template name cannot be blank"));
+                return false;
+            } else {
+                getService().list(new AsyncCallback<EntitySearchResult<BroadcastTemplate>>() {
+
+                    @Override
+                    public void onSuccess(EntitySearchResult<BroadcastTemplate> result) {
+                        for (BroadcastTemplate current : result.getData()) {
+                            if (current.name().getValue().equals(inputNameTextBox.getValue())) {
+                                nameBoxValidationLabel.setMessage(i18n.tr("The template name {0} already exists. Please change template name.",
+                                        inputNameTextBox.getValue()));
+                                return;
+                            }
+                        }
+                        nameBoxValidationLabel.clear();
+
+                        final BroadcastTemplateInitializationData initData = EntityFactory.create(BroadcastTemplateInitializationData.class);
+                        initData.name().setValue(inputNameTextBox.getValue());
+                        if (audienceType != null) {
+                            initData.audienceType().setValue(audienceType);
+                            if (audienceType.equals(AudienceType.Employee)) {
+                                initData.messageType().setValue(MessageType.Organizational);
+                            } else {
+                                initData.messageType().setValue(MessageType.Informational);
+                            }
+                        } else {
+                            initData.audienceType().setValue(null); // should not appear
+                            initData.messageType().setValue(null);
+                        }
+                        editNew(CrmSiteMap.Communication.BroadcastTemplate.class, initData);
+                        hide(true);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        if (caught instanceof IntegrityConstraintUserRuntimeException) {
+                            MessageDialog.error(i18n.tr("Get Broadcast templates"), caught.getMessage());
+                        } else {
+                            throw new UnrecoverableClientError(caught);
+                        }
+                    }
+                }, new EntityListCriteria<BroadcastTemplate>(BroadcastTemplate.class));
+            }
             return false;
         }
 
     }
+
 }
