@@ -23,21 +23,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.cell.client.SafeHtmlCell;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.Tree;
-import com.google.gwt.user.client.ui.TreeItem;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.SingleSelectionModel;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.i18n.shared.I18n;
@@ -46,8 +45,6 @@ import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
 
     private static final I18n i18n = I18n.get(SimplePickerPanel.class);
-
-    private static TreeImages images = GWT.create(TreeImages.class);
 
     private HandlerRegistration handlerRegistration;
 
@@ -61,7 +58,13 @@ public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E>
 
     private final static int SUGGESTIONS_PER_PAGE = 14;
 
-    private final PickerTree tree;
+    private final CellTable<E> table;
+
+    private final SingleSelectionModel<E> selectionModel;
+
+    private List<E> suggestions;
+
+    private String query;
 
     public SimplePickerPanel(IOptionsGrabber<E> optionsGrabber, IFormatter<E, SafeHtml> optionFormatter) {
         this.optionsGrabber = optionsGrabber;
@@ -71,12 +74,17 @@ public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E>
 
         setStyleName(WidgetsTheme.StyleName.SelectionPickerPanel.name());
 
-        if (optionFormatter == null) {
-            tree = new PickerTree(images, true);
-        } else {
-            tree = new PickerTree();
-        }
-        optionsHolder.add(tree);
+        table = new CellTable<E>();
+        table.addColumn(new PickerColumn());
+
+        selectionModel = new SingleSelectionModel<>();
+        table.setSelectionModel(selectionModel);
+
+        table.getElement().getStyle().setWidth(100, Unit.PCT);
+
+        table.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
+
+        optionsHolder.add(table);
 
         noMatchesLabel = new HTML(i18n.tr("No Matches"));
         noMatchesLabel.setStyleName(WidgetsTheme.StyleName.SelectionPickerPanelNoMatchesLabel.name());
@@ -95,11 +103,13 @@ public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E>
             handlerRegistration.removeHandler();
         }
         if (pickerPopup != null) {
-            handlerRegistration = tree.addSelectionHandler(new SelectionHandler<TreeItem>() {
 
+            handlerRegistration = selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
                 @Override
-                public void onSelection(SelectionEvent<TreeItem> event) {
-                    pickerPopup.pickSelection();
+                public void onSelectionChange(SelectionChangeEvent event) {
+                    if (selectionModel.getSelectedObject() != null) {
+                        pickerPopup.pickSelection();
+                    }
                 }
             });
         }
@@ -120,17 +130,26 @@ public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E>
     }
 
     protected void showOptions(Collection<E> options, String query, Collection<E> ignoreOptions) {
+        this.query = query;
         noMatchesLabel.setVisible(false);
 
         if (ignoreOptions != null && ignoreOptions.size() != 0 && options != null) {
             options.removeAll(ignoreOptions);
         }
 
-        List<E> suggestions = new ArrayList<E>(options);
+        selectionModel.clear();
 
-        tree.setOptions(suggestions.subList(0, suggestions.size() < SUGGESTIONS_PER_PAGE ? suggestions.size() : SUGGESTIONS_PER_PAGE), query);
+        suggestions = new ArrayList<E>(options);
+        table.setRowData(suggestions.subList(0, suggestions.size() < SUGGESTIONS_PER_PAGE ? suggestions.size() : SUGGESTIONS_PER_PAGE));
 
         if (options.size() > 0) {
+            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+
+                @Override
+                public void execute() {
+                    table.setKeyboardSelectedRow(0, false);
+                }
+            });
             noMatchesLabel.setVisible(false);
         } else {
             noMatchesLabel.setVisible(true);
@@ -140,100 +159,42 @@ public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E>
 
     @Override
     public void moveSelectionDown() {
-        // TODO Auto-generated method stub
-
+        int index = table.getKeyboardSelectedRow();
+        if (index < suggestions.size()) {
+            table.setKeyboardSelectedRow(index + 1, false);
+        }
     }
 
     @Override
     public void moveSelectionUp() {
-
+        int index = table.getKeyboardSelectedRow();
+        if (index > 0) {
+            table.setKeyboardSelectedRow(index - 1, false);
+        }
     }
 
     @Override
     public E getSelection() {
-        return tree.getSelection();
+        if (selectionModel.getSelectedObject() != null) {
+            return selectionModel.getSelectedObject();
+        } else if (table.getKeyboardSelectedRow() >= 0) {
+            return suggestions.get(table.getKeyboardSelectedRow());
+        } else {
+            return null;
+        }
     }
 
-    class PickerTree extends Tree {
+    class PickerColumn extends Column<E, SafeHtml> {
 
-        public PickerTree() {
-            super();
-        }
-
-        public PickerTree(Resources resources, boolean useLeafImages) {
-            super(resources, useLeafImages);
-        }
-
-        public void setOptions(Collection<E> options, String query) {
-            clear();
-
-            for (E option : options) {
-                PickerTreeItem treeItem = new PickerTreeItem(option, query);
-                addItem(treeItem);
-                treeItem.setUserObject(option);
-            }
-        }
-
-        @SuppressWarnings("unchecked")
-        public E getSelection() {
-            PickerTreeItem selectedItem = (PickerTreeItem) getSelectedItem();
-            return selectedItem == null ? null : selectedItem.getValue();
+        public PickerColumn() {
+            super(new SafeHtmlCell());
         }
 
         @Override
-        public void setFocus(boolean focus) {
-
-        }
-
-        class PickerTreeItem extends TreeItem {
-
-            private final E value;
-
-            private final HTML label;
-
-            public PickerTreeItem(E value, String query) {
-                super();
-                this.value = value;
-                SafeHtml formattedValue = optionFormatter.format(value);
-                label = new HTML((query.equals("") ? formattedValue : OptionQueryHighlighter.highlight(formattedValue, query,
-                        SimplePickerPanel.this.optionsGrabber.getSelectType())));
-                label.setStyleName(WidgetsTheme.StyleName.SelectionPickerPanelItem.name());
-                label.addMouseOverHandler(new ItemMouseEventHandler());
-                label.addMouseOutHandler(new ItemMouseEventHandler());
-                setWidget(label);
-            }
-
-            @Override
-            public void setSelected(boolean selected) {
-                super.setSelected(selected);
-                label.setStyleDependentName(WidgetsTheme.StyleDependent.selected.name(), selected);
-            }
-
-            public E getValue() {
-                return value;
-            }
-
-            public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
-                return addDomHandler(handler, MouseOverEvent.getType());
-            }
-
-            public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
-                return addDomHandler(handler, MouseOutEvent.getType());
-            }
-
-            public class ItemMouseEventHandler implements MouseOverHandler, MouseOutHandler {
-                @Override
-                public void onMouseOver(final MouseOverEvent event) {
-                    Widget widget = (Widget) event.getSource();
-                    widget.setStyleDependentName(WidgetsTheme.StyleDependent.hover.name(), true);
-                }
-
-                @Override
-                public void onMouseOut(final MouseOutEvent event) {
-                    Widget widget = (Widget) event.getSource();
-                    widget.removeStyleDependentName(WidgetsTheme.StyleDependent.hover.name());
-                }
-            }
+        public SafeHtml getValue(E value) {
+            SafeHtml formattedValue = optionFormatter.format(value);
+            return query.equals("") ? formattedValue : OptionQueryHighlighter.highlight(formattedValue, query,
+                    SimplePickerPanel.this.optionsGrabber.getSelectType());
         }
     }
 }
