@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -33,9 +33,7 @@ public class LegalTermsFolder extends PortalBoxFolder<SignedAgreementLegalTerm> 
 
     public LegalTermsFolder() {
         super(SignedAgreementLegalTerm.class);
-        setOrderable(false);
-        setAddable(false);
-        setRemovable(false);
+        setModifyable(false);
     }
 
     @Override
@@ -52,17 +50,21 @@ public class LegalTermsFolder extends PortalBoxFolder<SignedAgreementLegalTerm> 
         @Override
         protected IsWidget createContent() {
             FormPanel formPanel = new FormPanel(this);
+
             CLabel<String> caption = new CLabel<String>();
             caption.asWidget().addStyleName(FlexFormPanelTheme.StyleName.FormFlexPanelH1Label.name());
+
             formPanel.append(Location.Left, proto().term().title(), caption);
             formPanel.append(Location.Left, proto().term().content(), new CHtml<String>());
             formPanel.append(Location.Left, proto().signature()).decorate().customLabel("").labelPosition(LabelPosition.hidden).componentWidth(250);
+
             return formPanel;
         }
 
         @Override
         public void addValidations() {
             super.addValidations();
+
             get(proto().signature()).addComponentValidator(new OriginalSignatureValidator());
         }
 

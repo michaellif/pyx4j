@@ -45,7 +45,7 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
     private final EmergencyContactFolder emergencyContactFolder = new EmergencyContactFolder();
 
     public ProfilePage(ProfilePageViewImpl view) {
-        super(ResidentProfileDTO.class, view, "My Profile", ThemeColor.contrast2);
+        super(ResidentProfileDTO.class, view, i18n.tr("My Profile"), ThemeColor.contrast2);
         asWidget().setStyleName(EntityViewTheme.StyleName.EntityView.name());
     }
 
