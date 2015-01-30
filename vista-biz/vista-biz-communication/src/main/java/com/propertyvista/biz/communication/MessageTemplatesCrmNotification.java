@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -51,7 +52,10 @@ class MessageTemplatesCrmNotification {
 
     public static MailMessage createNewPmcEmail(OnboardingUser user, Pmc pmc) {
         MailMessage email = new MailMessage();
-        email.setTo(user.email().getValue());
+
+        String name = CommonsStringUtils.nvl_concat(user.firstName().getValue(), user.lastName().getValue(), " ");
+        user.name().setValue(name);
+        email.setTo(AddresseUtils.getCompleteEmail(user));
         email.setSender(getSender());
         email.setSubject(i18n.tr("New PMC Created"));
 
