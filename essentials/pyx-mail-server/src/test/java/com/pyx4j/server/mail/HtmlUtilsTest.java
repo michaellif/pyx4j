@@ -38,13 +38,23 @@ public class HtmlUtilsTest {
 
     private static final String TEXT_REGULAR_LINK = "Go to here: http://www.w3schools.com";
 
+    // HTML with inner link
+    private static final String HTML_INNER_MAILTO = "<!DOCTYPE html><html><body>Any question? Let us know <a href=\"http://www.w3schools.com\">here</a></body></html>";
+
+    private static final String TEXT_INNER_MAILTO = "Any question? Let us know here [link to: http://www.w3schools.com]";
+
+    // HTML with regular link
+    private static final String HTML_REGULAR_MAILTO = "<!DOCTYPE html><html><body>Any question? Let us know here: <a href=\"http://www.w3schools.com\">support@propertyvista.com</a></body></html>";
+
+    private static final String TEXT_REGULAR_MAILTO = "Any question? Let us know here: support@propertyvista.com";
+
     // HTML with images
 
     private static final String HTML_WITH_IMAGE = "<!DOCTYPE html><html><body><img src=\"w3schools.jpg\" alt=\"W3Schools.com\" width=\"104\" height=\"142\"></body></html>";
 
     private static final String TEXT_WITH_IMAGE = "{image: W3Schools.com}";
 
-    // HTML with break lines
+    // HTML with paragraphs
     private static final String HTML_WITH_PARAGRAPHS = "<!DOCTYPE html><html><body><p>This is a paragraph.</p><p>This is a paragraph.</p><p>This is a paragraph.</p></body></html>";
 
     @Test
@@ -53,6 +63,10 @@ public class HtmlUtilsTest {
         testNoHTMLTagsAndExpectedOutput(HTML_INNER_LINK, TEXT_INNER_LINK);
 
         testNoHTMLTagsAndExpectedOutput(HTML_REGULAR_LINK, TEXT_REGULAR_LINK);
+
+        testNoHTMLTagsAndExpectedOutput(HTML_INNER_MAILTO, TEXT_INNER_MAILTO);
+
+        testNoHTMLTagsAndExpectedOutput(HTML_REGULAR_MAILTO, TEXT_REGULAR_MAILTO);
 
         testNoHTMLTagsAndExpectedOutput(HTML_WITH_IMAGE, TEXT_WITH_IMAGE);
 

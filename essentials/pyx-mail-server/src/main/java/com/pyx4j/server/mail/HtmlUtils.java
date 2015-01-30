@@ -71,6 +71,7 @@ public class HtmlUtils {
             switch (e.tagName()) {
             case "table":
             case "br":
+            case "tr":
                 e.append("\\n");
                 break;
             case "p":
