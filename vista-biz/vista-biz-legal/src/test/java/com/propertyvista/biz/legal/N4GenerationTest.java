@@ -14,21 +14,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2013-10-30
+ * Created on 2013-09-24
  * @author ArtyomB
  */
 package com.propertyvista.biz.legal;
 
-import java.util.Collection;
-import java.util.List;
+import org.junit.Test;
 
-import com.pyx4j.commons.LogicalDate;
+import com.propertyvista.biz.legal.mock.MockN4FormDataFactory;
+import com.propertyvista.domain.legal.n4.pdf.N4PdfFormData;
 
-import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.financial.billing.InvoiceDebit;
+public class N4GenerationTest {
 
-public interface InvoiceDebitFetcher {
+    private final N4PdfFormData mockFormData;
 
-    public List<InvoiceDebit> getInvoiceDebits(Collection<ARCode> acceptedArCodes, BillingAccount billingAccount, LogicalDate dueDate);
+    public N4GenerationTest() {
+        mockFormData = MockN4FormDataFactory.makeMockN4FormFieldsData("Tenant Tenantovic");
+    }
+
+    /** Just run the form fill procedure and see that nothing fails */
+    @Test
+    public void testSanity() {
+        N4GenerationFacadeMock facade = new N4GenerationFacadeMock();
+        facade.generateN4Letter(mockFormData);
+    }
+
 }

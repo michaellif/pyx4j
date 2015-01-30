@@ -50,12 +50,12 @@ public interface N4Data extends IEntity {
 
     InternationalAddress companyAddress();
 
-    /** must have the following format: (XXX) XXX-XXXX */
+    IPrimitive<Boolean> useAgentContactInfoN4();
+
     @Editor(type = EditorType.phone)
     @Caption(name = "Phone")
     IPrimitive<String> phoneNumber();
 
-    /** optional, but must have the following format: (XXX) XXX-XXXX */
     @Editor(type = EditorType.phone)
     @Caption(name = "Fax")
     IPrimitive<String> faxNumber();
@@ -63,6 +63,8 @@ public interface N4Data extends IEntity {
     @Editor(type = EditorType.email)
     @Caption(name = "E-Mail")
     IPrimitive<String> emailAddress();
+
+    IPrimitive<Boolean> useAgentContactInfoCS();
 
     @Editor(type = EditorType.phone)
     @Caption(name = "Phone")

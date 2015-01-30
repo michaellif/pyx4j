@@ -28,6 +28,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public interface N4Batch extends N4Data {
@@ -53,4 +54,11 @@ public interface N4Batch extends N4Data {
     @Detached
     @OrderBy(PrimaryKey.class)
     IList<N4BatchItem> items();
+
+    /** copy the policy when batch is created */
+    @JoinColumn
+    @Indexed
+    @ReadOnly
+    @Detached
+    N4Policy n4policy();
 }

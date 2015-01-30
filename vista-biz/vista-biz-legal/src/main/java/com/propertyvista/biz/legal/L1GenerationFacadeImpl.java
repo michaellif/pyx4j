@@ -33,7 +33,7 @@ public class L1GenerationFacadeImpl implements L1GenerationFacade {
     public byte[] generateL1Letter(L1FormFieldsData fieldsData) {
         byte[] filledForm = null;
         try {
-            byte[] formTemplate = IOUtils.toByteArray(N4GenerationFacadeImpl.class.getResourceAsStream(N4_FORM_FILE));
+            byte[] formTemplate = IOUtils.toByteArray(L1GenerationFacadeImpl.class.getResourceAsStream(N4_FORM_FILE));
             filledForm = new FormFillerImpl().fillForm(formTemplate, new L1FieldsMapping(), fieldsData, true);
         } catch (Throwable e) {
             throw new RuntimeException(e);

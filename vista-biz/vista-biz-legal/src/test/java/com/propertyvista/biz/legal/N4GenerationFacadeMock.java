@@ -14,29 +14,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2013-09-24
+ * Created on 2013-09-23
  * @author ArtyomB
  */
 package com.propertyvista.biz.legal;
 
-import org.junit.Test;
+import org.apache.commons.io.IOUtils;
 
-import com.propertyvista.biz.legal.mock.MockN4FormDataFactory;
+import com.propertyvista.biz.legal.forms.framework.filling.FormFillerImpl;
+import com.propertyvista.biz.legal.forms.n4.N4FieldsMapping;
 import com.propertyvista.domain.legal.n4.pdf.N4PdfFormData;
 
-public class N4GenerationFacadeImplTest {
+public class N4GenerationFacadeMock {
 
-    private final N4PdfFormData mockFormData;
+    private static final String N4_FORM_FILE = "n4.pdf";
 
-    public N4GenerationFacadeImplTest() {
-        mockFormData = MockN4FormDataFactory.makeMockN4FormFieldsData("Tenant Tenantovic");
-    }
-
-    /** Just run the form fill procedure and see that nothing fails */
-    @Test
-    public void testSanity() {
-        N4GenerationFacadeImpl facade = new N4GenerationFacadeImpl();
-        facade.generateN4Letter(mockFormData);
+    public byte[] generateN4Letter(N4PdfFormData formData) {
+        byte[] filledForm = null;
+        try {
+            byte[] formTemplate = IOUtils.toByteArray(N4GenerationFacadeMock.class.getResourceAsStream(N4_FORM_FILE));
+            filledForm = new FormFillerImpl().fillForm(formTemplate, new N4FieldsMapping(), formData, true);
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+        return filledForm;
     }
 
 }
