@@ -160,8 +160,9 @@ public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E>
     @Override
     public void moveSelectionDown() {
         int index = table.getKeyboardSelectedRow();
-        if (index < suggestions.size()) {
+        if (index < table.getRowCount() - 1) {
             table.setKeyboardSelectedRow(index + 1, false);
+            table.getRowElement(index + 1).scrollIntoView();
         }
     }
 
@@ -170,6 +171,7 @@ public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E>
         int index = table.getKeyboardSelectedRow();
         if (index > 0) {
             table.setKeyboardSelectedRow(index - 1, false);
+            table.getRowElement(index - 1).scrollIntoView();
         }
     }
 
