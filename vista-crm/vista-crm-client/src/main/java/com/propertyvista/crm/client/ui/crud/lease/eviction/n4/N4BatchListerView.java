@@ -18,7 +18,4 @@ import com.propertyvista.dto.N4BatchDTO;
 
 public interface N4BatchListerView extends IPrimeListerView<N4BatchDTO> {
 
-    public interface LeaseListerPresenter extends IPrimeListerPresenter<N4BatchDTO> {
-
-    }
 }

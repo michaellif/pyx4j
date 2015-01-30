@@ -35,8 +35,9 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.legal.LeaseLegalFacade;
+import com.propertyvista.biz.legal.eviction.EvictionCaseFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
+import com.propertyvista.domain.eviction.EvictionStatus;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
@@ -46,7 +47,6 @@ import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
-import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -258,9 +258,12 @@ public class ARArrearsManager {
         arrearsSnapshot.lmrToUnitRentDifference().setValue(lastMonthRentDeposit(billingAccount).subtract(unitRent(billingAccount)));
 
         Persistence.ensureRetrieve(billingAccount.lease(), AttachLevel.Attached);
-        LegalStatus legalStatus = ServerSideFactory.create(LeaseLegalFacade.class).getCurrentLegalStatus(billingAccount.lease().<Lease> createIdentityStub());
-        arrearsSnapshot.legalStatus().setValue(legalStatus.status().getValue());
-        arrearsSnapshot.legalStatusDate().setValue(legalStatus.setOn().getValue());
+        EvictionStatus evictionStatus = ServerSideFactory.create(EvictionCaseFacade.class).getCurrentEvictionStatus(
+                billingAccount.lease().<Lease> createIdentityStub());
+        if (evictionStatus != null) {
+            arrearsSnapshot.legalStatus().set(evictionStatus.evictionStep().name());
+            arrearsSnapshot.legalStatusDate().setValue(evictionStatus.addedOn().getValue());
+        }
         return arrearsSnapshot;
     }
 

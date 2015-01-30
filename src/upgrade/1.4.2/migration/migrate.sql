@@ -45,7 +45,7 @@ COMMIT;
 -- create migration function
 \i create_migrate_functions.sql;
 
-
+\i migrate_legal_questions.sql
 
 SET client_min_messages = 'error';
 
@@ -345,3 +345,4 @@ BEGIN TRANSACTION;
 COMMIT;
 
 DROP FUNCTION _dba_.migrate_pmc_142(text);
+DROP FUNCTION _dba_.migrate_legal_questions(text);

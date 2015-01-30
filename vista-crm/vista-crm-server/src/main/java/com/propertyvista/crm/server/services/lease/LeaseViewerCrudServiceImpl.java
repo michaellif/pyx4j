@@ -12,8 +12,6 @@
  */
 package com.propertyvista.crm.server.services.lease;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,13 +40,11 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
-import com.propertyvista.biz.legal.LeaseLegalFacade;
 import com.propertyvista.biz.legal.eviction.EvictionCaseFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementSigningProgressFacade;
 import com.propertyvista.config.ThreadPoolNames;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
@@ -56,11 +52,6 @@ import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.eviction.EvictionStatus;
-import com.propertyvista.domain.legal.LegalLetter;
-import com.propertyvista.domain.legal.LegalStatus;
-import com.propertyvista.domain.legal.LegalStatus.Status;
-import com.propertyvista.domain.legal.LegalStatusN4;
-import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.security.CrmUserSignature;
 import com.propertyvista.domain.tenant.lease.AgreementInkSignatures;
@@ -72,9 +63,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseAgreementDocumentsDTO;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.dto.LeaseLegalStateDTO;
-import com.propertyvista.dto.LegalStatusDTO;
-import com.propertyvista.dto.LegalStatusN4DTO;
 
 public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<LeaseDTO> implements LeaseViewerCrudService {
 
@@ -300,85 +288,6 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
         Persistence.service().commit();
         callback.onSuccess(null);
-    }
-
-    @Override
-    public void getLegalState(AsyncCallback<LeaseLegalStateDTO> callback, Lease leaseId) {
-        LeaseLegalStateDTO legalState = EntityFactory.create(LeaseLegalStateDTO.class);
-        LegalStatus current = ServerSideFactory.create(LeaseLegalFacade.class).getCurrentLegalStatus(leaseId);
-        legalState.current().set(toDto(current));
-
-        List<LegalStatus> history = ServerSideFactory.create(LeaseLegalFacade.class).getLegalStatusHistory(leaseId);
-        for (LegalStatus status : history) {
-
-            legalState.historical().add(toDto(status));
-        }
-
-        callback.onSuccess(legalState);
-    }
-
-    private LegalStatusDTO toDto(LegalStatus status) {
-        LegalStatusDTO dto = null;
-        if (status.getInstanceValueClass().equals(LegalStatusN4.class)) {
-            dto = status.duplicate(LegalStatusN4DTO.class);
-        } else {
-            dto = status.duplicate(LegalStatusDTO.class);
-        }
-        dto.expiryDate().setValue(!status.expiry().isNull() ? new LogicalDate(status.expiry().getValue()) : null);
-
-        EntityQueryCriteria<LegalLetter> criteria = EntityQueryCriteria.create(LegalLetter.class);
-        criteria.eq(criteria.proto().lease(), status.lease());
-        criteria.eq(criteria.proto().status(), status);
-        dto.letters().addAll(Persistence.service().query(criteria));
-
-        return dto;
-    }
-
-    @Override
-    public void setLegalStatus(AsyncCallback<VoidSerializable> callback, Lease leaseId, LegalStatusDTO dto) {
-        LegalStatus legalStatus = null;
-        List<LegalLetter> attachedLetters;
-        if (dto.status().getValue() == Status.N4) {
-            LegalStatusN4 legalStatusN4 = EntityFactory.create(LegalStatusN4.class);
-            legalStatusN4.cancellationThreshold().setValue(((LegalStatusN4DTO) dto).cancellationThreshold().getValue());
-            legalStatusN4.terminationDate().setValue(((LegalStatusN4DTO) dto).terminationDate().getValue());
-            legalStatus = legalStatusN4;
-            attachedLetters = new ArrayList<>(dto.letters().size());
-            for (LegalLetter letter : dto.letters()) {
-                N4LegalLetter n4Letter = letter.duplicate(LegalLetter.class).duplicate(N4LegalLetter.class);
-                n4Letter.terminationDate().setValue(legalStatusN4.terminationDate().getValue());
-                attachedLetters.add(n4Letter);
-            }
-        } else {
-            legalStatus = EntityFactory.create(LegalStatus.class);
-            attachedLetters = dto.letters();
-        }
-        legalStatus.status().setValue(dto.status().getValue());
-        legalStatus.expiry().setValue(!dto.expiryDate().isNull() ? new Date(dto.expiryDate().getValue().getTime()) : null);
-        legalStatus.details().setValue(dto.details().getValue());
-        legalStatus.notes().setValue("set manually via CRM");
-        legalStatus.setBy().set(CrmAppContext.getCurrentUser());
-        legalStatus.setOn().setValue(SystemDateManager.getDate());
-
-        ServerSideFactory.create(LeaseLegalFacade.class).setLegalStatus(//@formatter:off
-                leaseId,
-                legalStatus,
-                attachedLetters
-        );//@formatter:on
-        Persistence.service().commit();
-        callback.onSuccess(null);
-    }
-
-    @Override
-    public void deleteLegalStatus(AsyncCallback<VoidSerializable> callback, Lease leaseId, LegalStatus statusId) {
-        ServerSideFactory.create(LeaseLegalFacade.class).removeLegalStatus(statusId);
-        Persistence.service().commit();
-        callback.onSuccess(null);
-    }
-
-    @Override
-    public void issueN4(AsyncCallback<VoidSerializable> defaultAsyncCallback, N4BatchRequestDTO n4GenerationQuery) {
-        // TODO implement this
     }
 
     @Override

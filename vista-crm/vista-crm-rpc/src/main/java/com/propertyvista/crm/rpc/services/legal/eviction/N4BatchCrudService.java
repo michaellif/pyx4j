@@ -16,6 +16,7 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.legal.n4.N4Batch;
@@ -27,4 +28,6 @@ public interface N4BatchCrudService extends AbstractCrudService<N4BatchDTO> {
     void createBatches(AsyncCallback<N4BatchDTO> callback, Vector<Lease> leaseCandidates);
 
     void serviceBatch(AsyncCallback<String> callback, N4Batch batchId);
+
+    void serviceBatches(AsyncCallback<String> callback, Vector<Key> batchIds);
 }

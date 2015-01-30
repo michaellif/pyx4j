@@ -22,7 +22,6 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
-import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
@@ -58,7 +57,7 @@ public interface DelinquentLeaseDTO extends IEntity {
 
     LeaseAgingBuckets arrears();
 
-    IPrimitive<LegalStatus.Status> legalStatus();
+    IPrimitive<String> legalStatus();
 
     IPrimitive<Date> legalStatusDate();
 

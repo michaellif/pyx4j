@@ -25,7 +25,6 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMet
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("Arrears Gadget Metadata")
@@ -56,7 +55,7 @@ public interface ArrearsSummaryGadgetMetadata extends CounterGadgetBaseMetadata,
 
     @Caption(description = "Choose legal status to display")
     @NotNull
-    IPrimitive<LegalStatus.Status> legalStatus();
+    IPrimitive<String> legalStatus();
 
     @EmbeddedEntity
     ListerUserSettings delinquentLeasesListerSettings();

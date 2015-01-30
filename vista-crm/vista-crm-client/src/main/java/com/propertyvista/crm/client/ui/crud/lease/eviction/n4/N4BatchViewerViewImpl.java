@@ -44,7 +44,9 @@ public class N4BatchViewerViewImpl extends CrmViewerViewImplBase<N4BatchDTO> imp
             }
         }, new ActionPermission(ServiceN4.class)));
 
-        addAction(new SecureMenuItem(i18n.tr("Download Forms"), new Command() {
+        // TODO - add IssueWithSummary and ServiceByAutoMail
+
+        addAction(new SecureMenuItem(i18n.tr("Print Forms"), new Command() {
             @Override
             public void execute() {
                 if (!getForm().getValue().serviceDate().isNull()) {

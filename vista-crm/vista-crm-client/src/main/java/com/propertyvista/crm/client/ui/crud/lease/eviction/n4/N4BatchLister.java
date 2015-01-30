@@ -20,12 +20,17 @@ import java.util.Vector;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
+import com.pyx4j.essentials.rpc.download.DownloadableService;
+import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.ActionPermission;
@@ -34,12 +39,14 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.crm.client.ui.tools.common.LinkDialog;
 import com.propertyvista.crm.rpc.services.legal.eviction.N4BatchCrudService;
 import com.propertyvista.crm.rpc.services.legal.eviction.ac.ServiceN4;
 import com.propertyvista.crm.rpc.services.selections.SelectN4LeaseCandidateListService;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.N4BatchDTO;
 import com.propertyvista.dto.N4LeaseCandidateDTO;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class N4BatchLister extends SiteDataTablePanel<N4BatchDTO> {
 
@@ -52,16 +59,36 @@ public class N4BatchLister extends SiteDataTablePanel<N4BatchDTO> {
         setDataTableModel(new DataTableModel<N4BatchDTO>());
         getDataTableModel().setMultipleSelection(true);
 
-        addUpperActionItem(new Button(i18n.tr("Print Forms"), new Command() {
+        addUpperActionItem(new Button(i18n.tr("Issue Forms"), new Command() {
             @Override
             public void execute() {
                 if (getDataTable().getSelectedItems().isEmpty()) {
                     showEmptySelectionError();
+                } else {
+                    Vector<Key> batchIds = new Vector<>();
+                    for (N4BatchDTO batch : getDataTable().getSelectedItems()) {
+                        batchIds.add(batch.getPrimaryKey());
+                    }
+                    ((N4BatchCrudService) getService()).serviceBatches(new DefaultAsyncCallback<String>() {
+                        @Override
+                        public void onSuccess(String deferredCorrelationId) {
+                            DeferredProcessDialog d = new DeferredProcessDialog(i18n.tr("N4 Document Generation"), i18n.tr("Generating Forms..."), false) {
+                                @Override
+                                public void onDeferredSuccess(final DeferredProcessProgressResponse result) {
+                                    super.onDeferredSuccess(result);
+                                    downloadErrorReport((DeferredReportProcessProgressResponse) result);
+                                    populate();
+                                }
+                            };
+                            d.show();
+                            d.startProgress(deferredCorrelationId);
+                        }
+                    }, batchIds);
                 }
             }
         }, new ActionPermission(ServiceN4.class)));
 
-        addUpperActionItem(new Button(i18n.tr("Print with Summary"), new Command() {
+        addUpperActionItem(new Button(i18n.tr("Issue with Summary"), new Command() {
             @Override
             public void execute() {
                 if (getDataTable().getSelectedItems().isEmpty()) {
@@ -71,6 +98,15 @@ public class N4BatchLister extends SiteDataTablePanel<N4BatchDTO> {
         }, new ActionPermission(ServiceN4.class)));
 
         addUpperActionItem(new Button(i18n.tr("Service by AutoMail"), new Command() {
+            @Override
+            public void execute() {
+                if (getDataTable().getSelectedItems().isEmpty()) {
+                    showEmptySelectionError();
+                }
+            }
+        }, new ActionPermission(ServiceN4.class)));
+
+        addUpperActionItem(new Button(i18n.tr("Print Forms"), new Command() {
             @Override
             public void execute() {
                 if (getDataTable().getSelectedItems().isEmpty()) {
@@ -146,5 +182,18 @@ public class N4BatchLister extends SiteDataTablePanel<N4BatchDTO> {
 
     private void showEmptySelectionError() {
         MessageDialog.error(i18n.tr("Selection Is Empty"), i18n.tr("Please select items to process..."));
+    }
+
+    private void downloadErrorReport(DeferredReportProcessProgressResponse response) {
+        if (response.getDownloadLink() != null) {
+            final String downloadUrl = GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping + "/" + response.getDownloadLink();
+            new LinkDialog(i18n.tr("Errors Occurred"), i18n.tr("Download Error Report"), downloadUrl) {
+                @Override
+                public boolean onClickCancel() {
+                    GWT.<DownloadableService> create(DownloadableService.class).cancelDownload(null, downloadUrl);
+                    return false;
+                }
+            }.show();
+        }
     }
 }

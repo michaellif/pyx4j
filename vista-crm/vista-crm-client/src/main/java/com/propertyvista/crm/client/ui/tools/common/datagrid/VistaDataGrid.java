@@ -26,6 +26,7 @@ import com.pyx4j.entity.core.IObject;
 /**
  * Same as GWT DataGrid, but with some convenience methods for defining columns based on subject contained entity type
  */
+@Deprecated
 public class VistaDataGrid<E extends IEntity> extends DataGrid<E> {
 
     private static final int DEFAULT_PAGE_SIZE = 50;

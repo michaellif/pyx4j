@@ -249,17 +249,7 @@ BEGIN
         
         ALTER TABLE communication_delivery_handle ADD COLUMN message_type VARCHAR(50);
         
-        
-        -- communication_episode
-        
-        CREATE TABLE communication_episode
-        (
-            id                              BIGINT              NOT NULL,
-                CONSTRAINT communication_episode_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE communication_episode OWNER TO vista;
-        
+                
         
         -- communication_message
         
@@ -459,8 +449,8 @@ BEGIN
             file_file_size              INTEGER,
             file_content_mime_type      VARCHAR(500),
             file_blob_key               BIGINT,
-            lease                       BIGINT                  NOT NULL,
-            record                      BIGINT,
+            lease                       BIGINT,
+            record                      BIGINT                  NOT NULL,
             added_on                    TIMESTAMP,
             title                       VARCHAR(500),
             note                        VARCHAR(500),
@@ -709,7 +699,8 @@ BEGIN
             servicing_agent                 BIGINT,
             signing_agent                   BIGINT,
             name                            VARCHAR(500),
-            issue_date                      TIMESTAMP,
+            created                         TIMESTAMP,
+            termination_date_option         VARCHAR(50),
                 CONSTRAINT n4_batch_pk PRIMARY KEY(id)
         );
         
@@ -724,7 +715,7 @@ BEGIN
             batch                           BIGINT,
             lease                           BIGINT,
             lease_arrears                   BIGINT,
-            serviced                        TIMESTAMP,
+            service_date                    TIMESTAMP,
                 CONSTRAINT n4_batch_item_pk PRIMARY KEY(id)
         );
         
@@ -750,7 +741,8 @@ BEGIN
         CREATE TABLE n4_lease_data
         (
             id                              BIGINT              NOT NULL,
-            issue_date                      TIMESTAMP,
+            created                         TIMESTAMP,
+            termination_date_option         VARCHAR(50),
             service_date                    DATE,
             delivery_method                 VARCHAR(50),
             delivery_date                   DATE,
@@ -985,6 +977,9 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_income_info '
                 ||'SET  amount_period = ''Monthly'', '
                 ||'     revenue_amount_period = ''Monthly'' ';
+                
+                
+        PERFORM * FROM _dba_.migrate_legal_questions(v_schema_name);
         
         /**
         ***     ==========================================================================================================
@@ -994,8 +989,30 @@ BEGIN
         ***     ==========================================================================================================
         **/
         
+        -- charge_line
         
-                 
+        DROP TABLE charge_line;
+        
+        -- charge_line_list
+        
+        DROP TABLE charge_line_list;
+        
+        -- charge_line_list$charges
+        
+        DROP TABLE charge_line_list$charges;
+        
+        -- charge_old
+        
+        DROP TABLE charge_old;
+        
+        -- customer_screening_legal_questions
+        
+        DROP TABLE customer_screening_legal_questions;
+        
+        -- customer_screening_v
+        
+        ALTER TABLE customer_screening_v DROP COLUMN legal_questions;
+        
         /**
         ***     ======================================================================================================
         ***
