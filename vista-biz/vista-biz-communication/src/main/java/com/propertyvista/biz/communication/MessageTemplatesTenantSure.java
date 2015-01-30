@@ -117,7 +117,7 @@ class MessageTemplatesTenantSure {
         MailMessage email = new MailMessage();
         email.setSender(getTenantSureSender());
         email.setSubject(i18n.tr("TenantSure Policy: Credit Card Expiring Notice"));
-        email.setTo(tenant.email().getStringView());
+        email.setTo(AddresseUtils.getCompleteEmail(tenant.name().getStringView(), tenant.email().getStringView()));
 
         MessageTemplate template = new MessageTemplate("email/tenantsure/tenantsure-credit-card-expiring.html");
 
@@ -142,7 +142,7 @@ class MessageTemplatesTenantSure {
         if ((mailConfig != null) && CommonsStringUtils.isStringSet(mailConfig.getForwardAllTo())) {
             tenantsEmail = mailConfig.getForwardAllTo();
         } else {
-            tenantsEmail = tenant.customer().person().email().getValue();
+            tenantsEmail = AddresseUtils.getCompleteEmail(tenant.customer().person().name().getStringView(), tenant.customer().person().email().getValue());
         }
         return tenantsEmail;
     }

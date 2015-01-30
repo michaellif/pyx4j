@@ -132,7 +132,7 @@ class MessageTemplatesCustomizable {
         }
         MailMessage email = new MailMessage();
         Persistence.ensureRetrieve(tenantInLease.leaseParticipant().customer().user(), AttachLevel.Attached);
-        email.setTo(tenantInLease.leaseParticipant().customer().user().email().getValue());
+        email.setTo(AddresseUtils.getCompleteEmail(tenantInLease.leaseParticipant().customer().user()));
         email.setSender(getSender());
         buildEmail(email, emailTemplate, context, data);
         return email;
@@ -158,7 +158,7 @@ class MessageTemplatesCustomizable {
         if (user.isValueDetached()) {
             Persistence.service().retrieve(participant.leaseParticipant().customer().user());
         }
-        email.setTo(user.email().getValue());
+        email.setTo(AddresseUtils.getCompleteEmail(user));
         email.setSender(getSender());
         // set email subject and body from the template
         buildEmail(email, emailTemplate, context, data);
@@ -172,7 +172,10 @@ class MessageTemplatesCustomizable {
         Persistence.ensureRetrieve(document.signedBy().leaseParticipant(), AttachLevel.Attached);
 
         MailMessage email = new MailMessage();
-        email.setTo(Arrays.asList(document.signedBy().leaseParticipant().customer().person().email().getValue()));
+
+        String name = document.signedBy().leaseParticipant().customer().person().name().getStringView();
+        String emailAddress = document.signedBy().leaseParticipant().customer().person().email().getValue();
+        email.setTo(Arrays.asList(AddresseUtils.getCompleteEmail(name, emailAddress)));
         email.setSender(getSender());
 
         LeaseApplicationDocumentBlob blob = Persistence.service().retrieve(LeaseApplicationDocumentBlob.class, document.file().blobKey().getValue());
@@ -206,7 +209,7 @@ class MessageTemplatesCustomizable {
             data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
         }
         MailMessage email = new MailMessage();
-        email.setTo(leaseParticipant.leaseParticipant().customer().user().email().getValue());
+        email.setTo(AddresseUtils.getCompleteEmail(leaseParticipant.leaseParticipant().customer().user()));
         email.setSender(getSender());
         // set email subject and body from the template
         buildEmail(email, emailTemplate, context, data);
@@ -246,7 +249,7 @@ class MessageTemplatesCustomizable {
         }
 
         MailMessage email = new MailMessage();
-        email.setTo(user.email().getValue());
+        email.setTo(AddresseUtils.getCompleteEmail(user));
         email.setSender(getSender());
         // set email subject and body from the template
         buildEmail(email, emailTemplate, context, data);
@@ -270,7 +273,7 @@ class MessageTemplatesCustomizable {
         }
 
         MailMessage email = new MailMessage();
-        email.setTo(user.email().getValue());
+        email.setTo(AddresseUtils.getCompleteEmail(user));
         email.setSender(getSender());
         // set email subject and body from the template
         buildEmail(email, emailTemplate, context, data);
@@ -299,7 +302,7 @@ class MessageTemplatesCustomizable {
         if (user.isValueDetached()) {
             Persistence.service().retrieve(tenant.leaseParticipant().customer().user());
         }
-        email.setTo(user.email().getValue());
+        email.setTo(AddresseUtils.getCompleteEmail(user));
         email.setSender(getSender());
         // set email subject and body from the template
         buildEmail(email, emailTemplate, context, data);
@@ -474,9 +477,5 @@ class MessageTemplatesCustomizable {
                 footerHtml
             ));//@formatter:on
 
-        // TODO
-        // What emails are problematic? (payments communications, tenantsure communications, operations communications...)
-        //email.setTextBody(Jsoup.parse(email.getHtmlBody()).text());
     }
-
 }

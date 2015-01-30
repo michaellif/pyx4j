@@ -47,6 +47,7 @@ class TenantAccess {
         }
         Persistence.ensureRetrieve(tenant.customer().user(), AttachLevel.Attached);
         // tenant.customer().person().email().getValue(); // This is the same.
-        return tenant.customer().user().email().getValue();
+        return AddresseUtils.getCompleteEmail(tenant.customer().user());
     }
+
 }
