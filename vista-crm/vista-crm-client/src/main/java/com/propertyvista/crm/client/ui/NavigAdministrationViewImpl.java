@@ -132,6 +132,8 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
             if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
                 sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new Settings.ILSConfig()));
             }
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Settings.MessageCategory(), DataModelPermission
+                    .permissionRead(MessageCategory.class)));
         }
 
         {//Security
@@ -140,10 +142,6 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
             sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Security.AuditRecords(), DataModelPermission
                     .permissionRead(AuditRecordDTO.class)));
             sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new Security.UserRole(), DataModelPermission.permissionRead(CrmRole.class)));
-
-            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Settings.MessageCategory(), DataModelPermission
-                    .permissionRead(MessageCategory.class)));
-
             sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Security.AssignReports(), DataModelPermission
                     .permissionRead(AvailableCrmReport.class)));
 
