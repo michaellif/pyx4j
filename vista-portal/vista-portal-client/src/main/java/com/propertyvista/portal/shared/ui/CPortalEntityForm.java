@@ -20,7 +20,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
 
-import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
+import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 
 public abstract class CPortalEntityForm<E extends IEntity> extends CForm<E> {
 
@@ -39,7 +39,7 @@ public abstract class CPortalEntityForm<E extends IEntity> extends CForm<E> {
     }
 
     public CPortalEntityForm(Class<E> clazz, IViewerView<? extends IEntity> view, String headerCaption, IsWidget footerActionWidget, ThemeColor themeColor) {
-        super(clazz, new VistaViewersComponentFactory());
+        super(clazz, new VistaEditorsComponentFactory());
         this.view = view;
         this.headerCaption = headerCaption;
         this.footerActionWidget = footerActionWidget;
