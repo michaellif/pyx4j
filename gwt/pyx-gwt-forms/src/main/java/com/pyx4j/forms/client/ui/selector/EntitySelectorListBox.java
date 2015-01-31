@@ -19,8 +19,8 @@
  */
 package com.pyx4j.forms.client.ui.selector;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -74,7 +74,7 @@ public class EntitySelectorListBox<E extends IEntity> extends SelectorListBox<E>
     }
 
     protected void setEnhancedValue(Collection<E> values) {
-        Collection<Key> keys = new Vector<>();
+        final Collection<Key> keys = new ArrayList<Key>();
         for (E value : values) {
             keys.add(value.getPrimaryKey());
         }
@@ -92,7 +92,13 @@ public class EntitySelectorListBox<E extends IEntity> extends SelectorListBox<E>
             @Override
             public void onSuccess(EntitySearchResult<E> result) {
                 if (result != null && result.getData() != null && result.getData().size() != 0) {
-                    value.addAll(result.getData());
+                    for (Key k : keys) {
+                        for (E entry : result.getData()) {
+                            if (entry.getPrimaryKey().equals(k)) {
+                                value.add(entry);
+                            }
+                        }
+                    }
                 }
                 listBox.showValue(value);
             }
