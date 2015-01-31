@@ -76,7 +76,7 @@ public class ILSVendorConfigEditorFolder extends VistaBoxFolder<ILSVendorConfig>
             FormPanel formPanel = new FormPanel(this);
 
             formPanel.append(Location.Left, proto().vendor(), new CEnumLabel()).decorate();
-            formPanel.append(Location.Left, proto().maxDailyAds()).decorate().componentWidth(120);
+            formPanel.append(Location.Left, proto().maxDailyAds()).decorate().componentWidth(60);
 
             return formPanel;
         }
