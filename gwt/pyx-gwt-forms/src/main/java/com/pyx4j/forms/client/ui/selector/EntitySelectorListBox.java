@@ -93,8 +93,8 @@ public class EntitySelectorListBox<E extends IEntity> extends SelectorListBox<E>
             public void onSuccess(EntitySearchResult<E> result) {
                 if (result != null && result.getData() != null && result.getData().size() != 0) {
                     value.addAll(result.getData());
-                    listBox.showValue(value);
                 }
+                listBox.showValue(value);
             }
         });
 
