@@ -32,6 +32,10 @@ BEGIN
         ALTER TABLE identification_document_file DROP CONSTRAINT identification_document_file_owner_fk;
         ALTER TABLE lease_billing_type_policy_item DROP CONSTRAINT lease_billing_type_policy_item_lease_billing_policy_fk;
         ALTER TABLE maintenance_request_schedule DROP CONSTRAINT maintenance_request_schedule_request_fk;
+        ALTER TABLE legal_letter DROP CONSTRAINT legal_letter_lease_fk;
+        ALTER TABLE legal_letter DROP CONSTRAINT legal_letter_status_fk;
+        ALTER TABLE legal_status DROP CONSTRAINT legal_status_lease_fk;
+        ALTER TABLE legal_status DROP CONSTRAINT legal_status_set_by_fk;
         ALTER TABLE permission_to_enter_note DROP CONSTRAINT permission_to_enter_note_locale_fk;
         ALTER TABLE proof_of_asset_document_file DROP CONSTRAINT proof_of_asset_document_file_owner_fk;
         ALTER TABLE proof_of_asset_document_folder DROP CONSTRAINT proof_of_asset_document_folder_owner_fk;
@@ -47,6 +51,9 @@ BEGIN
         ALTER TABLE customer_screening_personal_asset DROP CONSTRAINT customer_screening_personal_asset_pk;
         ALTER TABLE customer_screening_legal_questions DROP CONSTRAINT customer_screening_legal_questions_pk;
         ALTER TABLE identification_document_folder DROP CONSTRAINT identification_document_folder_pk;
+        ALTER TABLE legal_letter_blob DROP CONSTRAINT legal_letter_blob_pk;
+        ALTER TABLE legal_letter DROP CONSTRAINT legal_letter_pk;
+        ALTER TABLE legal_status DROP CONSTRAINT legal_status_pk;
         ALTER TABLE maintenance_request_schedule DROP CONSTRAINT maintenance_request_schedule_pk;
         ALTER TABLE proof_of_asset_document_folder DROP CONSTRAINT proof_of_asset_document_folder_pk;
         ALTER TABLE proof_of_income_document_folder DROP CONSTRAINT proof_of_income_document_folder_pk;
@@ -153,6 +160,10 @@ BEGIN
         -- autopay_agreement
         
         ALTER TABLE autopay_agreement   RENAME COLUMN creation_date TO created;
+        
+        -- billing_arrears_snapshot
+        
+        ALTER TABLE billing_arrears_snapshot ALTER COLUMN legal_status TYPE VARCHAR(500);
         
         
         -- broadcast_event
@@ -1012,6 +1023,45 @@ BEGIN
         -- customer_screening_v
         
         ALTER TABLE customer_screening_v DROP COLUMN legal_questions;
+        
+        -- legal_letter
+        
+        DROP TABLE legal_letter;
+        
+        -- legal_letter_blob
+        
+        DROP TABLE legal_letter_blob;
+        
+        -- legal_status
+        
+        -- DROP TABLE legal_status;
+        
+        -- maintenance_request
+        /*
+        
+        ALTER TABLE maintenance_request DROP COLUMN preferred_time1,
+                                        DROP COLUMN preferred_time2;
+        */
+        
+        -- maintenance_request_schedule
+        
+        -- DROP TABLE maintenance_request_schedule;
+        
+        -- n4_policy
+        
+        -- ALTER TABLE n4_policy DROP COLUMN include_signature;
+        
+        -- permission_to_enter_note
+        
+        -- ALTER TABLE permission_to_enter_note DROP COLUMN locale_old;
+        
+        -- proof_of_asset_document_folder
+        
+        DROP TABLE proof_of_asset_document_folder;
+        
+        -- proof_of_income_document_folder
+        
+        DROP TABLE proof_of_income_document_folder;
         
         /**
         ***     ======================================================================================================
