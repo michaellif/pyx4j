@@ -56,6 +56,24 @@ CREATE OR REPLACE VIEW _dba_.mail_queue AS
     ORDER BY    status
 );
 
+-- Empty PMC
+
+CREATE OR REPLACE VIEW _dba_.empty_pmc AS
+(
+    WITH t AS ( SELECT  namespace, 
+                DATE_TRUNC('day',MAX(created)) AS last_login
+                FROM    _admin_.audit_record
+                GROUP BY namespace) 
+    SELECT  s.name, s.namespace, s.created,
+            TO_CHAR(t.last_login, 'DD-MON-YYYY') AS last_login,
+            s.buildings, s.units, s.leases
+    FROM    t 
+    JOIN    _dba_.pmc_stats s ON (t.namespace = s.namespace)
+    WHERE   s.buildings = 0
+    AND     s.units = 0
+    ORDER BY  t.last_login
+);
+
 
 
 
