@@ -30,11 +30,11 @@ import com.pyx4j.site.client.backoffice.ui.prime.wizard.IPrimeWizardView.IPrimeW
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class AbstractPrimeWizard<E extends IEntity> extends AbstractPrimePaneView<IPrimeWizardPresenter> implements IPrimeWizardView<E> {
+public abstract class AbstractPrimeWizardView<E extends IEntity> extends AbstractPrimePaneView<IPrimeWizardPresenter> implements IPrimeWizardView<E> {
 
-    private static final I18n i18n = I18n.get(AbstractPrimeWizard.class);
+    private static final I18n i18n = I18n.get(AbstractPrimeWizardView.class);
 
-    private WizardForm<E> form;
+    private PrimeWizardForm<E> form;
 
     private IPrimeWizardView.IPrimeWizardPresenter presenter;
 
@@ -44,7 +44,7 @@ public abstract class AbstractPrimeWizard<E extends IEntity> extends AbstractPri
 
     private final Button btnCancel;
 
-    public AbstractPrimeWizard(String caption) {
+    public AbstractPrimeWizardView(String caption) {
         super();
         setCaption(caption);
 
@@ -80,7 +80,7 @@ public abstract class AbstractPrimeWizard<E extends IEntity> extends AbstractPri
 
     }
 
-    protected void setForm(WizardForm<E> form) {
+    protected void setForm(PrimeWizardForm<E> form) {
         if (getContentPane() == null) { // finalise UI here:
             setContentPane(new LayoutPanel());
             setSize("100%", "100%");
@@ -100,7 +100,7 @@ public abstract class AbstractPrimeWizard<E extends IEntity> extends AbstractPri
 
     }
 
-    protected WizardForm<E> getForm() {
+    protected PrimeWizardForm<E> getForm() {
         return form;
     }
 

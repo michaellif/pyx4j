@@ -42,18 +42,23 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.WizardPanel;
 
-public abstract class WizardForm<E extends IEntity> extends CForm<E> implements HasBeforeSelectionHandlers<Tab>, HasSelectionHandlers<Tab> {
+public abstract class PrimeWizardForm<E extends IEntity> extends CForm<E> implements HasBeforeSelectionHandlers<Tab>, HasSelectionHandlers<Tab> {
 
-    private static final I18n i18n = I18n.get(WizardForm.class);
+    private static final I18n i18n = I18n.get(PrimeWizardForm.class);
 
     private final WizardPanel wizardPanel;
 
     private final IPrimeWizardView<? extends IEntity> view;
 
-    public WizardForm(Class<E> rootClass, final IPrimeWizardView<? extends IEntity> view) {
+    public PrimeWizardForm(Class<E> rootClass, final IPrimeWizardView<? extends IEntity> view) {
         super(rootClass);
+
+        getNativeComponent().setSize("100%", "100%");
+
         this.view = view;
         wizardPanel = new WizardPanel();
+        wizardPanel.setSize("100%", "100%");
+
         wizardPanel.addSelectionHandler(new SelectionHandler<Tab>() {
 
             @Override
@@ -101,7 +106,6 @@ public abstract class WizardForm<E extends IEntity> extends CForm<E> implements 
 
     @Override
     protected IsWidget createContent() {
-        wizardPanel.setSize("100%", "100%");
         return wizardPanel;
     }
 
