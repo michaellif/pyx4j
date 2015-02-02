@@ -12,22 +12,15 @@
  */
 package com.propertyvista.server.ci;
 
-import java.io.Closeable;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Vector;
-import java.util.concurrent.Callable;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,189 +30,39 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
-import com.pyx4j.entity.rdb.IEntityPersistenceServiceRDB;
-import com.pyx4j.entity.rdb.RDBUtils;
-import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
-import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
-import com.pyx4j.entity.rpc.DataPreloaderInfo;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
-import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.IOUtils;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.annotations.Translate;
-import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.DevSession;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.contexts.ServerContext;
-import com.pyx4j.server.mail.Mail;
 
-import com.propertyvista.biz.system.OperationsAlertFacade;
-import com.propertyvista.biz.system.OperationsTriggerFacade;
-import com.propertyvista.biz.system.PmcFacade;
-import com.propertyvista.biz.system.VistaSystemFacade;
+import com.propertyvista.biz.preloader.OutputHolder;
+import com.propertyvista.biz.preloader.PmcPreloaderFacade;
+//import net.sf.dynamicreports.design.constant.ResetType;
+import com.propertyvista.biz.preloader.ResetType;
+import com.propertyvista.biz.preloader.pmc.PmcPreloaderManager;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
-import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.DemoData.DemoPmc;
-import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
-import com.propertyvista.misc.VistaDataPreloaderParameter;
-import com.propertyvista.misc.VistaDevPreloadConfig;
-import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.server.preloader.VistaOperationsDataPreloaders;
 import com.propertyvista.operations.server.qa.DBIntegrityCheckDeferredProcess;
-import com.propertyvista.portal.server.preloader.PmcCreatorDev;
-import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
-import com.propertyvista.server.config.VistaServerSideConfiguration;
 
 @SuppressWarnings("serial")
 public class DBResetServlet extends HttpServlet {
 
     private static final Logger log = LoggerFactory.getLogger(DBResetServlet.class);
 
-    @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-    private static enum ResetType {
-
-        @Translate("Drop All and Configure Vista Operations")
-        prodReset,
-
-        @Translate("Drop All and Preload all demo PMC (~3 min 24 seconds) [No Mockup]")
-        all,
-
-        @Translate("Drop All and Preload all demo PMC (+<b>star</b> tenants and buildings) : Mini version for UI Design (~1 min 22 seconds)")
-        allMini,
-
-        @Translate("Drop All and Preload One 'vista' PMC : Mini version for UI Design (~30 seconds)")
-        vistaMini,
-
-        @Translate("Drop All and Preload One 'vista' PMC : Default preload")
-        vista,
-
-        @Translate("Drop All and Preload One 'vista' PMC : Perfomance tests version (~25 minutes)")
-        vistaMax3000,
-
-        @Translate("Drop All and Preload all demo PMC : Mockup version  (~5 minutes)")
-        allWithMockup,
-
-        @Translate("For All PMC Generate Mockup on top of existing data")
-        allAddMockup,
-
-        @Translate("Drop All Tables")
-        clear,
-
-        @Translate("Drop PMC Tables and Preload one PMC")
-        resetPmc(true),
-
-        @Translate("Drop <b>Operations</b> and PMC Tables and Preload one PMC")
-        resetOperationsAndPmc(true),
-
-        @Translate("Preload this PMC")
-        preloadPmc(true),
-
-        @Translate("Preload this PMC : Mockup version  (~5 minutes)")
-        preloadPmcWithMockup,
-
-        @Translate("Generate Mockup on top of existing data")
-        addPmcMockup,
-
-        @Translate("Generate Mockup on top of existing data - Only MockupTenantPreloader")
-        addPmcMockupTest1,
-
-        clearPmc(true),
-
-        dropForeignKeys,
-
-        dbIntegrityCheck,
-
-        @Translate("Reset Data Cache for this PMC")
-        resetPmcCache,
-
-        @Translate("Reset Data Cache for All PMC")
-        resetAllCache;
-
-        private final boolean pmcParam;
-
-        ResetType() {
-            this.pmcParam = false;
-        }
-
-        ResetType(boolean pmcParam) {
-            this.pmcParam = pmcParam;
-        }
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
-    private class OutputHolder implements Closeable {
-
-        boolean pipeBroken = false;
-
-        OutputStream out;
-
-        OutputHolder(OutputStream out) {
-            this.out = out;
-        }
-
-        @Override
-        public void close() throws IOException {
-            if (this.out != null) {
-                this.out.close();
-                this.out = null;
-            }
-        }
-
-    }
-
-    private void o(OutputHolder out, String... messages) throws IOException {
-        if (out.pipeBroken) {
-            return;
-        }
-        try {
-            out.out.write("<pre>".getBytes());
-            for (String message : messages) {
-                out.out.write(message.getBytes());
-            }
-
-            out.out.write("</pre>".getBytes());
-            out.out.flush();
-        } catch (Throwable e) {
-            log.error("db-reset out put error", e);
-            log.error("db-reset will continue");
-            out.pipeBroken = true;
-        }
-    }
-
-    private void h(OutputHolder out, String... messages) throws IOException {
-        if (out.pipeBroken) {
-            return;
-        }
-        try {
-            for (String message : messages) {
-                out.out.write(message.getBytes());
-            }
-            out.out.flush();
-        } catch (Throwable e) {
-            log.error("db-reset out put error", e);
-            out.pipeBroken = true;
-        }
-    }
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
+
         long requestStart = System.currentTimeMillis();
         log.debug("DBReset requested from ip:{}, {}", ServerContext.getRequestRemoteAddr(),
                 DevSession.getSession().getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE));
@@ -228,234 +71,152 @@ public class DBResetServlet extends HttpServlet {
         response.setHeader("Cache-control", "no-cache, no-store, must-revalidate");
         response.setContentType("text/html");
         OutputHolder out = new OutputHolder(response.getOutputStream());
-        h(out, "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"></head><body>");
+        out.h("<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"></head><body>");
         try {
-            synchronized (DBResetServlet.class) {
-                long start = System.currentTimeMillis();
-                if (start - requestStart > 10 * Consts.MIN2MSEC) {
-                    log.warn("Outdated DBReset request from ip:{}, {}", ServerContext.getRequestRemoteAddr(),
-                            DevSession.getSession().getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE));
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                    return;
+
+            long start = System.currentTimeMillis();
+            if (start - requestStart > 10 * Consts.MIN2MSEC) {
+                log.warn("Outdated DBReset request from ip:{}, {}", ServerContext.getRequestRemoteAddr(),
+                        DevSession.getSession().getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE));
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                return;
+            }
+            try {
+                AbstractVistaServerSideConfiguration conf = (AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance();
+                if (!conf.openDBReset()) {
+                    if (!SecurityController.check(VistaAccessGrantedBehavior.Operations)) {
+                        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                        return;
+                    }
                 }
-                try {
-                    AbstractVistaServerSideConfiguration conf = (AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance();
-                    if (!conf.openDBReset()) {
-                        if (!SecurityController.check(VistaAccessGrantedBehavior.Operations)) {
-                            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                            return;
-                        }
+                log.warn("DBReset started from ip:{}, {}", ServerContext.getRequestRemoteAddr(),
+                        DevSession.getSession().getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE));
+                ResetType type = null;
+                String tp = req.getParameter("type");
+                if (CommonsStringUtils.isStringSet(tp)) {
+                    try {
+                        type = ResetType.valueOf(tp);
+                    } catch (IllegalArgumentException e) {
+                        out.o("Invalid requests type=", tp, "\n");
                     }
-                    log.warn("DBReset started from ip:{}, {}", ServerContext.getRequestRemoteAddr(),
-                            DevSession.getSession().getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE));
-                    ResetType type = null;
-                    String tp = req.getParameter("type");
-                    if (CommonsStringUtils.isStringSet(tp)) {
-                        try {
-                            type = ResetType.valueOf(tp);
-                        } catch (IllegalArgumentException e) {
-                            o(out, "Invalid requests type=", tp, "\n");
-                        }
-                    }
-                    final String requestNamespace = NamespaceManager.getNamespace();
-                    if ((req.getParameter("help") != null) || (type == null)) {
-                        o(out, "Current PMC is '", requestNamespace, "'<br/>");
-                        h(out, "Usage:<br/><table>");
-                        for (ResetType t : EnumSet.allOf(ResetType.class)) {
-                            if (t.pmcParam) {
-                                h(out, "<tr><td>&nbsp;</td></tr>");
+                }
+                final String requestNamespace = NamespaceManager.getNamespace();
+                if ((req.getParameter("help") != null) || (type == null)) {
+                    printHelp(requestNamespace, out, conf.dbResetPreloadPmc());
 
-                                h(out, "<tr><td>");
-                                h(out, "</td><td>", t.toString());
-                                h(out, "</td></tr>");
-                                for (DemoPmc demoPmc : conf.dbResetPreloadPmc()) {
-                                    h(out, "<tr><td>&nbsp;&nbsp;<a href=\"");
-                                    h(out, "?type=", t.name());
-                                    h(out, "&pmc=", demoPmc.name());
-                                    h(out, "\">");
-
-                                    h(out, "?type=", t.name());
-                                    h(out, "&pmc=", demoPmc.name());
-
-                                    h(out, "</a></td><td>", "<b>" + demoPmc.name() + "</b> &nbsp;", t.toString());
-                                    h(out, "</td></tr>");
-                                }
-                                h(out, "<tr><td>&nbsp;");
-                                h(out, "</td><td>");
-                                h(out, "</td></tr>");
-                            } else {
-                                h(out, "<tr><td><a href=\"");
-                                h(out, "?type=", t.name(), "\">");
-                                h(out, "?type=", t.name());
-                                h(out, "</a></td><td>", t.toString());
-                                h(out, "</td></tr>");
-                            }
-                        }
-                        h(out, "</table>");
+                } else {
+                    out.o("Requested : '" + type.name() + "' " + type.toString());
+                    if (type == ResetType.resetPmcCache) {
+                        ServerSideFactory.create(PmcPreloaderFacade.class).resetPmcCache(out);
+                    } else if (type == ResetType.resetAllCache) {
+                        ServerSideFactory.create(PmcPreloaderFacade.class).resetAllCache(out);
                     } else {
-                        o(out, "Requested : '" + type.name() + "' " + type.toString());
-                        if (type == ResetType.resetPmcCache) {
-                            CacheService.reset();
-                            o(out, "\nCacheService.reset Ok");
-                        } else if (type == ResetType.resetAllCache) {
-                            CacheService.resetAll();
-                            o(out, "\nCacheService.resetAll Ok");
-                        } else {
-                            // End transaction started by Framework filter
-                            Persistence.service().endTransaction();
+                        // End transaction started by Framework filter
+                        Persistence.service().endTransaction(); // TODO Add this to functions in facade?
 
-                            Persistence.service().startBackgroundProcessTransaction();
-                            Lifecycle.startElevatedUserContext();
-                            Mail.getMailService().setDisabled(true);
-                            ServerSideFactory.create(VistaSystemFacade.class).setCommunicationsDisabled(true);
-                            try {
-                                if (EnumSet.of(ResetType.prodReset, ResetType.all, ResetType.allMini, ResetType.vistaMini, ResetType.vista,
-                                        ResetType.vistaMax3000, ResetType.allWithMockup, ResetType.resetOperationsAndPmc, ResetType.clear).contains(type)) {
-                                    Validate.isTrue(!VistaDeployment.isVistaProduction(), "Destruction is disabled");
-                                    SchedulerHelper.shutdown();
-                                    RDBUtils.resetDatabase();
-                                    SchedulerHelper.dbReset();
-                                    o(out, "DB Dropped: " + TimeUtils.secSince(start));
-                                    Thread.sleep(150);
-                                    SchedulerHelper.init();
-                                    SchedulerHelper.setActive(true);
-                                    log.debug("Initialize Admin");
-                                    NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
-                                    try {
-                                        RDBUtils.ensureNamespace();
-                                        long astart = System.currentTimeMillis();
-                                        if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
-                                            RDBUtils.initNameSpaceSpecificEntityTables();
-                                            o(out, "Admin tables created: " + TimeUtils.secSince(astart));
-                                        } else {
-                                            RDBUtils.initAllEntityTables();
-                                            o(out, "All tables created: " + TimeUtils.secSince(astart));
-                                        }
-                                        if (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType() == DatabaseType.PostgreSQL) {
-                                            Persistence.service().commit();
-                                        }
+                        Persistence.service().startBackgroundProcessTransaction();
+                        Lifecycle.startElevatedUserContext();
+                        try {
+                            if (EnumSet.of(ResetType.prodReset, ResetType.all, ResetType.allMini, ResetType.vistaMini, ResetType.vista, ResetType.vistaMax3000,
+                                    ResetType.allWithMockup, ResetType.resetOperationsAndPmc, ResetType.clear).contains(type)) {
 
-                                        CacheService.resetAll();
+                                ServerSideFactory.create(PmcPreloaderFacade.class).resetAll(out, new VistaOperationsDataPreloaders());
 
-                                        new VistaOperationsDataPreloaders().preloadAll();
-                                        Persistence.service().commit();
-                                    } finally {
-                                        NamespaceManager.setNamespace(requestNamespace);
-                                    }
+                            } else if (type == ResetType.resetPmc) {
+                                String pmc = ensurePmc(req.getParameter("pmc"));
+                                ServerSideFactory.create(PmcPreloaderFacade.class).resetPmcTables(pmc);
+                            }
 
-                                    if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
-                                        NamespaceManager.setNamespace(VistaNamespace.expiringNamespace);
-                                        try {
-                                            RDBUtils.ensureNamespace();
-                                            RDBUtils.initNameSpaceSpecificEntityTables();
-                                            Persistence.service().commit();
-                                        } finally {
-                                            NamespaceManager.setNamespace(requestNamespace);
-                                        }
-                                    }
-                                } else if (type == ResetType.resetPmc) {
-                                    String pmc = req.getParameter("pmc");
-                                    if (pmc == null) {
-                                        pmc = NamespaceManager.getNamespace();
-                                    }
-                                    resetPmcTables(pmc);
+                            switch (type) {
+                            case all:
+                            case allWithMockup:
+                            case allAddMockup:
+                            case allMini:
+                                for (DemoPmc demoPmc : conf.dbResetPreloadPmc()) {
+                                    ServerSideFactory.create(PmcPreloaderFacade.class).preloadPmc(prodPmcNameCorrections(demoPmc.name()), type,
+                                            req.getParameterMap(), out);
+                                    out.h("<script>window.scrollTo(0,document.body.scrollHeight);</script>");
                                 }
-
-                                switch (type) {
-                                case all:
-                                case allWithMockup:
-                                case allAddMockup:
-                                case allMini:
-                                    for (DemoPmc demoPmc : conf.dbResetPreloadPmc()) {
-                                        preloadPmc(req, out, prodPmcNameCorrections(demoPmc.name()), type);
-                                        h(out, "<script>window.scrollTo(0,document.body.scrollHeight);</script>");
-                                    }
-                                    break;
-                                case vista:
-                                    preloadPmc(req, out, prodPmcNameCorrections(DemoPmc.vista.name()), type);
-                                    break;
-                                case vistaMini:
-                                    preloadPmc(req, out, prodPmcNameCorrections(DemoPmc.vista.name()), type);
-                                    break;
-                                case vistaMax3000:
-                                    preloadPmc(req, out, prodPmcNameCorrections(DemoPmc.vista.name()), type);
-                                    break;
-                                case addPmcMockup:
-                                case addPmcMockupTest1:
-                                case preloadPmcWithMockup:
-                                case resetPmc:
-                                case resetOperationsAndPmc:
-                                case preloadPmc: {
-                                    String pmc = req.getParameter("pmc");
-                                    if (pmc == null) {
-                                        pmc = NamespaceManager.getNamespace();
-                                    }
-                                    preloadPmc(req, out, pmc, type);
-                                    break;
-                                }
-                                case clearPmc: {
-                                    String pmc = req.getParameter("pmc");
-                                    if (pmc == null) {
-                                        pmc = NamespaceManager.getNamespace();
-                                    }
-                                    o(out, "\n--- PMC  '" + pmc + "' ---\n");
-                                    RDBUtils.deleteFromAllEntityTables();
-                                    NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
-                                    EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-                                    criteria.add(PropertyCriterion.eq(criteria.proto().namespace(), pmc));
-                                    Persistence.service().delete(criteria);
-                                    Persistence.service().commit();
-                                }
-                                    break;
-                                case dropForeignKeys:
-                                    RDBUtils.dropAllForeignKeys();
-                                    break;
-                                case prodReset:
-                                    break;
-                                case dbIntegrityCheck:
+                                break;
+                            case vista:
+                                ServerSideFactory.create(PmcPreloaderFacade.class).preloadPmc(prodPmcNameCorrections(DemoPmc.vista.name()), type,
+                                        req.getParameterMap(), out);
+                                break;
+                            case vistaMini:
+                                ServerSideFactory.create(PmcPreloaderFacade.class).preloadPmc(prodPmcNameCorrections(DemoPmc.vista.name()), type,
+                                        req.getParameterMap(), out);
+                                break;
+                            case vistaMax3000:
+                                ServerSideFactory.create(PmcPreloaderFacade.class).preloadPmc(prodPmcNameCorrections(DemoPmc.vista.name()), type,
+                                        req.getParameterMap(), out);
+                                break;
+                            case addPmcMockup:
+                            case addPmcMockupTest1:
+                            case preloadPmcWithMockup:
+                            case resetPmc:
+                            case resetOperationsAndPmc:
+                            case preloadPmc: {
+                                String pmc = ensurePmc(req.getParameter("pmc"));
+                                ServerSideFactory.create(PmcPreloaderFacade.class).preloadPmc(pmc, type, req.getParameterMap(), out);
+                                break;
+                            }
+                            case clearPmc: {
+                                String pmc = ensurePmc(req.getParameter("pmc"));
+                                out.o("\n--- PMC  '" + pmc + "' ---\n");
+                                ServerSideFactory.create(PmcPreloaderFacade.class).clearPmc(pmc);
+                            }
+                                break;
+                            case dropForeignKeys:
+                                ServerSideFactory.create(PmcPreloaderFacade.class).dropForeignKeys(out);
+                                break;
+                            case prodReset:
+                                break;
+                            case dbIntegrityCheck:
+                                // TODO No access to operations-server module for DBIntegrityCheckDeferredProcess
+                                // change for:
+                                // ServerSideFactory.create(PmcPreloaderFacade.class).dbIntegrityCheck(out);
+                                PmcPreloaderManager.instance().stopCommunications();
+                                try {
                                     ReportRequest reportdbo = new ReportRequest();
                                     EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
                                     criteria.add(PropertyCriterion.ne(criteria.proto().status(), PmcStatus.Created));
                                     criteria.asc(criteria.proto().namespace());
                                     reportdbo.setCriteria(criteria);
                                     new DBIntegrityCheckDeferredProcess(reportdbo, false).execute();
-                                    break;
-                                default:
-                                    throw new Error("unimplemented: " + type);
+                                    PmcPreloaderManager.recordOperation(ResetType.dbIntegrityCheck, start);
+                                } catch (Throwable t) {
+                                    log.error("", t);
+                                    Persistence.service().rollback();
+                                    PmcPreloaderManager.writeToOutput(out, "\nDB reset error:");
+                                    PmcPreloaderManager.writeToOutput(out, t.getMessage());
+                                } finally {
+                                    PmcPreloaderManager.instance().startCommunications();
+                                    PmcPreloaderManager.instance().performResetFinallyActions();
                                 }
-
-                                o(out, "\nTotal time: " + TimeUtils.secSince(start));
-                                log.info("DB reset {} {}", type, TimeUtils.secSince(start));
-                                ServerSideFactory.create(OperationsAlertFacade.class).record(null, "DB operation {0} compleated {1}", type.name(),
-                                        TimeUtils.secSince(start));
-                                o(out, "Processing total time: " + TimeUtils.secSince(start) + "\n");
-                            } catch (Throwable t) {
-                                log.error("", t);
-                                Persistence.service().rollback();
-                                throw new Error(t);
-                            } finally {
-                                ServerSideFactory.create(VistaSystemFacade.class).setCommunicationsDisabled(false);
-                                Mail.getMailService().setDisabled(false);
-                                Lifecycle.endElevatedUserContext();
-                                Persistence.service().endTransaction();
+                                break;
+                            default:
+                                throw new Error("unimplemented: " + type);
                             }
-                            h(out, "<p style=\"background-color:33FF33\">DONE</p>");
-                            h(out, "<script>window.scrollTo(0,document.body.scrollHeight);</script>");
+
+                        } finally {
+                            Lifecycle.endElevatedUserContext();
+                            Persistence.service().endTransaction();
                         }
+
+                        out.o("\nTotal time: " + TimeUtils.secSince(start));
+                        log.info("DB reset {} {}", type, TimeUtils.secSince(start));
+                        out.o("Processing total time: " + TimeUtils.secSince(start) + "\n");
+                        out.h("<p style=\"background-color:33FF33\">DONE</p>");
+                        out.h("<script>window.scrollTo(0,document.body.scrollHeight);</script>");
                     }
-                    h(out, "</body></html>");
-                } catch (Throwable t) {
-                    log.error("DB reset error", t);
-                    o(out, "\nDB reset error:");
-                    o(out, t.getMessage());
-                    h(out, "<script>window.scrollTo(0,document.body.scrollHeight);</script>");
-                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                } finally {
-                    DataGenerator.cleanup();
-                    CacheService.reset();
-                    log.warn("DBReset completed from ip:{}, {}", ServerContext.getRequestRemoteAddr(),
-                            DevSession.getSession().getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE));
                 }
+                out.h("</body></html>");
+            } catch (Throwable t) {
+                out.h("<script>window.scrollTo(0,document.body.scrollHeight);</script>");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } finally {
+                log.warn("DBReset completed from ip:{}, {}", ServerContext.getRequestRemoteAddr(),
+                        DevSession.getSession().getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE));
             }
         } finally {
             IOUtils.closeQuietly(out);
@@ -463,17 +224,45 @@ public class DBResetServlet extends HttpServlet {
 
     }
 
-    private void resetPmcTables(String pmc) {
-        final String requestNamespace = NamespaceManager.getNamespace();
-        NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
+    private void printHelp(String requestNamespace, OutputHolder out, Set<DemoPmc> PMCs) {
         try {
-            CacheService.resetAll();
-            if (((IEntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
-                RDBUtils.resetSchema(pmc);
+            out.o("Current PMC is '", requestNamespace, "'<br/>");
+            out.h("Usage:<br/><table>");
+            for (ResetType t : EnumSet.allOf(ResetType.class)) {
+//            if (t.pmcParam) {
+                if (t.getPmcParam()) {
+                    out.h("<tr><td>&nbsp;</td></tr>");
+
+                    out.h("<tr><td>");
+                    out.h("</td><td>", t.toString());
+                    out.h("</td></tr>");
+                    for (DemoPmc demoPmc : PMCs) {
+                        out.h("<tr><td>&nbsp;&nbsp;<a href=\"");
+                        out.h("?type=", t.name());
+                        out.h("&pmc=", demoPmc.name());
+                        out.h("\">");
+
+                        out.h("?type=", t.name());
+                        out.h("&pmc=", demoPmc.name());
+
+                        out.h("</a></td><td>", "<b>" + demoPmc.name() + "</b> &nbsp;", t.toString());
+                        out.h("</td></tr>");
+                    }
+                    out.h("<tr><td>&nbsp;");
+                    out.h("</td><td>");
+                    out.h("</td></tr>");
+                } else {
+                    out.h("<tr><td><a href=\"");
+                    out.h("?type=", t.name(), "\">");
+                    out.h("?type=", t.name());
+                    out.h("</a></td><td>", t.toString());
+                    out.h("</td></tr>");
+                }
             }
-            Persistence.service().commit();
-        } finally {
-            NamespaceManager.setNamespace(requestNamespace);
+            out.h("</table>");
+        } catch (Throwable t) {
+            log.error("Error printing help: ", t);
+            throw new Error(t);
         }
     }
 
@@ -485,129 +274,10 @@ public class DBResetServlet extends HttpServlet {
         }
     }
 
-    private void preloadPmc(HttpServletRequest req, OutputHolder out, String pmcDnsName, ResetType type) throws IOException {
-        long pmcStart = System.currentTimeMillis();
-        NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
-        log.debug("Preload PMC '{}'", pmcDnsName);
-
-        EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), pmcDnsName));
-        ServerSideFactory.create(PmcFacade.class).deleteAllPmcData(Persistence.service().retrieve(criteria));
-
-        final Pmc pmc = PmcCreatorDev.createPmc(pmcDnsName, (type == ResetType.allMini));
-        Persistence.service().commit();
-
-        VistaDeployment.changePmcContext();
-
-        NamespaceManager.setNamespace(pmc.namespace().getValue());
-        o(out, "\n--- Preload  " + pmcDnsName + " ---\n");
-        if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
-            RDBUtils.ensureNamespace();
-            RDBUtils.initAllEntityTables();
-            if (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType() == DatabaseType.PostgreSQL) {
-                Persistence.service().commit();
-            }
-            o(out, "PMC Tables created ", TimeUtils.secSince(pmcStart));
+    private static String ensurePmc(String pmc) {
+        if (pmc == null) {
+            pmc = NamespaceManager.getNamespace();
         }
-
-        if (!EnumSet.of(ResetType.all, ResetType.allMini, ResetType.vistaMini, ResetType.vista, ResetType.vistaMax3000, ResetType.addPmcMockup,
-                ResetType.allAddMockup, ResetType.addPmcMockupTest1).contains(type)) {
-            RDBUtils.deleteFromAllEntityTables();
-        }
-        CacheService.reset();
-
-        DataPreloaderCollection preloaders = ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders();
-        VistaDevPreloadConfig cfg;
-        switch (type) {
-        case preloadPmcWithMockup:
-        case addPmcMockup:
-        case addPmcMockupTest1:
-        case allAddMockup:
-        case allWithMockup:
-            cfg = VistaDevPreloadConfig.createMockup();
-            break;
-        case vistaMini:
-        case allMini:
-            cfg = VistaDevPreloadConfig.createUIDesignMini();
-            break;
-        case vistaMax3000:
-            cfg = VistaDevPreloadConfig.createPerfomanceMax(3000);
-            break;
-        default:
-            cfg = VistaDevPreloadConfig.createDefault();
-        }
-        //TODO fix LeasePreloader
-        if (pmcDnsName.equals(DemoPmc.star.name()) && (type != ResetType.allMini)) {
-            cfg.numComplexes = 0;
-            cfg.numResidentialBuildings = 0;
-            cfg.numPotentialTenants2CreditCheck = 0;
-            cfg.numPotentialTenants = 0;
-            cfg.numTenants = 0;
-            cfg.numLeads = 0;
-            cfg.numUnAssigendTenants = 0;
-        }
-        setPreloadConfigParameter(req, cfg);
-        preloaders.setParameterValue(VistaDataPreloaderParameter.devPreloadConfig.name(), cfg);
-        preloaders.setParameterValue(VistaDataPreloaderParameter.pmcName.name(), pmc.name().getStringView());
-
-        if (type.name().toLowerCase().contains("add")) {
-            Vector<DataPreloaderInfo> dpis = preloaders.getDataPreloaderInfo();
-            Vector<DataPreloaderInfo> dpisRun = new Vector<DataPreloaderInfo>();
-            String mockupClassNamefragment = "Mockup";
-            for (DataPreloaderInfo info : dpis) {
-                info.setParameters((HashMap<String, Serializable>) preloaders.getParametersValues());
-                switch (type) {
-                case addPmcMockupTest1:
-                    mockupClassNamefragment = "MockupTenantPreloader";
-                case allAddMockup:
-                case addPmcMockup:
-                    if (info.getDataPreloaderClassName().contains(mockupClassNamefragment)) {
-                        dpisRun.add(info);
-                        break;
-                    }
-                default:
-                    break;
-                }
-            }
-
-            o(out, preloaders.exectutePreloadersCreate(dpisRun));
-        } else {
-            o(out, preloaders.preloadAll());
-        }
-
-        if (pmcDnsName.equals(DemoPmc.star.name()) && (type == ResetType.all)) {
-            TaskRunner.runInOperationsNamespace(new Callable<Void>() {
-                @Override
-                public Void call() {
-                    ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.yardiImportProcess, pmc, null);
-                    return null;
-                }
-            });
-        }
-
-        CacheService.reset();
-
-        log.info("Preloaded PMC '{}' {}", pmcDnsName, TimeUtils.secSince(pmcStart));
-        o(out, "Preloaded PMC '" + pmcDnsName + "' " + TimeUtils.secSince(pmcStart));
-        ServerSideFactory.create(OperationsAlertFacade.class).record(pmc, "Preloaded PMC ''{0}'' {1}", pmcDnsName, TimeUtils.secSince(pmcStart));
-    }
-
-    private void setPreloadConfigParameter(HttpServletRequest req, VistaDevPreloadConfig cfg) {
-        for (Field field : cfg.getClass().getFields()) {
-            String value = req.getParameter(field.getName());
-            if (value != null) {
-                try {
-                    if (field.getType().equals(Integer.class) || field.getType().equals(int.class)) {
-                        field.setInt(cfg, Integer.valueOf(value));
-                    } else if (field.getType().equals(Long.class) || field.getType().equals(long.class)) {
-                        field.setLong(cfg, Long.valueOf(value));
-                    } else if (field.getType().equals(String.class)) {
-                        field.set(cfg, value);
-                    }
-                } catch (Throwable e) {
-                    throw new Error(e);
-                }
-            }
-        }
+        return pmc;
     }
 }

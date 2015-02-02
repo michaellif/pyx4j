@@ -12,14 +12,34 @@
  */
 package com.propertyvista.biz.preloader;
 
+import java.util.Map;
+
+import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
+
+import com.propertyvista.domain.pmc.Pmc;
+
 public interface PmcPreloaderFacade {
+
+    public void clearPmc(String pmc);
 
     public void resetPmcTables(String pmc);
 
-    public void preloadPmc(String pmc);
+    public void preloadPmc(String pmc, ResetType type, Map<String, String[]> params, OutputHolder out);
 
-    public void resetAndPreload(String pmc);
+    public void preloadPmc(String pmc, ResetType type);
 
-    // TODO do refactor preload methods from DBReset servlet and move them here
+    public void preloadExistingPmc(Pmc pmc);
+
+    public void resetAndPreloadPmc(String pmc);
+
+    public void resetAll(OutputHolder out, DataPreloaderCollection preloaders);
+
+    public void resetPmcCache(OutputHolder out);
+
+    public void resetAllCache(OutputHolder out);
+
+    public void dropForeignKeys(OutputHolder out);
+
+    public void dbIntegrityCheck(OutputHolder out);
 
 }
