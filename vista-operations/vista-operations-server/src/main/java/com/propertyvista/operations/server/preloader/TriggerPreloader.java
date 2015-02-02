@@ -15,6 +15,7 @@ package com.propertyvista.operations.server.preloader;
 import java.util.EnumSet;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
@@ -47,12 +48,12 @@ public class TriggerPreloader extends AbstractDataPreloader {
             }
 
             if (pmcProcessType.equals(PmcProcessType.resetDemoPMC)) {
-//                if (ApplicationMode.isDemo()) {
-                trigger.scheduleSuspended().setValue(false);
-                trigger.schedules().add(createNightlySchedule());
-//                } else {
-//                    continue;
-//                }
+                if (ApplicationMode.isDemo()) {
+                    trigger.scheduleSuspended().setValue(false);
+                    trigger.schedules().add(createNightlySchedule());
+                } else {
+                    continue;
+                }
             }
 
             Persistence.service().persist(trigger);
