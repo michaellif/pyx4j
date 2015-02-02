@@ -50,9 +50,9 @@ public class N4BatchViewerViewImpl extends CrmViewerViewImplBase<N4BatchDTO> imp
             @Override
             public void execute() {
                 if (!getForm().getValue().serviceDate().isNull()) {
-                    // TODO - implement
+                    ((N4BatchViewerView.Presenter) getPresenter()).downloadForms(getForm().getValue());
                 } else {
-                    MessageDialog.error(i18n.tr("Forms Not Issued"), i18n.tr("Issue Forms before downloading"));
+                    MessageDialog.error(i18n.tr("Forms Not Issued"), i18n.tr("Issue Forms before printing"));
                 }
             }
         }, new ActionPermission(ServiceN4.class)));

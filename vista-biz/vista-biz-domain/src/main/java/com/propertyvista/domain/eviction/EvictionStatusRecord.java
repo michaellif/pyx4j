@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -56,6 +57,7 @@ public interface EvictionStatusRecord extends IEntity {
     @Detached
     Employee addedBy();
 
+    @Owned
     @Detached
     @OrderBy(PrimaryKey.class)
     IList<EvictionDocument> attachments();

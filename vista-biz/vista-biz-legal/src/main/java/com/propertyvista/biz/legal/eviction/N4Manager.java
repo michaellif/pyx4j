@@ -141,7 +141,6 @@ public class N4Manager {
                 generationDate //
                 ));
         n4Letter.printOrder().setValue(0);
-        Persistence.service().persist(n4Letter);
 
         return n4Letter;
     }
@@ -166,7 +165,6 @@ public class N4Manager {
                 generationDate //
                 ));
         n4csLetter.printOrder().setValue(1);
-        Persistence.service().persist(n4csLetter);
 
         return n4csLetter;
     }

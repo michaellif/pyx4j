@@ -12,8 +12,11 @@
  */
 package com.propertyvista.crm.client.activity.crud.lease.eviction.n4;
 
+import java.util.Vector;
+
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.essentials.rpc.download.DownloadableService;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
@@ -59,10 +62,43 @@ public class N4BatchViewerActivity extends CrmViewerActivity<N4BatchDTO> impleme
         }, EntityFactory.createIdentityStub(N4Batch.class, batch.getPrimaryKey()));
     }
 
+    @Override
+    public void downloadForms(N4BatchDTO batch) {
+        Vector<Key> batchIds = new Vector<>();
+        batchIds.add(batch.getPrimaryKey());
+        ((N4BatchCrudService) getService()).downloadForms(new DefaultAsyncCallback<String>() {
+            @Override
+            public void onSuccess(String deferredCorrelationId) {
+                DeferredProcessDialog d = new DeferredProcessDialog(i18n.tr("N4 Document Download"), i18n.tr("Downloading Forms..."), false) {
+                    @Override
+                    public void onDeferredSuccess(final DeferredProcessProgressResponse result) {
+                        super.onDeferredSuccess(result);
+                        downloadForms((DeferredReportProcessProgressResponse) result);
+                    }
+                };
+                d.show();
+                d.startProgress(deferredCorrelationId);
+            }
+        }, batchIds);
+    }
+
     private void downloadErrorReport(DeferredReportProcessProgressResponse response) {
         if (response.getDownloadLink() != null) {
             final String downloadUrl = GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping + "/" + response.getDownloadLink();
             new LinkDialog(i18n.tr("Errors Occurred"), i18n.tr("Download Error Report"), downloadUrl) {
+                @Override
+                public boolean onClickCancel() {
+                    GWT.<DownloadableService> create(DownloadableService.class).cancelDownload(null, downloadUrl);
+                    return false;
+                }
+            }.show();
+        }
+    }
+
+    private void downloadForms(DeferredReportProcessProgressResponse response) {
+        if (response.getDownloadLink() != null) {
+            final String downloadUrl = GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping + "/" + response.getDownloadLink();
+            new LinkDialog(i18n.tr("Download Forms"), i18n.tr("Click to Download"), downloadUrl) {
                 @Override
                 public boolean onClickCancel() {
                     GWT.<DownloadableService> create(DownloadableService.class).cancelDownload(null, downloadUrl);
