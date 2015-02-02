@@ -96,12 +96,4 @@ public class PmcPreloaderFacadeImpl implements PmcPreloaderFacade {
 
     }
 
-//    public static void logError(OutputHolder out, Throwable t) throws Error {
-//        PmcPreloaderHelper.writeToOutput(out, "\nDB reset error:");
-//        PmcPreloaderHelper.writeToOutput(out, t.getMessage());
-//        if (null != out) {
-//            throw new Error(t);
-//        }
-//    }
-
 }
