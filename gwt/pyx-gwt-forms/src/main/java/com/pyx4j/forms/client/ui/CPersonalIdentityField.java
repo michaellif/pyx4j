@@ -84,7 +84,7 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
 
     @Override
     public void onEditingStop() {
-        if (!getNativeComponent().getEditor().getValue().isEmpty() && getValue() != null) {
+        if (getNativeComponent().getEditor().isParsedOk() && getValue() != null) {
             // clear obfuscated value to indicate user input
             getValue().obfuscatedNumber().setValue(null);
         }
@@ -96,6 +96,9 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
         T value;
         try {
             value = super.getEditorValue();
+            if (value == null) {
+                value = getValue();
+            }
         } catch (Throwable e) {
             // don't clear native value so that format validator could fail properly
             clear(false);
