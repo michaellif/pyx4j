@@ -16,38 +16,36 @@ import java.util.Map;
 
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 
-import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.preloader.OutputHolder;
 import com.propertyvista.biz.preloader.PmcPreloaderFacade;
 import com.propertyvista.biz.preloader.ResetType;
-import com.propertyvista.biz.preloader.pmc.helper.PmcPreloaderManager;
 import com.propertyvista.domain.pmc.Pmc;
 
 public class PmcPreloaderFacadeImpl implements PmcPreloaderFacade {
 
     @Override
-    public void resetPmcTables(String pmcDnsName, long start, boolean isExplicitTransaction) {
-        PmcPreloaderManager.instance().resetPmcTables(pmcDnsName, start, isExplicitTransaction);
+    public void resetPmcTables(String pmcDnsName) {
+        PmcPreloaderManager.instance().resetPmcTables(pmcDnsName);
     }
 
     @Override
-    public void resetAndPreloadPmcProcess(String pmcDnsName, ExecutionMonitor executionMonitor) {
-        PmcPreloaderManager.instance().resetAndPreloadPmc(pmcDnsName, executionMonitor);
+    public void resetAndPreloadPmcProcess(String pmcDnsName) {
+        PmcPreloaderManager.instance().resetAndPreloadPmc(pmcDnsName);
     }
 
     @Override
-    public void clearPmc(String pmcDnsName, long start) {
-        PmcPreloaderManager.instance().clearPmc(pmcDnsName, start);
+    public void clearPmc(String pmcDnsName) {
+        PmcPreloaderManager.instance().clearPmc(pmcDnsName);
     }
 
     @Override
-    public void preloadPmc(String pmcDnsName, ResetType type, Map<String, String[]> params, OutputHolder o, long start, boolean isExplicitTransaction) {
-        PmcPreloaderManager.instance().preloadPmc(pmcDnsName, type, params, o, start, isExplicitTransaction);
+    public void preloadPmc(String pmcDnsName, ResetType type, Map<String, String[]> params, OutputHolder o) {
+        PmcPreloaderManager.instance().preloadPmc(pmcDnsName, type, params, o);
     }
 
     @Override
-    public void preloadPmc(String pmcDnsName, ResetType type, long start, boolean isExplicitTransaction) {
-        PmcPreloaderManager.instance().preloadPmc(pmcDnsName, type, null, null, start, isExplicitTransaction);
+    public void preloadPmc(String pmcDnsName, ResetType type) {
+        PmcPreloaderManager.instance().preloadPmc(pmcDnsName, type, null, null);
     }
 
     @Override
@@ -56,8 +54,8 @@ public class PmcPreloaderFacadeImpl implements PmcPreloaderFacade {
     }
 
     @Override
-    public void resetAll(OutputHolder o, long start, DataPreloaderCollection operationPreloaders) {
-        PmcPreloaderManager.instance().resetAll(o, start, operationPreloaders);
+    public void resetAll(OutputHolder o, DataPreloaderCollection operationPreloaders) {
+        PmcPreloaderManager.instance().resetAll(o, operationPreloaders);
     }
 
     @Override
@@ -71,12 +69,12 @@ public class PmcPreloaderFacadeImpl implements PmcPreloaderFacade {
     }
 
     @Override
-    public void dropForeignKeys(OutputHolder out, long start) {
-        PmcPreloaderManager.instance().dropForeignKeys(out, start);
+    public void dropForeignKeys(OutputHolder out) {
+        PmcPreloaderManager.instance().dropForeignKeys(out);
     }
 
     @Override
-    public void dbIntegrityCheck(OutputHolder out, long start) {
+    public void dbIntegrityCheck(OutputHolder out) {
         // TODO Not access to DBIntegrityCheckDeferredProcess at operations-server module
 //        PmcPreloaderHelper.stopAndPrepareDBProcesses();
 //        try {

@@ -16,31 +16,30 @@ import java.util.Map;
 
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 
-import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.pmc.Pmc;
 
 public interface PmcPreloaderFacade {
 
-    public void clearPmc(String pmc, long start);
+    public void clearPmc(String pmc);
 
-    public void resetPmcTables(String pmc, long start, boolean isExplicitTransaction);
+    public void resetPmcTables(String pmc);
 
-    public void preloadPmc(String pmc, ResetType type, Map<String, String[]> params, OutputHolder out, long start, boolean isExplicitTransaction);
+    public void preloadPmc(String pmc, ResetType type, Map<String, String[]> params, OutputHolder out);
 
-    public void preloadPmc(String pmc, ResetType type, long start, boolean isExplicitTransaction);
+    public void preloadPmc(String pmc, ResetType type);
 
     public void preloadExistingPmc(Pmc pmc);
 
-    public void resetAndPreloadPmcProcess(String pmc, ExecutionMonitor executionMonitor);
+    public void resetAndPreloadPmcProcess(String pmc);
 
-    public void resetAll(OutputHolder out, long start, DataPreloaderCollection preloaders);
+    public void resetAll(OutputHolder out, DataPreloaderCollection preloaders);
 
     public void resetPmcCache(OutputHolder out);
 
     public void resetAllCache(OutputHolder out);
 
-    public void dropForeignKeys(OutputHolder out, long start);
+    public void dropForeignKeys(OutputHolder out);
 
-    public void dbIntegrityCheck(OutputHolder out, long start);
+    public void dbIntegrityCheck(OutputHolder out);
 
 }

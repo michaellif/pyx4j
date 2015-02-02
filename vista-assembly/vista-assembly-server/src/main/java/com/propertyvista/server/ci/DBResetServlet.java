@@ -45,7 +45,7 @@ import com.propertyvista.biz.preloader.OutputHolder;
 import com.propertyvista.biz.preloader.PmcPreloaderFacade;
 //import net.sf.dynamicreports.design.constant.ResetType;
 import com.propertyvista.biz.preloader.ResetType;
-import com.propertyvista.biz.preloader.pmc.helper.PmcPreloaderManager;
+import com.propertyvista.biz.preloader.pmc.PmcPreloaderManager;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.pmc.Pmc;
@@ -73,7 +73,7 @@ public class DBResetServlet extends HttpServlet {
         OutputHolder out = new OutputHolder(response.getOutputStream());
         out.h("<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"></head><body>");
         try {
-//            synchronized (DBResetServlet.class) {
+
             long start = System.currentTimeMillis();
             if (start - requestStart > 10 * Consts.MIN2MSEC) {
                 log.warn("Outdated DBReset request from ip:{}, {}", ServerContext.getRequestRemoteAddr(),
@@ -112,7 +112,7 @@ public class DBResetServlet extends HttpServlet {
                         ServerSideFactory.create(PmcPreloaderFacade.class).resetAllCache(out);
                     } else {
                         // End transaction started by Framework filter
-                        Persistence.service().endTransaction(); // TODO Add this statement to functions in facade?
+                        Persistence.service().endTransaction(); // TODO Add this to functions in facade?
 
                         Persistence.service().startBackgroundProcessTransaction();
                         Lifecycle.startElevatedUserContext();
@@ -120,11 +120,11 @@ public class DBResetServlet extends HttpServlet {
                             if (EnumSet.of(ResetType.prodReset, ResetType.all, ResetType.allMini, ResetType.vistaMini, ResetType.vista, ResetType.vistaMax3000,
                                     ResetType.allWithMockup, ResetType.resetOperationsAndPmc, ResetType.clear).contains(type)) {
 
-                                ServerSideFactory.create(PmcPreloaderFacade.class).resetAll(out, start, new VistaOperationsDataPreloaders());
+                                ServerSideFactory.create(PmcPreloaderFacade.class).resetAll(out, new VistaOperationsDataPreloaders());
 
                             } else if (type == ResetType.resetPmc) {
                                 String pmc = ensurePmc(req.getParameter("pmc"));
-                                ServerSideFactory.create(PmcPreloaderFacade.class).resetPmcTables(pmc, start, true);
+                                ServerSideFactory.create(PmcPreloaderFacade.class).resetPmcTables(pmc);
                             }
 
                             switch (type) {
@@ -134,21 +134,21 @@ public class DBResetServlet extends HttpServlet {
                             case allMini:
                                 for (DemoPmc demoPmc : conf.dbResetPreloadPmc()) {
                                     ServerSideFactory.create(PmcPreloaderFacade.class).preloadPmc(prodPmcNameCorrections(demoPmc.name()), type,
-                                            req.getParameterMap(), out, start, true);
+                                            req.getParameterMap(), out);
                                     out.h("<script>window.scrollTo(0,document.body.scrollHeight);</script>");
                                 }
                                 break;
                             case vista:
                                 ServerSideFactory.create(PmcPreloaderFacade.class).preloadPmc(prodPmcNameCorrections(DemoPmc.vista.name()), type,
-                                        req.getParameterMap(), out, start, true);
+                                        req.getParameterMap(), out);
                                 break;
                             case vistaMini:
                                 ServerSideFactory.create(PmcPreloaderFacade.class).preloadPmc(prodPmcNameCorrections(DemoPmc.vista.name()), type,
-                                        req.getParameterMap(), out, start, true);
+                                        req.getParameterMap(), out);
                                 break;
                             case vistaMax3000:
                                 ServerSideFactory.create(PmcPreloaderFacade.class).preloadPmc(prodPmcNameCorrections(DemoPmc.vista.name()), type,
-                                        req.getParameterMap(), out, start, true);
+                                        req.getParameterMap(), out);
                                 break;
                             case addPmcMockup:
                             case addPmcMockupTest1:
@@ -157,17 +157,17 @@ public class DBResetServlet extends HttpServlet {
                             case resetOperationsAndPmc:
                             case preloadPmc: {
                                 String pmc = ensurePmc(req.getParameter("pmc"));
-                                ServerSideFactory.create(PmcPreloaderFacade.class).preloadPmc(pmc, type, req.getParameterMap(), out, start, true);
+                                ServerSideFactory.create(PmcPreloaderFacade.class).preloadPmc(pmc, type, req.getParameterMap(), out);
                                 break;
                             }
                             case clearPmc: {
                                 String pmc = ensurePmc(req.getParameter("pmc"));
                                 out.o("\n--- PMC  '" + pmc + "' ---\n");
-                                ServerSideFactory.create(PmcPreloaderFacade.class).clearPmc(pmc, start);
+                                ServerSideFactory.create(PmcPreloaderFacade.class).clearPmc(pmc);
                             }
                                 break;
                             case dropForeignKeys:
-                                ServerSideFactory.create(PmcPreloaderFacade.class).dropForeignKeys(out, start);
+                                ServerSideFactory.create(PmcPreloaderFacade.class).dropForeignKeys(out);
                                 break;
                             case prodReset:
                                 break;
@@ -218,7 +218,6 @@ public class DBResetServlet extends HttpServlet {
                 log.warn("DBReset completed from ip:{}, {}", ServerContext.getRequestRemoteAddr(),
                         DevSession.getSession().getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE));
             }
-//            }
         } finally {
             IOUtils.closeQuietly(out);
         }

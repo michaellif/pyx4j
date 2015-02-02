@@ -10,7 +10,7 @@
  * Created on Jan 9, 2015
  * @author ernestog
  */
-package com.propertyvista.biz.preloader.pmc.helper;
+package com.propertyvista.biz.preloader.pmc;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -37,18 +37,19 @@ import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
+import com.pyx4j.entity.server.ConnectionTarget;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
 
-import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.preloader.OutputHolder;
 import com.propertyvista.biz.preloader.ResetType;
-import com.propertyvista.biz.preloader.pmc.CommunicationsHandler;
-import com.propertyvista.biz.preloader.pmc.PmcCreatorDev;
 import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.biz.system.PmcFacade;
@@ -79,21 +80,27 @@ public class PmcPreloaderManager implements CommunicationsHandler {
         return SingletonHolder.INSTANCE;
     }
 
-    public synchronized void clearPmc(String pmcDnsName, long processStartTimeInMillis) {
+    public synchronized void clearPmc(final String pmcDnsName) {
+        long operationStartTime = System.currentTimeMillis();
         stopCommunications();
         try {
             RDBUtils.deleteFromAllEntityTables();
-            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
-            EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().namespace(), pmcDnsName));
-            Persistence.service().delete(criteria);
-            Persistence.service().commit();
 
-            PmcPreloaderManager.recordOperation(ResetType.clearPmc, processStartTimeInMillis);
+            TaskRunner.runUnitOfWorkInOperationstNamespace(TransactionScopeOption.RequiresNew, new Executable<Void, RuntimeException>() {
+                @Override
+                public Void execute() {
+                    NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
+                    EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+                    criteria.add(PropertyCriterion.eq(criteria.proto().namespace(), pmcDnsName));
+                    Persistence.service().delete(criteria);
+                    return null;
+                }
+            });
+
+            PmcPreloaderManager.recordOperation(ResetType.clearPmc, operationStartTime);
 
         } catch (Throwable t) {
             log.error("", t);
-            Persistence.service().rollback();
         } finally {
             startCommunications();
             performResetFinallyActions();
@@ -122,11 +129,12 @@ public class PmcPreloaderManager implements CommunicationsHandler {
         }
     }
 
-    public synchronized void dropForeignKeys(OutputHolder output, long processStartTimeInMillis) {
+    public synchronized void dropForeignKeys(OutputHolder output) {
+        long operationStartTime = System.currentTimeMillis();
         stopCommunications();
         try {
             RDBUtils.dropAllForeignKeys();
-            PmcPreloaderManager.recordOperation(ResetType.dropForeignKeys, processStartTimeInMillis);
+            PmcPreloaderManager.recordOperation(ResetType.dropForeignKeys, operationStartTime);
         } catch (Throwable t) {
 //            log.error("", t);
             Persistence.service().rollback();
@@ -137,68 +145,72 @@ public class PmcPreloaderManager implements CommunicationsHandler {
         }
     }
 
-    public synchronized void resetPmcTables(String pmcDnsName, long processStartTimeInMillis, boolean isExplicitTransaction) {
+    public synchronized void resetPmcTables(final String pmcDnsName) {
+        long operationStartTime = System.currentTimeMillis();
         stopCommunications();
 
         try {
-            final String requestNamespace = NamespaceManager.getNamespace();
-            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
-            try {
-                CacheService.resetAll();
-                if (((IEntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
-                    RDBUtils.resetSchema(pmcDnsName);
-                }
-                if (isExplicitTransaction) {
-                    Persistence.service().commit();
+
+            new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
+
+                @Override
+                public Void execute() {
+                    CacheService.resetAll();
+                    if (((IEntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
+                        RDBUtils.resetSchema(pmcDnsName);
+                    }
+                    return null;
                 }
 
-            } finally {
-                NamespaceManager.setNamespace(requestNamespace);
-            }
-            PmcPreloaderManager.recordOperation(ResetType.resetPmc, processStartTimeInMillis);
+            });
+
+            PmcPreloaderManager.recordOperation(ResetType.resetPmc, operationStartTime);
         } catch (Throwable t) {
             log.error("", t);
-            Persistence.service().rollback();
             throw new Error(t);
         } finally {
             startCommunications();
-//            performResetFinallyActions();
         }
 
     }
 
-    public synchronized void preloadPmc(String pmcDnsName, ResetType type, Map<String, String[]> params, OutputHolder output, long processStartTimeInMillis,
-            boolean isExplicitTransacion) {
+    public synchronized void preloadPmc(final String pmcDnsName, final ResetType type, Map<String, String[]> params, OutputHolder output) {
         stopCommunications();
+        final String requestNamespace = NamespaceManager.getNamespace();
         try {
-            long pmcStart = System.currentTimeMillis();
-            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
+
+            long operationStartTime = System.currentTimeMillis();
+
             log.debug("Preload PMC '{}'", pmcDnsName);
 
-            deletePmcData(pmcDnsName);
+            final Pmc pmc = TaskRunner.runUnitOfWorkInOperationstNamespace(TransactionScopeOption.RequiresNew, new Executable<Pmc, RuntimeException>() {
+                @Override
+                public Pmc execute() {
+                    deletePmcData(pmcDnsName);
 
-            final Pmc pmc = PmcCreatorDev.createPmc(pmcDnsName, (type == ResetType.allMini));
-
-//            if PersistenceServicesFactory.getPersistenceService().isExplicitTransaction()
-            if (isExplicitTransacion) {
-                Persistence.service().commit();
-            }
+                    Pmc pmc = PmcCreatorDev.createPmc(pmcDnsName, (type == ResetType.allMini));
+                    return pmc;
+                }
+            });
 
             VistaDeployment.changePmcContext();
 
             NamespaceManager.setNamespace(pmc.namespace().getValue());
 
             writeToOutput(output, "\n--- Preload  " + pmcDnsName + " ---\n");
-            if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
-                RDBUtils.ensureNamespace();
-                RDBUtils.initAllEntityTables();
-                if (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType() == DatabaseType.PostgreSQL) {
-                    if (isExplicitTransacion) {
-                        Persistence.service().commit();
+
+            TaskRunner.runUnitOfWorkInTargetNamespace(pmc.namespace().getValue(), TransactionScopeOption.RequiresNew, new Executable<Void, RuntimeException>() {
+                @Override
+                public Void execute() {
+                    if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
+                        RDBUtils.ensureNamespace();
+                        RDBUtils.initAllEntityTables();
                     }
+                    return null;
                 }
-                writeToOutput(output, "PMC Tables created ", TimeUtils.secSince(pmcStart));
-            }
+            });
+
+            writeToOutput(output, "PMC Tables created ", TimeUtils.secSince(operationStartTime));
 
             if (!EnumSet.of(ResetType.all, ResetType.allMini, ResetType.vistaMini, ResetType.vista, ResetType.vistaMax3000, ResetType.addPmcMockup,
                     ResetType.allAddMockup, ResetType.addPmcMockupTest1).contains(type)) {
@@ -206,7 +218,6 @@ public class PmcPreloaderManager implements CommunicationsHandler {
             }
             CacheService.reset();
 
-//        DataPreloaderCollection preloaders = ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders();
             DataPreloaderCollection preloaders = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getDataPreloaders();
 
             VistaDevPreloadConfig cfg;
@@ -279,16 +290,16 @@ public class PmcPreloaderManager implements CommunicationsHandler {
 
             CacheService.reset();
 
-            log.info("Preloaded PMC '{}' {}", pmcDnsName, TimeUtils.secSince(pmcStart));
-            writeToOutput(output, "Preloaded PMC '" + pmcDnsName + "' " + TimeUtils.secSince(pmcStart));
-            ServerSideFactory.create(OperationsAlertFacade.class).record(pmc, "Preloaded PMC ''{0}'' {1}", pmcDnsName, TimeUtils.secSince(pmcStart));
+            log.info("Preloaded PMC '{}' {}", pmcDnsName, TimeUtils.secSince(operationStartTime));
+            writeToOutput(output, "Preloaded PMC '" + pmcDnsName + "' " + TimeUtils.secSince(operationStartTime));
+            ServerSideFactory.create(OperationsAlertFacade.class).record(pmc, "Preloaded PMC ''{0}'' {1}", pmcDnsName, TimeUtils.secSince(operationStartTime));
 
-            PmcPreloaderManager.recordOperation(type, processStartTimeInMillis);
+            PmcPreloaderManager.recordOperation(type, operationStartTime);
         } catch (Throwable t) {
             log.error("", t);
-            Persistence.service().rollback();
             throw new Error(t);
         } finally {
+            NamespaceManager.setNamespace(requestNamespace);
             startCommunications();
             performResetFinallyActions();
         }
@@ -321,7 +332,8 @@ public class PmcPreloaderManager implements CommunicationsHandler {
         }
     }
 
-    public synchronized void resetAll(OutputHolder output, long processStartTimeInMillis, DataPreloaderCollection operationPreloaders) {
+    public synchronized void resetAll(OutputHolder output, DataPreloaderCollection operationPreloaders) {
+        long operationStartTime = System.currentTimeMillis();
         stopCommunications();
         try {
             final String requestNamespace = NamespaceManager.getNamespace();
@@ -329,7 +341,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
             SchedulerHelper.shutdown();
             RDBUtils.resetDatabase();
             SchedulerHelper.dbReset();
-            writeToOutput(output, "DB Dropped: " + TimeUtils.secSince(processStartTimeInMillis));
+            writeToOutput(output, "DB Dropped: " + TimeUtils.secSince(operationStartTime));
             Thread.sleep(150);
             SchedulerHelper.init();
             SchedulerHelper.setActive(true);
@@ -351,7 +363,6 @@ public class PmcPreloaderManager implements CommunicationsHandler {
 
                 CacheService.resetAll();
 
-//                new VistaOperationsDataPreloaders().preloadAll();
                 operationPreloaders.preloadAll();
                 Persistence.service().commit();
             } finally {
@@ -379,15 +390,9 @@ public class PmcPreloaderManager implements CommunicationsHandler {
 
     }
 
-    public void resetAndPreloadPmc(final String pmcDnsName, final ExecutionMonitor executionMonitor) {
-        try {
-            resetPmcTables(pmcDnsName, System.currentTimeMillis(), false);
-//            executionMonitor.addProcessedEvent("Reset PMCs", "Pmc {0} reseted", pmcDnsName);
-            preloadPmc(pmcDnsName, ResetType.preloadPmc, null, null, System.currentTimeMillis(), false);
-//            executionMonitor.addProcessedEvent("Preloaded PMCs", "Pmc {0} reseted", pmcDnsName);
-        } catch (Throwable error) {
-            executionMonitor.addErredEvent("Error reseting and preload PMC. ", error);
-        }
+    public void resetAndPreloadPmc(final String pmcDnsName) {
+        resetPmcTables(pmcDnsName);
+        preloadPmc(pmcDnsName, ResetType.preloadPmc, null, null);
     }
 
     public static void writeToOutput(OutputHolder output, String... messages) {
