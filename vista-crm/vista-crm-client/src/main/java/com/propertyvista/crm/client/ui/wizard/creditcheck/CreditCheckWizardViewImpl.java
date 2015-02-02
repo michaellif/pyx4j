@@ -16,14 +16,14 @@ import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.wizard.AbstractPrimeWizard;
+import com.pyx4j.site.client.backoffice.ui.prime.wizard.AbstractPrimeWizardView;
 
 import com.propertyvista.crm.client.ui.components.LegalTermsDialog;
 import com.propertyvista.crm.rpc.services.PmcTermsOfServiceService;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.dto.vista2pmc.CreditCheckSetupDTO;
 
-public class CreditCheckWizardViewImpl extends AbstractPrimeWizard<CreditCheckSetupDTO> implements CreditCheckWizardView {
+public class CreditCheckWizardViewImpl extends AbstractPrimeWizardView<CreditCheckSetupDTO> implements CreditCheckWizardView {
 
     private static final I18n i18n = I18n.get(CreditCheckWizardViewImpl.class);
 

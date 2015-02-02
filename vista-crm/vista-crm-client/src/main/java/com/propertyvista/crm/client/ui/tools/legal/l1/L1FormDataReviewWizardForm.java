@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.wizard.IPrimeWizardView;
-import com.pyx4j.site.client.backoffice.ui.prime.wizard.WizardForm;
+import com.pyx4j.site.client.backoffice.ui.prime.wizard.PrimeWizardForm;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.tools.legal.l1.forms.L1LandlordsContactInfoFolder;
@@ -36,7 +36,7 @@ import com.propertyvista.crm.client.ui.tools.legal.l1.forms.LtbOwedRentForm;
 import com.propertyvista.crm.client.ui.tools.legal.l1.forms.LtbRentalUnitAddressForm;
 import com.propertyvista.crm.rpc.dto.legal.l1.L1FormDataReviewWizardDTO;
 
-public class L1FormDataReviewWizardForm extends WizardForm<L1FormDataReviewWizardDTO> {
+public class L1FormDataReviewWizardForm extends PrimeWizardForm<L1FormDataReviewWizardDTO> {
 
     private static final I18n i18n = I18n.get(L1FormDataReviewWizardForm.class);
 
