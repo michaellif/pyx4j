@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -20,6 +20,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.communication.AddresseUtils;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -30,7 +31,7 @@ public class NotificationsUtils {
     public static List<String> toEmails(List<Employee> employees) {
         List<String> emails = new ArrayList<String>();
         for (Employee emp : employees) {
-            emails.add(emp.email().getValue());
+            emails.add(AddresseUtils.getCompleteEmail(emp.name().getStringView(), emp.email().getValue()));
         }
         return emails;
     }

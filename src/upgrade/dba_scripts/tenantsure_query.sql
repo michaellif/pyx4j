@@ -124,6 +124,27 @@ JOIN    metcap.building b ON (b.id = a.building)
 JOIN    _admin_.tenant_sure_subscribers t ON (t.certificate_number = ic.insurance_certificate_number)
 AND NOT pm.is_deleted
 UNION
+SELECT  'nepm' AS pmc, b.property_code,
+        c.person_name_first_name AS first_name,
+        c.person_name_last_name AS last_name,
+        ic.insurance_certificate_number,
+        ip.status, ic.inception_date,
+        ip.cancellation,
+        ip.cancellation_date,
+        pm.id AS payment_method,
+        ppd.expiry_date, b.suspended
+FROM    nepm.customer c
+JOIN    nepm.lease_participant lp ON (c.id = lp.customer)
+JOIN    nepm.insurance_policy ip ON (lp.id = ip.tenant)
+JOIN    nepm.insurance_certificate ic ON (ip.id = ic.insurance_policy)
+JOIN    nepm.payment_method pm ON (lp.id = pm.tenant)
+JOIN    nepm.payment_payment_details ppd ON (ppd.id = pm.details)
+JOIN    nepm.lease l ON (l.id = lp.lease)
+JOIN    nepm.apt_unit a ON (a.id = l.unit)
+JOIN    nepm.building b ON (b.id = a.building)
+JOIN    _admin_.tenant_sure_subscribers t ON (t.certificate_number = ic.insurance_certificate_number)
+AND NOT pm.is_deleted
+UNION
 SELECT  'ofm' AS pmc, b.property_code,
         c.person_name_first_name AS first_name,
         c.person_name_last_name AS last_name,

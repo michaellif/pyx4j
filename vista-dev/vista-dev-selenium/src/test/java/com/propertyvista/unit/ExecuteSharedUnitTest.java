@@ -14,6 +14,7 @@ package com.propertyvista.unit;
 
 import junit.framework.Assert;
 
+import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +24,7 @@ import com.pyx4j.selenium.UnitTestExecutionTestBase;
 import com.propertyvista.unit.config.ApplicationId;
 import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
 
+@Ignore
 public class ExecuteSharedUnitTest extends UnitTestExecutionTestBase {
 
     private static final Logger log = LoggerFactory.getLogger(ExecuteSharedUnitTest.class);

@@ -179,7 +179,6 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     @Override
     public void sendNewPmcEmail(OnboardingUser user, Pmc pmc) {
         MailMessage m = MessageTemplatesCrmNotification.createNewPmcEmail(user, pmc);
-        m.setTo(user.email().getValue());
         Mail.queue(m, null, null);
     }
 
@@ -353,7 +352,8 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     @Override
     public void sendMaintenanceRequestCreatedPMC(MaintenanceRequest request) {
         for (Employee employee : NotificationsUtils.getNotificationTraget(request.building(), Notification.NotificationType.MaintenanceRequest)) {
-            sendMaintenanceRequestEmail(employee.email().getValue(), EmailTemplateType.MaintenanceRequestCreatedPMC, request);
+            sendMaintenanceRequestEmail(AddresseUtils.getCompleteEmail(employee.name().getStringView(), employee.email().getValue()),
+                    EmailTemplateType.MaintenanceRequestCreatedPMC, request);
         }
     }
 

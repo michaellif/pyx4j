@@ -43,9 +43,9 @@ public class ILSEmailConfigEditorFolder extends VistaBoxFolder<ILSEmailConfig> {
         protected IsWidget createContent() {
             FormPanel formPanel = new FormPanel(this);
 
-            formPanel.append(Location.Left, proto().frequency()).decorate().componentWidth(120);
-            formPanel.append(Location.Left, proto().email()).decorate().componentWidth(200);
-            formPanel.append(Location.Left, proto().maxDailyAds()).decorate().componentWidth(120);
+            formPanel.append(Location.Left, proto().frequency()).decorate().componentWidth(100);
+            formPanel.append(Location.Left, proto().email()).decorate();
+            formPanel.append(Location.Left, proto().maxDailyAds()).decorate().componentWidth(60);
 
             return formPanel;
         }

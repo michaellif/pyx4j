@@ -19,6 +19,12 @@
     <dependencies>
 
         <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>1.4.01</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-portal-server</artifactId>
             <version>${project.version}</version>
@@ -81,6 +87,7 @@
                 <seleniumJvm>xvfb-run</seleniumJvm>
                 <seleniumJvmArgLine>--wait=10 --server-num=1 --server-args="-screen 0 1050x1680x24" ${java.home}/bin/java</seleniumJvmArgLine>
             </properties>
+<!--
             <build>
                 <plugins>
                     <plugin>
@@ -110,6 +117,7 @@
                      </plugin>
                 </plugins>
             </build>
+-->
         </profile>
 
         <profile>

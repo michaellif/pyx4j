@@ -37,8 +37,8 @@ import com.propertyvista.portal.resident.activity.financial.payment.PaymentWizar
 import com.propertyvista.portal.resident.activity.financial.paymentmethod.PaymentMethodConfirmationActivity;
 import com.propertyvista.portal.resident.activity.financial.paymentmethod.PaymentMethodViewActivity;
 import com.propertyvista.portal.resident.activity.financial.paymentmethod.PaymentMethodWizardActivity;
+import com.propertyvista.portal.resident.activity.leasesigning.LeaseSigningActivity;
 import com.propertyvista.portal.resident.activity.leasesigning.LeaseSigningConfirmationActivity;
-import com.propertyvista.portal.resident.activity.leasesigning.LeaseSigningWizardActivity;
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceDashboardActivity;
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceRequestPageActivity;
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceRequestWizardActivity;
@@ -172,7 +172,8 @@ public class ContentActivityMapper implements AppActivityMapper {
 
 // LeaseSigning
                     } else if (place instanceof ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard) {
-                        activity = new LeaseSigningWizardActivity(appPlace);
+//                        activity = new LeaseSigningWizardActivity(appPlace);
+                        activity = new LeaseSigningActivity(appPlace);
                     } else if (place instanceof ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizardConfirmation) {
                         activity = new LeaseSigningConfirmationActivity(appPlace);
 // Communication

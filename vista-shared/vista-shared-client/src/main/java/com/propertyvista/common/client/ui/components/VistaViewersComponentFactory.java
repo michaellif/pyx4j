@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -15,6 +15,7 @@ package com.propertyvista.common.client.ui.components;
 import java.sql.Time;
 import java.util.Date;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.ObjectClassType;
@@ -25,9 +26,13 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CKeyField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
+import com.pyx4j.forms.client.ui.CSignature;
 import com.pyx4j.forms.client.ui.CTimeLabel;
+
+import com.propertyvista.domain.security.CustomerSignature;
 
 public class VistaViewersComponentFactory extends BaseEditableComponentFactory {
 
@@ -64,6 +69,10 @@ public class VistaViewersComponentFactory extends BaseEditableComponentFactory {
             }
         } else if (mm.isEntity() && !mm.isDetached() && !mm.isOwnedRelationships()) {
             return new CEntityLabel();
+        } else if (mm.getValueClass().equals(Key.class)) {
+            return new CKeyField();
+        } else if (mm.getValueClass().equals(CustomerSignature.class)) {
+            return new CSignature(mm.getCaption());
         } else {
             return super.create(member);
         }

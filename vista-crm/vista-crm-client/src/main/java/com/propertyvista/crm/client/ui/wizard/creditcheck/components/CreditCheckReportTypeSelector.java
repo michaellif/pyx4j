@@ -78,6 +78,7 @@ public class CreditCheckReportTypeSelector extends Composite implements IFocusWi
                 @Override
                 public void onClick(ClickEvent event) {
                     CreditCheckReportTypeSelector.this.setCreditCheckReportType(ReportTypeConditionsPanel.this.reportType);
+                    ValueChangeEvent.<CreditCheckReportType> fire(CreditCheckReportTypeSelector.this, (CreditCheckReportType) null);
                 }
             });
             conditionsPanel = new FlowPanel();
@@ -156,8 +157,6 @@ public class CreditCheckReportTypeSelector extends Composite implements IFocusWi
         for (Map.Entry<CreditCheckReportType, ReportTypeConditionsPanel> entry : reportTypePanels.entrySet()) {
             entry.getValue().setSelected(entry.getKey() == reportType);
         }
-        // fire event from here if the widget was reset
-        ValueChangeEvent.<CreditCheckReportType> fire(CreditCheckReportTypeSelector.this, (CreditCheckReportType) null);
     }
 
     public CreditCheckReportType getCreditCheckReportType() {
