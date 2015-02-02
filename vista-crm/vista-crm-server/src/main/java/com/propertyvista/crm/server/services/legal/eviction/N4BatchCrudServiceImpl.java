@@ -234,4 +234,12 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
         }
         callback.onSuccess(DeferredProcessRegistry.fork(new N4BatchGenerationDeferredProcess(batches.toArray(new N4Batch[0])), ThreadPoolNames.IMPORTS));
     }
+
+    @Override
+    public void downloadForms(AsyncCallback<String> callback, Vector<Key> batchIds) {
+        EntityQueryCriteria<N4Batch> crit = EntityQueryCriteria.create(N4Batch.class);
+        crit.in(crit.proto().id(), batchIds);
+        List<N4Batch> batches = Persistence.service().query(crit);
+        callback.onSuccess(DeferredProcessRegistry.fork(new N4DownloadDeferredProcess(batches), ThreadPoolNames.IMPORTS));
+    }
 }

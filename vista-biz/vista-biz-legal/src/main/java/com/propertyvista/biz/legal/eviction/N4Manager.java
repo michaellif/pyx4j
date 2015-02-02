@@ -113,6 +113,10 @@ public class N4Manager {
         // add status record
         note = batchName == null ? i18n.tr("N4 issued for Lease") : i18n.tr("N4 issued from Batch: {0}", batchName);
         ServerSideFactory.create(EvictionCaseFacade.class).addEvictionStatusDetails(n4status, note, Arrays.asList(n4Letter, n4csLetter));
+        // set the doc references
+        n4status.generatedForms().clear();
+        n4status.generatedForms().add(n4Letter);
+        n4status.generatedForms().add(n4csLetter);
 
         Persistence.service().persist(n4status);
     }
@@ -136,6 +140,7 @@ public class N4Manager {
                 lease.unit().info().number().getValue(), //
                 generationDate //
                 ));
+        n4Letter.printOrder().setValue(0);
         Persistence.service().persist(n4Letter);
 
         return n4Letter;
@@ -160,6 +165,7 @@ public class N4Manager {
                 lease.unit().info().number().getValue(), //
                 generationDate //
                 ));
+        n4csLetter.printOrder().setValue(1);
         Persistence.service().persist(n4csLetter);
 
         return n4csLetter;

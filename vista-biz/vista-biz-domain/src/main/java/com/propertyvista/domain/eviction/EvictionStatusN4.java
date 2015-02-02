@@ -21,8 +21,10 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.legal.n4.N4Batch;
@@ -59,4 +61,8 @@ public interface EvictionStatusN4 extends EvictionStatus {
     @Editor(type = EditorType.money)
     @NotNull
     IPrimitive<BigDecimal> cancellationBalance();
+
+    @Detached
+    @OrderBy(EvictionDocument.PrintOrderId.class)
+    IList<EvictionDocument> generatedForms();
 }

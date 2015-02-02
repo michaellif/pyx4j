@@ -30,4 +30,6 @@ public interface N4BatchCrudService extends AbstractCrudService<N4BatchDTO> {
     void serviceBatch(AsyncCallback<String> callback, N4Batch batchId);
 
     void serviceBatches(AsyncCallback<String> callback, Vector<Key> batchIds);
+
+    void downloadForms(AsyncCallback<String> callback, Vector<Key> batchIds);
 }

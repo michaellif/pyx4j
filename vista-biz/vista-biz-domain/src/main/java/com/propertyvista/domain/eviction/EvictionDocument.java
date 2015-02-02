@@ -15,10 +15,12 @@ package com.propertyvista.domain.eviction;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.SecurityEnabled;
@@ -57,4 +59,11 @@ public interface EvictionDocument extends IHasFile<EvictionDocumentBlob> {
 
     @Editor(type = EditorType.textarea)
     IPrimitive<String> note();
+
+    // --------- internals --------
+    interface PrintOrderId extends ColumnId {
+    }
+
+    @OrderColumn(PrintOrderId.class)
+    IPrimitive<Integer> printOrder();
 }

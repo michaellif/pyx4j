@@ -111,6 +111,31 @@ public class N4BatchLister extends SiteDataTablePanel<N4BatchDTO> {
             public void execute() {
                 if (getDataTable().getSelectedItems().isEmpty()) {
                     showEmptySelectionError();
+                } else {
+                    Vector<Key> batchIds = new Vector<>();
+                    for (N4BatchDTO batch : getDataTable().getSelectedItems()) {
+                        if (!batch.serviceDate().isNull()) {
+                            batchIds.add(batch.getPrimaryKey());
+                        }
+                    }
+                    if (batchIds.isEmpty()) {
+                        MessageDialog.error(i18n.tr("Selection Error"), i18n.tr("No serviced batches found in selection"));
+                        return;
+                    }
+                    ((N4BatchCrudService) getService()).downloadForms(new DefaultAsyncCallback<String>() {
+                        @Override
+                        public void onSuccess(String deferredCorrelationId) {
+                            DeferredProcessDialog d = new DeferredProcessDialog(i18n.tr("N4 Document Download"), i18n.tr("Downloading Forms..."), false) {
+                                @Override
+                                public void onDeferredSuccess(final DeferredProcessProgressResponse result) {
+                                    super.onDeferredSuccess(result);
+                                    downloadForms((DeferredReportProcessProgressResponse) result);
+                                }
+                            };
+                            d.show();
+                            d.startProgress(deferredCorrelationId);
+                        }
+                    }, batchIds);
                 }
             }
         }, new ActionPermission(ServiceN4.class)));
@@ -188,6 +213,19 @@ public class N4BatchLister extends SiteDataTablePanel<N4BatchDTO> {
         if (response.getDownloadLink() != null) {
             final String downloadUrl = GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping + "/" + response.getDownloadLink();
             new LinkDialog(i18n.tr("Errors Occurred"), i18n.tr("Download Error Report"), downloadUrl) {
+                @Override
+                public boolean onClickCancel() {
+                    GWT.<DownloadableService> create(DownloadableService.class).cancelDownload(null, downloadUrl);
+                    return false;
+                }
+            }.show();
+        }
+    }
+
+    private void downloadForms(DeferredReportProcessProgressResponse response) {
+        if (response.getDownloadLink() != null) {
+            final String downloadUrl = GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping + "/" + response.getDownloadLink();
+            new LinkDialog(i18n.tr("Download Forms"), i18n.tr("Click to Download"), downloadUrl) {
                 @Override
                 public boolean onClickCancel() {
                     GWT.<DownloadableService> create(DownloadableService.class).cancelDownload(null, downloadUrl);
