@@ -94,6 +94,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     private Button delButton;
 
+    private Button exportButton;
+
     private final Class<E> clazz;
 
     private ListerDataSource<E> dataSource;
@@ -136,6 +138,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
         setAddNewActionEnabled(allowAddNew);
         setDeleteActionEnabled(allowDelete);
+
+        setExportActionEnabled(true);
     }
 
     public Class<E> getEntityClass() {
@@ -177,34 +181,6 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         return entityPrototype;
     }
 
-    public void setDeleteActionEnabled(boolean enabled) {
-        if (delButton == null && enabled) {
-            topActionsBar.getToolbar().insertItem(delButton = new Button(FolderImages.INSTANCE.delButton().hover(), i18n.tr("Delete Checked"), new Command() {
-                @Override
-                public void execute() {
-                    onItemsDelete(getDataTable().getSelectedItems());
-                }
-            }), 1);
-
-            delButton.setEnabled(getDataTableModel() != null && getDataTableModel().isAnyRowSelected());
-
-            if (getDataTable().getDataTableModel() != null) {
-                getDataTable().getDataTableModel().setMultipleSelection(true);
-            }
-
-            getDataTable().addItemSelectionHandler(new ItemSelectionHandler() {
-                @Override
-                public void onChange() {
-                    delButton.setEnabled(getDataTable().getDataTableModel().isAnyRowSelected());
-                }
-            });
-
-        }
-        if (delButton != null) {
-            delButton.setVisible(enabled);
-        }
-    }
-
     public void setAddNewActionEnabled(boolean enabled) {
         if (addButton == null && enabled) {
             if (addButtonCaption == null) {
@@ -233,7 +209,54 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     protected void onItemNew() {
     }
 
+    public void setDeleteActionEnabled(boolean enabled) {
+        if (delButton == null && enabled) {
+            topActionsBar.getToolbar().insertItem(delButton = new Button(FolderImages.INSTANCE.delButton().hover(), i18n.tr("Delete Checked"), new Command() {
+                @Override
+                public void execute() {
+                    onItemsDelete(getDataTable().getSelectedItems());
+                }
+            }), 1);
+
+            delButton.setEnabled(getDataTableModel() != null && getDataTableModel().isAnyRowSelected());
+
+            if (getDataTable().getDataTableModel() != null) {
+                getDataTable().getDataTableModel().setMultipleSelection(true);
+            }
+
+            getDataTable().addItemSelectionHandler(new ItemSelectionHandler() {
+                @Override
+                public void onChange() {
+                    delButton.setEnabled(getDataTable().getDataTableModel().isAnyRowSelected());
+                }
+            });
+
+        }
+        if (delButton != null) {
+            delButton.setVisible(enabled);
+        }
+    }
+
     protected void onItemsDelete(Collection<E> items) {
+    }
+
+    public void setExportActionEnabled(boolean enabled) {
+        if (exportButton == null && enabled) {
+            topActionsBar.getToolbar().insertItem(addButton = new Button(i18n.tr("Export"), new Command() {
+                @Override
+                public void execute() {
+                    onExport();
+                }
+            }), 0);
+        }
+        if (exportButton != null) {
+            exportButton.setVisible(enabled);
+        }
+    }
+
+    protected void onExport() {
+        //TODO
+        System.out.println("+++++++++++++++ TODO onExport");
     }
 
     public void setFirstActionHandler(Command firstActionCommand) {
