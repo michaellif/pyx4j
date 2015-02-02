@@ -30,7 +30,7 @@ public interface PmcPreloaderFacade {
 
     public void preloadExistingPmc(Pmc pmc);
 
-    public void resetAndPreloadPmcProcess(String pmc);
+    public void resetAndPreloadPmc(String pmc);
 
     public void resetAll(OutputHolder out, DataPreloaderCollection preloaders);
 

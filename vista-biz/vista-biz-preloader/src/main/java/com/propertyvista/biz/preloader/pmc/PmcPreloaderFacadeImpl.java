@@ -29,7 +29,7 @@ public class PmcPreloaderFacadeImpl implements PmcPreloaderFacade {
     }
 
     @Override
-    public void resetAndPreloadPmcProcess(String pmcDnsName) {
+    public void resetAndPreloadPmc(String pmcDnsName) {
         PmcPreloaderManager.instance().resetAndPreloadPmc(pmcDnsName);
     }
 

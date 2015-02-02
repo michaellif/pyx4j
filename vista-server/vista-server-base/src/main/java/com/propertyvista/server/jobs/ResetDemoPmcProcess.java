@@ -33,7 +33,7 @@ public class ResetDemoPmcProcess implements PmcProcess {
 
         for (DemoPmc pmcToReset : PMCS_TO_RESET) {
             try {
-                ServerSideFactory.create(PmcPreloaderFacade.class).resetAndPreloadPmcProcess(pmcToReset.toString());
+                ServerSideFactory.create(PmcPreloaderFacade.class).resetAndPreloadPmc(pmcToReset.toString());
                 context.getExecutionMonitor().addProcessedEvent("PMC '" + pmcToReset.toString() + "' Reseted and Preloaded");
             } catch (Exception e) {
                 context.getExecutionMonitor().addErredEvent("Error reseting and preload PMC '" + pmcToReset.toString() + "'", e);
