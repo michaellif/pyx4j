@@ -12,26 +12,96 @@
  */
 package com.propertyvista.biz.preloader.pmc;
 
+import java.util.Map;
+
+import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
+
+import com.propertyvista.biz.preloader.OutputHolder;
 import com.propertyvista.biz.preloader.PmcPreloaderFacade;
+import com.propertyvista.biz.preloader.ResetType;
+import com.propertyvista.domain.pmc.Pmc;
 
 public class PmcPreloaderFacadeImpl implements PmcPreloaderFacade {
 
-    // TODO Create PmcPreloader Helper Obj with heavy functionality to invoke from this Facade Implementation
-
     @Override
-    public void resetPmcTables(String pmc) {
-        // TODO Auto-generated method stub
+    public void resetPmcTables(String pmcDnsName) {
+        PmcPreloaderManager.instance().resetPmcTables(pmcDnsName);
     }
 
     @Override
-    public void preloadPmc(String pmc) {
-        // TODO Auto-generated method stub
+    public void resetAndPreloadPmcProcess(String pmcDnsName) {
+        PmcPreloaderManager.instance().resetAndPreloadPmc(pmcDnsName);
     }
 
     @Override
-    public void resetAndPreload(String pmc) {
-        resetPmcTables(pmc);
-        preloadPmc(pmc);
+    public void clearPmc(String pmcDnsName) {
+        PmcPreloaderManager.instance().clearPmc(pmcDnsName);
     }
+
+    @Override
+    public void preloadPmc(String pmcDnsName, ResetType type, Map<String, String[]> params, OutputHolder o) {
+        PmcPreloaderManager.instance().preloadPmc(pmcDnsName, type, params, o);
+    }
+
+    @Override
+    public void preloadPmc(String pmcDnsName, ResetType type) {
+        PmcPreloaderManager.instance().preloadPmc(pmcDnsName, type, null, null);
+    }
+
+    @Override
+    public void preloadExistingPmc(Pmc pmc) {
+        PmcPreloaderManager.instance().preloadExistingPmc(pmc);
+    }
+
+    @Override
+    public void resetAll(OutputHolder o, DataPreloaderCollection operationPreloaders) {
+        PmcPreloaderManager.instance().resetAll(o, operationPreloaders);
+    }
+
+    @Override
+    public void resetPmcCache(OutputHolder out) {
+        PmcPreloaderManager.instance().resetPmcCache(out);
+    }
+
+    @Override
+    public void resetAllCache(OutputHolder out) {
+        PmcPreloaderManager.instance().resetAllCache(out);
+    }
+
+    @Override
+    public void dropForeignKeys(OutputHolder out) {
+        PmcPreloaderManager.instance().dropForeignKeys(out);
+    }
+
+    @Override
+    public void dbIntegrityCheck(OutputHolder out) {
+        // TODO Not access to DBIntegrityCheckDeferredProcess at operations-server module
+//        PmcPreloaderHelper.stopAndPrepareDBProcesses();
+//        try {
+//            ReportRequest reportdbo = new ReportRequest();
+//            EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+//            criteria.add(PropertyCriterion.ne(criteria.proto().status(), PmcStatus.Created));
+//            criteria.asc(criteria.proto().namespace());
+//            reportdbo.setCriteria(criteria);
+//            new DBIntegrityCheckDeferredProcess(reportdbo, false).execute();
+//            PmcPreloaderHelper.recordOperation(ResetType.dbIntegrityCheck, start);
+//        } catch (Throwable t) {
+////            log.error("", t);
+//            Persistence.service().rollback();
+//            logError(out, t);
+//        } finally {
+//            PmcPreloaderHelper.raiseDBProcesses();
+//            performResetFinallyActions();
+//        }
+
+    }
+
+//    public static void logError(OutputHolder out, Throwable t) throws Error {
+//        PmcPreloaderHelper.writeToOutput(out, "\nDB reset error:");
+//        PmcPreloaderHelper.writeToOutput(out, t.getMessage());
+//        if (null != out) {
+//            throw new Error(t);
+//        }
+//    }
 
 }

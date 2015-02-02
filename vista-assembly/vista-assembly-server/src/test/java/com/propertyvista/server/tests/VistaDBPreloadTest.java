@@ -25,13 +25,13 @@ import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.biz.preloader.pmc.PmcCreatorDev;
 import com.propertyvista.biz.system.VistaSystemFacade;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.operations.server.preloader.V2BPreloader;
-import com.propertyvista.portal.server.preloader.PmcCreatorDev;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 public class VistaDBPreloadTest extends VistaDBTestBase {
