@@ -16,18 +16,15 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Vector;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
-import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.Criterion;
@@ -41,16 +38,12 @@ import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.legal.eviction.EvictionCaseFacade;
 import com.propertyvista.biz.legal.forms.n4.N4GenerationUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.crm.rpc.services.selections.SelectN4LeaseCandidateListService;
 import com.propertyvista.domain.eviction.EvictionCase;
-import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.n4.N4UnpaidCharge;
-import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.EvictionFlowPolicy;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
@@ -66,7 +59,7 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
 
     private EntityListCriteria<N4LeaseCandidateDTO> toCriteria;
 
-    private final Map<PolicyNode, N4Policy> policyCache;
+    private final Map<Key, String> applicableBuildings;
 
     public SelectN4LeaseCandidateListServiceImpl() {
         super(new CrudEntityBinder<Lease, N4LeaseCandidateDTO>(Lease.class, N4LeaseCandidateDTO.class) {
@@ -80,8 +73,7 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
                 bind(toProto.moveOut(), boProto.expectedMoveOut());
             }
         });
-
-        policyCache = new HashMap<>();
+        applicableBuildings = getApplicableBuildings();
     }
 
     @Override
@@ -106,7 +98,7 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
         this.toCriteria = toCriteria;
 
         boCriteria.eq(boCriteria.proto().status(), Lease.Status.Active);
-        boCriteria.in(boCriteria.proto().unit().building(), getApplicableBuildings());
+        boCriteria.in(boCriteria.proto().unit().building().id(), applicableBuildings.keySet());
     }
 
     @Override
@@ -125,9 +117,13 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
             }
         }
         // update properties of the result set
+        result.setTotalRows(result.getData().size());
+        int maxPageNo = result.getTotalRows() / pageSize;
+        if (pageNumber > maxPageNo) {
+            pageNumber = maxPageNo;
+        }
         int pageFrom = pageNumber * pageSize;
         int pageTo = pageFrom + pageSize;
-        result.setTotalRows(result.getData().size());
         result.hasMoreData(result.getTotalRows() > pageTo);
         // extract requested page
         pageTo = result.hasMoreData() ? pageTo : result.getTotalRows();
@@ -137,17 +133,11 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
     }
 
     @Override
-    protected void retrievedForList(Lease bo) {
-        super.retrievedForList(bo);
-
-        Persistence.ensureRetrieve(bo.unit().building(), AttachLevel.IdOnly);
-    }
-
-    @Override
     protected void enhanceListRetrieved(Lease bo, N4LeaseCandidateDTO to) {
         super.enhanceListRetrieved(bo, to);
         to.amountOwed().setValue(getAmountOwed(bo));
         to.lastNotice().setValue(getLastEvictionCaseCloseDate(bo));
+        to.propertyCode().setValue(applicableBuildings.get(bo.unit().building().getPrimaryKey()));
     }
 
     // ----- internals ----------
@@ -183,27 +173,6 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
         return minOwing;
     }
 
-    private List<N4UnpaidCharge> getUnpaidCharges(Lease lease) {
-        HashSet<ARCode> acceptableArCodes = new HashSet<ARCode>(getPolicy(lease).relevantARCodes());
-        LogicalDate today = SystemDateManager.getLogicalDate();
-
-        List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(lease.billingAccount());
-        List<InvoiceDebit> filteredDebits = N4GenerationUtils.filterDebits(debits, acceptableArCodes, today);
-        List<N4UnpaidCharge> owings = new ArrayList<>();
-        for (InvoiceDebit debit : filteredDebits) {
-            N4UnpaidCharge owing = EntityFactory.create(N4UnpaidCharge.class);
-            owing.fromDate().setValue(debit.billingCycle().billingCycleStartDate().getValue());
-            owing.toDate().setValue(debit.billingCycle().billingCycleEndDate().getValue());
-            owing.rentCharged().setValue(owing.rentCharged().getValue(BigDecimal.ZERO).add(debit.amount().getValue()));
-            owing.rentCharged().setValue(owing.rentCharged().getValue().add(debit.taxTotal().getValue()));
-            owing.rentOwing().setValue(owing.rentOwing().getValue(BigDecimal.ZERO).add(debit.outstandingDebit().getValue()));
-            owing.rentPaid().setValue(owing.rentCharged().getValue().subtract(owing.rentOwing().getValue()));
-            owing.arCode().set(debit.arCode());
-            owings.add(owing);
-        }
-        return owings;
-    }
-
     private boolean hasOpenCase(Lease lease) {
         return ServerSideFactory.create(EvictionCaseFacade.class).getCurrentEvictionCase(lease) != null;
     }
@@ -221,7 +190,7 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
     private BigDecimal getAmountOwed(Lease lease) {
         BigDecimal amountOwed = BigDecimal.ZERO;
 
-        for (N4UnpaidCharge rentOwingForPeriod : getUnpaidCharges(lease)) {
+        for (N4UnpaidCharge rentOwingForPeriod : N4GenerationUtils.getUnpaidCharges(lease, getPolicy(lease).relevantARCodes())) {
             amountOwed = amountOwed.add(rentOwingForPeriod.rentOwing().getValue());
         }
         return amountOwed;
@@ -233,22 +202,18 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
 
     private N4Policy getPolicy(Lease lease) {
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.IdOnly);
-        PolicyNode node = lease.unit().building();
-        N4Policy policy = policyCache.get(node);
-        if (policy == null) {
-            policyCache.put(node, policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, N4Policy.class));
-        }
-        return policy;
+        return ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), N4Policy.class);
     }
 
-    private Set<Building> getApplicableBuildings() {
-        Set<Building> result = new HashSet<>();
+    private Map<Key, String> getApplicableBuildings() {
+        Map<Key, String> result = new HashMap<>();
         for (Building building : Persistence.service().query(EntityListCriteria.create(Building.class), AttachLevel.IdOnly)) {
             try {
                 EvictionFlowPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, EvictionFlowPolicy.class);
                 for (EvictionFlowStep step : policy.evictionFlow()) {
                     if (EvictionStepType.N4.equals(step.stepType().getValue())) {
-                        result.add(building);
+                        Persistence.ensureRetrieve(building, AttachLevel.Attached);
+                        result.put(building.getPrimaryKey(), building.propertyCode().getValue());
                     }
                 }
             } catch (PolicyNotFoundException ignore) {

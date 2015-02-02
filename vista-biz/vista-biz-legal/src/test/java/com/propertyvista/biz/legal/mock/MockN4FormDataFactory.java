@@ -21,13 +21,10 @@ package com.propertyvista.biz.legal.mock;
 
 import java.math.BigDecimal;
 
-import org.apache.commons.io.IOUtils;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.gwt.server.DateUtils;
 
-import com.propertyvista.biz.legal.N4GenerationFacadeImpl;
 import com.propertyvista.domain.legal.n4.pdf.N4PdfFormData;
 import com.propertyvista.domain.legal.n4.pdf.N4PdfLeaseData;
 import com.propertyvista.domain.legal.n4.pdf.N4PdfRentOwingForPeriod;
@@ -80,11 +77,6 @@ public class MockN4FormDataFactory {
         mockFormData.owedRent().rentOwingBreakdown().add(period3);
 
         mockFormData.signature().signedBy().setValue(SignedBy.Agent);
-        try {
-            mockFormData.signature().signature().setValue(IOUtils.toByteArray(N4GenerationFacadeImpl.class.getResourceAsStream(SIGNATURE)));
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
-        }
         mockFormData.signature().signatureDate().setValue(new LogicalDate(DateUtils.detectDateformat("2013-12-31")));
 
         mockFormData.landlordsContactInfo().firstName().setValue("Foo");

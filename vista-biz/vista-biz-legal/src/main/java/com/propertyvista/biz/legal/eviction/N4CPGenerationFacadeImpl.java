@@ -16,8 +16,6 @@ import org.apache.commons.io.IOUtils;
 
 import com.pyx4j.entity.core.EntityFactory;
 
-import com.propertyvista.biz.legal.InternalBillingInvoiceDebitFetcherImpl;
-import com.propertyvista.biz.legal.eviction.N4CPGenerationFacade;
 import com.propertyvista.biz.legal.forms.framework.filling.FormFillerImpl;
 import com.propertyvista.biz.legal.forms.n4cp.N4CPFieldsMapping;
 import com.propertyvista.domain.legal.n4.pdf.N4PdfFormData;
@@ -26,12 +24,6 @@ import com.propertyvista.domain.legal.n4cp.pdf.N4CPPdfFormData;
 public class N4CPGenerationFacadeImpl implements N4CPGenerationFacade {
 
     private static final String N4_CP_FORM_FILE = "n4cp.pdf";
-
-    private final InternalBillingInvoiceDebitFetcherImpl invoiceDebitFetcher;
-
-    public N4CPGenerationFacadeImpl() {
-        invoiceDebitFetcher = new InternalBillingInvoiceDebitFetcherImpl();
-    }
 
     @Override
     public byte[] generateN4CPLetter(N4CPPdfFormData formData) {

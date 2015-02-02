@@ -36,5 +36,8 @@ public class N4DataConverter {
         n4data.signatureDate().set(n4batch.signatureDate());
         n4data.signingAgent().set(n4batch.signingAgent());
         n4data.servicingAgent().set(n4batch.servicingAgent());
+        // copy agent contact settings
+        n4data.useAgentContactInfoN4().set(n4batch.useAgentContactInfoN4());
+        n4data.useAgentContactInfoCS().set(n4batch.useAgentContactInfoCS());
     }
 }

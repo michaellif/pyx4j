@@ -12,9 +12,6 @@
  */
 package com.propertyvista.crm.server.services.legal.eviction;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -46,11 +43,8 @@ import com.propertyvista.server.common.util.N4DataConverter;
 
 public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<EvictionCase, EvictionCaseDTO> implements EvictionCaseCrudService {
 
-    private final Map<Building, EvictionFlowPolicy> policyCache;
-
     public EvictionCaseCrudServiceImpl() {
         super(EvictionCase.class, EvictionCaseDTO.class);
-        policyCache = new HashMap<>();
     }
 
     @Override
@@ -96,7 +90,18 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
             }
             // N4
             if (status instanceof EvictionStatusN4) {
-                Persistence.service().persist(((EvictionStatusN4) status).n4Data());
+                N4LeaseData n4data = ((EvictionStatusN4) status).n4Data();
+                // populate agent contacts
+                if (n4data.useAgentContactInfoN4().getValue(false) && !n4data.signingAgent().isNull()) {
+                    Persistence.ensureRetrieve(n4data.signingAgent(), AttachLevel.Attached);
+                    n4data.phoneNumber().set(n4data.signingAgent().workPhone());
+                }
+                if (n4data.useAgentContactInfoCS().getValue(false) && !n4data.servicingAgent().isNull()) {
+                    Persistence.ensureRetrieve(n4data.servicingAgent(), AttachLevel.Attached);
+                    n4data.phoneNumberCS().set(n4data.servicingAgent().workPhone());
+                }
+
+                Persistence.service().persist(n4data);
             }
         }
 
@@ -147,11 +152,7 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
 
         Building building = lease.unit().building();
-        EvictionFlowPolicy policy = policyCache.get(building);
-        if (policy == null) {
-            policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, EvictionFlowPolicy.class);
-            policyCache.put(building, policy);
-        }
+        EvictionFlowPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, EvictionFlowPolicy.class);
         if (policy == null) {
             throw new Error("Cannot find EvictionFlowPolicy for building: " + building.propertyCode().getValue());
         }

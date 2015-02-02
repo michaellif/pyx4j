@@ -12,10 +12,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.eviction.n4;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CPhoneField;
+import com.pyx4j.forms.client.ui.CPhoneField.PhoneType;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -30,11 +35,15 @@ public class N4DataEditorPanel<E extends N4Data> extends FormPanel {
 
     private static final I18n i18n = I18n.get(N4BatchForm.class);
 
-    private final CForm<E> parent;
+    private final CForm<E> form;
+
+    private FormPanel contactPanelN4;
+
+    private FormPanel contactPanelCS;
 
     public N4DataEditorPanel(CForm<E> parent) {
         super(parent);
-        this.parent = parent;
+        this.form = parent;
 
         append(Location.Left, proto().serviceDate(), new CDateLabel()).decorate();
         append(Location.Left, proto().terminationDateOption()).decorate();
@@ -42,30 +51,45 @@ public class N4DataEditorPanel<E extends N4Data> extends FormPanel {
         append(Location.Right, proto().deliveryMethod()).decorate();
         append(Location.Right, proto().deliveryDate()).decorate();
 
-        h1(i18n.tr("Agent Information"));
+        h1(i18n.tr("Signing Agent"));
         CField<Employee, ?> signingAgentBox = isEditable() ? new CEntityComboBox<>(Employee.class) : //
                 new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class));
         append(Location.Left, proto().signingAgent(), signingAgentBox).decorate();
+        append(Location.Right, contactPanelN4 = new FormPanel(form));
+        contactPanelN4.append(Location.Left, proto().emailAddress()).decorate();
+        contactPanelN4.append(Location.Left, proto().phoneNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
+        contactPanelN4.append(Location.Left, proto().faxNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
 
-        append(Location.Left, proto().phoneNumber()).decorate();
-        append(Location.Left, proto().faxNumber()).decorate();
-        append(Location.Left, proto().emailAddress()).decorate();
-
+        h1(i18n.tr("Servicing Agent"));
         CField<Employee, ?> servicingAgentBox = isEditable() ? new CEntityComboBox<>(Employee.class) : //
                 new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class));
-        append(Location.Right, proto().servicingAgent(), servicingAgentBox).decorate();
-        append(Location.Right, proto().phoneNumberCS()).decorate();
+        append(Location.Left, proto().servicingAgent(), servicingAgentBox).decorate();
+        append(Location.Right, contactPanelCS = new FormPanel(form));
+        contactPanelCS.append(Location.Left, proto().phoneNumberCS()).decorate();
 
         h1(i18n.tr("Company Info"));
         append(Location.Left, proto().companyLegalName()).decorate().customLabel(i18n.tr("Legal Name"));
         append(Location.Dual, proto().companyAddress(), new InternationalAddressEditor());
+
+        if (isEditable()) {
+            form.addPropertyChangeHandler(new PropertyChangeHandler() {
+
+                @Override
+                public void onPropertyChange(PropertyChangeEvent event) {
+                    if (event.getPropertyName().equals(PropertyName.repopulated)) {
+                        contactPanelN4.setVisible(!form.getValue().useAgentContactInfoN4().getValue(false));
+                        contactPanelCS.setVisible(!form.getValue().useAgentContactInfoCS().getValue(false));
+                    }
+                }
+            });
+        }
     }
 
     public E proto() {
-        return parent.proto();
+        return form.proto();
     }
 
     public boolean isEditable() {
-        return parent.isEditable();
+        return form.isEditable();
     }
 }
