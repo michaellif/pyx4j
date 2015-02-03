@@ -23,16 +23,20 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.legal.forms.n4.N4GenerationUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.eviction.EvictionCase;
+import com.propertyvista.domain.eviction.EvictionCaseStatus;
 import com.propertyvista.domain.eviction.EvictionStatus;
 import com.propertyvista.domain.eviction.EvictionStatusN4;
 import com.propertyvista.domain.legal.errors.FormFillError;
@@ -132,6 +136,44 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         monitor.addProcessedEvent(N4_REPORT_SECTION);
     }
 
+    @Override
+    public void autoCancelN4(ExecutionMonitor monitor) {
+        // find open cases in n4 status and check if the balance is down the threshold or the time has expired
+        EntityQueryCriteria<EvictionCaseStatus> crit = EntityQueryCriteria.create(EvictionCaseStatus.class);
+        crit.isNull(crit.proto().evictionCase().closedOn());
+        crit.asc(crit.proto().evictionCase()); // order by case
+        crit.desc(crit.proto().addedOn()); // latest status first
+        ICursorIterator<EvictionCaseStatus> result = Persistence.service().query(null, crit, AttachLevel.Attached);
+        EvictionCase parentCase = null;
+        while (result.hasNext()) {
+            EvictionCaseStatus status = result.next();
+            if (!status.evictionCase().equals(parentCase) && isN4(status)) {
+                parentCase = status.evictionCase();
+                // running through an open case in n4 status
+                String reason = shouldAutoCancel((EvictionStatusN4) status);
+                if (reason != null) {
+                    ServerSideFactory.create(EvictionCaseFacade.class).closeEvictionCase(status.evictionCase(),
+                            i18n.tr("Closed by Auto Cancellation process: {0}", reason));
+                }
+            }
+        }
+        result.close();
+
+    }
+
+    private String shouldAutoCancel(EvictionStatusN4 n4status) {
+        if (SystemDateManager.getDate().after(n4status.expiryDate().getValue())) {
+            return i18n.tr("status has expired"); // has expired
+        } else if (N4GenerationUtils.getN4Balance(n4status.evictionCase().lease()).compareTo(n4status.cancellationBalance().getValue()) < 0) {
+            return i18n.tr("balance has been paid"); // has been paid off
+        }
+        return null;
+    }
+
+    private boolean isN4(EvictionCaseStatus status) {
+        return EvictionStepType.N4.equals(status.evictionStep().stepType().getValue());
+    }
+
     private void ensureN4LeaseData(EvictionStatusN4 statusN4) {
         if (statusN4.n4Data().isNull()) {
             N4LeaseData n4data = EntityFactory.create(N4LeaseData.class);
@@ -153,5 +195,4 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
             return i18n.tr("Unexpected Error: please contact support for more details");
         }
     }
-
 }

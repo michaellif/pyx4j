@@ -24,4 +24,6 @@ public interface N4ManagementFacade {
     void issueN4(N4Batch batch, ExecutionMonitor monitor) throws IllegalStateException, FormFillError;
 
     void issueN4(EvictionCase evictionCase, ExecutionMonitor monitor) throws IllegalStateException, FormFillError;
+
+    void autoCancelN4(ExecutionMonitor monitor);
 }

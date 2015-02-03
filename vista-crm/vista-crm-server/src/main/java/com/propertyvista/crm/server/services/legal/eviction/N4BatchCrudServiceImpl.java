@@ -13,7 +13,6 @@
 package com.propertyvista.crm.server.services.legal.eviction;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +42,6 @@ import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.eviction.EvictionCase;
 import com.propertyvista.domain.eviction.EvictionStatusN4;
-import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.legal.n4.N4Batch;
 import com.propertyvista.domain.legal.n4.N4BatchItem;
 import com.propertyvista.domain.legal.n4.N4LeaseArrears;
@@ -83,7 +81,7 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
             }
 
             N4BatchItem item = EntityFactory.create(N4BatchItem.class);
-            item.leaseArrears().set(getLeaseArrears(leaseId, n4policy.relevantARCodes()));
+            item.leaseArrears().set(getLeaseArrears(leaseId));
             item.lease().set(leaseId);
 
             bo.items().add(item);
@@ -208,10 +206,10 @@ public class N4BatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<N4Batch, 
         batch.name().setValue(building.propertyCode().getValue() + "_" + batch.created().getStringView().replaceAll(" ", "_"));
     }
 
-    private N4LeaseArrears getLeaseArrears(Lease lease, Collection<ARCode> acceptableArCodes) {
+    private N4LeaseArrears getLeaseArrears(Lease lease) {
         BigDecimal amountOwed = BigDecimal.ZERO;
         List<N4UnpaidCharge> owings;
-        for (N4UnpaidCharge rentOwingForPeriod : owings = N4GenerationUtils.getUnpaidCharges(lease, acceptableArCodes)) {
+        for (N4UnpaidCharge rentOwingForPeriod : owings = N4GenerationUtils.getUnpaidCharges(lease)) {
             amountOwed = amountOwed.add(rentOwingForPeriod.rentOwing().getValue());
         }
 

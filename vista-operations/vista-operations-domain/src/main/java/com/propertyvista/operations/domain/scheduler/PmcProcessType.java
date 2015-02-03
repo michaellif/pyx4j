@@ -125,6 +125,9 @@ public enum PmcProcessType implements Serializable {
 
     tenantSureBusinessReport,
 
+    @Translate("N4 - Auto Cancellation")
+    n4AutoCancellation,
+
     @Translate("ILS Vendor Update")
     ilsUpdate,
 
