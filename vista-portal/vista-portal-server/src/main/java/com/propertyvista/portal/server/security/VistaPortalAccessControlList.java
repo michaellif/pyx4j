@@ -66,10 +66,10 @@ import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfIncomeDocume
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectSignUpService;
 import com.propertyvista.portal.rpc.portal.resident.ac.HelpAction;
+import com.propertyvista.portal.rpc.portal.resident.services.CommunicationPortalCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.ExtraActivityPortalService;
 import com.propertyvista.portal.rpc.portal.resident.services.LeaseContextSelectionService;
 import com.propertyvista.portal.rpc.portal.resident.services.MessageAttachmentUploadPortalService;
-import com.propertyvista.portal.rpc.portal.resident.services.CommunicationPortalCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.QuickTipService;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentSelfRegistrationService;
@@ -145,6 +145,7 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(new IServiceExecutePermission(ReferenceDataService.class));
         grant(new EntityPermission(City.class, EntityPermission.READ));
         grant(new EntityPermission(CommunicationThread.class, EntityPermission.READ));
+        grant(new EntityPermission(NotificationDelivery.class, EntityPermission.READ));
         grant(new EntityPermission(Message.class, EntityPermission.READ));
 
         grant(new EntityPermission(CountryPolicyNode.class, EntityPermission.READ));
