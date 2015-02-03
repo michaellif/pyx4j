@@ -130,6 +130,8 @@ public class N4BatchLister extends SiteDataTablePanel<N4BatchDTO> {
                                 public void onDeferredSuccess(final DeferredProcessProgressResponse result) {
                                     super.onDeferredSuccess(result);
                                     downloadForms((DeferredReportProcessProgressResponse) result);
+                                    // clear selection
+                                    getDataTable().getDataTableModel().setAllRowsSelected(false);
                                 }
                             };
                             d.show();

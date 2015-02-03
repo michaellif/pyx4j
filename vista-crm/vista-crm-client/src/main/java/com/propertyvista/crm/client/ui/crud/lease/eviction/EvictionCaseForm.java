@@ -58,11 +58,11 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
 
         CEntityLabel<Lease> leaseLabel = isEditable() ? new CEntityLabel<Lease>() : new CEntityCrudHyperlink<Lease>(
                 AppPlaceEntityMapper.resolvePlace(Lease.class));
-        formPanel.append(Location.Dual, proto().lease(), leaseLabel).decorate();
-        formPanel.append(Location.Dual, proto().createdOn()).decorate();
-        formPanel.append(Location.Dual, proto().createdBy(), new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class))).decorate();
-        formPanel.append(Location.Dual, proto().updatedOn()).decorate();
-        formPanel.append(Location.Dual, proto().closedOn()).decorate();
+        formPanel.append(Location.Left, proto().lease(), leaseLabel).decorate();
+        formPanel.append(Location.Left, proto().createdBy(), new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class))).decorate();
+        formPanel.append(Location.Right, proto().createdOn()).decorate();
+        formPanel.append(Location.Right, proto().updatedOn()).decorate();
+        formPanel.append(Location.Right, proto().closedOn()).decorate();
         formPanel.append(Location.Dual, proto().note()).decorate();
 
         formPanel.h1(i18n.tr("Status History"));

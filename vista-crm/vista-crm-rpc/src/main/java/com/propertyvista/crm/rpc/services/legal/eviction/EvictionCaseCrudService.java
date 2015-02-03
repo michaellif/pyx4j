@@ -30,4 +30,6 @@ public interface EvictionCaseCrudService extends AbstractCrudService<EvictionCas
     void hasEvictionFlow(AsyncCallback<Boolean> callback, Key leaseId);
 
     void issueN4(AsyncCallback<String> callback, EvictionCase caseId);
+
+    void downloadAttachments(AsyncCallback<String> callback, EvictionCase caseId);
 }

@@ -21,6 +21,8 @@ public interface EvictionCaseViewerView extends IPrimeViewerView<EvictionCaseDTO
     interface Presenter extends IPrimeViewerView.IPrimeViewerPresenter {
 
         void issueN4(EvictionCaseDTO evictionCase);
+
+        void downloadAttachments(EvictionCaseDTO evictionCase);
     }
 
 }

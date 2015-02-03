@@ -164,4 +164,10 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
         EvictionCase evictionCase = Persistence.service().retrieve(EvictionCase.class, caseId.getPrimaryKey());
         callback.onSuccess(DeferredProcessRegistry.fork(new N4LeaseGenerationDeferredProcess(evictionCase), ThreadPoolNames.IMPORTS));
     }
+
+    @Override
+    public void downloadAttachments(AsyncCallback<String> callback, EvictionCase caseId) {
+        EvictionCase evictionCase = Persistence.service().retrieve(EvictionCase.class, caseId.getPrimaryKey());
+        callback.onSuccess(DeferredProcessRegistry.fork(new EvictionCaseDownloadDeferredProcess(evictionCase), ThreadPoolNames.IMPORTS));
+    }
 }
