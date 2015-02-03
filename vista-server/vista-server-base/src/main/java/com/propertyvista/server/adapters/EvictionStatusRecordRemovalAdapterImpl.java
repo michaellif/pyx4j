@@ -22,7 +22,10 @@ import com.propertyvista.shared.adapters.EvictionStatusRecordRemovalAdapter;
 
 public class EvictionStatusRecordRemovalAdapterImpl implements EvictionStatusRecordRemovalAdapter {
 
-    // If status record is removed from EvictionStatusN4.statusRecords(), the EvictionStatusN4.generatedForms() must be removed
+    /*
+     * If status record with attachments is removed from EvictionStatusN4.statusRecords(), the possible
+     * references from EvictionStatusN4.generatedForms() must be removed as well
+     */
     @Override
     public void onBeforeUpdate(EvictionStatusN4 origEntity, EvictionStatusN4 newEntity) {
         // find deleted records
