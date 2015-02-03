@@ -136,20 +136,21 @@ public class CommunicationEditForm extends CrmEntityForm<CommunicationThreadDTO>
     protected CommunicationThreadDTO preprocessValue(CommunicationThreadDTO value, boolean fireEvent, boolean populate) {
         if (value == null || value.getPrimaryKey() == null || value.getPrimaryKey().isDraft()) {
             CommunicationEditorActivity presenter = ((CommunicationEditorActivity) getParentView().getPresenter());
-            DeliveryMethod dm = presenter.getDeliveryMethod();
-            if (dm == null) {
+            DeliveryMethod deliveryMethod = presenter.getDeliveryMethod();
+            if (deliveryMethod == null) {
                 setVisibility(true, false);
                 get(proto().representingMessage().content()).setTitle(i18n.tr("Text"));
-                MessageCategory mc = presenter.getCategory();
-                if (mc != null && !mc.isNull()) {
-                    get(proto().category()).setEditable(false);
-                } else {
-                    get(proto().category()).setEditable(true);
-                }
+
             } else {
-                setVisibility(false, DeliveryMethod.Notification.equals(dm));
+                setVisibility(false, DeliveryMethod.Notification.equals(deliveryMethod));
                 get(proto().representingMessage().content()).setTitle(i18n.tr("Fallback"));
-                get(proto().deliveredText()).setTitle(dm.toString());
+                get(proto().deliveredText()).setTitle(deliveryMethod.toString());
+            }
+            MessageCategory mc = presenter.getCategory();
+            if (mc != null && !mc.isNull()) {
+                get(proto().category()).setEditable(false);
+            } else {
+                get(proto().category()).setEditable(true);
             }
         }
         return super.preprocessValue(value, fireEvent, populate);
