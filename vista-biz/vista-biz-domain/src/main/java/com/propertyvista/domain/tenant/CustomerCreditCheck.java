@@ -29,6 +29,7 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Versioned;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -37,6 +38,9 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 /**
  * This object is created once and never updated.
@@ -69,6 +73,14 @@ public interface CustomerCreditCheck extends IEntity {
     @Owner
     @JoinColumn
     CustomerScreening screening();
+
+    @NotNull
+    @Detached
+    LeaseParticipant<LeaseTermParticipant<?>> screene();
+
+    @NotNull
+    @Detached
+    Building building();
 
     /**
      * TimeStamp used for selecting the last one and recording actual event

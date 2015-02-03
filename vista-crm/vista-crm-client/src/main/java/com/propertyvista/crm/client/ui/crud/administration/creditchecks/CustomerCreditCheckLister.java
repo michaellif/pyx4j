@@ -34,6 +34,7 @@ public class CustomerCreditCheckLister extends SiteDataTablePanel<CustomerCredit
         super(CustomerCreditCheckDTO.class, GWT.<CustomerCreditCheckCrudService> create(CustomerCreditCheckCrudService.class), false);
 
         setColumnDescriptors( //
+                new ColumnDescriptor.Builder(proto().building()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().screening().screene().person().name()).columnTitle(i18n.tr("Tenant")).searchable(false).build(), //
                 new ColumnDescriptor.Builder(proto().screening().screene().person().name().firstName()).searchableOnly().filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().screening().screene().person().name().lastName()).searchableOnly().filterAlwaysShown(true).build(), //
@@ -48,7 +49,6 @@ public class CustomerCreditCheckLister extends SiteDataTablePanel<CustomerCredit
                 new ColumnDescriptor.Builder(proto().reason()).build());
 
         setDataTableModel(new DataTableModel<CustomerCreditCheckDTO>());
-
     }
 
     @Override

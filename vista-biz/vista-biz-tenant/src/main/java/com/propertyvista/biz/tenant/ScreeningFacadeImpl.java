@@ -175,56 +175,58 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
             throw new UserRuntimeException(i18n.tr("Credit Check interface was not activated"));
         }
 
-        LeaseTermParticipant<?> leaseParticipant = (LeaseTermParticipant<?>) Persistence.service().retrieve(leaseParticipantId.getValueClass(),
+        LeaseTermParticipant<?> leaseTermParticipant = (LeaseTermParticipant<?>) Persistence.service().retrieve(leaseParticipantId.getValueClass(),
                 leaseParticipantId.getPrimaryKey());
-        CustomerScreening screening = retrivePersonScreening(leaseParticipant.leaseParticipant().customer());
 
-        CustomerCreditCheck pcc = EntityFactory.create(CustomerCreditCheck.class);
-        pcc.amountChecked().setValue(rentAmount);
-        pcc.screening().set(screening);
-        pcc.createdBy().set(currentUserEmployee);
+        Persistence.ensureRetrieve(leaseTermParticipant.leaseTermV().holder().lease(), AttachLevel.Attached);
 
-        Persistence.service().retrieve(leaseParticipant.leaseTermV());
-        Persistence.service().retrieve(leaseParticipant.leaseTermV().holder().lease());
+        Lease lease = leaseTermParticipant.leaseTermV().holder().lease();
 
-        BackgroundCheckPolicy backgroundCheckPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
-                leaseParticipant.leaseTermV().holder().lease().unit(), BackgroundCheckPolicy.class);
-        pcc.backgroundCheckPolicy().set(EntityGraph.businessDuplicate(backgroundCheckPolicy.version()));
+        CustomerCreditCheck ccc = EntityFactory.create(CustomerCreditCheck.class);
 
-        Persistence.service().retrieve(screening.version().incomes());
-        Persistence.service().retrieve(screening.version().assets());
-        Persistence.ensureRetrieve(screening.version().documents(), AttachLevel.Attached);
+        ccc.amountChecked().setValue(rentAmount);
+        ccc.screening().set(retrivePersonScreening(leaseTermParticipant.leaseParticipant().customer()));
+        ccc.screene().set(leaseTermParticipant.leaseParticipant());
+        ccc.building().set(lease.unit().building());
+        ccc.createdBy().set(currentUserEmployee);
 
-        pcc.transactionId().setValue(ScreeningPayments.preAuthorization(equifaxInfo));
+        BackgroundCheckPolicy backgroundCheckPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(ccc.building(),
+                BackgroundCheckPolicy.class);
+        ccc.backgroundCheckPolicy().set(EntityGraph.businessDuplicate(backgroundCheckPolicy.version()));
+
+        Persistence.ensureRetrieve(ccc.screening().version().incomes(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(ccc.screening().version().assets(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(ccc.screening().version().documents(), AttachLevel.Attached);
+
+        ccc.transactionId().setValue(ScreeningPayments.preAuthorization(equifaxInfo));
 
         // Need this for simulations
-        Lease lease = leaseParticipant.leaseTermV().holder().lease();
         lease.currentTerm().set(Persistence.service().retrieve(LeaseTerm.class, lease.currentTerm().getPrimaryKey().asDraftKey()));
         Persistence.service().retrieve(lease.currentTerm().version().tenants());
         Persistence.service().retrieve(lease.currentTerm().version().guarantors());
 
         boolean success = false;
         try {
-            pcc = EquifaxCreditCheck.runCreditCheck(equifaxInfo, leaseParticipant.leaseParticipant().customer(), pcc, backgroundCheckPolicy.strategyNumber()
-                    .getValue(), lease, leaseParticipant);
+            ccc = EquifaxCreditCheck.runCreditCheck(equifaxInfo, leaseTermParticipant.leaseParticipant().customer(), ccc, backgroundCheckPolicy
+                    .strategyNumber().getValue(), lease, leaseTermParticipant);
 
             // This is the business, we charge only when riskCode is returned
-            success = !pcc.riskCode().isNull();
+            success = !ccc.riskCode().isNull();
 
-            Persistence.service().persist(pcc);
+            Persistence.service().persist(ccc);
 
             Persistence.service().commit();
         } finally {
-            if (!pcc.transactionId().isNull()) {
+            if (!ccc.transactionId().isNull()) {
                 if (success) {
-                    ScreeningPayments.compleateTransaction(pcc.transactionId().getValue());
+                    ScreeningPayments.compleateTransaction(ccc.transactionId().getValue());
                 } else {
-                    ScreeningPayments.preAuthorizationReversal(pcc.transactionId().getValue());
+                    ScreeningPayments.preAuthorizationReversal(ccc.transactionId().getValue());
                 }
             }
         }
 
-        return pcc;
+        return ccc;
     }
 
     private CustomerScreening retrivePersonScreening(Customer customer) {

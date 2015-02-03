@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services.admin;
 import java.util.concurrent.Callable;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
@@ -35,6 +36,7 @@ public class CustomerCreditCheckCrudServiceImpl extends AbstractCrudServiceDtoIm
     protected void enhanceRetrieved(CustomerCreditCheck bo, CustomerCreditCheckDTO to, RetrieveTarget retrieveTarget) {
         Persistence.service().retrieveMember(to.screening());
         Persistence.service().retrieveMember(to.screening().screene());
+        Persistence.service().retrieveMember(to.building(), AttachLevel.ToStringMembers);
 
         if (!to.transactionId().isNull()) {
             final Key transactionId = to.transactionId().getValue();
@@ -55,5 +57,4 @@ public class CustomerCreditCheckCrudServiceImpl extends AbstractCrudServiceDtoIm
         super.enhanceListRetrieved(entity, dto);
         enhanceRetrieved(entity, dto, RetrieveTarget.View);
     }
-
 }
