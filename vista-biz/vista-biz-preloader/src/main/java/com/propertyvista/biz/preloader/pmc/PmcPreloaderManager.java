@@ -296,8 +296,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
 
             PmcPreloaderManager.recordOperation(type, operationStartTime);
         } catch (Throwable t) {
-            log.error("", t);
-            throw new Error(t);
+            logError(output, t);
         } finally {
             NamespaceManager.setNamespace(requestNamespace);
             startCommunications();
@@ -380,9 +379,8 @@ public class PmcPreloaderManager implements CommunicationsHandler {
                 }
             }
         } catch (Throwable t) {
-            log.error("", t);
             Persistence.service().rollback();
-            throw new Error(t);
+            logError(output, t);
         } finally {
             startCommunications();
             performResetFinallyActions();
@@ -392,7 +390,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
 
     public void resetAndPreloadPmc(final String pmcDnsName) {
         resetPmcTables(pmcDnsName);
-        preloadPmc(pmcDnsName, ResetType.preloadPmc, null, null);
+        preloadPmc(pmcDnsName, ResetType.preloadPmc, null, null); // TODO Change for preloadPmcWithMock before 1.4.2 when fixed (now it fails)
     }
 
     public static void writeToOutput(OutputHolder output, String... messages) {
@@ -450,11 +448,12 @@ public class PmcPreloaderManager implements CommunicationsHandler {
     }
 
     private static void logError(OutputHolder output, Throwable t) throws Error {
-        PmcPreloaderManager.writeToOutput(output, "\nDB reset error:");
+        PmcPreloaderManager.writeToOutput(output, "\nDB error:");
         PmcPreloaderManager.writeToOutput(output, t.getMessage());
-        if (null != output) {
-            throw new Error(t);
+        if (null == output) {
+            log.error("", t);
         }
+        throw new Error(t);
     }
 
     @Override
