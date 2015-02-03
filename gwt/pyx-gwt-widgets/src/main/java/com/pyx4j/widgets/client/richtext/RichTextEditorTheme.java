@@ -8,7 +8,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
-public class RichTextTheme extends Theme {
+public class RichTextEditorTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
         ReachTextEditor, ReachTextArea, RteToolbar, RteToolbarButton, RteToolbarButtonNoToggle, RteCheckBox,
@@ -16,7 +16,7 @@ public class RichTextTheme extends Theme {
         ReachTextViewer
     }
 
-    public RichTextTheme() {
+    public RichTextEditorTheme() {
         initStyles();
     }
 

@@ -26,7 +26,7 @@ public class RichTextViewer extends HTML {
 
     public RichTextViewer() {
         super();
-        setStyleName(RichTextTheme.StyleName.ReachTextViewer.name());
+        setStyleName(RichTextEditorTheme.StyleName.ReachTextViewer.name());
     }
 
 }
