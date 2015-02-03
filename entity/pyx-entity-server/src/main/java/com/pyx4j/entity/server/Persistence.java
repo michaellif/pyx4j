@@ -63,34 +63,12 @@ public class Persistence {
     public static <T extends IEntity> ICursorIterator<T> secureQuery(String encodedCursorReference, EntityQueryCriteria<T> criteria, AttachLevel attachLevel) {
         SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
         applyDatasetAccessRule(criteria);
-        final ICursorIterator<T> unfiltered = service().query(encodedCursorReference, criteria, AttachLevel.Attached);
-        return new ICursorIterator<T>() {
-
-            @Override
-            public boolean hasNext() {
-                return unfiltered.hasNext();
-            }
-
+        return new CursorIteratorDelegate<T, T>(service().query(encodedCursorReference, criteria, AttachLevel.Attached)) {
             @Override
             public T next() {
                 T entity = unfiltered.next();
                 SecurityController.assertPermission(entity, EntityPermission.permissionRead(entity));
                 return entity;
-            }
-
-            @Override
-            public void remove() {
-                unfiltered.remove();
-            }
-
-            @Override
-            public String encodedCursorReference() {
-                return unfiltered.encodedCursorReference();
-            }
-
-            @Override
-            public void close() {
-                unfiltered.close();
             }
         };
     }

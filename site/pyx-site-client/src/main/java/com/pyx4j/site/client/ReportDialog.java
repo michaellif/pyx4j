@@ -36,7 +36,10 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.rpc.DocCreationRequest;
+import com.pyx4j.entity.rpc.DocCreationService;
 import com.pyx4j.essentials.client.DownloadFrame;
+import com.pyx4j.essentials.rpc.download.DownloadableService;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.rpc.report.ReportService;
@@ -46,6 +49,7 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
+import com.pyx4j.rpc.shared.DeferredCorrelationId;
 
 //TODO find name for that - it is used not only for reports
 public class ReportDialog extends DeferredProcessDialog {
@@ -54,7 +58,7 @@ public class ReportDialog extends DeferredProcessDialog {
 
     private static final I18n i18n = I18n.get(ReportDialog.class);
 
-    private ReportService<?> reportService;
+    private DownloadableService reportService;
 
     private String downloadServletPath;
 
@@ -93,6 +97,29 @@ public class ReportDialog extends DeferredProcessDialog {
 
         reportService.createDownload(callback, reportRequest);
 
+    }
+
+    public void start(DocCreationService reportService, DocCreationRequest docCreationRequest) {
+        if (reportService instanceof DownloadableService) {
+            this.reportService = (DownloadableService) reportService;
+        }
+
+        show();
+        AsyncCallback<DeferredCorrelationId> callback = new BlockingAsyncCallback<DeferredCorrelationId>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                hide();
+                throw new UnrecoverableClientError(caught);
+            }
+
+            @Override
+            public void onSuccess(DeferredCorrelationId deferredCorrelationID) {
+                startProgress(deferredCorrelationID.getDeferredCorrelationId());
+            }
+
+        };
+        reportService.startDocCreation(callback, docCreationRequest);
     }
 
     public ReportDialog(String title, String initialMessage) {

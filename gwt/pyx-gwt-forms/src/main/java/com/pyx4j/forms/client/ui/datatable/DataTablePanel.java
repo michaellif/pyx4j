@@ -138,8 +138,6 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
         setAddNewActionEnabled(allowAddNew);
         setDeleteActionEnabled(allowDelete);
-
-        setExportActionEnabled(true);
     }
 
     public Class<E> getEntityClass() {
@@ -242,7 +240,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     public void setExportActionEnabled(boolean enabled) {
         if (exportButton == null && enabled) {
-            topActionsBar.getToolbar().insertItem(addButton = new Button(i18n.tr("Export"), new Command() {
+            topActionsBar.getToolbar().insertItem(exportButton = new Button(i18n.tr("Export"), new Command() {
                 @Override
                 public void execute() {
                     onExport();
@@ -255,8 +253,6 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     }
 
     protected void onExport() {
-        //TODO
-        System.out.println("+++++++++++++++ TODO onExport");
     }
 
     public void setFirstActionHandler(Command firstActionCommand) {
@@ -482,6 +478,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         return dataTable.getSelectedItems();
     }
 
+    //TODO Refactor to return list of filters  and unify with ListerDataSource.preDefinedFilters
     protected EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
         if (getFilters() != null) {
             for (Criterion fd : getFilters()) {

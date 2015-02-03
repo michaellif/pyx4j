@@ -21,36 +21,37 @@ package com.pyx4j.essentials.server.docs.sheet;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.config.shared.ApplicationBackend;
-import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.EntityColumnDescriptor;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.rpc.DocCreationRequest;
+import com.pyx4j.entity.rpc.DocCreationService;
+import com.pyx4j.entity.rpc.SheetCreationRequest;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
-import com.pyx4j.essentials.rpc.report.ReportRequest;
-import com.pyx4j.essentials.rpc.report.ReportService;
+import com.pyx4j.entity.server.CursorSource;
+import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.essentials.rpc.download.DownloadableService;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
+import com.pyx4j.gwt.shared.DownloadFormat;
+import com.pyx4j.rpc.shared.DeferredCorrelationId;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-public abstract class AbstractDownloadableCrudServiceDtoImpl<E extends IEntity, DTO extends IEntity> extends AbstractCrudServiceDtoImpl<E, DTO> implements
-        ReportService<DTO> {
+public abstract class AbstractDownloadableCrudServiceDtoImpl<BO extends IEntity, TO extends IEntity> extends AbstractCrudServiceDtoImpl<BO, TO> implements
+        DocCreationService, DownloadableService {
 
-    protected AbstractDownloadableCrudServiceDtoImpl(Class<E> entityClass, Class<DTO> dtoClass) {
+    protected AbstractDownloadableCrudServiceDtoImpl(Class<BO> entityClass, Class<TO> dtoClass) {
         super(entityClass, dtoClass);
     }
 
-    @Override
-    public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
-        EntityListCriteria<E> criteria = EntityListCriteria.create(boClass);
-        criteria.setVersionedCriteria(reportRequest.getCriteria().getVersionedCriteria());
-        enhanceListCriteria(criteria, (EntityListCriteria<DTO>) reportRequest.getCriteria());
-        reportRequest.setCriteria(criteria);
+    protected AbstractDownloadableCrudServiceDtoImpl(EntityBinder<BO, TO> binder) {
+        super(binder);
+    }
 
-        if (ApplicationBackend.getBackendType() == ApplicationBackendType.GAE) {
-            callback.onSuccess(DeferredProcessRegistry.register(new SearchReportDeferredProcess<E>(reportRequest)));
-        } else {
-            callback.onSuccess(DeferredProcessRegistry.fork(new SearchReportDeferredProcess<E>(reportRequest), DeferredProcessRegistry.THREAD_POOL_DOWNLOADS));
-        }
+    @Override
+    public final void startDocCreation(AsyncCallback<DeferredCorrelationId> callback, DocCreationRequest docCreationRequest) {
+        callback.onSuccess(startDocCreation(docCreationRequest));
     }
 
     @Override
@@ -60,6 +61,35 @@ public abstract class AbstractDownloadableCrudServiceDtoImpl<E extends IEntity, 
             Downloadable.cancel(fileName);
         }
         callback.onSuccess(null);
+    }
+
+    public final DeferredCorrelationId startDocCreation(DocCreationRequest docCreationRequest) {
+        if (docCreationRequest instanceof SheetCreationRequest) {
+            SheetCreationRequest sheetCreationRequest = (SheetCreationRequest) docCreationRequest;
+
+            @SuppressWarnings("unchecked")
+            EntityListCriteria<TO> criteria = (EntityListCriteria<TO>) sheetCreationRequest.getQeueryCriteria();
+
+            CursorSource<TO> cursorSource = this;
+            ReportTableFormatter formatter = new ReportTableXLSXFormatter();
+            EntityReportFormatter<TO> entityFormatter = createSheetEntityFormatter(sheetCreationRequest);
+
+            String fileName = EntityFactory.getEntityMeta(toClass).getCaption() + "."
+                    + DownloadFormat.fromSheetFormat(sheetCreationRequest.getSheetFormat()).getExtension();
+
+            return new DeferredCorrelationId(DeferredProcessRegistry.fork(new SheetCreationDeferredProcess<TO>(criteria, cursorSource, formatter,
+                    entityFormatter, fileName), DeferredProcessRegistry.THREAD_POOL_DOWNLOADS));
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    private EntityReportFormatter<TO> createSheetEntityFormatter(SheetCreationRequest sheetCreationRequest) {
+        EntityReportFormatter<TO> erf = new EntityReportFormatter<TO>(toClass);
+        for (EntityColumnDescriptor cd : sheetCreationRequest.getColumnDescriptors()) {
+            erf.selectMemeber(cd.getPath(), cd.getTitle());
+        }
+        return erf;
     }
 
 }

@@ -65,6 +65,14 @@ public class EntityReportFormatter<E extends IEntity> {
         return EntityMetaUtils.getDirectMembers(entityClass);
     }
 
+    public void selectMemeber(Path memberPath, String caption) {
+        if (selectedMemberNames == null) {
+            selectedMemberNames = new ArrayList<>();
+        }
+        selectedMemberNames.add(memberPath);
+        addMemberCaption(memberPath, caption);
+    }
+
     public void selectMemebers() {
         selectedMemberNames = new ArrayList<>();
         EntityMeta em = EntityFactory.getEntityMeta(entityClass);

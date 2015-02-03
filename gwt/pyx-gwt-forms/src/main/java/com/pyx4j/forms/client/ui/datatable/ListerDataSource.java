@@ -30,6 +30,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.DocCreationService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.forms.client.ui.AsyncLoadingHandler;
 import com.pyx4j.forms.client.ui.EntityDataSource;
@@ -56,6 +57,14 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
 
     public Class<E> getEntityClass() {
         return entityClass;
+    }
+
+    public DocCreationService getDocCreationService() {
+        if (service instanceof DocCreationService) {
+            return (DocCreationService) service;
+        } else {
+            return null;
+        }
     }
 
     @Override

@@ -27,12 +27,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -40,10 +42,11 @@ import com.pyx4j.entity.core.criterion.RangeCriterion;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.security.shared.SecurityController;
 
-public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends IEntity> implements AbstractListCrudService<TO> {
+public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends IEntity> implements AbstractListCrudService<TO>, CursorSource<TO> {
 
     protected Class<BO> boClass;
 
@@ -225,10 +228,47 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         }
     }
 
+    @Deprecated
+    // TODO use getQueryCursor
     protected EntitySearchResult<BO> query(EntityListCriteria<BO> criteria) {
         return Persistence.secureQuery(criteria);
     }
 
+    public final ICursorIterator<BO> getQueryCursor(String encodedCursorReference, EntityQueryCriteria<BO> criteria, AttachLevel attachLevel) {
+        return new CursorIteratorDelegate<BO, BO>(Persistence.secureQuery(encodedCursorReference, criteria, attachLevel)) {
+
+            @Override
+            public BO next() {
+                BO bo = unfiltered.next();
+                retrievedForList(bo);
+                return bo;
+            }
+
+        };
+    }
+
+    @Override
+    public ICursorIterator<TO> getCursor(String encodedCursorReference, EntityListCriteria<TO> dtoCriteria, AttachLevel attachLevel) {
+        EntityListCriteria<BO> criteria = EntityListCriteria.create(boClass);
+        criteria.setPageNumber(dtoCriteria.getPageNumber());
+        criteria.setPageSize(dtoCriteria.getPageSize());
+        criteria.setVersionedCriteria(dtoCriteria.getVersionedCriteria());
+        enhanceListCriteria(criteria, dtoCriteria);
+
+        return new CursorIteratorDelegate<TO, BO>(getQueryCursor(encodedCursorReference, criteria, attachLevel)) {
+
+            @Override
+            public TO next() {
+                BO bo = unfiltered.next();
+                TO to = binder.createTO(bo);
+                enhanceListRetrieved(bo, to);
+                return to;
+            }
+
+        };
+    }
+
+    //TODO make it final
     @Override
     public void list(AsyncCallback<EntitySearchResult<TO>> callback, EntityListCriteria<TO> dtoCriteria) {
         if (!dtoCriteria.getEntityClass().equals(toClass)) {

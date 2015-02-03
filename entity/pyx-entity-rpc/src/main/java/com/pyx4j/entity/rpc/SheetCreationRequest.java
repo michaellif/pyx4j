@@ -29,18 +29,9 @@ public class SheetCreationRequest extends DocCreationRequest {
 
     public enum SheetFormat {
 
-        CSV("csv", "Comma-separated values (CSV)"),
+        CSV,
 
-        XLSX("xlsx", "MS Excel");
-
-        private String[] extensions;
-
-        private String name;
-
-        SheetFormat(String extension, String name) {
-            this.extensions = new String[] { extension };
-            this.name = name;
-        }
+        XLSX;
 
     }
 
@@ -52,6 +43,14 @@ public class SheetCreationRequest extends DocCreationRequest {
 
     public SheetCreationRequest() {
 
+    }
+
+    public SheetFormat getSheetFormat() {
+        return sheetFormat;
+    }
+
+    public void setSheetFormat(SheetFormat sheetFormat) {
+        this.sheetFormat = sheetFormat;
     }
 
     public Vector<EntityColumnDescriptor> getColumnDescriptors() {

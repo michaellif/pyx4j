@@ -32,6 +32,7 @@ import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
@@ -86,6 +87,8 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
         });
 
         setDataSource(new ListerDataSource<E>(entityClass, service));
+
+        setExportActionEnabled(getDataSource().getDocCreationService() != null);
     }
 
     protected void view(Class<? extends CrudAppPlace> openPlaceClass, Key itemID) {
@@ -227,4 +230,13 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
         return AppPlaceEntityMapper.resolvePlaceClass(getEntityClass());
     }
 
+    @Override
+    protected void onExport() {
+        // TODO This should be EntityQueryCriteria or Filters
+        EntityListCriteria<E> criteria = EntityListCriteria.create(getEntityClass());
+        criteria.setSorts(getDataTableModel().getSortCriteria());
+        updateCriteria(criteria);
+
+        DataTableDocCreation.createExcelExport(getDataSource().getDocCreationService(), criteria, getDataTable().getVisibleColumnDescriptors());
+    }
 }

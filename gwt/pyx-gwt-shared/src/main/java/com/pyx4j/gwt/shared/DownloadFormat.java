@@ -22,6 +22,8 @@ package com.pyx4j.gwt.shared;
 import java.util.Collection;
 import java.util.Vector;
 
+import com.pyx4j.entity.rpc.SheetCreationRequest.SheetFormat;
+
 public enum DownloadFormat {
 
     CSV("csv", "Comma-separated values (CSV)"),
@@ -126,5 +128,16 @@ public enum DownloadFormat {
             }
         }
         throw new IllegalArgumentException();
+    }
+
+    public static DownloadFormat fromSheetFormat(SheetFormat sheetFormat) {
+        switch (sheetFormat) {
+        case CSV:
+            return DownloadFormat.CSV;
+        case XLSX:
+            return DownloadFormat.XLSX;
+        default:
+            throw new IllegalArgumentException();
+        }
     }
 }
