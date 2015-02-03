@@ -94,36 +94,12 @@ public class CommunicationLister extends SiteDataTablePanel<CommunicationThreadD
         }));
 
         Button.ButtonMenuBar subMenu = new Button.ButtonMenuBar();
-        subMenu.addItem(newTicket = new MenuItem(i18n.tr("Ticket"), new Command() {
-            @Override
-            public void execute() {
-                editNewEntity(CategoryType.Ticket, null);
-            }
-        }));
-        subMenu.addItem(newMessage = new MenuItem(i18n.tr("Message"), new Command() {
-            @Override
-            public void execute() {
-                editNewEntity(CategoryType.Message, null);
-            }
-        }));
-        subMenu.addItem(newIVR = new MenuItem(i18n.tr("IVR"), new Command() {
-            @Override
-            public void execute() {
-                editNewEntity(CategoryType.Message, DeliveryMethod.IVR);
-            }
-        }));
-        subMenu.addItem(newSMS = new MenuItem(i18n.tr("SMS"), new Command() {
-            @Override
-            public void execute() {
-                editNewEntity(CategoryType.Message, DeliveryMethod.SMS);
-            }
-        }));
-        subMenu.addItem(newNotification = new MenuItem(i18n.tr("Notification"), new Command() {
-            @Override
-            public void execute() {
-                editNewEntity(CategoryType.Message, DeliveryMethod.Notification);
-            }
-        }));
+        subMenu.addItem(newTicket = new MessagesMenuItem(CategoryType.Ticket));
+        subMenu.addItem(newMessage = new MessagesMenuItem(CategoryType.Message));
+        subMenu.addItem(newIVR = new MessagesMenuItem(CategoryType.Message, DeliveryMethod.IVR));
+        subMenu.addItem(newSMS = new MessagesMenuItem(CategoryType.Message, DeliveryMethod.SMS));
+        subMenu.addItem(newNotification = new MessagesMenuItem(CategoryType.Message, DeliveryMethod.Notification));
+
         newButton.setMenu(subMenu);
         newButton.setPermission(DataModelPermission.permissionCreate(CommunicationThreadDTO.class));
 
@@ -354,5 +330,25 @@ public class CommunicationLister extends SiteDataTablePanel<CommunicationThreadD
         }
         initData.deliveryMethod().setValue(deliveryMethod);
         editNew(Message.class, initData);
+    }
+
+    private class MessagesMenuItem extends MenuItem {
+
+        MessagesMenuItem(final Object placeCriteria) {
+            super(placeCriteria.toString(),new Command() {
+                @Override
+                public void execute() {
+                    editNewEntity(placeCriteria, null);
+                }
+            });
+        }
+        MessagesMenuItem(final Object placeCriteria, final DeliveryMethod deliveryMethod ) {
+            super(deliveryMethod.toString(), new Command() {
+                @Override
+                public void execute() {
+                    editNewEntity(placeCriteria, deliveryMethod);
+                }
+            });
+        }
     }
 }

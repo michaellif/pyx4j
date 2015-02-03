@@ -54,6 +54,8 @@ import com.propertyvista.domain.tenant.income.CustomerScreeningIncomeInfo.Amount
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeSource;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.misc.CreditCardNumberGenerator;
@@ -66,7 +68,7 @@ public class ScreeningGenerator {
 
     }
 
-    CustomerScreening createScreening() {
+    CustomerScreening createScreening(Lease lease, LeaseParticipant<?> screene) {
         CustomerScreening screening = EntityFactory.create(CustomerScreening.class);
 
         // Documents
@@ -90,7 +92,7 @@ public class ScreeningGenerator {
         int minAssets = (screening.version().incomes().size() == 0) ? 1 : 0;
         screening.version().assets().addAll(createAssets(minAssets));
 
-        screening.creditChecks().addAll(createPersonCreditCheck());
+        screening.creditChecks().addAll(createPersonCreditCheck(lease, screene));
 
         return screening;
     }
@@ -251,19 +253,20 @@ public class ScreeningGenerator {
         return assets;
     }
 
-    private Collection<CustomerCreditCheck> createPersonCreditCheck() {
+    private Collection<CustomerCreditCheck> createPersonCreditCheck(Lease lease, LeaseParticipant<?> screene) {
         List<CustomerCreditCheck> list = new ArrayList<CustomerCreditCheck>();
         for (int i = 0; i < 1 + RandomUtil.randomInt(3); i++) {
             CustomerCreditCheck pcc = EntityFactory.create(CustomerCreditCheck.class);
 
+            pcc.screene().set(screene);
+            pcc.building().set(lease.unit().building());
             pcc.creditCheckDate().setValue(RandomUtil.randomDateDaysShifted(-40));
+            pcc.amountChecked().setValue(BigDecimal.valueOf(500 + RandomUtil.randomDouble(500)));
 
             pcc.backgroundCheckPolicy().bankruptcy().setValue(RandomUtil.randomEnum(BjccEntry.class));
             pcc.backgroundCheckPolicy().judgment().setValue(RandomUtil.randomEnum(BjccEntry.class));
             pcc.backgroundCheckPolicy().collection().setValue(RandomUtil.randomEnum(BjccEntry.class));
             pcc.backgroundCheckPolicy().chargeOff().setValue(RandomUtil.randomEnum(BjccEntry.class));
-
-            pcc.amountChecked().setValue(BigDecimal.valueOf(500 + RandomUtil.randomDouble(500)));
 
             List<CreditCheckResult> options = new ArrayList<CreditCheckResult>(EnumSet.allOf(CreditCheckResult.class));
             options.remove(CreditCheckResult.Error);

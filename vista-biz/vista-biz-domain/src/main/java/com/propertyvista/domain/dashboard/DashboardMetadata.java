@@ -101,6 +101,7 @@ public interface DashboardMetadata extends IEntity {
     /**
      * Holds the docking position of the gadgets and gadgetIds {@link GadgetMetadata#gadgetId()}
      */
+    @Length(2048)
     IPrimitive<String> encodedLayout();
 
 }

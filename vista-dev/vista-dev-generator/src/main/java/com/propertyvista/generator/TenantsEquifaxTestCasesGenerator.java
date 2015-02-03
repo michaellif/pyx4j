@@ -67,8 +67,8 @@ public class TenantsEquifaxTestCasesGenerator {
             mainTenant.leaseParticipant().customer().person().name().firstName().set(tenantInfo.firstName());
             mainTenant.leaseParticipant().customer().person().name().lastName().set(tenantInfo.lastName());
             mainTenant.leaseParticipant().customer().person().birthDate().set(tenantInfo.birthDate());
+            mainTenant.leaseParticipant().customer().personScreening().set(screeningGenerator.createScreening(lease, mainTenant.leaseParticipant()));
 
-            mainTenant.leaseParticipant().customer().personScreening().set(screeningGenerator.createScreening());
             PriorAddress currentAddress = mainTenant.leaseParticipant().customer().personScreening().version().currentAddress();
             currentAddress.streetNumber().set(tenantInfo.streetNumber());
             currentAddress.streetName().set(tenantInfo.streetName());

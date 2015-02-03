@@ -30,6 +30,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.person.Name;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
@@ -42,22 +43,23 @@ public class CustomerCreditCheckForm extends CrmEntityForm<CustomerCreditCheckDT
 
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().screening().screene().person().name(), new CEntityHyperlink<Name>(new Command() {
+        formPanel.append(Location.Left, proto().screene().customer().person().name(), new CEntityHyperlink<Name>(new Command() {
             @Override
             public void execute() {
                 CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(LeaseApplicationDTO.class);
                 place.formListerPlace().queryArg(
                         EntityFactory.getEntityPrototype(LeaseApplicationDTO.class).leaseParticipants().$().customer().customerId().getPath().toString(),
-                        getValue().screening().screene().customerId().getValue().toString());
+                        getValue().screene().customer().customerId().getValue().toString());
                 AppSite.getPlaceController().goTo(place);
             }
         })).decorate().customLabel(i18n.tr("Customer"));
 
         formPanel.h1(i18n.tr("Details"));
-        formPanel.append(Location.Left, proto().creditCheckDate()).decorate();
-        formPanel.append(Location.Left, proto().createdBy(), new CEntityCrudHyperlink<Employee>(new CrmSiteMap.Organization.Employee())).decorate();
+        formPanel.append(Location.Left, proto().building(), new CEntityCrudHyperlink<Building>(new CrmSiteMap.Properties.Building())).decorate();
         formPanel.append(Location.Left, proto().amountChecked()).decorate();
         formPanel.append(Location.Left, proto().transaction().status()).decorate();
+        formPanel.append(Location.Left, proto().creditCheckDate()).decorate();
+        formPanel.append(Location.Left, proto().createdBy(), new CEntityCrudHyperlink<Employee>(new CrmSiteMap.Organization.Employee())).decorate();
 
         formPanel.h1(i18n.tr("Results From Equifax"));
         formPanel.append(Location.Left, proto().riskCode()).decorate();
