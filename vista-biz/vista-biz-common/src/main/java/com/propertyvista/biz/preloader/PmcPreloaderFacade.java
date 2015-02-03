@@ -26,8 +26,6 @@ public interface PmcPreloaderFacade {
 
     public void preloadPmc(String pmc, ResetType type, Map<String, String[]> params, OutputHolder out);
 
-    public void preloadPmc(String pmc, ResetType type);
-
     public void preloadExistingPmc(Pmc pmc);
 
     public void resetAndPreloadPmc(String pmc);

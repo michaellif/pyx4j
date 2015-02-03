@@ -164,4 +164,10 @@ public class OperationsTriggerFacadeImpl implements OperationsTriggerFacade {
         }
     }
 
+    @Override
+    public void scheduleTrigger(Trigger trigger) {
+        JobUtils.createJobDetail(trigger);
+        JobUtils.updateSchedule(null, trigger);
+    }
+
 }

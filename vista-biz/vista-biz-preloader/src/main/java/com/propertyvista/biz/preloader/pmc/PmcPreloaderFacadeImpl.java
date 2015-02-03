@@ -44,11 +44,6 @@ public class PmcPreloaderFacadeImpl implements PmcPreloaderFacade {
     }
 
     @Override
-    public void preloadPmc(String pmcDnsName, ResetType type) {
-        PmcPreloaderManager.instance().preloadPmc(pmcDnsName, type, null, null);
-    }
-
-    @Override
     public void preloadExistingPmc(Pmc pmc) {
         PmcPreloaderManager.instance().preloadExistingPmc(pmc);
     }
