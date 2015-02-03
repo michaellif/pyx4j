@@ -49,8 +49,8 @@ public class EvictionStatusEditor<S extends EvictionStatus> extends EvictionStat
     protected FormPanel getPropertyPanel() {
         FormPanel formPanel = super.getPropertyPanel();
         // add status properties here
-        formPanel.append(Location.Left, proto().addedOn()).decorate();
-        formPanel.append(Location.Right, proto().addedBy(), new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class))).decorate();
+        formPanel.append(Location.Left, proto().addedBy(), new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class))).decorate();
+        formPanel.append(Location.Right, proto().addedOn()).decorate();
         formPanel.append(Location.Dual, proto().note()).decorate();
 
         return formPanel;
@@ -94,10 +94,10 @@ public class EvictionStatusEditor<S extends EvictionStatus> extends EvictionStat
                 protected IsWidget createContent() {
                     FormPanel formPanel = new FormPanel(this);
 
-                    formPanel.append(Location.Dual, proto().note()).decorate();
-                    formPanel.append(Location.Dual, proto().addedOn()).decorate();
-                    formPanel.append(Location.Dual, proto().addedBy(), new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class)))
+                    formPanel.append(Location.Left, proto().addedBy(), new CEntityCrudHyperlink<Employee>(AppPlaceEntityMapper.resolvePlace(Employee.class)))
                             .decorate();
+                    formPanel.append(Location.Right, proto().addedOn()).decorate();
+                    formPanel.append(Location.Dual, proto().note()).decorate();
 
                     formPanel.h1(i18n.tr("Attachments"));
                     formPanel.append(Location.Dual, proto().attachments(), new UploadableEvictionDocumentFolder(canUploadDocuments));
@@ -133,9 +133,9 @@ public class EvictionStatusEditor<S extends EvictionStatus> extends EvictionStat
                 protected IsWidget createContent() {
                     FormPanel formPanel = new FormPanel(this);
 
-                    formPanel.append(Location.Dual, proto().title()).decorate();
+                    formPanel.append(Location.Left, proto().title()).decorate();
+                    formPanel.append(Location.Right, proto().addedOn()).decorate();
                     formPanel.append(Location.Dual, proto().note()).decorate();
-                    formPanel.append(Location.Dual, proto().addedOn()).decorate();
                     formPanel.append(Location.Dual, proto().file(), new CFile( //
                             uploadable ? GWT.<UploadService<?, ?>> create(EvictionDocumentUploadService.class) : null, //
                             new VistaFileURLBuilder(EvictionDocument.class) //

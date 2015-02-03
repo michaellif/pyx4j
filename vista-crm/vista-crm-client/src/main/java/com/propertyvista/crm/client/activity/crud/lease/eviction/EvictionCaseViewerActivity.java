@@ -59,10 +59,41 @@ public class EvictionCaseViewerActivity extends CrmViewerActivity<EvictionCaseDT
         }, EntityFactory.createIdentityStub(EvictionCaseDTO.class, evictionCase.getPrimaryKey()));
     }
 
+    @Override
+    public void downloadAttachments(EvictionCaseDTO evictionCase) {
+        ((EvictionCaseCrudService) getService()).downloadAttachments(new DefaultAsyncCallback<String>() {
+            @Override
+            public void onSuccess(String deferredCorrelationId) {
+                DeferredProcessDialog d = new DeferredProcessDialog(i18n.tr("Document Download"), i18n.tr("Downloading Attachments..."), false) {
+                    @Override
+                    public void onDeferredSuccess(final DeferredProcessProgressResponse result) {
+                        super.onDeferredSuccess(result);
+                        downloadAttachments((DeferredReportProcessProgressResponse) result);
+                    }
+                };
+                d.show();
+                d.startProgress(deferredCorrelationId);
+            }
+        }, EntityFactory.createIdentityStub(EvictionCaseDTO.class, evictionCase.getPrimaryKey()));
+    }
+
     private void downloadErrorReport(DeferredReportProcessProgressResponse response) {
         if (response.getDownloadLink() != null) {
             final String downloadUrl = GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping + "/" + response.getDownloadLink();
             new LinkDialog(i18n.tr("Errors Occurred"), i18n.tr("Download Error Report"), downloadUrl) {
+                @Override
+                public boolean onClickCancel() {
+                    GWT.<DownloadableService> create(DownloadableService.class).cancelDownload(null, downloadUrl);
+                    return false;
+                }
+            }.show();
+        }
+    }
+
+    private void downloadAttachments(DeferredReportProcessProgressResponse response) {
+        if (response.getDownloadLink() != null) {
+            final String downloadUrl = GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping + "/" + response.getDownloadLink();
+            new LinkDialog(i18n.tr("Download Attachments"), i18n.tr("Click to Download"), downloadUrl) {
                 @Override
                 public boolean onClickCancel() {
                     GWT.<DownloadableService> create(DownloadableService.class).cancelDownload(null, downloadUrl);

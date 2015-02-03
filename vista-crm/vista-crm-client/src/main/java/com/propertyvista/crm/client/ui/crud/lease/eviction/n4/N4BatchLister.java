@@ -88,23 +88,25 @@ public class N4BatchLister extends SiteDataTablePanel<N4BatchDTO> {
             }
         }, new ActionPermission(ServiceN4.class)));
 
-        addUpperActionItem(new Button(i18n.tr("Issue with Summary"), new Command() {
-            @Override
-            public void execute() {
-                if (getDataTable().getSelectedItems().isEmpty()) {
-                    showEmptySelectionError();
+        if (false) { // TODO - implement
+            addUpperActionItem(new Button(i18n.tr("Issue with Summary"), new Command() {
+                @Override
+                public void execute() {
+                    if (getDataTable().getSelectedItems().isEmpty()) {
+                        showEmptySelectionError();
+                    }
                 }
-            }
-        }, new ActionPermission(ServiceN4.class)));
+            }, new ActionPermission(ServiceN4.class)));
 
-        addUpperActionItem(new Button(i18n.tr("Service by AutoMail"), new Command() {
-            @Override
-            public void execute() {
-                if (getDataTable().getSelectedItems().isEmpty()) {
-                    showEmptySelectionError();
+            addUpperActionItem(new Button(i18n.tr("Service by AutoMail"), new Command() {
+                @Override
+                public void execute() {
+                    if (getDataTable().getSelectedItems().isEmpty()) {
+                        showEmptySelectionError();
+                    }
                 }
-            }
-        }, new ActionPermission(ServiceN4.class)));
+            }, new ActionPermission(ServiceN4.class)));
+        }
 
         addUpperActionItem(new Button(i18n.tr("Print Forms"), new Command() {
             @Override
@@ -130,6 +132,8 @@ public class N4BatchLister extends SiteDataTablePanel<N4BatchDTO> {
                                 public void onDeferredSuccess(final DeferredProcessProgressResponse result) {
                                     super.onDeferredSuccess(result);
                                     downloadForms((DeferredReportProcessProgressResponse) result);
+                                    // clear selection
+                                    getDataTable().getDataTableModel().setAllRowsSelected(false);
                                 }
                             };
                             d.show();

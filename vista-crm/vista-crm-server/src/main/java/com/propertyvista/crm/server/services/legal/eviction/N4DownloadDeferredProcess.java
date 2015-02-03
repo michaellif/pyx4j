@@ -14,6 +14,7 @@ package com.propertyvista.crm.server.services.legal.eviction;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -110,23 +111,23 @@ public class N4DownloadDeferredProcess extends AbstractDeferredProcess {
                 String fileName = batch.building().propertyCode().getValue() + "-n4forms-" + System.currentTimeMillis() + ".pdf";
                 formFiles.put(fileName, bos);
             }
+            String fileName = null;
+            if (formFiles.size() == 1) {
+                // return single pdf
+                fileName = formFiles.keySet().iterator().next();
+                Downloadable generatedN4bundle = new Downloadable(formFiles.get(fileName).toByteArray(), "application/pdf");
+                generatedN4bundle.save(fileName);
+            } else if (formFiles.size() > 1) {
+                // return zip archive
+                fileName = createZipArchive(formFiles);
+            }
+            this.fileName = URLEncoder.encode(fileName, "UTF-8");
         } catch (Throwable caught) {
             log.error("got error while merging N4's", caught);
             error = caught;
         } finally {
             IOUtils.closeQuietly(bos);
             completed = true;
-            if (error == null) {
-                if (formFiles.size() == 1) {
-                    // return single pdf
-                    String fileName = formFiles.keySet().iterator().next();
-                    Downloadable generatedN4bundle = new Downloadable(formFiles.get(fileName).toByteArray(), "application/pdf");
-                    generatedN4bundle.save(this.fileName = fileName);
-                } else if (formFiles.size() > 1) {
-                    // return zip archive
-                    this.fileName = createZipArchive(formFiles);
-                }
-            }
         }
     }
 

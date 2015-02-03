@@ -45,10 +45,10 @@ public class EvictionCaseViewerViewImpl extends CrmViewerViewImplBase<EvictionCa
         }, new ActionPermission(ServiceN4.class)));
         setActionVisible(issueN4Action, false);
 
-        addAction(downloadN4Action = new SecureMenuItem(i18n.tr("Download Forms"), new Command() {
+        addAction(downloadN4Action = new SecureMenuItem(i18n.tr("Print Attachments"), new Command() {
             @Override
             public void execute() {
-                // TODO - implement
+                ((EvictionCaseViewerView.Presenter) getPresenter()).downloadAttachments(getForm().getValue());
             }
         }, new ActionPermission(ServiceN4.class)));
         setActionVisible(downloadN4Action, false);
