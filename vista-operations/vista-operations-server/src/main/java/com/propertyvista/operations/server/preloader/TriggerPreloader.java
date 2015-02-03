@@ -15,6 +15,7 @@ package com.propertyvista.operations.server.preloader;
 import java.util.EnumSet;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
@@ -78,9 +79,16 @@ public class TriggerPreloader extends AbstractDataPreloader {
         nightlySchedule.repeatType().setValue(ScheduleType.Daily);
         nightlySchedule.repeatEvery().setValue(1);
         nightlySchedule.time().setValue(java.sql.Time.valueOf(NIGHTLY_HOUR));
-        nightlySchedule.startsOn().setValue(new LogicalDate());
+        nightlySchedule.startsOn().setValue(getTomorrowDate());
 
         return nightlySchedule;
+    }
+
+    private static LogicalDate getTomorrowDate() {
+        LogicalDate startDate = new LogicalDate();
+        TimeUtils.addDays(startDate, 1);
+
+        return startDate;
     }
 
     @Override
