@@ -15,11 +15,14 @@ package com.propertyvista.operations.server.preloader;
 import java.util.EnumSet;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
+import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.operations.domain.scheduler.PmcProcessOptions;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.domain.scheduler.ScheduleType;
@@ -37,7 +40,7 @@ public class TriggerPreloader extends AbstractDataPreloader {
         for (PmcProcessType pmcProcessType : EnumSet.allOf(PmcProcessType.class)) {
             Trigger trigger = EntityFactory.create(Trigger.class);
 
-            trigger.scheduleSuspended().setValue(true);
+            trigger.scheduleSuspended().setValue(Boolean.TRUE);
             trigger.triggerType().setValue(pmcProcessType);
             trigger.name().setValue(pmcProcessType.getDescription());
 
@@ -49,7 +52,7 @@ public class TriggerPreloader extends AbstractDataPreloader {
 
             if (pmcProcessType.equals(PmcProcessType.resetDemoPMC)) {
                 if (ApplicationMode.isDemo()) {
-                    trigger.scheduleSuspended().setValue(false);
+                    trigger.scheduleSuspended().setValue(Boolean.FALSE);
                     trigger.schedules().add(createNightlySchedule());
                 } else {
                     continue;
@@ -57,9 +60,17 @@ public class TriggerPreloader extends AbstractDataPreloader {
             }
 
             Persistence.service().persist(trigger);
+
+            if (isTriggerScheduleActive(trigger)) {
+                ServerSideFactory.create(OperationsTriggerFacade.class).scheduleTrigger(trigger);
+            }
         }
 
         return null;
+    }
+
+    private static boolean isTriggerScheduleActive(Trigger trigger) {
+        return !trigger.scheduleSuspended().getValue().booleanValue();
     }
 
     private TriggerSchedule createNightlySchedule() {
@@ -68,9 +79,16 @@ public class TriggerPreloader extends AbstractDataPreloader {
         nightlySchedule.repeatType().setValue(ScheduleType.Daily);
         nightlySchedule.repeatEvery().setValue(1);
         nightlySchedule.time().setValue(java.sql.Time.valueOf(NIGHTLY_HOUR));
-        nightlySchedule.startsOn().setValue(new LogicalDate());
+        nightlySchedule.startsOn().setValue(getTomorrowDate());
 
         return nightlySchedule;
+    }
+
+    private static LogicalDate getTomorrowDate() {
+        LogicalDate startDate = new LogicalDate();
+        TimeUtils.addDays(startDate, 1);
+
+        return startDate;
     }
 
     @Override

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -83,8 +83,7 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceDtoImpl<Trigger, 
     @Override
     protected void create(Trigger bo, TriggerDTO to) {
         super.create(bo, to);
-        JobUtils.createJobDetail(bo);
-        JobUtils.updateSchedule(null, bo);
+        ServerSideFactory.create(OperationsTriggerFacade.class).scheduleTrigger(bo);
     }
 
     @Override
