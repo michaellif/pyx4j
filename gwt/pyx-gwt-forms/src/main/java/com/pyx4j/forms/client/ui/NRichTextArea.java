@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.widgets.client.richtext.RichTextEditor;
 import com.pyx4j.widgets.client.richtext.RichTextImageProvider;
+import com.pyx4j.widgets.client.richtext.RichTextViewer;
 
 public class NRichTextArea extends NValueBoxBase<String, RichTextEditor, CRichTextArea> {
 
@@ -50,14 +51,7 @@ public class NRichTextArea extends NValueBoxBase<String, RichTextEditor, CRichTe
 
     @Override
     protected HTML createViewer() {
-        HTML viewer = super.createViewer();
-        //TODO move to styles and make it tidy
-        viewer.getElement().getStyle().setProperty("overflow", "auto");
-        viewer.getElement().getStyle().setProperty("height", "100%");
-        viewer.getElement().getStyle().setProperty("maxHeight", "15em");
-        viewer.getElement().getStyle().setProperty("background", "#fafafa");
-        viewer.getElement().getStyle().setProperty("padding", "2px");
-        return viewer;
+        return new RichTextViewer();
     }
 
     public void scrollToBottom() {

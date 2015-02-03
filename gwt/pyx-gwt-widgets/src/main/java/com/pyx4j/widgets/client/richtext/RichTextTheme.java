@@ -8,13 +8,15 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
-public class RichTextEditorTheme extends Theme {
+public class RichTextTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        ReachTextEditor, ReachTextArea, RteToolbar, RteToolbarButton, RteToolbarButtonNoToggle, RteCheckBox
+        ReachTextEditor, ReachTextArea, RteToolbar, RteToolbarButton, RteToolbarButtonNoToggle, RteCheckBox,
+
+        ReachTextViewer
     }
 
-    public RichTextEditorTheme() {
+    public RichTextTheme() {
         initStyles();
     }
 
@@ -76,5 +78,15 @@ public class RichTextEditorTheme extends Theme {
         style.addProperty("padding", "5px 1px");
         style.addProperty("float", "right");
         addStyle(style);
+
+        style = new Style(".", StyleName.ReachTextViewer);
+        style.addProperty("overflow", "auto");
+        style.addProperty("height", "100%");
+        style.addProperty("max-height", "15em");
+        style.addProperty("line-height", "2.6em");
+        style.addProperty("background", ThemeColor.foreground, 0.1);
+        style.addProperty("padding", "2px");
+        addStyle(style);
+
     }
 }
