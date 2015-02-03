@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.wizard.IPrimeWizardView;
-import com.pyx4j.site.client.backoffice.ui.prime.wizard.WizardForm;
+import com.pyx4j.site.client.backoffice.ui.prime.wizard.PrimeWizardForm;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -46,7 +46,7 @@ import com.propertyvista.domain.pmc.info.BusinessInformation.CompanyType;
 import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
 import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO.PropertyAccountInfo;
 
-public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
+public class OnlinePaymentWizardForm extends PrimeWizardForm<OnlinePaymentSetupDTO> {
 
     private static final I18n i18n = I18n.get(OnlinePaymentWizardForm.class);
 

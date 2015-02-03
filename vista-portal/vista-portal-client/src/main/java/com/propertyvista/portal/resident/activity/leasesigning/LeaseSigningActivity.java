@@ -48,15 +48,13 @@ public class LeaseSigningActivity extends AbstractEditorActivity<LeaseAgreementD
 
     @Override
     public void submit() {
-        if (!getView().isDirty()) {
-            getService().create(new DefaultAsyncCallback<Key>() {
-                @Override
-                public void onSuccess(Key result) {
-                    getView().reset();
-                    ReferenceDataManager.invalidate(LeaseAgreementDTO.class);
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizardConfirmation());
-                }
-            }, getView().getValue());
-        }
+        getService().create(new DefaultAsyncCallback<Key>() {
+            @Override
+            public void onSuccess(Key result) {
+                getView().reset();
+                ReferenceDataManager.invalidate(LeaseAgreementDTO.class);
+                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizardConfirmation());
+            }
+        }, getView().getValue());
     }
 }

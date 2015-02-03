@@ -17,6 +17,8 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.rpc.DocCreationService;
+import com.pyx4j.essentials.rpc.download.DownloadableService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.annotations.AccessControl;
 
@@ -27,7 +29,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.dto.BuildingDTO;
 
-public interface BuildingCrudService extends AbstractCrudService<BuildingDTO> {
+public interface BuildingCrudService extends AbstractCrudService<BuildingDTO>, DocCreationService, DownloadableService {
 
     void retrieveMerchantAccountStatus(AsyncCallback<MerchantAccount> callback, MerchantAccount merchantAccountId);
 

@@ -22,8 +22,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.essentials.server.docs.sheet.AbstractDownloadableCrudServiceDtoImpl;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
@@ -58,7 +58,7 @@ import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building, BuildingDTO> implements BuildingCrudService {
+public class BuildingCrudServiceImpl extends AbstractDownloadableCrudServiceDtoImpl<Building, BuildingDTO> implements BuildingCrudService {
 
     private final static I18n i18n = I18n.get(BuildingCrudServiceImpl.class);
 

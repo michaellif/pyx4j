@@ -19,6 +19,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.rpc.DocCreationService;
+import com.pyx4j.essentials.rpc.download.DownloadableService;
 
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -27,7 +29,7 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public interface PaymentRecordCrudService extends AbstractCrudService<PaymentRecordDTO> {
+public interface PaymentRecordCrudService extends AbstractCrudService<PaymentRecordDTO>, DocCreationService, DownloadableService {
 
     @Transient
     public interface PaymentInitializationData extends InitializationData {

@@ -15,44 +15,47 @@ package com.propertyvista.server.jobs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.preloader.PmcPreloaderFacade;
+import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 
 public class ResetDemoPmcProcess implements PmcProcess {
 
     private static final Logger log = LoggerFactory.getLogger(ResetDemoPmcProcess.class);
 
+    private static final DemoPmc[] PMCS_TO_RESET = { DemoPmc.vista, DemoPmc.redridge, DemoPmc.rockville, DemoPmc.star, DemoPmc.gondor, DemoPmc.metcap,
+            DemoPmc.timbercreek };
+
     @Override
     public boolean start(PmcProcessContext context) {
-        log.info("Reset demo PMC Job started");
+
+        for (DemoPmc pmcToReset : PMCS_TO_RESET) {
+            try {
+                ServerSideFactory.create(PmcPreloaderFacade.class).resetAndPreloadPmc(pmcToReset.toString());
+                context.getExecutionMonitor().addProcessedEvent("PMC '" + pmcToReset.toString() + "' Reseted and Preloaded");
+            } catch (Exception e) {
+                context.getExecutionMonitor().addErredEvent("Error reseting and preload PMC '" + pmcToReset.toString() + "'", e);
+            }
+        }
+
         return true;
     }
 
     @Override
     public boolean allowExecution(PmcVistaFeatures features) {
-        if (!ApplicationMode.isDemo()) {
-            log.info("No DEMO environment. PMCs reset job is not allowed.");
-        }
-
-        return ApplicationMode.isDemo();
-    }
-
-    @Override
-    public void executePmcJob(PmcProcessContext context) {
-        PmcPreloaderFacade pmcPreloader = null; //new PmcPreloaderFacadeFactory().getFacade();
-        log.info("Execution of Reset demo PMC Job began...");
-
-        // TODO reset & preload PMCs based on TriggerPmcs by invoking PmcPreloaderFacade
-//            pmcPreloader.resetPmcTables(pmc.name());
-//            pmcPreloader.resetAndPreload(pmc.name());
-
+        return false;
     }
 
     @Override
     public void complete(PmcProcessContext context) {
-        log.info("Reset demo PMC Job completed");
+
+    }
+
+    @Override
+    public void executePmcJob(PmcProcessContext context) {
+
     }
 
 }

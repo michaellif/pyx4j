@@ -28,8 +28,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.essentials.server.docs.sheet.AbstractDownloadableCrudServiceDtoImpl;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
@@ -53,7 +53,7 @@ import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class PaymentRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRecord, PaymentRecordDTO> implements PaymentRecordCrudService {
+public class PaymentRecordCrudServiceImpl extends AbstractDownloadableCrudServiceDtoImpl<PaymentRecord, PaymentRecordDTO> implements PaymentRecordCrudService {
 
     private static final I18n i18n = I18n.get(PaymentRecordCrudServiceImpl.class);
 

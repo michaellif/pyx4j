@@ -51,10 +51,10 @@ public class LeaseSigningForm extends CPortalEntityForm<LeaseAgreementDTO> {
             @Override
             public void execute() {
                 setVisitedRecursive();
-                if (!isValid()) {
-                    MessageDialog.error(i18n.tr("Error"), i18n.tr("There has been an error. Please check your data and try again."));
-                } else {
+                if (isValid()) {
                     ((LeaseSigningPresenter) getView().getPresenter()).submit();
+                } else {
+                    MessageDialog.error(i18n.tr("Error"), i18n.tr("There has been an error. Please check your data and try again."));
                 }
             }
         });

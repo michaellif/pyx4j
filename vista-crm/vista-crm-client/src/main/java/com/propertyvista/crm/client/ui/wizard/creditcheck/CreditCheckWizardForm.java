@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.wizard.IPrimeWizardView;
-import com.pyx4j.site.client.backoffice.ui.prime.wizard.WizardForm;
+import com.pyx4j.site.client.backoffice.ui.prime.wizard.PrimeWizardForm;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -38,7 +38,7 @@ import com.propertyvista.domain.pmc.CreditCheckReportType;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.dto.vista2pmc.CreditCheckSetupDTO;
 
-public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
+public class CreditCheckWizardForm extends PrimeWizardForm<CreditCheckSetupDTO> {
 
     private static final I18n i18n = I18n.get(CreditCheckWizardForm.class);
 
