@@ -35,9 +35,9 @@ public class CustomerCreditCheckLister extends SiteDataTablePanel<CustomerCredit
 
         setColumnDescriptors( //
                 new ColumnDescriptor.Builder(proto().building()).filterAlwaysShown(true).build(), //
-                new ColumnDescriptor.Builder(proto().screening().screene().person().name()).columnTitle(i18n.tr("Tenant")).searchable(false).build(), //
-                new ColumnDescriptor.Builder(proto().screening().screene().person().name().firstName()).searchableOnly().filterAlwaysShown(true).build(), //
-                new ColumnDescriptor.Builder(proto().screening().screene().person().name().lastName()).searchableOnly().filterAlwaysShown(true).build(), //
+                new ColumnDescriptor.Builder(proto().screene().customer().person().name()).columnTitle(i18n.tr("Tenant")).searchable(false).build(), //
+                new ColumnDescriptor.Builder(proto().screene().customer().person().name().firstName()).searchableOnly().filterAlwaysShown(true).build(), //
+                new ColumnDescriptor.Builder(proto().screene().customer().person().name().lastName()).searchableOnly().filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().creditCheckDate()).build(), //
                 new ColumnDescriptor.Builder(proto().createdBy().name()).columnTitle(i18n.tr("Created By")).build(), //
                 new ColumnDescriptor.Builder(proto().createdBy().name().firstName()).searchableOnly().build(), //
@@ -53,6 +53,6 @@ public class CustomerCreditCheckLister extends SiteDataTablePanel<CustomerCredit
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().screening().screene().person().name(), false));
+        return Arrays.asList(new Sort(proto().screene().customer().person().name(), false));
     }
 }

@@ -34,8 +34,7 @@ public class CustomerCreditCheckCrudServiceImpl extends AbstractCrudServiceDtoIm
 
     @Override
     protected void enhanceRetrieved(CustomerCreditCheck bo, CustomerCreditCheckDTO to, RetrieveTarget retrieveTarget) {
-        Persistence.service().retrieveMember(to.screening());
-        Persistence.service().retrieveMember(to.screening().screene());
+        Persistence.service().retrieveMember(to.screene(), AttachLevel.Attached);
         Persistence.service().retrieveMember(to.building(), AttachLevel.ToStringMembers);
 
         if (!to.transactionId().isNull()) {

@@ -43,13 +43,13 @@ public class CustomerCreditCheckForm extends CrmEntityForm<CustomerCreditCheckDT
 
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().screening().screene().person().name(), new CEntityHyperlink<Name>(new Command() {
+        formPanel.append(Location.Left, proto().screene().customer().person().name(), new CEntityHyperlink<Name>(new Command() {
             @Override
             public void execute() {
                 CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(LeaseApplicationDTO.class);
                 place.formListerPlace().queryArg(
                         EntityFactory.getEntityPrototype(LeaseApplicationDTO.class).leaseParticipants().$().customer().customerId().getPath().toString(),
-                        getValue().screening().screene().customerId().getValue().toString());
+                        getValue().screene().customer().customerId().getValue().toString());
                 AppSite.getPlaceController().goTo(place);
             }
         })).decorate().customLabel(i18n.tr("Customer"));
