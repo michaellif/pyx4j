@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanelTheme;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.widgets.client.datepicker.DatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DialogTheme;
-import com.pyx4j.widgets.client.richtext.RichTextEditorTheme;
+import com.pyx4j.widgets.client.richtext.RichTextTheme;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 import com.pyx4j.widgets.client.tabpanel.TabTheme;
 
@@ -83,7 +83,7 @@ public class OnboardingTheme extends Theme {
                 return ThemeColor.formBackground;
             }
         });
-        addTheme(new RichTextEditorTheme());
+        addTheme(new RichTextTheme());
         addTheme(new DatePickerTheme());
         addTheme(new PaneTheme());
         addTheme(new DataTableTheme());
