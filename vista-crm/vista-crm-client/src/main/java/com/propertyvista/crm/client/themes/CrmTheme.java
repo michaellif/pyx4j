@@ -30,7 +30,7 @@ import com.pyx4j.site.client.ui.sidemenu.SideMenuTheme;
 import com.pyx4j.widgets.client.dashboard.DashboardTheme;
 import com.pyx4j.widgets.client.datepicker.DatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DialogTheme;
-import com.pyx4j.widgets.client.richtext.RichTextEditorTheme;
+import com.pyx4j.widgets.client.richtext.RichTextTheme;
 import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 import com.pyx4j.widgets.client.tabpanel.TabTheme;
@@ -124,7 +124,7 @@ public class CrmTheme extends VistaTheme {
                 return ThemeColor.foreground;
             }
         });
-        addTheme(new RichTextEditorTheme());
+        addTheme(new RichTextTheme());
         addTheme(new DatePickerTheme());
         addTheme(new PaneTheme());
         addTheme(new DataTableTheme());
