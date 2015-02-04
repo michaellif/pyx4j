@@ -239,6 +239,9 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
     }
 
     public Cell createCell() {
+        if (this.curentRow == null) {
+            newRow();
+        }
         return this.curentRow.createCell(this.cellIdx++);
     }
 
@@ -428,7 +431,7 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
     }
 
     /*
-     * 
+     *
      * @see http://jakarta.apache.org/poi/hssf/quick-guide.html#Outlining
      */
     public void groupRowStart(boolean collapsed) {
