@@ -130,6 +130,17 @@ class YardiResidentTransactionsStubProxy extends YardiAbstractStubProxy implemen
     public ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyListCode, LogicalDate date) throws YardiServiceException,
             RemoteException {
         try {
+            setMessageErrorHandler(new MessageErrorHandler() {
+                @Override
+                public boolean handle(Messages messages) throws YardiServiceException {
+                    if (messages.hasErrorMessage(YardiHandledErrorMessages.errorMessage_TenantNotFound)) {
+                        return true;
+                    } else if (messages.hasErrorMessage(YardiHandledErrorMessages.errorMessage_NoAccess)) {
+                        throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
+                    }
+                    return false;
+                }
+            });
             return getStub(yc).getAllLeaseCharges(yc, propertyListCode, date);
         } catch (YardiResponseException e) {
             validateResponseXml(e.getResponse());
@@ -141,6 +152,17 @@ class YardiResidentTransactionsStubProxy extends YardiAbstractStubProxy implemen
     public ResidentTransactions getLeaseChargesForTenant(PmcYardiCredential yc, String propertyId, String tenantId, LogicalDate date)
             throws YardiServiceException, RemoteException {
         try {
+            setMessageErrorHandler(new MessageErrorHandler() {
+                @Override
+                public boolean handle(Messages messages) throws YardiServiceException {
+                    if (messages.hasErrorMessage(YardiHandledErrorMessages.errorMessage_TenantNotFound)) {
+                        return true;
+                    } else if (messages.hasErrorMessage(YardiHandledErrorMessages.errorMessage_NoAccess)) {
+                        throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
+                    }
+                    return false;
+                }
+            });
             return getStub(yc).getLeaseChargesForTenant(yc, propertyId, tenantId, date);
         } catch (YardiResponseException e) {
             validateResponseXml(e.getResponse());

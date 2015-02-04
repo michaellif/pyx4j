@@ -124,6 +124,8 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
         }
         if (!property.getRTCustomer().isEmpty()) {
             rt.getProperty().add(property);
+        } else {
+            Messages.throwYardiResponseException(YardiHandledErrorMessages.errorMessage_TenantNotFound);
         }
         return rt;
     }
@@ -147,6 +149,8 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
         if (!rtCustomer.getRTServiceTransactions().getTransactions().isEmpty()) {
             property.getRTCustomer().add(rtCustomer);
             rt.getProperty().add(property);
+        } else {
+            Messages.throwYardiResponseException(YardiHandledErrorMessages.errorMessage_TenantNotFound);
         }
         return rt;
     }

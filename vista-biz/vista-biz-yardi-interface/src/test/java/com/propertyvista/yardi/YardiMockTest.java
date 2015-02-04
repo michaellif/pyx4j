@@ -251,7 +251,7 @@ public class YardiMockTest extends YardiTestBase {
 
         // 3. Test assertion
         // -----------------
-        assertEquals("Has LeaseCharges", 0, transactions.getProperty().size());
+        assertNull("Has LeaseCharges", transactions);
 
         setSysDate("01-Jun-2012");
 
@@ -263,7 +263,32 @@ public class YardiMockTest extends YardiTestBase {
 
         transactions = YardiStubFactory.create(YardiResidentTransactionsStub.class).getLeaseChargesForTenant(getYardiCredential(BuildingID), BuildingID,
                 TenantID, null);
-        assertEquals("Has LeaseCharges", 0, transactions.getProperty().size());
+        assertNull("Has LeaseCharges", transactions);
+    }
+
+    public void testGetAllLeaseCharges() throws Exception {
+        // 1. Test setup
+        // -------------
+        leaseSetup();
+
+        // 2. Test execution
+        // -----------------
+        ResidentTransactions transactions = YardiStubFactory.create(YardiResidentTransactionsStub.class).getAllLeaseCharges(getYardiCredential(BuildingID),
+                BuildingID, null);
+
+        // 3. Test assertion
+        // -----------------
+        assertNull("Has LeaseCharges", transactions);
+
+        setSysDate("01-Jun-2012");
+
+        transactions = YardiStubFactory.create(YardiResidentTransactionsStub.class).getAllLeaseCharges(getYardiCredential(BuildingID), BuildingID, null);
+        assertEquals("Has LeaseCharges", 3, transactions.getProperty().get(0).getRTCustomer().get(0).getRTServiceTransactions().getTransactions().size());
+
+        setSysDate("01-Aug-2014");
+
+        transactions = YardiStubFactory.create(YardiResidentTransactionsStub.class).getAllLeaseCharges(getYardiCredential(BuildingID), BuildingID, null);
+        assertNull("Has LeaseCharges", transactions);
     }
 
     public void testRentableItemsPreload() throws Exception {
