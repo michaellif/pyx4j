@@ -133,6 +133,12 @@ public class Persistence {
         return secureQuery(criteria, AttachLevel.Attached);
     }
 
+    public static <T extends IEntity> int secureCount(EntityQueryCriteria<T> criteria) {
+        SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
+        applyDatasetAccessRule(criteria);
+        return service().count(criteria);
+    }
+
     public static <T extends IEntity> T secureRetrieve(EntityQueryCriteria<T> criteria) {
         SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
         applyDatasetAccessRule(criteria);
@@ -274,7 +280,7 @@ public class Persistence {
 
     /**
      * Update only members set in entityTemplate.
-     * 
+     *
      * @param primaryKey
      * @param entityTemplate
      * @return
