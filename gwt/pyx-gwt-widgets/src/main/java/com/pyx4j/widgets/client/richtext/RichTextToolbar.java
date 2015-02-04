@@ -160,7 +160,7 @@ public class RichTextToolbar extends FlowPanel {
         topToolbar.add(topButtonBar);
 
         textHtmlSwitch = new CheckBox(i18n.tr("HTML"));
-        textHtmlSwitch.addStyleName(RichTextEditorTheme.StyleName.RteCheckBox.name());
+        textHtmlSwitch.addStyleName(RichTextTheme.StyleName.RteCheckBox.name());
         textHtmlSwitch.setTitle(i18n.tr("Toggle HTML or Text mode"));
         textHtmlSwitch.addClickHandler(new ClickHandler() {
             @Override
@@ -214,7 +214,7 @@ public class RichTextToolbar extends FlowPanel {
                 insertToolbar.setVisible(insertButton.isActive());
             }
         }, true));
-        insertButton.addStyleName(RichTextEditorTheme.StyleName.RteToolbarButton.name());
+        insertButton.addStyleName(RichTextTheme.StyleName.RteToolbarButton.name());
 
         Toolbar linkPanel = new Toolbar();
         linkPanel.addItem(createButton(images.createLink(), i18n.tr("Create Link"), new Command() {
@@ -321,7 +321,7 @@ public class RichTextToolbar extends FlowPanel {
                 fontToolbar.setVisible(fontButton.isActive());
             }
         }, true));
-        fontButton.addStyleName(RichTextEditorTheme.StyleName.RteToolbarButton.name());
+        fontButton.addStyleName(RichTextTheme.StyleName.RteToolbarButton.name());
         fontToolbar.add(foreColors = createColorList(i18n.tr("Font Color"), new ChangeHandler() {
 
             @Override
@@ -362,7 +362,7 @@ public class RichTextToolbar extends FlowPanel {
                 formatToolbar.setVisible(formatButton.isActive());
             }
         }, true));
-        formatButton.addStyleName(RichTextEditorTheme.StyleName.RteToolbarButton.name());
+        formatButton.addStyleName(RichTextTheme.StyleName.RteToolbarButton.name());
 
         Toolbar formatPanel = new Toolbar();
 
@@ -570,7 +570,7 @@ public class RichTextToolbar extends FlowPanel {
             }
         };
 
-        button.addStyleName(toggleable ? RichTextEditorTheme.StyleName.RteToolbarButton.name() : RichTextEditorTheme.StyleName.RteToolbarButtonNoToggle.name());
+        button.addStyleName(toggleable ? RichTextTheme.StyleName.RteToolbarButton.name() : RichTextTheme.StyleName.RteToolbarButtonNoToggle.name());
         button.setTitle(tip);
 
         return button;

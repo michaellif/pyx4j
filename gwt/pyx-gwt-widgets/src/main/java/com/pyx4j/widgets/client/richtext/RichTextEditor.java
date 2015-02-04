@@ -57,7 +57,7 @@ public class RichTextEditor extends FlowPanel implements IValueBoxWidget<String>
     public RichTextEditor() {
         super();
 
-        setStyleName(RichTextEditorTheme.StyleName.ReachTextEditor.name());
+        setStyleName(RichTextTheme.StyleName.ReachTextEditor.name());
 
         richTextArea = new RichTextArea();
         richTextArea.setWidth("100%");
