@@ -307,6 +307,11 @@ BEGIN
         
         ALTER TABLE crm_user_preferences OWNER TO vista;
         
+        -- customer_credit_check
+        
+        ALTER TABLE customer_credit_check   ADD COLUMN building BIGINT,
+                                            ADD COLUMN screene BIGINT,
+                                            ADD COLUMN screene_discriminator VARCHAR(50);
         
         -- customer_delivery_preferences
         
@@ -359,6 +364,10 @@ BEGIN
         ALTER TABLE customer_screening_v RENAME COLUMN update_date TO updated;
         ALTER TABLE customer_screening_v ALTER COLUMN updated TYPE TIMESTAMP;
         
+        
+        -- dashboard_metadata
+        
+        ALTER TABLE dashboard_metadata ALTER COLUMN encoded_layout TYPE VARCHAR(2048);
         
         -- email_template
         
@@ -1110,6 +1119,10 @@ BEGIN
             REFERENCES crm_user_preferences(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE crm_user_preferences ADD CONSTRAINT crm_user_preferences_crm_user_fk FOREIGN KEY(crm_user) 
             REFERENCES crm_user(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE customer_credit_check ADD CONSTRAINT customer_credit_check_building_fk FOREIGN KEY(building) 
+            REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE customer_credit_check ADD CONSTRAINT customer_credit_check_screene_fk FOREIGN KEY(screene) 
+            REFERENCES lease_participant(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE customer_delivery_preferences ADD CONSTRAINT customer_delivery_preferences_user_preferences_fk FOREIGN KEY(user_preferences) 
             REFERENCES customer_preferences(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE customer_screening_asset ADD CONSTRAINT customer_screening_asset_owner_fk FOREIGN KEY(owner) 
