@@ -22,6 +22,8 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.contact.InternationalAddress;
@@ -29,8 +31,14 @@ import com.propertyvista.domain.contact.InternationalAddress;
 @AbstractEntity
 public interface N4Data extends IEntity {
 
+    @I18n
     public enum TerminationDateOption {
         Calculate, LeaveBlank;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
     }
 
     @NotNull

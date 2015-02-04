@@ -449,6 +449,20 @@ BEGIN
         ALTER TABLE eviction_case_status OWNER TO vista;
         
         
+        -- eviction_case_status$generated_forms
+        
+        CREATE TABLE eviction_case_status$generated_forms
+        (
+            id                              BIGINT              NOT NULL,
+            owner                           BIGINT,
+            value                           BIGINT,
+            seq                             INT,
+                CONSTRAINT eviction_case_status$generated_forms_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE eviction_case_status$generated_forms OWNER TO vista;
+        
+        
         -- eviction_document
         
         CREATE TABLE eviction_document
@@ -461,10 +475,11 @@ BEGIN
             file_content_mime_type      VARCHAR(500),
             file_blob_key               BIGINT,
             lease                       BIGINT,
-            record                      BIGINT                  NOT NULL,
+            record                      BIGINT,
             added_on                    TIMESTAMP,
             title                       VARCHAR(500),
             note                        VARCHAR(500),
+            print_order                 INTEGER,
                 CONSTRAINT eviction_document_pk PRIMARY KEY(id)
         );
         
@@ -531,20 +546,6 @@ BEGIN
         );
         
         ALTER TABLE eviction_status_record OWNER TO vista;
-        
-        
-        -- eviction_status_record$attachments
-        
-        CREATE TABLE eviction_status_record$attachments
-        (
-            id                              BIGINT              NOT NULL,
-            owner                           BIGINT,
-            value                           BIGINT,
-            seq                             INTEGER,
-                CONSTRAINT eviction_status_record$attachments_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE eviction_status_record$attachments OWNER TO vista;
         
         
         -- identification_document_folder/identification_document
@@ -660,27 +661,18 @@ BEGIN
         ALTER TABLE maintenance_request_window OWNER TO vista;
         
         
+        -- maintenance_request_schedule
+        
+        ALTER TABLE maintenance_request_schedule RENAME TO maintenance_request_work_order;
+        
         -- maintenance_request_work_order
         
-        CREATE TABLE maintenance_request_work_order
-        (
-            id                              BIGINT              NOT NULL,
-            request                         BIGINT              NOT NULL,
-            created                         TIMESTAMP,
-            updated                         TIMESTAMP,
-            scheduled_date                  DATE,
-            scheduled_time_time_from        TIME,
-            scheduled_time_time_to          TIME,
-            work_description                VARCHAR(500),
-            progress_note                   VARCHAR(500),
-            is_emergency_work               BOOLEAN,
-            notice_of_entry_text            VARCHAR(10000),
-            notice_of_entry_message_date    VARCHAR(500),
-            notice_of_entry_message_id      VARCHAR(500),
-                CONSTRAINT maintenance_request_work_order_pk PRIMARY KEY(id)
-        );
+        ALTER TABLE maintenance_request_work_order RENAME COLUMN scheduled_time_from TO scheduled_time_time_from;
+        ALTER TABLE maintenance_request_work_order RENAME COLUMN scheduled_time_to TO scheduled_time_time_to;
         
-        ALTER TABLE maintenance_request_work_order OWNER TO vista;
+        ALTER TABLE maintenance_request_work_order  ADD COLUMN created TIMESTAMP,
+                                                    ADD COLUMN updated TIMESTAMP,
+                                                    ADD COLUMN is_emergency_work BOOLEAN;
         
         
         -- n4_batch
@@ -701,10 +693,12 @@ BEGIN
             company_address_province        VARCHAR(500),
             company_address_country         VARCHAR(50),
             company_address_postal_code     VARCHAR(500),
+            use_agent_contact_info_n4       BOOLEAN,
             phone_number                    VARCHAR(500),
             phone_number_cs                 VARCHAR(500),
             fax_number                      VARCHAR(500),
             email_address                   VARCHAR(500),
+            use_agent_contact_info_cs       BOOLEAN,
             is_landlord                     BOOLEAN,
             signature_date                  DATE,
             servicing_agent                 BIGINT,
@@ -712,6 +706,7 @@ BEGIN
             name                            VARCHAR(500),
             created                         TIMESTAMP,
             termination_date_option         VARCHAR(50),
+            n4policy                        BIGINT,
                 CONSTRAINT n4_batch_pk PRIMARY KEY(id)
         );
         
@@ -765,9 +760,11 @@ BEGIN
             company_address_province        VARCHAR(500),
             company_address_country         VARCHAR(50),
             company_address_postal_code     VARCHAR(500),
+            use_agent_contact_info_n4       BOOLEAN,
             phone_number                    VARCHAR(500),
             fax_number                      VARCHAR(500),
             email_address                   VARCHAR(500),
+            use_agent_contact_info_cs       BOOLEAN,
             phone_number_cs                 VARCHAR(500),
             is_landlord                     BOOLEAN,
             signature_date                  DATE,
@@ -992,6 +989,14 @@ BEGIN
                 
         PERFORM * FROM _dba_.migrate_legal_questions(v_schema_name);
         
+        -- permission_to_enter_note
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.permission_to_enter_note AS p '
+                ||'SET      locale = l.lang '
+                ||'FROM     '||v_schema_name||'.available_locale l '
+                ||'WHERE    p.locale_old = l.id ';
+                
+        
         /**
         ***     ==========================================================================================================
         ***
@@ -1053,7 +1058,7 @@ BEGIN
         
         -- permission_to_enter_note
         
-        -- ALTER TABLE permission_to_enter_note DROP COLUMN locale_old;
+        ALTER TABLE permission_to_enter_note DROP COLUMN locale_old;
         
         -- proof_of_asset_document_folder
         
@@ -1075,6 +1080,7 @@ BEGIN
         
         ALTER TABLE customer_screening_asset ADD CONSTRAINT customer_screening_asset_pk PRIMARY KEY(id);
         ALTER TABLE identification_document ADD CONSTRAINT identification_document_pk PRIMARY KEY(id);
+        ALTER TABLE maintenance_request_work_order ADD CONSTRAINT maintenance_request_work_order_pk PRIMARY KEY(id);
 
         -- foreign keys
         
@@ -1134,6 +1140,10 @@ BEGIN
             REFERENCES n4_lease_data(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE eviction_case_status ADD CONSTRAINT eviction_case_status_originating_batch_fk FOREIGN KEY(originating_batch) 
             REFERENCES n4_batch(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE eviction_case_status$generated_forms ADD CONSTRAINT eviction_case_status$generated_forms_owner_fk FOREIGN KEY(owner) 
+            REFERENCES eviction_case_status(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE eviction_case_status$generated_forms ADD CONSTRAINT eviction_case_status$generated_forms_value_fk FOREIGN KEY(value) 
+            REFERENCES eviction_document(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE eviction_document ADD CONSTRAINT eviction_document_lease_fk FOREIGN KEY(lease) 
             REFERENCES lease(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE eviction_document ADD CONSTRAINT eviction_document_record_fk FOREIGN KEY(record) 
@@ -1144,10 +1154,6 @@ BEGIN
             REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE eviction_status_record ADD CONSTRAINT eviction_status_record_eviction_status_fk FOREIGN KEY(eviction_status) 
             REFERENCES eviction_case_status(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE eviction_status_record$attachments ADD CONSTRAINT eviction_status_record$attachments_owner_fk FOREIGN KEY(owner) 
-            REFERENCES eviction_status_record(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE eviction_status_record$attachments ADD CONSTRAINT eviction_status_record$attachments_value_fk FOREIGN KEY(value) 
-            REFERENCES eviction_document(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE identification_document ADD CONSTRAINT identification_document_id_type_fk FOREIGN KEY(id_type) 
             REFERENCES identification_document_type(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE identification_document ADD CONSTRAINT identification_document_owner_fk FOREIGN KEY(owner) 
@@ -1171,6 +1177,7 @@ BEGIN
         ALTER TABLE maintenance_request_work_order ADD CONSTRAINT maintenance_request_work_order_request_fk FOREIGN KEY(request) 
             REFERENCES maintenance_request(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE n4_batch ADD CONSTRAINT n4_batch_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE n4_batch ADD CONSTRAINT n4_batch_n4policy_fk FOREIGN KEY(n4policy) REFERENCES n4_policy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE n4_batch ADD CONSTRAINT n4_batch_servicing_agent_fk FOREIGN KEY(servicing_agent) REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE n4_batch ADD CONSTRAINT n4_batch_signing_agent_fk FOREIGN KEY(signing_agent) REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE n4_batch_item ADD CONSTRAINT n4_batch_item_batch_fk FOREIGN KEY(batch) 
@@ -1240,14 +1247,15 @@ BEGIN
         CREATE INDEX eviction_case_eviction_flow_policy_idx ON eviction_case USING btree (eviction_flow_policy);
         CREATE INDEX eviction_case_status_eviction_case_eviction_step_idx ON eviction_case_status USING btree (eviction_case, eviction_step);
         CREATE INDEX eviction_case_status_originating_batch_idx ON eviction_case_status USING btree (originating_batch);
+        CREATE INDEX eviction_case_status$generated_forms_owner_idx ON eviction_case_status$generated_forms USING btree (owner);
         CREATE INDEX eviction_flow_step_policy_name_idx ON eviction_flow_step USING btree (policy, name);
-        CREATE INDEX eviction_status_record$attachments_owner_idx ON eviction_status_record$attachments USING btree (owner);
         CREATE INDEX lease_application$approval_checklist_owner_idx ON lease_application$approval_checklist USING btree (owner);
         CREATE INDEX legal_questions_policy_item_policy_idx ON legal_questions_policy_item USING btree (policy);
         CREATE UNIQUE INDEX lease_billing_type_policy_item_policy_billing_period_idx ON lease_billing_type_policy_item USING btree (policy, billing_period);
         CREATE INDEX maintenance_request_work_order_request_idx ON maintenance_request_work_order USING btree (request);
         CREATE INDEX maintenance_request_policy$tenant_preferred_windows_owner_idx ON maintenance_request_policy$tenant_preferred_windows USING btree (owner);
         CREATE INDEX n4_batch_building_idx ON n4_batch USING btree (building);
+        CREATE INDEX n4_batch_n4policy_idx ON n4_batch USING btree (n4policy);
         CREATE INDEX n4_batch_item_batch_idx ON n4_batch_item USING btree (batch);
         CREATE INDEX n4_batch_item_lease_idx ON n4_batch_item USING btree (lease);
         CREATE INDEX n4_lease_arrears_lease_idx ON n4_lease_arrears USING btree (lease);

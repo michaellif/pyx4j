@@ -100,6 +100,8 @@ public class PmcProcessFactory {
             return new LeaseCompletionProcess();
         case leaseRenewal:
             return new LeaseRenewalProcess();
+        case n4AutoCancellation:
+            return new N4AutoCancellationProcess();
 
 // Global:
         case equifaxRetention:

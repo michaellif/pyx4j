@@ -43,9 +43,7 @@ import com.propertyvista.biz.legal.forms.n4.N4GenerationUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.crm.rpc.services.selections.SelectN4LeaseCandidateListService;
 import com.propertyvista.domain.eviction.EvictionCase;
-import com.propertyvista.domain.legal.n4.N4UnpaidCharge;
 import com.propertyvista.domain.policy.policies.EvictionFlowPolicy;
-import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep.EvictionStepType;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -135,7 +133,7 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
     @Override
     protected void enhanceListRetrieved(Lease bo, N4LeaseCandidateDTO to) {
         super.enhanceListRetrieved(bo, to);
-        to.amountOwed().setValue(getAmountOwed(bo));
+        to.amountOwed().setValue(N4GenerationUtils.getN4Balance(bo));
         to.lastNotice().setValue(getLastEvictionCaseCloseDate(bo));
         to.propertyCode().setValue(applicableBuildings.get(bo.unit().building().getPrimaryKey()));
     }
@@ -187,22 +185,8 @@ public class SelectN4LeaseCandidateListServiceImpl extends AbstractListServiceDt
 
     }
 
-    private BigDecimal getAmountOwed(Lease lease) {
-        BigDecimal amountOwed = BigDecimal.ZERO;
-
-        for (N4UnpaidCharge rentOwingForPeriod : N4GenerationUtils.getUnpaidCharges(lease, getPolicy(lease).relevantARCodes())) {
-            amountOwed = amountOwed.add(rentOwingForPeriod.rentOwing().getValue());
-        }
-        return amountOwed;
-    }
-
     private boolean hasAmountOwed(Lease lease, BigDecimal minAmountOwed) {
-        return getAmountOwed(lease).compareTo(minAmountOwed) > 0;
-    }
-
-    private N4Policy getPolicy(Lease lease) {
-        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.IdOnly);
-        return ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), N4Policy.class);
+        return N4GenerationUtils.getN4Balance(lease).compareTo(minAmountOwed) > 0;
     }
 
     private Map<Key, String> getApplicableBuildings() {

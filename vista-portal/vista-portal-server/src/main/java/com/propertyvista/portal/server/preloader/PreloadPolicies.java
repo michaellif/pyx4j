@@ -39,6 +39,7 @@ import com.propertyvista.biz.preloader.policy.subpreloaders.ResidentPortalPolicy
 import com.propertyvista.biz.preloader.policy.subpreloaders.TenantInsurancePolicyPreloader;
 import com.propertyvista.biz.preloader.policy.subpreloaders.YardiInterfacePolicyPreloader;
 import com.propertyvista.preloader.policy.MockupDepositPolicyPreloader;
+import com.propertyvista.preloader.policy.MockupEvictionFlowPolicyPreloader;
 import com.propertyvista.preloader.policy.MockupLeaseAdjustmentPolicyPreloader;
 import com.propertyvista.preloader.policy.MockupLeaseBillingPolicyPreloader;
 import com.propertyvista.preloader.policy.MockupProductTaxPolicyPreloader;
@@ -80,6 +81,7 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
             add(new MockupLeaseAdjustmentPolicyPreloader());
             add(new MockupLeaseBillingPolicyPreloader());
             add(new MockupProspectPortalPolicyPreloader());
+            add(new MockupEvictionFlowPolicyPreloader());
         }
     }
 

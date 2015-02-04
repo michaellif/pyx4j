@@ -27,21 +27,25 @@ import java.util.List;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.n4.N4UnpaidCharge;
+import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class N4GenerationUtils {
 
-    public static List<N4UnpaidCharge> getUnpaidCharges(Lease lease, Collection<ARCode> acceptableArCodes) {
+    public static List<N4UnpaidCharge> getUnpaidCharges(Lease lease) {
         LogicalDate today = SystemDateManager.getLogicalDate();
 
         List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(lease.billingAccount());
-        List<InvoiceDebit> filteredDebits = filterDebits(debits, acceptableArCodes, today);
+        List<InvoiceDebit> filteredDebits = filterDebits(debits, getPolicy(lease).relevantARCodes(), today);
         List<N4UnpaidCharge> owings = new ArrayList<>();
         for (InvoiceDebit debit : filteredDebits) {
             N4UnpaidCharge owing = EntityFactory.create(N4UnpaidCharge.class);
@@ -55,6 +59,21 @@ public class N4GenerationUtils {
             owings.add(owing);
         }
         return owings;
+    }
+
+    public static BigDecimal getN4Balance(Lease lease) {
+        Persistence.ensureRetrieve(lease, AttachLevel.Attached);
+
+        BigDecimal amountOwed = BigDecimal.ZERO;
+        for (N4UnpaidCharge rentOwingForPeriod : N4GenerationUtils.getUnpaidCharges(lease)) {
+            amountOwed = amountOwed.add(rentOwingForPeriod.rentOwing().getValue());
+        }
+        return amountOwed;
+    }
+
+    private static N4Policy getPolicy(Lease lease) {
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.IdOnly);
+        return ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), N4Policy.class);
     }
 
     private static List<InvoiceDebit> filterDebits(List<InvoiceDebit> debits, Collection<ARCode> acceptableArCodes, LogicalDate asOf) {

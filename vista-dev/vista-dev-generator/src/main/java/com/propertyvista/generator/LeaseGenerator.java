@@ -101,7 +101,7 @@ public class LeaseGenerator extends DataGenerator {
 
         mainTenant.leaseParticipant().customer().set(customerGenerator.createCustomer());
         mainTenant.leaseParticipant().customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
-        mainTenant.leaseParticipant().customer().personScreening().set(screeningGenerator.createScreening());
+        mainTenant.leaseParticipant().customer().personScreening().set(screeningGenerator.createScreening(lease, mainTenant.leaseParticipant()));
         mainTenant.role().setValue(LeaseTermParticipant.Role.Applicant);
 
         lease.currentTerm().version().tenants().add(mainTenant);
@@ -114,7 +114,7 @@ public class LeaseGenerator extends DataGenerator {
 
             tenant.leaseParticipant().customer().set(customerGenerator.createCustomer());
             tenant.leaseParticipant().customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
-            tenant.leaseParticipant().customer().personScreening().set(screeningGenerator.createScreening());
+            tenant.leaseParticipant().customer().personScreening().set(screeningGenerator.createScreening(lease, tenant.leaseParticipant()));
             tenant.role().setValue(RandomUtil.random(EnumSet.of(LeaseTermParticipant.Role.CoApplicant, LeaseTermParticipant.Role.Dependent)));
             tenant.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
 
@@ -125,7 +125,7 @@ public class LeaseGenerator extends DataGenerator {
             LeaseTermGuarantor guarantor = EntityFactory.create(LeaseTermGuarantor.class);
 
             guarantor.leaseParticipant().customer().set(customerGenerator.createCustomer());
-            guarantor.leaseParticipant().customer().personScreening().set(screeningGenerator.createScreening());
+            guarantor.leaseParticipant().customer().personScreening().set(screeningGenerator.createScreening(lease, guarantor.leaseParticipant()));
             guarantor.role().setValue(LeaseTermParticipant.Role.Guarantor);
             guarantor.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
             guarantor.tenant().set(mainTenant.leaseParticipant());
