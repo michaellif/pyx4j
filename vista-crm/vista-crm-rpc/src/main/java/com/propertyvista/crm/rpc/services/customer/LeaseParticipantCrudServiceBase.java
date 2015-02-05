@@ -16,13 +16,13 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.crm.rpc.services.AbstractCrmPrimeCrudService;
+import com.propertyvista.crm.rpc.services.AbstractCrmCrudService;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseParticipantDTO;
 
-public interface LeaseParticipantCrudServiceBase<DTO extends LeaseParticipantDTO<? extends LeaseTermParticipant<?>>> extends AbstractCrmPrimeCrudService<DTO> {
+public interface LeaseParticipantCrudServiceBase<DTO extends LeaseParticipantDTO<? extends LeaseTermParticipant<?>>> extends AbstractCrmCrudService<DTO> {
 
     void getAllowedPaymentTypes(AsyncCallback<Vector<PaymentType>> callback, DTO participantId);
 

@@ -20,12 +20,12 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 import com.propertyvista.crm.rpc.services.admin.CustomerCreditCheckCrudService;
-import com.propertyvista.crm.server.services.AbstractCrmPrimeCrudServiceImpl;
+import com.propertyvista.crm.server.services.AbstractCrmCrudServiceImpl;
 import com.propertyvista.domain.pmc.payment.CustomerCreditCheckTransaction;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.server.TaskRunner;
 
-public class CustomerCreditCheckCrudServiceImpl extends AbstractCrmPrimeCrudServiceImpl<CustomerCreditCheck, CustomerCreditCheckDTO> implements
+public class CustomerCreditCheckCrudServiceImpl extends AbstractCrmCrudServiceImpl<CustomerCreditCheck, CustomerCreditCheckDTO> implements
         CustomerCreditCheckCrudService {
 
     public CustomerCreditCheckCrudServiceImpl() {

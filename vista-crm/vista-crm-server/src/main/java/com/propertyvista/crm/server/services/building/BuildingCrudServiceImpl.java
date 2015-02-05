@@ -34,7 +34,7 @@ import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
-import com.propertyvista.crm.server.services.AbstractCrmPrimeCrudServiceImpl;
+import com.propertyvista.crm.server.services.AbstractCrmCrudServiceImpl;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeDirection;
 import com.propertyvista.domain.GeoLocation.LongitudeDirection;
@@ -58,7 +58,7 @@ import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class BuildingCrudServiceImpl extends AbstractCrmPrimeCrudServiceImpl<Building, BuildingDTO> implements BuildingCrudService {
+public class BuildingCrudServiceImpl extends AbstractCrmCrudServiceImpl<Building, BuildingDTO> implements BuildingCrudService {
 
     private final static I18n i18n = I18n.get(BuildingCrudServiceImpl.class);
 

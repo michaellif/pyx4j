@@ -26,7 +26,7 @@ import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.crm.rpc.services.financial.AutoPayHistoryCrudService;
-import com.propertyvista.crm.server.services.AbstractCrmPrimeCrudServiceImpl;
+import com.propertyvista.crm.server.services.AbstractCrmCrudServiceImpl;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.pmc.Pmc;
@@ -35,7 +35,7 @@ import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.server.TaskRunner;
 
-public class AutoPayHistoryCrudServiceImpl extends AbstractCrmPrimeCrudServiceImpl<AutopayAgreement, AutoPayHistoryDTO> implements AutoPayHistoryCrudService {
+public class AutoPayHistoryCrudServiceImpl extends AbstractCrmCrudServiceImpl<AutopayAgreement, AutoPayHistoryDTO> implements AutoPayHistoryCrudService {
 
     public AutoPayHistoryCrudServiceImpl() {
         super(AutopayAgreement.class, AutoPayHistoryDTO.class);

@@ -12,8 +12,8 @@
  */
 package com.propertyvista.crm.rpc.services.organization;
 
-import com.propertyvista.crm.rpc.services.AbstractCrmPrimeCrudService;
+import com.propertyvista.crm.rpc.services.AbstractCrmCrudService;
 import com.propertyvista.domain.property.vendor.Vendor;
 
-public interface VendorCrudService extends AbstractCrmPrimeCrudService<Vendor> {
+public interface VendorCrudService extends AbstractCrmCrudService<Vendor> {
 }

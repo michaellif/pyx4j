@@ -13,8 +13,8 @@
 package com.propertyvista.crm.rpc.services.admin;
 
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
-import com.propertyvista.crm.rpc.services.AbstractCrmPrimeCrudService;
+import com.propertyvista.crm.rpc.services.AbstractCrmCrudService;
 
-public interface CustomerCreditCheckCrudService extends AbstractCrmPrimeCrudService<CustomerCreditCheckDTO> {
+public interface CustomerCreditCheckCrudService extends AbstractCrmCrudService<CustomerCreditCheckDTO> {
 
 }

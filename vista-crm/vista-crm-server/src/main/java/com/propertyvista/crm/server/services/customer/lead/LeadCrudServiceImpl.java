@@ -27,7 +27,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.tenant.LeadFacade;
 import com.propertyvista.crm.rpc.services.customer.lead.LeadCrudService;
-import com.propertyvista.crm.server.services.AbstractCrmPrimeCrudServiceImpl;
+import com.propertyvista.crm.server.services.AbstractCrmCrudServiceImpl;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Appointment;
@@ -36,7 +36,7 @@ import com.propertyvista.domain.tenant.lead.Lead.ConvertToLeaseAppraisal;
 import com.propertyvista.domain.tenant.lead.Lead.Status;
 import com.propertyvista.domain.tenant.lead.Showing;
 
-public class LeadCrudServiceImpl extends AbstractCrmPrimeCrudServiceImpl<Lead, Lead> implements LeadCrudService {
+public class LeadCrudServiceImpl extends AbstractCrmCrudServiceImpl<Lead, Lead> implements LeadCrudService {
 
     public LeadCrudServiceImpl() {
         super(Lead.class, Lead.class);

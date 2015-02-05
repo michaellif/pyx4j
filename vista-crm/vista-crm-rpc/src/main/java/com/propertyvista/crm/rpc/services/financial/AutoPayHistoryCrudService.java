@@ -13,8 +13,8 @@
 package com.propertyvista.crm.rpc.services.financial;
 
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
-import com.propertyvista.crm.rpc.services.AbstractCrmPrimeCrudService;
+import com.propertyvista.crm.rpc.services.AbstractCrmCrudService;
 
-public interface AutoPayHistoryCrudService extends AbstractCrmPrimeCrudService<AutoPayHistoryDTO> {
+public interface AutoPayHistoryCrudService extends AbstractCrmCrudService<AutoPayHistoryDTO> {
 
 }

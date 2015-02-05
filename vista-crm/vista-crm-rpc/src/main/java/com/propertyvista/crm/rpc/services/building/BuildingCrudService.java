@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.annotations.AccessControl;
 
-import com.propertyvista.crm.rpc.services.AbstractCrmPrimeCrudService;
+import com.propertyvista.crm.rpc.services.AbstractCrmCrudService;
 import com.propertyvista.crm.rpc.services.lease.ac.UpdateFromYardi;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -27,7 +27,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.dto.BuildingDTO;
 
-public interface BuildingCrudService extends AbstractCrmPrimeCrudService<BuildingDTO> {
+public interface BuildingCrudService extends AbstractCrmCrudService<BuildingDTO> {
 
     void retrieveMerchantAccountStatus(AsyncCallback<MerchantAccount> callback, MerchantAccount merchantAccountId);
 

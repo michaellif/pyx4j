@@ -12,9 +12,9 @@
  */
 package com.propertyvista.crm.rpc.services.security;
 
-import com.propertyvista.crm.rpc.services.AbstractCrmPrimeCrudService;
+import com.propertyvista.crm.rpc.services.AbstractCrmCrudService;
 import com.propertyvista.dto.AuditRecordDTO;
 
-public interface CrmAuditRecordsListerService extends AbstractCrmPrimeCrudService<AuditRecordDTO> {
+public interface CrmAuditRecordsListerService extends AbstractCrmCrudService<AuditRecordDTO> {
 
 }

@@ -17,6 +17,6 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.rpc.DocCreationService;
 import com.pyx4j.essentials.rpc.download.DownloadableService;
 
-public interface AbstractCrmPrimeCrudService<E extends IEntity> extends AbstractCrudService<E>, DocCreationService, DownloadableService {
+public interface AbstractCrmCrudService<E extends IEntity> extends AbstractCrudService<E>, DocCreationService, DownloadableService {
 
 }

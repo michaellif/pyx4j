@@ -37,7 +37,7 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
 import com.propertyvista.biz.system.yardi.YardiARFacade;
 import com.propertyvista.crm.rpc.services.billing.PaymentRecordCrudService;
-import com.propertyvista.crm.server.services.AbstractCrmPrimeCrudServiceImpl;
+import com.propertyvista.crm.server.services.AbstractCrmCrudServiceImpl;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -53,7 +53,7 @@ import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class PaymentRecordCrudServiceImpl extends AbstractCrmPrimeCrudServiceImpl<PaymentRecord, PaymentRecordDTO> implements PaymentRecordCrudService {
+public class PaymentRecordCrudServiceImpl extends AbstractCrmCrudServiceImpl<PaymentRecord, PaymentRecordDTO> implements PaymentRecordCrudService {
 
     private static final I18n i18n = I18n.get(PaymentRecordCrudServiceImpl.class);
 

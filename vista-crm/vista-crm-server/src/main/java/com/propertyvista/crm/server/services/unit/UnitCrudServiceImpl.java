@@ -26,7 +26,7 @@ import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
-import com.propertyvista.crm.server.services.AbstractCrmPrimeCrudServiceImpl;
+import com.propertyvista.crm.server.services.AbstractCrmCrudServiceImpl;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -36,7 +36,7 @@ import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.AptUnitServicePriceDTO;
 import com.propertyvista.server.common.util.AddressRetriever;
 
-public class UnitCrudServiceImpl extends AbstractCrmPrimeCrudServiceImpl<AptUnit, AptUnitDTO> implements UnitCrudService {
+public class UnitCrudServiceImpl extends AbstractCrmCrudServiceImpl<AptUnit, AptUnitDTO> implements UnitCrudService {
 
     private static class Binder extends CrudEntityBinder<AptUnit, AptUnitDTO> {
 

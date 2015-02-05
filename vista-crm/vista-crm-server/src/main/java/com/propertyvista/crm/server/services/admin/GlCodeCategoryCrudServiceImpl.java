@@ -16,10 +16,10 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
-import com.propertyvista.crm.server.services.AbstractCrmPrimeCrudServiceImpl;
+import com.propertyvista.crm.server.services.AbstractCrmCrudServiceImpl;
 import com.propertyvista.domain.financial.GlCodeCategory;
 
-public class GlCodeCategoryCrudServiceImpl extends AbstractCrmPrimeCrudServiceImpl<GlCodeCategory, GlCodeCategory> implements GlCodeCategoryCrudService {
+public class GlCodeCategoryCrudServiceImpl extends AbstractCrmCrudServiceImpl<GlCodeCategory, GlCodeCategory> implements GlCodeCategoryCrudService {
 
     public GlCodeCategoryCrudServiceImpl() {
         super(GlCodeCategory.class, GlCodeCategory.class);

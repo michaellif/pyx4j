@@ -12,9 +12,9 @@
  */
 package com.propertyvista.crm.rpc.services.building;
 
-import com.propertyvista.crm.rpc.services.AbstractCrmPrimeCrudService;
+import com.propertyvista.crm.rpc.services.AbstractCrmCrudService;
 import com.propertyvista.dto.ComplexDTO;
 
-public interface ComplexCrudService extends AbstractCrmPrimeCrudService<ComplexDTO> {
+public interface ComplexCrudService extends AbstractCrmCrudService<ComplexDTO> {
 
 }

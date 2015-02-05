@@ -16,16 +16,16 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.essentials.server.docs.sheet.AbstractDownloadableCrudServiceDtoImpl;
 
-import com.propertyvista.crm.rpc.services.AbstractCrmPrimeCrudService;
+import com.propertyvista.crm.rpc.services.AbstractCrmCrudService;
 
-public abstract class AbstractCrmPrimeCrudServiceImpl<BO extends IEntity, TO extends IEntity> extends AbstractDownloadableCrudServiceDtoImpl<BO, TO> implements
-        AbstractCrmPrimeCrudService<TO> {
+public abstract class AbstractCrmCrudServiceImpl<BO extends IEntity, TO extends IEntity> extends AbstractDownloadableCrudServiceDtoImpl<BO, TO> implements
+        AbstractCrmCrudService<TO> {
 
-    protected AbstractCrmPrimeCrudServiceImpl(Class<BO> entityClass, Class<TO> dtoClass) {
+    protected AbstractCrmCrudServiceImpl(Class<BO> entityClass, Class<TO> dtoClass) {
         super(entityClass, dtoClass);
     }
 
-    protected AbstractCrmPrimeCrudServiceImpl(EntityBinder<BO, TO> binder) {
+    protected AbstractCrmCrudServiceImpl(EntityBinder<BO, TO> binder) {
         super(binder);
     }
 

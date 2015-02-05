@@ -19,12 +19,12 @@ import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.building.LandlordCrudService;
-import com.propertyvista.crm.server.services.AbstractCrmPrimeCrudServiceImpl;
+import com.propertyvista.crm.server.services.AbstractCrmCrudServiceImpl;
 import com.propertyvista.domain.property.Landlord;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.LandlordDTO;
 
-public class LandlordCrudServiceImpl extends AbstractCrmPrimeCrudServiceImpl<Landlord, LandlordDTO> implements LandlordCrudService {
+public class LandlordCrudServiceImpl extends AbstractCrmCrudServiceImpl<Landlord, LandlordDTO> implements LandlordCrudService {
 
     private static class BuildingBinder extends CrudEntityBinder<Building, Building> {
 

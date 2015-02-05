@@ -14,11 +14,11 @@ package com.propertyvista.crm.rpc.services.unit;
 
 import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.crm.rpc.services.AbstractCrmPrimeCrudService;
+import com.propertyvista.crm.rpc.services.AbstractCrmCrudService;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
 
-public interface UnitCrudService extends AbstractCrmPrimeCrudService<AptUnitDTO> {
+public interface UnitCrudService extends AbstractCrmCrudService<AptUnitDTO> {
 
     @Transient
     public interface UnitInitializationdata extends InitializationData {

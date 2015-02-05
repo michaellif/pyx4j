@@ -19,13 +19,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.crm.rpc.services.AbstractCrmPrimeCrudService;
+import com.propertyvista.crm.rpc.services.AbstractCrmCrudService;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Lead.ConvertToLeaseAppraisal;
 
-public interface LeadCrudService extends AbstractCrmPrimeCrudService<Lead> {
+public interface LeadCrudService extends AbstractCrmCrudService<Lead> {
 
     void updateValue(AsyncCallback<Floorplan> callback, Key floorplanId);
 

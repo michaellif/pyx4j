@@ -12,8 +12,8 @@
  */
 package com.propertyvista.crm.rpc.services.admin;
 
-import com.propertyvista.crm.rpc.services.AbstractCrmPrimeCrudService;
+import com.propertyvista.crm.rpc.services.AbstractCrmCrudService;
 import com.propertyvista.domain.financial.ARCode;
 
-public interface ARCodeCrudService extends AbstractCrmPrimeCrudService<ARCode> {
+public interface ARCodeCrudService extends AbstractCrmCrudService<ARCode> {
 }
