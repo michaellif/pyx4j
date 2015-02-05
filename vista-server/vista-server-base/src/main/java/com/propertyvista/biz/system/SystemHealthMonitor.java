@@ -27,6 +27,7 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.encryption.EncryptedStorageFacade;
+import com.propertyvista.operations.domain.scheduler.PmcProcessOptions;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.RunStatus;
@@ -94,8 +95,12 @@ class SystemHealthMonitor {
 
                 EntityQueryCriteria<Run> criteria2 = EntityQueryCriteria.create(Run.class);
                 criteria2.eq(criteria2.proto().status(), RunStatus.Completed);
-                criteria2.ge(criteria2.proto().forDate(), dayStart.getTime());
-                criteria2.le(criteria2.proto().forDate(), dayEnd.getTime());
+                if (trigger.triggerType().getValue().getOptions().contains(PmcProcessOptions.NextDayAutoRecoverable)) {
+                    criteria2.ge(criteria2.proto().forDate(), dayStart.getTime());
+                } else {
+                    criteria2.ge(criteria2.proto().forDate(), dayStart.getTime());
+                    criteria2.le(criteria2.proto().forDate(), dayEnd.getTime());
+                }
                 criteria2.eq(criteria2.proto().trigger(), trigger);
 
                 if (!Persistence.service().exists(criteria2)) {

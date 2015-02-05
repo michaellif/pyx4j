@@ -47,10 +47,10 @@ public enum PmcProcessType implements Serializable {
     paymentsIssue(PmcProcessOptions.RunForDay, PmcProcessOptions.RequiredDaily),
 
     @Translate("P 3 - Post Scheduled eCheque Payments")
-    paymentsScheduledEcheck(PmcProcessOptions.RunForDay, PmcProcessOptions.RequiredDaily),
+    paymentsScheduledEcheck(PmcProcessOptions.RunForDay, PmcProcessOptions.RequiredDaily, PmcProcessOptions.NextDayAutoRecoverable),
 
     @Translate("P 4 - Post Scheduled Cards Payments")
-    paymentsScheduledCards(PmcProcessOptions.RunForDay, PmcProcessOptions.RequiredDaily),
+    paymentsScheduledCards(PmcProcessOptions.RunForDay, PmcProcessOptions.RequiredDaily, PmcProcessOptions.NextDayAutoRecoverable),
 
     @Translate("P 5A - Send eCheque(PAD) Funds Transfer to Caledon")
     paymentsPadSend,
@@ -88,7 +88,7 @@ public enum PmcProcessType implements Serializable {
     @Translate("P 8B - Payments Process Cards Reconciliation (auto triggered by paymentsReceiveCardsReconciliation)")
     paymentsProcessCardsReconciliation,
 
-    paymentsTenantSure(PmcProcessOptions.RunForDay, PmcProcessOptions.RequiredDaily),
+    paymentsTenantSure(PmcProcessOptions.RunForDay, PmcProcessOptions.RequiredDaily, PmcProcessOptions.NextDayAutoRecoverable),
 
     // TODO rename to : paymentsUpdatePreauthorizedPaymentAgreements
     paymentsLastMonthSuspend(PmcProcessOptions.RunForDay),
