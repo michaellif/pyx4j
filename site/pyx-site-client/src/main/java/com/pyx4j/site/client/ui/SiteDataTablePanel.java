@@ -237,6 +237,6 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
         criteria.setSorts(getDataTableModel().getSortCriteria());
         updateCriteria(criteria);
 
-        DataTableDocCreation.createExcelExport(getDataSource().getDocCreationService(), criteria, getDataTable().getVisibleColumnDescriptors());
+        DataTableDocCreation.createExcelExport(getDataSource().getDocCreationService(), criteria, getDataTable().getColumnDescriptors());
     }
 }

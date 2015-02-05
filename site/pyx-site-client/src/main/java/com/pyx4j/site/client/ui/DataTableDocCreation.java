@@ -45,10 +45,12 @@ public class DataTableDocCreation {
         request.setColumnDescriptors(new Vector<EntityColumnDescriptor>());
 
         for (ColumnDescriptor columnDescriptor : columnDescriptors) {
-            EntityColumnDescriptor d = new EntityColumnDescriptor();
-            d.setPath(columnDescriptor.getColumnPath());
-            d.setTitle(columnDescriptor.getColumnTitle());
-            request.getColumnDescriptors().add(d);
+            if (!columnDescriptor.isSearchableOnly()) {
+                EntityColumnDescriptor d = new EntityColumnDescriptor();
+                d.setPath(columnDescriptor.getColumnPath());
+                d.setTitle(columnDescriptor.getColumnTitle());
+                request.getColumnDescriptors().add(d);
+            }
         }
 
         reportDialog.start(service, request);
