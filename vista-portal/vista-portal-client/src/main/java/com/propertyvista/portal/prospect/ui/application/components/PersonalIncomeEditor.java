@@ -65,7 +65,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
 
     public void onSetDocumentationPolicy() {
         displayProofDocsPolicy();
-        revalidate();
+        fileUpload.setVisited(true);
     }
 
     @Override

@@ -109,7 +109,7 @@ public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningAsset>
 
         public void onSetDocumentationPolicy() {
             displayProofDocsPolicy();
-            revalidate();
+            fileUpload.setVisited(true);
         }
 
         @Override

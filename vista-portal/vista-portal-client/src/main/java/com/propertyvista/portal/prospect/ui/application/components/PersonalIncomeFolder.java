@@ -41,7 +41,7 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
 
     private static final I18n i18n = I18n.get(PersonalIncomeFolder.class);
 
-    private RestrictionsPolicy restrictionsPolicy = EntityFactory.create(RestrictionsPolicy.class);
+    private RestrictionsPolicy restrictionsPolicy;
 
     private ApplicationDocumentationPolicy documentationPolicy;
 
@@ -59,6 +59,7 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
 
     public void setRestrictionsPolicy(RestrictionsPolicy policy) {
         restrictionsPolicy = policy;
+        revalidate();
     }
 
     public void setDocumentationPolicy(ApplicationDocumentationPolicy policy) {
@@ -97,17 +98,20 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
         this.addComponentValidator(new AbstractComponentValidator<IList<CustomerScreeningIncome>>() {
             @Override
             public AbstractValidationError isValid() {
-                if (!getCComponent().getValue().isEmpty()) {
+                if (!getCComponent().getValue().isEmpty() && restrictionsPolicy != null) {
                     EmploymentsInfo info = getEmploymentsInfo();
                     if (info.employmentCount == 1) {
                         if (info.firstEmployment != null && !info.firstEmployment.isEmpty()) {
                             if (!info.firstEmployment.starts().isNull()) {
                                 LogicalDate today = new LogicalDate(ClientContext.getServerDate());
-                                LogicalDate date = (info.firstEmployment.ends().isNull() ? today : info.firstEmployment.ends().getValue());
+                                LogicalDate date = new LogicalDate(info.firstEmployment.ends().isNull() ? today : info.firstEmployment.ends().getValue());
                                 CalendarUtil.addMonthsToDate(date, -restrictionsPolicy.minEmploymentDuration().getValue(0));
+                                CalendarUtil.addDaysToDate(date, 1); // compensate for 'including end date' logic
                                 if (info.firstEmployment.starts().getValue().after(date) //
                                         || (!info.firstEmployment.ends().isNull() && !info.firstEmployment.ends().getValue().after(today))) {
-                                    return new BasicValidationError(getCComponent(), i18n.tr("You need to enter more employment information"));
+                                    return new BasicValidationError(getCComponent(), i18n.tr(
+                                            "Previous employment information is necessary (current employment duration is less then {0} months)",
+                                            restrictionsPolicy.minEmploymentDuration().getValue(0)));
                                 }
                             }
                         }
