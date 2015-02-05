@@ -20,6 +20,8 @@
  */
 package com.pyx4j.i18n.gettext;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -71,7 +73,17 @@ public class POEntry {
         if (references == null) {
             references = new Vector<String>();
         }
-        references.add(reference);
+        references.addAll(unWrapReference(reference));
+    }
+
+    private Collection<String> unWrapReference(String reference) {
+        Collection<String> r = new ArrayList<>();
+        for (String s : reference.split("\\s")) {
+            if (s.trim().length() > 0) {
+                r.add(s.trim());
+            }
+        }
+        return r;
     }
 
     public void addComment(String comment) {
