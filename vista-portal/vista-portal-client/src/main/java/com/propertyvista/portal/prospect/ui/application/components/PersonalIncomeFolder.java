@@ -110,7 +110,7 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
                                 if (info.firstEmployment.starts().getValue().after(date) //
                                         || (!info.firstEmployment.ends().isNull() && !info.firstEmployment.ends().getValue().after(today))) {
                                     return new BasicValidationError(getCComponent(), i18n.tr(
-                                            "Previous employment information is necessary (current employment duration is less then {0} months)",
+                                            "Previous employment information is necessary (current employment duration is less than {0} months)",
                                             restrictionsPolicy.minEmploymentDuration().getValue(0)));
                                 }
                             }
