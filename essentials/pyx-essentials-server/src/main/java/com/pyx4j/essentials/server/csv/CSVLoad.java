@@ -33,6 +33,9 @@ import com.pyx4j.gwt.server.IOUtils;
 
 public class CSVLoad {
 
+    // FEFF because this is the Unicode char represented by the UTF-8 byte order mark (EF BB BF).
+    private static final String UTF8_BOM = "\uFEFF";
+
     public static int findHeaderLine(String[][] data) {
         for (int i = 0; i < data.length; i++) {
             if (data[i][0].startsWith("#")) {
@@ -82,6 +85,9 @@ public class CSVLoad {
 
             while (((line = reader.readLine()) != null) && (reciver.canContuneLoad())) {
                 lineNumber++;
+                if (lineNumber == 1) {
+                    line = removeUTF8BOM(line);
+                }
                 String[] values = parser.parse(line);
                 if (values == null) {
                     continue;
@@ -102,6 +108,13 @@ public class CSVLoad {
         } finally {
             IOUtils.closeQuietly(in);
         }
+    }
+
+    private static String removeUTF8BOM(String line) {
+        if (line.startsWith(UTF8_BOM)) {
+            line = line.substring(1);
+        }
+        return line;
     }
 
     public static String[] loadUTF8File(String resourceName, final String columName) {
