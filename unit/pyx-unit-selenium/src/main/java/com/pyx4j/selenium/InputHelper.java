@@ -32,7 +32,8 @@ import java.util.NoSuchElementException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.seleniumemulation.JavascriptLibrary;
+
+import com.thoughtworks.selenium.webdriven.JavascriptLibrary;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.gwt.server.DateUtils;

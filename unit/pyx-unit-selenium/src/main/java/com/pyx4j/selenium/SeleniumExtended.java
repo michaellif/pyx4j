@@ -24,16 +24,17 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.seleniumemulation.JavascriptLibrary;
+import org.openqa.selenium.interactions.Actions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
 import org.slf4j.spi.LocationAwareLogger;
+
+import com.thoughtworks.selenium.webdriven.JavascriptLibrary;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.CompositeDebugId;
@@ -339,7 +340,16 @@ public class SeleniumExtended extends WebDriverWrapper {
     public void click(By by) {
         WebElement element = driver.findElement(by);
         log("click on element <{}> id={} ", element.getTagName(), element.getAttribute("id"));
-        element.click();
+        //To fix the focus reset problem from the previous element we have to use additional clickAndHold action for buttons and divs.
+        //This is the fix for Selenium FireFox Drive bug. Was tested on FirefoxDrive and ChromeDrive.
+        if (element.getTagName().equals("div") || element.getTagName().equals("button")) {
+            Actions actions = new Actions(driver);
+            actions.moveToElement(element).clickAndHold(element).click();
+            actions.release();
+            actions.perform();
+        } else {
+            element.click();
+        }
         this.waitWhileWorking();
     }
 
