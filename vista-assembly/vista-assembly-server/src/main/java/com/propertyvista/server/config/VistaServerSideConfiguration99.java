@@ -12,7 +12,6 @@
  */
 package com.propertyvista.server.config;
 
-
 /**
  * See the files https://svn.pyx4j.com/svn-configs/trunk/vista/testenv/apps/catalina.base/tomcatA/conf/vista99
  *
@@ -27,11 +26,6 @@ public class VistaServerSideConfiguration99 extends VistaServerSideConfiguration
     @Override
     public boolean isVistaQa() {
         return true;
-    }
-
-    @Override
-    protected String getApplicationDeploymentProtocol() {
-        return "https";
     }
 
     @Override

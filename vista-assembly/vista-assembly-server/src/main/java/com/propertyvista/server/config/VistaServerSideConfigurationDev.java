@@ -51,15 +51,6 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
     }
 
     @Override
-    protected String getApplicationDeploymentProtocol() {
-        if (isDepoymentHttps()) {
-            return "https";
-        } else {
-            return "http";
-        }
-    }
-
-    @Override
     public IPersistenceConfiguration getPersistenceConfiguration() {
         return new VistaConfigurationMySQL() {
 
