@@ -30,6 +30,12 @@
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
             <version>${maven.plugin.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>asm</groupId>
+                    <artifactId>asm</artifactId>
+                </exclusion>
+            </exclusions>             
         </dependency>
 
         <dependency>
@@ -58,9 +64,15 @@
         </dependency>
 
         <dependency>
-            <groupId>asm</groupId>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>5.0.3</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
             <artifactId>asm-analysis</artifactId>
-            <version>4.0</version>
+            <version>5.0.3</version>
         </dependency>
 
         <dependency>
