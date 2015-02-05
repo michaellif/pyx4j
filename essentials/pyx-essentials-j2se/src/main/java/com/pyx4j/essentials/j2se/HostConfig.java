@@ -25,8 +25,10 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Locale;
 import java.util.TreeMap;
 
@@ -159,12 +161,12 @@ public abstract class HostConfig {
         StringBuilder b = new StringBuilder();
         try {
             Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
-            ArrayList<NetworkInterface> interfaces = new ArrayList<>();
+            List<NetworkInterface> interfaces = new ArrayList<>();
             while (en.hasMoreElements()) {
                 NetworkInterface itf = en.nextElement();
                 interfaces.add(itf);
             }
-            interfaces.sort(new Comparator<NetworkInterface>() {
+            Collections.sort(interfaces, new Comparator<NetworkInterface>() {
                 @Override
                 public int compare(NetworkInterface i1, NetworkInterface i2) {
                     int cmp = Boolean.valueOf(isUp(i2)).compareTo(Boolean.valueOf(isUp(i1)));
