@@ -171,6 +171,10 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         getFolderItem().getItemActionsBar().setDefaultActionsState(removable, up, down);
     }
 
+    public void setToolbarVisible(boolean visible) {
+        toolbar.setVisible(visible);
+    }
+
     @Override
     public void onSetDebugId(IDebugId parentDebugId) {
         this.parentDebugId = parentDebugId;
