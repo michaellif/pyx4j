@@ -34,7 +34,11 @@ import com.pyx4j.gwt.server.IOUtils;
 public class CSVLoad {
 
     // FEFF because this is the Unicode char represented by the UTF-8 byte order mark (EF BB BF).
-    private static final String UTF8_BOM = "\uFEFF";
+    private static final String UTF16_BOM = "\uFEFF";
+
+    private static final String UTF8_BOM = "\uEFBBBF";
+
+    private static final String UTF8_BOM_InCp1252 = "?";
 
     public static int findHeaderLine(String[][] data) {
         for (int i = 0; i < data.length; i++) {
@@ -86,7 +90,7 @@ public class CSVLoad {
             while (((line = reader.readLine()) != null) && (reciver.canContuneLoad())) {
                 lineNumber++;
                 if (lineNumber == 1) {
-                    line = removeUTF8BOM(line);
+                    line = removeUTF8BOM(line, charset);
                 }
                 String[] values = parser.parse(line);
                 if (values == null) {
@@ -110,9 +114,15 @@ public class CSVLoad {
         }
     }
 
-    private static String removeUTF8BOM(String line) {
-        if (line.startsWith(UTF8_BOM)) {
+    private static String removeUTF8BOM(String line, Charset charset) {
+        if (charset == null && line.startsWith(UTF8_BOM_InCp1252)) {
+            line = line.substring(3);
+        } else if (line.startsWith(UTF16_BOM) && (charset.equals(StandardCharsets.UTF_16))) {
             line = line.substring(1);
+        } else if (line.startsWith(UTF8_BOM) && (charset.equals(StandardCharsets.UTF_8))) {
+            line = line.substring(3);
+        } else if (line.startsWith(UTF8_BOM_InCp1252) && (charset.equals(Charset.forName("Cp1252")))) {
+            line = line.substring(3);
         }
         return line;
     }
