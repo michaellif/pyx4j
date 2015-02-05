@@ -44,6 +44,8 @@ public class ReportTableCSVFormatter implements ReportTableFormatter {
 
     private boolean forceQuote;
 
+    private boolean emitUTF8BOM = true;
+
     private int rowCount = 0;
 
     private int cellCount = 0;
@@ -67,6 +69,14 @@ public class ReportTableCSVFormatter implements ReportTableFormatter {
         this.forceQuote = forceQuote;
     }
 
+    public boolean isEmitUTF8BOM() {
+        return emitUTF8BOM;
+    }
+
+    public void setEmitUTF8BOM(boolean emitUTF8BOM) {
+        this.emitUTF8BOM = emitUTF8BOM;
+    }
+
     public void setTimezoneOffset(int timezoneOffset) {
         // Hack. Selecting first time zone is as good as any, There are no Daylight Saving Time information from the GWT client.
         String[] ids = TimeZone.getAvailableIDs(-(int) (timezoneOffset * Consts.MIN2MSEC));
@@ -86,7 +96,7 @@ public class ReportTableCSVFormatter implements ReportTableFormatter {
     @Override
     public byte[] getBinaryData() {
         byte[] b = dataBuilder.getBinaryData(charset);
-        if (charset.equals(StandardCharsets.UTF_8)) {
+        if (isEmitUTF8BOM() && charset.equals(StandardCharsets.UTF_8)) {
             byte[] utf = new byte[b.length + 3];
             // Add UTF-8 BOM for MS Excel
             utf[0] = (byte) 0xEF;
