@@ -33,7 +33,8 @@ public class MerchantAccountListerViewImpl extends AbstractListerView<MerchantAc
     public static class MerchantAccountLister extends SiteDataTablePanel<MerchantAccount> {
 
         public MerchantAccountLister() {
-            super(MerchantAccount.class, GWT.<AbstractListCrudService<MerchantAccount>> create(MerchantAccountCrudService.class), true);
+            super(MerchantAccount.class, GWT.<AbstractListCrudService<MerchantAccount>> create(MerchantAccountCrudService.class), VistaFeatures.instance()
+                    .yardiIntegration());
 
             setColumnDescriptors( //
                     new ColumnDescriptor.Builder(proto().accountName()).filterAlwaysShown(true).build(),//
@@ -47,7 +48,7 @@ public class MerchantAccountListerViewImpl extends AbstractListerView<MerchantAc
 
         @Override
         public boolean canCreateNewItem() {
-            return super.canCreateNewItem() && VistaFeatures.instance().yardiIntegration() && super.canCreateNewItem();
+            return (VistaFeatures.instance().yardiIntegration() && super.canCreateNewItem());
         }
     }
 }
