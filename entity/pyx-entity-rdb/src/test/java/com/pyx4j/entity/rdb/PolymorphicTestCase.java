@@ -40,6 +40,11 @@ import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete3AssignedPKEntity;
 import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntity;
 import com.pyx4j.entity.test.shared.domain.inherit.ReferenceNotOwnerEntity;
+import com.pyx4j.entity.test.shared.domain.inherit.constr.CS1Concrete1;
+import com.pyx4j.entity.test.shared.domain.inherit.constr.CS1Concrete2;
+import com.pyx4j.entity.test.shared.domain.inherit.constr.CS2Concrete1;
+import com.pyx4j.entity.test.shared.domain.inherit.constr.CS2Concrete2;
+import com.pyx4j.entity.test.shared.domain.inherit.constr.CS2Concrete3;
 import com.pyx4j.entity.test.shared.domain.inherit.single.SBase;
 import com.pyx4j.entity.test.shared.domain.inherit.single.SConcrete1;
 import com.pyx4j.entity.test.shared.domain.inherit.single.SConcrete2;
@@ -732,4 +737,39 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         }
 
     }
+
+    public void testPolymorphicNotNullConstraintSingle() {
+        String testId = uniqueString();
+
+        CS1Concrete1 ent1 = EntityFactory.create(CS1Concrete1.class);
+        ent1.testId().setValue(testId);
+        ent1.nameC1().setValue("c1:" + uniqueString());
+        srv.persist(ent1);
+
+        CS1Concrete2 ent2 = EntityFactory.create(CS1Concrete2.class);
+        ent2.testId().setValue(testId);
+        ent2.nameC2().setValue("c2:" + uniqueString());
+        srv.persist(ent2);
+
+    }
+
+    public void testPolymorphicNotNullConstraintTwo() {
+        String testId = uniqueString();
+
+        CS2Concrete1 ent1 = EntityFactory.create(CS2Concrete1.class);
+        ent1.testId().setValue(testId);
+        ent1.nameC1C2().setValue("c1:" + uniqueString());
+        srv.persist(ent1);
+
+        CS2Concrete2 ent2 = EntityFactory.create(CS2Concrete2.class);
+        ent2.testId().setValue(testId);
+        ent2.nameC1C2().setValue("c2:" + uniqueString());
+        srv.persist(ent2);
+
+        CS2Concrete3 ent3 = EntityFactory.create(CS2Concrete3.class);
+        ent3.testId().setValue(testId);
+        ent3.nameC3().setValue("c3:" + uniqueString());
+        srv.persist(ent3);
+    }
+
 }

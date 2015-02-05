@@ -180,6 +180,10 @@ public class EntityOperationsMeta {
             if (alreadyMapped != null) {
                 if (!memberMeta.isEmbedded()) {
                     assertTypeCompativility(memberMeta, alreadyMapped.getMemberMeta());
+                    // if was not defined on super
+                    if ((subclassDiscriminator != null) && (alreadyMapped.getSubclassDiscriminators() != null)) {
+                        alreadyMapped.addSubclassDiscriminator(subclassDiscriminator);
+                    }
                     continue;
                 }
             }
