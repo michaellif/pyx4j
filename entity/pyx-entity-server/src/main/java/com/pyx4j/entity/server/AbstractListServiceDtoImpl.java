@@ -23,13 +23,16 @@ package com.pyx4j.entity.server;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.Criterion;
@@ -41,6 +44,7 @@ import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.security.shared.SecurityController;
 
 public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends IEntity> implements AbstractListCrudService<TO> {
@@ -89,9 +93,9 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     /**
      * Allows to map BO to id of different TO entity.
      * if changed, need to change getTOKey
-     * 
+     *
      * @experimental
-     * 
+     *
      * @param toId
      * @return primary key of BO entity
      */
@@ -101,9 +105,9 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
 
     /**
      * Default implementation does noting since the keys mapped one to one.
-     * 
+     *
      * @experimental
-     * 
+     *
      * @param bo
      * @param to
      */
@@ -147,7 +151,15 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
             if (path == null) {
                 path = convertPropertyDTOPathToDBOPath(propertyCriterion.getPropertyPath(), boProto, toProto);
             }
-            return new PropertyCriterion(path, propertyCriterion.getRestriction(), convertValue(criteria, propertyCriterion));
+            IObject<?> boMember = boProto.getMember(path);
+            if (Date.class.equals(boProto.getMember(path).getValueClass()) && propertyCriterion.getValue() instanceof LogicalDate) {
+                AndCriterion criterion = new AndCriterion();
+                criterion.add(PropertyCriterion.ge(boMember, propertyCriterion.getValue()));
+                criterion.add(PropertyCriterion.lt(boMember, DateUtils.dayEnd((Date) propertyCriterion.getValue())));
+                return criterion;
+            } else {
+                return new PropertyCriterion(path, propertyCriterion.getRestriction(), convertValue(criteria, propertyCriterion));
+            }
         } else if (cr instanceof OrCriterion) {
             OrCriterion criterion = new OrCriterion();
             criterion.addRight(convertFilters(criteria, ((OrCriterion) cr).getFiltersRight()));
