@@ -14,11 +14,12 @@ package com.propertyvista.crm.server.services.lease.common;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
-import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
+import com.propertyvista.crm.server.services.AbstractCrmPrimeCrudServiceImpl;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -27,7 +28,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.LeaseDTO;
 
-public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends AbstractCrudServiceDtoImpl<Lease, DTO> {
+public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends AbstractCrmPrimeCrudServiceImpl<Lease, DTO> {
 
     protected LeaseCrudServiceBaseImpl(Class<DTO> dtoClass) {
         super(Lease.class, dtoClass);

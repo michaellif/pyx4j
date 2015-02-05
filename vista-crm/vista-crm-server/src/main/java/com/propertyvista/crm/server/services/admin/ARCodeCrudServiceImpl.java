@@ -21,22 +21,22 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IntegrityConstraintUserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.admin.ARCodeCrudService;
+import com.propertyvista.crm.server.services.AbstractCrmPrimeCrudServiceImpl;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.YardiChargeCode;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class ARCodeCrudServiceImpl extends AbstractCrudServiceImpl<ARCode> implements ARCodeCrudService {
+public class ARCodeCrudServiceImpl extends AbstractCrmPrimeCrudServiceImpl<ARCode, ARCode> implements ARCodeCrudService {
 
     private static final I18n i18n = I18n.get(ARCodeCrudServiceImpl.class);
 
     public ARCodeCrudServiceImpl() {
-        super(ARCode.class);
+        super(ARCode.class, ARCode.class);
     }
 
     @Override

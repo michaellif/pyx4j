@@ -12,16 +12,16 @@
  */
 package com.propertyvista.crm.server.services.organization;
 
-import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.organization.VendorCrudService;
+import com.propertyvista.crm.server.services.AbstractCrmPrimeCrudServiceImpl;
 import com.propertyvista.domain.property.vendor.Vendor;
 
-public class VendorCrudServiceImpl extends AbstractCrudServiceImpl<Vendor> implements VendorCrudService {
+public class VendorCrudServiceImpl extends AbstractCrmPrimeCrudServiceImpl<Vendor, Vendor> implements VendorCrudService {
 
     public VendorCrudServiceImpl() {
-        super(Vendor.class);
+        super(Vendor.class, Vendor.class);
     }
 
     @Override

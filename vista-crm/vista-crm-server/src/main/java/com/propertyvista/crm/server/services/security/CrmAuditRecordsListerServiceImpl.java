@@ -19,20 +19,20 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.crm.rpc.services.security.CrmAuditRecordsListerService;
+import com.propertyvista.crm.server.services.AbstractCrmPrimeCrudServiceImpl;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.VistaUserType;
 import com.propertyvista.dto.AuditRecordDTO;
 import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.server.TaskRunner;
 
-public class CrmAuditRecordsListerServiceImpl extends AbstractListServiceDtoImpl<AuditRecord, AuditRecordDTO> implements CrmAuditRecordsListerService {
+public class CrmAuditRecordsListerServiceImpl extends AbstractCrmPrimeCrudServiceImpl<AuditRecord, AuditRecordDTO> implements CrmAuditRecordsListerService {
 
     private static class Binder extends CrudEntityBinder<AuditRecord, AuditRecordDTO> {
 

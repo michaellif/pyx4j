@@ -16,16 +16,16 @@ import java.util.concurrent.Callable;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.AttachLevel;
-import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 import com.propertyvista.crm.rpc.services.admin.CustomerCreditCheckCrudService;
+import com.propertyvista.crm.server.services.AbstractCrmPrimeCrudServiceImpl;
 import com.propertyvista.domain.pmc.payment.CustomerCreditCheckTransaction;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.server.TaskRunner;
 
-public class CustomerCreditCheckCrudServiceImpl extends AbstractCrudServiceDtoImpl<CustomerCreditCheck, CustomerCreditCheckDTO> implements
+public class CustomerCreditCheckCrudServiceImpl extends AbstractCrmPrimeCrudServiceImpl<CustomerCreditCheck, CustomerCreditCheckDTO> implements
         CustomerCreditCheckCrudService {
 
     public CustomerCreditCheckCrudServiceImpl() {

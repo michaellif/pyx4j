@@ -12,10 +12,9 @@
  */
 package com.propertyvista.crm.rpc.services.building;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
-
+import com.propertyvista.crm.rpc.services.AbstractCrmPrimeCrudService;
 import com.propertyvista.dto.LandlordDTO;
 
-public interface LandlordCrudService extends AbstractCrudService<LandlordDTO> {
+public interface LandlordCrudService extends AbstractCrmPrimeCrudService<LandlordDTO> {
 
 }

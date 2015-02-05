@@ -21,7 +21,6 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -30,6 +29,7 @@ import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceCrudService;
+import com.propertyvista.crm.server.services.AbstractCrmPrimeCrudServiceImpl;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
@@ -43,7 +43,7 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.MaintenanceRequestWorkOrderDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<MaintenanceRequest, MaintenanceRequestDTO> implements MaintenanceCrudService {
+public class MaintenanceCrudServiceImpl extends AbstractCrmPrimeCrudServiceImpl<MaintenanceRequest, MaintenanceRequestDTO> implements MaintenanceCrudService {
 
     public MaintenanceCrudServiceImpl() {
         super(MaintenanceRequest.class, MaintenanceRequestDTO.class);

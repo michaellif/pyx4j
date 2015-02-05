@@ -12,10 +12,9 @@
  */
 package com.propertyvista.crm.rpc.services.admin;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
-
+import com.propertyvista.crm.rpc.services.AbstractCrmPrimeCrudService;
 import com.propertyvista.domain.financial.GlCodeCategory;
 
-public interface GlCodeCategoryCrudService extends AbstractCrudService<GlCodeCategory> {
+public interface GlCodeCategoryCrudService extends AbstractCrmPrimeCrudService<GlCodeCategory> {
 
 }

@@ -17,13 +17,13 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.crm.rpc.services.AbstractCrmPrimeCrudService;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseDTO;
 
-public interface LeaseViewerCrudServiceBase<DTO extends LeaseDTO> extends AbstractCrudService<DTO> {
+public interface LeaseViewerCrudServiceBase<DTO extends LeaseDTO> extends AbstractCrmPrimeCrudService<DTO> {
 
     void retrieveParticipants(AsyncCallback<Vector<LeaseTermParticipant<?>>> callback, Key entityId, Boolean includeDependants);
 
