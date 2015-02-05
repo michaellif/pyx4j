@@ -337,6 +337,10 @@ public class SeleniumExtended extends WebDriverWrapper {
         }
     }
 
+    public WebElement findElement(IDebugId debugId) {
+        return driver.findElement(by(debugId));
+    }
+
     public void click(By by) {
         WebElement element = driver.findElement(by);
         log("click on element <{}> id={} ", element.getTagName(), element.getAttribute("id"));
