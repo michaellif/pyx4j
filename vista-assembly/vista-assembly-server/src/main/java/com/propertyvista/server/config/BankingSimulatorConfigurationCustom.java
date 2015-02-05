@@ -14,6 +14,8 @@ package com.propertyvista.server.config;
 
 import java.io.File;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
+
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.BankingSimulatorConfiguration;
 
@@ -28,7 +30,8 @@ class BankingSimulatorConfigurationCustom extends BankingSimulatorConfiguration 
     @Override
     public String getCardServiceSimulatorUrl() {
         return config.getConfigProperties().getValue("simulator.cardServiceSimulatorUrl", //
-                "http://" + "interfaces" + config.getApplicationURLNamespace(false) //
+                ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getApplicationDeploymentProtocol() //
+                        + "://" + "interfaces" + config.getApplicationURLNamespace(false) //
                         + BankingSimulatorConfiguration.cardServiceSimulatorServletMapping) //
                 + config.getCaledonFundsTransferConfiguration().getCardsReconciliationId();
     }

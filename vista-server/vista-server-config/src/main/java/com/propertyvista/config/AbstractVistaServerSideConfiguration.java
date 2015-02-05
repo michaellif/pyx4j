@@ -47,6 +47,7 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract Integer enviromentId();
 
+    @Override
     public abstract boolean isDemoBehavior();
 
     public abstract boolean isVistaQa();
@@ -64,6 +65,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
     public abstract String openIdDomainIdentifier(String userDomain);
 
     public abstract String openIdProviderDomain();
+
+    public abstract String getApplicationDeploymentProtocol();
 
     public abstract boolean isDepoymentHttps();
 

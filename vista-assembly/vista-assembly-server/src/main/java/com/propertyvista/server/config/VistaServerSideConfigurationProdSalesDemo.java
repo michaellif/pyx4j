@@ -35,11 +35,6 @@ public class VistaServerSideConfigurationProdSalesDemo extends VistaServerSideCo
     }
 
     @Override
-    protected String getApplicationDeploymentProtocol() {
-        return "https";
-    }
-
-    @Override
     public String getApplicationURLNamespace(boolean secure) {
         return ".propertyvista.biz/";
     }

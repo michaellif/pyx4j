@@ -14,17 +14,17 @@ package com.propertyvista.crm.rpc.services.organization;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.annotations.AccessControl;
 
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.dto.company.ac.CRMUserSecurityActions;
+import com.propertyvista.crm.rpc.services.AbstractCrmCrudService;
 
 /**
  * Service used by managers to create new users/employees.
  */
-public interface EmployeeCrudService extends AbstractCrudService<EmployeeDTO> {
+public interface EmployeeCrudService extends AbstractCrmCrudService<EmployeeDTO> {
 
     @AccessControl(CRMUserSecurityActions.class)
     void clearSecurityQuestion(AsyncCallback<VoidSerializable> asyncCallback, EmployeeDTO employeeId);

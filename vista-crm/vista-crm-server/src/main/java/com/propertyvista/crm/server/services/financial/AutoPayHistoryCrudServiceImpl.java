@@ -19,7 +19,6 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
@@ -27,6 +26,7 @@ import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.crm.rpc.services.financial.AutoPayHistoryCrudService;
+import com.propertyvista.crm.server.services.AbstractCrmCrudServiceImpl;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.pmc.Pmc;
@@ -35,7 +35,7 @@ import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.server.TaskRunner;
 
-public class AutoPayHistoryCrudServiceImpl extends AbstractCrudServiceDtoImpl<AutopayAgreement, AutoPayHistoryDTO> implements AutoPayHistoryCrudService {
+public class AutoPayHistoryCrudServiceImpl extends AbstractCrmCrudServiceImpl<AutopayAgreement, AutoPayHistoryDTO> implements AutoPayHistoryCrudService {
 
     public AutoPayHistoryCrudServiceImpl() {
         super(AutopayAgreement.class, AutoPayHistoryDTO.class);

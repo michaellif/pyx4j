@@ -65,6 +65,10 @@ public class JobNotifications {
             return;
         }
 
+        if ((run.executionReport().erred().getValue(0L) > 0) || (run.executionReport().detailsErred().getValue(0L) > 0)) {
+            events.add(TriggerNotificationEvent.Error);
+        }
+
         if (run.executionReport().total().getValue(0L) > 0) {
             events.add(TriggerNotificationEvent.NonEmpty);
         }

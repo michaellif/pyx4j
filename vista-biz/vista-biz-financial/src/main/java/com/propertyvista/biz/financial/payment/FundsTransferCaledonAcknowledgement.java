@@ -15,12 +15,14 @@ package com.propertyvista.biz.financial.payment;
 import java.util.EnumSet;
 
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.eft.caledoneft.CaledonPadUtils;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatch;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatchProcessingStatus;
@@ -109,6 +111,13 @@ class FundsTransferCaledonAcknowledgement {
 
             executionMonitor.setMessage("File not Accepted");
             executionMonitor.addErredEvent("fileStatus", padFile.acknowledgmentStatusCode().getValue());
+
+            ServerSideFactory.create(OperationsAlertFacade.class).record(padFile,
+                    "Funds Transfer File {0} with {1} record(s) was not accepted {2} {3};\nPayment Subsystem Halted!",//
+                    padFile.fileName(), //
+                    padFile.recordsCount(), //
+                    ackFile.acknowledgmentStatusCode(), //
+                    ackFile.acknowledgmentRejectReasonMessage());
         }
     }
 

@@ -27,7 +27,6 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.entity.server.Persistence;
 
@@ -36,6 +35,7 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.crm.rpc.services.customer.LeaseParticipantCrudServiceBase;
+import com.propertyvista.crm.server.services.AbstractCrmCrudServiceImpl;
 import com.propertyvista.crm.server.util.LeaseParticipantUtils;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -52,7 +52,7 @@ import com.propertyvista.dto.LeaseParticipantDTO;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeaseParticipant<? extends LeaseTermParticipant<?>>, TO extends LeaseParticipantDTO<? extends LeaseTermParticipant<?>>>
-        extends AbstractCrudServiceDtoImpl<BO, TO> implements LeaseParticipantCrudServiceBase<TO> {
+        extends AbstractCrmCrudServiceImpl<BO, TO> implements LeaseParticipantCrudServiceBase<TO> {
 
     public LeaseParticipantCrudServiceBaseImpl(Class<BO> boClass, Class<TO> toClass) {
         super(new CrudEntityBinder<BO, TO>(boClass, toClass) {

@@ -19,6 +19,8 @@ public enum PmcProcessOptions {
 
     GlobalOnly,
 
-    RequiredDaily
+    RequiredDaily,
+
+    NextDayAutoRecoverable
 
 }

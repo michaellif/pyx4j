@@ -17,15 +17,15 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.crm.rpc.services.AbstractCrmCrudService;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Lead.ConvertToLeaseAppraisal;
 
-public interface LeadCrudService extends AbstractCrudService<Lead> {
+public interface LeadCrudService extends AbstractCrmCrudService<Lead> {
 
     void updateValue(AsyncCallback<Floorplan> callback, Key floorplanId);
 

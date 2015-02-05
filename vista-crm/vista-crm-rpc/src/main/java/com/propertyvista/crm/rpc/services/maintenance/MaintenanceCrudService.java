@@ -17,10 +17,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.annotations.AccessControl;
 
+import com.propertyvista.crm.rpc.services.AbstractCrmCrudService;
 import com.propertyvista.crm.rpc.services.maintenance.ac.Resolve;
 import com.propertyvista.crm.rpc.services.maintenance.ac.Schedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
@@ -31,7 +32,7 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.MaintenanceRequestWorkOrderDTO;
 
-public interface MaintenanceCrudService extends AbstractCrudService<MaintenanceRequestDTO> {
+public interface MaintenanceCrudService extends AbstractCrmCrudService<MaintenanceRequestDTO> {
 
     @Transient
     interface MaintenanceInitializationData extends InitializationData {

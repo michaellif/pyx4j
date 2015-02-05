@@ -52,11 +52,6 @@ public class VistaServerSideConfiguration44 extends VistaServerSideConfiguration
     }
 
     @Override
-    protected String getApplicationDeploymentProtocol() {
-        return "https";
-    }
-
-    @Override
     public String getApplicationURLNamespace(boolean secure) {
         if (isDepoymentUseNewDevDomains()) {
             return "-44.devpv.com/";

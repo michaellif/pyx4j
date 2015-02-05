@@ -164,6 +164,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
+    public String getApplicationDeploymentProtocol() {
+        return "http";
+    }
+
+    @Override
     public boolean isDepoymentHttps() {
         return false;
     }

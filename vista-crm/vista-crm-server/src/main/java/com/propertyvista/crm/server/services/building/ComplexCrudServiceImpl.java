@@ -15,17 +15,17 @@ package com.propertyvista.crm.server.services.building;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.CrudEntityBinder;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.building.ComplexCrudService;
+import com.propertyvista.crm.server.services.AbstractCrmCrudServiceImpl;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.ComplexDTO;
 
-public class ComplexCrudServiceImpl extends AbstractCrudServiceDtoImpl<Complex, ComplexDTO> implements ComplexCrudService {
+public class ComplexCrudServiceImpl extends AbstractCrmCrudServiceImpl<Complex, ComplexDTO> implements ComplexCrudService {
 
     private static class BuildingBinder extends CrudEntityBinder<Building, Building> {
 

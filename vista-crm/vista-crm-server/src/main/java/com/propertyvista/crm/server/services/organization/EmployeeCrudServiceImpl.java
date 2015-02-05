@@ -22,7 +22,6 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.security.DataModelPermission;
-import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityDiff;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -38,6 +37,7 @@ import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.dto.company.EmployeePrivilegesDTO;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
+import com.propertyvista.crm.server.services.AbstractCrmCrudServiceImpl;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.security.AuditRecordEventType;
@@ -48,7 +48,7 @@ import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
 import com.propertyvista.server.common.security.UserAccessUtils;
 import com.propertyvista.server.domain.security.BehaviorHolder;
 
-public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee, EmployeeDTO> implements EmployeeCrudService {
+public class EmployeeCrudServiceImpl extends AbstractCrmCrudServiceImpl<Employee, EmployeeDTO> implements EmployeeCrudService {
 
     public EmployeeCrudServiceImpl() {
         super(Employee.class, EmployeeDTO.class);

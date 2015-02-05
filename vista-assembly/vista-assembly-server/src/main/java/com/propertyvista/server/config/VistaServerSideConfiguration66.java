@@ -20,11 +20,6 @@ public class VistaServerSideConfiguration66 extends VistaServerSideConfiguration
     }
 
     @Override
-    protected String getApplicationDeploymentProtocol() {
-        return "https";
-    }
-
-    @Override
     public int interfaceSSHDPort() {
         return 8826;
     }

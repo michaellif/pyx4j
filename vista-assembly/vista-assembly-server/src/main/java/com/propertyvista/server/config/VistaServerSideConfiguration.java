@@ -146,8 +146,13 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
         return getApplicationDeploymentProtocol() + "://" + NamespaceManager.getNamespace() + getApplicationURLNamespace(true);
     }
 
-    protected String getApplicationDeploymentProtocol() {
-        return "http";
+    @Override
+    public String getApplicationDeploymentProtocol() {
+        if (isDepoymentHttps()) {
+            return "https";
+        } else {
+            return "http";
+        }
     }
 
     @Override

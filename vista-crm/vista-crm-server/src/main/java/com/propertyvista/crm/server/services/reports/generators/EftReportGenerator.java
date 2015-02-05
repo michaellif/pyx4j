@@ -258,7 +258,6 @@ public class EftReportGenerator implements ReportExporter {
 
         criteria.isNotNull(criteria.proto().padBillingCycle());
 
-        criteria.eq(criteria.proto().billingAccount().lease().status(), Lease.Status.Active);
         if (reportMetadata.leasesOnNoticeOnly().getValue(false)) {
             criteria.eq(criteria.proto().billingAccount().lease().completion(), Lease.CompletionType.Notice);
         }

@@ -12,10 +12,9 @@
  */
 package com.propertyvista.crm.rpc.services.financial;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
-
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
+import com.propertyvista.crm.rpc.services.AbstractCrmCrudService;
 
-public interface AutoPayHistoryCrudService extends AbstractCrudService<AutoPayHistoryDTO> {
+public interface AutoPayHistoryCrudService extends AbstractCrmCrudService<AutoPayHistoryDTO> {
 
 }
