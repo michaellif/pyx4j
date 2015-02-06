@@ -76,6 +76,7 @@ public class LeasePreloaderHelper {
         autoPayAgreement.tenant().set(leaseParticipant);
         autoPayAgreement.effectiveFrom().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(autoPayAgreement.tenant().lease()));
         autoPayAgreement.paymentMethod().set(methods.get(0));
+        autoPayAgreement.comments().setValue("Default PreAuthorization");
 
         // Setup autopay with the amount of money for the item
         AutopayAgreementCoveredItem coveredItems = EntityFactory.create(AutopayAgreementCoveredItem.class);

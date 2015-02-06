@@ -53,8 +53,6 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
-import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.EcheckInfo;
@@ -294,27 +292,6 @@ public class LeaseLifecycleSimulator {
             lease.currentTerm().type().setValue((random.nextInt() % 10 < 7) ? Type.Fixed : Type.FixedEx);
             lease.leaseApplication().referenceSource().setValue(RandomUtil.randomEnum(ReferenceSource.class));
             lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
-            Persistence.service().retrieveMember(lease.leaseParticipants());
-
-            LeaseTermTenant mainTenant = lease.currentTerm().version().tenants().get(0);
-
-            if (!mainTenant.leaseParticipant().customer().paymentMethods().isEmpty()) {
-                // new approach:
-                AutopayAgreement pap = EntityFactory.create(AutopayAgreement.class);
-
-                pap.paymentMethod().set(mainTenant.leaseParticipant().customer().paymentMethods().iterator().next());
-
-                AutopayAgreementCoveredItem papItem = EntityFactory.create(AutopayAgreementCoveredItem.class);
-                papItem.billableItem().set(lease.currentTerm().version().leaseProducts().serviceItem());
-                papItem.amount().setValue(papItem.billableItem().agreedPrice().getValue());
-                pap.coveredItems().add(papItem);
-                pap.comments().setValue("Default PreAuthorization...");
-
-                pap.tenant().set(mainTenant.leaseParticipant());
-                Persistence.service().persist(pap);
-            }
-
-            Persistence.service().merge(mainTenant.leaseParticipant());
 
             for (LeaseTermTenant participant : lease.currentTerm().version().tenants()) {
                 participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
