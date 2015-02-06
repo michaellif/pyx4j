@@ -252,6 +252,18 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                     simBuilder2.end(new LogicalDate());
                     simBuilder2.create().generateRandomLifeCycle(lease2);
                 }
+
+                if (lease.status().getValue().isActive()) {
+                    new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+                        @Override
+                        public Void execute() throws RuntimeException {
+                            LeaseTermTenant mainTenant = lease.currentTerm().version().tenants().get(0);
+                            LeaseProducts products = lease.currentTerm().version().leaseProducts();
+                            createDefaultAutopay(mainTenant, products);
+                            return null;
+                        }
+                    });
+                }
             }
 
             numCreated++;
@@ -394,9 +406,12 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
     private void createDefaultAutopay(LeaseTermTenant tenant, LeaseProducts products) {
         BillableItem item = null;
-        if (products != null && !products.isEmpty()) {
+        if (products != null && !products.isEmpty() && !products.featureItems().isEmpty()) {
             item = products.featureItems().get(0);
+        } else {
+            item = products.serviceItem();
         }
+        Persistence.ensureRetrieve(tenant.leaseParticipant(), AttachLevel.Attached);
         LeasePreloaderHelper.createDefaultAutoPayment(tenant.leaseParticipant(), item);
     }
 
