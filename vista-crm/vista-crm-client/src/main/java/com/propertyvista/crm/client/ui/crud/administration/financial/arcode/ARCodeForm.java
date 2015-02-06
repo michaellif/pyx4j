@@ -30,11 +30,16 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
 
     private static final I18n i18n = I18n.get(ARCodeForm.class);
 
-    private final FormPanel yardiIntegrationPanel;
+    private FormPanel yardiIntegrationPanel;
 
     public ARCodeForm(IPrimeFormView<ARCode, ?> view) {
         super(ARCode.class, view);
 
+        selectTab(addTab(createDetailsTabPanel(), i18n.tr("Details")));
+        setTabBarVisible(false);
+    }
+
+    private FormPanel createDetailsTabPanel() {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().name()).decorate().componentWidth(200);
@@ -59,18 +64,27 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
             }
         }).decorate().componentWidth(200);
 
+        formPanel.append(Location.Right, proto().reserved()).decorate();
+        get(proto().type()).inheritEditable(false);
+
+        formPanel.append(Location.Dual, createYardiIntegrationPanel());
+
+        return formPanel;
+    }
+
+    private FormPanel createYardiIntegrationPanel() {
         yardiIntegrationPanel = new FormPanel(this);
+
         yardiIntegrationPanel.h1(i18n.tr("Yardi Integration"));
         yardiIntegrationPanel.append(Location.Left, proto().yardiChargeCodes(), new YardiChargeCodeFolder());
 
-        formPanel.append(Location.Dual, yardiIntegrationPanel);
-
-        setTabBarVisible(false);
-        selectTab(addTab(formPanel, i18n.tr("AR Code")));
+        return yardiIntegrationPanel;
     }
 
     @Override
     public void setYardiIntegrationModeEnabled(boolean enabled) {
+        assert (yardiIntegrationPanel != null);
+
         yardiIntegrationPanel.setVisible(enabled);
         get(proto().glCode()).setVisible(!enabled);
     }
@@ -80,7 +94,6 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
         super.onValueSet(populate);
 
         // disable type change on reserved codes:
-        get(proto().type()).inheritEditable(false);
         get(proto().type()).setEditable(!getValue().reserved().getValue(true));
     }
 }

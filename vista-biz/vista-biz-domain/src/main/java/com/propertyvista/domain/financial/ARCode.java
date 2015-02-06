@@ -18,6 +18,8 @@ import java.util.EnumSet;
 
 import javax.xml.bind.annotation.XmlType;
 
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
@@ -168,6 +170,7 @@ public interface ARCode extends IEntity {
     IPrimitive<Date> updated();
 
     @NotNull
+    @Editor(type = EditorType.label)
     IPrimitive<Boolean> reserved();
 
     /** Named "charge code", however it's applied to both charges and credits */
