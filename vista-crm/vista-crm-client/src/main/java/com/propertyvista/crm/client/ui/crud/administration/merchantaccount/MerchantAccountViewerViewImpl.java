@@ -21,16 +21,16 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 public class MerchantAccountViewerViewImpl extends CrmViewerViewImplBase<MerchantAccount> implements MerchantAccountViewerView {
 
-    private final BuildingLister buildingLister;
+    private final BuildingLister buildingLister = new BuildingLister();
 
     public MerchantAccountViewerViewImpl() {
-        buildingLister = new BuildingLister();
-
         setForm(new MerchantAccountForm(this));
     }
 
     @Override
     public void populate(MerchantAccount value) {
+        super.populate(value);
+
         buildingLister.getDataSource().clearPreDefinedFilters();
         buildingLister.getDataSource().addPreDefinedFilter(
                 PropertyCriterion.eq(EntityFactory.getEntityPrototype(Building.class).merchantAccounts().$().merchantAccount(), value));
