@@ -59,6 +59,21 @@ BEGIN
         ALTER TABLE proof_of_income_document_folder DROP CONSTRAINT proof_of_income_document_folder_pk;
         
         
+        -- check constraints
+        
+        ALTER TABLE billing_arrears_snapshot DROP CONSTRAINT billing_arrears_snapshot_legal_status_e_ck;
+        ALTER TABLE building_amenity DROP CONSTRAINT building_amenity_building_amenity_type_e_ck;
+        ALTER TABLE communication_message_category DROP CONSTRAINT communication_message_category_category_type_e_ck;
+        ALTER TABLE communication_message_category DROP CONSTRAINT communication_message_category_ticket_type_e_ck;
+        ALTER TABLE customer_screening_personal_asset DROP CONSTRAINT customer_screening_personal_asset_asset_type_e_ck;
+        ALTER TABLE email_template DROP CONSTRAINT email_template_template_type_e_ck;
+        ALTER TABLE floorplan_amenity DROP CONSTRAINT floorplan_amenity_floorplan_type_e_ck;
+        ALTER TABLE lead DROP CONSTRAINT lead_ref_source_e_ck;
+        ALTER TABLE legal_status DROP CONSTRAINT legal_status_id_discriminator_ck;
+        ALTER TABLE legal_status DROP CONSTRAINT legal_status_status_e_ck;
+        ALTER TABLE maintenance_request DROP CONSTRAINT maintenance_request_preferred_time1_e_ck;
+        ALTER TABLE maintenance_request DROP CONSTRAINT maintenance_request_preferred_time2_e_ck;
+        ALTER TABLE notes_and_attachments DROP CONSTRAINT notes_and_attachments_owner_discriminator_d_ck;
 
 
 
@@ -987,6 +1002,23 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.application_documentation_policy '
                 ||'SET  mandatory_proof_of_asset = FALSE, '
                 ||'     mandatory_proof_of_employment = mandatory_proof_of_income ';
+                
+        -- building_amenity
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.building_amenity '
+                ||'SET  building_amenity_type = ''racquetballCourt'' '
+                ||'WHERE    building_amenity_type = ''racquetball'' ';
+                
+        -- communication_message_category
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.communication_message_category '
+                ||'SET  ticket_type = NULL '
+                ||'WHERE    ticket_type = ''NotTicket'' ';
+                
+        EXECUTE 'INSERT INTO '||v_schema_name||'.communication_message_category '
+                ||'             (id,category,category_type,ticket_type,deleted) '
+                ||'(SELECT  nextval(''public.communication_message_category_seq'') AS id, '
+                ||'         ''Maintenance'',''Ticket'',''Maintenance'',FALSE )';
         
         
         -- customer_screening_income_info
@@ -1048,22 +1080,18 @@ BEGIN
         
         -- legal_status
         
-        -- DROP TABLE legal_status;
+        DROP TABLE legal_status;
         
         -- maintenance_request
-        /*
+        
         
         ALTER TABLE maintenance_request DROP COLUMN preferred_time1,
                                         DROP COLUMN preferred_time2;
-        */
         
-        -- maintenance_request_schedule
-        
-        -- DROP TABLE maintenance_request_schedule;
         
         -- n4_policy
         
-        -- ALTER TABLE n4_policy DROP COLUMN include_signature;
+        ALTER TABLE n4_policy DROP COLUMN include_signature;
         
         -- permission_to_enter_note
         
@@ -1230,6 +1258,176 @@ BEGIN
         ALTER TABLE status_selection_policy_item ADD CONSTRAINT status_selection_policy_item_checklist_item_fk FOREIGN KEY(checklist_item) 
             REFERENCES application_approval_checklist_policy_item(id)  DEFERRABLE INITIALLY DEFERRED;
 
+        
+        -- check constraints
+        
+        ALTER TABLE application_approval_checklist_policy ADD CONSTRAINT application_approval_checklist_policy_node_discriminator_d_ck 
+            CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
+        ALTER TABLE broadcast_template ADD CONSTRAINT broadcast_template_audience_type_e_ck 
+            CHECK ((audience_type) IN ('Customer', 'Employee', 'Guarantor', 'Prospect', 'Tenant'));
+        ALTER TABLE broadcast_template ADD CONSTRAINT broadcast_template_message_type_e_ck 
+            CHECK ((message_type) IN ('CommercialActivity', 'Informational', 'Legal', 'Organizational', 'Promotional'));
+        ALTER TABLE broadcast_template ADD CONSTRAINT broadcast_template_template_type_e_ck 
+            CHECK ((template_type) IN ('ApplicationApproved', 'ApplicationCreatedApplicant', 'ApplicationCreatedCoApplicant', 
+            'ApplicationCreatedGuarantor', 'ApplicationDeclined', 'AutoPayCancellation', 'AutoPayChanges', 'AutoPaySetupConfirmation', 
+            'DirectDebitAccountChanged', 'MaintenanceRequestCancelled', 'MaintenanceRequestCompleted', 'MaintenanceRequestCreatedPMC', 
+            'MaintenanceRequestCreatedTenant', 'MaintenanceRequestEntryNotice', 'MaintenanceRequestUpdated', 'MessageBroadcastCustomer', 
+            'MessageBroadcastEmployee', 'MessageBroadcastGuarantor', 'MessageBroadcastProspect', 'MessageBroadcastTenant', 
+            'OneTimePaymentSubmitted', 'PasswordRetrievalCrm', 'PasswordRetrievalProspect', 'PasswordRetrievalTenant', 
+            'PaymentReceipt', 'PaymentReceiptWithWebPaymentFee', 'PaymentReturned', 'ProspectWelcome', 'TenantInvitation'));
+        ALTER TABLE building_amenity ADD CONSTRAINT building_amenity_building_amenity_type_e_ck 
+            CHECK ((building_amenity_type) IN ('airConditioning', 'availability24Hours', 'balcony', 'basketballCourt', 'businessCenter', 
+            'childCare', 'clubDiscount', 'clubHouse', 'concierge', 'controlledAccess', 'coveredParking', 'doorAttendant', 'elevator', 'fitness', 
+            'fitnessCentre', 'freeWeights', 'furnishedUnits', 'garage', 'gas', 'gate', 'groupExercise', 'guestRoom', 'handicapAccess', 'highSpeed', 
+            'houseSitting', 'housekeeping', 'hydro', 'intrusionAlarm', 'laundry', 'library', 'mealService', 'nightPatrol', 'onSiteMaintenance', 
+            'onSiteManagement', 'other', 'packageReceiving', 'parking', 'playGround', 'pool', 'racquetballCourt', 'recreationalRoom', 'sauna', 
+            'shortTermLease', 'spa', 'storageSpace', 'sundeck', 'tennisCourt', 'transportation', 'tvLounge', 'vintage', 'volleyballCourt', 'water'));
+        ALTER TABLE communication_delivery_handle ADD CONSTRAINT communication_delivery_handle_message_type_e_ck 
+            CHECK ((message_type) IN ('CommercialActivity', 'Informational', 'Legal', 'Organizational', 'Promotional'));
+        ALTER TABLE communication_message ADD CONSTRAINT communication_message_on_behalf_discriminator_d_ck 
+            CHECK ((on_behalf_discriminator) IN ('Employee', 'Guarantor', 'SystemEndpoint', 'Tenant'));
+        ALTER TABLE communication_message_category ADD CONSTRAINT communication_message_category_category_type_e_ck 
+            CHECK ((category_type) IN ('Message', 'Ticket'));
+        ALTER TABLE communication_message_category ADD CONSTRAINT communication_message_category_ticket_type_e_ck 
+            CHECK ((ticket_type) IN ('Landlord', 'Maintenance', 'Tenant', 'Vendor'));
+        ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_associated_discriminator_d_ck 
+            CHECK (associated_discriminator = 'MaintenanceRequest');
+        ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_delivery_method_e_ck 
+            CHECK ((delivery_method) IN ('IVR', 'Notification', 'SMS'));
+        ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_special_delivery_discriminator_d_ck 
+            CHECK ((special_delivery_discriminator) IN ('IVRDelivery', 'NotificationDelivery', 'SMSDelivery'));
+        ALTER TABLE crm_user_delivery_preferences ADD CONSTRAINT crm_user_delivery_preferences_informational_delivery_e_ck 
+            CHECK ((informational_delivery) IN ('Daily', 'DoNotSend', 'Individual', 'Weekly'));
+        ALTER TABLE crm_user_delivery_preferences ADD CONSTRAINT crm_user_delivery_preferences_promotional_delivery_e_ck 
+            CHECK ((promotional_delivery) IN ('Daily', 'DoNotSend', 'Individual', 'Weekly'));
+        ALTER TABLE customer_credit_check ADD CONSTRAINT customer_credit_check_screene_discriminator_d_ck 
+            CHECK ((screene_discriminator) IN ('Guarantor', 'Tenant'));
+        ALTER TABLE customer_delivery_preferences ADD CONSTRAINT customer_delivery_preferences_informational_delivery_e_ck 
+            CHECK ((informational_delivery) IN ('Daily', 'DoNotSend', 'Individual', 'Weekly'));
+        ALTER TABLE customer_delivery_preferences ADD CONSTRAINT customer_delivery_preferences_promotional_delivery_e_ck 
+            CHECK ((promotional_delivery) IN ('Daily', 'DoNotSend', 'Individual', 'Weekly'));
+        ALTER TABLE customer_screening_asset ADD CONSTRAINT customer_screening_asset_asset_type_e_ck 
+            CHECK ((asset_type) IN ('bankAccounts', 'businesses', 'cars', 'insurancePolicies', 'other', 'realEstateProperties', 'shares', 'unitTrusts'));
+        ALTER TABLE customer_screening_income_info ADD CONSTRAINT customer_screening_income_info_amount_period_e_ck 
+            CHECK ((amount_period) IN ('Annually', 'BiWeekly', 'Daily', 'Hourly', 'Monthly', 'Quaterly', 'SemiAnnually', 'SemiMonthly', 'Weekly'));
+        ALTER TABLE customer_screening_income_info ADD CONSTRAINT customer_screening_income_info_revenue_amount_period_e_ck 
+            CHECK ((revenue_amount_period) IN ('Annually', 'BiWeekly', 'Daily', 'Hourly', 'Monthly', 'Quaterly', 'SemiAnnually', 'SemiMonthly', 'Weekly'));
+        ALTER TABLE email_template ADD CONSTRAINT email_template_template_type_e_ck 
+            CHECK ((template_type) IN ('ApplicationApproved', 'ApplicationCreatedApplicant', 'ApplicationCreatedCoApplicant', 'ApplicationCreatedGuarantor', 
+            'ApplicationDeclined', 'AutoPayCancellation', 'AutoPayChanges', 'AutoPaySetupConfirmation', 'DirectDebitAccountChanged', 
+            'MaintenanceRequestCancelled', 'MaintenanceRequestCompleted', 'MaintenanceRequestCreatedPMC', 'MaintenanceRequestCreatedTenant', 
+            'MaintenanceRequestEntryNotice', 'MaintenanceRequestUpdated', 'MessageBroadcastCustomer', 'MessageBroadcastEmployee', 
+            'MessageBroadcastGuarantor', 'MessageBroadcastProspect', 'MessageBroadcastTenant', 'OneTimePaymentSubmitted', 'PasswordRetrievalCrm', 
+            'PasswordRetrievalProspect', 'PasswordRetrievalTenant', 'PaymentReceipt', 'PaymentReceiptWithWebPaymentFee', 'PaymentReturned', 
+            'ProspectWelcome', 'TenantInvitation'));
+        ALTER TABLE entry_instructions_note ADD CONSTRAINT entry_instructions_note_locale_e_ck 
+            CHECK ((locale) IN ('en', 'en_CA', 'en_GB', 'en_US', 'es', 'fr', 'fr_CA', 'ru', 'zh_CN', 'zh_TW'));
+        ALTER TABLE entry_not_granted_alert ADD CONSTRAINT entry_not_granted_alert_locale_e_ck 
+            CHECK ((locale) IN ('en', 'en_CA', 'en_GB', 'en_US', 'es', 'fr', 'fr_CA', 'ru', 'zh_CN', 'zh_TW'));
+        ALTER TABLE eviction_case_status ADD CONSTRAINT eviction_case_status_id_discriminator_ck 
+            CHECK ((id_discriminator) IN ('General', 'N4'));
+        ALTER TABLE eviction_flow_policy ADD CONSTRAINT eviction_flow_policy_node_discriminator_d_ck 
+            CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
+        ALTER TABLE eviction_flow_step ADD CONSTRAINT eviction_flow_step_step_type_e_ck 
+            CHECK ((step_type) IN ('Custom', 'HearingDate', 'L1', 'N4', 'Order', 'RequestToReviewOrder', 'SetAside', 'Sheriff', 'StayOrder'));
+        ALTER TABLE eviction_status_record ADD CONSTRAINT eviction_status_record_eviction_status_discriminator_d_ck 
+            CHECK ((eviction_status_discriminator) IN ('General', 'N4'));
+        ALTER TABLE floorplan_amenity ADD CONSTRAINT floorplan_amenity_floorplan_type_e_ck 
+            CHECK ((floorplan_type) IN ('additionalStorage', 'airConditioner', 'alarm', 'balcony', 'cable', 'carpeting', 'carport', 'ceilingFan', 
+            'controlledAccess', 'courtyard', 'dishwasher', 'disposal', 'dryer', 'fireplace', 'furnished', 'garage', 'handrails', 'hardwoodFloors', 
+            'heat', 'highSpeedInternetAvailable', 'individualClimateControl', 'largeClosets', 'microwave', 'other', 'patio', 'privateBalcony', 
+            'privatePatio', 'range', 'refrigerator', 'satellite', 'skylight', 'vaultedCeiling', 'view', 'walkinClosets', 'washer', 'wdHookup', 
+            'wheelChair', 'windowCoverings'));
+        ALTER TABLE lead ADD CONSTRAINT lead_reference_source_e_ck 
+            CHECK ((reference_source) IN ('DirectMail', 'Internet', 'Newspaper', 'Other', 'Radio', 'Referral', 'TV'));
+        ALTER TABLE lease_application ADD CONSTRAINT lease_application_reference_source_e_ck 
+            CHECK ((reference_source) IN ('DirectMail', 'Internet', 'Newspaper', 'Other', 'Radio', 'Referral', 'TV'));
+        ALTER TABLE legal_questions_policy ADD CONSTRAINT legal_questions_policy_node_discriminator_d_ck 
+            CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
+        ALTER TABLE legal_questions_policy_item ADD CONSTRAINT legal_questions_policy_item_locale_e_ck 
+            CHECK ((locale) IN ('en', 'en_CA', 'en_GB', 'en_US', 'es', 'fr', 'fr_CA', 'ru', 'zh_CN', 'zh_TW'));
+        ALTER TABLE n4_batch ADD CONSTRAINT n4_batch_company_address_country_e_ck 
+            CHECK ((company_address_country) IN ('Afghanistan', 'AlandIslands', 'Albania', 'Algeria', 'AmericanSamoa', 'Andorra', 'Angola', 'Anguilla', 
+            'Antarctica', 'Antigua', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 
+            'Belarus', 'Belgium', 'Belize', 'Benin', 'Bermuda', 'Bhutan', 'Bolivia', 'Bonaire', 'BosniaHerzegovina', 'Botswana', 'BouvetIsland', 'Brazil', 
+            'BruneiDarussalam', 'Bulgaria', 'BurkinaFaso', 'Burundi', 'CaboVerde', 'Cambodia', 'Cameroon', 'Canada', 'CaymanIslands', 'CentralAfricanRepublic', 
+            'Chad', 'Chile', 'China', 'ChristmasIsland', 'CocosIslands', 'Colombia', 'Comoros', 'Congo', 'CookIslands', 'CostaRica', 'Croatia', 'Cuba', 'Curacao', 
+            'Cyprus', 'CzechRepublic', 'Denmark', 'Djibouti', 'Dominica', 'DominicanRepublic', 'Ecuador', 'Egypt', 'ElSalvador', 'EquatorialGuinea', 'Eritrea', 
+            'Estonia', 'Ethiopia', 'FalklandIslands', 'FaroeIslands', 'Fiji', 'Finland', 'France', 'FrenchGuiana', 'FrenchPolynesia', 'FrenchTerritories', 'Gabon', 
+            'Gambia', 'Georgia', 'Germany', 'Ghana', 'Gibraltar', 'Greece', 'Greenland', 'Grenada', 'Guadeloupe', 'Guam', 'Guatemala', 'Guernsey', 'Guinea', 
+            'GuineaBissau', 'Guyana', 'Haiti', 'HeardIslands', 'Honduras', 'HongKong', 'Hungary', 'Iceland', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 
+            'IsleOfMan', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jersey', 'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati', 'Kuwait', 'Kyrgyzstan', 'LaoRepublic', 
+            'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Macao', 'Macedonia', 'Madagascar', 'Malawi', 'Malaysia', 
+            'Maldives', 'Mali', 'Malta', 'MarshallIslands', 'Martinique', 'Mauritania', 'Mauritius', 'Mayotte', 'Mexico', 'Micronesia', 'Moldova', 'Monaco', 'Mongolia', 
+            'Montenegro', 'Montserrat', 'Morocco', 'Mozambique', 'Myanmar', 'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'NewCaledonia', 'NewZealand', 'Nicaragua', 
+            'Niger', 'Nigeria', 'Niue', 'NorfolkIsland', 'NorthKorea', 'NorthernMarianaIslands', 'Norway', 'Oman', 'Pakistan', 'Palau', 'Palestine', 'Panama', 
+            'PapuaNewGuinea', 'Paraguay', 'Peru', 'Philippines', 'Pitcairn', 'Poland', 'Portugal', 'PuertoRico', 'Qatar', 'Reunion', 'Romania', 'RussianFederation', 
+            'Rwanda', 'SaintBarthelemy', 'SaintHelena', 'SaintKitts', 'SaintLucia', 'SaintMartin', 'SaintPierre', 'SaintVincent', 'Samoa', 'SanMarino', 'SaoTome', 
+            'SaudiArabia', 'Senegal', 'Serbia', 'Seychelles', 'SierraLeone', 'Singapore', 'SintMaartenDutch', 'Slovakia', 'Slovenia', 'SolomonIslands', 'Somalia', 
+            'SouthAfrica', 'SouthKorea', 'SouthSudan', 'Spain', 'SriLanka', 'Sudan', 'Suriname', 'Svalbard', 'Swaziland', 'Sweden', 'Switzerland', 'Syria', 'Taiwan', 
+            'Tajikistan', 'Tanzania', 'Thailand', 'TimorLeste', 'Togo', 'Tokelau', 'Tonga', 'Trinidad', 'Tunisia', 'Turkey', 'Turkmenistan', 'TurksCaicos', 'Tuvalu', 
+            'Uganda', 'Ukraine', 'UnitedArabEmirates', 'UnitedKingdom', 'UnitedStates', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican', 'Venezuela', 'VietNam', 
+            'VirginIslands', 'VirginIslandsGB', 'WallisFutuna', 'WesternSahara', 'Yemen', 'Zambia', 'Zimbabwe'));
+        ALTER TABLE n4_batch ADD CONSTRAINT n4_batch_delivery_method_e_ck CHECK ((delivery_method) IN ('Courier', 'Hand', 'Mail'));
+        ALTER TABLE n4_batch ADD CONSTRAINT n4_batch_termination_date_option_e_ck CHECK ((termination_date_option) IN ('Calculate', 'LeaveBlank'));
+        ALTER TABLE n4_lease_data ADD CONSTRAINT n4_lease_data_company_address_country_e_ck 
+            CHECK ((company_address_country) IN ('Afghanistan', 'AlandIslands', 'Albania', 'Algeria', 'AmericanSamoa', 'Andorra', 'Angola', 'Anguilla', 
+            'Antarctica', 'Antigua', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 
+            'Belarus', 'Belgium', 'Belize', 'Benin', 'Bermuda', 'Bhutan', 'Bolivia', 'Bonaire', 'BosniaHerzegovina', 'Botswana', 'BouvetIsland', 'Brazil', 
+            'BruneiDarussalam', 'Bulgaria', 'BurkinaFaso', 'Burundi', 'CaboVerde', 'Cambodia', 'Cameroon', 'Canada', 'CaymanIslands', 'CentralAfricanRepublic', 
+            'Chad', 'Chile', 'China', 'ChristmasIsland', 'CocosIslands', 'Colombia', 'Comoros', 'Congo', 'CookIslands', 'CostaRica', 'Croatia', 'Cuba', 'Curacao', 
+            'Cyprus', 'CzechRepublic', 'Denmark', 'Djibouti', 'Dominica', 'DominicanRepublic', 'Ecuador', 'Egypt', 'ElSalvador', 'EquatorialGuinea', 'Eritrea', 
+            'Estonia', 'Ethiopia', 'FalklandIslands', 'FaroeIslands', 'Fiji', 'Finland', 'France', 'FrenchGuiana', 'FrenchPolynesia', 'FrenchTerritories', 'Gabon', 
+            'Gambia', 'Georgia', 'Germany', 'Ghana', 'Gibraltar', 'Greece', 'Greenland', 'Grenada', 'Guadeloupe', 'Guam', 'Guatemala', 'Guernsey', 'Guinea', 
+            'GuineaBissau', 'Guyana', 'Haiti', 'HeardIslands', 'Honduras', 'HongKong', 'Hungary', 'Iceland', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 
+            'IsleOfMan', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jersey', 'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati', 'Kuwait', 'Kyrgyzstan', 'LaoRepublic', 
+            'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Macao', 'Macedonia', 'Madagascar', 'Malawi', 'Malaysia', 
+            'Maldives', 'Mali', 'Malta', 'MarshallIslands', 'Martinique', 'Mauritania', 'Mauritius', 'Mayotte', 'Mexico', 'Micronesia', 'Moldova', 'Monaco', 'Mongolia', 
+            'Montenegro', 'Montserrat', 'Morocco', 'Mozambique', 'Myanmar', 'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'NewCaledonia', 'NewZealand', 'Nicaragua', 
+            'Niger', 'Nigeria', 'Niue', 'NorfolkIsland', 'NorthKorea', 'NorthernMarianaIslands', 'Norway', 'Oman', 'Pakistan', 'Palau', 'Palestine', 'Panama', 
+            'PapuaNewGuinea', 'Paraguay', 'Peru', 'Philippines', 'Pitcairn', 'Poland', 'Portugal', 'PuertoRico', 'Qatar', 'Reunion', 'Romania', 'RussianFederation', 
+            'Rwanda', 'SaintBarthelemy', 'SaintHelena', 'SaintKitts', 'SaintLucia', 'SaintMartin', 'SaintPierre', 'SaintVincent', 'Samoa', 'SanMarino', 'SaoTome', 
+            'SaudiArabia', 'Senegal', 'Serbia', 'Seychelles', 'SierraLeone', 'Singapore', 'SintMaartenDutch', 'Slovakia', 'Slovenia', 'SolomonIslands', 'Somalia', 
+            'SouthAfrica', 'SouthKorea', 'SouthSudan', 'Spain', 'SriLanka', 'Sudan', 'Suriname', 'Svalbard', 'Swaziland', 'Sweden', 'Switzerland', 'Syria', 'Taiwan', 
+            'Tajikistan', 'Tanzania', 'Thailand', 'TimorLeste', 'Togo', 'Tokelau', 'Tonga', 'Trinidad', 'Tunisia', 'Turkey', 'Turkmenistan', 'TurksCaicos', 'Tuvalu', 
+            'Uganda', 'Ukraine', 'UnitedArabEmirates', 'UnitedKingdom', 'UnitedStates', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican', 'Venezuela', 'VietNam', 
+            'VirginIslands', 'VirginIslandsGB', 'WallisFutuna', 'WesternSahara', 'Yemen', 'Zambia', 'Zimbabwe'));
+        ALTER TABLE n4_lease_data ADD CONSTRAINT n4_lease_data_delivery_method_e_ck CHECK ((delivery_method) IN ('Courier', 'Hand', 'Mail'));
+        ALTER TABLE n4_lease_data ADD CONSTRAINT n4_lease_data_termination_date_option_e_ck CHECK ((termination_date_option) IN ('Calculate', 'LeaveBlank'));
+        ALTER TABLE n4_policy ADD CONSTRAINT n4_policy_agent_selection_method_cs_e_ck CHECK ((agent_selection_method_cs) IN ('ByLoggedInUser', 'FromEmployeeList'));
+        ALTER TABLE n4_policy ADD CONSTRAINT n4_policy_agent_selection_method_n4_e_ck CHECK ((agent_selection_method_n4) IN ('ByLoggedInUser', 'FromEmployeeList'));
+        ALTER TABLE notes_and_attachments ADD CONSTRAINT notes_and_attachments_owner_discriminator_d_ck 
+            CHECK ((owner_discriminator) IN ('ARPolicy', 'AgreementLegalPolicy', 'ApplicationApprovalChecklistPolicy', 'ApplicationDocumentationPolicy', 'AptUnit', 
+            'AutoPayPolicy', 'AutopayAgreement', 'BackgroundCheckPolicy', 'Building', 'CardsAggregatedTransfer', 'Complex', 'DatesPolicy', 'DepositPolicy', 
+            'EftAggregatedTransfer', 'EmailTemplatesPolicy', 'Employee', 'EvictionFlowPolicy', 'Floorplan', 'Guarantor', 'IdAssignmentPolicy', 'Landlord', 'Lease', 
+            'LeaseAdjustmentPolicy', 'LeaseBillingPolicy', 'LegalQuestionsPolicy', 'LegalTermsPolicy', 'Locker', 'MaintenanceRequest', 'MaintenanceRequestPolicy', 
+            'MerchantAccount', 'N4Policy', 'OnlineAppPolicy', 'Parking', 'PaymentPostingBatch', 'PaymentRecord', 'PaymentTransactionsPolicy', 'PaymentTypeSelectionPolicy', 
+            'PetPolicy', 'ProductTaxPolicy', 'ProspectPortalPolicy', 'ResidentPortalPolicy', 'RestrictionsPolicy', 'Tenant', 'TenantInsurancePolicy', 'Vendor', 
+            'YardiInterfacePolicy', 'feature', 'service'));
+        ALTER TABLE permission_to_enter_note ADD CONSTRAINT permission_to_enter_note_locale_e_ck 
+            CHECK ((locale) IN ('en', 'en_CA', 'en_GB', 'en_US', 'es', 'fr', 'fr_CA', 'ru', 'zh_CN', 'zh_TW'));
+        ALTER TABLE proof_of_asset_document_type ADD CONSTRAINT proof_of_asset_document_type_asset_type_e_ck 
+            CHECK ((asset_type) IN ('bankAccounts', 'businesses', 'cars', 'insurancePolicies', 'other', 'realEstateProperties', 'shares', 'unitTrusts'));
+        ALTER TABLE proof_of_asset_document_type ADD CONSTRAINT proof_of_asset_document_type_importance_e_ck 
+            CHECK ((importance) IN ('Optional', 'Preferred', 'Required'));
+        ALTER TABLE proof_of_employment_document_type ADD CONSTRAINT proof_of_employment_document_type_importance_e_ck 
+            CHECK ((importance) IN ('Optional', 'Preferred', 'Required'));
+        ALTER TABLE proof_of_employment_document_type ADD CONSTRAINT proof_of_employment_document_type_income_source_e_ck 
+            CHECK ((income_source) IN ('disabilitySupport', 'dividends', 'fulltime', 'other', 'parttime', 'pension', 'retired', 'seasonallyEmployed', 
+            'selfemployed', 'socialServices', 'student', 'unemployed'));
+        ALTER TABLE proof_of_income_document_type ADD CONSTRAINT proof_of_income_document_type_importance_e_ck 
+            CHECK ((importance) IN ('Optional', 'Preferred', 'Required'));
+        ALTER TABLE proof_of_income_document_type ADD CONSTRAINT proof_of_income_document_type_income_source_e_ck 
+            CHECK ((income_source) IN ('disabilitySupport', 'dividends', 'fulltime', 'other', 'parttime', 'pension', 'retired', 'seasonallyEmployed', 
+            'selfemployed', 'socialServices', 'student', 'unemployed'));
+        ALTER TABLE schedule ADD CONSTRAINT schedule_frequency_e_ck CHECK ((frequency) IN ('Daily', 'Monthly', 'Weekly'));
+        ALTER TABLE special_delivery ADD CONSTRAINT special_delivery_id_discriminator_ck 
+            CHECK ((id_discriminator) IN ('IVRDelivery', 'NotificationDelivery', 'SMSDelivery'));
+        ALTER TABLE special_delivery ADD CONSTRAINT special_delivery_notification_type_e_ck CHECK ((notification_type) IN ('Information', 'Note', 'Warning'));
+
+
+
+        
         
         -- not null
         
