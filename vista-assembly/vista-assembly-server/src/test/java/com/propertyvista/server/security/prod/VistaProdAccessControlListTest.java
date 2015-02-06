@@ -12,6 +12,8 @@
  */
 package com.propertyvista.server.security.prod;
 
+import java.util.HashMap;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -20,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.IPersistenceConfiguration;
+import com.pyx4j.config.server.PropertiesConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.rpc.shared.IService;
@@ -45,6 +48,11 @@ public class VistaProdAccessControlListTest {
             @Override
             public IPersistenceConfiguration getPersistenceConfiguration() {
                 return new VistaTestsDBConfigurationHSQLMemory();
+            }
+
+            @Override
+            public PropertiesConfiguration getConfigProperties() {
+                return new PropertiesConfiguration(new HashMap<String, String>());
             }
         });
         Mail.getMailService().setDisabled(true);
