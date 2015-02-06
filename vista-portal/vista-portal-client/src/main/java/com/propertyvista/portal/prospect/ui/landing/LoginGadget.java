@@ -53,7 +53,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> implements ILog
 
         setActionsToolbar(loginToolbar);
 
-        final FlowPanel contentPanel = new FlowPanel();
+        FlowPanel contentPanel = new FlowPanel();
         contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
         loginForm = new LoginForm(this);
@@ -139,7 +139,6 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> implements ILog
                 loginToolbar.devLoginButton.setDevLogin(devCredientials, appModeName);
             }
         }
-
     }
 
     class LoginButton extends Button {
@@ -151,9 +150,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> implements ILog
                     onLogin();
                 }
             });
-
         }
-
     }
 
     class DevLoginButton extends Button {
@@ -184,9 +181,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> implements ILog
                         }
                     });
                 }
-
             }
         }
     }
-
 }

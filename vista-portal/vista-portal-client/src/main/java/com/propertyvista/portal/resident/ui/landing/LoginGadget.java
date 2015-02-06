@@ -127,7 +127,6 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> implements ILog
 
             addItem(loginButton);
             addItem(devLoginButton);
-
         }
 
         public void setDevLogin(List<? extends DevLoginCredentials> devCredientials, String appModeName) {
@@ -139,7 +138,6 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> implements ILog
                 loginToolbar.devLoginButton.setDevLogin(devCredientials, appModeName);
             }
         }
-
     }
 
     class LoginButton extends Button {
@@ -151,9 +149,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> implements ILog
                     onLogin();
                 }
             });
-
         }
-
     }
 
     class DevLoginButton extends Button {
@@ -183,7 +179,6 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> implements ILog
                         }
                     });
                 }
-
             }
         }
     }
@@ -198,6 +193,5 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> implements ILog
                 }
             }
         }
-
     }
 }

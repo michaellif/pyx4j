@@ -48,30 +48,23 @@ public class LoginForm extends CForm<AuthenticationRequest> {
 
     @Override
     protected IsWidget createContent() {
-        LoginFormPanel formPanel = new LoginFormPanel(this);
 
-        formPanel.br();
-
-        formPanel.append(Location.Left, proto().email(), new CEmailField()).decorate();
-        CEmailField emailField = (CEmailField) get(proto().email());
+        CEmailField emailField = new CEmailField();
         emailField.setWatermark(i18n.tr("Email Address"));
         emailField.setMandatoryValidationMessage(i18n.tr("Enter your email address"));
         emailField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
 
-        formPanel.append(Location.Left, proto().password(), new CPasswordBox()).decorate();
-        CPasswordBox passwordField = (CPasswordBox) get(proto().password());
+        CPasswordBox passwordField = new CPasswordBox();
         passwordField.setMandatoryValidationMessage(i18n.tr("Enter your password"));
         passwordField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
 
-        formPanel.append(Location.Left, proto().captcha()).decorate();
-        captchaField = (CCaptcha) get(proto().captcha());
+        captchaField = new CCaptcha();
         captchaField.setWatermark(i18n.tr("Enter both security words above"));
         captchaField.setMandatoryValidationMessage(i18n.tr("Captcha code is required"));
         captchaField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
         setCaptchaEnabled(false);
 
-        formPanel.append(Location.Left, proto().rememberID(), new CCheckBox());
-        CCheckBox rememberID = (CCheckBox) get(proto().rememberID());
+        CCheckBox rememberID = new CCheckBox();
         rememberID.setDecorator(new CheckBoxDecorator());
         rememberID.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
 
@@ -82,8 +75,16 @@ public class LoginForm extends CForm<AuthenticationRequest> {
                 loginGadget.onResetPassword();
             }
         });
-        formPanel.append(Location.Left, resetPassword);
 
+        // put it all together:
+        LoginFormPanel formPanel = new LoginFormPanel(this);
+
+        formPanel.br();
+        formPanel.append(Location.Left, proto().email(), emailField).decorate();
+        formPanel.append(Location.Left, proto().password(), passwordField).decorate();
+        formPanel.append(Location.Left, proto().captcha(), captchaField).decorate();
+        formPanel.append(Location.Left, proto().rememberID(), rememberID);
+        formPanel.append(Location.Left, resetPassword);
         formPanel.br();
 
         return formPanel;
@@ -91,16 +92,14 @@ public class LoginForm extends CForm<AuthenticationRequest> {
 
     public final void setCaptchaEnabled(boolean isEnabled) {
         captchaField.setMandatory(isEnabled);
-        captchaField.setVisited(!isEnabled);
         captchaField.setVisible(isEnabled);
+        captchaField.setVisited(!isEnabled);
         if (isEnabled) {
             captchaField.createNewChallenge();
         }
-
     }
 
     class EnterKeyHandler implements KeyUpHandler {
-
         @Override
         public void onKeyUp(KeyUpEvent event) {
             if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
@@ -109,7 +108,5 @@ public class LoginForm extends CForm<AuthenticationRequest> {
                 }
             }
         }
-
     }
-
 }
