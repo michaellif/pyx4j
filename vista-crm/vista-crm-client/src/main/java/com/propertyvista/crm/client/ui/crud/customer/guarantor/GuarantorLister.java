@@ -21,6 +21,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantLister;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
 import com.propertyvista.dto.GuarantorDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class GuarantorLister extends LeaseParticipantLister<GuarantorDTO> {
 
@@ -30,7 +31,7 @@ public class GuarantorLister extends LeaseParticipantLister<GuarantorDTO> {
         super(GuarantorDTO.class, GWT.<GuarantorCrudService> create(GuarantorCrudService.class));
 
         setColumnDescriptors( //
-                new Builder(proto().participantId()).build(), //
+                new Builder(proto().participantId()).width("80px").filterAlwaysShown(VistaFeatures.instance().yardiIntegration()).build(), //
 
                 new Builder(proto().customer().person().name()).searchable(false).build(), //
                 new Builder(proto().customer().person().name().firstName(), false).filterAlwaysShown(true).build(), //

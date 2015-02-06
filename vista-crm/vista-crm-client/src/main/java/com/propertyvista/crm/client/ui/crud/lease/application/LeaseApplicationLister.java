@@ -26,6 +26,7 @@ import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseDataDialog;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.dto.LeaseApplicationDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseApplicationLister extends SiteDataTablePanel<LeaseApplicationDTO> {
 
@@ -34,9 +35,9 @@ public class LeaseApplicationLister extends SiteDataTablePanel<LeaseApplicationD
     public LeaseApplicationLister() {
         super(LeaseApplicationDTO.class, GWT.<LeaseApplicationViewerCrudService> create(LeaseApplicationViewerCrudService.class), true);
 
-        setColumnDescriptors(
-        //
-                new Builder(proto().leaseApplication().applicationId()).columnTitle(i18n.tr("Id")).build(),//
+        setColumnDescriptors(//
+                new Builder(proto().leaseApplication().applicationId()).columnTitle(i18n.tr("Id"))
+                        .filterAlwaysShown(VistaFeatures.instance().yardiIntegration()).build(),//
                 new Builder(proto().type()).build(),//
                 new Builder(proto().unit().building().propertyCode()).filterAlwaysShown(true).build(),//
                 new Builder(proto().unit()).filterAlwaysShown(true).build(),//
@@ -53,10 +54,8 @@ public class LeaseApplicationLister extends SiteDataTablePanel<LeaseApplicationD
                 new Builder(proto().onlineApplication()).sortable(false).searchable(false).build(),//
 
                 new Builder(proto()._applicant().customer().person().name()).columnTitle(i18n.tr("Primary Tenant Name")).searchable(false).build(),//
-                new Builder(proto()._applicant().customer().person().name().firstName(), false).columnTitle(i18n.tr("Primary Tenant First Name"))
-                        .filterAlwaysShown(true).build(),//
-                new Builder(proto()._applicant().customer().person().name().lastName(), false).columnTitle(i18n.tr("Primary Tenant Last Name"))
-                        .filterAlwaysShown(true).build(),//
+                new Builder(proto()._applicant().customer().person().name().firstName(), false).columnTitle(i18n.tr("Primary Tenant First Name")).build(),//
+                new Builder(proto()._applicant().customer().person().name().lastName(), false).columnTitle(i18n.tr("Primary Tenant Last Name")).build(),//
 
                 new Builder(proto().leaseParticipants().$().customer().customerId(), false).searchableOnly().build(),//
 

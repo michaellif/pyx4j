@@ -27,6 +27,7 @@ import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class FormerLeaseLister extends SiteDataTablePanel<LeaseDTO> {
 
@@ -37,7 +38,7 @@ public class FormerLeaseLister extends SiteDataTablePanel<LeaseDTO> {
 
         setColumnDescriptors(
                 //
-                new Builder(proto().leaseId()).columnTitle(i18n.tr("Id")).build(), //
+                new Builder(proto().leaseId()).columnTitle(i18n.tr("Id")).filterAlwaysShown(VistaFeatures.instance().yardiIntegration()).build(), //
                 new Builder(proto().type()).build(), //
 
                 new Builder(proto().unit().building().propertyCode()).filterAlwaysShown(true).build(), //

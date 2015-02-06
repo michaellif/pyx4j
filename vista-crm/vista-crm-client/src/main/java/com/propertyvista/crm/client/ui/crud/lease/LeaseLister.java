@@ -50,7 +50,7 @@ public class LeaseLister extends SiteDataTablePanel<LeaseDTO> {
 
         List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>(Arrays.asList(
         //@formatter:off
-            new Builder(proto().leaseId()).columnTitle(i18n.tr("Id")).width("80px").build(),
+            new Builder(proto().leaseId()).columnTitle(i18n.tr("Id")).width("80px").filterAlwaysShown(VistaFeatures.instance().yardiIntegration()).build(),
             new Builder(proto().type()).build(),
 
             new Builder(proto().unit().building().propertyCode()).filterAlwaysShown(true).build(),
@@ -63,8 +63,8 @@ public class LeaseLister extends SiteDataTablePanel<LeaseDTO> {
             new Builder(proto().unit().info().number()).columnTitle(proto().unit().getMeta().getCaption()).searchableOnly().width("80px").build(),
 
             new Builder(proto()._applicant().customer().person().name()).columnTitle(i18n.tr("Primary Tenant Name")).searchable(false).build(),
-            new Builder(proto()._applicant().customer().person().name().firstName(), false).columnTitle(i18n.tr("Primary Tenant First Name")).filterAlwaysShown(true).build(),
-            new Builder(proto()._applicant().customer().person().name().lastName(), false).columnTitle(i18n.tr("Primary Tenant Last Name")).filterAlwaysShown(true).build(),
+            new Builder(proto()._applicant().customer().person().name().firstName(), false).columnTitle(i18n.tr("Primary Tenant First Name")).build(),
+            new Builder(proto()._applicant().customer().person().name().lastName(), false).columnTitle(i18n.tr("Primary Tenant Last Name")).build(),
             new Builder(proto()._applicant().customer().registeredInPortal(), false).width("80px").build(),
 
             new Builder(proto().leaseParticipants().$().customer().customerId(), false).searchableOnly().build(),
