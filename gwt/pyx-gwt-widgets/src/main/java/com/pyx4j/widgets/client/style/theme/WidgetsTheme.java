@@ -71,6 +71,8 @@ public class WidgetsTheme extends Theme {
 
         SelectedItemEditor, SelectedItemEditorContent,
 
+        SelectedItemEditorBodyHolder,
+
         DownArrow;
     }
 
@@ -385,7 +387,6 @@ public class WidgetsTheme extends Theme {
 
     protected void initRadioGroupStyle() {
         Style style = new Style(".", StyleName.OptionGroup);
-        style.addProperty("overflow", "auto");
         addStyle(style);
 
         style = new Style(".", StyleName.OptionGroupItem);
@@ -630,6 +631,11 @@ public class WidgetsTheme extends Theme {
         style.addProperty("border-bottom-right-radius", "0px");
         style.addProperty("border-bottom-left-radius", "0px");
         style.addProperty("border-bottom-width", "0");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SelectedItemEditorBodyHolder);
+        style.addProperty("max-height", "400px");
+        style.addProperty("overflow", "auto");
         addStyle(style);
 
         style = new Style(".", StyleName.SelectedItemHolder, "-", StyleDependent.editing, ":hover");

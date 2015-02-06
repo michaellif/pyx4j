@@ -120,6 +120,7 @@ public class ItemEditorPopup extends DropDownPanel implements Focusable, HasAllF
             setStylePrimaryName(WidgetsTheme.StyleName.SelectedItemEditorContent.name());
 
             bodyHolder = new SimplePanel();
+            bodyHolder.setStyleName(WidgetsTheme.StyleName.SelectedItemEditorBodyHolder.name());
             add(bodyHolder);
 
             toolbar = new Toolbar();
