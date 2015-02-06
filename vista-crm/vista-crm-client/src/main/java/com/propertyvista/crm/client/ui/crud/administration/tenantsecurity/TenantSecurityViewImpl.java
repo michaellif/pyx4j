@@ -72,11 +72,15 @@ public class TenantSecurityViewImpl extends AbstractPrimePaneView implements Ten
 
         public SendMailSelectionDialog() {
             super(i18n.tr("Send mail"));
-            setBody(createBody());
 
+            emailType.populate(null);
             emailType.setMandatory(true);
             emailType.setOptions(Arrays.asList(EmailTemplateType.TenantInvitation));
             emailType.setValue(EmailTemplateType.TenantInvitation);
+            emailType.asWidget().setWidth("378px");
+            setDialogPixelWidth(400);
+
+            setBody(createBody());
         }
 
         protected Widget createBody() {
