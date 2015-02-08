@@ -118,12 +118,12 @@ public class ApplicationVersion {
         if (productVersion == null) {
             productVersion = properties.getProperty(POM_VERSION);
         }
-        if (productVersion.endsWith("-SNAPSHOT")) {
+        if ((productVersion != null) && productVersion.endsWith("-SNAPSHOT")) {
             productVersion = productVersion.substring(0, productVersion.indexOf("-SNAPSHOT"));
         }
 
         productBuild = properties.getProperty(PRODUCT_BUILD);
-        if (productBuild.startsWith("${")) {
+        if ((productBuild != null) && productBuild.startsWith("${")) {
             productBuild = productVersion + "." + buildNumber;
         }
 
@@ -175,17 +175,17 @@ public class ApplicationVersion {
         if (pyxProductVersion == null) {
             pyxProductVersion = properties.getProperty(POM_VERSION);
         }
-        if (pyxProductVersion.endsWith("-SNAPSHOT")) {
+        if ((pyxProductVersion != null) && pyxProductVersion.endsWith("-SNAPSHOT")) {
             pyxProductVersion = pyxProductVersion.substring(0, pyxProductVersion.indexOf("-SNAPSHOT"));
         }
 
         pyxBuildNumber = properties.getProperty(BUILD_NUMBER, "n/a");
-        if (pyxBuildNumber.startsWith("${") || buildNumber.endsWith("-SNAPSHOT")) {
+        if ((pyxBuildNumber != null) && pyxBuildNumber.startsWith("${") || buildNumber.endsWith("-SNAPSHOT")) {
             pyxBuildNumber = "n/a";
         }
 
         pyxProductBuild = properties.getProperty(PRODUCT_BUILD);
-        if (pyxProductBuild.startsWith("${")) {
+        if ((pyxProductBuild != null) && pyxProductBuild.startsWith("${")) {
             pyxProductBuild = pyxProductVersion + "." + pyxBuildNumber;
         }
 
