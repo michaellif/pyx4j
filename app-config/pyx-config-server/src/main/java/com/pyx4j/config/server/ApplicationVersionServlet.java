@@ -115,7 +115,7 @@ public class ApplicationVersionServlet extends HttpServlet {
         case buildLabelPyx:
             return ApplicationVersion.getPyxBuildLabel();
         case buildDatePyx:
-
+            return ApplicationVersion.getPyxBuildTime();
         case scmRevisionPyx:
             return ApplicationVersion.getPyxScmRevision();
         default:

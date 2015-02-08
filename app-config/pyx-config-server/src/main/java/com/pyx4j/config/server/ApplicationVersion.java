@@ -298,4 +298,19 @@ public class ApplicationVersion {
         initVersionInfo();
         return pyxBuildTimestamp;
     }
+
+    public static String getPyxBuildTime() {
+        initVersionInfo();
+        if (pyxBuildTimestamp != null) {
+            DateFormat df;
+            if (TimeUtils.isSameDay(buildTimestamp, new Date())) {
+                df = new SimpleDateFormat("HH:mm");
+            } else {
+                df = new SimpleDateFormat("MMM dd, yyyy HH:mm");
+            }
+            return df.format(pyxBuildTimestamp);
+        } else {
+            return "";
+        }
+    }
 }

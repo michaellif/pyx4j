@@ -286,7 +286,8 @@
                     <version>${project.version}</version>
                     <configuration>
                         <systemProperties>
-                            <systemProperty>buildLabel</systemProperty>
+                            <systemProperty>project.version</systemProperty>
+                            <systemProperty>build.number</systemProperty>
                             <systemProperty>timestamp</systemProperty>
                         </systemProperties>
                     </configuration>
