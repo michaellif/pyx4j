@@ -51,7 +51,9 @@ public class ClientApplicationVersionGenerator extends Generator {
     /**
      * Configuration properties.
      */
-    public static final String BUILD_LABEL = "pyx.compileTimeSystemProperty.build.label";
+    public static final String PROJECT_VERSION = "pyx.compileTimeSystemProperty.project.version";
+
+    public static final String BUILD_NUMBER = "pyx.compileTimeSystemProperty.build.number";
 
     public static final String BUILD_TIME = "pyx.compileTimeSystemProperty.build.time";
 
@@ -74,7 +76,10 @@ public class ClientApplicationVersionGenerator extends Generator {
             throw new UnableToCompleteException();
         }
 
-        String buildLabel = getConfigurationProperty(logger, context, BUILD_LABEL);
+        String productVersion = getConfigurationProperty(logger, context, PROJECT_VERSION);
+        String buildNumber = getConfigurationProperty(logger, context, BUILD_NUMBER);
+
+        String buildLabel = productVersion + "." + buildNumber;
         String buildTime = getConfigurationProperty(logger, context, BUILD_TIME);
         String buildFromat = getConfigurationProperty(logger, context, BUILD_TIME_FORMAT);
         String scmRevision = getConfigurationProperty(logger, context, SCM_REVISION);

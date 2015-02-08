@@ -41,6 +41,8 @@ public class ApplicationVersion {
 
     private static final String PYX_BUILD_PROPERTIES_FILE = "com/pyx4j/config/generated/pyx-build.version.properties";
 
+    private static final String PROJECT_VERSION = "project.version";
+
     private static final String POM_VERSION = "pom.version";
 
     private static final String BUILD_NUMBER = "build.number";
@@ -111,7 +113,10 @@ public class ApplicationVersion {
             buildNumber = "n/a";
         }
 
-        productVersion = properties.getProperty(POM_VERSION);
+        productVersion = properties.getProperty(PROJECT_VERSION);
+        if (productVersion == null) {
+            productVersion = properties.getProperty(POM_VERSION);
+        }
         if (productVersion.endsWith("-SNAPSHOT")) {
             productVersion = productVersion.substring(0, productVersion.indexOf("-SNAPSHOT"));
         }
@@ -165,7 +170,10 @@ public class ApplicationVersion {
             }
         }
 
-        pyxProductVersion = properties.getProperty(POM_VERSION);
+        pyxProductVersion = properties.getProperty(PROJECT_VERSION);
+        if (pyxProductVersion == null) {
+            pyxProductVersion = properties.getProperty(POM_VERSION);
+        }
         if (pyxProductVersion.endsWith("-SNAPSHOT")) {
             pyxProductVersion = pyxProductVersion.substring(0, pyxProductVersion.indexOf("-SNAPSHOT"));
         }

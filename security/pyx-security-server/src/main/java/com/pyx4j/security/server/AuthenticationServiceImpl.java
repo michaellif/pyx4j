@@ -66,7 +66,7 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
         if (clientSystemInfo == null) {
             throw new ClientVersionMismatchError(i18n.tr("Client version {0} does not match server version {1}", "", serverVersion));
         }
-        if (((clientSystemInfo.isScript()) && (!serverVersion.equals("n/a")) && (!serverVersion.endsWith("-SNAPSHOT")) && (!serverVersion
+        if (((clientSystemInfo.isScript()) && (!serverVersion.contains("n/a")) && (!serverVersion.endsWith("-SNAPSHOT")) && (!serverVersion
                 .equals(clientSystemInfo.getBuildLabel())))) {
             throw new ClientVersionMismatchError(i18n.tr("Client version {0} does not match server version {1}", clientSystemInfo.getBuildLabel(),
                     serverVersion));
