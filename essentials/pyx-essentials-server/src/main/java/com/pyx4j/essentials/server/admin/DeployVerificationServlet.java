@@ -47,15 +47,25 @@ public class DeployVerificationServlet extends HttpServlet {
         response.setDateHeader("Expires", 0); //prevents caching at the proxy server
         response.setDateHeader("X-StatusDate", System.currentTimeMillis());
 
-        String buildLabel = request.getParameter("buildLabel");
-        if (CommonsStringUtils.isEmpty(buildLabel)) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-        }
-        if (ApplicationVersion.getBuildLabel().equals(buildLabel)) {
-            //TODO test DB connection status
-            replyOk(response);
+        String productBuild = request.getParameter("productBuild");
+        if (!CommonsStringUtils.isEmpty(productBuild)) {
+            if (ApplicationVersion.getProductBuild().equals(productBuild)) {
+                //TODO test DB connection status
+                replyOk(response);
+            } else {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            }
         } else {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            String buildLabel = request.getParameter("buildLabel");
+            if (CommonsStringUtils.isEmpty(buildLabel)) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            }
+            if (ApplicationVersion.getBuildLabel().equals(buildLabel)) {
+                //TODO test DB connection status
+                replyOk(response);
+            } else {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            }
         }
 
     }
