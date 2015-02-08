@@ -46,27 +46,27 @@ public class ApplicationVersion {
 
     private static final String BUILD_NUMBER = "build.number";
 
+    private static final String PRODUCT_BUILD = "product.build";
+
     private static final String BUILD_TIME = "build.time";
 
     private static final String PATCH_NUMBER = "patch.number";
 
     private static final String BUILD_TIME_FORMAT = "yyyy-MM-dd HH:mm z";
 
-    private static final String BUILD_TIMESTAMP = "build.timestamp";
-
-    private static final String BUILD_TIMESTAMP_FORMAT = "yyyyMMddHHmmss";
-
     private static String productVersion = null;
 
     private static String patchNumber;
 
-    private static String buildLabel;
+    private static String buildNumber;
+
+    private static String productBuild = null;
 
     private static Date buildTimestamp;
 
     private static String scmRevision;
 
-    private static String pyxBuildLabel;
+    private static String pyxBuildNumber;
 
     private static String pyxScmRevision;
 
@@ -103,13 +103,19 @@ public class ApplicationVersion {
             }
         }
 
-        buildLabel = properties.getProperty(BUILD_NUMBER, "n/a");
-        if (buildLabel.startsWith("${")) {
-            buildLabel = "n/a";
+        buildNumber = properties.getProperty(BUILD_NUMBER, "n/a");
+        if (buildNumber.startsWith("${")) {
+            buildNumber = "n/a";
         }
-        productVersion = properties.getProperty(POM_VERSION, buildLabel);
+
+        productVersion = properties.getProperty(POM_VERSION);
         if (productVersion.endsWith("-SNAPSHOT")) {
             productVersion = productVersion.substring(0, productVersion.indexOf("-SNAPSHOT"));
+        }
+
+        productBuild = properties.getProperty(PRODUCT_BUILD);
+        if (productBuild.startsWith("${")) {
+            productBuild = productVersion + "." + buildNumber;
         }
 
         patchNumber = properties.getProperty(PATCH_NUMBER);
@@ -120,12 +126,6 @@ public class ApplicationVersion {
                 buildTimestamp = null;
             } else {
                 buildTimestamp = new SimpleDateFormat(BUILD_TIME_FORMAT).parse(bildTimeString);
-            }
-            if (buildTimestamp == null) {
-                bildTimeString = properties.getProperty(BUILD_TIMESTAMP);
-                if ((bildTimeString != null) && (!bildTimeString.startsWith("${"))) {
-                    buildTimestamp = new SimpleDateFormat(BUILD_TIMESTAMP_FORMAT).parse(bildTimeString);
-                }
             }
         } catch (ParseException e) {
             log.error("build timestamp error", e);
@@ -162,9 +162,9 @@ public class ApplicationVersion {
             }
         }
 
-        pyxBuildLabel = properties.getProperty(BUILD_NUMBER, "n/a");
-        if (pyxBuildLabel.startsWith("${") || buildLabel.endsWith("-SNAPSHOT")) {
-            pyxBuildLabel = "n/a";
+        pyxBuildNumber = properties.getProperty(BUILD_NUMBER, "n/a");
+        if (pyxBuildNumber.startsWith("${") || buildNumber.endsWith("-SNAPSHOT")) {
+            pyxBuildNumber = "n/a";
         }
         pyxScmRevision = properties.getProperty("scm.revision", "");
         try {
@@ -173,12 +173,6 @@ public class ApplicationVersion {
                 pyxBuildTimestamp = null;
             } else {
                 pyxBuildTimestamp = new SimpleDateFormat(BUILD_TIME_FORMAT).parse(bildTimeString);
-            }
-            if (pyxBuildTimestamp == null) {
-                bildTimeString = properties.getProperty(BUILD_TIMESTAMP);
-                if ((bildTimeString != null) && (!bildTimeString.startsWith("${"))) {
-                    pyxBuildTimestamp = new SimpleDateFormat(BUILD_TIMESTAMP_FORMAT).parse(bildTimeString);
-                }
             }
         } catch (ParseException e) {
             log.error("build timestamp error", e);
@@ -216,13 +210,22 @@ public class ApplicationVersion {
         return productVersion;
     }
 
+    public static String getProductBuild() {
+        initVersionInfo();
+        return productBuild;
+    }
+
     public static String getPatchNumber() {
         return patchNumber;
     }
 
     public static String getBuildLabel() {
+        return getProductBuild();
+    }
+
+    public static String getBuildNumber() {
         initVersionInfo();
-        return buildLabel;
+        return buildNumber;
     }
 
     public static String getBuildTime() {
@@ -252,7 +255,7 @@ public class ApplicationVersion {
 
     public static String getPyxBuildLabel() {
         initVersionInfo();
-        return pyxBuildLabel;
+        return pyxBuildNumber;
     }
 
     public static String getPyxScmRevision() {
