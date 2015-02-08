@@ -66,7 +66,11 @@ public class ApplicationVersion {
 
     private static String scmRevision;
 
+    private static String pyxProductVersion;
+
     private static String pyxBuildNumber;
+
+    private static String pyxProductBuild;
 
     private static String pyxScmRevision;
 
@@ -162,10 +166,21 @@ public class ApplicationVersion {
             }
         }
 
+        pyxProductVersion = properties.getProperty(POM_VERSION);
+        if (pyxProductVersion.endsWith("-SNAPSHOT")) {
+            pyxProductVersion = pyxProductVersion.substring(0, pyxProductVersion.indexOf("-SNAPSHOT"));
+        }
+
         pyxBuildNumber = properties.getProperty(BUILD_NUMBER, "n/a");
         if (pyxBuildNumber.startsWith("${") || buildNumber.endsWith("-SNAPSHOT")) {
             pyxBuildNumber = "n/a";
         }
+
+        pyxProductBuild = properties.getProperty(PRODUCT_BUILD);
+        if (pyxProductBuild.startsWith("${")) {
+            pyxProductBuild = pyxProductVersion + "." + pyxBuildNumber;
+        }
+
         pyxScmRevision = properties.getProperty("scm.revision", "");
         try {
             String bildTimeString = properties.getProperty(BUILD_TIME);
@@ -253,9 +268,18 @@ public class ApplicationVersion {
         return scmRevision;
     }
 
-    public static String getPyxBuildLabel() {
+    public static String getPyxProductVersion() {
         initVersionInfo();
-        return pyxBuildNumber;
+        return pyxProductVersion;
+    }
+
+    public static String getPyxProductBuild() {
+        initVersionInfo();
+        return pyxProductBuild;
+    }
+
+    public static String getPyxBuildLabel() {
+        return getPyxProductBuild();
     }
 
     public static String getPyxScmRevision() {
