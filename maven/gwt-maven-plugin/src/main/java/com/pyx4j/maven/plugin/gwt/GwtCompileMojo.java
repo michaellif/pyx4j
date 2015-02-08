@@ -388,7 +388,10 @@ public class GwtCompileMojo extends AbstractGWTMojo {
         System.setProperty("gwt.persistentunitcachedir", persistentUnitCacheDir.toString());
         if (systemProperties != null) {
             for (String property : systemProperties) {
-                System.setProperty(property, project.getProperties().getProperty(property));
+                String value = project.getProperties().getProperty(property);
+                if (value != null) {
+                    System.setProperty(property, value);
+                }
             }
         }
 
