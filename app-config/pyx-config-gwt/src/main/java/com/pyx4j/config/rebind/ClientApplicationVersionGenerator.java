@@ -77,6 +77,9 @@ public class ClientApplicationVersionGenerator extends Generator {
         }
 
         String productVersion = getConfigurationProperty(logger, context, PROJECT_VERSION);
+        if ((productVersion != null) && productVersion.endsWith("-SNAPSHOT")) {
+            productVersion = productVersion.substring(0, productVersion.indexOf("-SNAPSHOT"));
+        }
         String buildNumber = getConfigurationProperty(logger, context, BUILD_NUMBER);
 
         String buildLabel = productVersion + "." + buildNumber;

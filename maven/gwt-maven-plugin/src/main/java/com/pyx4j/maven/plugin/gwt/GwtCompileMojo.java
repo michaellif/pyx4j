@@ -188,6 +188,10 @@ public class GwtCompileMojo extends AbstractGWTMojo {
     @Component
     private MavenProject project;
 
+    // TODO get is from project
+    @Parameter(defaultValue = "${project.version}")
+    private String projectVersion;
+
     /**
      * The plugin dependencies.
      * 
@@ -388,6 +392,9 @@ public class GwtCompileMojo extends AbstractGWTMojo {
         if (systemProperties != null) {
             for (String property : systemProperties) {
                 String value = project.getProperties().getProperty(property);
+                if ((value == null) && (property.equals("project.version"))) {
+                    value = projectVersion;
+                }
                 if (value != null) {
                     System.setProperty(property, value);
                 }
