@@ -113,12 +113,12 @@ public class ConfigInfoServlet extends HttpServlet {
         }
     }
 
-    private String applicationUptime() {
+    public static String applicationUptime() {
         return TimeUtils.durationFormatSeconds((int) (System.currentTimeMillis() - ServerSideConfiguration.getStartTime()) / Consts.SEC2MSEC) + ", since: "
                 + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z").format(new Date(ServerSideConfiguration.getStartTime()));
     }
 
-    private String systemUptime() {
+    public static String systemUptime() {
         try {
             long jvmStartTime = ManagementFactory.getRuntimeMXBean().getStartTime();
             long jvmUpTime = ManagementFactory.getRuntimeMXBean().getUptime();
