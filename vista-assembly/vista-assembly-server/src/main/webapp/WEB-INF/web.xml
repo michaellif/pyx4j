@@ -6,16 +6,16 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
     metadata-complete="true">
     <!-- @version $Revision$ ($Author$) $Date$ -->
-    <display-name>Vista Portal ${buildLabel} svn:${scm.revision} ts:${timestamp}</display-name>
+    <display-name>Vista ${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${bamboo.buildNumber} svn:${scm.revision} ts:${timestamp}</display-name>
 
-   <!-- 
+   <!--
 N.B.   keep this file empty, See resources/META-INF/services/javax.servlet.ServletContainerInitializer for application initialization
     -->
- 
+
     <!-- Tomcat only starts ServletContainerInitializer that are defined in ordered web-fragment, TODO Jetty works differently or has a bug  -->
-    <absolute-ordering> 
-	   <name>vistaserver</name> 
-    </absolute-ordering> 
+    <absolute-ordering>
+	   <name>vistaserver</name>
+    </absolute-ordering>
 
     <!--  this is the only exception, to make Tomcat and Jetty to work the same way and void memory leaks in Sun jaxws-ri implementation  -->
     <listener>

@@ -512,18 +512,7 @@
             </activation>
             <properties>
                 <buildLabel>${bamboo.buildNumber}</buildLabel>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>hasCCBuildLabel</id>
-            <activation>
-                <property>
-                    <name>label</name>
-                </property>
-            </activation>
-            <properties>
-                <buildLabel>${project.version}-ci${label}</buildLabel>
+                <build.number>${bamboo.buildNumber}</build.number>
             </properties>
         </profile>
 
