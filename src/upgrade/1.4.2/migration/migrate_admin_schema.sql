@@ -132,7 +132,7 @@ SET search_path = '_admin_';
         ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
             CHECK ((trigger_type) IN ('billing', 'cleanup', 'depositInterestAdjustment', 'depositRefund', 'equifaxRetention', 
             'ilsEmailFeed', 'ilsUpdate', 'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion', 'leaseRenewal', 
-            'paymentsBmoReceive', 'paymentsCardsPostRejected', 'paymentsCardsSend', 'paymentsDbpProcess', 
+            'n4AutoCancellation', 'paymentsBmoReceive', 'paymentsCardsPostRejected', 'paymentsCardsSend', 'paymentsDbpProcess', 
             'paymentsDbpProcessAcknowledgment', 'paymentsDbpProcessReconciliation', 'paymentsDbpSend', 'paymentsIssue', 
             'paymentsLastMonthSuspend', 'paymentsPadProcessAcknowledgment', 'paymentsPadProcessReconciliation', 'paymentsPadSend', 
             'paymentsProcessCardsReconciliation', 'paymentsReceiveAcknowledgment', 'paymentsReceiveCardsReconciliation', 
@@ -140,7 +140,6 @@ SET search_path = '_admin_';
             'resetDemoPMC', 'tenantSureBusinessReport', 'tenantSureCancellation', 'tenantSureHQUpdate', 'tenantSureRenewal', 
             'tenantSureReports', 'tenantSureTransactionReports', 'test', 'updateArrears', 'updatePaymentsSummary', 
             'vistaBusinessReport', 'vistaCaleonReport', 'vistaHeathMonitor', 'yardiARDateVerification', 'yardiImportProcess'));
-
         
         -- not null
         

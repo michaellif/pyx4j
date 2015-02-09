@@ -103,3 +103,36 @@ CREATE OR REPLACE VIEW _dba_.building_stats_view AS
                         AND     stats_week = (SELECT (MAX(stats_week) -7) FROM _dba_.building_stats)) AS t1
         ON      (t0.property_code = t1.property_code  AND t0.pmc = t1.pmc)
  );
+ 
+ CREATE VIEW _dba_.stats_changes_view AS
+ (
+    WITH t AS ( SELECT  pmc,property_code,
+                        MIN(stats_week) AS first_data,
+                        MAX(stats_week) AS latest_data
+                FROM    _dba_.building_stats
+                GROUP BY pmc, property_code )
+    SELECT  t0.pmc, t0.property_code,
+            t0.stats_week AS begin_date,
+            t1.stats_week AS now_date,
+            t0.count_trans_all AS eft_count_begin,
+            t1.count_trans_all AS eft_count_now,
+            t0.amount_trans_all AS eft_amount_begin,
+            t1.amount_trans_all AS eft_amount_now,
+            t0.reg_tenants AS reg_tenants_begin,
+            t1.reg_tenants AS reg_tenants_now,
+            t0.tenants_epay AS  tenants_eft_begin,
+            t1.tenants_epay AS  tenants_eft_now,
+            t0.total_tenantsure AS tenantsure_begin,
+            t1.total_tenantsure AS tenantsure_now
+    FROM    (SELECT s.pmc,s.property_code,stats_week,count_trans_all,amount_trans_all,
+                    reg_tenants,tenants_epay,total_tenantsure
+            FROM   _dba_.building_stats s
+            JOIN   t ON (s.pmc = t.pmc AND s.property_code = t.property_code
+                    AND s.stats_week = t.first_data)) AS t0
+    JOIN    (SELECT s.pmc,s.property_code,stats_week,count_trans_all,amount_trans_all,
+                    reg_tenants,tenants_epay,total_tenantsure
+            FROM   _dba_.building_stats s
+            JOIN   t ON (s.pmc = t.pmc AND s.property_code = t.property_code
+                     AND s.stats_week = t.latest_data)) AS t1 
+        ON (t0.property_code = t1.property_code AND t0.pmc = t1.pmc)
+);
