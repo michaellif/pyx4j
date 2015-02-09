@@ -26,7 +26,6 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RequireFeature;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -84,7 +83,7 @@ public interface CardServiceSimulationTransaction extends IEntity {
 
     IPrimitive<String> authorizationNumber();
 
-    @NotNull
+    @MemberColumn(notNull = true)
     IPrimitive<Boolean> voided();
 
     @Format("MM/dd/yyyy HH:mm.ss")
