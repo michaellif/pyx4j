@@ -1,8 +1,6 @@
 /**
 ***     ======================================================================================================================
 ***
-***             @version $Revision$ ($Author$) $Date$
-***
 ***             Per-building statistics functions
 ***
 ***     ======================================================================================================================
@@ -15,7 +13,7 @@
 *** --------------------------------------------------------------------
 **/
 
-
+/*
 ALTER TABLE _dba_.building_stats    ADD COLUMN total_insurance INT  DEFAULT 0,
                                     ADD COLUMN total_tenantsure INT DEFAULT 0;
                                     
@@ -24,7 +22,7 @@ UPDATE _dba_.building_stats
 SET total_insurance = 0,
     total_tenantsure = 0;
 
-
+*/
 
 CREATE OR REPLACE FUNCTION _dba_.gather_building_stats(v_schema_name TEXT) RETURNS VOID
 AS
@@ -48,7 +46,7 @@ BEGIN
                         ||'             lp.id AS lease_participant,'
                         ||'             c.registered_in_portal,cu.id AS customer_user,'
                         ||'             p.id AS payment_id, p.payment_status,p.amount,'
-                        ||'             p.last_status_change_date, p.finalize_date,'
+                        ||'             p.last_status_change_date, p.finalized_date,'
                         ||'             pm.payment_type,pm.id_discriminator AS pm_discriminator,'
                         ||'             pm.is_deleted AS pm_deleted,'
                         ||'             ppd.card_type, '
