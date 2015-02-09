@@ -44,7 +44,7 @@ public class CrmRootPane extends RootPane<BackOfficeLayoutPanel> {
     public static final int NOTIFICATION_HEIGHT = 40;
 
     public CrmRootPane() {
-        super(new BackOfficeLayoutPanel(i18n.tr("Shortcuts"), i18n.tr("Help"), i18n.tr("Feedback")));
+        super(new BackOfficeLayoutPanel(i18n.tr("Shortcuts"), i18n.tr("Show me how"), i18n.tr("Feedback")));
 
         asWidget().setHeaderHeight(HEADER_HEIGHT);
 

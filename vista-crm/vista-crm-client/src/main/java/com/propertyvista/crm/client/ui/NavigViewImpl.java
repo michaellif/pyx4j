@@ -301,6 +301,16 @@ public class NavigViewImpl extends Composite implements NavigView {
 //            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.ResidentInsurance()));
         }
 
+        {//WalkMe
+            root.addMenuItem(new SideMenuItem(new SideMenuCommand() {
+                @Override
+                public boolean execute() {
+                    //TODO add Walkme
+                    return true;
+                }
+            }, i18n.tr("Help"), CrmImages.INSTANCE.helpIcon()));
+        }
+
         AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
 
             @Override

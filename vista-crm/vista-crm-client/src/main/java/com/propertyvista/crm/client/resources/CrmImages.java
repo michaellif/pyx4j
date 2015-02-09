@@ -431,6 +431,25 @@ public interface CrmImages extends VistaImages {
         ImageResource active();
     }
 
+    HelpIconImages helpIcon();
+
+    public interface HelpIconImages extends ButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Help_normal.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Help_active.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Help_hover.png")
+        ImageResource active();
+    }
+
     EditIconButtonImages editButton();
 
     public interface EditIconButtonImages extends ButtonImages {
