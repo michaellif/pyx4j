@@ -642,5 +642,9 @@ public class WidgetsTheme extends Theme {
         style.addProperty("background-color", "white");
         addStyle(style);
 
+        style = new Style(".cellTableKeyboardSelectedRow .cellTableKeyboardSelectedRowCell");
+        style.addProperty("background-color", ThemeColor.foreground, 0.11);
+        style.addProperty("border-color", ThemeColor.foreground, 0.11);
+        addStyle(style);
     }
 }
