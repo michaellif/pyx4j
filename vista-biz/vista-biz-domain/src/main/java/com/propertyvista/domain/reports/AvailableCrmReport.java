@@ -36,18 +36,34 @@ public interface AvailableCrmReport extends IEntity {
     @I18n
     public enum CrmReportType {
 
-        AutoPayChanges,
+        AutoPayChanges(true),
 
-        Availability,
+        AutoPayReconciliation,
 
-        CustomerCreditCheck,
+        Availability(true),
 
-        EFT,
+        CustomerCreditCheck(true),
+
+        EFT(true),
 
         @Translate("EFT Variance")
-        EftVariance,
+        EftVariance(true),
 
-        ResidentInsurance;
+        ResidentInsurance(true);
+
+        private final boolean isOld;
+
+        CrmReportType() {
+            this.isOld = false;
+        }
+
+        CrmReportType(boolean isOld) {
+            this.isOld = isOld;
+        }
+
+        public boolean isOld() {
+            return isOld;
+        }
 
         @Override
         public String toString() {

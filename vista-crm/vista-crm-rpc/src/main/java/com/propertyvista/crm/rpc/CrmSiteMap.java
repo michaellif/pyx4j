@@ -352,6 +352,9 @@ public class CrmSiteMap implements SiteMap {
             }
         }
 
+        public static class AutoPayReconciliation extends CrmCrudAppPlace {
+        }
+
         public static class Availability extends ReportsAppPlace<AvailabilityReportMetadata> {
             public Availability() {
                 super(AvailabilityReportMetadata.class);

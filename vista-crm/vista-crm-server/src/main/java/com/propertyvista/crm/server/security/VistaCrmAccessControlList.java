@@ -87,6 +87,7 @@ import com.propertyvista.crm.rpc.services.organization.VendorCrudService;
 import com.propertyvista.crm.rpc.services.policies.CrmPolicyRetrieveService;
 import com.propertyvista.crm.rpc.services.policies.policy.EmailTemplatesPolicyCrudService;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
+import com.propertyvista.crm.rpc.services.reports.AutoPayReconciliationReportListService;
 import com.propertyvista.crm.rpc.services.reports.CrmAvailableReportService;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsService;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsSettingsPersistenceService;
@@ -243,6 +244,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(CrmAvailableReportService.class));
         grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(CrmReportsService.class));
         grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(CrmReportsSettingsPersistenceService.class));
+
+        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(AutoPayReconciliationReportListService.class));
 
 // - Legal:
         grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(L1FormDataReviewWizardService.class));

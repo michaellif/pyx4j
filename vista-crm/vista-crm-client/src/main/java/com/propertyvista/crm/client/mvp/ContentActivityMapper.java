@@ -275,6 +275,7 @@ import com.propertyvista.crm.client.activity.policies.yardiinterface.YardiInterf
 import com.propertyvista.crm.client.activity.policies.yardiinterface.YardiInterfacePolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.yardiinterface.YardiInterfacePolicyViewerActivity;
 import com.propertyvista.crm.client.activity.reports.AutoPayChangesReportActivity;
+import com.propertyvista.crm.client.activity.reports.AutoPayReconciliationReportListerActivity;
 import com.propertyvista.crm.client.activity.reports.AvailabilityReportActivity;
 import com.propertyvista.crm.client.activity.reports.CustomerCreditCheckReportActivity;
 import com.propertyvista.crm.client.activity.reports.EftReportActivity;
@@ -1549,6 +1550,10 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new EftVarianceReportActivity((ReportsAppPlace<EftVarianceReportMetadata>) place);
                     } else if (place instanceof Reports.ResidentInsurance) {
                         activity = new ResidentInsuranceReportActivity((ReportsAppPlace<ResidentInsuranceReportMetadata>) place);
+
+                        // reports as Listers
+                    } else if (crudPlace instanceof Reports.AutoPayReconciliation) {
+                        activity = new AutoPayReconciliationReportListerActivity(crudPlace);
 
                         // Communication
                     } else if (crudPlace instanceof Communication.Message) {

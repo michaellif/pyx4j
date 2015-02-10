@@ -349,7 +349,17 @@ public class NavigViewImpl extends Composite implements NavigView {
     public void updateAvailableReports(List<CrmReportType> reportTypes) {
         reports.clear();
         for (CrmReportType type : reportTypes) {
-            reports.addMenuItem(new SideMenuAppPlaceItem(CrmReportsMapper.resolvePlace(type)));
+            if (type.isOld()) {
+                reports.addMenuItem(new SideMenuAppPlaceItem(CrmReportsMapper.resolvePlace(type)));
+            } else {
+                switch (type) {
+                case AutoPayReconciliation:
+                    reports.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.AutoPayReconciliation()));
+                    break;
+                default:
+                    throw new IllegalArgumentException("not implemented");
+                }
+            }
         }
     }
 
