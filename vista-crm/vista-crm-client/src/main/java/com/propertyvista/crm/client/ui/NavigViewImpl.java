@@ -37,6 +37,7 @@ import com.pyx4j.site.client.ui.sidemenu.SideMenuList;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ClientLocaleUtils;
+import com.propertyvista.common.client.WalkMe;
 import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.resources.CrmImages;
@@ -305,7 +306,7 @@ public class NavigViewImpl extends Composite implements NavigView {
             root.addMenuItem(new SideMenuItem(new SideMenuCommand() {
                 @Override
                 public boolean execute() {
-                    //TODO add Walkme
+                    WalkMe.toggleMenu();
                     return true;
                 }
             }, i18n.tr("Help"), CrmImages.INSTANCE.helpIcon()));

@@ -150,6 +150,7 @@ SET search_path = '_admin_';
         ALTER TABLE admin_pmc_vista_features ALTER COLUMN white_label_portal SET NOT NULL;
         ALTER TABLE admin_pmc_vista_features ALTER COLUMN yardi_integration SET NOT NULL;
         ALTER TABLE admin_pmc_vista_features ALTER COLUMN yardi_maintenance SET NOT NULL;
+        ALTER TABLE dev_card_service_simulation_transaction ALTER COLUMN voided SET NOT NULL;
         
 
 
