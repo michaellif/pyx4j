@@ -95,12 +95,14 @@ public abstract class AbstractPrimeReport<R extends ReportTemplate> extends Abst
 
         viewPanel.add(reportWidget);
 
-        addHeaderToolbarItem(new Button(i18n.tr("Customize..."), new Command() {
-            @Override
-            public void execute() {
-                getPresenter().loadAvailableTemplates();
-            }
-        }));
+// removed currently according VISTA-5872
+//
+//        addHeaderToolbarItem(new Button(i18n.tr("Customize..."), new Command() {
+//            @Override
+//            public void execute() {
+//                getPresenter().loadAvailableTemplates();
+//            }
+//        }));
 
         addHeaderToolbarItem(new Button(i18n.tr("Print"), new Command() {
             @Override
