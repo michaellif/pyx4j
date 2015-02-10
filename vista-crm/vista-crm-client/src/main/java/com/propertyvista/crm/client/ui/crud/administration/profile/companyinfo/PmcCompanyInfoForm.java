@@ -45,7 +45,7 @@ public class PmcCompanyInfoForm extends CrmEntityForm<PmcCompanyInfoDTO> {
     FormPanel createGeneralTabContent() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().companyName()).decorate();
+        formPanel.append(Location.Dual, proto().companyName()).decorate();
 
         formPanel.h1(proto().contacts().getMeta().getCaption());
         formPanel.append(Location.Dual, proto().contacts(), new PmcCompanyInfoContactFolder());
@@ -64,7 +64,7 @@ public class PmcCompanyInfoForm extends CrmEntityForm<PmcCompanyInfoDTO> {
             formPanel.br();
         }
 
-        formPanel.append(Location.Left, proto().websiteDnsName()).decorate();
+        formPanel.append(Location.Dual, proto().websiteDnsName()).decorate();
 
         if (!isViewable()) {
             formPanel.br();
@@ -89,7 +89,7 @@ public class PmcCompanyInfoForm extends CrmEntityForm<PmcCompanyInfoDTO> {
             formPanel.br();
         }
 
-        formPanel.append(Location.Left, proto().portalDnsName()).decorate();
+        formPanel.append(Location.Dual, proto().portalDnsName()).decorate();
 
         if (!isViewable()) {
             formPanel.br();
