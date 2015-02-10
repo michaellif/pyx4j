@@ -12,6 +12,7 @@
  */
 package com.propertyvista.domain.financial;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
@@ -153,6 +154,24 @@ public interface ARCode extends IEntity {
 
         public static Collection<Type> nonReccuringFeatures() {
             return EnumSet.of(OneTime);
+        }
+
+        public static Collection<Type> allOfActionType(ActionType actionType) {
+            Collection<Type> r = new ArrayList<>();
+            for (Type type : EnumSet.allOf(Type.class)) {
+                if (type.getActionType() == actionType) {
+                    r.add(type);
+                }
+            }
+            return r;
+        }
+
+        public static Collection<Type> debits() {
+            return allOfActionType(ActionType.Debit);
+        }
+
+        public static Collection<Type> credits() {
+            return allOfActionType(ActionType.Credit);
         }
     }
 

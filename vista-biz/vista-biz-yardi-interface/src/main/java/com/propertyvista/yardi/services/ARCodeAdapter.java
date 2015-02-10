@@ -12,8 +12,6 @@
  */
 package com.propertyvista.yardi.services;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,15 +50,8 @@ public class ARCodeAdapter {
     public ARCode retrieveARCode(ARCode.ActionType actionType, String chargeCode) {
         EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
         criteria.eq(criteria.proto().yardiChargeCodes().$().yardiChargeCode(), chargeCode);
-        List<ARCode> codes = Persistence.service().query(criteria);
-        ARCode code = null;
-        for (ARCode cd : codes) {
-            if (cd.type().getValue().getActionType() == actionType) {
-                code = cd;
-                break;
-            }
-        }
-        return code;
+        criteria.in(criteria.proto().type(), ARCode.Type.allOfActionType(actionType));
+        return Persistence.service().retrieve(criteria);
     }
 
     private ARCode retrieveDefaultUnkownARCode(ARCode.ActionType actionType) {
