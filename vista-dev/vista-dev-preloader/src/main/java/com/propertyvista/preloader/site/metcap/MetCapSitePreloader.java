@@ -10,7 +10,7 @@
  * Created on Nov 1, 2011
  * @author vlads
  */
-package com.propertyvista.preloader.site.metcup;
+package com.propertyvista.preloader.site.metcap;
 
 import java.util.Date;
 
@@ -31,7 +31,7 @@ public class MetCapSitePreloader extends AbstractSitePreloader {
 
     @Override
     protected Integer object1() {
-        return 207;
+        return 270;
     }
 
     @Override

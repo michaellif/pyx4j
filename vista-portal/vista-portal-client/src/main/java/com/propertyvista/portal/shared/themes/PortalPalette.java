@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -56,6 +56,19 @@ public class PortalPalette extends VistaPalette {
                         .addColor(ThemeColor.contrast5, 74, 56)//
                         .addColor(ThemeColor.contrast6, 74, 56)//
                         .addColor(ThemeColor.foreground, 30, 20)//
+                        .addColor(ThemeColor.formBackground, 0, 100)//
+                        .addColor(ThemeColor.siteBackground, 0, 100);
+                break;
+            case skin3:
+                addColor(ThemeColor.object1, 0, 16)//
+                        .addColor(ThemeColor.object2, 100, 29)//
+                        .addColor(ThemeColor.contrast1, 100, 29)//
+                        .addColor(ThemeColor.contrast2, 100, 29)//
+                        .addColor(ThemeColor.contrast3, 100, 29)//
+                        .addColor(ThemeColor.contrast4, 100, 29)//
+                        .addColor(ThemeColor.contrast5, 100, 29)//
+                        .addColor(ThemeColor.contrast6, 100, 29)//
+                        .addColor(ThemeColor.foreground, 100, 29)//
                         .addColor(ThemeColor.formBackground, 0, 100)//
                         .addColor(ThemeColor.siteBackground, 0, 100);
                 break;

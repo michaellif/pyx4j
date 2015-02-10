@@ -41,7 +41,8 @@ public class PmcCreatorDev {
         pmc.dnsName().setValue(pmcName);
 
         pmc.features().onlineApplication().setValue(Boolean.TRUE);
-        pmc.features().whiteLabelPortal().setValue(pmcName.equals(DemoPmc.metcap.name()) || pmcName.equals(DemoPmc.timbercreek.name()));
+        pmc.features().whiteLabelPortal()
+                .setValue(pmcName.equals(DemoPmc.metcap.name()) || pmcName.equals(DemoPmc.timbercreek.name()) || pmcName.equals(DemoPmc.greenwin.name()));
         pmc.features().yardiIntegration().setValue(Boolean.FALSE);
         pmc.features().tenantSureIntegration().setValue(Boolean.TRUE);
         pmc.features().tenantEmailEnabled().setValue(Boolean.TRUE);

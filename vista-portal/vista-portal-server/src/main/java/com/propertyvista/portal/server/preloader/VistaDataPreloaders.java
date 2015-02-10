@@ -42,7 +42,8 @@ import com.propertyvista.preloader.leases.LeasePreloader;
 import com.propertyvista.preloader.policy.PaymentMethodSelectionPolicyDevPreloader;
 import com.propertyvista.preloader.site.demo.DemoSitePreloader;
 import com.propertyvista.preloader.site.gondor.GondorSitePreloader;
-import com.propertyvista.preloader.site.metcup.MetCapSitePreloader;
+import com.propertyvista.preloader.site.greenwin.GreenwinSitePreloader;
+import com.propertyvista.preloader.site.metcap.MetCapSitePreloader;
 import com.propertyvista.preloader.site.redridge.RedridgeSitePreloader;
 import com.propertyvista.preloader.site.rockville.RockvilleSitePreloader;
 import com.propertyvista.preloader.site.star.StarlightSitePreloader;
@@ -87,6 +88,7 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
             case vista:
                 //add(new TimbercreekSitePreloader());
                 //add(new MetCapSitePreloader());
+                //add(new GreenwinSitePreloader());
                 add(new VistaSitePreloader());
                 break;
             case star:
@@ -106,6 +108,9 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
                 break;
             case timbercreek:
                 add(new TimbercreekSitePreloader());
+                break;
+            case greenwin:
+                add(new GreenwinSitePreloader());
                 break;
             case demo:
                 add(new DemoSitePreloader());

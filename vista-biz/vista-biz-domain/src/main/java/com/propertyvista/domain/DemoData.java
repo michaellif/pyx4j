@@ -20,7 +20,7 @@ import com.propertyvista.domain.security.VistaOperationsBehavior;
 public class DemoData {
 
     public static enum DemoPmc {
-        vista, redridge, rockville, star, gondor, metcap, timbercreek, demo;
+        vista, redridge, rockville, star, gondor, metcap, timbercreek, greenwin, demo;
     }
 
     //We need E-mail delivery during tests. All E-mails goes to us!
