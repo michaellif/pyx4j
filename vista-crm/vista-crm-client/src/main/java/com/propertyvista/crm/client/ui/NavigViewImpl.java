@@ -76,6 +76,7 @@ import com.propertyvista.dto.N4BatchDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.dto.communication.CommunicationThreadDTO;
 import com.propertyvista.dto.communication.MessageDTO;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
@@ -279,15 +280,17 @@ public class NavigViewImpl extends Composite implements NavigView {
             communicationGroups = new SideMenuList();
             sideMenuList.addMenuItem(new SideMenuFolderItem(communicationGroups, i18n.tr("Groups"), null, null, DataModelPermission
                     .permissionRead(MessageCategory.class)));
+            if (VistaTODO.VISTA_1288_Communication_Broadcast) {
+                SideMenuList broadcastFolder = new SideMenuList();
 
-            SideMenuList broadcastFolder = new SideMenuList();
-            sideMenuList.addMenuItem(new SideMenuFolderItem(broadcastFolder, i18n.tr("Broadcast"), null, null, DataModelPermission
-                    .permissionRead(BroadcastTemplate.class)));
+                sideMenuList.addMenuItem(new SideMenuFolderItem(broadcastFolder, i18n.tr("Broadcast"), null, null, DataModelPermission
+                        .permissionRead(BroadcastTemplate.class)));
 
-            broadcastFolder.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.BroadcastTemplate(), DataModelPermission
-                    .permissionRead(BroadcastTemplate.class)));
-            broadcastFolder.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.BroadcastEvent(), DataModelPermission
-                    .permissionRead(BroadcastEvent.class)));
+                broadcastFolder.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.BroadcastTemplate(), DataModelPermission
+                        .permissionRead(BroadcastTemplate.class)));
+                broadcastFolder.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.BroadcastEvent(), DataModelPermission
+                        .permissionRead(BroadcastEvent.class)));
+            }
         }
 
         {//Reports
