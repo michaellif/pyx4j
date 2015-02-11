@@ -53,11 +53,11 @@ public class DialogTheme extends Theme {
         Style style = new Style(".", StyleName.Dialog);
         style.addProperty("box-shadow", "10px 10px 5px rgba(0, 0, 0, 0.3)");
         style.addProperty("border", "5px solid");
-        style.addProperty("border-color", ThemeColor.object2, 1.2);
+        style.addProperty("border-color", ThemeColor.object2, 1);
         addStyle(style);
 
         style = new Style(".", StyleName.DialogCaption);
-        style.addProperty("background", ThemeColor.object2, 1);
+        style.addProperty("background", ThemeColor.object2, 0.9);
         style.addProperty("filter", "alpha(opacity=95)");
         style.addProperty("opacity", "0.95");
         style.addProperty("color", ThemeColor.object1, 0.1);
