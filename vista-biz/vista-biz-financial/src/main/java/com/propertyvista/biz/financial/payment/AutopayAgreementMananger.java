@@ -66,6 +66,7 @@ import com.propertyvista.domain.policy.policies.AutoPayPolicy.ChangeRule;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -427,6 +428,20 @@ class AutopayAgreementMananger {
         default:
             throw new IllegalArgumentException();
         }
+    }
+
+    public List<BillableItem> getAutoPpayApplicabelItems(Lease lease, BillingCycle billingCycle) {
+        List<BillableItem> billableItems = new ArrayList<>();
+        LeaseTermV leaseTermV = lease.currentTerm().version();
+        if (PaymentBillableUtils.isBillableItemPapable(leaseTermV.leaseProducts().serviceItem(), billingCycle)) {
+            billableItems.add(leaseTermV.leaseProducts().serviceItem());
+        }
+        for (BillableItem bi : leaseTermV.leaseProducts().featureItems()) {
+            if (PaymentBillableUtils.isBillableItemPapable(bi, billingCycle)) {
+                billableItems.add(bi);
+            }
+        }
+        return billableItems;
     }
 
     public void terminateAutopayAgreements(Lease lease) {

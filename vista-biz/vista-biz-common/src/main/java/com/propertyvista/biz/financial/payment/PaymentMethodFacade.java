@@ -29,6 +29,7 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -109,6 +110,8 @@ public interface PaymentMethodFacade {
     LogicalDate getNextAutopayDate(Lease lease);
 
     String getNextAutopayApplicabilityMessage(Lease lease);
+
+    List<BillableItem> getAutoPpayApplicabelItems(Lease lease, BillingCycle billingCycle);
 
     List<PaymentRecord> calulatePreauthorizedPayment(BillingCycle billingCycle, BillingAccount billingAccountId);
 

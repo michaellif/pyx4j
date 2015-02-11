@@ -19,10 +19,14 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.crm.rpc.dto.reports.AutoPayReconciliationDTO;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.ActionType;
+import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class AutoPayReconciliationCalculator {
@@ -36,15 +40,21 @@ public class AutoPayReconciliationCalculator {
         reconciliationTo.otherCharges().setValue(BigDecimal.ZERO);
 
         for (AutopayAgreementCoveredItem item : reconciliationTo.coveredItems()) {
-            BigDecimal actualPrice = ServerSideFactory.create(BillingFacade.class).getActualPrice(item.billableItem());
-            reconciliationTo.price().setValue(reconciliationTo.payment().getValue().add(actualPrice));
             reconciliationTo.payment().setValue(reconciliationTo.payment().getValue().add(item.amount().getValue()));
+        }
+
+        BillingCycle nextPaymentCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(reconciliationTo.tenant().lease());
+
+        for (BillableItem billableItem : ServerSideFactory.create(PaymentMethodFacade.class).getAutoPpayApplicabelItems(reconciliationTo.tenant().lease(),
+                nextPaymentCycle)) {
+            BigDecimal actualPrice = ServerSideFactory.create(BillingFacade.class).getActualPrice(billableItem);
+            reconciliationTo.price().setValue(reconciliationTo.price().getValue().add(actualPrice));
 
             ARCode arCode = null;
-            if (!item.billableItem().item().product().holder().code().type().isNull()) {
-                arCode = item.billableItem().item().product().holder().code();
-            } else if (VistaFeatures.instance().yardiIntegration() && !item.billableItem().yardiChargeCode().isNull()) {
-                retrieveARCode(ActionType.Debit, item.billableItem().yardiChargeCode().getValue());
+            if (!billableItem.item().product().holder().code().type().isNull()) {
+                arCode = billableItem.item().product().holder().code();
+            } else if (VistaFeatures.instance().yardiIntegration() && !billableItem.yardiChargeCode().isNull()) {
+                retrieveARCode(ActionType.Debit, billableItem.yardiChargeCode().getValue());
             }
 
             if (arCode != null) {
@@ -63,7 +73,17 @@ public class AutoPayReconciliationCalculator {
             }
         }
 
-        reconciliationTo.cunt().setValue(1);
+        // Count other active agreements 
+        {
+            EntityQueryCriteria<AutopayAgreement> criteria = EntityQueryCriteria.create(AutopayAgreement.class);
+            criteria.eq(criteria.proto().tenant().lease(), reconciliationTo.tenant().lease());
+            criteria.eq(criteria.proto().isDeleted(), false);
+            int agreementsCount = Persistence.service().count(criteria);
+            reconciliationTo.paymentShareAmount().setValue(reconciliationTo.payment().getValue().divide(BigDecimal.valueOf(agreementsCount)));
+        }
+        reconciliationTo.discrepancy().setValue(reconciliationTo.paymentShareAmount().getValue().subtract(reconciliationTo.price().getValue()));
+
+        reconciliationTo.count().setValue(1);
     }
 
     private static ARCode retrieveARCode(ARCode.ActionType actionType, String chargeCode) {

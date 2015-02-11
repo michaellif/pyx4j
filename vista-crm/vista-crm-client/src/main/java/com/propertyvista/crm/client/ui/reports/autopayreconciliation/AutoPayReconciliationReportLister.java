@@ -12,10 +12,13 @@
  */
 package com.propertyvista.crm.client.ui.reports.autopayreconciliation;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor.Builder;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
@@ -45,19 +48,25 @@ public class AutoPayReconciliationReportLister extends SiteDataTablePanel<AutoPa
 
                 new Builder(proto().tenant().lease().expectedMoveOut(), false).build(),
 
-                new Builder(proto().renewalDate()).width("80px").build(), //
+                new Builder(proto().renewalDate()).width("80px").searchable(false).sortable(false).build(), //
 
-                new Builder(proto().rentCharge()).width("80px").build(), //
-                new Builder(proto().parkingCharges()).width("80px").build(), //
-                new Builder(proto().otherCharges()).width("80px").build(), //
+                new Builder(proto().rentCharge()).width("80px").searchable(false).sortable(false).build(), //
+                new Builder(proto().parkingCharges()).width("80px").searchable(false).sortable(false).build(), //
+                new Builder(proto().otherCharges()).width("80px").searchable(false).sortable(false).build(), //
 
-                new Builder(proto().price()).width("80px").build(), //
-                new Builder(proto().payment()).width("80px").build(), //
-                new Builder(proto().discrepany()).build(), //
+                new Builder(proto().price()).width("80px").searchable(false).sortable(false).build(), //
+                new Builder(proto().payment()).width("80px").searchable(false).sortable(false).build(), //
+                new Builder(proto().paymentShareAmount()).width("80px").visible(false).searchable(false).sortable(false).build(), //
+                new Builder(proto().discrepancy()).searchable(false).sortable(false).build(), //
 
-                new Builder(proto().cunt()).searchable(false).visible(false).build() //
+                new Builder(proto().count()).searchable(false).sortable(false).visible(false).build() //
         );
 
         setDataTableModel(new DataTableModel<AutoPayReconciliationDTO>());
+    }
+
+    @Override
+    public List<Sort> getDefaultSorting() {
+        return Arrays.asList(new Sort(proto().tenant().lease().leaseId(), false));
     }
 }

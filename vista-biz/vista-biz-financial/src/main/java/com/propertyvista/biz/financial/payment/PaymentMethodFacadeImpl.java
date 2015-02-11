@@ -45,6 +45,7 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
@@ -240,6 +241,11 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     @Override
     public String getNextAutopayApplicabilityMessage(Lease lease) {
         return new AutopayAgreementMananger().getNextAutopayApplicabilityMessage(lease);
+    }
+
+    @Override
+    public List<BillableItem> getAutoPpayApplicabelItems(Lease lease, BillingCycle billingCycle) {
+        return new AutopayAgreementMananger().getAutoPpayApplicabelItems(lease, billingCycle);
     }
 
     @Override

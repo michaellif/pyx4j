@@ -47,8 +47,11 @@ public interface AutoPayReconciliationDTO extends AutopayAgreement {
     IPrimitive<BigDecimal> payment();
 
     @Format("#,##0.00")
-    IPrimitive<BigDecimal> discrepany();
+    IPrimitive<BigDecimal> paymentShareAmount();
 
-    IPrimitive<Integer> cunt();
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> discrepancy();
+
+    IPrimitive<Integer> count();
 
 }
