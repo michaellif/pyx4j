@@ -39,6 +39,7 @@ import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.domain.financial.billing.Bill.BillType;
@@ -49,7 +50,6 @@ import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseAdjustmentPolicyItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.portal.rpc.shared.BillingException;
 
 public class BillingManager {
@@ -71,12 +71,7 @@ public class BillingManager {
     }
 
     Bill runBilling(Lease leaseId, boolean preview) {
-        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
-        lease.currentTerm().set(Persistence.service().retrieve(LeaseTerm.class, lease.currentTerm().getPrimaryKey().asCurrentKey()));
-        if (lease.currentTerm().version().isNull()) {
-            lease.currentTerm().set(Persistence.service().retrieve(LeaseTerm.class, lease.currentTerm().getPrimaryKey().asDraftKey()));
-        }
-
+        Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, false);
         BillingCycle billingCycle = getNextBillBillingCycle(lease);
         return runBilling(lease, billingCycle, preview);
     }

@@ -122,7 +122,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                         cal.setTime(new LogicalDate(Math.min(new LogicalDate().getTime(), lease.currentTerm().termFrom().getValue().getTime())));
                         cal.add(Calendar.MONTH, -1);
                         SystemDateManager.setDate(cal.getTime());
-                        lease.set(ServerSideFactory.create(LeaseFacade.class).persist(lease));
+                        ServerSideFactory.create(LeaseFacade.class).persist(lease);
 
                         for (LeaseTermTenant participant : lease.currentTerm().version().tenants()) {
                             participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
@@ -153,7 +153,9 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                         return null;
                     }
                 });
+
                 SystemDateManager.setDate(trDate);
+
             } else {
                 LeaseLifecycleSimulatorBuilder simBuilder = LeaseLifecycleSimulator.sim(random);
 
@@ -236,7 +238,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 simBuilder.create().generateRandomLifeCycle(lease);
 
                 // Add Turnover
-                lease.set(Persistence.service().retrieve(Lease.class, lease.getPrimaryKey()));
                 if (lease.status().getValue().isFormer() && RandomUtil.randomBoolean()) {
                     // Create new Lease for the same unit
                     unit = makeAvailable(Persistence.service().retrieve(AptUnit.class, unit.getPrimaryKey()));
