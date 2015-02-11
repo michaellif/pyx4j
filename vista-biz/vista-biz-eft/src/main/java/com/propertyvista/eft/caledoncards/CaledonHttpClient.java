@@ -177,6 +177,9 @@ public class CaledonHttpClient {
                 String[] nameAndValue = nameValues[i].split("=");
                 if (nameAndValue.length == 2) {
                     values.put(nameAndValue[0], nameAndValue[1]);
+                } else if (nameAndValue.length == 1) {
+                    values.put(nameAndValue[0], "");
+                    log.info("Received empty parameter '{}' from Caledon Response", nameValues[i]);
                 } else {
                     log.warn("Can't pars argument '{}'", nameValues[i]);
                     throw new PaymentProcessingException("invalid Caledon response");

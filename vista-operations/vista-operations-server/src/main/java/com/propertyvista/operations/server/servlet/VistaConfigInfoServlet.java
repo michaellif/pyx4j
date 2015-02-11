@@ -73,6 +73,11 @@ public class VistaConfigInfoServlet extends ConfigInfoServlet {
         b.append("  CaledonFundsTransferConfiguration     :\n      ")
                 .append(conf.getCaledonFundsTransferConfiguration().toString().replaceAll("\n", "\n      ")).append("\n");
         b.append("\n");
+
+        b.append("  CaledonCardsConfiguration             :\n      ").append(conf.getCaledonCardsConfiguration().toString().replaceAll("\n", "\n      "))
+                .append("\n");
+        b.append("\n");
+
         b.append("  BmoInterfaceWorkDirectory             : ").append(conf.getBmoInterfaceWorkDirectory().getAbsolutePath()).append("\n");
         b.append("  BmoInterfaceConfiguration             :\n      ").append(conf.getBmoInterfaceConfiguration().toString().replaceAll("\n", "\n      "))
                 .append("\n");

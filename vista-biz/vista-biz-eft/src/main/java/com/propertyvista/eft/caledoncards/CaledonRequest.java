@@ -73,4 +73,7 @@ public class CaledonRequest {
     @HttpRequestField("AVS")
     public String avs;
 
+    @HttpRequestField("EXT_RESP")
+    public String extResp;
+
 }

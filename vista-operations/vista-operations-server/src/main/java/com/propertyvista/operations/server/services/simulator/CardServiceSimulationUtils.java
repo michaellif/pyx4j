@@ -156,4 +156,12 @@ public class CardServiceSimulationUtils {
         }
         return null;
     }
+
+    public static String getLast4Digits(String cardNumber) {
+        if (cardNumber != null && cardNumber.length() >= 4) {
+            return cardNumber.substring(cardNumber.length() - 4, cardNumber.length());
+        } else {
+            throw new Error("Invalid card number: '" + cardNumber + "'");
+        }
+    }
 }

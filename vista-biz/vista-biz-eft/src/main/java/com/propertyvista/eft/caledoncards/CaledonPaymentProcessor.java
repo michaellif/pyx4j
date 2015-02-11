@@ -20,10 +20,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 
+import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.biz.system.eft.CreditCardPaymentProcessorFacade;
 import com.propertyvista.biz.system.eft.PaymentProcessingException;
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.eft.caledoncards.dev.VisaDebitInternalValidator;
 import com.propertyvista.operations.domain.eft.cards.to.CreditCardPaymentInstrument;
@@ -384,6 +390,54 @@ public class CaledonPaymentProcessor implements CreditCardPaymentProcessorFacade
 
     @Override
     public PaymentResponse validateVisaDebit(CreditCardPaymentInstrument ccinfo) {
+        PaymentResponse paymentResponse = null;
+
+        if (ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getCaledonCardsConfiguration().useExternalCardValidation()) {
+            paymentResponse = externalVisaDebitValidation(ccinfo, null);
+        } else {
+            paymentResponse = internalVisaDebitValidation(ccinfo);
+        }
+
+        return paymentResponse;
+    }
+
+    public PaymentResponse externalVisaDebitValidation(CreditCardPaymentInstrument ccinfo, String terminalId) {
+
+        CaledonRequest crequest = createRequestInstrument(ccinfo);
+        crequest.transactionType = CaledonTransactionType.ACCOUNT_STATUS_INQUIRY.getValue();
+
+        // Use default Vista Merchant Id
+        if (terminalId == null) {
+            terminalId = ServerSideFactory.create(Vista2PmcFacade.class).getVistaMerchantTerminalId();
+        }
+
+        crequest.terminalID = terminalId;
+        crequest.creditCardNumber = ccinfo.creditCardNumber().getValue();
+        if (!ccinfo.creditCardExpiryDate().isNull()) {
+            crequest.setExpiryDate(ccinfo.creditCardExpiryDate().getValue());
+        }
+        crequest.extResp = "Y";
+
+        CaledonResponse cresponse = caledonCardsClient().transaction(crequest);
+
+        if (cresponse.code.equals("0000") && !matchesCardTypeSelectedByUserWithVisaDebit(cresponse)) {
+            // Change response code error to send to UI
+            cresponse.code = "1214";
+        }
+
+        return createResponse(cresponse);
+    }
+
+    private boolean matchesCardTypeSelectedByUserWithVisaDebit(CaledonResponse cresponse) {
+        if (cresponse.cardType.equalsIgnoreCase(CreditCardInfo.CreditCardType.Visa.name()) && //
+                (cresponse.cardProduct.equalsIgnoreCase(CaledonCardProduct.VisaDebit.getIntrfaceValue()) || //
+                cresponse.cardProduct.equalsIgnoreCase(""))) { // TODO patch because production caledon returns no cardProduct with our test terminalId
+            return true;
+        }
+        return false;
+    }
+
+    private PaymentResponse internalVisaDebitValidation(CreditCardPaymentInstrument ccinfo) {
         if (VisaDebitInternalValidator.isVisaDebitValid(ccinfo.creditCardNumber().getValue())) {
             PaymentResponse response = EntityFactory.create(PaymentResponse.class);
             response.success().setValue(true);

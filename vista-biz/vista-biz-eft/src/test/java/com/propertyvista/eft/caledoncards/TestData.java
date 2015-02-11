@@ -20,6 +20,8 @@ public interface TestData {
 
     public static String TEST_TERMID = TEST_TERMID2;
 
+    public static String TEST_TERMID3 = "BIRCHWT6";
+
     public static String TEST_TERMID_ERROR = "BIRCHWXYZ";
 
     //Test Credit Card Account Numbers
@@ -53,4 +55,7 @@ public interface TestData {
     public static String CARD_VISA2 = "4012888888881881";
 
     public static String CARD_VISA3 = "4222222222222";
+
+    // Visa Debit
+    public static String CARD_VISA_DEBIT = "4539639392394216";
 }
