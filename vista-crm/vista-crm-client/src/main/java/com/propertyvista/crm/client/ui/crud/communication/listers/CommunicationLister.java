@@ -54,6 +54,7 @@ import com.propertyvista.domain.communication.SpecialDelivery.DeliveryMethod;
 import com.propertyvista.dto.communication.CommunicationThreadDTO;
 import com.propertyvista.dto.communication.CommunicationThreadDTO.ViewScope;
 import com.propertyvista.dto.communication.MessageDTO;
+import com.propertyvista.misc.VistaTODO;
 
 public class CommunicationLister extends SiteDataTablePanel<CommunicationThreadDTO> {
     private static final I18n i18n = I18n.get(CommunicationLister.class);
@@ -96,8 +97,10 @@ public class CommunicationLister extends SiteDataTablePanel<CommunicationThreadD
         Button.ButtonMenuBar subMenu = new Button.ButtonMenuBar();
         subMenu.addItem(newTicket = new MessagesMenuItem(CategoryType.Ticket));
         subMenu.addItem(newMessage = new MessagesMenuItem(CategoryType.Message));
-        subMenu.addItem(newIVR = new MessagesMenuItem(CategoryType.Message, DeliveryMethod.IVR));
-        subMenu.addItem(newSMS = new MessagesMenuItem(CategoryType.Message, DeliveryMethod.SMS));
+        if (VistaTODO.VISTA_1288_Communication_Broadcast) {
+            subMenu.addItem(newIVR = new MessagesMenuItem(CategoryType.Message, DeliveryMethod.IVR));
+            subMenu.addItem(newSMS = new MessagesMenuItem(CategoryType.Message, DeliveryMethod.SMS));
+        }
         subMenu.addItem(newNotification = new MessagesMenuItem(CategoryType.Message, DeliveryMethod.Notification));
 
         newButton.setMenu(subMenu);
@@ -166,8 +169,10 @@ public class CommunicationLister extends SiteDataTablePanel<CommunicationThreadD
         if (placeCriteria == null) {
             newMessage.setVisible(true);
             newTicket.setVisible(true);
-            newIVR.setVisible(true);
-            newSMS.setVisible(true);
+            if (VistaTODO.VISTA_1288_Communication_Broadcast) {
+                newIVR.setVisible(true);
+                newSMS.setVisible(true);
+            }
             newNotification.setVisible(true);
             if (viewScope!= null){
                 criteria.eq(criteria.proto().viewScope(), ViewScope.Messages);
@@ -194,8 +199,10 @@ public class CommunicationLister extends SiteDataTablePanel<CommunicationThreadD
                 newButton.setVisible(CategoryType.Message == category);
                 newMessage.setVisible(CategoryType.Message == category);
                 newTicket.setVisible(false);
-                newIVR.setVisible(CategoryType.Message == category);
-                newSMS.setVisible(CategoryType.Message == category);
+                if (VistaTODO.VISTA_1288_Communication_Broadcast) {
+                    newIVR.setVisible(CategoryType.Message == category);
+                    newSMS.setVisible(CategoryType.Message == category);
+                }
                 newNotification.setVisible(CategoryType.Message == category);
             }
         }
