@@ -32,6 +32,8 @@ public interface MoneyInCandidateDTO extends IEntity {
 
     IPrimitive<String> leaseId();
 
+    IPrimitive<String> tenantName();
+
     IList<MoneyInLeaseParticipantDTO> payerCandidates();
 
     IPrimitive<BigDecimal> totalOutstanding();

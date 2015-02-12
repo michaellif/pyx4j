@@ -143,6 +143,8 @@ public class MoneyInToolServiceImpl implements MoneyInToolService {
         candidate.payment().leaseIdStub().set(lease.createIdentityStub());
         candidate.payment().payerLeaseTermTenantIdStub().set(candidate.payerCandidates().get(0).leaseTermTenantIdStub());
 
+        candidate.tenantName().setValue(candidate.payerCandidates().getStringView());
+
         return candidate;
     }
 
