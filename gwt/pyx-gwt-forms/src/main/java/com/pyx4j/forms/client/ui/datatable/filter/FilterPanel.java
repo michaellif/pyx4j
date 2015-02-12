@@ -70,7 +70,7 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
 
             @Override
             public void onValueChange(ValueChangeEvent<Collection<FilterItem>> event) {
-                dataTablePanel.populate();
+                dataTablePanel.populate(0);
             }
         });
 
