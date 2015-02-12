@@ -56,9 +56,9 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
 
     private static final I18n i18n = I18n.get(CreditCardInfoEditor.class);
 
-    private BooleanWrapper isCreditCardTypeSet = new BooleanWrapper();
+    private boolean isCreditCardTypeSet = false;
 
-    private BooleanWrapper isExpiryDateSet = new BooleanWrapper();
+    private boolean isExpiryDateSet = false;
 
     // a hack for async creditCardNumber Validation
     private boolean isCreditCardNumberCheckSent;
@@ -116,7 +116,8 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
             @Override
             public void onValueChange(ValueChangeEvent<CreditCardType> event) {
                 get(proto().securityCode()).setMandatory(true);
-                cardEditorRevalidate(event, isCreditCardTypeSet);
+                isCreditCardTypeSet = event.getValue() != null ? true : false;
+                cardEditor.revalidate();
             }
         });
         get(proto().card()).addValueChangeHandler(new ValueChangeHandler<CreditCardNumberIdentity>() {
@@ -130,7 +131,8 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
             @Override
             public void onValueChange(ValueChangeEvent<LogicalDate> event) {
                 get(proto().securityCode()).setMandatory(true);
-                cardEditorRevalidate(event, isExpiryDateSet);
+                isExpiryDateSet = event.getValue() != null ? true : false;
+                cardEditor.revalidate();
             }
         });
     }
@@ -207,7 +209,7 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
 
     private void validateCreditCardNumberAsync(final CComponent<?, ?, ?, ?> component, CreditCardNumberIdentity value) {
 
-        if (!isCreditCardTypeSet.getValue() || !isExpiryDateSet.getValue() || !get(proto().expiryDate()).isValid()) {
+        if (!isCreditCardTypeSet || !isExpiryDateSet || !get(proto().expiryDate()).isValid()) {
             return;
         }
 
@@ -255,15 +257,6 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
         isCreditCardNumberValid = null;
     }
 
-    private void cardEditorRevalidate(ValueChangeEvent<?> event, BooleanWrapper flag) {
-        if (event.getValue() != null) {
-            flag.setValue(true);
-            cardEditor.revalidate();
-        } else {
-            flag.setValue(false);
-        }
-    }
-
     @Override
     public void generateMockData() {
         get(proto().nameOn()).setMockValue("Dev");
@@ -274,20 +267,5 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
         TimeUtils.addDays(nextMonth, 31);
         get(proto().expiryDate()).setMockValue(nextMonth);
         get(proto().securityCode()).setMockValue("123");
-    }
-
-    private class BooleanWrapper {
-        private boolean flag = false;
-
-        public BooleanWrapper() {
-        }
-
-        public void setValue(boolean value) {
-            flag = value;
-        }
-
-        public boolean getValue() {
-            return flag;
-        }
     }
 }
