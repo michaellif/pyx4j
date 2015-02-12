@@ -149,8 +149,9 @@ public class MoneyInToolServiceImpl implements MoneyInToolService {
     private Collection<? extends MoneyInLeaseParticipantDTO> fetchPayerCandidates(Lease lease) {
         Persistence.ensureRetrieve(lease.currentTerm(), AttachLevel.IdOnly);
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
+
         List<MoneyInLeaseParticipantDTO> moneyInLeaseParticipants = new ArrayList<MoneyInLeaseParticipantDTO>(lease.currentTerm().version().tenants().size());
-        for (LeaseTermParticipant leaseTermParticipant : lease.currentTerm().version().tenants()) {
+        for (LeaseTermParticipant<?> leaseTermParticipant : lease.currentTerm().version().tenants()) {
             if (leaseTermParticipant.role().getValue() == LeaseTermParticipant.Role.Applicant
                     || leaseTermParticipant.role().getValue() == LeaseTermParticipant.Role.CoApplicant) {
                 moneyInLeaseParticipants.add(toMoneyInLeaseParticipant(leaseTermParticipant));
@@ -160,10 +161,12 @@ public class MoneyInToolServiceImpl implements MoneyInToolService {
         return moneyInLeaseParticipants;
     }
 
-    private MoneyInLeaseParticipantDTO toMoneyInLeaseParticipant(LeaseTermParticipant leaseTermParticipant) {
+    private MoneyInLeaseParticipantDTO toMoneyInLeaseParticipant(LeaseTermParticipant<?> leaseTermParticipant) {
         MoneyInLeaseParticipantDTO moneyInLeaseParticipant = EntityFactory.create(MoneyInLeaseParticipantDTO.class);
+
         moneyInLeaseParticipant.leaseTermTenantIdStub().set(leaseTermParticipant.duplicate(LeaseTermTenant.class).createIdentityStub());
         moneyInLeaseParticipant.name().setValue(leaseTermParticipant.leaseParticipant().customer().person().name().getStringView());
+
         return moneyInLeaseParticipant;
     }
 
