@@ -44,6 +44,7 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
@@ -51,6 +52,7 @@ import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.payment.CreditCardInfo;
@@ -291,7 +293,7 @@ public class LeaseLifecycleSimulator {
             lease.status().setValue(Status.Application);
             lease.currentTerm().type().setValue((random.nextInt() % 10 < 7) ? Type.Fixed : Type.FixedEx);
             lease.leaseApplication().referenceSource().setValue(RandomUtil.randomEnum(ReferenceSource.class));
-            lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
+            ServerSideFactory.create(LeaseFacade.class).persist(lease);
 
             for (LeaseTermTenant participant : lease.currentTerm().version().tenants()) {
                 participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
@@ -328,6 +330,7 @@ public class LeaseLifecycleSimulator {
                 log.info("" + now() + " approve lease: {} {} - {}", lease.leaseId(), lease.currentTerm().termFrom(), lease.currentTerm().termTo());
             }
             ServerSideFactory.create(LeaseFacade.class).approve(lease, null, "LeaseLifecycleSimulator");
+            lease.set(ServerSideFactory.create(LeaseFacade.class).load(lease, false));
 
             if (debug) {
                 log.info("" + now() + " approved lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
@@ -348,6 +351,7 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             ServerSideFactory.create(LeaseFacade.class).activate(lease);
+            lease.set(ServerSideFactory.create(LeaseFacade.class).load(lease, false));
             if (debug) {
                 log.info("" + now() + " activated lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
                         + lease.currentTerm().termTo().getValue());
@@ -572,10 +576,14 @@ public class LeaseLifecycleSimulator {
                         return;
                     }
 
-                    LogicalDate billingRunDay = ServerSideFactory.create(BillingFacade.class).getNextBillBillingCycle(lease).targetBillExecutionDate()
-                            .getValue();
-                    if (now().equals(billingRunDay) && (now().compareTo(lease.leaseTo().getValue()) < 0)
-                            && (now().compareTo(lease.expectedMoveOut().getValue()) < 0)) {
+                    BillingCycle nextBillBillingCycle = ServerSideFactory.create(BillingFacade.class).getNextBillBillingCycle(lease);
+                    LogicalDate billingRunDay = nextBillBillingCycle.targetBillExecutionDate().getValue();
+                    if (billingRunDay.before(lease.approvalDate().getValue())) {
+                        nextBillBillingCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(nextBillBillingCycle);
+                        billingRunDay = nextBillBillingCycle.targetBillExecutionDate().getValue();
+                    }
+
+                    if (now().equals(billingRunDay) && (now().before(lease.leaseTo().getValue())) && (now().before(lease.expectedMoveOut().getValue()))) {
                         BillingFacade billing = ServerSideFactory.create(BillingFacade.class);
                         try {
                             billing.runBilling(lease);
