@@ -17,6 +17,8 @@ import static org.junit.Assert.assertEquals;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import javax.xml.ws.BindingProvider;
+
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -56,6 +58,8 @@ public class WSScreeningServiceTest extends WSTestBase {
 
         WSScreeningService service = client.getWSScreeningService();
 
+        changeWSScreeningServicePortAddress(service);
+
         ServiceResponse response = service.getScreeningReport("ERROR REQUEST's CONTENT");
         String xml = (String) response.getServiceResponseResult().getContent().get(0);
         Assert.assertNotNull(xml);
@@ -73,6 +77,8 @@ public class WSScreeningServiceTest extends WSTestBase {
 
         WSScreeningService service = client.getWSScreeningService();
 
+        changeWSScreeningServicePortAddress(service);
+
         ServiceResponse response = service.getScreeningReport("");
         String xml = (String) response.getServiceResponseResult().getContent().get(0);
         Assert.assertNotNull(xml);
@@ -81,5 +87,11 @@ public class WSScreeningServiceTest extends WSTestBase {
         Assert.assertNotNull(xml);
         Assert.assertEquals(1, messages.getMessages().size());
         Assert.assertEquals(MessageType.Error, messages.getMessages().get(0).getType());
+    }
+
+    // change WS endpoint address dinamically (predefined in ScreeningService.wsdl. See ScreeningService.URL)
+    private void changeWSScreeningServicePortAddress(WSScreeningService service) {
+        BindingProvider bindingProvider = (BindingProvider) service;
+        bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getAddress());
     }
 }
