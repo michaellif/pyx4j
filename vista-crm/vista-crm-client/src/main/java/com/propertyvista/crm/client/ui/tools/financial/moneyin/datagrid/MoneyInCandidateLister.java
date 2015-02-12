@@ -27,7 +27,7 @@ public class MoneyInCandidateLister extends DataTablePanel<MoneyInCandidateDTO> 
                 new ColumnDescriptor.Builder(proto().building()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().unit()).build(), //
                 new ColumnDescriptor.Builder(proto().leaseId()).build(), //
-                new ColumnDescriptor.Builder(proto().payerCandidates().$().name()).filterAlwaysShown(true).searchableOnly().build(), //
+                new ColumnDescriptor.Builder(proto().tenantName()).filterAlwaysShown(true).searchableOnly().build(), //
                 new ColumnDescriptor.Builder(proto().payerCandidates()).searchable(false).sortable(false).build(), //
                 new ColumnDescriptor.Builder(proto().totalOutstanding()).build());
 
