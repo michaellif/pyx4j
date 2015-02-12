@@ -16,9 +16,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.TextAlign;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 
@@ -26,7 +23,6 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCredentials;
@@ -183,15 +179,4 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> implements ILog
         }
     }
 
-    class EnterKeyHandler implements KeyUpHandler {
-
-        @Override
-        public void onKeyUp(KeyUpEvent event) {
-            if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                if (!Dialog.isDialogOpen()) {
-                    onLogin();
-                }
-            }
-        }
-    }
 }
