@@ -44,7 +44,7 @@ public class CaledonTokenTest extends CaledonTestBase {
         CreditCardPaymentProcessorFacade proc = new CaledonPaymentProcessor();
         TokenPaymentInstrument token = EntityFactory.create(TokenPaymentInstrument.class);
         token.code().setValue("ut" + String.valueOf(System.currentTimeMillis()));
-        PaymentResponse pr = proc.createToken(testMerchant, super.createCCInformation(TestData.CARD_MC1, "2019-01", "123"), token);
+        PaymentResponse pr = proc.createToken(testMerchant, super.createCCInformation(TestData.CARD_MC1, "2019-01", "423"), token);
         log.debug("responce code {}", pr.code().getValue());
         assertEquals(CaledonTokenResponse.TOKEN_SUCCESS.getValue(), pr.code().getValue());
 

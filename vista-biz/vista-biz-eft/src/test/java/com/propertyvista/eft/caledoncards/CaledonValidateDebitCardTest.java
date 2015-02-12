@@ -79,7 +79,7 @@ public class CaledonValidateDebitCardTest extends CaledonTestBase {
     }
 
     private static CreditCardPaymentInstrument createCCInformation(String expirationDate) {
-        return createCCInformation(TestData.CARD_VISA_DEBIT, expirationDate, "123");
+        return createCCInformation(TestData.CARD_VISA_DEBIT, expirationDate, "423");
     }
 
     private static String createErrorMessage(PaymentResponse response, ResponseCode expectedResponseCode) {

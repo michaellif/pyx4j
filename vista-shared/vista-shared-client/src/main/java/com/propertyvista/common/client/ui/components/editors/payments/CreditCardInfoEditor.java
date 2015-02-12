@@ -266,6 +266,6 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
         LogicalDate nextMonth = new LogicalDate();
         TimeUtils.addDays(nextMonth, 31);
         get(proto().expiryDate()).setMockValue(nextMonth);
-        get(proto().securityCode()).setMockValue("123");
+        get(proto().securityCode()).setMockValue("423");
     }
 }
