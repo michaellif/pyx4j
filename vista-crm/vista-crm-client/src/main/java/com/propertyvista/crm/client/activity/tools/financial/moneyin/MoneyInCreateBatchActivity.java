@@ -92,8 +92,6 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
 
     private final MoneyInCandidateSearchVisorView paymentCandidateSearchVisor;
 
-    private final ListerDataSource<MoneyInCandidateDTO> paymentDataSource;
-
     public MoneyInCreateBatchActivity() {
         proto = EntityFactory.getEntityPrototype(MoneyInCandidateDTO.class);
         service = GWT.<MoneyInToolService> create(MoneyInToolService.class);
@@ -122,19 +120,18 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
             }
         };
 
-        paymentDataSource = new ListerDataSource<>(MoneyInCandidateDTO.class, new AbstractListCrudService<MoneyInCandidateDTO>() {
-            @Override
-            public void list(AsyncCallback<EntitySearchResult<MoneyInCandidateDTO>> callback, EntityListCriteria<MoneyInCandidateDTO> criteria) {
-                new InMemeoryListService<>(searchResultsProvider.getList()).list(callback, criteria);
-            }
+        paymentCandidateSearchVisor = new MoneyInCandidateSearchVisorView(addPaymentCandidatesController, new ListerDataSource<MoneyInCandidateDTO>(
+                MoneyInCandidateDTO.class, new AbstractListCrudService<MoneyInCandidateDTO>() {
+                    @Override
+                    public void list(AsyncCallback<EntitySearchResult<MoneyInCandidateDTO>> callback, EntityListCriteria<MoneyInCandidateDTO> criteria) {
+                        new InMemeoryListService<>(searchResultsProvider.getList()).list(callback, criteria);
+                    }
 
-            @Override
-            public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-                callback.onFailure(new Exception("delete operation not supported"));
-            }
-        });
-        paymentCandidateSearchVisor = new MoneyInCandidateSearchVisorView(addPaymentCandidatesController, paymentDataSource);
-
+                    @Override
+                    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
+                        callback.onFailure(new Exception("delete operation not supported"));
+                    }
+                }));
     }
 
     @Override

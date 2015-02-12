@@ -362,8 +362,6 @@ public class LeaseLifecycleSimulator {
         }
 
         private void queueReccurentBilling() {
-            Bill lastBill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
-
             LogicalDate billingRunDay = ServerSideFactory.create(BillingFacade.class).getNextBillBillingCycle(lease).targetBillExecutionDate().getValue();
             if (billingRunDay.before(lease.currentTerm().termFrom().getValue())) {
                 Calendar cal = GregorianCalendar.getInstance();
@@ -372,8 +370,6 @@ public class LeaseLifecycleSimulator {
                 billingRunDay = new LogicalDate(cal.getTime());
             }
             queueEvent(billingRunDay, new RunBillingRecurrent(lease));
-
-//            new RunBillingRecurrent(lease).exec();
         }
 
         private void queueTenantActions() {

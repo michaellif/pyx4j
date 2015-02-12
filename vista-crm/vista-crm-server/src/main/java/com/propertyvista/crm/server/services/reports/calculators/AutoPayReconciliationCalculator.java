@@ -61,6 +61,7 @@ public class AutoPayReconciliationCalculator {
                 switch (arCode.type().getValue()) {
                 case Residential:
                     reconciliationTo.rentCharge().setValue(reconciliationTo.rentCharge().getValue().add(actualPrice));
+                    reconciliationTo.renewalDate().setValue(billableItem.effectiveDate().getValue());
                     break;
                 case Parking:
                     reconciliationTo.parkingCharges().setValue(reconciliationTo.parkingCharges().getValue().add(actualPrice));
@@ -71,6 +72,10 @@ public class AutoPayReconciliationCalculator {
             } else {
                 reconciliationTo.otherCharges().setValue(reconciliationTo.otherCharges().getValue().add(actualPrice));
             }
+
+            if (!billableItem.effectiveDate().isNull() && reconciliationTo.renewalDate().isNull()) {
+                reconciliationTo.renewalDate().setValue(billableItem.effectiveDate().getValue());
+            }
         }
 
         // Count other active agreements 
@@ -79,9 +84,9 @@ public class AutoPayReconciliationCalculator {
             criteria.eq(criteria.proto().tenant().lease(), reconciliationTo.tenant().lease());
             criteria.eq(criteria.proto().isDeleted(), false);
             int agreementsCount = Persistence.service().count(criteria);
-            reconciliationTo.paymentShareAmount().setValue(reconciliationTo.payment().getValue().divide(BigDecimal.valueOf(agreementsCount)));
+            reconciliationTo.paymentShareAmount().setValue(reconciliationTo.price().getValue().divide(BigDecimal.valueOf(agreementsCount)));
         }
-        reconciliationTo.discrepancy().setValue(reconciliationTo.paymentShareAmount().getValue().subtract(reconciliationTo.price().getValue()));
+        reconciliationTo.discrepancy().setValue(reconciliationTo.payment().getValue().subtract(reconciliationTo.paymentShareAmount().getValue()));
 
         reconciliationTo.count().setValue(1);
     }

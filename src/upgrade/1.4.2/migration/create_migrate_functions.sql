@@ -61,6 +61,7 @@ BEGIN
         
         -- check constraints
         
+        ALTER TABLE available_crm_report DROP CONSTRAINT available_crm_report_report_type_e_ck;
         ALTER TABLE billing_arrears_snapshot DROP CONSTRAINT billing_arrears_snapshot_legal_status_e_ck;
         ALTER TABLE building_amenity DROP CONSTRAINT building_amenity_building_amenity_type_e_ck;
         ALTER TABLE communication_message_category DROP CONSTRAINT communication_message_category_category_type_e_ck;
@@ -1003,6 +1004,21 @@ BEGIN
                 ||'SET  mandatory_proof_of_asset = FALSE, '
                 ||'     mandatory_proof_of_employment = mandatory_proof_of_income ';
                 
+        -- available_crm_report
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.available_crm_report (id,report_type) '
+                ||'VALUES (nextval(''public.available_crm_report_seq''),''AutoPayReconciliation'')';
+                
+        -- available_crm_report$rls
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.available_crm_report$rls (id,owner,value) '
+                ||'(SELECT  nextval(''public.available_crm_report$rls_seq'') AS id,'
+                ||'         a.id AS owner, r.id AS value '
+                ||'FROM     '||v_schema_name||'.available_crm_report a, '
+                ||'         '||v_schema_name||'.crm_role r '
+                ||'WHERE    a.report_type = ''AutoPayReconciliation'' '
+                ||'AND      r.name = ''Super Administrator'' )';
+                
         -- building_amenity
         
         EXECUTE 'UPDATE '||v_schema_name||'.building_amenity '
@@ -1261,6 +1277,9 @@ BEGIN
         
         -- check constraints
         
+        ALTER TABLE available_crm_report ADD CONSTRAINT available_crm_report_report_type_e_ck 
+            CHECK ((report_type) IN ('AutoPayChanges', 'AutoPayReconciliation', 'Availability', 'CustomerCreditCheck', 'EFT', 
+            'EftVariance', 'ResidentInsurance'));
         ALTER TABLE application_approval_checklist_policy ADD CONSTRAINT application_approval_checklist_policy_node_discriminator_d_ck 
             CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE broadcast_template ADD CONSTRAINT broadcast_template_audience_type_e_ck 

@@ -55,7 +55,6 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
                     new FolderColumnDescriptor(proto().checkNumber(), "150px"),
                     new FolderColumnDescriptor(proto().amount(), "150px")
             );//@formatter:on
-
         }
 
         @Override
@@ -83,7 +82,6 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
                 }
             };
         }
-
     }
 
     public void onShowToPaymentRecord(Key paymentRecordId) {
@@ -98,6 +96,7 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
 
     private Widget createGeneralTab() {
         FormPanel formPanel = new FormPanel(this);
+
         formPanel.h2(i18n.tr("Batch Details"));
         formPanel.append(Location.Left, proto().building()).decorate();
         formPanel.append(Location.Left, proto().totalReceivedAmount()).decorate();
@@ -130,5 +129,4 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
 
         return formPanel.asWidget();
     }
-
 }
