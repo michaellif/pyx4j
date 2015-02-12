@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
@@ -392,7 +391,7 @@ public class CaledonPaymentProcessor implements CreditCardPaymentProcessorFacade
     public PaymentResponse validateVisaDebit(CreditCardPaymentInstrument ccinfo) {
         PaymentResponse paymentResponse = null;
 
-        if (ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getCaledonCardsConfiguration().useExternalCardValidation()) {
+        if (ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getCaledonCardsConfiguration().useCardValidation()) {
             paymentResponse = externalVisaDebitValidation(ccinfo, null);
         } else {
             paymentResponse = internalVisaDebitValidation(ccinfo);

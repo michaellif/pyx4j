@@ -20,17 +20,17 @@ public abstract class CaledonCardsConfiguration {
         this.config = config;
     }
 
-    protected abstract boolean useExternalCardValidationDefault();
+    protected abstract boolean useCardValidationDefault();
 
-    public final boolean useExternalCardValidation() {
-        return config.getConfigProperties().getBooleanValue("caledon.useExternalCardValidation", useExternalCardValidationDefault());
+    public final boolean useCardValidation() {
+        return config.getConfigProperties().getBooleanValue("caledon.useCardValidation", useCardValidationDefault());
     }
 
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();
         b.append("configurationClass                : ").append(getClass().getName()).append("\n");
-        b.append("useExternalCardValidation         : ").append(useExternalCardValidation()).append("\n");
+        b.append("useCardValidation                 : ").append(useCardValidation()).append("\n");
         return b.toString();
     }
 }

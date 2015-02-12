@@ -22,7 +22,7 @@ public class CaledonCardsConfigurationTests extends CaledonCardsConfiguration {
     }
 
     @Override
-    public boolean useExternalCardValidationDefault() {
+    public boolean useCardValidationDefault() {
         return true;
     }
 
