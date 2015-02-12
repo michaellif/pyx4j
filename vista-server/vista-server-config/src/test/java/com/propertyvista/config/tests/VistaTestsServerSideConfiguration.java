@@ -38,6 +38,7 @@ import com.pyx4j.security.shared.AclCreator;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.BankingSimulatorConfiguration;
 import com.propertyvista.config.BmoInterfaceConfiguration;
+import com.propertyvista.config.CaledonCardsConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.EncryptedStorageConfiguration;
 import com.propertyvista.config.EquifaxInterfaceConfiguration;
@@ -290,6 +291,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
+    public CaledonCardsConfiguration getCaledonCardsConfiguration() {
+        return new CaledonCardsConfigurationTests(this);
+    }
+
+    @Override
     public BmoInterfaceConfiguration getBmoInterfaceConfiguration() {
         throw new Error("not supported in tests");
     }
@@ -328,5 +334,4 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     public String walkMeJsAPIUrl(VistaApplication application) {
         return null;
     }
-
 }

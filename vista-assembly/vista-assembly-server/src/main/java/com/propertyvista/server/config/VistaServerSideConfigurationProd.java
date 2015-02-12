@@ -19,6 +19,7 @@ import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 
 import com.propertyvista.config.BmoInterfaceConfiguration;
+import com.propertyvista.config.CaledonCardsConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.EquifaxInterfaceConfiguration;
 import com.propertyvista.config.VistaDeployment;
@@ -156,6 +157,11 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         } else {
             throw new UserRuntimeException("FundsTransfer is disabled");
         }
+    }
+
+    @Override
+    public CaledonCardsConfiguration getCaledonCardsConfiguration() {
+        return new CaledonCardsConfigurationProd(this);
     }
 
     @Override

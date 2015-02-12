@@ -181,6 +181,7 @@ class CreditCardProcessor {
         } else {
             CreditCardPaymentInstrument ccInfo = EntityFactory.create(CreditCardPaymentInstrument.class);
             ccInfo.creditCardNumber().setValue(cc.card().newNumber().getValue());
+            ccInfo.creditCardExpiryDate().setValue(cc.expiryDate().getValue());
 
             PaymentResponse response = getPaymentProcessor().validateVisaDebit(ccInfo);
             return response.success().getValue();

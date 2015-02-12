@@ -16,10 +16,12 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Random;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -78,6 +80,9 @@ public class CardServiceSimulationProcessor {
                 case VOID:
                     caledonResponse = processCard(merchantAccount, caledonRequest);
                     break;
+                case ACCOUNT_STATUS_INQUIRY:
+                    caledonResponse = validateCard(merchantAccount, caledonRequest);
+                    break;
                 default:
                     throw new Error("Unsupported transactionType '" + transactionType + "'");
                 }
@@ -87,6 +92,36 @@ public class CardServiceSimulationProcessor {
             Persistence.service().commit();
         }
         log.info("card simulator response code {}", caledonResponse.code);
+        return caledonResponse;
+    }
+
+    private static CaledonResponse validateCard(CardServiceSimulationMerchantAccount merchantAccount, CaledonRequestToken caledonRequest) {
+        CaledonResponse caledonResponse = new CaledonResponse();
+        LogicalDate cardExpirationDate = CardServiceSimulationUtils.parsDate(caledonRequest.expiryDate);
+
+        if (cardExpirationDate.lt(CardServiceSimulationUtils.getCardServiceSimulatorConfig().acceptCardExpiryFrom().getValue())) {
+            caledonResponse.code = "1254";
+            caledonResponse.text = "EXPIRED CARD";
+            caledonResponse.responseType = "D";
+        } else if (cardExpirationDate.gt(CardServiceSimulationUtils.getCardServiceSimulatorConfig().acceptCardExpiryTo().getValue())) {
+            caledonResponse.code = "1280";
+            caledonResponse.text = "DATE INVALID";
+            caledonResponse.responseType = "D";
+        } else {
+            caledonResponse.code = "0000";
+            caledonResponse.text = RandomStringUtils.randomNumeric(6);
+        }
+
+        // TODO By now since we validate visa debit we set default visa debit values
+        if (caledonRequest.extResp.equals("Y")) {
+            caledonResponse.cardType = "VISA";
+            caledonResponse.cardProduct = "VD";
+            caledonResponse.countryOfOperationCode = "124";
+        }
+        caledonResponse.cvv2 = "N";
+        caledonResponse.expiryDate = caledonRequest.expiryDate;
+        caledonResponse.last4Digits = CardServiceSimulationUtils.getLast4Digits(caledonRequest.creditCardNumber);
+
         return caledonResponse;
     }
 

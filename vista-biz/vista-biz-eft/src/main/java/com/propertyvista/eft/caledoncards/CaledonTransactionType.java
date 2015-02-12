@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -14,27 +14,24 @@ package com.propertyvista.eft.caledoncards;
 
 public enum CaledonTransactionType {
 
-    //external api
+    // Transaction types from Caledon API
+
     SALE("S", "Sale"),
 
-    //external api
     AUTH_ONLY("A", "Auth Only"),
 
     VOID("V", "Void"),
 
-    //external api
     AUTH_REVERSE("W", "Auth Reversal"),
 
     PREAUTH("P", "Pre-Authorization"),
 
-    //external api
     RETURN("R", "Return"),
 
     RETURN_VOID("M", "Return Void"),
 
     FORCE_POST("F", "Force Post"),
 
-    //external api
     COMPLETION("C", "Completion"),
 
     BALANCE_REQ("B", "Balance Request"),
@@ -53,8 +50,9 @@ public enum CaledonTransactionType {
 
     COMMERCIAL("K", "Commercial"),
 
-    //external api
-    TOKEN("G", "Token");
+    TOKEN("G", "Token"),
+
+    ACCOUNT_STATUS_INQUIRY("J", "Account Status Inquiry");
 
     private final String value;
 

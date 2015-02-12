@@ -102,6 +102,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract CaledonFundsTransferConfiguration getCaledonFundsTransferConfiguration();
 
+    public abstract CaledonCardsConfiguration getCaledonCardsConfiguration();
+
     public abstract BmoInterfaceConfiguration getBmoInterfaceConfiguration();
 
     public abstract EquifaxInterfaceConfiguration getEquifaxInterfaceConfiguration();

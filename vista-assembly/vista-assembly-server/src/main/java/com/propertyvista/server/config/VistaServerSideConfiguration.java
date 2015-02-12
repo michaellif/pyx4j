@@ -44,6 +44,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.BankingSimulatorConfiguration;
 import com.propertyvista.config.BmoInterfaceConfiguration;
+import com.propertyvista.config.CaledonCardsConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.EncryptedStorageConfiguration;
 import com.propertyvista.config.EquifaxInterfaceConfiguration;
@@ -488,6 +489,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
+    public CaledonCardsConfiguration getCaledonCardsConfiguration() {
+        return new CaledonCardsConfigurationSimulator(this);
+    }
+
+    @Override
     public BmoInterfaceConfiguration getBmoInterfaceConfiguration() {
         return new BmoInterfaceConfigurationSimulator(this);
     }
@@ -547,4 +553,5 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
         }
         return getConfigProperties().getValue("walkMeJsAPIUrl." + application.name(), defaultUrl);
     }
+
 }
