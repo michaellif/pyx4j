@@ -55,8 +55,8 @@ public class AutoPayReconciliationReportLister extends SiteDataTablePanel<AutoPa
                 new Builder(proto().otherCharges()).width("80px").searchable(false).sortable(false).build(), //
 
                 new Builder(proto().price()).width("80px").searchable(false).sortable(false).build(), //
-                new Builder(proto().payment()).width("80px").searchable(false).sortable(false).build(), //
                 new Builder(proto().paymentShareAmount()).width("80px").visible(false).searchable(false).sortable(false).build(), //
+                new Builder(proto().payment()).width("80px").searchable(false).sortable(false).build(), //
                 new Builder(proto().discrepancy()).searchable(false).sortable(false).build(), //
 
                 new Builder(proto().count()).searchable(false).sortable(false).visible(false).build() //
