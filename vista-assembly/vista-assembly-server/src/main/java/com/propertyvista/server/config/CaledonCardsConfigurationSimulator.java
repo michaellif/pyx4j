@@ -21,9 +21,4 @@ public class CaledonCardsConfigurationSimulator extends CaledonCardsConfiguratio
         super(config);
     }
 
-    @Override
-    public boolean useCardValidationDefault() {
-        return true;
-    }
-
 }

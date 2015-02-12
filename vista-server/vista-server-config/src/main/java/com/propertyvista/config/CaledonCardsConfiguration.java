@@ -20,7 +20,9 @@ public abstract class CaledonCardsConfiguration {
         this.config = config;
     }
 
-    protected abstract boolean useCardValidationDefault();
+    protected boolean useCardValidationDefault() {
+        return true;
+    }
 
     public final boolean useCardValidation() {
         return config.getConfigProperties().getBooleanValue("caledon.useCardValidation", useCardValidationDefault());

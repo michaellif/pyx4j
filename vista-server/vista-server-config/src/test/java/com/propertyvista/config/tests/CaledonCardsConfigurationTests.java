@@ -21,9 +21,4 @@ public class CaledonCardsConfigurationTests extends CaledonCardsConfiguration {
         super(config);
     }
 
-    @Override
-    public boolean useCardValidationDefault() {
-        return true;
-    }
-
 }

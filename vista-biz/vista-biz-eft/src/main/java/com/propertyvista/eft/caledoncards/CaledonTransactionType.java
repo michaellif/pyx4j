@@ -14,27 +14,24 @@ package com.propertyvista.eft.caledoncards;
 
 public enum CaledonTransactionType {
 
-    //external api
+    // Transaction types from Caledon API
+
     SALE("S", "Sale"),
 
-    //external api
     AUTH_ONLY("A", "Auth Only"),
 
     VOID("V", "Void"),
 
-    //external api
     AUTH_REVERSE("W", "Auth Reversal"),
 
     PREAUTH("P", "Pre-Authorization"),
 
-    //external api
     RETURN("R", "Return"),
 
     RETURN_VOID("M", "Return Void"),
 
     FORCE_POST("F", "Force Post"),
 
-    //external api
     COMPLETION("C", "Completion"),
 
     BALANCE_REQ("B", "Balance Request"),
@@ -53,10 +50,8 @@ public enum CaledonTransactionType {
 
     COMMERCIAL("K", "Commercial"),
 
-    //external api
     TOKEN("G", "Token"),
 
-    //external api
     ACCOUNT_STATUS_INQUIRY("J", "Account Status Inquiry");
 
     private final String value;
