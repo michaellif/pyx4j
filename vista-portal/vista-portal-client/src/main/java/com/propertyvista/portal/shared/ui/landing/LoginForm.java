@@ -12,6 +12,7 @@
  */
 package com.propertyvista.portal.shared.ui.landing;
 
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -103,10 +104,17 @@ public class LoginForm extends CForm<AuthenticationRequest> {
         @Override
         public void onKeyUp(KeyUpEvent event) {
             if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                focusNext(event.getNativeEvent());
                 if (!Dialog.isDialogOpen()) {
                     loginGadget.onLogin();
                 }
             }
         }
+
+        public native void focusNext(NativeEvent event)/*-{
+			var inputs = $wnd.$(':input:visible');
+			inputs.eq(inputs.index(event.target) + 1).focus();
+        }-*/;
     }
+
 }
