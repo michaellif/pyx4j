@@ -7,32 +7,37 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 4, 2015
- * @author ernestog
+ * Created on Feb 13, 2015
+ * @author vlads
  */
 package com.propertyvista.config;
 
-public abstract class CaledonCardsConfiguration {
+public abstract class VistaSystemsDNSConfig {
 
     protected final AbstractVistaServerSideConfiguration config;
 
-    protected CaledonCardsConfiguration(AbstractVistaServerSideConfiguration config) {
+    protected VistaSystemsDNSConfig(AbstractVistaServerSideConfiguration config) {
         this.config = config;
     }
 
-    protected boolean useCardValidationDefault() {
-        return true;
+    public String getDnsServre() {
+        return config.getConfigProperties().getValue("dns.dnsServer", "8.8.8.8");
     }
 
-    public final boolean useCardValidation() {
-        return config.getConfigProperties().getBooleanValue("caledon.useCardValidation", useCardValidationDefault());
+    public String getVistaSiteIP() {
+        return config.getConfigProperties().getValue("dns.siteIP");
+    }
+
+    public String getVistaResidentIP() {
+        return config.getConfigProperties().getValue("dns.residentIP");
     }
 
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();
         b.append("configurationClass                : ").append(getClass().getName()).append("\n");
-        b.append("caledon.useCardValidation         : ").append(useCardValidation()).append("\n");
+        b.append("dns.dnsServer                     : ").append(getDnsServre()).append("\n");
         return b.toString();
     }
+
 }

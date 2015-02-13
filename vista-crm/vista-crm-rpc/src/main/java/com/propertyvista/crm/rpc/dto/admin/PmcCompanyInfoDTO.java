@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.pmc.PmcDnsConfigTO;
 import com.propertyvista.domain.settings.PmcCompanyInfo;
 
 @Transient
@@ -26,7 +27,11 @@ import com.propertyvista.domain.settings.PmcCompanyInfo;
 @SecurityEnabled
 public interface PmcCompanyInfoDTO extends PmcCompanyInfo {
 
+    PmcDnsConfigTO websiteDnsConfig();
+
     IPrimitive<String> websiteDnsName();
+
+    PmcDnsConfigTO portalDnsConfig();
 
     IPrimitive<String> portalDnsName();
 }

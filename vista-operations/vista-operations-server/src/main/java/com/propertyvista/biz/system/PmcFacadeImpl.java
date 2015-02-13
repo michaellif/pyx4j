@@ -31,8 +31,10 @@ import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcAccountNumbers;
+import com.propertyvista.domain.pmc.PmcDnsConfigTO;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.domain.pmc.ReservedPmcNames;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationSummary;
 import com.propertyvista.operations.domain.scheduler.RunData;
 import com.propertyvista.operations.domain.scheduler.TriggerPmc;
@@ -206,5 +208,15 @@ public class PmcFacadeImpl implements PmcFacade {
     @Override
     public void persistMerchantAccount(Pmc pmc, final MerchantAccount merchantAccount) {
         new MerchantAccountManager().persistMerchantAccount(pmc, merchantAccount);
+    }
+
+    @Override
+    public PmcDnsConfigTO getApplicationDnsConfig(Pmc pmc, VistaApplication application) {
+        return new CustomDNSManager().getApplicationDnsConfig(pmc, application);
+    }
+
+    @Override
+    public void updateApplicationDnsConfig(Pmc pmc, VistaApplication application, PmcDnsConfigTO dnsConfig) {
+        new CustomDNSManager().updateApplicationDnsConfig(pmc, application, dnsConfig);
     }
 }

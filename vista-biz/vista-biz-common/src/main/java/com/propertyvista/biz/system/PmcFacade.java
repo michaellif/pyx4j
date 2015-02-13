@@ -14,6 +14,8 @@ package com.propertyvista.biz.system;
 
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.PmcDnsConfigTO;
+import com.propertyvista.domain.security.common.VistaApplication;
 
 /**
  * PMC management
@@ -40,5 +42,10 @@ public interface PmcFacade {
     public boolean reservedDnsName(String dnsName, String onboardingAccountId);
 
     public void persistMerchantAccount(Pmc pmc, MerchantAccount merchantAccount);
+
+    // Only resident and site are supported. TODO prospect
+    public PmcDnsConfigTO getApplicationDnsConfig(Pmc pmc, VistaApplication application);
+
+    public void updateApplicationDnsConfig(Pmc pmc, VistaApplication application, PmcDnsConfigTO dnsConfig);
 
 }

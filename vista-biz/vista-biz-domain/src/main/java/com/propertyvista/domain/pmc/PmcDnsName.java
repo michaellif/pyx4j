@@ -29,6 +29,10 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.VistaNamespace;
 
+/**
+ * PMC custom DNS configurations
+ */
+
 @Table(prefix = "admin", namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PmcDnsName extends IEntity {
@@ -63,6 +67,7 @@ public interface PmcDnsName extends IEntity {
     @NotNull
     IPrimitive<String> dnsName();
 
+    //when edited in CRM set to active if DNS is resolved OK. 
     @Caption(name = "Active")
     IPrimitive<Boolean> enabled();
 
