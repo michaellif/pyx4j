@@ -136,16 +136,17 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
                         + "<br/>" + InsuranceGadgetMessages.otherInsuranceTenantSureInvitation);
                 break;
             case hasTenantSure:
-                if (!getValue().message().isNull()) {
-                    message.setText(SimpleMessageFormat.format(InsuranceGadgetMessages.hasInsuranceProblemMessage, getValue().message().getValue()));
-                } else if (getValue().coverageExpiryDate().isNull()) {
+                if (getValue().coverageExpiryDate().isNull()) {
                     message.setText(SimpleMessageFormat.format(InsuranceGadgetMessages.hasTenantSureStatusMessage));
                 } else {
                     message.setText(SimpleMessageFormat.format(InsuranceGadgetMessages.hasInsuranceStatusMessage, getValue().coverageExpiryDate().getValue()));
                 }
                 break;
             }
+
+            if (!getValue().message().isNull()) {
+                message.setText(SimpleMessageFormat.format("{0} {1}", message.getText(), getValue().message().getValue()));
+            }
         }
     }
-
 }

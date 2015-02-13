@@ -24,12 +24,9 @@ public class InsuranceGadgetMessages {
 
     public static final String hasTenantSureStatusMessage = i18n.tr("According to our records you have valid Tenant Insurance.");
 
-    public static final String hasInsuranceProblemMessage = i18n.tr("{0}");
-
     public static final String noInsuranceTenantSureInvitation = i18n
             .tr("As per your Lease Agreement, you must obtain and provide the landlord with proof of Tenant Insurance. We have teamed up with Highcourt Partners Limited, a licensed broker, to assist you in obtaining your Tenant Insurance.");
 
     public static final String otherInsuranceTenantSureInvitation = i18n
             .tr("If you wish you can get next insurance policy here. We have teamed up with Highcourt Partners Limited, a licensed broker, to assist you in obtaining your Tenant Insurance.");
-
 }
