@@ -47,7 +47,13 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
         MainEnity mainR = srv.retrieve(MainEnity.class, main.getPrimaryKey());
 
         Assert.assertTrue("is detached", mainR.detachedEntity().isValueDetached());
-        Assert.assertTrue("is detached value null", mainR.detachedEntity().name().isNull());
+        boolean accessed = false;
+        try {
+            mainR.detachedEntity().name().isNull();
+            accessed = true;
+        } catch (RuntimeException ok) {
+        }
+        Assert.assertFalse("access to detached value should have fail", accessed);
 
         // See if it did not saved value
         srvSave(mainR, testCaseMethod);
@@ -105,7 +111,13 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
         MainEnity mainR = srv.retrieve(MainEnity.class, main.getPrimaryKey());
 
         Assert.assertTrue("is detached", mainR.detachedEntities().get(0).isValueDetached());
-        Assert.assertTrue("is detached value null", mainR.detachedEntities().get(0).name().isNull());
+        boolean accessed = false;
+        try {
+            Assert.assertTrue("is detached value null", mainR.detachedEntities().get(0).name().isNull());
+            accessed = true;
+        } catch (RuntimeException ok) {
+        }
+        Assert.assertFalse("access to detached value should have fail", accessed);
 
         Assert.assertTrue("is detached", mainR.detachedEntities().get(1).isValueDetached());
 
@@ -173,7 +185,13 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
         Assert.assertNotNull("retrieved by PK", mainR);
 
         Assert.assertTrue("is detached", mainR.ownedEntity().detachedEntity().isValueDetached());
-        Assert.assertTrue("is detached value null", mainR.ownedEntity().detachedEntity().name().isNull());
+        boolean accessed = false;
+        try {
+            mainR.ownedEntity().detachedEntity().name().isNull();
+            accessed = true;
+        } catch (RuntimeException ok) {
+        }
+        Assert.assertFalse("access to detached value should have fail", accessed);
 
         // See if it did not saved value
         srvSave(mainR, testCaseMethod);
@@ -211,7 +229,13 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
         MainHolderEnity mainR = srv.retrieve(MainHolderEnity.class, main.getPrimaryKey());
 
         Assert.assertTrue("is detached", mainR.ownedEntity().detachedEntities().get(0).isValueDetached());
-        Assert.assertTrue("is detached value null", mainR.ownedEntity().detachedEntities().get(0).name().isNull());
+        boolean accessed = false;
+        try {
+            mainR.ownedEntity().detachedEntities().get(0).name().isNull();
+            accessed = true;
+        } catch (RuntimeException ok) {
+        }
+        Assert.assertFalse("access to detached value should have fail", accessed);
 
         Assert.assertTrue("is detached", mainR.ownedEntity().detachedEntities().get(1).isValueDetached());
 

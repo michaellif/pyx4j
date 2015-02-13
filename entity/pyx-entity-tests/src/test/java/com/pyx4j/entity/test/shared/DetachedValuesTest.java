@@ -79,6 +79,20 @@ public class DetachedValuesTest extends InitializerTestBase {
             }
         });
 
+        assertException("name().getValue(default)", new Runnable() {
+            @Override
+            public void run() {
+                emp.department().name().getValue("Unknown");
+            }
+        });
+
+        assertException("name().isNull()", new Runnable() {
+            @Override
+            public void run() {
+                emp.department().name().isNull();
+            }
+        });
+
         assertException("name().getStringView", new Runnable() {
             @Override
             public void run() {
