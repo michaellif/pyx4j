@@ -1053,6 +1053,15 @@ BEGIN
                 ||'FROM     '||v_schema_name||'.available_locale l '
                 ||'WHERE    p.locale_old = l.id ';
                 
+                
+        -- restrictions_policy
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.restrictions_policy '
+                ||'SET  emergency_contacts_is_mandatory = TRUE, '
+                ||'     emergency_contacts_number = 1, '
+                ||'     max_number_of_employments = 2, '
+                ||'     min_employment_duration = 24, '
+                ||'     reference_source_is_mandatory = TRUE';
         
         /**
         ***     ==========================================================================================================
