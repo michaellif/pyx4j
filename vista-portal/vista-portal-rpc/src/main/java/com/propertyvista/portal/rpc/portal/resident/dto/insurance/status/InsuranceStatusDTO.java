@@ -35,9 +35,9 @@ public interface InsuranceStatusDTO extends IEntity {
 
     IPrimitive<Status> status();
 
-    IPrimitive<LogicalDate> coverageExpiryDate();
-
     IPrimitive<String> message();
+
+    IPrimitive<LogicalDate> coverageExpiryDate();
 
     @Format("#,##0.00")
     IPrimitive<BigDecimal> minimumRequiredLiability();
