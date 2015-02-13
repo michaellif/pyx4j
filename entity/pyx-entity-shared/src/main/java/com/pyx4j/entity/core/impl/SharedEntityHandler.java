@@ -231,6 +231,10 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
         return getValue(false);
     }
 
+    void assertDetached() {
+        getValue(true);
+    }
+
     @SuppressWarnings("unchecked")
     private Map<String, Serializable> getValue(boolean assertDetached) {
         assert !isPrototypeEntity : "Prototype Entity '" + getObjectClass().getName() + "' data manipulations disabled";

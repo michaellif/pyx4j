@@ -211,6 +211,7 @@ public class PrimitiveHandler<TYPE extends Serializable> extends ObjectHandler<T
 
     @Override
     public boolean isNull() {
+        ((SharedEntityHandler) getOwner()).assertDetached();
         if (!getOwner().containsMemberValue(getFieldName())) {
             return true;
         } else {
