@@ -30,6 +30,9 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsuranceCertificate;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy.CancellationType;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy.TenantSureStatus;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.GeneralInsuranceCertificateSummaryDTO;
@@ -139,6 +142,21 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
         }
         if (isExpiryDateDefined) {
             insuranceStatusDTO.coverageExpiryDate().setValue(coverageExpiryDate);
+        }
+
+        if (insuranceStatusDTO.status().getValue() == InsuranceStatusDTO.Status.hasTenantSure) {
+            TenantSureInsurancePolicy insuranceTenantSure = (TenantSureInsurancePolicy) tenantInsurancePolicy;
+            if (insuranceTenantSure.status().getValue() == TenantSureStatus.PendingCancellation) {
+                if (insuranceTenantSure.cancellation().getValue() == CancellationType.SkipPayment) {
+                    insuranceStatusDTO
+                            .message()
+                            .setValue(
+                                    i18n.tr("There was a problem with your last scheduled payment. If you don''t update your credit card details, your TenantSure insurance will expire."));
+                } else {
+                    insuranceStatusDTO.message().setValue(
+                            i18n.tr("Your insurance has been cancelled and will expire on {0,date,short}", insuranceTenantSure.certificate().expiryDate()));
+                }
+            }
         }
 
         return insuranceStatusDTO;
