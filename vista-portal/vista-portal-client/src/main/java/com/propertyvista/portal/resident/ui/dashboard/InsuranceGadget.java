@@ -145,7 +145,7 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
             }
 
             if (!getValue().message().isNull()) {
-                message.setText(SimpleMessageFormat.format("{0} {1}", message.getText(), getValue().message().getValue()));
+                message.setHTML(SimpleMessageFormat.format("{0}<p>{1}</p>", message.getHTML(), getValue().message().getValue()));
             }
         }
     }
