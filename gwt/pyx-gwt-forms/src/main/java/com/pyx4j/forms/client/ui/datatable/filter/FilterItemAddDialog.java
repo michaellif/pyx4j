@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
@@ -61,7 +62,7 @@ public class FilterItemAddDialog extends Dialog {
         checkGroup.setValue(descriptors);
 
         setDialogPixelWidth(300);
-        setBody(checkGroup);
+        setBody(new ScrollPanel(checkGroup));
     }
 
     public Collection<ColumnDescriptor> getSelectedItems() {
