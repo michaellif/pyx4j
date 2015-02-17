@@ -36,20 +36,20 @@ public class NotificationsUtils {
         return emails;
     }
 
-    public static List<Employee> getNotificationTraget(Notification.NotificationType notificationType) {
+    public static List<Employee> getNotificationTraget(Notification.AlertType notificationType) {
         EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
         criteria.eq(criteria.proto().notifications().$().type(), notificationType);
 
         return Persistence.service().query(criteria);
     }
 
-    public static List<Employee> getNotificationTraget(Lease leaseId, Notification.NotificationType notificationType) {
+    public static List<Employee> getNotificationTraget(Lease leaseId, Notification.AlertType notificationType) {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
         criteria.eq(criteria.proto().units().$().leases(), leaseId);
         return getNotificationTraget(Persistence.service().retrieve(criteria, AttachLevel.IdOnly), notificationType);
     }
 
-    public static List<Employee> getNotificationTraget(Building buildingId, Notification.NotificationType notificationType) {
+    public static List<Employee> getNotificationTraget(Building buildingId, Notification.AlertType notificationType) {
         EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
 
         OrCriterion or = criteria.or();

@@ -61,7 +61,7 @@ import com.propertyvista.crm.rpc.dto.company.ac.CRMUserSecurityActions;
 import com.propertyvista.crm.rpc.services.organization.EmployeeSignatureUploadService;
 import com.propertyvista.domain.company.EmployeeSignature;
 import com.propertyvista.domain.company.Notification;
-import com.propertyvista.domain.company.Notification.NotificationType;
+import com.propertyvista.domain.company.Notification.AlertType;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -253,17 +253,17 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         @Override
         protected void addItem() {
 
-            Collection<NotificationType> types = EnumSet.allOf(NotificationType.class);
+            Collection<AlertType> types = EnumSet.allOf(AlertType.class);
             if (VistaFeatures.instance().yardiIntegration()) {
-                types.remove(NotificationType.BillingAlert);
+                types.remove(AlertType.BillingAlert);
                 if (!SecurityController.check(VistaCrmBehavior.AdminGeneral)) {
-                    types.remove(NotificationType.YardiSynchronization);
+                    types.remove(AlertType.YardiSynchronization);
                 }
             } else {
-                types.remove(NotificationType.YardiSynchronization);
+                types.remove(AlertType.YardiSynchronization);
             }
 
-            new SelectEnumDialog<NotificationType>(i18n.tr("Select Alert Type"), types) {
+            new SelectEnumDialog<AlertType>(i18n.tr("Select Alert Type"), types) {
                 @Override
                 public boolean onClickOk() {
                     Notification item = EntityFactory.create(Notification.class);

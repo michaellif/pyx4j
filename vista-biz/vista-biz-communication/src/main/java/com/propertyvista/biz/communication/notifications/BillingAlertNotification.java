@@ -29,7 +29,7 @@ public class BillingAlertNotification extends AbstractGroupPerBuildingNotificati
     private final Map<Lease, List<String>> billingAlerts = new HashMap<>();
 
     public BillingAlertNotification(Lease leaseId, String alert) {
-        super(Notification.NotificationType.BillingAlert, leaseId);
+        super(Notification.AlertType.BillingAlert, leaseId);
         billingAlerts.put(leaseId, Arrays.asList(alert));
     }
 
@@ -52,7 +52,7 @@ public class BillingAlertNotification extends AbstractGroupPerBuildingNotificati
 
     @Override
     public void send() {
-        List<Employee> employees = NotificationsUtils.getNotificationTraget(getBuildingId(), Notification.NotificationType.BillingAlert);
+        List<Employee> employees = NotificationsUtils.getNotificationTraget(getBuildingId(), Notification.AlertType.BillingAlert);
         if (!employees.isEmpty()) {
             ServerSideFactory.create(CommunicationFacade.class).sendBillingAlertNotification(NotificationsUtils.toEmails(employees), getLeaseIds(), billingAlerts);
         }

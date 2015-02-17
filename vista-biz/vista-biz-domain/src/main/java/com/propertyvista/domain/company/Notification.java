@@ -33,7 +33,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 public interface Notification extends IEntity {
 
     @I18n
-    public static enum NotificationType implements Serializable {
+    public static enum AlertType implements Serializable {
 
         @Translate("Electronic Payment Rejected")
         ElectronicPaymentRejectedNsf,
@@ -68,7 +68,7 @@ public interface Notification extends IEntity {
     @ReadOnly
     @MemberColumn(name = "tp")
     @ToString
-    IPrimitive<NotificationType> type();
+    IPrimitive<AlertType> type();
 
     @Detached
     IList<Building> buildings();

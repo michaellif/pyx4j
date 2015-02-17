@@ -24,12 +24,12 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public class AutoPayReviewRequiredNotification extends AbstractGroupPerBuildingNotification {
 
     public AutoPayReviewRequiredNotification(Lease leaseId) {
-        super(Notification.NotificationType.AutoPayReviewRequired, leaseId);
+        super(Notification.AlertType.AutoPayReviewRequired, leaseId);
     }
 
     @Override
     public void send() {
-        List<Employee> employees = NotificationsUtils.getNotificationTraget(getBuildingId(), Notification.NotificationType.AutoPayReviewRequired);
+        List<Employee> employees = NotificationsUtils.getNotificationTraget(getBuildingId(), Notification.AlertType.AutoPayReviewRequired);
         if (!employees.isEmpty()) {
             ServerSideFactory.create(CommunicationFacade.class).sendAutoPayReviewRequiredNotification(NotificationsUtils.toEmails(employees), getLeaseIds());
         }

@@ -46,7 +46,7 @@ public class RejectPaymentNotification extends AbstractNotification {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.eq(criteria.proto().billingAccount(), paymentRecord.billingAccount());
         Lease leaseId = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
-        List<Employee> employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.NotificationType.ElectronicPaymentRejectedNsf);
+        List<Employee> employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.AlertType.ElectronicPaymentRejectedNsf);
         if (!employees.isEmpty()) {
             ServerSideFactory.create(CommunicationFacade.class)
                     .sendPaymentRejectedNotification(NotificationsUtils.toEmails(employees), paymentRecord, applyNSF);

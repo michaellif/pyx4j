@@ -19,7 +19,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.domain.company.Notification.NotificationType;
+import com.propertyvista.domain.company.Notification.AlertType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -29,7 +29,7 @@ public abstract class AbstractGroupPerBuildingNotification extends AbstractNotif
 
     private final List<Lease> leaseIds = new ArrayList<Lease>();
 
-    protected AbstractGroupPerBuildingNotification(NotificationType type, Lease leaseId) {
+    protected AbstractGroupPerBuildingNotification(AlertType type, Lease leaseId) {
         this.leaseIds.add(leaseId);
 
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
