@@ -14,7 +14,6 @@ package com.propertyvista.portal.shared.ui.landing;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -33,7 +32,6 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
-import com.propertyvista.domain.communication.Schedule;
 import com.propertyvista.portal.shared.ui.LoginFormPanel;
 import com.propertyvista.portal.shared.ui.util.decorators.CheckBoxDecorator;
 
