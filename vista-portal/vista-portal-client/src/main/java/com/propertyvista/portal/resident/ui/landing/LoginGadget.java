@@ -179,4 +179,8 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> implements ILog
         }
     }
 
+    @Override
+    public void setLoginButtonFocus() {
+        loginToolbar.loginButton.setFocus(true);
+    }
 }

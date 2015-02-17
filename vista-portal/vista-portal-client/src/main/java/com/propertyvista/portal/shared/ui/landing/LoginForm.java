@@ -12,6 +12,8 @@
  */
 package com.propertyvista.portal.shared.ui.landing;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -31,6 +33,7 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
+import com.propertyvista.domain.communication.Schedule;
 import com.propertyvista.portal.shared.ui.LoginFormPanel;
 import com.propertyvista.portal.shared.ui.util.decorators.CheckBoxDecorator;
 
@@ -104,17 +107,19 @@ public class LoginForm extends CForm<AuthenticationRequest> {
         @Override
         public void onKeyUp(KeyUpEvent event) {
             if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                focusNext(event.getNativeEvent());
+                loginGadget.setLoginButtonFocus();
                 if (!Dialog.isDialogOpen()) {
-                    loginGadget.onLogin();
+                    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+
+                        @Override
+                        public void execute() {
+                            loginGadget.onLogin();
+                        }
+                    });
                 }
             }
         }
 
-        public native void focusNext(NativeEvent event)/*-{
-			var inputs = $wnd.$(':input:visible');
-			inputs.eq(inputs.index(event.target) + 1).focus();
-        }-*/;
     }
 
 }

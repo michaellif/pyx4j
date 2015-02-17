@@ -18,4 +18,6 @@ public interface ILoginGadget {
 
     void onLogin();
 
+    void setLoginButtonFocus();
+
 }
