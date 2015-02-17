@@ -33,6 +33,7 @@ import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcAccountNumbers;
 import com.propertyvista.domain.pmc.PmcDnsConfigTO;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
+import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.pmc.ReservedPmcNames;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationSummary;
@@ -120,6 +121,11 @@ public class PmcFacadeImpl implements PmcFacade {
         }
         {
             EntityQueryCriteria<AuditRecord> criteria = EntityQueryCriteria.create(AuditRecord.class);
+            criteria.eq(criteria.proto().pmc(), pmc);
+            Persistence.service().delete(criteria);
+        }
+        {
+            EntityQueryCriteria<PmcPaymentMethod> criteria = EntityQueryCriteria.create(PmcPaymentMethod.class);
             criteria.eq(criteria.proto().pmc(), pmc);
             Persistence.service().delete(criteria);
         }

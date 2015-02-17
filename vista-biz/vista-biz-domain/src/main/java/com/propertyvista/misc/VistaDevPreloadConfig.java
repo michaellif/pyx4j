@@ -89,6 +89,9 @@ public final class VistaDevPreloadConfig implements Serializable {
 
     public int numRoofs = 1;
 
+    /** for credit check payments preloader */
+    public boolean creditCheckPaymentPreloader = false;
+
     private VistaDevPreloadConfig() {
     }
 

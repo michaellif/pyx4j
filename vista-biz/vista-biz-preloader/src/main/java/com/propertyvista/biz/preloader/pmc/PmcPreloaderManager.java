@@ -249,6 +249,11 @@ public class PmcPreloaderManager implements CommunicationsHandler {
                 cfg.numLeads = 0;
                 cfg.numUnAssigendTenants = 0;
             }
+
+            // As this preload function is invoked from DBResetServlet and
+            // nightly reset DEMO PMC process only, preload creditCheckPaymentPreloader also
+            cfg.creditCheckPaymentPreloader = true;
+
             setPreloadConfigParameter(params, cfg);
             preloaders.setParameterValue(VistaDataPreloaderParameter.devPreloadConfig.name(), cfg);
             preloaders.setParameterValue(VistaDataPreloaderParameter.pmcName.name(), pmc.name().getStringView());
@@ -314,6 +319,10 @@ public class PmcPreloaderManager implements CommunicationsHandler {
             DataPreloaderCollection preloaders = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getDataPreloaders();
 
             VistaDevPreloadConfig cfg = VistaDevPreloadConfig.createDefault();
+
+            // Preload creditCheck Payments preloader also after Onboarding PMC creation
+            cfg.creditCheckPaymentPreloader = true;
+
             preloaders.setParameterValue(VistaDataPreloaderParameter.devPreloadConfig.name(), cfg);
             preloaders.setParameterValue(VistaDataPreloaderParameter.pmcName.name(), pmc.name().getStringView());
 
