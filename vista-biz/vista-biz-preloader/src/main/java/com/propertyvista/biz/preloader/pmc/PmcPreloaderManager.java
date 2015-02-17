@@ -390,7 +390,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
 
     public void resetAndPreloadPmc(final String pmcDnsName) {
         resetPmcTables(pmcDnsName);
-        preloadPmc(pmcDnsName, ResetType.preloadPmc, null, null); // TODO Change for preloadPmcWithMock before 1.4.2 when fixed (now it fails)
+        preloadPmc(pmcDnsName, ResetType.preloadPmcWithMockup, null, null);
     }
 
     public static void writeToOutput(OutputHolder output, String... messages) {
