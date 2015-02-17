@@ -35,7 +35,7 @@ public class YardiConfigurationNotification extends AbstractNotification {
 
     @Override
     public void send() {
-        List<Employee> employees = NotificationsUtils.getNotificationTraget(Notification.NotificationType.YardiSynchronization);
+        List<Employee> employees = NotificationsUtils.getNotificationTraget(Notification.AlertType.YardiSynchronization);
         List<String> emails = NotificationsUtils.toEmails(employees);
         if (emails.isEmpty()) {
             emails.add("leonard@propertyvista.com");

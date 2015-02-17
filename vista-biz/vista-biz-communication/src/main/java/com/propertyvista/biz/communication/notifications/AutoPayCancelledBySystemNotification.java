@@ -30,7 +30,7 @@ public class AutoPayCancelledBySystemNotification extends AbstractGroupPerBuildi
     private final Map<Lease, List<AutopayAgreement>> canceledAgreements = new HashMap<Lease, List<AutopayAgreement>>();
 
     public AutoPayCancelledBySystemNotification(Lease leaseId, List<AutopayAgreement> canceledAgreements) {
-        super(Notification.NotificationType.AutoPayReviewRequired, leaseId);
+        super(Notification.AlertType.AutoPayReviewRequired, leaseId);
         this.canceledAgreements.put(leaseId, new ArrayList<AutopayAgreement>(canceledAgreements));
     }
 
@@ -53,7 +53,7 @@ public class AutoPayCancelledBySystemNotification extends AbstractGroupPerBuildi
 
     @Override
     public void send() {
-        List<Employee> employees = NotificationsUtils.getNotificationTraget(getBuildingId(), Notification.NotificationType.AutoPayReviewRequired);
+        List<Employee> employees = NotificationsUtils.getNotificationTraget(getBuildingId(), Notification.AlertType.AutoPayReviewRequired);
         if (!employees.isEmpty()) {
             ServerSideFactory.create(CommunicationFacade.class).sendAutoPayCancelledBySystemNotification(NotificationsUtils.toEmails(employees), getLeaseIds(),
                     canceledAgreements);

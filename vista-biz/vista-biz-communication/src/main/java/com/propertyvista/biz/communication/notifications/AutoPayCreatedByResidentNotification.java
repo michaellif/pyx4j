@@ -40,7 +40,7 @@ public class AutoPayCreatedByResidentNotification extends AbstractNotification {
 
     @Override
     public void send() {
-        List<Employee> employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.NotificationType.AutoPayCreatedByResident);
+        List<Employee> employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.AlertType.AutoPayCreatedByResident);
         if (!employees.isEmpty()) {
             ServerSideFactory.create(CommunicationFacade.class).sendAutoPayCreatedByResidentNotification(NotificationsUtils.toEmails(employees), leaseId,
                     createdAgreement);

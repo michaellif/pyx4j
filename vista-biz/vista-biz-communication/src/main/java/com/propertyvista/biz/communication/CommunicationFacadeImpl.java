@@ -351,7 +351,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendMaintenanceRequestCreatedPMC(MaintenanceRequest request) {
-        for (Employee employee : NotificationsUtils.getNotificationTraget(request.building(), Notification.NotificationType.MaintenanceRequest)) {
+        for (Employee employee : NotificationsUtils.getNotificationTraget(request.building(), Notification.AlertType.MaintenanceRequest)) {
             sendMaintenanceRequestEmail(AddresseUtils.getCompleteEmail(employee.name().getStringView(), employee.email().getValue()),
                     EmailTemplateType.MaintenanceRequestCreatedPMC, request);
         }

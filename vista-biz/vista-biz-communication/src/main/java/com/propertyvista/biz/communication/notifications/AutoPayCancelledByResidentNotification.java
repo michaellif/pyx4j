@@ -41,7 +41,7 @@ public class AutoPayCancelledByResidentNotification extends AbstractNotification
 
     @Override
     public void send() {
-        List<Employee> employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.NotificationType.AutoPayCanceledByResident);
+        List<Employee> employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.AlertType.AutoPayCanceledByResident);
         if (!employees.isEmpty()) {
             ServerSideFactory.create(CommunicationFacade.class).sendAutoPayCancelledByResidentNotification(NotificationsUtils.toEmails(employees), leaseId,
                     canceledAgreements);

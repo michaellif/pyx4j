@@ -49,9 +49,9 @@ public class PostToYardiFailedNotification extends AbstractNotification {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.eq(criteria.proto().billingAccount(), paymentRecord.billingAccount());
         Lease leaseId = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
-        List<Employee> employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.NotificationType.ElectronicPaymentRejectedNsf);
+        List<Employee> employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.AlertType.ElectronicPaymentRejectedNsf);
         if (employees.isEmpty()) {
-            employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.NotificationType.AutoPayReviewRequired);
+            employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.AlertType.AutoPayReviewRequired);
         }
         List<String> emails = NotificationsUtils.toEmails(employees);
         if (emails.isEmpty()) {
