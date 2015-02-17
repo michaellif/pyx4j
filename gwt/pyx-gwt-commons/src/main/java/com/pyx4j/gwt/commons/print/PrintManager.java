@@ -44,24 +44,29 @@ public class PrintManager {
         iframe.setAttribute("style", "position: absolute; width: 0; height: 0; border: 0");
         iframe.setAttribute("src", "javascript:''");
         RootPanel.get().getElement().appendChild(iframe);
-
-        Element headElement = Document.get().getElementsByTagName("head").getItem(0);
-        Node headClone = HeadElement.as(headElement).cloneNode(true);
-        fillIframeHead(iframe, headClone.toString());
     }
 
     public static void print(Element element) {
-        fillIframe(instance().iframe, element.getInnerHTML());
+        Element headElement = Document.get().getElementsByTagName("head").getItem(0);
+        Node headClone = HeadElement.as(headElement).cloneNode(true);
+        StringBuilder contentBuilder = new StringBuilder("<html>");
+        contentBuilder.append(headClone.toString()).append("<body>").append(element.getInnerHTML()).append("</body>").append("</html>");
+        fillIframe(instance().iframe, contentBuilder.toString());
         printIframe(instance().iframe);
     }
 
     public static void preview(Element element) {
-        fillIframe(instance().iframe, element.getInnerHTML());
+        Element headElement = Document.get().getElementsByTagName("head").getItem(0);
+        Node headClone = HeadElement.as(headElement).cloneNode(true);
+        StringBuilder contentBuilder = new StringBuilder("<html>");
+        contentBuilder.append(headClone.toString()).append("<body>").append(element.getInnerHTML()).append("</body>").append("</html>");
+
+        fillIframe(instance().iframe, contentBuilder.toString());
         previewIframe(instance().iframe);
     }
 
     private static final native void fillIframeHead(IFrameElement iframe, String content)// @formatter:off
-    /*-{  
+    /*-{
         var doc = iframe.contentWindow.document;
         doc.open();
         doc.writeln(content);
@@ -71,7 +76,10 @@ public class PrintManager {
 
     private static final native void fillIframe(IFrameElement iframe, String content)// @formatter:off
     /*-{
-      iframe.contentWindow.document.body.innerHTML = content;
+      var doc = iframe.contentDocument;
+        doc.open();
+        doc.writeln(content);
+        doc.close();
       }-*/;
     // @formatter:on
 
