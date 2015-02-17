@@ -86,6 +86,9 @@ public class DirectDebitPostProcessor {
                 log.error("DirectDebitRecord transaction '" + debitRecord.paymentReferenceNumber().getValue() + "' processing error", e);
                 executionMonitor.addErredEvent("DirectDebit", debitRecord.amount().getValue(), e);
             }
+            if (executionMonitor.isTerminationRequested()) {
+                break;
+            }
 
         }
 

@@ -13,6 +13,7 @@
 package com.propertyvista.crm.server.services.reports;
 
 import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.dto.reports.AutoPayReconciliationDTO;
@@ -28,6 +29,12 @@ public class AutoPayReconciliationReportListServiceImpl extends AbstractCrmCrudS
 
     public AutoPayReconciliationReportListServiceImpl() {
         super(AutopayAgreement.class, AutoPayReconciliationDTO.class);
+    }
+
+    @Override
+    protected void enhanceListCriteria(EntityListCriteria<AutopayAgreement> boCriteria, EntityListCriteria<AutoPayReconciliationDTO> toCriteria) {
+        super.enhanceListCriteria(boCriteria, toCriteria);
+        boCriteria.eq(boCriteria.proto().isDeleted(), false);
     }
 
     @Override

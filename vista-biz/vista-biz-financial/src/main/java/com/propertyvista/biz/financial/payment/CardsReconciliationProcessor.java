@@ -130,6 +130,10 @@ class CardsReconciliationProcessor {
                         SimpleMessageFormat.format("AggregatedTransferReconciliation {0} {1} {2}", reconciliationRecord.id(),
                                 reconciliationRecord.merchantTerminalId(), reconciliationRecord.depositDate()), e);
             }
+
+            if (executionMonitor.isTerminationRequested()) {
+                break;
+            }
         }
     }
 
@@ -186,8 +190,10 @@ class CardsReconciliationProcessor {
         }
 
         if (reconciliationRecord.mastercardDeposit().getValue(BigDecimal.ZERO).compareTo(totals.mastercardAmount) != 0) {
-            String m = SimpleMessageFormat.format("Merchant {0} {1} MasterCard Deposit {2} does not match transactions total {3}",//
-                    reconciliationRecord.merchantTerminalId(), reconciliationRecord.depositDate(), reconciliationRecord.mastercardDeposit(), totals.mastercardAmount);
+            String m = SimpleMessageFormat.format(
+                    "Merchant {0} {1} MasterCard Deposit {2} does not match transactions total {3}",//
+                    reconciliationRecord.merchantTerminalId(), reconciliationRecord.depositDate(), reconciliationRecord.mastercardDeposit(),
+                    totals.mastercardAmount);
             executionMonitor.addErredEvent("DailyTotals", totals.mastercardAmount.subtract(reconciliationRecord.mastercardDeposit().getValue(BigDecimal.ZERO)),
                     m);
             throw new ValidationFailedRollback(m);

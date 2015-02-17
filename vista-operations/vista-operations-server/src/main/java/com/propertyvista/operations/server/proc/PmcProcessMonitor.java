@@ -12,12 +12,18 @@
  */
 package com.propertyvista.operations.server.proc;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 
 import com.propertyvista.operations.domain.scheduler.Run;
@@ -26,13 +32,15 @@ import com.propertyvista.server.jobs.PmcProcessContext;
 
 public class PmcProcessMonitor {
 
+    private static final Logger log = LoggerFactory.getLogger(PmcProcessMonitor.class);
+
     private static final Object monitor = new Object();
 
     private static int runningExecutionsCount = 0;
 
     private static boolean shuttingDown = false;
 
-    public final static int SHUTDOWN_TIMEOUT = 30 * 1000;
+    public final static long SHUTDOWN_TIMEOUT = 2 * Consts.MIN2MSEC;
 
     private static Map<Key, ProcessMonitorContext> runningExecutions = new HashMap<Key, ProcessMonitorContext>();
 
@@ -100,6 +108,15 @@ public class PmcProcessMonitor {
 
     public static void shutdown() {
         shuttingDown = true;
+
+        // Avoid Concurrent Update Exceptions when process ends
+        List<ProcessMonitorContext> runningContexts = new ArrayList<>(runningExecutions.values());
+        for (ProcessMonitorContext mc : runningContexts) {
+            if (mc.context != null) {
+                mc.context.getExecutionMonitor().requestTermination();
+            }
+        }
+
         long waitEnds = System.currentTimeMillis() + SHUTDOWN_TIMEOUT;
         while ((runningExecutionsCount > 0) && (waitEnds < System.currentTimeMillis())) {
             synchronized (monitor) {
@@ -110,6 +127,14 @@ public class PmcProcessMonitor {
                 }
             }
         }
-    }
 
+        if (runningExecutionsCount > 0) {
+            runningContexts = new ArrayList<>(runningExecutions.values());
+            for (ProcessMonitorContext mc : runningContexts) {
+                if (mc.pmcProcess != null) {
+                    log.error("The process is still running {}, while shutdown is requested", mc.pmcProcess.getClass().getSimpleName());
+                }
+            }
+        }
+    }
 }
