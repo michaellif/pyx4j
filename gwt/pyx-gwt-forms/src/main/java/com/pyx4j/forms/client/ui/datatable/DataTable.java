@@ -33,9 +33,13 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 public class DataTable<E extends IEntity> implements IsWidget, DataTableModelListener {
+
+    private static final I18n i18n = I18n.get(DataTable.class);
 
     private ITablePane<E> tablePanel;
 
@@ -316,6 +320,18 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
 
         @Override
         public boolean onClickOk() {
+            boolean noSelectedColumns = true;
+            for (CheckBox checkBox : columnChecksList) {
+                if (checkBox.getValue()) {
+                    noSelectedColumns = false;
+                    break;
+                }
+            }
+            if (noSelectedColumns) {
+                MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Please specify at least one column!"));
+                return false;
+            }
+
             boolean hasChanged = false;
             int checksListIdx = 0;
             for (ColumnDescriptor column : getColumnDescriptors()) {
