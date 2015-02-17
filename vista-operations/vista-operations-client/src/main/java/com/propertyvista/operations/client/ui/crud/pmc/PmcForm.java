@@ -54,7 +54,6 @@ import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
 import com.propertyvista.operations.rpc.dto.PmcDTO;
-import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 
 public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
@@ -223,6 +222,10 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
                 yardiMaintenanceSwitch.setEnabled(Boolean.TRUE.equals(event.getValue()));
             }
         });
+
+        formPanel.append(Location.Left, proto().schemaVersion()).decorate();
+        formPanel.append(Location.Right, proto().schemaDataUpgradeSteps()).decorate();
+
         return formPanel;
     }
 
