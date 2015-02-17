@@ -71,7 +71,7 @@ public class UpdateArrearsProcess implements PmcProcess {
         long currentBillingAccount = 0L;
         long failed = 0L;
 
-        while (billingAccounts.hasNext()) {
+        while (billingAccounts.hasNext() && !context.getExecutionMonitor().isTerminationRequested()) {
             ++currentBillingAccount;
 
             try {
@@ -104,7 +104,7 @@ public class UpdateArrearsProcess implements PmcProcess {
 
         long current = 0L;
         long failed = 0L;
-        while (buildings.hasNext()) {
+        while (buildings.hasNext() && !context.getExecutionMonitor().isTerminationRequested()) {
             ++current;
             try {
                 new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
