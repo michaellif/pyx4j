@@ -20,23 +20,23 @@ public abstract class VistaSystemsDNSConfig {
         this.config = config;
     }
 
-    public String getDnsServre() {
+    public String getDnsServer() {
         return config.getConfigProperties().getValue("dns.dnsServer", "8.8.8.8");
     }
 
     public String getVistaSiteIP() {
-        return config.getConfigProperties().getValue("dns.siteIP");
+        return config.getConfigProperties().getValue("dns.siteIP", "127.0.0.1");
     }
 
     public String getVistaResidentIP() {
-        return config.getConfigProperties().getValue("dns.residentIP");
+        return config.getConfigProperties().getValue("dns.residentIP", "127.0.0.1");
     }
 
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();
         b.append("configurationClass                : ").append(getClass().getName()).append("\n");
-        b.append("dns.dnsServer                     : ").append(getDnsServre()).append("\n");
+        b.append("dns.dnsServer                     : ").append(getDnsServer()).append("\n");
         return b.toString();
     }
 

@@ -43,6 +43,7 @@ import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.EncryptedStorageConfiguration;
 import com.propertyvista.config.EquifaxInterfaceConfiguration;
 import com.propertyvista.config.TenantSureConfiguration;
+import com.propertyvista.config.VistaSystemsDNSConfig;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.operations.domain.VistaSystemMaintenanceState;
@@ -311,6 +312,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
+    public VistaSystemsDNSConfig getVistaSystemDNSConfig() {
+        return new VistaSystemDNSConfigTests(this);
+    }
+
+    @Override
     public String rdateServer() {
         return "rdate.birchwoodsoftwaregroup.com";
     }
@@ -334,4 +340,5 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     public String walkMeJsAPIUrl(VistaApplication application) {
         return null;
     }
+
 }

@@ -16,6 +16,8 @@ import static com.pyx4j.commons.HtmlUtils.h2;
 
 import java.util.List;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -67,6 +69,8 @@ public class LoginForm extends CForm<AuthenticationRequest> {
     private FlowPanel wallMessagePanel;
 
     private final Command loginCommand;
+
+    private Button loginButton;
 
     private final Command resetPasswordCommand;
 
@@ -127,7 +131,8 @@ public class LoginForm extends CForm<AuthenticationRequest> {
         HorizontalPanel buttonPanel = new HorizontalPanel();
         buttonPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         buttonPanel.getElement().getStyle().setMarginTop(10, Unit.PX);
-        Button loginButton = new Button(i18n.tr("Login"), new Command() {
+
+        loginButton = new Button(i18n.tr("Login"), new Command() {
 
             @Override
             public void execute() {
@@ -286,8 +291,15 @@ public class LoginForm extends CForm<AuthenticationRequest> {
         @Override
         public void onKeyUp(KeyUpEvent event) {
             if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                loginButton.setFocus(true);
                 if (!Dialog.isDialogOpen()) {
-                    login();
+                    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+
+                        @Override
+                        public void execute() {
+                            login();
+                        }
+                    });
                 }
             }
         }

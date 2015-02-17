@@ -108,6 +108,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract EquifaxInterfaceConfiguration getEquifaxInterfaceConfiguration();
 
+    public abstract VistaSystemsDNSConfig getVistaSystemDNSConfig();
+
     //(in seconds)
     public abstract int yardiConnectionTimeout();
 
