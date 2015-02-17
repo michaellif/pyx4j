@@ -20,15 +20,19 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.AbstractValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -53,11 +57,31 @@ public class UnitStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(UnitStep.class);
 
-    private final CComboBox<BedroomNumber> bedroomSelector = new CComboBox<BedroomNumber>(true);
+    private final CComboBox<BedroomNumber> bedroomSelector = new CComboBox<>(true);
 
-    private final CComboBox<BathroomNumber> bathroomSelector = new CComboBox<BathroomNumber>(true);
+    private final CComboBox<BathroomNumber> bathroomSelector = new CComboBox<>(true);
 
-    private final CEntityLabel<UnitTO> selectedUnit = new CEntityLabel<UnitTO>();
+    private final CLabel<UnitTO> selectedUnit = new CLabel<UnitTO>() {
+
+        @Override
+        public void setFormatter(IFormatter<UnitTO, String> formatter) {
+            super.setFormatter(new IFormatter<UnitTO, String>() {
+                @Override
+                public String format(UnitTO value) {
+                    if (value != null && !value.isEmpty()) {
+                        return value.getStringView();
+                    } else {
+                        return i18n.tr("No unit is selected yet.");
+                    }
+                }
+            });
+        };
+
+        @Override
+        public boolean isValidatable() {
+            return true;
+        }
+    };
 
     private final AvailableUnitsFolder availableUnitsFolder = new AvailableUnitsFolder();
 
@@ -65,7 +89,7 @@ public class UnitStep extends ApplicationWizardStep {
 
     private Widget availableUnitsHeader, potentialUnitsHeader;
 
-    private final Button updateButton = new Button(i18n.tr("Change Selection"), new Command() {
+    private final Button updateButton = new Button(i18n.tr("Change Unit Selection"), new Command() {
         @Override
         public void execute() {
             MessageDialog.confirm(i18n.tr("Warning"), i18n.tr("You will lose already selected Unit Options. Do you really want to change current selection?"),
@@ -89,10 +113,11 @@ public class UnitStep extends ApplicationWizardStep {
         FormPanel formPanel = new FormPanel(getWizard());
 
         formPanel.append(Location.Left, proto().unitSelection().building(), new CBuildingLabel()).decorate();
+        formPanel.append(Location.Left, proto().unitSelection().selectedUnit(), selectedUnit).decorate();
         formPanel.append(Location.Left, proto().unitSelection().moveIn()).decorate().componentWidth(120);
+
         formPanel.append(Location.Left, proto().unitSelection().bedrooms(), bedroomSelector).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().unitSelection().bathrooms(), bathroomSelector).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().unitSelection().selectedUnit(), selectedUnit).decorate();
 
         availableUnitsHeader = formPanel.h3(i18n.tr("Exact match:"));
 
@@ -100,6 +125,8 @@ public class UnitStep extends ApplicationWizardStep {
 
         potentialUnitsHeader = formPanel.h3(i18n.tr("Partial match:"));
         formPanel.append(Location.Left, proto().unitSelection().potentialUnits(), potentialUnitsFolder);
+
+        formPanel.br();
 
         formPanel.append(Location.Left, updateButton);
 
@@ -130,11 +157,8 @@ public class UnitStep extends ApplicationWizardStep {
 
     void setEditableState(Boolean editable) {
         get(proto().unitSelection().moveIn()).setEditable(editable);
-        get(proto().unitSelection().building()).setEditable(editable);
         get(proto().unitSelection().bedrooms()).setEditable(editable);
         get(proto().unitSelection().bathrooms()).setEditable(editable);
-
-        selectedUnit.setVisible(!editable);
 
         availableUnitsHeader.setVisible(editable);
         availableUnitsFolder.setVisible(editable);
@@ -150,6 +174,21 @@ public class UnitStep extends ApplicationWizardStep {
     @Override
     public void addValidations() {
         super.addValidations();
+
+        selectedUnit.addComponentValidator(new AbstractComponentValidator<UnitTO>() {
+            @Override
+            public AbstractValidationError isValid() {
+                return (selectedUnit.isVisited() && selectedUnit.isValueEmpty() ? new BasicValidationError(getCComponent(), i18n
+                        .tr("Unit selection is required")) : null);
+            }
+        });
+
+        selectedUnit.addValueChangeHandler(new ValueChangeHandler<UnitTO>() {
+            @Override
+            public void onValueChange(final ValueChangeEvent<UnitTO> event) {
+                updateUnitOptions(event.getValue());
+            }
+        });
 
         get(proto().unitSelection().moveIn()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
             @Override
@@ -169,13 +208,6 @@ public class UnitStep extends ApplicationWizardStep {
             @Override
             public void onValueChange(final ValueChangeEvent<BathroomNumber> event) {
                 updateAvailableUnits();
-            }
-        });
-
-        selectedUnit.addValueChangeHandler(new ValueChangeHandler<UnitTO>() {
-            @Override
-            public void onValueChange(final ValueChangeEvent<UnitTO> event) {
-                updateUnitOptions(event.getValue());
             }
         });
     }
