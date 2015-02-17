@@ -81,6 +81,9 @@ abstract class AbstractAcknowledgementProcessor {
                 }
 
             });
+            if (executionMonitor.isTerminationRequested()) {
+                break;
+            }
         }
     }
 

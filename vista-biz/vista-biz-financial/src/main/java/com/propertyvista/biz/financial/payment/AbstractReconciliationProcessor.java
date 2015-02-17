@@ -136,7 +136,9 @@ abstract class AbstractReconciliationProcessor {
         });
 
         for (final FundsReconciliationSummary summary : summaryTransactions) {
-
+            if (executionMonitor.isTerminationRequested()) {
+                break;
+            }
             try {
                 new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
@@ -186,6 +188,9 @@ abstract class AbstractReconciliationProcessor {
         });
 
         for (final FundsReconciliationRecordRecord debitRecord : records) {
+            if (executionMonitor.isTerminationRequested()) {
+                break;
+            }
             try {
                 new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
