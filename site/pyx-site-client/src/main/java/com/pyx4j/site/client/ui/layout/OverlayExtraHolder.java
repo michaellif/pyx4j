@@ -24,7 +24,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.ui.devconsole.AbstractDevConsole;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
@@ -48,7 +47,7 @@ public class OverlayExtraHolder extends AbstractOverlayHolder {
 
         overlayDevConsoleHolder = new LayoutPanel();
         overlayDevConsoleHolder.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-        addTab(overlayDevConsoleHolder, ApplicationMode.isDemo() ? "Demo" : "Dev.");
+        addTab(overlayDevConsoleHolder, "Extra");
         setTabVisible(getTabIndex(overlayDevConsoleHolder), false);
 
         overlayExtra1Holder = new LayoutPanel();
