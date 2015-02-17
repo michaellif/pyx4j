@@ -169,6 +169,7 @@ public class EmailTemplateRootObjectLoader {
             t.Website().set(bld.contacts().website());
             t.Address().setValue(bld.info().address().getStringView());
             // set contact info
+            Persistence.ensureRetrieve(bld.contacts().propertyContacts(), AttachLevel.Attached);
             for (PropertyContact cont : bld.contacts().propertyContacts()) {
                 if (cont.type().isNull()) {
                     continue;
