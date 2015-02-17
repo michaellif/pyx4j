@@ -109,9 +109,10 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
                                 CalendarUtil.addDaysToDate(date, 1); // compensate for 'including end date' logic
                                 if (info.firstEmployment.starts().getValue().after(date) //
                                         || (!info.firstEmployment.ends().isNull() && !info.firstEmployment.ends().getValue().after(today))) {
-                                    return new BasicValidationError(getCComponent(), i18n.tr(
-                                            "Previous employment information is necessary (current employment duration is less than {0} months)",
-                                            restrictionsPolicy.minEmploymentDuration().getValue(0)));
+                                    return new BasicValidationError(
+                                            getCComponent(),
+                                            i18n.tr("More employment information is necessary (entered employment either is not current or its duration is less than {0} months)",
+                                                    restrictionsPolicy.minEmploymentDuration().getValue(0)));
                                 }
                             }
                         }
