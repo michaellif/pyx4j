@@ -23,6 +23,7 @@ import com.propertyvista.config.CaledonCardsConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.EquifaxInterfaceConfiguration;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.config.VistaSystemsDNSConfig;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.shared.config.VistaSettings;
 
@@ -180,5 +181,10 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         } else {
             throw new UserRuntimeException("EquifaxInterface is disabled");
         }
+    }
+
+    @Override
+    public VistaSystemsDNSConfig getVistaSystemDNSConfig() {
+        return new VistaSystemsDNSConfigProd(this);
     }
 }

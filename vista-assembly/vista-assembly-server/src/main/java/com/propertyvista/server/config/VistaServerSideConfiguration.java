@@ -51,6 +51,7 @@ import com.propertyvista.config.EquifaxInterfaceConfiguration;
 import com.propertyvista.config.TenantSureConfiguration;
 import com.propertyvista.config.VistaCookieLocaleResolver;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.config.VistaSystemsDNSConfig;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.misc.VistaDevPreloadConfig;
@@ -511,6 +512,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     @Override
     public PropertiesConfiguration yardiInterfaceProperties() {
         return new PropertiesConfiguration("yardiInterface", getConfigProperties());
+    }
+
+    @Override
+    public VistaSystemsDNSConfig getVistaSystemDNSConfig() {
+        return new VistaSystemsDNSConfigSimulator(this);
     }
 
     @Override
