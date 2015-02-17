@@ -196,6 +196,7 @@ public class LeaseParticipantUtils {
     }
 
     public static boolean isApplicationInPogress(Lease lease, LeaseTermV leaseTermV) {
+        Persistence.ensureRetrieve(leaseTermV, AttachLevel.Attached);
         return (lease.status().getValue() != Lease.Status.Cancelled) && VersionedEntityUtils.isDraft(leaseTermV) && lease.status().getValue().isDraft();
     }
 }
