@@ -107,6 +107,7 @@ public class CustomDNSManager {
             return null;
         }
 
+        // TODO Don't understand this part yet ??
         if (customerDnsName.startsWith("my.")) {
             pmcDnsConfig.customerDnsName().setValue(customerDnsName);
 
@@ -234,6 +235,7 @@ public class CustomDNSManager {
         EntityQueryCriteria<PmcDnsName> criteria = EntityQueryCriteria.create(PmcDnsName.class);
         criteria.eq(criteria.proto().enabled(), Boolean.TRUE);
         criteria.eq(criteria.proto().dnsName(), pmc.dnsName());
+        criteria.eq(criteria.proto().target(), application == VistaApplication.site ? DnsNameTarget.site : DnsNameTarget.portal);
         criteria.eq(criteria.proto().pmc().status(), PmcStatus.Active);
 
         PmcDnsName pmcDns = Persistence.service().retrieve(criteria);
