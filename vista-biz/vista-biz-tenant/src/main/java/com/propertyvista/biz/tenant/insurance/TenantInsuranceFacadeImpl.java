@@ -160,10 +160,9 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
     }
 
     private static Lease retrieveLease(Tenant tenantId) {
-        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
-        Persistence.service().retrieve(Lease.class, tenant.lease().getPrimaryKey());
-        return Persistence.service().retrieve(criteria);
+        return Persistence.service().retrieve(Lease.class, tenant.lease().getPrimaryKey());
+
     }
 
     /** this one chooses the best insurance certificate out of all insurance certificates */
