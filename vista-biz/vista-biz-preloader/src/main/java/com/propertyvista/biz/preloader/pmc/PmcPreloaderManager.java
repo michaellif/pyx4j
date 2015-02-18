@@ -321,7 +321,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
             VistaDevPreloadConfig cfg = VistaDevPreloadConfig.createDefault();
 
             // Preload creditCheck Payments preloader also after Onboarding PMC creation
-            cfg.creditCheckPaymentPreloader = true;
+//            cfg.creditCheckPaymentPreloader = true;
 
             preloaders.setParameterValue(VistaDataPreloaderParameter.devPreloadConfig.name(), cfg);
             preloaders.setParameterValue(VistaDataPreloaderParameter.pmcName.name(), pmc.name().getStringView());
