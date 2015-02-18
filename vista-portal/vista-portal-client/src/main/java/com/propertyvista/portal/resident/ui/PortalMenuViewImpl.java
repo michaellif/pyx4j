@@ -30,7 +30,6 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.tenant.CustomerPreferencesPortalHidable;
 import com.propertyvista.portal.resident.ui.utils.PortalHidablePreferenceManager;
@@ -42,7 +41,6 @@ import com.propertyvista.portal.shared.ui.AppPlaceMenuItem;
 import com.propertyvista.portal.shared.ui.MenuItem;
 import com.propertyvista.portal.shared.ui.MenuList;
 import com.propertyvista.portal.shared.ui.NotNavigableMenuItem;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class PortalMenuViewImpl extends DockPanel implements PortalMenuView {
     private static final I18n i18n = I18n.get(PortalMenuViewImpl.class);
@@ -82,10 +80,8 @@ public class PortalMenuViewImpl extends DockPanel implements PortalMenuView {
             mainHolder
                     .addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.Maintenance(), PortalImages.INSTANCE.maintenanceMenu(), ThemeColor.contrast5));
 
-            if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-                mainHolder.addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.ResidentServices(), PortalImages.INSTANCE.residentServicesMenu(),
-                        ThemeColor.contrast3));
-            }
+            mainHolder.addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.ResidentServices(), PortalImages.INSTANCE.residentServicesMenu(),
+                    ThemeColor.contrast3));
 
         }
 
@@ -94,11 +90,12 @@ public class PortalMenuViewImpl extends DockPanel implements PortalMenuView {
         footerHolder.addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.Profile(), PortalImages.INSTANCE.profileMenu(), ThemeColor.formBackground));
         footerHolder.addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.Account(), PortalImages.INSTANCE.accountMenu(), ThemeColor.formBackground));
 
-        leaseSelectionMenu = new AppPlaceMenuItem(new ResidentPortalSiteMap.LeaseContextSelection(), PortalImages.INSTANCE.selectMenu(), ThemeColor.formBackground);
+        leaseSelectionMenu = new AppPlaceMenuItem(new ResidentPortalSiteMap.LeaseContextSelection(), PortalImages.INSTANCE.selectMenu(),
+                ThemeColor.formBackground);
         footerHolder.addMenuItem(leaseSelectionMenu);
 
-        showGettingStartedGadgetMenu = new NotNavigableMenuItem(i18n.tr("Show Getting Started"), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.formBackground,
-                new Command() {
+        showGettingStartedGadgetMenu = new NotNavigableMenuItem(i18n.tr("Show Getting Started"), PortalImages.INSTANCE.dashboardMenu(),
+                ThemeColor.formBackground, new Command() {
                     @Override
                     public void execute() {
                         PortalHidablePreferenceManager.updatePreference(CustomerPreferencesPortalHidable.Type.GettingStartedGadget, false);
