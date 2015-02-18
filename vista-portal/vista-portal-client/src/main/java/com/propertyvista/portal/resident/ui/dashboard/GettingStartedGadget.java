@@ -82,7 +82,7 @@ public class GettingStartedGadget extends AbstractGadget<MainDashboardViewImpl> 
             }
         }), maintananceId);
 
-        contentPanel.addAndReplaceElement(new ContentLink(i18n.tr("Purchase Insurance."), new Command() {
+        contentPanel.addAndReplaceElement(new ContentLink(i18n.tr("Update Insurance information."), new Command() {
 
             @Override
             public void execute() {

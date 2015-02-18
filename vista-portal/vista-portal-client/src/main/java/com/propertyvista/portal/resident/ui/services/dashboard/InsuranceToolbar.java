@@ -21,6 +21,7 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public abstract class InsuranceToolbar extends GadgetToolbar {
 
@@ -40,7 +41,10 @@ public abstract class InsuranceToolbar extends GadgetToolbar {
             }
         });
         purchaseButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 1));
-        addItem(purchaseButton);
+
+        if (VistaFeatures.instance().tenantSure()) {
+            addItem(purchaseButton);
+        }
 
         proofButton = new Button("", new Command() {
 
@@ -49,7 +53,8 @@ public abstract class InsuranceToolbar extends GadgetToolbar {
                 onProofClicked();
             }
         });
-        proofButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 0.8));
+        proofButton.getElement().getStyle()
+                .setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, VistaFeatures.instance().tenantSure() ? 0.8 : 1));
         addItem(proofButton);
 
         recalculateState(null);
