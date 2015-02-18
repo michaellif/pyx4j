@@ -643,6 +643,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         LeaseTerm leaseTerm = bo.masterOnlineApplication().leaseApplication().lease().currentTerm();
 
         Collection<String> emails = new ArrayList<>();
+
         for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
             if (!tenant.leaseParticipant().customer().person().email().isNull()) {
                 emails.add(tenant.leaseParticipant().customer().person().email().getValue());
@@ -933,9 +934,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             to.payment().paymentMethod().customer().set(ResidentPortalContext.getCustomer());
             to.payment().paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
 
-            ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), to.payment().paymentMethod(),
-                    PaymentMethodTarget.OneTimePayment, VistaApplication.prospect);
-            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(to.payment().paymentMethod(), lease.unit().building());
+            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(to.payment().paymentMethod(), to.policyNode());
         }
     }
 
@@ -945,6 +944,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         Persistence.ensureRetrieve(bo.masterOnlineApplication().leaseApplication().lease(), AttachLevel.Attached);
         LeaseTerm leaseTerm = Persistence.retrieveDraftForEdit(LeaseTerm.class, bo.masterOnlineApplication().leaseApplication().lease().currentTerm()
                 .getPrimaryKey());
+
+        Persistence.service().retrieveMember(leaseTerm.version().tenants());
+        Persistence.service().retrieveMember(leaseTerm.version().guarantors());
 
         // All saveXXX methods SHOULD use this Lease and current LeaseTerm:
         bo.masterOnlineApplication().leaseApplication().lease().set(bo.masterOnlineApplication().leaseApplication().lease().currentTerm(), leaseTerm);
