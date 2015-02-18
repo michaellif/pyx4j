@@ -130,7 +130,7 @@ public class CustomDNSManager {
     private String resolveDnsName(String customerDnsName) {
         String ipAddress = null;
         try {
-            ipAddress = getJavaResolverForTargetHost(customerDnsName).resolveHost();
+            ipAddress = getJavaResolver().resolveHost(customerDnsName);
         } catch (UnknownHostException e) {
             log.error("UnknownHost customerDnsName '{}', {}", customerDnsName, e.getMessage());
         } catch (IOException | InterruptedException e) {
@@ -147,7 +147,7 @@ public class CustomDNSManager {
         try {
             customerDnsName = getHostName(customerCompleteDnsName);
         } catch (Exception e) {
-            log.error("Bad format for CustomerDNSName '{}'", customerCompleteDnsName, e);
+            log.error("Bad format for CustomerDNSName '{}', {}", customerCompleteDnsName, e.getMessage());
             return null;
         }
 
@@ -176,7 +176,7 @@ public class CustomDNSManager {
             try {
                 customerDnsName = getHostName(customerCompleteDnsName);
             } catch (Exception e) {
-                log.error("Bad format for CustomerDNSName", e);
+                log.error("Bad format for CustomerDNSName '{}', {}", customerCompleteDnsName, e.getMessage());
                 return;
             }
 
@@ -185,7 +185,7 @@ public class CustomDNSManager {
             String ipAddress = null;
 
             try {
-                ipAddress = getJavaResolverForTargetHost(customerDnsName).resolveHost();
+                ipAddress = getJavaResolver().resolveHost(customerDnsName);
             } catch (UnknownHostException e) {
 //                pmcDnsConfig.dnsResolutionMessage().setValue(getUnknownHostExceptionTypeMessage(e));
                 pmcDnsConfig.dnsResolutionMessage().setValue(e.getMessage());
@@ -205,16 +205,17 @@ public class CustomDNSManager {
         }
     }
 
-    private static JavaResolver getJavaResolverForTargetHost(String targetHost) {
-        JavaResolver javaDnsResolver = new JavaResolver();
-        javaDnsResolver.setTargetHost(targetHost);
+    private static JavaResolver getJavaResolver() {
         List<String> dnsServers = new ArrayList<String>();
         dnsServers.add(ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getVistaSystemDNSConfig().getDnsServer());
-        javaDnsResolver.setDnsServers(dnsServers);
-        return javaDnsResolver;
+
+        return new JavaResolver(dnsServers);
     }
 
     private String getHostName(String customerDnsName) throws URISyntaxException, URIException, NullPointerException {
+        if (!customerDnsName.startsWith("http")) {
+            customerDnsName = "http://" + customerDnsName;
+        }
         URI uri = new URI(customerDnsName, false);
         String domain = uri.getHost();
         return domain;
@@ -234,7 +235,6 @@ public class CustomDNSManager {
     private PmcDnsName getPmcDnsAliasesForPmcAndApplication(Pmc pmc, VistaApplication application) {
         EntityQueryCriteria<PmcDnsName> criteria = EntityQueryCriteria.create(PmcDnsName.class);
         criteria.eq(criteria.proto().enabled(), Boolean.TRUE);
-        criteria.eq(criteria.proto().dnsName(), pmc.dnsName());
         criteria.eq(criteria.proto().target(), application == VistaApplication.site ? DnsNameTarget.site : DnsNameTarget.portal);
         criteria.eq(criteria.proto().pmc().status(), PmcStatus.Active);
 
@@ -272,6 +272,7 @@ public class CustomDNSManager {
         return true;
     }
 
+    // Function to customize message to be shown at PmcDnsConfigTO.dnsResolutionMessage
     private static String getUnknownHostExceptionTypeMessage(UnknownHostException e) {
         String exMessage = e.getMessage();
         if (exMessage.contains("no A record")) {

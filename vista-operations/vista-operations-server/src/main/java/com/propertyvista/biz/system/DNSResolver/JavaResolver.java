@@ -26,29 +26,24 @@ import java.util.List;
 
 import org.xbill.DNS.Lookup;
 
-public class JavaResolver {
-
-    private String targetHost;
+public class JavaResolver implements DNSResolver {
 
     private List<String> dnsServers = new ArrayList<String>();
 
-    DNSLookup dnsLookup;
-
-    public JavaResolver() {
-        dnsLookup = new DNSLookup();
-    }
-
-    public JavaResolver(String host, List<String> dnsServers) {
-        this.targetHost = host;
+    public JavaResolver(List<String> dnsServers) {
         this.dnsServers = dnsServers;
-        dnsLookup = new DNSLookup();
     }
 
-    public String resolveHost() throws IOException, InterruptedException {
+    @Override
+    public String resolveHost(String targetHost) throws IOException, InterruptedException {
+
+        if (targetHost == null) {
+            return null;
+        }
 
         String ipAddress = "";
 
-        Lookup lookupObj = dnsLookup.getLookupObj(targetHost, dnsServers);
+        Lookup lookupObj = DNSLookup.getLookupObj(targetHost, dnsServers);
 
         lookupObj.run();
 
@@ -58,21 +53,13 @@ public class JavaResolver {
             ipAddress = lookupObj.getAnswers()[0].rdataToString();
         } else {
             try {
-                dnsLookup.analyzeLookupError(targetHost, result);
+                DNSLookup.analyzeLookupErrorForHost(targetHost, result);
             } catch (Throwable e) {
                 throw e;
             }
         }
 
         return ipAddress;
-    }
-
-    public String getTargetHost() {
-        return targetHost;
-    }
-
-    public void setTargetHost(String targetHost) {
-        this.targetHost = targetHost;
     }
 
     public List<String> getDnsServers() {

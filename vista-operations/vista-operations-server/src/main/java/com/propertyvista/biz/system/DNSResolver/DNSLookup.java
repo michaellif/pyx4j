@@ -34,14 +34,17 @@ public class DNSLookup {
 
     static Logger log = Logger.getLogger(DNSLookup.class.getName());
 
-    public Lookup getLookupObj(String host, List<String> dnsServers) {
+    private DNSLookup() {
+
+    }
+
+    public static Lookup getLookupObj(String host, List<String> dnsServers) {
         Lookup lookupObj = null;
 
         try {
             lookupObj = new Lookup(host, Type.A, DClass.IN);
         } catch (TextParseException e) {
-            // TODO Auto-generated catch block
-            log.error("Error", e);
+            log.error("Error creating Lookup objec", e);
         }
 
         if (dnsServers != null && dnsServers.size() > 0) {
@@ -53,19 +56,20 @@ public class DNSLookup {
             }
 
             for (String dns : dnsServers) {
-                //log.debug(String.format("Using '%s' DNS server resolving '%s'", dns, host.getHostName()));
+                log.debug(String.format("Using '%s' DNS server resolving '%s'", dns, host));
             }
 
             lookupObj.setResolver(extResolver);
 
-        } else
+        } else {
             log.debug(String.format("Using default DNS server resolving '%s'", host));
+        }
 
         return lookupObj;
 
     }
 
-    public void analyzeLookupError(String host, int result) throws UnknownHostException {
+    public static void analyzeLookupErrorForHost(String host, int result) throws UnknownHostException {
         switch (result) {
         case Lookup.HOST_NOT_FOUND:
             throw new UnknownHostException(String.format("Host '%s' not found", host));
