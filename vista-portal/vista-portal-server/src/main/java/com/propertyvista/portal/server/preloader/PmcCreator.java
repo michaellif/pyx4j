@@ -91,7 +91,7 @@ public class PmcCreator {
                 // Create support account by default
                 createVistaSupportUsers();
 
-                if (ApplicationMode.isDevelopment()) {
+                if (ApplicationMode.isDevelopment() && !ApplicationMode.isDemo()) {
                     for (int i = 1; i <= DemoData.UserType.PM.getDefaultMax(); i++) {
                         String email = DemoData.UserType.PM.getEmail(i);
                         createCrmEmployee(email, email, email, email, null, defaultRole);
