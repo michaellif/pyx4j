@@ -32,6 +32,7 @@ import com.propertyvista.preloader.AggregatedTransfersDevPreloader;
 import com.propertyvista.preloader.BuildingPreloader;
 import com.propertyvista.preloader.CampaignPreloader;
 import com.propertyvista.preloader.CommunicationDevPreloader;
+import com.propertyvista.preloader.CreditChecksPaymentsPreloader;
 import com.propertyvista.preloader.CrmRolesDevPreloader;
 import com.propertyvista.preloader.MaintenanceRequestsMockupPreloader;
 import com.propertyvista.preloader.MerchantAccountPreloader;
@@ -144,8 +145,8 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
             add(new UpdateArrearsHistoryDevPreloader());
             add(new MaintenanceRequestsMockupPreloader());
             add(new CommunicationDevPreloader());
-
             add(new ILSMarketingDevPreloader());
+            add(new CreditChecksPaymentsPreloader());
         }
     }
 
