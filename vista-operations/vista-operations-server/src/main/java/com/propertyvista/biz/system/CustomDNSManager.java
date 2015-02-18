@@ -13,28 +13,18 @@
 package com.propertyvista.biz.system;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.Callable;
 
-import org.apache.commons.httpclient.URI;
-import org.apache.commons.httpclient.URIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.system.DNSResolver.JavaResolver;
-import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcDnsConfigTO;
 import com.propertyvista.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.pmc.PmcDnsName.DnsNameTarget;
@@ -59,8 +49,8 @@ public class CustomDNSManager {
 
         PmcDnsConfigTO pmcDnsConfig = EntityFactory.create(PmcDnsConfigTO.class);
         pmcDnsConfig.dnsNameDefault().setValue(VistaDeployment.getBaseApplicationURL(pmc, application, true));
-        pmcDnsConfig.dnsNameIsActive().setValue(getDnsNameIsActiveForApplication(pmc, application));
-        pmcDnsConfig.serverIPAddress().setValue(getIpAddressForApplication(application));
+        pmcDnsConfig.dnsNameIsActive().setValue(PmcDNSUtils.isDnsNameActiveForApplication(pmc, application));
+        pmcDnsConfig.serverIPAddress().setValue(PmcDNSUtils.getDefaultIpAddressForApplication(application));
 
         setDnsResolutionDataForApplication(pmc, pmcDnsConfig, application);
 
@@ -79,10 +69,15 @@ public class CustomDNSManager {
         }
 
         final String dnsCustomerName = dnsConfig.customerDnsName().getValue();
+
+        if (dnsCustomerName == null) {
+            return;
+        }
+
         TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
-                PmcDnsName pmcDnsName = getPmcDnsAliasesForPmcAndApplication(pmc, application);
+                PmcDnsName pmcDnsName = PmcDNSUtils.getPmcDnsAliasesForPmcAndApplication(pmc, application);
                 pmcDnsName.pmc().set(pmc);
                 pmcDnsName.dnsName().setValue(dnsCustomerName);
                 pmcDnsName.enabled().setValue(Boolean.TRUE);
@@ -96,28 +91,38 @@ public class CustomDNSManager {
 
     }
 
+    private PmcDnsConfigTO setSiteAppDnsResolutionData(PmcDnsConfigTO pmcDnsConfig) {
+        String customerCompleteDnsName = pmcDnsConfig.customerDnsName().getValue();
+        String customerDnsName = getHostName(customerCompleteDnsName);
+
+        if (customerDnsName != null) {
+            pmcDnsConfig.customerDnsName().setValue(customerDnsName);
+        }
+
+        return pmcDnsConfig;
+    }
+
     private PmcDnsConfigTO setResidentAppDnsResolutionData(PmcDnsConfigTO pmcDnsConfig) {
         String customerCompleteDnsName = pmcDnsConfig.customerDnsName().getValue();
         String customerDnsName;
 
-        try {
-            customerDnsName = getHostName(customerCompleteDnsName);
-        } catch (Exception e) {
-            log.error("Bad format for CustomerDNSName '{}', {}", customerCompleteDnsName, e.getMessage());
-            return null;
+        customerDnsName = getHostName(customerCompleteDnsName);
+
+        if (customerDnsName == null) {
+            return pmcDnsConfig;
         }
 
-        // TODO Don't understand this part yet ??
+        // TODO Don't understand this part yet...
         if (customerDnsName.startsWith("my.")) {
             pmcDnsConfig.customerDnsName().setValue(customerDnsName);
 
-            if (resolveDnsName("www." + customerDnsName) != null) {
+            if (resolveDNS("www." + customerDnsName) != null) {
                 pmcDnsConfig.customerDnsName().setValue("www." + customerDnsName);
             }
         } else if (customerDnsName.startsWith("www.my.")) {
             pmcDnsConfig.customerDnsName().setValue(customerDnsName);
 
-            if (resolveDnsName("my." + customerDnsName) != null) {
+            if (resolveDNS("my." + customerDnsName) != null) {
                 pmcDnsConfig.customerDnsName().setValue("my." + customerDnsName);
             }
         } else {
@@ -127,56 +132,14 @@ public class CustomDNSManager {
         return pmcDnsConfig;
     }
 
-    private String resolveDnsName(String customerDnsName) {
-        String ipAddress = null;
-        try {
-            ipAddress = getJavaResolver().resolveHost(customerDnsName);
-        } catch (UnknownHostException e) {
-            log.error("UnknownHost customerDnsName '{}', {}", customerDnsName, e.getMessage());
-        } catch (IOException | InterruptedException e) {
-            log.error("Error resolving customerDnsName '{}', {}", customerDnsName, e.getMessage());
-        }
-
-        return ipAddress;
-    }
-
-    private PmcDnsConfigTO setSiteAppDnsResolutionData(PmcDnsConfigTO pmcDnsConfig) {
-        String customerCompleteDnsName = pmcDnsConfig.customerDnsName().getValue();
-        String customerDnsName;
-
-        try {
-            customerDnsName = getHostName(customerCompleteDnsName);
-        } catch (Exception e) {
-            log.error("Bad format for CustomerDNSName '{}', {}", customerCompleteDnsName, e.getMessage());
-            return null;
-        }
-
-        pmcDnsConfig.customerDnsName().setValue(customerDnsName);
-
-        return pmcDnsConfig;
-    }
-
-    private static String getIpAddressForApplication(VistaApplication application) {
-        if (application == VistaApplication.site) {
-            return ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getVistaSystemDNSConfig().getVistaSiteIP();
-        } else if (application == VistaApplication.resident) {
-            return ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getVistaSystemDNSConfig().getVistaResidentIP();
-        }
-
-        return null;
-    }
-
     private void setDnsResolutionDataForApplication(Pmc pmc, PmcDnsConfigTO pmcDnsConfig, VistaApplication application) {
 
-        String customerCompleteDnsName = getCustomerDnsName(pmc, application);
+        String customerCompleteDnsName = PmcDNSUtils.getCustomerDnsName(pmc, application);
 
         if (customerCompleteDnsName != null) {
-            String customerDnsName;
+            String customerDnsName = getHostName(customerCompleteDnsName);
 
-            try {
-                customerDnsName = getHostName(customerCompleteDnsName);
-            } catch (Exception e) {
-                log.error("Bad format for CustomerDNSName '{}', {}", customerCompleteDnsName, e.getMessage());
+            if (customerDnsName == null) {
                 return;
             }
 
@@ -185,7 +148,7 @@ public class CustomDNSManager {
             String ipAddress = null;
 
             try {
-                ipAddress = getJavaResolver().resolveHost(customerDnsName);
+                ipAddress = PmcDNSUtils.getJavaResolver().resolveHost(customerDnsName);
             } catch (UnknownHostException e) {
 //                pmcDnsConfig.dnsResolutionMessage().setValue(getUnknownHostExceptionTypeMessage(e));
                 pmcDnsConfig.dnsResolutionMessage().setValue(e.getMessage());
@@ -205,93 +168,20 @@ public class CustomDNSManager {
         }
     }
 
-    private static JavaResolver getJavaResolver() {
-        List<String> dnsServers = new ArrayList<String>();
-        dnsServers.add(ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getVistaSystemDNSConfig().getDnsServer());
-
-        return new JavaResolver(dnsServers);
-    }
-
-    private String getHostName(String customerDnsName) throws URISyntaxException, URIException, NullPointerException {
-        if (!customerDnsName.startsWith("http")) {
-            customerDnsName = "http://" + customerDnsName;
-        }
-        URI uri = new URI(customerDnsName, false);
-        String domain = uri.getHost();
-        return domain;
-//        return domain.startsWith("www.") ? domain.substring(4) : domain;
-    }
-
-    private String getCustomerDnsName(Pmc pmc, VistaApplication application) {
-        for (PmcDnsName dnsName : pmc.dnsNameAliases()) {
-            if (dnsName.target().getValue().name().equalsIgnoreCase(application.name())) {
-                return dnsName.dnsName().getValue();
-            }
-        }
-
-        return null;
-    }
-
-    private PmcDnsName getPmcDnsAliasesForPmcAndApplication(Pmc pmc, VistaApplication application) {
-        EntityQueryCriteria<PmcDnsName> criteria = EntityQueryCriteria.create(PmcDnsName.class);
-        criteria.eq(criteria.proto().enabled(), Boolean.TRUE);
-        criteria.eq(criteria.proto().target(), application == VistaApplication.site ? DnsNameTarget.site : DnsNameTarget.portal);
-        criteria.eq(criteria.proto().pmc().status(), PmcStatus.Active);
-
-        PmcDnsName pmcDns = Persistence.service().retrieve(criteria);
-
-        if (pmcDns != null) {
-            return pmcDns;
-        } else {
-            PmcDnsName newPmcDnsName = EntityFactory.create(PmcDnsName.class);
-            return newPmcDnsName;
-        }
-
-    }
-
-    // Search in dns names aliases for first record with same application
-    private static Boolean getDnsNameIsActiveForApplication(Pmc pmc, VistaApplication application) {
-
-        for (PmcDnsName dnsName : pmc.dnsNameAliases()) {
-            if (dnsName.target().getValue().name().equalsIgnoreCase(application.name())) {
-                if (dnsName.enabled().getValue()) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
     private static boolean isApplicationSuspported(VistaApplication application) {
         if (!Arrays.asList(supportedApps).contains(application)) {
             log.warn("Application {} is not currently supported", application.name());
             return false;
         }
-
         return true;
     }
 
-    // Function to customize message to be shown at PmcDnsConfigTO.dnsResolutionMessage
-    private static String getUnknownHostExceptionTypeMessage(UnknownHostException e) {
-        String exMessage = e.getMessage();
-        if (exMessage.contains("no A record")) {
-            return "TYPE_NOT_FOUND: No A records";
-        }
+    private String resolveDNS(String dns) {
+        return PmcDNSUtils.resolveDnsName(dns);
+    }
 
-        if (exMessage.contains("Cannot lookup host")) {
-            return "TYPE_UNRECOVORABLE: Cannot lookup host";
-        }
-
-        if (exMessage.contains("Temporary failure")) {
-            return "TRY_AGAIN: Temporary failure to lookup host";
-        }
-
-        if (exMessage.contains("Unknown error")) {
-            return "UNKNOWN ERROR";
-        }
-
-        return "HOST_NOT_FOUND";
+    private String getHostName(String customerCompleteDnsName) {
+        return PmcDNSUtils.getHostName(customerCompleteDnsName);
     }
 
 }
