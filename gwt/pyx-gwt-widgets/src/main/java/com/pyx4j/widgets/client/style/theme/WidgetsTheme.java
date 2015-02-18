@@ -634,7 +634,7 @@ public class WidgetsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.SelectedItemEditorBodyHolder);
-        style.addProperty("max-height", "400px");
+        style.addProperty("max-height", "350px");
         style.addProperty("overflow", "auto");
         addStyle(style);
 
