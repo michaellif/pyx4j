@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.system.Vista2PmcFacade;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.AllowedPaymentsSetup;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.PaymentAccepted;
@@ -38,6 +39,7 @@ import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentSetup;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -243,10 +245,9 @@ class PaymentUtils {
         MerchantElectronicPaymentSetup merchantSetup = getEffectiveElectronicPaymentsSetup(billingAccountId);
         PaymentTypeSelectionPolicy paymentMethodSelectionPolicy;
         {
-            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().leases().$().billingAccount(), billingAccountId));
-            paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(Persistence.service().retrieve(criteria),
-                    PaymentTypeSelectionPolicy.class);
+            Persistence.ensureRetrieve(billingAccount.lease(), AttachLevel.IdOnly);
+            PolicyNode node = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(billingAccount.lease());
+            paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, PaymentTypeSelectionPolicy.class);
         }
         return PaymentAcceptanceUtils.getAllowedPaymentTypes(paymentMethodTarget, vistaApplication, merchantSetup, systemSetup,
                 paymentAccepted == PaymentAccepted.CashEquivalent, paymentMethodSelectionPolicy);

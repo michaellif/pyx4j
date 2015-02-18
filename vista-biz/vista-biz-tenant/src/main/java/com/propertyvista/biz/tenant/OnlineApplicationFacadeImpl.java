@@ -373,7 +373,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
             return building;
         } else {
             // Case of ILS link
-            Persistence.ensureRetrieve(application.masterOnlineApplication(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(application.masterOnlineApplication().ilsBuilding(), AttachLevel.IdOnly);
             return application.masterOnlineApplication().ilsBuilding();
         }
     }
