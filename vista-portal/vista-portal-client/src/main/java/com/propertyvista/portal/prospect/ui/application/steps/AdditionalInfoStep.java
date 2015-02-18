@@ -74,7 +74,7 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
         formPanel.append(Location.Left, proto().applicantData().legalQuestions(), new LegalQuestionFolder());
 
         if (SecurityController.check(PortalProspectBehavior.Applicant)) {
-            formPanel.h3(i18n.tr("How Did You Hear About Us?"));
+            formPanel.h3(i18n.tr("References"));
             formPanel.append(Location.Left, proto().referenceSource()).decorate().componentWidth(150);
         }
 
