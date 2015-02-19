@@ -97,7 +97,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public abstract class LeaseAbstractManager {
@@ -1330,50 +1329,28 @@ public abstract class LeaseAbstractManager {
     }
 
     public PolicyNode getLeasePolicyNode(Lease leaseId) {
-        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey(), AttachLevel.IdOnly, false);
-        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.IdOnly);
-
-        if (lease.unit().isNull()) {
-            // no unit selected still - return organization node for policy queries:
-            return Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class));
+        PolicyNode node = getLeaseBuilding(leaseId);
+        if (node == null) {
+            // return organization node for policy queries in case of empty building/unit selection:
+            node = Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class));
         }
-        return getLeaseBuilding(leaseId);
+        return node;
     }
 
     public Building getLeaseBuilding(Lease leaseId) {
-        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey(), AttachLevel.IdOnly, false);
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.IdOnly);
 
         if (lease.unit().isNull()) {
-            return null; // no unit selected still!..
-        } else if (!lease.unit().building().isValueDetached()) {
-            return lease.unit().building();
-        } else {
-            Building building;
-            {
-                EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-                criteria.eq(criteria.proto().units().$().leases(), lease);
-                building = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
+            if (LeaseApplication.Status.isOnlineApplication(lease.leaseApplication())) {
+                // OnlineApplication, Case of ILS link, see  @link: OnlineApplicationFacadeImpl.getOnlineApplicationPolicyNode
+                Persistence.ensureRetrieve(lease.leaseApplication().onlineApplication().ilsBuilding(), AttachLevel.IdOnly);
+                return lease.leaseApplication().onlineApplication().ilsBuilding();
             }
-            if (building != null) {
-                return building;
-            }
-
-            // OnlineApplication, Case of ILS link, see  OnlineApplicationFacadeImpl.getOnlineApplicationPolicyNode
-            {
-                EntityQueryCriteria<MasterOnlineApplication> criteria = EntityQueryCriteria.create(MasterOnlineApplication.class);
-                criteria.eq(criteria.proto().leaseApplication().lease(), lease);
-                MasterOnlineApplication masterOnlineApplication = Persistence.service().retrieve(criteria);
-                if (masterOnlineApplication != null) {
-                    building = masterOnlineApplication.ilsBuilding();
-                }
-            }
-            if (building == null) {
-                return building;
-            }
-
-            throw new Error();
+            return null; // no unit selected yet!..
         }
+
+        return lease.unit().building();
     }
 
     private void initializeApprovalChecklist(LeaseApplication leaseApplication) {

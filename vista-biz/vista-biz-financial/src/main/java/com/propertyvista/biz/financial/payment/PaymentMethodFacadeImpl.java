@@ -85,7 +85,7 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     @Override
     public List<LeasePaymentMethod> retrieveLeasePaymentMethods(LeaseTermParticipant<? extends LeaseParticipant<?>> participantId, PaymentMethodTarget usage,
             VistaApplication vistaApplication) {
-        Persistence.ensureRetrieve(participantId, AttachLevel.Attached);
+        Persistence.ensureRetrieve(participantId.leaseParticipant(), AttachLevel.IdOnly);
         return retrieveLeasePaymentMethods(participantId.leaseParticipant(), usage, vistaApplication);
     }
 
