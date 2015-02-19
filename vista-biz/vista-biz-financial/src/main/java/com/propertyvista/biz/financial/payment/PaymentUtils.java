@@ -80,9 +80,7 @@ class PaymentUtils {
 
     public static boolean isPaymentsAllowed(BillingAccount billingAccountId) {
         if (PaymentRecord.merchantAccountIsRequedForPayments) {
-            EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), billingAccountId));
-            return Persistence.service().retrieve(criteria) != null;
+            return (getMerchantAccount(billingAccountId) != null);
         } else {
             return true;
         }
@@ -95,9 +93,7 @@ class PaymentUtils {
     }
 
     public static boolean isElectronicPaymentsSetup(BillingAccount billingAccountId) {
-        EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), billingAccountId));
-        return isElectronicPaymentsSetup(Persistence.service().retrieve(criteria));
+        return isElectronicPaymentsSetup(getMerchantAccount(billingAccountId));
     }
 
     public static MerchantElectronicPaymentSetup getEffectiveElectronicPaymentsSetup(MerchantAccount merchantAccount) {
@@ -127,9 +123,7 @@ class PaymentUtils {
     }
 
     private static MerchantElectronicPaymentSetup getEffectiveElectronicPaymentsSetup(BillingAccount billingAccountId) {
-        EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), billingAccountId));
-        MerchantAccount merchantAccount = Persistence.service().retrieve(criteria);
+        MerchantAccount merchantAccount = getMerchantAccount(billingAccountId);
         if (merchantAccount != null) {
             return getEffectiveElectronicPaymentsSetup(merchantAccount);
         } else {
