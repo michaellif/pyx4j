@@ -45,7 +45,7 @@ public abstract class VersionedLister<E extends IVersionedEntity<?>> extends Sit
 
     private VersionDisplayMode versionDisplayMode = VersionDisplayMode.displayFinal;
 
-    private final RadioGroup<VersionDisplayMode> displayModeButton = new RadioGroup<VersionDisplayMode>(Layout.HORISONTAL);
+    private final RadioGroup<VersionDisplayMode> displayModeButton = new RadioGroup<VersionDisplayMode>(Layout.HORIZONTAL);
     {
         displayModeButton.setOptions(new ArrayList<VersionDisplayMode>(EnumSet.allOf(VersionDisplayMode.class)));
         displayModeButton.setValue(versionDisplayMode);
