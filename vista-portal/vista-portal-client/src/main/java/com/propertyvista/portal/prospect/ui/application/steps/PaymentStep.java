@@ -129,7 +129,7 @@ public class PaymentStep extends ApplicationWizardStep {
 
         formPanel.h3(i18n.tr("Payment Method"));
         formPanel.append(Location.Left, proto().payment().selectPaymentMethod(),
-                new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL)).decorate();
+                new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORIZONTAL)).decorate();
         formPanel.append(Location.Left, proto().payment().profiledPaymentMethod(), profiledPaymentMethodsCombo).decorate();
         formPanel.append(Location.Left, proto().payment().paymentMethod(), paymentMethodEditor);
         formPanel.hr();
