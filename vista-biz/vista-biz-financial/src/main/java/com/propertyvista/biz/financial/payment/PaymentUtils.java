@@ -172,7 +172,8 @@ class PaymentUtils {
                 return merchantAccount;
             }
         }
-        throw new UserRuntimeException(i18n.tr("No active merchantAccount found to process the payment"));
+//        throw new UserRuntimeException(i18n.tr("No active merchantAccount found to process the payment"));
+        return getMerchantAccount(billingAccountId);
     }
 
     public static MerchantAccount retrieveValidMerchantAccount(Building buildingId) {
