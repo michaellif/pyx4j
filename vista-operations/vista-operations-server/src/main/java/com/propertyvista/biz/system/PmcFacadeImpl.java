@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.Locale;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ApplicationVersion;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -23,7 +24,11 @@ import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.server.ConnectionTarget;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -191,16 +196,31 @@ public class PmcFacadeImpl implements PmcFacade {
     @Override
     public void activatePmc(Pmc pmcId) {
         Pmc pmc = Persistence.service().retrieve(Pmc.class, pmcId.getPrimaryKey());
+
+        final Key pmcPrimaryKey = pmcId.getPrimaryKey();
         // First time create preload
         if (pmc.status().getValue() == PmcStatus.Created) {
-            pmc.status().setValue(PmcStatus.Activating);
-            Persistence.service().persist(pmc);
+            new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(new Executable<Void, RuntimeException>() {
+                @Override
+                public Void execute() {
+                    Pmc pmc = Persistence.service().retrieve(Pmc.class, pmcPrimaryKey);
+                    pmc.status().setValue(PmcStatus.Activating);
+                    Persistence.service().persist(pmc);
+                    return null;
+                }
+            });
 
             PmcCreator.preloadPmc(pmc);
 
-            pmc.status().setValue(PmcStatus.Active);
-
-            Persistence.service().persist(pmc);
+            new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(new Executable<Void, RuntimeException>() {
+                @Override
+                public Void execute() {
+                    Pmc pmc = Persistence.service().retrieve(Pmc.class, pmcPrimaryKey);
+                    pmc.status().setValue(PmcStatus.Active);
+                    Persistence.service().persist(pmc);
+                    return null;
+                }
+            });
 
         } else if (EnumSet.of(PmcStatus.Activating, PmcStatus.Terminated).contains(pmc.status().getValue())) {
             throw new UserRuntimeException(i18n.tr("Invalid transition {0}", pmc.status().getValue()));
