@@ -64,7 +64,7 @@ public class PmcCompanyInfoForm extends CrmEntityForm<PmcCompanyInfoDTO> {
             formPanel.br();
         }
 
-        formPanel.append(Location.Dual, proto().websiteDnsName()).decorate();
+        formPanel.append(Location.Dual, proto().websiteDnsConfig().customerDnsName()).decorate();
 
         if (!isViewable()) {
             formPanel.br();
@@ -89,7 +89,7 @@ public class PmcCompanyInfoForm extends CrmEntityForm<PmcCompanyInfoDTO> {
             formPanel.br();
         }
 
-        formPanel.append(Location.Dual, proto().portalDnsName()).decorate();
+        formPanel.append(Location.Dual, proto().portalDnsConfig().customerDnsName()).decorate();
 
         if (!isViewable()) {
             formPanel.br();
