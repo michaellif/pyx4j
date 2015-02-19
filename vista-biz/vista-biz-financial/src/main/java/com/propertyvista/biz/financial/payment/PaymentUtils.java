@@ -42,7 +42,6 @@ import com.propertyvista.domain.pmc.fee.AbstractPaymentSetup;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -61,11 +60,26 @@ class PaymentUtils {
         }
     }
 
+    static MerchantAccount getMerchantAccount(BillingAccount billingAccountId) {
+        EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), billingAccountId));
+        MerchantAccount merchantAccount = Persistence.service().retrieve(criteria);
+        if (merchantAccount != null) {
+            return merchantAccount;
+        } else {
+            EntityQueryCriteria<Lease> criteria2 = EntityQueryCriteria.create(Lease.class);
+            criteria2.eq(criteria2.proto().billingAccount(), billingAccountId);
+            Lease leaseId = Persistence.service().retrieve(criteria2, AttachLevel.IdOnly);
+            Building building = ServerSideFactory.create(LeaseFacade.class).getLeaseBuilding(leaseId);
+            EntityQueryCriteria<MerchantAccount> criteria3 = EntityQueryCriteria.create(MerchantAccount.class);
+            criteria3.eq(criteria.proto()._buildings(), building);
+            return Persistence.service().retrieve(criteria3);
+        }
+    }
+
     public static boolean isPaymentsAllowed(BillingAccount billingAccountId) {
         if (PaymentRecord.merchantAccountIsRequedForPayments) {
-            EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), billingAccountId));
-            return Persistence.service().retrieve(criteria) != null;
+            return (getMerchantAccount(billingAccountId) != null);
         } else {
             return true;
         }
@@ -78,14 +92,12 @@ class PaymentUtils {
     }
 
     public static boolean isElectronicPaymentsSetup(BillingAccount billingAccountId) {
-        EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), billingAccountId));
-        return isElectronicPaymentsSetup(Persistence.service().retrieve(criteria));
+        return isElectronicPaymentsSetup(getMerchantAccount(billingAccountId));
     }
 
     public static MerchantElectronicPaymentSetup getEffectiveElectronicPaymentsSetup(MerchantAccount merchantAccount) {
-        MerchantElectronicPaymentSetup paymentsSetup;
         if (isElectronicPaymentsSetup(merchantAccount)) {
+            MerchantElectronicPaymentSetup paymentsSetup;
             if (merchantAccount.merchantTerminalIdConvenienceFee().isNull()) {
                 merchantAccount.setup().acceptedCreditCardConvenienceFee().setValue(false);
             }
@@ -103,17 +115,14 @@ class PaymentUtils {
             if (systemState.enableInteracMaintenance().getValue(false)) {
                 paymentsSetup.acceptedInterac().setValue(false);
             }
+            return paymentsSetup;
         } else {
-            paymentsSetup = EntityFactory.create(MerchantElectronicPaymentSetup.class);
+            return EntityFactory.create(MerchantElectronicPaymentSetup.class);
         }
-        return paymentsSetup;
     }
 
     private static MerchantElectronicPaymentSetup getEffectiveElectronicPaymentsSetup(BillingAccount billingAccountId) {
-        EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), billingAccountId));
-        MerchantAccount merchantAccount = Persistence.service().retrieve(criteria);
-        return getEffectiveElectronicPaymentsSetup(merchantAccount);
+        return getEffectiveElectronicPaymentsSetup(getMerchantAccount(billingAccountId));
     }
 
     static MerchantElectronicPaymentSetup getEffectiveElectronicPaymentsSetup(Building buildingId) {
@@ -142,14 +151,10 @@ class PaymentUtils {
     }
 
     static MerchantAccount retrieveValidMerchantAccount(PaymentRecord paymentRecord) {
-        return retrieveValidMerchantAccount(paymentRecord.billingAccount());
-    }
-
-    static MerchantAccount retrieveValidMerchantAccount(BillingAccount billingAccountId) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
         criteria.eq(criteria.proto().invalid(), Boolean.FALSE);
         criteria.eq(criteria.proto().status(), MerchantAccountActivationStatus.Active);
-        criteria.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), billingAccountId);
+        criteria.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), paymentRecord.billingAccount());
         for (MerchantAccount merchantAccount : Persistence.service().query(criteria)) {
             if (!merchantAccount.merchantTerminalId().isNull()) {
                 return merchantAccount;
@@ -272,10 +277,9 @@ class PaymentUtils {
         }
         PaymentTypeSelectionPolicy paymentMethodSelectionPolicy;
         {
-            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().leases().$().billingAccount(), billingAccountId));
-            paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(Persistence.service().retrieve(criteria),
-                    PaymentTypeSelectionPolicy.class);
+            Persistence.ensureRetrieve(billingAccount.lease(), AttachLevel.IdOnly);
+            PolicyNode node = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(billingAccount.lease());
+            paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, PaymentTypeSelectionPolicy.class);
         }
         return PaymentAcceptanceUtils.getAllowedCreditCardTypes(PaymentMethodTarget.TODO, vistaApplication, merchantSetup, systemSetup,
                 paymentAccepted == PaymentAccepted.CashEquivalent, paymentMethodSelectionPolicy, forConvenienceFeeOnly);
