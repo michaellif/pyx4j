@@ -42,7 +42,6 @@ import com.propertyvista.domain.pmc.fee.AbstractPaymentSetup;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -290,10 +289,9 @@ class PaymentUtils {
         }
         PaymentTypeSelectionPolicy paymentMethodSelectionPolicy;
         {
-            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().leases().$().billingAccount(), billingAccountId));
-            paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(Persistence.service().retrieve(criteria),
-                    PaymentTypeSelectionPolicy.class);
+            Persistence.ensureRetrieve(billingAccount.lease(), AttachLevel.IdOnly);
+            PolicyNode node = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(billingAccount.lease());
+            paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, PaymentTypeSelectionPolicy.class);
         }
         return PaymentAcceptanceUtils.getAllowedCreditCardTypes(PaymentMethodTarget.TODO, vistaApplication, merchantSetup, systemSetup,
                 paymentAccepted == PaymentAccepted.CashEquivalent, paymentMethodSelectionPolicy, forConvenienceFeeOnly);
