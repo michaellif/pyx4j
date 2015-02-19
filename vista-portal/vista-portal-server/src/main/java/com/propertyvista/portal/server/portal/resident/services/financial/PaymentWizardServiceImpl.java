@@ -19,6 +19,7 @@ import java.util.concurrent.Callable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
@@ -35,6 +36,7 @@ import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
 import com.propertyvista.config.ThreadPoolNames;
+import com.propertyvista.config.VistaSystemMaintenance;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo;
@@ -81,6 +83,10 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
                 ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), PaymentMethodTarget.OneTimePayment,
                         VistaApplication.resident));
 
+        if (VistaSystemMaintenance.getApplicationsState().tenantsPaymentsDisabled().getValue()) {
+            dto.allowedPaymentsSetup().set(null);
+        }
+
         dto.address().set(AddressRetriever.getLeaseAddress(lease));
 
         dto.propertyCode().set(lease.unit().building().propertyCode());
@@ -119,6 +125,10 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
 
     @Override
     protected boolean persist(PaymentRecord bo, PaymentDTO to) {
+        if (VistaSystemMaintenance.getApplicationsState().tenantsPaymentsDisabled().getValue()) {
+            throw new UserRuntimeException(true, i18n.tr("Application is Unavailable due to short maintenance.\nPlease try again in one hour"));
+        }
+
         Lease lease = Persistence.service().retrieve(Lease.class, ResidentPortalContext.getLeaseIdStub().getPrimaryKey());
 
         bo.paymentMethod().customer().set(ResidentPortalContext.getCustomer());

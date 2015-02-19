@@ -2106,6 +2106,18 @@ ApartmentUnit,Kitchen-Pantry,Walls / Ceiling,Walls,Paint,STANDARD
 ApartmentUnit,Kitchen-Pantry,Walls / Ceiling,Walls,Sheetrock repair,STANDARD
 ApartmentUnit,Kitchen-Pantry,Walls / Ceiling,Walls,Stress crack repair,STANDARD
 ApartmentUnit,Laundry Room,Air Conditioning / Heat,Adjust Vent,,STANDARD
+ApartmentUnit,Laundry Room,Air Conditioning / Heat,Ceiling Repair,,STANDARD
+ApartmentUnit,Laundry Room,Air Conditioning / Heat,Door Repair,,STANDARD
+ApartmentUnit,Laundry Room,Air Conditioning / Heat,Dryer repair,,STANDARD
+ApartmentUnit,Laundry Room,Air Conditioning / Heat,Floor Repair,,STANDARD
+ApartmentUnit,Laundry Room,Air Conditioning / Heat,Light Repair,,STANDARD
+ApartmentUnit,Laundry Room,Air Conditioning / Heat,No Hot Water,,STANDARD
+ApartmentUnit,Laundry Room,Air Conditioning / Heat,Not In List,,STANDARD
+ApartmentUnit,Laundry Room,Air Conditioning / Heat,Plumbing,,STANDARD
+ApartmentUnit,Laundry Room,Air Conditioning / Heat,Smoke Detector Repair,,STANDARD
+ApartmentUnit,Laundry Room,Air Conditioning / Heat,Wall Repair,,STANDARD
+ApartmentUnit,Laundry Room,Air Conditioning / Heat,Washer repair,,STANDARD
+ApartmentUnit,Laundry Room,Air Conditioning / Heat,Water Leak (Explain),,EMERGENCY
 ApartmentUnit,Living Room,Air Conditioning / Heat,Adjust Vent,,STANDARD
 ApartmentUnit,Living Room,Air Conditioning / Heat,Air Conditioning,Area of apartment does not cool,STANDARD
 ApartmentUnit,Living Room,Air Conditioning / Heat,Air Conditioning,Blowing cool air,STANDARD

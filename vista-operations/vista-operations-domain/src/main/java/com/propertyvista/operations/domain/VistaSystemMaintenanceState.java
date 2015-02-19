@@ -16,12 +16,13 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
+import com.pyx4j.i18n.annotations.I18n;
 
 /**
  * All boolean are set to false by default.
  */
-
 @Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface VistaSystemMaintenanceState extends SystemMaintenanceState {
 
     @Caption(description = "When checked disables TenantSure on tenant portal")
@@ -36,5 +37,8 @@ public interface VistaSystemMaintenanceState extends SystemMaintenanceState {
     IPrimitive<Boolean> enableInteracMaintenance();
 
     IPrimitive<Boolean> enableEquifaxMaintenance();
+
+    //N.B. In PMC it can be enabled even when globally it is disabled.
+    VistaApplicationsSystemMaintenanceState applications();
 
 }

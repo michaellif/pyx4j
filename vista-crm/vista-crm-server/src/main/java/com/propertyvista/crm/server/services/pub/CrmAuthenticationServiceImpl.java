@@ -30,6 +30,7 @@ import com.pyx4j.security.shared.Behavior;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.VistaSystemMaintenance;
 import com.propertyvista.crm.rpc.CrmUserVisit;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.domain.preferences.CrmUserPreferences;
@@ -74,6 +75,11 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
     @Override
     protected Collection<Behavior> getAccountSetupRequiredBehaviors() {
         return Arrays.asList(new Behavior[] { getPasswordChangeRequiredBehavior(), VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired });
+    }
+
+    @Override
+    protected boolean applicationLoginDisabled() {
+        return VistaSystemMaintenance.getApplicationsState().crmLoginDisabled().getValue();
     }
 
     private boolean isAccountRecoveryOptionsConfigured(CrmUserCredential userCredential) {
