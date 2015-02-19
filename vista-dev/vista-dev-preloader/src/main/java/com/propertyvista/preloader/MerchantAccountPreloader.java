@@ -43,18 +43,23 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
 
     @Override
     public String create() {
+        System.out.println("--- MerchantAccountPreloader.create() 01---");
         if (accountImport == null) {
             EntityCSVReciver<MerchantAccountImport> rcv = EntityCSVReciver.create(MerchantAccountImport.class);
             rcv.setHeaderIgnoreCase(true);
             accountImport = rcv.loadResourceFile("MerchantAccountsImport.xlsx");
         }
 
+        System.out.println("--- MerchantAccountPreloader.create() 02---");
+
         final Pmc pmc = VistaDeployment.getCurrentPmc().duplicate();
+
+        System.out.println("--- MerchantAccountPreloader.create() 03---");
 
         TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
-
+                System.out.println("--- MerchantAccountPreloader.create() 04---");
                 Persistence.service().retrieveMember(pmc.paymentTypeInfo());
                 int ordinal = -1;
                 try {
@@ -63,6 +68,7 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                 } catch (IllegalArgumentException ignore) {
                 }
                 if (ordinal >= 0) {
+                    System.out.println("--- MerchantAccountPreloader.create() 05---");
                     String caledonCompanyId = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class)
                             .getCaledonFundsTransferConfiguration().getIntefaceCompanyId();
                     List<MerchantAccountImport> companyImport = new ArrayList<MerchantAccountImport>();
@@ -76,7 +82,7 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                         }
                     }
                     Persistence.service().persist(pmc.paymentTypeInfo());
-
+                    System.out.println("--- MerchantAccountPreloader.create() 06---");
                     // Add one or two (for vista) working accounts.
                     int nWorkingAccounts = 1;
                     if (ordinal == 0) {
@@ -132,6 +138,8 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                         }
                     }
 
+                    System.out.println("--- MerchantAccountPreloader.create() 07---");
+
                     int internalAccounts = 3;
 
                     for (int n = 0; n <= internalAccounts; n++) {
@@ -163,7 +171,9 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                         ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, merchantAccount);
                     }
 
+                    System.out.println("--- MerchantAccountPreloader.create() 08---");
                 } else {
+                    System.out.println("--- MerchantAccountPreloader.create() 09---");
                     int internalAccounts = 2;
                     int offsetNumber = Persistence.service().count(EntityQueryCriteria.create(PmcMerchantAccountIndex.class));
                     for (int n = 0; n <= internalAccounts; n++) {
@@ -196,6 +206,7 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                     }
                 }
 
+                System.out.println("--- MerchantAccountPreloader.create() 10---");
                 return null;
             }
         });
