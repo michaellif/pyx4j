@@ -48,7 +48,7 @@ public class CustomDNSManager {
         }
 
         PmcDnsConfigTO pmcDnsConfig = EntityFactory.create(PmcDnsConfigTO.class);
-        pmcDnsConfig.dnsNameDefault().setValue(VistaDeployment.getBaseApplicationURL(pmc, application, true));
+        pmcDnsConfig.dnsNameDefault().setValue(PmcDNSUtils.getHostName(VistaDeployment.getBaseApplicationURL(pmc, application, true)));
         pmcDnsConfig.dnsNameIsActive().setValue(PmcDNSUtils.isDnsNameActiveForApplication(pmc, application));
         pmcDnsConfig.serverIPAddress().setValue(PmcDNSUtils.getDefaultIpAddressForApplication(application));
 
