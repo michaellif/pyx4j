@@ -100,9 +100,9 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
                 return new CPhoneField();
             case radiogroup:
                 if (mm.getValueClass() == Boolean.class) {
-                    return new CRadioGroupBoolean(RadioGroup.Layout.HORISONTAL);
+                    return new CRadioGroupBoolean(RadioGroup.Layout.HORIZONTAL);
                 } else if (mm.getValueClass().isEnum()) {
-                    return new CRadioGroupEnum(mm.getValueClass(), RadioGroup.Layout.HORISONTAL);
+                    return new CRadioGroupEnum(mm.getValueClass(), RadioGroup.Layout.HORIZONTAL);
                 } else {
                     throw new Error("Unknown");
                 }

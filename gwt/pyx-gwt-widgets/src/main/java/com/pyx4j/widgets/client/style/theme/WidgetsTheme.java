@@ -77,7 +77,7 @@ public class WidgetsTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        watermark, hover, focused, readonly, disabled, active, semitransparent, singleLine, selected, playing, paused, left, right, editable, editing, horizontal
+        watermark, hover, focused, readonly, disabled, active, semitransparent, singleLine, selected, playing, paused, left, right, editable, editing, horizontal, vertical
     }
 
     public WidgetsTheme() {
@@ -419,6 +419,9 @@ public class WidgetsTheme extends Theme {
         style.addProperty("display", "inline-block");
         addStyle(style);
 
+        style = new Style(".", StyleName.OptionGroup, "-", WidgetsTheme.StyleDependent.vertical);
+        style.addProperty("padding", "6px 0");
+        addStyle(style);
     }
 
     protected void initGlassPanelStyle() {

@@ -25,15 +25,17 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.CheckGroup;
+import com.pyx4j.widgets.client.OptionGroup.Layout;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -294,54 +296,56 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
 
     private class ColumnSelectorDialog extends OkCancelDialog {
 
-        private final List<CheckBox> columnChecksList = new ArrayList<CheckBox>();
+        private final CheckGroup<ColumnDescriptor> checkGroup;
 
         public ColumnSelectorDialog() {
             super("Select Columns");
+            checkGroup = new CheckGroup<>(Layout.VERTICAL);
+            checkGroup.setFormatter(new IFormatter<ColumnDescriptor, SafeHtml>() {
 
-            setDialogPixelWidth(300);
-            FlowPanel panel = new FlowPanel();
+                @Override
+                public SafeHtml format(ColumnDescriptor value) {
+                    return SafeHtmlUtils.fromTrustedString(value.getColumnTitle());
+                }
+            });
+
+            checkGroup.setHeight("200px");
+            checkGroup.setWidth("100%");
+
+            List<ColumnDescriptor> options = new ArrayList<>();
+            List<ColumnDescriptor> value = new ArrayList<>();
+
             for (ColumnDescriptor column : getColumnDescriptors()) {
                 if (!column.isSearchableOnly()) {
-                    CheckBox columnCheck = new CheckBox(column.getColumnTitle());
-                    columnCheck.setValue(column.isVisible());
-                    columnChecksList.add(columnCheck);
-                    panel.add(columnCheck);
-                    panel.add(new HTML());
+                    options.add(column);
+                    if (column.isVisible()) {
+                        value.add(column);
+                    }
                 }
             }
 
-            ScrollPanel scroll = new ScrollPanel(panel);
-            scroll.setHeight("200px");
-            scroll.setStyleName(DataTableTheme.StyleName.DataTableColumnMenu.name());
+            checkGroup.setOptions(options);
+            checkGroup.setValue(value);
 
-            setBody(scroll.asWidget());
+            setDialogPixelWidth(300);
+            setBody(new ScrollPanel(checkGroup));
         }
 
         @Override
         public boolean onClickOk() {
-            boolean noSelectedColumns = true;
-            for (CheckBox checkBox : columnChecksList) {
-                if (checkBox.getValue()) {
-                    noSelectedColumns = false;
-                    break;
-                }
-            }
-            if (noSelectedColumns) {
+            Collection<ColumnDescriptor> selection = checkGroup.getValue();
+            if (selection.size() == 0) {
                 MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Please specify at least one column!"));
                 return false;
             }
 
             boolean hasChanged = false;
-            int checksListIdx = 0;
             for (ColumnDescriptor column : getColumnDescriptors()) {
                 if (!column.isSearchableOnly()) {
-                    boolean requestedVisible = columnChecksList.get(checksListIdx).getValue();
-                    if (column.isVisible() != requestedVisible) {
-                        column.setVisible(requestedVisible);
+                    if (selection.contains(column) ^ column.isVisible()) {
+                        column.setVisible(!column.isVisible());
                         hasChanged = true;
                     }
-                    checksListIdx++;
                 }
             }
 

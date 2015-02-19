@@ -55,7 +55,7 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
             checkGroup.setOptions(new ArrayList(EnumSet.allOf((Class<Enum>) mm.getValueClass())));
         } else if (mm.getValueClass().equals(Boolean.class)) {
 
-            CheckGroup<Boolean> booleanGroup = new CheckGroup<>(Layout.HORISONTAL);
+            CheckGroup<Boolean> booleanGroup = new CheckGroup<>(Layout.HORIZONTAL);
             booleanGroup.setFormatter(new IFormatter<Boolean, SafeHtml>() {
 
                 @Override

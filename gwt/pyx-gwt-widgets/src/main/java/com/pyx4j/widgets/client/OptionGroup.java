@@ -50,7 +50,7 @@ import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 public class OptionGroup<E> extends FlowPanel implements IFocusWidget, HasValueChangeHandlers<E> {
 
     public enum Layout {
-        VERTICAL, HORISONTAL;
+        VERTICAL, HORIZONTAL;
     }
 
     private boolean enabled = true;
@@ -78,8 +78,10 @@ public class OptionGroup<E> extends FlowPanel implements IFocusWidget, HasValueC
 
         setStyleName(WidgetsTheme.StyleName.OptionGroup.name());
 
-        if (layout == Layout.HORISONTAL) {
+        if (layout == Layout.HORIZONTAL) {
             addStyleDependentName(WidgetsTheme.StyleDependent.horizontal.name());
+        } else if (layout == Layout.VERTICAL) {
+            addStyleDependentName(WidgetsTheme.StyleDependent.vertical.name());
         }
     }
 

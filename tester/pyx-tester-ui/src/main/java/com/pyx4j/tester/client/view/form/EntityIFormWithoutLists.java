@@ -126,7 +126,7 @@ public class EntityIFormWithoutLists extends CForm<EntityI> {
             rbgoptions.put(i, "Value" + i);
         }
 
-        CRadioGroupInteger rgi = new CRadioGroupInteger(Layout.HORISONTAL, rbgoptions);
+        CRadioGroupInteger rgi = new CRadioGroupInteger(Layout.HORIZONTAL, rbgoptions);
         formPanel.append(Location.Left, proto().intRadioGroupHorizontal(), rgi).decorate();
 
         rgi = new CRadioGroupInteger(Layout.VERTICAL, rbgoptions);

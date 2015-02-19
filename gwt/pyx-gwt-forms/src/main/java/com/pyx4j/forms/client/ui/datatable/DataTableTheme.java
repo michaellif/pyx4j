@@ -32,7 +32,7 @@ import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 public class DataTableTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        DataTable, DataTableHolder, DataTableRow, DataTableHeader, DataTableHeaderItem, DataTableActionsBar, DataTableActionsBarContent, DataTableToolBar, DataTablePageNavigBar, DataTableColumnSelector, DataTableColumnMenu,
+        DataTable, DataTableHolder, DataTableRow, DataTableHeader, DataTableHeaderItem, DataTableActionsBar, DataTableActionsBarContent, DataTableToolBar, DataTablePageNavigBar, DataTableColumnSelector,
 
         DataTableFilter, DataTableFilterMain, DataTableFilterHeader, DataTableFilterFooter, DataTableFilterItem,
 
@@ -95,14 +95,6 @@ public class DataTableTheme extends Theme {
         style = new Style(selectorPrefix + ":hover");
         style.addProperty("background-color", ThemeColor.foreground, 0.8);
         style.addProperty("color", ThemeColor.foreground, 0.1);
-        addStyle(style);
-
-        style = new Style(".", StyleName.DataTableColumnMenu);
-        style.addProperty("background-color", ThemeColor.foreground, 0.1);
-        style.addProperty("color", ThemeColor.foreground, 0.9);
-        style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColor.foreground, 0.9);
-        style.addProperty("padding", "5px 7px");
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableRow);
