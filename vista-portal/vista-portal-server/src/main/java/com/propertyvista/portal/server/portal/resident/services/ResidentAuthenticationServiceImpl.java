@@ -46,6 +46,7 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.config.VistaSystemMaintenance;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.ResidentPortalPolicy;
@@ -97,6 +98,11 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
     @Override
     protected Behavior getPasswordChangeRequiredBehavior() {
         return VistaBasicBehavior.ResidentPortalPasswordChangeRequired;
+    }
+
+    @Override
+    protected boolean applicationLoginDisabled() {
+        return VistaSystemMaintenance.getApplicationsState().tenantsLoginDisabled().getValue();
     }
 
     @Override
@@ -175,7 +181,8 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
                     behaviors.add(PortalResidentBehavior.CommunicationCreateMessages);
                 }
                 // TODO Make it properly in PaymentFacade
-                {
+                if (!VistaSystemMaintenance.getApplicationsState().tenantsPaymentsDisabled().getValue()) {
+
                     EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
                     criteria.eq(criteria.proto().lease(), selectedLeaseId);
                     BillingAccount billingAccount = Persistence.service().retrieve(criteria);

@@ -43,6 +43,7 @@ import com.propertyvista.biz.system.PmcNameValidator;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.config.VistaSystemMaintenance;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
@@ -120,6 +121,8 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         Persistence.service().retrieveMember(bo.paymentTypeInfo());
         to.paymentTypeInfo().set(bo.paymentTypeInfo());
 
+        to.maintenance().set(VistaSystemMaintenance.getApplicationsState(bo));
+
     }
 
     @Override
@@ -150,6 +153,8 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
             encryptPassword(yardiCredential);
         }
         encryptPassword(bo.equifaxInfo());
+
+        VistaSystemMaintenance.setApplicationsState(bo, to.maintenance());
 
         boolean updated = super.persist(bo, to);
 

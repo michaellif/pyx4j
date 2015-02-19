@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -77,6 +78,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         addTab(createEquifaxlTab(), i18n.tr("Equifax"));
         addTab(createYardiTab(), i18n.tr("Yardi"));
         addTab(createFundsTransferTab(), i18n.tr("Funds Transfer"));
+        addTab(createMaintenanceTab(), i18n.tr("Maintenance"));
         setTabEnabled(addTab(createCardTransactionTab(), i18n.tr("Card Transaction Records")), !isEditable());
         setTabEnabled(addTab(createDirectDebitTab(), i18n.tr("Direct Debit Records")), !isEditable());
     }
@@ -294,6 +296,17 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
         formPanel.h2(i18n.tr("Override"));
         formPanel.append(Location.Dual, proto().paymentTypeInfo(), new PaymentFeesForm<PmcPaymentTypeInfo>(PmcPaymentTypeInfo.class));
+
+        return formPanel;
+    }
+
+    private IsWidget createMaintenanceTab() {
+        FormPanel formPanel = new FormPanel(this);
+
+        formPanel.append(Location.Dual, proto().maintenance().crmLoginDisabled(), new CComboBoxBoolean()).decorate();
+        formPanel.append(Location.Dual, proto().maintenance().crmPaymentsDisabled(), new CComboBoxBoolean()).decorate();
+        formPanel.append(Location.Dual, proto().maintenance().tenantsLoginDisabled(), new CComboBoxBoolean()).decorate();
+        formPanel.append(Location.Dual, proto().maintenance().tenantsPaymentsDisabled(), new CComboBoxBoolean()).decorate();
 
         return formPanel;
     }

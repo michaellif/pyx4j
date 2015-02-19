@@ -18,6 +18,7 @@ import java.util.EnumSet;
 
 import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -54,16 +55,22 @@ public class MaintenanceForm extends OperationsEntityForm<VistaSystemMaintenance
 
         selectTab(addTab(formPanel, i18n.tr("General")));
 
-        FormPanel tenantSureMaintenanceTab = new FormPanel(this);
+        FormPanel maintenanceTab = new FormPanel(this);
 
-        tenantSureMaintenanceTab.append(Location.Dual, proto().enableTenantSureMaintenance()).decorate().componentWidth(60);
-        tenantSureMaintenanceTab.append(Location.Dual, proto().enableFundsTransferMaintenance()).decorate().componentWidth(60);
-        tenantSureMaintenanceTab.append(Location.Dual, proto().enableCreditCardMaintenance()).decorate().componentWidth(60);
-        tenantSureMaintenanceTab.append(Location.Dual, proto().enableCreditCardConvenienceFeeMaintenance()).decorate().componentWidth(60);
-        tenantSureMaintenanceTab.append(Location.Dual, proto().enableInteracMaintenance()).decorate().componentWidth(60);
-        tenantSureMaintenanceTab.append(Location.Dual, proto().enableEquifaxMaintenance()).decorate().componentWidth(60);
+        maintenanceTab.append(Location.Dual, proto().enableTenantSureMaintenance()).decorate().componentWidth(60);
+        maintenanceTab.append(Location.Dual, proto().enableFundsTransferMaintenance()).decorate().componentWidth(60);
+        maintenanceTab.append(Location.Dual, proto().enableCreditCardMaintenance()).decorate().componentWidth(60);
+        maintenanceTab.append(Location.Dual, proto().enableCreditCardConvenienceFeeMaintenance()).decorate().componentWidth(60);
+        maintenanceTab.append(Location.Dual, proto().enableInteracMaintenance()).decorate().componentWidth(60);
+        maintenanceTab.append(Location.Dual, proto().enableEquifaxMaintenance()).decorate().componentWidth(60);
 
-        addTab(tenantSureMaintenanceTab, i18n.tr("Vista Interfaces"));
+        maintenanceTab.h1(i18n.tr("Applications (Can Also be configured per PMC)"));
+        maintenanceTab.append(Location.Dual, proto().applications().crmLoginDisabled(), new CComboBoxBoolean()).decorate();
+        maintenanceTab.append(Location.Dual, proto().applications().crmPaymentsDisabled(), new CComboBoxBoolean()).decorate();
+        maintenanceTab.append(Location.Dual, proto().applications().tenantsLoginDisabled(), new CComboBoxBoolean()).decorate();
+        maintenanceTab.append(Location.Dual, proto().applications().tenantsPaymentsDisabled(), new CComboBoxBoolean()).decorate();
+
+        addTab(maintenanceTab, i18n.tr("Vista Interfaces"));
 
     }
 }
