@@ -60,7 +60,7 @@ class PaymentUtils {
         }
     }
 
-    private static MerchantAccount getMerchantAccount(BillingAccount billingAccountId) {
+    static MerchantAccount getMerchantAccount(BillingAccount billingAccountId) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
         criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), billingAccountId));
         MerchantAccount merchantAccount = Persistence.service().retrieve(criteria);
@@ -96,8 +96,8 @@ class PaymentUtils {
     }
 
     public static MerchantElectronicPaymentSetup getEffectiveElectronicPaymentsSetup(MerchantAccount merchantAccount) {
-        MerchantElectronicPaymentSetup paymentsSetup;
         if (isElectronicPaymentsSetup(merchantAccount)) {
+            MerchantElectronicPaymentSetup paymentsSetup;
             if (merchantAccount.merchantTerminalIdConvenienceFee().isNull()) {
                 merchantAccount.setup().acceptedCreditCardConvenienceFee().setValue(false);
             }
@@ -115,22 +115,14 @@ class PaymentUtils {
             if (systemState.enableInteracMaintenance().getValue(false)) {
                 paymentsSetup.acceptedInterac().setValue(false);
             }
+            return paymentsSetup;
         } else {
-            paymentsSetup = EntityFactory.create(MerchantElectronicPaymentSetup.class);
+            return EntityFactory.create(MerchantElectronicPaymentSetup.class);
         }
-        return paymentsSetup;
     }
 
     private static MerchantElectronicPaymentSetup getEffectiveElectronicPaymentsSetup(BillingAccount billingAccountId) {
-        MerchantAccount merchantAccount = getMerchantAccount(billingAccountId);
-        if (merchantAccount != null) {
-            return getEffectiveElectronicPaymentsSetup(merchantAccount);
-        } else {
-            EntityQueryCriteria<Lease> criteria2 = EntityQueryCriteria.create(Lease.class);
-            criteria2.eq(criteria2.proto().billingAccount(), billingAccountId);
-            Lease leaseId = Persistence.service().retrieve(criteria2, AttachLevel.IdOnly);
-            return getEffectiveElectronicPaymentsSetup(ServerSideFactory.create(LeaseFacade.class).getLeaseBuilding(leaseId));
-        }
+        return getEffectiveElectronicPaymentsSetup(getMerchantAccount(billingAccountId));
     }
 
     static MerchantElectronicPaymentSetup getEffectiveElectronicPaymentsSetup(Building buildingId) {
@@ -159,21 +151,16 @@ class PaymentUtils {
     }
 
     static MerchantAccount retrieveValidMerchantAccount(PaymentRecord paymentRecord) {
-        return retrieveValidMerchantAccount(paymentRecord.billingAccount());
-    }
-
-    static MerchantAccount retrieveValidMerchantAccount(BillingAccount billingAccountId) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
         criteria.eq(criteria.proto().invalid(), Boolean.FALSE);
         criteria.eq(criteria.proto().status(), MerchantAccountActivationStatus.Active);
-        criteria.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), billingAccountId);
+        criteria.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), paymentRecord.billingAccount());
         for (MerchantAccount merchantAccount : Persistence.service().query(criteria)) {
             if (!merchantAccount.merchantTerminalId().isNull()) {
                 return merchantAccount;
             }
         }
-//        throw new UserRuntimeException(i18n.tr("No active merchantAccount found to process the payment"));
-        return getMerchantAccount(billingAccountId);
+        throw new UserRuntimeException(i18n.tr("No active merchantAccount found to process the payment"));
     }
 
     public static MerchantAccount retrieveValidMerchantAccount(Building buildingId) {
