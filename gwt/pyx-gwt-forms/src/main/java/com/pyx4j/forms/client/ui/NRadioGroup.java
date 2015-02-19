@@ -56,7 +56,10 @@ public class NRadioGroup<E> extends NFocusField<E, RadioGroup<E>, CRadioGroup<E>
 
     @Override
     protected void onEditorCreate() {
-        super.onEditorCreate();
+        //Do not call super!
+
+        setTabIndex(getCComponent().getTabIndex());
+
         List<E> options = getCComponent().getOptions();
         getEditor().setOptions(options);
 
