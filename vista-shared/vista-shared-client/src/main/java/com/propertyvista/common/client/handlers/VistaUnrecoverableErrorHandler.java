@@ -88,6 +88,10 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
         showMessage(text, NotificationType.ERROR);
     }
 
+    protected String defaultErrorMessageText() {
+        return i18n.tr("Please report the incident to technical support, describing the steps taken prior to the error.\n");
+    }
+
     @Override
     protected void showDefaultError(Throwable caught, String errorCode) {
 
@@ -95,7 +99,7 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
 
         String title = i18n.tr("An Unexpected Error Has Occurred.");
 
-        String userMessage = i18n.tr("Please report the incident to technical support, describing the steps taken prior to the error.\n");
+        String userMessage = defaultErrorMessageText();
 
         if (caught instanceof SecurityViolationException) {
             userMessage = i18n.tr("Access denied. Please contact your security administrator for any access inquiries.\n");

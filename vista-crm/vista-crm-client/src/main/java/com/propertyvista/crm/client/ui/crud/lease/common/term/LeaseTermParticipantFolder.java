@@ -142,7 +142,7 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
 
     private abstract class AddParticipantBox extends OkCancelDialog {
 
-        private final CRadioGroupEnum<AddParticipantSelection> selection = new CRadioGroupEnum<>(AddParticipantSelection.class, RadioGroup.Layout.HORISONTAL);
+        private final CRadioGroupEnum<AddParticipantSelection> selection = new CRadioGroupEnum<>(AddParticipantSelection.class, RadioGroup.Layout.HORIZONTAL);
 
         public AddParticipantBox() {
             super(getAddItemDialogCaption());

@@ -173,7 +173,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
 
     private IsWidget createSelectPaymentMethodStep() {
         FormPanel formPanel = new FormPanel(this);
-        formPanel.append(Location.Left, proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL))
+        formPanel.append(Location.Left, proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORIZONTAL))
                 .decorate().componentWidth(200);
 
         formPanel.append(Location.Left, proto().profiledPaymentMethod(), profiledPaymentMethodsCombo).decorate();

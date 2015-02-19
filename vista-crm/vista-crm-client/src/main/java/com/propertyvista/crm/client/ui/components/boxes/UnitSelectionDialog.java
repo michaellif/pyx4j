@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -53,26 +53,30 @@ public abstract class UnitSelectionDialog extends EntitySelectorTableDialog<AptU
         return Arrays.asList(//@formatter:off
                 // unit data
                 new ColumnDescriptor.Builder(proto().info().floor(), false).build(),
-                new ColumnDescriptor.Builder(proto().info().number(), true).build(),
+                new ColumnDescriptor.Builder(proto().info().number(), true).filterAlwaysShown(true).build(),
+
                 new ColumnDescriptor.Builder(proto().info().area()).build(),
-                new ColumnDescriptor.Builder(proto().info()._bedrooms()).build(),
-                new ColumnDescriptor.Builder(proto().info()._bathrooms()).build(),
+                new ColumnDescriptor.Builder(proto().info()._bedrooms()).filterAlwaysShown(true).build(),
+                new ColumnDescriptor.Builder(proto().info()._bathrooms()).filterAlwaysShown(true).build(),
+
                 new ColumnDescriptor.Builder(proto().floorplan().name()).columnTitle(i18n.tr("Floorplan")).build(),
                 new ColumnDescriptor.Builder(proto().floorplan().marketingName(), false).build(),
-                new ColumnDescriptor.Builder(proto().availability().availableForRent()).build(),
+                new ColumnDescriptor.Builder(proto().availability().availableForRent()).filterAlwaysShown(true).build(),
                 new ColumnDescriptor.Builder(proto().financial()._marketRent()).build(),
 
-                // building data                
+                // building data
                 new ColumnDescriptor.Builder(proto().building().propertyCode(), true).build(),
                 new ColumnDescriptor.Builder(proto().building().complex(), false).build(),
                 new ColumnDescriptor.Builder(proto().building().info().name(), true).columnTitle(i18n.tr("Building")).build(),
                 new ColumnDescriptor.Builder(proto().building().info().type(), false).build(),
                 new ColumnDescriptor.Builder(proto().building().info().shape(), false).build(),
+
                 new ColumnDescriptor.Builder(proto().building().info().address().streetNumber(), false).build(),
                 new ColumnDescriptor.Builder(proto().building().info().address().streetName(), false).build(),
                 new ColumnDescriptor.Builder(proto().building().info().address().city(), true).build(),
                 new ColumnDescriptor.Builder(proto().building().info().address().province(), true).build(),
                 new ColumnDescriptor.Builder(proto().building().info().address().country(), false).build(),
+
                 new ColumnDescriptor.Builder(proto().building().info().totalStoreys(), false).build(),
                 new ColumnDescriptor.Builder(proto().building().info().residentialStoreys(), false).build(),
                 new ColumnDescriptor.Builder(proto().building().info().structureType(), false).build(),
@@ -85,6 +89,7 @@ public abstract class UnitSelectionDialog extends EntitySelectorTableDialog<AptU
                 new ColumnDescriptor.Builder(proto().building().info().centralAir(), false).build(),
                 new ColumnDescriptor.Builder(proto().building().info().centralHeat(), false).build(),
                 new ColumnDescriptor.Builder(proto().building().contacts().website(), false).build(),
+
                 new ColumnDescriptor.Builder(proto().building().financial().dateAcquired(), false).build(),
                 new ColumnDescriptor.Builder(proto().building().financial().purchasePrice(), false).build(),
                 new ColumnDescriptor.Builder(proto().building().financial().marketPrice(), false).build(),

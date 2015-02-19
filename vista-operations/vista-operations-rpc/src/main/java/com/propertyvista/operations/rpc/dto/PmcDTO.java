@@ -19,6 +19,7 @@ import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.operations.domain.VistaApplicationsSystemMaintenanceState;
 import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
 
 @Transient
@@ -35,5 +36,7 @@ public interface PmcDTO extends Pmc {
     IPrimitive<String> prospectPortalUrl();
 
     DefaultPaymentFees defaultPaymentFees();
+
+    VistaApplicationsSystemMaintenanceState maintenance();
 
 }

@@ -51,10 +51,12 @@ public abstract class EmployeeSelectionDialog extends EntitySelectorTableDialog<
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
                 new ColumnDescriptor.Builder(proto().employeeId()).build(),
-                new ColumnDescriptor.Builder(proto().name()).searchable(false).build(),
                 new ColumnDescriptor.Builder(proto().title()).build(),
-                new ColumnDescriptor.Builder(proto().name().firstName()).searchableOnly().build(),
-                new ColumnDescriptor.Builder(proto().name().lastName()).searchableOnly().build(),
+
+                new ColumnDescriptor.Builder(proto().name()).searchable(false).build(),
+                new ColumnDescriptor.Builder(proto().name().firstName()).searchableOnly().filterAlwaysShown(true).build(),
+                new ColumnDescriptor.Builder(proto().name().lastName()).searchableOnly().filterAlwaysShown(true).build(),
+
                 new ColumnDescriptor.Builder(proto().email(), false).build(),
                 new ColumnDescriptor.Builder(proto().updated(), false).build()
         ); //@formatter:on

@@ -196,6 +196,12 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             }
         }).decorate();
         get(proto().building()).setMandatory(true);
+        get(proto().building()).addValueChangeHandler(new ValueChangeHandler<Building>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Building> event) {
+                get(proto().unit()).setEditable(!event.getValue().isNull());
+            }
+        });
 
         formPanel.append(Location.Left, proto().unit(), new CEntitySelectorHyperlink<AptUnit>() {
             @Override
@@ -391,7 +397,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             }
 
             get(proto().building()).setEditable(isDraft);
-            get(proto().unit()).setEditable(isDraft);
+            get(proto().unit()).setEditable(isDraft && !getValue().building().isNull());
 
             get(proto().termFrom()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
             get(proto().termTo()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);

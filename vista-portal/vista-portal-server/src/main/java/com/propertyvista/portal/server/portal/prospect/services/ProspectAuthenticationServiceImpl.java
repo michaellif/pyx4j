@@ -33,6 +33,7 @@ import com.pyx4j.security.shared.Behavior;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
+import com.propertyvista.config.VistaSystemMaintenance;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.CustomerUserCredential;
 import com.propertyvista.domain.security.PortalProspectBehavior;
@@ -74,6 +75,11 @@ public class ProspectAuthenticationServiceImpl extends VistaAuthenticationServic
     @Override
     protected Behavior getPasswordChangeRequiredBehavior() {
         return VistaBasicBehavior.ProspectPortalPasswordChangeRequired;
+    }
+
+    @Override
+    protected boolean applicationLoginDisabled() {
+        return VistaSystemMaintenance.getApplicationsState().tenantsLoginDisabled().getValue();
     }
 
     @Override

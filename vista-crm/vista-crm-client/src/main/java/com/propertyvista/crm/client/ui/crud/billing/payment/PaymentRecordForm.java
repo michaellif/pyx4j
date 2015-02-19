@@ -226,7 +226,7 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         }).decorate();
 
         formPanel.append(Location.Left, proto().selectPaymentMethod(),
-                new CRadioGroupEnum<PaymentDataDTO.PaymentSelect>(PaymentDataDTO.PaymentSelect.class, RadioGroup.Layout.HORISONTAL)).decorate();
+                new CRadioGroupEnum<PaymentDataDTO.PaymentSelect>(PaymentDataDTO.PaymentSelect.class, RadioGroup.Layout.HORIZONTAL)).decorate();
 
         formPanel.append(Location.Left, proto().profiledPaymentMethod(), profiledPaymentMethodsCombo).decorate();
         formPanel.append(Location.Left, proto().storeInProfile()).decorate().componentWidth(50);

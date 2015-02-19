@@ -121,6 +121,10 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, V 
         return true;
     }
 
+    protected boolean applicationLoginDisabled() {
+        return false;
+    }
+
     protected boolean isSessionValid() {
         boolean sessionValid = SecurityController.check(getVistaApplication())
                 && (SecurityController.check(getApplicationAccessGrantedBehavior()) || SecurityController.check(getAccountSetupRequiredBehaviors()));
@@ -254,7 +258,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, V 
             throw new UserRuntimeException(true, AbstractAntiBot.cannedLoginFailedMessage());
         }
         String email = EmailValidator.normalizeEmailAddress(request.email().getValue());
-        if (VistaDeployment.isVistaStaging()) {
+        if (VistaDeployment.isVistaStaging() || applicationLoginDisabled()) {
             if (!email.startsWith("s!")) {
                 log.warn("Staging env protection (s!${email}) triggered for user {}", email);
                 throw new UserRuntimeException(true, i18n.tr("Application is Unavailable due to short maintenance.\nPlease try again in one hour"));
@@ -471,6 +475,13 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, V 
             break;
         default:
             break;
+        }
+
+        if (applicationLoginDisabled()) {
+            if (systemWallMessage == null) {
+                systemWallMessage = new SystemWallMessage();
+            }
+            systemWallMessage.setMessage(i18n.tr("Application is Unavailable due to short maintenance.\nPlease try again in one hour"));
         }
 
         ar.setSystemWallMessage(systemWallMessage);

@@ -26,29 +26,31 @@ import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.dto.reports.AutoPayReconciliationDTO;
 import com.propertyvista.crm.rpc.services.reports.AutoPayReconciliationReportListService;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class AutoPayReconciliationReportLister extends SiteDataTablePanel<AutoPayReconciliationDTO> {
 
     private final static I18n i18n = I18n.get(AutoPayReconciliationReportLister.class);
 
     public AutoPayReconciliationReportLister() {
-        super(AutoPayReconciliationDTO.class, GWT.<AbstractCrudService<AutoPayReconciliationDTO>> create(AutoPayReconciliationReportListService.class), true);
+        super(AutoPayReconciliationDTO.class, GWT.<AbstractCrudService<AutoPayReconciliationDTO>> create(AutoPayReconciliationReportListService.class), false);
 
-        setColumnDescriptors( //
+        setColumnDescriptors(
+                //
                 new Builder(proto().tenant().lease().unit().building().propertyCode()).width("80px").filterAlwaysShown(true).build(), //
-
                 new Builder(proto().tenant().lease().unit()).width("80px").searchable(false).build(),
-
-                new Builder(proto().tenant().lease().leaseId()).width("80px").build(), //
+                new Builder(proto().tenant().lease().leaseId()).width("80px").filterAlwaysShown(VistaFeatures.instance().yardiIntegration()).build(), //
 
                 new Builder(proto().tenant()).searchable(false).build(), //
-                new Builder(proto().tenant().participantId()).columnTitle(i18n.tr("Tenant Id")).width("80px").build(), //
+                new Builder(proto().tenant().participantId()).columnTitle(i18n.tr("Tenant Id")).width("80px")
+                        .filterAlwaysShown(VistaFeatures.instance().yardiIntegration()).build(), //
+                new Builder(proto().tenant().customer().person().name().firstName(), false).columnTitle(i18n.tr("Tenant First Name")).build(),//
+                new Builder(proto().tenant().customer().person().name().lastName(), false).columnTitle(i18n.tr("Tenant Last Name")).build(),//
 
-                new Builder(proto().effectiveFrom()).build(), //
-
-                new Builder(proto().tenant().lease().expectedMoveOut(), false).build(),
-
+                new Builder(proto().effectiveFrom()).build(), // 'first billing cycle'
+                new Builder(proto().tenant().lease().expectedMoveOut(), false).build(), //
                 new Builder(proto().renewalDate()).width("80px").searchable(false).sortable(false).build(), //
+                new Builder(proto().created()).build(), //
 
                 new Builder(proto().rentCharge()).width("80px").searchable(false).sortable(false).build(), //
                 new Builder(proto().parkingCharges()).width("80px").searchable(false).sortable(false).build(), //
