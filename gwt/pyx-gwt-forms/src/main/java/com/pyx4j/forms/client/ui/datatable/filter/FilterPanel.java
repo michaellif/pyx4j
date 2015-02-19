@@ -84,10 +84,15 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
                     @Override
                     public boolean onClickOk() {
                         List<FilterItem> items = new ArrayList<>(getValue());
-                        for (ColumnDescriptor columnDescriptor : dialog.getSelectedItems()) {
-                            FilterItem item = new FilterItem(columnDescriptor);
-                            if (!items.contains(item)) {
-                                items.add(item);
+
+                        for (ColumnDescriptor cd : getColumnDescriptors()) {
+                            if (cd.isSearchable() && !cd.isFilterAlwaysShown()) {
+                                FilterItem item = new FilterItem(cd);
+                                if (dialog.getSelectedItems().contains(cd) && !items.contains(item)) {
+                                    items.add(item);
+                                } else if (!dialog.getSelectedItems().contains(cd) && items.contains(item)) {
+                                    items.remove(item);
+                                }
                             }
                         }
                         if (items.size() > 0) {

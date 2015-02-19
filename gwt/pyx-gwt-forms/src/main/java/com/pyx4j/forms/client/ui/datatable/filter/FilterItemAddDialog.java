@@ -22,16 +22,19 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.CheckGroup;
 import com.pyx4j.widgets.client.OptionGroup.Layout;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
 public class FilterItemAddDialog extends Dialog {
 
+    private static final I18n i18n = I18n.get(FilterItemAddDialog.class);
+
     private final CheckGroup<ColumnDescriptor> checkGroup;
 
     public FilterItemAddDialog(FilterPanel parent) {
-        super("Select Filter Items");
+        super(i18n.tr("Select Additional Filter Items"));
 
         checkGroup = new CheckGroup<>(Layout.VERTICAL);
         checkGroup.setFormatter(new IFormatter<ColumnDescriptor, SafeHtml>() {
@@ -48,7 +51,7 @@ public class FilterItemAddDialog extends Dialog {
         List<ColumnDescriptor> options = new ArrayList<>();
 
         for (ColumnDescriptor cd : parent.getColumnDescriptors()) {
-            if (cd.isSearchable()) {
+            if (cd.isSearchable() && !cd.isFilterAlwaysShown()) {
                 options.add(cd);
             }
         }
