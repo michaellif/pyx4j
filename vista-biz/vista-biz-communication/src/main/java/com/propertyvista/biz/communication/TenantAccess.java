@@ -46,7 +46,9 @@ class TenantAccess {
             return null;
         }
         Persistence.ensureRetrieve(tenant.customer().user(), AttachLevel.Attached);
-        // tenant.customer().person().email().getValue(); // This is the same.
+        if (!tenant.customer().registeredInPortal().getValue(false)) {
+            log.info("Email will not be sent to LeaseParticipant {} because he is not Registered In Portal", tenant.getPrimaryKey());
+        }
         return AddresseUtils.getCompleteEmail(tenant.customer().user());
     }
 
