@@ -123,7 +123,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
     @Override
     public ConvenienceFeeCalculationResponseTO getConvenienceFee(BillingAccount billingAccountId, CreditCardType cardType, BigDecimal amount) {
-        MerchantAccount account = PaymentUtils.retrieveValidMerchantAccount(billingAccountId);
+        MerchantAccount account = PaymentUtils.getMerchantAccount(billingAccountId);
         Validate.isTrue(!account.merchantTerminalIdConvenienceFee().isNull(), "MerchantAccount not setup to process the payment with fee");
         return ServerSideFactory.create(CreditCardFacade.class).getConvenienceFee(account.merchantTerminalIdConvenienceFee().getValue(),
                 ReferenceNumberPrefix.RentPayments, cardType, amount);

@@ -37,7 +37,6 @@ import com.pyx4j.site.client.frontoffice.ui.layout.FrontOfficeLayoutPanel;
 import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.common.client.WalkMe;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
-import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.site.VistaBrowserRequirments;
 import com.propertyvista.common.client.site.VistaSite;
@@ -78,7 +77,7 @@ public abstract class PortalSite extends VistaSite {
         super.onSiteLoad();
         AppSite.getEventBus().addHandler(NotificationEvent.getType(), new PortalUserMessageHandler());
 
-        UncaughtHandler.setUnrecoverableErrorHandler(new VistaUnrecoverableErrorHandler());
+        UncaughtHandler.setUnrecoverableErrorHandler(new VistaPortalUnrecoverableErrorHandler());
 
         getHistoryHandler().register(getPlaceController(), getEventBus());
 
