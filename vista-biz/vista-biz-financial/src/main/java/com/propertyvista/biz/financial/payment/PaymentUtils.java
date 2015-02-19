@@ -61,6 +61,23 @@ class PaymentUtils {
         }
     }
 
+    private static MerchantAccount getMerchantAccount(BillingAccount billingAccountId) {
+        EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), billingAccountId));
+        MerchantAccount merchantAccount = Persistence.service().retrieve(criteria);
+        if (merchantAccount != null) {
+            return merchantAccount;
+        } else {
+            EntityQueryCriteria<Lease> criteria2 = EntityQueryCriteria.create(Lease.class);
+            criteria2.eq(criteria2.proto().billingAccount(), billingAccountId);
+            Lease leaseId = Persistence.service().retrieve(criteria2, AttachLevel.IdOnly);
+            Building building = ServerSideFactory.create(LeaseFacade.class).getLeaseBuilding(leaseId);
+            EntityQueryCriteria<MerchantAccount> criteria3 = EntityQueryCriteria.create(MerchantAccount.class);
+            criteria3.eq(criteria.proto()._buildings(), building);
+            return Persistence.service().retrieve(criteria3);
+        }
+    }
+
     public static boolean isPaymentsAllowed(BillingAccount billingAccountId) {
         if (PaymentRecord.merchantAccountIsRequedForPayments) {
             EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
@@ -113,7 +130,14 @@ class PaymentUtils {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
         criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), billingAccountId));
         MerchantAccount merchantAccount = Persistence.service().retrieve(criteria);
-        return getEffectiveElectronicPaymentsSetup(merchantAccount);
+        if (merchantAccount != null) {
+            return getEffectiveElectronicPaymentsSetup(merchantAccount);
+        } else {
+            EntityQueryCriteria<Lease> criteria2 = EntityQueryCriteria.create(Lease.class);
+            criteria2.eq(criteria2.proto().billingAccount(), billingAccountId);
+            Lease leaseId = Persistence.service().retrieve(criteria2, AttachLevel.IdOnly);
+            return getEffectiveElectronicPaymentsSetup(ServerSideFactory.create(LeaseFacade.class).getLeaseBuilding(leaseId));
+        }
     }
 
     static MerchantElectronicPaymentSetup getEffectiveElectronicPaymentsSetup(Building buildingId) {
