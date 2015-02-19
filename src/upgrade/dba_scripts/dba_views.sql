@@ -74,6 +74,22 @@ CREATE OR REPLACE VIEW _dba_.empty_pmc AS
     ORDER BY  t.last_login
 );
 
+-- Contacts for empty PMC
+
+CREATE OR REPLACE VIEW _dba_.empty_pmc_contacts AS 
+(
+    SELECT  a.name AS pmc, u.first_name, u.last_name, u.email
+    FROM    _admin_.admin_pmc a 
+    JOIN    _admin_.onboarding_user u ON (a.id = u.pmc)
+    JOIN    _dba_.pmc_stats s ON (a.namespace = s.namespace)
+    WHERE   s.buildings = 0
+    AND     s.units = 0
+    ORDER BY a.created
+
+);
+
+
+
 
 
 
