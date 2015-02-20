@@ -23,14 +23,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.system.DNSResolver.JavaResolver;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.pmc.PmcDnsName.DnsNameTarget;
 import com.propertyvista.domain.security.common.VistaApplication;
@@ -73,22 +69,6 @@ public class PmcDNSUtils {
         }
 
         return false;
-    }
-
-    public static PmcDnsName getPmcDnsAliasesForPmcAndApplication(Pmc pmc, VistaApplication application) {
-        EntityQueryCriteria<PmcDnsName> criteria = EntityQueryCriteria.create(PmcDnsName.class);
-        criteria.eq(criteria.proto().enabled(), Boolean.TRUE);
-        criteria.eq(criteria.proto().target(), application == VistaApplication.site ? DnsNameTarget.site : DnsNameTarget.portal);
-        criteria.eq(criteria.proto().pmc().status(), PmcStatus.Active);
-
-        PmcDnsName pmcDns = Persistence.service().retrieve(criteria);
-
-        if (pmcDns != null) {
-            return pmcDns;
-        } else {
-            PmcDnsName newPmcDnsName = EntityFactory.create(PmcDnsName.class);
-            return newPmcDnsName;
-        }
     }
 
     public static JavaResolver getJavaResolver() {
@@ -143,13 +123,26 @@ public class PmcDNSUtils {
     }
 
     public static String getCustomerDnsName(Pmc pmc, VistaApplication application) {
+        DnsNameTarget targetApp = getDnsNameTargetByVistaApplication(application);
+
         for (PmcDnsName dnsName : pmc.dnsNameAliases()) {
-            if (dnsName.target().getValue().name().equalsIgnoreCase(application.name())) {
+            if (dnsName.target().getValue() == targetApp) {
                 return dnsName.dnsName().getValue();
             }
         }
 
         return null;
+    }
+
+    public static DnsNameTarget getDnsNameTargetByVistaApplication(VistaApplication application) {
+        switch (application) {
+        case site:
+            return DnsNameTarget.site;
+        case resident:
+            return DnsNameTarget.portal;
+        default:
+            return null;
+        }
     }
 
 }
