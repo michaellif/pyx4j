@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -21,6 +21,8 @@ import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -33,6 +35,7 @@ import com.propertyvista.domain.VistaNamespace;
  * PMC custom DNS configurations
  */
 
+@ToStringFormat("{0,choice,0#Not Active|1#Active}")
 @Table(prefix = "admin", namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PmcDnsName extends IEntity {
@@ -67,7 +70,8 @@ public interface PmcDnsName extends IEntity {
     @NotNull
     IPrimitive<String> dnsName();
 
-    //when edited in CRM set to active if DNS is resolved OK. 
+    @ToString(index = 0)
+    //when edited in CRM set to active if DNS is resolved OK.
     @Caption(name = "Active")
     IPrimitive<Boolean> enabled();
 

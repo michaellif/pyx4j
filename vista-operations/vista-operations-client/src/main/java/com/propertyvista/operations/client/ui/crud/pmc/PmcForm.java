@@ -184,7 +184,6 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         });
 
         auditRecordsLink = new Anchor(i18n.tr("Audit Records for this PMC"));
-
         auditRecordsLink.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -198,7 +197,9 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         });
 
         formPanel.br();
+
         formPanel.append(Location.Dual, auditRecordsLink);
+
         formPanel.br();
 
         formPanel.h1(proto().features().getMeta().getCaption());
@@ -207,15 +208,21 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         formPanel.append(Location.Left, proto().features().onlineApplication()).decorate();
         formPanel.append(Location.Left, proto().features().whiteLabelPortal()).decorate();
 
-        formPanel.append(Location.Left, proto().features().yardiIntegration()).decorate();
+        formPanel.append(Location.Right, proto().features().yardiIntegration()).decorate();
         formPanel.append(Location.Right, proto().features().yardiMaintenance()).decorate();
 
-        formPanel.append(Location.Left, proto().features().tenantSureIntegration()).decorate();
+        formPanel.append(Location.Right, proto().features().tenantSureIntegration()).decorate();
         formPanel.append(Location.Right, proto().features().tenantEmailEnabled()).decorate();
 
         formPanel.h1(proto().dnsNameAliases().getMeta().getCaption());
         formPanel.append(Location.Dual, proto().dnsNameAliases(), new PmcDnsNameFolder(isEditable()));
 
+        formPanel.br();
+
+        formPanel.append(Location.Left, proto().schemaVersion()).decorate().componentWidth(150);
+        formPanel.append(Location.Right, proto().schemaDataUpgradeSteps()).decorate().componentWidth(150);
+
+        // tweaks:
         final CComponent<?, Boolean, ?, ?> yardiIntegrationSwitch = get(proto().features().yardiIntegration());
         final CComponent<?, Boolean, ?, ?> yardiMaintenanceSwitch = get(proto().features().yardiMaintenance());
         yardiIntegrationSwitch.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -224,9 +231,6 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
                 yardiMaintenanceSwitch.setEnabled(Boolean.TRUE.equals(event.getValue()));
             }
         });
-
-        formPanel.append(Location.Left, proto().schemaVersion()).decorate();
-        formPanel.append(Location.Right, proto().schemaDataUpgradeSteps()).decorate();
 
         return formPanel;
     }
