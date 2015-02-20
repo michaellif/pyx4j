@@ -220,7 +220,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         formPanel.br();
 
         formPanel.append(Location.Left, proto().schemaVersion()).decorate().componentWidth(150);
-        formPanel.append(Location.Right, proto().schemaDataUpgradeSteps()).decorate().componentWidth(150);
+        formPanel.append(Location.Right, proto().schemaDataUpgradeSteps()).decorate().componentWidth(100);
 
         // tweaks:
         final CComponent<?, Boolean, ?, ?> yardiIntegrationSwitch = get(proto().features().yardiIntegration());
