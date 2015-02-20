@@ -85,7 +85,6 @@ CREATE OR REPLACE VIEW _dba_.empty_pmc_contacts AS
     WHERE   s.buildings = 0
     AND     s.units = 0
     ORDER BY a.created
-
 );
 
 
