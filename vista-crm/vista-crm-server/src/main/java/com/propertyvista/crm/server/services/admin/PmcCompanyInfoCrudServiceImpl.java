@@ -65,13 +65,13 @@ public class PmcCompanyInfoCrudServiceImpl implements PmcCompanyInfoCrudService 
         PmcCompanyInfo ciBO = new CompanyInfoBinder().createBO(editableEntity);
 
         Persistence.service().merge(ciBO);
-        Persistence.service().commit();
 
         ServerSideFactory.create(PmcFacade.class).updateApplicationDnsConfig(VistaDeployment.getCurrentPmc(), VistaApplication.site,
                 editableEntity.websiteDnsConfig());
         ServerSideFactory.create(PmcFacade.class).updateApplicationDnsConfig(VistaDeployment.getCurrentPmc(), VistaApplication.resident,
-                editableEntity.websiteDnsConfig());
+                editableEntity.portalDnsConfig());
 
+        Persistence.service().commit();
         callback.onSuccess(ciBO.getPrimaryKey());
     }
 
