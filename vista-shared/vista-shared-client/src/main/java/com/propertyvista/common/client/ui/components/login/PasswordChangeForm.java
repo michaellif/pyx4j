@@ -165,7 +165,7 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
             if (get(proto().newPassword()).getValue() != null && enforceRequireChangePasswordThreshold != null && passwordStrengthRule != null) {
                 PasswordStrengthVerdict verdict = passwordStrengthRule.getPasswordVerdict(get(proto().newPassword()).getValue());
                 if (getCComponent().getValue() != null && !getCComponent().getValue() && verdict != null
-                        && verdict.compareTo(enforceRequireChangePasswordThreshold) <= 0) {
+                        && verdict.compareTo(enforceRequireChangePasswordThreshold) < 0) {
                     return new BasicValidationError(get(proto().passwordChangeRequired()),
                             i18n.tr("Password is to weak. You should require to change password on next sign in."));
                 }
