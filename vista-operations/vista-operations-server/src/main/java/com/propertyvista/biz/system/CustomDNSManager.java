@@ -14,7 +14,9 @@ package com.propertyvista.biz.system;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
@@ -48,18 +50,7 @@ public class CustomDNSManager {
             return null;
         }
 
-        PmcDnsConfigTO pmcDnsConfig = EntityFactory.create(PmcDnsConfigTO.class);
-        pmcDnsConfig.dnsNameIsActive().setValue(PmcDNSUtils.isDnsNameActiveForApplication(pmc, application));
-        pmcDnsConfig.serverIPAddress().setValue(PmcDNSUtils.getDefaultIpAddressForApplication(application));
-
-        setDnsResolutionInformation(pmc, pmcDnsConfig, application);
-
-        if (pmcDnsConfig.dnsNameIsActive().getValue()) {
-            pmcDnsConfig.dnsNameDefault().setValue(pmcDnsConfig.customerDnsName().getValue());
-        } else {
-            pmcDnsConfig.dnsNameDefault().setValue(PmcDNSUtils.getHostName(VistaDeployment.getBaseApplicationURL(pmc, application, true)));
-        }
-
+        PmcDnsConfigTO pmcDnsConfig = getDnsResolutionInformationForApplication(pmc, application);
         return pmcDnsConfig;
     }
 
@@ -68,18 +59,53 @@ public class CustomDNSManager {
             return;
         }
 
-        if (application == VistaApplication.site) {
-            dnsConfig = setSiteAppDnsResolutionData(dnsConfig);
-        } else if (application == VistaApplication.resident) {
-            dnsConfig = setResidentAppDnsResolutionData(dnsConfig);
-        }
+        String customerCompleteDnsName = dnsConfig.customerDnsName().getValue();
+        String customerDnsName = getHostName(customerCompleteDnsName);
 
-        final String dnsCustomerName = dnsConfig.customerDnsName().getValue();
-
-        if (dnsCustomerName == null) {
+        if (customerDnsName == null) {
             return;
         }
 
+        dnsConfig.customerDnsName().setValue(customerDnsName);
+
+        if (application == VistaApplication.site) {
+            updateSiteAppDnsResolutionData(pmc, dnsConfig);
+        } else if (application == VistaApplication.resident) {
+            updateResidentAppDnsResolutionData(pmc, dnsConfig);
+        }
+    }
+
+    private static void updateSiteAppDnsResolutionData(Pmc pmc, final PmcDnsConfigTO dnsConfig) {
+        removePmcDnsAliasesForPmcAndApplication(pmc, VistaApplication.site);
+        addDnsAliasForPmcAndApplication(pmc, VistaApplication.site, dnsConfig);
+    }
+
+    private static void updateResidentAppDnsResolutionData(Pmc pmc, final PmcDnsConfigTO dnsConfig) {
+        String customerDnsName = dnsConfig.customerDnsName().getValue();
+
+        // Add customer dnsAlias for Resident Portal
+        removePmcDnsAliasesForPmcAndApplication(pmc, VistaApplication.resident);
+        addDnsAliasForPmcAndApplication(pmc, VistaApplication.resident, dnsConfig);
+
+        // If case of "my." or "www.my." check for adding alternative dns alias if they are also resolved
+        if (customerDnsName.startsWith("my.")) {
+            String alternativeDnsName = "www." + customerDnsName;
+            if (resolveDNS(alternativeDnsName) != null) {
+                dnsConfig.customerDnsName().setValue(alternativeDnsName);
+                addDnsAliasForPmcAndApplication(pmc, VistaApplication.resident, dnsConfig);
+            }
+        } else if (customerDnsName.startsWith("www.my.")) {
+            String alternativeDnsName = customerDnsName.replaceFirst("www.my.", "my.");
+            if (resolveDNS(alternativeDnsName) != null) {
+                dnsConfig.customerDnsName().setValue(alternativeDnsName);
+                addDnsAliasForPmcAndApplication(pmc, VistaApplication.resident, dnsConfig);
+            }
+        }
+
+    }
+
+    // TODO Move method to PmcFacade
+    private static void addDnsAliasForPmcAndApplication(Pmc pmc, final VistaApplication application, final PmcDnsConfigTO dnsConfig) {
         final Key pmcPrimaryKey = pmc.getPrimaryKey();
         final DnsNameTarget targetApp = PmcDNSUtils.getDnsNameTargetByVistaApplication(application);
 
@@ -87,10 +113,10 @@ public class CustomDNSManager {
             @Override
             public Void call() {
                 Pmc pmc = Persistence.service().retrieve(Pmc.class, pmcPrimaryKey);
-                removePmcDnsAliasesForPmcAndApplication(pmc, application);
+                Persistence.service().persist(pmc);
                 PmcDnsName pmcDnsName = EntityFactory.create(PmcDnsName.class);
-                pmcDnsName.dnsName().setValue(dnsCustomerName);
-                pmcDnsName.enabled().setValue(isDnsSolvedAndMatch(dnsCustomerName, application));
+                pmcDnsName.dnsName().setValue(dnsConfig.customerDnsName().getValue());
+                pmcDnsName.enabled().setValue(isDnsSolvedAndMatch(dnsConfig.customerDnsName().getValue(), application));
                 pmcDnsName.target().setValue(targetApp);
                 pmcDnsName.httpsEnabled().setValue(Boolean.FALSE); // TODO what here?? Read http/https in customerAddress?
                 pmcDnsName.pmc().set(pmc);
@@ -98,66 +124,39 @@ public class CustomDNSManager {
                 Persistence.service().persist(pmc);
                 return null;
             }
-
         });
-
     }
 
-    private static void removePmcDnsAliasesForPmcAndApplication(final Pmc targetPmc, VistaApplication application) {
+    // TODO Move method to PmcFacade
+    private static void removePmcDnsAliasesForPmcAndApplication(Pmc targetPmc, final VistaApplication application) {
+        final Key pmcPrimaryKey = targetPmc.getPrimaryKey();
         final DnsNameTarget app = PmcDNSUtils.getDnsNameTargetByVistaApplication(application);
+        TaskRunner.runInOperationsNamespace(new Callable<Void>() {
+            @Override
+            public Void call() {
+                Pmc pmc = Persistence.service().retrieve(Pmc.class, pmcPrimaryKey);
+                List<PmcDnsName> dnsNameAliases = new ArrayList<PmcDnsName>();
 
-        for (PmcDnsName currentDnsName : targetPmc.dnsNameAliases()) {
-            if (currentDnsName.target().getValue().equals(app)) {
-                targetPmc.dnsNameAliases().remove(currentDnsName);
-                break;
+                for (PmcDnsName currentDnsName : pmc.dnsNameAliases()) {
+                    if (!currentDnsName.target().getValue().equals(app)) {
+                        dnsNameAliases.add(currentDnsName);
+                    }
+                }
+
+                pmc.dnsNameAliases().clear();
+                pmc.dnsNameAliases().addAll(dnsNameAliases);
+                Persistence.service().persist(pmc);
+                return null;
             }
-        }
-
-        Persistence.service().persist(targetPmc);
-        Persistence.service().commit();
+        });
     }
 
-    private PmcDnsConfigTO setSiteAppDnsResolutionData(PmcDnsConfigTO pmcDnsConfig) {
+    private PmcDnsConfigTO getDnsResolutionInformationForApplication(Pmc pmc, VistaApplication application) {
 
-        String customerCompleteDnsName = pmcDnsConfig.customerDnsName().getValue();
-        String customerDnsName = getHostName(customerCompleteDnsName);
+        PmcDnsConfigTO pmcDnsConfig = EntityFactory.create(PmcDnsConfigTO.class);
 
-        if (customerDnsName != null) {
-            pmcDnsConfig.customerDnsName().setValue(customerDnsName);
-        }
-
-        return pmcDnsConfig;
-    }
-
-    private PmcDnsConfigTO setResidentAppDnsResolutionData(PmcDnsConfigTO pmcDnsConfig) {
-        String customerCompleteDnsName = pmcDnsConfig.customerDnsName().getValue();
-        String customerDnsName = getHostName(customerCompleteDnsName);
-
-        if (customerDnsName == null) {
-            return pmcDnsConfig;
-        }
-
-        // TODO Don't understand this part yet...
-        if (customerDnsName.startsWith("my.")) {
-            pmcDnsConfig.customerDnsName().setValue(customerDnsName);
-
-            if (resolveDNS("www." + customerDnsName) != null) {
-                pmcDnsConfig.customerDnsName().setValue("www." + customerDnsName);
-            }
-        } else if (customerDnsName.startsWith("www.my.")) {
-            pmcDnsConfig.customerDnsName().setValue(customerDnsName);
-
-            if (resolveDNS("my." + customerDnsName) != null) {
-                pmcDnsConfig.customerDnsName().setValue("my." + customerDnsName);
-            }
-        } else {
-            pmcDnsConfig.customerDnsName().setValue(customerDnsName);
-        }
-
-        return pmcDnsConfig;
-    }
-
-    private void setDnsResolutionInformation(Pmc pmc, PmcDnsConfigTO pmcDnsConfig, VistaApplication application) {
+        pmcDnsConfig.dnsNameIsActive().setValue(PmcDNSUtils.isDnsNameActiveForApplication(pmc, application));
+        pmcDnsConfig.serverIPAddress().setValue(PmcDNSUtils.getDefaultIpAddressForApplication(application));
 
         String customerCompleteDnsName = PmcDNSUtils.getCustomerDnsName(pmc, application);
 
@@ -166,7 +165,7 @@ public class CustomDNSManager {
 
             if (customerDnsName == null) {
                 pmcDnsConfig.dnsResolved().setValue(Boolean.FALSE);
-                return;
+                return null;
             }
 
             pmcDnsConfig.customerDnsName().setValue(customerDnsName);
@@ -193,6 +192,14 @@ public class CustomDNSManager {
             }
 
         }
+
+        if (pmcDnsConfig.dnsNameIsActive().getValue()) {
+            pmcDnsConfig.dnsNameDefault().setValue(pmcDnsConfig.customerDnsName().getValue());
+        } else {
+            pmcDnsConfig.dnsNameDefault().setValue(PmcDNSUtils.getHostName(VistaDeployment.getBaseApplicationURL(pmc, application, true)));
+        }
+
+        return pmcDnsConfig;
     }
 
     private static boolean isApplicationSuspported(VistaApplication application) {
@@ -203,7 +210,7 @@ public class CustomDNSManager {
         return true;
     }
 
-    private boolean isDnsSolvedAndMatch(String dns, VistaApplication application) {
+    private static boolean isDnsSolvedAndMatch(String dns, VistaApplication application) {
         String ipAddress = resolveDNS(dns);
 
         if (ipAddress != null && ipAddress.equalsIgnoreCase(PmcDNSUtils.getDefaultIpAddressForApplication(application))) {
@@ -213,7 +220,7 @@ public class CustomDNSManager {
         }
     }
 
-    private String resolveDNS(String dns) {
+    private static String resolveDNS(String dns) {
         return PmcDNSUtils.resolveDnsName(dns);
     }
 
