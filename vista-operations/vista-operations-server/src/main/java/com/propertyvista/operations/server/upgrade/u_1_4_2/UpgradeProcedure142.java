@@ -22,6 +22,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.preloader.policy.subpreloaders.ApplicationApprovalChecklistPolicyPreloader;
 import com.propertyvista.biz.preloader.policy.subpreloaders.ApplicationDocumentationPolicyPreloader;
 import com.propertyvista.biz.preloader.policy.subpreloaders.LegalQuestionsPolicyPreloader;
+import com.propertyvista.biz.preloader.policy.subpreloaders.MaintenanceRequestPolicyPreloader;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.operations.server.upgrade.UpgradeProcedure;
@@ -32,7 +33,7 @@ public class UpgradeProcedure142 implements UpgradeProcedure {
 
     @Override
     public int getUpgradeStepsCount() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -46,6 +47,9 @@ public class UpgradeProcedure142 implements UpgradeProcedure {
             break;
         case 3:
             runApplicationDocumentationPolicyUpdate();
+            break;
+        case 4:
+            runMaintenanceRequestPolicyPreload();
             break;
         default:
             throw new IllegalArgumentException();
@@ -86,4 +90,17 @@ public class UpgradeProcedure142 implements UpgradeProcedure {
             Persistence.service().merge(policy);
         }
     }
+
+    private void runMaintenanceRequestPolicyPreload() {
+        log.info("Creating MaintenanceRequestPolicy for 'Organization'");
+        MaintenanceRequestPolicyPreloader policyPreloader = new MaintenanceRequestPolicyPreloader();
+        OrganizationPoliciesNode organizationNode = Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class));
+        if (organizationNode == null) {
+            throw new UserRuntimeException("Organizational Policy node Was not found");
+        }
+        policyPreloader.setTopNode(organizationNode);
+        String policyCreationLog = policyPreloader.create();
+        log.info("Finished policy creation: " + policyCreationLog);
+    }
+
 }
