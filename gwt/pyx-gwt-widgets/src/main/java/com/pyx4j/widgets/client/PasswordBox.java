@@ -73,7 +73,6 @@ public class PasswordBox extends FlowPanel implements IValueBoxWidget<String> {
         this.passwordStrengthRule = rule;
         if (rule != null && getWidgetCount() == 1) {
             passwordStrengthWidget = new PasswordStrengthWidget();
-            passwordStrengthWidget.setVisible(false);
             add(passwordStrengthWidget);
         }
         if (passwordStrengthWidget != null) {
@@ -134,7 +133,6 @@ public class PasswordBox extends FlowPanel implements IValueBoxWidget<String> {
             super.updateTextBox();
             if (passwordStrengthWidget != null) {
                 passwordStrengthWidget.ratePassword();
-                passwordStrengthWidget.setVisible(isTextBoxWidgetFocused());
             }
         }
 
