@@ -343,7 +343,7 @@ public class CommunicationPage extends CPortalEntityForm<CommunicationThreadDTO>
                                 DeliveryHandle dh = EntityFactory.create(DeliveryHandle.class);
                                 dh.isRead().setValue(false);
                                 dh.star().setValue(false);
-                                dh.recipient().set(currentMessage.sender());
+                                dh.recipient().set(currentMessage.senderDTO().endpoint());
 
                                 newItem.getValue().recipients().add(dh);
                             }
