@@ -66,7 +66,7 @@ public class MoveInWizardPapPreviewGadget extends AbstractGadget<MoveInWizardVie
             continueButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
             addItem(continueButton);
 
-            Button skipButton = new Button(i18n.tr("later"), new Command() {
+            Button skipButton = new Button(i18n.tr("X"), new Command() {
                 @Override
                 public void execute() {
                     MoveInWizardManager.skipStep(MoveInWizardStep.pap, new AsyncCallback<VoidSerializable>() {
