@@ -43,7 +43,6 @@ import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
-import com.propertyvista.portal.prospect.ui.application.ApplicationWizard;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.DependentDTO;
@@ -54,9 +53,9 @@ public class PeopleStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(PeopleStep.class);
 
-    private final CoapplicantsFolder coapplicantsFolder = new CoapplicantsFolder(getWizard());
+    private final CoapplicantsFolder coapplicantsFolder = new CoapplicantsFolder(this);
 
-    private final DependentsFolder dependentsFolder = new DependentsFolder(getWizard());
+    private final DependentsFolder dependentsFolder = new DependentsFolder(this);
 
     public PeopleStep() {
         super(OnlineApplicationWizardStepMeta.People);
@@ -93,7 +92,7 @@ public class PeopleStep extends ApplicationWizardStep {
 
     private class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {
 
-        public CoapplicantsFolder(ApplicationWizard applicationWizard) {
+        public CoapplicantsFolder(PeopleStep parent) {
             super(CoapplicantDTO.class, i18n.tr("Co-Applicant"));
         }
 
@@ -187,23 +186,23 @@ public class PeopleStep extends ApplicationWizardStep {
 
     private class DependentsFolder extends PortalBoxFolder<DependentDTO> {
 
-        private final ApplicationWizard wizard;
+        private final PeopleStep parent;
 
-        public DependentsFolder(ApplicationWizard applicationWizard) {
+        public DependentsFolder(PeopleStep parent) {
             super(DependentDTO.class, i18n.tr("Dependent"));
-            this.wizard = applicationWizard;
+            this.parent = parent;
         }
 
         public Integer ageOfMajority() {
-            return wizard.getValue().ageOfMajority().getValue();
+            return parent.getValue().ageOfMajority().getValue();
         }
 
         public boolean enforceAgeOfMajority() {
-            return wizard.getValue().enforceAgeOfMajority().getValue(false);
+            return parent.getValue().enforceAgeOfMajority().getValue(false);
         }
 
         public boolean maturedOccupantsAreApplicants() {
-            return wizard.getValue().maturedOccupantsAreApplicants().getValue(false);
+            return parent.getValue().maturedOccupantsAreApplicants().getValue(false);
         }
 
         @Override
