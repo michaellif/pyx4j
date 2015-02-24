@@ -447,7 +447,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             policyNode = dto.unit().building();
 
             Persistence.ensureRetrieve(dto.unit().floorplan(), AttachLevel.Attached);
-            bedrooms = dto.unit().floorplan().bedrooms().getValue();
+            bedrooms = dto.unit().floorplan().bedrooms().getValue(0);
         }
 
         RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, RestrictionsPolicy.class);
