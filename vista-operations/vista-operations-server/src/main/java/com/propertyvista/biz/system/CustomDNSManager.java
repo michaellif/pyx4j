@@ -63,7 +63,8 @@ public class CustomDNSManager {
             return;
         }
 
-        String customerCompleteDnsName = dnsConfig.customerDnsName().getValue();
+        String customerCompleteDnsName = dnsConfig.customerDnsName().getValue().trim();
+        dnsConfig.customerDnsName().setValue(customerCompleteDnsName);
         String customerDnsName = getHostName(customerCompleteDnsName);
 
         if (customerDnsName == null) {
@@ -164,6 +165,7 @@ public class CustomDNSManager {
 
         pmcDnsConfig.dnsNameIsActive().setValue(PmcDNSUtils.isDnsNameActiveForApplication(pmc, application));
         pmcDnsConfig.serverIPAddress().setValue(PmcDNSUtils.getDefaultIpAddressForApplication(application));
+        pmcDnsConfig.dnsNameDefault().setValue(PmcDNSUtils.getHostName(VistaDeployment.getBaseApplicationURL(pmc, application, true)));
 
         String customerCompleteDnsName = PmcDNSUtils.getCustomerDnsName(pmc, application);
 
@@ -198,12 +200,6 @@ public class CustomDNSManager {
                 pmcDnsConfig.dnsResolutionMessage().setValue(i18n.tr(IP_DOES_NOT_MATCH_VISTA_SERVER_ADDRESS));
             }
 
-        }
-
-        if (pmcDnsConfig.dnsNameIsActive().getValue()) {
-            pmcDnsConfig.dnsNameDefault().setValue(pmcDnsConfig.customerDnsName().getValue());
-        } else {
-            pmcDnsConfig.dnsNameDefault().setValue(PmcDNSUtils.getHostName(VistaDeployment.getBaseApplicationURL(pmc, application, true)));
         }
 
         return pmcDnsConfig;
