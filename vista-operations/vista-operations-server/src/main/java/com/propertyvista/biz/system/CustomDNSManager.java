@@ -63,7 +63,8 @@ public class CustomDNSManager {
             return;
         }
 
-        String customerCompleteDnsName = dnsConfig.customerDnsName().getValue();
+        String customerCompleteDnsName = dnsConfig.customerDnsName().getValue().trim();
+        dnsConfig.customerDnsName().setValue(customerCompleteDnsName);
         String customerDnsName = getHostName(customerCompleteDnsName);
 
         if (customerDnsName == null) {
