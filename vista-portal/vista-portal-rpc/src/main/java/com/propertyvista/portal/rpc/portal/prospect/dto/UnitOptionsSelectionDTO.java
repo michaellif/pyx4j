@@ -13,7 +13,6 @@
 package com.propertyvista.portal.rpc.portal.prospect.dto;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
@@ -29,13 +28,12 @@ public interface UnitOptionsSelectionDTO extends IEntity {
     @Transient
     public interface Restrictions extends IEntity {
 
-        @Caption(description = "Maximum allowed parking spots")
+        IPrimitive<Double> occupantsPerBedRoom();
+
         IPrimitive<Integer> maxParkingSpots();
 
-        @Caption(description = "Maximum allowed lockers")
         IPrimitive<Integer> maxLockers();
 
-        @Caption(description = "Maximum allowed pets quantity")
         IPrimitive<Integer> maxPets();
     }
 

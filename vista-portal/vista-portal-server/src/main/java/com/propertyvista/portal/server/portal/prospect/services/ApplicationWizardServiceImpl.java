@@ -1264,6 +1264,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         UnitOptionsSelectionDTO.Restrictions restrictions = EntityFactory.create(UnitOptionsSelectionDTO.Restrictions.class);
         RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit, RestrictionsPolicy.class);
 
+        restrictions.occupantsPerBedRoom().setValue(restrictionsPolicy.occupantsPerBedRoom().getValue());
         restrictions.maxLockers().setValue(restrictionsPolicy.maxLockers().getValue());
         restrictions.maxParkingSpots().setValue(restrictionsPolicy.maxParkingSpots().getValue());
         restrictions.maxPets().setValue(restrictionsPolicy.maxPets().getValue());
