@@ -67,7 +67,7 @@ public interface LeaseTermDTO extends LeaseTerm {
 
     IPrimitive<Boolean> noNeedGuarantors();
 
-    IPrimitive<Double> occupantsPerBedRoom();
+    IPrimitive<Integer> maxOccupants();
 
     IPrimitive<Integer> maxParkingSpots();
 

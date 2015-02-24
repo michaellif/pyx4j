@@ -28,7 +28,7 @@ public interface UnitOptionsSelectionDTO extends IEntity {
     @Transient
     public interface Restrictions extends IEntity {
 
-        IPrimitive<Double> occupantsPerBedRoom();
+        IPrimitive<Integer> maxOccupants();
 
         IPrimitive<Integer> maxParkingSpots();
 
