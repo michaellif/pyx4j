@@ -84,9 +84,9 @@ public class PeopleStep extends ApplicationWizardStep {
     }
 
     private boolean isNewOccupantAllowed() {
-        int maxOccupants = getValue().unitOptionsSelection().restrictions().maxOccupants().getValue(-1);
-        if (maxOccupants >= 0) {
-            return ((coapplicantsFolder.getValue().size() + dependentsFolder.getValue().size()) < maxOccupants);
+        int maxOccupants = getValue().unitOptionsSelection().restrictions().maxOccupants().getValue(0);
+        if (maxOccupants > 0) {
+            return (coapplicantsFolder.getValue().size() + dependentsFolder.getValue().size() < maxOccupants - 1); // provided ONE main applicant is already present...
         }
         return true;
     }

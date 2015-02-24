@@ -1266,7 +1266,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         Persistence.ensureRetrieve(unit.floorplan(), AttachLevel.Attached);
         restrictions.maxOccupants().setValue(
-                (int) (unit.floorplan().bedrooms().getValue().doubleValue() * restrictionsPolicy.occupantsPerBedRoom().getValue()) - 1);
+                (int) (unit.floorplan().bedrooms().getValue().doubleValue() * restrictionsPolicy.occupantsPerBedRoom().getValue(0.0)));
         restrictions.maxLockers().setValue(restrictionsPolicy.maxLockers().getValue());
         restrictions.maxParkingSpots().setValue(restrictionsPolicy.maxParkingSpots().getValue());
         restrictions.maxPets().setValue(restrictionsPolicy.maxPets().getValue());

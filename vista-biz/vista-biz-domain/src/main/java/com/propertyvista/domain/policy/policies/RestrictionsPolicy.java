@@ -25,7 +25,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 @LowestApplicableNode(value = Building.class)
 public interface RestrictionsPolicy extends Policy, TenantsAccessiblePolicy {
 
-    @Caption(name = "Occupants per Bedroom", description = "Number of Occupants (N) per Bedroom in formula: Bedrooms x N = OccupantsPerUnit")
+    @Caption(name = "Occupants per Bedroom", description = "Number of Occupants (N) per Bedroom in formula: Bedrooms x N = Occupants per Unit")
     IPrimitive<Double> occupantsPerBedRoom();
 
     @Caption(description = "Maximum allowed parking spots")
