@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -35,6 +35,7 @@ import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.theme.VistaTheme.StyleName;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
@@ -53,6 +54,10 @@ public class PeopleStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(PeopleStep.class);
 
+    private final CoapplicantsFolder coapplicantsFolder = new CoapplicantsFolder(getWizard());
+
+    private final DependentsFolder dependentsFolder = new DependentsFolder(getWizard());
+
     public PeopleStep() {
         super(OnlineApplicationWizardStepMeta.People);
     }
@@ -70,12 +75,20 @@ public class PeopleStep extends ApplicationWizardStep {
         get(proto().applicant()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
         formPanel.h3(i18n.tr("Co-Applicants"));
-        formPanel.append(Location.Left, proto().coapplicants(), new CoapplicantsFolder(getWizard()));
+        formPanel.append(Location.Left, proto().coapplicants(), coapplicantsFolder);
 
         formPanel.h3(i18n.tr("Dependents"));
-        formPanel.append(Location.Left, proto().dependents(), new DependentsFolder(getWizard()));
+        formPanel.append(Location.Left, proto().dependents(), dependentsFolder);
 
         return formPanel;
+    }
+
+    private boolean isNewOccupantAllowed() {
+        int maxOccupants = getValue().unitOptionsSelection().restrictions().maxOccupants().getValue(-1);
+        if (maxOccupants >= 0) {
+            return ((coapplicantsFolder.getValue().size() + dependentsFolder.getValue().size()) < maxOccupants);
+        }
+        return true;
     }
 
     private class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {
@@ -98,6 +111,15 @@ public class PeopleStep extends ApplicationWizardStep {
         }
 
         @Override
+        protected void addItem() {
+            if (isNewOccupantAllowed()) {
+                super.addItem();
+            } else {
+                MessageDialog.info(i18n.tr("According to our policy maximum number of occupants has been reached for this unit!"));
+            }
+        }
+
+        @Override
         public void addValidations() {
             super.addValidations();
 
@@ -105,7 +127,7 @@ public class PeopleStep extends ApplicationWizardStep {
                 @Override
                 public AbstractValidationError isValid() {
                     if (hasDuplicateEmails(getCComponent().getValue())) {
-                        return new BasicValidationError(getCComponent(), i18n.tr("Co-Applicants have the same email address"));
+                        return new BasicValidationError(getCComponent(), i18n.tr("Co-Applicants can not have the same email address"));
                     }
                     return null;
                 }
@@ -205,6 +227,15 @@ public class PeopleStep extends ApplicationWizardStep {
             }
         }
 
+        @Override
+        protected void addItem() {
+            if (isNewOccupantAllowed()) {
+                super.addItem();
+            } else {
+                MessageDialog.info(i18n.tr("According to our policy maximum number of occupants has been reached for this unit!"));
+            }
+        }
+
         class DependentForm extends CForm<DependentDTO> {
 
             public DependentForm() {
@@ -250,8 +281,7 @@ public class PeopleStep extends ApplicationWizardStep {
                             if (maturedOccupantsAreApplicants()) {
                                 if (TimeUtils.isOlderThan(getCComponent().getValue(), ageOfMajority())) {
                                     return new BasicValidationError(getCComponent(), i18n.tr(
-                                            "According to internal regulations and age this person cannot be a Dependent. Age of majority is {0}",
-                                            ageOfMajority()));
+                                            "According to our policy this person cannot be a Dependent. The age of majority is {0}", ageOfMajority()));
                                 }
                             }
                         }
