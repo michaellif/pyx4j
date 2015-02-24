@@ -180,7 +180,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
                 // pmc info
                 HtmlContent pmcInfo = EntityFactory.create(HtmlContent.class);
                 pmcInfo.locale().set(li.aLocale);
-                pmcInfo.html().setValue("<div>" + pmcName() + "<br/>Contact us: TBD <br/></div>");
+                pmcInfo.html().setValue("<div>" + pmcName() + "<br/>Contact us: " + getContactUs() + " <br/></div>");
                 descriptor.pmcInfo().add(pmcInfo);
             }
         }
@@ -624,6 +624,16 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
             log.error("SiteImageResource load error", e);
         }
         return siteImage;
+    }
+
+    private String getContactUs() {
+        StringBuffer contactUsText = new StringBuffer();
+        contactUsText.append("info");
+        contactUsText.append("@");
+        contactUsText.append(pmcName().replaceAll("\\s+", "").toLowerCase());
+        contactUsText.append(".com");
+
+        return contactUsText.toString();
     }
 
     @SuppressWarnings("unchecked")
