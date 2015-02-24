@@ -20,7 +20,7 @@ import com.pyx4j.widgets.client.Button.SecureMenuItem;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.services.legal.eviction.ac.ServiceN4;
-import com.propertyvista.domain.eviction.EvictionStatus;
+import com.propertyvista.domain.eviction.EvictionCaseStatus;
 import com.propertyvista.domain.eviction.EvictionStatusN4;
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep.EvictionStepType;
 import com.propertyvista.dto.EvictionCaseDTO;
@@ -69,9 +69,9 @@ public class EvictionCaseViewerViewImpl extends CrmViewerViewImplBase<EvictionCa
         }
 
         boolean hasArrears = false;
-        for (EvictionStatus status : evictionCase.history()) {
+        for (EvictionCaseStatus status : evictionCase.history()) {
             if (EvictionStepType.N4.equals(status.evictionStep().stepType().getValue())) {
-                EvictionStatusN4 statusN4 = (EvictionStatusN4) status;
+                EvictionStatusN4 statusN4 = status.<EvictionStatusN4> cast();
                 hasArrears = !statusN4.leaseArrears().isEmpty();
                 break;
             }

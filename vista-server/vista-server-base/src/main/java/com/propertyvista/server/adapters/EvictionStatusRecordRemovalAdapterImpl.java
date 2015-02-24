@@ -29,12 +29,14 @@ public class EvictionStatusRecordRemovalAdapterImpl implements EvictionStatusRec
     @Override
     public void onBeforeUpdate(EvictionStatusN4 origEntity, EvictionStatusN4 newEntity) {
         // find deleted records
-        for (EvictionStatusRecord record : origEntity.statusRecords()) {
-            if (!newEntity.statusRecords().contains(record)) {
-                // remove other references, if any
-                Persistence.ensureRetrieve(record.attachments(), AttachLevel.IdOnly);
-                for (EvictionDocument doc : record.attachments()) {
-                    newEntity.generatedForms().remove(doc);
+        if (origEntity != null) {
+            for (EvictionStatusRecord record : origEntity.statusRecords()) {
+                if (!newEntity.statusRecords().contains(record)) {
+                    // remove other references, if any
+                    Persistence.ensureRetrieve(record.attachments(), AttachLevel.IdOnly);
+                    for (EvictionDocument doc : record.attachments()) {
+                        newEntity.generatedForms().remove(doc);
+                    }
                 }
             }
         }

@@ -21,21 +21,16 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 
-import com.propertyvista.domain.eviction.EvictionStatus;
+import com.propertyvista.domain.eviction.EvictionCaseStatus;
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
 
-public class EvictionStatusEditorBase<S extends EvictionStatus> extends CForm<S> {
+public class EvictionStatusEditorBase<S extends EvictionCaseStatus> extends CForm<S> {
 
     public interface EvictionStepSelectionHandler {
         Set<EvictionFlowStep> getAvailableSteps();
     }
 
     private final EvictionStepSelectionHandler stepSelectionHandler;
-
-    EvictionStatusEditorBase(Class<S> entityClass, EvictionStepSelectionHandler stepSelectionHandler) {
-        super(entityClass);
-        this.stepSelectionHandler = stepSelectionHandler;
-    }
 
     private final CComboBox<EvictionFlowStep> stepSelector = new CComboBox<EvictionFlowStep>( //
             NotInOptionsPolicy.KEEP, //
@@ -54,6 +49,11 @@ public class EvictionStatusEditorBase<S extends EvictionStatus> extends CForm<S>
             super.onEditingStart();
         }
     };
+
+    EvictionStatusEditorBase(Class<S> entityClass, EvictionStepSelectionHandler stepSelectionHandler) {
+        super(entityClass);
+        this.stepSelectionHandler = stepSelectionHandler;
+    }
 
     protected CComboBox<EvictionFlowStep> getStepSelector() {
         return stepSelector;

@@ -37,7 +37,7 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.legal.eviction.EvictionCaseFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
-import com.propertyvista.domain.eviction.EvictionStatus;
+import com.propertyvista.domain.eviction.EvictionCaseStatus;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
@@ -258,7 +258,7 @@ public class ARArrearsManager {
         arrearsSnapshot.lmrToUnitRentDifference().setValue(lastMonthRentDeposit(billingAccount).subtract(unitRent(billingAccount)));
 
         Persistence.ensureRetrieve(billingAccount.lease(), AttachLevel.Attached);
-        EvictionStatus evictionStatus = ServerSideFactory.create(EvictionCaseFacade.class).getCurrentEvictionStatus(
+        EvictionCaseStatus evictionStatus = ServerSideFactory.create(EvictionCaseFacade.class).getCurrentEvictionStatus(
                 billingAccount.lease().<Lease> createIdentityStub());
         if (evictionStatus != null) {
             arrearsSnapshot.legalStatus().set(evictionStatus.evictionStep().name());

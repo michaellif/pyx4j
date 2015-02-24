@@ -67,7 +67,6 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
             setTabVisible(adjustmentsTab, false);
             setTabVisible(chargesTab, false);
             setTabVisible(billsTab, false);
-            setTabVisible(evictionHistoryTab, false);
         }
     }
 
@@ -87,7 +86,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
         setTabVisible(paymentsTab, !getValue().status().getValue().isDraft());
         setTabVisible(financialTab, !getValue().status().getValue().isDraft());
-        setTabVisible(evictionHistoryTab, isInternalMode && !getValue().status().getValue().isDraft());
+        setTabVisible(evictionHistoryTab, !getValue().status().getValue().isDraft());
     }
 
     private IsWidget createFinancialTransactionHistoryTab() {

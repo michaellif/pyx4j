@@ -31,6 +31,7 @@ import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.legal.eviction.EvictionCaseFacade;
 import com.propertyvista.domain.eviction.EvictionCase;
+import com.propertyvista.domain.eviction.EvictionCaseStatus;
 import com.propertyvista.domain.eviction.EvictionDocument;
 import com.propertyvista.domain.eviction.EvictionStatus;
 import com.propertyvista.domain.financial.ARCode;
@@ -80,7 +81,7 @@ public abstract class ArrearsSnapshotTestBase extends LeaseFinancialTestBase {
         }
 
         @Override
-        public void addEvictionStatusDetails(EvictionStatus evictionStatus, String note, List<EvictionDocument> attachments) {
+        public void addEvictionStatusDetails(EvictionCaseStatus evictionStatus, String note, List<EvictionDocument> attachments) {
         }
 
         @Override
