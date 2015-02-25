@@ -13,6 +13,7 @@
 package com.propertyvista.generator;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.EnumSet;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -27,6 +28,7 @@ import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.person.Person.Sex;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.ReferenceSource;
@@ -53,6 +55,16 @@ public class LeaseGenerator extends DataGenerator {
     protected static final long MAX_LEASE_DURATION = 1000L * 60L * 60L * 24L * 365L * 3L;
 
     protected static final long MIN_LEASE_DURATION = 1000L * 60L * 60L * 24L * 365L;
+
+    public static final EnumSet<PersonRelationship> maleDependentRelationships = EnumSet.of(PersonRelationship.Son, PersonRelationship.Friend,
+            PersonRelationship.Other);
+
+    public static final EnumSet<PersonRelationship> femaleDependentRelationships = EnumSet.of(PersonRelationship.Daughter, PersonRelationship.Friend,
+            PersonRelationship.Other);
+
+    public static final EnumSet<PersonRelationship> coApplicantRelationships = EnumSet.of(PersonRelationship.Spouse, PersonRelationship.Mother,
+            PersonRelationship.Father, PersonRelationship.Grandfather, PersonRelationship.Grandmother, PersonRelationship.Uncle, PersonRelationship.Aunt,
+            PersonRelationship.Friend, PersonRelationship.Other);
 
     private final VistaDevPreloadConfig config;
 
@@ -117,6 +129,10 @@ public class LeaseGenerator extends DataGenerator {
             tenant.leaseParticipant().customer().personScreening().set(screeningGenerator.createScreening(lease, tenant.leaseParticipant()));
             tenant.role().setValue(RandomUtil.random(EnumSet.of(LeaseTermParticipant.Role.CoApplicant, LeaseTermParticipant.Role.Dependent)));
             tenant.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
+
+            if (tenant.role().getValue().equals(LeaseTermParticipant.Role.Dependent)) {
+                ensureDependantAttributes(tenant);
+            }
 
             lease.currentTerm().version().tenants().add(tenant);
         }
@@ -203,5 +219,16 @@ public class LeaseGenerator extends DataGenerator {
                 }
             }
         }
+    }
+
+    private static void ensureDependantAttributes(LeaseTermTenant tenant) {
+        if (tenant.leaseParticipant().customer().person().sex().equals(Sex.Male)) {
+            tenant.relationship().setValue(RandomUtil.random(maleDependentRelationships));
+        } else {
+            tenant.relationship().setValue(RandomUtil.random(femaleDependentRelationships));
+        }
+
+        int thisYear = Calendar.getInstance().get(Calendar.YEAR);
+        tenant.leaseParticipant().customer().person().birthDate().setValue(RandomUtil.randomLogicalDate(thisYear - 17, thisYear - 13));
     }
 }

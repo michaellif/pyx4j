@@ -97,8 +97,13 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 String email = DemoData.UserType.COAPPLICANT.getEmail(tCoApplicantCount);
                 participant.leaseParticipant().customer().person().email().setValue(email);
 
+                if (participant.role().getValue().equals(LeaseTermParticipant.Role.Dependent)) {
+                    ensureCoApplicantAttributes(participant);
+                }
+
                 // Make sure he is CoApplicant
                 participant.role().setValue(LeaseTermParticipant.Role.CoApplicant);
+
             }
 
             if ((lease.currentTerm().version().guarantors().size() > 0) && (tGuarantorCount < DemoData.UserType.GUARANTOR.getDefaultMax())) {
@@ -451,6 +456,11 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         } else {
             return new LogicalDate(segment.dateFrom().getValue());
         }
+    }
+
+    private void ensureCoApplicantAttributes(LeaseTermTenant participant) {
+        participant.relationship().setValue(RandomUtil.random(LeaseGenerator.coApplicantRelationships));
+        participant.leaseParticipant().customer().person().birthDate().setValue(RandomUtil.randomLogicalDate(1930, 1980));
     }
 
 }
