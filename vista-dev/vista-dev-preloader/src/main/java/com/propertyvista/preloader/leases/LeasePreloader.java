@@ -316,6 +316,10 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 String email = DemoData.UserType.PCOAPPLICANT.getEmail(pCoApplicantCount);
                 participant.leaseParticipant().customer().person().email().setValue(email);
 
+                if (participant.role().getValue().equals(LeaseTermParticipant.Role.Dependent)) {
+                    ensureCoApplicantAttributes(participant);
+                }
+
                 // Make sure he is CoApplicant
                 participant.role().setValue(LeaseTermParticipant.Role.CoApplicant);
             }
