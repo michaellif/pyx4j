@@ -23,8 +23,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.pmc.Pmc;
@@ -35,6 +37,8 @@ import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.server.TaskRunner;
 
 public class CustomDNSManager {
+
+    private static final I18n i18n = I18n.get(CustomDNSManager.class);
 
     private final static Logger log = LoggerFactory.getLogger(CustomDNSManager.class);
 
@@ -59,7 +63,8 @@ public class CustomDNSManager {
             return;
         }
 
-        String customerCompleteDnsName = dnsConfig.customerDnsName().getValue();
+        String customerCompleteDnsName = dnsConfig.customerDnsName().getValue().trim();
+        dnsConfig.customerDnsName().setValue(customerCompleteDnsName);
         String customerDnsName = getHostName(customerCompleteDnsName);
 
         if (customerDnsName == null) {
@@ -73,6 +78,9 @@ public class CustomDNSManager {
         } else if (application == VistaApplication.resident) {
             updateResidentAppDnsResolutionData(pmc, dnsConfig);
         }
+
+        // Remove all cache in order to Redirecting filter can redirect to correct new values
+        CacheService.resetAll();
     }
 
     private static void updateSiteAppDnsResolutionData(Pmc pmc, final PmcDnsConfigTO dnsConfig) {
@@ -157,6 +165,7 @@ public class CustomDNSManager {
 
         pmcDnsConfig.dnsNameIsActive().setValue(PmcDNSUtils.isDnsNameActiveForApplication(pmc, application));
         pmcDnsConfig.serverIPAddress().setValue(PmcDNSUtils.getDefaultIpAddressForApplication(application));
+        pmcDnsConfig.dnsNameDefault().setValue(PmcDNSUtils.getHostName(VistaDeployment.getBaseApplicationURL(pmc, application, true)));
 
         String customerCompleteDnsName = PmcDNSUtils.getCustomerDnsName(pmc, application);
 
@@ -178,7 +187,7 @@ public class CustomDNSManager {
 //                pmcDnsConfig.dnsResolutionMessage().setValue(getUnknownHostExceptionTypeMessage(e));
                 pmcDnsConfig.dnsResolutionMessage().setValue(e.getMessage());
             } catch (IOException | InterruptedException e) {
-                pmcDnsConfig.dnsResolutionMessage().setValue(ERROR_RESOLVING_CUSTOMER_ADDRESS);
+                pmcDnsConfig.dnsResolutionMessage().setValue(i18n.tr(ERROR_RESOLVING_CUSTOMER_ADDRESS));
                 log.error("Error resolving customerDnsName", e);
             }
 
@@ -188,15 +197,9 @@ public class CustomDNSManager {
                 pmcDnsConfig.dnsResolved().setValue(Boolean.TRUE);
             } else {
                 pmcDnsConfig.dnsResolved().setValue(Boolean.FALSE);
-                pmcDnsConfig.dnsResolutionMessage().setValue(IP_DOES_NOT_MATCH_VISTA_SERVER_ADDRESS);
+                pmcDnsConfig.dnsResolutionMessage().setValue(i18n.tr(IP_DOES_NOT_MATCH_VISTA_SERVER_ADDRESS));
             }
 
-        }
-
-        if (pmcDnsConfig.dnsNameIsActive().getValue()) {
-            pmcDnsConfig.dnsNameDefault().setValue(pmcDnsConfig.customerDnsName().getValue());
-        } else {
-            pmcDnsConfig.dnsNameDefault().setValue(PmcDNSUtils.getHostName(VistaDeployment.getBaseApplicationURL(pmc, application, true)));
         }
 
         return pmcDnsConfig;

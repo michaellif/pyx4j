@@ -48,6 +48,8 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -86,7 +88,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
                 setSelectedUnit(initData.unit(), term);
             }
 
-            setAgeRestrictions(term);
+            setRestrictions(term);
 
             switch (initData.leaseStatus().getValue()) {
             case ExistingLease:
@@ -189,7 +191,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             checkUnitMoveOut(to);
         }
 
-        setAgeRestrictions(to);
+        setRestrictions(to);
 
         if (to.lease().status().getValue() == Status.Application) {
             to.masterApplicationStatus()
@@ -214,7 +216,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         fillServiceItems(currentValue);
 
         checkUnitMoveOut(currentValue);
-        setAgeRestrictions(currentValue);
+        setRestrictions(currentValue);
 
         return currentValue;
     }
@@ -436,19 +438,29 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         }
     }
 
-    private void setAgeRestrictions(LeaseTermDTO dto) {
+    private void setRestrictions(LeaseTermDTO dto) {
+        Integer bedrooms = 0;
+        PolicyNode policyNode;
         if (dto.unit().isNull()) {
-            dto.ageOfMajority().setValue(18);
-            dto.enforceAgeOfMajority().setValue(false);
-            dto.maturedOccupantsAreApplicants().setValue(false);
+            policyNode = Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class));
         } else {
-            RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(dto.unit().building(),
-                    RestrictionsPolicy.class);
-            dto.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
-            dto.enforceAgeOfMajority().setValue(restrictionsPolicy.enforceAgeOfMajority().getValue());
-            dto.maturedOccupantsAreApplicants().setValue(restrictionsPolicy.maturedOccupantsAreApplicants().getValue());
-            dto.noNeedGuarantors().setValue(restrictionsPolicy.noNeedGuarantors().getValue());
+            policyNode = dto.unit().building();
+
+            Persistence.ensureRetrieve(dto.unit().floorplan(), AttachLevel.Attached);
+            bedrooms = dto.unit().floorplan().bedrooms().getValue(0);
         }
+
+        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, RestrictionsPolicy.class);
+
+        dto.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
+        dto.enforceAgeOfMajority().setValue(restrictionsPolicy.enforceAgeOfMajority().getValue());
+        dto.maturedOccupantsAreApplicants().setValue(restrictionsPolicy.maturedOccupantsAreApplicants().getValue());
+        dto.noNeedGuarantors().setValue(restrictionsPolicy.noNeedGuarantors().getValue());
+
+        dto.maxOccupants().setValue((int) (bedrooms.doubleValue() * restrictionsPolicy.occupantsPerBedRoom().getValue(0.0)));
+        dto.maxLockers().setValue(restrictionsPolicy.maxLockers().getValue());
+        dto.maxParkingSpots().setValue(restrictionsPolicy.maxParkingSpots().getValue());
+        dto.maxPets().setValue(restrictionsPolicy.maxPets().getValue());
     }
 
     private LeaseTermDTO createOffer(Lease leaseId, Type type) {

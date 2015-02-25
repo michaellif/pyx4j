@@ -137,17 +137,15 @@ public class VistaApplicationResolverHelper {
 
     public static boolean isHttpsRedirectionNeeded(HttpServletRequest httpRequest, VistaApplication app) {
 
-        boolean redirect = false;
-
         if (httpRequest.isSecure()) {
-            return redirect;
+            return false;
         }
 
         if (app != null && app != VistaApplication.site && app != VistaApplication.noApp) {
-            redirect = true;
+            return true;
         }
 
-        return redirect;
+        return false;
     }
 
     /**
