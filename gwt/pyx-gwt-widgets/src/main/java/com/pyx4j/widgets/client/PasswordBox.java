@@ -162,6 +162,7 @@ public class PasswordBox extends FlowPanel implements IValueBoxWidget<String> {
 
             progressMarker = new SimplePanel();
             progressMarker.setHeight("4px");
+            progressMarker.getElement().getStyle().setMarginBottom(4, Unit.PX);
             progressHolder.setWidget(progressMarker);
 
             textBox.addKeyUpHandler(new KeyUpHandler() {
