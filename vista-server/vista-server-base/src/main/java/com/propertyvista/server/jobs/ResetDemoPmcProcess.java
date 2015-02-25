@@ -25,8 +25,7 @@ public class ResetDemoPmcProcess implements PmcProcess {
 
     private static final Logger log = LoggerFactory.getLogger(ResetDemoPmcProcess.class);
 
-    private static final DemoPmc[] PMCS_TO_RESET = { DemoPmc.vista, DemoPmc.redridge, DemoPmc.rockville, DemoPmc.star, DemoPmc.gondor, DemoPmc.metcap,
-            DemoPmc.timbercreek, DemoPmc.greenwin };
+    private static final DemoPmc[] PMCS_TO_RESET = { DemoPmc.vista, DemoPmc.redridge, DemoPmc.rockville, DemoPmc.star, DemoPmc.gondor, DemoPmc.timbercreek };
 
     @Override
     public boolean start(PmcProcessContext context) {

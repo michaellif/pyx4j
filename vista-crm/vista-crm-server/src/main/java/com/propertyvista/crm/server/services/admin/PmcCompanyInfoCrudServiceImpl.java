@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services.admin;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rpc.AbstractCrudService;
@@ -22,6 +23,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.dto.admin.PmcCompanyInfoDTO;
 import com.propertyvista.crm.rpc.services.admin.PmcCompanyInfoCrudService;
@@ -51,8 +53,9 @@ public class PmcCompanyInfoCrudServiceImpl implements PmcCompanyInfoCrudService 
 
         PmcCompanyInfoDTO ciTO = new CompanyInfoBinder().createTO(ciBO);
 
-        ciTO.websiteDnsName().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.site, false));
-        ciTO.portalDnsName().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.resident, false));
+        ciTO.websiteDnsConfig().set(ServerSideFactory.create(PmcFacade.class).getApplicationDnsConfig(VistaDeployment.getCurrentPmc(), VistaApplication.site));
+        ciTO.portalDnsConfig().set(
+                ServerSideFactory.create(PmcFacade.class).getApplicationDnsConfig(VistaDeployment.getCurrentPmc(), VistaApplication.resident));
 
         callback.onSuccess(ciTO);
     }
@@ -62,8 +65,13 @@ public class PmcCompanyInfoCrudServiceImpl implements PmcCompanyInfoCrudService 
         PmcCompanyInfo ciBO = new CompanyInfoBinder().createBO(editableEntity);
 
         Persistence.service().merge(ciBO);
-        Persistence.service().commit();
 
+        ServerSideFactory.create(PmcFacade.class).updateApplicationDnsConfig(VistaDeployment.getCurrentPmc(), VistaApplication.site,
+                editableEntity.websiteDnsConfig());
+        ServerSideFactory.create(PmcFacade.class).updateApplicationDnsConfig(VistaDeployment.getCurrentPmc(), VistaApplication.resident,
+                editableEntity.portalDnsConfig());
+
+        Persistence.service().commit();
         callback.onSuccess(ciBO.getPrimaryKey());
     }
 

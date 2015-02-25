@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -48,7 +48,7 @@ class PolicyManager {
             ProvincePolicyNode.class, CountryPolicyNode.class, OrganizationPoliciesNode.class);
 
     /**
-     * 
+     *
      * @param node
      *            not <code>null</code>.
      * @param policyClass
@@ -62,7 +62,7 @@ class PolicyManager {
             node = Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class));
         }
         if (node == null || node.isNull()) {
-            throw new IllegalArgumentException("PolicyNode must not be null for policy " + policyClass.getSimpleName());
+            throw new IllegalArgumentException("PolicyNode is 'null' querying policy " + policyClass.getSimpleName());
         }
 
         PolicyNode currentNode = node;
@@ -70,11 +70,9 @@ class PolicyManager {
         if (policy != null) {
             return policy;
         }
-        if (currentNode.isValueDetached()) {
-            currentNode = currentNode.duplicate();
-            Persistence.service().retrieve(currentNode);
-        }
+
         do {
+            Persistence.ensureRetrieve(currentNode, AttachLevel.Attached);
             EntityQueryCriteria<POLICY> criteria = EntityQueryCriteria.create(policyClass);
             criteria.add(PropertyCriterion.eq(criteria.proto().node(), currentNode));
             policy = Persistence.service().retrieve(criteria);
@@ -82,17 +80,11 @@ class PolicyManager {
                 break;
             }
             currentNode = parentOf(currentNode);
-
         } while (currentNode != null);
 
         if (policy == null) {
-            String nodeStringView = null;
-            if (node.isValueDetached()) {
-                nodeStringView = ((PolicyNode) Persistence.service().retrieve(node.getInstanceValueClass(), node.getPrimaryKey())).getStringView();
-            } else {
-                nodeStringView = node.getStringView();
-            }
-            throw new PolicyNotFoundException(policyClass, nodeStringView);
+            Persistence.ensureRetrieve(node, AttachLevel.ToStringMembers);
+            throw new PolicyNotFoundException(policyClass, node.getStringView());
         } else {
             policy = correctAccordingToVistaFeatures(policy);
             CacheService.put(policyCacheKey(policyClass, node), policy);
@@ -101,7 +93,7 @@ class PolicyManager {
     }
 
     private static String policyCacheKey(final Class<? extends Policy> policyClass, PolicyNode node) {
-        return PolicyManager.class.getName() + policyClass.getName() + node.getPrimaryKey() + node.getEntityMeta().getEntityClass().getName();
+        return PolicyManager.class.getName() + policyClass.getSimpleName() + node.getEntityMeta().getEntityClass().getSimpleName() + node.getPrimaryKey();
     }
 
     static void resetPolicyCache() {
@@ -110,7 +102,7 @@ class PolicyManager {
 
     // TODO move this method to another class (i.e. something that manages/defines heirarchy)
     /**
-     * 
+     *
      * @param node
      * @return <code>null</code> for organizational policy node, otherwise parent node or if there's not a parent node organizational policy node
      */
@@ -123,7 +115,6 @@ class PolicyManager {
 
         PolicyNode policyNode = null;
         do {
-
             if (AptUnit.class.equals(nodeClass)) {
                 policyNode = Persistence.service().retrieve(Floorplan.class, ((AptUnit) node.cast()).floorplan().getPrimaryKey());
                 break;
@@ -184,10 +175,9 @@ class PolicyManager {
         }
 
         return policyNode;
-
     }
 
-    // TODO move this method to another class (i.e. something that manages/defines heirarchy)        
+    // TODO move this method to another class (i.e. something that manages/defines heirarchy)
     public static List<? extends PolicyNode> childrenOf(PolicyNode node) {
         Class<? extends PolicyNode> nodeClass = node != null ? (Class<? extends PolicyNode>) node.getInstanceValueClass() : OrganizationPoliciesNode.class;
 
@@ -286,6 +276,7 @@ class PolicyManager {
                 parentList = childList;
             }
         }
+
         return resultList;
     }
 

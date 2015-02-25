@@ -30,11 +30,11 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.rpc.services.legal.eviction.EvictionDocumentUploadService;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.eviction.EvictionCaseStatus;
 import com.propertyvista.domain.eviction.EvictionDocument;
-import com.propertyvista.domain.eviction.EvictionStatus;
 import com.propertyvista.domain.eviction.EvictionStatusRecord;
 
-public class EvictionStatusEditor<S extends EvictionStatus> extends EvictionStatusEditorBase<S> {
+public class EvictionStatusEditor<S extends EvictionCaseStatus> extends EvictionStatusEditorBase<S> {
 
     private static final I18n i18n = I18n.get(EvictionStatusEditor.class);
 

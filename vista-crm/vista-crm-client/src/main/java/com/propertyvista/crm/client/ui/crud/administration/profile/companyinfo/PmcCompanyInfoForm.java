@@ -28,18 +28,23 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.resources.CrmResources;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.admin.PmcCompanyInfoDTO;
+import com.propertyvista.domain.pmc.PmcDnsConfigTO;
 import com.propertyvista.domain.settings.PmcCompanyInfoContact;
 
 public class PmcCompanyInfoForm extends CrmEntityForm<PmcCompanyInfoDTO> {
 
     private static final I18n i18n = I18n.get(PmcCompanyInfoForm.class);
 
+    private final HTML websiteHeader = new HTML();
+
+    private final HTML portalHeader = new HTML();
+
     public PmcCompanyInfoForm(IPrimeFormView<PmcCompanyInfoDTO, ?> view) {
         super(PmcCompanyInfoDTO.class, view);
 
         selectTab(addTab(createGeneralTabContent(), i18n.tr("General")));
-        selectTab(addTab(createWebsiteDnsNameTabContent(), i18n.tr("Website DNS Name")));
-        selectTab(addTab(createPortalDnsNameTabContent(), i18n.tr("Portal DNS Name")));
+        addTab(createWebsiteDnsNameTabContent(), i18n.tr("Website DNS Name"));
+        addTab(createPortalDnsNameTabContent(), i18n.tr("Portal DNS Name"));
     }
 
     FormPanel createGeneralTabContent() {
@@ -56,24 +61,19 @@ public class PmcCompanyInfoForm extends CrmEntityForm<PmcCompanyInfoDTO> {
     private FormPanel createWebsiteDnsNameTabContent() {
         FormPanel formPanel = new FormPanel(this);
 
-        if (!isViewable()) {
-            HTML websiteHeader = new HTML(CrmResources.INSTANCE.dnsNameSetupWebsiteHeader().getText());
-            websiteHeader.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-            formPanel.append(Location.Dual, websiteHeader);
+        websiteHeader.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+        formPanel.append(Location.Dual, websiteHeader);
 
-            formPanel.br();
-        }
+        formPanel.br();
 
-        formPanel.append(Location.Dual, proto().websiteDnsName()).decorate();
+        formPanel.append(Location.Dual, proto().websiteDnsConfig().customerDnsName()).decorate();
 
-        if (!isViewable()) {
-            formPanel.br();
-            formPanel.br();
+        formPanel.br();
+        formPanel.br();
 
-            HTML websiteFooter = new HTML(CrmResources.INSTANCE.dnsNameSetupFooter().getText());
-            websiteFooter.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-            formPanel.append(Location.Dual, websiteFooter);
-        }
+        HTML websiteFooter = new HTML(CrmResources.INSTANCE.dnsNameSetupFooter().getText());
+        websiteFooter.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+        formPanel.append(Location.Dual, websiteFooter);
 
         return formPanel;
     }
@@ -81,26 +81,64 @@ public class PmcCompanyInfoForm extends CrmEntityForm<PmcCompanyInfoDTO> {
     private FormPanel createPortalDnsNameTabContent() {
         FormPanel formPanel = new FormPanel(this);
 
-        if (!isViewable()) {
-            HTML portalHeader = new HTML(CrmResources.INSTANCE.dnsNameSetupPortalHeader().getText());
-            portalHeader.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-            formPanel.append(Location.Dual, portalHeader);
+        portalHeader.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+        formPanel.append(Location.Dual, portalHeader);
 
-            formPanel.br();
-        }
+        formPanel.br();
 
-        formPanel.append(Location.Dual, proto().portalDnsName()).decorate();
+        formPanel.append(Location.Dual, proto().portalDnsConfig().customerDnsName()).decorate();
 
-        if (!isViewable()) {
-            formPanel.br();
-            formPanel.br();
+        formPanel.br();
+        formPanel.br();
 
-            HTML portalFooter = new HTML(CrmResources.INSTANCE.dnsNameSetupFooter().getText());
-            portalFooter.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-            formPanel.append(Location.Dual, portalFooter);
-        }
+        HTML portalFooter = new HTML(CrmResources.INSTANCE.dnsNameSetupFooter().getText());
+        portalFooter.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+        formPanel.append(Location.Dual, portalFooter);
 
         return formPanel;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        updateSiteHeader(getValue().websiteDnsConfig());
+        updatePortalHeader(getValue().portalDnsConfig());
+
+        String websiteNote = getValue().websiteDnsConfig().dnsResolved().getValue(false) ? null : getValue().websiteDnsConfig().dnsResolutionMessage()
+                .getValue();
+        get(proto().websiteDnsConfig().customerDnsName()).setNote(websiteNote, NoteStyle.Warn);
+
+        String portalNote = getValue().portalDnsConfig().dnsResolved().getValue(false) ? null : getValue().portalDnsConfig().dnsResolutionMessage().getValue();
+        get(proto().portalDnsConfig().customerDnsName()).setNote(portalNote, NoteStyle.Warn);
+    }
+
+    private void updateSiteHeader(PmcDnsConfigTO dnsConfig) {
+        String content = CrmResources.INSTANCE.dnsNameSetupWebsiteHeader().getText();
+
+        if (dnsConfig.dnsResolved().getValue(false)) {
+            content = content.replace("_CURRENT_DOMAIN_", dnsConfig.customerDnsName().getValue());
+        } else {
+            content = content.replace("_CURRENT_DOMAIN_", dnsConfig.dnsNameDefault().getValue());
+        }
+
+        content = content.replace("_IP_ADDRESS_", dnsConfig.serverIPAddress().getValue());
+
+        websiteHeader.setHTML(content);
+    }
+
+    private void updatePortalHeader(PmcDnsConfigTO dnsConfig) {
+        String content = CrmResources.INSTANCE.dnsNameSetupPortalHeader().getText();
+
+        if (dnsConfig.dnsResolved().getValue(false)) {
+            content = content.replace("_CURRENT_DOMAIN_", dnsConfig.customerDnsName().getValue());
+        } else {
+            content = content.replace("_CURRENT_DOMAIN_", dnsConfig.dnsNameDefault().getValue());
+        }
+
+        content = content.replace("_IP_ADDRESS_", dnsConfig.serverIPAddress().getValue());
+
+        portalHeader.setHTML(content);
     }
 
     private class PmcCompanyInfoContactFolder extends VistaTableFolder<PmcCompanyInfoContact> {

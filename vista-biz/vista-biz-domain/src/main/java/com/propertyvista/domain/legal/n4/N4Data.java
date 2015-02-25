@@ -50,7 +50,6 @@ public interface N4Data extends IEntity {
 
     IPrimitive<N4DeliveryMethod> deliveryMethod();
 
-    @ReadOnly
     @Format("yyyy-MM-dd")
     IPrimitive<LogicalDate> deliveryDate();
 

@@ -67,6 +67,16 @@ public interface LeaseTermDTO extends LeaseTerm {
 
     IPrimitive<Boolean> noNeedGuarantors();
 
+    IPrimitive<Integer> maxOccupants();
+
+    IPrimitive<Integer> maxParkingSpots();
+
+    IPrimitive<Integer> maxLockers();
+
+    IPrimitive<Integer> maxPets();
+
+    //------------------------------------------------
+
     MasterOnlineApplicationStatus masterApplicationStatus();
 
     IPrimitive<String> nextAutopayApplicabilityMessage();

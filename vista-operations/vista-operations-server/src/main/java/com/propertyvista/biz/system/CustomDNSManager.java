@@ -14,14 +14,19 @@ package com.propertyvista.biz.system;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.pmc.Pmc;
@@ -32,6 +37,8 @@ import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.server.TaskRunner;
 
 public class CustomDNSManager {
+
+    private static final I18n i18n = I18n.get(CustomDNSManager.class);
 
     private final static Logger log = LoggerFactory.getLogger(CustomDNSManager.class);
 
@@ -47,92 +54,118 @@ public class CustomDNSManager {
             return null;
         }
 
-        PmcDnsConfigTO pmcDnsConfig = EntityFactory.create(PmcDnsConfigTO.class);
-        pmcDnsConfig.dnsNameDefault().setValue(VistaDeployment.getBaseApplicationURL(pmc, application, true));
-        pmcDnsConfig.dnsNameIsActive().setValue(PmcDNSUtils.isDnsNameActiveForApplication(pmc, application));
-        pmcDnsConfig.serverIPAddress().setValue(PmcDNSUtils.getDefaultIpAddressForApplication(application));
-
-        setDnsResolutionDataForApplication(pmc, pmcDnsConfig, application);
-
+        PmcDnsConfigTO pmcDnsConfig = getDnsResolutionInformationForApplication(pmc, application);
         return pmcDnsConfig;
     }
 
-    public void updateApplicationDnsConfig(final Pmc pmc, final VistaApplication application, PmcDnsConfigTO dnsConfig) {
+    public void updateApplicationDnsConfig(Pmc pmc, final VistaApplication application, PmcDnsConfigTO dnsConfig) {
         if (!isApplicationSuspported(application)) {
             return;
         }
 
-        if (application == VistaApplication.site) {
-            dnsConfig = setSiteAppDnsResolutionData(dnsConfig);
-        } else if (application == VistaApplication.resident) {
-            dnsConfig = setResidentAppDnsResolutionData(dnsConfig);
-        }
+        String customerCompleteDnsName = dnsConfig.customerDnsName().getValue().trim();
+        dnsConfig.customerDnsName().setValue(customerCompleteDnsName);
+        String customerDnsName = getHostName(customerCompleteDnsName);
 
-        final String dnsCustomerName = dnsConfig.customerDnsName().getValue();
-
-        if (dnsCustomerName == null) {
+        if (customerDnsName == null) {
             return;
         }
+
+        dnsConfig.customerDnsName().setValue(customerDnsName);
+
+        if (application == VistaApplication.site) {
+            updateSiteAppDnsResolutionData(pmc, dnsConfig);
+        } else if (application == VistaApplication.resident) {
+            updateResidentAppDnsResolutionData(pmc, dnsConfig);
+        }
+
+        // Remove all cache in order to Redirecting filter can redirect to correct new values
+        CacheService.resetAll();
+    }
+
+    private static void updateSiteAppDnsResolutionData(Pmc pmc, final PmcDnsConfigTO dnsConfig) {
+        removePmcDnsAliasesForPmcAndApplication(pmc, VistaApplication.site);
+        addDnsAliasForPmcAndApplication(pmc, VistaApplication.site, dnsConfig);
+    }
+
+    private static void updateResidentAppDnsResolutionData(Pmc pmc, final PmcDnsConfigTO dnsConfig) {
+        String customerDnsName = dnsConfig.customerDnsName().getValue();
+
+        // Add customer dnsAlias for Resident Portal
+        removePmcDnsAliasesForPmcAndApplication(pmc, VistaApplication.resident);
+        addDnsAliasForPmcAndApplication(pmc, VistaApplication.resident, dnsConfig);
+
+        // If case of "my." or "www.my." check for adding alternative dns alias if they are also resolved
+        if (customerDnsName.startsWith("my.")) {
+            String alternativeDnsName = "www." + customerDnsName;
+            if (resolveDNS(alternativeDnsName) != null) {
+                dnsConfig.customerDnsName().setValue(alternativeDnsName);
+                addDnsAliasForPmcAndApplication(pmc, VistaApplication.resident, dnsConfig);
+            }
+        } else if (customerDnsName.startsWith("www.my.")) {
+            String alternativeDnsName = customerDnsName.replaceFirst("www.my.", "my.");
+            if (resolveDNS(alternativeDnsName) != null) {
+                dnsConfig.customerDnsName().setValue(alternativeDnsName);
+                addDnsAliasForPmcAndApplication(pmc, VistaApplication.resident, dnsConfig);
+            }
+        }
+
+    }
+
+    // TODO Move method to PmcFacade
+    private static void addDnsAliasForPmcAndApplication(Pmc pmc, final VistaApplication application, final PmcDnsConfigTO dnsConfig) {
+        final Key pmcPrimaryKey = pmc.getPrimaryKey();
+        final DnsNameTarget targetApp = PmcDNSUtils.getDnsNameTargetByVistaApplication(application);
 
         TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
-                PmcDnsName pmcDnsName = PmcDNSUtils.getPmcDnsAliasesForPmcAndApplication(pmc, application);
-                pmcDnsName.pmc().set(pmc);
-                pmcDnsName.dnsName().setValue(dnsCustomerName);
-                pmcDnsName.enabled().setValue(Boolean.TRUE);
-                pmcDnsName.target().setValue(DnsNameTarget.site);
+                Pmc pmc = Persistence.service().retrieve(Pmc.class, pmcPrimaryKey);
+                Persistence.service().persist(pmc);
+                PmcDnsName pmcDnsName = EntityFactory.create(PmcDnsName.class);
+                pmcDnsName.dnsName().setValue(dnsConfig.customerDnsName().getValue());
+                pmcDnsName.enabled().setValue(isDnsSolvedAndMatch(dnsConfig.customerDnsName().getValue(), application));
+                pmcDnsName.target().setValue(targetApp);
                 pmcDnsName.httpsEnabled().setValue(Boolean.FALSE); // TODO what here?? Read http/https in customerAddress?
-
-                Persistence.service().persist(pmcDnsName);
+                pmcDnsName.pmc().set(pmc);
+                pmc.dnsNameAliases().add(pmcDnsName);
+                Persistence.service().persist(pmc);
                 return null;
             }
         });
-
     }
 
-    private PmcDnsConfigTO setSiteAppDnsResolutionData(PmcDnsConfigTO pmcDnsConfig) {
-        String customerCompleteDnsName = pmcDnsConfig.customerDnsName().getValue();
-        String customerDnsName = getHostName(customerCompleteDnsName);
+    // TODO Move method to PmcFacade
+    private static void removePmcDnsAliasesForPmcAndApplication(Pmc targetPmc, final VistaApplication application) {
+        final Key pmcPrimaryKey = targetPmc.getPrimaryKey();
+        final DnsNameTarget app = PmcDNSUtils.getDnsNameTargetByVistaApplication(application);
+        TaskRunner.runInOperationsNamespace(new Callable<Void>() {
+            @Override
+            public Void call() {
+                Pmc pmc = Persistence.service().retrieve(Pmc.class, pmcPrimaryKey);
+                List<PmcDnsName> dnsNameAliases = new ArrayList<PmcDnsName>();
 
-        if (customerDnsName != null) {
-            pmcDnsConfig.customerDnsName().setValue(customerDnsName);
-        }
+                for (PmcDnsName currentDnsName : pmc.dnsNameAliases()) {
+                    if (!currentDnsName.target().getValue().equals(app)) {
+                        dnsNameAliases.add(currentDnsName);
+                    }
+                }
 
-        return pmcDnsConfig;
-    }
-
-    private PmcDnsConfigTO setResidentAppDnsResolutionData(PmcDnsConfigTO pmcDnsConfig) {
-        String customerCompleteDnsName = pmcDnsConfig.customerDnsName().getValue();
-        String customerDnsName;
-
-        customerDnsName = getHostName(customerCompleteDnsName);
-
-        if (customerDnsName == null) {
-            return pmcDnsConfig;
-        }
-
-        // TODO Don't understand this part yet...
-        if (customerDnsName.startsWith("my.")) {
-            pmcDnsConfig.customerDnsName().setValue(customerDnsName);
-
-            if (resolveDNS("www." + customerDnsName) != null) {
-                pmcDnsConfig.customerDnsName().setValue("www." + customerDnsName);
+                pmc.dnsNameAliases().clear();
+                pmc.dnsNameAliases().addAll(dnsNameAliases);
+                Persistence.service().persist(pmc);
+                return null;
             }
-        } else if (customerDnsName.startsWith("www.my.")) {
-            pmcDnsConfig.customerDnsName().setValue(customerDnsName);
-
-            if (resolveDNS("my." + customerDnsName) != null) {
-                pmcDnsConfig.customerDnsName().setValue("my." + customerDnsName);
-            }
-        } else {
-            pmcDnsConfig.customerDnsName().setValue(customerDnsName);
-        }
-
-        return pmcDnsConfig;
+        });
     }
 
-    private void setDnsResolutionDataForApplication(Pmc pmc, PmcDnsConfigTO pmcDnsConfig, VistaApplication application) {
+    private PmcDnsConfigTO getDnsResolutionInformationForApplication(Pmc pmc, VistaApplication application) {
+
+        PmcDnsConfigTO pmcDnsConfig = EntityFactory.create(PmcDnsConfigTO.class);
+
+        pmcDnsConfig.dnsNameIsActive().setValue(PmcDNSUtils.isDnsNameActiveForApplication(pmc, application));
+        pmcDnsConfig.serverIPAddress().setValue(PmcDNSUtils.getDefaultIpAddressForApplication(application));
+        pmcDnsConfig.dnsNameDefault().setValue(PmcDNSUtils.getHostName(VistaDeployment.getBaseApplicationURL(pmc, application, true)));
 
         String customerCompleteDnsName = PmcDNSUtils.getCustomerDnsName(pmc, application);
 
@@ -140,7 +173,8 @@ public class CustomDNSManager {
             String customerDnsName = getHostName(customerCompleteDnsName);
 
             if (customerDnsName == null) {
-                return;
+                pmcDnsConfig.dnsResolved().setValue(Boolean.FALSE);
+                return null;
             }
 
             pmcDnsConfig.customerDnsName().setValue(customerDnsName);
@@ -153,7 +187,7 @@ public class CustomDNSManager {
 //                pmcDnsConfig.dnsResolutionMessage().setValue(getUnknownHostExceptionTypeMessage(e));
                 pmcDnsConfig.dnsResolutionMessage().setValue(e.getMessage());
             } catch (IOException | InterruptedException e) {
-                pmcDnsConfig.dnsResolutionMessage().setValue(ERROR_RESOLVING_CUSTOMER_ADDRESS);
+                pmcDnsConfig.dnsResolutionMessage().setValue(i18n.tr(ERROR_RESOLVING_CUSTOMER_ADDRESS));
                 log.error("Error resolving customerDnsName", e);
             }
 
@@ -163,9 +197,12 @@ public class CustomDNSManager {
                 pmcDnsConfig.dnsResolved().setValue(Boolean.TRUE);
             } else {
                 pmcDnsConfig.dnsResolved().setValue(Boolean.FALSE);
-                pmcDnsConfig.dnsResolutionMessage().setValue(IP_DOES_NOT_MATCH_VISTA_SERVER_ADDRESS);
+                pmcDnsConfig.dnsResolutionMessage().setValue(i18n.tr(IP_DOES_NOT_MATCH_VISTA_SERVER_ADDRESS));
             }
+
         }
+
+        return pmcDnsConfig;
     }
 
     private static boolean isApplicationSuspported(VistaApplication application) {
@@ -176,7 +213,17 @@ public class CustomDNSManager {
         return true;
     }
 
-    private String resolveDNS(String dns) {
+    private static boolean isDnsSolvedAndMatch(String dns, VistaApplication application) {
+        String ipAddress = resolveDNS(dns);
+
+        if (ipAddress != null && ipAddress.equalsIgnoreCase(PmcDNSUtils.getDefaultIpAddressForApplication(application))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private static String resolveDNS(String dns) {
         return PmcDNSUtils.resolveDnsName(dns);
     }
 

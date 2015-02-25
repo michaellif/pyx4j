@@ -51,7 +51,7 @@ import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudService
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.eviction.EvictionStatus;
+import com.propertyvista.domain.eviction.EvictionCaseStatus;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.security.CrmUserSignature;
 import com.propertyvista.domain.tenant.lease.AgreementInkSignatures;
@@ -403,7 +403,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     }
 
     private void loadCurrentLegalStatus(LeaseDTO lease) {
-        EvictionStatus status = ServerSideFactory.create(EvictionCaseFacade.class).getCurrentEvictionStatus(lease);
+        EvictionCaseStatus status = ServerSideFactory.create(EvictionCaseFacade.class).getCurrentEvictionStatus(lease);
         if (status != null) {
             lease.currentLegalStatus().set(status.evictionStep().name());
         }

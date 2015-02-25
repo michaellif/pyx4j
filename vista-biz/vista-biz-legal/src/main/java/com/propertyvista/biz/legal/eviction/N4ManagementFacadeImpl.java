@@ -37,7 +37,6 @@ import com.propertyvista.biz.legal.forms.n4.N4GenerationUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.eviction.EvictionCase;
 import com.propertyvista.domain.eviction.EvictionCaseStatus;
-import com.propertyvista.domain.eviction.EvictionStatus;
 import com.propertyvista.domain.eviction.EvictionStatusN4;
 import com.propertyvista.domain.legal.errors.FormFillError;
 import com.propertyvista.domain.legal.n4.N4Batch;
@@ -93,7 +92,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         // validate preconditions
         EvictionStatusN4 statusN4 = null;
         if (evictionCase.closedOn().isNull()) {
-            for (EvictionStatus status : evictionCase.history()) {
+            for (EvictionCaseStatus status : evictionCase.history()) {
                 if (EvictionStepType.N4.equals(status.evictionStep().stepType().getValue())) {
                     statusN4 = (EvictionStatusN4) status;
                     Persistence.ensureRetrieve(statusN4.leaseArrears(), AttachLevel.Attached);

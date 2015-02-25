@@ -92,6 +92,7 @@ public class N4Manager {
     // ------ internals -----------
     private void issueN4(N4Data n4data, N4LeaseArrears leaseArrears, N4Policy policy, LogicalDate deliveryDate, Date generationDate, String batchName)
             throws FormFillError {
+        n4data.signatureDate().setValue(new LogicalDate(generationDate));
         N4PdfLeaseData n4LeaseData = prepareN4LeaseData(n4data, leaseArrears, deliveryDate, policy);
 
         String note = batchName == null ? i18n.tr("Generated for Lease") : i18n.tr("Generated from N4 Batch: {0}", batchName);

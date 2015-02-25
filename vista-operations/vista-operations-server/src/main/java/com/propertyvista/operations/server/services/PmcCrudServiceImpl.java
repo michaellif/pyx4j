@@ -160,15 +160,9 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
         if (updated) {
             ServerSideFactory.create(AuditFacade.class).updated(bo, EntityDiff.getChanges(orig, bo));
+            CacheService.resetAll();
         }
 
-        TaskRunner.runInTargetNamespace(bo, new Callable<Void>() {
-            @Override
-            public Void call() {
-                CacheService.reset();
-                return null;
-            }
-        });
         return updated;
     }
 

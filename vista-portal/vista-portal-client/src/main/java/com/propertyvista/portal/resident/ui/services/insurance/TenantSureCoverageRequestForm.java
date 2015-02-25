@@ -52,20 +52,20 @@ public class TenantSureCoverageRequestForm extends CForm<TenantSureCoverageDTO> 
     protected IsWidget createContent() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().inceptionDate()).decorate();
+        formPanel.append(Location.Left, proto().inceptionDate()).decorate().labelWidth(250).componentWidth(150);
 
         formPanel.h1(i18n.tr("Coverage"));
-        formPanel.append(Location.Left, proto().personalLiabilityCoverage(), new MoneyComboBox()).decorate();
-        formPanel.append(Location.Left, proto().contentsCoverage(), new MoneyComboBox()).decorate();
-        formPanel.append(Location.Left, proto().deductible(), new MoneyComboBox()).decorate();
+        formPanel.append(Location.Left, proto().personalLiabilityCoverage(), new MoneyComboBox()).decorate().labelWidth(250).componentWidth(150);
+        formPanel.append(Location.Left, proto().contentsCoverage(), new MoneyComboBox()).decorate().labelWidth(250).componentWidth(150);
+        formPanel.append(Location.Left, proto().deductible(), new MoneyComboBox()).decorate().labelWidth(250).componentWidth(150);
 
         formPanel.h1(i18n.tr("Coverage Qualification Questions"));
-        formPanel.append(Location.Left, proto().smoker(), new YesNoComboBox()).decorate();
-        formPanel.append(Location.Left, proto().numberOfPreviousClaims()).decorate();
+        formPanel.append(Location.Left, proto().smoker(), new YesNoComboBox()).decorate().labelWidth(250).componentWidth(150);
+        formPanel.append(Location.Left, proto().numberOfPreviousClaims()).decorate().labelWidth(250).componentWidth(150);
 
         if (VistaTODO.VISTA_3207_TENANT_SURE_YEARLY_PAY_SCHEDULE_IMPLEMENTED) {
             formPanel.h1(i18n.tr("Payment"));
-            formPanel.append(Location.Left, proto().paymentSchedule()).decorate();
+            formPanel.append(Location.Left, proto().paymentSchedule()).decorate().labelWidth(250).componentWidth(150);
         }
 
         return formPanel;

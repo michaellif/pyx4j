@@ -18,7 +18,7 @@ import java.util.Set;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
-import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
@@ -37,7 +37,9 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.lease.eviction.EvictionStatusEditorBase.EvictionStepSelectionHandler;
 import com.propertyvista.crm.client.ui.crud.lease.eviction.n4.N4EvictionStatusEditor;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.eviction.EvictionCaseStatus;
 import com.propertyvista.domain.eviction.EvictionStatus;
+import com.propertyvista.domain.eviction.EvictionStatusN4;
 import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.EvictionCaseDTO;
@@ -85,14 +87,14 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
         }
     }
 
-    class StatusHistoryFolder extends VistaBoxFolder<EvictionStatus> {
+    class StatusHistoryFolder extends VistaBoxFolder<EvictionCaseStatus> {
 
         private final EvictionStepSelectionHandler stepSelectionHandler = new EvictionStepSelectionHandler() {
 
             @Override
             public Set<EvictionFlowStep> getAvailableSteps() {
                 Set<EvictionFlowStep> availableSteps = new HashSet<>(EvictionCaseForm.this.getValue().evictionFlowPolicy().evictionFlow());
-                for (EvictionStatus status : getValue()) {
+                for (EvictionCaseStatus status : getValue()) {
                     availableSteps.remove(status.evictionStep());
                 }
                 return availableSteps;
@@ -100,18 +102,11 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
         };
 
         public StatusHistoryFolder() {
-            super(EvictionStatus.class);
-            addValueChangeHandler(new ValueChangeHandler<IList<EvictionStatus>>() {
-
-                @Override
-                public void onValueChange(ValueChangeEvent<IList<EvictionStatus>> event) {
-                    setAddable(hasMoreSteps());
-                }
-            });
+            super(EvictionCaseStatus.class);
         }
 
         @Override
-        protected CFolderItem<EvictionStatus> createItem(boolean first) {
+        protected CFolderItem<EvictionCaseStatus> createItem(boolean first) {
             // need own folder item implementation to handle polymorphic EvictionStatus entity
             return new StatusHistoryFolderItem();
         }
@@ -123,10 +118,15 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
         }
 
         @Override
-        public VistaBoxFolderItemDecorator<EvictionStatus> createItemDecorator() {
-            VistaBoxFolderItemDecorator<EvictionStatus> itemDecorator = super.createItemDecorator();
+        public VistaBoxFolderItemDecorator<EvictionCaseStatus> createItemDecorator() {
+            VistaBoxFolderItemDecorator<EvictionCaseStatus> itemDecorator = super.createItemDecorator();
             itemDecorator.setExpended(false);
             return itemDecorator;
+        }
+
+        @Override
+        protected void onValueSet(boolean populate) {
+            setAddable(hasMoreSteps());
         }
 
         private boolean hasMoreSteps() {
@@ -134,24 +134,25 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
             return evictionCase == null ? false : evictionCase.evictionFlowPolicy().evictionFlow().size() > getValue().size();
         }
 
-        class StatusHistoryFolderItem extends CFolderItem<EvictionStatus> {
+        class StatusHistoryFolderItem extends CFolderItem<EvictionCaseStatus> {
 
-            private EvictionStatusEditorBase<? extends EvictionStatus> statusEditor;
+            private EvictionStatusEditorBase<? extends EvictionCaseStatus> statusEditor;
 
             public StatusHistoryFolderItem() {
-                super(EvictionStatus.class);
+                super(EvictionCaseStatus.class);
             }
 
             @Override
-            public IFolderItemDecorator<EvictionStatus> createItemDecorator() {
+            public IFolderItemDecorator<EvictionCaseStatus> createItemDecorator() {
                 return StatusHistoryFolder.this.createItemDecorator();
             }
 
             @Override
-            protected CForm<? extends EvictionStatus> createItemForm(IObject<?> member) {
-                EvictionStatusEditorBase<? extends EvictionStatus> itemForm = null;
+            protected CForm<? extends EvictionCaseStatus> createItemForm(IObject<?> member) {
+                EvictionStatusEditorBase<? extends EvictionCaseStatus> itemForm = null;
                 if (statusEditor == null) {
-                    itemForm = new EvictionStatusEditorBase<EvictionStatus>(EvictionStatus.class, stepSelectionHandler);
+                    // Just base editor to allow stepType selection
+                    itemForm = new EvictionStatusEditorBase<EvictionCaseStatus>(EvictionCaseStatus.class, stepSelectionHandler);
                 } else {
                     itemForm = statusEditor;
                 }
@@ -160,9 +161,7 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
 
                     @Override
                     public void onValueChange(ValueChangeEvent<EvictionFlowStep> event) {
-                        EvictionStatus value = getValue();
-                        reset();
-                        populate(value);
+                        setStatusEditor(event.getValue());
                     }
                 });
 
@@ -170,23 +169,54 @@ public class EvictionCaseForm extends CrmEntityForm<EvictionCaseDTO> {
             }
 
             @Override
-            protected EvictionStatus preprocessValue(EvictionStatus value, boolean fireEvent, boolean populate) {
-                if (statusEditor == null && value != null && !value.evictionStep().stepType().isNull()) {
-                    switch (value.evictionStep().stepType().getValue()) {
-                    case N4:
-                        statusEditor = new N4EvictionStatusEditor(stepSelectionHandler, uploadable);
-                        break;
-                    default:
-                        statusEditor = new EvictionStatusEditor<EvictionStatus>(EvictionStatus.class, stepSelectionHandler, uploadable);
-                        break;
-                    }
+            protected void onValueSet(boolean populate) {
+                if (getValue() != null) {
+                    setStatusEditor(getValue().evictionStep());
+                }
+            }
 
-                    // replace content
+            private void setStatusEditor(EvictionFlowStep flowStep) {
+                if (flowStep.stepType().isNull()) {
+                    return;
+                }
+
+                EvictionCaseStatus value = getValue();
+                EvictionCaseStatus newValue = value;
+                boolean newEditor = false;
+
+                switch (flowStep.stepType().getValue()) {
+                case N4:
+                    if (statusEditor == null || statusEditor.getClass() != N4EvictionStatusEditor.class) {
+                        statusEditor = new N4EvictionStatusEditor(stepSelectionHandler, uploadable);
+                        newEditor = true;
+                        if (value.getInstanceValueClass() != EvictionStatusN4.class) {
+                            newValue = EntityFactory.create(EvictionStatusN4.class);
+                        }
+                    }
+                    break;
+                default:
+                    if (statusEditor == null || statusEditor.getClass() != EvictionStatusEditor.class) {
+                        statusEditor = new EvictionStatusEditor<EvictionStatus>(EvictionStatus.class, stepSelectionHandler, uploadable);
+                        newEditor = true;
+                        if (value.getInstanceValueClass() != EvictionStatus.class) {
+                            newValue = EntityFactory.create(EvictionStatus.class);
+                        }
+                    }
+                    break;
+                }
+
+                if (newEditor) {
+                    if (newValue != value) {
+                        newValue.evictionStep().set(flowStep);
+                        int idx = StatusHistoryFolder.this.getValue().indexOf(value);
+                        StatusHistoryFolder.this.getValue().set(idx, newValue);
+                        value = newValue;
+                    }
                     createContent();
                     getNativeComponent().setContent(statusEditor);
                     addValidations();
+                    populate(value);
                 }
-                return super.preprocessValue(value, fireEvent, populate);
             }
         }
     }
