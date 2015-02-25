@@ -159,8 +159,8 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             formPanel.append(Location.Left, proto().middleName()).decorate();
             formPanel.append(Location.Left, proto().lastName()).decorate();
             formPanel.append(Location.Left, proto().email()).decorate();
-            formPanel.append(Location.Left, proto().password()).decorate().componentWidth(180);
-            formPanel.append(Location.Left, proto().passwordConfirm()).decorate().componentWidth(180);
+            formPanel.append(Location.Left, proto().password()).decorate().componentWidth(240);
+            formPanel.append(Location.Left, proto().passwordConfirm()).decorate().componentWidth(240);
             formPanel.br();
 
             CTextFieldBase<?, ?> emailField = (CTextFieldBase<?, ?>) get(proto().email());
