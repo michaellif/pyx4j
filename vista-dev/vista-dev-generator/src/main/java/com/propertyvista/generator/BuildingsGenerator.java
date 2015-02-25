@@ -29,6 +29,7 @@ import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.pmc.IntegrationSystem;
+import com.propertyvista.domain.property.Landlord;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
@@ -602,4 +603,13 @@ public class BuildingsGenerator {
             Persistence.service().persist(node);
         }
     }
+
+    public Landlord createLandlord(String name, InternationalAddress address) {
+        Landlord landlord = EntityFactory.create(Landlord.class);
+        landlord.name().setValue(name);
+        landlord.website().setValue("www." + name.replace("#", "").replace(" ", "").toLowerCase() + ".com");
+        landlord.address().set(address);
+        return landlord;
+    }
+
 }

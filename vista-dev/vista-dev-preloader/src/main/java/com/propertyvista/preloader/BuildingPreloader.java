@@ -42,6 +42,7 @@ import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.property.Landlord;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Elevator;
@@ -108,6 +109,18 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
         MerchantAccount merchantAccount = getMerchantAccount();
 
+        // Create some landlords
+        List<Landlord> landlords = new Vector<Landlord>();
+        for (int i = 0; i < config().numLandlords; ++i) {
+            landlords
+                    .add(buildingGenerator.createLandlord(CommonsGenerator.createName().getStringView(), CommonsGenerator.createInternationalAddress(country)));
+        }
+        // Remove dupplicates Id for addresses
+        DataGenerator.cleanRandomDuplicates("address");
+
+        Persistence.service().persist(landlords);
+        Set<Landlord> landlordsWithBuildings = new HashSet<Landlord>();
+
         // create some portfolios:
         List<Portfolio> portfolios = new Vector<Portfolio>();
 
@@ -135,6 +148,18 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                     log.warn("Unable find location for {}", building.info().address().getStringView());
                 }
             }
+
+            // Assign at least one building to one landlord
+            Landlord landlord;
+            if (landlordsWithBuildings.size() < landlords.size()) {
+                int index = DataGenerator.nextInt(landlords.size(), "landlord", landlords.size());
+                landlord = landlords.get(index);
+            } else {
+                landlord = DataGenerator.random(landlords);
+            }
+
+            building.landlord().set(landlord);
+            landlordsWithBuildings.add(landlord);
 
             if (DataGenerator.randomBoolean()) {
                 Complex complex;

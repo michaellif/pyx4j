@@ -242,6 +242,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
             //TODO fix LeasePreloader
             if (pmcDnsName.equals(DemoPmc.star.name()) && (type != ResetType.allMini)) {
                 cfg.numComplexes = 0;
+                cfg.numLandlords = 0;
                 cfg.numResidentialBuildings = 0;
                 cfg.numPotentialTenants2CreditCheck = 0;
                 cfg.numPotentialTenants = 0;
