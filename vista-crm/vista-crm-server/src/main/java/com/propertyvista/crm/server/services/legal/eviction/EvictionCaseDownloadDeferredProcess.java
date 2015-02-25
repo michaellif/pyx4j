@@ -30,8 +30,8 @@ import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
 import com.propertyvista.domain.blob.EvictionDocumentBlob;
 import com.propertyvista.domain.eviction.EvictionCase;
+import com.propertyvista.domain.eviction.EvictionCaseStatus;
 import com.propertyvista.domain.eviction.EvictionDocument;
-import com.propertyvista.domain.eviction.EvictionStatus;
 import com.propertyvista.domain.eviction.EvictionStatusRecord;
 
 public class EvictionCaseDownloadDeferredProcess extends AbstractDeferredProcess {
@@ -55,7 +55,7 @@ public class EvictionCaseDownloadDeferredProcess extends AbstractDeferredProcess
         this.progress = new AtomicInteger(0);
         int max = 0;
         Persistence.ensureRetrieve(evictionCase.history(), AttachLevel.IdOnly);
-        for (EvictionStatus status : evictionCase.history()) {
+        for (EvictionCaseStatus status : evictionCase.history()) {
             Persistence.ensureRetrieve(status.statusRecords(), AttachLevel.IdOnly);
             for (EvictionStatusRecord record : status.statusRecords()) {
                 Persistence.ensureRetrieve(record.attachments(), AttachLevel.Attached);
@@ -73,7 +73,7 @@ public class EvictionCaseDownloadDeferredProcess extends AbstractDeferredProcess
                     + evictionCase.lease().unit().getStringView() + "-" + System.currentTimeMillis() + ".zip";
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             ZipOutputStream zip = new ZipOutputStream(out);
-            for (EvictionStatus status : evictionCase.history()) {
+            for (EvictionCaseStatus status : evictionCase.history()) {
                 for (EvictionStatusRecord record : status.statusRecords()) {
                     for (EvictionDocument form : record.attachments()) {
                         EvictionDocumentBlob blob = Persistence.service().retrieve(EvictionDocumentBlob.class, form.file().blobKey().getValue());

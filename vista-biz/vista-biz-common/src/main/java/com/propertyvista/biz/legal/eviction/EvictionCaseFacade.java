@@ -15,8 +15,8 @@ package com.propertyvista.biz.legal.eviction;
 import java.util.List;
 
 import com.propertyvista.domain.eviction.EvictionCase;
+import com.propertyvista.domain.eviction.EvictionCaseStatus;
 import com.propertyvista.domain.eviction.EvictionDocument;
-import com.propertyvista.domain.eviction.EvictionStatus;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 /**
@@ -32,13 +32,13 @@ public interface EvictionCaseFacade {
 
     EvictionCase getCurrentEvictionCase(Lease leaseId);
 
-    EvictionStatus getCurrentEvictionStatus(EvictionCase evictionCase);
+    EvictionCaseStatus getCurrentEvictionStatus(EvictionCase evictionCase);
 
-    EvictionStatus getCurrentEvictionStatus(Lease leaseId);
+    EvictionCaseStatus getCurrentEvictionStatus(Lease leaseId);
 
-    void addEvictionStatusDetails(EvictionStatus evictionStatus, String note, List<EvictionDocument> attachments);
+    void addEvictionStatusDetails(EvictionCaseStatus evictionStatus, String note, List<EvictionDocument> attachments);
 
-    EvictionStatus addEvictionStatusDetails(EvictionCase evictionCase, String statusName, String note, List<EvictionDocument> attachments);
+    EvictionCaseStatus addEvictionStatusDetails(EvictionCase evictionCase, String statusName, String note, List<EvictionDocument> attachments);
 
     List<EvictionCase> getEvictionHistory(Lease leaseId);
 

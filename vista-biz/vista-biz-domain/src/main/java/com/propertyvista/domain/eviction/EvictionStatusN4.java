@@ -35,7 +35,7 @@ import com.propertyvista.shared.adapters.EvictionStatusRecordRemovalAdapter;
 
 @DiscriminatorValue("N4")
 @Adapters(entityModificationAdapters = EvictionStatusRecordRemovalAdapter.class)
-public interface EvictionStatusN4 extends EvictionStatus {
+public interface EvictionStatusN4 extends EvictionCaseStatus {
 
     @Detached
     N4LeaseArrears leaseArrears();

@@ -204,9 +204,7 @@ public class CommunicationPortalCrudServiceImpl extends AbstractCrudServiceDtoIm
 
     @Override
     public void hideThread(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        EntityQueryCriteria<CommunicationThread> threadCriteria = EntityQueryCriteria.create(CommunicationThread.class);
-        threadCriteria.add(PropertyCriterion.in(threadCriteria.proto().content().$().id(), entityId));
-        CommunicationThread thread = Persistence.secureRetrieve(threadCriteria);
+        CommunicationThread thread = Persistence.secureRetrieve(CommunicationThread.class, entityId);
         if (thread == null) {
             callback.onFailure(new Error("The thread does not exist"));
             return;

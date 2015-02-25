@@ -63,7 +63,7 @@ public interface EvictionCase extends IEntity {
 
     @Owned
     @OrderBy(PrimaryKey.class)
-    IList<EvictionStatus> history();
+    IList<EvictionCaseStatus> history();
 
     /** Copy policy when the case is created */
     @JoinColumn

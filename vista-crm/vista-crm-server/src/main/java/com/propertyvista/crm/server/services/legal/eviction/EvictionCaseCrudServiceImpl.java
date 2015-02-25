@@ -30,7 +30,7 @@ import com.propertyvista.crm.rpc.services.legal.eviction.EvictionCaseCrudService
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.eviction.EvictionCase;
-import com.propertyvista.domain.eviction.EvictionStatus;
+import com.propertyvista.domain.eviction.EvictionCaseStatus;
 import com.propertyvista.domain.eviction.EvictionStatusN4;
 import com.propertyvista.domain.eviction.EvictionStatusRecord;
 import com.propertyvista.domain.legal.n4.N4Batch;
@@ -79,7 +79,7 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
         if (bo.createdBy().isNull()) {
             bo.createdBy().set(signedIn);
         }
-        for (EvictionStatus status : bo.history()) {
+        for (EvictionCaseStatus status : bo.history()) {
             if (status.getPrimaryKey() == null) {
                 status.addedBy().set(signedIn);
             }
@@ -102,6 +102,9 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
                 }
 
                 Persistence.service().persist(n4data);
+
+                ((EvictionStatusN4) status).leaseArrears().lease().set(to.lease());
+                Persistence.service().persist(((EvictionStatusN4) status).leaseArrears());
             }
         }
 
@@ -112,7 +115,8 @@ public class EvictionCaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Evic
     protected void enhanceRetrieved(EvictionCase bo, EvictionCaseDTO to, RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(bo, to, retrieveTarget);
 
-        for (EvictionStatus status : to.history()) {
+        Persistence.ensureRetrieve(to.history(), AttachLevel.Attached);
+        for (EvictionCaseStatus status : to.history()) {
             Persistence.ensureRetrieve(status.addedBy(), AttachLevel.Attached);
             Persistence.ensureRetrieve(status.statusRecords(), AttachLevel.Attached);
             for (EvictionStatusRecord record : status.statusRecords()) {

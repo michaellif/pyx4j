@@ -29,6 +29,7 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.eviction.EvictionCase;
+import com.propertyvista.domain.eviction.EvictionCaseStatus;
 import com.propertyvista.domain.eviction.EvictionDocument;
 import com.propertyvista.domain.eviction.EvictionStatus;
 import com.propertyvista.domain.eviction.EvictionStatusN4;
@@ -80,13 +81,13 @@ public class EvictionCaseFacadeImpl implements EvictionCaseFacade {
     }
 
     @Override
-    public EvictionStatus getCurrentEvictionStatus(Lease leaseId) {
+    public EvictionCaseStatus getCurrentEvictionStatus(Lease leaseId) {
         EvictionCase evictionCase = getCurrentEvictionCase(leaseId);
         return evictionCase == null ? null : getCurrentEvictionStatus(evictionCase);
     }
 
     @Override
-    public EvictionStatus getCurrentEvictionStatus(EvictionCase evictionCase) {
+    public EvictionCaseStatus getCurrentEvictionStatus(EvictionCase evictionCase) {
         if (evictionCase.history().isEmpty() || !evictionCase.closedOn().isNull()) {
             return null;
         } else {
@@ -111,7 +112,7 @@ public class EvictionCaseFacadeImpl implements EvictionCaseFacade {
     }
 
     @Override
-    public EvictionStatus addEvictionStatusDetails(EvictionCase evictionCase, String statusName, String note, List<EvictionDocument> attachments) {
+    public EvictionCaseStatus addEvictionStatusDetails(EvictionCase evictionCase, String statusName, String note, List<EvictionDocument> attachments) {
         // - check that the case is not closed
         if (!evictionCase.closedOn().isNull()) {
             return null;
@@ -128,8 +129,8 @@ public class EvictionCaseFacadeImpl implements EvictionCaseFacade {
             throw new UserRuntimeException(i18n.tr("No corresponding flow step found in the Eviction Flow Policy: " + statusName));
         }
         // - find the given evictionStep in the case history
-        EvictionStatus evictionStatus = null;
-        for (EvictionStatus status : evictionCase.history()) {
+        EvictionCaseStatus evictionStatus = null;
+        for (EvictionCaseStatus status : evictionCase.history()) {
             if (status.evictionStep().name().equals(statusName)) {
                 evictionStatus = status;
                 break;
@@ -152,7 +153,7 @@ public class EvictionCaseFacadeImpl implements EvictionCaseFacade {
     }
 
     @Override
-    public void addEvictionStatusDetails(EvictionStatus evictionStatus, String note, List<EvictionDocument> attachments) {
+    public void addEvictionStatusDetails(EvictionCaseStatus evictionStatus, String note, List<EvictionDocument> attachments) {
         EvictionStatusRecord record = EntityFactory.create(EvictionStatusRecord.class);
         record.addedBy().set(getLoggedEmployee());
         record.note().setValue(note);
@@ -190,7 +191,7 @@ public class EvictionCaseFacadeImpl implements EvictionCaseFacade {
         return policy;
     }
 
-    private EvictionStatus createEvictionStatus(EvictionStepType flowStep) {
+    private EvictionCaseStatus createEvictionStatus(EvictionStepType flowStep) {
         switch (flowStep) {
         case N4:
             return EntityFactory.create(EvictionStatusN4.class);
