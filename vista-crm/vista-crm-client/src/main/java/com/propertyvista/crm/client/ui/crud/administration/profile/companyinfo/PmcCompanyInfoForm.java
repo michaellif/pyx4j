@@ -43,8 +43,8 @@ public class PmcCompanyInfoForm extends CrmEntityForm<PmcCompanyInfoDTO> {
         super(PmcCompanyInfoDTO.class, view);
 
         selectTab(addTab(createGeneralTabContent(), i18n.tr("General")));
-        selectTab(addTab(createWebsiteDnsNameTabContent(), i18n.tr("Website DNS Name")));
-        selectTab(addTab(createPortalDnsNameTabContent(), i18n.tr("Portal DNS Name")));
+        addTab(createWebsiteDnsNameTabContent(), i18n.tr("Website DNS Name"));
+        addTab(createPortalDnsNameTabContent(), i18n.tr("Portal DNS Name"));
     }
 
     FormPanel createGeneralTabContent() {

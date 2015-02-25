@@ -439,7 +439,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     }
 
     private void setRestrictions(LeaseTermDTO dto) {
-        Integer bedrooms = 1;
+        Integer bedrooms = 0;
         PolicyNode policyNode;
         if (dto.unit().isNull()) {
             policyNode = Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class));
@@ -447,7 +447,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             policyNode = dto.unit().building();
 
             Persistence.ensureRetrieve(dto.unit().floorplan(), AttachLevel.Attached);
-            bedrooms = dto.unit().floorplan().bedrooms().getValue();
+            bedrooms = dto.unit().floorplan().bedrooms().getValue(0);
         }
 
         RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, RestrictionsPolicy.class);
@@ -457,7 +457,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         dto.maturedOccupantsAreApplicants().setValue(restrictionsPolicy.maturedOccupantsAreApplicants().getValue());
         dto.noNeedGuarantors().setValue(restrictionsPolicy.noNeedGuarantors().getValue());
 
-        dto.maxOccupants().setValue((int) (bedrooms.doubleValue() * restrictionsPolicy.occupantsPerBedRoom().getValue()));
+        dto.maxOccupants().setValue((int) (bedrooms.doubleValue() * restrictionsPolicy.occupantsPerBedRoom().getValue(0.0)));
         dto.maxLockers().setValue(restrictionsPolicy.maxLockers().getValue());
         dto.maxParkingSpots().setValue(restrictionsPolicy.maxParkingSpots().getValue());
         dto.maxPets().setValue(restrictionsPolicy.maxPets().getValue());
