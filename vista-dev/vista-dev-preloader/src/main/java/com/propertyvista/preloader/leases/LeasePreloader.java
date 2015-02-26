@@ -39,6 +39,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
@@ -270,7 +271,10 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                         }
                     });
                 }
+
             }
+
+            ensureLeaseDepositsNotZero(lease);
 
             numCreated++;
         }
@@ -356,6 +360,8 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 LeasePreloaderHelper.addDefaultPaymentToLeaseApplication(leaseTermParticipant);
             }
 
+            ensureLeaseDepositsNotZero(lease);
+
             SystemDateManager.resetDate();
         }
 
@@ -384,12 +390,23 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 LeaseTermParticipant<? extends LeaseParticipant<?>> leaseTermParticipant = lease.currentTerm().version().tenants().get(0);
                 LeasePreloaderHelper.addDefaultPaymentToLeaseApplication(leaseTermParticipant);
             }
+
+            ensureLeaseDepositsNotZero(lease);
         }
 
         StringBuilder b = new StringBuilder();
         b.append("Created " + numCreated + " leases");
 
         return b.toString();
+    }
+
+    private void ensureLeaseDepositsNotZero(Lease lease) {
+        BillableItem serviceItem = lease.currentTerm().version().leaseProducts().serviceItem();
+
+        for (Deposit deposit : serviceItem.deposits()) {
+            deposit.amount().setValue(serviceItem.agreedPrice().getValue());
+            Persistence.service().persist(deposit);
+        }
     }
 
     private void skipResidentWizard(LeaseTermParticipant<?> tenant) {
