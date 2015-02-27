@@ -202,6 +202,7 @@ public class ScreeningGenerator {
         employer.address().set(CommonsGenerator.createInternationalAddress());
 
         employer.name().setValue(RandomUtil.random(PreloadData.EMPLOYER_NAMES));
+        employer.employedForYears().setValue(Double.valueOf(1 + RandomUtil.randomInt(9)));
         employer.supervisorName().setValue("Mr. " + DataGenerator.randomLastName());
         employer.supervisorPhone().setValue(RandomUtil.randomPhone());
         employer.incomeAmount().setValue(new BigDecimal(1000 + RandomUtil.randomInt(4000)));
