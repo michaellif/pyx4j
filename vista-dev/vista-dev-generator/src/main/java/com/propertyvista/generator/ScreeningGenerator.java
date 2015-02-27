@@ -32,6 +32,7 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.essentials.server.upload.FileUploadRegistry;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.blob.IdentificationDocumentBlob;
@@ -61,6 +62,8 @@ import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.misc.CreditCardNumberGenerator;
 
 public class ScreeningGenerator {
+
+    private static final I18n i18n = I18n.get(ScreeningGenerator.class);
 
     private List<IdentificationDocumentType> identificationDocumentTypes;
 
@@ -136,40 +139,61 @@ public class ScreeningGenerator {
         //TODO: generate it somehow according the LegalQuestionsPolicy ?!
 
         CustomerScreeningLegalQuestion item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
-        item.question().setValue("Have you ever been sued for rent?");
+        item.question().setValue(i18n.tr("Have you ever been sued for rent?"));
         item.answer().setValue(RandomUtil.randomBoolean());
+        if (item.answer().getValue() == Boolean.TRUE) {
+            item.notes().setValue(i18n.tr("Problem with banking payment. Solved friendly."));
+        }
         legalQuestion.add(item);
 
         item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
-        item.question().setValue("Have you ever been sued for damages?");
+        item.question().setValue(i18n.tr("Have you ever been sued for damages?"));
         item.answer().setValue(RandomUtil.randomBoolean());
+        if (item.answer().getValue() == Boolean.TRUE) {
+            item.notes().setValue(i18n.tr("Small pet damages years ago. Court absolved me."));
+        }
         legalQuestion.add(item);
 
         item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
-        item.question().setValue("Have you ever been evicted?");
+        item.question().setValue(i18n.tr("Have you ever been evicted?"));
         item.answer().setValue(RandomUtil.randomBoolean());
+        if (item.answer().getValue() == Boolean.TRUE) {
+            item.notes().setValue(i18n.tr("Long time ago, when I was fired and I couldn't pay my rent."));
+        }
         legalQuestion.add(item);
 
         item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
-        item.question().setValue("Have you ever defaulted on a lease?");
+        item.question().setValue(i18n.tr("Have you ever defaulted on a lease?"));
         item.answer().setValue(RandomUtil.randomBoolean());
+        if (item.answer().getValue() == Boolean.TRUE) {
+            item.notes().setValue(i18n.tr("5 years ago when I was relocated to Europe for old company."));
+        }
         legalQuestion.add(item);
 
         item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
         item.question()
                 .setValue(
-                        "Have you ever been convicted of a crime/felony that involved an offense against property, persons, government officials, or that involved firearms, illegal drugs, or sex or sex crimes?");
+                        i18n.tr("Have you ever been convicted of a crime/felony that involved an offense against property, persons, government officials, or that involved firearms, illegal drugs, or sex or sex crimes?"));
         item.answer().setValue(RandomUtil.randomBoolean());
+        if (item.answer().getValue() == Boolean.TRUE) {
+            item.notes().setValue(i18n.tr("When I was 17 years old I was convicted of small drug dealing."));
+        }
         legalQuestion.add(item);
 
         item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
-        item.question().setValue("Have you ever had any liens, court judgments or repossessions?");
+        item.question().setValue(i18n.tr("Have you ever had any liens, court judgments or repossessions?"));
         item.answer().setValue(RandomUtil.randomBoolean());
+        if (item.answer().getValue() == Boolean.TRUE) {
+            item.notes().setValue(i18n.tr("Long time ago, when I was fired and I couldn't pay my rent."));
+        }
         legalQuestion.add(item);
 
         item = EntityFactory.create(CustomerScreeningLegalQuestion.class);
-        item.question().setValue("Have you ever filed for bankruptcy protection?");
+        item.question().setValue(i18n.tr("Have you ever filed for bankruptcy protection?"));
         item.answer().setValue(RandomUtil.randomBoolean());
+        if (item.answer().getValue() == Boolean.TRUE) {
+            item.notes().setValue(i18n.tr("Long time ago, when I was fired and I couldn't pay my rent."));
+        }
         legalQuestion.add(item);
 
         return legalQuestion;
