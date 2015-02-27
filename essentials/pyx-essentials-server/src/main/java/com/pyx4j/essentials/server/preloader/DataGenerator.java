@@ -37,7 +37,9 @@ import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 
 public class DataGenerator {
 
-    static String[] firstNames;
+    static String[] maleFirstNames;
+
+    static String[] femaleFirstNames;
 
     static String[] lastNames;
 
@@ -176,10 +178,25 @@ public class DataGenerator {
     }
 
     public static String randomFirstName() {
-        if (firstNames == null) {
-            firstNames = CSVLoad.loadFile(resourceFileName("first-names.csv"), "Name");
+        if (Boolean.valueOf(random(GeneratorType.Boolean))) {
+            return randomMaleFirstName();
+        } else {
+            return randomFemaleFirstName();
         }
-        return firstNames[nextInt(firstNames.length, "firstName", 20)];
+    }
+
+    public static String randomFemaleFirstName() {
+        if (femaleFirstNames == null) {
+            femaleFirstNames = CSVLoad.loadFile(resourceFileName("female-first-names.csv"), "Name");
+        }
+        return femaleFirstNames[nextInt(femaleFirstNames.length, "femaleFirstName", 20)];
+    }
+
+    public static String randomMaleFirstName() {
+        if (maleFirstNames == null) {
+            maleFirstNames = CSVLoad.loadFile(resourceFileName("male-first-names.csv"), "Name");
+        }
+        return maleFirstNames[nextInt(maleFirstNames.length, "maleFirstName", 20)];
     }
 
     public static String randomLastName() {
