@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.widgets.client.IFocusWidget;
 
-class ValidationLabel extends SimplePanel {
+public class ValidationLabel extends SimplePanel {
 
     private final HTML label;
 
