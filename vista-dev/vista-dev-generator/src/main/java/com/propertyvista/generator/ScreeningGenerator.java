@@ -44,6 +44,7 @@ import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
 import com.propertyvista.domain.media.ProofOfIncomeDocumentFile;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy.BjccEntry;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
+import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.CustomerScreening;
@@ -60,6 +61,7 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.misc.CreditCardNumberGenerator;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class ScreeningGenerator {
 
@@ -117,7 +119,12 @@ public class ScreeningGenerator {
     private PriorAddress createPriorAddress() {
         PriorAddress address = EntityFactory.create(PriorAddress.class);
 
-        address.set(CommonsGenerator.createRandomInternationalAddress().duplicate(PriorAddress.class));
+        ISOCountry currentContextCountry = null;
+        if (VistaFeatures.instance().countryOfOperation() != null) {
+            currentContextCountry = VistaFeatures.instance().countryOfOperation().country;
+        }
+
+        address.set(CommonsGenerator.createRandomInternationalAddressByCountry(currentContextCountry).duplicate(PriorAddress.class));
 
         address.moveInDate().setValue(RandomUtil.randomLogicalDate(2009, 2011));
         address.moveOutDate().setValue(RandomUtil.randomLogicalDate(2011, 2013));

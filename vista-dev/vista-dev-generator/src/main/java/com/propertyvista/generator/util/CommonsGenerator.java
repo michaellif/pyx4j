@@ -312,6 +312,11 @@ public class CommonsGenerator {
         return countryAddresses.get(DataGenerator.nextInt(countryAddresses.size(), "address", 15)).duplicate();
     }
 
+    private static InternationalAddress getRandomAddressByCountry(ISOCountry country) {
+        List<InternationalAddress> countryAddresses = getCountryAddresses(country);
+        return countryAddresses.get(RandomUtil.randomInt(countryAddresses.size() - 1)).duplicate();
+    }
+
     public static InternationalAddress createInternationalAddress(BuildingsGeneratorConfig config) {
         if (config.provinceCode != null) {
             ISOProvince prov = ISOProvince.forCode(config.provinceCode);
@@ -337,6 +342,27 @@ public class CommonsGenerator {
         }
     }
 
+    /**
+     * Returns one real international address by country. Suite number is a random to 1000.
+     * If country == null get Canada as country
+     *
+     * @param country
+     *            the country of the address (if null, assumes Canada as country)
+     * @return
+     */
+    public static InternationalAddress createRandomInternationalAddressByCountry(ISOCountry country) {
+        loadAddresses(country);
+        InternationalAddress address = getRandomAddressByCountry(country);
+        address.suiteNumber().setValue(Integer.toString(RandomUtil.randomInt(1000)));
+        return getRandomAddressByCountry(country);
+    }
+
+    /**
+     * Returns random international address where city and street might not match with state or provice.
+     *
+     * @deprecated use {@link #createRandomInternationalAddressByCountry(ISOCountry country)} for real address instead.
+     */
+    @Deprecated
     public static InternationalAddress createRandomInternationalAddress() {
         InternationalAddress address = EntityFactory.create(InternationalAddress.class);
 
