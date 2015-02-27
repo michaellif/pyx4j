@@ -20,6 +20,7 @@ import java.util.Random;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -50,6 +51,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.marketing.LeaseParticipantMoveInAction.MoveInActionType;
 import com.propertyvista.generator.LeaseGenerator;
 import com.propertyvista.generator.TenantsEquifaxTestCasesGenerator;
+import com.propertyvista.generator.TenantsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.preloader.helper.LeasePreloaderHelper;
 import com.propertyvista.preloader.leases.LeaseLifecycleSimulator.LeaseLifecycleSimulatorBuilder;
@@ -340,10 +342,12 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             }
             ServerSideFactory.create(LeaseFacade.class).persist(lease);
             for (LeaseTermTenant participant : lease.currentTerm().version().tenants()) {
+                setPictureToTenantIfDemo(participant.leaseParticipant().customer());
                 participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
                 Persistence.service().persist(participant.leaseParticipant().customer().personScreening());
             }
             for (LeaseTermGuarantor participant : lease.currentTerm().version().guarantors()) {
+                setPictureToTenantIfDemo(participant.leaseParticipant().customer());
                 participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
                 Persistence.service().persist(participant.leaseParticipant().customer().personScreening());
             }
@@ -398,6 +402,13 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         b.append("Created " + numCreated + " leases");
 
         return b.toString();
+    }
+
+    private void setPictureToTenantIfDemo(Customer customer) {
+        if (ApplicationMode.isDemo()) {
+            TenantsGenerator.setCustomerPicture(customer);
+            Persistence.service().persist(customer.picture());
+        }
     }
 
     private void ensureLeaseDepositsNotZero(Lease lease) {

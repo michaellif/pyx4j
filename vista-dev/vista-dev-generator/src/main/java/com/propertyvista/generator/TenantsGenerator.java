@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -12,23 +12,34 @@
  */
 package com.propertyvista.generator;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
+import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.domain.blob.CustomerPictureBlob;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.person.Person.Sex;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.ReferenceSource;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Guest;
@@ -39,6 +50,12 @@ import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.shared.util.CreditCardFormatter;
 
 public class TenantsGenerator {
+
+    private final static Logger log = LoggerFactory.getLogger(TenantsGenerator.class);
+
+    private final static String MALE_PICTURE = "male_profile_picture.jpg";
+
+    private final static String FEMALE_PICTURE = "female_profile_picture.jpg";
 
     public TenantsGenerator(long seed) {
         DataGenerator.setRandomSeed(seed);
@@ -56,6 +73,44 @@ public class TenantsGenerator {
         Customer item = EntityFactory.create(Customer.class);
         item.person().set(CommonsGenerator.createPerson());
         return item;
+    }
+
+    public static void setCustomerPicture(Customer customer) {
+        CustomerPicture picture = getCustomerPicture(customer);
+        if (picture != null) {
+            customer.picture().set(picture);
+        } else {
+            log.warn("Could't create default picture for TENANT '{}'", customer.person().email().getValue());
+        }
+    }
+
+    private static CustomerPicture getCustomerPicture(Customer customer) {
+
+        CustomerPicture picture = null;
+
+        final String picture_name = customer.person().sex().getValue() == Sex.Male ? MALE_PICTURE : FEMALE_PICTURE;
+
+        try {
+            byte bytes[] = IOUtils.getBinaryResource(picture_name, TenantsGenerator.class);
+            if (bytes != null) {
+                // Create Picture Blob
+                CustomerPictureBlob blob = EntityFactory.create(CustomerPictureBlob.class);
+                blob.contentType().setValue(MimeMap.getContentType(FilenameUtils.getExtension(picture_name)));
+                blob.data().setValue(bytes);
+                Persistence.service().persist(blob);
+
+                // Create Tenant Picture
+                picture = EntityFactory.create(CustomerPicture.class);
+                picture.file().fileName().setValue(picture_name);
+                picture.file().fileSize().setValue(bytes.length);
+                picture.file().blobKey().setValue(blob.getPrimaryKey());
+                picture.customer().set(customer);
+            }
+        } catch (IOException e) {
+            log.error("Error preloading image '{}' for tenant picture. ", picture_name, e);
+        }
+
+        return picture;
     }
 
     public List<LeasePaymentMethod> createPaymentMethods(Customer customer) {

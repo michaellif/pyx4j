@@ -13,6 +13,7 @@
 package com.propertyvista.generator.util;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,9 @@ import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.person.Name;
+import com.propertyvista.domain.person.Name.Prefix;
 import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.person.Person.Sex;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
@@ -153,13 +156,21 @@ public class CommonsGenerator {
     }
 
     public static Name createName() {
+        return createName(null);
+    }
+
+    public static Name createName(Person.Sex sex) {
         Name name = EntityFactory.create(Name.class);
 
         if (RandomUtil.randomInt() % 5 == 0) {
-            name.namePrefix().setValue(RandomUtil.randomEnum(Name.Prefix.class));
+            Name.Prefix prefix = getRandomNamePrefix(sex);
+            if (prefix != null) {
+                name.namePrefix().setValue(prefix);
+            }
         }
 
-        name.firstName().setValue(DataGenerator.randomFirstName());
+        name.firstName().setValue(getFirstName(sex));
+
         name.lastName().setValue(DataGenerator.randomLastName());
 
         if (RandomUtil.randomInt() % 10 == 0) {
@@ -175,13 +186,35 @@ public class CommonsGenerator {
         return name;
     }
 
+    private static String getFirstName(Sex sex) {
+        if (sex == null) {
+            return DataGenerator.randomFirstName();
+        } else if (sex.equals(Sex.Male)) {
+            return DataGenerator.randomMaleFirstName();
+        } else {
+            return DataGenerator.randomFemaleFirstName();
+        }
+    }
+
+    private static Prefix getRandomNamePrefix(Sex sex) {
+        if (sex == null) {
+            return RandomUtil.randomEnum(Name.Prefix.class);
+        } else if (sex.equals(Sex.Male)) {
+            return RandomUtil.random(EnumSet.of(Name.Prefix.Mr, Name.Prefix.Dr));
+        } else {
+            return RandomUtil.random(EnumSet.of(Name.Prefix.Miss, Name.Prefix.Ms, Name.Prefix.Mrs, Name.Prefix.Dr));
+        }
+    }
+
     public static Person createPerson() {
         Person person = EntityFactory.create(Person.class);
 
-        Name name = createName();
+        person.sex().setValue(RandomUtil.randomEnum(Person.Sex.class));
+
+        Name name = createName(person.sex().getValue());
+
         person.name().set(name);
         person.birthDate().setValue(RandomUtil.randomLogicalDate(1930, 1980));
-        person.sex().setValue(RandomUtil.randomEnum(Person.Sex.class));
 
         person.homePhone().setValue(createPhone());
         person.mobilePhone().setValue(createPhone());
