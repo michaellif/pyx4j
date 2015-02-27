@@ -277,7 +277,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
             }
 
-            ensureLeaseDepositsNotZero(lease);
+//            ensureLeaseDepositsNotZero(lease);
 
             numCreated++;
         }
@@ -365,7 +365,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 LeasePreloaderHelper.addDefaultPaymentToLeaseApplication(leaseTermParticipant);
             }
 
-            ensureLeaseDepositsNotZero(lease);
+//            ensureLeaseDepositsNotZero(lease);
 
             SystemDateManager.resetDate();
         }
@@ -396,7 +396,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 LeasePreloaderHelper.addDefaultPaymentToLeaseApplication(leaseTermParticipant);
             }
 
-            ensureLeaseDepositsNotZero(lease);
+//            ensureLeaseDepositsNotZero(lease);
         }
 
         StringBuilder b = new StringBuilder();
