@@ -62,9 +62,11 @@ public class LeaseGenerator extends DataGenerator {
     public static final EnumSet<PersonRelationship> femaleDependentRelationships = EnumSet.of(PersonRelationship.Daughter, PersonRelationship.Friend,
             PersonRelationship.Other);
 
-    public static final EnumSet<PersonRelationship> coApplicantRelationships = EnumSet.of(PersonRelationship.Spouse, PersonRelationship.Mother,
-            PersonRelationship.Father, PersonRelationship.Grandfather, PersonRelationship.Grandmother, PersonRelationship.Uncle, PersonRelationship.Aunt,
-            PersonRelationship.Friend, PersonRelationship.Other);
+    public static final EnumSet<PersonRelationship> maleCoApplicantRelationships = EnumSet.of(PersonRelationship.Father, PersonRelationship.Grandfather,
+            PersonRelationship.Uncle, PersonRelationship.Friend, PersonRelationship.Other);
+
+    public static final EnumSet<PersonRelationship> femaleCoApplicantRelationships = EnumSet.of(PersonRelationship.Spouse, PersonRelationship.Mother,
+            PersonRelationship.Aunt, PersonRelationship.Friend, PersonRelationship.Other);
 
     private final VistaDevPreloadConfig config;
 
@@ -222,7 +224,7 @@ public class LeaseGenerator extends DataGenerator {
     }
 
     private static void ensureDependantAttributes(LeaseTermTenant tenant) {
-        if (tenant.leaseParticipant().customer().person().sex().equals(Sex.Male)) {
+        if (tenant.leaseParticipant().customer().person().sex().getValue().equals(Sex.Male)) {
             tenant.relationship().setValue(RandomUtil.random(maleDependentRelationships));
         } else {
             tenant.relationship().setValue(RandomUtil.random(femaleDependentRelationships));

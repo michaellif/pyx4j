@@ -36,6 +36,7 @@ import com.propertyvista.biz.preloader.BaseVistaDevDataPreloader;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.person.Person.Sex;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.Customer;
@@ -491,7 +492,11 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
     }
 
     private void ensureCoApplicantAttributes(LeaseTermTenant participant) {
-        participant.relationship().setValue(RandomUtil.random(LeaseGenerator.coApplicantRelationships));
+        if (participant.leaseParticipant().customer().person().sex().getValue().equals(Sex.Male)) {
+            participant.relationship().setValue(RandomUtil.random(LeaseGenerator.maleCoApplicantRelationships));
+        } else {
+            participant.relationship().setValue(RandomUtil.random(LeaseGenerator.femaleCoApplicantRelationships));
+        }
         participant.leaseParticipant().customer().person().birthDate().setValue(RandomUtil.randomLogicalDate(1930, 1980));
     }
 
