@@ -27,6 +27,7 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public abstract class TenantSelectionDialog extends EntitySelectorTableDialog<Tenant> {
 
@@ -51,7 +52,7 @@ public abstract class TenantSelectionDialog extends EntitySelectorTableDialog<Te
     @Override
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
-                new ColumnDescriptor.Builder(proto().participantId()).build(),
+                new ColumnDescriptor.Builder(proto().participantId()).filterAlwaysShown(VistaFeatures.instance().yardiIntegration()).build(),
 
                 new ColumnDescriptor.Builder(proto().customer().person().name()).searchable(false).build(),
                 new ColumnDescriptor.Builder(proto().customer().person().name().firstName()).searchableOnly().filterAlwaysShown(true).build(),

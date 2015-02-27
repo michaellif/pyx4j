@@ -50,7 +50,7 @@ public abstract class PortfolioSelectionDialog extends EntitySelectorTableDialog
     @Override
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
-                new ColumnDescriptor.Builder(proto().name()).build(),
+                new ColumnDescriptor.Builder(proto().name()).filterAlwaysShown(true).build(),
                 new ColumnDescriptor.Builder(proto().description()).build()
         ); //@formatter:on
     }

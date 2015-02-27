@@ -18,9 +18,9 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 
 import com.propertyvista.crm.rpc.services.selections.SelectEmployeeListService;
 import com.propertyvista.domain.company.Employee;
@@ -34,11 +34,11 @@ public class SelectorDialogCorporateLister extends EntityLister<Employee> {
         super(Employee.class, GWT.<SelectEmployeeListService> create(SelectEmployeeListService.class), parent, alreadySelected);
 
         setColumnDescriptors( //
-                new ColumnDescriptor.Builder(proto().employeeId()).build(),//
+                new ColumnDescriptor.Builder(proto().employeeId()).filterAlwaysShown(true).build(),//
                 new ColumnDescriptor.Builder(proto().name()).searchable(false).build(),//
-                new ColumnDescriptor.Builder(proto().title()).build(),//
-                new ColumnDescriptor.Builder(proto().name().firstName()).searchableOnly().build(),//
-                new ColumnDescriptor.Builder(proto().name().lastName()).searchableOnly().build(),//
+                new ColumnDescriptor.Builder(proto().title()).filterAlwaysShown(true).build(),//
+                new ColumnDescriptor.Builder(proto().name().firstName()).searchableOnly().filterAlwaysShown(true).build(),//
+                new ColumnDescriptor.Builder(proto().name().lastName()).searchableOnly().filterAlwaysShown(true).build(),//
                 new ColumnDescriptor.Builder(proto().email(), false).build(),//
                 new ColumnDescriptor.Builder(proto().updated(), false).build() //
         );

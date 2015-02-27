@@ -41,9 +41,9 @@ public class EmployeeLister extends SiteDataTablePanel<EmployeeDTO> {
 
         List<ColumnDescriptor> cd = new ArrayList<>();
 
-        cd.add(new ColumnDescriptor.Builder(proto().employeeId()).build());
+        cd.add(new ColumnDescriptor.Builder(proto().employeeId()).filterAlwaysShown(true).build());
         cd.add(new ColumnDescriptor.Builder(proto().name()).searchable(false).build());
-        cd.add(new ColumnDescriptor.Builder(proto().title()).build());
+        cd.add(new ColumnDescriptor.Builder(proto().title()).filterAlwaysShown(true).build());
         cd.add(new ColumnDescriptor.Builder(proto().name().firstName()).searchableOnly().filterAlwaysShown(true).build());
         cd.add(new ColumnDescriptor.Builder(proto().name().lastName()).searchableOnly().filterAlwaysShown(true).build());
         cd.add(new ColumnDescriptor.Builder(proto().email()).filterAlwaysShown(true).build());
