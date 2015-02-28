@@ -221,4 +221,12 @@ public class DateUtils extends TimeUtils {
         }
         throw new ParseException("Undetected date format [" + str + "]", 0);
     }
+
+    public static Date getMinimumDateForField(Date date, int field) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.set(Calendar.DATE, calendar.getActualMinimum(field));
+        return calendar.getTime();
+    }
+
 }
