@@ -113,8 +113,8 @@ public class TaxFolder extends CFolder<Tax> {
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off
-                    new ColumnDescriptor.Builder(proto().authority(), true).build(),
-                    new ColumnDescriptor.Builder(proto().name(), true).build(),
+                    new ColumnDescriptor.Builder(proto().authority(), true).filterAlwaysShown(true).build(),
+                    new ColumnDescriptor.Builder(proto().name(), true).filterAlwaysShown(true).build(),
                     new ColumnDescriptor.Builder(proto().rate(), true).build(),
                     new ColumnDescriptor.Builder(proto().compound(), true).build()
             );//@formatter:on
