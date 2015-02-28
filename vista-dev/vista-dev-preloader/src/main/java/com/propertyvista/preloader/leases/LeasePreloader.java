@@ -41,7 +41,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
@@ -277,7 +276,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
             }
 
-//            ensureLeaseDepositsNotZero(lease);
+            ensureLeaseDepositsNotZero(lease);
 
             numCreated++;
         }
@@ -290,6 +289,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             unit = makeAvailable(unit);
 
             Lease lease = generator.createLeaseWithTenants(unit);
+            LeaseGenerator.ensureOneYearLeaseFromNextMonthOn(lease);
             LeaseGenerator.attachDocumentData(lease);
 
             //Set users that can login using UI
@@ -365,7 +365,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 LeasePreloaderHelper.addDefaultPaymentToLeaseApplication(leaseTermParticipant);
             }
 
-//            ensureLeaseDepositsNotZero(lease);
+            ensureLeaseDepositsNotZero(lease);
 
             SystemDateManager.resetDate();
         }
@@ -396,7 +396,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 LeasePreloaderHelper.addDefaultPaymentToLeaseApplication(leaseTermParticipant);
             }
 
-//            ensureLeaseDepositsNotZero(lease);
+            ensureLeaseDepositsNotZero(lease);
         }
 
         StringBuilder b = new StringBuilder();
@@ -413,12 +413,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
     }
 
     private void ensureLeaseDepositsNotZero(Lease lease) {
-        BillableItem serviceItem = lease.currentTerm().version().leaseProducts().serviceItem();
-
-        for (Deposit deposit : serviceItem.deposits()) {
-            deposit.amount().setValue(serviceItem.agreedPrice().getValue());
-            Persistence.service().persist(deposit);
-        }
+        // TODO IMPLEMENT PROPER WAY TO DO THIS
     }
 
     private void skipResidentWizard(LeaseTermParticipant<?> tenant) {

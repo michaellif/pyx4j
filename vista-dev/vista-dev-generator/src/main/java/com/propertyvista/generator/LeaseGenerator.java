@@ -21,6 +21,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
+import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.ARCode;
@@ -233,4 +234,16 @@ public class LeaseGenerator extends DataGenerator {
         int thisYear = Calendar.getInstance().get(Calendar.YEAR);
         tenant.leaseParticipant().customer().person().birthDate().setValue(RandomUtil.randomLogicalDate(thisYear - 17, thisYear - 13));
     }
+
+    public static void ensureOneYearLeaseFromNextMonthOn(Lease lease) {
+        LogicalDate leaseFrom = new LogicalDate(DateUtils.getTodayDate());
+        leaseFrom = DateUtils.monthAdd(leaseFrom, 1);
+        leaseFrom = new LogicalDate(DateUtils.getMinimumDateForField(leaseFrom, Calendar.DAY_OF_MONTH));
+
+        LogicalDate leaseTo = new LogicalDate(DateUtils.yearsAdd(leaseFrom, 1));
+        lease.currentTerm().termFrom().setValue(leaseFrom);
+        lease.currentTerm().termTo().setValue(leaseTo);
+        lease.expectedMoveIn().setValue(leaseFrom);
+    }
+
 }
