@@ -239,10 +239,9 @@ public class ScreeningGenerator {
         employer.position().setValue(RandomUtil.random(PreloadData.OCCUPATIONS));
 
         int startYear = 1990 + RandomUtil.randomInt(20);
-        int endYear = startYear + 1 + RandomUtil.randomInt(8);
 
         employer.starts().setValue(new LogicalDate(DateUtils.createDate(startYear, RandomUtil.randomInt(12), RandomUtil.randomInt(28)).getTime()));
-        employer.ends().setValue(new LogicalDate(DateUtils.createDate(endYear, RandomUtil.randomInt(12), RandomUtil.randomInt(28)).getTime()));
+        employer.ends().setValue(new LogicalDate(DateUtils.yearsAdd(DateUtils.getTodayDate(), 1 + RandomUtil.randomInt(3))));
 
         return employer;
     }
