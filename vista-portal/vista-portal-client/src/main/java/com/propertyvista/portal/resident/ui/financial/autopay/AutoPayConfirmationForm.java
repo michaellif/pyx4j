@@ -37,7 +37,6 @@ public class AutoPayConfirmationForm extends CPortalEntityForm<AutoPayDTO> {
     public AutoPayConfirmationForm() {
         super(AutoPayDTO.class, null, i18n.tr("Your Auto Pay has been successfully setup and will be processed automatically every month."), new Button(
                 i18n.tr("Continue"), new Command() {
-
                     @Override
                     public void execute() {
                         AppSite.getPlaceController().goTo(AppPlace.NOWHERE);

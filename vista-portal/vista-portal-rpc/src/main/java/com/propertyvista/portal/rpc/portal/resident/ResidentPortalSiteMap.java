@@ -89,7 +89,7 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
             @PlaceProperties(caption = "Auto Pay Agreement Submitted")
             public static class AutoPayConfirmation extends AppPlace implements IMoveInPlace {
                 {
-                    setStable(false);
+//                    setStable(false);
                 }
 
                 public AutoPayConfirmation() {
@@ -150,7 +150,7 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
 
         public static class LeaseSigningWizardConfirmation extends AppPlace implements IMoveInPlace {
             {
-                setStable(false);
+//                setStable(false);
             }
         }
     }
@@ -189,7 +189,7 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
                 @PlaceProperties(navigLabel = "TenantSure Order Completed", caption = "TenantSure Order Completed")
                 public static class TenantSureWizardConfirmation extends AppPlace implements IMoveInPlace {
                     {
-                        setStable(false);
+//                        setStable(false);
                     }
                 }
 
