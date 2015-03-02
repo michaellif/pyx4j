@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationFirstPage" pageWidth="612" pageHeight="842" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3ab57690-448c-4258-a02d-968bc8f50a7e">
+	<property name="ireport.zoom" value="1.9487171000000352"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="landlordLogo" class="java.io.InputStream"/>
+	<parameter name="landlordName" class="java.lang.String"/>
+	<field name="leaseSection" class="com.pyx4j.entity.core.IList"/>
+	<field name="peopleSection" class="com.pyx4j.entity.core.IList"/>
+	<field name="additionalInfoSection" class="com.pyx4j.entity.core.IList"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="101" splitType="Stretch">
+			<staticText>
+				<reportElement x="349" y="14" width="222" height="20" uuid="5996a310-98ff-4e81-b0a8-68e1153b6605"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rental Application]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="81" width="90" height="20" uuid="07f3ce43-fcd5-42ba-853e-4102806c1fce"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Application Type]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="100" y="84" width="8" height="10" uuid="4e272da0-b5db-4c18-8967-397cc0d74a11"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="177" y="84" width="8" height="10" uuid="43e6c06f-df68-44f1-adf2-82051f4f3011"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="113" y="82" width="43" height="15" uuid="10f156e0-c568-4f67-b22e-665340f7b18e"/>
+				<text><![CDATA[New]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="197" y="82" width="66" height="15" uuid="b484a0b3-12f2-4f47-ba46-a04ee7e4db90"/>
+				<text><![CDATA[Transfer]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="323" y="81" width="100" height="20" uuid="fe264350-47cd-4306-b628-3a26935f3493"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date Submitted]]></text>
+			</staticText>
+			<image scaleImage="RetainShape" hAlign="Right" vAlign="Top">
+				<reportElement x="0" y="0" width="286" height="66" uuid="f6924c01-bfb0-4fba-9819-de3248917f43"/>
+				<imageExpression><![CDATA[$P{landlordLogo}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="4" width="309" height="19" uuid="0d57e3cc-a17c-40fe-857d-64166ff07019"/>
+				<text><![CDATA[The undersigned Applicant(s) hereby make this application to lease:]]></text>
+			</staticText>
+		</band>
+		<band height="18">
+			<subreport>
+				<reportElement x="-20" y="8" width="612" height="1" uuid="ce6f4bc9-a4e8-44b3-bff7-fb642701e405"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{leaseSection})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.RentalApplicationFirstPage")]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="18">
+			<subreport>
+				<reportElement x="-20" y="8" width="612" height="1" uuid="82ce1d6e-f292-4111-9d62-d4058d49b6f3"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{peopleSection})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.RentalApplicationPeople")]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="42">
+			<staticText>
+				<reportElement x="5" y="0" width="173" height="20" uuid="4fa28e9b-e598-4f73-91c6-95e3f7d082a2"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Terms and Conditions]]></text>
+			</staticText>
+		</band>
+		<band height="18">
+			<subreport>
+				<reportElement x="-20" y="8" width="591" height="1" uuid="4ce4469e-b04e-4508-9d07-fc362e3d23ad"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{additionalInfoSection})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.RentalApplicationApplicantDetails")]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="50"/>
+	</detail>
+</jasperReport>

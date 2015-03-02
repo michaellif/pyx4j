@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationApplicantDetails" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e542c805-24ad-4889-8885-2d7bc3fb68d3">
-	<property name="ireport.zoom" value="2.3579476910000388"/>
+	<property name="ireport.zoom" value="2.35794769100004"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="711"/>
+	<property name="ireport.y" value="1443"/>
 	<field name="generalQuestions" class="com.pyx4j.entity.core.IList"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -259,7 +259,7 @@
 		</band>
 		<band height="18">
 			<subreport>
-				<reportElement x="0" y="8" width="571" height="1" uuid="8fca1ae3-65d1-4579-9447-9c634c6c585b"/>
+				<reportElement x="0" y="8" width="572" height="1" uuid="8fca1ae3-65d1-4579-9447-9c634c6c585b"/>
 				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{generalQuestions})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.RentalApplicationGeneralQuestions")]]></subreportExpression>
 			</subreport>
@@ -483,7 +483,7 @@
 			</staticText>
 		</band>
 		<band height="23"/>
-		<band height="50">
+		<band height="28">
 			<rectangle>
 				<reportElement x="379" y="0" width="192" height="20" forecolor="#CCCCCC" uuid="f92a7e85-3671-44f5-b5a5-c7b470b7662b"/>
 			</rectangle>
