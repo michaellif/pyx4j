@@ -78,9 +78,7 @@ public class ScreeningGenerator {
 
         // Documents
         screening.version().documents().add(createIdentificationDocument(IdentificationDocumentType.Type.canadianSIN));
-        for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
-            screening.version().documents().add(createIdentificationDocument(null));
-        }
+        screening.version().documents().add(createIdentificationDocument(IdentificationDocumentType.Type.license));
 
         // Address
         screening.version().currentAddress().set(createPriorAddress());
