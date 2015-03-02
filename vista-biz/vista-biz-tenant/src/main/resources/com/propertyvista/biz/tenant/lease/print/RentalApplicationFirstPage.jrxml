@@ -1,485 +1,378 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationFirstPage" pageWidth="612" pageHeight="842" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3ab57690-448c-4258-a02d-968bc8f50a7e">
-	<property name="ireport.zoom" value="1.9487171000000325"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationFirstPage" pageWidth="612" pageHeight="842" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="4ad4750a-92b0-4fa9-9570-bf16984ed5dd">
+	<property name="ireport.zoom" value="1.9487171000000056"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
-	<subDataset name="Table Dataset 1" uuid="055701f0-6956-40c0-a935-87610b2c52a5"/>
+	<property name="ireport.y" value="129"/>
+	<subDataset name="Table Dataset 1" uuid="edf86aec-6d48-4fa7-b7ac-b1ec0f75e7e9"/>
 	<parameter name="landlordLogo" class="java.io.InputStream"/>
-	<field name="leaseSection" class="com.pyx4j.entity.core.IList"/>
-	<field name="additionalInfoSection" class="com.pyx4j.entity.core.IList"/>
+	<field name="unitNumber" class="java.lang.String"/>
+	<field name="landlordName" class="java.lang.String"/>
+	<field name="street" class="java.lang.String"/>
+	<field name="city" class="java.lang.String"/>
+	<field name="province" class="java.lang.String"/>
+	<field name="postalCode" class="java.lang.String"/>
+	<field name="floorplan" class="java.lang.String"/>
+	<field name="includedUtilities" class="java.lang.String"/>
+	<field name="leaseFrom" class="com.pyx4j.commons.LogicalDate"/>
+	<field name="leaseTo" class="com.pyx4j.commons.LogicalDate"/>
+	<field name="unitRent" class="java.math.BigDecimal"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<title>
-		<band height="101" splitType="Stretch">
-			<staticText>
-				<reportElement x="349" y="14" width="222" height="20" uuid="5996a310-98ff-4e81-b0a8-68e1153b6605"/>
-				<textElement>
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Rental Application]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="81" width="90" height="20" uuid="07f3ce43-fcd5-42ba-853e-4102806c1fce"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Application Type]]></text>
-			</staticText>
-			<rectangle>
-				<reportElement x="100" y="84" width="8" height="10" uuid="4e272da0-b5db-4c18-8967-397cc0d74a11"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="177" y="84" width="8" height="10" uuid="43e6c06f-df68-44f1-adf2-82051f4f3011"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="113" y="82" width="43" height="15" uuid="10f156e0-c568-4f67-b22e-665340f7b18e"/>
-				<text><![CDATA[New]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="197" y="82" width="66" height="15" uuid="b484a0b3-12f2-4f47-ba46-a04ee7e4db90"/>
-				<text><![CDATA[Transfer]]></text>
-			</staticText>
-			<staticText>
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="323" y="81" width="100" height="20" uuid="fe264350-47cd-4306-b628-3a26935f3493"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Date Submitted]]></text>
-			</staticText>
-			<image scaleImage="RetainShape" hAlign="Right" vAlign="Top">
-				<reportElement x="0" y="0" width="286" height="66" uuid="f6924c01-bfb0-4fba-9819-de3248917f43"/>
-				<imageExpression><![CDATA[$P{landlordLogo}]]></imageExpression>
-			</image>
-		</band>
-	</title>
 	<detail>
-		<band height="35" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="4" width="309" height="19" uuid="0d57e3cc-a17c-40fe-857d-64166ff07019"/>
-				<text><![CDATA[The undersigned Applicant(s) hereby make this application to lease:]]></text>
-			</staticText>
-		</band>
 		<band height="155">
 			<rectangle>
-				<reportElement x="1" y="3" width="570" height="20" forecolor="#CCCCCC" uuid="4e2dfe75-ee0a-43fd-9db1-22532c8ac7fa"/>
+				<reportElement x="1" y="3" width="570" height="20" forecolor="#CCCCCC" uuid="34016907-092c-4457-8fe2-d9c5ebd2ddcd"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="1" y="23" width="555" height="20" forecolor="#CCCCCC" uuid="5a74b1db-b0cb-43b0-8f78-4b7e04e0a667"/>
+				<reportElement x="1" y="23" width="555" height="20" forecolor="#CCCCCC" uuid="a58d5c50-5c3f-44fb-857a-15781e36ad8f"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="1" y="23" width="570" height="20" forecolor="#CCCCCC" uuid="765b3859-f1fd-4729-b72e-2287b50465ec"/>
+				<reportElement x="1" y="23" width="570" height="20" forecolor="#CCCCCC" uuid="6110c5d9-ffdb-4944-ae29-cb4135c496f9"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="1" y="43" width="570" height="20" forecolor="#CCCCCC" uuid="89b91c48-4669-4148-89ec-42aa29213962"/>
+				<reportElement x="1" y="43" width="570" height="20" forecolor="#CCCCCC" uuid="55dad6ee-238d-4abe-b8d6-fc5a7d17d912"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="1" y="63" width="188" height="20" forecolor="#CCCCCC" uuid="3400e5da-c698-4924-873d-4de52875f9b5"/>
+				<reportElement x="1" y="63" width="188" height="20" forecolor="#CCCCCC" uuid="51263ff5-741b-4a19-8d64-1e6042dc8dcf"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="1" y="83" width="570" height="20" forecolor="#CCCCCC" uuid="e58b09e4-78e7-4c29-aa0d-e68282b7d720"/>
+				<reportElement x="1" y="83" width="570" height="20" forecolor="#CCCCCC" uuid="3495d954-a479-4c95-9a35-557c4b7c207f"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="1" y="103" width="570" height="20" forecolor="#CCCCCC" uuid="936a7622-f7c3-44c7-ac9e-53538f519828"/>
+				<reportElement x="1" y="103" width="570" height="20" forecolor="#CCCCCC" uuid="9fa919fe-a595-48ef-b99b-577315025f83"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="4" y="3" width="173" height="20" uuid="7ab2b75e-8e58-4077-a7dd-fa721575a879"/>
+				<reportElement x="4" y="3" width="173" height="20" uuid="71d8ae01-a46a-4f49-9484-d076a3d19df5"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Rental Premises Applied For]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="4" y="28" width="66" height="15" forecolor="#666666" uuid="ca50bb0f-9421-4122-94de-2aa1ddf53ccf"/>
+				<reportElement x="4" y="28" width="66" height="15" forecolor="#666666" uuid="dab8494a-0af0-4f5c-b998-860067a08977"/>
 				<text><![CDATA[Address]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="4" y="48" width="66" height="15" forecolor="#666666" uuid="ece94437-76d6-4fe1-90d1-181d60f6d529"/>
+				<reportElement x="4" y="48" width="66" height="15" forecolor="#666666" uuid="42964cd1-9f3d-4655-ac4d-055b7f365235"/>
 				<text><![CDATA[Suite No]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="4" y="68" width="66" height="15" forecolor="#666666" uuid="d528433e-d8dc-4945-af7d-75f454951092"/>
+				<reportElement x="4" y="68" width="66" height="15" forecolor="#666666" uuid="16f4a901-12d2-4dbf-a4a1-57da91d8ee61"/>
 				<text><![CDATA[City]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="4" y="88" width="66" height="15" forecolor="#666666" uuid="bb6e07cd-9836-49c7-b956-0ac95342ceea"/>
+				<reportElement x="4" y="88" width="66" height="15" forecolor="#666666" uuid="50aa7ef5-43d0-41ee-a51a-ccbf6875ac9e"/>
 				<text><![CDATA[Unit Type]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="4" y="108" width="86" height="15" forecolor="#666666" uuid="72fa5c62-89a7-4187-8740-a8d0ab693de6"/>
+				<reportElement x="4" y="108" width="86" height="15" forecolor="#666666" uuid="20185df7-bed9-4b9a-9059-d27ee9c39ce7"/>
 				<text><![CDATA[Landlord/Owner]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="188" y="63" width="185" height="20" forecolor="#CCCCCC" uuid="9eee1c54-4a61-42ed-a7c3-03a5cc960492"/>
+				<reportElement x="188" y="63" width="185" height="20" forecolor="#CCCCCC" uuid="fb417a3a-ce10-4bdc-b34a-6e5456d5d85e"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="373" y="63" width="198" height="20" forecolor="#CCCCCC" uuid="b9aaac82-5166-4696-b8e3-cc0c37fae6b1"/>
+				<reportElement x="373" y="63" width="198" height="20" forecolor="#CCCCCC" uuid="05de2ed5-1ce3-4f80-a70d-88e0ca404ae0"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="373" y="123" width="182" height="20" forecolor="#CCCCCC" uuid="80aba6f0-1db8-4917-9b5e-735a6bbc544c"/>
+				<reportElement x="373" y="123" width="182" height="20" forecolor="#CCCCCC" uuid="96ebe19e-bf78-4bc8-9492-ab10cfed8bc2"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="377" y="128" width="79" height="15" forecolor="#666666" uuid="ec98ed9f-dfc5-4d51-9f37-42bf4eed237f"/>
+				<reportElement x="377" y="128" width="79" height="15" forecolor="#666666" uuid="a1272296-228b-4acc-8f1c-4897bdb8d0c5"/>
 				<text><![CDATA[Months in Term]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="191" y="68" width="75" height="15" forecolor="#666666" uuid="7a70f3cf-449e-4e3d-9ee6-9eb779063b7f"/>
+				<reportElement x="191" y="68" width="75" height="15" forecolor="#666666" uuid="1b125fc4-b64a-4c6b-a079-49e45b19dba0"/>
 				<text><![CDATA[State/Province]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="377" y="68" width="79" height="15" forecolor="#666666" uuid="21195e7b-3c45-40f4-beeb-c5a7d4b6e2a1"/>
+				<reportElement x="377" y="68" width="79" height="15" forecolor="#666666" uuid="6131f773-375c-466d-802c-047098037d44"/>
 				<text><![CDATA[Zip/Postal Code]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="373" y="123" width="198" height="20" forecolor="#CCCCCC" uuid="c097a2ee-fae8-43be-88da-b574ebacf133"/>
+				<reportElement x="373" y="123" width="198" height="20" forecolor="#CCCCCC" uuid="1b64410a-0697-49ef-8677-19c61922505f"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="1" y="123" width="188" height="20" forecolor="#CCCCCC" uuid="8134c27c-f720-4814-a9b6-3b00845c7649"/>
+				<reportElement x="1" y="123" width="188" height="20" forecolor="#CCCCCC" uuid="4f6fc4d3-4548-46bf-a583-b7bcc6223148"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="188" y="123" width="185" height="20" forecolor="#CCCCCC" uuid="43ee350c-cdf4-4444-80c3-1ab7c553e155"/>
+				<reportElement x="188" y="123" width="185" height="20" forecolor="#CCCCCC" uuid="ad566906-cc2d-4143-b676-fce17ee5600d"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="4" y="128" width="66" height="15" forecolor="#666666" uuid="65620fad-89c2-426f-a8a3-ae4a11f97bfc"/>
+				<reportElement x="4" y="128" width="66" height="15" forecolor="#666666" uuid="6ac1182e-9002-47e5-be1f-e67580614c8f"/>
 				<text><![CDATA[Term From]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="191" y="128" width="66" height="15" forecolor="#666666" uuid="9453828b-cbe1-4f4a-8f9d-ffb023dad37a"/>
+				<reportElement x="191" y="128" width="66" height="15" forecolor="#666666" uuid="40b6b5e4-e9b3-4534-91ae-44cc9ed4e3b1"/>
 				<text><![CDATA[Term To]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="377" y="128" width="98" height="15" forecolor="#666666" uuid="244b3b68-f052-45bf-9581-36035881432a"/>
+				<reportElement x="377" y="128" width="98" height="15" forecolor="#666666" uuid="b7afcd3c-afef-428c-8c20-87c833af201f"/>
 				<text><![CDATA[# of months in term]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="0" y="0" width="571" height="3" forecolor="#FFFFFF" backcolor="#00CC99" uuid="19cf4dbe-0601-434e-b23a-ca5d0e77e18f"/>
+				<reportElement x="1" y="0" width="570" height="2" forecolor="#00CC99" backcolor="#00CC99" uuid="055077bd-c57b-4b33-a816-eb69c09873d6"/>
 				<graphicElement>
-					<pen lineWidth="0.0" lineStyle="Dashed"/>
+					<pen lineWidth="1.0"/>
 				</graphicElement>
 			</rectangle>
+			<textField>
+				<reportElement x="91" y="108" width="480" height="15" uuid="1ae32bec-a3be-4c96-86b5-3a3b37c282b5"/>
+				<textFieldExpression><![CDATA[$F{landlordName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="28" width="501" height="15" uuid="01f4bb15-063c-4e85-ba7d-78fbf6174bd5"/>
+				<textFieldExpression><![CDATA[$F{street}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="48" width="100" height="15" uuid="22645295-a5ee-46bd-8ac6-ba5006c10a21"/>
+				<textFieldExpression><![CDATA[$F{unitNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="68" width="118" height="15" uuid="562702ea-7c3b-4a15-8d61-5ff34a908ed7"/>
+				<textFieldExpression><![CDATA[$F{city}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="266" y="68" width="107" height="15" uuid="6e5a0565-513c-410b-9631-ed818e8599df"/>
+				<textFieldExpression><![CDATA[$F{province}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="68" width="116" height="15" uuid="0fc7f504-2e93-4ee5-8c4e-e3e933975453"/>
+				<textFieldExpression><![CDATA[$F{postalCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="88" width="501" height="15" uuid="23de346f-13e1-4c87-9b4b-7a12a2872e8e"/>
+				<textFieldExpression><![CDATA[$F{floorplan}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="70" y="128" width="118" height="15" uuid="ce32704e-6595-4354-b294-36809ea77da4"/>
+				<textFieldExpression><![CDATA[$F{leaseFrom}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="257" y="128" width="116" height="15" uuid="e2130ae7-b17e-4c96-b27c-1cedddebc794"/>
+				<textFieldExpression><![CDATA[$F{leaseTo}]]></textFieldExpression>
+			</textField>
 		</band>
 		<band height="88">
 			<rectangle>
-				<reportElement x="1" y="4" width="570" height="20" forecolor="#CCCCCC" uuid="7c92310b-0c3e-449a-b137-2d1344d35910"/>
+				<reportElement x="1" y="4" width="570" height="20" forecolor="#CCCCCC" uuid="0be15149-de38-4594-b8f8-58f6b510b662"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="4" y="4" width="173" height="20" uuid="ff897a4c-4407-46f5-bbb3-848808b31ffc"/>
+				<reportElement x="4" y="4" width="173" height="20" uuid="3a73b6a8-39fc-491f-adb4-1b4c43fbca26"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Rental Information]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="1" y="24" width="132" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="44c79b0b-e65d-4c87-9dcc-0b746611ce52"/>
+				<reportElement x="1" y="24" width="132" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="03ee65d8-28ab-4194-8efc-3dc7f88039eb"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="132" y="24" width="132" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="280ae0b0-cee5-43b3-9936-a8e71e66fc89"/>
+				<reportElement x="132" y="24" width="132" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="8dc6675b-b8e4-4391-a88d-c79510fc5333"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="263" y="24" width="132" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="fc3b8630-4b09-4c15-bff3-929cde585f28"/>
+				<reportElement x="263" y="24" width="132" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="afd660d3-e9f0-4ffb-8899-5b15d3e630a7"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="395" y="24" width="176" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="3986ea0c-5270-47cc-bc3f-f61ffe93d6c8"/>
+				<reportElement x="395" y="24" width="176" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="63d603e8-3cba-42ae-879d-b6378ba4199f"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="132" y="44" width="132" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="f0cda4be-94ce-4fac-baed-6d9ac6813a8a"/>
+				<reportElement x="132" y="44" width="132" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="4f8459e5-a1ab-4b65-8bc8-5c69aa97ed95"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="395" y="44" width="176" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="d038c007-8e1e-4a57-9a54-dc47fb977b3a"/>
+				<reportElement x="395" y="44" width="176" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="6f25e543-64b8-43a9-82f8-93221ad79a3e"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="1" y="44" width="132" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="8c2c1a44-2aa3-4873-9f28-98f9941b0a7f"/>
+				<reportElement x="1" y="44" width="131" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="acdad73b-a301-4469-8497-5ccdb089d17d"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="263" y="44" width="132" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="b266e14c-46a6-4acd-9b0e-b7370c0234f0"/>
+				<reportElement x="263" y="44" width="132" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="cb99db75-04a7-4d05-bd07-68510b597444"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="395" y="64" width="176" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="1c118a31-ebb6-4f4e-b86d-25563d6f77d0"/>
+				<reportElement x="395" y="64" width="176" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="d464616b-2a74-4178-a22d-e652e28594c8"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="263" y="64" width="132" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="79f05cf7-99c8-469c-8e6e-f3f20bd7ed50"/>
+				<reportElement x="263" y="64" width="132" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="2eeb27ed-000d-401d-9cff-1fcd9f2fe83b"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="265" y="27" width="84" height="15" forecolor="#666666" uuid="578e04cc-3903-46ff-85f1-aa600557dc07"/>
+				<reportElement x="265" y="27" width="84" height="15" forecolor="#666666" uuid="0f6b3e3e-ae53-47f3-a2ef-ce0aaa460a83"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Outdoor Parking]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="399" y="27" width="66" height="15" forecolor="#666666" uuid="fe439c39-271e-4ac3-a86c-b735bd603d24"/>
+				<reportElement x="399" y="27" width="66" height="15" forecolor="#666666" uuid="6498eb93-842b-40f8-855e-40b2e4f24c8b"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Lockers]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="4" y="26" width="66" height="15" forecolor="#666666" uuid="7c50c383-eaab-4e58-b71c-5a10f679c9a8"/>
+				<reportElement x="4" y="26" width="66" height="15" forecolor="#666666" uuid="de3062db-6669-4ca4-bd82-c2e835849523"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Basic Rent]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="138" y="26" width="66" height="15" forecolor="#666666" uuid="c8562d6e-e7de-4bf3-9839-665752e58dd3"/>
+				<reportElement x="138" y="26" width="66" height="15" forecolor="#666666" uuid="e866d159-ef49-4dc4-9a93-6021a20c43dd"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Indoor Parking]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="266" y="67" width="84" height="15" forecolor="#666666" uuid="187f78a8-c270-4710-8372-40d6fdf8938e"/>
+				<reportElement x="266" y="67" width="84" height="15" forecolor="#666666" uuid="0bbe8e2c-d591-4a91-ad45-56e9959c95e4"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total Rent]]></text>
 			</staticText>
 			<rectangle radius="0">
-				<reportElement mode="Opaque" x="0" y="1" width="571" height="3" forecolor="#FFFFFF" backcolor="#00CC99" uuid="f6601ff5-18c2-47fd-b561-9b49842e1bcf"/>
+				<reportElement mode="Opaque" x="1" y="1" width="570" height="2" forecolor="#00CC99" backcolor="#00CC99" uuid="321703af-a1d8-4696-a782-b3286102abc5"/>
 				<graphicElement fill="Solid">
-					<pen lineWidth="0.0"/>
+					<pen lineWidth="1.0"/>
 				</graphicElement>
 			</rectangle>
+			<textField>
+				<reportElement x="5" y="49" width="127" height="15" uuid="10188368-3aae-470d-b76f-1f8c0fa6010a"/>
+				<textFieldExpression><![CDATA[$F{unitRent}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="395" y="67" width="128" height="15" uuid="7aad7a94-23b6-4acb-9976-e665cfb6351a"/>
+				<textFieldExpression><![CDATA[$F{unitRent}]]></textFieldExpression>
+			</textField>
 		</band>
 		<band height="53">
 			<rectangle>
-				<reportElement x="1" y="4" width="570" height="20" forecolor="#CCCCCC" uuid="285c2867-93a6-486a-afae-f6edec69a6bf"/>
+				<reportElement x="1" y="4" width="570" height="20" forecolor="#CCCCCC" uuid="df47370a-b1d2-4d7e-a54d-2310aae15378"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="4" y="4" width="173" height="20" uuid="8a0d08c4-53d5-4950-96bc-4feeb563ead7"/>
+				<reportElement x="4" y="4" width="173" height="20" uuid="08d7d0e8-1598-4a63-a9c2-2105b37dfd34"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Utilities Included]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="1" y="24" width="570" height="20" forecolor="#CCCCCC" uuid="70b55f06-20b2-465b-82c4-7658710912e5"/>
+				<reportElement x="1" y="24" width="570" height="20" forecolor="#CCCCCC" uuid="aea26d8f-6369-4450-a74d-afe3b1c6cd17"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="0" y="1" width="571" height="3" forecolor="#FFFFFF" backcolor="#00CC99" uuid="5a3b6e1e-9cc3-4976-83dd-ba69331b8d3d"/>
+				<reportElement x="1" y="1" width="570" height="2" forecolor="#00CC99" backcolor="#00CC99" uuid="4edea890-7a9c-4817-bab4-20a410d7bf09"/>
 				<graphicElement>
-					<pen lineWidth="0.0"/>
+					<pen lineWidth="1.0"/>
 				</graphicElement>
 			</rectangle>
+			<textField>
+				<reportElement x="4" y="24" width="567" height="15" uuid="810fe391-e5a8-4cd8-823a-5d43e0004e83"/>
+				<textFieldExpression><![CDATA[$F{includedUtilities}]]></textFieldExpression>
+			</textField>
 		</band>
 		<band height="72">
 			<rectangle>
-				<reportElement x="263" y="43" width="132" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="660c39cb-78a4-47ae-972e-0d28f7ff3976"/>
+				<reportElement x="395" y="43" width="176" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="f0a82563-8360-4be9-a8a5-b620bcd7b4e6"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="132" y="23" width="132" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="734f69a8-5c42-4ad0-a775-be1e7323f2c0"/>
+				<reportElement x="1" y="3" width="570" height="20" forecolor="#CCCCCC" uuid="61929e4c-180b-41dd-913d-3d1d87396c9c"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="263" y="43" width="132" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="cde11abd-7b40-4aa0-8fd7-e249f8be1cd9"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="132" y="23" width="132" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="2542b5ea-c89e-4cf3-af55-484cd17141d9"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="395" y="23" width="176" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="c347fb5b-bc9a-4618-bedd-eeaa78dba6ec"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="263" y="23" width="132" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="6898b9cc-9dde-4485-9676-cfa79cb0a72e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="23" width="132" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="53103a9c-d7aa-40fd-8de7-eddd696957b7"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="4" y="4" width="173" height="20" uuid="2a6452b9-8a1f-4531-ac3b-b7f27d918757"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Rental Information]]></text>
-			</staticText>
-			<rectangle>
-				<reportElement x="395" y="43" width="176" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="01860ab1-7a20-48c7-a7da-b6cd3bdffb33"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="395" y="23" width="176" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="beac6d0a-55ca-4abe-adf5-faa54d8a0a40"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="263" y="23" width="132" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="3712fc4c-ea90-436b-aa21-2cdfcb277707"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="23" width="132" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="9ca3ae94-ffb1-4054-bdb9-92faf2f3e2d1"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="3" width="570" height="20" forecolor="#CCCCCC" uuid="bd53c4b4-f8e3-46ca-8686-9f4167eb437b"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="266" y="46" width="84" height="15" forecolor="#666666" uuid="a2b65f57-371b-485c-8e6d-a70b21910a96"/>
+				<reportElement x="266" y="46" width="84" height="15" forecolor="#666666" uuid="1496defb-45d2-4128-b24a-56408275e256"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total Monies]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="4" y="3" width="173" height="20" uuid="7c02a561-2ca3-4d59-98ea-6631895df002"/>
+				<reportElement x="4" y="3" width="173" height="20" uuid="8fba3600-db9e-4587-b44a-e510c9f5110b"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Summary of Monies]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="4" y="28" width="66" height="15" forecolor="#666666" uuid="e2ddbb09-c0e0-4124-b9bc-80f4549bf8a8"/>
+				<reportElement x="4" y="28" width="66" height="15" forecolor="#666666" uuid="cab9909b-ef20-4f01-b590-8847a2ff536d"/>
 				<text><![CDATA[Pro-Rate]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="138" y="28" width="76" height="15" forecolor="#666666" uuid="f3df56b4-a9bf-4735-9633-6ac0e486fa30"/>
+				<reportElement x="138" y="28" width="76" height="15" forecolor="#666666" uuid="fbeb7cb5-3407-4386-88be-ddf7f4fa8bd3"/>
 				<text><![CDATA[1st Month Rent]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="266" y="28" width="76" height="15" forecolor="#666666" uuid="d1ea4822-fc12-4b9a-b3e7-be187ba36ef9"/>
+				<reportElement x="266" y="28" width="76" height="15" forecolor="#666666" uuid="351ff208-2f2b-44a4-acaa-8759c58d475b"/>
 				<text><![CDATA[Contact Deposit]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="399" y="28" width="76" height="15" forecolor="#666666" uuid="2f554cc6-b33a-40db-8e5e-ef14fde5f649"/>
+				<reportElement x="399" y="28" width="76" height="15" forecolor="#666666" uuid="2dee630c-10e7-41e7-825b-b687690e4166"/>
 				<text><![CDATA[Locker Deposit]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="1" y="43" width="263" height="20" forecolor="#CCCCCC" uuid="26b40482-cd85-48a2-9581-b9a77717d921"/>
+				<reportElement x="1" y="43" width="263" height="20" forecolor="#CCCCCC" uuid="a8cfdbf0-ad1e-468d-a18f-de785e659a53"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="4" y="48" width="259" height="15" forecolor="#666666" uuid="d2c9e92f-d8ef-44b1-8044-0c656caaba3d"/>
+				<reportElement x="4" y="48" width="259" height="15" forecolor="#666666" uuid="9493e57d-9ba8-4c2e-a594-148f94dbb14e"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[$___ to be paid in advance to cover the period from ______ to ______]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="0" y="1" width="571" height="3" forecolor="#FFFFFF" backcolor="#00CC99" uuid="4d44da84-dff3-4b69-bb8e-da9f47c2cade"/>
+				<reportElement x="1" y="1" width="570" height="2" forecolor="#00CC99" backcolor="#00CC99" uuid="9527516c-af48-4afb-831d-6bd715654569"/>
 				<graphicElement>
-					<pen lineWidth="0.0"/>
+					<pen lineWidth="1.0"/>
 				</graphicElement>
 			</rectangle>
 		</band>
 		<band height="44">
 			<rectangle>
-				<reportElement x="1" y="3" width="570" height="20" forecolor="#CCCCCC" uuid="179e31a4-14da-4a70-8f8c-82e86559a91e"/>
+				<reportElement x="1" y="3" width="570" height="20" forecolor="#CCCCCC" uuid="d083c413-a5ec-4f7c-9356-8f6db67f2ab9"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="4" y="3" width="173" height="20" uuid="6fa36422-bd33-4130-bda8-bc77131db6ee"/>
+				<reportElement x="4" y="3" width="173" height="20" uuid="86577671-464e-40e6-8087-07aefe93750e"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Notes for Rental Premises]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="0" y="0" width="571" height="3" forecolor="#FFFFFF" backcolor="#00CC99" uuid="5dcb3b5f-0ae6-4234-b4e8-314a73b24d25"/>
+				<reportElement x="0" y="0" width="571" height="3" forecolor="#FFFFFF" backcolor="#00CC99" uuid="6d624565-82a9-49a7-8139-f5aee2492c7e"/>
 				<graphicElement>
 					<pen lineWidth="0.0"/>
 				</graphicElement>
 			</rectangle>
 		</band>
-		<band height="50">
+		<band height="36">
 			<staticText>
-				<reportElement x="4" y="1" width="100" height="20" uuid="329137f6-79ff-4f6b-8f07-443f15363f12"/>
+				<reportElement x="4" y="1" width="100" height="20" uuid="8339a29b-a047-4569-973e-5e357604aac0"/>
 				<textElement>
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Acknowledgement]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="104" y="1" width="467" height="30" forecolor="#666666" uuid="59950134-2e13-4d8c-941f-7096584b5b1b"/>
+				<reportElement x="104" y="1" width="467" height="30" forecolor="#666666" uuid="7d4b91f9-73c1-44bc-97b6-0e08798c2808"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[Each Applicant hereby acknowledges that he/she has been shown and has read the Landlord’s usual form of Tenancy Agreement.
 ]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="4" y="31" width="567" height="19" forecolor="#666666" uuid="d97ec517-0be3-44a9-96cd-00d098e18a46"/>
-				<textElement>
-					<font size="9"/>
-				</textElement>
-				<text><![CDATA[The undersigned Applicant(s) hereby make this application to lease:]]></text>
-			</staticText>
-		</band>
-		<band height="62">
-			<rectangle>
-				<reportElement x="1" y="3" width="570" height="20" forecolor="#CCCCCC" uuid="b4da0a08-504f-42fe-9bd9-dd6dd9112b90"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="4" y="3" width="173" height="20" uuid="23a1975f-ec42-4c89-8427-a78908aabbb8"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Proposed Applicant(s)]]></text>
-			</staticText>
-			<rectangle>
-				<reportElement x="0" y="0" width="571" height="3" forecolor="#FFFFFF" backcolor="#00CC99" uuid="34f9ce46-b2d2-473e-86ac-bda477009cb5"/>
-				<graphicElement>
-					<pen lineWidth="0.0"/>
-				</graphicElement>
-			</rectangle>
-			<componentElement>
-				<reportElement key="table" x="0" y="23" width="571" height="27" uuid="0d45300b-cd13-45ab-83c9-be75268f995f"/>
-				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="Table Dataset 1" uuid="ea48f3fc-95f0-486a-ac7e-88f543cd39ae">
-						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource(1)]]></dataSourceExpression>
-					</datasetRun>
-					<jr:column width="126" uuid="1be5766d-5efb-4d86-977b-e52a4b8e4f8d">
-						<jr:detailCell height="20" rowSpan="1"/>
-					</jr:column>
-					<jr:column width="145" uuid="431fbe14-376a-47bb-9be6-4cfe3111709c">
-						<jr:detailCell height="20" rowSpan="1"/>
-					</jr:column>
-					<jr:column width="145" uuid="40e524d4-2332-497b-9e59-c8ac8aa0afe8">
-						<jr:detailCell height="20" rowSpan="1"/>
-					</jr:column>
-					<jr:column width="136" uuid="ab0a66b9-fd6b-41d6-a8e1-883d420b2806">
-						<jr:detailCell height="20" rowSpan="1"/>
-					</jr:column>
-				</jr:table>
-			</componentElement>
-		</band>
-		<band height="31">
-			<staticText>
-				<reportElement x="1" y="1" width="570" height="19" forecolor="#666666" uuid="177ee8b1-2272-4b30-8ea4-771dbf65eea2"/>
-				<textElement>
-					<font size="9"/>
-				</textElement>
-				<text><![CDATA[The undersigned Occupant(s) hereby make this application to lease:]]></text>
-			</staticText>
-		</band>
-		<band height="55">
-			<componentElement>
-				<reportElement key="table" x="1" y="23" width="570" height="27" uuid="c9f5e1cf-bbba-461e-9633-b199b0683a67"/>
-				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="Table Dataset 1" uuid="dad75f06-c8e4-4962-9ea0-a865ad9e1064">
-						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource(1)]]></dataSourceExpression>
-					</datasetRun>
-					<jr:column width="126" uuid="5d0af04d-9a9d-463e-b969-2ba90ad5c08c">
-						<jr:detailCell height="20" rowSpan="1"/>
-					</jr:column>
-					<jr:column width="145" uuid="d2206aac-1e19-44a2-af21-1daacef3fb07">
-						<jr:detailCell height="20" rowSpan="1"/>
-					</jr:column>
-					<jr:column width="145" uuid="46324b5f-995a-4079-bd93-b3bb1dd56b7d">
-						<jr:detailCell height="20" rowSpan="1"/>
-					</jr:column>
-					<jr:column width="136" uuid="3ad1f696-a93c-4bd7-a5a1-48a9a061a55f">
-						<jr:detailCell height="20" rowSpan="1"/>
-					</jr:column>
-				</jr:table>
-			</componentElement>
-			<rectangle>
-				<reportElement x="1" y="3" width="570" height="20" forecolor="#CCCCCC" uuid="1abdc8bd-0ab6-4644-8f7a-f67d2a4bf38b"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="0" y="0" width="571" height="3" forecolor="#FFFFFF" backcolor="#00CC99" uuid="8ffdef44-a087-43fc-8a38-0a4c772e3c72"/>
-				<graphicElement>
-					<pen lineWidth="0.0"/>
-				</graphicElement>
-			</rectangle>
-			<staticText>
-				<reportElement x="5" y="3" width="173" height="20" uuid="ab7a5b63-e2b7-48f7-9328-5b34c649550d"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Proposed Occupant(s)]]></text>
-			</staticText>
-		</band>
-		<band height="50">
-			<staticText>
-				<reportElement x="5" y="0" width="173" height="20" uuid="4fa28e9b-e598-4f73-91c6-95e3f7d082a2"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Terms and Conditions]]></text>
-			</staticText>
-		</band>
-		<band height="18">
-			<subreport>
-				<reportElement x="0" y="8" width="571" height="1" uuid="4ce4469e-b04e-4508-9d07-fc362e3d23ad"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{additionalInfoSection})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.RentalApplicationApplicantDetails")]]></subreportExpression>
-			</subreport>
 		</band>
 	</detail>
 </jasperReport>

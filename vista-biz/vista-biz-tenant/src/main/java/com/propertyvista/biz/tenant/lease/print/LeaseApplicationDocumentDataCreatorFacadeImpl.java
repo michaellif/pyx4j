@@ -154,9 +154,16 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         Persistence.ensureRetrieve(application.lease().unit().building(), AttachLevel.Attached);
 
         LeaseTerm term = Persistence.retrieveDraftForEdit(LeaseTerm.class, application.lease().currentTerm().getPrimaryKey());
+        leaseSection.landlordName().setValue(application.lease().unit().building().landlord().name().getValue());
         leaseSection.unitNumber().setValue(application.lease().unit().info().number().getValue());
         leaseSection.address().setValue(AddressRetriever.getLeaseLegalAddress(application.lease()).getStringView());
         leaseSection.floorplan().setValue(application.lease().unit().floorplan().marketingName().getValue());
+        leaseSection.city().setValue(AddressRetriever.getLeaseLegalAddress(application.lease()).city().getValue());
+        leaseSection.province().setValue(AddressRetriever.getLeaseLegalAddress(application.lease()).province().getValue());
+        leaseSection.postalCode().setValue(AddressRetriever.getLeaseLegalAddress(application.lease()).postalCode().getValue());
+        leaseSection.street().setValue(
+                AddressRetriever.getLeaseLegalAddress(application.lease()).streetNumber().getValue() + " "
+                        + (AddressRetriever.getLeaseLegalAddress(application.lease()).streetName().getValue()));
         leaseSection.includedUtilities().setValue(retrieveUtilities(term));
 
         leaseSection.leaseFrom().setValue(application.lease().leaseFrom().getValue());
@@ -178,12 +185,13 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
                 dependent.relationship().setValue(leaseTermTenant.relationship().getStringView());
                 dependent.birthDate().setValue(leaseTermTenant.leaseParticipant().customer().person().birthDate().getValue());
                 peopleSection.dependents().add(dependent);
-            } else if (leaseTermTenant.role().getValue() != Role.Guarantor && !leaseTermTenant.getPrimaryKey().equals(subjectParticipant.getPrimaryKey())) {
+            } else {
                 LeaseApplicationDocumentDataCoApplicantDTO coapplicant = peopleSection.coApplicants().$();
                 coapplicant.firstName().setValue(leaseTermTenant.leaseParticipant().customer().person().name().firstName().getStringView());
                 coapplicant.lastName().setValue(leaseTermTenant.leaseParticipant().customer().person().name().lastName().getStringView());
-                coapplicant.relationship().setValue(leaseTermTenant.relationship().getStringView());
-                coapplicant.email().setValue(leaseTermTenant.leaseParticipant().customer().person().email().getStringView());
+                coapplicant.relationship().setValue(
+                        (leaseTermTenant.relationship().getStringView() == null) ? "" : leaseTermTenant.relationship().getStringView());
+                coapplicant.birthDate().setValue(leaseTermTenant.leaseParticipant().customer().person().birthDate().getValue());
                 peopleSection.coApplicants().add(coapplicant);
             }
         }
