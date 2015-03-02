@@ -12,6 +12,7 @@
  */
 package com.propertyvista.preloader;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -73,6 +74,9 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
         Tenant t001 = null;
         Tenant t002 = null;
         Tenant t003 = null;
+        // Potential tenants
+        List<Tenant> pTenants = new ArrayList<Tenant>();
+
         if (listTenants != null) {
             String email;
             for (Tenant customerUser : listTenants) {
@@ -83,6 +87,8 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
                     t002 = customerUser;
                 } else if ("t003@pyx4j.com".equals(email)) {
                     t003 = customerUser;
+                } else if (email.matches("p\\d{3}@pyx4j.com")) {
+                    pTenants.add(customerUser);
                 }
             }
         }
@@ -126,6 +132,13 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
                     "Late payment notification",
                     "Dear Veronica W Canoy,\nThanks for reminder. My payment it will be delaying one more week, until that please accept my dinner invitation!:)",
                     true, false, mg, sep);
+
+            // Welcome message to potential tenants
+            for (Tenant potentialTenant : pTenants) {
+                createMessage(i, m001, potentialTenant, null, "Welcome",
+                        "We look forward to having you move to our building. If you have any questions, please do not hesitate to contact us", false, false,
+                        mg, sep);
+            }
         }
         return "persons and messages created";
     }
