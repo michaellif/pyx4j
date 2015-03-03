@@ -326,8 +326,11 @@ public class PaymentFacadeImpl implements PaymentFacade {
                         @Override
                         public Void execute() {
                             log.error("Unable to cancel posted Receipt Batch to Yardi; {}", paymentRecord);
-                            ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord, "Unable to cancel posted Receipt Batch to Yardi; {0}",
-                                    paymentRecord);
+                            ServerSideFactory
+                                    .create(OperationsAlertFacade.class)
+                                    .record(paymentRecord,
+                                            "Unable to Cancel in Yardi posted Receipt Batch; Payment Record {0} {1} will appear in Yardi BUT will not be processed in Vista",
+                                            paymentRecord.id(), paymentRecord.amount());
 
                             return null;
                         }
