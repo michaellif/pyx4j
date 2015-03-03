@@ -62,9 +62,4 @@ public class AutoPayConfirmationActivity extends SecurityAwareActivity implement
     public void back() {
         AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments());
     }
-
-    @Override
-    public void onStop() {
-        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial());
-    }
 }
