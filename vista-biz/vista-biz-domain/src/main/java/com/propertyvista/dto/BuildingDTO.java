@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
@@ -43,6 +44,7 @@ public interface BuildingDTO extends Building {
 
     IList<DashboardMetadata> dashboards();
 
+    @NotNull
     IPrimitive<Boolean> merchantAccountPresent();
 
     @Caption(name = "ILS Summary")

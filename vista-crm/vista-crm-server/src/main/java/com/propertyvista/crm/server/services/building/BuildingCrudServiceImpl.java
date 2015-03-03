@@ -12,6 +12,7 @@
  */
 package com.propertyvista.crm.server.services.building;
 
+import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -135,10 +136,14 @@ public class BuildingCrudServiceImpl extends AbstractCrmCrudServiceImpl<Building
         for (PropertyCriterion merchantAccountPresentCriteria : dtoCriteria.getCriterions(dtoCriteria.proto().merchantAccountPresent())) {
             if (merchantAccountPresentCriteria != null) {
                 dtoCriteria.removeCriterions(merchantAccountPresentCriteria);
-                if (merchantAccountPresentCriteria.getValue() == Boolean.FALSE) {
-                    dbCriteria.notExists(dbCriteria.proto().merchantAccounts());
-                } else {
-                    dbCriteria.isNotNull(dbCriteria.proto().merchantAccounts());
+                @SuppressWarnings("unchecked")
+                List<Boolean> values = (List<Boolean>) merchantAccountPresentCriteria.getValue();
+                if (values != null && values.size() == 1) {
+                    if (values.contains(Boolean.FALSE)) {
+                        dbCriteria.notExists(dbCriteria.proto().merchantAccounts());
+                    } else {
+                        dbCriteria.isNotNull(dbCriteria.proto().merchantAccounts());
+                    }
                 }
             }
         }

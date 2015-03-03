@@ -77,18 +77,20 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         for (PropertyCriterion papCriteria : dtoCriteria.getCriterions(dtoCriteria.proto().preauthorizedPaymentPresent())) {
             if (papCriteria != null) {
                 dtoCriteria.removeCriterions(papCriteria);
-                AndCriterion notDeleted = new AndCriterion();
-                notDeleted.eq(dbCriteria.proto().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().isDeleted(),
-                        Boolean.FALSE);
-                if (papCriteria.getValue() == Boolean.FALSE) {
-                    dbCriteria.notExists(dbCriteria.proto().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments(), notDeleted);
-                } else {
-                    dbCriteria.add(notDeleted);
-                    dbCriteria.isNotNull(dbCriteria.proto().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
+                @SuppressWarnings("unchecked")
+                List<Boolean> values = (List<Boolean>) papCriteria.getValue();
+                if (values != null && values.size() == 1) {
+                    AndCriterion notDeleted = new AndCriterion();
+                    notDeleted.eq(dbCriteria.proto().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().isDeleted(), false);
+                    if (values.contains(Boolean.FALSE)) {
+                        dbCriteria.notExists(dbCriteria.proto().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments(), notDeleted);
+                    } else {
+                        dbCriteria.add(notDeleted);
+                        dbCriteria.isNotNull(dbCriteria.proto().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
+                    }
                 }
             }
         }
-
         super.enhanceListCriteria(dbCriteria, dtoCriteria);
     }
 
