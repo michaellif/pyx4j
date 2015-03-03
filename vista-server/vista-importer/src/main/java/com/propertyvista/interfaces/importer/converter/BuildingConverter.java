@@ -12,7 +12,9 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.CrudEntityBinder;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
@@ -56,5 +58,14 @@ public class BuildingConverter extends CrudEntityBinder<Building, BuildingIO> {
         bind(toProto.marketing().visibility(), boProto.marketing().visibility());
         bind(toProto.marketing().name(), boProto.marketing().name());
         bind(toProto.marketing().description(), boProto.marketing().description());
+    }
+
+    @Override
+    public void copyBOtoTO(Building bo, BuildingIO to) {
+
+        Persistence.ensureRetrieve(bo.contacts().propertyContacts(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(bo.contacts().organizationContacts(), AttachLevel.Attached);
+
+        super.copyBOtoTO(bo, to);
     }
 }
