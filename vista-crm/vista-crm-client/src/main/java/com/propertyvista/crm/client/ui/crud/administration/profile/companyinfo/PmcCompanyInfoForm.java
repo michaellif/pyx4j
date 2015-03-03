@@ -116,13 +116,14 @@ public class PmcCompanyInfoForm extends CrmEntityForm<PmcCompanyInfoDTO> {
     private void updateSiteHeader(PmcDnsConfigTO dnsConfig) {
         String content = CrmResources.INSTANCE.dnsNameSetupWebsiteHeader().getText();
 
-        if (dnsConfig.dnsResolved().getValue(false)) {
-            content = content.replace("_CURRENT_DOMAIN_", dnsConfig.customerDnsName().getValue());
+        if (dnsConfig.dnsNameIsActive().getValue(false)) {
+            content = content.replaceAll("_CURRENT_DOMAIN_", dnsConfig.customerDnsName().getValue());
         } else {
-            content = content.replace("_CURRENT_DOMAIN_", dnsConfig.dnsNameDefault().getValue());
+            content = content.replaceAll("_CURRENT_DOMAIN_", dnsConfig.dnsNameDefault().getValue());
         }
 
-        content = content.replace("_IP_ADDRESS_", dnsConfig.serverIPAddress().getValue());
+        content = content.replaceAll("_IP_ADDRESS_", dnsConfig.serverIPAddress().getValue());
+        content = content.replaceAll("_DEFAULT_DOMAIN_", dnsConfig.dnsNameDefault().getValue());
 
         websiteHeader.setHTML(content);
     }
@@ -130,13 +131,14 @@ public class PmcCompanyInfoForm extends CrmEntityForm<PmcCompanyInfoDTO> {
     private void updatePortalHeader(PmcDnsConfigTO dnsConfig) {
         String content = CrmResources.INSTANCE.dnsNameSetupPortalHeader().getText();
 
-        if (dnsConfig.dnsResolved().getValue(false)) {
-            content = content.replace("_CURRENT_DOMAIN_", dnsConfig.customerDnsName().getValue());
+        if (dnsConfig.dnsNameIsActive().getValue(false)) {
+            content = content.replaceAll("_CURRENT_DOMAIN_", dnsConfig.customerDnsName().getValue());
         } else {
-            content = content.replace("_CURRENT_DOMAIN_", dnsConfig.dnsNameDefault().getValue());
+            content = content.replaceAll("_CURRENT_DOMAIN_", dnsConfig.dnsNameDefault().getValue());
         }
 
-        content = content.replace("_IP_ADDRESS_", dnsConfig.serverIPAddress().getValue());
+        content = content.replaceAll("_IP_ADDRESS_", dnsConfig.serverIPAddress().getValue());
+        content = content.replaceAll("_DEFAULT_DOMAIN_", dnsConfig.dnsNameDefault().getValue());
 
         portalHeader.setHTML(content);
     }

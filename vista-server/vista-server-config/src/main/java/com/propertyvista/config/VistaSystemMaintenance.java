@@ -54,7 +54,7 @@ public final class VistaSystemMaintenance {
         if (state.isEmpty()) {
             applications.remove(pmc);
         } else {
-
+            applications.put(pmc.<Pmc> createIdentityStub(), state.<VistaApplicationsSystemMaintenanceState> duplicate());
         }
     }
 
