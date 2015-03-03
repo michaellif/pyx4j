@@ -214,7 +214,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
                 public void execute() {
                     onItemsDelete(getDataTable().getSelectedItems());
                 }
-            }), 1);
+            }), (addButton == null) ? 0 : 1);
 
             delButton.setEnabled(getDataTableModel() != null && getDataTableModel().isAnyRowSelected());
 
