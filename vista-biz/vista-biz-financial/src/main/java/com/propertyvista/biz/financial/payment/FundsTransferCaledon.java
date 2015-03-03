@@ -172,12 +172,12 @@ public class FundsTransferCaledon {
             // Allow to recover the process automatically
             sendError = e;
             padFile.status().setValue(FundsTransferFile.PadFileStatus.Creating);
-            log.info("file was no sent due to connection error, set status to {} for next resned", padFile.status());
+            log.info("file was not sent due to connection error, set status to {} for next resend", padFile.status());
         } catch (FileCreationException e) {
             // Allow to recover the process automatically
             sendError = e;
             padFile.status().setValue(FundsTransferFile.PadFileStatus.Creating);
-            log.info("file was no sent due file system error, set status to {} for next resned", padFile.status());
+            log.info("file was not sent due file system error, set status to {} for next resend", padFile.status());
         } catch (Throwable e) {
             sendError = e;
             padFile.status().setValue(FundsTransferFile.PadFileStatus.SendError);
