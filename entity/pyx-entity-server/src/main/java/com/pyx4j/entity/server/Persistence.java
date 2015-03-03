@@ -205,7 +205,7 @@ public class Persistence {
             public boolean apply(IEntity entity) {
                 if ((rootEntity == entity) || (entity.getMeta().isOwnedRelationships() && entity.getMeta().isCascadePersist())) {
                     if (entity.isValueDetached()) {
-                        service().retrieve(entity);
+                        service().retrieveMember(entity);
                     }
                     return true;
                 } else {
