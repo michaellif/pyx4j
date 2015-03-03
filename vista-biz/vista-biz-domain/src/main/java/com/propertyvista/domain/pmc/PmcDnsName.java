@@ -73,11 +73,13 @@ public interface PmcDnsName extends IEntity {
     @ToString(index = 0)
     //when edited in CRM set to active if DNS is resolved OK.
     @Caption(name = "Active")
+    @MemberColumn(notNull = true)
     IPrimitive<Boolean> enabled();
 
     @NotNull
     IPrimitive<DnsNameTarget> target();
 
+    @MemberColumn(notNull = true)
     IPrimitive<Boolean> httpsEnabled();
 
     @Length(150)

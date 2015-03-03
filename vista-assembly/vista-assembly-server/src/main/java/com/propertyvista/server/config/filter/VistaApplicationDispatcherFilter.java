@@ -31,9 +31,11 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.gwt.server.ServletUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.server.config.filter.namespace.VistaApplicationResolverHelper;
 import com.propertyvista.server.config.filter.namespace.VistaNamespaceDataResolver;
+import com.propertyvista.server.config.filter.namespace.VistaPmcDnsNameResolverHelper;
 import com.propertyvista.server.config.filter.utils.HttpRequestUtils;
 
 public class VistaApplicationDispatcherFilter implements Filter {
@@ -89,22 +91,25 @@ public class VistaApplicationDispatcherFilter implements Filter {
         String serverName = httprequest.getServerName(); // sample: vista-crm.dev.birchwoodsoftwaregroup.com
         serverName = serverName.toLowerCase(Locale.ENGLISH);
 
-//        VistaApplication app = namespaceResolver.getVistaApplication();
         VistaApplication app = namespaceResolver.getNamespaceData().getApplication();
-
-        //TODO BASED ON PMC and APP, DO FORWARD OR REDIRECT
-
-//        if (debug) {
-//            log.debug(">>>>>>>>>>>>>>>>>>>> NAMESPACE: {} <<<<<<<<<<<<<<<<< ", namespaceResolver.getVistaNamespace());
-//        }
+        PmcDnsName customerDnsName = namespaceResolver.getNamespaceData().getCustomerDnsName();
 
         if (app == null) {
             if (debug) {
                 log.debug("***ADF*** NOT forwarding");
             }
             chain.doFilter(request, response);
+        } else if (VistaPmcDnsNameResolverHelper.isCustomerDNSActive(customerDnsName)) {
+            String defaultApplicationUrl = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getDefaultApplicationURL(app,
+                    customerDnsName.pmc().dnsName().getValue());
+
+            if (debug) {
+                log.debug("***ADF*** redirecting. Customer DNS alias active with https enabled. Sending redirect to default https url \"{}\" to browser",
+                        defaultApplicationUrl);
+            }
+            ((HttpServletResponse) response).sendRedirect(defaultApplicationUrl);
+            return;
         } else if (isDeploymentHttps && VistaApplicationResolverHelper.isHttpsRedirectionNeeded(httprequest, app)) {
-            // TODO Redo and redirect only with information about PMC and APP
             String httpsUrl = HttpRequestUtils.getHttpsUrl(httprequest);
             if (debug) {
                 log.debug("***ADF*** redirecting. Change protocol from 'http' to 'https'. Sending redirect to \"{}\" to browser", httpsUrl);

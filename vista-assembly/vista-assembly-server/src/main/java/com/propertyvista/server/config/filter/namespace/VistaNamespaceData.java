@@ -14,11 +14,14 @@ package com.propertyvista.server.config.filter.namespace;
 
 import com.pyx4j.config.server.NamespaceData;
 
+import com.propertyvista.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.security.common.VistaApplication;
 
 public class VistaNamespaceData extends NamespaceData {
 
     protected VistaApplication application;
+
+    protected PmcDnsName customerDnsName;
 
     public VistaNamespaceData() {
         super(null);
@@ -35,6 +38,14 @@ public class VistaNamespaceData extends NamespaceData {
 
     public void setApplication(VistaApplication app) {
         this.application = app;
+    }
+
+    public PmcDnsName getCustomerDnsName() {
+        return customerDnsName;
+    }
+
+    public void setCustomerDnsName(PmcDnsName customerDnsName) {
+        this.customerDnsName = customerDnsName;
     }
 
 }

@@ -14,10 +14,6 @@ package com.propertyvista.server.config.filter.namespace;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.server.Persistence;
-
-import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.pmc.PmcDnsName.DnsNameTarget;
 import com.propertyvista.domain.security.common.VistaApplication;
@@ -101,20 +97,15 @@ public class VistaApplicationResolverHelper {
         // TODO Do we look up for custom DNS resolution before checking regular DNS formats??
         // Try look up custom DNS Name
         if (app == null) {
-            app = lookUpCustomDNS(domain, rootServletPath);
+            app = getAppByCustomDNS(domain, rootServletPath);
         }
 
         return app;
     }
 
-    private static VistaApplication lookUpCustomDNS(String domain, String rootServletPath) {
+    private static VistaApplication getAppByCustomDNS(String domain, String rootServletPath) {
 
-        EntityQueryCriteria<PmcDnsName> criteria = EntityQueryCriteria.create(PmcDnsName.class);
-        criteria.eq(criteria.proto().enabled(), Boolean.TRUE);
-        criteria.eq(criteria.proto().dnsName(), domain);
-        criteria.eq(criteria.proto().pmc().status(), PmcStatus.Active);
-
-        PmcDnsName pmcDns = Persistence.service().retrieve(criteria);
+        PmcDnsName pmcDns = VistaPmcDnsNameResolverHelper.getCustomPmcDNSName(domain);
 
         if (pmcDns != null) {
             if (pmcDns.target().getValue().equals(DnsNameTarget.portal)) {
@@ -142,6 +133,7 @@ public class VistaApplicationResolverHelper {
         }
 
         if (app != null && app != VistaApplication.site && app != VistaApplication.noApp) {
+//        if (app != null && app != VistaApplication.noApp) {
             return true;
         }
 

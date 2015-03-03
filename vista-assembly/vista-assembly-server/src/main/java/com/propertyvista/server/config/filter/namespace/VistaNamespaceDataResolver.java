@@ -65,8 +65,8 @@ public class VistaNamespaceDataResolver extends NamespaceDataResolver {
     private void initNamespaceData() {
         namespaceData = new VistaNamespaceData();
 
-        VistaApplication app = VistaApplicationResolverHelper.getApplication(httpRequest);
         // Resolve application
+        VistaApplication app = VistaApplicationResolverHelper.getApplication(httpRequest);
         namespaceData.setApplication(app);
 
         // Based on resolved application, set namespace in some cases
@@ -85,7 +85,10 @@ public class VistaNamespaceDataResolver extends NamespaceDataResolver {
             }
         }
 
+        // Set namespace in default cases
         namespaceData.setNamespace(VistaNamespaceResolverHelper.getNamespace(httpRequest));
 
+        // Set customerPmcDnsName
+        namespaceData.setCustomerDnsName(VistaPmcDnsNameResolverHelper.getCustomerPmcDnsNameForApplication(httpRequest, app));
     }
 }

@@ -134,7 +134,7 @@ public class VistaDeployment {
             throw new IllegalArgumentException();
         }
         for (PmcDnsName alias : pmc.dnsNameAliases()) {
-            if (alias.target().getValue() == target) {
+            if (alias.enabled().getValue() && alias.target().getValue() == target) {
                 if (secure && !alias.httpsEnabled().getValue(false)) {
                     // Fallback to default
                     continue;
@@ -143,7 +143,13 @@ public class VistaDeployment {
                 if (secure) {
                     protocol = "https://";
                 }
-                return protocol + alias.dnsName().getValue();
+
+                String baseApplicationUrl = protocol + alias.dnsName().getValue();
+                if (application.equals(VistaApplication.prospect)) {
+                    baseApplicationUrl += "/prospect";
+                }
+
+                return baseApplicationUrl;
             }
         }
         return ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getDefaultApplicationURL(application, pmc.dnsName().getValue());
