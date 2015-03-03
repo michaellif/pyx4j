@@ -44,10 +44,6 @@ public class CustomDNSManager {
 
     static final VistaApplication[] supportedApps = { VistaApplication.site, VistaApplication.resident };
 
-    static final String IP_DOES_NOT_MATCH_VISTA_SERVER_ADDRESS = "Solved ip address does not match with Property Vista server ip address";
-
-    static final String ERROR_RESOLVING_CUSTOMER_ADDRESS = "Error resolving customer ip address. Please, try again.";
-
     // Only resident and site are supported. TODO prospect
     public PmcDnsConfigTO getApplicationDnsConfig(Pmc pmc, VistaApplication application) {
         if (!isApplicationSuspported(application)) {
@@ -59,7 +55,7 @@ public class CustomDNSManager {
     }
 
     public void updateApplicationDnsConfig(Pmc pmc, final VistaApplication application, PmcDnsConfigTO dnsConfig) {
-        if (!isApplicationSuspported(application)) {
+        if (!isApplicationSuspported(application) || dnsConfig.customerDnsName().isNull()) {
             return;
         }
 
@@ -187,7 +183,7 @@ public class CustomDNSManager {
 //                pmcDnsConfig.dnsResolutionMessage().setValue(getUnknownHostExceptionTypeMessage(e));
                 pmcDnsConfig.dnsResolutionMessage().setValue(e.getMessage());
             } catch (IOException | InterruptedException e) {
-                pmcDnsConfig.dnsResolutionMessage().setValue(i18n.tr(ERROR_RESOLVING_CUSTOMER_ADDRESS));
+                pmcDnsConfig.dnsResolutionMessage().setValue(i18n.tr("Error resolving customer ip address. Please, try again."));
                 log.error("Error resolving customerDnsName", e);
             }
 
@@ -197,7 +193,7 @@ public class CustomDNSManager {
                 pmcDnsConfig.dnsResolved().setValue(Boolean.TRUE);
             } else {
                 pmcDnsConfig.dnsResolved().setValue(Boolean.FALSE);
-                pmcDnsConfig.dnsResolutionMessage().setValue(i18n.tr(IP_DOES_NOT_MATCH_VISTA_SERVER_ADDRESS));
+                pmcDnsConfig.dnsResolutionMessage().setValue(i18n.tr("Resolved ip address does not match with Property Vista server ip address"));
             }
 
         }
