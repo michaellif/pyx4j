@@ -140,6 +140,10 @@ public class PmcDNSUtils {
             return DnsNameTarget.site;
         case resident:
             return DnsNameTarget.portal;
+        case prospect:
+            return DnsNameTarget.portal;
+        case crm:
+            return DnsNameTarget.crm;
         default:
             return null;
         }

@@ -55,7 +55,12 @@ public class CustomDNSManager {
     }
 
     public void updateApplicationDnsConfig(Pmc pmc, final VistaApplication application, PmcDnsConfigTO dnsConfig) {
-        if (!isApplicationSuspported(application) || dnsConfig.customerDnsName().isNull()) {
+        if (!isApplicationSuspported(application)) {
+            return;
+        }
+
+        if (dnsConfig.customerDnsName().isNull() || dnsConfig.customerDnsName().getValue().trim().length() == 0) {
+            removePmcDnsAliasesForPmcAndApplication(pmc, application);
             return;
         }
 
