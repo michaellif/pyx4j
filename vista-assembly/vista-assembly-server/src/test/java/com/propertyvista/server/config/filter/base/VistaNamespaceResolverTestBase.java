@@ -39,6 +39,7 @@ public class VistaNamespaceResolverTestBase extends TestCase {
         createActivePMC("testnamespace");
         createActivePMC("testpmcs");
         createInactivePMC("inactivepmc");
+        createActivePMC("redridge");
 
         // Create different PMC with custom DNS aliases for applications
         createActivePMCWithActiveAlias("customizablePmc1", "custom.crm.server.canada.com", DnsNameTarget.crm);

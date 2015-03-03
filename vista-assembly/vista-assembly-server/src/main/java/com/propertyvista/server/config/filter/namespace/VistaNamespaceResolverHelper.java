@@ -51,6 +51,7 @@ public class VistaNamespaceResolverHelper {
         prodSystemDnsBase.add("residentportalsite.com");
         prodSystemDnsBase.add("prospectportalsite.com");
         prodSystemDnsBase.add("propertyvista.com");
+        prodSystemDnsBase.add("propertyvista.net");
 
         testSystemDnsBase.add("birchwoodsoftwaregroup.com");
         testSystemDnsBase.add("devpv.com");

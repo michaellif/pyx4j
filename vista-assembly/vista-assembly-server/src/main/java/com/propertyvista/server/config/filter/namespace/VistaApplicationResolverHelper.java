@@ -22,6 +22,8 @@ import com.propertyvista.server.config.filter.utils.HttpRequestUtils;
 public class VistaApplicationResolverHelper {
     private static final String regExTwoDigits = "\\d\\d";
 
+    private final static String prodStagingRegex = "prod\\d*|staging\\d*";
+
     static VistaApplication getApplication(HttpServletRequest httpRequest) {
 
         VistaApplication app = null;
@@ -82,7 +84,7 @@ public class VistaApplicationResolverHelper {
                 }
 
                 try {
-                    int index = appByDomainTokens[1].matches(regExTwoDigits) ? 0 : 1;
+                    int index = (appByDomainTokens[1].matches(regExTwoDigits) || appByDomainTokens[1].matches(prodStagingRegex)) ? 0 : 1;
                     if (appByDomainTokens[index].equalsIgnoreCase("static")) {
                         return VistaApplication.noApp;
                     }

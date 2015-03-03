@@ -58,12 +58,52 @@ public class VistaNamespaceDataResolverTest extends VistaNamespaceResolverTestBa
         testDNSAlias(req, VistaApplication.site);
 
         // Test 7: test Inactive PMC with active DNS Alias
-		req = new MockHttpServletRequest("http://customizableportal.server.canada.com:8990/robots.txt");
+        req = new MockHttpServletRequest("http://customizableportal.server.canada.com:8990/robots.txt");
         testDNSAlias(req, null);
         // Test 8: test Active PMC with Inactive DNS Alias
-		req = new MockHttpServletRequest("http://customer.site.client-custom.canada.com:8990/robots.txt");
-        testDNSAlias(req, null);    
-	}
+        req = new MockHttpServletRequest("http://customer.site.client-custom.canada.com:8990/robots.txt");
+        testDNSAlias(req, null);
+
+        // New tests URLs to deal with staging
+        // VISTA STAGING
+        req = new MockHttpServletRequest("https://vista-crm-staging.propertyvista.net/");
+        testRetrievingData(req, VistaApplication.crm, "vista");
+
+        req = new MockHttpServletRequest("https://vista-site-staging.propertyvista.net/");
+        testRetrievingData(req, VistaApplication.site, "vista");
+
+        req = new MockHttpServletRequest("https://vista-portal-staging.propertyvista.net/");
+        testRetrievingData(req, VistaApplication.resident, "vista");
+
+        req = new MockHttpServletRequest("https://vista-portal-staging.propertyvista.net/prospect");
+        testRetrievingData(req, VistaApplication.prospect, "vista");
+
+        // Onbarding
+        req = new MockHttpServletRequest("https://onboarding-staging.propertyvista.net/");
+        testRetrievingData(req, VistaApplication.onboarding, VistaNamespace.noNamespace);
+
+        // Operations
+        req = new MockHttpServletRequest("https://operations-staging.propertyvista.net/");
+        testRetrievingData(req, VistaApplication.operations, VistaNamespace.operationsNamespace);
+
+        // DB Reset
+        req = new MockHttpServletRequest("http://static-staging.propertyvista.net/o/db-reset");
+        testRetrievingData(req, VistaApplication.noApp, VistaNamespace.noNamespace);
+
+        // REDRIDGE STAGING
+        req = new MockHttpServletRequest("https://redridge-crm-staging.propertyvista.net/");
+        testRetrievingData(req, VistaApplication.crm, "redridge");
+
+        req = new MockHttpServletRequest("https://redridge-site-staging.propertyvista.net/");
+        testRetrievingData(req, VistaApplication.site, "redridge");
+
+        req = new MockHttpServletRequest("https://redridge-portal-staging.propertyvista.net/");
+        testRetrievingData(req, VistaApplication.resident, "redridge");
+
+        req = new MockHttpServletRequest("https://redridge-portal-staging.propertyvista.net/prospect");
+        testRetrievingData(req, VistaApplication.prospect, "redridge");
+
+    }
 
     /**
      * Test three different scenarios accesing data:

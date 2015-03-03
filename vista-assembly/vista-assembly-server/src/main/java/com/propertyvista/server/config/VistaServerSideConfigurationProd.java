@@ -75,7 +75,7 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
             hostName = pmcDnsName;
         }
         if (VistaDeployment.isVistaStaging()) {
-            hostName += "-staging03";
+            hostName += "-staging";
         }
         String base = protocol + "://" + hostName;
 
@@ -83,26 +83,26 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         String path = "/";
         switch (application) {
         case crm:
-            dnsName = ".propertyvista.com";
+            dnsName = VistaDeployment.isVistaStaging() ? ".propertyvista.net" : ".propertyvista.com";
             break;
         case onboarding:
-            dnsName = ".propertyvista.com";
+            dnsName = VistaDeployment.isVistaStaging() ? ".propertyvista.net" : ".propertyvista.com";
             break;
         case site:
-            dnsName = ".residentportalsite.com";
+            dnsName = VistaDeployment.isVistaStaging() ? ".propertyvista.net" : ".residentportalsite.com";
             break;
         case resident:
-            dnsName = ".my-community.co";
+            dnsName = VistaDeployment.isVistaStaging() ? ".propertyvista.net" : ".my-community.co";
             break;
         case prospect:
-            dnsName = ".my-community.co";
+            dnsName = VistaDeployment.isVistaStaging() ? ".propertyvista.net" : ".my-community.co";
             path += application.name();
             break;
         case operations:
             if (VistaDeployment.isVistaProduction()) {
                 hostName += "-prod03";
             }
-            dnsName = ".propertyvista.com";
+            dnsName = VistaDeployment.isVistaStaging() ? ".propertyvista.net" : ".propertyvista.com";
             break;
         default:
             throw new IllegalArgumentException();
@@ -116,7 +116,7 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         case production:
             return "-prod03.propertyvista.com/";
         case staging:
-            return "-staging03.propertyvista.com/";
+            return "-staging.propertyvista.net/";
         default:
             throw new IllegalArgumentException(VistaDeployment.getSystemIdentification().name());
         }
