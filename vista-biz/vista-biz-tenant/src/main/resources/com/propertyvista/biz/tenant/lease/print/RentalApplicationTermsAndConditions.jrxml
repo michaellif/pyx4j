@@ -73,7 +73,8 @@
 			</textField>
 		</band>
 		<band height="33">
-			<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}   && ($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.Initials)]]></printWhenExpression>
+			<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}
+  && ($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.Initials)]]></printWhenExpression>
 			<rectangle>
 				<reportElement x="373" y="4" width="198" height="20" forecolor="#CCCCCC" uuid="8a7ab7e6-5b0d-4f71-ba75-cbee7aa4f1a9"/>
 			</rectangle>

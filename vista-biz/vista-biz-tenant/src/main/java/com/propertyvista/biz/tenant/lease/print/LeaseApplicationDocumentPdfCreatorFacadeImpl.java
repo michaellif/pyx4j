@@ -42,7 +42,7 @@ public class LeaseApplicationDocumentPdfCreatorFacadeImpl implements LeaseApplic
         params.put("applicants", data.applicants());
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        JasperReportProcessor.createReport(new JasperReportModel(LeaseTermAgreementPdfCreatorFacadeImpl.class.getPackage().getName() + ".RentalApplication",
+        JasperReportProcessor.createReport(new JasperReportModel(LeaseTermAgreementPdfCreatorFacadeImpl.class.getPackage().getName() + ".LeaseApplication",
                 new LinkedList<LeaseApplicationDocumentDataSectionsDTO>(data.sections()), params), JasperFileFormat.PDF, bos);
 
         return bos.toByteArray();

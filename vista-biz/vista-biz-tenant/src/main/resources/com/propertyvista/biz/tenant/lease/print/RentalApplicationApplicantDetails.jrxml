@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationApplicantDetails" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e542c805-24ad-4889-8885-2d7bc3fb68d3">
-	<property name="ireport.zoom" value="2.35794769100004"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationApplicantDetails" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="e542c805-24ad-4889-8885-2d7bc3fb68d3">
+	<property name="ireport.zoom" value="1.6105100000000279"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="1443"/>
-	<field name="generalQuestions" class="com.pyx4j.entity.core.IList"/>
+	<property name="ireport.y" value="0"/>
+	<field name="firstName" class="java.lang.String"/>
+	<field name="lastName" class="java.lang.String"/>
+	<field name="middleName" class="java.lang.String"/>
+	<field name="namePrefix" class="java.lang.String"/>
+	<field name="nameSuffix" class="java.lang.String"/>
+	<field name="gender" class="java.lang.String"/>
+	<field name="birthDate" class="com.pyx4j.commons.LogicalDate"/>
+	<field name="homePhone" class="java.lang.String"/>
+	<field name="mobilePhone" class="java.lang.String"/>
+	<field name="workPhone" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -119,8 +129,36 @@
 				<reportElement x="289" y="69" width="66" height="15" forecolor="#666666" uuid="609122d3-6e25-4346-b6f8-5bd499780886"/>
 				<text><![CDATA[Birthday]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="70" y="29" width="100" height="15" uuid="b3b3700e-255c-4113-a4a8-31b9cbfb69dd"/>
+				<textFieldExpression><![CDATA[$F{firstName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="255" y="29" width="111" height="15" uuid="d6945528-567a-45c8-897e-de0b0075179e"/>
+				<textFieldExpression><![CDATA[$F{middleName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="448" y="29" width="123" height="15" uuid="fbaec607-0014-453c-92c8-6e41cb58a4a9"/>
+				<textFieldExpression><![CDATA[$F{lastName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="49" width="111" height="15" uuid="80331397-bcdf-4396-aff2-24610ce85762"/>
+				<textFieldExpression><![CDATA[$F{namePrefix}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="355" y="49" width="216" height="15" uuid="2b0c2aa1-b1ff-4926-b16e-ddb3f589d860"/>
+				<textFieldExpression><![CDATA[$F{nameSuffix}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="69" width="111" height="15" uuid="91965e84-7776-4280-9475-e7c3272e7a38"/>
+				<textFieldExpression><![CDATA[$F{gender}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="355" y="69" width="216" height="15" uuid="5b27c18d-79e6-42d2-8020-5423c9928a34"/>
+				<textFieldExpression><![CDATA[$F{birthDate}]]></textFieldExpression>
+			</textField>
 		</band>
-		<band height="79">
+		<band height="72">
 			<rectangle>
 				<reportElement x="186" y="26" width="193" height="20" forecolor="#CCCCCC" uuid="3422d369-4e05-4a45-a41d-18d4809db9ad"/>
 			</rectangle>
@@ -165,346 +203,22 @@
 				<reportElement x="4" y="51" width="66" height="15" forecolor="#666666" uuid="4f1c1edd-4f9f-47a0-bcc6-4865d0a87ce0"/>
 				<text><![CDATA[Email]]></text>
 			</staticText>
-		</band>
-		<band height="151">
-			<rectangle>
-				<reportElement x="286" y="123" width="285" height="20" forecolor="#CCCCCC" uuid="a1da6d22-eee9-4b4b-a34c-2d34acf7974a"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="123" width="285" height="20" forecolor="#CCCCCC" uuid="80b90e1c-ddbd-4f4d-ab73-43d855d38070"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="103" width="285" height="20" forecolor="#CCCCCC" uuid="1e654c8b-986c-41d5-95a3-6ef29b3e2e69"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="63" width="188" height="20" forecolor="#CCCCCC" uuid="ac924b11-b8d6-4a2c-a9a9-491a2a61b27c"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="23" width="555" height="20" forecolor="#CCCCCC" uuid="9c752299-3a53-4184-ae9f-9a2a8ed67525"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="23" width="570" height="20" forecolor="#CCCCCC" uuid="fc7c058d-0d48-4e48-a439-5ca60491d91f"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="3" width="570" height="20" forecolor="#CCCCCC" uuid="892f2f54-9d95-49e1-a552-4f4432ef8b1a"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="188" y="63" width="185" height="20" forecolor="#CCCCCC" uuid="7171f9a7-7228-42af-b213-fb5fcd24508a"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="83" width="570" height="20" forecolor="#CCCCCC" uuid="3038c1ca-595e-4af1-a941-14de10ced727"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="4" y="3" width="173" height="20" uuid="70c6d3a4-749a-4358-8b73-fe02b5b84e95"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Rental Premises Applied For]]></text>
-			</staticText>
-			<rectangle>
-				<reportElement x="1" y="43" width="570" height="20" forecolor="#CCCCCC" uuid="332d6f48-da54-48c6-a7e9-10c58437a477"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="373" y="63" width="198" height="20" forecolor="#CCCCCC" uuid="76c0739e-b59d-4e37-b595-67c275474143"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="4" y="88" width="66" height="15" forecolor="#666666" uuid="9044a1a1-550b-4ecf-a287-928025eb2377"/>
-				<text><![CDATA[Unit Type]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="4" y="68" width="66" height="15" forecolor="#666666" uuid="73b4bfb0-cbac-439a-9b37-408876022a41"/>
-				<text><![CDATA[City]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="4" y="28" width="66" height="15" forecolor="#666666" uuid="713f6cbd-87f5-40c2-a686-b02ae2cf7592"/>
-				<text><![CDATA[Address]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="4" y="48" width="66" height="15" forecolor="#666666" uuid="b26144dc-ea75-4959-842a-8cf679c86ad5"/>
-				<text><![CDATA[Suite No]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="191" y="68" width="75" height="15" forecolor="#666666" uuid="82cc354d-e6d8-4486-bfee-52fbcab84325"/>
-				<text><![CDATA[State/Province]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="377" y="68" width="79" height="15" forecolor="#666666" uuid="ffdecf06-511b-449c-8a32-34136706fc1f"/>
-				<text><![CDATA[Zip/Postal Code]]></text>
-			</staticText>
-			<rectangle>
-				<reportElement x="0" y="0" width="571" height="3" forecolor="#FFFFFF" backcolor="#FF8026" uuid="a2e7ddb2-5d57-4a5d-b8f1-80677e864cf2"/>
-				<graphicElement>
-					<pen lineWidth="0.0" lineStyle="Dashed"/>
-				</graphicElement>
-			</rectangle>
-			<rectangle>
-				<reportElement x="286" y="103" width="285" height="20" forecolor="#CCCCCC" uuid="a52760ed-806d-4456-a889-636d39a136c1"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="4" y="128" width="110" height="15" forecolor="#666666" uuid="8d69dde8-8483-4ef8-a0c9-dbdace04f037"/>
-				<text><![CDATA[Management Company]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="289" y="128" width="66" height="15" forecolor="#666666" uuid="20fde9be-6dbe-410e-8a18-f21dbcc050b2"/>
-				<text><![CDATA[Manager Name]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="4" y="108" width="66" height="15" forecolor="#666666" uuid="0ce22ef7-de03-4702-9a63-b560bba4168b"/>
-				<text><![CDATA[Move In Date]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="289" y="108" width="84" height="15" forecolor="#666666" uuid="9413a1e0-f1a2-47bc-968d-2a7fb6d71cd6"/>
-				<text><![CDATA[Move Out Date]]></text>
-			</staticText>
-		</band>
-		<band height="18">
-			<subreport>
-				<reportElement x="0" y="8" width="572" height="1" uuid="8fca1ae3-65d1-4579-9447-9c634c6c585b"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{generalQuestions})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.RentalApplicationGeneralQuestions")]]></subreportExpression>
-			</subreport>
-		</band>
-		<band height="77">
-			<rectangle>
-				<reportElement x="373" y="44" width="198" height="20" forecolor="#CCCCCC" uuid="49118f97-c2d5-4249-8f56-5c0a2a602227"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="188" y="44" width="185" height="20" forecolor="#CCCCCC" uuid="bc22b928-108d-4e97-b18e-625eae5130c6"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="24" width="285" height="20" forecolor="#CCCCCC" uuid="b2065ba6-06b2-4806-8882-bce4d52ae46c"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="286" y="24" width="285" height="20" forecolor="#CCCCCC" uuid="82555937-4274-4cf8-aad2-9e78f2d8b0f1"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="4" width="570" height="20" forecolor="#CCCCCC" uuid="645ffd3b-ec07-4f37-8e24-4582d3b590f7"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="4" y="4" width="173" height="20" uuid="5fecfe45-207c-4004-9875-f7f736f4f521"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Income]]></text>
-			</staticText>
-			<rectangle>
-				<reportElement x="0" y="1" width="571" height="3" forecolor="#FFFFFF" backcolor="#FF8026" uuid="9c6f5644-d649-4261-b66f-1ce8a8212762"/>
-				<graphicElement>
-					<pen lineWidth="0.0" lineStyle="Dashed"/>
-				</graphicElement>
-			</rectangle>
-			<staticText>
-				<reportElement x="289" y="29" width="66" height="15" forecolor="#666666" uuid="8dc40434-034f-436e-aa89-ea0b78aa1bf3"/>
-				<text><![CDATA[Employer Name]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="4" y="29" width="110" height="15" forecolor="#666666" uuid="41936e3f-e4a0-4959-b772-b484c4068170"/>
-				<text><![CDATA[Income Source]]></text>
-			</staticText>
-			<rectangle>
-				<reportElement x="1" y="44" width="188" height="20" forecolor="#CCCCCC" uuid="2bdb782e-6772-4ef4-bac5-f9899a881ad4"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="377" y="49" width="90" height="15" forecolor="#666666" uuid="db77ad0b-1611-455b-ad03-678a089757b5"/>
-				<text><![CDATA[Supervisor Phone]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="4" y="49" width="105" height="15" forecolor="#666666" uuid="fc4c0698-0465-46e9-ad9c-ec9c9201f888"/>
-				<text><![CDATA[Employed for (years)]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="191" y="49" width="95" height="15" forecolor="#666666" uuid="c69b920f-bde9-430e-a3c7-1df663452984"/>
-				<text><![CDATA[Supervisor Name]]></text>
-			</staticText>
-		</band>
-		<band height="115">
-			<rectangle>
-				<reportElement x="373" y="65" width="198" height="20" forecolor="#CCCCCC" uuid="6ceebacb-c7cf-4505-8f4d-a27121426125"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="188" y="65" width="185" height="20" forecolor="#CCCCCC" uuid="b9eef4b4-3bea-47f4-948b-2591ccbf263c"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="25" width="555" height="20" forecolor="#CCCCCC" uuid="788e9bb4-2f19-409e-af3a-2fb897930c47"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="45" width="570" height="20" forecolor="#CCCCCC" uuid="b642be10-6779-4245-80a5-12c87641ba75"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="25" width="570" height="20" forecolor="#CCCCCC" uuid="755f41f1-6d5f-40ef-8079-00bf40e6ee4a"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="5" width="570" height="20" forecolor="#CCCCCC" uuid="024cbf8b-f973-42ca-93e3-0694b3dc4220"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="4" y="30" width="66" height="15" forecolor="#666666" uuid="65fc0b15-b7ec-417f-995f-a9f44cba8baa"/>
-				<text><![CDATA[Address]]></text>
-			</staticText>
-			<rectangle>
-				<reportElement x="1" y="65" width="188" height="20" forecolor="#CCCCCC" uuid="46ba4358-a9f0-421d-9597-9c958879bdfe"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="4" y="5" width="173" height="20" uuid="2b55603f-9c4d-4ecd-a7ad-1daf5c996878"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Employer Address]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="4" y="50" width="66" height="15" forecolor="#666666" uuid="58a76348-a4d0-4f60-8173-9b0892e7499b"/>
-				<text><![CDATA[Suite No]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="377" y="70" width="79" height="15" forecolor="#666666" uuid="d03d57a8-820c-4cc7-b513-4492f49980a2"/>
-				<text><![CDATA[Zip/Postal Code]]></text>
-			</staticText>
-			<rectangle>
-				<reportElement x="0" y="2" width="571" height="3" forecolor="#FFFFFF" backcolor="#FF8026" uuid="d4f47203-13dc-4ee9-b75e-5b2ad41ae7cd"/>
-				<graphicElement>
-					<pen lineWidth="0.0" lineStyle="Dashed"/>
-				</graphicElement>
-			</rectangle>
-			<staticText>
-				<reportElement x="4" y="70" width="66" height="15" forecolor="#666666" uuid="6c1f55c5-f7ef-49ce-8c06-e38c250efbe6"/>
-				<text><![CDATA[City]]></text>
-			</staticText>
-			<rectangle>
-				<reportElement x="1" y="85" width="570" height="20" forecolor="#CCCCCC" uuid="0121b49b-027d-4ede-a866-1810cfa73678"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="191" y="70" width="75" height="15" forecolor="#666666" uuid="bb45ab9e-30fe-4ee0-993b-f8b075542b31"/>
-				<text><![CDATA[State/Province]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="4" y="90" width="66" height="15" forecolor="#666666" uuid="660c3ab2-90f5-46ef-abfc-1b192e0e4f18"/>
-				<text><![CDATA[Country]]></text>
-			</staticText>
-		</band>
-		<band height="136">
-			<rectangle>
-				<reportElement x="286" y="104" width="285" height="20" forecolor="#CCCCCC" uuid="890b7b4a-4447-41cc-9801-cffb02a89c02"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="379" y="84" width="192" height="20" forecolor="#CCCCCC" uuid="e1bf76a5-a897-45d1-bf97-08e613bf0155"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="286" y="64" width="285" height="20" forecolor="#CCCCCC" uuid="9408bf1d-eca4-4231-a1ee-01789e2e454a"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="64" width="285" height="20" forecolor="#CCCCCC" uuid="8067a74b-a15c-4f56-8afd-f7c6bf7e0494"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="44" width="285" height="20" forecolor="#CCCCCC" uuid="59c3717f-0104-4ad0-8c00-e2a8c9e2410b"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="24" width="185" height="20" forecolor="#CCCCCC" uuid="6d1bbf7c-d747-4102-a665-b0db89104fc3"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="4" y="69" width="66" height="15" forecolor="#666666" uuid="8e2a893f-c860-4298-83f2-c403cbeba182"/>
-				<text><![CDATA[Gender]]></text>
-			</staticText>
-			<rectangle>
-				<reportElement x="286" y="44" width="285" height="20" forecolor="#CCCCCC" uuid="b327a230-5410-4ab8-9b06-d05fbfae02dc"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="0" y="1" width="571" height="3" forecolor="#FFFFFF" backcolor="#FF8026" uuid="9fcc7bed-7136-4595-a1b4-d678f745ab47"/>
-				<graphicElement>
-					<pen lineWidth="0.0" lineStyle="Dashed"/>
-				</graphicElement>
-			</rectangle>
-			<staticText>
-				<reportElement x="289" y="69" width="66" height="15" forecolor="#666666" uuid="7ecf91bd-6433-4aba-a48e-1a9ebe8b22ef"/>
-				<text><![CDATA[Birthday]]></text>
-			</staticText>
-			<rectangle>
-				<reportElement x="186" y="24" width="193" height="20" forecolor="#CCCCCC" uuid="8e82f6df-5b6a-480e-b5d4-3dba7c1ad322"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="4" width="570" height="20" forecolor="#CCCCCC" uuid="1bf6585f-e219-4bb1-83aa-c2bf3cfdff83"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="379" y="24" width="192" height="20" forecolor="#CCCCCC" uuid="f230a4b8-11ae-4662-82b1-468b93199aef"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="4" y="49" width="66" height="15" forecolor="#666666" uuid="7dd35798-1b2a-434d-b715-66d289e2ca41"/>
-				<text><![CDATA[Name Prefix]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="189" y="29" width="66" height="15" forecolor="#666666" uuid="0f67890e-98c9-436d-b4aa-f84207fd874e"/>
-				<text><![CDATA[Middle Name]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="4" y="4" width="173" height="20" uuid="dc340bdb-47c8-4541-a82f-2352a3e0195b"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Emergency Contact]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="382" y="29" width="66" height="15" forecolor="#666666" uuid="70dfd1e5-d96c-4764-9b9b-fd9ad85e0e7e"/>
-				<text><![CDATA[Last Name]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="4" y="29" width="66" height="15" forecolor="#666666" uuid="fdfac0ae-cb02-4b94-aae3-e6537fb66b58"/>
-				<text><![CDATA[First Name]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="289" y="49" width="66" height="15" forecolor="#666666" uuid="40adb5fb-3d5a-491c-9999-450481cb6dfb"/>
-				<text><![CDATA[Name Suffix]]></text>
-			</staticText>
-			<rectangle>
-				<reportElement x="186" y="84" width="193" height="20" forecolor="#CCCCCC" uuid="2e6856e0-a12f-4c7d-bf4b-4f6dff3f4414"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="84" width="185" height="20" forecolor="#CCCCCC" uuid="627c3701-92d9-40ad-9e51-08830abca870"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="382" y="89" width="66" height="15" forecolor="#666666" uuid="a4ac6524-38ed-4461-8d53-3a75b3a9fa2c"/>
-				<text><![CDATA[Work Phone]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="4" y="89" width="66" height="15" forecolor="#666666" uuid="9b3126fa-bab0-49d4-951a-265b6d091d6a"/>
-				<text><![CDATA[Home Phone]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="189" y="89" width="66" height="15" forecolor="#666666" uuid="d7af4211-e75e-44dd-a2d6-fd0a9abdea65"/>
-				<text><![CDATA[Mobile Phone]]></text>
-			</staticText>
-			<rectangle>
-				<reportElement x="1" y="104" width="285" height="20" forecolor="#CCCCCC" uuid="e0d93418-e377-4899-8f4c-d240e347a0e1"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="289" y="109" width="66" height="15" forecolor="#666666" uuid="db608142-fd0a-4e95-a6db-37632223db0b"/>
-				<text><![CDATA[Relationship]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="4" y="109" width="110" height="15" forecolor="#666666" uuid="5c8a3db6-9477-4a08-8647-f31bfc310733"/>
-				<text><![CDATA[Email]]></text>
-			</staticText>
-		</band>
-		<band height="23"/>
-		<band height="28">
-			<rectangle>
-				<reportElement x="379" y="0" width="192" height="20" forecolor="#CCCCCC" uuid="f92a7e85-3671-44f5-b5a5-c7b470b7662b"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="186" y="0" width="193" height="20" forecolor="#CCCCCC" uuid="13b24f15-d3a8-4924-a258-ed4b9ea4f199"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="189" y="5" width="66" height="15" forecolor="#666666" uuid="d10b3195-0f49-40ea-8f08-f58068caf256"/>
-				<text><![CDATA[Name]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="382" y="5" width="66" height="15" forecolor="#666666" uuid="5b228812-d9d8-49b6-a1ce-5880683495ce"/>
-				<text><![CDATA[Signature]]></text>
-			</staticText>
-			<rectangle>
-				<reportElement x="1" y="0" width="185" height="20" forecolor="#CCCCCC" uuid="a681dc2a-5f5b-433b-9a1a-32ea11b9245e"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="4" y="5" width="66" height="15" forecolor="#666666" uuid="e112a20b-b764-4b9f-97e6-e749d370cbbc"/>
-				<text><![CDATA[Date]]></text>
-			</staticText>
+			<textField>
+				<reportElement x="70" y="31" width="116" height="15" uuid="b2ca36d7-b7bf-4abd-85bb-f2a6a2f31c51"/>
+				<textFieldExpression><![CDATA[$F{homePhone}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="255" y="31" width="124" height="15" uuid="1e2fd035-5750-4f27-99b6-fcd58648c1e3"/>
+				<textFieldExpression><![CDATA[$F{mobilePhone}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="448" y="31" width="123" height="15" uuid="9caccdb4-ff8c-4efa-9943-67cac79ba49e"/>
+				<textFieldExpression><![CDATA[$F{workPhone}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="51" width="501" height="15" uuid="7352581c-c16d-4658-ac62-d95eeb6afaf9"/>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>
