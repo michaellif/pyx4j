@@ -44,25 +44,32 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
 
     private static final I18n i18n = I18n.get(MultiSelectFilterEditor.class);
 
-    private CheckGroup<?> checkGroup;
+    private Selector<?> checkGroup;
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public MultiSelectFilterEditor(IObject<?> member) {
         super(member);
         MemberMeta mm = member.getMeta();
         if (mm.getValueClass().isEnum()) {
-            checkGroup = new CheckGroup<>(Layout.VERTICAL);
-            checkGroup.setOptions(new ArrayList(EnumSet.allOf((Class<Enum>) mm.getValueClass())));
+            checkGroup = new Selector<Enum>(Layout.VERTICAL);
+            checkGroup.setEmptyFieldFormatter();
+
+            ArrayList options = new ArrayList(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
+            if (!mm.isAnnotationPresent(NotNull.class)) {
+                options.add(null);
+            }
+            checkGroup.setOptions(options);
+
         } else if (mm.getValueClass().equals(Boolean.class)) {
 
-            CheckGroup<Boolean> booleanGroup = new CheckGroup<>(Layout.HORIZONTAL);
+            Selector<Boolean> booleanGroup = new Selector<>(Layout.HORIZONTAL);
             booleanGroup.setFormatter(new IFormatter<Boolean, SafeHtml>() {
 
                 @Override
                 public SafeHtml format(Boolean value) {
                     String title;
                     if (value == null) {
-                        title = i18n.tr("Empty");
+                        title = i18n.tr("<i>Empty</i>");
                     } else if (value) {
                         title = i18n.tr("Yes");
                     } else {
@@ -84,18 +91,17 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
 
     @Override
     public PropertyCriterion getCriterion() {
-        if (checkGroup.getValue() == null || checkGroup.getValue().size() == 0) {
+        if (checkGroup.isAllSelected()) {
             return null;
-        } else {
-            return PropertyCriterion.in(getMember(), checkGroup.getValue());
         }
+        return PropertyCriterion.in(getMember(), checkGroup.getValue());
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void setCriterion(Criterion criterion) {
         if (criterion == null) {
-            checkGroup.setValue(null);
+            checkGroup.setAllSelected();
         } else {
             if (!(criterion instanceof PropertyCriterion)) {
                 throw new Error("Filter criterion isn't supported by editor");
@@ -133,5 +139,43 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
     @Override
     public void clear() {
         checkGroup.setValue(null);
+    }
+
+    class Selector<E> extends CheckGroup<E> {
+
+        public Selector(Layout layout) {
+            super(layout);
+        }
+
+        public void setAllSelected() {
+            for (E item : getButtons().keySet()) {
+                getButtons().get(item).setValue(Boolean.TRUE);
+            }
+        }
+
+        public boolean isAllSelected() {
+            for (E item : getButtons().keySet()) {
+                if (!getButtons().get(item).getValue()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public void setEmptyFieldFormatter() {
+            super.setFormatter(new IFormatter<E, SafeHtml>() {
+
+                @Override
+                public SafeHtml format(E value) {
+                    String title;
+                    if (value == null) {
+                        title = i18n.tr("<i>Empty</i>");
+                    } else {
+                        title = value.toString();
+                    }
+                    return SafeHtmlUtils.fromTrustedString(title);
+                }
+            });
+        }
     }
 }

@@ -78,11 +78,29 @@ public class FilterItem implements Comparable<FilterItem> {
         } else if (criterion instanceof PropertyCriterion) {
             Serializable value = ((PropertyCriterion) criterion).getValue();
             if (value instanceof Collection) {
-                return columnDescriptor.getColumnTitle() + ": '" + ((Collection) value).size() + "'";
+                if (((Collection) value).size() == 0) {
+                    return columnDescriptor.getColumnTitle() + ": 'None'";
+                }
+                if (!columnDescriptor.getMemeber().getValueClass().equals(Boolean.class)) {
+                    return columnDescriptor.getColumnTitle() + ": (" + ((Collection) value).size() + ")";
+                } else {
+                    StringBuilder selected = new StringBuilder();
+                    for (Object val : (Collection) value) {
+
+                        if (val == null) {
+                            selected.append(selected.toString().equals("") ? "Empty" : ", Empty");
+
+                        } else if (val.equals(Boolean.TRUE)) {
+                            selected.append(selected.toString().equals("") ? "Yes" : ", Yes");
+                        } else {
+                            selected.append(selected.toString().equals("") ? "No" : ", No");
+                        }
+                    }
+                    return columnDescriptor.getColumnTitle() + ": '" + selected.toString() + "'";
+                }
             } else {
                 return columnDescriptor.getColumnTitle() + ": '" + ((value == null) ? i18n.tr("All") : value) + "'";
             }
-
         } else if (criterion instanceof RangeCriterion) {
             Serializable fromValue = ((RangeCriterion) criterion).getFromValue();
             Serializable toValue = ((RangeCriterion) criterion).getToValue();
