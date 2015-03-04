@@ -23,7 +23,7 @@ public class SystemMaintenanceStateChangeEvent extends ServerEvent<SystemMainten
 
     public interface Handler {
 
-        void onSystemShutdown(SystemMaintenanceStateChangeEvent event);
+        void onMaintenanceStateChange(SystemMaintenanceStateChangeEvent event);
 
     }
 
@@ -33,7 +33,7 @@ public class SystemMaintenanceStateChangeEvent extends ServerEvent<SystemMainten
 
     @Override
     protected final void dispatch(Handler handler) {
-        handler.onSystemShutdown(this);
+        handler.onMaintenanceStateChange(this);
     }
 
     @Override

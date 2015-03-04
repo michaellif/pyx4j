@@ -31,6 +31,8 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.events.ServerEventBus;
+import com.pyx4j.config.server.events.SystemMaintenanceStateChangeEvent;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.xml.XMLEntityConverter;
 import com.pyx4j.essentials.rpc.SystemState;
@@ -40,6 +42,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.log4j.LoggerConfig;
 
+//TODO refactor to use scheduler for individual settings.
 public class SystemMaintenance {
 
     private final static Logger log = LoggerFactory.getLogger(SystemMaintenance.class);
@@ -78,6 +81,7 @@ public class SystemMaintenance {
             if (maintenanceScheduled <= System.currentTimeMillis() && (maintenanceScheduledEnd > System.currentTimeMillis())) {
                 log.info("System Maintenance started");
                 maintenanceStarted = System.currentTimeMillis() + Consts.MIN2MSEC * gracePeriodMin;
+                ServerEventBus.fireEvent(new SystemMaintenanceStateChangeEvent());
                 return true;
             }
         }
@@ -117,6 +121,7 @@ public class SystemMaintenance {
         }
         maintenanceScheduled = 0;
         maintenanceStarted = 0;
+        ServerEventBus.fireEvent(new SystemMaintenanceStateChangeEvent());
     }
 
     public static SystemMaintenanceState getSystemMaintenanceClientInfo() {
