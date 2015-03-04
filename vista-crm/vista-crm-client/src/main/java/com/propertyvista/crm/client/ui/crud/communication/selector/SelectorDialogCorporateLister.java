@@ -39,8 +39,8 @@ public class SelectorDialogCorporateLister extends EntityLister<Employee> {
                 new ColumnDescriptor.Builder(proto().title()).filterAlwaysShown(true).build(),//
                 new ColumnDescriptor.Builder(proto().name().firstName()).searchableOnly().filterAlwaysShown(true).build(),//
                 new ColumnDescriptor.Builder(proto().name().lastName()).searchableOnly().filterAlwaysShown(true).build(),//
-                new ColumnDescriptor.Builder(proto().email(), false).build(),//
-                new ColumnDescriptor.Builder(proto().updated(), false).build() //
+                new ColumnDescriptor.Builder(proto().email()).visible(false).build(),//
+                new ColumnDescriptor.Builder(proto().updated()).visible(false).build() //
         );
 
         DataTableModel<Employee> dataTableModel = new DataTableModel<Employee>();

@@ -54,20 +54,20 @@ public class LeaseLister extends SiteDataTablePanel<LeaseDTO> {
             new Builder(proto().type()).build(),
 
             new Builder(proto().unit().building().propertyCode()).filterAlwaysShown(true).build(),
-            new Builder(proto().unit().building().info().name(), false).columnTitle(i18n.tr("Building Name")).build(),
-            new Builder(proto().unit().building().info().address(), false).columnTitle(i18n.tr("Building Address")).searchable(false).build(),
-            new Builder(proto().unit().building().info().address().streetNumber(), false).columnTitle(i18n.tr("Building Street Number")).width("80px").build(),
-            new Builder(proto().unit().building().info().address().streetName(), false).columnTitle(i18n.tr("Building Street Name")).build(),
+            new Builder(proto().unit().building().info().name()).visible(false).columnTitle(i18n.tr("Building Name")).build(),
+            new Builder(proto().unit().building().info().address()).visible(false).columnTitle(i18n.tr("Building Address")).searchable(false).build(),
+            new Builder(proto().unit().building().info().address().streetNumber()).visible(false).columnTitle(i18n.tr("Building Street Number")).width("80px").build(),
+            new Builder(proto().unit().building().info().address().streetName()).visible(false).columnTitle(i18n.tr("Building Street Name")).build(),
 
             new Builder(proto().unit()).searchable(false).build(),
             new Builder(proto().unit().info().number()).columnTitle(proto().unit().getMeta().getCaption()).searchableOnly().width("80px").build(),
 
             new Builder(proto()._applicant().customer().person().name()).columnTitle(i18n.tr("Primary Tenant Name")).searchable(false).build(),
-            new Builder(proto()._applicant().customer().person().name().firstName(), false).columnTitle(i18n.tr("Primary Tenant First Name")).build(),
-            new Builder(proto()._applicant().customer().person().name().lastName(), false).columnTitle(i18n.tr("Primary Tenant Last Name")).build(),
-            new Builder(proto()._applicant().customer().registeredInPortal(), false).width("80px").build(),
+            new Builder(proto()._applicant().customer().person().name().firstName()).visible(false).columnTitle(i18n.tr("Primary Tenant First Name")).build(),
+            new Builder(proto()._applicant().customer().person().name().lastName()).visible(false).columnTitle(i18n.tr("Primary Tenant Last Name")).build(),
+            new Builder(proto()._applicant().customer().registeredInPortal()).visible(false).width("80px").build(),
 
-            new Builder(proto().leaseParticipants().$().customer().customerId(), false).searchableOnly().build(),
+            new Builder(proto().leaseParticipants().$().customer().customerId()).visible(false).searchableOnly().build(),
 
             new Builder(proto().status()).filterAlwaysShown(true).width("80px").build(),
             new Builder(proto().completion()).build(),
@@ -78,21 +78,21 @@ public class LeaseLister extends SiteDataTablePanel<LeaseDTO> {
             new Builder(proto().leaseTo()).build(),
 
             new Builder(proto().expectedMoveIn()).build(),
-            new Builder(proto().expectedMoveOut(), false).build(),
-            new Builder(proto().actualMoveIn(), false).build(),
-            new Builder(proto().actualMoveOut(), false).build(),
-            new Builder(proto().moveOutSubmissionDate(), false).build(),
+            new Builder(proto().expectedMoveOut()).visible(false).build(),
+            new Builder(proto().actualMoveIn()).visible(false).build(),
+            new Builder(proto().actualMoveOut()).visible(false).build(),
+            new Builder(proto().moveOutSubmissionDate()).visible(false).build(),
 
-            new Builder(proto().approvalDate(), false).build(),
-            new Builder(proto().creationDate(), false).build()
+            new Builder(proto().approvalDate()).visible(false).build(),
+            new Builder(proto().creationDate()).visible(false).build()
         )); //@formatter:on
 
         if (SecurityController.check(VistaBasicBehavior.PropertyVistaSupport)) {
             if (VistaFeatures.instance().yardiIntegration()) {
-                columnDescriptors.add(new ColumnDescriptor.Builder(proto().billingAccount().invoiceLineItems().$().chargeCode(), false)
+                columnDescriptors.add(new ColumnDescriptor.Builder(proto().billingAccount().invoiceLineItems().$().chargeCode()).visible(false)
                         .columnTitle("Yardi Charge Codes").searchableOnly().build());
             }
-            columnDescriptors.add(new ColumnDescriptor.Builder(proto().billingAccount().id(), false).columnTitle("Billing Account Id").build());
+            columnDescriptors.add(new ColumnDescriptor.Builder(proto().billingAccount().id()).visible(false).columnTitle("Billing Account Id").build());
         }
 
         setColumnDescriptors(columnDescriptors);

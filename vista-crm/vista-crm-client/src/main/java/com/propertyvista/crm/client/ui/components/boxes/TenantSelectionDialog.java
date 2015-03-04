@@ -59,9 +59,9 @@ public abstract class TenantSelectionDialog extends EntitySelectorTableDialog<Te
                 new ColumnDescriptor.Builder(proto().customer().person().name().lastName()).searchableOnly().filterAlwaysShown(true).build(),
 
                 new ColumnDescriptor.Builder(proto().customer().person().sex()).visible(false).build(),
-                new ColumnDescriptor.Builder(proto().customer().person().birthDate(), false).build(),
+                new ColumnDescriptor.Builder(proto().customer().person().birthDate()).visible(false).build(),
 
-                new ColumnDescriptor.Builder(proto().customer().person().email(), false).filterAlwaysShown(true).build(),
+                new ColumnDescriptor.Builder(proto().customer().person().email()).visible(false).filterAlwaysShown(true).build(),
                 new ColumnDescriptor.Builder(proto().customer().person().homePhone()).build(),
                 new ColumnDescriptor.Builder(proto().customer().person().mobilePhone()).build(),
                 new ColumnDescriptor.Builder(proto().customer().person().workPhone()).build(),

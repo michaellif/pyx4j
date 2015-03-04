@@ -29,14 +29,14 @@ public class LeaseAdjustmentLister extends SiteDataTablePanel<LeaseAdjustment> {
         setColumnDescriptors( //
                 new ColumnDescriptor.Builder(proto().code()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().executionType()).build(), //
-                new ColumnDescriptor.Builder(proto().receivedDate(), false).build(), //
+                new ColumnDescriptor.Builder(proto().receivedDate()).visible(false).build(), //
                 new ColumnDescriptor.Builder(proto().targetDate()).build(), //
                 new ColumnDescriptor.Builder(proto().tax()).build(), //
                 new ColumnDescriptor.Builder(proto().status()).filterAlwaysShown(true).build(), //
-                new ColumnDescriptor.Builder(proto().description(), false).build(), //
-                new ColumnDescriptor.Builder(proto().updated(), false).build(), //
-                new ColumnDescriptor.Builder(proto().created(), false).build(), //
-                new ColumnDescriptor.Builder(proto().createdBy(), false).build());
+                new ColumnDescriptor.Builder(proto().description()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().updated()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().created()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().createdBy()).visible(false).build());
 
         setDataTableModel(new DataTableModel<LeaseAdjustment>());
     }

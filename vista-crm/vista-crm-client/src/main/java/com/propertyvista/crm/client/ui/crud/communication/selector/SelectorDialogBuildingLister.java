@@ -33,14 +33,14 @@ public class SelectorDialogBuildingLister extends EntityLister<Building> {
         super(Building.class, GWT.<SelectBuildingListService> create(SelectBuildingListService.class), parent, alreadySelected);
 
         setColumnDescriptors( //
-                new ColumnDescriptor.Builder(proto().propertyCode(), true).filterAlwaysShown(true).build(),//
-                new ColumnDescriptor.Builder(proto().info().name(), true).build(),//
-                new ColumnDescriptor.Builder(proto().info().address().streetNumber(), false).build(),//
-                new ColumnDescriptor.Builder(proto().info().address().streetName(), false).build(),//
-                new ColumnDescriptor.Builder(proto().info().address().city(), true).filterAlwaysShown(true).build(),//
-                new ColumnDescriptor.Builder(proto().info().address().province(), true).filterAlwaysShown(true).build(),//
-                new ColumnDescriptor.Builder(proto().info().address().country(), false).filterAlwaysShown(true).build(),//
-                new ColumnDescriptor.Builder(proto().marketing().name(), false).columnTitle("Marketing Name").build() //
+                new ColumnDescriptor.Builder(proto().propertyCode()).filterAlwaysShown(true).build(),//
+                new ColumnDescriptor.Builder(proto().info().name()).build(),//
+                new ColumnDescriptor.Builder(proto().info().address().streetNumber()).visible(false).build(),//
+                new ColumnDescriptor.Builder(proto().info().address().streetName()).visible(false).build(),//
+                new ColumnDescriptor.Builder(proto().info().address().city()).filterAlwaysShown(true).build(),//
+                new ColumnDescriptor.Builder(proto().info().address().province()).filterAlwaysShown(true).build(),//
+                new ColumnDescriptor.Builder(proto().info().address().country()).visible(false).filterAlwaysShown(true).build(),//
+                new ColumnDescriptor.Builder(proto().marketing().name()).visible(false).columnTitle("Marketing Name").build() //
         );
 
         DataTableModel<Building> dataTableModel = new DataTableModel<Building>();

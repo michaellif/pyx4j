@@ -19,8 +19,8 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
@@ -46,15 +46,15 @@ public class MaintenanceRequestLister extends SiteDataTablePanel<MaintenanceRequ
                 new ColumnDescriptor.Builder(proto.priority()).build(),
                 new ColumnDescriptor.Builder(proto.summary()).build(),
                 new ColumnDescriptor.Builder(proto.reporterName()).columnTitle(i18n.tr("Tenant")).searchable(false).build(),
-                new ColumnDescriptor.Builder(proto.reporterPhone(), false).build(),
+                new ColumnDescriptor.Builder(proto.reporterPhone()).visible(false).build(),
                 new ColumnDescriptor.Builder(proto.permissionToEnter()).columnTitle(i18n.tr("Entry Allowed")).build(),
                 new ColumnDescriptor.Builder(proto.petInstructions()).visible(false).build(),
                 new ColumnDescriptor.Builder(proto.submitted()).build(),
                 new ColumnDescriptor.Builder(proto.status()).build(),
                 new ColumnDescriptor.Builder(proto.updated()).build(),
                 new ColumnDescriptor.Builder(proto.surveyResponse().rating()).build(),
-                new ColumnDescriptor.Builder(proto.surveyResponse().description()).visible(false)
-                        .columnTitle(proto.surveyResponse().getMeta().getCaption()).build() };
+                new ColumnDescriptor.Builder(proto.surveyResponse().description()).visible(false).columnTitle(proto.surveyResponse().getMeta().getCaption())
+                        .build() };
     }
 
     @Override

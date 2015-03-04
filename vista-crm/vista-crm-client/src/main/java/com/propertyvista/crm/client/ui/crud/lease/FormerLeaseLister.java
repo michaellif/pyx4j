@@ -52,14 +52,14 @@ public class FormerLeaseLister extends SiteDataTablePanel<LeaseDTO> {
                 new Builder(proto().leaseFrom()).build(), //
                 new Builder(proto().leaseTo()).build(), //
 
-                new Builder(proto().expectedMoveIn(), false).build(), //
-                new Builder(proto().expectedMoveOut(), false).build(), //
-                new Builder(proto().actualMoveIn(), false).build(), //
-                new Builder(proto().actualMoveOut(), false).build(), //
-                new Builder(proto().moveOutSubmissionDate(), false).build(), //
+                new Builder(proto().expectedMoveIn()).visible(false).build(), //
+                new Builder(proto().expectedMoveOut()).visible(false).build(), //
+                new Builder(proto().actualMoveIn()).visible(false).build(), //
+                new Builder(proto().actualMoveOut()).visible(false).build(), //
+                new Builder(proto().moveOutSubmissionDate()).visible(false).build(), //
 
-                new Builder(proto().approvalDate(), false).build(), //
-                new Builder(proto().creationDate(), false).build());
+                new Builder(proto().approvalDate()).visible(false).build(), //
+                new Builder(proto().creationDate()).visible(false).build());
 
         setDataTableModel(new DataTableModel<LeaseDTO>());
     }

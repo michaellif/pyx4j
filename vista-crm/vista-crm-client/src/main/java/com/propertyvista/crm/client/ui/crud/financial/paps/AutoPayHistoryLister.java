@@ -58,11 +58,11 @@ public class AutoPayHistoryLister extends SiteDataTablePanel<AutoPayHistoryDTO> 
                 new ColumnDescriptor.Builder(proto().effectiveFrom()).build(), //
                 new ColumnDescriptor.Builder(proto().expiredFrom()).build(), //
 
-                new ColumnDescriptor.Builder(proto().createdBy(), false).searchable(false).build(), //
+                new ColumnDescriptor.Builder(proto().createdBy()).visible(false).searchable(false).build(), //
                 new ColumnDescriptor.Builder(proto().created()).searchable(false).build(), //
 
-                new ColumnDescriptor.Builder(proto().updatedByTenant(), false).build(), //
-                new ColumnDescriptor.Builder(proto().updatedBySystem(), false).build(), //
+                new ColumnDescriptor.Builder(proto().updatedByTenant()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().updatedBySystem()).visible(false).build(), //
                 new ColumnDescriptor.Builder(proto().updated()).searchable(false).build() //
         );
 

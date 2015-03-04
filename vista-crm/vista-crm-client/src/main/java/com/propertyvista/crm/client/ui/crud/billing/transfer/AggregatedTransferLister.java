@@ -50,10 +50,10 @@ public class AggregatedTransferLister extends SiteDataTablePanel<AggregatedTrans
                 new ColumnDescriptor.Builder(proto().grossPaymentFee()).build(), //
                 new ColumnDescriptor.Builder(proto().grossPaymentCount()).build(), //
 
-                new ColumnDescriptor.Builder(proto().adjustments(), false).sortable(false).searchable(false).build(), //
+                new ColumnDescriptor.Builder(proto().adjustments()).visible(false).sortable(false).searchable(false).build(), //
                 new ColumnDescriptor.Builder(proto().adjustments().$().adjustment()).searchableOnly().build(), //
 
-                new ColumnDescriptor.Builder(proto().chargebacks(), false).sortable(false).searchable(false).build(), //
+                new ColumnDescriptor.Builder(proto().chargebacks()).visible(false).sortable(false).searchable(false).build(), //
                 new ColumnDescriptor.Builder(proto().chargebacks().$().chargeback()).searchableOnly().build(), //
 
                 new ColumnDescriptor.Builder(proto().payments().$().id()).searchableOnly().columnTitle(i18n.tr("Payment Id")).build(), //

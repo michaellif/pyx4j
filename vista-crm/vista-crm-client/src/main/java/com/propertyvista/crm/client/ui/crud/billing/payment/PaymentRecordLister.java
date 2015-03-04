@@ -38,14 +38,14 @@ public class PaymentRecordLister extends SiteDataTablePanel<PaymentRecordDTO> {
         List<ColumnDescriptor> cd = new ArrayList<>();
         cd.add(new ColumnDescriptor.Builder(proto().id()).build());
         if (VistaFeatures.instance().yardiIntegration()) {
-            cd.add(new ColumnDescriptor.Builder(proto().yardiDocumentNumber(), false).build());
-            cd.add(new ColumnDescriptor.Builder(proto().externalBatchNumber(), false).sortable(false).searchable(false).build());
-            cd.add(new ColumnDescriptor.Builder(proto().externalBatchNumberReversal(), false).sortable(false).searchable(false).build());
+            cd.add(new ColumnDescriptor.Builder(proto().yardiDocumentNumber()).visible(false).build());
+            cd.add(new ColumnDescriptor.Builder(proto().externalBatchNumber()).visible(false).sortable(false).searchable(false).build());
+            cd.add(new ColumnDescriptor.Builder(proto().externalBatchNumberReversal()).visible(false).sortable(false).searchable(false).build());
         }
         cd.add(new ColumnDescriptor.Builder(proto().billingAccount().lease().unit().building().propertyCode()).columnTitle(i18n.tr("Property Code"))
                 .visible(true).filterAlwaysShown(true).build());
         cd.add(new ColumnDescriptor.Builder(proto().padBillingCycle().billingCycleStartDate()).columnTitle(i18n.tr("Pre-Authorized Payment Cycle")).build());
-        cd.add(new ColumnDescriptor.Builder(proto().padBillingCycle().id(), false).columnTitle(i18n.tr("Pre-Authorized Payment Cycle Id")).build());
+        cd.add(new ColumnDescriptor.Builder(proto().padBillingCycle().id()).visible(false).columnTitle(i18n.tr("Pre-Authorized Payment Cycle Id")).build());
         cd.add(new ColumnDescriptor.Builder(proto().billingAccount().lease().unit().info().number()).columnTitle(i18n.tr("Unit")).visible(false).build());
         cd.add(new ColumnDescriptor.Builder(proto().billingAccount().lease().leaseId()).columnTitle(i18n.tr("Lease")).visible(true).build());
         cd.add(new ColumnDescriptor.Builder(proto().billingAccount().accountNumber()).visible(false).build());
@@ -58,7 +58,7 @@ public class PaymentRecordLister extends SiteDataTablePanel<PaymentRecordDTO> {
         cd.add(new ColumnDescriptor.Builder(proto().lastStatusChangeDate()).build());
         cd.add(new ColumnDescriptor.Builder(proto().targetDate()).build());
         cd.add(new ColumnDescriptor.Builder(proto().paymentStatus()).build());
-        cd.add(new ColumnDescriptor.Builder(proto().finalizedDate(), false).build());
+        cd.add(new ColumnDescriptor.Builder(proto().finalizedDate()).visible(false).build());
         cd.add(new ColumnDescriptor.Builder(proto().rejectedWithNSF()).visible(false).build());
         cd.add(new ColumnDescriptor.Builder(proto().transactionErrorMessage()).visible(false).build());
         cd.add(new ColumnDescriptor.Builder(proto().notice()).visible(false).build());

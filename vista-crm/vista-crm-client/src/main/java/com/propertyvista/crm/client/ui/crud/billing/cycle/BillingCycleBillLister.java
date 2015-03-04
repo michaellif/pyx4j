@@ -18,8 +18,8 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
@@ -44,19 +44,19 @@ public class BillingCycleBillLister extends SiteDataTablePanel<BillDataDTO> {
 
                 new ColumnDescriptor.Builder(proto().bill().billStatus()).build(), //
 
-                new ColumnDescriptor.Builder(proto().bill().balanceForwardAmount(), false).build(), //
-                new ColumnDescriptor.Builder(proto().bill().paymentReceivedAmount(), false).build(), //
-                new ColumnDescriptor.Builder(proto().bill().depositRefundAmount(), false).build(), //
-                new ColumnDescriptor.Builder(proto().bill().immediateAccountAdjustments(), false).build(), //
-                new ColumnDescriptor.Builder(proto().bill().nsfCharges(), false).build(), //
+                new ColumnDescriptor.Builder(proto().bill().balanceForwardAmount()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().bill().paymentReceivedAmount()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().bill().depositRefundAmount()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().bill().immediateAccountAdjustments()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().bill().nsfCharges()).visible(false).build(), //
 
-                new ColumnDescriptor.Builder(proto().bill().pendingAccountAdjustments(), false).build(), //
-                new ColumnDescriptor.Builder(proto().bill().depositAmount(), false).build(), //
+                new ColumnDescriptor.Builder(proto().bill().pendingAccountAdjustments()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().bill().depositAmount()).visible(false).build(), //
 
-                new ColumnDescriptor.Builder(proto().bill().pastDueAmount(), false).build(), //
-                new ColumnDescriptor.Builder(proto().bill().serviceCharge(), false).build(), //
-                new ColumnDescriptor.Builder(proto().bill().recurringFeatureCharges(), false).build(), //
-                new ColumnDescriptor.Builder(proto().bill().oneTimeFeatureCharges(), false).build());
+                new ColumnDescriptor.Builder(proto().bill().pastDueAmount()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().bill().serviceCharge()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().bill().recurringFeatureCharges()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().bill().oneTimeFeatureCharges()).visible(false).build());
 
         DataTableModel<BillDataDTO> dataTableModel = new DataTableModel<BillDataDTO>();
         dataTableModel.setMultipleSelection(true);

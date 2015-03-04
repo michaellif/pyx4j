@@ -57,8 +57,8 @@ public abstract class EmployeeSelectionDialog extends EntitySelectorTableDialog<
                 new ColumnDescriptor.Builder(proto().name().firstName()).searchableOnly().filterAlwaysShown(true).build(),
                 new ColumnDescriptor.Builder(proto().name().lastName()).searchableOnly().filterAlwaysShown(true).build(),
 
-                new ColumnDescriptor.Builder(proto().email(), false).build(),
-                new ColumnDescriptor.Builder(proto().updated(), false).build()
+                new ColumnDescriptor.Builder(proto().email()).visible(false).build(),
+                new ColumnDescriptor.Builder(proto().updated()).visible(false).build()
         ); //@formatter:on
     }
 

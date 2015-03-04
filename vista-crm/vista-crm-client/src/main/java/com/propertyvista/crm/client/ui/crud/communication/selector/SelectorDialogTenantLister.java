@@ -35,8 +35,8 @@ public class SelectorDialogTenantLister extends EntityLister<Tenant> {
                 new ColumnDescriptor.Builder(proto().customer().person().name().firstName()).searchableOnly().filterAlwaysShown(true).build(),//
                 new ColumnDescriptor.Builder(proto().customer().person().name().lastName()).searchableOnly().filterAlwaysShown(true).build(),//
                 new ColumnDescriptor.Builder(proto().customer().person().sex()).visible(false).build(),//
-                new ColumnDescriptor.Builder(proto().customer().person().birthDate(), false).build(),//
-                new ColumnDescriptor.Builder(proto().customer().person().email(), false).build(),//
+                new ColumnDescriptor.Builder(proto().customer().person().birthDate()).visible(false).build(),//
+                new ColumnDescriptor.Builder(proto().customer().person().email()).visible(false).build(),//
                 new ColumnDescriptor.Builder(proto().customer().person().homePhone()).build(),//
                 new ColumnDescriptor.Builder(proto().customer().person().mobilePhone()).build(),//
                 new ColumnDescriptor.Builder(proto().customer().person().workPhone()).build(),//

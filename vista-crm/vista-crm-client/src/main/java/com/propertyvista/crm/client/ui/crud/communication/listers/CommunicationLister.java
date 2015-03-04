@@ -137,8 +137,8 @@ public class CommunicationLister extends SiteDataTablePanel<CommunicationThreadD
             columns.add(new ColumnDescriptor.Builder(proto.deliveryMethod()).width("70px").searchable(true).build());
         }
 
-        columns.add(new ColumnDescriptor.Builder(proto.category(), false).searchable(false).build());
-        columns.add(new ColumnDescriptor.Builder(proto.category().categoryType(), false).searchableOnly().columnTitle(i18n.tr("Category")).filterAlwaysShown(true).build());
+        columns.add(new ColumnDescriptor.Builder(proto.category()).visible(false).searchable(false).build());
+        columns.add(new ColumnDescriptor.Builder(proto.category().categoryType()).visible(false).searchableOnly().columnTitle(i18n.tr("Category")).filterAlwaysShown(true).build());
         columns.add(new ColumnDescriptor.Builder(proto.allowedReply()).searchable(false).width("70px").build());
 
         if (viewScope != ViewScope.MessageCategory) {
@@ -147,7 +147,7 @@ public class CommunicationLister extends SiteDataTablePanel<CommunicationThreadD
             columns.add(new ColumnDescriptor.Builder(proto.status()).searchable(true).width("70px").build());
         }
         if (ViewScope.MessageCategory == viewScope) {
-            columns.add(new ColumnDescriptor.Builder(proto.hidden(), false).searchableOnly().columnTitle(i18n.tr("Hidden")).build());
+            columns.add(new ColumnDescriptor.Builder(proto.hidden()).visible(false).searchableOnly().columnTitle(i18n.tr("Hidden")).build());
         }
 
         return columns;

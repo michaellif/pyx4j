@@ -49,7 +49,7 @@ public class UnitLister extends SiteDataTablePanel<AptUnitDTO> {
                 new ColumnDescriptor.Builder(proto().info().economicStatus()).visible(false).build(), //
 
                 new ColumnDescriptor.Builder(proto().buildingCode()).visible(false).build(), //
-                new ColumnDescriptor.Builder(proto().floorplan().name()).columnTitle(i18n.tr("Floorplan Name")).build(), //
+                new ColumnDescriptor.Builder(proto().floorplan().name()).columnTitle(i18n.tr("Floorplan Name")).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().floorplan().marketingName()).visible(false).columnTitle(i18n.tr("Floorplan Marketing Name")).build(), //
 
                 new ColumnDescriptor.Builder(proto().financial()._unitRent()).build(), //

@@ -44,11 +44,11 @@ public class AutoPayReconciliationReportLister extends SiteDataTablePanel<AutoPa
                 new Builder(proto().tenant()).searchable(false).build(), //
                 new Builder(proto().tenant().participantId()).columnTitle(i18n.tr("Tenant Id")).width("80px")
                         .filterAlwaysShown(VistaFeatures.instance().yardiIntegration()).build(), //
-                new Builder(proto().tenant().customer().person().name().firstName(), false).columnTitle(i18n.tr("Tenant First Name")).build(),//
-                new Builder(proto().tenant().customer().person().name().lastName(), false).columnTitle(i18n.tr("Tenant Last Name")).build(),//
+                new Builder(proto().tenant().customer().person().name().firstName()).visible(false).columnTitle(i18n.tr("Tenant First Name")).build(),//
+                new Builder(proto().tenant().customer().person().name().lastName()).visible(false).columnTitle(i18n.tr("Tenant Last Name")).build(),//
 
                 new Builder(proto().effectiveFrom()).build(), // 'first billing cycle'
-                new Builder(proto().tenant().lease().expectedMoveOut(), false).build(), //
+                new Builder(proto().tenant().lease().expectedMoveOut()).visible(false).build(), //
                 new Builder(proto().renewalDate()).width("80px").searchable(false).sortable(false).build(), //
                 new Builder(proto().created()).build(), //
 

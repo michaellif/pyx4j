@@ -32,7 +32,7 @@ public class BillingCycleLister extends SiteDataTablePanel<BillingCycleDTO> {
         super(BillingCycleDTO.class, GWT.<AbstractCrudService<BillingCycleDTO>> create(BillingCycleCrudService.class), false);
 
         setColumnDescriptors( //
-                new ColumnDescriptor.Builder(proto().building(), false).build(), //
+                new ColumnDescriptor.Builder(proto().building()).visible(false).build(), //
                 new ColumnDescriptor.Builder(proto().billingType()).build(), //
                 new ColumnDescriptor.Builder(proto().billingCycleStartDate()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().billingCycleEndDate()).build(), //

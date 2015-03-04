@@ -534,10 +534,10 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 protected List<ColumnDescriptor> defineColumnDescriptors() {
                     return Arrays.asList( //
                             // building data
-                            new ColumnDescriptor.Builder(proto().building().propertyCode(), true).filterAlwaysShown(true).build(), //
+                            new ColumnDescriptor.Builder(proto().building().propertyCode()).filterAlwaysShown(true).build(), //
                             // unit data
-                            new ColumnDescriptor.Builder(proto().info().number(), true).filterAlwaysShown(true).build(), //
-                            new ColumnDescriptor.Builder(proto().info().floor(), false).build(), //
+                            new ColumnDescriptor.Builder(proto().info().number()).filterAlwaysShown(true).build(), //
+                            new ColumnDescriptor.Builder(proto().info().floor()).visible(false).build(), //
                             new ColumnDescriptor.Builder(proto().info().area()).build(), //
                             new ColumnDescriptor.Builder(proto().info()._bedrooms()).filterAlwaysShown(true).build(), //
                             new ColumnDescriptor.Builder(proto().info()._bathrooms()).filterAlwaysShown(true).build(), //
@@ -589,8 +589,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                             new ColumnDescriptor.Builder(proto().customer().person().name().firstName()).searchableOnly().filterAlwaysShown(true).build(), //
                             new ColumnDescriptor.Builder(proto().customer().person().name().lastName()).searchableOnly().filterAlwaysShown(true).build(), //
                             new ColumnDescriptor.Builder(proto().customer().person().sex()).visible(false).build(), //
-                            new ColumnDescriptor.Builder(proto().customer().person().birthDate(), false).build(), //
-                            new ColumnDescriptor.Builder(proto().customer().person().email(), false).build(), //
+                            new ColumnDescriptor.Builder(proto().customer().person().birthDate()).visible(false).build(), //
+                            new ColumnDescriptor.Builder(proto().customer().person().email()).visible(false).build(), //
                             new ColumnDescriptor.Builder(proto().customer().person().homePhone()).build(), //
                             new ColumnDescriptor.Builder(proto().customer().person().mobilePhone()).build(), //
                             new ColumnDescriptor.Builder(proto().customer().person().workPhone()).build(), //

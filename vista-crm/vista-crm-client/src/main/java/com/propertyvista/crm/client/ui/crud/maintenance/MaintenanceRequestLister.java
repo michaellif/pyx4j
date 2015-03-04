@@ -93,7 +93,7 @@ public class MaintenanceRequestLister extends SiteDataTablePanel<MaintenanceRequ
                 new ColumnDescriptor.Builder(proto.priority()).filterAlwaysShown(true).build(),
                 new ColumnDescriptor.Builder(proto.summary()).build(),
                 new ColumnDescriptor.Builder(proto.reporterName()).columnTitle(i18n.tr("Tenant")).searchable(false).build(),
-                new ColumnDescriptor.Builder(proto.reporterPhone(), false).build(),
+                new ColumnDescriptor.Builder(proto.reporterPhone()).visible(false).build(),
                 new ColumnDescriptor.Builder(proto.permissionToEnter()).columnTitle(i18n.tr("Entry Allowed")).filterAlwaysShown(true).build(),
                 new ColumnDescriptor.Builder(proto.petInstructions()).visible(false).build(),
                 new ColumnDescriptor.Builder(proto.submitted()).filterAlwaysShown(true).build(),

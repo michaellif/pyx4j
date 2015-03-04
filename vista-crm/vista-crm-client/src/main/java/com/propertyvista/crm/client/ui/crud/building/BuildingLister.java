@@ -36,49 +36,49 @@ public class BuildingLister extends SiteDataTablePanel<BuildingDTO> {
         super(BuildingDTO.class, GWT.<AbstractCrudService<BuildingDTO>> create(BuildingCrudService.class), !VistaFeatures.instance().yardiIntegration());
 
         setColumnDescriptors( //
-                new ColumnDescriptor.Builder(proto().propertyCode(), true).filterAlwaysShown(true).build(), //
+                new ColumnDescriptor.Builder(proto().propertyCode()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().complex().name()).columnTitle(proto().complex().getMeta().getCaption()).width("150px").build(), //
-                new ColumnDescriptor.Builder(proto().complexPrimary(), false).build(), //
-                new ColumnDescriptor.Builder(proto().externalId(), false).build(), //
-                new ColumnDescriptor.Builder(proto().integrationSystemId(), VistaFeatures.instance().yardiIntegration()).build(), //
-                new ColumnDescriptor.Builder(proto().suspended(), false).build(), //
-                new ColumnDescriptor.Builder(proto().updated(), false).build(), //
+                new ColumnDescriptor.Builder(proto().complexPrimary()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().externalId()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().integrationSystemId()).visible(VistaFeatures.instance().yardiIntegration()).build(), //
+                new ColumnDescriptor.Builder(proto().suspended()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().updated()).visible(false).build(), //
 
-                new ColumnDescriptor.Builder(proto().info().name(), true).width("150px").filterAlwaysShown(true).build(), //
-                new ColumnDescriptor.Builder(proto().info().type(), true).build(), //
-                new ColumnDescriptor.Builder(proto().info().shape(), false).build(), //
-                new ColumnDescriptor.Builder(proto().info().address().streetNumber(), false).build(), //
-                new ColumnDescriptor.Builder(proto().info().address().streetName(), false).build(), //
-                new ColumnDescriptor.Builder(proto().info().address().city(), true).filterAlwaysShown(true).build(), //
-                new ColumnDescriptor.Builder(proto().info().address().province(), true).filterAlwaysShown(true).build(), //
-                new ColumnDescriptor.Builder(proto().info().address().country(), false).build(), //
-                new ColumnDescriptor.Builder(proto().marketing().visibility(), false).build(), //
-                new ColumnDescriptor.Builder(proto().info().totalStoreys(), false).build(), //
-                new ColumnDescriptor.Builder(proto().info().residentialStoreys(), false).build(), //
-                new ColumnDescriptor.Builder(proto().info().structureType(), false).build(), //
-                new ColumnDescriptor.Builder(proto().info().structureBuildYear(), false).build(), //
-                new ColumnDescriptor.Builder(proto().info().constructionType(), false).build(), //
-                new ColumnDescriptor.Builder(proto().info().foundationType(), false).build(), //
-                new ColumnDescriptor.Builder(proto().info().floorType(), false).build(), //
-                new ColumnDescriptor.Builder(proto().info().landArea(), false).build(), //
-                new ColumnDescriptor.Builder(proto().info().waterSupply(), false).build(), //
-                new ColumnDescriptor.Builder(proto().info().centralAir(), false).build(), //
-                new ColumnDescriptor.Builder(proto().info().centralHeat(), false).build(), //
+                new ColumnDescriptor.Builder(proto().info().name()).width("150px").filterAlwaysShown(true).build(), //
+                new ColumnDescriptor.Builder(proto().info().type()).build(), //
+                new ColumnDescriptor.Builder(proto().info().shape()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().info().address().streetNumber()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().info().address().streetName()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().info().address().city()).filterAlwaysShown(true).build(), //
+                new ColumnDescriptor.Builder(proto().info().address().province()).filterAlwaysShown(true).build(), //
+                new ColumnDescriptor.Builder(proto().info().address().country()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().marketing().visibility()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().info().totalStoreys()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().info().residentialStoreys()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().info().structureType()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().info().structureBuildYear()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().info().constructionType()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().info().foundationType()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().info().floorType()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().info().landArea()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().info().waterSupply()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().info().centralAir()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().info().centralHeat()).visible(false).build(), //
 
-                new ColumnDescriptor.Builder(proto().contacts().website(), false).build(), //
+                new ColumnDescriptor.Builder(proto().contacts().website()).visible(false).build(), //
 
-                new ColumnDescriptor.Builder(proto().financial().dateAcquired(), true).build(), //
-                new ColumnDescriptor.Builder(proto().financial().purchasePrice(), true).build(), //
-                new ColumnDescriptor.Builder(proto().financial().marketPrice(), false).build(), //
-                new ColumnDescriptor.Builder(proto().financial().lastAppraisalDate(), true).build(), //
-                new ColumnDescriptor.Builder(proto().financial().lastAppraisalValue(), true).build(), //
+                new ColumnDescriptor.Builder(proto().financial().dateAcquired()).build(), //
+                new ColumnDescriptor.Builder(proto().financial().purchasePrice()).build(), //
+                new ColumnDescriptor.Builder(proto().financial().marketPrice()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().financial().lastAppraisalDate()).build(), //
+                new ColumnDescriptor.Builder(proto().financial().lastAppraisalValue()).build(), //
 
-                new ColumnDescriptor.Builder(proto().defaultProductCatalog(), false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().defaultProductCatalog()).visible(false).sortable(false).build(), //
 
-                new ColumnDescriptor.Builder(proto().merchantAccountPresent(), false).sortable(false).build(), //
-                new ColumnDescriptor.Builder(proto().financial().currency(), false).searchable(false).build(), //
+                new ColumnDescriptor.Builder(proto().merchantAccountPresent()).visible(false).sortable(false).build(), //
+                new ColumnDescriptor.Builder(proto().financial().currency()).visible(false).searchable(false).build(), //
 
-                new ColumnDescriptor.Builder(proto().marketing().name(), false).columnTitle(i18n.tr("Marketing Name")).build());
+                new ColumnDescriptor.Builder(proto().marketing().name()).visible(false).columnTitle(i18n.tr("Marketing Name")).build());
 
         setDataTableModel(new DataTableModel<BuildingDTO>());
     }

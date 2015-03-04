@@ -35,17 +35,17 @@ public class LeadLister extends SiteDataTablePanel<Lead> {
         super(Lead.class, GWT.<AbstractCrudService<Lead>> create(LeadCrudService.class), true);
 
         setColumnDescriptors( //
-                new ColumnDescriptor.Builder(proto().leadId(), true).build(), //
-                new ColumnDescriptor.Builder(proto().guests(), true).build(), //
+                new ColumnDescriptor.Builder(proto().leadId()).build(), //
+                new ColumnDescriptor.Builder(proto().guests()).build(), //
                 new ColumnDescriptor.Builder(proto().guests().$().person().name().firstName()).columnTitle(i18n.tr("Guest First Name")).searchableOnly()
                         .filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().guests().$().person().name().lastName()).columnTitle(i18n.tr("Guest Last Name")).searchableOnly()
                         .filterAlwaysShown(true).build(), //
-                new ColumnDescriptor.Builder(proto().moveInDate(), true).build(), //
-                new ColumnDescriptor.Builder(proto().leaseTerm(), true).build(), //
-                new ColumnDescriptor.Builder(proto().floorplan(), true).searchable(false).build(), //
-                new ColumnDescriptor.Builder(proto().createDate(), true).build(), //
-                new ColumnDescriptor.Builder(proto().status(), true).build());
+                new ColumnDescriptor.Builder(proto().moveInDate()).build(), //
+                new ColumnDescriptor.Builder(proto().leaseTerm()).build(), //
+                new ColumnDescriptor.Builder(proto().floorplan()).searchable(false).build(), //
+                new ColumnDescriptor.Builder(proto().createDate()).build(), //
+                new ColumnDescriptor.Builder(proto().status()).build());
 
         setDataTableModel(new DataTableModel<Lead>());
     }

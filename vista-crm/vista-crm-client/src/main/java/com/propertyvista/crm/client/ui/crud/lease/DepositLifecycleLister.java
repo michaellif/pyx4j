@@ -39,7 +39,7 @@ public class DepositLifecycleLister extends SiteDataTablePanel<DepositLifecycleD
                 new ColumnDescriptor.Builder(proto().deposit().type()).searchable(false).sortable(false).build(), //
                 new ColumnDescriptor.Builder(proto().deposit().amount()).searchable(false).sortable(false).build(), //
                 new ColumnDescriptor.Builder(proto().status()).build(), //
-                new ColumnDescriptor.Builder(proto().depositDate(), false).build(), //
+                new ColumnDescriptor.Builder(proto().depositDate()).visible(false).build(), //
                 new ColumnDescriptor.Builder(proto().refundDate()).build(), //
                 new ColumnDescriptor.Builder(proto().currentAmount()).filterAlwaysShown(true).build());
 

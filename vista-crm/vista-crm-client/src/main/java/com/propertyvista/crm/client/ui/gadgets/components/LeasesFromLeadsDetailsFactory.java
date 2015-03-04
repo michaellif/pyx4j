@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -39,26 +39,26 @@ public class LeasesFromLeadsDetailsFactory extends AbstractListerDetailsFactory<
         DEFAULT_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
                     new ColumnDescriptor.Builder(proto.lease().leaseId()).build(),
                     new ColumnDescriptor.Builder(proto.lease().type()).build(),
-                    
+
                     new ColumnDescriptor.Builder(proto.lease().unit().building().propertyCode()).build(),
                     new ColumnDescriptor.Builder(proto.lease().unit()).searchable(false).build(),
                     new ColumnDescriptor.Builder(proto.lease().unit().info().number()).columnTitle(proto.lease().unit().getMeta().getCaption()).searchableOnly().build(),
-                    
+
                     new ColumnDescriptor.Builder(proto.lease().status()).build(),
                     new ColumnDescriptor.Builder(proto.lease().completion()).build(),
                     new ColumnDescriptor.Builder(proto.lease().billingAccount().accountNumber()).build(),
-                    
+
                     new ColumnDescriptor.Builder(proto.lease().leaseFrom()).build(),
                     new ColumnDescriptor.Builder(proto.lease().leaseTo()).build(),
-                    
+
                     new ColumnDescriptor.Builder(proto.lease().expectedMoveIn()).build(),
-                    new ColumnDescriptor.Builder(proto.lease().expectedMoveOut(), false).build(),
-                    new ColumnDescriptor.Builder(proto.lease().actualMoveIn(), false).build(),
-                    new ColumnDescriptor.Builder(proto.lease().actualMoveOut(), false).build(),
-                    new ColumnDescriptor.Builder(proto.lease().moveOutSubmissionDate(), false).build(),
-                    
-                    new ColumnDescriptor.Builder(proto.lease().approvalDate(), false).build(),
-                    new ColumnDescriptor.Builder(proto.lease().creationDate(), false).build()
+                    new ColumnDescriptor.Builder(proto.lease().expectedMoveOut()).visible(false).build(),
+                    new ColumnDescriptor.Builder(proto.lease().actualMoveIn()).visible(false).build(),
+                    new ColumnDescriptor.Builder(proto.lease().actualMoveOut()).visible(false).build(),
+                    new ColumnDescriptor.Builder(proto.lease().moveOutSubmissionDate()).visible(false).build(),
+
+                    new ColumnDescriptor.Builder(proto.lease().approvalDate()).visible(false).build(),
+                    new ColumnDescriptor.Builder(proto.lease().creationDate()).visible(false).build()
                 );//@formatter:on
 
     }

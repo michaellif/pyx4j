@@ -42,7 +42,7 @@ public abstract class ProductCodeSelectorDialog extends EntitySelectorTableDialo
                 new ColumnDescriptor.Builder(proto().name()).filterAlwaysShown(true).build(),
                 new ColumnDescriptor.Builder(proto().type()).filterAlwaysShown(true).build(),
                 new ColumnDescriptor.Builder(proto().glCode()).filterAlwaysShown(true).build(),
-                new ColumnDescriptor.Builder(proto().updated(), false).build()
+                new ColumnDescriptor.Builder(proto().updated()).visible(false).build()
         ); //@formatter:on
     }
 

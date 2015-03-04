@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -38,14 +38,14 @@ public class LeadsDetailsFactory extends AbstractListerDetailsFactory<Lead, Coun
     static {
         Lead proto = EntityFactory.getEntityPrototype(Lead.class);
         DEFAULT_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
-                    new ColumnDescriptor.Builder(proto.leadId(), true).build(),
-                    new ColumnDescriptor.Builder(proto.guests(), true).build(),
+                    new ColumnDescriptor.Builder(proto.leadId()).build(),
+                    new ColumnDescriptor.Builder(proto.guests()).build(),
                     new ColumnDescriptor.Builder(proto.guests().$().person().name().lastName()).columnTitle(i18n.tr("Guest Last Name")).searchableOnly().build(),
-                    new ColumnDescriptor.Builder(proto.moveInDate(), true).build(),
-                    new ColumnDescriptor.Builder(proto.leaseTerm(), true).build(),
-                    new ColumnDescriptor.Builder(proto.floorplan(), true).searchable(false).build(),
-                    new ColumnDescriptor.Builder(proto.createDate(), true).build(),
-                    new ColumnDescriptor.Builder(proto.status(), true).build()
+                    new ColumnDescriptor.Builder(proto.moveInDate()).build(),
+                    new ColumnDescriptor.Builder(proto.leaseTerm()).build(),
+                    new ColumnDescriptor.Builder(proto.floorplan()).searchable(false).build(),
+                    new ColumnDescriptor.Builder(proto.createDate()).build(),
+                    new ColumnDescriptor.Builder(proto.status()).build()
             );//@formatter:on
 
     }

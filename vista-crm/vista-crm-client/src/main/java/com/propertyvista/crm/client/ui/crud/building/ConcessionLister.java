@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -24,8 +24,8 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 
 import com.propertyvista.common.client.ui.components.versioning.VersionedLister;
 import com.propertyvista.crm.rpc.services.building.catalog.ConcessionCrudService;
@@ -39,8 +39,8 @@ public class ConcessionLister extends VersionedLister<Concession> {
 
         setColumnDescriptors( //
                 new ColumnDescriptor.Builder(proto().version().versionNumber()).build(), //
-                new ColumnDescriptor.Builder(proto().version().type()).build(), //
-                new ColumnDescriptor.Builder(proto().version().term()).build(), //
+                new ColumnDescriptor.Builder(proto().version().type()).filterAlwaysShown(true).build(), //
+                new ColumnDescriptor.Builder(proto().version().term()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().version()).formatter(new IFormatter<IEntity, SafeHtml>() {
 
                     @Override
@@ -64,8 +64,8 @@ public class ConcessionLister extends VersionedLister<Concession> {
                         return builder.toSafeHtml();
                     }
                 }).build(), //
-                new ColumnDescriptor.Builder(proto().version().condition()).build(), //
-                new ColumnDescriptor.Builder(proto().version().effectiveDate()).build(), //
+                new ColumnDescriptor.Builder(proto().version().condition()).filterAlwaysShown(true).build(), //
+                new ColumnDescriptor.Builder(proto().version().effectiveDate()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().version().expirationDate()).build());
 
         setDataTableModel(new DataTableModel<Concession>());

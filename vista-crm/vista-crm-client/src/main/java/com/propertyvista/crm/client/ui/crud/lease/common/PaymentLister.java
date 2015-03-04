@@ -35,7 +35,7 @@ public class PaymentLister extends SiteDataTablePanel<PaymentRecordDTO> {
         List<ColumnDescriptor> cd = new ArrayList<>();
         cd.add(new ColumnDescriptor.Builder(proto().id()).build());
         if (VistaFeatures.instance().yardiIntegration()) {
-            cd.add(new ColumnDescriptor.Builder(proto().yardiDocumentNumber(), false).build());
+            cd.add(new ColumnDescriptor.Builder(proto().yardiDocumentNumber()).visible(false).build());
             cd.add(new ColumnDescriptor.Builder(proto().yardiBatches().$().externalBatchNumber()).searchableOnly().build());
         }
         cd.add(new ColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().customerId()).build());
@@ -46,14 +46,14 @@ public class PaymentLister extends SiteDataTablePanel<PaymentRecordDTO> {
                 .filterAlwaysShown(true).build());
         cd.add(new ColumnDescriptor.Builder(proto().leaseTermParticipant().role()).build());
         cd.add(new ColumnDescriptor.Builder(proto().amount()).filterAlwaysShown(true).build());
-        cd.add(new ColumnDescriptor.Builder(proto().convenienceFee(), false).build());
+        cd.add(new ColumnDescriptor.Builder(proto().convenienceFee()).visible(false).build());
         cd.add(new ColumnDescriptor.Builder(proto().paymentMethod().type()).build());
         cd.add(new ColumnDescriptor.Builder(proto().created()).build());
         cd.add(new ColumnDescriptor.Builder(proto().receivedDate()).build());
         cd.add(new ColumnDescriptor.Builder(proto().lastStatusChangeDate()).build());
         cd.add(new ColumnDescriptor.Builder(proto().targetDate()).build());
         cd.add(new ColumnDescriptor.Builder(proto().paymentStatus()).filterAlwaysShown(true).build());
-        cd.add(new ColumnDescriptor.Builder(proto().finalizedDate(), false).build());
+        cd.add(new ColumnDescriptor.Builder(proto().finalizedDate()).visible(false).build());
         cd.add(new ColumnDescriptor.Builder(proto().rejectedWithNSF()).visible(false).build());
         cd.add(new ColumnDescriptor.Builder(proto().transactionErrorMessage()).visible(false).build());
 

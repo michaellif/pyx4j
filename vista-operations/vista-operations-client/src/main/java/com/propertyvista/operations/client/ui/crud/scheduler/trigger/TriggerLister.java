@@ -19,9 +19,9 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.rpc.dto.TriggerDTO;
@@ -39,7 +39,7 @@ public class TriggerLister extends SiteDataTablePanel<TriggerDTO> {
                 new ColumnDescriptor.Builder(proto().scheduleSuspended()).sortable(false).searchable(false).build(), //
                 new ColumnDescriptor.Builder(proto().schedule()).sortable(false).searchable(false).build(), //
                 new ColumnDescriptor.Builder(proto().nextScheduledFireTime()).sortable(false).searchable(false).build(), //
-                new ColumnDescriptor.Builder(proto().populationType(), false).build(), //
+                new ColumnDescriptor.Builder(proto().populationType()).visible(false).build(), //
                 new ColumnDescriptor.Builder(proto().created()).build() //
         );
 

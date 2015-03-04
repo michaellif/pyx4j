@@ -36,12 +36,12 @@ public class FloorplanLister extends SiteDataTablePanel<FloorplanDTO> {
         setColumnDescriptors( //
                 new ColumnDescriptor.Builder(proto().name()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().marketingName()).filterAlwaysShown(true).build(), //
-                new ColumnDescriptor.Builder(proto().floorCount()).build(), //
-                new ColumnDescriptor.Builder(proto().bedrooms()).build(), //
-                new ColumnDescriptor.Builder(proto().dens()).build(), //
-                new ColumnDescriptor.Builder(proto().bathrooms()).build(), //
+                new ColumnDescriptor.Builder(proto().floorCount()).filterAlwaysShown(true).build(), //
+                new ColumnDescriptor.Builder(proto().bedrooms()).filterAlwaysShown(true).build(), //
+                new ColumnDescriptor.Builder(proto().dens()).filterAlwaysShown(true).build(), //
+                new ColumnDescriptor.Builder(proto().bathrooms()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().counters()._unitCount()).build(), //
-                new ColumnDescriptor.Builder(proto().counters()._marketingUnitCount(), false).build());
+                new ColumnDescriptor.Builder(proto().counters()._marketingUnitCount()).visible(false).build());
 
         setDataTableModel(new DataTableModel<FloorplanDTO>());
     }

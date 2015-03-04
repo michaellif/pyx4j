@@ -63,8 +63,8 @@ public class MessageCategoryLister extends SiteDataTablePanel<MessageCategory> {
         return new ColumnDescriptor[] {//@formatter:off
                 new ColumnDescriptor.Builder(proto.category()).columnTitle(i18n.tr("Name")).filterAlwaysShown(true).build(),
                 new ColumnDescriptor.Builder(proto.categoryType()).columnTitle(i18n.tr("Type")).filterAlwaysShown(true).build(),
-                new ColumnDescriptor.Builder(proto.roles(),false).sortable(false).build(),
-                new ColumnDescriptor.Builder(proto.dispatchers(),false).sortable(false).build()};
+                new ColumnDescriptor.Builder(proto.roles()).visible(false).sortable(false).build(),
+                new ColumnDescriptor.Builder(proto.dispatchers()).visible(false).sortable(false).build()};
       //@formatter:on
     }
 

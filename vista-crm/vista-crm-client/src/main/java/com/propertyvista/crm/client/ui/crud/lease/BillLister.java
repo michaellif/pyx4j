@@ -55,18 +55,18 @@ public class BillLister extends SiteDataTablePanel<BillDataDTO> {
 
                 new ColumnDescriptor.Builder(proto().bill().billStatus()).build(), //
 
-                new ColumnDescriptor.Builder(proto().bill().balanceForwardAmount(), false).build(), //
-                new ColumnDescriptor.Builder(proto().bill().paymentReceivedAmount(), false).build(), //
-                new ColumnDescriptor.Builder(proto().bill().depositRefundAmount(), false).build(), //
-                new ColumnDescriptor.Builder(proto().bill().immediateAccountAdjustments(), false).build(), //
-                new ColumnDescriptor.Builder(proto().bill().nsfCharges(), false).build(), //
+                new ColumnDescriptor.Builder(proto().bill().balanceForwardAmount()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().bill().paymentReceivedAmount()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().bill().depositRefundAmount()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().bill().immediateAccountAdjustments()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().bill().nsfCharges()).visible(false).build(), //
 
-                new ColumnDescriptor.Builder(proto().bill().pendingAccountAdjustments(), false).build(), //
-                new ColumnDescriptor.Builder(proto().bill().depositAmount(), false).build(), //
+                new ColumnDescriptor.Builder(proto().bill().pendingAccountAdjustments()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().bill().depositAmount()).visible(false).build(), //
 
-                new ColumnDescriptor.Builder(proto().bill().serviceCharge(), false).build(), //
-                new ColumnDescriptor.Builder(proto().bill().recurringFeatureCharges(), false).build(), //
-                new ColumnDescriptor.Builder(proto().bill().oneTimeFeatureCharges(), false).build());
+                new ColumnDescriptor.Builder(proto().bill().serviceCharge()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().bill().recurringFeatureCharges()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().bill().oneTimeFeatureCharges()).visible(false).build());
 
         DataTableModel<BillDataDTO> dataTableModel = new DataTableModel<BillDataDTO>();
         dataTableModel.setMultipleSelection(true);

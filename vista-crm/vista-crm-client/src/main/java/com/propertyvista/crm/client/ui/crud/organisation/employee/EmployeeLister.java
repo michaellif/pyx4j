@@ -47,16 +47,16 @@ public class EmployeeLister extends SiteDataTablePanel<EmployeeDTO> {
         cd.add(new ColumnDescriptor.Builder(proto().name().firstName()).searchableOnly().filterAlwaysShown(true).build());
         cd.add(new ColumnDescriptor.Builder(proto().name().lastName()).searchableOnly().filterAlwaysShown(true).build());
         cd.add(new ColumnDescriptor.Builder(proto().email()).filterAlwaysShown(true).build());
-        cd.add(new ColumnDescriptor.Builder(proto().updated(), false).build());
+        cd.add(new ColumnDescriptor.Builder(proto().updated()).visible(false).build());
 
         if (SecurityController.check(DataModelPermission.permissionRead(EmployeePrivilegesDTO.class))) {
-            cd.add(new ColumnDescriptor.Builder(proto().privileges().roles(), false).sortable(false).build());
-            cd.add(new ColumnDescriptor.Builder(proto().privileges().behaviors(), false).sortable(false).build());
+            cd.add(new ColumnDescriptor.Builder(proto().privileges().roles()).visible(false).sortable(false).build());
+            cd.add(new ColumnDescriptor.Builder(proto().privileges().behaviors()).visible(false).sortable(false).build());
         }
 
         if (SecurityController.check(DataModelPermission.permissionRead(Notification.class))) {
             cd.add(new ColumnDescriptor.Builder(proto().notifications().$().type()).columnTitle(i18n.tr("Notification type")).searchableOnly().build());
-            cd.add(new ColumnDescriptor.Builder(proto().notifications(), false).displayOnly().build());
+            cd.add(new ColumnDescriptor.Builder(proto().notifications()).visible(false).displayOnly().build());
         }
 
         setColumnDescriptors(cd);

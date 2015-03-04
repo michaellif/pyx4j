@@ -15,11 +15,11 @@ package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCard;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationCardCrudService;
 
@@ -36,7 +36,7 @@ public class CardServiceSimulationCardListerViewImpl extends AbstractListerView<
                     new ColumnDescriptor.Builder(proto().cardNumber()).build(), //
                     new ColumnDescriptor.Builder(proto().expiryDate()).build(), //
                     new ColumnDescriptor.Builder(proto().balance()).build(), //
-                    new ColumnDescriptor.Builder(proto().creditLimit(), false).build(), //
+                    new ColumnDescriptor.Builder(proto().creditLimit()).visible(false).build(), //
                     new ColumnDescriptor.Builder(proto().responseCode()).build(), //
                     new ColumnDescriptor.Builder(proto().created()).build() //
             );

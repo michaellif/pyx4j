@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -20,8 +20,8 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor.Builder;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.crm.rpc.services.billing.BillingCycleLeaseListService;
@@ -49,13 +49,13 @@ public class BillingCycleLeaseLister extends SiteDataTablePanel<LeaseDTO> {
                 new Builder(proto().leaseTo()).build(), //
 
                 new Builder(proto().expectedMoveIn()).build(), //
-                new Builder(proto().expectedMoveOut(), false).build(), //
-                new Builder(proto().actualMoveIn(), false).build(), //
-                new Builder(proto().actualMoveOut(), false).build(), //
-                new Builder(proto().moveOutSubmissionDate(), false).build(), //
+                new Builder(proto().expectedMoveOut()).visible(false).build(), //
+                new Builder(proto().actualMoveIn()).visible(false).build(), //
+                new Builder(proto().actualMoveOut()).visible(false).build(), //
+                new Builder(proto().moveOutSubmissionDate()).visible(false).build(), //
 
-                new Builder(proto().approvalDate(), false).build(), //
-                new Builder(proto().creationDate(), false).build(), //
+                new Builder(proto().approvalDate()).visible(false).build(), //
+                new Builder(proto().creationDate()).visible(false).build(), //
 
                 new Builder(proto().currentTerm().version().tenants()).build());
 

@@ -34,8 +34,8 @@ public class GuarantorLister extends LeaseParticipantLister<GuarantorDTO> {
                 new Builder(proto().participantId()).width("80px").filterAlwaysShown(VistaFeatures.instance().yardiIntegration()).build(), //
 
                 new Builder(proto().customer().person().name()).searchable(false).build(), //
-                new Builder(proto().customer().person().name().firstName(), false).filterAlwaysShown(true).build(), //
-                new Builder(proto().customer().person().name().lastName(), false).filterAlwaysShown(true).build(), //
+                new Builder(proto().customer().person().name().firstName()).visible(false).filterAlwaysShown(true).build(), //
+                new Builder(proto().customer().person().name().lastName()).visible(false).filterAlwaysShown(true).build(), //
                 new Builder(proto().customer().person().sex()).build(), //
                 new Builder(proto().customer().person().birthDate()).build(), //
 
