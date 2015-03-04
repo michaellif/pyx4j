@@ -14,6 +14,10 @@ package com.propertyvista.biz.system;
 
 import com.pyx4j.config.server.events.ServerEventBus;
 import com.pyx4j.config.server.events.SystemMaintenanceStateChangeEvent;
+import com.pyx4j.essentials.server.admin.SystemMaintenance;
+import com.pyx4j.quartz.SchedulerHelper;
+
+import com.propertyvista.config.VistaDeployment;
 
 public final class VistaSystemsManager implements SystemMaintenanceStateChangeEvent.Handler {
 
@@ -35,6 +39,10 @@ public final class VistaSystemsManager implements SystemMaintenanceStateChangeEv
 
     @Override
     public void onMaintenanceStateChange(SystemMaintenanceStateChangeEvent event) {
-        // TODO Auto-generated method stub
+        if (SystemMaintenance.isSystemMaintenance()) {
+            SchedulerHelper.setActive(false);
+        } else {
+            SchedulerHelper.setActive(!VistaDeployment.isVistaStaging());
+        }
     }
 }
