@@ -31,12 +31,15 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.Credentials;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.events.ServerEventBus;
+import com.pyx4j.config.server.events.SystemMaintenanceStateChangeEvent;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 import com.pyx4j.essentials.j2se.util.FileUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaInterfaceCredentials;
+import com.propertyvista.config.VistaSystemMaintenance;
 import com.propertyvista.eft.caledoneft.simulator.PadSimSftpHelper;
 import com.propertyvista.eft.dbp.simulator.DirectDebitSimManager;
 import com.propertyvista.sshd.fs.UsersFileSystemFactory;
@@ -46,6 +49,24 @@ public class InterfaceSSHDServer {
     private static final Logger log = LoggerFactory.getLogger(InterfaceSSHDServer.class);
 
     private static SshServer sshd;
+
+    static {
+        ServerEventBus.addHandler(SystemMaintenanceStateChangeEvent.class, new SystemMaintenanceStateChangeEvent.Handler() {
+
+            @Override
+            public void onMaintenanceStateChange(SystemMaintenanceStateChangeEvent event) {
+                if (VistaSystemMaintenance.getGlobalState().enableSFTPInterfaceMaintenance().getValue(false)) {
+                    if (isActive()) {
+                        shutdown();
+                    }
+                } else {
+                    if (!isActive()) {
+                        init();
+                    }
+                }
+            }
+        });
+    }
 
     public static synchronized void init() {
         AbstractVistaServerSideConfiguration config = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance());
@@ -113,8 +134,13 @@ public class InterfaceSSHDServer {
         }
     }
 
+    public static boolean isActive() {
+        return (sshd != null);
+    }
+
     public static synchronized void shutdown() {
         if (sshd != null) {
+            log.info("Shutdown SSHD");
             try {
                 sshd.stop();
             } catch (InterruptedException e) {

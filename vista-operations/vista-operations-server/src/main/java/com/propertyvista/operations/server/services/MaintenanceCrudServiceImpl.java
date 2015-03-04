@@ -34,14 +34,12 @@ import com.pyx4j.entity.shared.utils.EntityDiff;
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.essentials.server.admin.AdminServiceImpl;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
-import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.yardi.YardiOperationsFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.SystemConfig;
-import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.operations.domain.VistaSystemMaintenanceState;
 import com.propertyvista.operations.rpc.services.MaintenanceCrudService;
@@ -152,7 +150,6 @@ public class MaintenanceCrudServiceImpl extends AdminServiceImpl implements Main
         SystemMaintenanceState origState = SystemMaintenance.getSystemMaintenanceInfo().duplicate(VistaSystemMaintenanceState.class);
 
         SystemMaintenance.setSystemMaintenanceInfo(state);
-        SchedulerHelper.setActive(!VistaDeployment.isVistaStaging());
 
         try {
             ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.System, null, "System {0};\nState changes: {1}",

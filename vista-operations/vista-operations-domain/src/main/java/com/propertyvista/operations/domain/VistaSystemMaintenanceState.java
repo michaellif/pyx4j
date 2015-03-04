@@ -38,6 +38,8 @@ public interface VistaSystemMaintenanceState extends SystemMaintenanceState {
 
     IPrimitive<Boolean> enableEquifaxMaintenance();
 
+    IPrimitive<Boolean> enableSFTPInterfaceMaintenance();
+
     //N.B. In PMC it can be enabled even when globally it is disabled.
     VistaApplicationsSystemMaintenanceState applications();
 
