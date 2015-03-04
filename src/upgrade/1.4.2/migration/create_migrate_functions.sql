@@ -1459,6 +1459,7 @@ BEGIN
         
         -- not null
         
+        ALTER TABLE customer ALTER COLUMN registered_in_portal SET NOT NULL;
         ALTER TABLE customer_screening_asset ALTER COLUMN asset_type SET NOT NULL;
         ALTER TABLE identification_document_file ALTER COLUMN owner SET NOT NULL;
         ALTER TABLE product ALTER COLUMN default_catalog_item SET NOT NULL;

@@ -98,6 +98,12 @@ SET search_path = '_admin_';
         **/
 
 
+        -- admin_pmc_dns_name
+        
+        UPDATE  admin_pmc_dns_name
+        SET https_enabled = FALSE
+        WHERE   https_enabled IS NULL;
+
         -- cleanup for orpaned records in admin_pmc_vista_features
         
         DELETE FROM admin_pmc_vista_features
@@ -143,6 +149,8 @@ SET search_path = '_admin_';
         
         -- not null
         
+        ALTER TABLE admin_pmc_dns_name ALTER COLUMN enabled SET NOT NULL;
+        ALTER TABLE admin_pmc_dns_name ALTER COLUMN https_enabled SET NOT NULL;
         ALTER TABLE admin_pmc_vista_features ALTER COLUMN country_of_operation SET NOT NULL;
         ALTER TABLE admin_pmc_vista_features ALTER COLUMN online_application SET NOT NULL;
         ALTER TABLE admin_pmc_vista_features ALTER COLUMN tenant_email_enabled SET NOT NULL;
