@@ -68,13 +68,13 @@ public class PortalTermsAndPoliciesServiceImpl implements PortalTermsAndPolicies
             getVistaTerm(callback, VistaTerms.Target.TenantPaymentWebPaymentFeeTerms);
             break;
         case TenantBillingTerms:
-            getPMCTerm(callback, getFinancialTermsPolicy().tenantBillingTerms());
+            getPMCTerm(callback, getFinancialTermsPolicy().billingTerms());
             break;
         case TenantPreauthorizedPaymentCardTerms:
-            getPMCTerm(callback, getFinancialTermsPolicy().tenantPreauthorizedPaymentCardTerms());
+            getPMCTerm(callback, getFinancialTermsPolicy().preauthorizedPaymentCardTerms());
             break;
         case TenantPreauthorizedPaymentECheckTerms:
-            getPMCTerm(callback, getFinancialTermsPolicy().tenantPreauthorizedPaymentECheckTerms());
+            getPMCTerm(callback, getFinancialTermsPolicy().preauthorizedPaymentECheckTerms());
             break;
         case TenantSurePreAuthorizedPaymentsAgreement:
             getVistaTerm(callback, VistaTerms.Target.TenantSurePreAuthorizedPaymentsAgreement);
@@ -112,11 +112,11 @@ public class PortalTermsAndPoliciesServiceImpl implements PortalTermsAndPolicies
         case ResidentPortalWebPaymentFeeTerms:
             return getVistaTermCaption(VistaTerms.Target.TenantPaymentWebPaymentFeeTerms);
         case TenantBillingTerms:
-            return getPMCTermCaption(getFinancialTermsPolicy().tenantBillingTerms());
+            return getPMCTermCaption(getFinancialTermsPolicy().billingTerms());
         case TenantPreauthorizedPaymentCardTerms:
-            return getPMCTermCaption(getFinancialTermsPolicy().tenantPreauthorizedPaymentCardTerms());
+            return getPMCTermCaption(getFinancialTermsPolicy().preauthorizedPaymentCardTerms());
         case TenantPreauthorizedPaymentECheckTerms:
-            return getPMCTermCaption(getFinancialTermsPolicy().tenantPreauthorizedPaymentECheckTerms());
+            return getPMCTermCaption(getFinancialTermsPolicy().preauthorizedPaymentECheckTerms());
         case TenantSurePreAuthorizedPaymentsAgreement:
             return getVistaTermCaption(VistaTerms.Target.TenantSurePreAuthorizedPaymentsAgreement);
         }

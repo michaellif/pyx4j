@@ -26,11 +26,11 @@ import com.propertyvista.domain.policy.policies.domain.LegalTermsPolicyItem;
 public interface FinancialTermsPolicy extends Policy, TenantsAccessiblePolicy {
 
     @Owned
-    FinancialTermsPolicyItem tenantBillingTerms();
+    FinancialTermsPolicyItem billingTerms();
 
     @Owned
-    FinancialTermsPolicyItem tenantPreauthorizedPaymentECheckTerms();
+    FinancialTermsPolicyItem preauthorizedPaymentECheckTerms();
 
     @Owned
-    FinancialTermsPolicyItem tenantPreauthorizedPaymentCardTerms();
+    FinancialTermsPolicyItem preauthorizedPaymentCardTerms();
 }

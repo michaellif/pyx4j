@@ -30,10 +30,10 @@ public class FinancialTermsPolicyPreloader extends AbstractPolicyPreloader<Finan
     @Override
     protected FinancialTermsPolicy createPolicy(StringBuilder log) {
         FinancialTermsPolicy policy = EntityFactory.create(FinancialTermsPolicy.class);
-        policy.tenantBillingTerms().set(createFinancialTermsPolicyItem("Billing and Refund Policy", "TenantBillingAndRefundPolicy.html"));
-        policy.tenantPreauthorizedPaymentCardTerms().set(
+        policy.billingTerms().set(createFinancialTermsPolicyItem("Billing and Refund Policy", "TenantBillingAndRefundPolicy.html"));
+        policy.preauthorizedPaymentCardTerms().set(
                 createFinancialTermsPolicyItem("Pre-Authorization Payment Agreement", "TenantPreAuthorizedPaymentCardTerms.html"));
-        policy.tenantPreauthorizedPaymentECheckTerms().set(
+        policy.preauthorizedPaymentECheckTerms().set(
                 createFinancialTermsPolicyItem("Pre-Authorization Payment Agreement", "TenantPreAuthorizedPaymentECheckTerms.html"));
         return policy;
     }

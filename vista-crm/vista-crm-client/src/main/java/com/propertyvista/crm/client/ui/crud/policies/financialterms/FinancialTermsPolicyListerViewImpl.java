@@ -25,12 +25,12 @@ import com.propertyvista.domain.policy.dto.FinancialTermsPolicyDTO;
 public class FinancialTermsPolicyListerViewImpl extends AbstractListerView<FinancialTermsPolicyDTO> implements FinancialTermsPolicyListerView {
 
     public FinancialTermsPolicyListerViewImpl() {
-        setDataTablePanel(new LegalDocumentationPolicyLister());
+        setDataTablePanel(new FinancialPolicyLister());
     }
 
-    public static class LegalDocumentationPolicyLister extends PolicyListerBase<FinancialTermsPolicyDTO> {
+    public static class FinancialPolicyLister extends PolicyListerBase<FinancialTermsPolicyDTO> {
 
-        public LegalDocumentationPolicyLister() {
+        public FinancialPolicyLister() {
             super(FinancialTermsPolicyDTO.class, GWT.<FinancialTermsPolicyCrudService> create(FinancialTermsPolicyCrudService.class), false, false);
 
             setColumnDescriptors( //

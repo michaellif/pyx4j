@@ -1162,19 +1162,6 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof Administration.Policies.LegalDocumentation) {
-                        switch (crudPlace.getType()) {
-                        case lister:
-                            activity = new LegalTermsPolicyListerActivity(crudPlace);
-                            break;
-                        case editor:
-                            activity = new LegalTermsPolicyEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new LegalTermsPolicyViewerActivity(crudPlace);
-                            break;
-                        }
-
                     } else if (crudPlace instanceof Administration.Policies.FinancialTerms) {
                         switch (crudPlace.getType()) {
                         case lister:
@@ -1185,6 +1172,19 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new FinancialTermsPolicyViewerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (crudPlace instanceof Administration.Policies.LegalDocumentation) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new LegalTermsPolicyListerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new LegalTermsPolicyEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new LegalTermsPolicyViewerActivity(crudPlace);
                             break;
                         }
 

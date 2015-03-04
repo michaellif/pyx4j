@@ -26,26 +26,26 @@ public class FinancialTermsPolicyForm extends PolicyDTOTabPanelBasedForm<Financi
     public FinancialTermsPolicyForm(IPrimeFormView<FinancialTermsPolicyDTO, ?> view) {
         super(FinancialTermsPolicyDTO.class, view);
 
-        addTab(createTenantBillingTermsPanel(), proto().tenantBillingTerms().getMeta().getCaption());
-        addTab(createTenantPreauthorizedPaymentECheckTerms(), proto().tenantPreauthorizedPaymentECheckTerms().getMeta().getCaption());
-        addTab(createTenantPreauthorizedPaymentCardTerms(), proto().tenantPreauthorizedPaymentCardTerms().getMeta().getCaption());
+        addTab(createTenantBillingTermsPanel(), proto().billingTerms().getMeta().getCaption());
+        addTab(createTenantPreauthorizedPaymentECheckTerms(), proto().preauthorizedPaymentECheckTerms().getMeta().getCaption());
+        addTab(createTenantPreauthorizedPaymentCardTerms(), proto().preauthorizedPaymentCardTerms().getMeta().getCaption());
     }
 
     private IsWidget createTenantBillingTermsPanel() {
         FormPanel formPanel = new FormPanel(this);
-        formPanel.append(Location.Left, proto().tenantBillingTerms(), new FinancialTermsPolicyItemForm(isEditable()));
+        formPanel.append(Location.Left, proto().billingTerms(), new FinancialTermsPolicyItemForm(isEditable()));
         return formPanel;
     }
 
     private IsWidget createTenantPreauthorizedPaymentECheckTerms() {
         FormPanel formPanel = new FormPanel(this);
-        formPanel.append(Location.Left, proto().tenantPreauthorizedPaymentECheckTerms(), new FinancialTermsPolicyItemForm(isEditable()));
+        formPanel.append(Location.Left, proto().preauthorizedPaymentECheckTerms(), new FinancialTermsPolicyItemForm(isEditable()));
         return formPanel;
     }
 
     private IsWidget createTenantPreauthorizedPaymentCardTerms() {
         FormPanel formPanel = new FormPanel(this);
-        formPanel.append(Location.Left, proto().tenantPreauthorizedPaymentCardTerms(), new FinancialTermsPolicyItemForm(isEditable()));
+        formPanel.append(Location.Left, proto().preauthorizedPaymentCardTerms(), new FinancialTermsPolicyItemForm(isEditable()));
         return formPanel;
     }
 }
