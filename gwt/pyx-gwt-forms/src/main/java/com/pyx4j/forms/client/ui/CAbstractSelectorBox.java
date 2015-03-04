@@ -52,7 +52,7 @@ public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET ex
 
             @Override
             public String format(TYPE value) {
-                return value.getStringView();
+                return value == null ? "" : value.getStringView();
             }
         });
 
