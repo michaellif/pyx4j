@@ -186,10 +186,12 @@ public class SchedulerHelper {
             if (active) {
                 if (instance.scheduler.isInStandbyMode()) {
                     instance.scheduler.start();
+                    log.info("Scheduler started");
                 }
             } else {
                 if (!instance.scheduler.isInStandbyMode()) {
                     instance.scheduler.standby();
+                    log.info("Scheduler in standby");
                 }
             }
         } catch (Throwable e) {

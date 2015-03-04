@@ -118,10 +118,10 @@ public class SystemMaintenance {
     public static void stopSystemMaintenance() {
         if (maintenanceStarted != 0) {
             log.info("System Maintenance stopped");
+            maintenanceStarted = 0;
+            ServerEventBus.fireEvent(new SystemMaintenanceStateChangeEvent());
         }
         maintenanceScheduled = 0;
-        maintenanceStarted = 0;
-        ServerEventBus.fireEvent(new SystemMaintenanceStateChangeEvent());
     }
 
     public static SystemMaintenanceState getSystemMaintenanceClientInfo() {
@@ -154,7 +154,6 @@ public class SystemMaintenance {
 
     @SuppressWarnings("deprecation")
     public static void setSystemMaintenanceInfo(SystemMaintenanceState state) {
-        stopSystemMaintenance();
         if (!state.getValueClass().equals(getSystemMaintenanceStateClass())) {
             systemMaintenanceState = state.duplicate(getSystemMaintenanceStateClass());
         } else {
@@ -200,8 +199,14 @@ public class SystemMaintenance {
             } else {
                 maintenanceScheduled = 0;
                 maintenanceScheduledEnd = 0;
+                stopSystemMaintenance();
             }
+        } else {
+            maintenanceScheduled = 0;
+            maintenanceScheduledEnd = 0;
+            stopSystemMaintenance();
         }
+        ServerEventBus.fireEvent(new SystemMaintenanceStateChangeEvent());
         saveState();
     }
 
