@@ -37,8 +37,7 @@ import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.common.client.ui.components.PasswordIdentityFormat;
-import com.propertyvista.common.client.ui.components.PasswordIdentityParser;
+import com.propertyvista.common.client.ui.components.PasswordIdentityFormatter;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
@@ -256,14 +255,12 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
         formPanel.append(Location.Right, proto().equifaxInfo().equifaxPerApplicantCreditCheckFee(), new CLabel<>()).decorate();
 
-        CPersonalIdentityField<PasswordIdentity> memberNumber = new CPersonalIdentityField<PasswordIdentity>(PasswordIdentity.class);
-        memberNumber.setFormatter(new PasswordIdentityFormat());
-        memberNumber.setParser(new PasswordIdentityParser(memberNumber));
+        CPersonalIdentityField<PasswordIdentity> memberNumber = new CPersonalIdentityField<PasswordIdentity>(PasswordIdentity.class,
+                new PasswordIdentityFormatter());
         formPanel.append(Location.Left, proto().equifaxInfo().memberNumber(), memberNumber).decorate().componentWidth(200);
 
-        CPersonalIdentityField<PasswordIdentity> securityCode = new CPersonalIdentityField<PasswordIdentity>(PasswordIdentity.class);
-        securityCode.setFormatter(new PasswordIdentityFormat());
-        securityCode.setParser(new PasswordIdentityParser(securityCode));
+        CPersonalIdentityField<PasswordIdentity> securityCode = new CPersonalIdentityField<PasswordIdentity>(PasswordIdentity.class,
+                new PasswordIdentityFormatter());
         formPanel.append(Location.Left, proto().equifaxInfo().securityCode(), securityCode).decorate().componentWidth(200);
 
         formPanel.append(Location.Left, proto().equifaxInfo().customerCode()).decorate().componentWidth(200);

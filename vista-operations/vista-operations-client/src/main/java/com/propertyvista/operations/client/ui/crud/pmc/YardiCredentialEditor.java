@@ -30,8 +30,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
-import com.propertyvista.common.client.ui.components.PasswordIdentityFormat;
-import com.propertyvista.common.client.ui.components.PasswordIdentityParser;
+import com.propertyvista.common.client.ui.components.PasswordIdentityFormatter;
 import com.propertyvista.domain.security.PasswordIdentity;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.operations.rpc.services.dev.PmcYardiCredentialService;
@@ -63,9 +62,10 @@ class YardiCredentialEditor extends CForm<PmcYardiCredential> {
 
         formPanel.append(Location.Dual, proto().username()).decorate();
 
-        CPersonalIdentityField<PasswordIdentity> password = new CPersonalIdentityField<PasswordIdentity>(PasswordIdentity.class);
-        password.setFormatter(new PasswordIdentityFormat());
-        password.setParser(new PasswordIdentityParser(password));
+        CPersonalIdentityField<PasswordIdentity> password = new CPersonalIdentityField<PasswordIdentity>(PasswordIdentity.class,
+                new PasswordIdentityFormatter());
+//        password.setFormatter(new PasswordIdentityFormat());
+//        password.setParser(new PasswordIdentityParser(password));
         formPanel.append(Location.Dual, proto().password(), password).decorate();
         formPanel.append(Location.Dual, proto().serverName()).decorate();
         formPanel.append(Location.Dual, proto().database()).decorate();
