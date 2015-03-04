@@ -547,8 +547,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             @Override
             protected List<ColumnDescriptor> defineColumnDescriptors() {
                 return Arrays.asList(//@formatter:off
-                    new ColumnDescriptor.Builder(proto().type()).build(),
-                    new ColumnDescriptor.Builder(proto().name()).build(),
+                    new ColumnDescriptor.Builder(proto().type()).filterAlwaysShown(true).build(),
+                    new ColumnDescriptor.Builder(proto().name()).filterAlwaysShown(true).build(),
                     new ColumnDescriptor.Builder(proto().description()).build()
                   );//@formatter:on
             }

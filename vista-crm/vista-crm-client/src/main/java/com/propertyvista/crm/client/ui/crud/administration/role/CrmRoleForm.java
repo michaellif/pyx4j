@@ -137,7 +137,7 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
             @Override
             protected List<ColumnDescriptor> defineColumnDescriptors() {
                 return Arrays.asList(//
-                        new ColumnDescriptor.Builder(proto().permission(), true).build(),//
+                        new ColumnDescriptor.Builder(proto().permission(), true).filterAlwaysShown(true).build(),//
                         new ColumnDescriptor.Builder(proto().description(), true).build());
             }
 

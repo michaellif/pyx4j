@@ -58,7 +58,7 @@ class ServiceConcessionFolder extends VistaTableFolder<Concession> {
                 new FolderColumnDescriptor(proto().version().term(), "10em"),
                 new FolderColumnDescriptor(proto().version().condition(), "10em"),
                 new FolderColumnDescriptor(proto().version().mixable(), "5em")
-                );//@formatter:on   
+                );//@formatter:on
     }
 
     @Override
@@ -120,11 +120,11 @@ class ServiceConcessionFolder extends VistaTableFolder<Concession> {
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off
-                    new ColumnDescriptor.Builder(proto().version().type()).build(),
-                    new ColumnDescriptor.Builder(proto().version().term()).build(),
+                    new ColumnDescriptor.Builder(proto().version().type()).filterAlwaysShown(true).build(),
+                    new ColumnDescriptor.Builder(proto().version().term()).filterAlwaysShown(true).build(),
                     new ColumnDescriptor.Builder(proto().version().value()).build(),
                     new ColumnDescriptor.Builder(proto().version().condition()).build(),
-                    new ColumnDescriptor.Builder(proto().version().effectiveDate()).build(),
+                    new ColumnDescriptor.Builder(proto().version().effectiveDate()).filterAlwaysShown(true).build(),
                     new ColumnDescriptor.Builder(proto().version().expirationDate()).build()
             );//@formatter:on
         }

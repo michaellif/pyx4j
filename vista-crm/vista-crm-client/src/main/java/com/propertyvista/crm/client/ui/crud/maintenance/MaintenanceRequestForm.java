@@ -534,14 +534,14 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 protected List<ColumnDescriptor> defineColumnDescriptors() {
                     return Arrays.asList( //
                             // building data
-                            new ColumnDescriptor.Builder(proto().building().propertyCode(), true).build(), //
+                            new ColumnDescriptor.Builder(proto().building().propertyCode(), true).filterAlwaysShown(true).build(), //
                             // unit data
-                            new ColumnDescriptor.Builder(proto().info().number(), true).build(), //
+                            new ColumnDescriptor.Builder(proto().info().number(), true).filterAlwaysShown(true).build(), //
                             new ColumnDescriptor.Builder(proto().info().floor(), false).build(), //
                             new ColumnDescriptor.Builder(proto().info().area()).build(), //
-                            new ColumnDescriptor.Builder(proto().info()._bedrooms()).build(), //
-                            new ColumnDescriptor.Builder(proto().info()._bathrooms()).build(), //
-                            new ColumnDescriptor.Builder(proto().availability().availableForRent()).build(), //
+                            new ColumnDescriptor.Builder(proto().info()._bedrooms()).filterAlwaysShown(true).build(), //
+                            new ColumnDescriptor.Builder(proto().info()._bathrooms()).filterAlwaysShown(true).build(), //
+                            new ColumnDescriptor.Builder(proto().availability().availableForRent()).filterAlwaysShown(true).build(), //
                             new ColumnDescriptor.Builder(proto().financial()._marketRent()).build() //
                             );
                 }
@@ -586,8 +586,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                     return Arrays.asList( //
                             new ColumnDescriptor.Builder(proto().lease().unit()).searchable(false).build(), //
                             new ColumnDescriptor.Builder(proto().customer().person().name()).searchable(false).build(), //
-                            new ColumnDescriptor.Builder(proto().customer().person().name().firstName()).searchableOnly().build(), //
-                            new ColumnDescriptor.Builder(proto().customer().person().name().lastName()).searchableOnly().build(), //
+                            new ColumnDescriptor.Builder(proto().customer().person().name().firstName()).searchableOnly().filterAlwaysShown(true).build(), //
+                            new ColumnDescriptor.Builder(proto().customer().person().name().lastName()).searchableOnly().filterAlwaysShown(true).build(), //
                             new ColumnDescriptor.Builder(proto().customer().person().sex()).visible(false).build(), //
                             new ColumnDescriptor.Builder(proto().customer().person().birthDate(), false).build(), //
                             new ColumnDescriptor.Builder(proto().customer().person().email(), false).build(), //

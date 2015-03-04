@@ -97,8 +97,8 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off
-                    new ColumnDescriptor.Builder(proto().name()).build(),
-                    new ColumnDescriptor.Builder(proto().behaviors()).build()
+                    new ColumnDescriptor.Builder(proto().name()).filterAlwaysShown(true).build(),
+                    new ColumnDescriptor.Builder(proto().behaviors()).filterAlwaysShown(true).build()
             );//@formatter:on
         }
 

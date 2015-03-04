@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -45,8 +45,8 @@ public abstract class VersionSelectorDialog<V extends IVersionData<?>> extends E
     @Override
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
-                new ColumnDescriptor.Builder(proto().versionNumber()).build(),
-                new ColumnDescriptor.Builder(proto().fromDate()).build(),
+                new ColumnDescriptor.Builder(proto().versionNumber()).filterAlwaysShown(true).build(),
+                new ColumnDescriptor.Builder(proto().fromDate()).filterAlwaysShown(true).build(),
                 new ColumnDescriptor.Builder(proto().createdByUser()).build()
             );//@formatter:on
     }

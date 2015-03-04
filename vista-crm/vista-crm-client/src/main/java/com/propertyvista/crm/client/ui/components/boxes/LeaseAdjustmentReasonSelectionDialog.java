@@ -51,9 +51,9 @@ public abstract class LeaseAdjustmentReasonSelectionDialog extends EntitySelecto
     @Override
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
-                new ColumnDescriptor.Builder(proto().type(), true).filterAlwaysShown(true).build(),
-                new ColumnDescriptor.Builder(proto().name(), true).filterAlwaysShown(true).build(),
-                new ColumnDescriptor.Builder(proto().glCode(), true).build()
+                new ColumnDescriptor.Builder(proto().type()).filterAlwaysShown(true).build(),
+                new ColumnDescriptor.Builder(proto().name()).filterAlwaysShown(true).build(),
+                new ColumnDescriptor.Builder(proto().glCode()).filterAlwaysShown(true).build()
         ); //@formatter:on
     }
 

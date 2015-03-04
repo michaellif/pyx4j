@@ -170,14 +170,14 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList( // @formatter:off
-                    new ColumnDescriptor.Builder(proto().name()).build(),
-                    new ColumnDescriptor.Builder(proto().marketingName(),false).build(),
+                    new ColumnDescriptor.Builder(proto().name()).filterAlwaysShown(true).build(),
+                    new ColumnDescriptor.Builder(proto().marketingName(), false).build(),
                     new ColumnDescriptor.Builder(proto().floorCount()).build(),
-                    new ColumnDescriptor.Builder(proto().bedrooms()).build(),
-                    new ColumnDescriptor.Builder(proto().bathrooms()).build(),
+                    new ColumnDescriptor.Builder(proto().bedrooms()).filterAlwaysShown(true).build(),
+                    new ColumnDescriptor.Builder(proto().bathrooms()).filterAlwaysShown(true).build(),
                     new ColumnDescriptor.Builder(proto().halfBath()).build(),
                     new ColumnDescriptor.Builder(proto().dens()).build(),
-                    new ColumnDescriptor.Builder(proto().description(),false).build()
+                    new ColumnDescriptor.Builder(proto().description(), false).build()
                 );// @formatter:on
         }
 

@@ -51,9 +51,9 @@ public abstract class GlCodeSelectionDialog extends EntitySelectorTableDialog<Gl
     @Override
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
-                new ColumnDescriptor.Builder(proto().codeId(), true).filterAlwaysShown(true).build(),
-                new ColumnDescriptor.Builder(proto().description(), true).filterAlwaysShown(true).build(),
-                new ColumnDescriptor.Builder(proto().glCodeCategory(), true).build()
+                new ColumnDescriptor.Builder(proto().codeId()).filterAlwaysShown(true).build(),
+                new ColumnDescriptor.Builder(proto().description()).build(),
+                new ColumnDescriptor.Builder(proto().glCodeCategory()).filterAlwaysShown(true).build()
         ); //@formatter:on
     }
 

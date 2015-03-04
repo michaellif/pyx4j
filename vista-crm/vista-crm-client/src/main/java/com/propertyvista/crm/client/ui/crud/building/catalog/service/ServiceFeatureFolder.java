@@ -61,7 +61,7 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
                 new FolderColumnDescriptor(proto().version().recurring(), "5em"),
                 new FolderColumnDescriptor(proto().version().mandatory(), "5em"),
                 new FolderColumnDescriptor(proto().version().availableOnline(), "10em")
-                );//@formatter:on	
+                );//@formatter:on
     }
 
     @Override
@@ -125,11 +125,11 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off
                     new ColumnDescriptor.Builder(proto().code()).build(),
-                    new ColumnDescriptor.Builder(proto().version().name()).build(),
-                    new ColumnDescriptor.Builder(proto().version().mandatory()).build(),
-                    new ColumnDescriptor.Builder(proto().version().recurring()).build(),
+                    new ColumnDescriptor.Builder(proto().version().name()).filterAlwaysShown(true).build(),
+                    new ColumnDescriptor.Builder(proto().version().mandatory()).filterAlwaysShown(true).build(),
+                    new ColumnDescriptor.Builder(proto().version().recurring()).filterAlwaysShown(true).build(),
                     new ColumnDescriptor.Builder(proto().version().versionNumber()).build(),
-                    new ColumnDescriptor.Builder(proto().version().availableOnline()).build(),
+                    new ColumnDescriptor.Builder(proto().version().availableOnline()).filterAlwaysShown(true).build(),
                     new ColumnDescriptor.Builder(proto().defaultCatalogItem()).build()
             );//@formatter:on
         }

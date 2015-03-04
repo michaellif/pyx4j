@@ -51,8 +51,8 @@ public class MaintenanceRequestLister extends SiteDataTablePanel<MaintenanceRequ
         MaintenanceRequestDTO proto = EntityFactory.getEntityPrototype(MaintenanceRequestDTO.class);
 
         return new ColumnDescriptor[] {
-                new ColumnDescriptor.Builder(proto.requestId()).build(),
-                new ColumnDescriptor.Builder(proto.building().propertyCode()).columnTitle(i18n.tr("Building")).filterAlwaysShown(true).build(),
+                new ColumnDescriptor.Builder(proto.requestId()).filterAlwaysShown(true).build(),
+                new ColumnDescriptor.Builder(proto.building().propertyCode()).filterAlwaysShown(true).build(),
                 new ColumnDescriptor.Builder(proto.building().info().address()).formatter(new IFormatter<IEntity, SafeHtml>() {
 
                     @Override
@@ -66,8 +66,10 @@ public class MaintenanceRequestLister extends SiteDataTablePanel<MaintenanceRequ
                         return builder.toSafeHtml();
                     }
                 }).searchable(false).build(),
-                new ColumnDescriptor.Builder(proto.building().info().address().city()).searchableOnly().build(),
-                new ColumnDescriptor.Builder(proto.unit()).filterAlwaysShown(true).build(),
+                new ColumnDescriptor.Builder(proto.building().info().address().city()).searchableOnly().filterAlwaysShown(true).build(),
+                new ColumnDescriptor.Builder(proto.building().info().address().province()).searchableOnly().build(),
+                new ColumnDescriptor.Builder(proto.building().info().address().country()).searchableOnly().build(),
+                new ColumnDescriptor.Builder(proto.unit()).build(),
                 new ColumnDescriptor.Builder(proto.category()).formatter(new IFormatter<IEntity, SafeHtml>() {
 
                     @Override
@@ -88,14 +90,14 @@ public class MaintenanceRequestLister extends SiteDataTablePanel<MaintenanceRequ
                         return builder.toSafeHtml();
                     }
                 }).searchable(false).build(),
-                new ColumnDescriptor.Builder(proto.priority()).build(),
+                new ColumnDescriptor.Builder(proto.priority()).filterAlwaysShown(true).build(),
                 new ColumnDescriptor.Builder(proto.summary()).build(),
                 new ColumnDescriptor.Builder(proto.reporterName()).columnTitle(i18n.tr("Tenant")).searchable(false).build(),
                 new ColumnDescriptor.Builder(proto.reporterPhone(), false).build(),
-                new ColumnDescriptor.Builder(proto.permissionToEnter()).columnTitle(i18n.tr("Entry Allowed")).build(),
+                new ColumnDescriptor.Builder(proto.permissionToEnter()).columnTitle(i18n.tr("Entry Allowed")).filterAlwaysShown(true).build(),
                 new ColumnDescriptor.Builder(proto.petInstructions()).visible(false).build(),
-                new ColumnDescriptor.Builder(proto.submitted()).build(),
-                new ColumnDescriptor.Builder(proto.status()).build(),
+                new ColumnDescriptor.Builder(proto.submitted()).filterAlwaysShown(true).build(),
+                new ColumnDescriptor.Builder(proto.status()).filterAlwaysShown(true).build(),
                 new ColumnDescriptor.Builder(proto.updated()).build(),
                 new ColumnDescriptor.Builder(proto.surveyResponse().rating()).build(),
                 new ColumnDescriptor.Builder(proto.surveyResponse().description()).visible(false).columnTitle(proto.surveyResponse().getMeta().getCaption())
@@ -121,14 +123,14 @@ public class MaintenanceRequestLister extends SiteDataTablePanel<MaintenanceRequ
             @Override
             protected List<ColumnDescriptor> defineColumnDescriptors() {
                 return Arrays.asList( //
-                        new ColumnDescriptor.Builder(proto().propertyCode()).build(), //
+                        new ColumnDescriptor.Builder(proto().propertyCode()).filterAlwaysShown(true).build(), //
                         new ColumnDescriptor.Builder(proto().info().name()).build(), //
                         new ColumnDescriptor.Builder(proto().info().address()).width("50%").build(), //
                         new ColumnDescriptor.Builder(proto().info().address().streetNumber()).searchableOnly().build(), //
                         new ColumnDescriptor.Builder(proto().info().address().streetName()).searchableOnly().build(), //
-                        new ColumnDescriptor.Builder(proto().info().address().city()).searchableOnly().build(), //
-                        new ColumnDescriptor.Builder(proto().info().address().province()).searchableOnly().build(), //
-                        new ColumnDescriptor.Builder(proto().info().address().country()).searchableOnly().build() //
+                        new ColumnDescriptor.Builder(proto().info().address().city()).searchableOnly().filterAlwaysShown(true).build(), //
+                        new ColumnDescriptor.Builder(proto().info().address().province()).searchableOnly().filterAlwaysShown(true).build(), //
+                        new ColumnDescriptor.Builder(proto().info().address().country()).searchableOnly().filterAlwaysShown(true).build() //
                         );
             }
         }.show();
