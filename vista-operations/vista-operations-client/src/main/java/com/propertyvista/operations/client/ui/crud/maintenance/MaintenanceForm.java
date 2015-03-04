@@ -63,6 +63,7 @@ public class MaintenanceForm extends OperationsEntityForm<VistaSystemMaintenance
         maintenanceTab.append(Location.Dual, proto().enableCreditCardConvenienceFeeMaintenance()).decorate().componentWidth(60);
         maintenanceTab.append(Location.Dual, proto().enableInteracMaintenance()).decorate().componentWidth(60);
         maintenanceTab.append(Location.Dual, proto().enableEquifaxMaintenance()).decorate().componentWidth(60);
+        maintenanceTab.append(Location.Dual, proto().enableSFTPInterfaceMaintenance()).decorate().componentWidth(60);
 
         maintenanceTab.h1(i18n.tr("Applications (Can Also be configured per PMC)"));
         maintenanceTab.append(Location.Dual, proto().applications().crmLoginDisabled(), new CComboBoxBoolean()).decorate();
