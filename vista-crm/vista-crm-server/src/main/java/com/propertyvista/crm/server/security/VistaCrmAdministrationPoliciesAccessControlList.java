@@ -35,6 +35,7 @@ import com.propertyvista.crm.rpc.services.policies.policy.DatesPolicyCrudService
 import com.propertyvista.crm.rpc.services.policies.policy.DepositPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.EmailTemplatesPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.EvictionFlowPolicyCrudService;
+import com.propertyvista.crm.rpc.services.policies.policy.FinancialTermsPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.IdAssignmentPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.LeaseAdjustmentPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.LeaseAgreementLegalPolicyCrudService;
@@ -62,6 +63,7 @@ import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
 import com.propertyvista.domain.policy.policies.DatesPolicy;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
 import com.propertyvista.domain.policy.policies.EvictionFlowPolicy;
+import com.propertyvista.domain.policy.policies.FinancialTermsPolicy;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
 import com.propertyvista.domain.policy.policies.LeaseAgreementLegalPolicy;
@@ -133,6 +135,9 @@ class VistaCrmAdministrationPoliciesAccessControlList extends UIAclBuilder {
 
         grant(AdminGeneral, new IServiceExecutePermission(LegalDocumentationPolicyCrudService.class));
         grant(AdminGeneral, new EntityPermission(LegalTermsPolicy.class, ALL));
+
+        grant(AdminGeneral, new IServiceExecutePermission(FinancialTermsPolicyCrudService.class));
+        grant(AdminGeneral, new EntityPermission(FinancialTermsPolicy.class, ALL));
 
         grant(AdminGeneral, new IServiceExecutePermission(LegalQuestionsPolicyCrudService.class));
         grant(AdminGeneral, new EntityPermission(LegalQuestionsPolicy.class, ALL));

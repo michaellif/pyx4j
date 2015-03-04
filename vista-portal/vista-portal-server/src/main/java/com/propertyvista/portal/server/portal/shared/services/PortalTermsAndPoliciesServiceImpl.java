@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -26,8 +26,9 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.legal.TermsAndPoliciesType;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
+import com.propertyvista.domain.policy.policies.FinancialTermsPolicy;
 import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
-import com.propertyvista.domain.policy.policies.domain.LegalTermsPolicyItem;
+import com.propertyvista.domain.policy.policies.domain.TermsPolicyItem;
 import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalTermsAndPoliciesService;
@@ -40,16 +41,16 @@ public class PortalTermsAndPoliciesServiceImpl implements PortalTermsAndPolicies
     public void getTerm(AsyncCallback<LegalTermTO> callback, TermsAndPoliciesType type) {
         switch (type) {
         case PMCResidentPortalTermsAndConditions:
-            getPMCTerm(callback, getPMCResidentPortalTermsAndConditionsPolicyItem());
+            getPMCTerm(callback, getLegalTermsPolicy().residentPortalTermsAndConditions());
             break;
         case PMCResidentPortalPrivacyPolicy:
-            getPMCTerm(callback, getPMCResidentPortalPrivacyPolicyPolicyItem());
+            getPMCTerm(callback, getLegalTermsPolicy().residentPortalPrivacyPolicy());
             break;
         case PMCProspectPortalTermsAndConditions:
-            getPMCTerm(callback, getPMCProspectPortalTermsAndConditionsPolicyItem());
+            getPMCTerm(callback, getLegalTermsPolicy().prospectPortalTermsAndConditions());
             break;
         case PMCProspectPortalPrivacyPolicy:
-            getPMCTerm(callback, getPMCProspectPortalPrivacyPolicyPolicyItem());
+            getPMCTerm(callback, getLegalTermsPolicy().prospectPortalPrivacyPolicy());
             break;
         case PVProspectPortalPrivacyPolicy:
             getVistaTerm(callback, VistaTerms.Target.ProspectPortalPrivacyPolicy);
@@ -67,13 +68,13 @@ public class PortalTermsAndPoliciesServiceImpl implements PortalTermsAndPolicies
             getVistaTerm(callback, VistaTerms.Target.TenantPaymentWebPaymentFeeTerms);
             break;
         case TenantBillingTerms:
-            getVistaTerm(callback, VistaTerms.Target.TenantBillingTerms);
+            getPMCTerm(callback, getFinancialTermsPolicy().tenantBillingTerms());
             break;
         case TenantPreauthorizedPaymentCardTerms:
-            getVistaTerm(callback, VistaTerms.Target.TenantPreAuthorizedPaymentCardTerms);
+            getPMCTerm(callback, getFinancialTermsPolicy().tenantPreauthorizedPaymentCardTerms());
             break;
         case TenantPreauthorizedPaymentECheckTerms:
-            getVistaTerm(callback, VistaTerms.Target.TenantPreAuthorizedPaymentECheckTerms);
+            getPMCTerm(callback, getFinancialTermsPolicy().tenantPreauthorizedPaymentECheckTerms());
             break;
         case TenantSurePreAuthorizedPaymentsAgreement:
             getVistaTerm(callback, VistaTerms.Target.TenantSurePreAuthorizedPaymentsAgreement);
@@ -93,13 +94,13 @@ public class PortalTermsAndPoliciesServiceImpl implements PortalTermsAndPolicies
     private String getTermCaption(TermsAndPoliciesType type) {
         switch (type) {
         case PMCResidentPortalTermsAndConditions:
-            return getPMCTermCaption(getPMCResidentPortalTermsAndConditionsPolicyItem());
+            return getPMCTermCaption(getLegalTermsPolicy().residentPortalTermsAndConditions());
         case PMCResidentPortalPrivacyPolicy:
-            return getPMCTermCaption(getPMCResidentPortalPrivacyPolicyPolicyItem());
+            return getPMCTermCaption(getLegalTermsPolicy().residentPortalPrivacyPolicy());
         case PMCProspectPortalTermsAndConditions:
-            return getPMCTermCaption(getPMCProspectPortalTermsAndConditionsPolicyItem());
+            return getPMCTermCaption(getLegalTermsPolicy().prospectPortalTermsAndConditions());
         case PMCProspectPortalPrivacyPolicy:
-            return getPMCTermCaption(getPMCProspectPortalPrivacyPolicyPolicyItem());
+            return getPMCTermCaption(getLegalTermsPolicy().prospectPortalPrivacyPolicy());
         case PVProspectPortalPrivacyPolicy:
             return getVistaTermCaption(VistaTerms.Target.ProspectPortalPrivacyPolicy);
         case PVProspectPortalTermsAndConditions:
@@ -111,11 +112,11 @@ public class PortalTermsAndPoliciesServiceImpl implements PortalTermsAndPolicies
         case ResidentPortalWebPaymentFeeTerms:
             return getVistaTermCaption(VistaTerms.Target.TenantPaymentWebPaymentFeeTerms);
         case TenantBillingTerms:
-            return getVistaTermCaption(VistaTerms.Target.TenantBillingTerms);
+            return getPMCTermCaption(getFinancialTermsPolicy().tenantBillingTerms());
         case TenantPreauthorizedPaymentCardTerms:
-            return getVistaTermCaption(VistaTerms.Target.TenantPreAuthorizedPaymentCardTerms);
+            return getPMCTermCaption(getFinancialTermsPolicy().tenantPreauthorizedPaymentCardTerms());
         case TenantPreauthorizedPaymentECheckTerms:
-            return getVistaTermCaption(VistaTerms.Target.TenantPreAuthorizedPaymentECheckTerms);
+            return getPMCTermCaption(getFinancialTermsPolicy().tenantPreauthorizedPaymentECheckTerms());
         case TenantSurePreAuthorizedPaymentsAgreement:
             return getVistaTermCaption(VistaTerms.Target.TenantSurePreAuthorizedPaymentsAgreement);
         }
@@ -127,7 +128,12 @@ public class PortalTermsAndPoliciesServiceImpl implements PortalTermsAndPolicies
                 Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class)), LegalTermsPolicy.class);
     }
 
-    private void getPMCTerm(AsyncCallback<LegalTermTO> callback, LegalTermsPolicyItem policyItem) {
+    private FinancialTermsPolicy getFinancialTermsPolicy() {
+        return ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
+                Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class)), FinancialTermsPolicy.class);
+    }
+
+    private void getPMCTerm(AsyncCallback<LegalTermTO> callback, TermsPolicyItem policyItem) {
         LegalTermTO term = null;
         if (policyItem.enabled().getValue(false)) {
             term = EntityFactory.create(LegalTermTO.class);
@@ -141,27 +147,11 @@ public class PortalTermsAndPoliciesServiceImpl implements PortalTermsAndPolicies
         }
     }
 
-    private String getPMCTermCaption(LegalTermsPolicyItem policyItem) {
+    private String getPMCTermCaption(TermsPolicyItem policyItem) {
         if (policyItem.enabled().getValue(false)) {
             return policyItem.caption().getValue();
         }
         return null;
-    }
-
-    private LegalTermsPolicyItem getPMCProspectPortalTermsAndConditionsPolicyItem() {
-        return getLegalTermsPolicy().prospectPortalTermsAndConditions();
-    }
-
-    private LegalTermsPolicyItem getPMCProspectPortalPrivacyPolicyPolicyItem() {
-        return getLegalTermsPolicy().prospectPortalPrivacyPolicy();
-    }
-
-    private LegalTermsPolicyItem getPMCResidentPortalTermsAndConditionsPolicyItem() {
-        return getLegalTermsPolicy().residentPortalTermsAndConditions();
-    }
-
-    private LegalTermsPolicyItem getPMCResidentPortalPrivacyPolicyPolicyItem() {
-        return getLegalTermsPolicy().residentPortalPrivacyPolicy();
     }
 
     private void getVistaTerm(AsyncCallback<LegalTermTO> callback, final VistaTerms.Target target) {

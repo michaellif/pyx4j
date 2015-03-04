@@ -10,9 +10,10 @@
  * Created on Jan 3, 2012
  * @author ArtyomB
  */
-package com.propertyvista.domain.policy.policies.domain;
+package com.propertyvista.crm.rpc.services.policies.policy;
 
+import com.propertyvista.domain.policy.dto.FinancialTermsPolicyDTO;
 
-public interface LegalTermsPolicyItem extends TermsPolicyItem {
+public interface FinancialTermsPolicyCrudService extends AbstractPolicyCrudService<FinancialTermsPolicyDTO> {
 
 }

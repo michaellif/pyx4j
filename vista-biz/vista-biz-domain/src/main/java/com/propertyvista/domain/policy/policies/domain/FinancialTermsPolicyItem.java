@@ -7,12 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 3, 2012
- * @author ArtyomB
+ * Created on Mar 3, 2015
+ * @author VladL
  */
 package com.propertyvista.domain.policy.policies.domain;
 
-
-public interface LegalTermsPolicyItem extends TermsPolicyItem {
+public interface FinancialTermsPolicyItem extends TermsPolicyItem {
 
 }

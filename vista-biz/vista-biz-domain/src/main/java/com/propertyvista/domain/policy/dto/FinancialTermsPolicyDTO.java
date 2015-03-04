@@ -7,12 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 3, 2012
- * @author ArtyomB
+ * Created on Mar 3, 2015
+ * @author VladL
  */
-package com.propertyvista.domain.policy.policies.domain;
+package com.propertyvista.domain.policy.dto;
 
+import com.pyx4j.entity.annotations.ExtendsBO;
+import com.pyx4j.entity.annotations.Transient;
 
-public interface LegalTermsPolicyItem extends TermsPolicyItem {
+import com.propertyvista.domain.policy.framework.PolicyDTOBase;
+import com.propertyvista.domain.policy.policies.FinancialTermsPolicy;
+
+@Transient
+@ExtendsBO(FinancialTermsPolicy.class)
+public interface FinancialTermsPolicyDTO extends PolicyDTOBase, FinancialTermsPolicy {
 
 }

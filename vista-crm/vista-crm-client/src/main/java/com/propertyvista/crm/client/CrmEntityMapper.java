@@ -194,6 +194,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(LeaseApplicationLegalPolicy.class, Administration.Policies.LeaseApplicationTerms.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseAgreementLegalPolicy.class, Administration.Policies.AgreementLegalTerms.class, defaultImage);
         AppPlaceEntityMapper.register(LegalTermsPolicy.class, Administration.Policies.LegalDocumentation.class, defaultImage);
+        AppPlaceEntityMapper.register(LegalTermsPolicy.class, Administration.Policies.FinancialTerms.class, defaultImage);
         AppPlaceEntityMapper.register(LegalQuestionsPolicy.class, Administration.Policies.LegalQuestions.class, defaultImage);
         AppPlaceEntityMapper.register(MaintenanceRequestPolicy.class, Administration.Policies.MaintenanceRequest.class, defaultImage);
         AppPlaceEntityMapper.register(EvictionFlowPolicy.class, Administration.Policies.EvictionFlow.class, defaultImage);

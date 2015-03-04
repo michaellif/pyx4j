@@ -33,7 +33,7 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
         /*****************
          * N.B. While adding the new file of change file here please open defect for support to update the same datA in production. immediately or post version
          * installation.
-         * 
+         *
          * The change in policy text is not covered by DBA migration script.
          ****************/
 
@@ -42,16 +42,12 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
         createTerms(Target.PmcCaledonSoleProprietorshipSection, "PmcCaledonSoleProprietorshipVistaTerms.html", "TODO name it SoleProprietorship");
         createTerms(Target.PmcPaymentPad, "PmcPaymentPadVistaTerms.html", "TODO name it PaymentPad");
 
-        createTerms(Target.TenantBillingTerms, "TenantBillingAndRefundPolicy.html", "Billing and Refund Policy");
-        createTerms(Target.TenantPreAuthorizedPaymentECheckTerms, "TenantPreAuthorizedPaymentECheckTerms.html", "Pre-Authorization Payment Agreement");
-        createTerms(Target.TenantPreAuthorizedPaymentCardTerms, "TenantPreAuthorizedPaymentCardTerms.html", "Pre-Authorization Payment Agreement");
-        createTerms(Target.TenantPaymentWebPaymentFeeTerms, "TenantPaymentWebPaymentFeeTerms.html", "Web Payment Fee - Terms and Conditions");
-
         createTerms(Target.ProspectPortalTermsAndConditions, "ProspectPortalTermsAndConditionsOperations.html", "TERMS OF USE POLICY");
         createTerms(Target.ProspectPortalPrivacyPolicy, "ProspectPortalPrivacyPolicyOperations.html", "LANDLORD'S PRIVACY POLICY");
         createTerms(Target.ResidentPortalTermsAndConditions, "ResidentPortalTermsAndConditionsOperations.html", "TERMS OF USE POLICY");
         createTerms(Target.ResidentPortalPrivacyPolicy, "ResidentPortalPrivacyPolicyOperations.html", "LANDLORD'S PRIVACY POLICY");
 
+        createTerms(Target.TenantPaymentWebPaymentFeeTerms, "TenantPaymentWebPaymentFeeTerms.html", "Web Payment Fee - Terms and Conditions");
         createTerms(Target.TenantSurePreAuthorizedPaymentsAgreement, "TenantSurePreAuthorizedPaymentsAgreement.html", "Pre-Authorization Payment Agreement");
 
         return null;

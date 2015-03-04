@@ -211,27 +211,6 @@ public class OperationsSiteMap implements SiteMap {
             }
         }
 
-        @PlaceProperties(caption = "Tenant Billing Terms")
-        public static class TenantBillingTerms extends VistaTermsAccess {
-            public TenantBillingTerms() {
-                super(Target.TenantBillingTerms);
-            }
-        }
-
-        @PlaceProperties(caption = "Tenant eCheck Pre-Authorized Payment Terms")
-        public static class TenantPreAuthorizedPaymentECheck extends VistaTermsAccess {
-            public TenantPreAuthorizedPaymentECheck() {
-                super(Target.TenantPreAuthorizedPaymentECheckTerms);
-            }
-        }
-
-        @PlaceProperties(caption = "Tenant Card Pre-Authorized Payment Terms")
-        public static class TenantPreAuthorizedPaymentCreditCard extends VistaTermsAccess {
-            public TenantPreAuthorizedPaymentCreditCard() {
-                super(Target.TenantPreAuthorizedPaymentCardTerms);
-            }
-        }
-
         @PlaceProperties(caption = "Tenant Convenience Fee Terms")
         public static class TenantCaledonConvenienceFee extends VistaTermsAccess {
             public TenantCaledonConvenienceFee() {

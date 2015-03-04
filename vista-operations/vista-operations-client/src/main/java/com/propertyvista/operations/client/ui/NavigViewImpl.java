@@ -88,11 +88,8 @@ public class NavigViewImpl extends Composite implements NavigView {
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.ProspectPortalPrivacyPolicy(), VistaOperationsBehavior.SystemAdmin));
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.ResidentPortalTermsAndConditions(), VistaOperationsBehavior.SystemAdmin));
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.ResidentPortalPrivacyPolicy(), VistaOperationsBehavior.SystemAdmin));
-            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.TenantBillingTerms(), VistaOperationsBehavior.SystemAdmin));
-            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.TenantPreAuthorizedPaymentECheck(), VistaOperationsBehavior.SystemAdmin));
-            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.TenantPreAuthorizedPaymentCreditCard(), VistaOperationsBehavior.SystemAdmin));
-            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.TenantCaledonConvenienceFee(), VistaOperationsBehavior.SystemAdmin));
 
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.TenantCaledonConvenienceFee(), VistaOperationsBehavior.SystemAdmin));
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.TenantSurePapAgreement(), VistaOperationsBehavior.SystemAdmin));
 
         }
