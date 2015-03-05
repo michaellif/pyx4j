@@ -78,13 +78,17 @@ class VistaCrmFinancialAccessControlList extends UIAclBuilder {
         grant(FinancialMoneyIN, new IServiceExecutePermission(MoneyInBatchDepositSlipPrintService.class));
 
         // ------ Financial: Aggregated Transfer
+        grant(FinancialAggregatedTransfer, PreauthorizedPaymentDTO.class, READ);
+        grant(FinancialAggregatedTransfer, PreauthorizedPaymentsDTO.class, READ);
+
         grant(FinancialAggregatedTransfer, AggregatedTransfer.class, READ);
         grant(FinancialAggregatedTransfer, EftAggregatedTransfer.class, READ);
         grant(FinancialAggregatedTransfer, CardsAggregatedTransferDTO.class, READ);
         grant(FinancialAggregatedTransfer, new IServiceExecutePermission(AggregatedTransferCrudService.class));
+        grant(FinancialAggregatedTransfer, new IServiceExecutePermission(AggregatedTransferDownloadService.class));
+
         grant(FinancialAggregatedTransfer, PaymentRecordDTO.class, READ);
         grant(FinancialAggregatedTransfer, new IServiceExecutePermission(PaymentRecordListService.class));
-        grant(FinancialAggregatedTransfer, new IServiceExecutePermission(AggregatedTransferDownloadService.class));
 
         // ------ Financial: Basic
 
@@ -97,6 +101,7 @@ class VistaCrmFinancialAccessControlList extends UIAclBuilder {
         // ------ Financial: Payments
 
         grant(FinancialPayments, LeasePaymentMethod.class, READ);
+
         grant(FinancialPayments, PreauthorizedPaymentDTO.class, READ | UPDATE);
         grant(FinancialPayments, PreauthorizedPaymentsDTO.class, READ | UPDATE);
 
