@@ -218,6 +218,12 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
 
         }
 
+        // Selections are enforced on server
+        @Override
+        protected boolean isSecurityEnabled() {
+            return false;
+        };
+
         @Override
         public void setDataTableModel(DataTableModel<E> dataTableModel) {
             dataTableModel.setPageSize(DataTablePanel.PAGESIZE_SMALL);

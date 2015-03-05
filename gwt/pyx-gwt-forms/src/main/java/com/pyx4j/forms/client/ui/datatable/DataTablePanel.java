@@ -144,6 +144,10 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         return clazz;
     }
 
+    protected boolean isSecurityEnabled() {
+        return EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class);
+    }
+
     public void setColumnDescriptors(ColumnDescriptor... columnDescriptors) {
         setColumnDescriptors(Arrays.asList(columnDescriptors));
     }
@@ -191,7 +195,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
                 }
             }), 0);
 
-            if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
+            if (isSecurityEnabled()) {
                 addButton.setPermission((DataModelPermission.permissionCreate(getEntityClass())));
             }
 
@@ -221,7 +225,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
                 }
             }), (addButton == null) ? 0 : 1);
 
-            if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
+            if (isSecurityEnabled()) {
                 delButton.setPermission((DataModelPermission.permissionDelete(getEntityClass())));
             }
 
@@ -409,7 +413,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     }
 
     public void populate(final int pageNumber) {
-        if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
+        if (isSecurityEnabled()) {
             if (SecurityController.check(DataModelPermission.permissionRead(getEntityClass()))) {
                 setPageNumber(pageNumber);
                 populateInternal();
@@ -421,7 +425,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     }
 
     public void populate() {
-        if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
+        if (isSecurityEnabled()) {
             if (SecurityController.check(DataModelPermission.permissionRead(getEntityClass()))) {
                 populateInternal();
             }
