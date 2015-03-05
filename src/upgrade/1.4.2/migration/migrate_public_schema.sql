@@ -55,6 +55,8 @@ BEGIN TRANSACTION;
     CREATE SEQUENCE eviction_flow_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE eviction_flow_step_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE eviction_status_record_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+    CREATE SEQUENCE financial_terms_policy_item_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+    CREATE SEQUENCE financial_terms_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE legal_questions_policy_item_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE legal_questions_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE lease_application$approval_checklist_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -72,6 +74,7 @@ BEGIN TRANSACTION;
     CREATE SEQUENCE special_delivery_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE status_selection_item_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE status_selection_policy_item_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+    CREATE SEQUENCE terms_policy_item_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     
     
      -- Change owner to vista
@@ -100,6 +103,8 @@ BEGIN TRANSACTION;
     ALTER SEQUENCE eviction_flow_policy_seq OWNER TO vista ;
     ALTER SEQUENCE eviction_flow_step_seq OWNER TO vista ;
     ALTER SEQUENCE eviction_status_record_seq OWNER TO vista ;
+    ALTER SEQUENCE financial_terms_policy_item_seq OWNER TO vista ;
+    ALTER SEQUENCE financial_terms_policy_seq OWNER TO vista ;
     ALTER SEQUENCE identification_document_seq OWNER TO vista ;
     ALTER SEQUENCE legal_questions_policy_item_seq OWNER TO vista ;
     ALTER SEQUENCE legal_questions_policy_seq OWNER TO vista ;
@@ -119,6 +124,7 @@ BEGIN TRANSACTION;
     ALTER SEQUENCE schedule_seq OWNER TO vista ;
     ALTER SEQUENCE status_selection_item_seq OWNER TO vista ;
     ALTER SEQUENCE status_selection_policy_item_seq OWNER TO vista ;
+    ALTER SEQUENCE terms_policy_item_seq OWNER TO vista ;
 
         
 COMMIT;
