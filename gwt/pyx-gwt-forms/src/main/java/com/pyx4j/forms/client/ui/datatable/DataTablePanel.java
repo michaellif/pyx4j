@@ -190,6 +190,11 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
                     onItemNew();
                 }
             }), 0);
+
+            if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
+                addButton.setPermission((DataModelPermission.permissionCreate(getEntityClass())));
+            }
+
         }
         if (addButton != null) {
             addButton.setVisible(enabled);
@@ -215,6 +220,10 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
                     onItemsDelete(getDataTable().getSelectedItems());
                 }
             }), (addButton == null) ? 0 : 1);
+
+            if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
+                delButton.setPermission((DataModelPermission.permissionDelete(getEntityClass())));
+            }
 
             delButton.setEnabled(getDataTableModel() != null && getDataTableModel().isAnyRowSelected());
 
