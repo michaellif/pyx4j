@@ -34,7 +34,9 @@ SET search_path = '_admin_';
         -- check constraints
         
         ALTER TABLE audit_record DROP CONSTRAINT audit_record_event_e_ck;
+        ALTER TABLE scheduler_run DROP CONSTRAINT scheduler_run_status_e_ck;
         ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_type_e_ck;
+        ALTER TABLE vista_terms DROP CONSTRAINT vista_terms_target_e_ck;
 
        
 
@@ -135,6 +137,8 @@ SET search_path = '_admin_';
         ALTER TABLE audit_record ADD CONSTRAINT audit_record_event_e_ck 
             CHECK ((event) IN ('Create', 'CredentialUpdate', 'Delete', 'EquifaxReadReport', 'EquifaxRequest', 'Info', 'Login', 
             'LoginFailed', 'Logout', 'OpenIdLogin', 'PermitionsUpdate', 'Read', 'SessionExpiration', 'System', 'Update'));
+        ALTER TABLE scheduler_run ADD CONSTRAINT scheduler_run_status_e_ck 
+            CHECK ((status) IN ('Completed', 'Failed', 'PartiallyCompleted', 'Running', 'Sleeping', 'Terminated', 'TryAgain'));
         ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
             CHECK ((trigger_type) IN ('billing', 'cleanup', 'depositInterestAdjustment', 'depositRefund', 'equifaxRetention', 
             'ilsEmailFeed', 'ilsUpdate', 'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion', 'leaseRenewal', 
@@ -146,6 +150,11 @@ SET search_path = '_admin_';
             'resetDemoPMC', 'tenantSureBusinessReport', 'tenantSureCancellation', 'tenantSureHQUpdate', 'tenantSureRenewal', 
             'tenantSureReports', 'tenantSureTransactionReports', 'test', 'updateArrears', 'updatePaymentsSummary', 
             'vistaBusinessReport', 'vistaCaleonReport', 'vistaHeathMonitor', 'yardiARDateVerification', 'yardiImportProcess'));
+        ALTER TABLE vista_terms ADD CONSTRAINT vista_terms_target_e_ck 
+            CHECK ((target) IN ('PmcCaledonSoleProprietorshipSection', 'PmcCaledonTemplate', 'PmcPaymentPad', 'PmcPropertyVistaService', 
+            'ProspectPortalPrivacyPolicy', 'ProspectPortalTermsAndConditions', 'ResidentPortalPrivacyPolicy', 'ResidentPortalTermsAndConditions', 
+            'TenantPaymentWebPaymentFeeTerms', 'TenantSurePreAuthorizedPaymentsAgreement'));
+
         
         -- not null
         
