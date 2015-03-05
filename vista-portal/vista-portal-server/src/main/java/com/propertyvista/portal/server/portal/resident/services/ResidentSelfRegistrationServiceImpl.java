@@ -89,7 +89,6 @@ public class ResidentSelfRegistrationServiceImpl implements ResidentSelfRegistra
         sb.append(dbo.info().address().province().getValue()).append(", ").append(dbo.info().address().country().getValue()).append(", ")
                 .append(dbo.info().address().postalCode().getValue());
         dto.region().setValue(sb.toString());
-        dto.propertyCode().setValue(dbo.propertyCode().getValue());
         dto.buildingKey().set(dbo.createIdentityStub());
         dto.marketingName().set(dbo.marketing().name());
         return dto;

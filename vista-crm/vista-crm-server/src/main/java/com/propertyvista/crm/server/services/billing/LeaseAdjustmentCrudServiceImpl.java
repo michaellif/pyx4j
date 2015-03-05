@@ -20,7 +20,6 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.IMoneyPercentAmount;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
@@ -74,9 +73,10 @@ public class LeaseAdjustmentCrudServiceImpl extends AbstractCrudServiceImpl<Leas
     }
 
     @Override
-    public void calculateTax(final AsyncCallback<IMoneyPercentAmount> callback, LeaseAdjustment currentValue) {
+    public void calculateTax(final AsyncCallback<LeaseAdjustment> callback, LeaseAdjustment currentValue) {
+        currentValue = currentValue.<LeaseAdjustment> duplicate();
         ServerSideFactory.create(BillingFacade.class).updateLeaseAdjustmentTax(currentValue);
-        callback.onSuccess(currentValue.tax());
+        callback.onSuccess(currentValue);
     }
 
     @Override

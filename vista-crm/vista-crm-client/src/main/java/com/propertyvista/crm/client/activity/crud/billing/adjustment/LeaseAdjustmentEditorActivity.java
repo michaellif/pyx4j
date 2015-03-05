@@ -16,7 +16,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.shared.IMoneyPercentAmount;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -29,11 +28,11 @@ public class LeaseAdjustmentEditorActivity extends CrmEditorActivity<LeaseAdjust
 
     public LeaseAdjustmentEditorActivity(CrudAppPlace place) {
         super(LeaseAdjustment.class, place, CrmSite.getViewFactory().getView(LeaseAdjustmentEditorView.class), GWT
-                        .<AbstractCrudService<LeaseAdjustment>> create(LeaseAdjustmentCrudService.class));
+                .<AbstractCrudService<LeaseAdjustment>> create(LeaseAdjustmentCrudService.class));
     }
 
     @Override
-    public void calculateTax(AsyncCallback<IMoneyPercentAmount> callback, LeaseAdjustment currentValue) {
+    public void calculateTax(AsyncCallback<LeaseAdjustment> callback, LeaseAdjustment currentValue) {
         ((LeaseAdjustmentCrudService) getService()).calculateTax(callback, currentValue);
     }
 

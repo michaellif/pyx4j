@@ -80,6 +80,8 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
                     application.lease().unit().building().landlord().logo().file().blobKey().getValue());
             data.landlordLogo().setValue((blob.data().getValue()));
         }
+        data.submissionDate().setValue(application.submission().decisionDate().getValue());
+        data.leaseId().setValue(application.lease().leaseId().getValue());
 
         if (false /* TODO && (documentMode == blank) */) {
             makeDataPlaceholders(data.sections().get(0)); // TODO not sure it's supposed to work like that at all...
@@ -176,7 +178,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             LeaseTermParticipant<?> subjectParticipant) {
         EntityQueryCriteria<LeaseTermTenant> criteria = new EntityQueryCriteria<LeaseTermTenant>(LeaseTermTenant.class);
         criteria.eq(criteria.proto().leaseTermV().holder(), application.lease().currentTerm());
-
+        peopleSection.leaseId().setValue(application.lease().leaseId().getValue());
         for (LeaseTermTenant leaseTermTenant : Persistence.service().query(criteria)) {
             if (leaseTermTenant.role().getValue() == Role.Dependent) {
                 LeaseApplicationDocumentDataDependentDTO dependent = peopleSection.dependents().$();
@@ -200,6 +202,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     private void fillAboutYouSection(LeaseApplicationDocumentDataAboutYouSectionDTO aboutYou, LeaseApplication application,
             LeaseTermParticipant<?> subjectParticipant) {
         // Personal Information
+        aboutYou.leaseId().setValue(application.lease().leaseId().getValue());
         aboutYou.firstName().setValue(subjectParticipant.leaseParticipant().customer().person().name().firstName().getStringView());
         aboutYou.lastName().setValue(subjectParticipant.leaseParticipant().customer().person().name().lastName().getStringView());
         aboutYou.middleName().setValue(subjectParticipant.leaseParticipant().customer().person().name().middleName().getStringView());
@@ -253,7 +256,6 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
 
             additionalInfo.generalQuestions().add(question);
         }
-
     }
 
     private void fillFinaincialSection(LeaseApplicationDocumentDataFinancialSectionDTO financialInfo, LeaseApplication application,

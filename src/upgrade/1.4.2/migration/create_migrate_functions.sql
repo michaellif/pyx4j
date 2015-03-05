@@ -573,6 +573,36 @@ BEGIN
         ALTER TABLE eviction_status_record OWNER TO vista;
         
         
+        -- financial_terms_policy
+        
+        CREATE TABLE financial_terms_policy
+        (
+            id                              BIGINT              NOT NULL,
+            node                            BIGINT,
+            node_discriminator              VARCHAR(50),
+            updated                         TIMESTAMP,
+            billing_terms                   BIGINT,
+            preauthorized_payment_echeck_terms  BIGINT,
+            preauthorized_payment_card_terms    BIGINT,
+                CONSTRAINT financial_terms_policy_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE financial_terms_policy OWNER TO vista;
+        
+        
+        -- financial_terms_policy_item
+        
+        CREATE TABLE financial_terms_policy_item
+        (
+            id                              BIGINT              NOT NULL,
+            caption                         VARCHAR(500),
+            content                         VARCHAR(300000),
+            enabled                         BOOLEAN,
+                CONSTRAINT financial_terms_policy_item_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE financial_terms_policy_item OWNER TO vista;
+        
         -- identification_document_folder/identification_document
         
         ALTER TABLE identification_document_folder RENAME TO identification_document;
@@ -990,6 +1020,19 @@ BEGIN
         
         ALTER TABLE status_selection_policy_item OWNER TO vista;
         
+        -- terms_policy_item
+        
+        CREATE TABLE terms_policy_item
+        (
+            id                              BIGINT              NOT NULL,
+            caption                         VARCHAR(500),
+            content                         VARCHAR(300000),
+            enabled                         BOOLEAN,
+                CONSTRAINT terms_policy_item_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE terms_policy_item OWNER TO vista;
+        
         /**
         ***     =====================================================================================================
         ***
@@ -1224,6 +1267,12 @@ BEGIN
             REFERENCES identification_document_type(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE identification_document ADD CONSTRAINT identification_document_owner_fk FOREIGN KEY(owner) 
             REFERENCES customer_screening_v(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE financial_terms_policy ADD CONSTRAINT financial_terms_policy_billing_terms_fk FOREIGN KEY(billing_terms) 
+            REFERENCES financial_terms_policy_item(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE financial_terms_policy ADD CONSTRAINT financial_terms_policy_preauthorized_payment_card_terms_fk FOREIGN KEY(preauthorized_payment_card_terms) 
+            REFERENCES financial_terms_policy_item(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE financial_terms_policy ADD CONSTRAINT financial_terms_policy_preauthorized_payment_echeck_terms_fk FOREIGN KEY(preauthorized_payment_echeck_terms) 
+            REFERENCES financial_terms_policy_item(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE identification_document_file ADD CONSTRAINT identification_document_file_verified_by_fk FOREIGN KEY(verified_by) 
             REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE identification_document_file ADD CONSTRAINT identification_document_file_owner_fk FOREIGN KEY(owner) 
@@ -1360,6 +1409,8 @@ BEGIN
             CHECK ((step_type) IN ('Custom', 'HearingDate', 'L1', 'N4', 'Order', 'RequestToReviewOrder', 'SetAside', 'Sheriff', 'StayOrder'));
         ALTER TABLE eviction_status_record ADD CONSTRAINT eviction_status_record_eviction_status_discriminator_d_ck 
             CHECK ((eviction_status_discriminator) IN ('General', 'N4'));
+        ALTER TABLE financial_terms_policy ADD CONSTRAINT financial_terms_policy_node_discriminator_d_ck 
+            CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE floorplan_amenity ADD CONSTRAINT floorplan_amenity_floorplan_type_e_ck 
             CHECK ((floorplan_type) IN ('additionalStorage', 'airConditioner', 'alarm', 'balcony', 'cable', 'carpeting', 'carport', 'ceilingFan', 
             'controlledAccess', 'courtyard', 'dishwasher', 'disposal', 'dryer', 'fireplace', 'furnished', 'garage', 'handrails', 'hardwoodFloors', 
@@ -1425,13 +1476,15 @@ BEGIN
         ALTER TABLE n4_policy ADD CONSTRAINT n4_policy_agent_selection_method_cs_e_ck CHECK ((agent_selection_method_cs) IN ('ByLoggedInUser', 'FromEmployeeList'));
         ALTER TABLE n4_policy ADD CONSTRAINT n4_policy_agent_selection_method_n4_e_ck CHECK ((agent_selection_method_n4) IN ('ByLoggedInUser', 'FromEmployeeList'));
         ALTER TABLE notes_and_attachments ADD CONSTRAINT notes_and_attachments_owner_discriminator_d_ck 
-            CHECK ((owner_discriminator) IN ('ARPolicy', 'AgreementLegalPolicy', 'ApplicationApprovalChecklistPolicy', 'ApplicationDocumentationPolicy', 'AptUnit', 
-            'AutoPayPolicy', 'AutopayAgreement', 'BackgroundCheckPolicy', 'Building', 'CardsAggregatedTransfer', 'Complex', 'DatesPolicy', 'DepositPolicy', 
-            'EftAggregatedTransfer', 'EmailTemplatesPolicy', 'Employee', 'EvictionFlowPolicy', 'Floorplan', 'Guarantor', 'IdAssignmentPolicy', 'Landlord', 'Lease', 
-            'LeaseAdjustmentPolicy', 'LeaseBillingPolicy', 'LegalQuestionsPolicy', 'LegalTermsPolicy', 'Locker', 'MaintenanceRequest', 'MaintenanceRequestPolicy', 
-            'MerchantAccount', 'N4Policy', 'OnlineAppPolicy', 'Parking', 'PaymentPostingBatch', 'PaymentRecord', 'PaymentTransactionsPolicy', 'PaymentTypeSelectionPolicy', 
-            'PetPolicy', 'ProductTaxPolicy', 'ProspectPortalPolicy', 'ResidentPortalPolicy', 'RestrictionsPolicy', 'Tenant', 'TenantInsurancePolicy', 'Vendor', 
-            'YardiInterfacePolicy', 'feature', 'service'));
+            CHECK ((owner_discriminator) IN ('ARPolicy', 'AgreementLegalPolicy', 'ApplicationApprovalChecklistPolicy', 
+            'ApplicationDocumentationPolicy', 'AptUnit', 'AutoPayPolicy', 'AutopayAgreement', 'BackgroundCheckPolicy', 'Building', 
+            'CardsAggregatedTransfer', 'Complex', 'DatesPolicy', 'DepositPolicy', 'EftAggregatedTransfer', 'EmailTemplatesPolicy', 
+            'Employee', 'EvictionFlowPolicy', 'FiancialTermsPolicy', 'Floorplan', 'Guarantor', 'IdAssignmentPolicy', 'Landlord', 'Lease', 
+            'LeaseAdjustmentPolicy', 'LeaseBillingPolicy', 'LegalQuestionsPolicy', 'LegalTermsPolicy', 'Locker', 'MaintenanceRequest', 
+            'MaintenanceRequestPolicy', 'MerchantAccount', 'N4Policy', 'OnlineAppPolicy', 'Parking', 'PaymentPostingBatch', 'PaymentRecord', 
+            'PaymentTransactionsPolicy', 'PaymentTypeSelectionPolicy', 'PetPolicy', 'ProductTaxPolicy', 'ProspectPortalPolicy', 
+            'ResidentPortalPolicy', 'RestrictionsPolicy', 'Tenant', 'TenantInsurancePolicy', 'Vendor', 'YardiInterfacePolicy', 'feature', 
+            'service'));
         ALTER TABLE permission_to_enter_note ADD CONSTRAINT permission_to_enter_note_locale_e_ck 
             CHECK ((locale) IN ('en', 'en_CA', 'en_GB', 'en_US', 'es', 'fr', 'fr_CA', 'ru', 'zh_CN', 'zh_TW'));
         ALTER TABLE proof_of_asset_document_type ADD CONSTRAINT proof_of_asset_document_type_asset_type_e_ck 
