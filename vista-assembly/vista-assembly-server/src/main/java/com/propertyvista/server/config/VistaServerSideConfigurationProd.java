@@ -74,39 +74,69 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         default:
             hostName = pmcDnsName;
         }
+
         if (VistaDeployment.isVistaStaging()) {
+            switch (application) {
+            case crm:
+            case site:
+            case resident:
+            case prospect:
+                hostName += "-" + application.name();
+                break;
+            default:
+                break;
+            }
             hostName += "-staging";
         }
-        String base = protocol + "://" + hostName;
 
+        String base = protocol + "://" + hostName;
         String dnsName;
         String path = "/";
-        switch (application) {
-        case crm:
-            dnsName = VistaDeployment.isVistaStaging() ? ".propertyvista.net" : ".propertyvista.com";
-            break;
-        case onboarding:
-            dnsName = VistaDeployment.isVistaStaging() ? ".propertyvista.net" : ".propertyvista.com";
-            break;
-        case site:
-            dnsName = VistaDeployment.isVistaStaging() ? ".propertyvista.net" : ".residentportalsite.com";
-            break;
-        case resident:
-            dnsName = VistaDeployment.isVistaStaging() ? ".propertyvista.net" : ".my-community.co";
-            break;
-        case prospect:
-            dnsName = VistaDeployment.isVistaStaging() ? ".propertyvista.net" : ".my-community.co";
-            path += application.name();
-            break;
-        case operations:
-            if (VistaDeployment.isVistaProduction()) {
-                hostName += "-prod03";
+
+        if (VistaDeployment.isVistaStaging()) {
+            switch (application) {
+            case crm:
+            case onboarding:
+            case site:
+            case operations:
+            case resident:
+                dnsName = ".propertyvista.net";
+                break;
+            case prospect:
+                dnsName = ".propertyvista.net";
+                path += application.name();
+                break;
+            default:
+                throw new IllegalArgumentException();
             }
-            dnsName = VistaDeployment.isVistaStaging() ? ".propertyvista.net" : ".propertyvista.com";
-            break;
-        default:
-            throw new IllegalArgumentException();
+
+        } else {
+            switch (application) {
+            case crm:
+            case onboarding:
+                dnsName = ".propertyvista.com";
+                break;
+            case site:
+                dnsName = ".residentportalsite.com";
+                break;
+            case resident:
+                dnsName = ".my-community.co";
+                break;
+            case prospect:
+                dnsName = ".my-community.co";
+                path += application.name();
+                break;
+            case operations:
+                if (VistaDeployment.isVistaProduction()) {
+                    hostName += "-prod03";
+                }
+                dnsName = ".propertyvista.com";
+                break;
+            default:
+                throw new IllegalArgumentException();
+            }
         }
+
         return base + dnsName + path;
     }
 
