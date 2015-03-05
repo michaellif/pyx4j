@@ -126,13 +126,15 @@ class VistaCrmFinancialAccessControlList extends UIAclBuilder {
 
         grant(FinancialAdvanced, FinancialPayments);
 
-        grant(FinancialPayments, LeasePaymentMethod.class, ALL);
-        grant(FinancialPayments, PreauthorizedPaymentDTO.class, ALL);
+        grant(FinancialAdvanced, LeasePaymentMethod.class, ALL);
+
+        grant(FinancialAdvanced, PreauthorizedPaymentDTO.class, ALL);
+        grant(FinancialAdvanced, PreauthorizedPaymentsDTO.class, ALL);
 
         // ------ Financial: Full
         grant(FinancialFull, FinancialMoneyIN);
         grant(FinancialFull, FinancialAggregatedTransfer);
-        grant(FinancialFull, FinancialPayments);
+        grant(FinancialFull, FinancialAdvanced);
 
         grant(FinancialFull, BuildingFinancial.class, READ);
         grant(FinancialFull, BillingCycleDTO.class, READ);
@@ -145,11 +147,6 @@ class VistaCrmFinancialAccessControlList extends UIAclBuilder {
         grant(FinancialFull, new IServiceExecutePermission(BillPrintService.class));
 
         grant(FinancialFull, BuildingMerchantAccount.class, READ);
-
-        grant(FinancialFull, LeasePaymentMethod.class, ALL);
-
-        grant(FinancialFull, PreauthorizedPaymentDTO.class, ALL);
-        grant(FinancialFull, PreauthorizedPaymentsDTO.class, ALL);
 
         grant(FinancialFull, LeaseAdjustment.class, ALL);
         grant(FinancialFull, DepositLifecycleDTO.class, ALL);
