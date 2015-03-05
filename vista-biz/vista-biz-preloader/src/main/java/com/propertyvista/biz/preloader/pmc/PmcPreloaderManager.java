@@ -459,7 +459,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
 
     private static void logError(OutputHolder output, Throwable t) throws Error {
         PmcPreloaderManager.writeToOutput(output, "\nDB error:");
-        PmcPreloaderManager.writeToOutput(output, t.getMessage());
+        PmcPreloaderManager.writeToOutput(output, t.getMessage() == null ? t.toString() : t.getMessage());
         if (null == output) {
             log.error("", t);
         }
