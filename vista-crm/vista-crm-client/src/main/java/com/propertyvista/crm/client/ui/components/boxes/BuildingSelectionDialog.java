@@ -51,7 +51,7 @@ public abstract class BuildingSelectionDialog extends EntitySelectorTableDialog<
     @Override
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
-                new ColumnDescriptor.Builder(proto().propertyCode()).visible(false).filterAlwaysShown(true).build(),
+                new ColumnDescriptor.Builder(proto().propertyCode()).filterAlwaysShown(true).build(),
                 new ColumnDescriptor.Builder(proto().complex()).visible(false).build(),
                 new ColumnDescriptor.Builder(proto().externalId()).visible(false).build(),
                 new ColumnDescriptor.Builder(proto().portfolios()).build(),
