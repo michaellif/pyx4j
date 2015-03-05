@@ -16,7 +16,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.shared.IMoneyPercentAmount;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -34,7 +33,7 @@ public class LeaseAdjustmentViewerActivity extends CrmViewerActivity<LeaseAdjust
     }
 
     @Override
-    public void calculateTax(AsyncCallback<IMoneyPercentAmount> callback, LeaseAdjustment currentValue) {
+    public void calculateTax(AsyncCallback<LeaseAdjustment> callback, LeaseAdjustment currentValue) {
         ((LeaseAdjustmentCrudService) getService()).calculateTax(callback, currentValue);
     }
 

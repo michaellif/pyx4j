@@ -18,7 +18,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.IMoneyPercentAmount;
 import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CMoneyPercentCombo;
@@ -158,10 +157,11 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
             } else {
                 presenter = (LeaseAdjustmentPresenter) ((LeaseAdjustmentViewerView) getParentView()).getPresenter();
             }
-            presenter.calculateTax(new DefaultAsyncCallback<IMoneyPercentAmount>() {
+            presenter.calculateTax(new DefaultAsyncCallback<LeaseAdjustment>() {
                 @Override
-                public void onSuccess(IMoneyPercentAmount result) {
-                    get(proto().tax()).populate(result);
+                public void onSuccess(LeaseAdjustment result) {
+                    get(proto().taxType()).setValue(result.taxType().getValue());
+                    get(proto().tax()).setValue(result.tax());
                     recalculateTotal();
                 }
             }, getValue());
