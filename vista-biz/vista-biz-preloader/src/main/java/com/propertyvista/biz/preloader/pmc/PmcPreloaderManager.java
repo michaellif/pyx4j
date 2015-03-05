@@ -175,7 +175,9 @@ public class PmcPreloaderManager implements CommunicationsHandler {
     }
 
     public synchronized void preloadPmc(final String pmcDnsName, final ResetType type, Map<String, String[]> params, OutputHolder output) {
+        log.debug("Preload PMC... " + "trying to stop communications");
         stopCommunications();
+        log.debug("Preload PMC... " + "communications stopped");
         final String requestNamespace = NamespaceManager.getNamespace();
         try {
 
@@ -186,12 +188,15 @@ public class PmcPreloaderManager implements CommunicationsHandler {
             final Pmc pmc = TaskRunner.runUnitOfWorkInOperationstNamespace(TransactionScopeOption.RequiresNew, new Executable<Pmc, RuntimeException>() {
                 @Override
                 public Pmc execute() {
+                    log.debug("Preload PMC... " + "trying to delete PMCData");
                     deletePmcData(pmcDnsName);
-
+                    log.debug("Preload PMC... " + "PMCData deleted");
                     Pmc pmc = PmcCreatorDev.createPmc(pmcDnsName, (type == ResetType.allMini));
                     return pmc;
                 }
             });
+
+            log.debug("Preload PMC... " + "PMC created");
 
             VistaDeployment.changePmcContext();
 
