@@ -26,21 +26,18 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-@ToStringFormat("{0,choice,null#|!null#{0} - }{1}, {2}, {3}")
+@ToStringFormat("{0}, {1}, {2}")
 public interface SelfRegistrationBuildingDTO extends IEntity {
 
     Building buildingKey();
 
     @ToString(index = 0)
-    IPrimitive<String> propertyCode();
-
-    @ToString(index = 1)
     IPrimitive<String> streetAddress();
 
-    @ToString(index = 2)
+    @ToString(index = 1)
     IPrimitive<String> municipality();
 
-    @ToString(index = 3)
+    @ToString(index = 2)
     IPrimitive<String> region();
 
     @Editor(type = EditorType.phone)

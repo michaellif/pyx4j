@@ -17,6 +17,7 @@ import java.util.Comparator;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.SimpleMessageFormat;
@@ -37,8 +38,7 @@ public class BuildingSuggestBox extends CSelectorTextBox<SelfRegistrationBuildin
         optionsGrabber.setFormatter(new IFormatter<SelfRegistrationBuildingDTO, String>() {
             @Override
             public String format(SelfRegistrationBuildingDTO value) {
-                return SimpleMessageFormat.format("{0} {1} {2} {3} {4}", //
-                        value.propertyCode(),//
+                return SimpleMessageFormat.format("{0} {1} {2} {3}", //
                         value.marketingName(),//
                         value.streetAddress().getValue(), //
                         value.municipality().getValue(), //
@@ -49,7 +49,7 @@ public class BuildingSuggestBox extends CSelectorTextBox<SelfRegistrationBuildin
             @Override
             public String format(SelfRegistrationBuildingDTO value) {
                 if (value != null) {
-                    return SimpleMessageFormat.format("{0} - {1}", value.propertyCode().getValue(), value.streetAddress().getValue());
+                    return SimpleMessageFormat.format("{0}", value.streetAddress().getValue());
                 }
                 return null;
             }
@@ -60,9 +60,11 @@ public class BuildingSuggestBox extends CSelectorTextBox<SelfRegistrationBuildin
             @Override
             public SafeHtml format(SelfRegistrationBuildingDTO value) {
                 SafeHtmlBuilder builder = new SafeHtmlBuilder();
-                builder.appendHtmlConstant(SimpleMessageFormat.format(
-                        "<div style=\"font-size:12px;\"><div>{0} - {1}</div><div>{2}, {3}</div><div>{4}</div></div>", value.propertyCode(),
-                        value.marketingName(), value.streetAddress().getValue(), value.municipality().getValue(), value.region().getValue()));
+                builder.appendHtmlConstant(SimpleMessageFormat.format("<div style=\"font-size:12px;\"><div>{0}</div><div>{1}, {2}</div><div>{3}</div></div>",
+                        SafeHtmlUtils.fromString(value.marketingName().getValue()).asString(), //
+                        SafeHtmlUtils.fromString(value.streetAddress().getValue()).asString(), //
+                        SafeHtmlUtils.fromString(value.municipality().getValue()).asString(), //
+                        SafeHtmlUtils.fromString(value.region().getValue()).asString()));
                 return builder.toSafeHtml();
             }
         });

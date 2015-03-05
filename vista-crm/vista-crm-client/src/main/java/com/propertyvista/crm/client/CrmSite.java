@@ -164,6 +164,7 @@ public class CrmSite extends VistaSite {
                 obtainAuthenticationData();
                 if (descriptor.walkMeEnabled().getValue(false)) {
                     WalkMe.enable(descriptor.walkMeJsAPIUrl().getValue());
+                    CrmWalkMe.init();
                 }
             }
 
