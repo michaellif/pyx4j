@@ -76,5 +76,6 @@ public class RunForm extends OperationsEntityForm<Run> {
         get(proto().errorMessage()).setVisible(!getValue().errorMessage().isNull());
 
         reportSectionLister.getDataSource().setParentEntityId(getValue().executionReport().getPrimaryKey(), ExecutionReport.class);
+        reportSectionLister.populate();
     }
 }
