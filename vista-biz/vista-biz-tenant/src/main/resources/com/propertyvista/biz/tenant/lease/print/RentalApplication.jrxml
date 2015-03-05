@@ -5,6 +5,8 @@
 	<property name="ireport.y" value="0"/>
 	<parameter name="landlordLogo" class="java.io.InputStream"/>
 	<parameter name="landlordName" class="java.lang.String"/>
+	<parameter name="submissionDate" class="com.pyx4j.commons.LogicalDate"/>
+	<parameter name="leaseId" class="java.lang.String"/>
 	<field name="leaseSection" class="com.pyx4j.entity.core.IList"/>
 	<field name="peopleSection" class="com.pyx4j.entity.core.IList"/>
 	<field name="aboutYouSection" class="com.pyx4j.entity.core.IList"/>
@@ -18,7 +20,7 @@
 	<title>
 		<band height="101" splitType="Stretch">
 			<staticText>
-				<reportElement x="349" y="14" width="222" height="20" uuid="5996a310-98ff-4e81-b0a8-68e1153b6605"/>
+				<reportElement x="349" y="14" width="222" height="20" uuid="58d06198-6b38-4338-902c-40564cfdc5d4"/>
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
@@ -46,7 +48,7 @@
 				<text><![CDATA[Transfer]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="323" y="81" width="100" height="20" uuid="fe264350-47cd-4306-b628-3a26935f3493"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="323" y="81" width="87" height="16" uuid="fe264350-47cd-4306-b628-3a26935f3493"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
@@ -56,6 +58,10 @@
 				<reportElement x="0" y="0" width="286" height="66" uuid="f6924c01-bfb0-4fba-9819-de3248917f43"/>
 				<imageExpression><![CDATA[$P{landlordLogo}]]></imageExpression>
 			</image>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="410" y="81" width="100" height="15" uuid="a96e2adc-538a-4b64-8c36-11603b69c3fb"/>
+				<textFieldExpression><![CDATA[$P{submissionDate}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<detail>
@@ -64,6 +70,10 @@
 				<reportElement x="0" y="4" width="309" height="19" uuid="0d57e3cc-a17c-40fe-857d-64166ff07019"/>
 				<text><![CDATA[The undersigned Applicant(s) hereby make this application to lease:]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="310" y="4" width="261" height="20" uuid="c1421299-492b-4f9a-9fd5-1953d7a0e067"/>
+				<textFieldExpression><![CDATA[$P{leaseId}]]></textFieldExpression>
+			</textField>
 		</band>
 		<band height="18">
 			<subreport>
