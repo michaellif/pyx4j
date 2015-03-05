@@ -28,6 +28,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.domain.blob.IdentificationDocumentBlob;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 
 public class CleanupPmcProcess implements PmcProcess {
 
@@ -112,7 +113,8 @@ public class CleanupPmcProcess implements PmcProcess {
     }
 
     @Override
-    public void complete(PmcProcessContext context) {
+    public RunStatus complete(RunStatus runStatus, PmcProcessContext context) {
         log.info("Cleanup PMC Job complete");
+        return runStatus;
     }
 }

@@ -19,6 +19,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 
 public class PaymentsFundsTransferSendProcess implements PmcProcess {
 
@@ -35,7 +36,7 @@ public class PaymentsFundsTransferSendProcess implements PmcProcess {
         if (VistaDeployment.isVistaStaging()) {
             return false;
         }
-        padFile = ServerSideFactory.create(PaymentProcessFacade.class).prepareFundsTransferFile(fundsTransferType);
+        padFile = ServerSideFactory.create(PaymentProcessFacade.class).prepareFundsTransferFile(context.getExecutionMonitor(), fundsTransferType);
         return true;
     }
 
@@ -60,13 +61,11 @@ public class PaymentsFundsTransferSendProcess implements PmcProcess {
     }
 
     @Override
-    public void complete(PmcProcessContext context) {
-        if (ServerSideFactory.create(PaymentProcessFacade.class).sendFundsTransferFile(this.padFile)) {
-            context.getExecutionMonitor().setMessage("PAD file# " + padFile.fileCreationNumber().getStringView());
-            context.getExecutionMonitor().addInfoEvent("sent file", padFile.fileName().getValue());
-            context.getExecutionMonitor().addInfoEvent("fileCreationNumber", padFile.fileCreationNumber().getValue());
+    public RunStatus complete(RunStatus runStatus, PmcProcessContext context) {
+        if (!ServerSideFactory.create(PaymentProcessFacade.class).sendFundsTransferFile(context.getExecutionMonitor(), this.padFile)) {
+            return RunStatus.TryAgain;
         } else {
-            context.getExecutionMonitor().setMessage("Nothing to send");
+            return runStatus;
         }
     }
 

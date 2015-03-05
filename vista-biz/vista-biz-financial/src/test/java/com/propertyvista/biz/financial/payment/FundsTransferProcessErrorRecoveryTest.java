@@ -74,12 +74,7 @@ public class FundsTransferProcessErrorRecoveryTest extends LeaseFinancialTestBas
 
         MockEventBus.fireEvent(new ScheduleTransportConnectionError(true));
 
-        try {
-            SchedulerMock.runProcess(PmcProcessType.paymentsPadSend, (Date) null);
-            Assert.fail("Process should fail");
-        } catch (RuntimeException ok) {
-            Assert.assertTrue("Mock exception expected", ok.getMessage().contains("Mock"));
-        }
+        SchedulerMock.runProcess(PmcProcessType.paymentsPadSend, (Date) null);
 
         MockEventBus.fireEvent(new ScheduleTransportConnectionError(false));
 

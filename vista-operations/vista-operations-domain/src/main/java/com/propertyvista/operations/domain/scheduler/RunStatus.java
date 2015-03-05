@@ -13,6 +13,8 @@
 package com.propertyvista.operations.domain.scheduler;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.EnumSet;
 
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -30,8 +32,15 @@ public enum RunStatus implements Serializable {
 
     PartiallyCompleted,
 
+    // Reschedule run automatically
+    TryAgain,
+
     //TODO rename to Erred
     Failed;
+
+    public static Collection<RunStatus> requiredRescheduleRun() {
+        return EnumSet.of(Sleeping, TryAgain);
+    }
 
     @Override
     public String toString() {

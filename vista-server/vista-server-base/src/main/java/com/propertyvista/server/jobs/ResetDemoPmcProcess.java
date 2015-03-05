@@ -20,6 +20,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.preloader.PmcPreloaderFacade;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 
 public class ResetDemoPmcProcess implements PmcProcess {
 
@@ -48,8 +49,8 @@ public class ResetDemoPmcProcess implements PmcProcess {
     }
 
     @Override
-    public void complete(PmcProcessContext context) {
-
+    public RunStatus complete(RunStatus runStatus, PmcProcessContext context) {
+        return runStatus;
     }
 
     @Override

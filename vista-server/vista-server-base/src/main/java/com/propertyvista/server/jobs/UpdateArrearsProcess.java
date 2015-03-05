@@ -30,6 +30,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class UpdateArrearsProcess implements PmcProcess {
@@ -128,8 +129,9 @@ public class UpdateArrearsProcess implements PmcProcess {
     }
 
     @Override
-    public void complete(PmcProcessContext context) {
+    public RunStatus complete(RunStatus runStatus, PmcProcessContext context) {
         log.info("Arrears Update job finished");
+        return runStatus;
     }
 
 }

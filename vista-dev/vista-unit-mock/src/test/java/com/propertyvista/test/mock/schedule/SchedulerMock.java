@@ -29,6 +29,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.operations.domain.scheduler.PmcProcessOptions;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.jobs.PmcProcess;
 import com.propertyvista.server.jobs.PmcProcessContext;
@@ -93,7 +94,7 @@ public class SchedulerMock {
                 TaskRunner.runInOperationsNamespace(new Callable<Void>() {
                     @Override
                     public Void call() throws Exception {
-                        pmcProcess.complete(sharedContext);
+                        pmcProcess.complete(RunStatus.Completed, sharedContext);
                         return null;
                     }
                 });

@@ -16,6 +16,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.system.EquifaxProcessFacade;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 
 public class EquifaxRetentionProcess implements PmcProcess {
 
@@ -36,8 +37,9 @@ public class EquifaxRetentionProcess implements PmcProcess {
     }
 
     @Override
-    public void complete(PmcProcessContext context) {
+    public RunStatus complete(RunStatus runStatus, PmcProcessContext context) {
         ServerSideFactory.create(EquifaxProcessFacade.class).dataRetention(context.getExecutionMonitor());
+        return runStatus;
     }
 
 }

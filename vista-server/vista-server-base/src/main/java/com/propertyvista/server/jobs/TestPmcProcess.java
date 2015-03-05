@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 
 public class TestPmcProcess implements PmcProcess {
 
@@ -66,7 +67,8 @@ public class TestPmcProcess implements PmcProcess {
     }
 
     @Override
-    public void complete(PmcProcessContext context) {
+    public RunStatus complete(RunStatus runStatus, PmcProcessContext context) {
         log.info("Test Job complete");
+        return runStatus;
     }
 }

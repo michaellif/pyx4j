@@ -17,6 +17,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.billing.BillingProcessFacade;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class BillingProcess implements PmcProcess {
@@ -39,7 +40,8 @@ public class BillingProcess implements PmcProcess {
     }
 
     @Override
-    public void complete(PmcProcessContext context) {
+    public RunStatus complete(RunStatus runStatus, PmcProcessContext context) {
+        return runStatus;
     }
 
 }

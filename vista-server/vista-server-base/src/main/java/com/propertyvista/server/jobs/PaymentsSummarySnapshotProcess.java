@@ -22,6 +22,7 @@ import com.propertyvista.biz.dashboard.DashboardCalulationsFacade;
 import com.propertyvista.biz.dashboard.DashboardCalulationsFacade.PaymentsSummarySnapshotHook;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 
 public class PaymentsSummarySnapshotProcess implements PmcProcess {
 
@@ -61,8 +62,9 @@ public class PaymentsSummarySnapshotProcess implements PmcProcess {
     }
 
     @Override
-    public void complete(PmcProcessContext context) {
+    public RunStatus complete(RunStatus runStatus, PmcProcessContext context) {
         log.info("Payment Summary Snapshot process finished");
+        return runStatus;
     }
 
 }

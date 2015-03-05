@@ -27,6 +27,7 @@ import com.propertyvista.biz.system.yardi.YardiCredentialDisabledException;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.operations.domain.scheduler.CompletionType;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class YardiImportProcess implements PmcProcess {
@@ -69,8 +70,9 @@ public class YardiImportProcess implements PmcProcess {
     }
 
     @Override
-    public void complete(PmcProcessContext context) {
+    public RunStatus complete(RunStatus runStatus, PmcProcessContext context) {
         log.info("Yardi Import batch job finished");
         context.getExecutionMonitor().addInfoEvent("yardiTime", yardiRequestsTimeTotal, TimeUtils.durationFormat(yardiRequestsTimeTotal.longValue()));
+        return runStatus;
     }
 }

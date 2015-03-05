@@ -17,6 +17,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 
 public class PaymentsFundsTransferProcessReconciliationProcess implements PmcProcess {
 
@@ -51,7 +52,8 @@ public class PaymentsFundsTransferProcessReconciliationProcess implements PmcPro
     }
 
     @Override
-    public void complete(PmcProcessContext context) {
+    public RunStatus complete(RunStatus runStatus, PmcProcessContext context) {
+        return runStatus;
     }
 
 }

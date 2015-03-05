@@ -20,6 +20,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.ils.VistaILSFacade;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 
 public class ILSEmailFeedProcess implements PmcProcess {
 
@@ -43,7 +44,8 @@ public class ILSEmailFeedProcess implements PmcProcess {
     }
 
     @Override
-    public void complete(PmcProcessContext context) {
+    public RunStatus complete(RunStatus runStatus, PmcProcessContext context) {
         log.info("ILS Email Feed complete");
+        return runStatus;
     }
 }

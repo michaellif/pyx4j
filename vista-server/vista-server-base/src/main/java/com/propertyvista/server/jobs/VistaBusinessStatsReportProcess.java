@@ -17,6 +17,7 @@ import com.pyx4j.essentials.server.docs.sheet.ReportTableFormatter;
 
 import com.propertyvista.biz.operations.business.VistaBusinessFacade;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 
 public class VistaBusinessStatsReportProcess implements PmcProcess {
 
@@ -39,8 +40,9 @@ public class VistaBusinessStatsReportProcess implements PmcProcess {
     }
 
     @Override
-    public void complete(PmcProcessContext context) {
+    public RunStatus complete(RunStatus runStatus, PmcProcessContext context) {
         ServerSideFactory.create(VistaBusinessFacade.class).completeStatsReport(formater);
+        return runStatus;
     }
 
 }

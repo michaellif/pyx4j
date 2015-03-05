@@ -13,6 +13,7 @@
 package com.propertyvista.server.jobs;
 
 import com.propertyvista.domain.settings.PmcVistaFeatures;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 
 public interface PmcProcess {
 
@@ -42,9 +43,13 @@ public interface PmcProcess {
     /**
      * This is executed in shared context to finalize the process.
      * 
+     * @param runStatus
+     *            TODO
      * @param context
      *            Run statistics and forDate
+     * 
+     * @return TODO
      */
-    void complete(PmcProcessContext context);
+    RunStatus complete(RunStatus runStatus, PmcProcessContext context);
 
 }

@@ -21,13 +21,13 @@ import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
 
 public interface PaymentProcessFacade {
 
-    FundsTransferFile prepareFundsTransferFile(CaledonFundsTransferType fundsTransferType);
+    FundsTransferFile prepareFundsTransferFile(ExecutionMonitor executionMonitor, CaledonFundsTransferType fundsTransferType);
 
     void prepareEcheckFundsTransfer(ExecutionMonitor executionMonitor, FundsTransferFile padFile);
 
     void prepareDirectDebitFundsTransfer(ExecutionMonitor executionMonitor, FundsTransferFile padFile);
 
-    boolean sendFundsTransferFile(FundsTransferFile padFile);
+    boolean sendFundsTransferFile(ExecutionMonitor executionMonitor, FundsTransferFile padFile);
 
     //Funds Transfer
     CaledonFundsTransferType receiveFundsTransferAcknowledgementFile(ExecutionMonitor executionMonitor);

@@ -20,6 +20,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.system.yardi.YardiConfigurationFacade;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 
 public abstract class AbstractYardiAwareProcess implements PmcProcess {
 
@@ -53,10 +54,11 @@ public abstract class AbstractYardiAwareProcess implements PmcProcess {
     }
 
     @Override
-    public void complete(PmcProcessContext context) {
+    public RunStatus complete(RunStatus runStatus, PmcProcessContext context) {
         if (yardiRequestsTimeTotal != 0) {
             context.getExecutionMonitor().addInfoEvent("yardiTime", new BigDecimal(yardiRequestsTimeTotal), TimeUtils.durationFormat(yardiRequestsTimeTotal));
         }
+        return runStatus;
     }
 
 }

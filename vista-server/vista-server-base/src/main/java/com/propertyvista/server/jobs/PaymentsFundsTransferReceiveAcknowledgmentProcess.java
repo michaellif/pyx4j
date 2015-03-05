@@ -20,6 +20,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 
 public class PaymentsFundsTransferReceiveAcknowledgmentProcess implements PmcProcess {
 
@@ -46,7 +47,7 @@ public class PaymentsFundsTransferReceiveAcknowledgmentProcess implements PmcPro
     }
 
     @Override
-    public void complete(PmcProcessContext context) {
+    public RunStatus complete(RunStatus runStatus, PmcProcessContext context) {
         switch (fundsTransferType) {
         case PreAuthorizedDebit:
             ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsPadProcessAcknowledgment);
@@ -57,6 +58,7 @@ public class PaymentsFundsTransferReceiveAcknowledgmentProcess implements PmcPro
         default:
             throw new IllegalArgumentException();
         }
+        return runStatus;
     }
 
 }

@@ -109,19 +109,20 @@ class PmcProcessExecutor {
             }
 
             // Completion
+            PmcProcessContext context = new PmcProcessContext(run.forDate().getValue(), run.executionReport().processed().getValue(), run.executionReport()
+                    .failed().getValue(), run.executionReport().erred().getValue());
+            PmcProcessMonitor.setContext(run, pmcProcess, context);
             try {
-                PmcProcessContext context = new PmcProcessContext(run.forDate().getValue(), run.executionReport().processed().getValue(), run.executionReport()
-                        .failed().getValue(), run.executionReport().erred().getValue());
-                PmcProcessMonitor.setContext(run, pmcProcess, context);
-                pmcProcess.complete(context);
-                Persistence.service().retrieveMember(run.executionReport().details(), AttachLevel.Attached);
-                context.getExecutionMonitor().updateExecutionReport(run.executionReport());
-                Persistence.service().persist(run.executionReport());
+                runStatus = pmcProcess.complete(runStatus, context);
             } catch (Throwable e) {
                 log.error("pmcProcess execution error", e);
                 run.errorMessage().setValue(ExecutionMonitor.truncErrorMessage(ExceptionMessagesExtractor.getAllMessages(e)));
                 run.status().setValue(RunStatus.Failed);
                 return;
+            } finally {
+                Persistence.service().retrieveMember(run.executionReport().details(), AttachLevel.Attached);
+                context.getExecutionMonitor().updateExecutionReport(run.executionReport());
+                Persistence.service().persist(run.executionReport());
             }
             run.status().setValue(runStatus);
         } finally {

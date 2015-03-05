@@ -20,6 +20,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.legal.eviction.N4ManagementFacade;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 
 public class N4AutoCancellationProcess implements PmcProcess {
 
@@ -43,8 +44,9 @@ public class N4AutoCancellationProcess implements PmcProcess {
     }
 
     @Override
-    public void complete(PmcProcessContext context) {
+    public RunStatus complete(RunStatus runStatus, PmcProcessContext context) {
         log.info("N4 Auto Cancellation Process complete");
+        return runStatus;
     }
 
 }

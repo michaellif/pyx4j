@@ -22,13 +22,13 @@ import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
-    public FundsTransferFile prepareFundsTransferFile(CaledonFundsTransferType fundsTransferType) {
-        return new FundsTransferCaledon().prepareFundsTransferFile(fundsTransferType);
+    public FundsTransferFile prepareFundsTransferFile(ExecutionMonitor executionMonitor, CaledonFundsTransferType fundsTransferType) {
+        return new FundsTransferCaledon(executionMonitor).prepareFundsTransferFile(fundsTransferType);
     }
 
     @Override
-    public boolean sendFundsTransferFile(final FundsTransferFile padFile) {
-        return new FundsTransferCaledon().sendFundsTransferFile(padFile);
+    public boolean sendFundsTransferFile(ExecutionMonitor executionMonitor, final FundsTransferFile padFile) {
+        return new FundsTransferCaledon(executionMonitor).sendFundsTransferFile(padFile);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
     public CaledonFundsTransferType receiveFundsTransferAcknowledgementFile(ExecutionMonitor executionMonitor) {
-        return new FundsTransferCaledon().receiveFundsTransferAcknowledgementFile(executionMonitor);
+        return new FundsTransferCaledon(executionMonitor).receiveFundsTransferAcknowledgementFile();
     }
 
     @Override
@@ -58,7 +58,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
     public CaledonFundsTransferType receiveFundsTransferReconciliation(ExecutionMonitor executionMonitor) {
-        return new FundsTransferCaledon().receiveFundsTransferReconciliation(executionMonitor);
+        return new FundsTransferCaledon(executionMonitor).receiveFundsTransferReconciliation();
     }
 
     @Override
@@ -73,7 +73,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
     public Integer receiveCardsReconciliation(ExecutionMonitor executionMonitor) {
-        return new FundsTransferCaledon().receiveCardsReconciliation(executionMonitor);
+        return new FundsTransferCaledon(executionMonitor).receiveCardsReconciliation();
     }
 
     @Override

@@ -25,6 +25,7 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 
 public class DepositRefundProcess implements PmcProcess {
 
@@ -66,8 +67,9 @@ public class DepositRefundProcess implements PmcProcess {
     }
 
     @Override
-    public void complete(PmcProcessContext context) {
+    public RunStatus complete(RunStatus runStatus, PmcProcessContext context) {
         log.info("Deposit Refund batch job finished");
+        return runStatus;
     }
 
 }

@@ -20,6 +20,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.tenant.lease.LeaseProcessFacade;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 
 public class LeaseCompletionProcess implements PmcProcess {
 
@@ -43,7 +44,8 @@ public class LeaseCompletionProcess implements PmcProcess {
     }
 
     @Override
-    public void complete(PmcProcessContext context) {
+    public RunStatus complete(RunStatus runStatus, PmcProcessContext context) {
         log.info("Complete Lease batch job finished");
+        return runStatus;
     }
 }

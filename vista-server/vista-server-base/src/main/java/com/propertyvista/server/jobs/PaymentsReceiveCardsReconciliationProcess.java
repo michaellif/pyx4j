@@ -18,6 +18,7 @@ import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 
 public class PaymentsReceiveCardsReconciliationProcess implements PmcProcess {
 
@@ -40,11 +41,11 @@ public class PaymentsReceiveCardsReconciliationProcess implements PmcProcess {
     }
 
     @Override
-    public void complete(PmcProcessContext context) {
+    public RunStatus complete(RunStatus runStatus, PmcProcessContext context) {
         if ((recordsReceived != null) && (recordsReceived > 0)) {
             ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsProcessCardsReconciliation);
         }
-
+        return runStatus;
     }
 
 }

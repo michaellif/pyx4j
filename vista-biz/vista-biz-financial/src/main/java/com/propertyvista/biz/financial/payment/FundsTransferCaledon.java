@@ -53,10 +53,16 @@ import com.propertyvista.operations.domain.eft.cards.to.DailyReportTO;
 
 public class FundsTransferCaledon {
 
+    private final ExecutionMonitor executionMonitor;
+
     private static final Logger log = LoggerFactory.getLogger(FundsTransferCaledon.class);
 
     private final String companyId = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getCaledonFundsTransferConfiguration()
             .getIntefaceCompanyId();
+
+    FundsTransferCaledon(ExecutionMonitor executionMonitor) {
+        this.executionMonitor = executionMonitor;
+    }
 
     public FundsTransferFile prepareFundsTransferFile(final CaledonFundsTransferType fundsTransferType) {
         return new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<FundsTransferFile, RuntimeException>() {
@@ -79,6 +85,7 @@ public class FundsTransferCaledon {
                     log.info("created FundsTransferFile # {} for {} {}", padFile.fileCreationNumber().getValue(), companyId, fundsTransferType);
                 } else {
                     log.info("continue with FundsTransferFile # {} for {} {}", padFile.fileCreationNumber().getValue(), companyId, fundsTransferType);
+                    executionMonitor.addInfoEvent("continue with file", padFile.fileCreationNumber().getValue());
                 }
                 return padFile;
             }
@@ -113,6 +120,7 @@ public class FundsTransferCaledon {
         criteria.eq(criteria.proto().padBatch().padFile(), padFile);
         int records = Persistence.service().count(criteria);
         if (records == 0) {
+            executionMonitor.setMessage("Nothing to send");
             return false;
         }
 
@@ -162,43 +170,49 @@ public class FundsTransferCaledon {
 
         });
 
-        Throwable sendError = null;
+        boolean revolving = false;
+        boolean fileSent = false;
         try {
             ServerSideFactory.create(EFTTransportFacade.class).sendFundsTransferFile(padFile);
             padFile.status().setValue(FundsTransferFile.PadFileStatus.Sent);
             padFile.sent().setValue(new Date());
+
+            executionMonitor.setMessage("PAD file# " + padFile.fileCreationNumber().getStringView());
+            executionMonitor.addInfoEvent("sent file", padFile.fileName().getValue());
+            executionMonitor.addInfoEvent("fileCreationNumber", padFile.fileCreationNumber().getValue());
+            revolving = true;
+            fileSent = true;
         } catch (SftpTransportConnectionException e) {
             // Allow to recover the process automatically
-            sendError = e;
             padFile.status().setValue(FundsTransferFile.PadFileStatus.Creating);
             log.info("file was not sent due to connection error, set status to {} for next resend", padFile.status());
+            revolving = true;
+            executionMonitor.addErredEvent("connection error", e);
         } catch (FileCreationException e) {
             // Allow to recover the process automatically
-            sendError = e;
             padFile.status().setValue(FundsTransferFile.PadFileStatus.Creating);
             log.info("file was not sent due file system error, set status to {} for next resend", padFile.status());
-        } catch (Throwable e) {
-            sendError = e;
-            padFile.status().setValue(FundsTransferFile.PadFileStatus.SendError);
-        }
+            revolving = true;
+            executionMonitor.addErredEvent("create File", e);
+        } finally {
 
-        padFile.batches().setAttachLevel(AttachLevel.Detached);
-
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
-
-            @Override
-            public Void execute() {
-                Persistence.service().merge(padFile);
-                return null;
+            padFile.batches().setAttachLevel(AttachLevel.Detached);
+            if (!revolving) {
+                padFile.status().setValue(FundsTransferFile.PadFileStatus.SendError);
             }
 
-        });
+            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
-        if (sendError != null) {
-            throw new RuntimeException(sendError.getMessage(), sendError);
+                @Override
+                public Void execute() {
+                    Persistence.service().merge(padFile);
+                    return null;
+                }
+
+            });
         }
 
-        return true;
+        return fileSent;
 
     }
 
@@ -287,7 +301,7 @@ public class FundsTransferCaledon {
         }
     }
 
-    public CaledonFundsTransferType receiveFundsTransferAcknowledgementFile(final ExecutionMonitor executionMonitor) {
+    public CaledonFundsTransferType receiveFundsTransferAcknowledgementFile() {
         final FundsTransferAckFile padAkFile;
         try {
             padAkFile = ServerSideFactory.create(EFTTransportFacade.class).receiveFundsTransferAcknowledgementFile(companyId);
@@ -324,7 +338,7 @@ public class FundsTransferCaledon {
         return padAkFile.fundsTransferType().getValue();
     }
 
-    public CaledonFundsTransferType receiveFundsTransferReconciliation(final ExecutionMonitor executionMonitor) {
+    public CaledonFundsTransferType receiveFundsTransferReconciliation() {
         final FundsReconciliationFile reconciliationFile;
         try {
             reconciliationFile = ServerSideFactory.create(EFTTransportFacade.class).receiveFundsTransferReconciliation(companyId);
@@ -360,13 +374,13 @@ public class FundsTransferCaledon {
         return reconciliationFile.fundsTransferType().getValue();
     }
 
-    public Integer receiveCardsReconciliation(final ExecutionMonitor executionMonitor) {
+    public Integer receiveCardsReconciliation() {
         Integer r;
-        r = poolAndReceiveCardsDailyRepor(executionMonitor);
+        r = poolAndReceiveCardsDailyRepor();
         if (r != null) {
             return r;
         }
-        r = poolAndReceiveCardsReconciliation(executionMonitor);
+        r = poolAndReceiveCardsReconciliation();
         if (r != null) {
             return r;
         }
@@ -374,7 +388,7 @@ public class FundsTransferCaledon {
         return null;
     }
 
-    Integer poolAndReceiveCardsDailyRepor(final ExecutionMonitor executionMonitor) {
+    Integer poolAndReceiveCardsDailyRepor() {
         // Process DailyReport to make records Cleared
         final DailyReportTO dailyReportFile;
         try {
@@ -414,7 +428,7 @@ public class FundsTransferCaledon {
     }
 
     // Then process Reconciliation
-    Integer poolAndReceiveCardsReconciliation(final ExecutionMonitor executionMonitor) {
+    Integer poolAndReceiveCardsReconciliation() {
         final CardsReconciliationTO reconciliationFile;
         try {
             reconciliationFile = ServerSideFactory.create(EFTTransportFacade.class).receiveCardsReconciliationFiles(

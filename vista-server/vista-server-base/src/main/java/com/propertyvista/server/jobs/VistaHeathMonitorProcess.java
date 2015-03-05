@@ -18,6 +18,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 import com.propertyvista.biz.system.VistaSystemFacade;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 
 public class VistaHeathMonitorProcess implements PmcProcess {
 
@@ -38,7 +39,8 @@ public class VistaHeathMonitorProcess implements PmcProcess {
     }
 
     @Override
-    public void complete(PmcProcessContext context) {
+    public RunStatus complete(RunStatus runStatus, PmcProcessContext context) {
+        return runStatus;
     }
 
 }

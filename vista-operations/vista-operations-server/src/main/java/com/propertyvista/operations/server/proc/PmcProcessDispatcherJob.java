@@ -184,7 +184,7 @@ public class PmcProcessDispatcherJob implements Job {
 
             @Override
             public Void execute() {
-                if ((run.status().getValue() == RunStatus.Sleeping) && !trigger.sleepRetry().isNull()) {
+                if ((RunStatus.requiredRescheduleRun().contains(run.status().getValue())) && !trigger.sleepRetry().isNull()) {
                     // Reschedule run automatically
                     JobUtils.schedulSleepRetry(trigger, scheduledFireTime);
                 }
