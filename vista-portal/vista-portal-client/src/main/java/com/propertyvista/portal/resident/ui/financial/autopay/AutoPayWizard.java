@@ -399,10 +399,10 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
             public void onClick(ClickEvent event) {
                 switch (get(proto().paymentMethod()).getValue().type().getValue()) {
                 case Echeck:
-                    preAuthorizedAgreementAnchor.openTerm(ResidentPortalTerms.PreauthorizedPaymentTerms.class, event);
+                    preAuthorizedAgreementAnchor.openTerm(ResidentPortalTerms.PreauthorizedPaymentECheckTerms.class, event);
                     break;
                 case CreditCard:
-                    preAuthorizedAgreementAnchor.openTerm(ResidentPortalTerms.CreditCardPolicy.class, event);
+                    preAuthorizedAgreementAnchor.openTerm(ResidentPortalTerms.PreauthorizedPaymentCardTerms.class, event);
                     break;
                 default:
                     assert false : "Illegal payment method type!";

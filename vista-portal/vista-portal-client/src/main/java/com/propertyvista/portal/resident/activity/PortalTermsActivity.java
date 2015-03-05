@@ -71,10 +71,10 @@ public class PortalTermsActivity extends AbstractActivity {
             GWT.<PortalTermsAndPoliciesService> create(PortalTermsAndPoliciesService.class).getTerm(callback,
                     TermsAndPoliciesType.ResidentPortalWebPaymentFeeTerms);
 
-        } else if (place instanceof ResidentPortalTerms.PreauthorizedPaymentTerms) {
+        } else if (place instanceof ResidentPortalTerms.PreauthorizedPaymentECheckTerms) {
             GWT.<PortalTermsAndPoliciesService> create(PortalTermsAndPoliciesService.class).getTerm(callback,
                     TermsAndPoliciesType.TenantPreauthorizedPaymentECheckTerms);
-        } else if (place instanceof ResidentPortalTerms.CreditCardPolicy) {
+        } else if (place instanceof ResidentPortalTerms.PreauthorizedPaymentCardTerms) {
             GWT.<PortalTermsAndPoliciesService> create(PortalTermsAndPoliciesService.class).getTerm(callback,
                     TermsAndPoliciesType.TenantPreauthorizedPaymentCardTerms);
         } else if (place instanceof ResidentPortalTerms.TenantSurePreAuthorizedPaymentTerms) {

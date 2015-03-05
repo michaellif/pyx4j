@@ -32,10 +32,10 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
 
     public static class ResidentPortalTerms {
 
-        public static class PreauthorizedPaymentTerms extends AppPlace implements PublicPlace {
+        public static class PreauthorizedPaymentECheckTerms extends AppPlace implements PublicPlace {
         }
 
-        public static class CreditCardPolicy extends AppPlace implements PublicPlace {
+        public static class PreauthorizedPaymentCardTerms extends AppPlace implements PublicPlace {
         }
 
         public static class TenantSurePreAuthorizedPaymentTerms extends AppPlace implements PublicPlace {
