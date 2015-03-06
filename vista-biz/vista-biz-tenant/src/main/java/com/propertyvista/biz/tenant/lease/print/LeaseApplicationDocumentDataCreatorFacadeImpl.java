@@ -24,6 +24,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
@@ -48,6 +49,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
+import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataAboutYouSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataAdditionalInfoSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataCoApplicantDTO;
@@ -66,6 +68,7 @@ import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDa
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataResidenceDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataSectionsDTO;
 import com.propertyvista.server.common.util.AddressRetriever;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseApplicationDocumentDataCreatorFacade {
 
@@ -382,6 +385,24 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             utilites.add(utility.getStringView());
         }
         return StringUtils.join(utilites, "; ");
+    }
+
+    private BillDTO retrieveBillData(Lease lease) {
+        BillDTO billData = null;
+
+        if (VistaFeatures.instance().yardiIntegration()) {
+            return null; // no bills for Yardi mode!..
+        }
+
+        if (lease.status().getValue().isDraft() && Lease.Status.isApplicationUnitSelected(lease)) {
+            // create bill preview for draft leases/applications:
+            billData = BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(lease));
+        } else if (lease.status().getValue().isCurrent()) {
+            // create bill preview for draft leases/applications:
+            billData = BillingUtils.createBillDto(ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(lease));
+        }
+
+        return billData;
     }
 
 }

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -24,7 +24,6 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
@@ -38,7 +37,6 @@ import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillDataDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillViewDTO;
@@ -131,20 +129,11 @@ public class BillingServiceImpl implements BillingService {
 
         // create and fill resulting DTO:
         BillViewDTO result = EntityFactory.create(BillViewDTO.class);
-        result.billData().set(new CrudEntityBinder<Bill, BillDTO>(Bill.class, BillDTO.class) {
-            @Override
-            protected void bind() {
-                bindCompleteObject();
-            }
-        }.createTO(bill));
+        result.billData().set(BillingUtils.createBillDto(bill));
 
         // load detached entities:
-        Persistence.service().retrieve(result.billData().lineItems());
-        Persistence.service().retrieve(result.billData().billingAccount());
         Persistence.service().retrieve(result.billData().billingAccount().lease());
         Persistence.service().retrieve(result.billData().billingCycle().building());
-
-        BillingUtils.enhanceBillDto(bill, result.billData());
 
         callback.onSuccess(result);
     }

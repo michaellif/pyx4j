@@ -32,6 +32,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
@@ -60,6 +61,17 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.BillDTO;
 
 public class BillingUtils {
+    private static class BillConverter extends CrudEntityBinder<Bill, BillDTO> {
+
+        public BillConverter() {
+            super(Bill.class, BillDTO.class);
+        }
+
+        @Override
+        protected void bind() {
+            bindCompleteObject();
+        }
+    }
 
     public static void prepareAccumulators(Bill bill) {
         //Set accumulating fields to 0 value
@@ -84,7 +96,7 @@ public class BillingUtils {
         bill.taxes().setValue(new BigDecimal("0.00"));
     }
 
-    public static boolean isService(Product.ProductV product) {
+    public static boolean isService(Product.ProductV<?> product) {
         return product.cast() instanceof Service.ServiceV;
     }
 
