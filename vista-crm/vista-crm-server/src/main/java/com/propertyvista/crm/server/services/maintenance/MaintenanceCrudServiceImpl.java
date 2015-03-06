@@ -112,7 +112,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrmCrudServiceImpl<Maint
         schedule.scheduledTime().timeFrom().set(scheduleDTO.scheduledTime().timeFrom());
         schedule.scheduledTime().timeTo().set(scheduleDTO.scheduledTime().timeTo());
         schedule.workDescription().set(scheduleDTO.workDescription());
-        ServerSideFactory.create(MaintenanceFacade.class).sheduleMaintenanceRequest(request, schedule, CrmAppContext.getCurrentUserEmployee());
+        ServerSideFactory.create(MaintenanceFacade.class).scheduleMaintenanceRequest(request, schedule, CrmAppContext.getCurrentUserEmployee());
         saveRequest(request, oldStatus);
         callback.onSuccess(null);
     }

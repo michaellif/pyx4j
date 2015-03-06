@@ -76,8 +76,8 @@ public class MaintenanceYardiFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
-    public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestWorkOrder schedule, Employee requestReporter) {
-        MaintenanceYardiManager.instance().sheduleMaintenanceRequest(request, schedule, requestReporter);
+    public void scheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestWorkOrder schedule, Employee requestReporter) {
+        MaintenanceYardiManager.instance().scheduleMaintenanceRequest(request, schedule, requestReporter);
     }
 
     @Override
