@@ -57,10 +57,13 @@ import com.propertyvista.domain.ref.ProvincePolicyNode;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.CompanyVendor;
 import com.propertyvista.generator.util.RandomUtil;
+import com.propertyvista.generator.util.SameCityControlHelper;
 
 public class BuildingsGenerator {
 
     public static class BuildingsGeneratorConfig {
+
+        public String city = null;
 
         public String provinceCode = null;
 
@@ -72,12 +75,42 @@ public class BuildingsGenerator {
         DataGenerator.setRandomSeed(seed);
     }
 
-    public List<Building> createBuildings(int numBuildings, BuildingsGeneratorConfig config) {
+    /**
+     *
+     * @param manyAddressesInSameCity
+     *            true for at least 4 buildings in the same city (demo purposes). False for random addresses specified by config param
+     * @return
+     */
+    public List<Building> createBuildings(int numBuildings, BuildingsGeneratorConfig config, boolean manyBuildingsInSameCity) {
+        if (manyBuildingsInSameCity) {
+            return createBuildingsWithManyAddressesSameCity(numBuildings, config);
+        } else {
+            return createBuildings(numBuildings, config);
+        }
+    }
+
+    private List<Building> createBuildings(int numBuildings, BuildingsGeneratorConfig config) {
         List<Building> buildings = new ArrayList<Building>();
+
         for (int b = 0; b < numBuildings; b++) {
             Building building = createBuilding(b, config);
             buildings.add(building);
         }
+
+        return buildings;
+    }
+
+    private List<Building> createBuildingsWithManyAddressesSameCity(int numBuildings, BuildingsGeneratorConfig config) {
+        List<Building> buildings = new ArrayList<Building>();
+        SameCityControlHelper sameCityControlHelper = new SameCityControlHelper();
+
+        for (int b = 0; b < numBuildings; b++) {
+
+            Building building = createBuilding(b, sameCityControlHelper.updatedBuildingConfig(config));
+            buildings.add(building);
+            sameCityControlHelper.updateLastAddress(building.info().address());
+        }
+
         return buildings;
     }
 
