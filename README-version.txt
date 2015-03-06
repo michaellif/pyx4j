@@ -8,10 +8,12 @@
 
    e.g.  mvn versions:set -DgenerateBackupPoms=false
 
-* When creating Branch change VistaTODO.codeBaseIsProdBranch=true in Branch to support dual development environments
+* In created Branch change
+    * change VistaTODO.codeBaseIsProdBranch=true in Branch to support dual development environments
+    * rename the file in root production-branch.profile.off to production-branch.profile
+    * set patch.number=0 in  vista-server\src\main\resources-generated\generated\build.version.properties
+      **  The "patch.number" to be changed (set+1) for every next production deployment build in Branch
 
-*
-  To "patch.number" be changed (set) for every next production deployment build in Branch
-  file vista-server\src\main\resources-generated\generated\build.version.properties contains fixed patch.number
+ merge branch back to master. but do not merge any files modified in created Branch so the next merge will not copy them.
 
 
