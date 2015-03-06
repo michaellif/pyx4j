@@ -54,7 +54,7 @@
 				</textElement>
 				<text><![CDATA[Date Submitted]]></text>
 			</staticText>
-			<image scaleImage="RetainShape" hAlign="Right" vAlign="Top">
+			<image scaleImage="RetainShape" hAlign="Left" vAlign="Top">
 				<reportElement x="0" y="0" width="286" height="66" uuid="f6924c01-bfb0-4fba-9819-de3248917f43"/>
 				<imageExpression><![CDATA[$P{landlordLogo}]]></imageExpression>
 			</image>
