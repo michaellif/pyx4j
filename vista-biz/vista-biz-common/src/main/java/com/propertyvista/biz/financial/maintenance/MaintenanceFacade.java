@@ -51,7 +51,7 @@ public interface MaintenanceFacade {
 
     void rateMaintenanceRequest(MaintenanceRequest request, SurveyResponse rate);
 
-    void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestWorkOrder schedule, Employee requestReporter);
+    void scheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestWorkOrder schedule, Employee requestReporter);
 
     void resolveMaintenanceRequest(MaintenanceRequest request, Employee requestReporter);
 

@@ -152,7 +152,7 @@ public abstract class MaintenanceAbstractManager {
         Persistence.service().persist(request);
     }
 
-    public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestWorkOrder schedule, Employee requestReporter) {
+    public void scheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestWorkOrder schedule, Employee requestReporter) {
         request.workHistory().add(schedule);
         request.status().set(getMaintenanceStatus(request.building(), StatusPhase.Scheduled));
 

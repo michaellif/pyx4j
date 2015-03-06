@@ -28,7 +28,9 @@ import com.propertyvista.biz.system.yardi.YardiMaintenanceFacade;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
+import com.propertyvista.domain.maintenance.MaintenanceRequestWorkOrder;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -69,18 +71,37 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
             // TODO: send maintenance request mail from messaging system
             ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCreatedPMC(request);
             MailMessage mail = ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCreatedTenant(request);
-            ServerSideFactory.create(CommunicationMessageFacade.class).association2Thread(request, requestReporter, mail.getHtmlBody());
+            if (mail != null) {
+                ServerSideFactory.create(CommunicationMessageFacade.class).association2Thread(request, requestReporter, mail.getHtmlBody());
+            }
         }
     }
 
     @Override
     public void cancelMaintenanceRequest(MaintenanceRequest request, CommunicationEndpoint requestReporter) {
-        request.status().set(getMaintenanceStatus(request.building(), StatusPhase.Cancelled));
-        postRequest(request);
+        MaintenanceRequestStatus status = getMaintenanceStatus(request.building(), StatusPhase.Cancelled);
+        if (status != null) {
+            super.cancelMaintenanceRequest(request, requestReporter);
+            postRequest(request);
+        }
+    }
 
-        // TODO: send maintenance request mail from messaging system
-        MailMessage message = ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCancelled(request);
-        ServerSideFactory.create(CommunicationMessageFacade.class).associationChange2Message(request, requestReporter, extractMailBody(message));
+    @Override
+    public void resolveMaintenanceRequest(MaintenanceRequest request, Employee requestReporter) {
+        MaintenanceRequestStatus status = getMaintenanceStatus(request.building(), StatusPhase.Resolved);
+        if (status != null) {
+            super.resolveMaintenanceRequest(request, requestReporter);
+            postRequest(request);
+        }
+    }
+
+    @Override
+    public void scheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestWorkOrder schedule, Employee requestReporter) {
+        MaintenanceRequestStatus status = getMaintenanceStatus(request.building(), StatusPhase.Scheduled);
+        if (status != null) {
+            super.scheduleMaintenanceRequest(request, schedule, requestReporter);
+            postRequest(request);
+        }
     }
 
     @Override
