@@ -71,6 +71,8 @@ public class CommonsGenerator {
 
     private static Map<String, List<InternationalAddress>> addresses = new HashMap<>();
 
+    private static Map<ISOCountry, List<InternationalAddress>> citiesByCountry = new HashMap<>();
+
     private static final String DEFAULT_ADDRESSES_RESOURCE_FILE = "address-intern.csv";
 
     public static String lipsum() {
@@ -107,7 +109,7 @@ public class CommonsGenerator {
                     IOUtils.resourceFileName("buildings.xlsx", CommonsGenerator.class));
             buildingMarketings = entities.toArray(new Marketing[entities.size()]);
         }
-        return buildingMarketings[DataGenerator.nextInt(buildingMarketings.length, "buildings", 15)];
+        return buildingMarketings[DataGenerator.nextInt(buildingMarketings.length, "buildings", 60)];
     }
 
     public static BuildingAmenity randomBuildingAmenity() {
@@ -307,9 +309,35 @@ public class CommonsGenerator {
         return getAddress(country);
     }
 
+    public static InternationalAddress randomCityAddressByCountry(ISOCountry country) {
+        List<InternationalAddress> cityAddresses = getCityAddressesByCountry(country);
+        return cityAddresses.get(DataGenerator.nextInt(cityAddresses.size(), "city", 15));
+    }
+
+    private static List<InternationalAddress> getCityAddressesByCountry(ISOCountry country) {
+        loadAddresses(country);
+        loadCities(country);
+        return citiesByCountry.get(country);
+    }
+
+    private static void loadCities(ISOCountry country) {
+        if (citiesByCountry.get(country) == null) {
+            List<String> currentCities = new ArrayList<String>();
+            List<InternationalAddress> cityAddresses = new ArrayList<InternationalAddress>();
+            for (InternationalAddress address : getCountryAddresses(country)) {
+                if (!currentCities.contains(address.city().getValue())) {
+                    currentCities.add(address.city().getValue());
+                    cityAddresses.add(address);
+                }
+            }
+
+            citiesByCountry.put(country, cityAddresses);
+        }
+    }
+
     private static InternationalAddress getAddress(ISOCountry country) {
         List<InternationalAddress> countryAddresses = getCountryAddresses(country);
-        return countryAddresses.get(DataGenerator.nextInt(countryAddresses.size(), "address", 15)).duplicate();
+        return countryAddresses.get(DataGenerator.nextInt(countryAddresses.size(), "address", 60)).duplicate();
     }
 
     private static InternationalAddress getRandomAddressByCountry(ISOCountry country) {
@@ -321,17 +349,35 @@ public class CommonsGenerator {
         if (config.provinceCode != null) {
             ISOProvince prov = ISOProvince.forCode(config.provinceCode);
             if (prov != null) {
-                loadAddresses(config.country);
-                List<InternationalAddress> adressesFiltered = new ArrayList<>();
-                for (InternationalAddress addr : getCountryAddresses(config.country)) {
-                    if (prov.name.equalsIgnoreCase(addr.province().getValue())) {
-                        adressesFiltered.add(addr);
-                    }
-                }
-                return adressesFiltered.get(DataGenerator.randomInt(adressesFiltered.size())).duplicate();
+                return filterByProvince(config, prov);
             }
         }
         return createInternationalAddress(config.country);
+    }
+
+    private static InternationalAddress filterByProvince(BuildingsGeneratorConfig config, ISOProvince prov) {
+        loadAddresses(config.country);
+        List<InternationalAddress> adressesFiltered = new ArrayList<>();
+        for (InternationalAddress addr : getCountryAddresses(config.country)) {
+            if (prov.name.equalsIgnoreCase(addr.province().getValue())) {
+                adressesFiltered.add(addr);
+            }
+        }
+        if (config.city != null) {
+            return filterByCity(config, adressesFiltered);
+        }
+        return adressesFiltered.get(DataGenerator.randomInt(adressesFiltered.size())).duplicate();
+    }
+
+    private static InternationalAddress filterByCity(BuildingsGeneratorConfig config, List<InternationalAddress> adressesFiltered) {
+        List<InternationalAddress> otherCities = new ArrayList<>();
+        for (InternationalAddress addr : adressesFiltered) {
+            if (!addr.city().getValue().equals(config.city)) {
+                otherCities.add(addr);
+            }
+        }
+        adressesFiltered.removeAll(otherCities);
+        return adressesFiltered.get(DataGenerator.nextInt(adressesFiltered.size(), "addressByProvinceAndCity", 4)).duplicate();
     }
 
     private static List<InternationalAddress> getCountryAddresses(ISOCountry country) {
