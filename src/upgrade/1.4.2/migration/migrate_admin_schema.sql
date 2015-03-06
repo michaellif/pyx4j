@@ -112,6 +112,36 @@ SET search_path = '_admin_';
         WHERE   id NOT IN (SELECT features FROM admin_pmc);
         
         SET CONSTRAINTS ALL IMMEDIATE;
+        
+        
+        /**     DELETE unnneded records from _admin_.vista.terms, _admin_.vista.terms_v,
+        ***     _admin_.vista_terms_v$document AND _admin_.legal_document 
+        **/
+        
+        
+        
+        DELETE FROM vista_terms_v$document
+        WHERE   owner IN (  SELECT id  FROM vista_terms_v 
+                            WHERE holder IN (   SELECT  id
+                                                FROM    vista_terms 
+                                                WHERE   target IN ('TenantBillingTerms',
+                                                'TenantPreAuthorizedPaymentECheckTerms',
+                                                'TenantPreAuthorizedPaymentCardTerms')));
+                                                
+        DELETE FROM legal_document 
+        WHERE   id NOT IN ( SELECT value  FROM vista_terms_v$document) ;
+            
+
+        
+        DELETE FROM vista_terms_v WHERE holder IN ( SELECT  id
+                                                    FROM    vista_terms 
+                                                    WHERE   target IN ('TenantBillingTerms',
+                                                    'TenantPreAuthorizedPaymentECheckTerms',
+                                                    'TenantPreAuthorizedPaymentCardTerms'));
+        
+        DELETE FROM vista_terms 
+        WHERE target IN (   'TenantBillingTerms','TenantPreAuthorizedPaymentECheckTerms',
+                            'TenantPreAuthorizedPaymentCardTerms');
 
 
         /**
