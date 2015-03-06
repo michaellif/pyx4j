@@ -35,7 +35,7 @@ public class VistaServerSideConfigurationDevPostgreSQL extends VistaServerSideCo
                     if (VistaTODO.codeBaseIsProdBranch) {
                         return super.dbName() + "_prod";
                     } else {
-                        return super.dbName();
+                        return super.dbName() + DevelopmentBranchProfile.dbNameOffset();
                     }
                 }
             };
