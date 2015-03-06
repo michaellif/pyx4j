@@ -79,9 +79,11 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
             switch (application) {
             case crm:
             case site:
+                hostName += "-" + application.name();
+                break;
             case resident:
             case prospect:
-                hostName += "-" + application.name();
+                hostName += "-portal";
                 break;
             default:
                 break;
