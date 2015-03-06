@@ -182,6 +182,8 @@
     </modules>
 
     <properties>
+        <patch.number>.0</patch.number>
+
         <appGWTModuleSufix></appGWTModuleSufix>
         <gwtEnableAssertions>false</gwtEnableAssertions>
 
