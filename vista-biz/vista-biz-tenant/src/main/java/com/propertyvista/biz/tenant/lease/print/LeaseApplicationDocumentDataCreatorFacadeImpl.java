@@ -31,6 +31,7 @@ import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.blob.LandlordMediaBlob;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.LeaseApplicationLegalPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm;
@@ -388,7 +389,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     }
 
     private BillDTO retrieveBillData(Lease lease) {
-        BillDTO billData = null;
+        BillDTO billData = null; // or EntityFactory.create(BillDTO.class);
 
         if (VistaFeatures.instance().yardiIntegration()) {
             return null; // no bills for Yardi mode!..
@@ -398,11 +399,13 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             // create bill preview for draft leases/applications:
             billData = BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(lease));
         } else if (lease.status().getValue().isCurrent()) {
-            // create bill preview for draft leases/applications:
-            billData = BillingUtils.createBillDto(ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(lease));
+            // get first bill for current leases:
+            Bill bill = ServerSideFactory.create(BillingFacade.class).getBill(lease, 1);
+            if (bill != null) {
+                billData = BillingUtils.createBillDto(bill);
+            }
         }
 
         return billData;
     }
-
 }
