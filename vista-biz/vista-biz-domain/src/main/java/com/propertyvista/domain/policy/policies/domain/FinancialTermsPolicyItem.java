@@ -12,6 +12,7 @@
  */
 package com.propertyvista.domain.policy.policies.domain;
 
+
 public interface FinancialTermsPolicyItem extends TermsPolicyItem {
 
 }
