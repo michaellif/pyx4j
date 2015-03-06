@@ -83,7 +83,13 @@ public class ClientApplicationVersionGenerator extends Generator {
             productVersion = productVersion.substring(0, productVersion.indexOf("-SNAPSHOT"));
         }
         String patchNumber = getConfigurationProperty(logger, context, PATCH_NUMBER);
+        if (patchNumber != null && patchNumber.startsWith("${")) {
+            patchNumber = "";
+        }
         String buildNumber = getConfigurationProperty(logger, context, BUILD_NUMBER);
+        if (buildNumber != null && buildNumber.startsWith("${")) {
+            buildNumber = "n/a";
+        }
 
         String buildLabel = productVersion + patchNumber + "." + buildNumber;
         String buildTime = getConfigurationProperty(logger, context, BUILD_TIME);
