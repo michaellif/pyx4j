@@ -53,6 +53,8 @@ public class ClientApplicationVersionGenerator extends Generator {
      */
     public static final String PROJECT_VERSION = "pyx.compileTimeSystemProperty.project.version";
 
+    public static final String PATCH_NUMBER = "pyx.compileTimeSystemProperty.patch.number";
+
     public static final String BUILD_NUMBER = "pyx.compileTimeSystemProperty.build.number";
 
     public static final String BUILD_TIME = "pyx.compileTimeSystemProperty.build.time";
@@ -80,9 +82,10 @@ public class ClientApplicationVersionGenerator extends Generator {
         if ((productVersion != null) && productVersion.endsWith("-SNAPSHOT")) {
             productVersion = productVersion.substring(0, productVersion.indexOf("-SNAPSHOT"));
         }
+        String patchNumber = getConfigurationProperty(logger, context, PATCH_NUMBER);
         String buildNumber = getConfigurationProperty(logger, context, BUILD_NUMBER);
 
-        String buildLabel = productVersion + "." + buildNumber;
+        String buildLabel = productVersion + patchNumber + "." + buildNumber;
         String buildTime = getConfigurationProperty(logger, context, BUILD_TIME);
         String buildFromat = getConfigurationProperty(logger, context, BUILD_TIME_FORMAT);
         String scmRevision = getConfigurationProperty(logger, context, SCM_REVISION);

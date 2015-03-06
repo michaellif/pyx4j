@@ -7,6 +7,9 @@
 	
 	<define-configuration-property name="pyx.compileTimeSystemProperty.project.version" is-multi-valued="false" />
     <set-configuration-property name="pyx.compileTimeSystemProperty.project.version" value="project.version" />
+
+    <define-configuration-property name="pyx.compileTimeSystemProperty.patch.number" is-multi-valued="false" />
+    <set-configuration-property name="pyx.compileTimeSystemProperty.patch.number" value="patch.number" />
     
     <define-configuration-property name="pyx.compileTimeSystemProperty.build.number" is-multi-valued="false" />
     <set-configuration-property name="pyx.compileTimeSystemProperty.build.number" value="build.number" />

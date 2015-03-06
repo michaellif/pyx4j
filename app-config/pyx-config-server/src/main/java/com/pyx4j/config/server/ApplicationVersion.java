@@ -121,12 +121,16 @@ public class ApplicationVersion {
             productVersion = productVersion.substring(0, productVersion.indexOf("-SNAPSHOT"));
         }
 
-        productBuild = properties.getProperty(PRODUCT_BUILD);
-        if ((productBuild != null) && productBuild.startsWith("${")) {
-            productBuild = productVersion + "." + buildNumber;
+        patchNumber = properties.getProperty(PATCH_NUMBER, "");
+        if (patchNumber.startsWith("${")) {
+            patchNumber = "";
         }
 
-        patchNumber = properties.getProperty(PATCH_NUMBER);
+        productBuild = properties.getProperty(PRODUCT_BUILD);
+        if ((productBuild != null) && productBuild.startsWith("${")) {
+            productBuild = productVersion + patchNumber + "." + buildNumber;
+        }
+
         scmRevision = properties.getProperty("scm.revision", "");
         try {
             String bildTimeString = properties.getProperty(BUILD_TIME);
