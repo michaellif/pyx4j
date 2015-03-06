@@ -12,6 +12,7 @@
  */
 package com.propertyvista.domain.policy.policies.domain;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.ToString;
@@ -20,6 +21,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
+@AbstractEntity
 @ToStringFormat("{0}")
 public interface TermsPolicyItem extends IEntity {
 
