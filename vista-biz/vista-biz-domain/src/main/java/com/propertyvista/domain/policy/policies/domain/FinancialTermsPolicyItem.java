@@ -12,6 +12,9 @@
  */
 package com.propertyvista.domain.policy.policies.domain;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
+
+@AbstractEntity
 public interface FinancialTermsPolicyItem extends TermsPolicyItem {
 
 }
