@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <geoPairs>
     <pair>
+        <address>3602 Antiem St, , San Diego, California 92111, United States</address>
+        <geoPoint>32.809255/-117.159287</geoPoint>
+    </pair>
+    <pair>
+        <address>855 Carroll St, , Akron, Ohio 44305, United States</address>
+        <geoPoint>41.075766/-81.4916889</geoPoint>
+    </pair>
+    <pair>
         <address>1 Christianburg, Saint John, NB </address>
         <geoPoint>45.2733153/-66.0633081</geoPoint>
     </pair>
@@ -45,12 +53,24 @@
         <geoPoint>49.2050301/-122.926312</geoPoint>
     </pair>
     <pair>
+        <address>132 Rue de Carillon, , Quebec, Quebec G1K 4Z8, Canada</address>
+        <geoPoint>46.8139626/-71.2391878</geoPoint>
+    </pair>
+    <pair>
         <address>502 Delmar, Pointe-Claire, QC H9R 1E2</address>
         <geoPoint>45.4669375/-73.8033082</geoPoint>
     </pair>
     <pair>
+        <address>45 Martin St, , Milton, Ontario L9T 2R2, Canada</address>
+        <geoPoint>43.5141098/-79.883737</geoPoint>
+    </pair>
+    <pair>
         <address>1333 4th, Calgary, AB T2S 2S5</address>
         <geoPoint>51.0273711/-114.0715446</geoPoint>
+    </pair>
+    <pair>
+        <address>12001 Crystalwood Dr, , Houston, Texas 77013, United States</address>
+        <geoPoint>29.7818214/-95.224847</geoPoint>
     </pair>
     <pair>
         <address>223 Heiman, Kitchener, ON N2M 3M2</address>
@@ -67,6 +87,10 @@
     <pair>
         <address>1428 Commercial Dr, , Vancouver, British Columbia V5L 3X9, Canada</address>
         <geoPoint>49.2717009/-123.0695462</geoPoint>
+    </pair>
+    <pair>
+        <address>190 King William St, , Hamilton, Ontario L8R 1A8, Canada</address>
+        <geoPoint>43.2555516/-79.8619937</geoPoint>
     </pair>
     <pair>
         <address>2535 Florida, Toronto, ON </address>
@@ -103,6 +127,10 @@
     <pair>
         <address>235 Menard, Longueuil, QC J4L 1J6</address>
         <geoPoint>45.5224293/-73.4555927</geoPoint>
+    </pair>
+    <pair>
+        <address>551 Rue Dominion, , Montreal, Quebec H3J 2N5, Canada</address>
+        <geoPoint>45.4849595/-73.5738832</geoPoint>
     </pair>
     <pair>
         <address>2805 Flower Hill Church, Vancouver, BC </address>
@@ -161,12 +189,24 @@
         <geoPoint>43.7389179/-80.952241</geoPoint>
     </pair>
     <pair>
+        <address>1362 Mcintyre St, , Regina, Saskatchewan S4R 2M8, Canada</address>
+        <geoPoint>50.4571816/-104.616609</geoPoint>
+    </pair>
+    <pair>
         <address>1036 Myrand, Quebec, QC G1V 2V9</address>
         <geoPoint>46.7840701/-71.2634641</geoPoint>
     </pair>
     <pair>
+        <address>2010 S Miami Ave, , Miami, Florida 33129, United States</address>
+        <geoPoint>25.754899/-80.200247</geoPoint>
+    </pair>
+    <pair>
         <address>160 Mt Vermon St, , Boston, Massachusetts 02108, United States</address>
         <geoPoint>42.357278/-71.071726</geoPoint>
+    </pair>
+    <pair>
+        <address>17 Clinton St, , New York, New York 10002, United States</address>
+        <geoPoint>40.7208021/-73.9843917</geoPoint>
     </pair>
     <pair>
         <address>498 Delmar, Pointe-Claire, QC H9R 5V4</address>
@@ -175,6 +215,10 @@
     <pair>
         <address>1660 Bathurst, Toronto, ON M5P 3K1</address>
         <geoPoint>43.695148/-79.4234099</geoPoint>
+    </pair>
+    <pair>
+        <address>111 Lombard St, , Toronto, Ontario M5C 3H5, Canada</address>
+        <geoPoint>43.6523721/-79.3729446</geoPoint>
     </pair>
     <pair>
         <address>400 Cordova, Vancouver, BC V6A 1K2</address>
@@ -201,12 +245,32 @@
         <geoPoint>41.894965/-87.711759</geoPoint>
     </pair>
     <pair>
+        <address>650 Archwood Dr, , Ann Arbor, Michigan 48103, United States</address>
+        <geoPoint>42.290121/-83.785628</geoPoint>
+    </pair>
+    <pair>
         <address>392 Cooke, Toronto, ON </address>
         <geoPoint>43.7665218/-79.5036813</geoPoint>
     </pair>
     <pair>
+        <address>604 Belmont W, , Kitchener, Ontario N2M 1N5, Canada</address>
+        <geoPoint>43.4514977/-80.5167216</geoPoint>
+    </pair>
+    <pair>
+        <address>48 Greenway, , Albany, New York 12208, United States</address>
+        <geoPoint>42.661253/-73.8091949</geoPoint>
+    </pair>
+    <pair>
+        <address>951 Kettner Blvd, , San Diego, California 92101, United States</address>
+        <geoPoint>32.7151304/-117.1691578</geoPoint>
+    </pair>
+    <pair>
         <address>19 Birch, Calgary, AB </address>
         <geoPoint>51.148606/-114.2218253</geoPoint>
+    </pair>
+    <pair>
+        <address>788 Richards St, , Vancouver, British Columbia V6B OC8, Canada</address>
+        <geoPoint>49.2804843/-123.1169884</geoPoint>
     </pair>
     <pair>
         <address>610 Idylwyld Dr N, , Saskatoon, Saskatchewan S7L 0Z2, Canada</address>
@@ -215,6 +279,10 @@
     <pair>
         <address>2828 Sandalwood, Ottawa, ON K1V 7P5</address>
         <geoPoint>45.3792833/-75.6488364</geoPoint>
+    </pair>
+    <pair>
+        <address>1363 Lakeshore Road, , Burlington, Ontario L7S 1B2, Canada</address>
+        <geoPoint>43.3216975/-79.8000468</geoPoint>
     </pair>
     <pair>
         <address>3185 Chemin Chambly, Longueuil, QC J4L 1N3</address>
@@ -229,8 +297,16 @@
         <geoPoint>43.7050888/-79.5292987</geoPoint>
     </pair>
     <pair>
+        <address>200 Albert St, , Regina, Saskatchewan S4R 2N4, Canada</address>
+        <geoPoint>50.4754248/-104.6182373</geoPoint>
+    </pair>
+    <pair>
         <address>200 Ridley, North York, ON M5M 3M2</address>
         <geoPoint>43.7386194/-79.4195743</geoPoint>
+    </pair>
+    <pair>
+        <address>157 Annabella St, , Winnipeg, Manitoba R2W 3J1, Canada</address>
+        <geoPoint>49.9054045/-97.1211909</geoPoint>
     </pair>
     <pair>
         <address>573 Linda, Ottawa, ON </address>
@@ -241,8 +317,24 @@
         <geoPoint>43.495758/-80.548284</geoPoint>
     </pair>
     <pair>
+        <address>1023 Colony St, , Saskatoon, Saskatchewan S7N 0S3, Canada</address>
+        <geoPoint>52.1238384/-106.6450816</geoPoint>
+    </pair>
+    <pair>
         <address>900 Christie, Toronto, ON M6G 3C2</address>
         <geoPoint>43.6815962/-79.4256922</geoPoint>
+    </pair>
+    <pair>
+        <address>441 Elizabeth St, , Burlington, Ontario L7R 2L8, Canada</address>
+        <geoPoint>43.326602/-79.7966318</geoPoint>
+    </pair>
+    <pair>
+        <address>2764 Plante Rd, , Aurora, Illinois 60542, United States</address>
+        <geoPoint>41.812776/-88.388582</geoPoint>
+    </pair>
+    <pair>
+        <address>5859 Stanley St, , Halifax, Nova Scotia B3K 2G2, Canada</address>
+        <geoPoint>44.6627366/-63.6051316</geoPoint>
     </pair>
     <pair>
         <address>2836 Sandalwood, Ottawa, ON K1V 7P5</address>
@@ -255,6 +347,14 @@
     <pair>
         <address>1200 Saint-Sacrement, Quebec, QC G1N 3Y2</address>
         <geoPoint>46.801868/-71.261769</geoPoint>
+    </pair>
+    <pair>
+        <address>341 MacLaren, , Ottawa, Ontario K2P 2E2, Canada</address>
+        <geoPoint>45.4152353/-75.6949218</geoPoint>
+    </pair>
+    <pair>
+        <address>201 Chain Lake Dr, , Halifax, Nova Scotia B3S 1C8, Canada</address>
+        <geoPoint>44.6495778/-63.6772598</geoPoint>
     </pair>
     <pair>
         <address>321 South 23rd, London, ON </address>
@@ -281,6 +381,10 @@
         <geoPoint>39.9102202/-75.1706232</geoPoint>
     </pair>
     <pair>
+        <address>2315 Santa Maria St, , Austin, Texas 78702, United States</address>
+        <geoPoint>30.2574255/-97.7175723</geoPoint>
+    </pair>
+    <pair>
         <address>4555 Highway 7, , Woodbridge, Ontario L4L 1S6, Canada</address>
         <geoPoint>43.7838603/-79.5747644</geoPoint>
     </pair>
@@ -301,6 +405,10 @@
         <geoPoint>45.4667714/-73.8030715</geoPoint>
     </pair>
     <pair>
+        <address>1220 Jackson St, , Philadelphia, Pennsylvania 19148, United States</address>
+        <geoPoint>39.922592/-75.166965</geoPoint>
+    </pair>
+    <pair>
         <address>33690 Marshall Road, Abbotsford, BC V2S 1L2, Canada</address>
         <geoPoint>49.0388565/-122.2906149</geoPoint>
     </pair>
@@ -311,6 +419,10 @@
     <pair>
         <address>2334 Brunswick Street, Halifax, NS B3K 5K6, Canada</address>
         <geoPoint>44.6547609/-63.5842872</geoPoint>
+    </pair>
+    <pair>
+        <address>505 Park St, , Regina, Saskatchewan S4N 5B2, Canada</address>
+        <geoPoint>50.4712728/-104.5747293</geoPoint>
     </pair>
     <pair>
         <address>2176 7th, Regina, SK S4R 1C4</address>
@@ -385,6 +497,18 @@
         <geoPoint>43.5578917/-79.5789888</geoPoint>
     </pair>
     <pair>
+        <address>244 Front St, , New York, New York 10038, United States</address>
+        <geoPoint>40.708235/-74.0011899</geoPoint>
+    </pair>
+    <pair>
+        <address>404 Boulevard NE, , Atlanta, Georgia 30308, United States</address>
+        <geoPoint>33.76542/-84.372405</geoPoint>
+    </pair>
+    <pair>
+        <address>2003 NW Flagler Terrace, , Miami, Florida 33125, United States</address>
+        <geoPoint>25.774127/-80.228301</geoPoint>
+    </pair>
+    <pair>
         <address>435 Ash, New Westminster, BC V3M 3N2</address>
         <geoPoint>49.2103497/-122.9210823</geoPoint>
     </pair>
@@ -413,8 +537,16 @@
         <geoPoint>42.8882995/-78.8722273</geoPoint>
     </pair>
     <pair>
+        <address>281 Lakeshore E, , Port Credit, Ontario L5G 1H3, Canada</address>
+        <geoPoint>43.5606164/-79.575779</geoPoint>
+    </pair>
+    <pair>
         <address>7030 Casey, Niagara Falls, ON L2J 3G1</address>
         <geoPoint>43.1293121/-79.1151674</geoPoint>
+    </pair>
+    <pair>
+        <address>1234 Elizabeth Ave, , Charlotte, North Carolina 28204, United States</address>
+        <geoPoint>35.2171131/-80.8308658</geoPoint>
     </pair>
     <pair>
         <address>3210 23rd Avenue South, Lethbridge, AB T1K 4K4, Canada</address>
@@ -427,6 +559,10 @@
     <pair>
         <address>435 Longman Cres, , Regina, Saskatchewan S4N 6G3, Canada</address>
         <geoPoint>50.4830262/-104.5615799</geoPoint>
+    </pair>
+    <pair>
+        <address>5650 Russell St, , Halifax, Nova Scotia B3K 4G2, Canada</address>
+        <geoPoint>44.6602094/-63.5985577</geoPoint>
     </pair>
     <pair>
         <address>3125 Chemin Chambly, Longueuil, QC J4L 1N3</address>
@@ -461,12 +597,28 @@
         <geoPoint>49.2606641/-123.1314556</geoPoint>
     </pair>
     <pair>
+        <address>303 Mullholland St, , Ann Arbor, Michigan 48103, United States</address>
+        <geoPoint>42.2796726/-83.7571619</geoPoint>
+    </pair>
+    <pair>
+        <address>8465 Granville St, , Vancouver, British Columbia V6P 4Z9, Canada</address>
+        <geoPoint>49.209928/-123.1404982</geoPoint>
+    </pair>
+    <pair>
         <address>352 Raglan, Toronto, ON M6C 2K7</address>
         <geoPoint>43.686188/-79.420846</geoPoint>
     </pair>
     <pair>
         <address>178 Des Ormeaux, Longueuil, QC J4L 1J2</address>
         <geoPoint>45.5227158/-73.4567563</geoPoint>
+    </pair>
+    <pair>
+        <address>1627 Sauk Dr, , Aurora, Illinois 60510, United States</address>
+        <geoPoint>41.828711/-88.303745</geoPoint>
+    </pair>
+    <pair>
+        <address>4884 Dundas W, , Etobicoke, Ontario M9A 1B5, Canada</address>
+        <geoPoint>43.6495347/-79.5280713</geoPoint>
     </pair>
     <pair>
         <address>428 Kent, , Ottawa, Ontario K2P 2B3, Canada</address>
@@ -485,12 +637,24 @@
         <geoPoint>44.652203/-63.6509479</geoPoint>
     </pair>
     <pair>
+        <address>48 S Valley St, , Akron, Ohio 44303, United States</address>
+        <geoPoint>41.091752/-81.52937</geoPoint>
+    </pair>
+    <pair>
         <address>3195 Chemin Chambly, Longueuil, QC J4L 1N3</address>
         <geoPoint>45.5172338/-73.4524382</geoPoint>
     </pair>
     <pair>
         <address>990 Halley, Guelph, ON </address>
         <geoPoint>43.539102/-80.247622</geoPoint>
+    </pair>
+    <pair>
+        <address>210 La Verendrye St, , Winnipeg, Manitoba R2H 0B7, Canada</address>
+        <geoPoint>49.8949442/-97.1223533</geoPoint>
+    </pair>
+    <pair>
+        <address>2534 South St, , Philadelphia, Pennsylvania 19146, United States</address>
+        <geoPoint>39.945657/-75.183003</geoPoint>
     </pair>
     <pair>
         <address>740 Kipps Lane, London, ON N5Y 4R8, Canada</address>
@@ -537,6 +701,10 @@
         <geoPoint>43.6940836/-79.4227783</geoPoint>
     </pair>
     <pair>
+        <address>2705 Wentz Ave, , Saskatoon, Saskatchewan S7K 4B6, Canada</address>
+        <geoPoint>52.1706676/-106.6559204</geoPoint>
+    </pair>
+    <pair>
         <address>208 Des Ormeaux, Longueuil, QC J4L 1J2</address>
         <geoPoint>45.5232848/-73.4564405</geoPoint>
     </pair>
@@ -549,12 +717,24 @@
         <geoPoint>40.7450853/-74.0035238</geoPoint>
     </pair>
     <pair>
+        <address>14407 Wadebridge Way, , Houston, Texas 77015, United States</address>
+        <geoPoint>29.792406/-95.166911</geoPoint>
+    </pair>
+    <pair>
         <address>765 Steeles, Toronto, ON M2R 2S7</address>
         <geoPoint>43.7929733/-79.4431731</geoPoint>
     </pair>
     <pair>
         <address>3580 Bathurst, Toronto, ON M3H 3N4</address>
         <geoPoint>43.7300251/-79.432269</geoPoint>
+    </pair>
+    <pair>
+        <address>2880 W 13th Ave, , Vancouver, British Columbia V6K 2T7, Canada</address>
+        <geoPoint>49.2603849/-123.1699412</geoPoint>
+    </pair>
+    <pair>
+        <address>203 Broodway St, , Austin, Texas 78702, United States</address>
+        <geoPoint>30.253749/-97.711058</geoPoint>
     </pair>
     <pair>
         <address>55 Rue Laframboise, Saint Laurent,  H4N 3B7</address>
@@ -569,8 +749,20 @@
         <geoPoint>49.8959071/-97.1523328</geoPoint>
     </pair>
     <pair>
+        <address>1807 W 1st Ave, , Vancouver, British Columbia V6J 5B8, Canada</address>
+        <geoPoint>49.2707896/-123.1467816</geoPoint>
+    </pair>
+    <pair>
+        <address>650 E Jefferson Blvd, , Los Angeles, California 90011, United States</address>
+        <geoPoint>34.0155607/-118.2658444</geoPoint>
+    </pair>
+    <pair>
         <address>326 Avenue, Toronto, ON M4V 2H3</address>
         <geoPoint>43.6805533/-79.3989746</geoPoint>
+    </pair>
+    <pair>
+        <address>409 Haviland Cres, , Saskatoon, Saskatchewan S7L 5B3, Canada</address>
+        <geoPoint>52.1305301/-106.7353016</geoPoint>
     </pair>
     <pair>
         <address>88 Stockton, Toronto, ON </address>
@@ -617,8 +809,16 @@
         <geoPoint>43.539102/-80.247622</geoPoint>
     </pair>
     <pair>
+        <address>5 John Hirsch Pl, , Winnipeg, Manitoba R3B 0R4, Canada</address>
+        <geoPoint>49.8982497/-97.1372917</geoPoint>
+    </pair>
+    <pair>
         <address>607 Chase, Guelph, ON </address>
         <geoPoint>43.4648052/-80.4892883</geoPoint>
+    </pair>
+    <pair>
+        <address>3931 Rue de Mentana, , Montreal, Quebec H2L 3R7, Canada</address>
+        <geoPoint>45.5231877/-73.5714814</geoPoint>
     </pair>
     <pair>
         <address>88 Cogswell, Halifax, NS B3K 3B1</address>
@@ -635,6 +835,14 @@
     <pair>
         <address>752 Kipps Lane, London, ON N5Y 4V4, Canada</address>
         <geoPoint>43.0178472/-81.2451011</geoPoint>
+    </pair>
+    <pair>
+        <address>2062 Albert St, , Regina, Saskatchewan S4P 2T7, Canada</address>
+        <geoPoint>50.4459168/-104.6183001</geoPoint>
+    </pair>
+    <pair>
+        <address>259 McDonald St N, , Regina, Saskatchewan S4N 5W3, Canada</address>
+        <geoPoint>50.4801497/-104.5732992</geoPoint>
     </pair>
     <pair>
         <address>1968 McCallum, Abbotsford, BC V2S 3M6</address>
@@ -655,6 +863,10 @@
     <pair>
         <address>214 Des Ormeaux, Longueuil, QC J4L 1J2</address>
         <geoPoint>45.5232848/-73.4564405</geoPoint>
+    </pair>
+    <pair>
+        <address>6112 Willow, , Halifax, Nova Scotia B3K 1M2, Canada</address>
+        <geoPoint>44.6529253/-63.5956408</geoPoint>
     </pair>
     <pair>
         <address>3822 St Denis, , Montreal, Quebec H2W 2M2, Canada</address>
@@ -705,6 +917,14 @@
         <geoPoint>43.7280299/-79.440878</geoPoint>
     </pair>
     <pair>
+        <address>566 Osborne St, , Winnipeg, Manitoba R3L 2B4, Canada</address>
+        <geoPoint>49.8647806/-97.1339511</geoPoint>
+    </pair>
+    <pair>
+        <address>707 Brand Rd, , Saskatoon, Saskatchewan S7J 5L5, Canada</address>
+        <geoPoint>52.0870435/-106.6499224</geoPoint>
+    </pair>
+    <pair>
         <address>10 Lovett Lake Cres, , Halifax, Nova Scotia B3S 1B8, Canada</address>
         <geoPoint>44.644371/-63.6647585</geoPoint>
     </pair>
@@ -729,6 +949,14 @@
         <geoPoint>45.3761774/-75.6494019</geoPoint>
     </pair>
     <pair>
+        <address>1420 S Mint St, , Charlotte, North Carolina 28203, United States</address>
+        <geoPoint>35.2198406/-80.8598498</geoPoint>
+    </pair>
+    <pair>
+        <address>1333 Arena Dr, , Austin, Texas 78741, United States</address>
+        <geoPoint>30.2432212/-97.7271166</geoPoint>
+    </pair>
+    <pair>
         <address>5 Trinity, Halifax, NS </address>
         <geoPoint>44.6796412/-63.5940916</geoPoint>
     </pair>
@@ -741,12 +969,24 @@
         <geoPoint>43.6522229/-79.5706237</geoPoint>
     </pair>
     <pair>
+        <address>1155 King St E, , Hamilton, Ontario L8M 1G1, Canada</address>
+        <geoPoint>43.2474122/-79.8278581</geoPoint>
+    </pair>
+    <pair>
         <address>60 Centreville Street, Kitchener, ON N2A 1R9, Canada</address>
         <geoPoint>43.4297581/-80.43334</geoPoint>
     </pair>
     <pair>
         <address>675 Richmond Street, London, ON N6A 5X4, Canada</address>
         <geoPoint>42.9927928/-81.2518049</geoPoint>
+    </pair>
+    <pair>
+        <address>3940 Wisconsin St, , Los Angeles, California 90037, United States</address>
+        <geoPoint>34.014274/-118.292243</geoPoint>
+    </pair>
+    <pair>
+        <address>2176 7th Ave, , Regina, Saskatchewan S4R 1C4, Canada</address>
+        <geoPoint>50.4583028/-104.6108418</geoPoint>
     </pair>
     <pair>
         <address>8 Oakwood, Mississauga, ON L5G 3L7</address>
@@ -781,6 +1021,10 @@
         <geoPoint>42.3620111/-71.0611643</geoPoint>
     </pair>
     <pair>
+        <address>5657 Spring Garden Rd, , Halifax, Nova Scotia B3J 3R4, Canada</address>
+        <geoPoint>44.6426107/-63.5787094</geoPoint>
+    </pair>
+    <pair>
         <address>237 Menard, Longueuil, QC J4L 1J6</address>
         <geoPoint>45.5224645/-73.4555064</geoPoint>
     </pair>
@@ -809,6 +1053,10 @@
         <geoPoint>45.5188906/-73.4528925</geoPoint>
     </pair>
     <pair>
+        <address>1915 Ontario Ave, , Saskatoon, Saskatchewan S7K 1T5, Canada</address>
+        <geoPoint>52.1552083/-106.6662637</geoPoint>
+    </pair>
+    <pair>
         <address>7 Beach, Vancouver, BC V6Z 1E1</address>
         <geoPoint>49.2758139/-123.133274</geoPoint>
     </pair>
@@ -821,12 +1069,24 @@
         <geoPoint>45.4658907/-73.8025094</geoPoint>
     </pair>
     <pair>
+        <address>49 King St W, , Kingston, Ontario K7L 0A6, Canada</address>
+        <geoPoint>44.2228066/-76.4928572</geoPoint>
+    </pair>
+    <pair>
         <address>33095 Old Yale, Abbotsford, BC V2S 6C7</address>
         <geoPoint>49.0521396/-122.3057739</geoPoint>
     </pair>
     <pair>
         <address>210 Des Ormeaux, Longueuil, QC J4L 1J2</address>
         <geoPoint>45.5232848/-73.4564405</geoPoint>
+    </pair>
+    <pair>
+        <address>1221 Perkins Rd, , Orlando, Florida 32809, United States</address>
+        <geoPoint>28.459241/-81.362699</geoPoint>
+    </pair>
+    <pair>
+        <address>595 Rue Saint-Ignace, , Quebec, Quebec G1N 1N6, Canada</address>
+        <geoPoint>46.8096486/-71.2423799</geoPoint>
     </pair>
     <pair>
         <address>114 Chain Lake, Halifax, NS B3S 1B1</address>
@@ -869,6 +1129,10 @@
         <geoPoint>43.2591203/-79.9414702</geoPoint>
     </pair>
     <pair>
+        <address>426 Pine St, , Milton, Ontario L9T 1L4, Canada</address>
+        <geoPoint>43.5165313/-79.8763545</geoPoint>
+    </pair>
+    <pair>
         <address>222 Des Ormeaux, Longueuil, QC J4L 1J2</address>
         <geoPoint>45.5241216/-73.4559937</geoPoint>
     </pair>
@@ -901,12 +1165,32 @@
         <geoPoint>43.4729276/-80.534048</geoPoint>
     </pair>
     <pair>
+        <address>541 N Harding Ave, , Chicago, Illinois 60624, United States</address>
+        <geoPoint>41.891092/-87.7243809</geoPoint>
+    </pair>
+    <pair>
         <address>7594 16th Ave, Richmond Hill, MB L6L 6M6, Canada</address>
         <geoPoint>43.8587079/-79.4036079</geoPoint>
     </pair>
     <pair>
         <address>2848-2864 Baycrest, Ottawa, ON K1V 0H1</address>
         <geoPoint>45.3778445/-75.6516966</geoPoint>
+    </pair>
+    <pair>
+        <address>1155 King E, , Hamilton, Ontario L8M 1G1, Canada</address>
+        <geoPoint>43.2474122/-79.8278581</geoPoint>
+    </pair>
+    <pair>
+        <address>18 Park St E, , Mississauga, Ontario L5G 1L7, Canada</address>
+        <geoPoint>43.5537065/-79.587263</geoPoint>
+    </pair>
+    <pair>
+        <address>511 N Oakhurst Dr, , Aurora, Illinois 60502, United States</address>
+        <geoPoint>41.7607754/-88.2390145</geoPoint>
+    </pair>
+    <pair>
+        <address>1700 N Hudson Ave, , Chicago, Illinois 60614, United States</address>
+        <geoPoint>41.9130208/-87.6400529</geoPoint>
     </pair>
     <pair>
         <address>1212 des Pins Avenue W, Montreal,  H3G 1A9</address>
@@ -925,8 +1209,16 @@
         <geoPoint>43.6380408/-79.4874318</geoPoint>
     </pair>
     <pair>
+        <address>55 Port St E, , Mississauga, Ontario L5G 4P3, Canada</address>
+        <geoPoint>43.553322/-79.5815513</geoPoint>
+    </pair>
+    <pair>
         <address>2824 Sandalwood, Ottawa, ON K1V 7P5</address>
         <geoPoint>45.3792833/-75.6488364</geoPoint>
+    </pair>
+    <pair>
+        <address>1616 Pendrell St, , Vancouver, British Columbia V6G 1S8, Canada</address>
+        <geoPoint>49.2859932/-123.1383754</geoPoint>
     </pair>
     <pair>
         <address>2845 Cedarwood, Ottawa, ON K1V 0G6</address>
@@ -941,12 +1233,20 @@
         <geoPoint>43.6815926/-79.2810352</geoPoint>
     </pair>
     <pair>
+        <address>3332 McCarthy Rd, , Ottawa, Ontario K1V 0H9, Canada</address>
+        <geoPoint>45.350885/-75.6702999</geoPoint>
+    </pair>
+    <pair>
         <address>182 Des Ormeaux, Longueuil, QC J4L 1J2</address>
         <geoPoint>45.5228894/-73.4566595</geoPoint>
     </pair>
     <pair>
         <address>5700 Yonge St, Richmond Hill, TN 51531, United States</address>
         <geoPoint>43.901354/-79.4441681</geoPoint>
+    </pair>
+    <pair>
+        <address>92 Erb E, , Waterloo, Ontario N2J 1L9, Canada</address>
+        <geoPoint>43.4660942/-80.5167995</geoPoint>
     </pair>
     <pair>
         <address>495 - 509 Delmar Avenue, Pointe-Claire,  H9R 4A5</address>
@@ -1005,12 +1305,20 @@
         <geoPoint>43.5224653/-80.2387046</geoPoint>
     </pair>
     <pair>
+        <address>6964 Victoria Dr, , Vancouver, British Columbia V5P 3Y8, Canada</address>
+        <geoPoint>49.2206086/-123.0657136</geoPoint>
+    </pair>
+    <pair>
         <address>7 Wilsonview, Guelph, ON </address>
         <geoPoint>43.5220912/-80.238898</geoPoint>
     </pair>
     <pair>
         <address>1581 Sautee, Saint Laurent, QC </address>
         <geoPoint>45.5172008/-73.6667383</geoPoint>
+    </pair>
+    <pair>
+        <address>225 W Superior St, , Chicago, Illinois 60654, United States</address>
+        <geoPoint>41.8953546/-87.6353384</geoPoint>
     </pair>
     <pair>
         <address>1155 King, Hamilton, ON L8M 1G1</address>
@@ -1061,6 +1369,10 @@
         <geoPoint>45.5195468/-73.4535905</geoPoint>
     </pair>
     <pair>
+        <address>420 DesMeurons, , Winnipeg, Manitoba R2H 2N9, Canada</address>
+        <geoPoint>49.8860247/-97.1112895</geoPoint>
+    </pair>
+    <pair>
         <address>3060 Masson, Longueuil, QC J4L 4C7</address>
         <geoPoint>45.5194037/-73.453475</geoPoint>
     </pair>
@@ -1101,6 +1413,10 @@
         <geoPoint>45.5230825/-73.4565519</geoPoint>
     </pair>
     <pair>
+        <address>150 1st Ave S, , Saskatoon, Saskatchewan S7K 1K2, Canada</address>
+        <geoPoint>52.1275323/-106.6662043</geoPoint>
+    </pair>
+    <pair>
         <address>2896 West Silvania, Ottawa, ON </address>
         <geoPoint>41.6919963/-83.6128928</geoPoint>
     </pair>
@@ -1115,6 +1431,14 @@
     <pair>
         <address>583 Barber, Listowel, ON N4W 1S4</address>
         <geoPoint>43.7382812/-80.9526344</geoPoint>
+    </pair>
+    <pair>
+        <address>1650 Notre Dame Ave, , St James, Manitoba R3H 1H6, Canada</address>
+        <geoPoint>49.914535/-97.1945381</geoPoint>
+    </pair>
+    <pair>
+        <address>81 Millside Dr, , Milton, Ontario L9T 1S8, Canada</address>
+        <geoPoint>43.5162043/-79.8824904</geoPoint>
     </pair>
     <pair>
         <address>2865 Cedarwood, Ottawa, ON K1V 0G8</address>
@@ -1133,12 +1457,24 @@
         <geoPoint>49.2206623/-123.0657019</geoPoint>
     </pair>
     <pair>
+        <address>6241 Quinpool Rd, , Halifax, Nova Scotia B3L 1A4, Canada</address>
+        <geoPoint>44.645573/-63.5971186</geoPoint>
+    </pair>
+    <pair>
         <address>6601 Bliss Ave, , Cleveland, Ohio 44103, United States</address>
         <geoPoint>41.5235896/-81.6423976</geoPoint>
     </pair>
     <pair>
+        <address>937 SW 5th St, , Miami, Florida 33130, United States</address>
+        <geoPoint>25.769081/-80.20996</geoPoint>
+    </pair>
+    <pair>
         <address>226 Des Ormeaux, Longueuil, QC J4L 1J2</address>
         <geoPoint>45.5243351/-73.4558798</geoPoint>
+    </pair>
+    <pair>
+        <address>193 Berman Ave, , Akron, Ohio 44305, United States</address>
+        <geoPoint>41.069245/-81.479765</geoPoint>
     </pair>
     <pair>
         <address>2312 Lombard St, , Philadelphia, Pennsylvania 19146, United States</address>
@@ -1233,6 +1569,10 @@
         <geoPoint>45.5231217/-73.45653</geoPoint>
     </pair>
     <pair>
+        <address>1413 Crenshaw Blvd, , Los Angeles, California 90019, United States</address>
+        <geoPoint>34.0461308/-118.3274231</geoPoint>
+    </pair>
+    <pair>
         <address>2825 Cedarwood, Ottawa, ON K1V 0G6</address>
         <geoPoint>45.3762311/-75.6531205</geoPoint>
     </pair>
@@ -1281,6 +1621,10 @@
         <geoPoint>45.5231119/-73.4565355</geoPoint>
     </pair>
     <pair>
+        <address>121 Harbord St, , Toronto, Ontario M5S 1G9, Canada</address>
+        <geoPoint>43.6623856/-79.4049047</geoPoint>
+    </pair>
+    <pair>
         <address>220 Des Ormeaux, Longueuil, QC J4L 1J2</address>
         <geoPoint>45.5239081/-73.4561077</geoPoint>
     </pair>
@@ -1317,6 +1661,10 @@
         <geoPoint>49.2803846/-123.1228795</geoPoint>
     </pair>
     <pair>
+        <address>124 Hunter St W, , Hamilton, Ontario L8P 1R1, Canada</address>
+        <geoPoint>43.2550405/-79.8759571</geoPoint>
+    </pair>
+    <pair>
         <address>645 Gardiners, Kingston, ON K7M 8K2</address>
         <geoPoint>44.2437906/-76.5684944</geoPoint>
     </pair>
@@ -1345,6 +1693,10 @@
         <geoPoint>44.6548624/-63.5843781</geoPoint>
     </pair>
     <pair>
+        <address>6064 Bent Pine Dr, , Orlando, Florida 32822, United States</address>
+        <geoPoint>28.472716/-81.30438</geoPoint>
+    </pair>
+    <pair>
         <address>218 Des Ormeaux, Longueuil, QC J4L 1J2</address>
         <geoPoint>45.5236673/-73.4561171</geoPoint>
     </pair>
@@ -1361,12 +1713,20 @@
         <geoPoint>49.8860108/-97.1393451</geoPoint>
     </pair>
     <pair>
+        <address>21 Classic Ave, , Toronto, Ontario M5S 3J7, Canada</address>
+        <geoPoint>43.6625685/-79.400606</geoPoint>
+    </pair>
+    <pair>
         <address>64 Newton, Dartmouth, NS </address>
         <geoPoint>44.6447649/-63.60727</geoPoint>
     </pair>
     <pair>
         <address>713 Pecore St, , Houston, Texas 77009, United States</address>
         <geoPoint>29.790768/-95.37999</geoPoint>
+    </pair>
+    <pair>
+        <address>1600 Church Ave, , Winnipeg, Manitoba R2X 1G8, Canada</address>
+        <geoPoint>49.9407157/-97.1852763</geoPoint>
     </pair>
     <pair>
         <address>603 Country Hill, Kitchener, ON N2E 2G7</address>
@@ -1381,8 +1741,24 @@
         <geoPoint>44.2365244/-76.5004671</geoPoint>
     </pair>
     <pair>
+        <address>97 King St W, , Kitchener, Ontario N2G 1A7, Canada</address>
+        <geoPoint>43.4503945/-80.4909946</geoPoint>
+    </pair>
+    <pair>
+        <address>82 Lakeshore Road E, , Mississauga, Ontario L5G 1E1, Canada</address>
+        <geoPoint>43.5528842/-79.584526</geoPoint>
+    </pair>
+    <pair>
+        <address>346 Bass St SE, , Atlanta, Georgia 30315, United States</address>
+        <geoPoint>33.7349505/-84.3764758</geoPoint>
+    </pair>
+    <pair>
         <address>525 Sherbrooke, Montreal, QC H2X 3V8</address>
         <geoPoint>45.5096713/-73.5699673</geoPoint>
+    </pair>
+    <pair>
+        <address>220 N Ashley St, , Ann Arbor, Michigan 48104, United States</address>
+        <geoPoint>42.2825859/-83.7496809</geoPoint>
     </pair>
     <pair>
         <address>7063 6th, Calgary, AB T2R 1H3</address>
@@ -1391,6 +1767,10 @@
     <pair>
         <address>206 Des Ormeaux, Longueuil, QC J4L 1J2</address>
         <geoPoint>45.5231217/-73.45653</geoPoint>
+    </pair>
+    <pair>
+        <address>729 Griffin St NW, , Atlanta, Georgia 30318, United States</address>
+        <geoPoint>33.7740708/-84.4113965</geoPoint>
     </pair>
     <pair>
         <address>80 Birchwood, Ottawa, ON </address>
@@ -1403,6 +1783,10 @@
     <pair>
         <address>33333 Twelfth Avenue, Mission, BC V2V 5W2, Canada</address>
         <geoPoint>49.1456535/-122.3022112</geoPoint>
+    </pair>
+    <pair>
+        <address>321 100 St, , Houston, Texas 77015, United States</address>
+        <geoPoint>29.7528799/-95.1845135</geoPoint>
     </pair>
     <pair>
         <address>915 Quinpool, Halifax, NS B3L 1C7</address>
@@ -1425,12 +1809,24 @@
         <geoPoint>44.645783/-63.5720001</geoPoint>
     </pair>
     <pair>
+        <address>499 Broome St, , New York, New York 10013, United States</address>
+        <geoPoint>40.7231089/-74.0028544</geoPoint>
+    </pair>
+    <pair>
         <address>140 University Ave W, , Waterloo, Ontario N2L 6J3, Canada</address>
         <geoPoint>43.4728924/-80.5340476</geoPoint>
     </pair>
     <pair>
         <address>435 Longman, Regina, SK S4N 6G3</address>
         <geoPoint>50.4830265/-104.5615799</geoPoint>
+    </pair>
+    <pair>
+        <address>1633 Quebec Ave, , Saskatoon, Saskatchewan S7K 2C7, Canada</address>
+        <geoPoint>52.1510489/-106.6637229</geoPoint>
+    </pair>
+    <pair>
+        <address>220 Bainbridge St, , Philadelphia, Pennsylvania 19147, United States</address>
+        <geoPoint>39.940259/-75.1468367</geoPoint>
     </pair>
     <pair>
         <address>1501 Bank, Ottawa, ON K2P 1X3</address>
@@ -1451,6 +1847,10 @@
     <pair>
         <address>29 Bedford St, , New York, New York 10014, United States</address>
         <geoPoint>40.7291902/-74.0037923</geoPoint>
+    </pair>
+    <pair>
+        <address>1220 Cave St, , San Diego, California 92037, United States</address>
+        <geoPoint>32.84804/-117.271782</geoPoint>
     </pair>
     <pair>
         <address>1010 Seymour, Vancouver, BC V6B 1B4</address>
@@ -1493,8 +1893,24 @@
         <geoPoint>45.4161377/-75.702862</geoPoint>
     </pair>
     <pair>
+        <address>651 Rue de la Montagne, , Montreal, Quebec H3C 0G2, Canada</address>
+        <geoPoint>45.4938616/-73.5662827</geoPoint>
+    </pair>
+    <pair>
         <address>120 Raglan, Toronto, ON M6C 2L4</address>
         <geoPoint>43.6865162/-79.421002</geoPoint>
+    </pair>
+    <pair>
+        <address>1344 Missouri St, , San Diego, California 92109, United States</address>
+        <geoPoint>32.802788/-117.246601</geoPoint>
+    </pair>
+    <pair>
+        <address>247 Park St, , Akron, Ohio 44304, United States</address>
+        <geoPoint>41.0831025/-81.5082922</geoPoint>
+    </pair>
+    <pair>
+        <address>809 Pedro Ave, , Orlando, Florida 32807, United States</address>
+        <geoPoint>28.5330326/-81.3068044</geoPoint>
     </pair>
     <pair>
         <address>50 Tripp, Trenton, ON K8V 5Z7</address>
@@ -1525,8 +1941,28 @@
         <geoPoint>43.5774899/-80.2595789</geoPoint>
     </pair>
     <pair>
+        <address>43 Van Zandt St, , Albany, New York 12207, United States</address>
+        <geoPoint>42.64703/-73.756979</geoPoint>
+    </pair>
+    <pair>
         <address>59 Seaton, Toronto, ON </address>
         <geoPoint>43.6564502/-79.368557</geoPoint>
+    </pair>
+    <pair>
+        <address>2430 Rue de Chambly, , Montreal, Quebec H1W 3J5, Canada</address>
+        <geoPoint>45.5473208/-73.5503624</geoPoint>
+    </pair>
+    <pair>
+        <address>28 Helene St N, , Mississauga, Ontario L5G 3B7, Canada</address>
+        <geoPoint>43.5558235/-79.5866455</geoPoint>
+    </pair>
+    <pair>
+        <address>1264 Victoria N, , Kitchener, Ontario N2B 3C9, Canada</address>
+        <geoPoint>43.4688532/-80.4498206</geoPoint>
+    </pair>
+    <pair>
+        <address>201 Rue de Roi, , Quebec, Quebec G1K 2W3, Canada</address>
+        <geoPoint>46.8137084/-71.2285987</geoPoint>
     </pair>
     <pair>
         <address>37 Rykert, St. Catharines, ON L2S 2S5</address>
@@ -1549,6 +1985,10 @@
         <geoPoint>45.513954/-73.5687792</geoPoint>
     </pair>
     <pair>
+        <address>120 Stuart St, , Kingston, Ontario K7L 2V8, Canada</address>
+        <geoPoint>44.2243132/-76.4950739</geoPoint>
+    </pair>
+    <pair>
         <address>2177 Avenue, Toronto, ON M5M 4B7</address>
         <geoPoint>43.7398751/-79.4215504</geoPoint>
     </pair>
@@ -1563,6 +2003,10 @@
     <pair>
         <address>40 Primrose, Dartmouth, NS B3A 4C5</address>
         <geoPoint>44.6836322/-63.5842703</geoPoint>
+    </pair>
+    <pair>
+        <address>100 Main St W, , Hamilton, Ontario L8P 1H6, Canada</address>
+        <geoPoint>43.2566902/-79.87364</geoPoint>
     </pair>
     <pair>
         <address>3210 Masson, Longueuil, QC J4L 4C7</address>
@@ -1581,12 +2025,28 @@
         <geoPoint>43.697914/-79.4243462</geoPoint>
     </pair>
     <pair>
+        <address>150 N Locust St, , Aurora, Illinois 60506, United States</address>
+        <geoPoint>41.7622852/-88.3211755</geoPoint>
+    </pair>
+    <pair>
+        <address>1010 Rue William, , Montreal, Quebec H3C 0K8, Canada</address>
+        <geoPoint>45.4955286/-73.56031</geoPoint>
+    </pair>
+    <pair>
         <address>2600 Yonge, Toronto, ON M4P 2H5</address>
         <geoPoint>43.7109219/-79.399241</geoPoint>
     </pair>
     <pair>
+        <address>477 Guelph Ln, , Burlington, Ontario L7R 3L8, Canada</address>
+        <geoPoint>43.3393516/-79.7865829</geoPoint>
+    </pair>
+    <pair>
         <address>62-78 Vanderbilt Ave, , New York, New York 10017, United States</address>
         <geoPoint>40.7549334/-73.9765306</geoPoint>
+    </pair>
+    <pair>
+        <address>455 Rue Saint Germain, , Quebec, Quebec G1K 4N2, Canada</address>
+        <geoPoint>46.8082381/-71.2372036</geoPoint>
     </pair>
     <pair>
         <address>233 Sherbrooke, Montreal, QC H3A 2V7</address>
@@ -1625,12 +2085,28 @@
         <geoPoint>45.5230256/-73.4564266</geoPoint>
     </pair>
     <pair>
+        <address>114 Chain Lake Dr, , Halifax, Nova Scotia B3S 1B1, Canada</address>
+        <geoPoint>44.6374973/-63.6639651</geoPoint>
+    </pair>
+    <pair>
+        <address>207 Fort St, , Winnipeg, Manitoba R3C 1E2, Canada</address>
+        <geoPoint>49.8918218/-97.1379389</geoPoint>
+    </pair>
+    <pair>
+        <address>2037 Pine St, , Burlington, Ontario L7R 1E9, Canada</address>
+        <geoPoint>43.3257528/-79.7955815</geoPoint>
+    </pair>
+    <pair>
         <address>357 Arlington, Winnipeg, MB R3E 2E7</address>
         <geoPoint>49.8881064/-97.1691822</geoPoint>
     </pair>
     <pair>
         <address>239 Menard, Longueuil, QC J4L 1J6</address>
         <geoPoint>45.5224996/-73.4554201</geoPoint>
+    </pair>
+    <pair>
+        <address>110 60th St W, , Saskatoon, Saskatchewan S7R 1E1, Canada</address>
+        <geoPoint>52.1874583/-106.6717891</geoPoint>
     </pair>
     <pair>
         <address>2525 L'Acajou, Saint-Laurent, QC H4R 2W9</address>
@@ -1641,8 +2117,16 @@
         <geoPoint>45.4292562/-75.6736459</geoPoint>
     </pair>
     <pair>
+        <address>2489 Finch Ave W, , North York, Ontario M9M 2G1, Canada</address>
+        <geoPoint>43.7497071/-79.5531225</geoPoint>
+    </pair>
+    <pair>
         <address>951-999 Kettner Blvd, , San Diego, California 92101, United States</address>
         <geoPoint>32.7156428/-117.1691878</geoPoint>
+    </pair>
+    <pair>
+        <address>2065 Elm St, , Halifax, Nova Scotia B3L 2Y2, Canada</address>
+        <geoPoint>44.6450125/-63.6036258</geoPoint>
     </pair>
     <pair>
         <address>259 McDonald, Regina, SK </address>
@@ -1651,6 +2135,10 @@
     <pair>
         <address>2831-2839 Cedarwood, Ottawa, ON K1V 0G6</address>
         <geoPoint>45.3762311/-75.6531205</geoPoint>
+    </pair>
+    <pair>
+        <address>564 Manor Dr, , Ann Arbor, Michigan 48105, United States</address>
+        <geoPoint>42.304385/-83.737212</geoPoint>
     </pair>
     <pair>
         <address>910 Holborn, Kitchener, ON N2A 3Y9</address>
@@ -1677,8 +2165,16 @@
         <geoPoint>43.4450485/-80.5281535</geoPoint>
     </pair>
     <pair>
+        <address>19 Russell St, , Toronto, Ontario M5S 2S2, Canada</address>
+        <geoPoint>43.6598896/-79.3984287</geoPoint>
+    </pair>
+    <pair>
         <address>340 Avenue, Toronto, ON M4V 2H3</address>
         <geoPoint>43.6808927/-79.3993083</geoPoint>
+    </pair>
+    <pair>
+        <address>25C Pine Ln, , Albany, New York 12203, United States</address>
+        <geoPoint>42.696194/-73.857406</geoPoint>
     </pair>
     <pair>
         <address>758 Kipps Lane, London, ON N5Y 4Y1, Canada</address>
@@ -1737,6 +2233,10 @@
         <geoPoint>43.80266/-79.53197</geoPoint>
     </pair>
     <pair>
+        <address>1524 Belvedere Ave, , Charlotte, North Carolina 28205, United States</address>
+        <geoPoint>35.230193/-80.810573</geoPoint>
+    </pair>
+    <pair>
         <address>572 Weber N, , Waterloo, Ontario N2L 5C6, Canada</address>
         <geoPoint>43.495758/-80.548284</geoPoint>
     </pair>
@@ -1781,7 +2281,15 @@
         <geoPoint>34.0481825/-118.2482768</geoPoint>
     </pair>
     <pair>
+        <address>645 Gardiners, , Kingston, Ontario K7M 8K2, Canada</address>
+        <geoPoint>44.2437906/-76.5684944</geoPoint>
+    </pair>
+    <pair>
         <address>1021 St Marry, Winnipeg, MB </address>
         <geoPoint>49.8393225/-97.1121418</geoPoint>
+    </pair>
+    <pair>
+        <address>1953 Scarth St, , Regina, Saskatchewan S4P 2H1, Canada</address>
+        <geoPoint>50.4477368/-104.6108163</geoPoint>
     </pair>
 </geoPairs>
