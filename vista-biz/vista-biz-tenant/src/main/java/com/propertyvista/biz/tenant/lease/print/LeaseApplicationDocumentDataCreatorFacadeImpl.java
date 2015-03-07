@@ -389,11 +389,11 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     }
 
     private BillDTO retrieveBillData(Lease lease) {
-        BillDTO billData = null; // or EntityFactory.create(BillDTO.class);
-
         if (VistaFeatures.instance().yardiIntegration()) {
             return null; // no bills for Yardi mode!..
         }
+
+        BillDTO billData = EntityFactory.create(BillDTO.class);
 
         if (lease.status().getValue().isDraft() && Lease.Status.isApplicationUnitSelected(lease)) {
             // create bill preview for draft leases/applications:
