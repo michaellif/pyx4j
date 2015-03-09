@@ -54,7 +54,7 @@ public class AutoPayReconciliationCalculator {
             if (!billableItem.item().product().holder().code().type().isNull()) {
                 arCode = billableItem.item().product().holder().code();
             } else if (VistaFeatures.instance().yardiIntegration() && !billableItem.yardiChargeCode().isNull()) {
-                retrieveARCode(ActionType.Debit, billableItem.yardiChargeCode().getValue());
+                arCode = retrieveARCode(ActionType.Debit, billableItem.yardiChargeCode().getValue());
             }
 
             if (arCode != null) {
