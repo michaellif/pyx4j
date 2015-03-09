@@ -35,9 +35,7 @@ public class AutoPayPolicyForm extends PolicyDTOTabPanelBasedForm<AutoPayPolicyD
         FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, proto().onLeaseChargeChangeRule()).decorate().componentWidth(200).labelWidth(250);
 
-        // TODO : excludeFirstBillingPeriodCharge not implemented yet!
-//        panel.setWidget(++row, 0, 2, inject(proto().excludeFirstBillingPeriodCharge(),new FormDecoratorBuilder( 5, true).labelWidth(20).build()));
-
+        formPanel.append(Location.Left, proto().excludeFirstBillingPeriodCharge()).decorate().componentWidth(50).labelWidth(250);
         formPanel.append(Location.Left, proto().excludeLastBillingPeriodCharge()).decorate().componentWidth(50).labelWidth(250);
         formPanel.append(Location.Left, proto().allowCancelationByResident()).decorate().componentWidth(50).labelWidth(250);
 
