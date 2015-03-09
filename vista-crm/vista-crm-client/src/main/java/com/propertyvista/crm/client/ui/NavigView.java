@@ -50,4 +50,6 @@ public interface NavigView extends IsWidget, IsView {
     void setAvailableLocales(List<CompiledLocale> localeList);
 
     void updateUserName(String name);
+
+    void setN4BatchesVisible(boolean visible);
 }

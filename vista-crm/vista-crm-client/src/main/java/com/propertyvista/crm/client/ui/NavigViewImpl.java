@@ -114,6 +114,8 @@ public class NavigViewImpl extends Composite implements NavigView {
 
     private SideMenuAppPlaceItem dispatchedQueue;
 
+    private SideMenuAppPlaceItem n4batches;
+
     private SideMenuList reports;
 
     private LayoutType layoutType;
@@ -231,7 +233,7 @@ public class NavigViewImpl extends Composite implements NavigView {
 
             root.addMenuItem(new SideMenuFolderItem(sideMenuList, i18n.tr("Legal & Collections"), CrmImages.INSTANCE.legalIcon()));
 
-            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4Batches(), DataModelPermission
+            sideMenuList.addMenuItem(n4batches = new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4Batches(), DataModelPermission
                     .permissionCreate(N4BatchDTO.class)));
             if (false) { // TODO L1 implementation
                 sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.L1GenerationTool()));
@@ -403,6 +405,11 @@ public class NavigViewImpl extends Composite implements NavigView {
             }
 
         }
+    }
+
+    @Override
+    public void setN4BatchesVisible(boolean visible) {
+        this.n4batches.setVisible(visible);
     }
 
     @Override
