@@ -1016,13 +1016,14 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(to.policyNode(), RestrictionsPolicy.class);
 
         to.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
-        to.enforceAgeOfMajority().setValue(restrictionsPolicy.enforceAgeOfMajority().getValue());
-        to.maturedOccupantsAreApplicants().setValue(restrictionsPolicy.maturedOccupantsAreApplicants().getValue());
-        to.noNeedGuarantors().setValue(restrictionsPolicy.noNeedGuarantors().getValue());
+        to.enforceAgeOfMajority().setValue(restrictionsPolicy.enforceAgeOfMajority().getValue(false));
+        to.maturedOccupantsAreApplicants().setValue(restrictionsPolicy.maturedOccupantsAreApplicants().getValue(false));
+        to.noNeedGuarantors().setValue(restrictionsPolicy.noNeedGuarantors().getValue(false));
+
         to.yearsToForcingPreviousAddress().setValue(restrictionsPolicy.yearsToForcingPreviousAddress().getValue());
-        to.emergencyContactsIsMandatory().setValue(restrictionsPolicy.emergencyContactsIsMandatory().getValue());
+        to.emergencyContactsIsMandatory().setValue(restrictionsPolicy.emergencyContactsIsMandatory().getValue(false));
         to.emergencyContactsNumberRequired().setValue(restrictionsPolicy.emergencyContactsNumber().getValue());
-        to.referenceSourceIsMandatory().setValue(restrictionsPolicy.referenceSourceIsMandatory().getValue());
+        to.referenceSourceIsMandatory().setValue(restrictionsPolicy.referenceSourceIsMandatory().getValue(false));
     }
 
     // ================================================================================================================

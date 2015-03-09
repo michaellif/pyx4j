@@ -21,6 +21,7 @@ import com.propertyvista.crm.rpc.services.reports.AutoPayReconciliationReportLis
 import com.propertyvista.crm.server.services.AbstractCrmCrudServiceImpl;
 import com.propertyvista.crm.server.services.reports.calculators.AutoPayReconciliationCalculator;
 import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public class AutoPayReconciliationReportListServiceImpl extends AbstractCrmCrudServiceImpl<AutopayAgreement, AutoPayReconciliationDTO> implements
         AutoPayReconciliationReportListService {
@@ -35,6 +36,8 @@ public class AutoPayReconciliationReportListServiceImpl extends AbstractCrmCrudS
     protected void enhanceListCriteria(EntityListCriteria<AutopayAgreement> boCriteria, EntityListCriteria<AutoPayReconciliationDTO> toCriteria) {
         super.enhanceListCriteria(boCriteria, toCriteria);
         boCriteria.eq(boCriteria.proto().isDeleted(), false);
+        // Only for active Leases. the same in AutopayManager.calulatePapAmounts
+        boCriteria.eq(boCriteria.proto().tenant().lease().status(), Lease.Status.active());
         // Active Buildings
         boCriteria.eq(boCriteria.proto().tenant().lease().unit().building().suspended(), false);
     }

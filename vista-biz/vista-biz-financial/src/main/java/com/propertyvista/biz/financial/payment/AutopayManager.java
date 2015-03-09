@@ -243,9 +243,14 @@ class AutopayManager {
             log.debug("AutoPayPolicy  excludeLastBillingPeriodCharge {}", autoPayPolicy.excludeLastBillingPeriodCharge());
         }
         StringBuilder traceMessage = new StringBuilder();
-        if ((billingAccount.lease().status().getValue() != Lease.Status.Active)
-                || (!AutopayAgreementMananger.isPreauthorizedPaymentsApplicableForBillingCycle(billingAccount.lease(), billingCycle, autoPayPolicy,
-                        traceMessage))) {
+        if (!billingAccount.lease().status().getValue().isActive()) {
+            traceMessage.append("Lease status '" + billingAccount.lease().status().getValue() + "' not active for Auto Pay");
+            if (trace) {
+                log.debug("Payments Not Applicable ForBillingCycle {}", traceMessage);
+            }
+            return Collections.emptyList();
+        }
+        if (!AutopayAgreementMananger.isPreauthorizedPaymentsApplicableForBillingCycle(billingAccount.lease(), billingCycle, autoPayPolicy, traceMessage)) {
             // Do not create payments
             if (trace) {
                 log.debug("Payments Not Applicable ForBillingCycle {}", traceMessage);

@@ -612,7 +612,17 @@ class AutopayAgreementMananger {
     // Note: do not synchronize it with criteria1 in updatePreauthorizedPayments(ExecutionMonitor executionMonitor, LogicalDate forDate) !!!
 
     static private boolean leaseFirstBillingPeriodChargePolicyCheck(Lease lease, BillingCycle nextCycle, AutoPayPolicy autoPayPolicy, StringBuilder trace) {
-        // TODO Not implemented yet!..
+        if (autoPayPolicy.excludeFirstBillingPeriodCharge().getValue(false)) {
+            if (beforeOrEqual(nextCycle.billingCycleStartDate(), lease.leaseFrom())) {
+                trace.append("Lease First Month detected; Lease From : '" + lease.leaseFrom().getStringView() + "'");
+                return true;
+            }
+
+            if (beforeOrEqual(nextCycle.billingCycleStartDate(), lease.expectedMoveIn())) {
+                trace.append("Lease First Month detected; Expected Move In : '" + lease.expectedMoveIn().getStringView() + "'");
+                return true;
+            }
+        }
         return false;
     }
 

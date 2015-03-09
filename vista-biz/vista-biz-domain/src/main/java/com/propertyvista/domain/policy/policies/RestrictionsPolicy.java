@@ -14,6 +14,7 @@ package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 
@@ -42,13 +43,16 @@ public interface RestrictionsPolicy extends Policy, TenantsAccessiblePolicy {
     @NotNull
     IPrimitive<Integer> ageOfMajority();
 
+    @MemberColumn(notNull = true)
     IPrimitive<Boolean> enforceAgeOfMajority();
 
+    @MemberColumn(notNull = true)
     @Caption(name = "Matured Occupants are Applicants", description = "Some landlords force all matured occupants (over 18-19) to be on LEASE and therefore anyone OVER Age of Majority MUST be Applicant/Co-Applicant and cannot be Dependent")
     IPrimitive<Boolean> maturedOccupantsAreApplicants();
 
     // Financial:
 
+    @MemberColumn(notNull = true)
     @Caption(name = "Guarantors are optional", description = "If Guarantors are not necessary")
     IPrimitive<Boolean> noNeedGuarantors();
 
@@ -64,10 +68,12 @@ public interface RestrictionsPolicy extends Policy, TenantsAccessiblePolicy {
     @NotNull
     IPrimitive<Integer> yearsToForcingPreviousAddress();
 
+    @MemberColumn(notNull = true)
     IPrimitive<Boolean> emergencyContactsIsMandatory();
 
     @NotNull
     IPrimitive<Integer> emergencyContactsNumber();
 
+    @MemberColumn(notNull = true)
     IPrimitive<Boolean> referenceSourceIsMandatory();
 }

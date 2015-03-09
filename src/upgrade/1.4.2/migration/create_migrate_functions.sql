@@ -1078,6 +1078,17 @@ BEGIN
         PERFORM * FROM _dba_.migrate_legal_questions(v_schema_name);
         
         
+        -- deposit policy 
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.deposit_policy '
+                ||'SET  annual_interest_rate = 0.00 '
+                ||'WHERE annual_interest_rate IS NULL';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.deposit_policy '
+                ||'SET  security_deposit_refund_window = 0 '
+                ||'WHERE security_deposit_refund_window IS NULL';
+        
+        
         -- financial_terms_policy_item
         
         EXECUTE 'INSERT INTO '||v_schema_name||'.financial_terms_policy_item (id,caption,content,enabled) '
@@ -1129,6 +1140,10 @@ BEGIN
                 ||'     max_number_of_employments = 2, '
                 ||'     min_employment_duration = 24, '
                 ||'     reference_source_is_mandatory = TRUE';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.restrictions_policy '
+                ||'SET  enforce_age_of_majority = TRUE '
+                ||'WHERE enforce_age_of_majority IS NULL';
         
         /**
         ***     ==========================================================================================================
