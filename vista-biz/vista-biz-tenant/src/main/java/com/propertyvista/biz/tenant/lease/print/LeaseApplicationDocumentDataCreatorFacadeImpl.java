@@ -13,7 +13,9 @@
 package com.propertyvista.biz.tenant.lease.print;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Vector;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -43,6 +45,7 @@ import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.CustomerScreeningLegalQuestion;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -55,6 +58,8 @@ import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataAboutYouSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataAdditionalInfoSectionDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataAdjustmentDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataAdjustmentsSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataCoApplicantDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDependentDTO;
@@ -100,6 +105,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         } else {
             fillLeaseSection(data.sections().get(0).leaseSection().get(0), lease);
             fillRentalItemsSection(data.sections().get(0).rentalItemsSection().get(0), lease);
+            fillAdjustmentsSection(data.sections().get(0).adjustmentsSection().get(0), lease);
             fillPeopleSection(data.sections().get(0).peopleSection().get(0), lease, subjectParticipant);
             fillAboutYouSection(data.sections().get(0).aboutYouSection().get(0), lease, subjectParticipant);
             fillAdditionalInfoSection(data.sections().get(0).additionalInfoSection().get(0), lease, subjectParticipant);
@@ -142,6 +148,9 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
 
         LeaseApplicationDocumentDataRentalItemsSectionDTO rentalItemsSection = EntityFactory.create(LeaseApplicationDocumentDataRentalItemsSectionDTO.class);
         details.rentalItemsSection().add(rentalItemsSection);
+
+        LeaseApplicationDocumentDataAdjustmentsSectionDTO adjustmentsSection = EntityFactory.create(LeaseApplicationDocumentDataAdjustmentsSectionDTO.class);
+        details.adjustmentsSection().add(adjustmentsSection);
 
         LeaseApplicationDocumentDataPeopleSectionDTO peopleSection = EntityFactory.create(LeaseApplicationDocumentDataPeopleSectionDTO.class);
         details.peopleSection().add(peopleSection);
@@ -205,6 +214,30 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         rentalItem.effectiveDate().setValue(billableItem.effectiveDate().getValue() == null ? from : billableItem.effectiveDate().getValue());
         rentalItem.expirationDate().setValue(billableItem.expirationDate().getValue() == null ? to : billableItem.expirationDate().getValue());
         return rentalItem;
+    }
+
+    private void fillAdjustmentsSection(LeaseApplicationDocumentDataAdjustmentsSectionDTO leaseApplicationDocumentDataAdjustmentsSectionDTO, Lease lease) {
+        leaseApplicationDocumentDataAdjustmentsSectionDTO.adjustments().addAll(
+                getAdjustmentsList(lease.currentTerm().version().leaseProducts().serviceItem(), lease.currentTerm().termFrom().getValue(), lease.currentTerm()
+                        .termTo().getValue()));
+        for (BillableItem feature : lease.currentTerm().version().leaseProducts().featureItems()) {
+            leaseApplicationDocumentDataAdjustmentsSectionDTO.adjustments().addAll(
+                    getAdjustmentsList(feature, lease.currentTerm().termFrom().getValue(), lease.currentTerm().termTo().getValue()));
+        }
+    }
+
+    private Collection<LeaseApplicationDocumentDataAdjustmentDTO> getAdjustmentsList(BillableItem billableItem, LogicalDate from, LogicalDate to) {
+        Collection<LeaseApplicationDocumentDataAdjustmentDTO> adjustments = new Vector<LeaseApplicationDocumentDataAdjustmentDTO>();
+        String item = billableItem.item().name().getValue();
+        for (BillableItemAdjustment currentAdjustment : billableItem.adjustments()) {
+            LeaseApplicationDocumentDataAdjustmentDTO adjustment = EntityFactory.create(LeaseApplicationDocumentDataAdjustmentDTO.class);
+            adjustment.item().setValue(item);
+            adjustment.value().setValue(currentAdjustment.value().getStringView());
+            adjustment.effectiveDate().setValue(currentAdjustment.effectiveDate().getValue() == null ? from : currentAdjustment.effectiveDate().getValue());
+            adjustment.expirationDate().setValue(currentAdjustment.expirationDate().getValue() == null ? to : currentAdjustment.expirationDate().getValue());
+            adjustments.add(adjustment);
+        }
+        return adjustments;
     }
 
     private void fillPeopleSection(LeaseApplicationDocumentDataPeopleSectionDTO peopleSection, Lease lease, LeaseTermParticipant<?> subjectParticipant) {

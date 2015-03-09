@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationRentalItemDetails" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="b17b507c-0756-458c-8a13-302cb8cf8d54">
+	<property name="ireport.zoom" value="2.8531167061100136"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="item" class="java.lang.String"/>
+	<field name="value" class="java.lang.String"/>
+	<field name="effectiveDate" class="com.pyx4j.commons.LogicalDate"/>
+	<field name="expirationDate" class="com.pyx4j.commons.LogicalDate"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement x="263" y="0" width="132" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="64697850-9fa9-42c6-b7f0-15816211be1b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="132" y="0" width="131" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="bc370525-755f-45a8-bd2c-a0986daed3dc"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="395" y="0" width="176" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="d7bf61e1-6eda-40d7-a3ce-0ea012304aa6"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="0" width="131" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="dd6f4f49-cea4-4b75-8904-63b7c627ada6"/>
+			</rectangle>
+			<textField>
+				<reportElement x="7" y="2" width="125" height="18" uuid="56cb7aaf-ab44-454e-b723-b2172d12df7f"/>
+				<textFieldExpression><![CDATA[$F{item}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="138" y="2" width="73" height="18" uuid="e991540a-790f-4f62-875f-cb385ec7fa15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{value}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="270" y="2" width="125" height="18" uuid="1fff70e3-8cd4-46d1-8c29-bfa163ea7246"/>
+				<textFieldExpression><![CDATA[$F{effectiveDate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="401" y="2" width="170" height="18" uuid="65a0a31c-e589-4f87-ad5f-d42d616fc1cb"/>
+				<textFieldExpression><![CDATA[$F{expirationDate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationRentalItemsSection" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="e29c83d1-64b5-430f-91ea-60f5a67d54a4">
+	<property name="ireport.zoom" value="2.5937424601000143"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="adjustments" class="com.pyx4j.entity.core.IList"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="44">
+			<rectangle>
+				<reportElement x="1" y="4" width="570" height="20" forecolor="#CCCCCC" uuid="77056bf8-b0c0-47e9-870f-c69403ab886a"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="4" y="4" width="173" height="20" uuid="f4f48251-65f9-4400-822f-4ef2bcc56a50"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rental Item Adjustments]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="1" y="24" width="132" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="9a3fab37-3a97-462e-bcad-dacc0063a152"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="132" y="24" width="132" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="16bf59b9-8f8a-4246-9ff4-cfb424106bb2"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="263" y="24" width="132" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="99b4695c-deb1-42a1-beef-73794a9f2d70"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="395" y="24" width="176" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="b33c9ed8-1b92-4dfb-996a-65955ee19fa3"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="265" y="27" width="84" height="15" forecolor="#666666" uuid="a62bf793-3a11-471b-aca5-1f17071073fd"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Effective Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="399" y="27" width="66" height="15" forecolor="#666666" uuid="e64bfff7-5e78-4ef6-b3e4-1bb01760d60c"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Expiration Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="26" width="66" height="15" forecolor="#666666" uuid="017d439b-86f1-48c5-aeac-af47572c438c"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rental Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="138" y="26" width="90" height="15" forecolor="#666666" uuid="64840e43-1145-4354-bcba-4b898c22a4b0"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Adjustment Value]]></text>
+			</staticText>
+			<rectangle radius="0">
+				<reportElement mode="Opaque" x="1" y="1" width="570" height="2" forecolor="#00CC99" backcolor="#00CC99" uuid="71af24a1-9976-4a0d-8ee7-b9baba5d718d"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</rectangle>
+		</band>
+		<band height="1">
+			<subreport>
+				<reportElement x="-20" y="0" width="612" height="1" uuid="be0541c7-5c16-482f-bd06-02cb6e367d46"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{adjustments})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.RentalApplicationAdjustmentDetails")]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>
