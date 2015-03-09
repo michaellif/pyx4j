@@ -10,7 +10,7 @@
  * Created on 2012-07-16
  * @author vlads
  */
-package com.propertyvista.generator;
+package com.propertyvista.biz.generator;
 
 import java.util.List;
 import java.util.Vector;

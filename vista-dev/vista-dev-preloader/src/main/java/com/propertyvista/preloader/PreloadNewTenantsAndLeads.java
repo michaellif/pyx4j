@@ -22,6 +22,7 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.preloader.BaseVistaDevDataPreloader;
+import com.propertyvista.biz.preloader.UserPreloaderFacade;
 import com.propertyvista.biz.tenant.LeadFacade;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Employee;
@@ -54,7 +55,7 @@ public class PreloadNewTenantsAndLeads extends BaseVistaDevDataPreloader {
 
         for (int i = 1; i <= config().numUnAssigendTenants; i++) {
             String email = DemoData.UserType.NEW_TENANT.getEmail(i);
-            CustomerUser user = UserPreloader.createTenantUser(email, email, null);
+            CustomerUser user = ServerSideFactory.create(UserPreloaderFacade.class).createTenantUser(email, email, null);
             Customer tenant = generator.createTenant();
             tenant.person().email().setValue(email);
             tenant.user().set(user);

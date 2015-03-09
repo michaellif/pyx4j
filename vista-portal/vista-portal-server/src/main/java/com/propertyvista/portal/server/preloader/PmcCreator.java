@@ -18,13 +18,9 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
@@ -35,19 +31,13 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
-import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.preloader.CrmRolesPreloader;
 import com.propertyvista.biz.preloader.PmcPreloaderFacade;
-import com.propertyvista.biz.system.UserManagementFacade;
-import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
+import com.propertyvista.biz.preloader.UserPreloaderFacade;
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.CrmRole;
-import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.CrmUserCredential;
 import com.propertyvista.domain.security.OnboardingUser;
-import com.propertyvista.generator.SecurityGenerator;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.server.TaskRunner;
 
@@ -84,17 +74,17 @@ public class PmcCreator {
                 CrmRole defaultRole = CrmRolesPreloader.getDefaultRole();
 
                 for (OnboardingUser onbUser : getAllOnboardingUsers(pmc)) {
-                    createCrmEmployee(onbUser.firstName().getValue(), onbUser.lastName().getValue(), onbUser.email().getValue(), onbUser.password().getValue(),
-                            onbUser.getPrimaryKey(), defaultRole);
+                    ServerSideFactory.create(UserPreloaderFacade.class).createCrmEmployee(onbUser.firstName().getValue(), onbUser.lastName().getValue(),
+                            onbUser.email().getValue(), onbUser.password().getValue(), onbUser.getPrimaryKey(), defaultRole);
                 }
 
                 // Create support account by default
-                createVistaSupportUsers();
+                ServerSideFactory.create(UserPreloaderFacade.class).createVistaSupportUsers();
 
                 if (ApplicationMode.isDevelopment() && !ApplicationMode.isDemo()) {
                     for (int i = 1; i <= DemoData.UserType.PM.getDefaultMax(); i++) {
                         String email = DemoData.UserType.PM.getEmail(i);
-                        createCrmEmployee(email, email, email, email, null, defaultRole);
+                        ServerSideFactory.create(UserPreloaderFacade.class).createCrmEmployee(email, email, email, email, null, defaultRole);
                     }
                 }
 
@@ -113,62 +103,6 @@ public class PmcCreator {
                 return Persistence.service().query(criteria);
             }
         });
-    }
-
-    public static void createVistaSupportUsers() {
-        createCrmEmployee("Support", "PropertyVista", CrmUser.VISTA_SUPPORT_ACCOUNT_EMAIL, null, null, CrmRolesPreloader.getDefaultRole());
-    }
-
-    public static CrmUser createCrmEmployee(String firstName, String lastName, String email, String password, Key onboardingUserKey, CrmRole... roles) {
-        if (!ApplicationMode.isDevelopment()) {
-            EntityQueryCriteria<CrmUser> criteria = EntityQueryCriteria.create(CrmUser.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
-            List<CrmUser> users = Persistence.service().query(criteria);
-            if (users.size() != 0) {
-                log.debug("User already exists");
-                return users.get(0);
-            }
-        }
-        CrmUser user = EntityFactory.create(CrmUser.class);
-
-        user.name().setValue(CommonsStringUtils.nvl_concat(firstName, lastName, " "));
-        user.email().setValue(email);
-
-        Persistence.service().persist(user);
-
-        Employee employee = EntityFactory.create(Employee.class); //creates employee in crm
-        ServerSideFactory.create(IdAssignmentFacade.class).assignId(employee);
-        employee.user().set(user);
-        employee.name().firstName().setValue(firstName);
-        employee.name().lastName().setValue(lastName);
-        employee.email().setValue(email);
-
-        Persistence.service().persist(employee);
-
-        CrmUserCredential credential = EntityFactory.create(CrmUserCredential.class);
-        credential.setPrimaryKey(user.getPrimaryKey());
-
-        credential.onboardingUser().setValue(onboardingUserKey);
-
-        credential.user().set(user);
-
-        if (password != null) {
-            credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(password));
-        }
-        if (ApplicationMode.isDevelopment() || ApplicationMode.isDemo()) {
-            SecurityGenerator.assignSecurityQuestion(credential);
-        }
-        credential.enabled().setValue(Boolean.TRUE);
-        credential.accessAllBuildings().setValue(Boolean.TRUE);
-        for (CrmRole role : roles) {
-            if (role != null) {
-                credential.roles().add(role);
-            }
-        }
-        Persistence.service().persist(credential);
-        ServerSideFactory.create(UserManagementFacade.class).createGlobalCrmUserIndex(user);
-
-        return user;
     }
 
 }
