@@ -14,8 +14,14 @@ package com.propertyvista.preloader.site.gondor;
 
 import java.util.Date;
 
+import com.pyx4j.essentials.server.preloader.DataGenerator;
+
 import com.propertyvista.biz.preloader.site.AbstractSitePreloader;
+import com.propertyvista.domain.contact.InternationalAddress;
+import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
+import com.propertyvista.generator.util.CommonsGenerator;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class GondorSitePreloader extends AbstractSitePreloader {
 
@@ -88,6 +94,28 @@ public class GondorSitePreloader extends AbstractSitePreloader {
     @Override
     protected String copyright() {
         return "© " + pmcName() + " " + (1900 + new Date().getYear());
+    }
+
+    @Override
+    protected String address() {
+        ISOCountry country = VistaFeatures.instance().countryOfOperation().country;
+        InternationalAddress address = CommonsGenerator.createInternationalAddress(country);
+        return getFormattedAddress(address);
+    }
+
+    @Override
+    protected String phone1() {
+        return "+1-" + CommonsGenerator.createPhone(DataGenerator.randomPhone("800"));
+    }
+
+    @Override
+    protected String phone2() {
+        return "+1-" + CommonsGenerator.createPhone(DataGenerator.randomPhone("408"), "123");
+    }
+
+    @Override
+    protected String fax() {
+        return "+1-" + CommonsGenerator.createPhone(DataGenerator.randomPhone("408"));
     }
 
 }

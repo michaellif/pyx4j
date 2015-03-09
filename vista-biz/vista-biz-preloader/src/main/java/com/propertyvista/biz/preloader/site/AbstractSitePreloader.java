@@ -35,7 +35,9 @@ import com.pyx4j.i18n.server.ServerI18nFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.preloader.AbstractVistaDataPreloader;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.customizations.CountryOfOperation;
+import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.HtmlContent;
 import com.propertyvista.domain.site.News;
@@ -116,6 +118,14 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
     protected abstract Integer siteBackground();
 
     protected abstract String copyright();
+
+    protected abstract String address();
+
+    protected abstract String phone1();
+
+    protected abstract String phone2();
+
+    protected abstract String fax();
 
     @Override
     public String create() {
@@ -488,14 +498,28 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
             log.error("Error", e);
             contentText = "Page was not created for ${pmcName}";
         }
-        String pmcName = pmcName();
-        if (pmcName == null) {
-            pmcName = "n/a";
+
+        contentText = replaceTagOnContent("${pmcName}", pmcName(), contentText);
+
+        if (resourceBaseName.equalsIgnoreCase("contact.html")) {
+            contentText = replaceTagOnContent("${address}", address(), contentText);
+            contentText = replaceTagOnContent("${phone1}", phone1(), contentText);
+            contentText = replaceTagOnContent("${phone2}", phone2(), contentText);
+            contentText = replaceTagOnContent("${fax}", fax(), contentText);
         }
-        contentText = contentText.replace("${pmcName}", pmcName);
 
         pageContent.content().setValue(contentText);
         page.content().add(pageContent);
+    }
+
+    private String replaceTagOnContent(String tagName, String tagValue, String content) {
+        if (tagValue == null) {
+            tagValue = "n/a";
+        }
+
+        content = content.replace(tagName, tagValue);
+
+        return content;
     }
 
     protected HomePageGadget createGadget(String name, HomePageGadget.GadgetArea area) {
@@ -634,6 +658,22 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         contactUsText.append(".com");
 
         return contactUsText.toString();
+    }
+
+    protected String getFormattedAddress(InternationalAddress address) {
+        StringBuffer formattedAddress = new StringBuffer();
+        formattedAddress.append(address.streetNumber().getValue());
+        formattedAddress.append(" ");
+        formattedAddress.append(address.streetName().getValue());
+        formattedAddress.append("<br/>");
+        formattedAddress.append(address.city().getValue());
+        formattedAddress.append(" ");
+        formattedAddress.append(ISOProvince.forName(address.province().getValue(), address.country().getValue()).code);
+        formattedAddress.append(" ");
+        formattedAddress.append(address.postalCode().getValue());
+        formattedAddress.append("<br/>");
+        formattedAddress.append(address.country().getValue().name);
+        return formattedAddress.toString();
     }
 
     @SuppressWarnings("unchecked")
