@@ -26,7 +26,6 @@ BEGIN TRANSACTION;
     DROP SEQUENCE legal_letter_blob_seq;
     DROP SEQUENCE legal_letter_seq;
     DROP SEQUENCE legal_status_seq;
-    
     DROP SEQUENCE proof_of_asset_document_folder_seq;
     DROP SEQUENCE proof_of_income_document_folder_seq;
     
@@ -74,7 +73,6 @@ BEGIN TRANSACTION;
     CREATE SEQUENCE special_delivery_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE status_selection_item_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE status_selection_policy_item_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
-    CREATE SEQUENCE terms_policy_item_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     
     
      -- Change owner to vista
@@ -124,7 +122,6 @@ BEGIN TRANSACTION;
     ALTER SEQUENCE schedule_seq OWNER TO vista ;
     ALTER SEQUENCE status_selection_item_seq OWNER TO vista ;
     ALTER SEQUENCE status_selection_policy_item_seq OWNER TO vista ;
-    ALTER SEQUENCE terms_policy_item_seq OWNER TO vista ;
 
         
 COMMIT;

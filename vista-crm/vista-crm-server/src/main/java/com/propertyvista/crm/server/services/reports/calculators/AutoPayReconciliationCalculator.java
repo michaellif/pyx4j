@@ -13,6 +13,7 @@
 package com.propertyvista.crm.server.services.reports.calculators;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -84,7 +85,8 @@ public class AutoPayReconciliationCalculator {
             criteria.eq(criteria.proto().tenant().lease(), reconciliationTo.tenant().lease());
             criteria.eq(criteria.proto().isDeleted(), false);
             int agreementsCount = Persistence.service().count(criteria);
-            reconciliationTo.paymentShareAmount().setValue(reconciliationTo.price().getValue().divide(BigDecimal.valueOf(agreementsCount)));
+            reconciliationTo.paymentShareAmount().setValue(
+                    reconciliationTo.price().getValue().divide(BigDecimal.valueOf(agreementsCount), RoundingMode.HALF_UP));
         }
         reconciliationTo.discrepancy().setValue(reconciliationTo.payment().getValue().subtract(reconciliationTo.paymentShareAmount().getValue()));
 
