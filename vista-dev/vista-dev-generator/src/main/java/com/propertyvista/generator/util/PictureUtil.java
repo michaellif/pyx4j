@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -26,6 +26,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.gwt.server.IOUtils;
@@ -43,9 +44,11 @@ public class PictureUtil {
     public static Map<MediaFile, byte[]> loadResourceMedia(String filenamePrefix, Class<?> clazz) {
         Map<MediaFile, byte[]> data = new LinkedHashMap<MediaFile, byte[]>();
         loadResourcePicture(filenamePrefix + ".jpg", clazz, data);
-        loadResourcePicture(filenamePrefix + "-1.jpg", clazz, data);
-        loadResourcePicture(filenamePrefix + "-2.jpg", clazz, data);
-        loadResourcePicture(filenamePrefix + "-3.jpg", clazz, data);
+        if (ApplicationMode.isDemo()) {
+            loadResourcePicture(filenamePrefix + "-1.jpg", clazz, data);
+            loadResourcePicture(filenamePrefix + "-2.jpg", clazz, data);
+            loadResourcePicture(filenamePrefix + "-3.jpg", clazz, data);
+        }
         return data;
     }
 
