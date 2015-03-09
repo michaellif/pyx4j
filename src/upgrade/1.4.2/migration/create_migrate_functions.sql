@@ -1140,6 +1140,10 @@ BEGIN
                 ||'     max_number_of_employments = 2, '
                 ||'     min_employment_duration = 24, '
                 ||'     reference_source_is_mandatory = TRUE';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.restrictions_policy '
+                ||'SET  enforce_age_of_majority = TRUE '
+                ||'WHERE enforce_age_of_majority IS NULL';
         
         /**
         ***     ==========================================================================================================
