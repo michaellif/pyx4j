@@ -56,7 +56,7 @@
 	<xs:element name="ServiceRequestBriefDescription" type="xs:string"/>
 	<xs:element name="ServiceRequestDate" type="xs:date"/>
 	<xs:element name="ServiceRequestFullDescription" type="xs:string"/>
-	<xs:element name="ServiceRequestId" type="xs:short"/>		
+	<xs:element name="ServiceRequestId" type="xs:long"/>		
 	<xs:element name="StatusHistory">
 		<xs:complexType>
 			<xs:sequence>

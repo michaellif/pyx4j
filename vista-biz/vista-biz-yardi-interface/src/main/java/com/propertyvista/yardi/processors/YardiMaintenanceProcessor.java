@@ -73,7 +73,7 @@ public class YardiMaintenanceProcessor {
 
         if (!mr.requestId().isNull()) {
             try {
-                req.setServiceRequestId(Short.valueOf(mr.requestId().getValue()));
+                req.setServiceRequestId(Long.valueOf(mr.requestId().getValue()));
             } catch (NumberFormatException ignore) {
             }
         }
