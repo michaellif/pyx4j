@@ -65,7 +65,7 @@ public final class VistaDevPreloadConfig implements Serializable {
 
     public String province = null;
 
-    public int numResidentialBuildings = 15;
+    public int numResidentialBuildings = 16;
 
     public int numLeads = 5;
 

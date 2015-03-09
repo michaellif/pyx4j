@@ -21,7 +21,7 @@ public class VistaTODO {
      * This is changed by BuildMaster when creating Branch.
      * Used by configurations to enable dual development environments.
      */
-    public static final boolean codeBaseIsProdBranch = true;
+    public static final boolean codeBaseIsProdBranch = false;
 
     /**
      * TODO: Do not forget to turn it on/off during/after production release !!!
