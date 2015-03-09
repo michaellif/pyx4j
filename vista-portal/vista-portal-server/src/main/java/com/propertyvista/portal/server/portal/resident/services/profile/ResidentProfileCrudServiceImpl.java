@@ -60,7 +60,7 @@ public class ResidentProfileCrudServiceImpl implements ResidentProfileCrudServic
         if (retrieveTarget == RetrieveTarget.Edit) {
             RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainHierarchicalEffectivePolicy(
                     ResidentPortalContext.getLeaseIdStub(), RestrictionsPolicy.class);
-            to.emergencyContactsIsMandatory().setValue(restrictionsPolicy.emergencyContactsIsMandatory().getValue());
+            to.emergencyContactsIsMandatory().setValue(restrictionsPolicy.emergencyContactsIsMandatory().getValue(false));
             to.emergencyContactsNumberRequired().setValue(restrictionsPolicy.emergencyContactsNumber().getValue());
         } else {
             to.emergencyContactsIsMandatory().setValue(false);

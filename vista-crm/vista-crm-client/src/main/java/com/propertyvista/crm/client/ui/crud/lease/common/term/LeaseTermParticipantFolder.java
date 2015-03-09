@@ -43,7 +43,7 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
 
     private Integer ageOfMajority = 18;
 
-    private boolean enforceAgeOfMajority = false;
+    private Boolean enforceAgeOfMajority = false;
 
     private final CrmEntityForm<?> parentForm;
 
@@ -73,11 +73,11 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
         this.ageOfMajority = ageOfMajority;
     }
 
-    public boolean getEnforceAgeOfMajority() {
+    public Boolean getEnforceAgeOfMajority() {
         return enforceAgeOfMajority;
     }
 
-    public void setEnforceAgeOfMajority(boolean enforceAgeOfMajority) {
+    public void setEnforceAgeOfMajority(Boolean enforceAgeOfMajority) {
         this.enforceAgeOfMajority = enforceAgeOfMajority;
     }
 

@@ -70,7 +70,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
     private boolean isPadEditable = false;
 
-    private boolean maturedOccupantsAreApplicant = false;
+    private Boolean maturedOccupantsAreApplicant = false;
 
     public TenantInLeaseFolder(CrmEntityForm<?> parentForm) {
         super(LeaseTermTenant.class, parentForm);
@@ -90,11 +90,11 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         return i18n.tr("Do you want to select existing Prospect/Tenant?");
     }
 
-    public boolean getMaturedOccupantsAreApplicants() {
+    public Boolean getMaturedOccupantsAreApplicants() {
         return maturedOccupantsAreApplicant;
     }
 
-    public void setMaturedOccupantsAreApplicants(boolean maturedOccupantsAreApplicants) {
+    public void setMaturedOccupantsAreApplicants(Boolean maturedOccupantsAreApplicants) {
         this.maturedOccupantsAreApplicant = maturedOccupantsAreApplicants;
     }
 

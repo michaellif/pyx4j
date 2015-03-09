@@ -1021,7 +1021,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.noNeedGuarantors().setValue(restrictionsPolicy.noNeedGuarantors().getValue(false));
 
         to.yearsToForcingPreviousAddress().setValue(restrictionsPolicy.yearsToForcingPreviousAddress().getValue());
-        to.emergencyContactsIsMandatory().setValue(restrictionsPolicy.emergencyContactsIsMandatory().getValue());
+        to.emergencyContactsIsMandatory().setValue(restrictionsPolicy.emergencyContactsIsMandatory().getValue(false));
         to.emergencyContactsNumberRequired().setValue(restrictionsPolicy.emergencyContactsNumber().getValue());
         to.referenceSourceIsMandatory().setValue(restrictionsPolicy.referenceSourceIsMandatory().getValue(false));
     }
