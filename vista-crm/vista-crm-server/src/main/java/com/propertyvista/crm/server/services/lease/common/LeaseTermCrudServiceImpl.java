@@ -453,9 +453,9 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, RestrictionsPolicy.class);
 
         dto.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
-        dto.enforceAgeOfMajority().setValue(restrictionsPolicy.enforceAgeOfMajority().getValue());
-        dto.maturedOccupantsAreApplicants().setValue(restrictionsPolicy.maturedOccupantsAreApplicants().getValue());
-        dto.noNeedGuarantors().setValue(restrictionsPolicy.noNeedGuarantors().getValue());
+        dto.enforceAgeOfMajority().setValue(restrictionsPolicy.enforceAgeOfMajority().getValue(false));
+        dto.maturedOccupantsAreApplicants().setValue(restrictionsPolicy.maturedOccupantsAreApplicants().getValue(false));
+        dto.noNeedGuarantors().setValue(restrictionsPolicy.noNeedGuarantors().getValue(false));
 
         dto.maxOccupants().setValue((int) (bedrooms.doubleValue() * restrictionsPolicy.occupantsPerBedRoom().getValue(0.0)));
         dto.maxLockers().setValue(restrictionsPolicy.maxLockers().getValue());
