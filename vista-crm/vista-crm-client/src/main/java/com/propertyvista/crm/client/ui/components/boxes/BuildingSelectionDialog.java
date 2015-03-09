@@ -45,7 +45,7 @@ public abstract class BuildingSelectionDialog extends EntitySelectorTableDialog<
     }
 
     public BuildingSelectionDialog(boolean isMultiselect, Collection<Building> alreadySelected, String caption) {
-        super(Building.class, isMultiselect, caption);
+        super(Building.class, isMultiselect, alreadySelected, caption);
     }
 
     @Override
