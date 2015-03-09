@@ -32,6 +32,9 @@ BEGIN TRANSACTION;
     
 COMMIT;
 
+-- load tmp_terms
+\i insert_tmp_terms.sql
+
 -- public schema migration
 \i migrate_public_schema.sql;
 
@@ -346,3 +349,4 @@ COMMIT;
 
 DROP FUNCTION _dba_.migrate_pmc_142(text);
 DROP FUNCTION _dba_.migrate_legal_questions(text);
+DROP TABLE _dba_.tmp_terms;

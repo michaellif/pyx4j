@@ -1,0 +1,8 @@
+# You can have many branches locally running at the same time with separate databases.
+# copy this file to 'development-branch.profile' and change settings
+
+#will be added as sufix to db name; 'vista' -> 'vista1'
+dbNameOffset=1
+
+# http://localhost:8888  ->  http://localhost:8889
+jettyServerPortOffset=1

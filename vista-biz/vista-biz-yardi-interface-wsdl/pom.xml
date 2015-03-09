@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.propertyvista</groupId>
         <artifactId>vista-biz</artifactId>
-        <version>1.4.2-SNAPSHOT</version><!--vista-version-->
+        <version>1.4.3-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 

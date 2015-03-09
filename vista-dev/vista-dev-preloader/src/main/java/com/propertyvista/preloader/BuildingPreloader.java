@@ -136,7 +136,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         config.country = country;
 
         int unitCount = 0;
-        List<Building> buildings = buildingGenerator.createBuildings(config().numResidentialBuildings, config);
+        List<Building> buildings = buildingGenerator.createBuildings(config().numResidentialBuildings, config, ApplicationMode.isDemo());
 
         SharedGeoLocator.setMode(Mode.updateCache);
         int noGeoCount = 0;

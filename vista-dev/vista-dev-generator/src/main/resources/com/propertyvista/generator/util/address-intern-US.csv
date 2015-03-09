@@ -1,16 +1,61 @@
 streetNumber,streetName,city,province,country,postalCode
 29,Bedford St,New York,New York,UnitedStates,10014
+499,Broome St,New York,New York,UnitedStates,10013
+17,Clinton St,New York,New York,UnitedStates,10002
+244,Front St,New York,New York,UnitedStates,10038
 2110,Nueces St,Austin,Texas,UnitedStates,78705
+2315,Santa Maria St,Austin,Texas,UnitedStates,78702
+203,Broodway St,Austin,Texas,UnitedStates,78702
+1333,Arena Dr,Austin,Texas,UnitedStates,78741
 416,S Spring St,Los Angeles,California,UnitedStates,90013
+3940,Wisconsin St,Los Angeles,California,UnitedStates,90037
+650,E Jefferson Blvd,Los Angeles,California,UnitedStates,90011
+1413,Crenshaw Blvd,Los Angeles,California,UnitedStates,90019
 740,N Homan Ave,Chicago,Illinois,UnitedStates,60624
+541,N Harding Ave,Chicago,Illinois,UnitedStates,60624
+1700,N Hudson Ave,Chicago,Illinois,UnitedStates,60614
+225,W Superior St,Chicago,Illinois,UnitedStates,60654
 715,NW 4th Ave,Miami,Florida,UnitedStates,33136
+2003,NW Flagler Terrace,Miami,Florida,UnitedStates,33125
+937,SW 5th St,Miami,Florida,UnitedStates,33130
+2010,S Miami Ave,Miami,Florida,UnitedStates,33129
 230,Ripka St,Philadelphia,Pennsylvania,UnitedStates,19127
-48-54,S Valley St,Akron,Ohio,UnitedStates,44303
+220,Bainbridge St,Philadelphia,Pennsylvania,UnitedStates,19147
+1220,Jackson St,Philadelphia,Pennsylvania,UnitedStates,19148
+2534,South St,Philadelphia,Pennsylvania,UnitedStates,19146
+48,S Valley St,Akron,Ohio,UnitedStates,44303
+247,Park St,Akron,Ohio,UnitedStates,44304
+855,Carroll St,Akron,Ohio,UnitedStates,44305
+193,Berman Ave,Akron,Ohio,UnitedStates,44305
 255,Courtland St NE,Atlanta,Georgia,UnitedStates,30303
-220-298,N Ashley St,Ann Arbor,Michigan,UnitedStates,48104
+346,Bass St SE,Atlanta,Georgia,UnitedStates,30315
+404,Boulevard NE,Atlanta,Georgia,UnitedStates,30308
+729,Griffin St NW,Atlanta,Georgia,UnitedStates,30318
+220,N Ashley St,Ann Arbor,Michigan,UnitedStates,48104
+303,Mullholland St,Ann Arbor,Michigan,UnitedStates,48103
+650,Archwood Dr,Ann Arbor,Michigan,UnitedStates,48103
+564,Manor Dr,Ann Arbor,Michigan,UnitedStates,48105
 1811,Patton Ave,Charlotte,North Carolina,UnitedStates,28216
+1234,Elizabeth Ave,Charlotte,North Carolina,UnitedStates,28204
+1420,S Mint St,Charlotte,North Carolina,UnitedStates,28203
+1524,Belvedere Ave,Charlotte,North Carolina,UnitedStates,28205
 119,Chestnut St,Albany,New York,UnitedStates,12210
+25C,Pine Ln,Albany,New York,UnitedStates,12203
+48,Greenway,Albany,New York,UnitedStates,12208
+43,Van Zandt St,Albany,New York,UnitedStates,12207
 713,Pecore St,Houston,Texas,UnitedStates,77009
-150-198,N Locust St,Aurora,Illinois,UnitedStates,60506
-951-999,Kettner Blvd,San Diego,California,UnitedStates,92101
+12001,Crystalwood Dr,Houston,Texas,UnitedStates,77013
+321,100 St,Houston,Texas,UnitedStates,77015
+14407,Wadebridge Way,Houston,Texas,UnitedStates,77015
+150,N Locust St,Aurora,Illinois,UnitedStates,60506
+511,N Oakhurst Dr,Aurora,Illinois,UnitedStates,60502
+1627,Sauk Dr,Aurora,Illinois,UnitedStates,60510
+2764,Plante Rd,Aurora,Illinois,UnitedStates,60542
+951,Kettner Blvd,San Diego,California,UnitedStates,92101
+1220,Cave St,San Diego,California,UnitedStates,92037
+1344,Missouri St,San Diego,California,UnitedStates,92109
+3602,Antiem St,San Diego,California,UnitedStates,92111
 42,E Jackson St,Orlando,Florida,UnitedStates,32801
+6064,Bent Pine Dr,Orlando,Florida,UnitedStates,32822
+1221,Perkins Rd,Orlando,Florida,UnitedStates,32809
+809,Pedro Ave,Orlando,Florida,UnitedStates,32807

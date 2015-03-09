@@ -35,6 +35,8 @@ public class AutoPayReconciliationReportListServiceImpl extends AbstractCrmCrudS
     protected void enhanceListCriteria(EntityListCriteria<AutopayAgreement> boCriteria, EntityListCriteria<AutoPayReconciliationDTO> toCriteria) {
         super.enhanceListCriteria(boCriteria, toCriteria);
         boCriteria.eq(boCriteria.proto().isDeleted(), false);
+        // Active Buildings
+        boCriteria.eq(boCriteria.proto().tenant().lease().unit().building().suspended(), false);
     }
 
     @Override

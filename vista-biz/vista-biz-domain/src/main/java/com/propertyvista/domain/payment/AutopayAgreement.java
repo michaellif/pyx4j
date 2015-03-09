@@ -81,6 +81,7 @@ public interface AutopayAgreement extends IEntity, HasNotesAndAttachments {
     IList<AutopayAgreementCoveredItem> coveredItems();
 
     @NotNull
+    @MemberColumn(notNull = true)
     IPrimitive<Boolean> isDeleted();
 
     /**

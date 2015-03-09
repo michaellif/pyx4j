@@ -1020,18 +1020,6 @@ BEGIN
         
         ALTER TABLE status_selection_policy_item OWNER TO vista;
         
-        -- terms_policy_item
-        
-        CREATE TABLE terms_policy_item
-        (
-            id                              BIGINT              NOT NULL,
-            caption                         VARCHAR(500),
-            content                         VARCHAR(300000),
-            enabled                         BOOLEAN,
-                CONSTRAINT terms_policy_item_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE terms_policy_item OWNER TO vista;
         
         /**
         ***     =====================================================================================================
@@ -1088,6 +1076,53 @@ BEGIN
                 
                 
         PERFORM * FROM _dba_.migrate_legal_questions(v_schema_name);
+        
+        
+        -- deposit policy 
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.deposit_policy '
+                ||'SET  annual_interest_rate = 0.00 '
+                ||'WHERE annual_interest_rate IS NULL';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.deposit_policy '
+                ||'SET  security_deposit_refund_window = 0 '
+                ||'WHERE security_deposit_refund_window IS NULL';
+        
+        
+        -- financial_terms_policy_item
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.financial_terms_policy_item (id,caption,content,enabled) '
+                ||'(SELECT  nextval(''public.financial_terms_policy_item_seq'') AS id, '
+                ||'         t.caption, t.content, FALSE '
+                ||' FROM    _dba_.tmp_terms t ) ';
+                
+        
+        -- financial_terms_policy
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.financial_terms_policy(id,node,'
+                ||'node_discriminator,updated,billing_terms) '
+                ||'(SELECT  nextval(''public.financial_terms_policy_seq'') AS id, '
+                ||'         n.id AS node, ''OrganizationPoliciesNode'' AS node_discriminator, '
+                ||'         DATE_TRUNC(''second'',current_timestamp)::timestamp, '
+                ||'         i.id AS billing_terms '
+                ||' FROM    '||v_schema_name||'.organization_policies_node n, '
+                ||'         '||v_schema_name||'.financial_terms_policy_item i '
+                ||' WHERE   i.caption = ''Billing and Refund Policy'') ';
+                
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.financial_terms_policy AS p '
+                ||'SET  preauthorized_payment_echeck_terms = i.id '
+                ||'FROM '||v_schema_name||'.financial_terms_policy_item i ,'
+                ||'     _dba_.tmp_terms t '
+                ||'WHERE    t.target = ''TenantPreAuthorizedPaymentECheckTerms'' '
+                ||'AND      t.content = i.content ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.financial_terms_policy AS p '
+                ||'SET  preauthorized_payment_card_terms = i.id '
+                ||'FROM '||v_schema_name||'.financial_terms_policy_item i ,'
+                ||'     _dba_.tmp_terms t '
+                ||'WHERE    t.target = ''TenantPreAuthorizedPaymentCardTerms'' '
+                ||'AND      t.content = i.content ';
         
         -- permission_to_enter_note
         
