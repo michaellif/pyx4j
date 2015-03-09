@@ -61,12 +61,12 @@ public abstract class VistaSite extends AppSite {
         ImageFactory.setImageBundle((VistaImages) GWT.create(VistaImages.class));
         ApplicationCommon.initRpcGlassPanel();
         if (ApplicationMode.isDevelopment() && Window.Location.getParameter("trace") != null) {
-            RPCAppender rpcAppender = new RPCAppender(Level.TRACE);
+            RPCAppender rpcAppender = new RPCAppender(Level.TRACE, true);
             rpcAppender.autoFlush(2 * Consts.SEC2MILLISECONDS);
             ClientLogger.addAppender(rpcAppender);
             ClientLogger.setTraceOn(true);
         } else {
-            ClientLogger.addAppender(new RPCAppender(Level.WARN));
+            ClientLogger.addAppender(new RPCAppender(Level.WARN, true));
         }
         RootPanel.get().add(GlassPanel.instance());
 

@@ -14,6 +14,7 @@ package com.propertyvista.server.security;
 
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.log4gwt.rpc.LogServices;
+import com.pyx4j.log4gwt.rpc.LoggingService;
 import com.pyx4j.rpc.shared.IServiceAdapter;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
@@ -35,6 +36,7 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
     public VistaAccessControlList() {
         grant(new ServiceExecutePermission(LogServices.Log.class));
         grant(new ServiceExecutePermission(IServiceAdapter.class));
+        grant(new IServiceExecutePermission(LoggingService.class));
 
         if (allowAllDuringDevelopment) {
             // Debug
