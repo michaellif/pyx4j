@@ -39,9 +39,13 @@ import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.client.ui.NavigView.NavigPresenter;
 import com.propertyvista.crm.rpc.services.MessageCategoryCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
+import com.propertyvista.crm.rpc.services.policies.policy.EvictionFlowPolicyCrudService;
 import com.propertyvista.crm.rpc.services.reports.CrmAvailableReportService;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.policy.dto.EvictionFlowPolicyDTO;
+import com.propertyvista.domain.policy.policies.EvictionFlowPolicy;
+import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep.EvictionStepType;
 import com.propertyvista.domain.reports.AvailableCrmReport;
 import com.propertyvista.domain.reports.AvailableCrmReport.CrmReportType;
 import com.propertyvista.shared.i18n.CompiledLocale;
@@ -107,6 +111,8 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter {
             updateMessageCategoryItems();
         } else if (AvailableCrmReport.class.equals(event.getTargetEntityType())) {
             updateAvailableReportItems();
+        } else if (EvictionFlowPolicy.class.equals(event.getTargetEntityType())) {
+            updateN4BatchItems();
         }
     }
 
@@ -145,6 +151,19 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter {
 
             }, EntityListCriteria.create(MessageCategory.class));
         }
+    }
+
+    private void updateN4BatchItems() {
+        EntityListCriteria<EvictionFlowPolicyDTO> criteria = EntityListCriteria.create(EvictionFlowPolicyDTO.class);
+        criteria.eq(criteria.proto().evictionFlow().$().stepType(), EvictionStepType.N4);
+        GWT.<EvictionFlowPolicyCrudService> create(EvictionFlowPolicyCrudService.class).list(
+                new DefaultAsyncCallback<EntitySearchResult<EvictionFlowPolicyDTO>>() {
+
+                    @Override
+                    public void onSuccess(EntitySearchResult<EvictionFlowPolicyDTO> result) {
+                        view.setN4BatchesVisible(!result.getData().isEmpty());
+                    }
+                }, criteria);
     }
 
     private void obtainAvailableLocales() {
