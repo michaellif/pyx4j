@@ -35,9 +35,7 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
         super(ComplexDTO.class, view);
 
         selectTab(addTab(createGeneralPanel(), i18n.tr("General")));
-
         addTab(createBuildingsPanel(), i18n.tr("Buildings"));
-
     }
 
     private FormPanel createGeneralPanel() {
