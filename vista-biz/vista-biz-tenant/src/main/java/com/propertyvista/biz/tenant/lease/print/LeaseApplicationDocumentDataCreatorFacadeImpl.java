@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
@@ -41,6 +42,7 @@ import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.CustomerScreeningLegalQuestion;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -65,6 +67,7 @@ import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDa
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataLegalSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataLegalTermDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataPeopleSectionDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataRentalItemDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataRentalItemsSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataResidenceDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataSectionsDTO;
@@ -77,7 +80,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     public LeaseApplicationDocumentDataDTO createApplicationData(DocumentMode documentMode, LeaseApplication application,
             LeaseTermParticipant<?> subjectParticipant) {
         LeaseApplicationDocumentDataDTO data = makeDocumentData();
-
+        Persistence.ensureRetrieve(application.lease().unit().building(), AttachLevel.Attached);
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(application.lease(), false);
         Persistence.ensureRetrieve(lease.unit().building().landlord().logo(), AttachLevel.Attached);
         data.landlordName().setValue(lease.unit().building().landlord().name().getValue());
@@ -105,11 +108,6 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             fillLegalSection(data.sections().get(0).legalSection().get(0), application, subjectParticipant, documentMode == DocumentMode.InkSinging);
         }
         return data;
-    }
-
-    private void fillRentalItemsSection(LeaseApplicationDocumentDataRentalItemsSectionDTO rentalItemsSectionDTO, Lease lease) {
-
-        //lease.currentTerm().version().leaseProducts().serviceItem();
     }
 
     private void makeDataPlaceholders(LeaseApplicationDocumentDataSectionsDTO sections) {
@@ -141,6 +139,9 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
 
         LeaseApplicationDocumentDataLeaseSectionDTO leaseSection = EntityFactory.create(LeaseApplicationDocumentDataLeaseSectionDTO.class);
         details.leaseSection().add(leaseSection);
+
+        LeaseApplicationDocumentDataRentalItemsSectionDTO rentalItemsSection = EntityFactory.create(LeaseApplicationDocumentDataRentalItemsSectionDTO.class);
+        details.rentalItemsSection().add(rentalItemsSection);
 
         LeaseApplicationDocumentDataPeopleSectionDTO peopleSection = EntityFactory.create(LeaseApplicationDocumentDataPeopleSectionDTO.class);
         details.peopleSection().add(peopleSection);
@@ -182,10 +183,28 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
                         + (AddressRetriever.getLeaseLegalAddress(lease).streetName().getValue()));
         leaseSection.includedUtilities().setValue(retrieveUtilities(term));
 
-        leaseSection.leaseFrom().setValue(lease.leaseFrom().getValue());
-        leaseSection.leaseTo().setValue(lease.leaseTo().getValue());
+        leaseSection.leaseFrom().setValue(lease.currentTerm().termFrom().getValue());
+        leaseSection.leaseTo().setValue(lease.currentTerm().termTo().getValue());
 
         leaseSection.unitRent().setValue(ServerSideFactory.create(BillingFacade.class).getActualPrice(term.version().leaseProducts().serviceItem()));
+    }
+
+    private void fillRentalItemsSection(LeaseApplicationDocumentDataRentalItemsSectionDTO rentalItemsSectionDTO, Lease lease) {
+        rentalItemsSectionDTO.rentalItems().add(
+                getRentalItem(lease.currentTerm().version().leaseProducts().serviceItem(), lease.currentTerm().termFrom().getValue(), lease.currentTerm()
+                        .termTo().getValue()));
+        for (BillableItem feature : lease.currentTerm().version().leaseProducts().featureItems()) {
+            rentalItemsSectionDTO.rentalItems().add(getRentalItem(feature, lease.currentTerm().termFrom().getValue(), lease.currentTerm().termTo().getValue()));
+        }
+    }
+
+    private LeaseApplicationDocumentDataRentalItemDTO getRentalItem(BillableItem billableItem, LogicalDate from, LogicalDate to) {
+        LeaseApplicationDocumentDataRentalItemDTO rentalItem = EntityFactory.create(LeaseApplicationDocumentDataRentalItemDTO.class);
+        rentalItem.item().setValue(billableItem.item().name().getValue());
+        rentalItem.price().setValue(billableItem.agreedPrice().getValue().toString());
+        rentalItem.effectiveDate().setValue(billableItem.effectiveDate().getValue() == null ? from : billableItem.effectiveDate().getValue());
+        rentalItem.expirationDate().setValue(billableItem.expirationDate().getValue() == null ? to : billableItem.expirationDate().getValue());
+        return rentalItem;
     }
 
     private void fillPeopleSection(LeaseApplicationDocumentDataPeopleSectionDTO peopleSection, Lease lease, LeaseTermParticipant<?> subjectParticipant) {
