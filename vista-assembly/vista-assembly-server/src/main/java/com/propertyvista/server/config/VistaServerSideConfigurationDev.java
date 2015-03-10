@@ -26,7 +26,7 @@ import com.propertyvista.misc.VistaTODO;
 
 public class VistaServerSideConfigurationDev extends VistaServerSideConfiguration {
 
-    public static int devServerPort = 8888 + DevelopmentBranchProfile.jettyServerPortOffset();
+    public static int devServerPort = 8888;
 
     public static String devContextPath = "/vista";
 
@@ -174,7 +174,7 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
         if (VistaTODO.codeBaseIsProdBranch) {
             return super.interfaceSSHDPort() + 1;
         } else {
-            return super.interfaceSSHDPort() + DevelopmentBranchProfile.jettyServerPortOffset();
+            return super.interfaceSSHDPort();
         }
     }
 
