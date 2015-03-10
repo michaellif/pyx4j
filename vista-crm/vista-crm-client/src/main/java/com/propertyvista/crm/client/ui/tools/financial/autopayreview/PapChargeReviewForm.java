@@ -101,18 +101,22 @@ public final class PapChargeReviewForm extends CForm<PapChargeReviewDTO> {
 
     private void updateChangePercent() {
 
-        BigDecimal changePercent = new BigDecimal("0.00");
+        BigDecimal changePercent = BigDecimal.ZERO;
         if (getValue().changeType().getValue() == ChangeType.New) {
             BigDecimal newPapAmount = get(proto().newPapAmount()).getValue();
-            changePercent = newPapAmount != null && (newPapAmount.compareTo(BigDecimal.ZERO) != 0) ? new BigDecimal("1.00") : BigDecimal.ZERO;
+            changePercent = newPapAmount != null && (newPapAmount.compareTo(BigDecimal.ZERO) != 0) ? BigDecimal.ONE : BigDecimal.ZERO;
         }
         if (getValue().changeType().getValue() == ChangeType.Removed) {
-            changePercent = new BigDecimal("-1.00");
+            changePercent = BigDecimal.ONE.negate();
         }
         if (getValue().changeType().getValue() == ChangeType.Changed || getValue().changeType().getValue() == ChangeType.Unchanged) {
             if (get(proto().newPapAmount()).getValue() != null) {
                 BigDecimal change = get(proto().newPapAmount()).getValue().subtract(get(proto().suspendedPapAmount()).getValue());
-                changePercent = change.divide(get(proto().suspendedPapAmount()).getValue(), 2, BigDecimal.ROUND_HALF_UP);
+                if (BigDecimal.ZERO.compareTo(get(proto().suspendedPapAmount()).getValue()) == 0) {
+                    changePercent = BigDecimal.ONE;
+                } else {
+                    changePercent = change.divide(get(proto().suspendedPapAmount()).getValue(), 2, BigDecimal.ROUND_HALF_UP);
+                }
             } else {
                 changePercent = null;
             }
@@ -137,7 +141,7 @@ public final class PapChargeReviewForm extends CForm<PapChargeReviewDTO> {
 
         private BigDecimal calculateAmount(BigDecimal percent) {
             BigDecimal suspendedPrice = PapChargeReviewForm.this.get(PapChargeReviewForm.this.proto().suspendedPrice()).getValue();
-            suspendedPrice = suspendedPrice == null ? new BigDecimal("0.00") : suspendedPrice;
+            suspendedPrice = suspendedPrice == null ? BigDecimal.ZERO : suspendedPrice;
             return suspendedPrice.multiply(percent);
         }
 
