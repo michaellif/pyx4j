@@ -244,7 +244,6 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
             }
         }
         criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
-        criteria.desc(criteria.proto().version().fromDate());
         screening = Persistence.service().retrieve(criteria);
         if (screening == null) {
             throw new UserRuntimeException(i18n.tr("Screening does not exists"));
