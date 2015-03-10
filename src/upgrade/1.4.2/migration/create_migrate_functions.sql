@@ -1093,7 +1093,7 @@ BEGIN
         
         EXECUTE 'INSERT INTO '||v_schema_name||'.financial_terms_policy_item (id,caption,content,enabled) '
                 ||'(SELECT  nextval(''public.financial_terms_policy_item_seq'') AS id, '
-                ||'         t.caption, t.content, FALSE '
+                ||'         t.caption, t.content, TRUE '
                 ||' FROM    _dba_.tmp_terms t ) ';
                 
         
