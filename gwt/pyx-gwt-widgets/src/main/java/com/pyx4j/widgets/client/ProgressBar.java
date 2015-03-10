@@ -16,7 +16,7 @@
 package com.pyx4j.widgets.client;
 
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -237,36 +237,6 @@ public class ProgressBar extends Widget {
     }
 
     /**
-     * This method is called when the dimensions of the parent element change. Subclasses
-     * should override this method as needed.
-     * 
-     * Move the text to the center of the progress bar.
-     * 
-     * @param width
-     *            the new client width of the element
-     * @param height
-     *            the new client height of the element
-     */
-    public void onResize(int width, int height) {
-        if (textVisible) {
-            int textWidth = DOM.getElementPropertyInt(textElement, "offsetWidth");
-            int left = (width / 2) - (textWidth / 2);
-            DOM.setStyleAttribute(textElement, "left", left + "px");
-        }
-    }
-
-    /**
-     * Redraw the progress bar when something changes the layout.
-     */
-    public void redraw() {
-        if (isAttached()) {
-            int width = DOM.getElementPropertyInt(getElement(), "clientWidth");
-            int height = DOM.getElementPropertyInt(getElement(), "clientHeight");
-            onResize(width, height);
-        }
-    }
-
-    /**
      * Set the maximum progress. If the minimum progress is more than the current
      * progress, the current progress is adjusted to be within the new range.
      * 
@@ -301,21 +271,17 @@ public class ProgressBar extends Widget {
     public void setProgress(double curProgress) {
         this.curProgress = Math.max(minProgress, Math.min(maxProgress, curProgress));
 
-        // Calculate percent complete
-        int percent = (int) (100 * getPercent());
-        int barWidth = (int) (maxBarWidth * getPercent());
-        DOM.setStyleAttribute(barElement, "width", barWidth + "%");
+        DOM.setStyleAttribute(barElement, "width", (int) (maxBarWidth * getPercent()) + "%");
+
         DOM.setElementProperty(textElement, "innerHTML", generateText(curProgress));
 
         // Set the style depending on the size of the bar
-        if (percent < 50) {
+        if (getPercent() < 0.5) {
             DOM.setElementProperty(textElement, "className", "gwt-ProgressBar-text gwt-ProgressBar-text-firstHalf");
         } else {
             DOM.setElementProperty(textElement, "className", "gwt-ProgressBar-text gwt-ProgressBar-text-secondHalf");
         }
 
-        // Realign the text
-        redraw();
     }
 
     /**
@@ -338,7 +304,6 @@ public class ProgressBar extends Widget {
         this.textVisible = isVisible;
         if (this.textVisible) {
             DOM.setStyleAttribute(textElement, "display", "");
-            redraw();
         } else {
             DOM.setStyleAttribute(textElement, "display", "none");
         }
@@ -377,16 +342,6 @@ public class ProgressBar extends Widget {
      */
     protected Element getTextElement() {
         return textElement;
-    }
-
-    /**
-     * This method is called immediately after a widget becomes attached to the browser's
-     * document.
-     */
-    @Override
-    protected void onLoad() {
-        // Reset the position attribute of the parent element
-        redraw();
     }
 
     /**
