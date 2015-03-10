@@ -96,6 +96,17 @@
             </releases>
         </repository>
 
+        <repository>
+            <id>codehaus.org</id>
+            <url>http://snapshots.repository.codehaus.org</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+
     </repositories>
 
     <pluginRepositories>
@@ -109,6 +120,17 @@
             </snapshots>
             <releases>
                 <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+
+        <pluginRepository>
+            <id>codehaus.org</id>
+            <url>http://snapshots.repository.codehaus.org</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
             </releases>
         </pluginRepository>
 
