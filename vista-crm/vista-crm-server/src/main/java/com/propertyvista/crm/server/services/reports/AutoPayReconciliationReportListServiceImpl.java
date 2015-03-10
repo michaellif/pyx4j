@@ -37,7 +37,7 @@ public class AutoPayReconciliationReportListServiceImpl extends AbstractCrmCrudS
         super.enhanceListCriteria(boCriteria, toCriteria);
         boCriteria.eq(boCriteria.proto().isDeleted(), false);
         // Only for active Leases. the same in AutopayManager.calulatePapAmounts
-        boCriteria.eq(boCriteria.proto().tenant().lease().status(), Lease.Status.active());
+        boCriteria.in(boCriteria.proto().tenant().lease().status(), Lease.Status.active());
         // Active Buildings
         boCriteria.eq(boCriteria.proto().tenant().lease().unit().building().suspended(), false);
     }
