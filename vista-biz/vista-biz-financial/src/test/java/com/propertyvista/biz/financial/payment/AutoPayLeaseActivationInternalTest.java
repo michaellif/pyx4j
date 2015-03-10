@@ -46,7 +46,7 @@ public class AutoPayLeaseActivationInternalTest extends LeaseFinancialTestBase {
     }
 
     public void testLeaseActivation() throws Exception {
-        setSysDate("2011-03-10");
+        setSysDate("2011-02-10");
 
         createLease("2011-04-01", "2012-03-10", new BigDecimal("1000.00"), null);
 
@@ -55,7 +55,7 @@ public class AutoPayLeaseActivationInternalTest extends LeaseFinancialTestBase {
         //setLeaseBatchProcess();
         setPaymentBatchProcess();
 
-        advanceSysDate("2011-03-12");
+        advanceSysDate("2011-02-12");
 
         approveApplication(true);
 
@@ -73,9 +73,9 @@ public class AutoPayLeaseActivationInternalTest extends LeaseFinancialTestBase {
         // PAP day
         advanceSysDate("2011-04-01");
 
-        // NO Payment created since lease is not active!
+        // Payment created since lease is Approved
         new PaymentRecordTester(getLease().billingAccount()). //
-                count(0);
+                count(1);
 
         advanceSysDate("2011-04-28");
 
@@ -85,7 +85,7 @@ public class AutoPayLeaseActivationInternalTest extends LeaseFinancialTestBase {
         advanceSysDate("2011-05-02");
 
         new PaymentRecordTester(getLease().billingAccount())//
-                .count(1)//
+                .count(2)//
                 .lastRecordStatus(PaymentStatus.Queued)//
                 .lastRecordAmount("1120.00"); //;
 
