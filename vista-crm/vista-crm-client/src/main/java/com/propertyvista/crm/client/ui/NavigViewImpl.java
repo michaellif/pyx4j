@@ -17,14 +17,18 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
@@ -53,6 +57,7 @@ import com.propertyvista.crm.rpc.services.customer.ac.GuarantorListAction;
 import com.propertyvista.crm.rpc.services.customer.ac.PotentialTenantListAction;
 import com.propertyvista.crm.rpc.services.customer.ac.TenantListAction;
 import com.propertyvista.crm.rpc.services.lease.ac.FormerLeaseListAction;
+import com.propertyvista.crm.rpc.services.policies.policy.EvictionFlowPolicyCrudService;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsMapper;
 import com.propertyvista.domain.communication.BroadcastEvent;
 import com.propertyvista.domain.communication.BroadcastTemplate;
@@ -62,6 +67,8 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.domain.policy.dto.EvictionFlowPolicyDTO;
+import com.propertyvista.domain.policy.policies.domain.EvictionFlowStep.EvictionStepType;
 import com.propertyvista.domain.reports.AvailableCrmReport.CrmReportType;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.tenant.lead.Lead;
@@ -235,6 +242,7 @@ public class NavigViewImpl extends Composite implements NavigView {
 
             sideMenuList.addMenuItem(n4batches = new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4Batches(), DataModelPermission
                     .permissionCreate(N4BatchDTO.class)));
+            setN4BatchesVisibility();
             if (false) { // TODO L1 implementation
                 sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.L1GenerationTool()));
             }
@@ -408,8 +416,17 @@ public class NavigViewImpl extends Composite implements NavigView {
     }
 
     @Override
-    public void setN4BatchesVisible(boolean visible) {
-        this.n4batches.setVisible(visible);
+    public void setN4BatchesVisibility() {
+        EntityListCriteria<EvictionFlowPolicyDTO> criteria = EntityListCriteria.create(EvictionFlowPolicyDTO.class);
+        criteria.eq(criteria.proto().evictionFlow().$().stepType(), EvictionStepType.N4);
+        GWT.<EvictionFlowPolicyCrudService> create(EvictionFlowPolicyCrudService.class).list(
+                new DefaultAsyncCallback<EntitySearchResult<EvictionFlowPolicyDTO>>() {
+
+                    @Override
+                    public void onSuccess(EntitySearchResult<EvictionFlowPolicyDTO> result) {
+                        n4batches.setVisible(!result.getData().isEmpty());
+                    }
+                }, criteria);
     }
 
     @Override
