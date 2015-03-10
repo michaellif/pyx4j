@@ -51,5 +51,5 @@ public interface NavigView extends IsWidget, IsView {
 
     void updateUserName(String name);
 
-    void setN4BatchesVisible(boolean visible);
+    void setN4BatchesVisibility();
 }
