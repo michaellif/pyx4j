@@ -53,7 +53,7 @@ public class UserPreloaderFacadeImpl implements UserPreloaderFacade {
 
     @Override
     public CrmUser createCrmEmployee(String firstName, String lastName, String email, String password, Key onboardingUserKey, CrmRole... roles) {
-        if (!ApplicationMode.isDevelopment()) {
+        if (!ApplicationMode.isDevelopment() || ApplicationMode.isDemo()) {
             CrmUser cmrUser = getPmcUserByEmail(CrmUser.class, email);
             if (cmrUser != null) {
                 return cmrUser;

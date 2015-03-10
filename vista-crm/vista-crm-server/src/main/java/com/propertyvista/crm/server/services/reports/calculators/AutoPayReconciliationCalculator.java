@@ -90,7 +90,12 @@ public class AutoPayReconciliationCalculator {
         }
         reconciliationTo.discrepancy().setValue(reconciliationTo.payment().getValue().subtract(reconciliationTo.paymentShareAmount().getValue()));
 
-        reconciliationTo.count().setValue(1);
+        reconciliationTo.notice().setValue(
+                ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayApplicabilityMessage(reconciliationTo.tenant().lease()));
+
+        if (reconciliationTo.notice().isNull()) {
+            reconciliationTo.count().setValue(1);
+        }
     }
 
     private static ARCode retrieveARCode(ARCode.ActionType actionType, String chargeCode) {
