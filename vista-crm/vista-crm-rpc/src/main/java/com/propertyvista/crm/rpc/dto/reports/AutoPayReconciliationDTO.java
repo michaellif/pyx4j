@@ -54,4 +54,6 @@ public interface AutoPayReconciliationDTO extends AutopayAgreement {
 
     IPrimitive<Integer> count();
 
+    IPrimitive<String> notice();
+
 }
