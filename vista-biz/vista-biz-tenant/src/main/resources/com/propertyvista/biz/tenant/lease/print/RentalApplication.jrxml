@@ -8,6 +8,8 @@
 	<parameter name="submissionDate" class="com.pyx4j.commons.LogicalDate"/>
 	<parameter name="leaseId" class="java.lang.String"/>
 	<field name="leaseSection" class="com.pyx4j.entity.core.IList"/>
+	<field name="rentalItemsSection" class="com.pyx4j.entity.core.IList"/>
+	<field name="adjustmentsSection" class="com.pyx4j.entity.core.IList"/>
 	<field name="peopleSection" class="com.pyx4j.entity.core.IList"/>
 	<field name="aboutYouSection" class="com.pyx4j.entity.core.IList"/>
 	<field name="additionalInfoSection" class="com.pyx4j.entity.core.IList"/>
@@ -54,7 +56,7 @@
 				</textElement>
 				<text><![CDATA[Date Submitted]]></text>
 			</staticText>
-			<image scaleImage="RetainShape" hAlign="Right" vAlign="Top">
+			<image scaleImage="RetainShape" hAlign="Left" vAlign="Top">
 				<reportElement x="0" y="0" width="286" height="66" uuid="f6924c01-bfb0-4fba-9819-de3248917f43"/>
 				<imageExpression><![CDATA[$P{landlordLogo}]]></imageExpression>
 			</image>
@@ -80,6 +82,20 @@
 				<reportElement x="-20" y="8" width="612" height="1" uuid="ce6f4bc9-a4e8-44b3-bff7-fb642701e405"/>
 				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{leaseSection})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.RentalApplicationFirstPage")]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="18">
+			<subreport>
+				<reportElement x="-20" y="8" width="612" height="1" uuid="0e634f16-b6b0-44c2-881b-f401f8e0eaeb"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{rentalItemsSection})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.RentalApplicationRentalItems")]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="18">
+			<subreport>
+				<reportElement x="-20" y="8" width="612" height="1" uuid="a6e564a7-2155-4a7a-81e3-d2f72c2dbb54"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{adjustmentsSection})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.RentalApplicationAdjustments")]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="18">
