@@ -104,6 +104,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
                 @Override
                 public void execute() {
                     getValue().confirmedNoPermissionToEnter().setValue(true);
+                    MaintenanceRequestWizard.super.onFinish();
                 }
             });
         } else {
