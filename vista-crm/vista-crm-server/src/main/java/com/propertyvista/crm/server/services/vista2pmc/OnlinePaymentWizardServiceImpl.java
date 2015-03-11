@@ -13,7 +13,6 @@
 package com.propertyvista.crm.server.services.vista2pmc;
 
 import java.util.Date;
-import java.util.concurrent.Callable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -34,9 +33,10 @@ import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.dto.vista2pmc.AgreementDTO;
 import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
+import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.operations.domain.legal.VistaTerms.Target;
-import com.propertyvista.server.TaskRunner;
+import com.propertyvista.server.VistaTermsUtils;
 
 public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardService {
 
@@ -75,17 +75,20 @@ public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardServic
     }
 
     private String retrieveTerms(final VistaTerms.Target target) {
-        String termsText = TaskRunner.runInOperationsNamespace(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                EntityQueryCriteria<VistaTerms> criteria = EntityQueryCriteria.create(VistaTerms.class);
-                criteria.eq(criteria.proto().target(), target);
-                VistaTerms terms = Persistence.service().retrieve(criteria);
-                return terms.version().document().get(0).content().getValue();
-            }
-        });
+        String termsContent = null;
 
-        return termsText;
+        VistaTerms terms = VistaTermsUtils.retrieveVistaTerms(target);
+        for (LegalDocument doc : terms.version().document()) {
+            if (doc.locale().getValue().getLanguage().startsWith("en")) {
+                termsContent = doc.content().getValue();
+                break;
+            }
+        }
+
+        if (termsContent == null) {
+            throw new RuntimeException("Terms not found");
+        }
+        return termsContent;
     }
 
     private void initTerms(AgreementDTO agreement, String termsContent) {
