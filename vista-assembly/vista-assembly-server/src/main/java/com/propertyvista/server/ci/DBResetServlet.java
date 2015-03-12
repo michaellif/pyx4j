@@ -212,6 +212,7 @@ public class DBResetServlet extends HttpServlet {
                 }
                 out.h("</body></html>");
             } catch (Throwable t) {
+                out.h("<p style=\"visibility: hidden;\">DB reset error</p>");
                 out.h("<p style=\"background-color:FF3030\">ERROR</p>");
                 out.h("<script>window.scrollTo(0,document.body.scrollHeight);</script>");
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
