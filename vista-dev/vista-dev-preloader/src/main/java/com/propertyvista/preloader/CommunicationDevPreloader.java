@@ -87,7 +87,7 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
                     t002 = customerUser;
                 } else if ("t003@pyx4j.com".equals(email)) {
                     t003 = customerUser;
-                } else if (email.matches("p\\d{3}@pyx4j.com")) {
+                } else if (email.matches("p\\d{3}@propertyvista.com")) {
                     pTenants.add(customerUser);
                 }
             }
