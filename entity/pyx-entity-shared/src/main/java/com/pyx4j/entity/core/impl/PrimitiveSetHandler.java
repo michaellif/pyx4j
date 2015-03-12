@@ -150,7 +150,7 @@ public class PrimitiveSetHandler<TYPE extends Serializable> extends ObjectHandle
     @Override
     public boolean contains(Object o) {
         // Limitation of GWT
-        if (!getValueClass().isInterface() && !GWTJava5Helper.isAssignableFrom(getValueClass(), o.getClass())) {
+        if ((o != null) && !getValueClass().isInterface() && !GWTJava5Helper.isAssignableFrom(getValueClass(), o.getClass())) {
             throw new ClassCastException("Set member type expected " + getValueClass() + "; got " + o.getClass());
         }
         Set<?> value = getValue();
