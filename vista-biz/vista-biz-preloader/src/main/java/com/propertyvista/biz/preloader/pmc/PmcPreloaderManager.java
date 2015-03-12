@@ -101,6 +101,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
 
         } catch (Throwable t) {
             log.error("", t);
+            throw new Error(t);
         } finally {
             startCommunications();
             performResetFinallyActions();
@@ -113,6 +114,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
             PmcPreloaderManager.writeToOutput(output, "\nCacheService.reset Ok");
         } catch (Throwable t) {
             logError(output, t);
+            throw new Error(t);
         } finally {
             performResetFinallyActions();
         }
@@ -124,6 +126,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
             PmcPreloaderManager.writeToOutput(output, "\nCacheService.resetAll Ok");
         } catch (Throwable t) {
             logError(output, t);
+            throw new Error(t);
         } finally {
             performResetFinallyActions();
         }
@@ -139,6 +142,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
 //            log.error("", t);
             Persistence.service().rollback();
             logError(output, t);
+            throw new Error(t);
         } finally {
             startCommunications();
             performResetFinallyActions();
@@ -175,9 +179,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
     }
 
     public synchronized void preloadPmc(final String pmcDnsName, final ResetType type, Map<String, String[]> params, OutputHolder output) {
-        log.debug("Preload PMC... " + "trying to stop communications");
         stopCommunications();
-        log.debug("Preload PMC... " + "communications stopped");
         final String requestNamespace = NamespaceManager.getNamespace();
         try {
 
@@ -188,9 +190,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
             final Pmc pmc = TaskRunner.runUnitOfWorkInOperationstNamespace(TransactionScopeOption.RequiresNew, new Executable<Pmc, RuntimeException>() {
                 @Override
                 public Pmc execute() {
-                    log.debug("Preload PMC... " + "trying to delete PMCData");
                     deletePmcData(pmcDnsName);
-                    log.debug("Preload PMC... " + "PMCData deleted");
                     Pmc pmc = PmcCreatorDev.createPmc(pmcDnsName, (type == ResetType.allMini));
                     return pmc;
                 }
@@ -215,7 +215,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
                 }
             });
 
-            writeToOutput(output, "PMC Tables created ", TimeUtils.secSince(operationStartTime));
+            writeToOutput(output, "\nPMC Tables created ", TimeUtils.secSince(operationStartTime));
 
             if (!EnumSet.of(ResetType.all, ResetType.allMini, ResetType.vistaMini, ResetType.vista, ResetType.vistaMax3000, ResetType.addPmcMockup,
                     ResetType.allAddMockup, ResetType.addPmcMockupTest1).contains(type)) {
@@ -284,9 +284,9 @@ public class PmcPreloaderManager implements CommunicationsHandler {
                     }
                 }
 
-                writeToOutput(output, preloaders.exectutePreloadersCreate(dpisRun));
+                writeToOutput(output, "\n" + preloaders.exectutePreloadersCreate(dpisRun));
             } else {
-                writeToOutput(output, preloaders.preloadAll());
+                writeToOutput(output, "\n" + preloaders.preloadAll());
             }
 
             if (pmcDnsName.equals(DemoPmc.star.name()) && (type == ResetType.all)) {
@@ -302,12 +302,13 @@ public class PmcPreloaderManager implements CommunicationsHandler {
             CacheService.reset();
 
             log.info("Preloaded PMC '{}' {}", pmcDnsName, TimeUtils.secSince(operationStartTime));
-            writeToOutput(output, "Preloaded PMC '" + pmcDnsName + "' " + TimeUtils.secSince(operationStartTime));
+            writeToOutput(output, "\nPreloaded PMC '" + pmcDnsName + "' " + TimeUtils.secSince(operationStartTime));
             ServerSideFactory.create(OperationsAlertFacade.class).record(pmc, "Preloaded PMC ''{0}'' {1}", pmcDnsName, TimeUtils.secSince(operationStartTime));
 
             PmcPreloaderManager.recordOperation(type, operationStartTime);
         } catch (Throwable t) {
             logError(output, t);
+            throw new Error(t);
         } finally {
             NamespaceManager.setNamespace(requestNamespace);
             startCommunications();
@@ -355,7 +356,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
             SchedulerHelper.shutdown();
             RDBUtils.resetDatabase();
             SchedulerHelper.dbReset();
-            writeToOutput(output, "DB Dropped: " + TimeUtils.secSince(operationStartTime));
+            writeToOutput(output, "\nDB Dropped: " + TimeUtils.secSince(operationStartTime));
             Thread.sleep(150);
             SchedulerHelper.init();
             SchedulerHelper.setActive(true);
@@ -366,10 +367,10 @@ public class PmcPreloaderManager implements CommunicationsHandler {
                 long resetStartTimeInMillis = System.currentTimeMillis();
                 if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
                     RDBUtils.initNameSpaceSpecificEntityTables();
-                    writeToOutput(output, "Admin tables created: " + TimeUtils.secSince(resetStartTimeInMillis));
+                    writeToOutput(output, "\nAdmin tables created: " + TimeUtils.secSince(resetStartTimeInMillis));
                 } else {
                     RDBUtils.initAllEntityTables();
-                    writeToOutput(output, "All tables created: " + TimeUtils.secSince(resetStartTimeInMillis));
+                    writeToOutput(output, "\nAll tables created: " + TimeUtils.secSince(resetStartTimeInMillis));
                 }
                 if (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType() == DatabaseType.PostgreSQL) {
                     Persistence.service().commit();
@@ -396,6 +397,7 @@ public class PmcPreloaderManager implements CommunicationsHandler {
         } catch (Throwable t) {
             Persistence.service().rollback();
             logError(output, t);
+            throw new Error(t);
         } finally {
             startCommunications();
             performResetFinallyActions();
