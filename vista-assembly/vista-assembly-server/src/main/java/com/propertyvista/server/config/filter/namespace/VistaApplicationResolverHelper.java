@@ -55,10 +55,25 @@ public class VistaApplicationResolverHelper {
             String appByDomain = serverNameParts[0];
             String[] appByDomainTokens = appByDomain.split("-");
 
-            // Domains type : http://XXX.dev.birchwoodsoftwaregroup.com:8888
+            // Domains type : http://XXX.dev.birchwoodsoftwaregroup.com:8888 or
+            // Domains for production demo: demo.propertyvista.com, demo.residentportalsite.com or demo.my-community.co
             if (appByDomainTokens.length == 1) {
                 if (appByDomain.equalsIgnoreCase("static")) {
                     return VistaApplication.noApp;
+                } else if (appByDomain.equalsIgnoreCase("demo")) {
+                    if (serverNameParts.length >= 1) {
+                        switch (serverNameParts[1]) {
+                        case "propertyvista":
+                            return VistaApplication.crm;
+                        case "residentportalsite":
+                            return VistaApplication.site;
+                        case "my-community":
+                            if (rootServletPath.equalsIgnoreCase("prospect")) {
+                                return VistaApplication.prospect;
+                            }
+                            return VistaApplication.resident;
+                        }
+                    }
                 }
 
                 try {

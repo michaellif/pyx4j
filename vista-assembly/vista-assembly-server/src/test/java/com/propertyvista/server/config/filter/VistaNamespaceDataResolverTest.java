@@ -103,6 +103,22 @@ public class VistaNamespaceDataResolverTest extends VistaNamespaceResolverTestBa
         req = new MockHttpServletRequest("https://redridge-portal-staging.propertyvista.net/prospect");
         testRetrievingData(req, VistaApplication.prospect, "redridge");
 
+        // PROD CUSTOMERS DEMO -> PROSPECT
+        req = new MockHttpServletRequest("https://demo.propertyvista.com/");
+        testRetrievingData(req, VistaApplication.crm, "demo");
+
+        // PROD CUSTOMERS DEMO -> SITE
+        req = new MockHttpServletRequest("http://demo.residentportalsite.com/");
+        testRetrievingData(req, VistaApplication.site, "demo");
+
+        // PROD CUSTOMERS DEMO -> RESIDENT
+        req = new MockHttpServletRequest("https://demo.my-community.co/");
+        testRetrievingData(req, VistaApplication.resident, "demo");
+
+        // PROD CUSTOMERS DEMO -> PROSPECT
+        req = new MockHttpServletRequest("https://demo.my-community.co/prospect");
+        testRetrievingData(req, VistaApplication.prospect, "demo");
+
     }
 
     /**
