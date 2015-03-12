@@ -598,7 +598,7 @@ public class CrmSiteMap implements SiteMap {
             public static class FinancialTerms extends CrmCrudAppPlace {
             }
 
-            @PlaceProperties(caption = "Legal Questions")
+            @PlaceProperties(caption = "Questions")
             public static class LegalQuestions extends CrmCrudAppPlace {
 
             }

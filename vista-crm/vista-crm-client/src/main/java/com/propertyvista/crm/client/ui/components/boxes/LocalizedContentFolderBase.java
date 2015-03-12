@@ -32,8 +32,6 @@ public abstract class LocalizedContentFolderBase<E extends ILocalizedEntity> ext
 
     private final Class<E> entityClass;
 
-    private boolean allowDuplicateLocales = false;
-
     public LocalizedContentFolderBase(Class<E> entityClass, boolean editable) {
         super(entityClass, editable);
         this.entityClass = entityClass;
@@ -43,10 +41,6 @@ public abstract class LocalizedContentFolderBase<E extends ILocalizedEntity> ext
                 updateUsedLocales();
             }
         });
-    }
-
-    public void setAllowDuplicateLocales(boolean allowDuplicateLocales) {
-        this.allowDuplicateLocales = allowDuplicateLocales;
     }
 
     private void updateUsedLocales() {
@@ -65,7 +59,7 @@ public abstract class LocalizedContentFolderBase<E extends ILocalizedEntity> ext
 
     @Override
     protected void addItem() {
-        new AvailableLocaleSelectorDialog(allowDuplicateLocales ? (Set<CompiledLocale>) null : usedLocales) {
+        new AvailableLocaleSelectorDialog(usedLocales) {
             @Override
             public boolean onClickOk() {
                 AvailableLocale locale = getSelectedLocale();

@@ -51,7 +51,6 @@ public class LegalQuestionsPolicyForm extends PolicyDTOTabPanelBasedForm<LegalQu
 
         public LegalQuestionFolder(boolean editable) {
             super(LegalQuestionsPolicyItem.class, editable);
-            setAllowDuplicateLocales(true);
         }
 
         @Override
