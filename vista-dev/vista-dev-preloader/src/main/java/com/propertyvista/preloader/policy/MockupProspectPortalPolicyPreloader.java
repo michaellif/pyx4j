@@ -35,7 +35,11 @@ public class MockupProspectPortalPolicyPreloader extends AbstractPolicyPreloader
 
         policy.maxExactMatchUnits().setValue(3);
         policy.maxPartialMatchUnits().setValue(5);
-        policy.unitAvailabilitySpan().setValue(20);
+        if (ApplicationMode.isDemo()) {
+            policy.unitAvailabilitySpan().setValue(99999);
+        } else {
+            policy.unitAvailabilitySpan().setValue(20);
+        }
 
         // In case of demo and Canadian Buildings, Prospect Portal fee do not apply
         boolean avoidFee = (ApplicationMode.isDemo() && VistaFeatures.instance().countryOfOperation().equals(CountryOfOperation.Canada));

@@ -12,9 +12,7 @@
  */
 package com.propertyvista.portal.server.portal.shared.services;
 
-import java.util.List;
 import java.util.Vector;
-import java.util.concurrent.Callable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -32,7 +30,7 @@ import com.propertyvista.domain.policy.policies.domain.TermsPolicyItem;
 import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalTermsAndPoliciesService;
-import com.propertyvista.server.TaskRunner;
+import com.propertyvista.server.VistaTermsUtils;
 import com.propertyvista.shared.rpc.LegalTermTO;
 
 public class PortalTermsAndPoliciesServiceImpl implements PortalTermsAndPoliciesService {
@@ -134,73 +132,50 @@ public class PortalTermsAndPoliciesServiceImpl implements PortalTermsAndPolicies
     }
 
     private void getPMCTerm(AsyncCallback<LegalTermTO> callback, TermsPolicyItem policyItem) {
-        LegalTermTO term = null;
+        LegalTermTO term = EntityFactory.create(LegalTermTO.class);
         if (policyItem.enabled().getValue(false)) {
-            term = EntityFactory.create(LegalTermTO.class);
             term.caption().setValue(policyItem.caption().getValue());
             term.content().setValue(policyItem.content().getValue());
-        }
-        if (term == null) {
-            throw new RuntimeException("Terms not found");
         } else {
-            callback.onSuccess(term);
+            term.caption().setValue("Terms is disabled");
+            term.content().setValue("Please contact Office for details");
         }
+        callback.onSuccess(term);
     }
 
     private String getPMCTermCaption(TermsPolicyItem policyItem) {
         if (policyItem.enabled().getValue(false)) {
             return policyItem.caption().getValue();
         }
-        return null;
+        return "Terms is disabled";
     }
 
     private void getVistaTerm(AsyncCallback<LegalTermTO> callback, final VistaTerms.Target target) {
-        LegalTermTO terms = TaskRunner.runInOperationsNamespace(new Callable<LegalTermTO>() {
-            @Override
-            public LegalTermTO call() {
-                LegalTermTO result = null;
-                EntityQueryCriteria<VistaTerms> criteria = EntityQueryCriteria.create(VistaTerms.class);
-                criteria.eq(criteria.proto().target(), target);
-                List<VistaTerms> list = Persistence.service().query(criteria);
-                if (!list.isEmpty()) {
-                    VistaTerms terms = list.get(0);
-                    for (LegalDocument doc : terms.version().document()) {
-                        if (doc.locale().getValue().getLanguage().startsWith("en")) {
-                            result = EntityFactory.create(LegalTermTO.class);
-                            result.caption().setValue(terms.version().caption().getValue());
-                            result.content().setValue(doc.content().getValue());
-                            break;
-                        }
-                    }
-                }
-                return result;
+        LegalTermTO result = null;
+
+        VistaTerms terms = VistaTermsUtils.retrieveVistaTerms(target);
+        for (LegalDocument doc : terms.version().document()) {
+            if (doc.locale().getValue().getLanguage().startsWith("en")) {
+                result = EntityFactory.create(LegalTermTO.class);
+                result.caption().setValue(terms.version().caption().getValue());
+                result.content().setValue(doc.content().getValue());
+                break;
             }
-        });
-        if (terms == null) {
+        }
+
+        if (result == null) {
             throw new RuntimeException("Terms not found");
         }
-        callback.onSuccess(terms);
+        callback.onSuccess(result);
     }
 
     private String getVistaTermCaption(final VistaTerms.Target target) {
-        String caption = TaskRunner.runInOperationsNamespace(new Callable<String>() {
-            @Override
-            public String call() {
-                EntityQueryCriteria<VistaTerms> criteria = EntityQueryCriteria.create(VistaTerms.class);
-                criteria.eq(criteria.proto().target(), target);
-                List<VistaTerms> list = Persistence.service().query(criteria);
-                if (!list.isEmpty()) {
-                    VistaTerms terms = list.get(0);
-                    for (LegalDocument doc : terms.version().document()) {
-                        if (doc.locale().getValue().getLanguage().startsWith("en")) {
-                            return terms.version().caption().getValue();
-                        }
-                    }
-                }
-                return null;
+        VistaTerms terms = VistaTermsUtils.retrieveVistaTerms(target);
+        for (LegalDocument doc : terms.version().document()) {
+            if (doc.locale().getValue().getLanguage().startsWith("en")) {
+                return terms.version().caption().getValue();
             }
-        });
-
-        return caption;
+        }
+        return null;
     }
 }

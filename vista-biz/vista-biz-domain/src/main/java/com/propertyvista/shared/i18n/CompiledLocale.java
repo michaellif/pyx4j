@@ -67,6 +67,10 @@ public enum CompiledLocale implements Serializable {
         return l;
     }
 
+    public static EnumSet<CompiledLocale> getEnglishLocales() {
+        return EnumSet.of(en, en_CA, en_GB, en_US);
+    }
+
     @Override
     public String toString() {
         return I18nEnum.toString(this);
