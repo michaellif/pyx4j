@@ -34,11 +34,15 @@
 				<textFieldExpression><![CDATA[$F{value}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="270" y="2" width="125" height="18" uuid="1fff70e3-8cd4-46d1-8c29-bfa163ea7246"/>
+				<reportElement x="270" y="2" width="125" height="18" uuid="1fff70e3-8cd4-46d1-8c29-bfa163ea7246">
+					<printWhenExpression><![CDATA[!$F{effectiveDate}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{effectiveDate}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="401" y="2" width="170" height="18" uuid="65a0a31c-e589-4f87-ad5f-d42d616fc1cb"/>
+				<reportElement x="401" y="2" width="170" height="18" uuid="65a0a31c-e589-4f87-ad5f-d42d616fc1cb">
+					<printWhenExpression><![CDATA[!$F{expirationDate}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{expirationDate}]]></textFieldExpression>
 			</textField>
 		</band>

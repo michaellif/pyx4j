@@ -219,7 +219,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor<Inte
 
         TaxUtils.calculateProductChargeTaxes(charge, bill.billingCycle().building());
 
-        charge.description().setValue(charge.chargeSubLineItem().billableItem().item().description().getStringView());
+        charge.description().setValue(charge.chargeSubLineItem().billableItem().item().name().getStringView());
 
         return charge;
     }

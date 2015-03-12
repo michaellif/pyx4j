@@ -25,6 +25,8 @@ public interface LeaseApplicationDocumentDataSectionsDTO extends IEntity {
 
     IList<LeaseApplicationDocumentDataAdjustmentsSectionDTO> adjustmentsSection();
 
+    IList<LeaseApplicationDocumentDataFirstPaymentSectionDTO> firstPaymentSection();
+
     IList<LeaseApplicationDocumentDataPeopleSectionDTO> peopleSection();
 
     IList<LeaseApplicationDocumentDataAboutYouSectionDTO> aboutYouSection();

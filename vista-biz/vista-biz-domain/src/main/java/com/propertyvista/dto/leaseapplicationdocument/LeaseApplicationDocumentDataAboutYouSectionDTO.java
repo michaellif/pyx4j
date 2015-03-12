@@ -47,8 +47,14 @@ public interface LeaseApplicationDocumentDataAboutYouSectionDTO extends IEntity 
 
     // Identification Documents
 
+    IList<LeaseApplicationDocumentDataIdentificationDocumentDTO> identificationDocuments();
+
+    // Header Information
+
+    IPrimitive<String> landlordLogo();
+
     IPrimitive<String> leaseId();
 
-    IList<LeaseApplicationDocumentDataIdentificationDocumentDTO> identificationDocuments();
+    IPrimitive<LogicalDate> submissionDate();
 
 }

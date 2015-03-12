@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationApplicantFinancial" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="86393bcf-ee3a-407d-a9e4-e95c6f41c945">
-	<property name="ireport.zoom" value="1.9487171000000019"/>
+	<property name="ireport.zoom" value="1.6105100000000014"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="incomeSource" class="com.propertyvista.domain.tenant.income.IncomeSource"/>
@@ -62,23 +62,33 @@
 				<text><![CDATA[Supervisor Name]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="114" y="28" width="172" height="15" uuid="c9e45d3d-db2a-48c3-ac67-21754701d125"/>
+				<reportElement x="114" y="28" width="172" height="15" uuid="c9e45d3d-db2a-48c3-ac67-21754701d125">
+					<printWhenExpression><![CDATA[!$F{incomeSource}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{incomeSource}.toString()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="355" y="28" width="216" height="15" uuid="1df44f5c-efc6-48b4-91c3-cee312cf72a7"/>
+				<reportElement x="355" y="28" width="216" height="15" uuid="1df44f5c-efc6-48b4-91c3-cee312cf72a7">
+					<printWhenExpression><![CDATA[!$F{details}.name().getValue().equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{details}.name().getValue()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="109" y="48" width="79" height="15" uuid="36597a84-8f2a-4847-9571-1fc13205a622"/>
+				<reportElement x="109" y="48" width="79" height="15" uuid="36597a84-8f2a-4847-9571-1fc13205a622">
+					<printWhenExpression><![CDATA[!((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).employedForYears().getValue().equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).employedForYears().getValue()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="284" y="48" width="89" height="15" uuid="e955feb8-f282-4f3b-91b5-637535ff2cb1"/>
+				<reportElement x="284" y="48" width="89" height="15" uuid="e955feb8-f282-4f3b-91b5-637535ff2cb1">
+					<printWhenExpression><![CDATA[!((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).supervisorName().getStringView().equals("null")]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).supervisorName().getStringView()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="467" y="48" width="104" height="15" uuid="913042e4-a2e5-42b6-af07-8b8b22dd5280"/>
+				<reportElement x="467" y="48" width="104" height="15" uuid="913042e4-a2e5-42b6-af07-8b8b22dd5280">
+					<printWhenExpression><![CDATA[!((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).supervisorPhone().getStringView().equals("null")]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).supervisorPhone().getStringView()]]></textFieldExpression>
 			</textField>
 		</band>
@@ -149,23 +159,33 @@
 				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetNumber().getStringView() + " " + ((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetName().getStringView()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="70" y="48" width="501" height="15" uuid="ed295e13-7f42-430a-a4f6-9b7877442f65"/>
+				<reportElement x="70" y="48" width="501" height="15" uuid="ed295e13-7f42-430a-a4f6-9b7877442f65">
+					<printWhenExpression><![CDATA[!((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().suiteNumber().getStringView().equals("null")]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().suiteNumber().getStringView()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="70" y="68" width="118" height="15" uuid="2a000b34-18c3-47fc-a058-f8ef7adb6051"/>
+				<reportElement x="70" y="68" width="118" height="15" uuid="2a000b34-18c3-47fc-a058-f8ef7adb6051">
+					<printWhenExpression><![CDATA[!((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().city().getStringView().equals("null")]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().city().getStringView()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="266" y="68" width="107" height="15" uuid="ad07dd53-b23f-4cb0-a217-50b06ad974ba"/>
+				<reportElement x="266" y="68" width="107" height="15" uuid="ad07dd53-b23f-4cb0-a217-50b06ad974ba">
+					<printWhenExpression><![CDATA[!((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().province().getStringView().equals("null")]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().province().getStringView()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="456" y="68" width="115" height="15" uuid="fccf43d2-3fa1-4280-b4ed-8331c513b994"/>
+				<reportElement x="456" y="68" width="115" height="15" uuid="fccf43d2-3fa1-4280-b4ed-8331c513b994">
+					<printWhenExpression><![CDATA[!((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().postalCode().getStringView().equals("null")]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().postalCode().getStringView()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="70" y="88" width="501" height="15" uuid="38bbaa98-7302-4594-8e4b-03c501d5b217"/>
+				<reportElement x="70" y="88" width="501" height="15" uuid="38bbaa98-7302-4594-8e4b-03c501d5b217">
+					<printWhenExpression><![CDATA[!((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().country().getStringView().equals("null")]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().country().getStringView()]]></textFieldExpression>
 			</textField>
 		</band>

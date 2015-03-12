@@ -117,7 +117,9 @@
 				<text><![CDATA[Mobile Phone]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="70" y="28" width="116" height="15" uuid="116439a0-caec-4a25-b273-633410e41aa0"/>
+				<reportElement x="70" y="28" width="116" height="15" uuid="116439a0-caec-4a25-b273-633410e41aa0">
+					<printWhenExpression><![CDATA[!$F{name}.firstName().getValue().equals("null")]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{name}.firstName().getValue()]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -127,7 +129,9 @@
 				<textFieldExpression><![CDATA[$F{name}.middleName().getValue()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="448" y="28" width="116" height="15" uuid="e2ce8f62-b552-47cd-9346-beb5b1489a86"/>
+				<reportElement x="448" y="28" width="116" height="15" uuid="e2ce8f62-b552-47cd-9346-beb5b1489a86">
+					<printWhenExpression><![CDATA[!$F{name}.lastName().getValue().equals("null")]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{name}.lastName().getValue()]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -143,32 +147,46 @@
 				<textFieldExpression><![CDATA[$F{name}.nameSuffix().getValue()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="70" y="68" width="216" height="15" uuid="a3239b65-a492-4755-9908-9c9130b19704"/>
-				<textFieldExpression><![CDATA[$F{sex}.toString()]]></textFieldExpression>
+				<reportElement x="70" y="68" width="216" height="15" uuid="a3239b65-a492-4755-9908-9c9130b19704">
+					<printWhenExpression><![CDATA[!$F{sex}.equals(null)]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{sex}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="355" y="68" width="209" height="15" uuid="4ba82bc0-973a-47d0-9559-32b4cc73e233"/>
+				<reportElement x="355" y="68" width="209" height="15" uuid="4ba82bc0-973a-47d0-9559-32b4cc73e233">
+					<printWhenExpression><![CDATA[!$F{birthDate}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{birthDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="70" y="88" width="107" height="15" uuid="fd6c99b4-56f9-48aa-9a93-5cdcc744878a"/>
+				<reportElement x="70" y="88" width="107" height="15" uuid="fd6c99b4-56f9-48aa-9a93-5cdcc744878a">
+					<printWhenExpression><![CDATA[!$F{homePhone}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{homePhone}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="255" y="88" width="116" height="15" uuid="c198f665-03fc-4f6a-b29a-de4e56e02565"/>
+				<reportElement x="255" y="88" width="116" height="15" uuid="c198f665-03fc-4f6a-b29a-de4e56e02565">
+					<printWhenExpression><![CDATA[!$F{mobilePhone}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{mobilePhone}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="450" y="88" width="116" height="15" uuid="f9e5a721-5c41-4355-96fa-9afb5f7483ca"/>
+				<reportElement x="450" y="88" width="116" height="15" uuid="f9e5a721-5c41-4355-96fa-9afb5f7483ca">
+					<printWhenExpression><![CDATA[!$F{workPhone}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{workPhone}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="36" y="108" width="250" height="15" uuid="73b52623-3a82-4c5d-bc62-c097991803ec"/>
+				<reportElement x="36" y="108" width="250" height="15" uuid="73b52623-3a82-4c5d-bc62-c097991803ec">
+					<printWhenExpression><![CDATA[!$F{email}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="355" y="108" width="209" height="15" uuid="d2f4f43a-295c-4a04-972f-65ea96a639ab"/>
-				<textFieldExpression><![CDATA[$F{relationship}.toString()]]></textFieldExpression>
+				<reportElement x="355" y="108" width="209" height="15" uuid="d2f4f43a-295c-4a04-972f-65ea96a639ab">
+					<printWhenExpression><![CDATA[!$F{relationship}.equals(null)]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{relationship}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

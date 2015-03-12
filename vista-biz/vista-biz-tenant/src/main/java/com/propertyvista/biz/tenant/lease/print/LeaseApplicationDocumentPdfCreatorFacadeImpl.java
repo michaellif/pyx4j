@@ -34,6 +34,8 @@ public class LeaseApplicationDocumentPdfCreatorFacadeImpl implements LeaseApplic
         params.put("landlordName", data.landlordName().getValue());
         params.put("landlordAddress", data.landlordAddress().getValue());
         params.put("submissionDate", data.submissionDate().getValue());
+        params.put("name", data.name().getValue());
+        params.put("date", data.date().getValue());
         params.put("leaseId", data.leaseId().getValue());
 
         if (data.landlordLogo().getValue() != null) {
@@ -50,5 +52,4 @@ public class LeaseApplicationDocumentPdfCreatorFacadeImpl implements LeaseApplic
 
         return bos.toByteArray();
     }
-
 }

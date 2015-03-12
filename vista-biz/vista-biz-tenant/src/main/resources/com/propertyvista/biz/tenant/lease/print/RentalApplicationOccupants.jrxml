@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationOccupants" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="7cfc29e2-a001-46af-909d-851610a1b16f">
-	<property name="ireport.zoom" value="2.5937424601000028"/>
+	<property name="ireport.zoom" value="1.331000000000001"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="firstName" class="java.lang.String"/>
@@ -26,11 +26,15 @@
 				<textFieldExpression><![CDATA[$F{firstName}  + " " + $F{lastName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="381" y="0" width="179" height="20" uuid="98f5a814-758c-4d15-8b43-bac49b6d49ff"/>
+				<reportElement x="381" y="0" width="179" height="20" uuid="98f5a814-758c-4d15-8b43-bac49b6d49ff">
+					<printWhenExpression><![CDATA[!$F{relationship}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{relationship}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="189" y="0" width="176" height="20" uuid="61690e23-ca97-457f-9b80-ca5202d31695"/>
+				<reportElement x="189" y="0" width="176" height="20" uuid="61690e23-ca97-457f-9b80-ca5202d31695">
+					<printWhenExpression><![CDATA[!$F{birthDate}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{birthDate}]]></textFieldExpression>
 			</textField>
 		</band>

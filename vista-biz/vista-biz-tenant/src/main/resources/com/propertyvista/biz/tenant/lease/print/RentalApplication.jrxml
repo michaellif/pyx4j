@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationFirstPage" pageWidth="612" pageHeight="842" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3ab57690-448c-4258-a02d-968bc8f50a7e">
-	<property name="ireport.zoom" value="1.4641000000000266"/>
+	<property name="ireport.zoom" value="1.7715610000000352"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="10"/>
 	<parameter name="landlordLogo" class="java.io.InputStream"/>
 	<parameter name="landlordName" class="java.lang.String"/>
 	<parameter name="submissionDate" class="com.pyx4j.commons.LogicalDate"/>
 	<parameter name="leaseId" class="java.lang.String"/>
+	<parameter name="name" class="java.lang.String"/>
+	<parameter name="date" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="leaseSection" class="com.pyx4j.entity.core.IList"/>
 	<field name="rentalItemsSection" class="com.pyx4j.entity.core.IList"/>
 	<field name="adjustmentsSection" class="com.pyx4j.entity.core.IList"/>
+	<field name="firstPaymentSection" class="com.pyx4j.entity.core.IList"/>
 	<field name="peopleSection" class="com.pyx4j.entity.core.IList"/>
 	<field name="aboutYouSection" class="com.pyx4j.entity.core.IList"/>
 	<field name="additionalInfoSection" class="com.pyx4j.entity.core.IList"/>
@@ -36,17 +39,25 @@
 				<text><![CDATA[Application Type]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="100" y="84" width="8" height="10" uuid="4e272da0-b5db-4c18-8967-397cc0d74a11"/>
+				<reportElement x="100" y="84" width="8" height="10" uuid="4e272da0-b5db-4c18-8967-397cc0d74a11">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="177" y="84" width="8" height="10" uuid="43e6c06f-df68-44f1-adf2-82051f4f3011"/>
+				<reportElement x="177" y="84" width="8" height="10" uuid="43e6c06f-df68-44f1-adf2-82051f4f3011">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="113" y="82" width="43" height="15" uuid="10f156e0-c568-4f67-b22e-665340f7b18e"/>
+				<reportElement x="113" y="82" width="43" height="15" uuid="10f156e0-c568-4f67-b22e-665340f7b18e">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
 				<text><![CDATA[New]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="197" y="82" width="66" height="15" uuid="b484a0b3-12f2-4f47-ba46-a04ee7e4db90"/>
+				<reportElement x="197" y="82" width="66" height="15" uuid="b484a0b3-12f2-4f47-ba46-a04ee7e4db90">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
 				<text><![CDATA[Transfer]]></text>
 			</staticText>
 			<staticText>
@@ -57,11 +68,13 @@
 				<text><![CDATA[Date Submitted]]></text>
 			</staticText>
 			<image scaleImage="RetainShape" hAlign="Left" vAlign="Top">
-				<reportElement x="0" y="0" width="286" height="66" uuid="f6924c01-bfb0-4fba-9819-de3248917f43"/>
+				<reportElement x="0" y="0" width="286" height="66" uuid="ab24424e-516d-4def-ac3c-b80ed2e7265e"/>
 				<imageExpression><![CDATA[$P{landlordLogo}]]></imageExpression>
 			</image>
 			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="410" y="81" width="100" height="15" uuid="a96e2adc-538a-4b64-8c36-11603b69c3fb"/>
+				<reportElement x="410" y="81" width="100" height="15" uuid="a96e2adc-538a-4b64-8c36-11603b69c3fb">
+					<printWhenExpression><![CDATA[!$P{submissionDate}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$P{submissionDate}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -73,7 +86,9 @@
 				<text><![CDATA[The undersigned Applicant(s) hereby make this application to lease:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="310" y="4" width="261" height="20" uuid="c1421299-492b-4f9a-9fd5-1953d7a0e067"/>
+				<reportElement x="310" y="4" width="261" height="20" uuid="c1421299-492b-4f9a-9fd5-1953d7a0e067">
+					<printWhenExpression><![CDATA[!$P{leaseId}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$P{leaseId}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -100,6 +115,13 @@
 		</band>
 		<band height="18">
 			<subreport>
+				<reportElement x="-20" y="8" width="612" height="1" uuid="69a0876d-50b1-4bca-880d-8cc8464d8aa5"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{firstPaymentSection})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.RentalApplicationFirstPayment")]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="18">
+			<subreport>
 				<reportElement x="-20" y="8" width="612" height="1" uuid="82ce1d6e-f292-4111-9d62-d4058d49b6f3"/>
 				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{peopleSection})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.RentalApplicationPeople")]]></subreportExpression>
@@ -113,6 +135,9 @@
 			</subreport>
 		</band>
 		<band height="18">
+			<break>
+				<reportElement x="0" y="3" width="100" height="1" uuid="01eb3c3e-08ac-4d92-9a38-df3606915585"/>
+			</break>
 			<subreport>
 				<reportElement x="-20" y="8" width="591" height="1" uuid="d6ee7aeb-6c20-48fa-8c07-bb016c8d1d12"/>
 				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{aboutYouSection})]]></dataSourceExpression>
@@ -140,7 +165,7 @@
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.RentalApplicationApplicantEmergencyContactList")]]></subreportExpression>
 			</subreport>
 		</band>
-		<band height="26">
+		<band height="32">
 			<rectangle>
 				<reportElement x="2" y="3" width="185" height="20" forecolor="#CCCCCC" uuid="75819eac-0a5e-4920-857c-8e900c3f3e5b"/>
 			</rectangle>
@@ -148,7 +173,7 @@
 				<reportElement x="187" y="3" width="193" height="20" forecolor="#CCCCCC" uuid="e0744796-5053-4087-9a88-e59d5a1adbe6"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="190" y="8" width="66" height="15" forecolor="#666666" uuid="4c4f7e23-c0ce-42e8-9125-449cc562394c"/>
+				<reportElement x="190" y="8" width="30" height="15" forecolor="#666666" uuid="4c4f7e23-c0ce-42e8-9125-449cc562394c"/>
 				<text><![CDATA[Name]]></text>
 			</staticText>
 			<rectangle>
@@ -159,9 +184,35 @@
 				<text><![CDATA[Signature]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="8" width="66" height="15" forecolor="#666666" uuid="af108a4e-ff11-4a2c-8bc6-09c17e95bc42"/>
+				<reportElement x="5" y="8" width="42" height="15" forecolor="#666666" uuid="af108a4e-ff11-4a2c-8bc6-09c17e95bc42"/>
 				<text><![CDATA[Date]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="220" y="8" width="150" height="15" uuid="071c5b7a-2e20-4ba7-9584-1b29e4998f25"/>
+				<textFieldExpression><![CDATA[$P{name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMMMM dd, yyyy" isBlankWhenNull="true">
+				<reportElement x="47" y="8" width="100" height="15" uuid="ad9bf8b6-4453-4422-9aac-7576869a01a8"/>
+				<textFieldExpression><![CDATA[$P{date}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
+	<pageFooter>
+		<band height="11">
+			<textField>
+				<reportElement x="463" y="0" width="80" height="11" uuid="e5d75ac3-2f6f-4891-af67-06ab1672a869"/>
+				<textElement textAlignment="Right">
+					<font size="6" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="543" y="0" width="29" height="11" uuid="0b4f0b0d-6321-4095-940c-5437db0af498"/>
+				<textElement>
+					<font size="6" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
 </jasperReport>

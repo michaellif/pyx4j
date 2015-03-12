@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationPeople" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="513a6077-fd57-4fc4-902e-6eca35d8c3df">
-	<property name="ireport.zoom" value="1.9487171000000059"/>
+	<property name="ireport.zoom" value="1.7715610000000148"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="landlordLogo" class="java.io.InputStream"/>
@@ -12,6 +12,23 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
+		<band height="36">
+			<staticText>
+				<reportElement x="4" y="1" width="100" height="20" uuid="8339a29b-a047-4569-973e-5e357604aac0"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Acknowledgement]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="104" y="1" width="467" height="30" forecolor="#666666" uuid="7d4b91f9-73c1-44bc-97b6-0e08798c2808"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Each Applicant hereby acknowledges that he/she has been shown and has read the Landlord’s usual form of Tenancy Agreement.
+]]></text>
+			</staticText>
+		</band>
 		<band height="21" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="0" width="571" height="19" forecolor="#666666" uuid="7a6897e7-0c66-46df-9fe4-a71683c3ff3a"/>
@@ -21,25 +38,27 @@
 				<text><![CDATA[The undersigned Applicant(s) hereby make this application to lease:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="283" y="0" width="288" height="19" uuid="69e84c42-1f29-4279-b137-2795d49fb9cf"/>
+				<reportElement x="283" y="0" width="288" height="19" uuid="69e84c42-1f29-4279-b137-2795d49fb9cf">
+					<printWhenExpression><![CDATA[!$F{leaseId}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{leaseId}]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="45">
 			<rectangle>
-				<reportElement x="1" y="25" width="143" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="b9414534-cf2e-428c-a946-040f2a476728"/>
+				<reportElement x="376" y="25" width="195" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="d1c3709c-3ca0-4c1d-9829-8ac47d05b4a2"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="430" y="25" width="141" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="4a33a516-854e-44fb-b2b1-04f44ecde099"/>
+				<reportElement x="1" y="25" width="184" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="3e2888d8-10fc-4a56-bbcd-9ffbb37ead81"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="144" y="25" width="143" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="5e9105d3-4298-415f-91d2-c319abf93f1f"/>
+				<reportElement x="185" y="25" width="191" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="0cb80205-ba5f-4364-b65e-d64b350c3580"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="396" y="-97" width="174" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="d0c77a64-bcd6-4a79-b3da-5c2b3c779148"/>
 			</rectangle>
 			<rectangle>
 				<reportElement x="1" y="5" width="570" height="20" forecolor="#CCCCCC" uuid="6e4b415e-9e39-427d-a32a-ecc0fb70af54"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="287" y="25" width="143" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="569c35de-a052-4024-81ae-910d5f8c07f3"/>
 			</rectangle>
 			<rectangle>
 				<reportElement x="1" y="2" width="570" height="2" forecolor="#00CC99" backcolor="#00CC99" uuid="c7b3e33d-5c02-4f09-bb75-4af55340f56a"/>
@@ -48,14 +67,14 @@
 				</graphicElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="434" y="30" width="66" height="15" forecolor="#666666" uuid="977fed05-2c4f-4d59-a3d0-d2cdcc89dd44"/>
+				<reportElement x="380" y="30" width="66" height="15" forecolor="#666666" uuid="977fed05-2c4f-4d59-a3d0-d2cdcc89dd44"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Relationship]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="148" y="30" width="66" height="15" forecolor="#666666" uuid="0365d00f-4c20-4b8b-a065-bb671539b8eb"/>
+				<reportElement x="189" y="30" width="66" height="15" forecolor="#666666" uuid="0365d00f-4c20-4b8b-a065-bb671539b8eb"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
@@ -74,13 +93,6 @@
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Proposed Applicant(s)]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="291" y="30" width="66" height="15" forecolor="#666666" uuid="e0f99669-747a-45de-8fef-5c46e73249a7"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[SIN Number]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="52" y="32" width="73" height="10" forecolor="#666666" uuid="c084470c-8881-4523-b6da-d5f56d4c5f03"/>
@@ -107,7 +119,9 @@
 				<text><![CDATA[The undersigned Occupant(s) hereby make this application to lease:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="283" y="6" width="288" height="19" uuid="b60c9c7c-9d24-4f50-a2c1-174e563c3817"/>
+				<reportElement x="283" y="6" width="288" height="19" uuid="b60c9c7c-9d24-4f50-a2c1-174e563c3817">
+					<printWhenExpression><![CDATA[!$F{leaseId}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{leaseId}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -140,7 +154,7 @@
 				<reportElement x="376" y="25" width="195" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="06f44cf6-7c9c-46fc-9158-fb18f7396242"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="381" y="30" width="66" height="15" forecolor="#666666" uuid="b76132ea-ba8f-485e-8ed3-37a339aa976b"/>
+				<reportElement x="380" y="30" width="66" height="15" forecolor="#666666" uuid="b76132ea-ba8f-485e-8ed3-37a339aa976b"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
