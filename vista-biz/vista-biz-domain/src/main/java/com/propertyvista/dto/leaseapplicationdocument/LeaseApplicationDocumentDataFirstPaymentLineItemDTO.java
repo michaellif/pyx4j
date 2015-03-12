@@ -7,48 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2014-03-19
+ * Created on Mar 20, 2014
  * @author ArtyomB
  */
 package com.propertyvista.dto.leaseapplicationdocument;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 @Transient
-public interface LeaseApplicationDocumentDataLeaseSectionDTO extends IEntity {
+public interface LeaseApplicationDocumentDataFirstPaymentLineItemDTO extends IEntity {
 
-    // Unit Details:
-    IPrimitive<String> landlordName();
+    IPrimitive<String> item();
 
-    IPrimitive<String> unitNumber();
+    IPrimitive<String> description();
 
-    IPrimitive<String> address();
-
-    IPrimitive<String> street();
-
-    IPrimitive<String> city();
-
-    IPrimitive<String> province();
-
-    IPrimitive<String> postalCode();
-
-    IPrimitive<String> floorplan();
-
-    IPrimitive<String> includedUtilities();
-
-    // Lease Term:
-    IPrimitive<LogicalDate> leaseFrom();
-
-    IPrimitive<LogicalDate> leaseTo();
-
-    IPrimitive<String> totalMonths();
-
-    // Lease Options:
-    IPrimitive<BigDecimal> unitRent();
-
+    IPrimitive<BigDecimal> amount();
 }

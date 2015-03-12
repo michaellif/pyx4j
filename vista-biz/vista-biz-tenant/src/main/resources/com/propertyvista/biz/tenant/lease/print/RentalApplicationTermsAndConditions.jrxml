@@ -15,9 +15,9 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="70" splitType="Stretch">
+		<band height="65" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" x="56" y="34" width="516" height="28" uuid="114d668c-b487-40b4-93d6-ac58c70aebef"/>
+				<reportElement positionType="Float" x="56" y="34" width="516" height="29" uuid="114d668c-b487-40b4-93d6-ac58c70aebef"/>
 				<textElement markup="html"/>
 				<textFieldExpression><![CDATA[$F{wordingHtml}]]></textFieldExpression>
 			</textField>
@@ -36,8 +36,8 @@
 				<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="37">
-			<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}   && (($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.FullName)        || ($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.AgreeBoxAndFullName))]]></printWhenExpression>
+		<band height="31">
+			<printWhenExpression><![CDATA[(($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.FullName)        || ($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.AgreeBoxAndFullName))]]></printWhenExpression>
 			<rectangle>
 				<reportElement x="373" y="5" width="198" height="20" forecolor="#CCCCCC" uuid="4a63a3be-06d4-47aa-94c5-354d33aecb7b"/>
 			</rectangle>
@@ -48,11 +48,15 @@
 				<reportElement x="1" y="5" width="188" height="20" forecolor="#CCCCCC" uuid="81b2f6e7-3f61-4e34-aa0f-102dc65b4c21"/>
 			</rectangle>
 			<textField>
-				<reportElement x="225" y="10" width="107" height="15" uuid="ef0a2c88-9fb5-4952-a013-e7b9a6ea6658"/>
+				<reportElement x="225" y="10" width="107" height="15" uuid="ef0a2c88-9fb5-4952-a013-e7b9a6ea6658">
+					<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{signature}.fullName().getValue()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="41" y="10" width="147" height="15" uuid="f569507a-35da-4ac0-b588-b0857a2cdf4f"/>
+				<reportElement x="41" y="10" width="147" height="15" uuid="f569507a-35da-4ac0-b588-b0857a2cdf4f">
+					<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{signature}.signDate().getValue()]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -68,13 +72,14 @@
 				<text><![CDATA[Signature]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="455" y="10" width="116" height="15" uuid="9afe661f-b477-433b-b057-d640fc4ef188"/>
+				<reportElement x="455" y="10" width="116" height="15" uuid="9afe661f-b477-433b-b057-d640fc4ef188">
+					<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{signature}.ipAddress().getValue()]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="33">
-			<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}
-  && ($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.Initials)]]></printWhenExpression>
+		<band height="29">
+			<printWhenExpression><![CDATA[($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.Initials)]]></printWhenExpression>
 			<rectangle>
 				<reportElement x="373" y="4" width="198" height="20" forecolor="#CCCCCC" uuid="8a7ab7e6-5b0d-4f71-ba75-cbee7aa4f1a9"/>
 			</rectangle>
@@ -82,7 +87,9 @@
 				<reportElement x="1" y="4" width="188" height="20" forecolor="#CCCCCC" uuid="f4e10e5f-c93b-4143-bc13-db67829ea6f4"/>
 			</rectangle>
 			<textField>
-				<reportElement x="41" y="9" width="147" height="15" uuid="fb052333-ab54-48a2-962f-f3ec697e2eaf"/>
+				<reportElement x="41" y="9" width="147" height="15" uuid="fb052333-ab54-48a2-962f-f3ec697e2eaf">
+					<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{signature}.signDate().getValue()]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -90,7 +97,9 @@
 				<text><![CDATA[Signature]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="455" y="9" width="116" height="15" uuid="d418b3c7-37b2-4e58-8b3c-8513a5cd4577"/>
+				<reportElement x="455" y="9" width="116" height="15" uuid="d418b3c7-37b2-4e58-8b3c-8513a5cd4577">
+					<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{signature}.ipAddress().getValue()]]></textFieldExpression>
 			</textField>
 			<rectangle>
@@ -101,7 +110,9 @@
 				<text><![CDATA[Initials]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="225" y="9" width="107" height="15" uuid="8155b535-209e-489d-8eba-cb4b106dc99c"/>
+				<reportElement x="225" y="9" width="107" height="15" uuid="8155b535-209e-489d-8eba-cb4b106dc99c">
+					<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{signature}.initials().getValue()]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -109,10 +120,9 @@
 				<text><![CDATA[Date]]></text>
 			</staticText>
 		</band>
-		<band height="33">
-			<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}
-  && (($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.AgreeBox)
-      || ($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.AgreeBoxAndFullName))]]></printWhenExpression>
+		<band height="32">
+			<printWhenExpression><![CDATA[(($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.AgreeBox)
+    || ($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.AgreeBoxAndFullName))]]></printWhenExpression>
 			<rectangle>
 				<reportElement x="373" y="6" width="198" height="20" forecolor="#CCCCCC" uuid="b20a8fd1-4629-44f0-a5ea-d6166f221aaf"/>
 			</rectangle>
@@ -120,7 +130,9 @@
 				<reportElement x="1" y="6" width="188" height="20" forecolor="#CCCCCC" uuid="e2c6503e-5bba-460c-9755-7e83981a41b4"/>
 			</rectangle>
 			<textField>
-				<reportElement x="41" y="11" width="147" height="15" uuid="ad2fe2ec-226e-4882-9186-e5aa97a048c7"/>
+				<reportElement x="41" y="11" width="147" height="15" uuid="ad2fe2ec-226e-4882-9186-e5aa97a048c7">
+					<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{signature}.signDate().getValue()]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -128,14 +140,18 @@
 				<text><![CDATA[Signature]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="455" y="11" width="116" height="15" uuid="a7ba08d4-3c39-4f09-bdbd-c596a503dd55"/>
+				<reportElement x="455" y="11" width="116" height="15" uuid="a7ba08d4-3c39-4f09-bdbd-c596a503dd55">
+					<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{signature}.ipAddress().getValue()]]></textFieldExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="188" y="6" width="185" height="20" forecolor="#CCCCCC" uuid="20a12599-3720-49f2-a6f4-4cb2d8e53370"/>
 			</rectangle>
 			<textField>
-				<reportElement x="191" y="11" width="141" height="15" uuid="f1c50e20-7195-4ebe-b620-d4e62f9a7f8c"/>
+				<reportElement x="191" y="11" width="171" height="15" uuid="f1c50e20-7195-4ebe-b620-d4e62f9a7f8c">
+					<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{signature}.agree().getValue(false) ? "I agree with the terms above": ""]]></textFieldExpression>
 			</textField>
 			<staticText>

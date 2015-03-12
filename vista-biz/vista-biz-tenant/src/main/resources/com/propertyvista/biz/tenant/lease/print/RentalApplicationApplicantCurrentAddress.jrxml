@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationApplicantCurrentAddress" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="b9f9f2d0-0eb9-43b5-9b5a-ab45c1d353c8">
-	<property name="ireport.zoom" value="1.9487171000000019"/>
+	<property name="ireport.zoom" value="1.6105100000000014"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="suiteNumber" class="java.lang.String"/>
@@ -110,27 +110,39 @@
 				<textFieldExpression><![CDATA[$F{streetNumber} + " " +$F{streetName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="70" y="48" width="100" height="15" uuid="2512f93f-1b73-481b-a8e8-ce39cdd6ab6e"/>
+				<reportElement x="70" y="48" width="100" height="15" uuid="2512f93f-1b73-481b-a8e8-ce39cdd6ab6e">
+					<printWhenExpression><![CDATA[!$F{suiteNumber}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{suiteNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="70" y="68" width="100" height="15" uuid="aa27c89a-0036-4fbd-be8c-d37c32d51931"/>
+				<reportElement x="70" y="68" width="100" height="15" uuid="aa27c89a-0036-4fbd-be8c-d37c32d51931">
+					<printWhenExpression><![CDATA[!$F{city}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{city}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="266" y="68" width="100" height="15" uuid="f0c50750-50c0-44f6-92ab-dc787c94435c"/>
+				<reportElement x="266" y="68" width="100" height="15" uuid="f0c50750-50c0-44f6-92ab-dc787c94435c">
+					<printWhenExpression><![CDATA[!$F{province}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{province}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="456" y="68" width="100" height="15" uuid="8da994fe-1ade-40d5-adad-cbdbf15244fc"/>
+				<reportElement x="456" y="68" width="100" height="15" uuid="8da994fe-1ade-40d5-adad-cbdbf15244fc">
+					<printWhenExpression><![CDATA[!$F{postalCode}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{postalCode}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="70" y="108" width="100" height="15" uuid="df0471d6-55e9-4b04-ba32-112c2e83cea0"/>
+				<reportElement x="70" y="108" width="100" height="15" uuid="df0471d6-55e9-4b04-ba32-112c2e83cea0">
+					<printWhenExpression><![CDATA[!$F{moveInDate}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{moveInDate}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="373" y="108" width="100" height="15" uuid="592a2717-b2d3-4647-b51f-3279982406a2"/>
+				<reportElement x="373" y="108" width="100" height="15" uuid="592a2717-b2d3-4647-b51f-3279982406a2">
+					<printWhenExpression><![CDATA[!$F{moveOutDate}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{moveOutDate}]]></textFieldExpression>
 			</textField>
 		</band>

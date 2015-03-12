@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationApplicantDetails" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="e542c805-24ad-4889-8885-2d7bc3fb68d3">
-	<property name="ireport.zoom" value="1.6105100000000279"/>
+	<property name="ireport.zoom" value="1.3310000000000228"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="leaseId" class="java.lang.String"/>
+	<field name="submissionDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="firstName" class="java.lang.String"/>
 	<field name="lastName" class="java.lang.String"/>
 	<field name="middleName" class="java.lang.String"/>
@@ -15,21 +16,27 @@
 	<field name="mobilePhone" class="java.lang.String"/>
 	<field name="workPhone" class="java.lang.String"/>
 	<field name="email" class="java.lang.String"/>
+	<field name="landlordLogo" class="java.lang.String"/>
+	<field name="identificationDocuments" class="com.pyx4j.entity.core.IList"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="94" splitType="Stretch">
 			<staticText>
-				<reportElement x="198" y="73" width="66" height="15" uuid="4c18ff89-e68e-491f-b7f4-0bcb2e0c93b3"/>
+				<reportElement x="198" y="73" width="66" height="15" uuid="4c18ff89-e68e-491f-b7f4-0bcb2e0c93b3">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
 				<text><![CDATA[Transfer]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="114" y="73" width="43" height="15" uuid="1dc35dda-de32-41ca-b8f3-e6715bb718f4"/>
+				<reportElement x="114" y="73" width="43" height="15" uuid="1dc35dda-de32-41ca-b8f3-e6715bb718f4">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
 				<text><![CDATA[New]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="324" y="72" width="100" height="20" uuid="a1a1038a-c0d5-404b-895d-218d454a128a"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="324" y="72" width="76" height="20" uuid="a1a1038a-c0d5-404b-895d-218d454a128a"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
@@ -43,7 +50,9 @@
 				<text><![CDATA[Application Type]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="178" y="75" width="8" height="10" uuid="5d91ddee-00a6-4085-96c2-859047c20480"/>
+				<reportElement x="178" y="75" width="8" height="10" uuid="5d91ddee-00a6-4085-96c2-859047c20480">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
 			</rectangle>
 			<staticText>
 				<reportElement x="350" y="5" width="222" height="20" uuid="e20a511f-908f-4d5a-8351-46f1f740bd1d"/>
@@ -53,8 +62,20 @@
 				<text><![CDATA[Rental Application]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="101" y="75" width="8" height="10" uuid="198b79e5-3dd6-40ac-9d3d-e8ec585c897e"/>
+				<reportElement x="101" y="75" width="8" height="10" uuid="198b79e5-3dd6-40ac-9d3d-e8ec585c897e">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
 			</rectangle>
+			<image scaleImage="RetainShape" hAlign="Left" vAlign="Top">
+				<reportElement x="1" y="0" width="286" height="66" uuid="d3661312-0293-409d-a40a-0506499ccd19"/>
+				<imageExpression><![CDATA[(!$F{landlordLogo}.equals(null))? (new ByteArrayInputStream(($F{landlordLogo}).getBytes())) : null]]></imageExpression>
+			</image>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="400" y="72" width="100" height="15" uuid="7dde76fa-c3a9-4150-90e2-06dafad12fc9">
+					<printWhenExpression><![CDATA[!$F{submissionDate}.equals(null)]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{submissionDate}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<detail>
@@ -64,7 +85,9 @@
 				<text><![CDATA[The undersigned Applicant(s) hereby make this application to lease:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="310" y="3" width="100" height="19" uuid="0ed62e5e-d7a3-4628-ae7f-a399ef07649b"/>
+				<reportElement x="310" y="3" width="100" height="19" uuid="0ed62e5e-d7a3-4628-ae7f-a399ef07649b">
+					<printWhenExpression><![CDATA[!$F{leaseId}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{leaseId}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -135,31 +158,45 @@
 				<text><![CDATA[Birthday]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="70" y="29" width="100" height="15" uuid="b3b3700e-255c-4113-a4a8-31b9cbfb69dd"/>
+				<reportElement x="70" y="29" width="100" height="15" uuid="b3b3700e-255c-4113-a4a8-31b9cbfb69dd">
+					<printWhenExpression><![CDATA[!$F{firstName}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{firstName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="255" y="29" width="111" height="15" uuid="d6945528-567a-45c8-897e-de0b0075179e"/>
+				<reportElement x="255" y="29" width="111" height="15" uuid="d6945528-567a-45c8-897e-de0b0075179e">
+					<printWhenExpression><![CDATA[!$F{middleName}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{middleName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="448" y="29" width="123" height="15" uuid="fbaec607-0014-453c-92c8-6e41cb58a4a9"/>
+				<reportElement x="448" y="29" width="123" height="15" uuid="fbaec607-0014-453c-92c8-6e41cb58a4a9">
+					<printWhenExpression><![CDATA[!$F{lastName}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{lastName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="70" y="49" width="111" height="15" uuid="80331397-bcdf-4396-aff2-24610ce85762"/>
+				<reportElement x="70" y="49" width="111" height="15" uuid="80331397-bcdf-4396-aff2-24610ce85762">
+					<printWhenExpression><![CDATA[!$F{namePrefix}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{namePrefix}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="355" y="49" width="216" height="15" uuid="2b0c2aa1-b1ff-4926-b16e-ddb3f589d860"/>
+				<reportElement x="355" y="49" width="216" height="15" uuid="2b0c2aa1-b1ff-4926-b16e-ddb3f589d860">
+					<printWhenExpression><![CDATA[!$F{nameSuffix}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{nameSuffix}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="70" y="69" width="111" height="15" uuid="91965e84-7776-4280-9475-e7c3272e7a38"/>
+				<reportElement x="70" y="69" width="111" height="15" uuid="91965e84-7776-4280-9475-e7c3272e7a38">
+					<printWhenExpression><![CDATA[!$F{gender}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{gender}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="355" y="69" width="216" height="15" uuid="5b27c18d-79e6-42d2-8020-5423c9928a34"/>
+				<reportElement x="355" y="69" width="216" height="15" uuid="5b27c18d-79e6-42d2-8020-5423c9928a34">
+					<printWhenExpression><![CDATA[!$F{birthDate}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{birthDate}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -209,21 +246,72 @@
 				<text><![CDATA[Email]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="70" y="31" width="116" height="15" uuid="b2ca36d7-b7bf-4abd-85bb-f2a6a2f31c51"/>
+				<reportElement x="70" y="31" width="116" height="15" uuid="b2ca36d7-b7bf-4abd-85bb-f2a6a2f31c51">
+					<printWhenExpression><![CDATA[!$F{homePhone}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{homePhone}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="255" y="31" width="124" height="15" uuid="1e2fd035-5750-4f27-99b6-fcd58648c1e3"/>
+				<reportElement x="255" y="31" width="124" height="15" uuid="1e2fd035-5750-4f27-99b6-fcd58648c1e3">
+					<printWhenExpression><![CDATA[!$F{mobilePhone}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{mobilePhone}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="448" y="31" width="123" height="15" uuid="9caccdb4-ff8c-4efa-9943-67cac79ba49e"/>
+				<reportElement x="448" y="31" width="123" height="15" uuid="9caccdb4-ff8c-4efa-9943-67cac79ba49e">
+					<printWhenExpression><![CDATA[!$F{workPhone}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{workPhone}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="70" y="51" width="501" height="15" uuid="7352581c-c16d-4658-ac62-d95eeb6afaf9"/>
+				<reportElement x="70" y="51" width="501" height="15" uuid="7352581c-c16d-4658-ac62-d95eeb6afaf9">
+					<printWhenExpression><![CDATA[!$F{email}.equals(null)]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
 			</textField>
+		</band>
+		<band height="56">
+			<rectangle>
+				<reportElement x="1" y="5" width="570" height="20" forecolor="#CCCCCC" uuid="327a8c58-88d6-461d-880d-803de4445eef"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="4" y="5" width="173" height="20" uuid="429df73c-0cc7-4aee-8d7b-623e4f27c721"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Identiification Documents]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="2" width="571" height="3" forecolor="#FFFFFF" backcolor="#FF8026" uuid="f30c4e29-a994-4d1c-8373-d54aeb090138"/>
+				<graphicElement>
+					<pen lineWidth="0.0" lineStyle="Dashed"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="186" y="25" width="385" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="0b5fec44-2427-49b2-b4e4-19e7d8bf8a4c"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="25" width="185" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="25fabad3-7bc1-4a6c-b0f4-1cebbbb3d133"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="4" y="30" width="36" height="15" forecolor="#666666" uuid="e0b01f8c-0991-4a40-80fb-195ecc3e774e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="189" y="30" width="44" height="15" forecolor="#666666" uuid="0954b697-9d04-4479-b3e7-1cd16a0abab6"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Number]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="-20" y="45" width="612" height="1" uuid="bf621c4a-0519-4650-9815-a85c9946d473"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{identificationDocuments})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.RentalApplicationApplicantIdentificationDocuments")]]></subreportExpression>
+			</subreport>
 		</band>
 	</detail>
 </jasperReport>
