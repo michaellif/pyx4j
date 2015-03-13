@@ -184,7 +184,7 @@ public class PaymentStep extends ApplicationWizardStep {
             @Override
             public void onValueChange(ValueChangeEvent<LeasePaymentMethod> event) {
                 if (event.getValue() != null) {
-                    paymentMethodEditor.populate(event.getValue());
+                    paymentMethodEditor.populate(event.getValue().<LeasePaymentMethod> duplicate());
                 }
             }
         });

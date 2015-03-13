@@ -220,7 +220,7 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
     IPrimitive<BigDecimal> amount();
 
     @Format("#,##0.00")
-    @Editor(type = EditorType.money)
+    @Editor(type = EditorType.moneylabel)
     @Caption(name = "Web Payment Fee")
     IPrimitive<BigDecimal> convenienceFee();
 
