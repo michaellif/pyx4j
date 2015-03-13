@@ -97,6 +97,8 @@ public class VistaApplicationResolverHelper {
                     int index = (appByDomainTokens[1].matches(regExTwoDigits) || appByDomainTokens[1].matches(prodStagingRegex)) ? 0 : 1;
                     if (appByDomainTokens[index].equalsIgnoreCase("static")) {
                         return VistaApplication.noApp;
+                    } else if (appByDomainTokens[index].equalsIgnoreCase("start")) {
+                        return VistaApplication.onboarding;
                     }
                     app = VistaApplication.valueOf(appByDomainTokens[index]);
                 } catch (IllegalArgumentException e) {

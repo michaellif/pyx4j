@@ -90,6 +90,7 @@ import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
+import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.DependentDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.GuarantorDTO;
@@ -105,6 +106,7 @@ import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardSe
 import com.propertyvista.portal.rpc.portal.shared.dto.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
+import com.propertyvista.server.VistaTermsUtils;
 import com.propertyvista.server.common.lease.SignedLeaseApplicationDocumentCreatorDeferredProcess;
 import com.propertyvista.server.common.util.AddressRetriever;
 
@@ -834,7 +836,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         // some default values:
         dto.created().setValue(SystemDateManager.getDate());
-        dto.convenienceFeeSignature().signatureFormat().setValue(SignatureFormat.AgreeBox);
+        dto.convenienceFeeSignedTerm().signature().signatureFormat().setValue(SignatureFormat.AgreeBox);
 
         // current balance: -------------------------------------------------------------------------------------------------------
 
@@ -916,6 +918,10 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                     pbo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
                 }
             }
+
+            VistaTerms terms = VistaTermsUtils.retrieveVistaTerms(VistaTerms.Target.TenantPaymentWebPaymentFeeTerms);
+            pbo.convenienceFeeSignedTerm().term().setValue(terms.getPrimaryKey());
+            pbo.convenienceFeeSignedTerm().termFor().setValue(terms.version().fromDate().getValue());
 
             ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(pbo.billingAccount(), pbo.paymentMethod(), PaymentMethodTarget.OneTimePayment,
                     VistaApplication.prospect);

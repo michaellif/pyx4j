@@ -327,7 +327,7 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
                 paymentMethodEditor.setVisible(event.getValue() != null);
                 paymentMethodEditorHeader.setVisible(event.getValue() != null);
                 if (event.getValue() != null) {
-                    paymentMethodEditor.populate(event.getValue());
+                    paymentMethodEditor.populate(event.getValue().<LeasePaymentMethod> duplicate());
                     updateVisibility(event.getValue().type().getValue());
                 }
             }
