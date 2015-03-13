@@ -19,6 +19,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.Scheduler;
@@ -28,6 +29,9 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.ui.CComboBox.NotInOptionsPolicy;
 import com.pyx4j.widgets.client.ListBox;
@@ -46,6 +50,8 @@ public class NComboBox<E> extends NFocusField<E, ListBox, CComboBox<E>, HTML> im
     private E notInOptionsValue = null;
 
     private boolean deferredSetSelectedStarted = false;
+
+    private List<E> shownOptions = new ArrayList<>();
 
     public NComboBox(final CComboBox<E> comboBox) {
         super(comboBox);
@@ -74,6 +80,18 @@ public class NComboBox<E> extends NFocusField<E, ListBox, CComboBox<E>, HTML> im
             }
         });
         setTabIndex(getCComponent().getTabIndex());
+        getCComponent().addPropertyChangeHandler(new PropertyChangeHandler() {
+
+            @Override
+            public void onPropertyChange(PropertyChangeEvent event) {
+                if (event.getPropertyName() == PropertyChangeEvent.PropertyName.mandatory) {
+                    if (firstNativeItemIsNoSelection = !getCComponent().isMandatory()) {
+                        refreshOptions();
+                    }
+                }
+
+            }
+        });
     }
 
     @Override
@@ -102,22 +120,27 @@ public class NComboBox<E> extends NFocusField<E, ListBox, CComboBox<E>, HTML> im
         getEditor().removeItem(getNativeOptionIndex(opt));
     }
 
+    // The same as in CComponent
+    public boolean isValueEmpty(E v) {
+        return v == null || (v instanceof IEntity && ((IEntity) v).isNull());
+    }
+
     public void refreshOptions() {
         if (getEditor() != null) {
             getEditor().clear();
+            shownOptions.clear();
 
             firstNativeItemIsNoSelection = !getCComponent().isMandatory();
             if (firstNativeItemIsNoSelection) {
-                getEditor().addItem(getCComponent().getItemName(null));
+                shownOptions.add(null);
             }
 
             if (getCComponent().getOptions() != null) {
-
                 // For Policy.KEEP Show populated value in the list
-                if ((this.populatedValue != null) && (getCComponent().getPolicy() == NotInOptionsPolicy.KEEP)
+                if ((!isValueEmpty(this.populatedValue)) && (getCComponent().getPolicy() == NotInOptionsPolicy.KEEP)
                         && (!getCComponent().getOptions().contains(this.populatedValue))) {
                     notInOptionsValue = this.populatedValue;
-                    getEditor().addItem(getCComponent().getItemName(this.populatedValue));
+                    shownOptions.add(notInOptionsValue);
                 } else {
                     notInOptionsValue = null;
                 }
@@ -128,6 +151,10 @@ public class NComboBox<E> extends NFocusField<E, ListBox, CComboBox<E>, HTML> im
                 }
 
                 for (E o : getCComponent().getOptions()) {
+                    shownOptions.add(o);
+                }
+
+                for (E o : shownOptions) {
                     getEditor().addItem(getCComponent().getItemName(o));
                 }
             }
@@ -138,29 +165,8 @@ public class NComboBox<E> extends NFocusField<E, ListBox, CComboBox<E>, HTML> im
     private E getValueByNativeOptionIndex(int index) {
         if (index == -1) {
             return null;
-        } else if (index == 0) {
-            if (firstNativeItemIsNoSelection) {
-                return null;
-            } else if (notInOptionsValue != null) {
-                return this.value;
-            }
-        } else if (index == 1) {
-            if (firstNativeItemIsNoSelection && (notInOptionsValue != null)) {
-                return this.value;
-            }
         }
-
-        if (getCComponent().getOptions() == null) {
-            return null;
-        }
-
-        if (firstNativeItemIsNoSelection) {
-            index--;
-        }
-        if (notInOptionsValue != null) {
-            index--;
-        }
-        return getCComponent().getOptions().get(index);
+        return shownOptions.get(index);
     }
 
     private int getNativeOptionIndex(E opt) {
@@ -171,24 +177,7 @@ public class NComboBox<E> extends NFocusField<E, ListBox, CComboBox<E>, HTML> im
                 return -1;
             }
         } else {
-            int index = -1;
-            if (getCComponent().getOptions() != null) {
-                index = getCComponent().getOptions().indexOf(opt);
-            }
-            if (index != -1) {
-                if (firstNativeItemIsNoSelection) {
-                    index++;
-                }
-                if (notInOptionsValue != null) {
-                    index++;
-                }
-            } else if ((notInOptionsValue != null) && (notInOptionsValue.equals(opt))) {
-                index = 0;
-                if (firstNativeItemIsNoSelection) {
-                    index++;
-                }
-            }
-            return index;
+            return shownOptions.indexOf(opt);
         }
     }
 
@@ -243,6 +232,7 @@ public class NComboBox<E> extends NFocusField<E, ListBox, CComboBox<E>, HTML> im
         super.onUnload();
         if (getEditor() != null) {
             getEditor().clear();
+            shownOptions.clear();
         }
     }
 

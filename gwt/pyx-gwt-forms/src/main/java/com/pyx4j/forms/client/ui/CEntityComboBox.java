@@ -231,12 +231,10 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
         if ((value != null) && (value.isNull())) {
             value = null;
         }
+        if (value != null) {
+            value = value.duplicate();
+        }
         return super.preprocessValue(value, fireEvent, populate);
-    }
-
-    @Override
-    public boolean isValueEmpty() {
-        return super.isValueEmpty() || getValue().isNull();
     }
 
     @Override
