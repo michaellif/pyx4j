@@ -19,6 +19,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CCaptcha;
@@ -106,15 +107,24 @@ public class LoginForm extends CForm<AuthenticationRequest> {
         public void onKeyUp(KeyUpEvent event) {
             if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
                 loginGadget.setLoginButtonFocus();
-                if (!Dialog.isDialogOpen()) {
-                    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                //Dirty fix for Chrome that yields execution to let focus move out, triggering focus lost event on component, which in turn will execute onEditingStop()  
+                new Timer() {
 
-                        @Override
-                        public void execute() {
-                            loginGadget.onLogin();
+                    @Override
+                    public void run() {
+                        if (!Dialog.isDialogOpen()) {
+                            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+
+                                @Override
+                                public void execute() {
+                                    loginGadget.onLogin();
+                                }
+                            });
                         }
-                    });
-                }
+                    }
+
+                }.schedule(100);
+
             }
         }
 
