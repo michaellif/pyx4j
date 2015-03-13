@@ -29,6 +29,7 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox.AsyncOptionsReadyCallback;
@@ -119,6 +120,11 @@ public class NComboBox<E> extends NFocusField<E, ListBox, CComboBox<E>, HTML> im
         getEditor().removeItem(getNativeOptionIndex(opt));
     }
 
+    // The same as in CComponent
+    public boolean isValueEmpty(E v) {
+        return v == null || (v instanceof IEntity && ((IEntity) v).isNull());
+    }
+
     public void refreshOptions() {
         if (getEditor() != null) {
             getEditor().clear();
@@ -131,7 +137,7 @@ public class NComboBox<E> extends NFocusField<E, ListBox, CComboBox<E>, HTML> im
 
             if (getCComponent().getOptions() != null) {
                 // For Policy.KEEP Show populated value in the list
-                if ((this.populatedValue != null) && (getCComponent().getPolicy() == NotInOptionsPolicy.KEEP)
+                if ((!isValueEmpty(this.populatedValue)) && (getCComponent().getPolicy() == NotInOptionsPolicy.KEEP)
                         && (!getCComponent().getOptions().contains(this.populatedValue))) {
                     notInOptionsValue = this.populatedValue;
                     shownOptions.add(notInOptionsValue);
@@ -160,7 +166,6 @@ public class NComboBox<E> extends NFocusField<E, ListBox, CComboBox<E>, HTML> im
         if (index == -1) {
             return null;
         }
-        System.out.println("return index " + index);
         return shownOptions.get(index);
     }
 
@@ -172,10 +177,7 @@ public class NComboBox<E> extends NFocusField<E, ListBox, CComboBox<E>, HTML> im
                 return -1;
             }
         } else {
-            //return shownOptions.indexOf(opt);
-            int x = shownOptions.indexOf(opt);
-            System.out.println("getNativeOptionIndex index " + x + " " + opt);
-            return x;
+            return shownOptions.indexOf(opt);
         }
     }
 
