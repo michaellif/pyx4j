@@ -648,7 +648,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
                 throw new RuntimeException("Entity " + tm.entityMeta().getCaption() + " " + entity.getPrimaryKey() + " NotFound");
             }
         }
-        CacheService.entityCache().put(entity);
+        CacheService.entityCache().remove(entity);
     }
 
     private void insert(TableModel tm, IEntity entity) {
@@ -1322,7 +1322,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
                 IEntity childEntityActual = childEntity.cast();
                 cascadeDelete(childEntityActual.getEntityMeta(), childEntityActual.getPrimaryKey());
             }
-            CacheService.entityCache().put(entity);
+            CacheService.entityCache().remove(entity);
         }
         return updated;
     }
@@ -1927,7 +1927,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
             if (!tm.delete(getPersistenceContext(), primaryKey)) {
                 throw new RuntimeException("Entity '" + entityMeta.getCaption() + "' " + primaryKey + " NotFound");
             }
-            // TODO remove entities from Cache
+            CacheService.entityCache().remove(cascadedeleteDataEntity);
 
             for (MemberOperationsMeta member : tm.operationsMeta().getCascadeDeleteMembers()) {
                 if (!(member instanceof MemberExternalOperationsMeta)) {
