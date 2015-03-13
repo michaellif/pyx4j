@@ -41,6 +41,7 @@ public interface RestrictionsPolicy extends Policy, TenantsAccessiblePolicy {
     // Majority:
 
     @NotNull
+    @MemberColumn(notNull = true)
     IPrimitive<Integer> ageOfMajority();
 
     @MemberColumn(notNull = true)
@@ -57,6 +58,7 @@ public interface RestrictionsPolicy extends Policy, TenantsAccessiblePolicy {
     IPrimitive<Boolean> noNeedGuarantors();
 
     @NotNull
+    @MemberColumn(notNull = true)
     @Caption(description = "Minimal duration of employment (in months) to forcing previous employment information")
     IPrimitive<Integer> minEmploymentDuration();
 
@@ -66,12 +68,14 @@ public interface RestrictionsPolicy extends Policy, TenantsAccessiblePolicy {
     // Miscellaneous:
 
     @NotNull
+    @MemberColumn(notNull = true)
     IPrimitive<Integer> yearsToForcingPreviousAddress();
 
     @MemberColumn(notNull = true)
     IPrimitive<Boolean> emergencyContactsIsMandatory();
 
     @NotNull
+    @MemberColumn(notNull = true)
     IPrimitive<Integer> emergencyContactsNumber();
 
     @MemberColumn(notNull = true)
