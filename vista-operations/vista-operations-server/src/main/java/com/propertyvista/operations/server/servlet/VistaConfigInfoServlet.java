@@ -44,7 +44,7 @@ public class VistaConfigInfoServlet extends ConfigInfoServlet {
 
         b.append("\nVista Configuration:\n");
 
-        AbstractVistaServerSideConfiguration conf = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class);
+        final AbstractVistaServerSideConfiguration conf = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class);
 
         b.append("  enviromentId                        : ").append(conf.enviromentId()).append("\n");
         b.append("  isDepoymentApplicationDispatcher    : ").append(conf.isDepoymentApplicationDispatcher()).append("\n");
@@ -70,30 +70,71 @@ public class VistaConfigInfoServlet extends ConfigInfoServlet {
         b.append("\n");
 
         b.append("  CaledonInterfaceWorkDirectory         : ").append(conf.getCaledonInterfaceWorkDirectory().getAbsolutePath()).append("\n");
-        b.append("  CaledonFundsTransferConfiguration     :\n      ")
-                .append(conf.getCaledonFundsTransferConfiguration().toString().replaceAll("\n", "\n      ")).append("\n");
+
+        b.append(prn("  CaledonFundsTransferConfiguration     :\n      ", new ToPrint() {
+            @Override
+            public Object get() {
+                return conf.getCaledonFundsTransferConfiguration();
+            }
+        }));
         b.append("\n");
 
-        b.append("  CaledonCardsConfiguration             :\n      ").append(conf.getCaledonCardsConfiguration().toString().replaceAll("\n", "\n      "))
-                .append("\n");
+        b.append(prn("  CaledonCardsConfiguration             :\n      ", new ToPrint() {
+            @Override
+            public Object get() {
+                return conf.getCaledonCardsConfiguration();
+            }
+        }));
         b.append("\n");
 
         b.append("  BmoInterfaceWorkDirectory             : ").append(conf.getBmoInterfaceWorkDirectory().getAbsolutePath()).append("\n");
-        b.append("  BmoInterfaceConfiguration             :\n      ").append(conf.getBmoInterfaceConfiguration().toString().replaceAll("\n", "\n      "))
-                .append("\n");
+
+        b.append(prn("  BmoInterfaceConfiguration             :\n      ", new ToPrint() {
+            @Override
+            public Object get() {
+                return conf.getBmoInterfaceConfiguration();
+            }
+        }));
         b.append("\n");
 
-        b.append("  BankingSimulatorConfiguration         :\n    ").append(conf.getBankingSimulatorConfiguration().toString().replaceAll("\n", "\n    "))
-                .append("\n");
+        b.append(prn(" BankingSimulatorConfiguration            :\n      ", new ToPrint() {
+            @Override
+            public Object get() {
+                return conf.getBankingSimulatorConfiguration();
+            }
+        }));
+        b.append("\n");
 
-        b.append("  EquifaxInterfaceConfiguration         :\n      ").append(conf.getEquifaxInterfaceConfiguration().toString().replaceAll("\n", "\n      "))
-                .append("\n");
+        b.append(prn("  EquifaxInterfaceConfiguration         :\n      ", new ToPrint() {
+            @Override
+            public Object get() {
+                return conf.getEquifaxInterfaceConfiguration();
+            }
+        }));
+        b.append("\n");
 
         b.append("  EncryptedStorageConfiguration         :\n      ").append(conf.getEncryptedStorageConfiguration().toString().replaceAll("\n", "\n      "))
                 .append("\n");
 
         b.append("\nconfig.properties:\n");
 
+        return b.toString();
+    }
+
+    private interface ToPrint {
+
+        public Object get();
+
+    }
+
+    private String prn(String prefix, ToPrint toPrint) {
+        StringBuilder b = new StringBuilder();
+        b.append(prefix);
+        try {
+            b.append(toPrint.get().toString().replaceAll("\n", "\n      "));
+        } catch (Throwable e) {
+            b.append(e.getMessage());
+        }
         return b.toString();
     }
 
