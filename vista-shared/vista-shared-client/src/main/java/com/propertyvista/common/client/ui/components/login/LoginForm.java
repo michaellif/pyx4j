@@ -29,6 +29,7 @@ import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -292,15 +293,23 @@ public class LoginForm extends CForm<AuthenticationRequest> {
         public void onKeyUp(KeyUpEvent event) {
             if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
                 loginButton.setFocus(true);
-                if (!Dialog.isDialogOpen()) {
-                    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                //Dirty fix for Chrome that yields execution to let focus move out, triggering focus lost event on component, which in turn will execute onEditingStop()  
+                new Timer() {
 
-                        @Override
-                        public void execute() {
-                            login();
+                    @Override
+                    public void run() {
+                        if (!Dialog.isDialogOpen()) {
+                            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+
+                                @Override
+                                public void execute() {
+                                    login();
+                                }
+                            });
                         }
-                    });
-                }
+                    }
+
+                }.schedule(100);
             }
         }
 
