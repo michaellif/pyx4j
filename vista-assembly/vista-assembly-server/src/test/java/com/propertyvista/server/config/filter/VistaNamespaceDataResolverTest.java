@@ -121,6 +121,9 @@ public class VistaNamespaceDataResolverTest extends VistaNamespaceResolverTestBa
         req = new MockHttpServletRequest("https://demo.my-community.co/prospect");
         testRetrievingData(req, VistaApplication.prospect, "demo");
 
+        req = new MockHttpServletRequest("https://demo.my-community.co/prospect/");
+        testRetrievingData(req, VistaApplication.prospect, "demo");
+
         //
         // PRODUCTION
         // crm
@@ -138,6 +141,10 @@ public class VistaNamespaceDataResolverTest extends VistaNamespaceResolverTestBa
         // prospect
         req = new MockHttpServletRequest("https://redridge.my-community.co/prospect");
         testRetrievingData(req, VistaApplication.prospect, "redridge");
+
+        // propertyvista.biz
+        req = new MockHttpServletRequest("https://proddemo.propertyvista.biz/vista-prod-demo/");
+        testRetrievingData(req, VistaApplication.noApp, VistaNamespace.noNamespace);
 
     }
 

@@ -38,7 +38,7 @@ public class VistaNamespaceResolverHelper {
 
     private static final I18n i18n = I18n.get(VistaNamespaceResolverHelper.class);
 
-    private final static Set<String> prodSystemDnsBase = new HashSet<String>();
+    final static Set<String> prodSystemDnsBase = new HashSet<String>();
 
     private final static Set<String> testSystemDnsBase = new HashSet<String>();
 
