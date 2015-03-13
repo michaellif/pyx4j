@@ -53,7 +53,8 @@ public class VistaApplicationResolverHelper {
 
         if (serverNameParts.length >= 3) {
             String dnsBase = serverNameParts[serverNameParts.length - 2] + "." + serverNameParts[serverNameParts.length - 1];
-            VistaApplication application = getProductionAppByDomainOrPath(dnsBase, rootServletPath);
+            String dnsApp = serverNameParts[serverNameParts.length - 3];
+            VistaApplication application = getProductionAppByDomainOrPath(dnsApp, dnsBase, rootServletPath);
             if (application != null) {
                 return application;
             }
@@ -69,9 +70,6 @@ public class VistaApplicationResolverHelper {
                 if (appByDomain.equalsIgnoreCase("static")) {
                     return VistaApplication.noApp;
                 }
-//                else if (serverNameParts.length >= 1) {
-//
-//                }
 
                 try {
                     app = VistaApplication.valueOf(appByDomain);
@@ -117,7 +115,21 @@ public class VistaApplicationResolverHelper {
         return app;
     }
 
-    private static VistaApplication getProductionAppByDomainOrPath(String dnsBase, String rootServletPath) {
+    private static VistaApplication getProductionAppByDomainOrPath(String dnsApp, String dnsBase, String rootServletPath) {
+        if (!VistaNamespaceResolverHelper.prodSystemDnsBase.contains(dnsBase) && !dnsBase.equals("propertyvista.biz")) {
+            return null;
+        }
+
+        if (dnsApp.equalsIgnoreCase("proddemo") && dnsBase.equals("propertyvista.biz")) {
+            return VistaApplication.noApp;
+        } else if (dnsApp.equalsIgnoreCase("static")) {
+            return VistaApplication.noApp;
+        } else if (dnsApp.equalsIgnoreCase("operations")) {
+            return VistaApplication.operations;
+        } else if (dnsApp.equalsIgnoreCase("start") || dnsApp.equalsIgnoreCase("onboarding")) {
+            return VistaApplication.onboarding;
+        }
+
         switch (dnsBase) {
         case "propertyvista.com":
             if (rootServletPath.equalsIgnoreCase("interfaces")) {

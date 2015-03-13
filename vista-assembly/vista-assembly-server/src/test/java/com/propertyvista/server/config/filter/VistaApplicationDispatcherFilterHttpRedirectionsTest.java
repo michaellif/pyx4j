@@ -69,6 +69,23 @@ public class VistaApplicationDispatcherFilterHttpRedirectionsTest extends VistaA
         testHttpsRedirect("http://gondor-crm-99.devpv.com/", true);
         testHttpsRedirect("https://gondor-crm-99.devpv.com/", false);
 
+        // PRODUCTION
+        // crm
+        testHttpsRedirect("http://ofm.propertyvista.com/", true);
+        testHttpsRedirect("https://ofm.propertyvista.com/", false);
+        // site
+        testHttpsRedirect("https://ofm.residentportalsite.com/", false);
+        testHttpsRedirect("http://ofm.residentportalsite.com/", false);
+        // resident
+        testHttpsRedirect("http://ofm.my-community.co/", true);
+        testHttpsRedirect("https://ofm.my-community.co/", false);
+        // prospect
+        testHttpsRedirect("http://ofm.my-community.co/prospect", true);
+        testHttpsRedirect("https://ofm.my-community.co/prospect", false);
+
+        // PRODUCTION DEMO
+        testHttpsRedirect("http://demo.propertyvista.com/", true);
+
     }
 
 }
