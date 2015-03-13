@@ -51,15 +51,27 @@ public class VistaApplicationResolverHelper {
         VistaApplication app = null;
         String[] serverNameParts = domain.split("\\.");
 
+        if (serverNameParts.length >= 3) {
+            String dnsBase = serverNameParts[serverNameParts.length - 2] + "." + serverNameParts[serverNameParts.length - 1];
+            VistaApplication application = getProductionAppByDomainOrPath(dnsBase, rootServletPath);
+            if (application != null) {
+                return application;
+            }
+        }
+
         if (serverNameParts.length > 0) {
             String appByDomain = serverNameParts[0];
             String[] appByDomainTokens = appByDomain.split("-");
 
-            // Domains type : http://XXX.dev.birchwoodsoftwaregroup.com:8888
+            // Domains type : http://XXX.dev.birchwoodsoftwaregroup.com:8888 or
+            // Domains for production: demo.propertyvista.com, demo.residentportalsite.com or demo.my-community.co
             if (appByDomainTokens.length == 1) {
                 if (appByDomain.equalsIgnoreCase("static")) {
                     return VistaApplication.noApp;
                 }
+//                else if (serverNameParts.length >= 1) {
+//
+//                }
 
                 try {
                     app = VistaApplication.valueOf(appByDomain);
@@ -103,6 +115,25 @@ public class VistaApplicationResolverHelper {
         }
 
         return app;
+    }
+
+    private static VistaApplication getProductionAppByDomainOrPath(String dnsBase, String rootServletPath) {
+        switch (dnsBase) {
+        case "propertyvista.com":
+            if (rootServletPath.equalsIgnoreCase("interfaces")) {
+                return VistaApplication.interfaces;
+            }
+            return VistaApplication.crm;
+        case "residentportalsite.com":
+            return VistaApplication.site;
+        case "my-community.co":
+            if (rootServletPath.equalsIgnoreCase("prospect")) {
+                return VistaApplication.prospect;
+            }
+            return VistaApplication.resident;
+        default:
+            return null;
+        }
     }
 
     private static VistaApplication getAppByCustomDNS(String domain, String rootServletPath) {

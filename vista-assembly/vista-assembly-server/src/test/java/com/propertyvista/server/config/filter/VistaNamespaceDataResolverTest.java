@@ -103,6 +103,42 @@ public class VistaNamespaceDataResolverTest extends VistaNamespaceResolverTestBa
         req = new MockHttpServletRequest("https://redridge-portal-staging.propertyvista.net/prospect");
         testRetrievingData(req, VistaApplication.prospect, "redridge");
 
+        //
+        // PROD CUSTOMERS DEMO
+        // crm
+        req = new MockHttpServletRequest("https://demo.propertyvista.com/");
+        testRetrievingData(req, VistaApplication.crm, "demo");
+
+        // site
+        req = new MockHttpServletRequest("http://demo.residentportalsite.com/");
+        testRetrievingData(req, VistaApplication.site, "demo");
+
+        // resident
+        req = new MockHttpServletRequest("https://demo.my-community.co/");
+        testRetrievingData(req, VistaApplication.resident, "demo");
+
+        // prospect
+        req = new MockHttpServletRequest("https://demo.my-community.co/prospect");
+        testRetrievingData(req, VistaApplication.prospect, "demo");
+
+        //
+        // PRODUCTION
+        // crm
+        req = new MockHttpServletRequest("https://redridge.propertyvista.com/");
+        testRetrievingData(req, VistaApplication.crm, "redridge");
+
+        // site
+        req = new MockHttpServletRequest("http://redridge.residentportalsite.com/");
+        testRetrievingData(req, VistaApplication.site, "redridge");
+
+        // resident
+        req = new MockHttpServletRequest("https://redridge.my-community.co/");
+        testRetrievingData(req, VistaApplication.resident, "redridge");
+
+        // prospect
+        req = new MockHttpServletRequest("https://redridge.my-community.co/prospect");
+        testRetrievingData(req, VistaApplication.prospect, "redridge");
+
     }
 
     /**
