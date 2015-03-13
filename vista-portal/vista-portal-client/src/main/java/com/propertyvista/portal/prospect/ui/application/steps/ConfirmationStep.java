@@ -93,7 +93,7 @@ public class ConfirmationStep extends ApplicationWizardStep {
         });
         cSignature.setDecorator(new SignatureDecorator());
 
-        formPanel.append(Location.Left, proto().payment().convenienceFeeSignature(), cSignature);
+        formPanel.append(Location.Left, proto().payment().convenienceFeeSignedTerm().signature(), cSignature);
 
         formPanel.br();
 
@@ -112,7 +112,7 @@ public class ConfirmationStep extends ApplicationWizardStep {
 
             paymentDetailsHolder.clear();
             paymentDetailsHeader.setVisible(false);
-            get(proto().payment().convenienceFeeSignature()).setVisible(false);
+            get(proto().payment().convenienceFeeSignedTerm().signature()).setVisible(false);
 
             if (!get(proto().payment().amount()).getValue().equals(BigDecimal.ZERO)) {
                 paymentDetailsHeader.setVisible(true);
@@ -140,7 +140,7 @@ public class ConfirmationStep extends ApplicationWizardStep {
 
                         panel.add(new HTML("<br/>"));
 
-                        get(proto().payment().convenienceFeeSignature()).setVisible(true);
+                        get(proto().payment().convenienceFeeSignedTerm().signature()).setVisible(true);
 
                         getValue().payment().convenienceFee().setValue(result.feeAmount().getValue());
                         getValue().payment().convenienceFeeReferenceNumber().setValue(result.transactionNumber().getValue());

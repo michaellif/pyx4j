@@ -105,10 +105,6 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
 
         dto.currentAutoPayments().addAll(BillingServiceImpl.retrieveCurrentAutoPayments(lease));
 
-        VistaTerms terms = VistaTermsUtils.retrieveVistaTerms(VistaTerms.Target.TenantPaymentWebPaymentFeeTerms);
-        dto.convenienceFeeSignedTerm().term().setValue(terms.getPrimaryKey());
-        dto.convenienceFeeSignedTerm().termFor().setValue(terms.version().fromDate().getValue());
-
         return dto;
     }
 
@@ -136,6 +132,10 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
                 bo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
             }
         }
+
+        VistaTerms terms = VistaTermsUtils.retrieveVistaTerms(VistaTerms.Target.TenantPaymentWebPaymentFeeTerms);
+        bo.convenienceFeeSignedTerm().term().setValue(terms.getPrimaryKey());
+        bo.convenienceFeeSignedTerm().termFor().setValue(terms.version().fromDate().getValue());
 
         ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), bo.paymentMethod(), PaymentMethodTarget.OneTimePayment,
                 VistaApplication.resident);
