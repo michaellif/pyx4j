@@ -53,15 +53,19 @@ public class VistaLocale {
     }
 
     public static Locale getPmcDefaultEnglishLocale() {
-        switch (VistaFeatures.instance().countryOfOperation()) {
-        case Canada:
+        if (VistaFeatures.instance().countryOfOperation() == null) {
             return Locale.CANADA;
-        case US:
-            return Locale.US;
-        case UK:
-            return Locale.UK;
-        default:
-            return Locale.ENGLISH;
+        } else {
+            switch (VistaFeatures.instance().countryOfOperation()) {
+            case Canada:
+                return Locale.CANADA;
+            case US:
+                return Locale.US;
+            case UK:
+                return Locale.UK;
+            default:
+                return Locale.ENGLISH;
+            }
         }
     }
 

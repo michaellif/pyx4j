@@ -12,6 +12,7 @@
  */
 package com.propertyvista.biz.tenant.lease.print;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -35,6 +36,7 @@ import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.blob.LandlordMediaBlob;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.LeaseApplicationLegalPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm;
@@ -56,6 +58,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
 import com.propertyvista.dto.BillDTO;
+import com.propertyvista.dto.InvoiceLineItemGroupDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataAboutYouSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataAdditionalInfoSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataAdjustmentDTO;
@@ -65,6 +68,8 @@ import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDa
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDependentDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataEmergencyContactsSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataFinancialSectionDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataFirstPaymentLineItemDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataFirstPaymentSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataGeneralQuestionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataGuarantorDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataIdentificationDocumentDTO;
@@ -90,11 +95,19 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         Persistence.ensureRetrieve(lease.unit().building().landlord().logo(), AttachLevel.Attached);
         data.landlordName().setValue(lease.unit().building().landlord().name().getValue());
         data.landlordAddress().setValue(lease.unit().building().landlord().address().getStringView());
+        data.name().setValue(
+                subjectParticipant.leaseParticipant().customer().person().name().firstName().getStringView() + " "
+                        + subjectParticipant.leaseParticipant().customer().person().name().lastName().getStringView());
+
+        data.date().setValue(application.submission().decisionDate().getValue());
+
+        byte[] logo = null;
         if (!lease.unit().building().landlord().logo().isEmpty()) {
             Persistence.ensureRetrieve(lease.unit().building().landlord().logo().file(), AttachLevel.Attached);
             LandlordMediaBlob blob = Persistence.service().retrieve(LandlordMediaBlob.class,
                     lease.unit().building().landlord().logo().file().blobKey().getValue());
-            data.landlordLogo().setValue((blob.data().getValue()));
+            logo = blob.data().getValue();
+            data.landlordLogo().setValue(logo);
         }
         data.submissionDate().setValue(application.submission().decisionDate().getValue());
         data.leaseId().setValue(lease.leaseId().getValue());
@@ -106,8 +119,10 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             fillLeaseSection(data.sections().get(0).leaseSection().get(0), lease);
             fillRentalItemsSection(data.sections().get(0).rentalItemsSection().get(0), lease);
             fillAdjustmentsSection(data.sections().get(0).adjustmentsSection().get(0), lease);
+            fillFirstPaymentData(data.sections().get(0).firstPaymentSection().get(0), lease);
             fillPeopleSection(data.sections().get(0).peopleSection().get(0), lease, subjectParticipant);
-            fillAboutYouSection(data.sections().get(0).aboutYouSection().get(0), lease, subjectParticipant);
+            fillAboutYouSection(data.sections().get(0).aboutYouSection().get(0), lease, subjectParticipant, application.submission().decisionDate().getValue(),
+                    logo);
             fillAdditionalInfoSection(data.sections().get(0).additionalInfoSection().get(0), lease, subjectParticipant);
             fillFinaincialSection(data.sections().get(0).financialSection().get(0), lease, subjectParticipant);
             fillEmergencyContacts(data.sections().get(0).emergencyContactsSection().get(0), lease, subjectParticipant);
@@ -152,6 +167,9 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         LeaseApplicationDocumentDataAdjustmentsSectionDTO adjustmentsSection = EntityFactory.create(LeaseApplicationDocumentDataAdjustmentsSectionDTO.class);
         details.adjustmentsSection().add(adjustmentsSection);
 
+        LeaseApplicationDocumentDataFirstPaymentSectionDTO firstPayemntSection = EntityFactory.create(LeaseApplicationDocumentDataFirstPaymentSectionDTO.class);
+        details.firstPaymentSection().add(firstPayemntSection);
+
         LeaseApplicationDocumentDataPeopleSectionDTO peopleSection = EntityFactory.create(LeaseApplicationDocumentDataPeopleSectionDTO.class);
         details.peopleSection().add(peopleSection);
 
@@ -194,6 +212,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
 
         leaseSection.leaseFrom().setValue(lease.currentTerm().termFrom().getValue());
         leaseSection.leaseTo().setValue(lease.currentTerm().termTo().getValue());
+        leaseSection.totalMonths().setValue(String.valueOf(getTotalMonths(lease.currentTerm().termFrom().getValue(), lease.currentTerm().termTo().getValue())));
 
         leaseSection.unitRent().setValue(ServerSideFactory.create(BillingFacade.class).getActualPrice(term.version().leaseProducts().serviceItem()));
     }
@@ -264,9 +283,16 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         }
     }
 
-    private void fillAboutYouSection(LeaseApplicationDocumentDataAboutYouSectionDTO aboutYou, Lease lease, LeaseTermParticipant<?> subjectParticipant) {
-        // Personal Information
+    private void fillAboutYouSection(LeaseApplicationDocumentDataAboutYouSectionDTO aboutYou, Lease lease, LeaseTermParticipant<?> subjectParticipant,
+            LogicalDate date, byte[] logo) {
+        //header Information
         aboutYou.leaseId().setValue(lease.leaseId().getValue());
+        if (logo != null) {
+            aboutYou.landlordLogo().setValue(new String(logo));
+        }
+        aboutYou.submissionDate().setValue(date);
+
+        // Personal Information
         aboutYou.firstName().setValue(subjectParticipant.leaseParticipant().customer().person().name().firstName().getStringView());
         aboutYou.lastName().setValue(subjectParticipant.leaseParticipant().customer().person().name().lastName().getStringView());
         aboutYou.middleName().setValue(subjectParticipant.leaseParticipant().customer().person().name().middleName().getStringView());
@@ -440,6 +466,66 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         return StringUtils.join(utilites, "; ");
     }
 
+    private void fillFirstPaymentData(LeaseApplicationDocumentDataFirstPaymentSectionDTO firstPaymentSection, Lease lease) {
+
+        BigDecimal total = new BigDecimal(0);
+        BillDTO bill = retrieveBillData(lease);
+        if (bill.serviceChargeLineItems() != null) {
+            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.serviceChargeLineItems()));
+            total = total.add(bill.serviceChargeLineItems().total().getValue());
+        }
+        if (bill.recurringFeatureChargeLineItems() != null) {
+            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.recurringFeatureChargeLineItems()));
+            total = total.add(bill.recurringFeatureChargeLineItems().total().getValue());
+        }
+        if (bill.onetimeFeatureChargeLineItems() != null) {
+            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.onetimeFeatureChargeLineItems()));
+            total = total.add(bill.onetimeFeatureChargeLineItems().total().getValue());
+        }
+        if (bill.productCreditLineItems() != null) {
+            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.productCreditLineItems()));
+            total = total.add(bill.productCreditLineItems().total().getValue());
+        }
+        if (bill.depositLineItems() != null) {
+            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.depositLineItems()));
+            total = total.add(bill.depositLineItems().total().getValue());
+        }
+        if (bill.depositRefundLineItems() != null) {
+            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.depositRefundLineItems()));
+            total = total.add(bill.depositRefundLineItems().total().getValue());
+        }
+        if (bill.immediateAccountAdjustmentLineItems() != null) {
+            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.immediateAccountAdjustmentLineItems()));
+            total = total.add(bill.immediateAccountAdjustmentLineItems().total().getValue());
+        }
+        if (bill.pendingAccountAdjustmentLineItems() != null) {
+            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.pendingAccountAdjustmentLineItems()));
+            total = total.add(bill.pendingAccountAdjustmentLineItems().total().getValue());
+        }
+        if (bill.previousChargeRefundLineItems() != null) {
+            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.previousChargeRefundLineItems()));
+            total = total.add(bill.previousChargeRefundLineItems().total().getValue());
+        }
+        if (bill.nsfChargeLineItems() != null) {
+            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.nsfChargeLineItems()));
+            total = total.add(bill.nsfChargeLineItems().total().getValue());
+        }
+        if (bill.withdrawalLineItems() != null) {
+            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.withdrawalLineItems()));
+            total = total.add(bill.withdrawalLineItems().total().getValue());
+        }
+        if (bill.rejectedPaymentLineItems() != null) {
+            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.rejectedPaymentLineItems()));
+            total = total.add(bill.rejectedPaymentLineItems().total().getValue());
+        }
+        if (bill.paymentLineItems() != null) {
+            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.paymentLineItems()));
+            total = total.add(bill.paymentLineItems().total().getValue());
+        }
+
+        firstPaymentSection.total().setValue(total);
+    }
+
     private BillDTO retrieveBillData(Lease lease) {
         if (VistaFeatures.instance().yardiIntegration()) {
             return null; // no bills for Yardi mode!..
@@ -459,5 +545,21 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         }
 
         return billData;
+    }
+
+    private Collection<LeaseApplicationDocumentDataFirstPaymentLineItemDTO> retrieveLineItems(InvoiceLineItemGroupDTO lineItemsGroup) {
+        Collection<LeaseApplicationDocumentDataFirstPaymentLineItemDTO> lineItems = new Vector<LeaseApplicationDocumentDataFirstPaymentLineItemDTO>();
+        for (InvoiceLineItem current : lineItemsGroup.lineItems()) {
+            LeaseApplicationDocumentDataFirstPaymentLineItemDTO lineItem = EntityFactory.create(LeaseApplicationDocumentDataFirstPaymentLineItemDTO.class);
+            lineItem.item().setValue(lineItemsGroup.getMeta().getCaption());
+            lineItem.description().setValue(current.description().getValue());
+            lineItem.amount().setValue(current.amount().getValue());
+            lineItems.add(lineItem);
+        }
+        return lineItems;
+    }
+
+    private int getTotalMonths(LogicalDate start, LogicalDate end) {
+        return 12 * (end.getYear() - start.getYear()) + end.getMonth() - start.getMonth();
     }
 }

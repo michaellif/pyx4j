@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationRentalItemsSection" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="e29c83d1-64b5-430f-91ea-60f5a67d54a4">
-	<property name="ireport.zoom" value="5.054470284992967"/>
+	<property name="ireport.zoom" value="1.7715610000000104"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="rentalItems" class="com.pyx4j.entity.core.IList"/>
@@ -39,7 +39,7 @@
 				<text><![CDATA[Effective Date]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="399" y="27" width="66" height="15" forecolor="#666666" uuid="6498eb93-842b-40f8-855e-40b2e4f24c8b"/>
+				<reportElement x="399" y="27" width="83" height="15" forecolor="#666666" uuid="6498eb93-842b-40f8-855e-40b2e4f24c8b"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
@@ -50,7 +50,7 @@
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Rental Item]]></text>
+				<text><![CDATA[Item]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="138" y="26" width="66" height="15" forecolor="#666666" uuid="e866d159-ef49-4dc4-9a93-6021a20c43dd"/>
