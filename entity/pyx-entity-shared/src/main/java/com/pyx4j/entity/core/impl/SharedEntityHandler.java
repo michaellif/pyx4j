@@ -412,7 +412,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
         } else {
             assert !((SharedEntityHandler) entity).isPrototypeEntity : "Prototype Entity '" + getObjectClass().getName() + "' data manipulations disabled";
             assert this.getEntityMeta().isEntityClassAssignableFrom(entity) : this.getEntityMeta().getCaption() + " is not assignable from "
-                    + entity.getEntityMeta().getCaption();
+                    + entity.cast().getEntityMeta().getCaption();
             Map<String, Serializable> value = ((SharedEntityHandler) entity).ensureValue();
 
             AttachLevel level = entity.getAttachLevel();
