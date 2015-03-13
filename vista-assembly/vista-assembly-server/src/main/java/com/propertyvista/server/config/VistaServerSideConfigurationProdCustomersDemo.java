@@ -19,7 +19,7 @@ import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.shared.config.VistaSettings;
 
-public class VistaServerSideConfigurationProdCustomersDemo extends VistaServerSideConfigurationDevCustom {
+public class VistaServerSideConfigurationProdCustomersDemo extends VistaServerSideConfigurationCustom {
 
     @Override
     public boolean isDemoBehavior() {
