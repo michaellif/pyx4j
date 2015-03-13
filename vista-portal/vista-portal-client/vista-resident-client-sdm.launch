@@ -23,6 +23,5 @@
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.google.gwt.dev.HostedMode"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-codeServerPort 9980 -remoteUI &quot;${gwt_remote_ui_server_port}:${unique_id}&quot; -startupUrl http://vista-portal.local.devpv.com:8888/ -logLevel INFO -noserver -extra &quot;${workspace_loc:vista-portal-client}/target/hosted-extra&quot; -gen &quot;${workspace_loc:vista-portal-client}/target/hosted-gen&quot; -war &quot;${workspace_loc:vista-assembly-server}/src/main/webapp&quot; vista.residentHosted"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="vista-portal-client"/>
-<!-- TODO Enable assertions after moving to GWT 2.8. See https://code.google.com/p/google-web-toolkit/issues/detail?id=9043 -->
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xms512m -Xmx2048m -Djava.net.preferIPv4Stack=true -XX:MaxPermSize=256m -XX:ReservedCodeCacheSize=128m"/>
 </launchConfiguration>
