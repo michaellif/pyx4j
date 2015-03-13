@@ -36,9 +36,9 @@ import com.pyx4j.entity.server.UnitOfWork;
  */
 public final class PersistenceTrace {
 
-    public static final boolean trace = true;
+    public static final boolean trace = false;
 
-    public static final boolean traceSql = true;
+    public static final boolean traceSql = false;
 
     public static final boolean traceOpenSession = false;
 
