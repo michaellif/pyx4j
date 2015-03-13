@@ -53,6 +53,8 @@ import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
+import com.propertyvista.domain.ref.ISOCountry;
+import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
@@ -338,11 +340,14 @@ public class EquifaxModelMapper {
         CityType city = factory.createCityType();
         city.setValue(vistaAddress.city().getValue());
         efxAddress.setCity(city);
-        CodeType province = factory.createCodeType();
-        province.setCode(vistaAddress.province().getValue());
-        //TODO Need to know Equifax point of view on this
-        //province.setDescription(vistaAddress.province().name().getValue());
-        efxAddress.setProvince(province);
+
+        ISOProvince isoProvince = ISOProvince.forName(vistaAddress.province().getValue(), ISOCountry.Canada);
+        if (isoProvince != null) {
+            CodeType province = factory.createCodeType();
+            province.setCode(isoProvince.code);
+            efxAddress.setProvince(province);
+        }
+
         efxAddress.setPostalCode(efxPostalCodeFormat(vistaAddress.postalCode().getValue()));
     }
 
