@@ -27,12 +27,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.annotations.Cached;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.meta.EntityMeta;
-import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.PersistenceTrace;
 import com.pyx4j.entity.server.EntityCollectionRequest;
 import com.pyx4j.entity.server.IEntityCacheService;
@@ -69,8 +67,7 @@ public class EntityCacheService implements IEntityCacheService {
             T entity = ent.duplicate();
             if (PersistenceTrace.traceCache) {
                 log.info("Cache get {}\n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
-            }
-            if (PersistenceTrace.traceEntity) {
+            } else if (PersistenceTrace.traceEntity) {
                 if (PersistenceTrace.traceEntityFilter(entity)) {
                     log.info("Cache get {}\n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
                 }
@@ -130,8 +127,7 @@ public class EntityCacheService implements IEntityCacheService {
                             log.info("Cache get {}\n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
                         }
                     } else if (PersistenceTrace.traceCache) {
-                        log.info("Cache miss {} {}\n{}", meta.getEntityClass().getSimpleName(), primaryKey,
-                                PersistenceTrace.getCallOrigin());
+                        log.info("Cache miss {} {}\n{}", meta.getEntityClass().getSimpleName(), primaryKey, PersistenceTrace.getCallOrigin());
                     }
                 }
                 ret.put(request, responce);
@@ -149,8 +145,7 @@ public class EntityCacheService implements IEntityCacheService {
         }
         if (PersistenceTrace.traceCache) {
             log.info("Cache put {}\n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
-        }
-        if (PersistenceTrace.traceEntity) {
+        } else if (PersistenceTrace.traceEntity) {
             if (PersistenceTrace.traceEntityFilter(entity)) {
                 log.info("Cache put {}\n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
             }
@@ -167,8 +162,7 @@ public class EntityCacheService implements IEntityCacheService {
             }
             if (PersistenceTrace.traceCache) {
                 log.info("Cache put {}\n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
-            }
-            if (PersistenceTrace.traceEntity) {
+            } else if (PersistenceTrace.traceEntity) {
                 if (PersistenceTrace.traceEntityFilter(entity)) {
                     log.info("Cache put {}\n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
                 }

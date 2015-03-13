@@ -19,33 +19,17 @@
  */
 package com.pyx4j.entity.test.shared.domain.cached;
 
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 @Table(prefix = "test")
-public interface CE2 extends IEntity {
-
-    @Owner
-    @JoinColumn
-    @ReadOnly
-    @Detached
-    @Indexed
-    @MemberColumn(notNull = true)
-    CE1 ce1();
+public interface CE3 extends IEntity {
 
     IPrimitive<String> testId();
 
     @ToString
     IPrimitive<String> name();
 
-    @ToString
-    CE3 ce3();
 }

@@ -906,6 +906,14 @@ public class TableModel {
     }
 
     public boolean retrieve(PersistenceContext persistenceContext, Key primaryKey, IEntity entity, AttachLevel attachLevel, boolean forUpdate) {
+        if (PersistenceTrace.traceEntity) {
+            if (PersistenceTrace.traceEntityFilter(entity)) {
+                log.info("Retrieve {} as {}\n{}", entity.getDebugExceptionInfoString(), attachLevel, PersistenceTrace.getCallOrigin());
+            }
+            if (entity.getValueClass().getSimpleName().equals("CE3")) {
+                System.out.println("RRR");
+            }
+        }
         PreparedStatement stmt = null;
         ResultSet rs = null;
         StringBuilder sql = new StringBuilder();

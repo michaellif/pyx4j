@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
@@ -34,8 +36,11 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.cached.CE1;
 import com.pyx4j.entity.test.shared.domain.cached.CE2;
+import com.pyx4j.entity.test.shared.domain.cached.CE3;
 
 public abstract class CachedTestCase extends DatastoreTestBase {
+
+    private static final Logger log = LoggerFactory.getLogger(CachedTestCase.class);
 
     @Override
     protected void setUp() throws Exception {
@@ -48,6 +53,7 @@ public abstract class CachedTestCase extends DatastoreTestBase {
         });
         CacheService.reset();
         ServerSideConfiguration.setInstance(null);
+        //CacheService.entityCache().setDisabled(true);
         super.setUp();
     }
 
@@ -63,12 +69,21 @@ public abstract class CachedTestCase extends DatastoreTestBase {
                 CE2 ent2 = EntityFactory.create(CE2.class);
                 ent2.testId().setValue(testId);
                 ent2.name().setValue("C" + c);
+
+                {
+                    CE3 ent3 = EntityFactory.create(CE3.class);
+                    ent3.testId().setValue(testId);
+                    ent3.name().setValue("R" + c);
+                    srv.persist(ent3);
+
+                    ent2.ce3().set(srv.retrieve(CE3.class, ent3.getPrimaryKey(), AttachLevel.ToStringMembers, false));
+                }
+
                 ent1.children().add(ent2);
             }
             srv.persist(ent1);
             ents.add(ent1);
         }
-        CacheService.reset();
 
         {
             EntityQueryCriteria<CE1> criteria = EntityQueryCriteria.create(CE1.class);
@@ -76,10 +91,14 @@ public abstract class CachedTestCase extends DatastoreTestBase {
         }
 
         // See if we can access it
-        {
+        for (int i = 0; i < 2; i++) {
+            if (PersistenceTrace.traceCache) {
+                log.info("---- Test Read #{}", i);
+            }
             CE1 ent1 = Persistence.service().retrieve(CE1.class, ents.get(0).getPrimaryKey());
             Persistence.ensureRetrieve(ent1.children(), AttachLevel.Attached);
             Assert.assertEquals(testId, ent1.children().get(1).testId().getValue());
+            Assert.assertEquals(AttachLevel.Attached, ent1.children().get(1).ce3().getAttachLevel());
         }
     }
 }

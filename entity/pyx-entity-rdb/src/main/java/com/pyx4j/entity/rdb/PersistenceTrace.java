@@ -38,7 +38,7 @@ public final class PersistenceTrace {
 
     public static final boolean trace = true;
 
-    public static final boolean traceSql = false;
+    public static final boolean traceSql = true;
 
     public static final boolean traceOpenSession = false;
 
@@ -46,13 +46,13 @@ public final class PersistenceTrace {
 
     public static final boolean traceWarnings = false;
 
-    public static final boolean traceWrite = true;
+    public static final boolean traceWrite = false;
 
-    public static final boolean traceCache = true;
+    public static final boolean traceCache = false;
 
-    public static final boolean traceEntity = true;
+    public static final boolean traceEntity = false;
 
-    public static final List<String> traceEntities = Arrays.asList("Process", "ProcessService", "Environment", "Service");
+    public static final List<String> traceEntities = Arrays.asList("SampleShortClassName1", "SampleShortClassName2");
 
     private PersistenceTrace() {
     }
