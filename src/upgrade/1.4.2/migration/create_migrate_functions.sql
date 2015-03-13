@@ -1145,6 +1145,10 @@ BEGIN
                 ||'SET  enforce_age_of_majority = TRUE '
                 ||'WHERE enforce_age_of_majority IS NULL';
                 
+        EXECUTE 'UPDATE '||v_schema_name||'.restrictions_policy '
+                ||'SET  age_of_majority = 18 '
+                ||'WHERE age_of_majority IS NULL';
+                
         -- system_endpoint
         
         EXECUTE 'INSERT INTO '||v_schema_name||'.system_endpoint (id,name) '
@@ -1563,11 +1567,15 @@ BEGIN
         ALTER TABLE product ALTER COLUMN default_catalog_item SET NOT NULL;
         ALTER TABLE proof_of_asset_document_file ALTER COLUMN owner SET NOT NULL;
         ALTER TABLE proof_of_income_document_file ALTER COLUMN owner SET NOT NULL;
+        ALTER TABLE restrictions_policy ALTER COLUMN age_of_majority SET NOT NULL;
+        ALTER TABLE restrictions_policy ALTER COLUMN emergency_contacts_number SET NOT NULL;
         ALTER TABLE restrictions_policy ALTER COLUMN emergency_contacts_is_mandatory SET NOT NULL;
         ALTER TABLE restrictions_policy ALTER COLUMN enforce_age_of_majority SET NOT NULL;
         ALTER TABLE restrictions_policy ALTER COLUMN matured_occupants_are_applicants SET NOT NULL;
+        ALTER TABLE restrictions_policy ALTER COLUMN min_employment_duration SET NOT NULL;
         ALTER TABLE restrictions_policy ALTER COLUMN no_need_guarantors SET NOT NULL;
         ALTER TABLE restrictions_policy ALTER COLUMN reference_source_is_mandatory SET NOT NULL;
+        ALTER TABLE restrictions_policy ALTER COLUMN years_to_forcing_previous_address SET NOT NULL;
 
        
         
