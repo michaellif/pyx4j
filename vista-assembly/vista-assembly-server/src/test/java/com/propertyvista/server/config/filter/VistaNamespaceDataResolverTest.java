@@ -78,8 +78,8 @@ public class VistaNamespaceDataResolverTest extends VistaNamespaceResolverTestBa
         req = new MockHttpServletRequest("https://vista-portal-staging.propertyvista.net/prospect");
         testRetrievingData(req, VistaApplication.prospect, "vista");
 
-        // Onbarding
-        req = new MockHttpServletRequest("https://onboarding-staging.propertyvista.net/");
+        // Onboarding
+        req = new MockHttpServletRequest("https://start-staging.propertyvista.net/");
         testRetrievingData(req, VistaApplication.onboarding, VistaNamespace.noNamespace);
 
         // Operations
