@@ -15,6 +15,7 @@ package com.propertyvista.portal.resident.ui;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.resident.mvp.CommunicationActivityMapper;
 import com.propertyvista.portal.resident.mvp.CommunityEventsActivityMapper;
 import com.propertyvista.portal.resident.mvp.ContentActivityMapper;
@@ -44,7 +45,9 @@ public class ResidentPortalRootPane extends PortalRootPane {
         bind(new FooterActivityMapper(), asWidget().getDisplay(DisplayType.footer));
         bind(new CommunityEventsActivityMapper(), asWidget().getDisplay(DisplayType.extra1));
         bind(new QuickTipActivityMapper(), asWidget().getDisplay(DisplayType.extra2));
-        bind(new WeatherActivityMapper(), asWidget().getDisplay(DisplayType.extra3));
+        if (VistaTODO.VISTA_6054_OpenWeatherImplmentedProperly) {
+            bind(new WeatherActivityMapper(), asWidget().getDisplay(DisplayType.extra3));
+        }
         bind(new SiteFeedbackMapper(), asWidget().getDisplay(DisplayType.extra4));
         bind(new NotificationActivityMapper(), asWidget().getDisplay(DisplayType.notification));
         bind(new DevConsoleActivityMapper(), asWidget().getDisplay(DisplayType.devConsole));

@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertyvista.domain.ref.ISOCountry;
+import com.propertyvista.misc.VistaTODO;
 
 public class OpenWeatherMapApiImpl implements OpenWeatherMapApi {
 
@@ -49,6 +50,10 @@ public class OpenWeatherMapApiImpl implements OpenWeatherMapApi {
 
     @Override
     public Weatherdata getWeatherdata(String cityName, ISOCountry country) {
+        if (!VistaTODO.VISTA_6054_OpenWeatherImplmentedProperly) {
+            return null;
+        }
+
         Weatherdata weatherData = null;
         if (cityName == null || country == null) {
             return null;
