@@ -71,23 +71,27 @@ public class ApplicationDocumentationPolicyPreloader extends AbstractPolicyPrelo
         policy.mandatoryProofOfEmployment().setValue(true);
         {
             ProofOfEmploymentDocumentType poe = EntityFactory.create(ProofOfEmploymentDocumentType.class);
+            poe.importance().setValue(Importance.Optional);
             poe.incomeSource().setValue(IncomeSource.fulltime);
             poe.notes().setValue(
                     i18n.tr("Letter of Employment (salary or hourly wage and hours worked per week, and length of employment) and Pay Stub are required"));
             policy.allowedEmploymentDocuments().add(poe);
 
             poe = EntityFactory.create(ProofOfEmploymentDocumentType.class);
+            poe.importance().setValue(Importance.Optional);
             poe.incomeSource().setValue(IncomeSource.parttime);
             poe.notes().setValue(
                     i18n.tr("Letter of Employment (salary or hourly wage and hours worked per week, and length of employment) and Pay Stub are required"));
             policy.allowedEmploymentDocuments().add(poe);
 
             poe = EntityFactory.create(ProofOfEmploymentDocumentType.class);
+            poe.importance().setValue(Importance.Optional);
             poe.incomeSource().setValue(IncomeSource.seasonallyEmployed);
             poe.notes().setValue(i18n.tr("Last Letter of Employment is required"));
             policy.allowedEmploymentDocuments().add(poe);
 
             poe = EntityFactory.create(ProofOfEmploymentDocumentType.class);
+            poe.importance().setValue(Importance.Optional);
             poe.incomeSource().setValue(IncomeSource.selfemployed);
             poe.notes().setValue(i18n.tr("Most recent Tax Assessment is required"));
             policy.allowedEmploymentDocuments().add(poe);
@@ -98,21 +102,25 @@ public class ApplicationDocumentationPolicyPreloader extends AbstractPolicyPrelo
         policy.mandatoryProofOfIncome().setValue(false);
         {
             ProofOfIncomeDocumentType poi = EntityFactory.create(ProofOfIncomeDocumentType.class);
+            poi.importance().setValue(Importance.Optional);
             poi.incomeSource().setValue(IncomeSource.pension);
             poi.notes().setValue(i18n.tr("Pension Confirmation is required"));
             policy.allowedIncomeDocuments().add(poi);
 
             poi = EntityFactory.create(ProofOfIncomeDocumentType.class);
+            poi.importance().setValue(Importance.Optional);
             poi.incomeSource().setValue(IncomeSource.socialServices);
             poi.notes().setValue(i18n.tr("Social Assistance Confirmation is required"));
             policy.allowedIncomeDocuments().add(poi);
 
             poi = EntityFactory.create(ProofOfIncomeDocumentType.class);
+            poi.importance().setValue(Importance.Optional);
             poi.incomeSource().setValue(IncomeSource.disabilitySupport);
             poi.notes().setValue(i18n.tr("Benefit Statement is required"));
             policy.allowedIncomeDocuments().add(poi);
 
             poi = EntityFactory.create(ProofOfIncomeDocumentType.class);
+            poi.importance().setValue(Importance.Optional);
             poi.incomeSource().setValue(IncomeSource.student);
             poi.notes().setValue(i18n.tr("Student Loan Confirmation is required"));
             policy.allowedIncomeDocuments().add(poi);
@@ -123,11 +131,13 @@ public class ApplicationDocumentationPolicyPreloader extends AbstractPolicyPrelo
         policy.mandatoryProofOfAsset().setValue(false);
         {
             ProofOfAssetDocumentType poa = EntityFactory.create(ProofOfAssetDocumentType.class);
+            poa.importance().setValue(Importance.Optional);
             poa.assetType().setValue(AssetType.bankAccounts);
             poa.notes().setValue(i18n.tr("Bank Statement is required"));
             policy.allowedAssetDocuments().add(poa);
 
             poa = EntityFactory.create(ProofOfAssetDocumentType.class);
+            poa.importance().setValue(Importance.Optional);
             poa.assetType().setValue(AssetType.businesses);
             poa.notes().setValue(i18n.tr("Business registration is required"));
             policy.allowedAssetDocuments().add(poa);
