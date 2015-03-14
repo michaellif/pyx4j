@@ -75,4 +75,6 @@ public class VistaTODO {
     public static boolean VISTA_2693_Yardi_Plugin_V1_1_Upgrade_Completed = true;
 
     public static boolean VISTA_1288_Communication_Broadcast = false;
+
+    public static boolean VISTA_6054_OpenWeatherImplmentedProperly = false;
 }
