@@ -36,6 +36,8 @@ import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.server.config.filter.namespace.VistaApplicationResolverHelper;
 import com.propertyvista.server.config.filter.namespace.VistaNamespaceDataResolver;
 import com.propertyvista.server.config.filter.namespace.VistaPmcDnsNameResolverHelper;
+import com.propertyvista.server.config.filter.special.Hidden;
+import com.propertyvista.server.config.filter.special.SpecialURL;
 import com.propertyvista.server.config.filter.utils.HttpRequestUtils;
 
 public class VistaApplicationDispatcherFilter implements Filter {
@@ -94,11 +96,24 @@ public class VistaApplicationDispatcherFilter implements Filter {
         VistaApplication app = namespaceResolver.getNamespaceData().getApplication();
         PmcDnsName customerDnsName = namespaceResolver.getNamespaceData().getCustomerDnsName();
 
-        if (app == null) {
+        SpecialURL specialURL = namespaceResolver.getNamespaceData().getSpecialURL();
+        if (specialURL != null) {
+            httprequest.setAttribute(SpecialURL.class.getName(), specialURL);
+            String urlForward = specialURL.getNewURLRequest(httprequest);
             if (debug) {
-                log.debug("***ADF*** NOT forwarding");
+                log.debug("***SUF*** \"{}\" forwarding to \"{}\" ", requestUri, urlForward);
             }
-            chain.doFilter(request, response);
+            request.getRequestDispatcher(urlForward).forward(request, response);
+        } else if (app == null) {
+            if (httprequest.getServletPath().startsWith(Hidden.url)) { // <!--  this is bad...
+
+            } else {
+
+                if (debug) {
+                    log.debug("***ADF*** NOT forwarding");
+                }
+                chain.doFilter(request, response);
+            }
         } else if (VistaPmcDnsNameResolverHelper.isCustomerDNSActive(customerDnsName)) {
             String defaultApplicationUrl = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getDefaultApplicationURL(app,
                     customerDnsName.pmc().dnsName().getValue());

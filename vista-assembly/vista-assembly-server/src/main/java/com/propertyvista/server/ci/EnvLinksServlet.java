@@ -26,17 +26,24 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ApplicationVersion;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.biz.system.WorldDateManager;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.server.config.filter.special.SpecialURL;
 
 @SuppressWarnings("serial")
 public class EnvLinksServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (ApplicationMode.isProduction() && request.getAttribute(SpecialURL.class.getName()) == null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
         response.setHeader("Cache-Control", "no-store");
         response.setHeader("Pragma", "no-cache");
         response.setDateHeader("Expires", 0); //prevents caching at the proxy server

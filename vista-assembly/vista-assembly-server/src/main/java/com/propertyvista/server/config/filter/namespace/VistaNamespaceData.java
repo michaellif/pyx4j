@@ -16,12 +16,15 @@ import com.pyx4j.config.server.NamespaceData;
 
 import com.propertyvista.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.server.config.filter.special.SpecialURL;
 
 public class VistaNamespaceData extends NamespaceData {
 
     protected VistaApplication application;
 
     protected PmcDnsName customerDnsName;
+
+    private SpecialURL specialURL;
 
     public VistaNamespaceData() {
         super(null);
@@ -46,6 +49,14 @@ public class VistaNamespaceData extends NamespaceData {
 
     public void setCustomerDnsName(PmcDnsName customerDnsName) {
         this.customerDnsName = customerDnsName;
+    }
+
+    public SpecialURL getSpecialURL() {
+        return specialURL;
+    }
+
+    public void setSpecialURL(SpecialURL specialURL) {
+        this.specialURL = specialURL;
     }
 
 }
