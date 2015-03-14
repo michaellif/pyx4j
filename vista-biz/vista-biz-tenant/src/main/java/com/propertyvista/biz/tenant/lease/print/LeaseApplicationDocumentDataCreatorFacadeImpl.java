@@ -119,7 +119,9 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             fillLeaseSection(data.sections().get(0).leaseSection().get(0), lease);
             fillRentalItemsSection(data.sections().get(0).rentalItemsSection().get(0), lease);
             fillAdjustmentsSection(data.sections().get(0).adjustmentsSection().get(0), lease);
-            fillFirstPaymentData(data.sections().get(0).firstPaymentSection().get(0), lease);
+            if (!VistaFeatures.instance().yardiIntegration()) {
+            	fillFirstPaymentData(data.sections().get(0).firstPaymentSection().get(0), lease);
+            }
             fillPeopleSection(data.sections().get(0).peopleSection().get(0), lease, subjectParticipant);
             fillAboutYouSection(data.sections().get(0).aboutYouSection().get(0), lease, subjectParticipant, application.submission().decisionDate().getValue(),
                     logo);
@@ -167,8 +169,10 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         LeaseApplicationDocumentDataAdjustmentsSectionDTO adjustmentsSection = EntityFactory.create(LeaseApplicationDocumentDataAdjustmentsSectionDTO.class);
         details.adjustmentsSection().add(adjustmentsSection);
 
-        LeaseApplicationDocumentDataFirstPaymentSectionDTO firstPayemntSection = EntityFactory.create(LeaseApplicationDocumentDataFirstPaymentSectionDTO.class);
-        details.firstPaymentSection().add(firstPayemntSection);
+        if (!VistaFeatures.instance().yardiIntegration()) {
+        	LeaseApplicationDocumentDataFirstPaymentSectionDTO firstPayemntSection = EntityFactory.create(LeaseApplicationDocumentDataFirstPaymentSectionDTO.class);
+        	details.firstPaymentSection().add(firstPayemntSection);
+        }
 
         LeaseApplicationDocumentDataPeopleSectionDTO peopleSection = EntityFactory.create(LeaseApplicationDocumentDataPeopleSectionDTO.class);
         details.peopleSection().add(peopleSection);
