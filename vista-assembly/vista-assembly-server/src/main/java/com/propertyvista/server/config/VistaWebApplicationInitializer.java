@@ -260,6 +260,7 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
                 ServletRegistration.Dynamic sc = ctx.addServlet("EnvLinksServlet", EnvLinksServlet.class);
                 sc.addMapping("/index.html");
                 sc.addMapping(SpecialURL.envLinks.url);
+                sc.addMapping(SpecialURL.envLinks.url + "/index.html"); // <!-- this works in Tomcat
             }
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("StatusServlet", VistaStatusServlet.class);
