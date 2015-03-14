@@ -71,6 +71,7 @@ import com.propertyvista.server.ci.TestTimeoutServlet;
 import com.propertyvista.server.ci.VistaStatusServlet;
 import com.propertyvista.server.ci.bugs.WSServletContextListenerFix;
 import com.propertyvista.server.config.filter.VistaApplicationDispatcherFilter;
+import com.propertyvista.server.config.filter.special.SpecialURL;
 import com.propertyvista.server.oapi.OAPIFilter;
 import com.propertyvista.server.security.RobotsFilter;
 import com.propertyvista.server.security.idp.IdpEndpointServlet;
@@ -258,6 +259,7 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("EnvLinksServlet", EnvLinksServlet.class);
                 sc.addMapping("/index.html");
+                sc.addMapping(SpecialURL.envLinks.url);
             }
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("StatusServlet", VistaStatusServlet.class);
