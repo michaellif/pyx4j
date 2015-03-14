@@ -132,21 +132,23 @@ public class EquifaxModelMapper {
         // address
         {
             Address efxAddress = factory.createAddressesTypeAddress();
-            addresses.getAddress().add(efxAddress);
             efxAddress.setAddressType("CURR");
 
             PriorAddress currentAddress = pcc.screening().version().currentAddress();
 
-            toEtxAddress(factory, currentAddress, efxAddress);
+            if (toEtxAddress(factory, currentAddress, efxAddress)) {
+                addresses.getAddress().add(efxAddress);
+            }
         }
         // previousAddress {
         {
             PriorAddress previousAddress = pcc.screening().version().previousAddress();
             if (!previousAddress.isEmpty()) {
                 Address efxAddress = factory.createAddressesTypeAddress();
-                addresses.getAddress().add(efxAddress);
                 efxAddress.setAddressType("FORM");
-                toEtxAddress(factory, previousAddress, efxAddress);
+                if (toEtxAddress(factory, previousAddress, efxAddress)) {
+                    addresses.getAddress().add(efxAddress);
+                }
             }
         }
 
@@ -333,7 +335,11 @@ public class EquifaxModelMapper {
         telephones.getParsedTelephone().add(efxTelephone);
     }
 
-    private static void toEtxAddress(ObjectFactory factory, PriorAddress vistaAddress, Address efxAddress) {
+    private static boolean toEtxAddress(ObjectFactory factory, PriorAddress vistaAddress, Address efxAddress) {
+        if (vistaAddress.country().isNull() || !vistaAddress.country().getValue().equals(ISOCountry.Canada)) {
+            // Not Canadian Address not supported
+            return false;
+        }
         efxAddress.setCivicNumber(vistaAddress.streetNumber().getValue());
         efxAddress.setStreetName(vistaAddress.streetName().getValue());
         efxAddress.setSuite(vistaAddress.suiteNumber().getValue());
@@ -347,11 +353,14 @@ public class EquifaxModelMapper {
             province.setCode(isoProvince.code);
             efxAddress.setProvince(province);
         } else {
-        	// expect E0807 Invalid xml formatted input - missing xml tag Province
-        	log.error("province {} not found, Equifax will not probably work", vistaAddress.province());
+            // expect E0807 Invalid xml formatted input - missing xml tag Province
+            log.error("province {} not found, Equifax will not probably work", vistaAddress.province());
+            //  Canadian Address no province,  h.m....
+            return false;
         }
 
         efxAddress.setPostalCode(efxPostalCodeFormat(vistaAddress.postalCode().getValue()));
+        return true;
     }
 
     private static String efxPostalCodeFormat(String value) {
