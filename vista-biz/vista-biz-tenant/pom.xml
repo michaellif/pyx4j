@@ -114,7 +114,7 @@
                 <configuration>
                    <!--compiler>com.amdocs.entree.reports.JRJavacCompiler</compiler-->
                    <sourceDirectory>${basedir}/src/main/resources/com/propertyvista/biz/tenant/lease/print</sourceDirectory>
-                   <outputDirectory>${project.build.directory}/classes/reports</outputDirectory>
+                   <outputDirectory>${project.build.directory}/classes/com/propertyvista/biz/tenant/lease/print</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>
