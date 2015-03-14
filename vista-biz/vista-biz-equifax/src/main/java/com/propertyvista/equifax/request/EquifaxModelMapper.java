@@ -346,6 +346,9 @@ public class EquifaxModelMapper {
             CodeType province = factory.createCodeType();
             province.setCode(isoProvince.code);
             efxAddress.setProvince(province);
+        } else {
+        	// expect E0807 Invalid xml formatted input - missing xml tag Province
+        	log.error("province {} not found, Equifax will not probably work", vistaAddress.province());
         }
 
         efxAddress.setPostalCode(efxPostalCodeFormat(vistaAddress.postalCode().getValue()));
