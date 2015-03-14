@@ -45,6 +45,7 @@ public class LeaseApplicationDocumentationPolicyDataModel extends MockDataModel<
         policy.mandatoryProofOfEmployment().setValue(true);
         {
             ProofOfEmploymentDocumentType poe = EntityFactory.create(ProofOfEmploymentDocumentType.class);
+            poe.importance().setValue(Importance.Optional);
             poe.incomeSource().setValue(IncomeSource.fulltime);
             poe.notes().setValue("Letter of Employment and Pay Stub are required");
             policy.allowedEmploymentDocuments().add(poe);
@@ -55,6 +56,7 @@ public class LeaseApplicationDocumentationPolicyDataModel extends MockDataModel<
         policy.mandatoryProofOfIncome().setValue(false);
         {
             ProofOfIncomeDocumentType poi = EntityFactory.create(ProofOfIncomeDocumentType.class);
+            poi.importance().setValue(Importance.Optional);
             poi.incomeSource().setValue(IncomeSource.pension);
             poi.notes().setValue("Pension Confirmation is required");
             policy.allowedIncomeDocuments().add(poi);
@@ -65,6 +67,7 @@ public class LeaseApplicationDocumentationPolicyDataModel extends MockDataModel<
         policy.mandatoryProofOfAsset().setValue(false);
         {
             ProofOfAssetDocumentType poa = EntityFactory.create(ProofOfAssetDocumentType.class);
+            poa.importance().setValue(Importance.Optional);
             poa.assetType().setValue(AssetType.bankAccounts);
             poa.notes().setValue("Bank Statement (for every account) is required");
             policy.allowedAssetDocuments().add(poa);
