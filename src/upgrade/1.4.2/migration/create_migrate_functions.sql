@@ -1124,6 +1124,25 @@ BEGIN
                 ||'WHERE    t.target = ''TenantPreAuthorizedPaymentCardTerms'' '
                 ||'AND      t.content = i.content ';
         
+        
+        -- identification_document_type
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.identification_document_type '
+                ||'SET importance = ''Optional'' '
+                ||'WHERE importance IS NULL';
+                
+        -- try to preload Canadian SIN where doesn't exist
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.identification_document_type '
+                ||'(id,policy,name,importance,id_type) '
+                ||'(SELECT nextval(''public.identification_document_type_seq'') AS id, '
+                ||'         id AS policy, ''SIN'' AS name, ''Required'' AS importance, '
+                ||'         ''canadianSIN'' AS id_type '
+                ||' FROM   '||v_schema_name||'.application_documentation_policy '
+                ||'         WHERE NOT EXISTS (  SELECT ''x'' '
+                ||'                             FROM '||v_schema_name||'.identification_document_type '
+                ||'                             WHERE   id_type = ''canadianSIN''))';
+        
         -- permission_to_enter_note
         
         EXECUTE 'UPDATE '||v_schema_name||'.permission_to_enter_note AS p '
