@@ -74,6 +74,7 @@ public interface ApplicationDocumentType extends IEntity {
 
     @NotNull
     @ToString(index = 1)
+    @MemberColumn(notNull = true)
     IPrimitive<Importance> importance();
 
     @Editor(type = EditorType.textarea)
