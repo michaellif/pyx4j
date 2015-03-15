@@ -153,6 +153,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                             filters.add(new UnitAvailabilityCriteria(AptUnitOccupancySegment.Status.pending, ClientContext.getServerDate()));
                             filters.add(PropertyCriterion.eq(proto().units().$().productItems().$().product().holder().defaultCatalogItem(), Boolean.TRUE));
                         } else if (EnumSet.of(Lease.Status.NewLease, Lease.Status.Application).contains(currentValue.lease().status().getValue())) { // lease & application:
+                            filters.add(PropertyCriterion.eq(proto().suspended(), Boolean.FALSE));
                             LogicalDate dateFrom = new LogicalDate(ClientContext.getServerDate());
                             if (!currentValue.termFrom().isNull()) {
                                 dateFrom = currentValue.termFrom().getValue();
@@ -221,6 +222,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                             filters.add(new UnitAvailabilityCriteria(AptUnitOccupancySegment.Status.pending, ClientContext.getServerDate()));
                             filters.add(PropertyCriterion.eq(proto().productItems().$().product().holder().defaultCatalogItem(), Boolean.TRUE));
                         } else if (EnumSet.of(Lease.Status.NewLease, Lease.Status.Application).contains(currentValue.lease().status().getValue())) { // lease & application:
+                            filters.add(PropertyCriterion.eq(proto().building().suspended(), Boolean.FALSE));
                             LogicalDate dateFrom = new LogicalDate(ClientContext.getServerDate());
                             if (!currentValue.termFrom().isNull()) {
                                 dateFrom = currentValue.termFrom().getValue();
