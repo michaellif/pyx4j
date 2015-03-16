@@ -177,14 +177,7 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        if (get(proto().type()).isEditable() && get(proto().type()) instanceof CComboBox) {
-            CComboBox<PaymentType> type = ((CComboBox<PaymentType>) get(proto().type()));
-            // set single-available option preselected for new items:
-            if (getValue().id().isNull() && !type.getOptions().isEmpty()) {
-                type.setValue(type.getOptions().get(0), false, populate);
-            }
-            setPaymentTypeSelectionEditable(getValue().id().isNull());
-        }
+        setPaymentTypeSelectionEditable(getValue().id().isNull());
     }
 
     @Override
