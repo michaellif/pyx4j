@@ -33,11 +33,10 @@ import com.pyx4j.gwt.server.ServletUtils;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.portal.rpc.shared.SiteWasNotActivatedUserRuntimeException;
 import com.propertyvista.server.config.filter.namespace.VistaApplicationResolverHelper;
 import com.propertyvista.server.config.filter.namespace.VistaNamespaceDataResolver;
 import com.propertyvista.server.config.filter.namespace.VistaPmcDnsNameResolverHelper;
-import com.propertyvista.server.config.filter.special.Hidden;
-import com.propertyvista.server.config.filter.special.SpecialURL;
 import com.propertyvista.server.config.filter.utils.HttpRequestUtils;
 
 public class VistaApplicationDispatcherFilter implements Filter {
@@ -96,24 +95,8 @@ public class VistaApplicationDispatcherFilter implements Filter {
         VistaApplication app = namespaceResolver.getNamespaceData().getApplication();
         PmcDnsName customerDnsName = namespaceResolver.getNamespaceData().getCustomerDnsName();
 
-        SpecialURL specialURL = namespaceResolver.getNamespaceData().getSpecialURL();
-        if (specialURL != null) {
-            httprequest.setAttribute(SpecialURL.class.getName(), specialURL);
-            String urlForward = specialURL.getNewURLRequest(httprequest);
-            if (debug) {
-                log.debug("***SUF*** \"{}\" forwarding to \"{}\" ", requestUri, urlForward);
-            }
-            request.getRequestDispatcher(urlForward).forward(request, response);
-        } else if (app == null) {
-            if (httprequest.getServletPath().startsWith(Hidden.url)) { // <!--  this is bad...
-
-            } else {
-
-                if (debug) {
-                    log.debug("***ADF*** NOT forwarding");
-                }
-                chain.doFilter(request, response);
-            }
+        if (app == null) {
+            throw new SiteWasNotActivatedUserRuntimeException(serverName);
         } else if (VistaPmcDnsNameResolverHelper.isCustomerDNSActive(customerDnsName)) {
             String defaultApplicationUrl = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getDefaultApplicationURL(app,
                     customerDnsName.pmc().dnsName().getValue());

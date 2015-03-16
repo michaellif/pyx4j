@@ -24,6 +24,12 @@ public enum VistaApplication implements Behavior {
 
     interfaces,
 
+    staticContext("static"),
+
+    // CI specific URs and 
+    env,
+
+    @Deprecated
     noApp,
 
     operations,
@@ -36,7 +42,33 @@ public enum VistaApplication implements Behavior {
 
     prospect,
 
-    onboarding;
+    onboarding("start");
+
+    private final String dnsNameFragment;
+
+    VistaApplication() {
+        this(null);
+    }
+
+    VistaApplication(String dnsNameFragment) {
+        if (dnsNameFragment == null) {
+            this.dnsNameFragment = name();
+        } else {
+            this.dnsNameFragment = dnsNameFragment;
+        }
+    }
+
+    public String getDnsNameFragment() {
+        return dnsNameFragment;
+    }
+
+    public String getInternalMappingName() {
+        if (this == staticContext) {
+            return "static";
+        } else {
+            return name();
+        }
+    }
 
     public static VistaApplication getVistaApplication(Set<Behavior> behaviours) {
         for (VistaApplication behaviour : VistaApplication.values()) {
