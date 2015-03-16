@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.server.contexts.AntiDoS;
 import com.pyx4j.server.contexts.DevSession;
@@ -175,7 +176,7 @@ public class OpenIdFilter implements Filter {
     }
 
     public static String getCommonURLBase4OpenId(HttpServletRequest request) {
-        if (((VistaServerSideConfiguration) ServerSideConfiguration.instance()).isDevelopmentBehavior()) {
+        if (((VistaServerSideConfiguration) ServerSideConfiguration.instance()).isDevelopmentBehavior() && !ApplicationMode.isDemo()) {
             StringBuffer url = new StringBuffer();
             url.append(request.getScheme());
             url.append("://");
