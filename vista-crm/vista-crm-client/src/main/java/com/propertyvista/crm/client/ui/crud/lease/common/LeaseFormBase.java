@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComponent;
@@ -210,10 +209,6 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
     }
 
     protected IsWidget createChargesTab() {
-        if (VistaFeatures.instance().yardiIntegration()) {
-            return new HTML();
-        }
-
         FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Dual, proto().billingPreview(), new BillForm(true));
         return formPanel;
