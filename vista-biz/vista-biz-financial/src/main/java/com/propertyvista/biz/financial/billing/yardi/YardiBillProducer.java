@@ -30,7 +30,6 @@ import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.biz.financial.billing.BillProducer;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billing.DateRange;
-import com.propertyvista.biz.financial.billing.internal.BillingManager;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -62,7 +61,7 @@ class YardiBillProducer implements BillProducer {
             previewBill.billingAccount().set(lease.billingAccount());
             previewBill.billSequenceNumber().setValue(0);
             previewBill.billingCycle().set(billingCycle);
-            BillingManager.instance().setBillStatus(previewBill, Bill.BillStatus.Running, true);
+            previewBill.billStatus().setValue(Bill.BillStatus.Running);
 
             previewBill.executionDate().setValue(SystemDateManager.getLogicalDate());
 
