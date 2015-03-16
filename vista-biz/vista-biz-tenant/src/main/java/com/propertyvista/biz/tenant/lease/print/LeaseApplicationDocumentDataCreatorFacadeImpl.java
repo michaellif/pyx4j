@@ -532,20 +532,20 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     }
 
     private BillDTO retrieveBillData(Lease lease) {
-        if (VistaFeatures.instance().yardiIntegration()) {
-            return null; // no bills for Yardi mode!..
-        }
-
         BillDTO billData = EntityFactory.create(BillDTO.class);
 
-        if (lease.status().getValue().isDraft() && Lease.Status.isApplicationUnitSelected(lease)) {
-            // create bill preview for draft leases/applications:
+        if (VistaFeatures.instance().yardiIntegration()) {
             billData = BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(lease));
-        } else if (lease.status().getValue().isCurrent()) {
-            // get first bill for current leases:
-            Bill bill = ServerSideFactory.create(BillingFacade.class).getBill(lease, 1);
-            if (bill != null) {
-                billData = BillingUtils.createBillDto(bill);
+        } else {
+            if (lease.status().getValue().isDraft() && Lease.Status.isApplicationUnitSelected(lease)) {
+                // create bill preview for draft leases/applications:
+                billData = BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(lease));
+            } else if (lease.status().getValue().isCurrent()) {
+                // get first bill for current leases:
+                Bill bill = ServerSideFactory.create(BillingFacade.class).getBill(lease, 1);
+                if (bill != null) {
+                    billData = BillingUtils.createBillDto(bill);
+                }
             }
         }
 
