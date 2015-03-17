@@ -12,24 +12,24 @@
  */
 package com.propertyvista.server.jobs;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Set;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.preloader.PmcPreloaderFacade;
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.operations.domain.scheduler.RunStatus;
 
 public class ResetDemoPmcProcess implements PmcProcess {
 
-    private static final Logger log = LoggerFactory.getLogger(ResetDemoPmcProcess.class);
-
-    private static final DemoPmc[] PMCS_TO_RESET = { DemoPmc.vista, DemoPmc.redridge, DemoPmc.rockville, DemoPmc.star, DemoPmc.gondor, DemoPmc.timbercreek };
-
     @Override
     public boolean start(PmcProcessContext context) {
+
+        AbstractVistaServerSideConfiguration conf = (AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance();
+        Set<DemoPmc> PMCS_TO_RESET = conf.dbResetPreloadPmc();
 
         for (DemoPmc pmcToReset : PMCS_TO_RESET) {
             try {
