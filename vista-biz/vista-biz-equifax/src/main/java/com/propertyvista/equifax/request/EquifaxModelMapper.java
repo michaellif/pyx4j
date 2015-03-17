@@ -45,8 +45,10 @@ import ca.equifax.uat.to.SubjectsType;
 import ca.equifax.uat.to.SubjectsType.Subject;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.PriorAddress;
@@ -72,7 +74,37 @@ public class EquifaxModelMapper {
 
     private final static Logger log = LoggerFactory.getLogger(EquifaxModelMapper.class);
 
-    public static CNConsAndCommRequestType createRequest(PmcEquifaxInfo equifaxInfo, Customer customer, CustomerCreditCheck pcc, int strategyNumber) {
+    private final static I18n i18n = I18n.get(EquifaxModelMapper.class);
+
+    /**
+     * This code was created by trial and error on UAT environment.
+     */
+    public static void validateRequiredData(Customer customer, CustomerCreditCheck ccc) {
+        // DateOfBirth  is not required.
+
+        // address
+        {
+            PriorAddress currentAddress = ccc.screening().version().currentAddress();
+            if (currentAddress.country().isNull() || !currentAddress.country().getValue().equals(ISOCountry.Canada)) {
+                throw new UserRuntimeException(i18n.tr("Credit Check is not available for not Canadian addresses"));
+            }
+            if (currentAddress.city().isNull()) {
+                throw new UserRuntimeException(i18n.tr("Credit Check require current address City"));
+            }
+            if (currentAddress.province().isNull()) {
+                throw new UserRuntimeException(i18n.tr("Credit Check require current address Province"));
+            }
+            ISOProvince isoProvince = ISOProvince.forName(currentAddress.province().getValue(), ISOCountry.Canada);
+            if (isoProvince == null) {
+                isoProvince = ISOProvince.forCode(currentAddress.province().getValue());
+            }
+            if (isoProvince == null) {
+                throw new UserRuntimeException(i18n.tr("Credit Check require valid Canadian Province, Value {0} is unrecognized", currentAddress.province()));
+            }
+        }
+    }
+
+    public static CNConsAndCommRequestType createRequest(PmcEquifaxInfo equifaxInfo, Customer customer, CustomerCreditCheck ccc, int strategyNumber) {
 
         ObjectFactory factory = new ObjectFactory();
 
@@ -134,7 +166,7 @@ public class EquifaxModelMapper {
             Address efxAddress = factory.createAddressesTypeAddress();
             efxAddress.setAddressType("CURR");
 
-            PriorAddress currentAddress = pcc.screening().version().currentAddress();
+            PriorAddress currentAddress = ccc.screening().version().currentAddress();
 
             if (toEtxAddress(factory, currentAddress, efxAddress)) {
                 addresses.getAddress().add(efxAddress);
@@ -142,7 +174,7 @@ public class EquifaxModelMapper {
         }
         // previousAddress {
         {
-            PriorAddress previousAddress = pcc.screening().version().previousAddress();
+            PriorAddress previousAddress = ccc.screening().version().previousAddress();
             if (!previousAddress.isEmpty()) {
                 Address efxAddress = factory.createAddressesTypeAddress();
                 efxAddress.setAddressType("FORM");
@@ -170,7 +202,7 @@ public class EquifaxModelMapper {
         }
 
         // sin
-        for (IdentificationDocument document : pcc.screening().version().documents()) {
+        for (IdentificationDocument document : ccc.screening().version().documents()) {
             if ((document.idType().type().getValue() == IdentificationDocumentType.Type.canadianSIN) && (!document.idNumber().isNull())) {
                 subject.setSocialInsuranceNumber(new BigInteger(document.idNumber().getValue().replaceAll("[\\s-]+", "")));
                 break;
@@ -215,7 +247,7 @@ public class EquifaxModelMapper {
 
         //Find PresentEmployer and calculate Income
         CustomerScreeningIncome presentPersonalIncome = null;
-        for (CustomerScreeningIncome personalIncome : pcc.screening().version().incomes()) {
+        for (CustomerScreeningIncome personalIncome : ccc.screening().version().incomes()) {
             if (isCurrentDate(personalIncome.details().ends())) {
                 addMonthlyIncome(personalIncome, parameters);
                 if (presentPersonalIncome == null) {
@@ -280,15 +312,15 @@ public class EquifaxModelMapper {
             XmlCreator.addParameter(EmploymentStatus.NotAsked, parameters);
         }
 
-        XmlCreator.addParameter(new MonthlyHousingCosts(pcc.amountChecked().getValue().intValue()), parameters);
+        XmlCreator.addParameter(new MonthlyHousingCosts(ccc.amountChecked().getValue().intValue()), parameters);
         //XmlCreator.addParameter(new MonthlyCostsOther(300), parameters);
 
-        if (!pcc.screening().version().currentAddress().moveInDate().isNull()) {
-            XmlCreator.addParameter(new TimeAtPresentAddress(monthSince(pcc.screening().version().currentAddress().moveInDate())), parameters);
+        if (!ccc.screening().version().currentAddress().moveInDate().isNull()) {
+            XmlCreator.addParameter(new TimeAtPresentAddress(monthSince(ccc.screening().version().currentAddress().moveInDate())), parameters);
         }
 
-        if (!pcc.screening().version().currentAddress().rented().isNull()) {
-            switch (pcc.screening().version().currentAddress().rented().getValue()) {
+        if (!ccc.screening().version().currentAddress().rented().isNull()) {
+            switch (ccc.screening().version().currentAddress().rented().getValue()) {
             case owned:
                 XmlCreator.addParameter(ResidentialStatus.OwnsOrBuying, parameters);
                 break;
@@ -348,6 +380,9 @@ public class EquifaxModelMapper {
         efxAddress.setCity(city);
 
         ISOProvince isoProvince = ISOProvince.forName(vistaAddress.province().getValue(), ISOCountry.Canada);
+        if (isoProvince == null) {
+            isoProvince = ISOProvince.forCode(vistaAddress.province().getValue());
+        }
         if (isoProvince != null) {
             CodeType province = factory.createCodeType();
             province.setCode(isoProvince.code);
