@@ -86,20 +86,20 @@ public class EquifaxModelMapper {
         {
             PriorAddress currentAddress = ccc.screening().version().currentAddress();
             if (currentAddress.country().isNull() || !currentAddress.country().getValue().equals(ISOCountry.Canada)) {
-                throw new UserRuntimeException(i18n.tr("Credit Check is not available for not Canadian addresses"));
+                throw new UserRuntimeException(i18n.tr("Credit Check is not available for Non-Canadian addresses"));
             }
             if (currentAddress.city().isNull()) {
-                throw new UserRuntimeException(i18n.tr("Credit Check require current address City"));
+                throw new UserRuntimeException(i18n.tr("Credit Check requires Current Address: City"));
             }
             if (currentAddress.province().isNull()) {
-                throw new UserRuntimeException(i18n.tr("Credit Check require current address Province"));
+                throw new UserRuntimeException(i18n.tr("Credit Check requires Current Address: Province"));
             }
             ISOProvince isoProvince = ISOProvince.forName(currentAddress.province().getValue(), ISOCountry.Canada);
             if (isoProvince == null) {
                 isoProvince = ISOProvince.forCode(currentAddress.province().getValue());
             }
             if (isoProvince == null) {
-                throw new UserRuntimeException(i18n.tr("Credit Check require valid Canadian Province, Value {0} is unrecognized", currentAddress.province()));
+                throw new UserRuntimeException(i18n.tr("Credit Check requires valid Canadian Province, Value {0} is unrecognized", currentAddress.province()));
             }
         }
     }
