@@ -198,6 +198,8 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         Persistence.ensureRetrieve(ccc.screening().version().assets(), AttachLevel.Attached);
         Persistence.ensureRetrieve(ccc.screening().version().documents(), AttachLevel.Attached);
 
+        ServerSideFactory.create(EquifaxFacade.class).validateRequiredData(leaseTermParticipant.leaseParticipant().customer(), ccc);
+
         ccc.transactionId().setValue(ScreeningPayments.preAuthorization(equifaxInfo));
 
         // Need this for simulations
@@ -207,8 +209,8 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
 
         boolean success = false;
         try {
-            ccc = EquifaxCreditCheck.runCreditCheck(equifaxInfo, leaseTermParticipant.leaseParticipant().customer(), ccc, backgroundCheckPolicy
-                    .strategyNumber().getValue(), lease, leaseTermParticipant);
+            ccc = ServerSideFactory.create(EquifaxFacade.class).runCreditCheck(equifaxInfo, leaseTermParticipant.leaseParticipant().customer(), ccc,
+                    backgroundCheckPolicy.strategyNumber().getValue(), lease, leaseTermParticipant);
 
             // This is the business, we charge only when riskCode is returned
             success = !ccc.riskCode().isNull();

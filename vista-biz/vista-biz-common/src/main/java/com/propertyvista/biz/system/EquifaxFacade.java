@@ -12,10 +12,21 @@
  */
 package com.propertyvista.biz.system;
 
+import com.propertyvista.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.domain.security.AuditRecordEventType;
+import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.CustomerCreditCheck;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 public interface EquifaxFacade {
 
     public boolean isLimitReached(final AuditRecordEventType eventType);
+
+    public void validateRequiredData(Customer customer, CustomerCreditCheck ccc);
+
+    public CustomerCreditCheck runCreditCheck(PmcEquifaxInfo equifaxInfo, Customer customer, CustomerCreditCheck pcc, int strategyNumber,
+    /* simulation data parameters */
+    Lease lease, LeaseTermParticipant<?> leaseTermParticipant);
 
 }
