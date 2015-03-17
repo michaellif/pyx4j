@@ -24,6 +24,7 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.contexts.ServerContext;
@@ -79,6 +80,8 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
         dto.allowedPaymentsSetup().set(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), PaymentMethodTarget.OneTimePayment,
                         VistaApplication.resident));
+
+        dto.convenienceFeeSignedTerm().signature().signatureFormat().setValue(SignatureFormat.AgreeBox);
 
         if (VistaSystemMaintenance.getApplicationsState().tenantsPaymentsDisabled().getValue()) {
             dto.allowedPaymentsSetup().set(null);
