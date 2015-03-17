@@ -35,9 +35,11 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceAdjustmentSubLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceConcessionSubLineItem;
+import com.propertyvista.domain.financial.billing.InvoiceDeposit;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.shared.BillingException;
@@ -83,6 +85,7 @@ class YardiBillProducer implements BillProducer {
             previewBill.balanceForwardAmount().setValue(new BigDecimal("0.00"));
 
             calculateProducts(previewBill);
+            calculateDeposits(previewBill);
             calculateTotals(previewBill);
 
             previewBill.billStatus().setValue(Bill.BillStatus.Finished);
@@ -252,8 +255,55 @@ class YardiBillProducer implements BillProducer {
 
     private BigDecimal prorate(InvoiceProductCharge charge) {
         BillingCycle cycle = billingCycle;
+//        BillingCycle cycle = null;
+//        switch (charge.period().getValue()) {
+//        case previous:
+//            cycle = getBillProducer().getPreviousPeriodBill().billingCycle();
+//            break;
+//        case current:
+//            cycle = getBillProducer().getCurrentPeriodBill().billingCycle();
+//            break;
+//        case next:
+//            cycle = getBillProducer().getNextPeriodBill().billingCycle();
+//            break;
+//        }
         BigDecimal proration = ProrationUtils.prorate(charge.fromDate().getValue(), charge.toDate().getValue(), cycle);
         return DomainUtil.roundMoney(charge.chargeSubLineItem().billableItem().agreedPrice().getValue(BigDecimal.ZERO).multiply(proration));
+    }
+
+    private void calculateDeposits(Bill bill) {
+        createInvoiceDeposit(lease.currentTerm().version().leaseProducts().serviceItem(), bill);
+        for (BillableItem billableItem : lease.currentTerm().version().leaseProducts().featureItems()) {
+            createInvoiceDeposit(billableItem, bill);
+        }
+    }
+
+    private void createInvoiceDeposit(BillableItem billableItem, Bill bill) {
+        //This is first time charge have been issued - add deposit
+        for (Deposit deposit : billableItem.deposits()) {
+            LogicalDate effectiveDate = billableItem.effectiveDate().getValue();
+            if (!deposit.isProcessed().getValue(false) && (effectiveDate == null || !effectiveDate.after(bill.billingPeriodEndDate().getValue()))) {
+                InvoiceDeposit invoiceDeposit = EntityFactory.create(InvoiceDeposit.class);
+                invoiceDeposit.billingAccount().set(bill.billingAccount());
+                invoiceDeposit.dueDate().setValue(bill.dueDate().getValue());
+                invoiceDeposit.arCode().set(deposit.chargeCode());
+                invoiceDeposit.description().setValue(deposit.type().getStringView());
+                invoiceDeposit.amount().setValue(deposit.amount().getValue());
+                invoiceDeposit.taxTotal().setValue(BigDecimal.ZERO);
+                invoiceDeposit.deposit().set(deposit);
+                addInvoiceDeposit(invoiceDeposit, bill);
+            }
+        }
+    }
+
+    private void addInvoiceDeposit(InvoiceDeposit invoiceDeposit, Bill bill) {
+        if (invoiceDeposit == null) {
+            return;
+        }
+        bill.depositAmount().setValue(bill.depositAmount().getValue().add(invoiceDeposit.amount().getValue()));
+        bill.lineItems().add(invoiceDeposit);
+        //TODO
+        // getBillingManager().getNextPeriodBill().taxes().setValue(getBillingManager().getNextPeriodBill().taxes().getValue().add(deposit.taxTotal().getValue()));
     }
 
     private void calculateTotals(Bill bill) {
