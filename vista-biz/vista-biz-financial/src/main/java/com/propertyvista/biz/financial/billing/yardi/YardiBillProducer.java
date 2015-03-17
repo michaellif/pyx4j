@@ -66,6 +66,7 @@ class YardiBillProducer implements BillProducer {
 
         Bill previewBill = EntityFactory.create(Bill.class);
         try {
+            previewBill.billType().setValue(findBillType());
             previewBill.billingAccount().set(lease.billingAccount());
             previewBill.billSequenceNumber().setValue(0);
             previewBill.billingCycle().set(billingCycle);
@@ -73,16 +74,13 @@ class YardiBillProducer implements BillProducer {
 
             previewBill.executionDate().setValue(SystemDateManager.getLogicalDate());
 
-            Bill.BillType billType = findBillType();
-            previewBill.billType().setValue(billType);
-
             DateRange billingPeriodRange = BillDateUtils.calculateBillingPeriodRange(previewBill);
             previewBill.billingPeriodStartDate().setValue(billingPeriodRange.getFromDate());
             previewBill.billingPeriodEndDate().setValue(billingPeriodRange.getToDate());
             previewBill.dueDate().setValue(BillDateUtils.calculateBillDueDate(previewBill));
 
             BillingUtils.prepareAccumulators(previewBill);
-            previewBill.balanceForwardAmount().setValue(new BigDecimal("0.00"));
+            previewBill.balanceForwardAmount().setValue(BigDecimal.ZERO);
 
             calculateProducts(previewBill);
             calculateDeposits(previewBill);
@@ -255,6 +253,7 @@ class YardiBillProducer implements BillProducer {
         //TODO
     }
 
+// TODO elaborate yardi prorate calculations - talk with AlexS
     private BigDecimal prorate(InvoiceProductCharge charge) {
         BillingCycle cycle = billingCycle;
 //        BillingCycle cycle = null;
@@ -286,6 +285,7 @@ class YardiBillProducer implements BillProducer {
             LogicalDate effectiveDate = billableItem.effectiveDate().getValue();
             if (!deposit.isProcessed().getValue(false) && (effectiveDate == null || !effectiveDate.after(bill.billingPeriodEndDate().getValue()))) {
                 InvoiceDeposit invoiceDeposit = EntityFactory.create(InvoiceDeposit.class);
+
                 invoiceDeposit.billingAccount().set(bill.billingAccount());
                 invoiceDeposit.dueDate().setValue(bill.dueDate().getValue());
                 invoiceDeposit.arCode().set(deposit.chargeCode());
@@ -293,6 +293,7 @@ class YardiBillProducer implements BillProducer {
                 invoiceDeposit.amount().setValue(deposit.amount().getValue());
                 invoiceDeposit.taxTotal().setValue(BigDecimal.ZERO);
                 invoiceDeposit.deposit().set(deposit);
+
                 addInvoiceDeposit(invoiceDeposit, bill);
             }
         }
