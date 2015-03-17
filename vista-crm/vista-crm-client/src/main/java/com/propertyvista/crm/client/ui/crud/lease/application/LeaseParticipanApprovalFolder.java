@@ -209,11 +209,11 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
 
             CreditCheckResult creditCheckResult = getValue().creditCheck().creditCheckResult().getValue();
 
-            get(proto().creditCheck().creditCheckResult()).setVisible(creditCheckResult != CreditCheckResult.Accept);
             get(proto().creditCheck().amountApproved()).setVisible(creditCheckResult == CreditCheckResult.Accept);
             get(proto().creditCheck().reason()).setVisible(creditCheckResult != CreditCheckResult.Accept);
 
-            get(proto().creditCheck().creditCheckReport()).setVisible(!getValue().creditCheck().creditCheckReport().isNull());
+            get(proto().creditCheck().creditCheckReport()).setVisible(
+                    !getValue().creditCheck().creditCheckReport().isNull() && (creditCheckResult != CreditCheckResult.Error));
         }
     }
 }
