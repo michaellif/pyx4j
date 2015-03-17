@@ -186,6 +186,8 @@ class YardiBillProducer implements BillProducer {
 
 // TODO: elaborate yardi tax
 //        TaxUtils.calculateProductChargeTaxes(charge, bill.billingCycle().building());
+        charge.taxTotal().setValue(BigDecimal.ZERO);
+// end of TODO
 
         charge.description().setValue(charge.chargeSubLineItem().billableItem().item().name().getStringView());
 
@@ -333,7 +335,8 @@ class YardiBillProducer implements BillProducer {
 //            TaxUtils.pennyFix(taxCombinedAmount.subtract(bill.taxes().getValue()), bill.lineItems());
 //            bill.taxes().setValue(taxCombinedAmount);
 //        }
-
+      bill.taxes().setValue(BigDecimal.ZERO);
+// end of TODO
         bill.totalDueAmount().setValue(bill.pastDueAmount().getValue().add(bill.currentAmount().getValue().add(bill.taxes().getValue())));
         // @formatter:on
     }
