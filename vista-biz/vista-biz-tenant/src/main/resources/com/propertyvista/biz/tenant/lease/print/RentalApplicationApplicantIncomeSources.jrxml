@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationApplicantFinancial" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="86393bcf-ee3a-407d-a9e4-e95c6f41c945">
-	<property name="ireport.zoom" value="1.6105100000000014"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="1.2100000000000033"/>
+	<property name="ireport.x" value="19"/>
+	<property name="ireport.y" value="465"/>
 	<field name="incomeSource" class="com.propertyvista.domain.tenant.income.IncomeSource"/>
 	<field name="details" class="com.propertyvista.domain.tenant.income.CustomerScreeningIncomeInfo"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="70" splitType="Stretch">
-			<rectangle>
-				<reportElement x="1" y="43" width="188" height="20" forecolor="#CCCCCC" uuid="2bdb782e-6772-4ef4-bac5-f9899a881ad4"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="23" width="285" height="20" forecolor="#CCCCCC" uuid="b2065ba6-06b2-4806-8882-bce4d52ae46c"/>
-			</rectangle>
+		<band height="23" splitType="Stretch">
 			<rectangle>
 				<reportElement x="1" y="3" width="570" height="20" forecolor="#CCCCCC" uuid="645ffd3b-ec07-4f37-8e24-4582d3b590f7"/>
 			</rectangle>
@@ -26,168 +20,578 @@
 				</textElement>
 				<text><![CDATA[Income]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="4" y="28" width="110" height="15" forecolor="#666666" uuid="41936e3f-e4a0-4959-b772-b484c4068170"/>
-				<text><![CDATA[Income Source]]></text>
-			</staticText>
-			<rectangle>
-				<reportElement x="373" y="43" width="198" height="20" forecolor="#CCCCCC" uuid="49118f97-c2d5-4249-8f56-5c0a2a602227"/>
-			</rectangle>
 			<rectangle>
 				<reportElement x="0" y="0" width="571" height="3" forecolor="#FFFFFF" backcolor="#FF8026" uuid="9c6f5644-d649-4261-b66f-1ce8a8212762"/>
 				<graphicElement>
 					<pen lineWidth="0.0" lineStyle="Dashed"/>
 				</graphicElement>
 			</rectangle>
-			<staticText>
-				<reportElement x="4" y="48" width="105" height="15" forecolor="#666666" uuid="fc4c0698-0465-46e9-ad9c-ec9c9201f888"/>
-				<text><![CDATA[Employed for (years)]]></text>
-			</staticText>
-			<rectangle>
-				<reportElement x="286" y="23" width="285" height="20" forecolor="#CCCCCC" uuid="82555937-4274-4cf8-aad2-9e78f2d8b0f1"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="188" y="43" width="185" height="20" forecolor="#CCCCCC" uuid="bc22b928-108d-4e97-b18e-625eae5130c6"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="289" y="28" width="66" height="15" forecolor="#666666" uuid="8dc40434-034f-436e-aa89-ea0b78aa1bf3"/>
-				<text><![CDATA[Employer Name]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="377" y="48" width="90" height="15" forecolor="#666666" uuid="db77ad0b-1611-455b-ad03-678a089757b5"/>
-				<text><![CDATA[Supervisor Phone]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="191" y="48" width="95" height="15" forecolor="#666666" uuid="c69b920f-bde9-430e-a3c7-1df663452984"/>
-				<text><![CDATA[Supervisor Name]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="114" y="28" width="172" height="15" uuid="c9e45d3d-db2a-48c3-ac67-21754701d125">
-					<printWhenExpression><![CDATA[!$F{incomeSource}.equals(null)]]></printWhenExpression>
-				</reportElement>
-				<textFieldExpression><![CDATA[$F{incomeSource}.toString()]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="355" y="28" width="216" height="15" uuid="1df44f5c-efc6-48b4-91c3-cee312cf72a7">
-					<printWhenExpression><![CDATA[!$F{details}.name().getValue().equals(null)]]></printWhenExpression>
-				</reportElement>
-				<textFieldExpression><![CDATA[$F{details}.name().getValue()]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="109" y="48" width="79" height="15" uuid="36597a84-8f2a-4847-9571-1fc13205a622">
-					<printWhenExpression><![CDATA[!((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).employedForYears().getValue().equals(null)]]></printWhenExpression>
-				</reportElement>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).employedForYears().getValue()]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="284" y="48" width="89" height="15" uuid="e955feb8-f282-4f3b-91b5-637535ff2cb1">
-					<printWhenExpression><![CDATA[!((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).supervisorName().getStringView().equals("null")]]></printWhenExpression>
-				</reportElement>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).supervisorName().getStringView()]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="467" y="48" width="104" height="15" uuid="913042e4-a2e5-42b6-af07-8b8b22dd5280">
-					<printWhenExpression><![CDATA[!((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).supervisorPhone().getStringView().equals("null")]]></printWhenExpression>
-				</reportElement>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).supervisorPhone().getStringView()]]></textFieldExpression>
-			</textField>
 		</band>
-		<band height="108">
+		<band height="171">
+			<printWhenExpression><![CDATA[($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.fulltime) || ($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.parttime) || ($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.seasonallyEmployed)]]></printWhenExpression>
 			<rectangle>
-				<reportElement x="1" y="63" width="188" height="20" forecolor="#CCCCCC" uuid="46ba4358-a9f0-421d-9597-9c958879bdfe"/>
+				<reportElement x="373" y="20" width="198" height="20" forecolor="#CCCCCC" uuid="49118f97-c2d5-4249-8f56-5c0a2a602227"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="188" y="63" width="185" height="20" forecolor="#CCCCCC" uuid="b9eef4b4-3bea-47f4-948b-2591ccbf263c"/>
+				<reportElement x="1" y="20" width="188" height="20" forecolor="#CCCCCC" uuid="2bdb782e-6772-4ef4-bac5-f9899a881ad4"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="1" y="83" width="570" height="20" forecolor="#CCCCCC" uuid="0121b49b-027d-4ede-a866-1810cfa73678"/>
+				<reportElement x="286" y="0" width="285" height="20" forecolor="#CCCCCC" uuid="82555937-4274-4cf8-aad2-9e78f2d8b0f1"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="1" y="43" width="570" height="20" forecolor="#CCCCCC" uuid="b642be10-6779-4245-80a5-12c87641ba75"/>
+				<reportElement x="1" y="0" width="285" height="20" forecolor="#CCCCCC" uuid="b2065ba6-06b2-4806-8882-bce4d52ae46c"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="373" y="63" width="198" height="20" forecolor="#CCCCCC" uuid="6ceebacb-c7cf-4505-8f4d-a27121426125"/>
+				<reportElement x="1" y="117" width="188" height="20" forecolor="#CCCCCC" uuid="46ba4358-a9f0-421d-9597-9c958879bdfe"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="1" y="23" width="555" height="20" forecolor="#CCCCCC" uuid="788e9bb4-2f19-409e-af3a-2fb897930c47"/>
+				<reportElement x="188" y="117" width="185" height="20" forecolor="#CCCCCC" uuid="b9eef4b4-3bea-47f4-948b-2591ccbf263c"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="1" y="3" width="570" height="20" forecolor="#CCCCCC" uuid="024cbf8b-f973-42ca-93e3-0694b3dc4220"/>
+				<reportElement x="1" y="137" width="570" height="20" forecolor="#CCCCCC" uuid="0121b49b-027d-4ede-a866-1810cfa73678"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="0" y="0" width="571" height="3" forecolor="#FFFFFF" backcolor="#FF8026" uuid="d4f47203-13dc-4ee9-b75e-5b2ad41ae7cd"/>
+				<reportElement x="1" y="97" width="570" height="20" forecolor="#CCCCCC" uuid="b642be10-6779-4245-80a5-12c87641ba75"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="373" y="117" width="198" height="20" forecolor="#CCCCCC" uuid="6ceebacb-c7cf-4505-8f4d-a27121426125"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="77" width="555" height="20" forecolor="#CCCCCC" uuid="788e9bb4-2f19-409e-af3a-2fb897930c47"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="57" width="570" height="20" forecolor="#CCCCCC" uuid="024cbf8b-f973-42ca-93e3-0694b3dc4220"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="54" width="571" height="3" forecolor="#FFFFFF" backcolor="#FF8026" uuid="d4f47203-13dc-4ee9-b75e-5b2ad41ae7cd"/>
 				<graphicElement>
 					<pen lineWidth="0.0" lineStyle="Dashed"/>
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="1" y="23" width="570" height="20" forecolor="#CCCCCC" uuid="755f41f1-6d5f-40ef-8079-00bf40e6ee4a"/>
+				<reportElement x="1" y="77" width="570" height="20" forecolor="#CCCCCC" uuid="755f41f1-6d5f-40ef-8079-00bf40e6ee4a"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="4" y="28" width="66" height="15" forecolor="#666666" uuid="65fc0b15-b7ec-417f-995f-a9f44cba8baa"/>
+				<reportElement x="4" y="82" width="66" height="15" forecolor="#666666" uuid="65fc0b15-b7ec-417f-995f-a9f44cba8baa"/>
 				<text><![CDATA[Address]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="4" y="68" width="66" height="15" forecolor="#666666" uuid="6c1f55c5-f7ef-49ce-8c06-e38c250efbe6"/>
+				<reportElement x="4" y="122" width="66" height="15" forecolor="#666666" uuid="6c1f55c5-f7ef-49ce-8c06-e38c250efbe6"/>
 				<text><![CDATA[City]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="4" y="88" width="66" height="15" forecolor="#666666" uuid="660c3ab2-90f5-46ef-abfc-1b192e0e4f18"/>
+				<reportElement x="4" y="142" width="66" height="15" forecolor="#666666" uuid="660c3ab2-90f5-46ef-abfc-1b192e0e4f18"/>
 				<text><![CDATA[Country]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="377" y="68" width="79" height="15" forecolor="#666666" uuid="d03d57a8-820c-4cc7-b513-4492f49980a2"/>
+				<reportElement x="377" y="122" width="79" height="15" forecolor="#666666" uuid="d03d57a8-820c-4cc7-b513-4492f49980a2"/>
 				<text><![CDATA[Zip/Postal Code]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="4" y="48" width="66" height="15" forecolor="#666666" uuid="58a76348-a4d0-4f60-8173-9b0892e7499b"/>
+				<reportElement x="4" y="102" width="66" height="15" forecolor="#666666" uuid="58a76348-a4d0-4f60-8173-9b0892e7499b"/>
 				<text><![CDATA[Suite No]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="191" y="68" width="75" height="15" forecolor="#666666" uuid="bb45ab9e-30fe-4ee0-993b-f8b075542b31"/>
+				<reportElement x="191" y="122" width="75" height="15" forecolor="#666666" uuid="bb45ab9e-30fe-4ee0-993b-f8b075542b31"/>
 				<text><![CDATA[State/Province]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="4" y="3" width="173" height="20" uuid="2b55603f-9c4d-4ecd-a7ad-1daf5c996878"/>
+				<reportElement x="4" y="57" width="173" height="20" uuid="2b55603f-9c4d-4ecd-a7ad-1daf5c996878"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Employer Address]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="70" y="28" width="501" height="15" uuid="42caafd0-dc15-4e67-a045-3c066f53e49b"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="82" width="501" height="15" uuid="42caafd0-dc15-4e67-a045-3c066f53e49b"/>
 				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetNumber().getStringView() + " " + ((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetName().getStringView()]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="70" y="48" width="501" height="15" uuid="ed295e13-7f42-430a-a4f6-9b7877442f65">
-					<printWhenExpression><![CDATA[!((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().suiteNumber().getStringView().equals("null")]]></printWhenExpression>
-				</reportElement>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="102" width="501" height="15" uuid="ed295e13-7f42-430a-a4f6-9b7877442f65"/>
 				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().suiteNumber().getStringView()]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="70" y="68" width="118" height="15" uuid="2a000b34-18c3-47fc-a058-f8ef7adb6051">
-					<printWhenExpression><![CDATA[!((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().city().getStringView().equals("null")]]></printWhenExpression>
-				</reportElement>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="122" width="118" height="15" uuid="2a000b34-18c3-47fc-a058-f8ef7adb6051"/>
 				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().city().getStringView()]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="266" y="68" width="107" height="15" uuid="ad07dd53-b23f-4cb0-a217-50b06ad974ba">
-					<printWhenExpression><![CDATA[!((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().province().getStringView().equals("null")]]></printWhenExpression>
-				</reportElement>
+			<textField isBlankWhenNull="true">
+				<reportElement x="266" y="122" width="107" height="15" uuid="ad07dd53-b23f-4cb0-a217-50b06ad974ba"/>
 				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().province().getStringView()]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="456" y="68" width="115" height="15" uuid="fccf43d2-3fa1-4280-b4ed-8331c513b994">
-					<printWhenExpression><![CDATA[!((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().postalCode().getStringView().equals("null")]]></printWhenExpression>
-				</reportElement>
+			<textField isBlankWhenNull="true">
+				<reportElement x="456" y="122" width="115" height="15" uuid="fccf43d2-3fa1-4280-b4ed-8331c513b994"/>
 				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().postalCode().getStringView()]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="70" y="88" width="501" height="15" uuid="38bbaa98-7302-4594-8e4b-03c501d5b217">
-					<printWhenExpression><![CDATA[!((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().country().getStringView().equals("null")]]></printWhenExpression>
-				</reportElement>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="142" width="501" height="15" uuid="38bbaa98-7302-4594-8e4b-03c501d5b217"/>
 				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().country().getStringView()]]></textFieldExpression>
 			</textField>
+			<rectangle>
+				<reportElement x="188" y="20" width="185" height="20" forecolor="#CCCCCC" uuid="bc22b928-108d-4e97-b18e-625eae5130c6"/>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement x="467" y="25" width="104" height="15" uuid="913042e4-a2e5-42b6-af07-8b8b22dd5280"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).supervisorPhone().getStringView()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="289" y="5" width="66" height="15" forecolor="#666666" uuid="8dc40434-034f-436e-aa89-ea0b78aa1bf3"/>
+				<text><![CDATA[Employer Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="5" width="110" height="15" forecolor="#666666" uuid="41936e3f-e4a0-4959-b772-b484c4068170"/>
+				<text><![CDATA[Income Source]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="377" y="25" width="90" height="15" forecolor="#666666" uuid="db77ad0b-1611-455b-ad03-678a089757b5"/>
+				<text><![CDATA[Supervisor Phone]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="355" y="5" width="216" height="15" uuid="1df44f5c-efc6-48b4-91c3-cee312cf72a7"/>
+				<textFieldExpression><![CDATA[$F{details}.name().getValue()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="191" y="25" width="95" height="15" forecolor="#666666" uuid="c69b920f-bde9-430e-a3c7-1df663452984"/>
+				<text><![CDATA[Supervisor Name]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="109" y="25" width="79" height="15" uuid="36597a84-8f2a-4847-9571-1fc13205a622"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).employedForYears().getValue()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="284" y="25" width="89" height="15" uuid="e955feb8-f282-4f3b-91b5-637535ff2cb1"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).supervisorName().getStringView()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="25" width="105" height="15" forecolor="#666666" uuid="fc4c0698-0465-46e9-ad9c-ec9c9201f888"/>
+				<text><![CDATA[Employed for (years)]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="114" y="5" width="172" height="15" uuid="c9e45d3d-db2a-48c3-ac67-21754701d125"/>
+				<textFieldExpression><![CDATA[$F{incomeSource}.toString()]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="175">
+			<printWhenExpression><![CDATA[($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.selfemployed)]]></printWhenExpression>
+			<rectangle>
+				<reportElement x="373" y="21" width="198" height="20" forecolor="#CCCCCC" uuid="84c9203f-1e72-4736-9b51-f21a55945d24"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="118" width="188" height="20" forecolor="#CCCCCC" uuid="bfd3a07f-f2b3-4749-b353-6d58cc176e3b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="98" width="570" height="20" forecolor="#CCCCCC" uuid="099d2d2f-a77d-497a-afbc-4382de0c9098"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="58" width="570" height="20" forecolor="#CCCCCC" uuid="50b305f0-3645-4a46-b24c-15af6d709f69"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="78" width="555" height="20" forecolor="#CCCCCC" uuid="de353b7d-460e-4f59-b6d4-be07ddbea96c"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="138" width="570" height="20" forecolor="#CCCCCC" uuid="855eb17e-d401-43ff-8248-bcf9d3fb4fc5"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="373" y="118" width="198" height="20" forecolor="#CCCCCC" uuid="33df6faa-51c8-429f-bdfc-7ea0a2995d4d"/>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="123" width="118" height="15" uuid="55cf706f-321a-4c8f-a47d-5475b0f608b4"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().city().getStringView()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="58" width="173" height="20" uuid="e39ec06e-0c14-498a-acd3-74129cc43a42"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Employer Address]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="103" width="66" height="15" forecolor="#666666" uuid="ef13d1a5-3847-4002-aafa-f6cbbf16be84"/>
+				<text><![CDATA[Suite No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="123" width="66" height="15" forecolor="#666666" uuid="5d485f0a-26cb-4828-be34-20efea1c94ea"/>
+				<text><![CDATA[City]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="143" width="501" height="15" uuid="f261c3bb-5295-4f9b-97d2-da3268ee1002"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().country().getStringView()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="377" y="123" width="79" height="15" forecolor="#666666" uuid="654d5d60-064d-4717-b823-7a8abcfc84aa"/>
+				<text><![CDATA[Zip/Postal Code]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="1" y="78" width="570" height="20" forecolor="#CCCCCC" uuid="0534c82c-e9f6-4851-afb4-f352dc0d49e9"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="4" y="83" width="66" height="15" forecolor="#666666" uuid="ec77b63c-0fe9-492c-afbf-fa55050dde2b"/>
+				<text><![CDATA[Address]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="188" y="118" width="185" height="20" forecolor="#CCCCCC" uuid="185ae724-11d7-4bb4-8650-10c8a588f514"/>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement x="266" y="123" width="107" height="15" uuid="99c50580-02cf-42ec-a24f-0f3be4c148af"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().province().getStringView()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="103" width="501" height="15" uuid="1252bb58-0926-4582-97d6-9de779068cd8"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().suiteNumber().getStringView()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="143" width="66" height="15" forecolor="#666666" uuid="431e1654-f27f-43ec-b7bf-427df3462ab3"/>
+				<text><![CDATA[Country]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="456" y="123" width="115" height="15" uuid="15baa874-26c0-44f1-b757-32547356bfeb"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().postalCode().getStringView()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="83" width="501" height="15" uuid="05790d35-fbfd-4edd-bb88-0c43b3a32192"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetNumber().getStringView() + " " + ((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetName().getStringView()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="191" y="123" width="75" height="15" forecolor="#666666" uuid="822636cc-446d-4f21-8a1c-8919e7f9050a"/>
+				<text><![CDATA[State/Province]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="188" y="21" width="185" height="20" forecolor="#CCCCCC" uuid="fa5e23ae-899c-4b77-a276-0ebffe6cba78"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="21" width="188" height="20" forecolor="#CCCCCC" uuid="775b5d5d-9b60-4e8e-a535-8c000f551e1a"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="286" y="1" width="285" height="20" forecolor="#CCCCCC" uuid="6e354051-d37b-4f2e-81f8-e2fbf62be064"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="1" width="285" height="20" forecolor="#CCCCCC" uuid="62f70bf5-8a26-4f52-8da6-ce50fc8f9c21"/>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement x="467" y="26" width="104" height="15" uuid="b7e7ebdc-2729-4b8f-ab52-0fc8bd4befa4"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).supervisorPhone().getStringView()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="289" y="6" width="88" height="15" forecolor="#666666" uuid="f41ab35b-8fa7-43f2-964e-172097ea6b4a"/>
+				<text><![CDATA[Name of Company]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="6" width="110" height="15" forecolor="#666666" uuid="e1eee492-477f-405a-a3e8-9f88ec7a430e"/>
+				<text><![CDATA[Income Source]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="55" width="571" height="3" forecolor="#FFFFFF" backcolor="#FF8026" uuid="be4e2eee-5d1b-432c-9504-39e9081e6caa"/>
+				<graphicElement>
+					<pen lineWidth="0.0" lineStyle="Dashed"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="377" y="26" width="90" height="15" forecolor="#666666" uuid="a8124e4c-5fde-4c1f-b8e7-b0e38c5c0be7"/>
+				<text><![CDATA[Supervisor Phone]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="387" y="6" width="184" height="15" uuid="57dc4db7-0e01-4b3e-a1d0-3f55873ab296"/>
+				<textFieldExpression><![CDATA[$F{details}.name().getValue()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="191" y="26" width="95" height="15" forecolor="#666666" uuid="7876ac0f-40b8-4a95-bb02-ec8159a4f8f9"/>
+				<text><![CDATA[Supervisor Name]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="109" y="26" width="79" height="15" uuid="d9e96ea9-35a5-4392-adba-6ec41482d1cc"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).employedForYears().getValue()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="26" width="105" height="15" forecolor="#666666" uuid="270fc606-f02d-4018-9692-bdd1fe50d16c"/>
+				<text><![CDATA[Years in Business]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="284" y="26" width="89" height="15" uuid="29d9f3c0-6cbb-4b8d-8620-30e0be6625c6"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).supervisorName().getStringView()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="114" y="6" width="172" height="15" uuid="471e9e14-b12e-4850-b19a-59b071978032"/>
+				<textFieldExpression><![CDATA[$F{incomeSource}.toString()]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="173">
+			<printWhenExpression><![CDATA[($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.socialServices)]]></printWhenExpression>
+			<rectangle>
+				<reportElement x="1" y="78" width="555" height="20" forecolor="#CCCCCC" uuid="44f78814-bf46-433a-b76d-cd7115c3a4ce"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="373" y="118" width="198" height="20" forecolor="#CCCCCC" uuid="a217564b-a664-48b9-921f-f6e3ab2ec184"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="98" width="570" height="20" forecolor="#CCCCCC" uuid="6e2a66e1-bc90-442f-b313-d73fc9e13f8a"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="78" width="570" height="20" forecolor="#CCCCCC" uuid="f5d04858-d927-47c7-94ad-7f7fcbb3fd47"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="118" width="188" height="20" forecolor="#CCCCCC" uuid="348f914f-f1a5-43d0-b785-1b980b3692c0"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="188" y="118" width="185" height="20" forecolor="#CCCCCC" uuid="9b14cf37-06de-464f-a596-42b69c20f0b0"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="1" width="285" height="20" forecolor="#CCCCCC" uuid="83bcc7ce-1158-4bc7-8f48-b2b4b0a671c9"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="138" width="570" height="20" forecolor="#CCCCCC" uuid="5814ea28-1ad1-43de-9820-aebc82522814"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="373" y="21" width="198" height="20" forecolor="#CCCCCC" uuid="d2adcf73-30a2-42df-b942-11f31a2ad8fb"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="4" y="83" width="66" height="15" forecolor="#666666" uuid="9399a193-e9f0-432f-b287-0a0db6f889cf"/>
+				<text><![CDATA[Address]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="456" y="123" width="115" height="15" uuid="d27190fb-3929-4c63-981a-92b06201b2cb"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().postalCode().getStringView()]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="1" y="21" width="153" height="20" forecolor="#CCCCCC" uuid="f038a4a3-ab13-4b7d-b064-1bacc7a039ee"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="154" y="21" width="219" height="20" forecolor="#CCCCCC" uuid="0941c527-7c08-4f5a-b9a4-0d257f6dbdb7"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="191" y="123" width="75" height="15" forecolor="#666666" uuid="eaf37eb5-51fa-4ef6-86ed-f1a27b950223"/>
+				<text><![CDATA[State/Province]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="1" y="58" width="570" height="20" forecolor="#CCCCCC" uuid="95c42d25-844b-4af2-b8e7-9bcc0618d3c0"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="4" y="103" width="66" height="15" forecolor="#666666" uuid="6fde3c0e-6d7a-4558-adb7-96313fa54008"/>
+				<text><![CDATA[Suite No]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="266" y="123" width="107" height="15" uuid="62fc333d-ffa1-434d-814a-13589e887c3d"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().province().getStringView()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="114" y="6" width="172" height="15" uuid="4342edf2-d797-4c27-a179-fd255ad44637"/>
+				<textFieldExpression><![CDATA[$F{incomeSource}.toString()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="103" width="501" height="15" uuid="df13e705-71b3-4af9-a7a4-f2659ed3dea8"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().suiteNumber().getStringView()]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="286" y="1" width="285" height="20" forecolor="#CCCCCC" uuid="9707a441-2924-44cb-9779-fb77410e7602"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="55" width="571" height="3" forecolor="#FFFFFF" backcolor="#FF8026" uuid="ecfb1927-1de4-4850-952b-aa2ea1edd70c"/>
+				<graphicElement>
+					<pen lineWidth="0.0" lineStyle="Dashed"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="4" y="143" width="66" height="15" forecolor="#666666" uuid="bdf71528-9c42-4f42-b4fb-22895d9ca4a9"/>
+				<text><![CDATA[Country]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="467" y="26" width="104" height="15" uuid="50464bf4-dee4-46ff-84ab-94736719295b"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).supervisorPhone().getStringView()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="401" y="6" width="170" height="15" uuid="1440f9f7-505e-44c6-8602-217dd1db9b4c"/>
+				<textFieldExpression><![CDATA[$F{details}.name().getValue()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="123" width="118" height="15" uuid="0b305ea1-9239-4d0c-8e73-cb3cf4c61657"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().city().getStringView()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="58" width="173" height="20" uuid="8e08ba0a-1533-42e2-bfa8-b0b5aaddf7ae"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Employer Address]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="82" y="26" width="72" height="15" uuid="9c173525-a871-4437-8b16-2974debabd96"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).employedForYears().getValue()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="289" y="6" width="112" height="15" forecolor="#666666" uuid="f4d3caa3-65be-451c-a3e4-687114571c3d"/>
+				<text><![CDATA[Social Services Agency]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="83" width="501" height="15" uuid="b2a8b2d7-7bec-45d4-aaff-e7b8a933950d"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetNumber().getStringView() + " " + ((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetName().getStringView()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="377" y="26" width="90" height="15" forecolor="#666666" uuid="d40e3555-06ab-4f44-bbe8-2564228f6c72"/>
+				<text><![CDATA[Agent's Phone]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="377" y="123" width="79" height="15" forecolor="#666666" uuid="16d47a00-9f3e-484e-adbc-7d490bd8403f"/>
+				<text><![CDATA[Zip/Postal Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="6" width="110" height="15" forecolor="#666666" uuid="14fbb388-4ff0-40aa-93d2-81815eefea32"/>
+				<text><![CDATA[Income Source]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="143" width="501" height="15" uuid="28292cb0-1226-4090-afe5-6d0574fa4ab6"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().country().getStringView()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="255" y="26" width="118" height="15" uuid="5c89aef1-7e58-4907-b408-e490416a9a4c"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).supervisorName().getStringView()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="157" y="26" width="98" height="15" forecolor="#666666" uuid="4e212a9c-e57f-4ccd-9cd4-6b184daeceb5"/>
+				<text><![CDATA[Agent / Case Worker]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="26" width="78" height="15" forecolor="#666666" uuid="f7fbc638-e93e-4bcf-b197-bc620467bac7"/>
+				<text><![CDATA[Years Receiving]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="123" width="66" height="15" forecolor="#666666" uuid="ca8bbaf3-93fb-4f56-8ee4-0cdf83b6bef1"/>
+				<text><![CDATA[City]]></text>
+			</staticText>
+		</band>
+		<band height="37">
+			<printWhenExpression><![CDATA[($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.pension)
+                 || ($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.retired)
+                 || ($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.unemployed)
+                 || ($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.disabilitySupport)
+                 || ($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.dividends)
+                 || ($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.other)]]></printWhenExpression>
+			<rectangle>
+				<reportElement x="286" y="0" width="285" height="20" forecolor="#CCCCCC" uuid="4c391091-5b42-445a-be5f-4fdea624c3b1"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="0" width="285" height="20" forecolor="#CCCCCC" uuid="aa56a8b3-bf16-4312-ba10-75e185b66204"/>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement x="401" y="5" width="170" height="15" uuid="e44e10ab-ac67-4427-8183-033be4a75ee8"/>
+				<textFieldExpression><![CDATA[$F{details}.name().getValue()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="5" width="110" height="15" forecolor="#666666" uuid="1c4e07da-2e00-45d4-91ab-5f17b9e4f9f3"/>
+				<text><![CDATA[Income Source]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="289" y="5" width="112" height="15" forecolor="#666666" uuid="cba2b494-ceeb-4d89-b888-e794caf3639a"/>
+				<text><![CDATA[Social Services Agency]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="114" y="5" width="172" height="15" uuid="fb06d9ed-00e6-41e7-bb23-d6918dc6b26a"/>
+				<textFieldExpression><![CDATA[$F{incomeSource}.toString()]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="152">
+			<printWhenExpression><![CDATA[($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.student)]]></printWhenExpression>
+			<rectangle>
+				<reportElement x="1" y="97" width="188" height="20" forecolor="#CCCCCC" uuid="d0cea98c-2591-41bf-8694-7016f475cca5"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="373" y="97" width="198" height="20" forecolor="#CCCCCC" uuid="c000db3b-6cf9-4fae-8115-81cfe246b4e1"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="37" width="570" height="20" forecolor="#CCCCCC" uuid="d809f02e-049e-47bd-883f-91ef51f0c111"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="77" width="570" height="20" forecolor="#CCCCCC" uuid="249ac261-9f19-47d3-a9c6-637c54dcaf04"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="57" width="570" height="20" forecolor="#CCCCCC" uuid="689c7751-a061-4b58-8ffe-38020cc1f665"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="117" width="570" height="20" forecolor="#CCCCCC" uuid="f9d0638d-046e-4e61-be33-4e63221d6f8e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="286" y="0" width="285" height="20" forecolor="#CCCCCC" uuid="151b8bab-81ca-449c-b67e-6235f9b7d148"/>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="102" width="118" height="15" uuid="48541ee7-da3a-400e-b624-5c95455892ec"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).address().city().getValue()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="122" width="501" height="15" uuid="1d667b41-a90c-4fc3-a64b-5ab1b64c863c"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).address().country().getStringView()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="82" width="66" height="15" forecolor="#666666" uuid="7c4d50cd-eb5f-40f5-9e50-6716da7a40b7"/>
+				<text><![CDATA[Suite No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="377" y="102" width="79" height="15" forecolor="#666666" uuid="2827efba-d04f-48ea-8aed-35285b9a62fb"/>
+				<text><![CDATA[Zip/Postal Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="37" width="173" height="20" uuid="4b06f89d-ba26-4e0c-83b7-4859f0f6cf45"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[School Address]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="122" width="66" height="15" forecolor="#666666" uuid="06297dc4-3fa4-4b3a-9a9c-c7c5b89cb40d"/>
+				<text><![CDATA[Country]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="188" y="97" width="185" height="20" forecolor="#CCCCCC" uuid="88d38b5f-9c38-4244-9ae3-cf76e988f31d"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="4" y="102" width="66" height="15" forecolor="#666666" uuid="3a1133da-f034-4a0a-8d30-01e0319ff441"/>
+				<text><![CDATA[City]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="34" width="571" height="3" forecolor="#FFFFFF" backcolor="#FF8026" uuid="999067e0-d825-420f-9a64-e9e0ffac65da"/>
+				<graphicElement>
+					<pen lineWidth="0.0" lineStyle="Dashed"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="0" width="285" height="20" forecolor="#CCCCCC" uuid="605f10d9-f0a8-40b5-9ee8-e3f08f05e390"/>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement x="266" y="102" width="107" height="15" uuid="3f38d7de-526f-49e7-9dc8-21a660bbefa8"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).address().province().getStringView()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="5" width="110" height="15" forecolor="#666666" uuid="c1373a60-4d83-4d34-86b1-05730c77d5f1"/>
+				<text><![CDATA[Income Source]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="328" y="5" width="243" height="15" uuid="50ed2789-2405-493e-b62e-6d8a00f32f8d"/>
+				<textFieldExpression><![CDATA[$F{details}.name().getValue()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="62" width="501" height="15" uuid="4677fd07-ffee-40ec-9a20-dd29ab795dce"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.contact.InternationalAddress)((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).address().cast()).streetNumber().getStringView() + " " + ((com.propertyvista.domain.contact.InternationalAddress)((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).address().cast()).streetName().getStringView()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="289" y="5" width="39" height="15" forecolor="#666666" uuid="b102602b-7cf6-4734-baae-0081893d8611"/>
+				<text><![CDATA[School]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="191" y="102" width="75" height="15" forecolor="#666666" uuid="999541ae-afa2-4281-9bb9-ee380d76b939"/>
+				<text><![CDATA[State/Province]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="114" y="5" width="172" height="15" uuid="b506ff66-4b97-4711-82a5-1dd3ee074b11"/>
+				<textFieldExpression><![CDATA[$F{incomeSource}.toString()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="82" width="501" height="15" uuid="3e427582-adce-4e7c-a8d5-3da7ad1805ce"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.contact.InternationalAddress)((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).address().cast()).suiteNumber().getStringView()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="456" y="102" width="115" height="15" uuid="87cbd689-daad-4f4b-a071-fd73e6d407f8"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).address().postalCode().getStringView()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="62" width="66" height="15" forecolor="#666666" uuid="1df54b45-9532-4552-90cf-450b3ae72523"/>
+				<text><![CDATA[Address]]></text>
+			</staticText>
 		</band>
 	</detail>
 </jasperReport>
