@@ -24,7 +24,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.TaxUtils;
+//import com.propertyvista.biz.financial.TaxUtils;
 import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.biz.financial.billing.BillProducer;
 import com.propertyvista.biz.financial.billing.BillingUtils;
@@ -113,7 +113,6 @@ class YardiBillProducer implements BillProducer {
 
     private void createCharge(BillableItem billableItem, Bill bill) {
         Persistence.service().retrieve(billableItem.item().product());
-
         addCharge(createCharge(billableItem, bill, InvoiceProductCharge.Period.next), bill);
     }
 
@@ -185,7 +184,8 @@ class YardiBillProducer implements BillProducer {
             charge.amount().setValue(charge.amount().getValue().add(subLineItem.amount().getValue()));
         }
 
-        TaxUtils.calculateProductChargeTaxes(charge, bill.billingCycle().building());
+// TODO: elaborate yardi tax
+//        TaxUtils.calculateProductChargeTaxes(charge, bill.billingCycle().building());
 
         charge.description().setValue(charge.chargeSubLineItem().billableItem().item().name().getStringView());
 
@@ -327,11 +327,12 @@ class YardiBillProducer implements BillProducer {
                 add(bill.latePaymentFees().getValue()).
                 add(bill.depositAmount().getValue()));
 
-        BigDecimal taxCombinedAmount = TaxUtils.calculateCombinedTax(bill.lineItems());
-        if (taxCombinedAmount.subtract(bill.taxes().getValue()).abs().compareTo(BigDecimal.ZERO) >= 0.01) {
-            TaxUtils.pennyFix(taxCombinedAmount.subtract(bill.taxes().getValue()), bill.lineItems());
-            bill.taxes().setValue(taxCombinedAmount);
-        }
+// TODO: elaborate yardi tax
+//        BigDecimal taxCombinedAmount = TaxUtils.calculateCombinedTax(bill.lineItems());
+//        if (taxCombinedAmount.subtract(bill.taxes().getValue()).abs().compareTo(BigDecimal.ZERO) >= 0.01) {
+//            TaxUtils.pennyFix(taxCombinedAmount.subtract(bill.taxes().getValue()), bill.lineItems());
+//            bill.taxes().setValue(taxCombinedAmount);
+//        }
 
         bill.totalDueAmount().setValue(bill.pastDueAmount().getValue().add(bill.currentAmount().getValue().add(bill.taxes().getValue())));
         // @formatter:on
@@ -340,9 +341,9 @@ class YardiBillProducer implements BillProducer {
     private Bill.BillType findBillType() {
         switch (lease.status().getValue()) {
         case Application:
-        case Approved: // first bill should be issued
+        case Approved:
         case Active:
-        case Completed: // final bill should be issued
+        case Completed:
             return Bill.BillType.First;
         default:
             throw new BillingException(i18n.tr("Billing can't run when lease is in status ''{0}''", lease.status().getValue()));
