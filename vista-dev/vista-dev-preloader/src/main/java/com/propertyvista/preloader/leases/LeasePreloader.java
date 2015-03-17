@@ -262,7 +262,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                     simBuilder2.create().generateRandomLifeCycle(lease2);
                 }
 
-                if (lease.status().getValue().isActive()) {
+                if (lease.status().getValue().isActive() && !lease.currentTerm().version().tenants().isEmpty()) {
                     new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
                         @Override
                         public Void execute() throws RuntimeException {
