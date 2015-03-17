@@ -27,6 +27,7 @@ public class SpecialURLMaping {
         prodUrls.put("static.propertyvista.com", SpecialURL.staticContext);
         prodUrls.put("static.propertyvista.net", SpecialURL.staticContext);
 
+        prodUrls.put("env-55.devpv.com", SpecialURL.envLinks);
         prodUrls.put("env-prod.propertyvista.com", SpecialURL.envLinks);
         prodUrls.put("env-staging.propertyvista.net", SpecialURL.envLinks);
     }
