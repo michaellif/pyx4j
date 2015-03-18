@@ -20,11 +20,10 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.theme.BillingTheme;
@@ -77,8 +76,8 @@ public class BillForm extends CForm<BillDTO> {
 
         if (!justPreviewBill) {
             formPanel.h1(i18n.tr("Previous Bill"));
-            formPanel.append(Location.Left, proto().balanceForwardAmount(), new CMoneyLabel()).decorate().componentAlignment(Alignment.right);
-            formPanel.append(Location.Left, proto().carryForwardCredit(), new CMoneyLabel()).decorate().componentAlignment(Alignment.right);
+            formPanel.append(Location.Left, proto().balanceForwardAmount()).decorate().componentAlignment(Alignment.right);
+            formPanel.append(Location.Left, proto().carryForwardCredit()).decorate().componentAlignment(Alignment.right);
 
             formPanel.append(Location.Left, proto().depositRefundLineItems(), new LineItemCollapsibleViewer());
             formPanel.append(Location.Left, proto().immediateAccountAdjustmentLineItems(), new LineItemCollapsibleViewer());
@@ -88,30 +87,28 @@ public class BillForm extends CForm<BillDTO> {
             formPanel.append(Location.Left, proto().rejectedPaymentLineItems(), new LineItemCollapsibleViewer());
             formPanel.append(Location.Left, proto().paymentLineItems(), new LineItemCollapsibleViewer());
 
-            CMoneyLabel lastBillTotal = new CMoneyLabel();
-            lastBillTotal.asWidget().addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
-            formPanel.append(Location.Left, proto().pastDueAmount(), lastBillTotal).decorate().componentAlignment(Alignment.right);
+            formPanel.append(Location.Left, proto().pastDueAmount()).decorate().componentAlignment(Alignment.right);
+            get(proto().pastDueAmount()).asWidget().addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
         }
 
         formPanel.h1(i18n.tr("Current Bill"));
         if (justPreviewBill) {
-            formPanel.append(Location.Left, proto().pastDueAmount(), new CMoneyLabel()).decorate().componentAlignment(Alignment.right);
+            formPanel.append(Location.Left, proto().pastDueAmount()).decorate().componentAlignment(Alignment.right);
         }
         formPanel.append(Location.Left, proto().serviceChargeLineItems(), new LineItemCollapsibleViewer());
         formPanel.append(Location.Left, proto().recurringFeatureChargeLineItems(), new LineItemCollapsibleViewer());
         formPanel.append(Location.Left, proto().onetimeFeatureChargeLineItems(), new LineItemCollapsibleViewer());
         formPanel.append(Location.Left, proto().pendingAccountAdjustmentLineItems(), new LineItemCollapsibleViewer());
-        formPanel.append(Location.Left, proto().latePaymentFees(), new CMoneyLabel()).decorate().componentAlignment(Alignment.right);
+        formPanel.append(Location.Left, proto().latePaymentFees()).decorate().componentAlignment(Alignment.right);
         formPanel.append(Location.Left, proto().depositLineItems(), new LineItemCollapsibleViewer());
-        formPanel.append(Location.Left, proto().productCreditAmount(), new CMoneyLabel()).decorate().componentAlignment(Alignment.right);
+        formPanel.append(Location.Left, proto().productCreditAmount()).decorate().componentAlignment(Alignment.right);
 
-        formPanel.append(Location.Left, proto().currentAmount(), new CMoneyLabel()).decorate().componentAlignment(Alignment.right);
-        formPanel.append(Location.Left, proto().taxes(), new CMoneyLabel()).decorate().componentAlignment(Alignment.right);
+        formPanel.append(Location.Left, proto().currentAmount()).decorate().componentAlignment(Alignment.right);
+        formPanel.append(Location.Left, proto().taxes()).decorate().componentAlignment(Alignment.right);
 
         // Dues:
-        CMoneyLabel grandTotal = new CMoneyLabel();
-        grandTotal.asWidget().addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
-        formPanel.append(Location.Left, proto().totalDueAmount(), grandTotal).decorate().componentAlignment(Alignment.right);
+        formPanel.append(Location.Left, proto().totalDueAmount()).decorate().componentAlignment(Alignment.right);
+        get(proto().totalDueAmount()).asWidget().addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
 
         return formPanel;
     }

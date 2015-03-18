@@ -30,16 +30,11 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.security.DataModelPermission;
-import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.AbstractValidationError;
-import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -424,6 +419,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setActionVisible(cancelAction, false);
         setActionVisible(refSourceAction, false);
 
+        documentsButton.setVisible(false);
         editButton.setVisible(false);
 
         super.reset();
@@ -461,6 +457,8 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setActionHighlighted(submitAction, submitAction.isVisible());
         setActionHighlighted(completeAction, completeAction.isVisible());
         setActionHighlighted(approveAction, approveAction.isVisible());
+
+        documentsButton.setVisible(!value.status().getValue().isOperative() && !value.status().getValue().isFormer());
 
         // edit/view terms enabling logic:
         boolean isEditable = (status.isDraft() && status != Status.PendingDecision && (!isOnlineApplication || noPtAppProgress));
