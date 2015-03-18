@@ -40,8 +40,8 @@ public class EnvLinksServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (ApplicationMode.isProduction() && request.getAttribute(SpecialURL.class.getName()) == null || !request.isSecure()) {
-            //response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            //return;
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
 
         response.setHeader("Cache-Control", "no-store");
