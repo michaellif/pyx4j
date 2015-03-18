@@ -39,4 +39,6 @@ public interface LeaseApplicationDocumentDataSectionsDTO extends IEntity {
 
     IList<LeaseApplicationDocumentDataLegalSectionDTO> legalSection();
 
+    IList<LeaseApplicationDocumentDataConfirmationSectionDTO> confirmationSection();
+
 }

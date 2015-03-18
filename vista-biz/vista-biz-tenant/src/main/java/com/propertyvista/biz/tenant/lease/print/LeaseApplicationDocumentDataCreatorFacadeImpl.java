@@ -39,6 +39,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.LeaseApplicationLegalPolicy;
+import com.propertyvista.domain.policy.policies.domain.LeaseApplicationConfirmationTerm;
 import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm;
 import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm.TargetRole;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -56,6 +57,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationConfirmationTerm;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.InvoiceLineItemGroupDTO;
@@ -64,6 +66,8 @@ import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDa
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataAdjustmentDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataAdjustmentsSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataCoApplicantDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataConfirmationSectionDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataConfirmationTermDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDependentDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataEmergencyContactsSectionDTO;
@@ -107,7 +111,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             LandlordMediaBlob blob = Persistence.service().retrieve(LandlordMediaBlob.class,
                     lease.unit().building().landlord().logo().file().blobKey().getValue());
             logo = blob.data().getValue();
-            data.landlordLogo().setValue(logo);
+            data.landlordLogo().setValue(new String(logo));
         }
         data.submissionDate().setValue(application.submission().decisionDate().getValue());
         data.leaseId().setValue(lease.leaseApplication().applicationId().getValue());
@@ -127,6 +131,8 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             fillFinaincialSection(data.sections().get(0).financialSection().get(0), lease, subjectParticipant);
             fillEmergencyContacts(data.sections().get(0).emergencyContactsSection().get(0), lease, subjectParticipant);
             fillLegalSection(data.sections().get(0).legalSection().get(0), application, subjectParticipant, documentMode == DocumentMode.InkSinging);
+            fillConfirmationSection(data.sections().get(0).confirmationSection().get(0), application, subjectParticipant,
+                    documentMode == DocumentMode.InkSinging);
         }
         return data;
     }
@@ -189,6 +195,10 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
 
         LeaseApplicationDocumentDataLegalSectionDTO legalSection = EntityFactory.create(LeaseApplicationDocumentDataLegalSectionDTO.class);
         details.legalSection().add(legalSection);
+
+        LeaseApplicationDocumentDataConfirmationSectionDTO confirmationSection = EntityFactory.create(LeaseApplicationDocumentDataConfirmationSectionDTO.class);
+        details.confirmationSection().add(confirmationSection);
+
         return data;
     }
 
@@ -454,6 +464,54 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             legalTerm.signature().set(signedLegalTerm.signature().duplicate());
             legalTerm.makeWithSignaturePlaceholder().setValue(makeWithSignaturePlaceholders);
             legalSection.legalTerms().add(legalTerm);
+        }
+    }
+
+    private void fillConfirmationSection(LeaseApplicationDocumentDataConfirmationSectionDTO legalSection, LeaseApplication application,
+            LeaseTermParticipant<?> subjectParticipant, boolean makeWithSignaturePlaceholders) {
+
+        List<SignedOnlineApplicationConfirmationTerm> signedConfirmationTerms;
+
+        // fetch terms
+        if (makeWithSignaturePlaceholders) {
+            // TODO copied from OnlineApplicationFacade.getOnlineApplicationLegalTerms(), probably should be merged
+            Building policyNode = application.lease().unit().building();
+
+            LeaseApplicationLegalPolicy leaseApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode,
+                    LeaseApplicationLegalPolicy.class);
+            signedConfirmationTerms = new ArrayList<SignedOnlineApplicationConfirmationTerm>();
+            for (LeaseApplicationConfirmationTerm term : leaseApplicationPolicy.confirmationTerms()) {
+                TargetRole termRole = term.applyToRole().getValue();
+                if (termRole.matchesApplicationRole(subjectParticipant.role().getValue())) {
+                    SignedOnlineApplicationConfirmationTerm signedConfTerm = EntityFactory.create(SignedOnlineApplicationConfirmationTerm.class);
+                    signedConfTerm.term().set(term);
+                    signedConfTerm.signature().signatureFormat().set(term.signatureFormat());
+                    signedConfirmationTerms.add(signedConfTerm);
+                }
+            }
+
+        } else {
+            EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
+            criteria.eq(criteria.proto().masterOnlineApplication().leaseApplication(), application);
+            criteria.eq(criteria.proto().customer(), subjectParticipant.leaseParticipant().customer());
+
+            OnlineApplication onlineApplication = Persistence.service().retrieve(criteria);
+            if (onlineApplication == null) {
+                throw new RuntimeException("online application for application=" + "" + " customer=" + ""
+                        + " was not found, can't create printable legal terms");
+            }
+            signedConfirmationTerms = onlineApplication.confirmationTerms();
+        }
+
+        // convert for printing
+        for (SignedOnlineApplicationConfirmationTerm signedConfTerm : signedConfirmationTerms) {
+            LeaseApplicationDocumentDataConfirmationTermDTO confTerm = EntityFactory.create(LeaseApplicationDocumentDataConfirmationTermDTO.class);
+            confTerm.title().setValue(signedConfTerm.term().title().getValue());
+            confTerm.wordingHtml().setValue(signedConfTerm.term().content().getValue());
+            Persistence.ensureRetrieve(signedConfTerm.signature(), AttachLevel.Attached);
+            confTerm.signature().set(signedConfTerm.signature().duplicate());
+            confTerm.makeWithSignaturePlaceholder().setValue(makeWithSignaturePlaceholders);
+            legalSection.legalTerms().add(confTerm);
         }
     }
 
