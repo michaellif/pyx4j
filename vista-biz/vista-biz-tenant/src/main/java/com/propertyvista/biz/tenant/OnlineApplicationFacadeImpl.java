@@ -188,6 +188,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     @Override
     public void submitOnlineApplication(OnlineApplication application) {
         application.status().setValue(OnlineApplication.Status.Submitted);
+        application.submitDate().setValue(SystemDateManager.getLogicalDate());
         Persistence.service().merge(application);
 
         // TODO: update behavior somehow:
