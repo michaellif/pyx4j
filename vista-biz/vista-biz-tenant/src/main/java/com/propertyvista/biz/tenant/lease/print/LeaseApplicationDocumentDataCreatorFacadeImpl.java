@@ -110,7 +110,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             data.landlordLogo().setValue(logo);
         }
         data.submissionDate().setValue(application.submission().decisionDate().getValue());
-        data.leaseId().setValue(lease.leaseId().getValue());
+        data.leaseId().setValue(lease.leaseApplication().applicationId().getValue());
 
         if (false /* TODO && (documentMode == blank) */) {
             makeDataPlaceholders(data.sections().get(0)); // TODO not sure it's supposed to work like that at all...
@@ -267,7 +267,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     private void fillPeopleSection(LeaseApplicationDocumentDataPeopleSectionDTO peopleSection, Lease lease, LeaseTermParticipant<?> subjectParticipant) {
         EntityQueryCriteria<LeaseTermTenant> criteria = new EntityQueryCriteria<LeaseTermTenant>(LeaseTermTenant.class);
         criteria.eq(criteria.proto().leaseTermV().holder(), lease.currentTerm());
-        peopleSection.leaseId().setValue(lease.leaseId().getValue());
+        peopleSection.leaseId().setValue(lease.leaseApplication().applicationId().getValue());
         for (LeaseTermTenant leaseTermTenant : Persistence.service().query(criteria)) {
             if (leaseTermTenant.role().getValue() == Role.Dependent) {
                 LeaseApplicationDocumentDataDependentDTO dependent = peopleSection.dependents().$();
@@ -291,7 +291,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     private void fillAboutYouSection(LeaseApplicationDocumentDataAboutYouSectionDTO aboutYou, Lease lease, LeaseTermParticipant<?> subjectParticipant,
             LogicalDate date, byte[] logo) {
         //header Information
-        aboutYou.leaseId().setValue(lease.leaseId().getValue());
+        aboutYou.leaseId().setValue(lease.leaseApplication().applicationId().getValue());
         if (logo != null) {
             aboutYou.landlordLogo().setValue(new String(logo));
         }
