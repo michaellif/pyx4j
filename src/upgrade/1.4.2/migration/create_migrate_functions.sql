@@ -1150,6 +1150,44 @@ BEGIN
                 ||'FROM     '||v_schema_name||'.available_locale l '
                 ||'WHERE    p.locale_old = l.id ';
                 
+        -- proof_of_asset_document_file
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.proof_of_asset_document_file AS f '
+                ||'SET  description = t.description '
+                ||'FROM     (SELECT f.id, '
+                ||'         CASE WHEN f.description IS NULL THEN d.description '
+                ||'         ELSE f.description||''. ''||d.description END AS description '
+                ||'         FROM    '||v_schema_name||'.proof_of_asset_document_file f '
+                ||'         JOIN    '||v_schema_name||'.proof_of_asset_document_folder d ON (d.id = f.owner)) AS t '
+                ||'WHERE    f.id = t.id ';
+        
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.proof_of_asset_document_file AS f '
+                ||'SET  owner = s.id '
+                ||'FROM  '||v_schema_name||'.proof_of_asset_document_folder AS d, '
+                ||'      '||v_schema_name||'.customer_screening_asset s '
+                ||'WHERE    f.owner = d.id '
+                ||'AND      d.owner = s.id ';
+                
+        -- proof_of_income_document_file
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.proof_of_income_document_file AS f '
+                ||'SET  description = t.description '
+                ||'FROM     (SELECT f.id, '
+                ||'         CASE WHEN f.description IS NULL THEN d.description '
+                ||'         ELSE f.description||''. ''||d.description END AS description '
+                ||'         FROM    '||v_schema_name||'.proof_of_income_document_file f '
+                ||'         JOIN    '||v_schema_name||'.proof_of_income_document_folder d ON (d.id = f.owner)) AS t '
+                ||'WHERE    f.id = t.id ';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.proof_of_income_document_file AS f '
+                ||'SET  owner = s.id '
+                ||'FROM  '||v_schema_name||'.proof_of_income_document_folder AS d, '
+                ||'      '||v_schema_name||'.customer_screening_income s '
+                ||'WHERE    f.owner = d.id '
+                ||'AND      d.owner = s.id ';
+        
+                
                 
         -- restrictions_policy
         
