@@ -12,6 +12,10 @@
  */
 package com.propertyvista.domain.security.common;
 
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import com.pyx4j.security.shared.Behavior;
@@ -26,7 +30,7 @@ public enum VistaApplication implements Behavior {
 
     staticContext("static"),
 
-    // CI specific URs and 
+    // CI specific URs and
     env,
 
     @Deprecated
@@ -70,6 +74,26 @@ public enum VistaApplication implements Behavior {
         }
     }
 
+    private static final Collection<VistaApplication> pmcApplications = EnumSet.of(crm, site, resident, prospect);
+
+    public boolean requirePmcResolution() {
+        return pmcApplications.contains(this);
+    }
+
+    private static final Map<String, VistaApplication> applicationsByDnsNameFragment = createApplicationsByDnsNameFragment();
+
+    private static Map<String, VistaApplication> createApplicationsByDnsNameFragment() {
+        Map<String, VistaApplication> m = new HashMap<>();
+        for (VistaApplication a : EnumSet.allOf(VistaApplication.class)) {
+            m.put(a.getDnsNameFragment(), a);
+        }
+        return m;
+    }
+
+    public static VistaApplication getVistaApplicationByDnsNameFragment(String dnsNameFragment) {
+        return applicationsByDnsNameFragment.get(dnsNameFragment);
+    }
+
     public static VistaApplication getVistaApplication(Set<Behavior> behaviours) {
         for (VistaApplication behaviour : VistaApplication.values()) {
             if (behaviours.contains(behaviour)) {
@@ -78,4 +102,5 @@ public enum VistaApplication implements Behavior {
         }
         return null;
     }
+
 }
