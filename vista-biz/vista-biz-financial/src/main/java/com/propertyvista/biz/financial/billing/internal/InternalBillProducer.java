@@ -95,7 +95,6 @@ class InternalBillProducer implements BillProducer {
 
         Bill bill = EntityFactory.create(Bill.class);
         try {
-            bill.billType().setValue(findBillType());
             bill.billingAccount().set(lease.billingAccount());
 
             if (preview) {
@@ -111,6 +110,8 @@ class InternalBillProducer implements BillProducer {
             BillingManager.instance().setBillStatus(bill, Bill.BillStatus.Running, true);
 
             currentPeriodBill = BillingManager.instance().getLatestConfirmedBill(lease);
+
+            bill.billType().setValue(findBillType());
 
             if (currentPeriodBill != null) {
                 Persistence.service().retrieve(currentPeriodBill.lineItems());
