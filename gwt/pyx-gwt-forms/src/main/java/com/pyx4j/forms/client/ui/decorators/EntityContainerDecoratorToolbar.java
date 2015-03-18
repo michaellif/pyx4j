@@ -115,12 +115,12 @@ public class EntityContainerDecoratorToolbar<E extends IEntity> extends FlowPane
         actionsPanel.getElement().getStyle().setTop(0, Unit.PX);
         actionsPanel.getElement().getStyle().setRight(0, Unit.PX);
 
-        actionsPanelHolder = new SimplePanel();
-        actionsPanel.addItem(actionsPanelHolder);
-
         warnImage = new Image(images.warn());
         warnImage.setVisible(false);
         actionsPanel.addItem(warnImage);
+
+        actionsPanelHolder = new SimplePanel();
+        actionsPanel.addItem(actionsPanelHolder);
 
         add(captionPanel);
         add(actionsPanel);
