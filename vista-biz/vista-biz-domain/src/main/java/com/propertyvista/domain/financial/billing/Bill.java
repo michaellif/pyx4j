@@ -134,6 +134,7 @@ public interface Bill extends IEntity {
      */
     @Caption(name = "Previous Balance")
     @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> balanceForwardAmount();
 
     /**
@@ -141,57 +142,72 @@ public interface Bill extends IEntity {
      * Bill day.
      */
     @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> paymentReceivedAmount();
 
     @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> paymentRejectedAmount();
 
     @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> depositRefundAmount();
 
     //immediateAccountAdjustments should include taxes
     @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> immediateAccountAdjustments();
 
     @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> nsfCharges();
 
     @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> withdrawalAmount();
 
     /**
      * pastDueAmount = previousBalanceAmount + paymentReceivedAmount + depositRefundAmount +
      * immediateAdjustments
      */
-    @Editor(type = EditorType.money)
     @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> pastDueAmount();
 
     @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> serviceCharge();
 
     @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> recurringFeatureCharges();
 
     @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> oneTimeFeatureCharges();
 
     @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> pendingAccountAdjustments();
 
     @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> previousChargeRefunds();
 
     @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> latePaymentFees();
 
     @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> depositAmount();
 
     @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> productCreditAmount();
 
     @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> carryForwardCredit();
 
     /**
@@ -201,17 +217,19 @@ public interface Bill extends IEntity {
 
     @Caption(name = "Total (before taxes)")
     @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> currentAmount();
 
     @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> taxes();
 
     /**
      * totalDueAmount = pastDueAmount + currentAmount + taxes
      */
     @ToString(index = 1)
-    @Editor(type = EditorType.money)
     @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> totalDueAmount();
 
 }

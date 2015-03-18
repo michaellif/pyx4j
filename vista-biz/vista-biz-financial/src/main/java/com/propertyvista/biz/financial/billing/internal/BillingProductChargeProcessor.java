@@ -35,7 +35,6 @@ import com.propertyvista.domain.financial.billing.InvoiceProductCredit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.util.DomainUtil;
-import com.propertyvista.portal.rpc.shared.BillingException;
 
 public class BillingProductChargeProcessor extends AbstractBillingProcessor<InternalBillProducer> {
 
@@ -64,9 +63,6 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor<Inte
         reviseChargeForPeriod(service, InvoiceProductCharge.Period.previous);
 
         for (BillableItem billableItem : getBillProducer().getNextPeriodBill().billingAccount().lease().currentTerm().version().leaseProducts().featureItems()) {
-            if (billableItem.isNull()) {
-                throw new BillingException("Service Item is mandatory in lease");
-            }
             createCharge(billableItem);
 
             reviseChargeForPeriod(billableItem, InvoiceProductCharge.Period.current);

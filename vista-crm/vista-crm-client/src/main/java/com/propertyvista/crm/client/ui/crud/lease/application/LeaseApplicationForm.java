@@ -89,9 +89,6 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         super.onReset();
 
         get(proto().currentTerm()).setNote(null);
-
-        // Yardi mode overrides:
-        chargesTab.setTabVisible(!VistaFeatures.instance().yardiIntegration());
     }
 
     @Override
@@ -99,8 +96,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         super.onValueSet(populate);
 
         // dynamic tabs visibility management:
-        chargesTab.setTabVisible(!VistaFeatures.instance().yardiIntegration() && getValue().status().getValue().isDraft()
-                && !getValue().billingPreview().isNull());
+        chargesTab.setTabVisible(getValue().status().getValue().isDraft() && !getValue().billingPreview().isNull());
         approvalTab.setTabVisible(!getValue().leaseApplication().approvalChecklist().isEmpty());
         approvalChecklistFolder.setModifyable(approvalTab.isTabVisible() && getValue().status().getValue().isDraft());
 
@@ -232,6 +228,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
             super(ApprovalChecklistItem.class, false);
         }
 
+        @Override
         public void setModifyable(boolean modifyable) {
             for (CComponent<?, ?, ?, ?> item : getComponents()) {
                 ((ApprovalChecklistItemEditor) ((CFolderItem<?>) item).getComponents().iterator().next()).setModifyable(modifyable);

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -95,6 +95,7 @@ class InternalBillProducer implements BillProducer {
 
         Bill bill = EntityFactory.create(Bill.class);
         try {
+            bill.billType().setValue(findBillType());
             bill.billingAccount().set(lease.billingAccount());
 
             if (preview) {
@@ -128,9 +129,6 @@ class InternalBillProducer implements BillProducer {
 
             bill.executionDate().setValue(SystemDateManager.getLogicalDate());
 
-            Bill.BillType billType = findBillType();
-            bill.billType().setValue(billType);
-
             DateRange billingPeriodRange = BillDateUtils.calculateBillingPeriodRange(bill);
             bill.billingPeriodStartDate().setValue(billingPeriodRange.getFromDate());
             bill.billingPeriodEndDate().setValue(billingPeriodRange.getToDate());
@@ -144,7 +142,7 @@ class InternalBillProducer implements BillProducer {
             if (lastBill != null) {
                 nextPeriodBill.balanceForwardAmount().setValue(lastBill.totalDueAmount().getValue());
             } else {
-                nextPeriodBill.balanceForwardAmount().setValue(new BigDecimal("0.00"));
+                nextPeriodBill.balanceForwardAmount().setValue(BigDecimal.ZERO);
             }
 
             List<AbstractBillingProcessor<?>> processors = getExecutionPlan(nextPeriodBill.billType().getValue());
@@ -229,7 +227,7 @@ class InternalBillProducer implements BillProducer {
         case Final:
             // @formatter:off
             return Arrays.asList(new AbstractBillingProcessor<?>[] {
-                    
+
                     new BillingProductChargeProcessor(this),
                     new BillingDepositProcessor(this),
                     new BillingLeaseAdjustmentProcessor(this),
