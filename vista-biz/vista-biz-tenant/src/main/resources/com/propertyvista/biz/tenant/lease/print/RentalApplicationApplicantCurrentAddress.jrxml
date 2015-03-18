@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationApplicantCurrentAddress" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="b9f9f2d0-0eb9-43b5-9b5a-ab45c1d353c8">
-	<property name="ireport.zoom" value="1.6105100000000014"/>
+	<property name="ireport.zoom" value="1.2100000000000009"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="suiteNumber" class="java.lang.String"/>
@@ -15,7 +15,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="147" splitType="Stretch">
+		<band height="110" splitType="Stretch">
 			<rectangle>
 				<reportElement x="1" y="23" width="570" height="20" forecolor="#CCCCCC" uuid="c854f022-013a-404c-a739-b20226fec7d3"/>
 			</rectangle>
@@ -23,25 +23,18 @@
 				<reportElement x="1" y="3" width="570" height="20" forecolor="#CCCCCC" uuid="0c2b71f1-2590-4a92-bfb9-00e9884b711c"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="1" y="123" width="285" height="20" forecolor="#CCCCCC" uuid="c08fbf74-651c-41cf-99ba-1bd0520ae9b8"/>
+				<reportElement x="286" y="83" width="285" height="20" forecolor="#CCCCCC" uuid="7d986f69-b607-4471-ba39-56c426ca2288"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="286" y="103" width="285" height="20" forecolor="#CCCCCC" uuid="7d986f69-b607-4471-ba39-56c426ca2288"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="103" width="285" height="20" forecolor="#CCCCCC" uuid="3b7fe91c-93ea-49b6-95af-116af8f89143"/>
+				<reportElement x="1" y="83" width="285" height="20" forecolor="#CCCCCC" uuid="3b7fe91c-93ea-49b6-95af-116af8f89143"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="4" y="108" width="66" height="15" forecolor="#666666" uuid="2c8904de-a821-4e00-bd8a-436613002ca3"/>
+				<reportElement x="4" y="88" width="66" height="15" forecolor="#666666" uuid="2c8904de-a821-4e00-bd8a-436613002ca3"/>
 				<text><![CDATA[Move In Date]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="1" y="23" width="570" height="20" forecolor="#CCCCCC" uuid="98cad48d-05fb-4315-919c-7cb7c50addd9"/>
 			</rectangle>
-			<staticText>
-				<reportElement x="4" y="128" width="110" height="15" forecolor="#666666" uuid="381eed94-ae37-456c-a633-cbc026da96ae"/>
-				<text><![CDATA[Management Company]]></text>
-			</staticText>
 			<staticText>
 				<reportElement x="4" y="28" width="66" height="15" forecolor="#666666" uuid="3dbef864-41d8-434a-891b-207f4f924114"/>
 				<text><![CDATA[Address]]></text>
@@ -53,7 +46,7 @@
 				<reportElement x="1" y="43" width="570" height="20" forecolor="#CCCCCC" uuid="b9ca9d38-58c0-4edd-b768-e1eecb1d007d"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="289" y="108" width="84" height="15" forecolor="#666666" uuid="4e2589d9-a573-477f-bf86-3cf150424f5d"/>
+				<reportElement x="289" y="88" width="84" height="15" forecolor="#666666" uuid="4e2589d9-a573-477f-bf86-3cf150424f5d"/>
 				<text><![CDATA[Move Out Date]]></text>
 			</staticText>
 			<staticText>
@@ -63,20 +56,10 @@
 			<rectangle>
 				<reportElement x="1" y="63" width="188" height="20" forecolor="#CCCCCC" uuid="76acafcd-44b5-4ddf-b196-c6c865d4849f"/>
 			</rectangle>
-			<rectangle>
-				<reportElement x="1" y="83" width="570" height="20" forecolor="#CCCCCC" uuid="a37f5c92-b54d-486b-946a-b288fdb37145"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="4" y="88" width="66" height="15" forecolor="#666666" uuid="403daca6-bcbc-4777-afe5-1f411bbd3b7d"/>
-				<text><![CDATA[Unit Type]]></text>
-			</staticText>
 			<staticText>
 				<reportElement x="4" y="68" width="66" height="15" forecolor="#666666" uuid="dc131705-effd-4bbc-94f2-825df3b303aa"/>
 				<text><![CDATA[City]]></text>
 			</staticText>
-			<rectangle>
-				<reportElement x="286" y="123" width="285" height="20" forecolor="#CCCCCC" uuid="48c95153-97d7-4d2a-a182-677129645f41"/>
-			</rectangle>
 			<staticText>
 				<reportElement x="4" y="3" width="173" height="20" uuid="2a53e99d-3ec5-443d-9049-2705913ce6f4"/>
 				<textElement>
@@ -101,13 +84,9 @@
 				<reportElement x="377" y="68" width="79" height="15" forecolor="#666666" uuid="a3ff4299-afc4-4665-b269-034b5bb35647"/>
 				<text><![CDATA[Zip/Postal Code]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="289" y="128" width="66" height="15" forecolor="#666666" uuid="80952d8a-276d-4ef1-a6d2-fe52fd6f7ec4"/>
-				<text><![CDATA[Manager Name]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="70" y="28" width="501" height="15" uuid="88f014b2-743d-4ff2-9a26-78d9c40018dd"/>
-				<textFieldExpression><![CDATA[$F{streetNumber} + " " +$F{streetName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[(($F{streetNumber}.equals(null))? "" : ($F{streetNumber})) +(($F{streetName}.equals(null))? "" : (" " + $F{streetName}))]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="70" y="48" width="100" height="15" uuid="2512f93f-1b73-481b-a8e8-ce39cdd6ab6e">
@@ -134,13 +113,13 @@
 				<textFieldExpression><![CDATA[$F{postalCode}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="70" y="108" width="100" height="15" uuid="df0471d6-55e9-4b04-ba32-112c2e83cea0">
+				<reportElement x="70" y="88" width="100" height="15" uuid="df0471d6-55e9-4b04-ba32-112c2e83cea0">
 					<printWhenExpression><![CDATA[!$F{moveInDate}.equals(null)]]></printWhenExpression>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{moveInDate}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="373" y="108" width="100" height="15" uuid="592a2717-b2d3-4647-b51f-3279982406a2">
+				<reportElement x="373" y="88" width="100" height="15" uuid="592a2717-b2d3-4647-b51f-3279982406a2">
 					<printWhenExpression><![CDATA[!$F{moveOutDate}.equals(null)]]></printWhenExpression>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{moveOutDate}]]></textFieldExpression>
