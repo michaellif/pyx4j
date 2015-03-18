@@ -31,7 +31,7 @@ public class VistaServerSideConfigurationProdSalesDemo extends VistaServerSideCo
 
     @Override
     public Set<DemoPmc> dbResetPreloadPmc() {
-        return EnumSet.of(DemoPmc.star, DemoPmc.redridge, DemoPmc.rockville, DemoPmc.gondor, DemoPmc.metcap, DemoPmc.timbercreek, DemoPmc.greenwin);
+        return EnumSet.of(DemoPmc.vista, DemoPmc.redridge, DemoPmc.rockville, DemoPmc.star, DemoPmc.gondor, DemoPmc.timbercreek);
     }
 
     @Override
