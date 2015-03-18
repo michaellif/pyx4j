@@ -60,10 +60,19 @@ public class ApplicationStatusFolder extends VistaBoxFolder<OnlineApplicationSta
                 formPanel.append(Location.Left, proto().role()).decorate();
 
                 formPanel.append(Location.Right, proto().status()).decorate();
+                formPanel.append(Location.Right, proto().submissionDate()).decorate();
                 formPanel.append(Location.Right, proto().progress()).decorate();
                 formPanel.append(Location.Right, proto().daysOpen()).decorate();
 
                 return formPanel;
+            }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+
+                get(proto().submissionDate()).setVisible(!getValue().submissionDate().isNull());
+                get(proto().progress()).setVisible(getValue().submissionDate().isNull());
             }
         };
     }

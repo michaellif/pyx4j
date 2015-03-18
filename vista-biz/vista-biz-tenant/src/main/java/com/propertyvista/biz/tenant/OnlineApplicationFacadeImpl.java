@@ -402,6 +402,8 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
             status.customer().set(application.customer());
             status.role().setValue(application.role().getValue());
 
+            status.submissionDate().setValue(application.submitDate().getValue());
+
             // calculate progress:
             status.progress().setValue(calculateProgress(application));
             status.daysOpen().setValue((SystemDateManager.getLogicalDate().getTime() - application.createDate().getValue().getTime()) / (1000 * 60 * 60 * 24));

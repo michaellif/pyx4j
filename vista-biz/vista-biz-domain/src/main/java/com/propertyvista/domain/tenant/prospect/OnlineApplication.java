@@ -90,6 +90,5 @@ public interface OnlineApplication extends IEntity {
     @Timestamp(Update.Created)
     IPrimitive<LogicalDate> createDate();
 
-    @ReadOnly
     IPrimitive<LogicalDate> submitDate();
 }
