@@ -24,12 +24,10 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.i18n.shared.I18n;
 
-//import com.propertyvista.biz.financial.TaxUtils;
 import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.biz.financial.billing.BillProducer;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billing.DateRange;
-import com.propertyvista.biz.financial.billing.ProrationUtils;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -68,8 +66,8 @@ class YardiBillProducer implements BillProducer {
         try {
             previewBill.billType().setValue(findBillType());
             previewBill.billingAccount().set(lease.billingAccount());
-            previewBill.billSequenceNumber().setValue(0);
             previewBill.billingCycle().set(billingCycle);
+            previewBill.billSequenceNumber().setValue(0);
             previewBill.billStatus().setValue(Bill.BillStatus.Running);
 
             previewBill.executionDate().setValue(SystemDateManager.getLogicalDate());
@@ -240,8 +238,11 @@ class YardiBillProducer implements BillProducer {
             return;
         }
 
-        BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), bill.billingCycle());
-        adjustment.amount().setValue(DomainUtil.roundMoney(amount.multiply(proration)));
+// TODO elaborate yardi prorate calculations
+//        BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), bill.billingCycle());
+//        adjustment.amount().setValue(DomainUtil.roundMoney(amount.multiply(proration)));
+        adjustment.amount().setValue(DomainUtil.roundMoney(amount));
+// end of TODO
         adjustment.description().setValue(billableItemAdjustment.billableItem().item().name().getStringView() + " " + i18n.tr("Adjustment"));
         adjustment.billableItemAdjustment().set(billableItemAdjustment);
 
@@ -250,12 +251,11 @@ class YardiBillProducer implements BillProducer {
     }
 
     private void createConcessionSubLineItems(InvoiceProductCharge charge, BillableItem billableItem) {
-        //TODO
+        // There are no such things in Yardi mode...
     }
 
-// TODO elaborate yardi prorate calculations - talk with AlexS
+// TODO elaborate yardi prorate calculations
     private BigDecimal prorate(InvoiceProductCharge charge) {
-        BillingCycle cycle = billingCycle;
 //        BillingCycle cycle = null;
 //        switch (charge.period().getValue()) {
 //        case previous:
@@ -268,8 +268,9 @@ class YardiBillProducer implements BillProducer {
 //            cycle = getBillProducer().getNextPeriodBill().billingCycle();
 //            break;
 //        }
-        BigDecimal proration = ProrationUtils.prorate(charge.fromDate().getValue(), charge.toDate().getValue(), cycle);
-        return DomainUtil.roundMoney(charge.chargeSubLineItem().billableItem().agreedPrice().getValue(BigDecimal.ZERO).multiply(proration));
+//        BigDecimal proration = ProrationUtils.prorate(charge.fromDate().getValue(), charge.toDate().getValue(), cycle);
+//        return DomainUtil.roundMoney(charge.chargeSubLineItem().billableItem().agreedPrice().getValue(BigDecimal.ZERO).multiply(proration));
+        return charge.chargeSubLineItem().billableItem().agreedPrice().getValue(BigDecimal.ZERO);
     }
 
     private void calculateDeposits(Bill bill) {

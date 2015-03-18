@@ -36,7 +36,6 @@ public class YardiBillingManager {
         public static final YardiBillingManager INSTANCE = new YardiBillingManager();
     }
 
-    //TODO shouldn't be public
     public static YardiBillingManager instance() {
         return SingletonHolder.INSTANCE;
     }
