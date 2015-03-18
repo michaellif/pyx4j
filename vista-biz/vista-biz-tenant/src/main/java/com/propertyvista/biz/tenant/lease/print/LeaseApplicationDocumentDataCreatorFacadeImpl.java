@@ -433,16 +433,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             }
 
         } else {
-            EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
-            criteria.eq(criteria.proto().masterOnlineApplication().leaseApplication(), application);
-            criteria.eq(criteria.proto().customer(), subjectParticipant.leaseParticipant().customer());
-
-            OnlineApplication onlineApplication = Persistence.service().retrieve(criteria);
-            if (onlineApplication == null) {
-                throw new RuntimeException("online application for application=" + "" + " customer=" + ""
-                        + " was not found, can't create printable legal terms");
-            }
-            signedLegalTerms = onlineApplication.legalTerms();
+            signedLegalTerms = retrieveOnlineApplication(application, subjectParticipant).legalTerms();
         }
 
         // convert for printing
@@ -545,6 +536,18 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         }
 
         return billData;
+    }
+
+    private OnlineApplication retrieveOnlineApplication(LeaseApplication application, LeaseTermParticipant<?> subjectParticipant) {
+        EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
+        criteria.eq(criteria.proto().masterOnlineApplication().leaseApplication(), application);
+        criteria.eq(criteria.proto().customer(), subjectParticipant.leaseParticipant().customer());
+
+        OnlineApplication onlineApplication = Persistence.service().retrieve(criteria);
+        if (onlineApplication == null) {
+            throw new RuntimeException("online application for application=" + "" + " customer=" + "" + " was not found, can't create printable legal terms");
+        }
+        return onlineApplication;
     }
 
     private Collection<LeaseApplicationDocumentDataFirstPaymentLineItemDTO> retrieveLineItems(InvoiceLineItemGroupDTO lineItemsGroup) {
