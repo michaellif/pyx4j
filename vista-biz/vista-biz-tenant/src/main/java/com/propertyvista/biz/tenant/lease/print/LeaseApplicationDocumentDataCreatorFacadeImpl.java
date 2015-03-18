@@ -110,7 +110,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             data.landlordLogo().setValue(logo);
         }
         data.submissionDate().setValue(application.submission().decisionDate().getValue());
-        data.leaseId().setValue(lease.leaseId().getValue());
+        data.leaseId().setValue(lease.leaseApplication().applicationId().getValue());
 
         if (false /* TODO && (documentMode == blank) */) {
             makeDataPlaceholders(data.sections().get(0)); // TODO not sure it's supposed to work like that at all...
@@ -119,9 +119,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             fillLeaseSection(data.sections().get(0).leaseSection().get(0), lease);
             fillRentalItemsSection(data.sections().get(0).rentalItemsSection().get(0), lease);
             fillAdjustmentsSection(data.sections().get(0).adjustmentsSection().get(0), lease);
-            if (!VistaFeatures.instance().yardiIntegration()) {
-                fillFirstPaymentData(data.sections().get(0).firstPaymentSection().get(0), lease);
-            }
+            fillFirstPaymentData(data.sections().get(0).firstPaymentSection().get(0), lease);
             fillPeopleSection(data.sections().get(0).peopleSection().get(0), lease, subjectParticipant);
             fillAboutYouSection(data.sections().get(0).aboutYouSection().get(0), lease, subjectParticipant, application.submission().decisionDate().getValue(),
                     logo);
@@ -169,11 +167,8 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         LeaseApplicationDocumentDataAdjustmentsSectionDTO adjustmentsSection = EntityFactory.create(LeaseApplicationDocumentDataAdjustmentsSectionDTO.class);
         details.adjustmentsSection().add(adjustmentsSection);
 
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            LeaseApplicationDocumentDataFirstPaymentSectionDTO firstPayemntSection = EntityFactory
-                    .create(LeaseApplicationDocumentDataFirstPaymentSectionDTO.class);
-            details.firstPaymentSection().add(firstPayemntSection);
-        }
+        LeaseApplicationDocumentDataFirstPaymentSectionDTO firstPayemntSection = EntityFactory.create(LeaseApplicationDocumentDataFirstPaymentSectionDTO.class);
+        details.firstPaymentSection().add(firstPayemntSection);
 
         LeaseApplicationDocumentDataPeopleSectionDTO peopleSection = EntityFactory.create(LeaseApplicationDocumentDataPeopleSectionDTO.class);
         details.peopleSection().add(peopleSection);
@@ -267,7 +262,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     private void fillPeopleSection(LeaseApplicationDocumentDataPeopleSectionDTO peopleSection, Lease lease, LeaseTermParticipant<?> subjectParticipant) {
         EntityQueryCriteria<LeaseTermTenant> criteria = new EntityQueryCriteria<LeaseTermTenant>(LeaseTermTenant.class);
         criteria.eq(criteria.proto().leaseTermV().holder(), lease.currentTerm());
-        peopleSection.leaseId().setValue(lease.leaseId().getValue());
+        peopleSection.leaseId().setValue(lease.leaseApplication().applicationId().getValue());
         for (LeaseTermTenant leaseTermTenant : Persistence.service().query(criteria)) {
             if (leaseTermTenant.role().getValue() == Role.Dependent) {
                 LeaseApplicationDocumentDataDependentDTO dependent = peopleSection.dependents().$();
@@ -291,7 +286,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     private void fillAboutYouSection(LeaseApplicationDocumentDataAboutYouSectionDTO aboutYou, Lease lease, LeaseTermParticipant<?> subjectParticipant,
             LogicalDate date, byte[] logo) {
         //header Information
-        aboutYou.leaseId().setValue(lease.leaseId().getValue());
+        aboutYou.leaseId().setValue(lease.leaseApplication().applicationId().getValue());
         if (logo != null) {
             aboutYou.landlordLogo().setValue(new String(logo));
         }
@@ -532,20 +527,20 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     }
 
     private BillDTO retrieveBillData(Lease lease) {
-        if (VistaFeatures.instance().yardiIntegration()) {
-            return null; // no bills for Yardi mode!..
-        }
-
         BillDTO billData = EntityFactory.create(BillDTO.class);
 
-        if (lease.status().getValue().isDraft() && Lease.Status.isApplicationUnitSelected(lease)) {
-            // create bill preview for draft leases/applications:
+        if (VistaFeatures.instance().yardiIntegration()) {
             billData = BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(lease));
-        } else if (lease.status().getValue().isCurrent()) {
-            // get first bill for current leases:
-            Bill bill = ServerSideFactory.create(BillingFacade.class).getBill(lease, 1);
-            if (bill != null) {
-                billData = BillingUtils.createBillDto(bill);
+        } else {
+            if (lease.status().getValue().isDraft() && Lease.Status.isApplicationUnitSelected(lease)) {
+                // create bill preview for draft leases/applications:
+                billData = BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(lease));
+            } else if (lease.status().getValue().isCurrent()) {
+                // get first bill for current leases:
+                Bill bill = ServerSideFactory.create(BillingFacade.class).getBill(lease, 1);
+                if (bill != null) {
+                    billData = BillingUtils.createBillDto(bill);
+                }
             }
         }
 

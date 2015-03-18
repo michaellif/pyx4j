@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -40,8 +40,8 @@ public class EnvLinksServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (ApplicationMode.isProduction() && (request.getAttribute(SpecialURL.class.getName()) == null || !request.isSecure())) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return;
+//            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+//            return;
         }
 
         response.setHeader("Cache-Control", "no-store");

@@ -34,7 +34,6 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> extends LeaseCrudServiceBaseImpl<DTO> implements LeaseViewerCrudServiceBase<DTO> {
 
@@ -48,11 +47,9 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
 
         Persistence.service().retrieve(to.currentTerm().version().utilities());
 
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            // create bill preview for draft leases/applications:
-            if (in.status().getValue().isDraft() && Lease.Status.isApplicationUnitSelected(in)) {
-                to.billingPreview().set(BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(in)));
-            }
+        // create bill preview for draft leases/applications:
+        if (in.status().getValue().isDraft() && Lease.Status.isApplicationUnitSelected(in)) {
+            to.billingPreview().set(BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(in)));
         }
 
         if (Lease.Status.isApplicationUnitSelected(to)) {

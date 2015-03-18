@@ -86,7 +86,6 @@ public class LineItemCollapsibleViewer extends CViewer<InvoiceLineItemGroupDTO> 
         public LineItemCollapsibleDecorator(WidgetsImages images) {
             super(images);
             addToggleHandler(LineItemCollapsibleViewer.this);
-
         }
     }
 

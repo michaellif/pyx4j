@@ -75,25 +75,25 @@ public class BillingUtils {
 
     public static void prepareAccumulators(Bill bill) {
         //Set accumulating fields to 0 value
-        bill.serviceCharge().setValue(new BigDecimal("0.00"));
+        bill.serviceCharge().setValue(BigDecimal.ZERO);
 
-        bill.depositRefundAmount().setValue(new BigDecimal("0.00"));
-        bill.immediateAccountAdjustments().setValue(new BigDecimal("0.00"));
-        bill.nsfCharges().setValue(new BigDecimal("0.00"));
-        bill.withdrawalAmount().setValue(new BigDecimal("0.00"));
-        bill.paymentRejectedAmount().setValue(new BigDecimal("0.00"));
-        bill.paymentReceivedAmount().setValue(new BigDecimal("0.00"));
+        bill.depositRefundAmount().setValue(BigDecimal.ZERO);
+        bill.immediateAccountAdjustments().setValue(BigDecimal.ZERO);
+        bill.nsfCharges().setValue(BigDecimal.ZERO);
+        bill.withdrawalAmount().setValue(BigDecimal.ZERO);
+        bill.paymentRejectedAmount().setValue(BigDecimal.ZERO);
+        bill.paymentReceivedAmount().setValue(BigDecimal.ZERO);
 
-        bill.recurringFeatureCharges().setValue(new BigDecimal("0.00"));
-        bill.oneTimeFeatureCharges().setValue(new BigDecimal("0.00"));
-        bill.pendingAccountAdjustments().setValue(new BigDecimal("0.00"));
-        bill.previousChargeRefunds().setValue(new BigDecimal("0.00"));
-        bill.latePaymentFees().setValue(new BigDecimal("0.00"));
-        bill.depositAmount().setValue(new BigDecimal("0.00"));
-        bill.productCreditAmount().setValue(new BigDecimal("0.00"));
-        bill.carryForwardCredit().setValue(new BigDecimal("0.00"));
+        bill.recurringFeatureCharges().setValue(BigDecimal.ZERO);
+        bill.oneTimeFeatureCharges().setValue(BigDecimal.ZERO);
+        bill.pendingAccountAdjustments().setValue(BigDecimal.ZERO);
+        bill.previousChargeRefunds().setValue(BigDecimal.ZERO);
+        bill.latePaymentFees().setValue(BigDecimal.ZERO);
+        bill.depositAmount().setValue(BigDecimal.ZERO);
+        bill.productCreditAmount().setValue(BigDecimal.ZERO);
+        bill.carryForwardCredit().setValue(BigDecimal.ZERO);
 
-        bill.taxes().setValue(new BigDecimal("0.00"));
+        bill.taxes().setValue(BigDecimal.ZERO);
     }
 
     public static boolean isService(Product.ProductV<?> product) {
@@ -262,7 +262,7 @@ public class BillingUtils {
     }
 
     public static BigDecimal getMaxLeaseTermMonthlyTotal(LeaseTerm leaseTerm) {
-        BigDecimal total = new BigDecimal("0.00");
+        BigDecimal total = BigDecimal.ZERO;
 
         LogicalDate from, to, leaseEnd;
         Calendar calendar = new GregorianCalendar();
@@ -275,7 +275,7 @@ public class BillingUtils {
             calendar.add(Calendar.MONTH, 1);
             to = new LogicalDate(calendar.getTime());
             // add up price for service and all applicable features for the from-to period
-            BigDecimal monthly = new BigDecimal("0.00");
+            BigDecimal monthly = BigDecimal.ZERO;
             monthly = monthly.add(leaseTerm.version().leaseProducts().serviceItem().agreedPrice().getValue(BigDecimal.ZERO));
             for (BillableItem feature : leaseTerm.version().leaseProducts().featureItems()) {
                 // add feature monthly price if active within current from-to period (not prorated)

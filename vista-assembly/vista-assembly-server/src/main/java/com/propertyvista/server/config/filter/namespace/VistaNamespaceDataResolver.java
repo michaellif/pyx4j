@@ -20,7 +20,6 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.security.common.VistaApplication;
-import com.propertyvista.server.config.filter.special.SpecialURLMaping;
 import com.propertyvista.server.config.filter.utils.HttpRequestUtils;
 
 public class VistaNamespaceDataResolver extends NamespaceDataResolver {
@@ -66,7 +65,7 @@ public class VistaNamespaceDataResolver extends NamespaceDataResolver {
     private void initNamespaceData() {
         namespaceData = new VistaNamespaceData();
 
-        namespaceData.setSpecialURL(SpecialURLMaping.resolve(httpRequest));
+        //namespaceData.setSpecialURL(SpecialURLMaping.resolve(httpRequest));
 
         // Resolve application
         VistaApplication app = VistaApplicationResolverHelper.getApplication(httpRequest);
