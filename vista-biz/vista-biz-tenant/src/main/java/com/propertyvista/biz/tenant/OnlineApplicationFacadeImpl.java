@@ -188,7 +188,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     @Override
     public void submitOnlineApplication(OnlineApplication application) {
         application.status().setValue(OnlineApplication.Status.Submitted);
-        application.submitDate().setValue(SystemDateManager.getLogicalDate());
+        application.submissionDate().setValue(SystemDateManager.getLogicalDate());
         Persistence.service().merge(application);
 
         // TODO: update behavior somehow:
@@ -402,11 +402,11 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
             status.customer().set(application.customer());
             status.role().setValue(application.role().getValue());
 
-            status.submissionDate().setValue(application.submitDate().getValue());
+            status.submissionDate().setValue(application.submissionDate().getValue());
 
             // calculate progress:
             status.progress().setValue(calculateProgress(application));
-            status.daysOpen().setValue((SystemDateManager.getLogicalDate().getTime() - application.createDate().getValue().getTime()) / (1000 * 60 * 60 * 24));
+            status.daysOpen().setValue((SystemDateManager.getLogicalDate().getTime() - application.creationDate().getValue().getTime()) / (1000 * 60 * 60 * 24));
 
             moaStatus.individualApplications().add(status);
 

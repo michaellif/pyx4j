@@ -88,7 +88,7 @@ public interface OnlineApplication extends IEntity {
     ISet<OnlineApplicationWizardStepStatus> stepsStatuses();
 
     @Timestamp(Update.Created)
-    IPrimitive<LogicalDate> createDate();
+    IPrimitive<LogicalDate> creationDate();
 
-    IPrimitive<LogicalDate> submitDate();
+    IPrimitive<LogicalDate> submissionDate();
 }
