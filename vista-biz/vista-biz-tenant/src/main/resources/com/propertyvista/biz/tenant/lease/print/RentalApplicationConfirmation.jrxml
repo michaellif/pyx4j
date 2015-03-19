@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationTerms" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="1c5b4e4e-6ba0-4a4f-bbb3-371f271112dd">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="legalTerms" class="com.pyx4j.entity.core.IList"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="37" splitType="Stretch">
+			<staticText>
+				<reportElement x="5" y="0" width="173" height="20" uuid="d320177f-88be-458b-b25c-e32dc2ec4c85"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Confirmation Terms]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="-19" y="29" width="591" height="1" uuid="85c15a88-e531-4612-8d3a-6f5b7d879de1"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{legalTerms})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.RentalApplicationConfirmationTerms")]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

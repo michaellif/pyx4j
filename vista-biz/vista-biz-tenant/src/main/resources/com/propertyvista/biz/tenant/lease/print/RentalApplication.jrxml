@@ -2,13 +2,11 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationFirstPage" pageWidth="612" pageHeight="842" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3ab57690-448c-4258-a02d-968bc8f50a7e">
 	<property name="ireport.zoom" value="1.7715610000000352"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="10"/>
-	<parameter name="landlordLogo" class="java.io.InputStream"/>
+	<property name="ireport.y" value="254"/>
+	<parameter name="landlordLogo" class="java.lang.String"/>
 	<parameter name="landlordName" class="java.lang.String"/>
 	<parameter name="submissionDate" class="com.pyx4j.commons.LogicalDate"/>
 	<parameter name="leaseId" class="java.lang.String"/>
-	<parameter name="name" class="java.lang.String"/>
-	<parameter name="date" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="leaseSection" class="com.pyx4j.entity.core.IList"/>
 	<field name="rentalItemsSection" class="com.pyx4j.entity.core.IList"/>
 	<field name="adjustmentsSection" class="com.pyx4j.entity.core.IList"/>
@@ -19,6 +17,7 @@
 	<field name="financialSection" class="com.pyx4j.entity.core.IList"/>
 	<field name="emergencyContactsSection" class="com.pyx4j.entity.core.IList"/>
 	<field name="legalSection" class="com.pyx4j.entity.core.IList"/>
+	<field name="confirmationSection" class="com.pyx4j.entity.core.IList"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -69,12 +68,10 @@
 			</staticText>
 			<image scaleImage="RetainShape" hAlign="Left" vAlign="Top">
 				<reportElement x="0" y="0" width="286" height="66" uuid="ab24424e-516d-4def-ac3c-b80ed2e7265e"/>
-				<imageExpression><![CDATA[$P{landlordLogo}]]></imageExpression>
+				<imageExpression><![CDATA[(!$P{landlordLogo}.equals(null))? (new ByteArrayInputStream(($P{landlordLogo}).getBytes())) : null]]></imageExpression>
 			</image>
-			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="410" y="81" width="100" height="15" uuid="a96e2adc-538a-4b64-8c36-11603b69c3fb">
-					<printWhenExpression><![CDATA[!$P{submissionDate}.equals(null)]]></printWhenExpression>
-				</reportElement>
+			<textField pattern="MMMMM dd, yyyy" isBlankWhenNull="true">
+				<reportElement x="410" y="81" width="100" height="15" uuid="a96e2adc-538a-4b64-8c36-11603b69c3fb"/>
 				<textFieldExpression><![CDATA[$P{submissionDate}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -85,10 +82,8 @@
 				<reportElement x="0" y="4" width="309" height="19" uuid="0d57e3cc-a17c-40fe-857d-64166ff07019"/>
 				<text><![CDATA[The undersigned Applicant(s) hereby make this application to lease:]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="310" y="4" width="261" height="20" uuid="c1421299-492b-4f9a-9fd5-1953d7a0e067">
-					<printWhenExpression><![CDATA[!$P{leaseId}.equals(null)]]></printWhenExpression>
-				</reportElement>
+			<textField isBlankWhenNull="true">
+				<reportElement x="310" y="4" width="261" height="20" uuid="c1421299-492b-4f9a-9fd5-1953d7a0e067"/>
 				<textFieldExpression><![CDATA[$P{leaseId}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -165,36 +160,12 @@
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.RentalApplicationApplicantEmergencyContactList")]]></subreportExpression>
 			</subreport>
 		</band>
-		<band height="32">
-			<rectangle>
-				<reportElement x="2" y="3" width="185" height="20" forecolor="#CCCCCC" uuid="75819eac-0a5e-4920-857c-8e900c3f3e5b"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="187" y="3" width="193" height="20" forecolor="#CCCCCC" uuid="e0744796-5053-4087-9a88-e59d5a1adbe6"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="190" y="8" width="30" height="15" forecolor="#666666" uuid="4c4f7e23-c0ce-42e8-9125-449cc562394c"/>
-				<text><![CDATA[Name]]></text>
-			</staticText>
-			<rectangle>
-				<reportElement x="380" y="3" width="191" height="20" forecolor="#CCCCCC" uuid="f92a7e85-3671-44f5-b5a5-c7b470b7662b"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="383" y="8" width="66" height="15" forecolor="#666666" uuid="5b228812-d9d8-49b6-a1ce-5880683495ce"/>
-				<text><![CDATA[Signature]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="5" y="8" width="42" height="15" forecolor="#666666" uuid="af108a4e-ff11-4a2c-8bc6-09c17e95bc42"/>
-				<text><![CDATA[Date]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="220" y="8" width="150" height="15" uuid="071c5b7a-2e20-4ba7-9584-1b29e4998f25"/>
-				<textFieldExpression><![CDATA[$P{name}]]></textFieldExpression>
-			</textField>
-			<textField pattern="MMMMM dd, yyyy" isBlankWhenNull="true">
-				<reportElement x="47" y="8" width="100" height="15" uuid="ad9bf8b6-4453-4422-9aac-7576869a01a8"/>
-				<textFieldExpression><![CDATA[$P{date}]]></textFieldExpression>
-			</textField>
+		<band height="16">
+			<subreport>
+				<reportElement x="-20" y="8" width="591" height="1" uuid="425b140a-0185-43c5-be94-9c33e95d2200"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{confirmationSection})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.RentalApplicationConfirmation")]]></subreportExpression>
+			</subreport>
 		</band>
 	</detail>
 	<pageFooter>
