@@ -40,15 +40,12 @@ public class EnvNApplicationContextResolver extends AbstractApplicationContextRe
     protected VistaApplication resolveApplication(HttpServletRequest httpRequest, String normalizedServerName) {
         String[] appByDomainTokens = normalizedServerName.split("-");
         if (appByDomainTokens.length >= 2) {
-            VistaApplication app = VistaApplication.getVistaApplicationByDnsNameFragment(appByDomainTokens[1]);
+            VistaApplication app = VistaApplicationDeploymentMap.getVistaApplicationByDnsNameFragment(appByDomainTokens[1], httpRequest);
             if (app != null && app.requirePmcResolution()) {
-                if (app == VistaApplication.resident && "prospect".equalsIgnoreCase(HttpRequestUtils.getRootServletPath(httpRequest))) {
-                    return VistaApplication.prospect;
-                }
                 return app;
             }
         } else if (appByDomainTokens.length == 1) {
-            VistaApplication app = VistaApplication.getVistaApplicationByDnsNameFragment(appByDomainTokens[0]);
+            VistaApplication app = VistaApplicationDeploymentMap.getVistaApplicationByDnsNameFragment(appByDomainTokens[0]);
             if (app != null && !app.requirePmcResolution()) {
                 return app;
             }

@@ -61,20 +61,21 @@ public class CustomDNSApplicationContextResolver implements VistaApplicationCont
     }
 
     protected VistaApplication resolveApplication(HttpServletRequest httpRequest, PmcDnsName dnsName) {
+        VistaApplication app;
         switch (dnsName.target().getValue()) {
         case crm:
-            return VistaApplication.crm;
+            app = VistaApplication.crm;
+            break;
         case site:
-            return VistaApplication.site;
+            app = VistaApplication.site;
+            break;
         case portal:
-            if ("prospect".equalsIgnoreCase(HttpRequestUtils.getRootServletPath(httpRequest))) {
-                return VistaApplication.prospect;
-            } else {
-                return VistaApplication.resident;
-            }
+            app = VistaApplication.resident;
+            break;
         default:
             return null;
         }
+        return VistaApplicationDeploymentMap.getVistaApplicationByDnsNameFragment(app.getDnsNameFragment(), httpRequest);
     }
 
 }

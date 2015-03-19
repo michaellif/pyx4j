@@ -14,8 +14,6 @@ package com.propertyvista.domain.security.common;
 
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import com.pyx4j.security.shared.Behavior;
@@ -83,7 +81,7 @@ public enum VistaApplication implements Behavior {
         return dnsNameFragment;
     }
 
-    public String getChildSubApplicationPath() {
+    public String getSubApplicationPath() {
         return childSubApplicationPath;
     }
 
@@ -111,22 +109,6 @@ public enum VistaApplication implements Behavior {
         default:
             return null;
         }
-    }
-
-    private static final Map<String, VistaApplication> applicationsByDnsNameFragment = createApplicationsByDnsNameFragment();
-
-    private static Map<String, VistaApplication> createApplicationsByDnsNameFragment() {
-        Map<String, VistaApplication> m = new HashMap<>();
-        for (VistaApplication a : EnumSet.allOf(VistaApplication.class)) {
-            if (!m.containsKey(a.getDnsNameFragment())) {
-                m.put(a.getDnsNameFragment(), a);
-            }
-        }
-        return m;
-    }
-
-    public static VistaApplication getVistaApplicationByDnsNameFragment(String dnsNameFragment) {
-        return applicationsByDnsNameFragment.get(dnsNameFragment);
     }
 
     public static VistaApplication getVistaApplication(Set<Behavior> behaviours) {

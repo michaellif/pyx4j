@@ -13,6 +13,7 @@
 package com.propertyvista.server.config.filter;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -36,7 +37,6 @@ import com.propertyvista.config.deployment.VistaApplicationContext;
 import com.propertyvista.config.deployment.VistaNamespaceResolver;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.portal.rpc.shared.SiteWasNotActivatedUserRuntimeException;
-import com.propertyvista.server.config.filter.utils.HttpRequestUtils;
 
 public class VistaApplicationContextDispatcherFilter implements Filter {
 
@@ -76,12 +76,13 @@ public class VistaApplicationContextDispatcherFilter implements Filter {
         }
     }
 
+    private static AtomicInteger rc = new AtomicInteger();
+
     public void map(final ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
         if (debug) {
-            log.info("Complete URL Request -> {}", HttpRequestUtils.getCompleteURLWithContextPath(httpRequest));
-            log.info("Complete URL Request without context -> {}", HttpRequestUtils.getCompleteURLNoContextPath(httpRequest));
+            log.info("***ACD*** RequestURL -> {} {}", ServletUtils.getActualRequestURL(httpRequest, true), httpRequest.getClass().getSimpleName());
         }
 
         VistaApplicationContext context = VistaNamespaceResolver.instance().resolve(httpRequest);
@@ -91,11 +92,12 @@ public class VistaApplicationContextDispatcherFilter implements Filter {
         }
 
         if (debug) {
-            log.info("Resolved App '{}', NameSpace '{}'", context.getApplication(), context.getNamespace());
+            log.info("***ACD*** Resolved App '{}', NameSpace '{}'", context.getApplication(), context.getNamespace());
         }
 
         if (isDeploymentHttps && !httpRequest.isSecure() && context.getApplication().requireHttps()) {
             String defaultApplicationUrl = VistaDeployment.getBaseApplicationURL(context.getCurrentPmc(), context.getApplication(), true);
+            defaultApplicationUrl += "?rrt" + rc.incrementAndGet();
             if (debug) {
                 log.info("***ACD*** \"{}\" redirecting to \"{}\" ", httpRequest.getRequestURI(), defaultApplicationUrl);
             }
@@ -104,6 +106,10 @@ public class VistaApplicationContextDispatcherFilter implements Filter {
             // default behavior reading directories different in tomcat than jetty
             // Redirect incomplete path:  /prospect -> /prospect/
             String urlToForward = httpRequest.getRequestURL().append("/").toString();
+            String query = httpRequest.getQueryString();
+            if (query != null && query.length() > 0) {
+                urlToForward += "?" + query;
+            }
             if (debug) {
                 log.debug("***ACD*** redirecting Incomplete AppRoot to \"{}\"", urlToForward);
             }
@@ -124,14 +130,14 @@ public class VistaApplicationContextDispatcherFilter implements Filter {
     }
 
     public static boolean isIncompleteAppRoot(HttpServletRequest httpRequest, VistaApplication app) {
-        return (app.getChildSubApplicationPath() != null) && httpRequest.getServletPath().equalsIgnoreCase("/" + app.getChildSubApplicationPath());
+        return (app.getSubApplicationPath() != null) && httpRequest.getServletPath().equalsIgnoreCase("/" + app.getSubApplicationPath());
     }
 
     public static String buildInternalForwardUri(HttpServletRequest httpRequest, VistaApplication app) {
         String uri = "";
 
         String internalMappingRoot = "/" + app.getInternalMappingName();
-        if (app.getChildSubApplicationPath() == null) {
+        if (app.getSubApplicationPath() == null) {
             uri += internalMappingRoot;
         }
 
