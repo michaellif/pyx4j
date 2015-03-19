@@ -71,7 +71,7 @@ public class BillingDepositProcessor extends AbstractBillingProcessor<InternalBi
                 invoiceDeposit.billingAccount().set(getBillProducer().getNextPeriodBill().billingAccount());
                 invoiceDeposit.dueDate().setValue(getBillProducer().getNextPeriodBill().dueDate().getValue());
                 invoiceDeposit.arCode().set(deposit.chargeCode());
-                invoiceDeposit.description().setValue(deposit.type().getStringView());
+                invoiceDeposit.description().setValue(billableItem.item().name().getStringView() + ", " + deposit.type().getStringView());
                 invoiceDeposit.amount().setValue(deposit.amount().getValue());
                 invoiceDeposit.taxTotal().setValue(BigDecimal.ZERO);
                 invoiceDeposit.deposit().set(deposit);

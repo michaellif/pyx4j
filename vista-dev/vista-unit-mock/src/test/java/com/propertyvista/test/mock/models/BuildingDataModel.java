@@ -118,7 +118,7 @@ public class BuildingDataModel extends MockDataModel<Building> {
         productItem.name().setValue(arCodes.get(ARCode.Type.Residential).get(0).name().getValue());
         productItem.element().set(generateResidentialUnit(building, unitNo));
         productItem.price().setValue(price);
-        productItem.description().setValue(productItem.name().getValue());
+        productItem.description().setValue(productItem.name().getValue() + " description");
 
         standardResidentialService.version().items().add(productItem);
 
@@ -283,7 +283,7 @@ public class BuildingDataModel extends MockDataModel<Building> {
         ProductItem productItem = EntityFactory.create(ProductItem.class);
         productItem.name().setValue(code.name().getValue());
         productItem.price().setValue(new BigDecimal(price));
-        productItem.description().setValue(code.name().getStringView() + " Description");
+        productItem.description().setValue(code.name().getStringView() + " description");
         if (element != null) {
             productItem.element().set(element);
         }
