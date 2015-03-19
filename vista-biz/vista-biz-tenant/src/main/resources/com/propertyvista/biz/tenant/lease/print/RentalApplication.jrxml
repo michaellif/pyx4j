@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationFirstPage" pageWidth="612" pageHeight="842" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3ab57690-448c-4258-a02d-968bc8f50a7e">
 	<property name="ireport.zoom" value="1.7715610000000352"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="10"/>
+	<property name="ireport.y" value="254"/>
 	<parameter name="landlordLogo" class="java.lang.String"/>
 	<parameter name="landlordName" class="java.lang.String"/>
 	<parameter name="submissionDate" class="com.pyx4j.commons.LogicalDate"/>
@@ -17,6 +17,7 @@
 	<field name="financialSection" class="com.pyx4j.entity.core.IList"/>
 	<field name="emergencyContactsSection" class="com.pyx4j.entity.core.IList"/>
 	<field name="legalSection" class="com.pyx4j.entity.core.IList"/>
+	<field name="confirmationSection" class="com.pyx4j.entity.core.IList"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -159,7 +160,13 @@
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.RentalApplicationApplicantEmergencyContactList")]]></subreportExpression>
 			</subreport>
 		</band>
-		<band height="32"/>
+		<band height="16">
+			<subreport>
+				<reportElement x="-20" y="8" width="591" height="1" uuid="425b140a-0185-43c5-be94-9c33e95d2200"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{confirmationSection})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.RentalApplicationConfirmation")]]></subreportExpression>
+			</subreport>
+		</band>
 	</detail>
 	<pageFooter>
 		<band height="11">

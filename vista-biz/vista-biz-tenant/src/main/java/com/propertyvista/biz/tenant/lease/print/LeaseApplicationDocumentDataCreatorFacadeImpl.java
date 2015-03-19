@@ -12,7 +12,6 @@
  */
 package com.propertyvista.biz.tenant.lease.print;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -525,63 +524,50 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     }
 
     private void fillFirstPaymentData(LeaseApplicationDocumentDataFirstPaymentSectionDTO firstPaymentSection, Lease lease) {
-
-        BigDecimal total = new BigDecimal(0);
         BillDTO bill = retrieveBillData(lease);
         if (bill.serviceChargeLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.serviceChargeLineItems()));
-            total = total.add(bill.serviceChargeLineItems().total().getValue());
         }
         if (bill.recurringFeatureChargeLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.recurringFeatureChargeLineItems()));
-            total = total.add(bill.recurringFeatureChargeLineItems().total().getValue());
         }
         if (bill.onetimeFeatureChargeLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.onetimeFeatureChargeLineItems()));
-            total = total.add(bill.onetimeFeatureChargeLineItems().total().getValue());
         }
         if (bill.productCreditLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.productCreditLineItems()));
-            total = total.add(bill.productCreditLineItems().total().getValue());
         }
         if (bill.depositLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.depositLineItems()));
-            total = total.add(bill.depositLineItems().total().getValue());
         }
         if (bill.depositRefundLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.depositRefundLineItems()));
-            total = total.add(bill.depositRefundLineItems().total().getValue());
         }
         if (bill.immediateAccountAdjustmentLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.immediateAccountAdjustmentLineItems()));
-            total = total.add(bill.immediateAccountAdjustmentLineItems().total().getValue());
         }
         if (bill.pendingAccountAdjustmentLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.pendingAccountAdjustmentLineItems()));
-            total = total.add(bill.pendingAccountAdjustmentLineItems().total().getValue());
         }
         if (bill.previousChargeRefundLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.previousChargeRefundLineItems()));
-            total = total.add(bill.previousChargeRefundLineItems().total().getValue());
         }
         if (bill.nsfChargeLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.nsfChargeLineItems()));
-            total = total.add(bill.nsfChargeLineItems().total().getValue());
         }
         if (bill.withdrawalLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.withdrawalLineItems()));
-            total = total.add(bill.withdrawalLineItems().total().getValue());
         }
         if (bill.rejectedPaymentLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.rejectedPaymentLineItems()));
-            total = total.add(bill.rejectedPaymentLineItems().total().getValue());
         }
         if (bill.paymentLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.paymentLineItems()));
-            total = total.add(bill.paymentLineItems().total().getValue());
         }
 
-        firstPaymentSection.total().setValue(total);
+        firstPaymentSection.currentAmount().setValue(bill.currentAmount().getValue());
+        firstPaymentSection.taxes().setValue(bill.taxes().getValue());
+        firstPaymentSection.totalDueAmount().setValue(bill.totalDueAmount().getValue());
     }
 
     private BillDTO retrieveBillData(Lease lease) {

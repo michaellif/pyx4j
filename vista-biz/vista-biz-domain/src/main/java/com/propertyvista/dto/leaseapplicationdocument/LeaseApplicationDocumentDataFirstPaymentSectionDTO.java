@@ -14,6 +14,7 @@ package com.propertyvista.dto.leaseapplicationdocument;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
@@ -24,6 +25,13 @@ public interface LeaseApplicationDocumentDataFirstPaymentSectionDTO extends IEnt
 
     IList<LeaseApplicationDocumentDataFirstPaymentLineItemDTO> lineItems();
 
-    IPrimitive<BigDecimal> total();
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> currentAmount();
+
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> taxes();
+
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> totalDueAmount();
 
 }
