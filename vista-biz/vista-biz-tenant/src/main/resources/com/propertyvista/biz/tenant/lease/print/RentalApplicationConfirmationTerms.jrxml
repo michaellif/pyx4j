@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationTermsAndConditions" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="4a4a7b8b-08ae-4649-9627-7590ea6bdccf">
+	<property name="ireport.zoom" value="1.610510000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="wordingHtml" class="java.lang.String"/>
+	<field name="signature" class="com.pyx4j.entity.shared.ISignature"/>
+	<field name="title" class="java.lang.String"/>
+	<field name="makeWithSignaturePlaceholder" class="java.lang.Boolean"/>
+	<variable name="TERM_NUMBER" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{title}]]></variableExpression>
+		<initialValueExpression><![CDATA[1]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="65" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="56" y="34" width="516" height="29" uuid="a0260229-14e2-4c27-a6d1-0432835ec0ab"/>
+				<textElement markup="html"/>
+				<textFieldExpression><![CDATA[$F{wordingHtml}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="10" y="10" width="42" height="20" uuid="6524bb17-e26d-4660-8b5f-fa4ce5280973"/>
+				<textElement textAlignment="Right" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["" + $V{TERM_NUMBER} + "."]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="56" y="10" width="364" height="20" uuid="db026663-4d2c-4973-8cd1-100a480c1cbd"/>
+				<textElement markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="31">
+			<printWhenExpression><![CDATA[(($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.FullName)        || ($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.AgreeBoxAndFullName))]]></printWhenExpression>
+			<rectangle>
+				<reportElement x="373" y="5" width="198" height="20" forecolor="#CCCCCC" uuid="3db9fb00-405e-40f1-93ea-23e7294266ae"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="188" y="5" width="185" height="20" forecolor="#CCCCCC" uuid="40fa3715-94b6-425a-aae7-804e4623d61d"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="5" width="188" height="20" forecolor="#CCCCCC" uuid="a146ddde-eb1c-490b-990d-2d7b271cd395"/>
+			</rectangle>
+			<textField>
+				<reportElement x="225" y="10" width="107" height="15" uuid="15975683-595e-4211-bb48-7f57f9823799">
+					<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{signature}.fullName().getValue()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="41" y="10" width="147" height="15" uuid="7c0e0a05-5399-4fc2-a724-bdcca79fcbd9">
+					<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{signature}.signDate().getValue()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="10" width="37" height="15" forecolor="#666666" uuid="48893ff2-4a54-4785-8a9f-0eb29971b977"/>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="191" y="10" width="34" height="15" forecolor="#666666" uuid="178945dd-86f0-4d80-a54c-c8dcb0126902"/>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="377" y="10" width="79" height="15" forecolor="#666666" uuid="b554aee5-c28d-473d-8073-3b0d026d6f3c"/>
+				<text><![CDATA[Signature]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="455" y="10" width="116" height="15" uuid="d77e9ca2-98ab-40f2-93e4-a36a8d0626be">
+					<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{signature}.ipAddress().getValue()]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="29">
+			<printWhenExpression><![CDATA[($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.Initials)]]></printWhenExpression>
+			<rectangle>
+				<reportElement x="373" y="4" width="198" height="20" forecolor="#CCCCCC" uuid="78bc131f-f36f-4771-bf5d-36867d7d606a"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="4" width="188" height="20" forecolor="#CCCCCC" uuid="de3050e9-6e2e-4461-a403-85d6f4eb9edc"/>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement x="41" y="9" width="147" height="15" uuid="8d509336-4fc4-4b04-b69b-780c9d499f51">
+					<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{signature}.signDate().getValue()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="377" y="9" width="79" height="15" forecolor="#666666" uuid="88593dd8-4bc1-4e25-ac2d-0fa17d2a9f10"/>
+				<text><![CDATA[Signature]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="455" y="9" width="116" height="15" uuid="40d1b872-9122-4a9f-81d0-484ddef4f5a2">
+					<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{signature}.ipAddress().getValue()]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="188" y="4" width="185" height="20" forecolor="#CCCCCC" uuid="7fc3c652-4b0c-4f9c-bce5-36083cabb421"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="191" y="9" width="34" height="15" forecolor="#666666" uuid="9cd737e6-3401-4d52-aa12-7f788561442f"/>
+				<text><![CDATA[Initials]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="225" y="9" width="107" height="15" uuid="9b530437-7062-4f8d-9d69-bacfcba0e05e">
+					<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{signature}.initials().getValue()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="9" width="37" height="15" forecolor="#666666" uuid="8be1b4d8-0f84-4a47-a838-ad342549502a"/>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+		</band>
+		<band height="32">
+			<printWhenExpression><![CDATA[(($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.AgreeBox)
+    || ($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.AgreeBoxAndFullName))]]></printWhenExpression>
+			<rectangle>
+				<reportElement x="373" y="6" width="198" height="20" forecolor="#CCCCCC" uuid="096ba8ef-f09e-4095-b50c-66be12952ee3"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="6" width="188" height="20" forecolor="#CCCCCC" uuid="5026040c-3bd0-4937-a28d-fcceb96f4bf8"/>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement x="41" y="11" width="147" height="15" uuid="a069a615-b957-42df-8858-1cd671ea1ce4">
+					<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{signature}.signDate().getValue()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="377" y="11" width="79" height="15" forecolor="#666666" uuid="d9fb90c5-9940-464e-a973-2639aca44652"/>
+				<text><![CDATA[Signature]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="455" y="11" width="116" height="15" uuid="7d07f734-1300-4bfe-93a9-8610877398d0">
+					<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{signature}.ipAddress().getValue()]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="188" y="6" width="185" height="20" forecolor="#CCCCCC" uuid="93bc35f3-99fa-4872-bf7c-7e5fdd545fce"/>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement x="191" y="11" width="171" height="15" uuid="91655be9-7858-4e92-b778-ff46d79c7752">
+					<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{signature}.agree().getValue(false) ? "I agree with the terms above": ""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="11" width="37" height="15" forecolor="#666666" uuid="91085a80-4c50-4cc3-87e7-505a123e8592"/>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

@@ -7,31 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 20, 2014
+ * Created on Mar 26, 2014
  * @author ArtyomB
  */
 package com.propertyvista.dto.leaseapplicationdocument;
 
-import java.math.BigDecimal;
-
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
-import com.pyx4j.entity.core.IPrimitive;
 
 @Transient
-public interface LeaseApplicationDocumentDataFirstPaymentSectionDTO extends IEntity {
+public interface LeaseApplicationDocumentDataConfirmationSectionDTO extends IEntity {
 
-    IList<LeaseApplicationDocumentDataFirstPaymentLineItemDTO> lineItems();
-
-    @Format("#,##0.00")
-    IPrimitive<BigDecimal> currentAmount();
-
-    @Format("#,##0.00")
-    IPrimitive<BigDecimal> taxes();
-
-    @Format("#,##0.00")
-    IPrimitive<BigDecimal> totalDueAmount();
+    IList<LeaseApplicationDocumentDataConfirmationTermDTO> legalTerms();
 
 }

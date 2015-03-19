@@ -12,7 +12,6 @@
  */
 package com.propertyvista.biz.tenant.lease.print;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -39,6 +38,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.LeaseApplicationLegalPolicy;
+import com.propertyvista.domain.policy.policies.domain.LeaseApplicationConfirmationTerm;
 import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm;
 import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm.TargetRole;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -56,6 +56,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationConfirmationTerm;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.InvoiceLineItemGroupDTO;
@@ -64,6 +65,8 @@ import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDa
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataAdjustmentDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataAdjustmentsSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataCoApplicantDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataConfirmationSectionDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataConfirmationTermDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDependentDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataEmergencyContactsSectionDTO;
@@ -107,7 +110,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             LandlordMediaBlob blob = Persistence.service().retrieve(LandlordMediaBlob.class,
                     lease.unit().building().landlord().logo().file().blobKey().getValue());
             logo = blob.data().getValue();
-            data.landlordLogo().setValue(logo);
+            data.landlordLogo().setValue(new String(logo));
         }
         data.submissionDate().setValue(application.submission().decisionDate().getValue());
         data.leaseId().setValue(lease.leaseApplication().applicationId().getValue());
@@ -127,6 +130,8 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             fillFinaincialSection(data.sections().get(0).financialSection().get(0), lease, subjectParticipant);
             fillEmergencyContacts(data.sections().get(0).emergencyContactsSection().get(0), lease, subjectParticipant);
             fillLegalSection(data.sections().get(0).legalSection().get(0), application, subjectParticipant, documentMode == DocumentMode.InkSinging);
+            fillConfirmationSection(data.sections().get(0).confirmationSection().get(0), application, subjectParticipant,
+                    documentMode == DocumentMode.InkSinging);
         }
         return data;
     }
@@ -189,6 +194,10 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
 
         LeaseApplicationDocumentDataLegalSectionDTO legalSection = EntityFactory.create(LeaseApplicationDocumentDataLegalSectionDTO.class);
         details.legalSection().add(legalSection);
+
+        LeaseApplicationDocumentDataConfirmationSectionDTO confirmationSection = EntityFactory.create(LeaseApplicationDocumentDataConfirmationSectionDTO.class);
+        details.confirmationSection().add(confirmationSection);
+
         return data;
     }
 
@@ -457,6 +466,54 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         }
     }
 
+    private void fillConfirmationSection(LeaseApplicationDocumentDataConfirmationSectionDTO legalSection, LeaseApplication application,
+            LeaseTermParticipant<?> subjectParticipant, boolean makeWithSignaturePlaceholders) {
+
+        List<SignedOnlineApplicationConfirmationTerm> signedConfirmationTerms;
+
+        // fetch terms
+        if (makeWithSignaturePlaceholders) {
+            // TODO copied from OnlineApplicationFacade.getOnlineApplicationLegalTerms(), probably should be merged
+            Building policyNode = application.lease().unit().building();
+
+            LeaseApplicationLegalPolicy leaseApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode,
+                    LeaseApplicationLegalPolicy.class);
+            signedConfirmationTerms = new ArrayList<SignedOnlineApplicationConfirmationTerm>();
+            for (LeaseApplicationConfirmationTerm term : leaseApplicationPolicy.confirmationTerms()) {
+                TargetRole termRole = term.applyToRole().getValue();
+                if (termRole.matchesApplicationRole(subjectParticipant.role().getValue())) {
+                    SignedOnlineApplicationConfirmationTerm signedConfTerm = EntityFactory.create(SignedOnlineApplicationConfirmationTerm.class);
+                    signedConfTerm.term().set(term);
+                    signedConfTerm.signature().signatureFormat().set(term.signatureFormat());
+                    signedConfirmationTerms.add(signedConfTerm);
+                }
+            }
+
+        } else {
+            EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
+            criteria.eq(criteria.proto().masterOnlineApplication().leaseApplication(), application);
+            criteria.eq(criteria.proto().customer(), subjectParticipant.leaseParticipant().customer());
+
+            OnlineApplication onlineApplication = Persistence.service().retrieve(criteria);
+            if (onlineApplication == null) {
+                throw new RuntimeException("online application for application=" + "" + " customer=" + ""
+                        + " was not found, can't create printable legal terms");
+            }
+            signedConfirmationTerms = onlineApplication.confirmationTerms();
+        }
+
+        // convert for printing
+        for (SignedOnlineApplicationConfirmationTerm signedConfTerm : signedConfirmationTerms) {
+            LeaseApplicationDocumentDataConfirmationTermDTO confTerm = EntityFactory.create(LeaseApplicationDocumentDataConfirmationTermDTO.class);
+            confTerm.title().setValue(signedConfTerm.term().title().getValue());
+            confTerm.wordingHtml().setValue(signedConfTerm.term().content().getValue());
+            Persistence.ensureRetrieve(signedConfTerm.signature(), AttachLevel.Attached);
+            confTerm.signature().set(signedConfTerm.signature().duplicate());
+            confTerm.makeWithSignaturePlaceholder().setValue(makeWithSignaturePlaceholders);
+            legalSection.legalTerms().add(confTerm);
+        }
+    }
+
     private String retrieveUtilities(LeaseTerm term) {
         Persistence.ensureRetrieve(term.version().utilities(), AttachLevel.ToStringMembers);
         List<String> utilites = new ArrayList<>(term.version().utilities().size());
@@ -467,63 +524,50 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     }
 
     private void fillFirstPaymentData(LeaseApplicationDocumentDataFirstPaymentSectionDTO firstPaymentSection, Lease lease) {
-
-        BigDecimal total = new BigDecimal(0);
         BillDTO bill = retrieveBillData(lease);
         if (bill.serviceChargeLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.serviceChargeLineItems()));
-            total = total.add(bill.serviceChargeLineItems().total().getValue());
         }
         if (bill.recurringFeatureChargeLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.recurringFeatureChargeLineItems()));
-            total = total.add(bill.recurringFeatureChargeLineItems().total().getValue());
         }
         if (bill.onetimeFeatureChargeLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.onetimeFeatureChargeLineItems()));
-            total = total.add(bill.onetimeFeatureChargeLineItems().total().getValue());
         }
         if (bill.productCreditLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.productCreditLineItems()));
-            total = total.add(bill.productCreditLineItems().total().getValue());
         }
         if (bill.depositLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.depositLineItems()));
-            total = total.add(bill.depositLineItems().total().getValue());
         }
         if (bill.depositRefundLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.depositRefundLineItems()));
-            total = total.add(bill.depositRefundLineItems().total().getValue());
         }
         if (bill.immediateAccountAdjustmentLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.immediateAccountAdjustmentLineItems()));
-            total = total.add(bill.immediateAccountAdjustmentLineItems().total().getValue());
         }
         if (bill.pendingAccountAdjustmentLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.pendingAccountAdjustmentLineItems()));
-            total = total.add(bill.pendingAccountAdjustmentLineItems().total().getValue());
         }
         if (bill.previousChargeRefundLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.previousChargeRefundLineItems()));
-            total = total.add(bill.previousChargeRefundLineItems().total().getValue());
         }
         if (bill.nsfChargeLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.nsfChargeLineItems()));
-            total = total.add(bill.nsfChargeLineItems().total().getValue());
         }
         if (bill.withdrawalLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.withdrawalLineItems()));
-            total = total.add(bill.withdrawalLineItems().total().getValue());
         }
         if (bill.rejectedPaymentLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.rejectedPaymentLineItems()));
-            total = total.add(bill.rejectedPaymentLineItems().total().getValue());
         }
         if (bill.paymentLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.paymentLineItems()));
-            total = total.add(bill.paymentLineItems().total().getValue());
         }
 
-        firstPaymentSection.total().setValue(total);
+        firstPaymentSection.currentAmount().setValue(bill.currentAmount().getValue());
+        firstPaymentSection.taxes().setValue(bill.taxes().getValue());
+        firstPaymentSection.totalDueAmount().setValue(bill.totalDueAmount().getValue());
     }
 
     private BillDTO retrieveBillData(Lease lease) {
