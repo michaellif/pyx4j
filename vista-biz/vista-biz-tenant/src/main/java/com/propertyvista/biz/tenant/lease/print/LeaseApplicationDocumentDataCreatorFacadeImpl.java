@@ -98,22 +98,16 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         Persistence.ensureRetrieve(lease.unit().building().landlord().logo(), AttachLevel.Attached);
         data.landlordName().setValue(lease.unit().building().landlord().name().getValue());
         data.landlordAddress().setValue(lease.unit().building().landlord().address().getStringView());
-        data.name().setValue(
-                subjectParticipant.leaseParticipant().customer().person().name().firstName().getStringView() + " "
-                        + subjectParticipant.leaseParticipant().customer().person().name().lastName().getStringView());
-
-        data.date().setValue(application.submission().decisionDate().getValue());
-
         byte[] logo = null;
         if (!lease.unit().building().landlord().logo().isEmpty()) {
             Persistence.ensureRetrieve(lease.unit().building().landlord().logo().file(), AttachLevel.Attached);
             LandlordMediaBlob blob = Persistence.service().retrieve(LandlordMediaBlob.class,
                     lease.unit().building().landlord().logo().file().blobKey().getValue());
             logo = blob.data().getValue();
-            data.landlordLogo().setValue(new String(logo));
+            data.landlordLogo().setValue(logo);
         }
         data.submissionDate().setValue(application.submission().decisionDate().getValue());
-        data.leaseId().setValue(lease.leaseApplication().applicationId().getValue());
+        data.applicationId().setValue(lease.leaseApplication().applicationId().getValue());
 
         if (false /* TODO && (documentMode == blank) */) {
             makeDataPlaceholders(data.sections().get(0)); // TODO not sure it's supposed to work like that at all...
@@ -271,7 +265,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     private void fillPeopleSection(LeaseApplicationDocumentDataPeopleSectionDTO peopleSection, Lease lease, LeaseTermParticipant<?> subjectParticipant) {
         EntityQueryCriteria<LeaseTermTenant> criteria = new EntityQueryCriteria<LeaseTermTenant>(LeaseTermTenant.class);
         criteria.eq(criteria.proto().leaseTermV().holder(), lease.currentTerm());
-        peopleSection.leaseId().setValue(lease.leaseApplication().applicationId().getValue());
+        peopleSection.applicationId().setValue(lease.leaseApplication().applicationId().getValue());
         for (LeaseTermTenant leaseTermTenant : Persistence.service().query(criteria)) {
             if (leaseTermTenant.role().getValue() == Role.Dependent) {
                 LeaseApplicationDocumentDataDependentDTO dependent = peopleSection.dependents().$();
@@ -295,7 +289,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     private void fillAboutYouSection(LeaseApplicationDocumentDataAboutYouSectionDTO aboutYou, Lease lease, LeaseTermParticipant<?> subjectParticipant,
             LogicalDate date, byte[] logo) {
         //header Information
-        aboutYou.leaseId().setValue(lease.leaseApplication().applicationId().getValue());
+        aboutYou.applicationId().setValue(lease.leaseApplication().applicationId().getValue());
         if (logo != null) {
             aboutYou.landlordLogo().setValue(new String(logo));
         }

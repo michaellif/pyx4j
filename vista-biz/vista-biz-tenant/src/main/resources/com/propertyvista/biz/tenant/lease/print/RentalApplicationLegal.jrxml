@@ -8,7 +8,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="37" splitType="Stretch">
+		<band height="33" splitType="Stretch">
 			<staticText>
 				<reportElement x="5" y="0" width="173" height="20" uuid="4fa28e9b-e598-4f73-91c6-95e3f7d082a2"/>
 				<textElement>

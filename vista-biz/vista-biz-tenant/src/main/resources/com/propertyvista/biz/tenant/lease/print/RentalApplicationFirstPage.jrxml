@@ -204,7 +204,7 @@
 				<textFieldExpression><![CDATA[$F{includedUtilities}]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="43">
+		<band height="32">
 			<printWhenExpression><![CDATA[false]]></printWhenExpression>
 			<rectangle>
 				<reportElement x="1" y="3" width="570" height="20" forecolor="#CCCCCC" uuid="d083c413-a5ec-4f7c-9356-8f6db67f2ab9"/>
