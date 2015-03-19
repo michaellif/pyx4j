@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.gwt.server.RequestDebug;
 import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -83,6 +84,9 @@ public class VistaApplicationContextDispatcherFilter implements Filter {
 
         if (debug) {
             log.info("***ACD*** RequestURL -> {} {}", ServletUtils.getActualRequestURL(httpRequest, true), httpRequest.getClass().getSimpleName());
+            if (httpRequest.getParameter("debug") != null) {
+                log.debug("{}", RequestDebug.getServletDebug(request), new Throwable("filter call trace"));
+            }
         }
 
         VistaApplicationContext context = VistaNamespaceResolver.instance().resolve(httpRequest);
