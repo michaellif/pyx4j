@@ -10,7 +10,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="66" splitType="Stretch">
+		<band height="67" splitType="Stretch">
 			<rectangle>
 				<reportElement x="0" y="0" width="570" height="20" forecolor="#CCCCCC" uuid="9ac68d94-ef96-44fd-a76e-9eedaf7e701b"/>
 			</rectangle>

@@ -28,20 +28,16 @@ public interface LeaseApplicationDocumentDataDTO extends IEntity {
 
     IPrimitive<String> landlordAddress();
 
-    IPrimitive<String> landlordLogo();
+    IPrimitive<byte[]> landlordLogo();
 
     IPrimitive<LogicalDate> submissionDate();
 
-    IPrimitive<String> leaseId();
+    IPrimitive<String> applicationId();
 
     IList<LeaseAgreementDocumentLegalTermTenantDTO> applicants();
 
     IList<LeaseApplicationDocumentDataSectionsDTO> sections();
 
     IPrimitive<byte[]> background();
-
-    IPrimitive<String> name();
-
-    IPrimitive<LogicalDate> date();
 
 }

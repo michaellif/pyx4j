@@ -20,7 +20,7 @@ public interface LeaseApplicationDocumentDataCreatorFacade {
 
     public enum DocumentMode {
 
-        InkSinging, OnlineDigitalSigning
+        InkSinging, OnlineDigitalySigned
 
         // TODO maybe blank?
     }

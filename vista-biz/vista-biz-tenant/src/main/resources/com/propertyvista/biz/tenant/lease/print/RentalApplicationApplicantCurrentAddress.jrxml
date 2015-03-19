@@ -15,7 +15,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="110" splitType="Stretch">
+		<band height="107" splitType="Stretch">
 			<rectangle>
 				<reportElement x="1" y="23" width="570" height="20" forecolor="#CCCCCC" uuid="c854f022-013a-404c-a739-b20226fec7d3"/>
 			</rectangle>
@@ -84,7 +84,7 @@
 				<reportElement x="377" y="68" width="79" height="15" forecolor="#666666" uuid="a3ff4299-afc4-4665-b269-034b5bb35647"/>
 				<text><![CDATA[Zip/Postal Code]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="70" y="28" width="501" height="15" uuid="88f014b2-743d-4ff2-9a26-78d9c40018dd"/>
 				<textFieldExpression><![CDATA[(($F{streetNumber}.equals(null))? "" : ($F{streetNumber})) +(($F{streetName}.equals(null))? "" : (" " + $F{streetName}))]]></textFieldExpression>
 			</textField>
