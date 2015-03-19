@@ -25,7 +25,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
-import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.DeliveryHandle;
@@ -59,9 +58,9 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
             String email;
             for (Employee crmUser : listEmployees) {
                 email = crmUser.email().getStringView();
-                if (new String("m001" + DemoData.USERS_DOMAIN).equals(email)) {
+                if ("m001@pyx4j.com".equals(email)) {
                     m001 = crmUser;
-                } else if (new String("e001" + DemoData.USERS_DOMAIN).equals(email)) {
+                } else if ("e001@pyx4j.com".equals(email)) {
                     e001 = crmUser;
                 }
             }
@@ -82,13 +81,13 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
             String email;
             for (Tenant customerUser : listTenants) {
                 email = customerUser.customer().person().email().getStringView();
-                if (new String("t001" + DemoData.USERS_DOMAIN).equals(email)) {
+                if ("t001@pyx4j.com".equals(email)) {
                     t001 = customerUser;
-                } else if (new String("t002" + DemoData.USERS_DOMAIN).equals(email)) {
+                } else if ("t002@pyx4j.com".equals(email)) {
                     t002 = customerUser;
-                } else if (new String("t003" + DemoData.USERS_DOMAIN).equals(email)) {
+                } else if ("t003@pyx4j.com".equals(email)) {
                     t003 = customerUser;
-                } else if (email.matches("p\\d{3}" + DemoData.USERS_DOMAIN)) {
+                } else if (email.matches("p\\d{3}@propertyvista.com")) {
                     pTenants.add(customerUser);
                 }
             }
