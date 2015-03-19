@@ -13,24 +13,17 @@
 package com.propertyvista.server.config.appcontext;
 
 import com.propertyvista.config.deployment.ChaineApplicationContextResolver;
-import com.propertyvista.config.deployment.CustomDNSApplicationContextResolver;
 import com.propertyvista.config.deployment.EnvNApplicationContextResolver;
-import com.propertyvista.config.deployment.FixedDNSApplicationContextResolver;
 import com.propertyvista.config.deployment.SingleAppApplicationContextResolver;
 import com.propertyvista.domain.security.common.VistaApplication;
 
-public class ProdResolver extends ChaineApplicationContextResolver {
+public class ProdCustomersDemoResolver extends ChaineApplicationContextResolver {
 
-    public ProdResolver() {
+    public ProdCustomersDemoResolver() {
         super(//
-                new FixedDNSApplicationContextResolver("operations.propertyvista.com", VistaApplication.operations), //
-                new FixedDNSApplicationContextResolver("static.propertyvista.com", VistaApplication.staticContext), //
-                new FixedDNSApplicationContextResolver("start.propertyvista.com", VistaApplication.onboarding), //
-                new FixedDNSApplicationContextResolver("env.propertyvista.com", VistaApplication.env), //
                 new SingleAppApplicationContextResolver(".propertyvista.com", VistaApplication.crm), //
                 new SingleAppApplicationContextResolver(".my-community.co", VistaApplication.resident), //
                 new SingleAppApplicationContextResolver(".residentportalsite.com", VistaApplication.site), //
-                new EnvNApplicationContextResolver("-staging.propertyvista.net"), //
-                new CustomDNSApplicationContextResolver());
+                new EnvNApplicationContextResolver("-cdemo.propertyvista.biz"));
     }
 }

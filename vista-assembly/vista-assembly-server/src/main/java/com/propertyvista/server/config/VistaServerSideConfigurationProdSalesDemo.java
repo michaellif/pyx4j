@@ -15,7 +15,9 @@ package com.propertyvista.server.config;
 import java.util.EnumSet;
 import java.util.Set;
 
+import com.propertyvista.config.deployment.VistaApplicationContextResolver;
 import com.propertyvista.domain.DemoData.DemoPmc;
+import com.propertyvista.server.config.appcontext.EnvNResolver;
 
 public class VistaServerSideConfigurationProdSalesDemo extends VistaServerSideConfigurationCustom {
 
@@ -32,6 +34,11 @@ public class VistaServerSideConfigurationProdSalesDemo extends VistaServerSideCo
     @Override
     public Set<DemoPmc> dbResetPreloadPmc() {
         return EnumSet.of(DemoPmc.vista, DemoPmc.redridge, DemoPmc.rockville, DemoPmc.star, DemoPmc.gondor, DemoPmc.timbercreek);
+    }
+
+    @Override
+    public VistaApplicationContextResolver createApplicationContextResolver() {
+        return new EnvNResolver(".propertyvista.biz");
     }
 
     @Override

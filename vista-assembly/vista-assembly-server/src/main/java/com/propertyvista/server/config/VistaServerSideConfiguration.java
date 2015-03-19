@@ -102,15 +102,6 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
         } else if ("vista-sales-demo".equals(contextName)) {
             return new VistaServerSideConfigurationProdSalesDemo();
 
-        } else if ("vistad11".equals(contextName)) {
-            return new VistaServerSideConfigurationD11();
-        } else if ("vistad22".equals(contextName)) {
-            return new VistaServerSideConfigurationD22();
-        } else if ("vistad33".equals(contextName)) {
-            return new VistaServerSideConfigurationD33();
-        } else if ("vistad44".equals(contextName)) {
-            return new VistaServerSideConfigurationD44();
-
         } else if (servletContext.getServerInfo().contains("jetty")) {
             return new VistaServerSideConfigurationDev();
         } else if ("vista".equals(contextName)) {
