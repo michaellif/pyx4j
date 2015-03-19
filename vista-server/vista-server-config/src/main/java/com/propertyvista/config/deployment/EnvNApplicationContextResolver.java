@@ -24,25 +24,43 @@ import com.propertyvista.domain.security.common.VistaApplication;
  * vista-crm-staging.propertyvista.net -> crm
  *
  */
-public class EnvNApplicationContextResolver extends StandardApplicationContextResolver {
+public class EnvNApplicationContextResolver extends AbstractApplicationContextResolver {
 
     public EnvNApplicationContextResolver(String dnsNameBase) {
-
+        super(dnsNameBase);
     }
 
     @Override
-    protected VistaApplication resolveApplication(HttpServletRequest httpRequest, String[] serverNameParts) {
-        String appByDomain = serverNameParts[0];
-        String[] appByDomainTokens = appByDomain.split("-");
+    protected VistaApplication resolveApplication(HttpServletRequest httpRequest, String normalizedServerName) {
+        String[] appByDomainTokens = normalizedServerName.split("-");
         if (appByDomainTokens.length >= 2) {
-            return VistaApplication.getVistaApplicationByDnsNameFragment(appByDomainTokens[1]);
+            VistaApplication app = VistaApplication.getVistaApplicationByDnsNameFragment(appByDomainTokens[1]);
+            if (app != null && app.requirePmcResolution()) {
+                if (app == VistaApplication.resident && "prospect".equalsIgnoreCase(HttpRequestUtils.getRootServletPath(httpRequest))) {
+                    return VistaApplication.prospect;
+                }
+                return app;
+            }
+        } else if (appByDomainTokens.length == 1) {
+            VistaApplication app = VistaApplication.getVistaApplicationByDnsNameFragment(appByDomainTokens[0]);
+            if (app != null && !app.requirePmcResolution()) {
+                return app;
+            }
         }
         return null;
     }
 
     @Override
-    protected String resolveNamespaceProposal(HttpServletRequest httpRequest, String[] serverNameParts) {
-        // TODO Auto-generated method stub
-        return null;
+    protected String resolveNamespaceProposal(HttpServletRequest httpRequest, String normalizedServerName, VistaApplication application) {
+        if (application.getFixedNamespace() != null) {
+            return application.getFixedNamespace();
+        } else {
+            String[] appByDomainTokens = normalizedServerName.split("-");
+            if (appByDomainTokens.length >= 2) {
+                return appByDomainTokens[0];
+            } else {
+                return null;
+            }
+        }
     }
 }

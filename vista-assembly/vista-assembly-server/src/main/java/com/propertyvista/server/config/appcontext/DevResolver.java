@@ -15,12 +15,18 @@ package com.propertyvista.server.config.appcontext;
 import com.propertyvista.config.deployment.ChaineApplicationContextResolver;
 import com.propertyvista.config.deployment.CustomDNSApplicationContextResolver;
 import com.propertyvista.config.deployment.EnvNApplicationContextResolver;
+import com.propertyvista.config.deployment.FixedDNSApplicationContextResolver;
+import com.propertyvista.domain.security.common.VistaApplication;
 
-public class EnvNResolver extends ChaineApplicationContextResolver {
+public class DevResolver extends ChaineApplicationContextResolver {
 
-    public EnvNResolver(String dnsNameBase) {
+    public DevResolver() {
         super(//
-                new EnvNApplicationContextResolver(dnsNameBase), //
+                new FixedDNSApplicationContextResolver("localhost", VistaApplication.env), //
+                new EnvNApplicationContextResolver(".local.devpv.com"), //
+                new EnvNApplicationContextResolver(".m.pyx4j.com"), // <!- Host on Mobile Emulator
+                new EnvNApplicationContextResolver(".h.pyx4j.com"), // <!- Host VM on WMware
                 new CustomDNSApplicationContextResolver());
+
     }
 }

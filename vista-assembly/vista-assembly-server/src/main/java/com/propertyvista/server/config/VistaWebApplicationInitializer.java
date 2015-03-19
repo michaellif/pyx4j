@@ -70,8 +70,7 @@ import com.propertyvista.server.ci.EnvLinksServlet;
 import com.propertyvista.server.ci.TestTimeoutServlet;
 import com.propertyvista.server.ci.VistaStatusServlet;
 import com.propertyvista.server.ci.bugs.WSServletContextListenerFix;
-import com.propertyvista.server.config.filter.VistaApplicationDispatcherFilter;
-import com.propertyvista.server.config.filter.special.SpecialURL;
+import com.propertyvista.server.config.filter.VistaApplicationContextDispatcherFilter;
 import com.propertyvista.server.oapi.OAPIFilter;
 import com.propertyvista.server.security.RobotsFilter;
 import com.propertyvista.server.security.idp.IdpEndpointServlet;
@@ -105,7 +104,7 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
 
         // URLs mapping to application
         {
-            FilterRegistration.Dynamic fc = ctx.addFilter("VistaApplicationDispatcherFilter", VistaApplicationDispatcherFilter.class);
+            FilterRegistration.Dynamic fc = ctx.addFilter("VistaApplicationContextDispatcherFilter", VistaApplicationContextDispatcherFilter.class);
             fc.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
         }
 
@@ -258,70 +257,75 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
         {
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("EnvLinksServlet", EnvLinksServlet.class);
-                sc.addMapping("/index.html");
-                sc.addMapping(SpecialURL.envLinks.url);
-                sc.addMapping(SpecialURL.envLinks.url + "/index.html"); // <!-- this works in Tomcat
+                sc.addMapping(urlPattern(VistaApplication.env, "/"));
+                sc.addMapping(urlPattern(VistaApplication.env, "/index.html")); // <!-- this works in Tomcat
             }
+
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("StatusServlet", VistaStatusServlet.class);
-                sc.addMapping("/status");
-                sc.addMapping("/o/status");
-                sc.addMapping("/public/status");
+                sc.addMapping(urlPattern(VistaApplication.env, "o/status"));
+                sc.addMapping(urlPattern(VistaApplication.env, "public/status"));
+                sc.addMapping(urlPattern(VistaApplication.staticContext, "public/status"));
             }
+
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("DeployVerificationServlet", DeployVerificationServlet.class);
-                sc.addMapping("/public/verify");
+                sc.addMapping(urlPattern(VistaApplication.env, "o/verify"));
+                sc.addMapping(urlPattern(VistaApplication.env, "public/verify"));
+                sc.addMapping(urlPattern(VistaApplication.staticContext, "public/verify"));
             }
+
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("ApplicationVersionServlet", ApplicationVersionServlet.class);
-                sc.addMapping("/version");
-                sc.addMapping("/o/version");
-                sc.addMapping("/public/version");
+                sc.addMapping(urlPattern(VistaApplication.env, "o/version"));
+                sc.addMapping(urlPattern(VistaApplication.env, "public/version"));
+                sc.addMapping(urlPattern(VistaApplication.staticContext, "public/version"));
             }
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("LogViewServlet", VistaLogViewServlet.class);
-                sc.addMapping(urlPattern(VistaApplication.operations, "/log/*"));
-                sc.addMapping(urlPattern(VistaApplication.operations, "/logs/*"));
+                sc.addMapping(urlPattern(VistaApplication.operations, "log/*"));
+                sc.addMapping(urlPattern(VistaApplication.operations, "logs/*"));
             }
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("DBResetServlet", DBResetServlet.class);
-                sc.addMapping("/o/db-reset");
+                sc.addMapping(urlPattern(VistaApplication.env, "o/db-reset"));
             }
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("VistaConfigInfoServlet", VistaConfigInfoServlet.class);
-                sc.addMapping(urlPattern(VistaApplication.operations, "/config"));
+                sc.addMapping(urlPattern(VistaApplication.operations, "config"));
             }
 
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("VistaStackTraceViewServlet", VistaStackTraceViewServlet.class);
-                sc.addMapping(urlPattern(VistaApplication.operations, "/stack/*"));
+                sc.addMapping(urlPattern(VistaApplication.operations, "stack/*"));
             }
 
             //TODO if Not production
             {
                 {
                     ServletRegistration.Dynamic sc = ctx.addServlet("OutOfMemorSimulationServlet", OutOfMemorySimulationServlet.class);
-                    sc.addMapping("/o/ooms");
+                    sc.addMapping(urlPattern(VistaApplication.operations, "ooms"));
                 }
+
                 {
                     ServletRegistration.Dynamic sc = ctx.addServlet("TestTimeoutServlet", TestTimeoutServlet.class);
-                    sc.addMapping("/o/tt");
+                    sc.addMapping(urlPattern(VistaApplication.operations, "tt"));
                 }
+
                 {
                     ServletRegistration.Dynamic sc = ctx.addServlet("DebugServlet", DebugServlet.class);
-                    sc.addMapping("/debug/*");
-                    sc.addMapping("/o/debug/*");
-                    sc.addMapping(allApplicationsUrlPatterns("/debug/*"));
+                    sc.addMapping(allApplicationsUrlPatterns("debug/*"));
+                    sc.addMapping(allApplicationsUrlPatterns("o/debug/*"));
                 }
+
                 {
                     ServletRegistration.Dynamic sc = ctx.addServlet("DebugRequestEchoServlet", DebugRequestEchoServlet.class);
-                    sc.addMapping("/echo/*");
-                    sc.addMapping("/o/echo/*");
-                    sc.addMapping(allApplicationsUrlPatterns("/echo/*"));
+                    sc.addMapping(allApplicationsUrlPatterns("echo/*"));
+                    sc.addMapping(allApplicationsUrlPatterns("o/echo/*"));
                 }
 
                 //http://static.dev.birchwoodsoftwaregroup.com:8888/vista/o/wsp/yardi.starlightinvest.com/voyager6008sp17/webservices/itfresidenttransactions20.asmx
-                {
+                if (false) {
                     ServletRegistration.Dynamic sc = ctx.addServlet("DevDumpProxyServlet", DevDumpProxyServlet.class);
                     sc.addMapping("/o/wsp/*");
                 }
@@ -331,7 +335,7 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
     }
 
     private String urlPattern(VistaApplication application, String urlPattern) {
-        return "/" + application.name() + (urlPattern.startsWith("/") ? "" : "/") + urlPattern;
+        return "/" + application.getInternalMappingName() + (urlPattern.startsWith("/") ? "" : "/") + urlPattern;
     }
 
     private String[] allApplicationsUrlPatterns(String urlPattern) {

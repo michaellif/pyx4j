@@ -16,21 +16,23 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.propertyvista.domain.security.common.VistaApplication;
 
-public class SingleAppApplicationContextResolver extends StandardApplicationContextResolver {
-
-    private final String dnsName;
+public class SingleAppApplicationContextResolver extends AbstractApplicationContextResolver {
 
     private final VistaApplication application;
 
     public SingleAppApplicationContextResolver(String dnsName, VistaApplication application) {
-        this.dnsName = dnsName;
+        super(dnsName);
         this.application = application;
     }
 
     @Override
-    public VistaApplicationContext resolve(HttpServletRequest httpRequest) {
-        // TODO Auto-generated method stub
-        return null;
+    protected VistaApplication resolveApplication(HttpServletRequest httpRequest, String normalizedHostName) {
+        return application;
+    }
+
+    @Override
+    protected String resolveNamespaceProposal(HttpServletRequest httpRequest, String normalizedHostName, VistaApplication application) {
+        return normalizedHostName;
     }
 
 }

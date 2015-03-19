@@ -20,6 +20,8 @@ import java.util.Set;
 
 import com.pyx4j.security.shared.Behavior;
 
+import com.propertyvista.domain.VistaNamespace;
+
 /**
  * No not assign this Behavior to any permissions.
  * This is used for Application identification and namespace integrity validations.
@@ -42,9 +44,9 @@ public enum VistaApplication implements Behavior {
 
     site,
 
-    resident,
+    resident("portal"),
 
-    prospect,
+    prospect("portal"),
 
     onboarding("start");
 
@@ -80,12 +82,34 @@ public enum VistaApplication implements Behavior {
         return pmcApplications.contains(this);
     }
 
+    private static final Collection<VistaApplication> applicationsNeedHttps = EnumSet.of(operations, onboarding, crm, resident, prospect);
+
+    public boolean requireHttps() {
+        return applicationsNeedHttps.contains(this);
+    }
+
+    public String getFixedNamespace() {
+        switch (this) {
+        case operations:
+            return VistaNamespace.operationsNamespace;
+        case env:
+        case interfaces:
+        case onboarding:
+        case staticContext:
+            return VistaNamespace.noNamespace;
+        default:
+            return null;
+        }
+    }
+
     private static final Map<String, VistaApplication> applicationsByDnsNameFragment = createApplicationsByDnsNameFragment();
 
     private static Map<String, VistaApplication> createApplicationsByDnsNameFragment() {
         Map<String, VistaApplication> m = new HashMap<>();
         for (VistaApplication a : EnumSet.allOf(VistaApplication.class)) {
-            m.put(a.getDnsNameFragment(), a);
+            if (!m.containsKey(a.getDnsNameFragment())) {
+                m.put(a.getDnsNameFragment(), a);
+            }
         }
         return m;
     }

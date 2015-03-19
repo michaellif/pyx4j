@@ -12,17 +12,27 @@
  */
 package com.propertyvista.config.deployment;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 public class ChaineApplicationContextResolver implements VistaApplicationContextResolver {
 
+    private final List<VistaApplicationContextResolver> resolvers;
+
     public ChaineApplicationContextResolver(VistaApplicationContextResolver... resolvers) {
+        this.resolvers = Arrays.asList(resolvers);
     }
 
     @Override
     public VistaApplicationContext resolve(HttpServletRequest httpRequest) {
-        // TODO Auto-generated method stub
+        for (VistaApplicationContextResolver resolver : resolvers) {
+            VistaApplicationContext c = resolver.resolve(httpRequest);
+            if (c != null) {
+                return c;
+            }
+        }
         return null;
     }
-
 }

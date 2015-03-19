@@ -44,6 +44,7 @@ import com.propertyvista.config.EncryptedStorageConfiguration;
 import com.propertyvista.config.EquifaxInterfaceConfiguration;
 import com.propertyvista.config.TenantSureConfiguration;
 import com.propertyvista.config.VistaSystemsDNSConfig;
+import com.propertyvista.config.deployment.VistaApplicationContextResolver;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.operations.domain.VistaSystemMaintenanceState;
@@ -163,6 +164,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     @Override
     public String getApplicationURLNamespace(boolean secure) {
         return ".birchwoodsoftwaregroup.com/";
+    }
+
+    @Override
+    public VistaApplicationContextResolver createApplicationContextResolver() {
+        return null;
     }
 
     @Override

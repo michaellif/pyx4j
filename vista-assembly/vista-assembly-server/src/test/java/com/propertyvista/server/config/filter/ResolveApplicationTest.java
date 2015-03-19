@@ -13,26 +13,23 @@
 package com.propertyvista.server.config.filter;
 
 import com.propertyvista.domain.security.common.VistaApplication;
-import com.propertyvista.server.config.filter.namespace.config.NamesConfig;
-import com.propertyvista.server.config.filter.namespace.config.NamesConfigNumberedEnv;
-import com.propertyvista.server.config.filter.namespace.config.NamesConfigProd;
 
 public class ResolveApplicationTest {
 
     public void testDev() {
-        setConfig(new NamesConfigNumberedEnv(".local.devpv.com"));
+        //setConfig(new NamesConfigNumberedEnv(".local.devpv.com"));
         assertApp("http://start.local.devpv.com", VistaApplication.onboarding);
         assertApp("http://vista-crm.local.devpv.com", VistaApplication.crm);
     }
 
     public void testEnv11() {
-        setConfig(new NamesConfigNumberedEnv("-11.devpv.com"));
+        //setConfig(new NamesConfigNumberedEnv("-11.devpv.com"));
         assertApp("http://start-11.devpv.com", VistaApplication.onboarding);
         assertApp("https://vista-crm-11.devpv.com/", VistaApplication.crm);
     }
 
     public void testProd() {
-        setConfig(new NamesConfigProd());
+        //setConfig(new NamesConfigProd());
         assertApp("https://interfaces.propertyvista.com", VistaApplication.interfaces);
         assertApp("https://vista.propertyvista.com/interfaces", VistaApplication.crm);
 
@@ -50,11 +47,6 @@ public class ResolveApplicationTest {
 
         assertApp("https://vista.propertyvista.com", VistaApplication.crm);
         assertApp("https://vista-crm-staging.propertyvista.net", VistaApplication.crm);
-    }
-
-    private void setConfig(NamesConfig namesConfigDev) {
-        // TODO Auto-generated method stub
-
     }
 
     private void assertApp(String string, VistaApplication onboarding) {

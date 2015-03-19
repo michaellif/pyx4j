@@ -16,6 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface VistaApplicationContextResolver {
 
+    /**
+     *
+     * @param httpRequest
+     * @return null if Context can't be resolved by this resolver.
+     */
     public VistaApplicationContext resolve(HttpServletRequest httpRequest);
 
 }

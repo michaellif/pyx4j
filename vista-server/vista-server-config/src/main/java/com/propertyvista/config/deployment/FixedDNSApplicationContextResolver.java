@@ -16,21 +16,39 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.propertyvista.domain.security.common.VistaApplication;
 
-public class FixedDNSApplicationContextResolver implements VistaApplicationContextResolver {
-
-    private final String dnsName;
+public class FixedDNSApplicationContextResolver extends AbstractApplicationContextResolver {
 
     private final VistaApplication application;
 
+    private final String namespaceProposal;
+
     public FixedDNSApplicationContextResolver(String dnsName, VistaApplication application) {
-        this.dnsName = dnsName;
+        super(dnsName);
         this.application = application;
+        namespaceProposal = application.getFixedNamespace();
+        if (namespaceProposal == null) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public FixedDNSApplicationContextResolver(String dnsName, VistaApplication application, String namespaceProposal) {
+        super(dnsName);
+        this.application = application;
+        this.namespaceProposal = namespaceProposal;
     }
 
     @Override
-    public VistaApplicationContext resolve(HttpServletRequest httpRequest) {
-        // TODO Auto-generated method stub
-        return null;
+    protected VistaApplication resolveApplication(HttpServletRequest httpRequest, String normalizedHostName) {
+        if (normalizedHostName.length() == 0) {
+            return application;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    protected String resolveNamespaceProposal(HttpServletRequest httpRequest, String normalizedHostName, VistaApplication application) {
+        return namespaceProposal;
     }
 
 }

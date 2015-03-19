@@ -21,8 +21,10 @@ import com.pyx4j.security.server.ThrottleConfig;
 import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.config.BankingSimulatorConfiguration;
+import com.propertyvista.config.deployment.VistaApplicationContextResolver;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.misc.VistaTODO;
+import com.propertyvista.server.config.appcontext.DevResolver;
 
 public class VistaServerSideConfigurationDev extends VistaServerSideConfiguration {
 
@@ -131,6 +133,11 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
         } else {
             return false;
         }
+    }
+
+    @Override
+    public VistaApplicationContextResolver createApplicationContextResolver() {
+        return new DevResolver();
     }
 
     @Override
