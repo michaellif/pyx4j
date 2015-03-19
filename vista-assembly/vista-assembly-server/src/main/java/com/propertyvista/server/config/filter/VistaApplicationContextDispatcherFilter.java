@@ -46,7 +46,7 @@ public class VistaApplicationContextDispatcherFilter implements Filter {
 
     private static String REQUEST_DISPATCHED_REQUEST_ATR = VistaApplicationContextDispatcherFilter.class.getName();
 
-    private boolean isDeploymentHttps = false;
+    private boolean isDeploymentHttps;
 
     private boolean debug = true; // temporary for local development
 
@@ -96,7 +96,18 @@ public class VistaApplicationContextDispatcherFilter implements Filter {
 
         if (isDeploymentHttps && !httpRequest.isSecure() && context.getApplication().requireHttps()) {
             String defaultApplicationUrl = VistaDeployment.getBaseApplicationURL(context.getCurrentPmc(), context.getApplication(), true);
+            if (debug) {
+                log.info("***ACD*** \"{}\" redirecting to \"{}\" ", httpRequest.getRequestURI(), defaultApplicationUrl);
+            }
             ((HttpServletResponse) response).sendRedirect(defaultApplicationUrl);
+        } else if (isIncompleteAppRoot(httpRequest, context.getApplication())) {
+            // default behavior reading directories different in tomcat than jetty
+            // Redirect incomplete path:  /prospect -> /prospect/
+            String urlToForward = httpRequest.getRequestURL().append("/").toString();
+            if (debug) {
+                log.debug("***ACD*** redirecting Incomplete AppRoot to \"{}\"", urlToForward);
+            }
+            ((HttpServletResponse) response).sendRedirect(urlToForward);
         } else {
             httpRequest.setAttribute(VistaApplication.class.getName(), context.getApplication()); // Where do we use this ??
 
@@ -106,55 +117,26 @@ public class VistaApplicationContextDispatcherFilter implements Filter {
 
             String urlForward = buildInternalForwardUri(httpRequest, context.getApplication());
             if (debug) {
-                log.info("***ADF*** \"{}\" forwarding to \"{}\" ", httpRequest.getRequestURI(), urlForward);
+                log.info("***ACD*** \"{}\" forwarding to \"{}\" ", httpRequest.getRequestURI(), urlForward);
             }
-
             request.getRequestDispatcher(urlForward).forward(request, response);
-
         }
+    }
 
-//        if (VistaPmcDnsNameResolverHelper.isCustomerDNSActive(customerDnsName)) {
-//            String defaultApplicationUrl = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getDefaultApplicationURL(app,
-//                    customerDnsName.pmc().dnsName().getValue());
-//
-//            if (debug) {
-//                log.debug("***ADF*** redirecting. Customer DNS alias active with https enabled. Sending redirect to default https url \"{}\" to browser",
-//                        defaultApplicationUrl);
-//            }
-//            ((HttpServletResponse) response).sendRedirect(defaultApplicationUrl);
-//            return;
-//        } else if (isDeploymentHttps && VistaApplicationResolverHelper.isHttpsRedirectionNeeded(httprequest, app)) {
-//            String httpsUrl = HttpRequestUtils.getHttpsUrl(httprequest);
-//            if (debug) {
-//                log.debug("***ADF*** redirecting. Change protocol from 'http' to 'https'. Sending redirect to \"{}\" to browser", httpsUrl);
-//            }
-//            ((HttpServletResponse) response).sendRedirect(httpsUrl);
-//            return;
-//        } else if (app == VistaApplication.prospect && VistaApplicationResolverHelper.isRootAppRequest(httprequest, app)) {
-//            String urlToForward = VistaApplicationResolverHelper.getCompleteURLToForward(httprequest, app);
-//            if (debug) {
-//                log.debug("***ADF*** redirecting. Sending redirect from '/prospect' to \"{}\" to browser", urlToForward);
-//            }
-//            ((HttpServletResponse) response).sendRedirect(urlToForward);
-//            return;
-//        }
+    public static boolean isIncompleteAppRoot(HttpServletRequest httpRequest, VistaApplication app) {
+        return (app.getChildSubApplicationPath() != null) && httpRequest.getServletPath().equalsIgnoreCase("/" + app.getChildSubApplicationPath());
     }
 
     public static String buildInternalForwardUri(HttpServletRequest httpRequest, VistaApplication app) {
         String uri = "";
 
         String internalMappingRoot = "/" + app.getInternalMappingName();
-        if (app != VistaApplication.prospect) {
+        if (app.getChildSubApplicationPath() == null) {
             uri += internalMappingRoot;
         }
 
         String requestPath = httpRequest.getServletPath();
         uri += requestPath;
-
-        // Hack in case of first request to Prospect app (default behavior reading directories different in tomcat than jetty)
-//        if (app == VistaApplication.prospect && requestPath.equalsIgnoreCase(internalMappingRoot)) {
-//            uri += "/";
-//        }
 
         if (httpRequest.getPathInfo() != null) {
             uri += httpRequest.getPathInfo();
