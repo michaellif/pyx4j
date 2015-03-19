@@ -102,8 +102,6 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
                 subjectParticipant.leaseParticipant().customer().person().name().firstName().getStringView() + " "
                         + subjectParticipant.leaseParticipant().customer().person().name().lastName().getStringView());
 
-        data.date().setValue(application.submission().decisionDate().getValue());
-
         byte[] logo = null;
         if (!lease.unit().building().landlord().logo().isEmpty()) {
             Persistence.ensureRetrieve(lease.unit().building().landlord().logo().file(), AttachLevel.Attached);
@@ -112,10 +110,15 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             logo = blob.data().getValue();
             data.landlordLogo().setValue(new String(logo));
         }
-        if (documentMode == DocumentMode.InkSinging) {
-            data.submissionDate().setValue(retrieveOnlineApplication(application, subjectParticipant).submissionDate().getValue());
-        }
+
         data.leaseId().setValue(lease.leaseApplication().applicationId().getValue());
+        data.date().setValue(application.submission().decisionDate().getValue());
+        if (documentMode == DocumentMode.InkSinging) {
+            OnlineApplication onlineApplication = retrieveOnlineApplication(application, subjectParticipant);
+            if (onlineApplication != null) {
+                data.submissionDate().setValue(onlineApplication.submissionDate().getValue());
+            }
+        }
 
         if (false /* TODO && (documentMode == blank) */) {
             makeDataPlaceholders(data.sections().get(0)); // TODO not sure it's supposed to work like that at all...
@@ -441,9 +444,13 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
                     signedLegalTerms.add(signedTerm);
                 }
             }
-
         } else {
-            signedLegalTerms = retrieveOnlineApplication(application, subjectParticipant).legalTerms();
+            OnlineApplication onlineApplication = retrieveOnlineApplication(application, subjectParticipant);
+            if (onlineApplication == null) {
+                throw new RuntimeException("Online application for customer: " + subjectParticipant.leaseParticipant().customer().getStringView()
+                        + "in Lease Application: " + application.applicationId().getStringView() + " was not found, can't create printable legal terms");
+            }
+            signedLegalTerms = onlineApplication.legalTerms();
         }
 
         // convert for printing
@@ -480,16 +487,11 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
                     signedConfirmationTerms.add(signedConfTerm);
                 }
             }
-
         } else {
-            EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
-            criteria.eq(criteria.proto().masterOnlineApplication().leaseApplication(), application);
-            criteria.eq(criteria.proto().customer(), subjectParticipant.leaseParticipant().customer());
-
-            OnlineApplication onlineApplication = Persistence.service().retrieve(criteria);
+            OnlineApplication onlineApplication = retrieveOnlineApplication(application, subjectParticipant);
             if (onlineApplication == null) {
-                throw new RuntimeException("online application for application=" + "" + " customer=" + ""
-                        + " was not found, can't create printable legal terms");
+                throw new RuntimeException("Online application for customer: " + subjectParticipant.leaseParticipant().customer().getStringView()
+                        + "in Lease Application: " + application.applicationId().getStringView() + " was not found, can't create printable legal terms");
             }
             signedConfirmationTerms = onlineApplication.confirmationTerms();
         }
@@ -587,12 +589,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
         criteria.eq(criteria.proto().masterOnlineApplication().leaseApplication(), application);
         criteria.eq(criteria.proto().customer(), subjectParticipant.leaseParticipant().customer());
-
-        OnlineApplication onlineApplication = Persistence.service().retrieve(criteria);
-        if (onlineApplication == null) {
-            throw new RuntimeException("online application for application=" + "" + " customer=" + "" + " was not found, can't create printable legal terms");
-        }
-        return onlineApplication;
+        return Persistence.service().retrieve(criteria);
     }
 
     private Collection<LeaseApplicationDocumentDataFirstPaymentLineItemDTO> retrieveLineItems(InvoiceLineItemGroupDTO lineItemsGroup) {
