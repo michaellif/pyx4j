@@ -53,7 +53,7 @@ public interface LeaseApplicationDocumentDataAboutYouSectionDTO extends IEntity 
 
     IPrimitive<String> landlordLogo();
 
-    IPrimitive<String> leaseId();
+    IPrimitive<String> applicationId();
 
     IPrimitive<LogicalDate> submissionDate();
 

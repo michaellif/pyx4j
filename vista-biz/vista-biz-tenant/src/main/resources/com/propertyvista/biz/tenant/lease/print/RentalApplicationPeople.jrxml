@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationPeople" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="513a6077-fd57-4fc4-902e-6eca35d8c3df">
-	<property name="ireport.zoom" value="0.8264462809917432"/>
+	<property name="ireport.zoom" value="1.331000000000013"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="landlordLogo" class="java.io.InputStream"/>
 	<parameter name="landlordName" class="java.lang.String"/>
-	<field name="leaseId" class="java.lang.String"/>
+	<field name="applicationId" class="java.lang.String"/>
 	<field name="coApplicants" class="com.pyx4j.entity.core.IList"/>
 	<field name="dependents" class="com.pyx4j.entity.core.IList"/>
 	<background>
@@ -37,12 +37,6 @@
 				</textElement>
 				<text><![CDATA[The undersigned Applicant(s) hereby make this application to lease:]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="283" y="0" width="288" height="19" uuid="69e84c42-1f29-4279-b137-2795d49fb9cf">
-					<printWhenExpression><![CDATA[!$F{leaseId}.equals(null)]]></printWhenExpression>
-				</reportElement>
-				<textFieldExpression><![CDATA[$F{leaseId}]]></textFieldExpression>
-			</textField>
 		</band>
 		<band height="45">
 			<rectangle>
@@ -115,12 +109,6 @@
 				</textElement>
 				<text><![CDATA[The undersigned Occupant(s) hereby make this application to lease:]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="283" y="6" width="288" height="19" uuid="b60c9c7c-9d24-4f50-a2c1-174e563c3817">
-					<printWhenExpression><![CDATA[!$F{leaseId}.equals(null)]]></printWhenExpression>
-				</reportElement>
-				<textFieldExpression><![CDATA[$F{leaseId}]]></textFieldExpression>
-			</textField>
 		</band>
 		<band height="46">
 			<printWhenExpression><![CDATA[!$F{dependents}.isEmpty()]]></printWhenExpression>
@@ -178,7 +166,7 @@
 				</graphicElement>
 			</rectangle>
 		</band>
-		<band height="11">
+		<band height="8">
 			<printWhenExpression><![CDATA[!$F{dependents}.isEmpty()]]></printWhenExpression>
 			<subreport>
 				<reportElement x="-20" y="-1" width="612" height="1" uuid="bf621c4a-0519-4650-9815-a85c9946d473"/>

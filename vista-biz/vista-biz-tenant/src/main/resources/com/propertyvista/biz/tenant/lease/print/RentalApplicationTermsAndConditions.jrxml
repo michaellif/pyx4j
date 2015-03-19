@@ -15,21 +15,21 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="65" splitType="Stretch">
+		<band height="61" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" x="56" y="34" width="516" height="29" uuid="114d668c-b487-40b4-93d6-ac58c70aebef"/>
+				<reportElement positionType="Float" x="56" y="28" width="516" height="29" uuid="114d668c-b487-40b4-93d6-ac58c70aebef"/>
 				<textElement markup="html"/>
 				<textFieldExpression><![CDATA[$F{wordingHtml}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="10" y="10" width="42" height="20" uuid="ae229f4d-215f-4198-8ea5-d37e2b33cc39"/>
+				<reportElement x="10" y="4" width="42" height="20" uuid="ae229f4d-215f-4198-8ea5-d37e2b33cc39"/>
 				<textElement textAlignment="Right" markup="none">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["" + $V{TERM_NUMBER} + "."]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="56" y="10" width="364" height="20" uuid="76e5f778-9109-4e28-a2be-b57d054008e8"/>
+				<reportElement x="56" y="4" width="364" height="20" uuid="76e5f778-9109-4e28-a2be-b57d054008e8"/>
 				<textElement markup="html">
 					<font isBold="true"/>
 				</textElement>
