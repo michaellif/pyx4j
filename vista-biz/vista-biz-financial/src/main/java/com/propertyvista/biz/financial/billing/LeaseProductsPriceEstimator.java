@@ -135,7 +135,7 @@ public class LeaseProductsPriceEstimator {
     private void createChargeSubLineItem(InvoiceProductCharge charge, BillableItem billableItem) {
         charge.chargeSubLineItem().billableItem().set(billableItem);
         charge.chargeSubLineItem().amount().setValue(charge.chargeSubLineItem().billableItem().agreedPrice().getValue(BigDecimal.ZERO));
-        charge.chargeSubLineItem().description().setValue(billableItem.item().description().getStringView());
+        charge.chargeSubLineItem().description().setValue(billableItem.item().name().getStringView());
     }
 
     private void createAdjustmentSubLineItems(InvoiceProductCharge charge, BillableItem billableItem) {

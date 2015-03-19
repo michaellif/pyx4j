@@ -230,7 +230,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor<Inte
             charge.chargeSubLineItem().amount().setValue(prorate(charge));
         }
 
-        charge.chargeSubLineItem().description().setValue(billableItem.item().description().getStringView());
+        charge.chargeSubLineItem().description().setValue(billableItem.item().name().getStringView());
     }
 
     private void createAdjustmentSubLineItems(InvoiceProductCharge charge, BillableItem billableItem, Bill bill) {
