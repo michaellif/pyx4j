@@ -58,15 +58,15 @@
 				</graphicElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="380" y="30" width="66" height="15" forecolor="#666666" uuid="977fed05-2c4f-4d59-a3d0-d2cdcc89dd44"/>
-				<textElement>
+				<reportElement x="380" y="30" width="191" height="15" forecolor="#666666" uuid="977fed05-2c4f-4d59-a3d0-d2cdcc89dd44"/>
+				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Relationship]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="189" y="30" width="66" height="15" forecolor="#666666" uuid="0365d00f-4c20-4b8b-a065-bb671539b8eb"/>
-				<textElement>
+				<reportElement x="189" y="30" width="187" height="15" forecolor="#666666" uuid="0365d00f-4c20-4b8b-a065-bb671539b8eb"/>
+				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Date of Birth]]></text>
@@ -139,15 +139,15 @@
 				<reportElement x="376" y="25" width="195" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="06f44cf6-7c9c-46fc-9158-fb18f7396242"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="380" y="30" width="66" height="15" forecolor="#666666" uuid="b76132ea-ba8f-485e-8ed3-37a339aa976b"/>
-				<textElement>
+				<reportElement x="380" y="30" width="191" height="15" forecolor="#666666" uuid="b76132ea-ba8f-485e-8ed3-37a339aa976b"/>
+				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Relationship]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="189" y="30" width="66" height="15" forecolor="#666666" uuid="ea64d5bf-6ce5-456a-ae45-05b2303b2909"/>
-				<textElement>
+				<reportElement x="185" y="30" width="191" height="15" forecolor="#666666" uuid="ea64d5bf-6ce5-456a-ae45-05b2303b2909"/>
+				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Date of Birth]]></text>
