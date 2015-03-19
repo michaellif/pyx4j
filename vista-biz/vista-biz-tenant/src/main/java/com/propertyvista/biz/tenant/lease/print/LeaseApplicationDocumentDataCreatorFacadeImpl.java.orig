@@ -37,11 +37,11 @@ import com.propertyvista.domain.blob.LandlordMediaBlob;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.media.IdentificationDocument;
-import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.LeaseApplicationLegalPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseApplicationConfirmationTerm;
 import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm;
 import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm.TargetRole;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.CustomerScreeningLegalQuestion;
@@ -93,11 +93,18 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     public LeaseApplicationDocumentDataDTO createApplicationData(DocumentMode documentMode, LeaseApplication application,
             LeaseTermParticipant<?> subjectParticipant) {
         LeaseApplicationDocumentDataDTO data = makeDocumentData();
-
+        Persistence.ensureRetrieve(application.lease().unit().building(), AttachLevel.Attached);
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(application.lease(), false);
         Persistence.ensureRetrieve(lease.unit().building().landlord().logo(), AttachLevel.Attached);
         data.landlordName().setValue(lease.unit().building().landlord().name().getValue());
         data.landlordAddress().setValue(lease.unit().building().landlord().address().getStringView());
+<<<<<<< HEAD
+        data.name().setValue(
+                subjectParticipant.leaseParticipant().customer().person().name().firstName().getStringView() + " "
+                        + subjectParticipant.leaseParticipant().customer().person().name().lastName().getStringView());
+
+=======
+>>>>>>> origin/bugfix/VISTA-6069-download-with-image-failure
         byte[] logo = null;
         if (!lease.unit().building().landlord().logo().isEmpty()) {
             Persistence.ensureRetrieve(lease.unit().building().landlord().logo().file(), AttachLevel.Attached);
@@ -106,14 +113,20 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             logo = blob.data().getValue();
             data.landlordLogo().setValue(logo);
         }
+<<<<<<< HEAD
 
-        data.applicationId().setValue(lease.leaseApplication().applicationId().getValue());
+        data.leaseId().setValue(lease.leaseApplication().applicationId().getValue());
+        data.date().setValue(application.submission().decisionDate().getValue());
         if (documentMode == DocumentMode.InkSinging) {
             OnlineApplication onlineApplication = retrieveOnlineApplication(application, subjectParticipant);
             if (onlineApplication != null) {
                 data.submissionDate().setValue(onlineApplication.submissionDate().getValue());
             }
         }
+=======
+        data.submissionDate().setValue(application.submission().decisionDate().getValue());
+        data.applicationId().setValue(lease.leaseApplication().applicationId().getValue());
+>>>>>>> origin/bugfix/VISTA-6069-download-with-image-failure
 
         if (false /* TODO && (documentMode == blank) */) {
             makeDataPlaceholders(data.sections().get(0)); // TODO not sure it's supposed to work like that at all...
@@ -425,7 +438,8 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         // fetch terms
         if (makeWithSignaturePlaceholders) {
             // TODO copied from OnlineApplicationFacade.getOnlineApplicationLegalTerms(), probably should be merged
-            PolicyNode policyNode = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(application.lease());
+            Building policyNode = application.lease().unit().building();
+
             LeaseApplicationLegalPolicy leaseApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode,
                     LeaseApplicationLegalPolicy.class);
             signedLegalTerms = new ArrayList<SignedOnlineApplicationLegalTerm>();
@@ -467,7 +481,8 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         // fetch terms
         if (makeWithSignaturePlaceholders) {
             // TODO copied from OnlineApplicationFacade.getOnlineApplicationLegalTerms(), probably should be merged
-            PolicyNode policyNode = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(application.lease());
+            Building policyNode = application.lease().unit().building();
+
             LeaseApplicationLegalPolicy leaseApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode,
                     LeaseApplicationLegalPolicy.class);
             signedConfirmationTerms = new ArrayList<SignedOnlineApplicationConfirmationTerm>();

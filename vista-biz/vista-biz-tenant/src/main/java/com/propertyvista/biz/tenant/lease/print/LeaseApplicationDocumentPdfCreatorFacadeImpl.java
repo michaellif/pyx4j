@@ -34,12 +34,10 @@ public class LeaseApplicationDocumentPdfCreatorFacadeImpl implements LeaseApplic
         params.put("landlordName", data.landlordName().getValue());
         params.put("landlordAddress", data.landlordAddress().getValue());
         params.put("submissionDate", data.submissionDate().getValue());
-        params.put("name", data.name().getValue());
-        params.put("date", data.date().getValue());
-        params.put("leaseId", data.leaseId().getValue());
+        params.put("applicationId", data.applicationId().getValue());
 
-        if (data.landlordLogo().getValue() != null && !(data.landlordLogo().getValue().equals(""))) {
-            params.put("landlordLogo", data.landlordLogo().getValue());
+        if (data.landlordLogo().getValue() != null) {
+            params.put("landlordLogo", new ByteArrayInputStream(data.landlordLogo().getValue()));
         }
         if (data.background().getValue() != null) {
             params.put("backgroundImage", new ByteArrayInputStream(data.background().getValue()));
