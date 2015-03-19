@@ -14,6 +14,9 @@ package com.propertyvista.config.deployment;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.propertyvista.domain.security.common.VistaApplication;
 
 /**
@@ -26,8 +29,11 @@ import com.propertyvista.domain.security.common.VistaApplication;
  */
 public class EnvNApplicationContextResolver extends AbstractApplicationContextResolver {
 
+    private static Logger log = LoggerFactory.getLogger(EnvNApplicationContextResolver.class);
+
     public EnvNApplicationContextResolver(String dnsNameBase) {
         super(dnsNameBase);
+        log.debug("Pattern *{} matching resolver created", dnsNameBase);
     }
 
     @Override

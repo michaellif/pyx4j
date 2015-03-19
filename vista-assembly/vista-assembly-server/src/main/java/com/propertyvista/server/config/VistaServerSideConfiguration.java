@@ -186,20 +186,12 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public VistaApplicationContextResolver createApplicationContextResolver() {
-        return new EnvNResolver((getApplicationURLNamespace(true)));
+        return new EnvNResolver("-" + enviromentId() + ".devpv.com");
     }
 
     @Override
     public String getApplicationURLNamespace(boolean secure) {
-        if (isDepoymentUseNewDevDomains()) {
-            return ".devpv.com/";
-        } else {
-            return ".birchwoodsoftwaregroup.com/";
-        }
-    }
-
-    protected String getAppUrlSeparator() {
-        return "-";
+        return "-" + enviromentId() + ".devpv.com/";
     }
 
     @Override

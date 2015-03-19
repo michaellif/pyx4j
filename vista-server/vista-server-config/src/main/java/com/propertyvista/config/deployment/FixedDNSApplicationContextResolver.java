@@ -14,27 +14,31 @@ package com.propertyvista.config.deployment;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.propertyvista.domain.security.common.VistaApplication;
 
 public class FixedDNSApplicationContextResolver extends AbstractApplicationContextResolver {
+
+    private static Logger log = LoggerFactory.getLogger(FixedDNSApplicationContextResolver.class);
 
     private final VistaApplication application;
 
     private final String namespaceProposal;
 
     public FixedDNSApplicationContextResolver(String dnsName, VistaApplication application) {
-        super(dnsName);
-        this.application = application;
-        namespaceProposal = application.getFixedNamespace();
-        if (namespaceProposal == null) {
-            throw new IllegalArgumentException();
-        }
+        this(dnsName, application, application.getFixedNamespace());
     }
 
     public FixedDNSApplicationContextResolver(String dnsName, VistaApplication application, String namespaceProposal) {
         super(dnsName);
+        if (namespaceProposal == null) {
+            throw new IllegalArgumentException();
+        }
         this.application = application;
         this.namespaceProposal = namespaceProposal;
+        log.debug("Fixed DNS {} -> {} {} resolver created", dnsName, application, namespaceProposal);
     }
 
     @Override

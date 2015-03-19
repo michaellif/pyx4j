@@ -14,15 +14,21 @@ package com.propertyvista.config.deployment;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.propertyvista.domain.security.common.VistaApplication;
 
 public class SingleAppApplicationContextResolver extends AbstractApplicationContextResolver {
+
+    private static Logger log = LoggerFactory.getLogger(SingleAppApplicationContextResolver.class);
 
     private final VistaApplication application;
 
     public SingleAppApplicationContextResolver(String dnsName, VistaApplication application) {
         super(dnsName);
         this.application = application;
+        log.debug("Single application {} -> {} resolver created", dnsNameBase, application);
     }
 
     @Override

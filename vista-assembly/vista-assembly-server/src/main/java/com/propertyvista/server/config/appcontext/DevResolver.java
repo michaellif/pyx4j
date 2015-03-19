@@ -26,6 +26,7 @@ public class DevResolver extends ChaineApplicationContextResolver {
                 new EnvNApplicationContextResolver(".local.devpv.com"), //
                 new EnvNApplicationContextResolver(".m.pyx4j.com"), // <!- Host on Mobile Emulator
                 new EnvNApplicationContextResolver(".h.pyx4j.com"), // <!- Host VM on WMware
+                new EnvNApplicationContextResolver("-00.devpv.com"), // Testing  local deployment
                 new CustomDNSApplicationContextResolver());
 
     }

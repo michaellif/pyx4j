@@ -108,11 +108,6 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
     }
 
     @Override
-    protected String getAppUrlSeparator() {
-        return ".";
-    }
-
-    @Override
     public boolean isDepoymentUseNewDevDomains() {
         return true;
     }
