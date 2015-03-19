@@ -46,26 +46,29 @@ public enum VistaApplication implements Behavior {
 
     resident("portal"),
 
-    prospect("portal"),
+    prospect("portal", "prospect"),
 
     onboarding("start");
 
     private final String dnsNameFragment;
+
+    private final String childSubApplicationPath;
 
     VistaApplication() {
         this(null);
     }
 
     VistaApplication(String dnsNameFragment) {
+        this(dnsNameFragment, null);
+    }
+
+    VistaApplication(String dnsNameFragment, String childSubApplicationPath) {
         if (dnsNameFragment == null) {
             this.dnsNameFragment = name();
         } else {
             this.dnsNameFragment = dnsNameFragment;
         }
-    }
-
-    public String getDnsNameFragment() {
-        return dnsNameFragment;
+        this.childSubApplicationPath = childSubApplicationPath;
     }
 
     public String getInternalMappingName() {
@@ -74,6 +77,14 @@ public enum VistaApplication implements Behavior {
         } else {
             return name();
         }
+    }
+
+    public String getDnsNameFragment() {
+        return dnsNameFragment;
+    }
+
+    public String getChildSubApplicationPath() {
+        return childSubApplicationPath;
     }
 
     private static final Collection<VistaApplication> pmcApplications = EnumSet.of(crm, site, resident, prospect);
