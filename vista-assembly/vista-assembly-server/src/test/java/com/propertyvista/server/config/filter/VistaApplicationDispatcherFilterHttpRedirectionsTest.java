@@ -16,7 +16,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 
-import org.junit.Test;
+import org.junit.Ignore;
 
 import com.propertyvista.server.config.filter.base.VistaApplicationDispatcherFilterTestBase;
 
@@ -34,7 +34,7 @@ public class VistaApplicationDispatcherFilterHttpRedirectionsTest extends VistaA
      * @throws IOException
      * @throws ServletException
      */
-    @Test
+    @Ignore
     public final void testHttpsRedirections() throws IOException, ServletException {
         // Onboarding
         testHttpsRedirect("http://onboarding.dev.birchwoodsoftwaregroup.com:8888/", true);

@@ -12,31 +12,44 @@
  */
 package com.propertyvista.server.config.filter;
 
+import org.junit.Test;
+
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.server.config.appcontext.DevResolver;
+import com.propertyvista.server.config.appcontext.EnvNResolver;
+import com.propertyvista.server.config.appcontext.ProdCustomersDemoResolver;
+import com.propertyvista.server.config.appcontext.ProdResolver;
+import com.propertyvista.server.config.filter.base.VistaNamespaceResolverTestBase;
 
-public class ResolveApplicationTest {
+public class ResolveApplicationTest extends VistaNamespaceResolverTestBase {
 
+    @Test
     public void testDev() {
-        //setConfig(new NamesConfigNumberedEnv(".local.devpv.com"));
+        setResolver(new DevResolver());
         assertApp("http://start.local.devpv.com", VistaApplication.onboarding);
         assertApp("http://vista-crm.local.devpv.com", VistaApplication.crm);
+        setResolver(null);
     }
 
+    @Test
     public void testEnv11() {
-        //setConfig(new NamesConfigNumberedEnv("-11.devpv.com"));
+        setResolver(new EnvNResolver("-11.devpv.com"));
         assertApp("http://start-11.devpv.com", VistaApplication.onboarding);
         assertApp("https://vista-crm-11.devpv.com/", VistaApplication.crm);
+        setResolver(null);
     }
 
+    @Test
     public void testProd() {
-        //setConfig(new NamesConfigProd());
+        setResolver(new ProdResolver());
         assertApp("https://interfaces.propertyvista.com", VistaApplication.interfaces);
         assertApp("https://vista.propertyvista.com/interfaces", VistaApplication.crm);
 
         assertApp("https://operations.propertyvista.com", VistaApplication.operations);
 
         assertApp("https://env.propertyvista.com", VistaApplication.env);
-        assertApp("https://env.my-community.co", VistaApplication.env);
+
+        assertApp("https://env.my-community.co", null);
         assertApp("https://env-staging.propertyvista.net", VistaApplication.env);
         assertApp("https://env.propertyvista.net", null);
 
@@ -47,10 +60,29 @@ public class ResolveApplicationTest {
 
         assertApp("https://vista.propertyvista.com", VistaApplication.crm);
         assertApp("https://vista-crm-staging.propertyvista.net", VistaApplication.crm);
+        setResolver(null);
     }
 
-    private void assertApp(String string, VistaApplication onboarding) {
-        // TODO Auto-generated method stub
+    @Test
+    public void testProdCustomersDemo() {
+        setResolver(new ProdCustomersDemoResolver());
+        // Customers demo
+        assertApp("https://demo.propertyvista.com", VistaApplication.crm);
+        assertApp("https://demo.my-community.co", VistaApplication.resident);
+//        assertApp("https://demo.my-community.co/prospect", VistaApplication.prospect);
+        assertApp("https://demo.http://demo.residentportalsite.com/en/", VistaApplication.site);
 
+        // Sales demo
+        assertApp("https://rockville-crm.propertyvista.biz", VistaApplication.crm);
+        assertApp("https://rockville-site.propertyvista.biz", VistaApplication.site);
+        assertApp("https://rockville-portal.propertyvista.biz", VistaApplication.resident);
+        assertApp("https://rockville-portal.propertyvista.biz/portal", VistaApplication.resident);
+
+        assertApp("https://operations.propertyvista.biz", VistaApplication.operations);
+        assertApp("https://onboarding.propertyvista.biz", VistaApplication.onboarding);
+        assertApp("https://static.propertyvista.biz", VistaApplication.staticContext);
+        assertApp("http://static.propertyvista.biz/o/db-reset", VistaApplication.env);
+        setResolver(null);
     }
+
 }

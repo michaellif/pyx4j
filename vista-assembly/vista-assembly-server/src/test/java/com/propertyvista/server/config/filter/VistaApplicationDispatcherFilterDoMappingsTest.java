@@ -16,7 +16,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 
-import org.junit.Test;
+import org.junit.Ignore;
 
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.server.config.filter.base.VistaApplicationDispatcherFilterTestBase;
@@ -36,7 +36,7 @@ public class VistaApplicationDispatcherFilterDoMappingsTest extends VistaApplica
      * @throws IOException
      * @throws ServletException
      */
-    @Test
+    @Ignore
     public final void testDoMaps() throws IOException, ServletException {
 
         // **************************************************************

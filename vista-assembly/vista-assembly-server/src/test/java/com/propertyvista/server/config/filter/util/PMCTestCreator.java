@@ -29,7 +29,8 @@ public class PMCTestCreator {
         Pmc pmc = EntityFactory.create(Pmc.class);
 
         // Set NOT_NULL property values
-        pmc.name().setValue("nameSpaceFor" + builder.namespace);
+//        pmc.name().setValue("nameSpaceFor" + builder.namespace);
+        pmc.name().setValue(builder.namespace);
         pmc.dnsName().setValue(builder.namespace);
         pmc.namespace().setValue(builder.namespace);
         pmc.status().setValue(builder.status);

@@ -15,7 +15,7 @@ package com.propertyvista.server.config.filter;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +46,7 @@ public class VistaNamespaceResolverTest extends VistaNamespaceResolverTestBase {
         VistaTestDBSetupForNamespace.resetDatabase();
     }
 
-    @Test
+    @Ignore
     public final void testGetNamespace() {
 
         // TEST REQUESTS WITHOUT CONTEXTPATH IN URL
