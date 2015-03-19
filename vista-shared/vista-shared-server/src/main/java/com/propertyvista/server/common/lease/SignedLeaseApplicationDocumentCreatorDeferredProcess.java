@@ -73,7 +73,7 @@ public class SignedLeaseApplicationDocumentCreatorDeferredProcess extends Abstra
                     retrieveLeaseParticipant();
 
                     LeaseApplicationDocumentDataDTO data = ServerSideFactory.create(LeaseApplicationDocumentDataCreatorFacade.class).createApplicationData(
-                            DocumentMode.OnlineDigitalSigning, application, participant);
+                            DocumentMode.OnlineDigitalySigned, application, participant);
                     byte[] pdfBytes = ServerSideFactory.create(LeaseApplicationDocumentPdfCreatorFacade.class).createPdf(data);
                     LeaseApplicationDocument documentId = saveDocument(pdfBytes);
                     ServerSideFactory.create(CommunicationFacade.class).sendApplicationDocumentCopy(documentId);

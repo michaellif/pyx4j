@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationApplicantFinancial" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="86393bcf-ee3a-407d-a9e4-e95c6f41c945">
 	<property name="ireport.zoom" value="1.2100000000000033"/>
-	<property name="ireport.x" value="19"/>
-	<property name="ireport.y" value="465"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="174"/>
 	<field name="incomeSource" class="com.propertyvista.domain.tenant.income.IncomeSource"/>
 	<field name="details" class="com.propertyvista.domain.tenant.income.CustomerScreeningIncomeInfo"/>
 	<background>
@@ -27,7 +27,7 @@
 				</graphicElement>
 			</rectangle>
 		</band>
-		<band height="171">
+		<band height="165">
 			<printWhenExpression><![CDATA[($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.fulltime) || ($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.parttime) || ($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.seasonallyEmployed)]]></printWhenExpression>
 			<rectangle>
 				<reportElement x="373" y="20" width="198" height="20" forecolor="#CCCCCC" uuid="49118f97-c2d5-4249-8f56-5c0a2a602227"/>
@@ -170,7 +170,7 @@
 				<textFieldExpression><![CDATA[$F{incomeSource}.toString()]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="175">
+		<band height="165">
 			<printWhenExpression><![CDATA[($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.selfemployed)]]></printWhenExpression>
 			<rectangle>
 				<reportElement x="373" y="21" width="198" height="20" forecolor="#CCCCCC" uuid="84c9203f-1e72-4736-9b51-f21a55945d24"/>
@@ -313,7 +313,7 @@
 				<textFieldExpression><![CDATA[$F{incomeSource}.toString()]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="173">
+		<band height="165">
 			<printWhenExpression><![CDATA[($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.socialServices)]]></printWhenExpression>
 			<rectangle>
 				<reportElement x="1" y="78" width="555" height="20" forecolor="#CCCCCC" uuid="44f78814-bf46-433a-b76d-cd7115c3a4ce"/>
@@ -456,7 +456,7 @@
 				<text><![CDATA[City]]></text>
 			</staticText>
 		</band>
-		<band height="37">
+		<band height="30">
 			<printWhenExpression><![CDATA[($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.pension)
                  || ($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.retired)
                  || ($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.unemployed)
@@ -486,7 +486,7 @@
 				<textFieldExpression><![CDATA[$F{incomeSource}.toString()]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="152">
+		<band height="143">
 			<printWhenExpression><![CDATA[($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.student)]]></printWhenExpression>
 			<rectangle>
 				<reportElement x="1" y="97" width="188" height="20" forecolor="#CCCCCC" uuid="d0cea98c-2591-41bf-8694-7016f475cca5"/>

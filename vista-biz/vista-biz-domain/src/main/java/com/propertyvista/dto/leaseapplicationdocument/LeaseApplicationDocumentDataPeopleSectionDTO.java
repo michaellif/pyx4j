@@ -20,7 +20,7 @@ import com.pyx4j.entity.core.IPrimitive;
 @Transient
 public interface LeaseApplicationDocumentDataPeopleSectionDTO extends IEntity {
 
-    IPrimitive<String> leaseId();
+    IPrimitive<String> applicationId();
 
     IList<LeaseApplicationDocumentDataCoApplicantDTO> coApplicants();
 
