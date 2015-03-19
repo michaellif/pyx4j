@@ -108,11 +108,8 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         }
 
         data.applicationId().setValue(lease.leaseApplication().applicationId().getValue());
-        if (documentMode == DocumentMode.InkSinging) {
-            OnlineApplication onlineApplication = retrieveOnlineApplication(application, subjectParticipant);
-            if (onlineApplication != null) {
-                data.submissionDate().setValue(onlineApplication.submissionDate().getValue());
-            }
+        if (documentMode == DocumentMode.OnlineDigitalySigned) {
+            data.submissionDate().setValue(getOnlineApplication(application, subjectParticipant).submissionDate().getValue());
         }
 
         if (false /* TODO && (documentMode == blank) */) {
@@ -128,9 +125,8 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             fillAdditionalInfoSection(data.sections().get(0).additionalInfoSection().get(0), lease, subjectParticipant);
             fillFinaincialSection(data.sections().get(0).financialSection().get(0), lease, subjectParticipant);
             fillEmergencyContacts(data.sections().get(0).emergencyContactsSection().get(0), lease, subjectParticipant);
-            fillLegalSection(data.sections().get(0).legalSection().get(0), application, subjectParticipant, documentMode == DocumentMode.InkSinging);
-            fillConfirmationSection(data.sections().get(0).confirmationSection().get(0), application, subjectParticipant,
-                    documentMode == DocumentMode.InkSinging);
+            fillLegalSection(data.sections().get(0).legalSection().get(0), application, subjectParticipant, documentMode);
+            fillConfirmationSection(data.sections().get(0).confirmationSection().get(0), application, subjectParticipant, documentMode);
         }
         return data;
     }
@@ -418,16 +414,19 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     }
 
     private void fillLegalSection(LeaseApplicationDocumentDataLegalSectionDTO legalSection, LeaseApplication application,
-            LeaseTermParticipant<?> subjectParticipant, boolean makeWithSignaturePlaceholders) {
+            LeaseTermParticipant<?> subjectParticipant, DocumentMode documentMode) {
 
         List<SignedOnlineApplicationLegalTerm> signedLegalTerms;
 
         // fetch terms
-        if (makeWithSignaturePlaceholders) {
+        if (documentMode == DocumentMode.OnlineDigitalySigned) {
+            signedLegalTerms = getOnlineApplication(application, subjectParticipant).legalTerms();
+        } else {
             // TODO copied from OnlineApplicationFacade.getOnlineApplicationLegalTerms(), probably should be merged
             PolicyNode policyNode = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(application.lease());
             LeaseApplicationLegalPolicy leaseApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode,
                     LeaseApplicationLegalPolicy.class);
+
             signedLegalTerms = new ArrayList<SignedOnlineApplicationLegalTerm>();
             for (LeaseApplicationLegalTerm term : leaseApplicationPolicy.legalTerms()) {
                 TargetRole termRole = term.applyToRole().getValue();
@@ -438,13 +437,6 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
                     signedLegalTerms.add(signedTerm);
                 }
             }
-        } else {
-            OnlineApplication onlineApplication = retrieveOnlineApplication(application, subjectParticipant);
-            if (onlineApplication == null) {
-                throw new RuntimeException("Online application for customer: " + subjectParticipant.leaseParticipant().customer().getStringView()
-                        + "in Lease Application: " + application.applicationId().getStringView() + " was not found, can't create printable legal terms");
-            }
-            signedLegalTerms = onlineApplication.legalTerms();
         }
 
         // convert for printing
@@ -454,22 +446,25 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             legalTerm.wordingHtml().setValue(signedLegalTerm.term().content().getValue());
             Persistence.ensureRetrieve(signedLegalTerm.signature(), AttachLevel.Attached);
             legalTerm.signature().set(signedLegalTerm.signature().duplicate());
-            legalTerm.makeWithSignaturePlaceholder().setValue(makeWithSignaturePlaceholders);
+            legalTerm.makeWithSignaturePlaceholder().setValue(documentMode == DocumentMode.InkSinging);
             legalSection.legalTerms().add(legalTerm);
         }
     }
 
     private void fillConfirmationSection(LeaseApplicationDocumentDataConfirmationSectionDTO legalSection, LeaseApplication application,
-            LeaseTermParticipant<?> subjectParticipant, boolean makeWithSignaturePlaceholders) {
+            LeaseTermParticipant<?> subjectParticipant, DocumentMode documentMode) {
 
         List<SignedOnlineApplicationConfirmationTerm> signedConfirmationTerms;
 
         // fetch terms
-        if (makeWithSignaturePlaceholders) {
+        if (documentMode == DocumentMode.OnlineDigitalySigned) {
+            signedConfirmationTerms = getOnlineApplication(application, subjectParticipant).confirmationTerms();
+        } else {
             // TODO copied from OnlineApplicationFacade.getOnlineApplicationLegalTerms(), probably should be merged
             PolicyNode policyNode = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(application.lease());
             LeaseApplicationLegalPolicy leaseApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode,
                     LeaseApplicationLegalPolicy.class);
+
             signedConfirmationTerms = new ArrayList<SignedOnlineApplicationConfirmationTerm>();
             for (LeaseApplicationConfirmationTerm term : leaseApplicationPolicy.confirmationTerms()) {
                 TargetRole termRole = term.applyToRole().getValue();
@@ -480,13 +475,6 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
                     signedConfirmationTerms.add(signedConfTerm);
                 }
             }
-        } else {
-            OnlineApplication onlineApplication = retrieveOnlineApplication(application, subjectParticipant);
-            if (onlineApplication == null) {
-                throw new RuntimeException("Online application for customer: " + subjectParticipant.leaseParticipant().customer().getStringView()
-                        + "in Lease Application: " + application.applicationId().getStringView() + " was not found, can't create printable legal terms");
-            }
-            signedConfirmationTerms = onlineApplication.confirmationTerms();
         }
 
         // convert for printing
@@ -496,7 +484,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             confTerm.wordingHtml().setValue(signedConfTerm.term().content().getValue());
             Persistence.ensureRetrieve(signedConfTerm.signature(), AttachLevel.Attached);
             confTerm.signature().set(signedConfTerm.signature().duplicate());
-            confTerm.makeWithSignaturePlaceholder().setValue(makeWithSignaturePlaceholders);
+            confTerm.makeWithSignaturePlaceholder().setValue(documentMode == DocumentMode.InkSinging);
             legalSection.legalTerms().add(confTerm);
         }
     }
@@ -576,6 +564,15 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         }
 
         return billData;
+    }
+
+    private OnlineApplication getOnlineApplication(LeaseApplication application, LeaseTermParticipant<?> subjectParticipant) {
+        OnlineApplication onlineApplication = retrieveOnlineApplication(application, subjectParticipant);
+        if (onlineApplication == null) {
+            throw new RuntimeException("Online application for customer: " + subjectParticipant.leaseParticipant().customer().getStringView()
+                    + "in Lease Application: " + application.applicationId().getStringView() + " was not found");
+        }
+        return onlineApplication;
     }
 
     private OnlineApplication retrieveOnlineApplication(LeaseApplication application, LeaseTermParticipant<?> subjectParticipant) {
