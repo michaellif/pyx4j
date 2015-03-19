@@ -109,12 +109,13 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             logo = blob.data().getValue();
             data.landlordLogo().setValue(logo);
         }
-        data.submissionDate().setValue(application.submission().decisionDate().getValue());
+        if (documentMode == DocumentMode.InkSinging) {
+            data.submissionDate().setValue(retrieveOnlineApplication(application, subjectParticipant).submissionDate().getValue());
+        }
         data.leaseId().setValue(lease.leaseApplication().applicationId().getValue());
 
         if (false /* TODO && (documentMode == blank) */) {
             makeDataPlaceholders(data.sections().get(0)); // TODO not sure it's supposed to work like that at all...
-
         } else {
             fillLeaseSection(data.sections().get(0).leaseSection().get(0), lease);
             fillRentalItemsSection(data.sections().get(0).rentalItemsSection().get(0), lease);
