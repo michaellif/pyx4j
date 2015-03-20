@@ -23,19 +23,21 @@
 				<reportElement x="1" y="0" width="184" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="2cf15c73-fa76-4b26-aa7c-7287ce505cdd"/>
 			</rectangle>
 			<textField>
-				<reportElement x="5" y="0" width="128" height="20" uuid="d7c41e34-fb0d-41cd-b879-44c5c627e5d6"/>
+				<reportElement x="5" y="2" width="180" height="18" uuid="d7c41e34-fb0d-41cd-b879-44c5c627e5d6"/>
 				<textFieldExpression><![CDATA[$F{firstName}  + " " + $F{lastName}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="190" y="0" width="125" height="20" uuid="ea90550b-1afb-4544-afa5-001fdf504c7a">
+				<reportElement x="185" y="2" width="191" height="18" uuid="ea90550b-1afb-4544-afa5-001fdf504c7a">
 					<printWhenExpression><![CDATA[!$F{birthDate}.equals(null)]]></printWhenExpression>
 				</reportElement>
+				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{birthDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="380" y="0" width="161" height="20" uuid="547ab544-d9b8-487e-83cd-c2eb0f484cf6">
+				<reportElement x="376" y="2" width="195" height="18" uuid="547ab544-d9b8-487e-83cd-c2eb0f484cf6">
 					<printWhenExpression><![CDATA[!$F{relationship}.equals(null)]]></printWhenExpression>
 				</reportElement>
+				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{relationship}]]></textFieldExpression>
 			</textField>
 		</band>
