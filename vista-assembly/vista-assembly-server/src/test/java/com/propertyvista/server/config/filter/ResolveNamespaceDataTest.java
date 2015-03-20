@@ -196,19 +196,17 @@ public class ResolveNamespaceDataTest extends VistaNamespaceResolverTestBase {
         // prospect
         testResolveNamespace("https://vista-portal.propertyvista.biz/prospect", VistaApplication.prospect, "vista");
 
-        testResolveNamespace("https://demo.my-community.co/prospect/", VistaApplication.prospect, "vista");
-
-        // crm
-        testResolveNamespace("https://one-harder-pmc-name-crm.propertyvista.biz/", VistaApplication.crm, "one-harder-pmc-name");
-
-        // site
-        testResolveNamespace("https://one-harder-pmc-name-site.propertyvista.biz/", VistaApplication.site, "one-harder-pmc-name");
-
-        // resident
-        testResolveNamespace("https://one-harder-pmc-name-portal.propertyvista.biz/", VistaApplication.resident, "one-harder-pmc-name");
-
-        // prospect
-        testResolveNamespace("https://one-harder-pmc-name-portal.propertyvista.biz/prospect", VistaApplication.prospect, "one-harder-pmc-name");
+//        // crm
+//        testResolveNamespace("https://one-harder-pmc-name-crm.propertyvista.biz/", VistaApplication.crm, "one-harder-pmc-name");
+//
+//        // site
+//        testResolveNamespace("https://one-harder-pmc-name-site.propertyvista.biz/", VistaApplication.site, "one-harder-pmc-name");
+//
+//        // resident
+//        testResolveNamespace("https://one-harder-pmc-name-portal.propertyvista.biz/", VistaApplication.resident, "one-harder-pmc-name");
+//
+//        // prospect
+//        testResolveNamespace("https://one-harder-pmc-name-portal.propertyvista.biz/prospect", VistaApplication.prospect, "one-harder-pmc-name");
 
         setResolver(null);
     }
