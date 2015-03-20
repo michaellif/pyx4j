@@ -28,6 +28,7 @@ import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.LifecycleListener;
 import com.pyx4j.config.server.LocaleResolver;
+import com.pyx4j.config.server.NamespaceResolver;
 import com.pyx4j.config.server.PropertiesConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.rpc.IServiceFactory;
@@ -52,6 +53,8 @@ import com.propertyvista.config.TenantSureConfiguration;
 import com.propertyvista.config.VistaCookieLocaleResolver;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.VistaSystemsDNSConfig;
+import com.propertyvista.config.deployment.VistaApplicationContextResolver;
+import com.propertyvista.config.deployment.VistaNamespaceResolver;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.misc.VistaDevPreloadConfig;
@@ -59,7 +62,7 @@ import com.propertyvista.operations.domain.VistaSystemMaintenanceState;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.server.ci.bugs.MemoryLeakJAXBContextLifecycleListener;
 import com.propertyvista.server.common.security.VistaAntiBot;
-import com.propertyvista.server.config.filter.namespace.VistaNamespaceDataResolver;
+import com.propertyvista.server.config.appcontext.EnvNResolver;
 import com.propertyvista.server.security.VistaAccessControlList;
 import com.propertyvista.server.security.VistaAclRevalidator;
 
@@ -98,15 +101,6 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
             return new VistaServerSideConfigurationProdCustomersDemo();
         } else if ("vista-sales-demo".equals(contextName)) {
             return new VistaServerSideConfigurationProdSalesDemo();
-
-        } else if ("vistad11".equals(contextName)) {
-            return new VistaServerSideConfigurationD11();
-        } else if ("vistad22".equals(contextName)) {
-            return new VistaServerSideConfigurationD22();
-        } else if ("vistad33".equals(contextName)) {
-            return new VistaServerSideConfigurationD33();
-        } else if ("vistad44".equals(contextName)) {
-            return new VistaServerSideConfigurationD44();
 
         } else if (servletContext.getServerInfo().contains("jetty")) {
             return new VistaServerSideConfigurationDev();
@@ -182,16 +176,13 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
-    public String getApplicationURLNamespace(boolean secure) {
-        if (isDepoymentUseNewDevDomains()) {
-            return ".devpv.com/";
-        } else {
-            return ".birchwoodsoftwaregroup.com/";
-        }
+    public VistaApplicationContextResolver createApplicationContextResolver() {
+        return new EnvNResolver("-" + enviromentId() + ".devpv.com");
     }
 
-    protected String getAppUrlSeparator() {
-        return "-";
+    @Override
+    public String getApplicationURLNamespace(boolean secure) {
+        return "-" + enviromentId() + ".devpv.com/";
     }
 
     @Override
@@ -202,20 +193,10 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     @Override
     public String getDefaultApplicationURL(VistaApplication application, String pmcDnsName) {
         String hostName;
-        switch (application) {
-        case onboarding:
-            hostName = "start";
-        case operations:
-            hostName = application.name();
-            break;
-        case prospect:
-            hostName = pmcDnsName + "-" + "portal";
-            break;
-        case resident:
-            hostName = pmcDnsName + "-" + "portal";
-            break;
-        default:
-            hostName = pmcDnsName + "-" + application.name();
+        if (application.requirePmcResolution()) {
+            hostName = pmcDnsName + "-" + application.getDnsNameFragment();
+        } else {
+            hostName = application.getDnsNameFragment();
         }
         String base = getApplicationDeploymentProtocol() + "://" + hostName + getApplicationURLNamespace(true);
         if (isAppsContextlessDepoyment() && (application != VistaApplication.prospect)) {
@@ -241,8 +222,8 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
-    public VistaNamespaceDataResolver getNamespaceResolver(HttpServletRequest httpRequest) {
-        return VistaNamespaceDataResolver.create(httpRequest);
+    public NamespaceResolver getNamespaceResolver(HttpServletRequest httpRequest) {
+        return VistaNamespaceResolver.instance().getNamespaceResolver(httpRequest);
     }
 
     @Override

@@ -32,16 +32,16 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.propertyvista.biz.system.WorldDateManager;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.server.config.filter.special.SpecialURL;
 
+//TODO Make it secure
 @SuppressWarnings("serial")
 public class EnvLinksServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (ApplicationMode.isProduction() && (request.getAttribute(SpecialURL.class.getName()) == null || !request.isSecure())) {
-//            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-//            return;
+        if (ApplicationMode.isProduction() && (!request.isSecure())) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
 
         response.setHeader("Cache-Control", "no-store");

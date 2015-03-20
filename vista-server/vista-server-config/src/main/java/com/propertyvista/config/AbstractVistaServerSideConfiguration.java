@@ -23,6 +23,7 @@ import com.pyx4j.config.server.PropertiesConfiguration;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.log4j.LoggerConfig;
 
+import com.propertyvista.config.deployment.VistaApplicationContextResolver;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.server.config.VistaFeaturesLifecycleListener;
@@ -77,6 +78,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
     public abstract boolean isAppsContextlessDepoyment();
 
     public abstract IMailServiceConfigConfiguration getOperationsAlertMailServiceConfiguration();
+
+    public abstract VistaApplicationContextResolver createApplicationContextResolver();
 
     public abstract String getApplicationURLNamespace(boolean secure);
 

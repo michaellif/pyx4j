@@ -15,8 +15,10 @@ package com.propertyvista.server.config;
 import java.util.EnumSet;
 import java.util.Set;
 
+import com.propertyvista.config.deployment.VistaApplicationContextResolver;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.server.config.appcontext.ProdCustomersDemoResolver;
 import com.propertyvista.shared.config.VistaSettings;
 
 public class VistaServerSideConfigurationProdCustomersDemo extends VistaServerSideConfigurationCustom {
@@ -50,6 +52,16 @@ public class VistaServerSideConfigurationProdCustomersDemo extends VistaServerSi
         default:
             return super.getDefaultApplicationURL(application, pmcDnsName);
         }
+    }
+
+    @Override
+    public VistaApplicationContextResolver createApplicationContextResolver() {
+        return new ProdCustomersDemoResolver();
+    }
+
+    @Override
+    public String getApplicationURLNamespace(boolean secure) {
+        return "-cdemo.propertyvista.biz/";
     }
 
     @Override

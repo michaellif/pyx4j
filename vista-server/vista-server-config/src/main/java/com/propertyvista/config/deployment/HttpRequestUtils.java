@@ -10,13 +10,13 @@
  * Created on Dec 19, 2014
  * @author ernestog
  */
-package com.propertyvista.server.config.filter.utils;
+package com.propertyvista.config.deployment;
 
 import javax.servlet.http.HttpServletRequest;
 
 import com.propertyvista.domain.security.common.VistaApplication;
 
-public class HttpRequestUtils {
+class HttpRequestUtils {
 
     public static String getNamespaceDataCacheKey(HttpServletRequest httpRequest) {
 
@@ -49,36 +49,4 @@ public class HttpRequestUtils {
         return "";
     }
 
-    public static String getServerURL(HttpServletRequest httpRequest) {
-        return httpRequest.getScheme()
-                + "://"
-                + httpRequest.getServerName()
-                + ("http".equals(httpRequest.getScheme()) && httpRequest.getServerPort() == 80 || "https".equals(httpRequest.getScheme())
-                        && httpRequest.getServerPort() == 443 ? "" : ":" + httpRequest.getServerPort());
-    }
-
-    public static String getCompleteURLNoContextPath(HttpServletRequest httpRequest) {
-        return getCompleteURL(false, httpRequest);
-    }
-
-    public static String getCompleteURLWithContextPath(HttpServletRequest httpRequest) {
-        return getCompleteURL(true, httpRequest);
-    }
-
-    public static String getCompleteURL(boolean returnWithContextPath, HttpServletRequest httpRequest) {
-        String requestUri = httpRequest.getRequestURI();
-        if (!returnWithContextPath && requestUri != null) {
-            String contextPath = httpRequest.getContextPath();
-            if (contextPath != null) {
-                requestUri = requestUri.replaceAll(contextPath, ""); // hack for duplicate context on request
-//                log.info("updatedRequestUri -> " + requestUri);
-            }
-        }
-
-        return getServerURL(httpRequest) + requestUri + (httpRequest.getQueryString() != null ? "?" + httpRequest.getQueryString() : "");
-    }
-
-    public static String getHttpsUrl(HttpServletRequest httpRequest) {
-        return new StringBuffer(getCompleteURLNoContextPath(httpRequest)).replace(0, 4, "https").toString();
-    }
 }

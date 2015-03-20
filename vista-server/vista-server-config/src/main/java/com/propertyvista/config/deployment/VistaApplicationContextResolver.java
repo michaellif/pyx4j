@@ -7,13 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 14, 2015
+ * Created on Mar 18, 2015
  * @author vlads
  */
-package com.propertyvista.server.config.filter.special;
+package com.propertyvista.config.deployment;
 
-public final class Hidden {
+import javax.servlet.http.HttpServletRequest;
 
-    public static String url = "/hidden";
+public interface VistaApplicationContextResolver {
+
+    /**
+     *
+     * @param httpRequest
+     * @return null if Context can't be resolved by this resolver.
+     */
+    public VistaApplicationContext resolve(HttpServletRequest httpRequest);
 
 }

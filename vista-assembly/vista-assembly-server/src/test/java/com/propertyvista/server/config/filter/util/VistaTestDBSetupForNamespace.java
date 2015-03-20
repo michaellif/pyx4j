@@ -10,7 +10,7 @@
  * Created on Oct 9, 2014
  * @author ernestog
  */
-package com.propertyvista.server.config.filter;
+package com.propertyvista.server.config.filter.util;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.RDBUtils;

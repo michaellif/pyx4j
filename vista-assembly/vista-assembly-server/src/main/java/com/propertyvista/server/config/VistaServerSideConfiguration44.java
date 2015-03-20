@@ -52,15 +52,6 @@ public class VistaServerSideConfiguration44 extends VistaServerSideConfiguration
     }
 
     @Override
-    public String getApplicationURLNamespace(boolean secure) {
-        if (isDepoymentUseNewDevDomains()) {
-            return "-44.devpv.com/";
-        } else {
-            return "-44.birchwoodsoftwaregroup.com/";
-        }
-    }
-
-    @Override
     public String getApplicationEmailSender() {
         return "\"Vista Support44\" <support.www44@birchwoodsoftwaregroup.com>";
     }

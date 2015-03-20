@@ -24,7 +24,9 @@ import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.EquifaxInterfaceConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.VistaSystemsDNSConfig;
+import com.propertyvista.config.deployment.VistaApplicationContextResolver;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.server.config.appcontext.ProdResolver;
 import com.propertyvista.shared.config.VistaSettings;
 
 public class VistaServerSideConfigurationProd extends VistaServerSideConfiguration {
@@ -140,6 +142,11 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         }
 
         return base + dnsName + path;
+    }
+
+    @Override
+    public VistaApplicationContextResolver createApplicationContextResolver() {
+        return new ProdResolver();
     }
 
     @Override
