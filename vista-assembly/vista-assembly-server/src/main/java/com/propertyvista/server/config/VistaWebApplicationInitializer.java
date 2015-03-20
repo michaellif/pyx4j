@@ -70,6 +70,7 @@ import com.propertyvista.server.ci.EnvLinksServlet;
 import com.propertyvista.server.ci.TestTimeoutServlet;
 import com.propertyvista.server.ci.VistaStatusServlet;
 import com.propertyvista.server.ci.bugs.WSServletContextListenerFix;
+import com.propertyvista.server.config.filter.EmptyServlet;
 import com.propertyvista.server.config.filter.VistaApplicationContextDispatcherFilter;
 import com.propertyvista.server.oapi.OAPIFilter;
 import com.propertyvista.server.security.RobotsFilter;
@@ -177,6 +178,16 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
                 ServletRegistration.Dynamic sc = ctx.addServlet("SiteImageResourceServlet", SiteImageResourceServlet.class);
                 sc.addMapping("*.siteimgrc");
             }
+        }
+
+        {
+            // Add noting to static folders  to avoid tomcat folder to folder/ redirects  ( // Rule 7 -- Default servlet)
+            ServletRegistration.Dynamic sc = ctx.addServlet("EmptyServlet", EmptyServlet.class);
+            ArrayList<String> arlPatterns = new ArrayList<String>();
+            for (VistaApplication application : VistaApplication.values()) {
+                arlPatterns.add("/" + application.getInternalMappingName());
+            }
+            sc.addMapping(arlPatterns.toArray(new String[arlPatterns.size()]));
         }
 
         // oapi
