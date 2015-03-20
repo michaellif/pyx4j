@@ -38,7 +38,7 @@ public enum IncomeSource {
 
     retired,
 
-    @Translate("Student Loan")
+    @Translate("Student")
     student,
 
     unemployed,
