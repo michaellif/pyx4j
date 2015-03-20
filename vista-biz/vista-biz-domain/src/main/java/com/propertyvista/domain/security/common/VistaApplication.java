@@ -33,9 +33,6 @@ public enum VistaApplication implements Behavior {
     // CI specific URs and
     env,
 
-    @Deprecated
-    noApp,
-
     operations,
 
     crm,

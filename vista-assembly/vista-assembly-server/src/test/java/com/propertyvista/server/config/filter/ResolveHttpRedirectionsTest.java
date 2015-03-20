@@ -27,7 +27,6 @@ import com.propertyvista.server.config.appcontext.EnvNResolver;
 import com.propertyvista.server.config.appcontext.ProdCustomersDemoResolver;
 import com.propertyvista.server.config.appcontext.ProdResolver;
 import com.propertyvista.server.config.filter.base.VistaNamespaceResolverTestBase;
-import com.propertyvista.server.config.filter.namespace.VistaApplicationResolverHelper;
 
 public class ResolveHttpRedirectionsTest extends VistaNamespaceResolverTestBase {
 
@@ -51,7 +50,7 @@ public class ResolveHttpRedirectionsTest extends VistaNamespaceResolverTestBase 
         testHttpsRedirect("https://operations.local.devpv.com:8888/", false);
 
         // DB Reset
-        testHttpsRedirect("http://static.local.devpv.com:8888/o/db-reset", true); // should expect redirection??
+        testHttpsRedirect("http://static.local.devpv.com:8888/o/db-reset", false);
         testHttpsRedirect("https://static.local.devpv.com:8888/o/db-reset", false);
 
         // SITE
@@ -86,7 +85,7 @@ public class ResolveHttpRedirectionsTest extends VistaNamespaceResolverTestBase 
         testHttpsRedirect("https://operations-99.devpv.com/", false);
         testHttpsRedirect("http://operations-99.devpv.com/", true);
 
-        testHttpsRedirect("http://static-99.devpv.com/o/db-reset", true); // should expect redirection??
+        testHttpsRedirect("http://static-99.devpv.com/o/db-reset", false);
         testHttpsRedirect("https://static-99.devpv.com/o/db-reset", false);
 
         // crm
@@ -138,11 +137,11 @@ public class ResolveHttpRedirectionsTest extends VistaNamespaceResolverTestBase 
         setResolver(new EnvNResolver(".propertyvista.biz"));
 
         // PROD SALES DEMO
-//        testHttpsRedirect("http://onboarding.propertyvista.biz/", true);
-//        testHttpsRedirect("https://onboarding.propertyvista.biz/", false);
+        testHttpsRedirect("http://start.propertyvista.biz/", true);
+        testHttpsRedirect("https://start.propertyvista.biz/", false);
 
-        testHttpsRedirect("http://static.propertyvista.biz/o/db-reset", true); // should expect redirection??
-        testHttpsRedirect("https://static.propertyvista.biz/o/db-reset", false);
+        testHttpsRedirect("http://env.propertyvista.biz/", false);
+        testHttpsRedirect("https://static.propertyvista.biz/", false);
 
         // crm
         testHttpsRedirect("https://vista-crm.propertyvista.biz/", false);
@@ -183,20 +182,20 @@ public class ResolveHttpRedirectionsTest extends VistaNamespaceResolverTestBase 
         testHttpsRedirect("https://testnamespace.my-community.co/prospect", false);
 
         // crm
-//        testHttpsRedirect("https://one-harder-pmc-name-crm.propertyvista.biz/", false);
-//        testHttpsRedirect("http://one-harder-pmc-name-crm.propertyvista.biz/", true);
-//
-//        // site
-//        testHttpsRedirect("https://one-harder-pmc-name-site.propertyvista.biz/", false);
-//        testHttpsRedirect("http://one-harder-pmc-name-site.propertyvista.biz/", false);
-//
-//        // resident
-//        testHttpsRedirect("https://one-harder-pmc-name-portal.propertyvista.biz/", false);
-//        testHttpsRedirect("http://one-harder-pmc-name-portal.propertyvista.biz/", true);
-//
-//        // prospect
-//        testHttpsRedirect("https://one-harder-pmc-name-portal.propertyvista.biz/prospect", false);
-//        testHttpsRedirect("http://one-harder-pmc-name-portal.propertyvista.biz/prospect", true);
+        testHttpsRedirect("https://one-harder-pmc-name.propertyvista.com/", false);
+        testHttpsRedirect("http://one-harder-pmc-name.propertyvista.com/", true);
+
+        // site
+        testHttpsRedirect("https://one-harder-pmc-name.propertyvista.com/", false);
+        testHttpsRedirect("http://one-harder-pmc-name.propertyvista.com/", true);
+
+        // resident
+        testHttpsRedirect("https://one-harder-pmc-name.propertyvista.com/", false);
+        testHttpsRedirect("http://one-harder-pmc-name.propertyvista.com/", true);
+
+        // prospect
+        testHttpsRedirect("https://one-harder-pmc-name.propertyvista.com/prospect", false);
+        testHttpsRedirect("http://one-harder-pmc-name.propertyvista.com/prospect", true);
 
         setResolver(null);
     }
@@ -209,8 +208,12 @@ public class ResolveHttpRedirectionsTest extends VistaNamespaceResolverTestBase 
         VistaApplication resolvedApplication = getContextResolver().resolve(request).getApplication();
 
         Assert.assertTrue("Redirection " + (redirectExpected ? "expected" : "not expected") + " for url '" + requestURL + "'",
-                VistaApplicationResolverHelper.isHttpsRedirectionNeeded(request, resolvedApplication) == redirectExpected);
+                isHttpsRedirectionNeeded(request, resolvedApplication) == redirectExpected);
 
+    }
+
+    private boolean isHttpsRedirectionNeeded(MockHttpServletRequest request, VistaApplication resolvedApplication) {
+        return !request.isSecure() && resolvedApplication.requireHttps();
     }
 
 }

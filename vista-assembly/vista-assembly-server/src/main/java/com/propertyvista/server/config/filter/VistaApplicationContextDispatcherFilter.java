@@ -13,7 +13,6 @@
 package com.propertyvista.server.config.filter;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -49,7 +48,7 @@ public class VistaApplicationContextDispatcherFilter implements Filter {
 
     private boolean isDeploymentHttps;
 
-    private boolean debug = true; // temporary for local development
+    private boolean debug = false; // temporary for local development
 
     private boolean enabled;
 
@@ -77,8 +76,6 @@ public class VistaApplicationContextDispatcherFilter implements Filter {
         }
     }
 
-    private static AtomicInteger rc = new AtomicInteger();
-
     public void map(final ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
@@ -101,7 +98,6 @@ public class VistaApplicationContextDispatcherFilter implements Filter {
 
         if (isDeploymentHttps && !httpRequest.isSecure() && context.getApplication().requireHttps()) {
             String defaultApplicationUrl = VistaDeployment.getBaseApplicationURL(context.getCurrentPmc(), context.getApplication(), true);
-            defaultApplicationUrl += "?rrt" + rc.incrementAndGet();
             if (debug) {
                 log.info("***ACD*** \"{}\" redirecting to \"{}\" ", httpRequest.getRequestURI(), defaultApplicationUrl);
             }

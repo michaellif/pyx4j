@@ -17,8 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import com.pyx4j.config.server.NamespaceResolver;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 
+import com.propertyvista.config.deployment.VistaNamespaceResolver;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
-import com.propertyvista.server.config.filter.namespace.VistaNamespaceDataResolver;
 
 public class VistaTestsServerSideConfigurationForNamespace extends VistaTestsServerSideConfiguration {
 
@@ -28,7 +28,7 @@ public class VistaTestsServerSideConfigurationForNamespace extends VistaTestsSer
 
     @Override
     public NamespaceResolver getNamespaceResolver(HttpServletRequest httpRequest) {
-        return VistaNamespaceDataResolver.create(httpRequest);
+        return VistaNamespaceResolver.instance().getNamespaceResolver(httpRequest);
     }
 
 }
