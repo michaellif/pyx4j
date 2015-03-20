@@ -17,6 +17,8 @@ import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.unit.server.mock.MockHttpServletRequest;
 
@@ -32,9 +34,9 @@ import com.propertyvista.server.config.filter.util.PMCTestCreator;
 
 public class VistaNamespaceResolverTestBase extends TestCase {
 
-    protected ChaineApplicationContextResolver ctxResolver = null;
+    protected final static Logger log = LoggerFactory.getLogger(VistaNamespaceResolverTestBase.class);
 
-    protected MockHttpServletRequest req;
+    protected ChaineApplicationContextResolver ctxResolver = null;
 
     @Override
     @Before

@@ -32,7 +32,6 @@ import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.portal.rpc.shared.SiteWasNotActivatedUserRuntimeException;
 import com.propertyvista.server.config.filter.VistaApplicationDispatcherFilter;
 import com.propertyvista.server.config.filter.VistaTestDBSetupForNamespace;
-import com.propertyvista.server.config.filter.namespace.VistaApplicationResolverHelper;
 import com.propertyvista.server.config.filter.util.PMCTestCreator;
 
 public class VistaApplicationDispatcherFilterTestBase {
@@ -72,25 +71,6 @@ public class VistaApplicationDispatcherFilterTestBase {
         filterUnderTest.map(req, resp, mockChain);
 
         Assert.assertTrue("Expected redirection from '" + url + "' to " + urlRedirection + "'", resp.getRedirectUrl().equalsIgnoreCase(urlRedirection));
-    }
-
-    /**
-     * Tests if a redirection to https should be done
-     *
-     * @param url
-     *            the url to test
-     * @param redirectExpected
-     *            if redirection to https protocol is expected
-     * @throws IOException
-     * @throws ServletException
-     */
-    protected void testHttpsRedirect(String url, boolean redirectExpected) throws IOException, ServletException {
-        req = new MockHttpServletRequest(url);
-        resp = new MockHttpServletResponse();
-
-        Assert.assertTrue("Redirection " + (redirectExpected ? "expected" : "not expected") + " for url '" + url + "'",
-                VistaApplicationResolverHelper.isHttpsRedirectionNeeded(req) == redirectExpected);
-
     }
 
     /**

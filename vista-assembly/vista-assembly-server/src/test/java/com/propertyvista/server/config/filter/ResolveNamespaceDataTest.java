@@ -62,7 +62,7 @@ public class ResolveNamespaceDataTest extends VistaNamespaceResolverTestBase {
     public void testEnv11() {
         setResolver(new EnvNResolver("-11.devpv.com"));
 
-//        testResolveNamespace("https://onboarding-11.devpv.com/", VistaApplication.onboarding, VistaNamespace.noNamespace);
+        testResolveNamespace("https://start-11.devpv.com/", VistaApplication.onboarding, VistaNamespace.noNamespace);
 
         testResolveNamespace("https://operations-11.devpv.com/", VistaApplication.operations, VistaNamespace.operationsNamespace);
 
@@ -193,9 +193,7 @@ public class ResolveNamespaceDataTest extends VistaNamespaceResolverTestBase {
 //        testResolveNamespace("https://one-harder-pmc-name-portal.propertyvista.biz/", VistaApplication.resident, "one-harder-pmc-name");
 //
 //        // prospect
-//        testResolveNamespace("https://one-harder-pmc-name-portal.propertyvista.biz/prospect", VistaApplication.prospect, "vista");
-
-//        testResolveNamespace("https://demo.my-community.co/prospect/", VistaApplication.prospect, "one-harder-pmc-name");
+//        testResolveNamespace("https://one-harder-pmc-name-portal.propertyvista.biz/prospect", VistaApplication.prospect, "one-harder-pmc-name");
 
         setResolver(null);
     }
