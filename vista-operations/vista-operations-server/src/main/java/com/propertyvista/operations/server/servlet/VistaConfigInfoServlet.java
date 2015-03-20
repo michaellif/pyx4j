@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.pyx4j.config.server.PropertiesConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.essentials.j2se.HostConfig;
 import com.pyx4j.essentials.server.admin.ConfigInfoServlet;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -147,6 +148,9 @@ public class VistaConfigInfoServlet extends ConfigInfoServlet {
         b.append("\nconfig.properties:\n");
         b.append(PropertiesConfiguration.stringView("  ", ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getConfigProperties()
                 .getProperties()));
+
+        b.append("\nNetwork Interfaces:\n").append(HostConfig.getNetworkInfo());
+
         return b.toString();
     }
 }
