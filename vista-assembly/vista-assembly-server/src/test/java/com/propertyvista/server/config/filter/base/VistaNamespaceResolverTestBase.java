@@ -30,8 +30,8 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcDnsName.DnsNameTarget;
 import com.propertyvista.domain.security.common.VistaApplication;
-import com.propertyvista.server.config.filter.VistaTestDBSetupForNamespace;
 import com.propertyvista.server.config.filter.util.PMCTestCreator;
+import com.propertyvista.server.config.filter.util.VistaTestDBSetupForNamespace;
 
 public class VistaNamespaceResolverTestBase extends TestCase {
 

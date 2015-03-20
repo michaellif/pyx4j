@@ -10,7 +10,7 @@
  * Created on Oct 9, 2014
  * @author ernestog
  */
-package com.propertyvista.server.config.filter;
+package com.propertyvista.server.config.filter.util;
 
 import javax.servlet.http.HttpServletRequest;
 

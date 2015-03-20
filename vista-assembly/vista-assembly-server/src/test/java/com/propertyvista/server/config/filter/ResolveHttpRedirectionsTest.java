@@ -29,7 +29,7 @@ import com.propertyvista.server.config.appcontext.ProdResolver;
 import com.propertyvista.server.config.filter.base.VistaNamespaceResolverTestBase;
 import com.propertyvista.server.config.filter.namespace.VistaApplicationResolverHelper;
 
-public class VistaApplicationDispatcherFilterHttpRedirectionsTest extends VistaNamespaceResolverTestBase {
+public class ResolveHttpRedirectionsTest extends VistaNamespaceResolverTestBase {
 
     @Override
     public void setUp() throws Exception {
@@ -129,38 +129,36 @@ public class VistaApplicationDispatcherFilterHttpRedirectionsTest extends VistaN
         testHttpsRedirect("https://demo.my-community.co/prospect", false);
         testHttpsRedirect("http://demo.my-community.co/prospect", true);
 
-        testHttpsRedirect("https://demo.my-community.co/prospect/", false);
-        testHttpsRedirect("http://demo.my-community.co/prospect/", true);
+        setResolver(null);
+    }
 
-        //
+    @Test
+    public final void testHttpsRedirectionsProdSalesDemo() throws IOException, ServletException {
+
+        setResolver(new EnvNResolver(".propertyvista.biz"));
+
         // PROD SALES DEMO
 //        testHttpsRedirect("http://onboarding.propertyvista.biz/", true);
 //        testHttpsRedirect("https://onboarding.propertyvista.biz/", false);
 
-//        testHttpsRedirect("https://operations.propertyvista.biz/", false);
-//        testHttpsRedirect("http://operations.propertyvista.biz/", true);
-//
-//        testHttpsRedirect("http://static.propertyvista.biz/o/db-reset", true); // should expect redirection??
-//        testHttpsRedirect("https://static.propertyvista.biz/o/db-reset", false);
-//
-//        // crm
-//        testHttpsRedirect("https://vista-crm.propertyvista.biz/", false);
-//        testHttpsRedirect("http://vista-crm.propertyvista.biz/", true);
-//
-//        // site
-//        testHttpsRedirect("https://vista-site.propertyvista.biz/", false);
-//        testHttpsRedirect("http://vista-site.propertyvista.biz/", false);
-//
-//        // resident
-//        testHttpsRedirect("https://vista-portal.propertyvista.biz/", false);
-//        testHttpsRedirect("http://vista-portal.propertyvista.biz/", true);
-//
-//        // prospect
-//        testHttpsRedirect("https://vista-portal.propertyvista.biz/prospect", false);
-//        testHttpsRedirect("http://vista-portal.propertyvista.biz/prospect", true);
+        testHttpsRedirect("http://static.propertyvista.biz/o/db-reset", true); // should expect redirection??
+        testHttpsRedirect("https://static.propertyvista.biz/o/db-reset", false);
 
-        testHttpsRedirect("https://demo.my-community.co/prospect/", false);
-        testHttpsRedirect("http://demo.my-community.co/prospect/", true);
+        // crm
+        testHttpsRedirect("https://vista-crm.propertyvista.biz/", false);
+        testHttpsRedirect("http://vista-crm.propertyvista.biz/", true);
+
+        // site
+        testHttpsRedirect("https://vista-site.propertyvista.biz/", false);
+        testHttpsRedirect("http://vista-site.propertyvista.biz/", false);
+
+        // resident
+        testHttpsRedirect("https://vista-portal.propertyvista.biz/", false);
+        testHttpsRedirect("http://vista-portal.propertyvista.biz/", true);
+
+        // prospect
+        testHttpsRedirect("https://vista-portal.propertyvista.biz/prospect", false);
+        testHttpsRedirect("http://vista-portal.propertyvista.biz/prospect", true);
 
         setResolver(null);
     }

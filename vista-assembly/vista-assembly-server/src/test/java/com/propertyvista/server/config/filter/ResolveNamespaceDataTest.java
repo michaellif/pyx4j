@@ -45,16 +45,6 @@ public class ResolveNamespaceDataTest extends VistaNamespaceResolverTestBase {
 
         testResolveNamespace("http://vista-portal.local.devpv.com:8888/", VistaApplication.resident, "vista");
 
-//        testResolveNamespace("http://one-harder-pmc-name-portal.local.devpv.com:8888/prospect", VistaApplication.prospect, "one-harder-pmc-name");
-//
-//        testResolveNamespace("http://one-harder-pmc-name-crm.local.devpv.com:8888/", VistaApplication.crm, "one-harder-pmc-name");
-//
-//        testResolveNamespace("http://one-harder-pmc-name-site.local.devpv.com:8888/", VistaApplication.site, "one-harder-pmc-name");
-//
-//        testResolveNamespace("http://one-harder-pmc-name-portal.local.devpv.com:8888/", VistaApplication.resident, "one-harder-pmc-name");
-//
-//        testResolveNamespace("http://one-harder-pmc-name-portal.local.devpv.com:8888/prospect", VistaApplication.prospect, "one-harder-pmc-name");
-
         setResolver(null);
     }
 
@@ -77,14 +67,6 @@ public class ResolveNamespaceDataTest extends VistaNamespaceResolverTestBase {
 
         testResolveNamespace("https://vista-portal-11.devpv.com/prospect", VistaApplication.prospect, "vista");
 
-        // one-harder-pmc-name
-//        testResolveNamespace("https://one-harder-pmc-name-crm-11.devpv.com/", VistaApplication.crm, "one-harder-pmc-name");
-//
-//        testResolveNamespace("https://one-harder-pmc-name-site-11.devpv.com/", VistaApplication.site, "one-harder-pmc-name");
-//
-//        testResolveNamespace("https://one-harder-pmc-name-portal-11.devpv.com/", VistaApplication.resident, "one-harder-pmc-name");
-//
-//        testResolveNamespace("https://one-harder-pmc-name-portal-11.devpv.com/prospect", VistaApplication.prospect, "one-harder-pmc-name");
     }
 
     @Test
@@ -132,9 +114,6 @@ public class ResolveNamespaceDataTest extends VistaNamespaceResolverTestBase {
         // prospect
         testResolveNamespace("https://redridge.my-community.co/prospect", VistaApplication.prospect, "redridge");
 
-        // prospect
-        testResolveNamespace("https://redridge.my-community.co/prospect/", VistaApplication.prospect, "redridge");
-
         // one-harder-pmc-name
         testResolveNamespace("https://one-harder-pmc-name.propertyvista.com/", VistaApplication.crm, "one-harder-pmc-name");
 
@@ -142,7 +121,12 @@ public class ResolveNamespaceDataTest extends VistaNamespaceResolverTestBase {
 
         testResolveNamespace("https://one-harder-pmc-name.my-community.co/", VistaApplication.resident, "one-harder-pmc-name");
 
-//        testResolveNamespace("https://one-harder-pmc-name.my-community.co/prospect", VistaApplication.prospect, "one-harder-pmc-name");
+        testResolveNamespace("https://one-harder-pmc-name.my-community.co/prospect", VistaApplication.prospect, "one-harder-pmc-name");
+
+        // Interfaces
+        testResolveNamespace("https://secure-interfaces.propertyvista.com/interfaces", VistaApplication.interfaces, VistaNamespace.noNamespace);
+
+        testResolveNamespace("https://interfaces.propertyvista.com/interfaces", VistaApplication.interfaces, VistaNamespace.noNamespace);
 
         setResolver(null);
     }
@@ -195,18 +179,6 @@ public class ResolveNamespaceDataTest extends VistaNamespaceResolverTestBase {
 
         // prospect
         testResolveNamespace("https://vista-portal.propertyvista.biz/prospect", VistaApplication.prospect, "vista");
-
-//        // crm
-//        testResolveNamespace("https://one-harder-pmc-name-crm.propertyvista.biz/", VistaApplication.crm, "one-harder-pmc-name");
-//
-//        // site
-//        testResolveNamespace("https://one-harder-pmc-name-site.propertyvista.biz/", VistaApplication.site, "one-harder-pmc-name");
-//
-//        // resident
-//        testResolveNamespace("https://one-harder-pmc-name-portal.propertyvista.biz/", VistaApplication.resident, "one-harder-pmc-name");
-//
-//        // prospect
-//        testResolveNamespace("https://one-harder-pmc-name-portal.propertyvista.biz/prospect", VistaApplication.prospect, "one-harder-pmc-name");
 
         setResolver(null);
     }
