@@ -29,8 +29,7 @@ public class CHtml<E> extends CField<E, NHtml<E>> {
     private IFormatter<E, SafeHtml> formatter;
 
     public CHtml() {
-        super();
-        setFormatter(new IFormatter<E, SafeHtml>() {
+        this(new IFormatter<E, SafeHtml>() {
             @Override
             public SafeHtml format(E value) {
                 SafeHtmlBuilder builder = new SafeHtmlBuilder();
@@ -41,6 +40,11 @@ public class CHtml<E> extends CField<E, NHtml<E>> {
             }
 
         });
+    }
+
+    public CHtml(IFormatter<E, SafeHtml> formatter) {
+        super();
+        setFormatter(formatter);
         setNativeComponent(new NHtml<E>(this));
         setEditable(false);
     }

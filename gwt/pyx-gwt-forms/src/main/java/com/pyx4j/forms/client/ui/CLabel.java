@@ -26,13 +26,17 @@ public class CLabel<E> extends CField<E, NLabel<E>> {
     private IFormatter<E, String> formatter;
 
     public CLabel() {
-        super();
-        setFormatter(new IFormatter<E, String>() {
+        this(new IFormatter<E, String>() {
             @Override
             public String format(E value) {
                 return value == null ? null : value.toString();
             }
         });
+    }
+
+    public CLabel(IFormatter<E, String> formatter) {
+        super();
+        setFormatter(formatter);
         setNativeComponent(new NLabel<E>(this));
         setEditable(false);
     }
