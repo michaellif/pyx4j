@@ -200,7 +200,7 @@ class YardiBillProducer implements BillProducer {
             charge.chargeSubLineItem().amount().setValue(prorate(charge));
         }
 
-        charge.chargeSubLineItem().description().setValue(billableItem.item().description().getStringView());
+        charge.chargeSubLineItem().description().setValue(billableItem.item().name().getStringView());
     }
 
     private void createAdjustmentSubLineItems(InvoiceProductCharge charge, BillableItem billableItem, Bill bill) {
@@ -290,7 +290,7 @@ class YardiBillProducer implements BillProducer {
                 invoiceDeposit.billingAccount().set(bill.billingAccount());
                 invoiceDeposit.dueDate().setValue(bill.dueDate().getValue());
                 invoiceDeposit.arCode().set(deposit.chargeCode());
-                invoiceDeposit.description().setValue(deposit.type().getStringView());
+                invoiceDeposit.description().setValue(billableItem.item().name().getStringView() + ", " + deposit.type().getStringView());
                 invoiceDeposit.amount().setValue(deposit.amount().getValue());
                 invoiceDeposit.taxTotal().setValue(BigDecimal.ZERO);
                 invoiceDeposit.deposit().set(deposit);

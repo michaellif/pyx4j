@@ -12,6 +12,7 @@
  */
 package com.propertyvista.biz.tenant.lease.print;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -233,7 +234,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     private LeaseApplicationDocumentDataRentalItemDTO getRentalItem(BillableItem billableItem, LogicalDate from, LogicalDate to) {
         LeaseApplicationDocumentDataRentalItemDTO rentalItem = EntityFactory.create(LeaseApplicationDocumentDataRentalItemDTO.class);
         rentalItem.item().setValue(billableItem.item().name().getValue());
-        rentalItem.price().setValue(billableItem.agreedPrice().getStringView());
+        rentalItem.price().setValue(billableItem.agreedPrice().getValue());
         rentalItem.effectiveDate().setValue(billableItem.effectiveDate().getValue() == null ? from : billableItem.effectiveDate().getValue());
         rentalItem.expirationDate().setValue(billableItem.expirationDate().getValue() == null ? to : billableItem.expirationDate().getValue());
         return rentalItem;
@@ -500,49 +501,61 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
 
     private void fillFirstPaymentData(LeaseApplicationDocumentDataFirstPaymentSectionDTO firstPaymentSection, Lease lease) {
         BillDTO bill = retrieveBillData(lease);
-        if (bill.serviceChargeLineItems() != null) {
-            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.serviceChargeLineItems()));
-        }
-        if (bill.recurringFeatureChargeLineItems() != null) {
-            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.recurringFeatureChargeLineItems()));
-        }
-        if (bill.onetimeFeatureChargeLineItems() != null) {
-            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.onetimeFeatureChargeLineItems()));
-        }
-        if (bill.productCreditLineItems() != null) {
-            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.productCreditLineItems()));
-        }
+
+// TODO: lease charges removed for now from Application, display just Deposits:
+//        if (bill.serviceChargeLineItems() != null) {
+//            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.serviceChargeLineItems()));
+//        }
+//        if (bill.recurringFeatureChargeLineItems() != null) {
+//            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.recurringFeatureChargeLineItems()));
+//        }
+//        if (bill.onetimeFeatureChargeLineItems() != null) {
+//            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.onetimeFeatureChargeLineItems()));
+//        }
+//        if (bill.productCreditLineItems() != null) {
+//            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.productCreditLineItems()));
+//        }
         if (bill.depositLineItems() != null) {
             firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.depositLineItems()));
         }
-        if (bill.depositRefundLineItems() != null) {
-            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.depositRefundLineItems()));
-        }
-        if (bill.immediateAccountAdjustmentLineItems() != null) {
-            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.immediateAccountAdjustmentLineItems()));
-        }
-        if (bill.pendingAccountAdjustmentLineItems() != null) {
-            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.pendingAccountAdjustmentLineItems()));
-        }
-        if (bill.previousChargeRefundLineItems() != null) {
-            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.previousChargeRefundLineItems()));
-        }
-        if (bill.nsfChargeLineItems() != null) {
-            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.nsfChargeLineItems()));
-        }
-        if (bill.withdrawalLineItems() != null) {
-            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.withdrawalLineItems()));
-        }
-        if (bill.rejectedPaymentLineItems() != null) {
-            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.rejectedPaymentLineItems()));
-        }
-        if (bill.paymentLineItems() != null) {
-            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.paymentLineItems()));
-        }
+//        if (bill.depositRefundLineItems() != null) {
+//            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.depositRefundLineItems()));
+//        }
+//        if (bill.immediateAccountAdjustmentLineItems() != null) {
+//            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.immediateAccountAdjustmentLineItems()));
+//        }
+//        if (bill.pendingAccountAdjustmentLineItems() != null) {
+//            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.pendingAccountAdjustmentLineItems()));
+//        }
+//        if (bill.previousChargeRefundLineItems() != null) {
+//            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.previousChargeRefundLineItems()));
+//        }
+//        if (bill.nsfChargeLineItems() != null) {
+//            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.nsfChargeLineItems()));
+//        }
+//        if (bill.withdrawalLineItems() != null) {
+//            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.withdrawalLineItems()));
+//        }
+//        if (bill.rejectedPaymentLineItems() != null) {
+//            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.rejectedPaymentLineItems()));
+//        }
+//        if (bill.paymentLineItems() != null) {
+//            firstPaymentSection.lineItems().addAll(retrieveLineItems(bill.paymentLineItems()));
+//        }
 
-        firstPaymentSection.currentAmount().setValue(bill.currentAmount().getValue());
-        firstPaymentSection.taxes().setValue(bill.taxes().getValue());
-        firstPaymentSection.totalDueAmount().setValue(bill.totalDueAmount().getValue());
+// TODO: lease charges removed for now from Application (+ their taxes!):
+//        firstPaymentSection.currentAmount().setValue(bill.currentAmount().getValue());
+//        firstPaymentSection.taxes().setValue(bill.taxes().getValue());
+//        firstPaymentSection.totalDueAmount().setValue(bill.totalDueAmount().getValue());
+// use instead:
+        firstPaymentSection.currentAmount().setValue(calculateToalDepositsOnly(bill));
+        firstPaymentSection.taxes().setValue(BigDecimal.ZERO);
+        firstPaymentSection.totalDueAmount().setValue(calculateToalDepositsOnly(bill));
+// end of TODO
+    }
+
+    private BigDecimal calculateToalDepositsOnly(BillDTO bill) {
+        return bill.depositAmount().getValue();
     }
 
     private BillDTO retrieveBillData(Lease lease) {
@@ -588,7 +601,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             LeaseApplicationDocumentDataFirstPaymentLineItemDTO lineItem = EntityFactory.create(LeaseApplicationDocumentDataFirstPaymentLineItemDTO.class);
             lineItem.item().setValue(lineItemsGroup.getMeta().getCaption());
             lineItem.description().setValue(current.description().getValue());
-            lineItem.amount().setValue(current.amount().getStringView());
+            lineItem.amount().setValue(current.amount().getValue());
             lineItems.add(lineItem);
         }
         return lineItems;

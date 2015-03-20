@@ -12,6 +12,8 @@
  */
 package com.propertyvista.dto.leaseapplicationdocument;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
@@ -22,7 +24,7 @@ public interface LeaseApplicationDocumentDataRentalItemDTO extends IEntity {
 
     IPrimitive<String> item();
 
-    IPrimitive<String> price();
+    IPrimitive<BigDecimal> price();
 
     IPrimitive<LogicalDate> effectiveDate();
 
