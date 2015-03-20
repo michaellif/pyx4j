@@ -12,12 +12,14 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
+import java.math.BigDecimal;
 import java.util.EnumSet;
 
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -26,9 +28,12 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.css.StyleManager;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CHtml;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.BaseFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
@@ -43,20 +48,19 @@ import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.ImageButton;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
+import com.propertyvista.portal.prospect.themes.ApplicationWizardTheme;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.BathroomNumber;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.BedroomNumber;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.UnitTO;
-import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.util.CBuildingLabel;
 
 public class UnitStep extends ApplicationWizardStep {
@@ -293,37 +297,131 @@ public class UnitStep extends ApplicationWizardStep {
 
             @Override
             protected IsWidget createContent() {
-                FlowPanel flowPanel = new FlowPanel();
-                flowPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-                flowPanel.setWidth("100%");
+                FlowPanel holderPanel = new FlowPanel();
+                holderPanel.setStyleName(ApplicationWizardTheme.StyleName.UnitCard.name());
 
-                CLabel<String> numberLabel = new CLabel<>(new IFormatter<String, String>() {
+                FlowPanel firstLinePanel = new FlowPanel();
+                firstLinePanel.setStyleName(ApplicationWizardTheme.StyleName.UnitCardFirstLine.name());
+                holderPanel.add(firstLinePanel);
+
+                CHtml<String> numberLabel = new CHtml<>(new IFormatter<String, SafeHtml>() {
 
                     @Override
-                    public String format(String value) {
-                        return i18n.tr("Unit ") + value;
+                    public SafeHtml format(String value) {
+                        SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                        builder.appendHtmlConstant("<div class='" + ApplicationWizardTheme.StyleName.UnitCardNumber.name() + "'>");
+                        builder.appendHtmlConstant(i18n.tr("Unit "));
+                        builder.appendHtmlConstant(value);
+                        builder.appendHtmlConstant("</div>");
+                        return builder.toSafeHtml();
                     }
                 });
-                flowPanel.add(inject(proto().number(), numberLabel));
+                firstLinePanel.add(inject(proto().number(), numberLabel));
                 numberLabel.asWidget().getElement().getStyle().setFloat(Float.LEFT);
 
-                CLabel<String> priceLabel = new CLabel<>(new IFormatter<String, String>() {
+                CHtml<BigDecimal> priceLabel = new CHtml<>(new IFormatter<BigDecimal, SafeHtml>() {
 
                     @Override
-                    public String format(String value) {
-                        return i18n.tr("$") + value;
+                    public SafeHtml format(BigDecimal value) {
+                        SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                        builder.appendHtmlConstant("<div class='" + ApplicationWizardTheme.StyleName.UnitCardPrice.name() + "'>");
+                        builder.appendHtmlConstant(i18n.tr("$"));
+                        builder.appendHtmlConstant(value.toString());
+                        builder.appendHtmlConstant("</div>");
+                        return builder.toSafeHtml();
                     }
                 });
-                flowPanel.add(inject(proto().price(), priceLabel));
+                firstLinePanel.add(inject(proto().price(), priceLabel));
                 priceLabel.asWidget().getElement().getStyle().setFloat(Float.RIGHT);
 
-                flowPanel.add(inject(proto().floor()));
-                flowPanel.add(inject(proto().bedrooms()));
-                flowPanel.add(inject(proto().dens()));
-                flowPanel.add(inject(proto().bathrooms()));
-                flowPanel.add(inject(proto().available()));
+                FlowPanel secondLinePanel = new FlowPanel();
+                secondLinePanel.setStyleName(ApplicationWizardTheme.StyleName.UnitCardSecondLine.name());
+                holderPanel.add(secondLinePanel);
 
-                ImageButton selectButton = new ImageButton(PortalImages.INSTANCE.selectButton(), new Command() {
+                FlowPanel infoPanel = new FlowPanel();
+                infoPanel.setStyleName(ApplicationWizardTheme.StyleName.UnitCardInfo.name());
+                secondLinePanel.add(infoPanel);
+
+                FlowPanel infoLeftColumnPanel = new FlowPanel();
+                infoLeftColumnPanel.setStyleName(ApplicationWizardTheme.StyleName.UnitCardInfoLeftColumn.name());
+                infoPanel.add(infoLeftColumnPanel);
+
+                CHtml<Integer> bedroomsLabel = new CHtml<>(new IFormatter<Integer, SafeHtml>() {
+
+                    @Override
+                    public SafeHtml format(Integer value) {
+                        SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                        builder.appendHtmlConstant("<div class='" + ApplicationWizardTheme.StyleName.UnitCardBeds.name() + "'>");
+                        builder.appendHtmlConstant(value.toString());
+                        builder.appendHtmlConstant(" " + i18n.tr("bed(s)"));
+                        builder.appendHtmlConstant("</div>");
+                        return builder.toSafeHtml();
+                    }
+                });
+                infoLeftColumnPanel.add(inject(proto().bedrooms(), bedroomsLabel));
+
+                CHtml<Integer> bathroomsLabel = new CHtml<>(new IFormatter<Integer, SafeHtml>() {
+
+                    @Override
+                    public SafeHtml format(Integer value) {
+                        SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                        builder.appendHtmlConstant("<div class='" + ApplicationWizardTheme.StyleName.UnitCardBaths.name() + "'>");
+                        builder.appendHtmlConstant(value.toString());
+                        builder.appendHtmlConstant(" " + i18n.tr("bath(s)"));
+                        builder.appendHtmlConstant("</div>");
+                        return builder.toSafeHtml();
+                    }
+                });
+                infoLeftColumnPanel.add(inject(proto().bathrooms(), bathroomsLabel));
+
+                FlowPanel infoRightColumnPanel = new FlowPanel();
+                infoRightColumnPanel.setStyleName(ApplicationWizardTheme.StyleName.UnitCardInfoRightColumn.name());
+                infoPanel.add(infoRightColumnPanel);
+
+                CHtml<Integer> floorLabel = new CHtml<>(new IFormatter<Integer, SafeHtml>() {
+
+                    @Override
+                    public SafeHtml format(Integer value) {
+                        SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                        builder.appendHtmlConstant("<div class='" + ApplicationWizardTheme.StyleName.UnitCardBaths.name() + "'>");
+                        builder.appendHtmlConstant(i18n.tr("floor #"));
+                        builder.appendHtmlConstant(value.toString());
+                        builder.appendHtmlConstant("</div>");
+                        return builder.toSafeHtml();
+                    }
+                });
+                infoRightColumnPanel.add(inject(proto().floor(), floorLabel));
+
+                CHtml<Integer> densLabel = new CHtml<>(new IFormatter<Integer, SafeHtml>() {
+
+                    @Override
+                    public SafeHtml format(Integer value) {
+                        SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                        builder.appendHtmlConstant("<div class='" + ApplicationWizardTheme.StyleName.UnitCardBaths.name() + "'>");
+                        builder.appendHtmlConstant(value.toString());
+                        builder.appendHtmlConstant(" " + i18n.tr("den(s)"));
+                        builder.appendHtmlConstant("</div>");
+                        return builder.toSafeHtml();
+                    }
+                });
+                infoRightColumnPanel.add(inject(proto().dens(), densLabel));
+
+                CHtml<LogicalDate> availableLabel = new CHtml<>(new IFormatter<LogicalDate, SafeHtml>() {
+
+                    @Override
+                    public SafeHtml format(LogicalDate value) {
+                        SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                        builder.appendHtmlConstant("<div class='" + ApplicationWizardTheme.StyleName.UnitCardAvailable.name() + "'>");
+                        builder.appendHtmlConstant(i18n.tr("Available from "));
+                        builder.appendHtmlConstant(value.toString());
+                        builder.appendHtmlConstant("</div>");
+                        return builder.toSafeHtml();
+                    }
+                });
+                secondLinePanel.add(inject(proto().available(), availableLabel));
+                availableLabel.asWidget().getElement().getStyle().setFloat(Float.LEFT);
+
+                Button selectButton = new Button(i18n.tr("Select"), new Command() {
 
                     @Override
                     public void execute() {
@@ -331,17 +429,18 @@ public class UnitStep extends ApplicationWizardStep {
                         setEditableState(false);
                     }
                 });
-                flowPanel.add(selectButton);
+                selectButton.addStyleName(ApplicationWizardTheme.StyleName.UnitCardSelectButton.name());
+
+                secondLinePanel.add(selectButton);
                 selectButton.asWidget().getElement().getStyle().setFloat(Float.RIGHT);
 
-                return flowPanel;
+                return holderPanel;
             }
 
             @Override
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
-
-                get(proto().dens()).setVisible(!getValue().dens().isNull());
+                get(proto().dens()).setVisible(!getValue().dens().isNull() && getValue().dens().getValue() > 0);
             }
         }
     }
