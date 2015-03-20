@@ -234,7 +234,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     private LeaseApplicationDocumentDataRentalItemDTO getRentalItem(BillableItem billableItem, LogicalDate from, LogicalDate to) {
         LeaseApplicationDocumentDataRentalItemDTO rentalItem = EntityFactory.create(LeaseApplicationDocumentDataRentalItemDTO.class);
         rentalItem.item().setValue(billableItem.item().name().getValue());
-        rentalItem.price().setValue(billableItem.agreedPrice().getStringView());
+        rentalItem.price().setValue(billableItem.agreedPrice().getValue());
         rentalItem.effectiveDate().setValue(billableItem.effectiveDate().getValue() == null ? from : billableItem.effectiveDate().getValue());
         rentalItem.expirationDate().setValue(billableItem.expirationDate().getValue() == null ? to : billableItem.expirationDate().getValue());
         return rentalItem;
@@ -601,7 +601,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             LeaseApplicationDocumentDataFirstPaymentLineItemDTO lineItem = EntityFactory.create(LeaseApplicationDocumentDataFirstPaymentLineItemDTO.class);
             lineItem.item().setValue(lineItemsGroup.getMeta().getCaption());
             lineItem.description().setValue(current.description().getValue());
-            lineItem.amount().setValue(current.amount().getStringView());
+            lineItem.amount().setValue(current.amount().getValue());
             lineItems.add(lineItem);
         }
         return lineItems;

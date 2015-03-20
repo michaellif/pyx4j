@@ -12,6 +12,8 @@
  */
 package com.propertyvista.dto.leaseapplicationdocument;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -23,5 +25,5 @@ public interface LeaseApplicationDocumentDataFirstPaymentLineItemDTO extends IEn
 
     IPrimitive<String> description();
 
-    IPrimitive<String> amount();
+    IPrimitive<BigDecimal> amount();
 }

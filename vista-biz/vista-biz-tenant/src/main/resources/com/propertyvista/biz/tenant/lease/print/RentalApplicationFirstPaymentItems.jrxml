@@ -5,7 +5,7 @@
 	<property name="ireport.y" value="0"/>
 	<field name="item" class="java.lang.String"/>
 	<field name="description" class="java.lang.String"/>
-	<field name="amount" class="java.lang.String"/>
+	<field name="amount" class="java.math.BigDecimal"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -22,13 +22,13 @@
 			</rectangle>
 			<textField>
 				<reportElement x="270" y="2" width="210" height="18" uuid="1b271fe3-5402-4bb5-8eb4-3d77444c7940"/>
-				<textFieldExpression><![CDATA[ $F{item}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{item}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="5" y="2" width="259" height="18" uuid="e58efc3e-8923-41fd-825e-b6b18ab44855"/>
 				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
 			</textField>
-			<textField pattern="">
+			<textField pattern="¤#,##0.00" isBlankWhenNull="true">
 				<reportElement x="486" y="2" width="80" height="18" uuid="e42c8a35-ca92-41f6-a169-9c65b3651b9d"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
