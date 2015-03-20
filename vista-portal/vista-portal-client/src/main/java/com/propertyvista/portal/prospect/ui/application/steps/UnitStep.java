@@ -28,8 +28,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.commons.css.StyleManager;
-import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CForm;
@@ -309,10 +307,12 @@ public class UnitStep extends ApplicationWizardStep {
                     @Override
                     public SafeHtml format(String value) {
                         SafeHtmlBuilder builder = new SafeHtmlBuilder();
-                        builder.appendHtmlConstant("<div class='" + ApplicationWizardTheme.StyleName.UnitCardNumber.name() + "'>");
-                        builder.appendHtmlConstant(i18n.tr("Unit "));
-                        builder.appendHtmlConstant(value);
-                        builder.appendHtmlConstant("</div>");
+                        if (value != null) {
+                            builder.appendHtmlConstant("<div class='" + ApplicationWizardTheme.StyleName.UnitCardNumber.name() + "'>");
+                            builder.appendHtmlConstant(i18n.tr("Unit "));
+                            builder.appendHtmlConstant(value);
+                            builder.appendHtmlConstant("</div>");
+                        }
                         return builder.toSafeHtml();
                     }
                 });
@@ -324,10 +324,12 @@ public class UnitStep extends ApplicationWizardStep {
                     @Override
                     public SafeHtml format(BigDecimal value) {
                         SafeHtmlBuilder builder = new SafeHtmlBuilder();
-                        builder.appendHtmlConstant("<div class='" + ApplicationWizardTheme.StyleName.UnitCardPrice.name() + "'>");
-                        builder.appendHtmlConstant(i18n.tr("$"));
-                        builder.appendHtmlConstant(value.toString());
-                        builder.appendHtmlConstant("</div>");
+                        if (value != null) {
+                            builder.appendHtmlConstant("<div class='" + ApplicationWizardTheme.StyleName.UnitCardPrice.name() + "'>");
+                            builder.appendHtmlConstant(i18n.tr("$"));
+                            builder.appendHtmlConstant(value.toString());
+                            builder.appendHtmlConstant("</div>");
+                        }
                         return builder.toSafeHtml();
                     }
                 });
@@ -351,10 +353,12 @@ public class UnitStep extends ApplicationWizardStep {
                     @Override
                     public SafeHtml format(Integer value) {
                         SafeHtmlBuilder builder = new SafeHtmlBuilder();
-                        builder.appendHtmlConstant("<div class='" + ApplicationWizardTheme.StyleName.UnitCardBeds.name() + "'>");
-                        builder.appendHtmlConstant(value.toString());
-                        builder.appendHtmlConstant(" " + i18n.tr("bed(s)"));
-                        builder.appendHtmlConstant("</div>");
+                        if (value != null) {
+                            builder.appendHtmlConstant("<div class='" + ApplicationWizardTheme.StyleName.UnitCardBeds.name() + "'>");
+                            builder.appendHtmlConstant(value.toString());
+                            builder.appendHtmlConstant(" " + i18n.tr("bed(s)"));
+                            builder.appendHtmlConstant("</div>");
+                        }
                         return builder.toSafeHtml();
                     }
                 });
@@ -365,10 +369,12 @@ public class UnitStep extends ApplicationWizardStep {
                     @Override
                     public SafeHtml format(Integer value) {
                         SafeHtmlBuilder builder = new SafeHtmlBuilder();
-                        builder.appendHtmlConstant("<div class='" + ApplicationWizardTheme.StyleName.UnitCardBaths.name() + "'>");
-                        builder.appendHtmlConstant(value.toString());
-                        builder.appendHtmlConstant(" " + i18n.tr("bath(s)"));
-                        builder.appendHtmlConstant("</div>");
+                        if (value != null) {
+                            builder.appendHtmlConstant("<div class='" + ApplicationWizardTheme.StyleName.UnitCardBaths.name() + "'>");
+                            builder.appendHtmlConstant(value.toString());
+                            builder.appendHtmlConstant(" " + i18n.tr("bath(s)"));
+                            builder.appendHtmlConstant("</div>");
+                        }
                         return builder.toSafeHtml();
                     }
                 });
@@ -383,10 +389,12 @@ public class UnitStep extends ApplicationWizardStep {
                     @Override
                     public SafeHtml format(Integer value) {
                         SafeHtmlBuilder builder = new SafeHtmlBuilder();
-                        builder.appendHtmlConstant("<div class='" + ApplicationWizardTheme.StyleName.UnitCardBaths.name() + "'>");
-                        builder.appendHtmlConstant(i18n.tr("floor #"));
-                        builder.appendHtmlConstant(value.toString());
-                        builder.appendHtmlConstant("</div>");
+                        if (value != null) {
+                            builder.appendHtmlConstant("<div class='" + ApplicationWizardTheme.StyleName.UnitCardBaths.name() + "'>");
+                            builder.appendHtmlConstant(i18n.tr("floor #"));
+                            builder.appendHtmlConstant(value.toString());
+                            builder.appendHtmlConstant("</div>");
+                        }
                         return builder.toSafeHtml();
                     }
                 });
@@ -397,10 +405,12 @@ public class UnitStep extends ApplicationWizardStep {
                     @Override
                     public SafeHtml format(Integer value) {
                         SafeHtmlBuilder builder = new SafeHtmlBuilder();
-                        builder.appendHtmlConstant("<div class='" + ApplicationWizardTheme.StyleName.UnitCardBaths.name() + "'>");
-                        builder.appendHtmlConstant(value.toString());
-                        builder.appendHtmlConstant(" " + i18n.tr("den(s)"));
-                        builder.appendHtmlConstant("</div>");
+                        if (value != null) {
+                            builder.appendHtmlConstant("<div class='" + ApplicationWizardTheme.StyleName.UnitCardBaths.name() + "'>");
+                            builder.appendHtmlConstant(value.toString());
+                            builder.appendHtmlConstant(" " + i18n.tr("den(s)"));
+                            builder.appendHtmlConstant("</div>");
+                        }
                         return builder.toSafeHtml();
                     }
                 });
@@ -411,10 +421,12 @@ public class UnitStep extends ApplicationWizardStep {
                     @Override
                     public SafeHtml format(LogicalDate value) {
                         SafeHtmlBuilder builder = new SafeHtmlBuilder();
-                        builder.appendHtmlConstant("<div class='" + ApplicationWizardTheme.StyleName.UnitCardAvailable.name() + "'>");
-                        builder.appendHtmlConstant(i18n.tr("Available from "));
-                        builder.appendHtmlConstant(value.toString());
-                        builder.appendHtmlConstant("</div>");
+                        if (value != null) {
+                            builder.appendHtmlConstant("<div class='" + ApplicationWizardTheme.StyleName.UnitCardAvailable.name() + "'>");
+                            builder.appendHtmlConstant(i18n.tr("Available from "));
+                            builder.appendHtmlConstant(value.toString());
+                            builder.appendHtmlConstant("</div>");
+                        }
                         return builder.toSafeHtml();
                     }
                 });
