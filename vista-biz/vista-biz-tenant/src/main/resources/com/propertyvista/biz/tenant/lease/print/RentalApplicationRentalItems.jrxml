@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationRentalItemsSection" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="e29c83d1-64b5-430f-91ea-60f5a67d54a4">
-	<property name="ireport.zoom" value="1.7715610000000104"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="rentalItems" class="com.pyx4j.entity.core.IList"/>
@@ -32,29 +32,29 @@
 				<reportElement x="395" y="24" width="176" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="63d603e8-3cba-42ae-879d-b6378ba4199f"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="265" y="27" width="84" height="15" forecolor="#666666" uuid="0f6b3e3e-ae53-47f3-a2ef-ce0aaa460a83"/>
-				<textElement>
+				<reportElement x="264" y="27" width="131" height="15" forecolor="#666666" uuid="0f6b3e3e-ae53-47f3-a2ef-ce0aaa460a83"/>
+				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Effective Date]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="399" y="27" width="83" height="15" forecolor="#666666" uuid="6498eb93-842b-40f8-855e-40b2e4f24c8b"/>
-				<textElement>
+				<reportElement x="395" y="27" width="176" height="15" forecolor="#666666" uuid="6498eb93-842b-40f8-855e-40b2e4f24c8b"/>
+				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Expiration Date]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="4" y="26" width="66" height="15" forecolor="#666666" uuid="de3062db-6669-4ca4-bd82-c2e835849523"/>
-				<textElement>
+				<reportElement x="0" y="27" width="132" height="15" forecolor="#666666" uuid="de3062db-6669-4ca4-bd82-c2e835849523"/>
+				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Item]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="138" y="26" width="66" height="15" forecolor="#666666" uuid="e866d159-ef49-4dc4-9a93-6021a20c43dd"/>
-				<textElement>
+				<reportElement x="132" y="27" width="131" height="15" forecolor="#666666" uuid="e866d159-ef49-4dc4-9a93-6021a20c43dd"/>
+				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Price]]></text>

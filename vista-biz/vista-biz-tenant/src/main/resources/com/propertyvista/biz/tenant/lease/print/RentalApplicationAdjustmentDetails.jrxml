@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationRentalItemDetails" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="b17b507c-0756-458c-8a13-302cb8cf8d54">
-	<property name="ireport.zoom" value="2.8531167061100136"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="item" class="java.lang.String"/>
@@ -29,20 +29,22 @@
 				<textFieldExpression><![CDATA[$F{item}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="138" y="2" width="73" height="18" uuid="e991540a-790f-4f62-875f-cb385ec7fa15"/>
-				<textElement textAlignment="Right"/>
+				<reportElement x="132" y="2" width="131" height="18" uuid="e991540a-790f-4f62-875f-cb385ec7fa15"/>
+				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{value}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="270" y="2" width="125" height="18" uuid="1fff70e3-8cd4-46d1-8c29-bfa163ea7246">
+				<reportElement x="263" y="2" width="132" height="18" uuid="1fff70e3-8cd4-46d1-8c29-bfa163ea7246">
 					<printWhenExpression><![CDATA[!$F{effectiveDate}.equals(null)]]></printWhenExpression>
 				</reportElement>
+				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{effectiveDate}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="401" y="2" width="170" height="18" uuid="65a0a31c-e589-4f87-ad5f-d42d616fc1cb">
+				<reportElement x="395" y="2" width="176" height="18" uuid="65a0a31c-e589-4f87-ad5f-d42d616fc1cb">
 					<printWhenExpression><![CDATA[!$F{expirationDate}.equals(null)]]></printWhenExpression>
 				</reportElement>
+				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{expirationDate}]]></textFieldExpression>
 			</textField>
 		</band>
