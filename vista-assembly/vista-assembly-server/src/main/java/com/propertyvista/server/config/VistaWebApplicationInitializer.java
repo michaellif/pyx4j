@@ -68,6 +68,7 @@ import com.propertyvista.server.VistaUploadServlet;
 import com.propertyvista.server.ci.DBResetServlet;
 import com.propertyvista.server.ci.EnvLinksServlet;
 import com.propertyvista.server.ci.TestTimeoutServlet;
+import com.propertyvista.server.ci.VistaHostInfoServlet;
 import com.propertyvista.server.ci.VistaStatusServlet;
 import com.propertyvista.server.ci.bugs.WSServletContextListenerFix;
 import com.propertyvista.server.config.filter.EmptyServlet;
@@ -277,6 +278,13 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
                 sc.addMapping(urlPattern(VistaApplication.env, "o/status"));
                 sc.addMapping(urlPattern(VistaApplication.env, "public/status"));
                 sc.addMapping(urlPattern(VistaApplication.staticContext, "public/status"));
+            }
+
+            {
+                ServletRegistration.Dynamic sc = ctx.addServlet("VistaHostInfoServlet", VistaHostInfoServlet.class);
+                sc.addMapping(urlPattern(VistaApplication.env, "o/host-info"));
+                sc.addMapping(urlPattern(VistaApplication.env, "public/host-info"));
+                sc.addMapping(urlPattern(VistaApplication.staticContext, "public/host-info"));
             }
 
             {
