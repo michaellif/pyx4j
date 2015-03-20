@@ -4,7 +4,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="item" class="java.lang.String"/>
-	<field name="price" class="java.lang.String"/>
+	<field name="price" class="java.math.BigDecimal"/>
 	<field name="effectiveDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="expirationDate" class="com.pyx4j.commons.LogicalDate"/>
 	<background>
@@ -28,7 +28,7 @@
 				<reportElement x="7" y="2" width="125" height="18" uuid="7e010c0f-aaaf-488e-9abd-1728b246d158"/>
 				<textFieldExpression><![CDATA[$F{item}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="¤#,##0.00" isBlankWhenNull="true">
 				<reportElement x="132" y="2" width="131" height="18" uuid="6f40483c-ff5c-4079-8c26-dbaee5d40d87"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>

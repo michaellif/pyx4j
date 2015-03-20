@@ -78,7 +78,7 @@
 				</textElement>
 				<text><![CDATA[Total Amount]]></text>
 			</staticText>
-			<textField pattern="###0.00;-###0.00">
+			<textField pattern="¤#,##0.00" isBlankWhenNull="true">
 				<reportElement x="486" y="2" width="80" height="18" uuid="89730e6d-88d4-40ed-8f2b-5a17b1c1c5e2"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{currentAmount}]]></textFieldExpression>
@@ -91,7 +91,7 @@
 			<rectangle>
 				<reportElement x="264" y="0" width="222" height="20" forecolor="#CCCCCC" backcolor="#FFFFFF" uuid="99e788d0-2157-4219-82e1-ba1f2bca1e14"/>
 			</rectangle>
-			<textField pattern="###0.00;-###0.00">
+			<textField pattern="¤#,##0.00" isBlankWhenNull="true">
 				<reportElement x="486" y="2" width="80" height="18" uuid="b3e0e7ff-c369-4ce3-9922-a72e46682d5f"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{taxes}]]></textFieldExpression>
@@ -108,7 +108,7 @@
 			<rectangle>
 				<reportElement x="486" y="0" width="85" height="20" forecolor="#CCCCCC" backcolor="#EEF1F3" uuid="f1bb54af-6236-4e3d-af40-76a4ab16df82"/>
 			</rectangle>
-			<textField pattern="###0.00;-###0.00">
+			<textField pattern="¤#,##0.00" isBlankWhenNull="true">
 				<reportElement x="486" y="2" width="80" height="18" uuid="fd88db8e-6da8-453e-8c99-d6227da75275"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{totalDueAmount}]]></textFieldExpression>
