@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RentalApplicationFirstPage" pageWidth="612" pageHeight="842" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3ab57690-448c-4258-a02d-968bc8f50a7e">
-	<property name="ireport.zoom" value="1.7715610000000352"/>
+	<property name="ireport.zoom" value="1.6105100000000372"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="landlordLogo" class="java.io.InputStream"/>
@@ -31,7 +31,7 @@
 				<text><![CDATA[Rental Application]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="81" width="23" height="20" uuid="07f3ce43-fcd5-42ba-853e-4102806c1fce"/>
+				<reportElement x="0" y="80" width="23" height="20" uuid="07f3ce43-fcd5-42ba-853e-4102806c1fce"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -60,7 +60,7 @@
 				<text><![CDATA[Transfer]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="323" y="81" width="87" height="16" uuid="fe264350-47cd-4306-b628-3a26935f3493"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="375" y="81" width="78" height="16" uuid="fe264350-47cd-4306-b628-3a26935f3493"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
@@ -71,13 +71,16 @@
 				<imageExpression><![CDATA[$P{landlordLogo}]]></imageExpression>
 			</image>
 			<textField pattern="MMMMM dd, yyyy" isBlankWhenNull="true">
-				<reportElement x="410" y="81" width="100" height="15" uuid="a96e2adc-538a-4b64-8c36-11603b69c3fb"/>
+				<reportElement x="453" y="81" width="118" height="15" uuid="a96e2adc-538a-4b64-8c36-11603b69c3fb"/>
 				<textFieldExpression><![CDATA[$P{submissionDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="23" y="83" width="181" height="18" uuid="c1421299-492b-4f9a-9fd5-1953d7a0e067"/>
+				<reportElement x="23" y="81" width="181" height="18" uuid="c1421299-492b-4f9a-9fd5-1953d7a0e067"/>
 				<textFieldExpression><![CDATA[$P{applicationId}]]></textFieldExpression>
 			</textField>
+			<line>
+				<reportElement x="453" y="94" width="118" height="1" forecolor="#CCCCCC" uuid="dd817326-9252-48f6-a24a-723800990262"/>
+			</line>
 		</band>
 	</title>
 	<detail>
