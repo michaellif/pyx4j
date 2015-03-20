@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.unit.server.mock.MockHttpServletRequest;
 
 import com.propertyvista.config.deployment.ChaineApplicationContextResolver;
+import com.propertyvista.config.deployment.VistaApplicationContext;
 import com.propertyvista.config.deployment.VistaApplicationContextResolver;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
@@ -67,6 +68,7 @@ public class VistaNamespaceResolverTestBase extends TestCase {
     public void tearDown() throws Exception {
         // Reset DB to normal
         VistaTestDBSetupForNamespace.resetDatabase();
+        setResolver(null);
     }
 
     private void createActivePMC(String namespace) {
@@ -106,30 +108,49 @@ public class VistaNamespaceResolverTestBase extends TestCase {
     }
 
     protected void assertApp(String requestURL, VistaApplication application) {
-        VistaApplication resolvedApplication;
-        try {
-            resolvedApplication = getContextResolver().resolve(new MockHttpServletRequest(requestURL)).getApplication();
-            Assert.assertTrue(buildErrorMssgForApplication(application, resolvedApplication), resolvedApplication == application);
-        } catch (NullPointerException npe) {
-            if (application == null) {
-                // Exception is expected. OK
-                Assert.assertTrue(true);
+        VistaApplicationContext resolvedContext = getContextResolver().resolve(new MockHttpServletRequest(requestURL));
+        if (resolvedContext == null) {
+            if (application != null) {
+                Assert.fail("Application " + application + " not resolved on URL " + requestURL);
+            } else {
+                // OK
             }
+        } else {
+            VistaApplication resolvedApplication = resolvedContext.getApplication();
+            Assert.assertTrue(buildErrorMssgForApplication(application, resolvedApplication), resolvedApplication == application);
         }
     }
 
     protected void assertNamespace(String requestURL, String namespace) {
-        String resolvedNamespace = getContextResolver().resolve(new MockHttpServletRequest(requestURL)).getNamespace();
-        Assert.assertTrue(buildErrorMssgForNamespace(namespace, resolvedNamespace), resolvedNamespace == namespace);
+        VistaApplicationContext resolvedContext = getContextResolver().resolve(new MockHttpServletRequest(requestURL));
+        if (resolvedContext == null) {
+            if (namespace != null) {
+                Assert.fail("Namespace " + namespace + " not resolved on URL " + requestURL);
+            } else {
+                // OK
+            }
+        } else {
+            String resolvedNamespace = resolvedContext.getNamespace();
+            Assert.assertTrue(buildErrorMssgForNamespace(namespace, resolvedNamespace), resolvedNamespace == namespace);
+        }
     }
 
     protected void assertPmc(String requestURL, String pmcName) {
-        if (pmcName.equalsIgnoreCase(VistaNamespace.noNamespace) || pmcName.equalsIgnoreCase(VistaNamespace.operationsNamespace)) {
-            return;
+        VistaApplicationContext resolvedContext = getContextResolver().resolve(new MockHttpServletRequest(requestURL));
+        if (resolvedContext == null) {
+            if (pmcName != null) {
+                Assert.fail("PmcName " + pmcName + " not resolved on URL " + requestURL);
+            } else {
+                // OK
+            }
+        } else {
+            Pmc resolvedPmc = resolvedContext.getCurrentPmc();
+            if (pmcName.equalsIgnoreCase(VistaNamespace.noNamespace) || pmcName.equalsIgnoreCase(VistaNamespace.operationsNamespace)) {
+                Assert.assertNull(resolvedPmc);
+            } else {
+                Assert.assertTrue(buildErrorMssgForPmc(pmcName, resolvedPmc.name().getValue()), resolvedPmc.name().getValue().equals(pmcName));
+            }
         }
-
-        Pmc resolvedPmc = getContextResolver().resolve(new MockHttpServletRequest(requestURL)).getCurrentPmc();
-        Assert.assertTrue(buildErrorMssgForPmc(pmcName, resolvedPmc.name().getValue()), resolvedPmc.name().getValue().equals(pmcName));
     }
 
     protected VistaApplicationContextResolver getContextResolver() {

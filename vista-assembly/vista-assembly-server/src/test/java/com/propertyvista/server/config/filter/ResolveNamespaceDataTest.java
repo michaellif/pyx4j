@@ -130,13 +130,19 @@ public class ResolveNamespaceDataTest extends VistaNamespaceResolverTestBase {
         testResolveNamespace("https://redridge.my-community.co/", VistaApplication.resident, "redridge");
 
         // prospect
-//        testResolveNamespace("https://redridge.my-community.co/prospect", VistaApplication.prospect, "redridge");
+        testResolveNamespace("https://redridge.my-community.co/prospect", VistaApplication.prospect, "redridge");
 
         // prospect
-//        testResolveNamespace("https://redridge.my-community.co/prospect/", VistaApplication.prospect, "redridge");
+        testResolveNamespace("https://redridge.my-community.co/prospect/", VistaApplication.prospect, "redridge");
 
-        // proddemo static
-//        testResolveNamespace("https://proddemo.propertyvista.biz/vista-prod-demo/", VistaApplication.staticContext, VistaNamespace.noNamespace);
+        // one-harder-pmc-name
+        testResolveNamespace("https://one-harder-pmc-name.propertyvista.com/", VistaApplication.crm, "one-harder-pmc-name");
+
+        testResolveNamespace("https://one-harder-pmc-name.residentportalsite.com/", VistaApplication.site, "one-harder-pmc-name");
+
+        testResolveNamespace("https://one-harder-pmc-name.my-community.co/", VistaApplication.resident, "one-harder-pmc-name");
+
+//        testResolveNamespace("https://one-harder-pmc-name.my-community.co/prospect", VistaApplication.prospect, "one-harder-pmc-name");
 
         setResolver(null);
     }
@@ -157,43 +163,52 @@ public class ResolveNamespaceDataTest extends VistaNamespaceResolverTestBase {
         testResolveNamespace("https://demo.my-community.co/", VistaApplication.resident, "demo");
 
         // prospect
-//        testResolveNamespace("https://demo.my-community.co/prospect", VistaApplication.prospect, "demo");
+        testResolveNamespace("https://demo.my-community.co/prospect", VistaApplication.prospect, "demo");
 
-//        testResolveNamespace("https://demo.my-community.co/prospect/", VistaApplication.prospect, "demo");
+        testResolveNamespace("https://demo.my-community.co/prospect/", VistaApplication.prospect, "demo");
+
+        // proddemo static
+        testResolveNamespace("https://static-cdemo.propertyvista.biz", VistaApplication.staticContext, VistaNamespace.noNamespace);
+
+    }
+
+    @Test
+    public void testProdSalesDemo() {
+        setResolver(new EnvNResolver(".propertyvista.biz"));
 
         //
         // PROD SALES DEMO
-//        testResolveNamespace("https://onboarding.propertyvista.biz/", VistaApplication.onboarding, VistaNamespace.noNamespace);
+        testResolveNamespace("https://start.propertyvista.biz/", VistaApplication.onboarding, VistaNamespace.noNamespace);
 
-//        testResolveNamespace("https://operations.propertyvista.biz/", VistaApplication.operations, VistaNamespace.operationsNamespace);
-//
-//        testResolveNamespace("http://static.propertyvista.biz/o/db-reset", VistaApplication.staticContext, VistaNamespace.noNamespace);
-//
-//        // crm
-//        testResolveNamespace("https://vista-crm.propertyvista.biz/", VistaApplication.crm, "vista");
-//
-//        // site
-//        testResolveNamespace("https://vista-site.propertyvista.biz/", VistaApplication.site, "vista");
-//
-//        // resident
-//        testResolveNamespace("https://vista-portal.propertyvista.biz/", VistaApplication.resident, "vista");
-//
-//        // prospect
-//        testResolveNamespace("https://vista-portal.propertyvista.biz/prospect", VistaApplication.prospect, "vista");
+        testResolveNamespace("https://operations.propertyvista.biz/", VistaApplication.operations, VistaNamespace.operationsNamespace);
 
-//        testResolveNamespace("https://demo.my-community.co/prospect/", VistaApplication.prospect, "vista");
+        testResolveNamespace("http://static.propertyvista.biz/o/db-reset", VistaApplication.staticContext, VistaNamespace.noNamespace);
 
         // crm
-//        testResolveNamespace("https://one-harder-pmc-name-crm.propertyvista.biz/", VistaApplication.crm, "one-harder-pmc-name");
-//
-//        // site
-//        testResolveNamespace("https://one-harder-pmc-name-site.propertyvista.biz/", VistaApplication.site, "one-harder-pmc-name");
-//
-//        // resident
-//        testResolveNamespace("https://one-harder-pmc-name-portal.propertyvista.biz/", VistaApplication.resident, "one-harder-pmc-name");
-//
-//        // prospect
-//        testResolveNamespace("https://one-harder-pmc-name-portal.propertyvista.biz/prospect", VistaApplication.prospect, "one-harder-pmc-name");
+        testResolveNamespace("https://vista-crm.propertyvista.biz/", VistaApplication.crm, "vista");
+
+        // site
+        testResolveNamespace("https://vista-site.propertyvista.biz/", VistaApplication.site, "vista");
+
+        // resident
+        testResolveNamespace("https://vista-portal.propertyvista.biz/", VistaApplication.resident, "vista");
+
+        // prospect
+        testResolveNamespace("https://vista-portal.propertyvista.biz/prospect", VistaApplication.prospect, "vista");
+
+        testResolveNamespace("https://demo.my-community.co/prospect/", VistaApplication.prospect, "vista");
+
+        // crm
+        testResolveNamespace("https://one-harder-pmc-name-crm.propertyvista.biz/", VistaApplication.crm, "one-harder-pmc-name");
+
+        // site
+        testResolveNamespace("https://one-harder-pmc-name-site.propertyvista.biz/", VistaApplication.site, "one-harder-pmc-name");
+
+        // resident
+        testResolveNamespace("https://one-harder-pmc-name-portal.propertyvista.biz/", VistaApplication.resident, "one-harder-pmc-name");
+
+        // prospect
+        testResolveNamespace("https://one-harder-pmc-name-portal.propertyvista.biz/prospect", VistaApplication.prospect, "one-harder-pmc-name");
 
         setResolver(null);
     }

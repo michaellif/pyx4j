@@ -60,6 +60,8 @@ public class ResolveApplicationTest extends VistaNamespaceResolverTestBase {
 
         assertApp("https://vista.propertyvista.com", VistaApplication.crm);
         assertApp("https://vista-crm-staging.propertyvista.net", VistaApplication.crm);
+        assertApp("https://one-harder-pmc-name.propertyvista.com", VistaApplication.crm);
+
         setResolver(null);
     }
 
@@ -69,19 +71,29 @@ public class ResolveApplicationTest extends VistaNamespaceResolverTestBase {
         // Customers demo
         assertApp("https://demo.propertyvista.com", VistaApplication.crm);
         assertApp("https://demo.my-community.co", VistaApplication.resident);
-//        assertApp("https://demo.my-community.co/prospect", VistaApplication.prospect);
-        assertApp("https://demo.http://demo.residentportalsite.com/en/", VistaApplication.site);
+        assertApp("https://demo.my-community.co/prospect", VistaApplication.prospect);
+        assertApp("http://demo.residentportalsite.com/en/", VistaApplication.site);
+
+        assertApp("https://demo-crm-cdemo.propertyvista.biz", VistaApplication.crm);
+        assertApp("https://demo-site-cdemo.propertyvista.biz", VistaApplication.site);
+        assertApp("https://demo-portal-cdemo.propertyvista.biz", VistaApplication.resident);
+        assertApp("https://demo-portal-cdemo.propertyvista.biz/portal", VistaApplication.resident);
+    }
+
+    @Test
+    public void testProdSalesDemo() {
+        setResolver(new EnvNResolver(".propertyvista.biz"));
 
         // Sales demo
-        assertApp("https://rockville-crm.propertyvista.biz", VistaApplication.crm);
-        assertApp("https://rockville-site.propertyvista.biz", VistaApplication.site);
-        assertApp("https://rockville-portal.propertyvista.biz", VistaApplication.resident);
-        assertApp("https://rockville-portal.propertyvista.biz/portal", VistaApplication.resident);
+        assertApp("https://redridge-crm.propertyvista.biz", VistaApplication.crm);
+        assertApp("https://redridge-site.propertyvista.biz", VistaApplication.site);
+        assertApp("https://redridge-portal.propertyvista.biz", VistaApplication.resident);
+        assertApp("https://redridge-portal.propertyvista.biz/portal", VistaApplication.resident);
 
         assertApp("https://operations.propertyvista.biz", VistaApplication.operations);
-        assertApp("https://onboarding.propertyvista.biz", VistaApplication.onboarding);
+        assertApp("https://start.propertyvista.biz", VistaApplication.onboarding);
         assertApp("https://static.propertyvista.biz", VistaApplication.staticContext);
-        assertApp("http://static.propertyvista.biz/o/db-reset", VistaApplication.env);
+        assertApp("http://env.propertyvista.biz/o/db-reset", VistaApplication.env);
         setResolver(null);
     }
 

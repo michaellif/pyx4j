@@ -25,6 +25,8 @@ public class ProdResolver extends ChaineApplicationContextResolver {
         super(//
                 new FixedDNSApplicationContextResolver("operations.propertyvista.com", VistaApplication.operations), //
                 new FixedDNSApplicationContextResolver("static.propertyvista.com", VistaApplication.staticContext), //
+                new FixedDNSApplicationContextResolver("static.my-community.co", VistaApplication.staticContext), //
+                new FixedDNSApplicationContextResolver("static.residentportalsite.com", VistaApplication.staticContext), //
                 new FixedDNSApplicationContextResolver("start.propertyvista.com", VistaApplication.onboarding), //
                 new FixedDNSApplicationContextResolver("interfaces.propertyvista.com", VistaApplication.interfaces), //
                 new FixedDNSApplicationContextResolver("env.propertyvista.com", VistaApplication.env), //

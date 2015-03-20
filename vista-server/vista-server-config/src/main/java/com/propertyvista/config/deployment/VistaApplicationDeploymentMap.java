@@ -12,8 +12,10 @@
  */
 package com.propertyvista.config.deployment;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +24,7 @@ import com.propertyvista.domain.security.common.VistaApplication;
 
 public class VistaApplicationDeploymentMap {
 
-    private final Map<String, VistaApplication> applicationsByDnsNameFragment;
+    private final Map<String, List<VistaApplication>> applicationsByDnsNameFragment;
 
     private final Map<String, VistaApplication> applicationsBySubApplicationPath;
 
@@ -38,9 +40,13 @@ public class VistaApplicationDeploymentMap {
         applicationsByDnsNameFragment = new HashMap<>();
         applicationsBySubApplicationPath = new HashMap<>();
         for (VistaApplication a : EnumSet.allOf(VistaApplication.class)) {
-            if (!applicationsByDnsNameFragment.containsKey(a.getDnsNameFragment())) {
-                applicationsByDnsNameFragment.put(a.getDnsNameFragment(), a);
+            List<VistaApplication> applications = applicationsByDnsNameFragment.get(a.getDnsNameFragment());
+            if (applications == null) {
+                applications = new ArrayList<>();
             }
+            applications.add(a);
+            applicationsByDnsNameFragment.put(a.getDnsNameFragment(), applications);
+
             if (a.getSubApplicationPath() != null) {
                 applicationsBySubApplicationPath.put(a.getDnsNameFragment() + "/" + a.getSubApplicationPath(), a);
             }
@@ -48,7 +54,16 @@ public class VistaApplicationDeploymentMap {
     }
 
     public static VistaApplication getVistaApplicationByDnsNameFragment(String dnsNameFragment) {
-        return instance().applicationsByDnsNameFragment.get(dnsNameFragment);
+        List<VistaApplication> applications = instance().applicationsByDnsNameFragment.get(dnsNameFragment);
+        if (applications != null) {
+            return applications.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public static List<VistaApplication> getSubApplications(VistaApplication application) {
+        return instance().applicationsByDnsNameFragment.get(application.getDnsNameFragment());
     }
 
     public static VistaApplication getVistaApplicationByDnsNameFragment(String dnsNameFragment, HttpServletRequest httpRequest) {
@@ -57,6 +72,16 @@ public class VistaApplicationDeploymentMap {
             return app;
         } else {
             return getVistaApplicationByDnsNameFragment(dnsNameFragment);
+        }
+    }
+
+    public static VistaApplication getVistaSubApplication(VistaApplication defaultApplication, HttpServletRequest httpRequest) {
+        VistaApplication app = instance().applicationsBySubApplicationPath.get(defaultApplication.getDnsNameFragment() + "/"
+                + HttpRequestUtils.getRootServletPath(httpRequest));
+        if (app != null) {
+            return app;
+        } else {
+            return defaultApplication;
         }
     }
 }

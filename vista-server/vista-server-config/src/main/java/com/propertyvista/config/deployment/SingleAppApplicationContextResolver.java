@@ -12,6 +12,8 @@
  */
 package com.propertyvista.config.deployment;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -25,15 +27,28 @@ public class SingleAppApplicationContextResolver extends AbstractApplicationCont
 
     private final VistaApplication application;
 
+    private final boolean hasSubApplications;
+
     public SingleAppApplicationContextResolver(String dnsName, VistaApplication application) {
         super(dnsName);
         this.application = application;
-        log.debug("Single application {} -> {} resolver created", dnsNameBase, application);
+        List<VistaApplication> applications = VistaApplicationDeploymentMap.getSubApplications(application);
+        if (applications.size() == 1) {
+            hasSubApplications = false;
+            log.debug("Single application {} -> {} resolver created", dnsNameBase, application);
+        } else {
+            hasSubApplications = true;
+            log.debug("Single application {} -> {} resolver created", dnsNameBase, applications);
+        }
     }
 
     @Override
     protected VistaApplication resolveApplication(HttpServletRequest httpRequest, String normalizedHostName) {
-        return application;
+        if (hasSubApplications) {
+            return VistaApplicationDeploymentMap.getVistaSubApplication(application, httpRequest);
+        } else {
+            return application;
+        }
     }
 
     @Override
