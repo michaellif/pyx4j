@@ -124,10 +124,12 @@ public interface Pmc extends IEntity {
      * Used by DB upgrade process to ensure that schema is upgraded only once.
      * String "1.2.3" or "1.2.3.4"
      */
+    @Editor(type = EditorType.label)
     IPrimitive<String> schemaVersion();
 
     /**
      * Executed UpgradeSteps for each major version.
      */
+    @Editor(type = EditorType.label)
     IPrimitive<Integer> schemaDataUpgradeSteps();
 }
