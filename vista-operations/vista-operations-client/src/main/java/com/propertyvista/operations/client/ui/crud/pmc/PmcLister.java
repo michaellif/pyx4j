@@ -20,8 +20,8 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 import com.pyx4j.widgets.client.Button;
@@ -50,7 +50,12 @@ public class PmcLister extends SiteDataTablePanel<PmcDTO> {
                 new ColumnDescriptor.Builder(proto().features().whiteLabelPortal()).visible(false).build(), //
                 new ColumnDescriptor.Builder(proto().features().tenantSureIntegration()).visible(false).build(), //
                 new ColumnDescriptor.Builder(proto().features().tenantEmailEnabled()).visible(false).build(), //
+
                 new ColumnDescriptor.Builder(proto().features().countryOfOperation()).visible(false).build(), //
+
+                new ColumnDescriptor.Builder(proto().schemaVersion()).visible(false).build(), //
+                new ColumnDescriptor.Builder(proto().schemaDataUpgradeSteps()).visible(false).build(), //
+
                 new ColumnDescriptor.Builder(proto().equifaxInfo().status()).columnTitle("Equifax Status").visible(false).build(), //
                 new ColumnDescriptor.Builder(proto().equifaxInfo().reportType()).visible(false).build());
 
