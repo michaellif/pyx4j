@@ -209,7 +209,7 @@ public class ApplicationVersion {
     public static String getProductVersion() {
         initVersionInfo();
         if (patchNumber != null) {
-            return productVersion + "." + patchNumber;
+            return productVersion + patchNumber;
         } else {
             return productVersion;
         }
