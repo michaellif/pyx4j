@@ -1380,7 +1380,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
     public <T extends IEntity> void retrieveMember(T entityMember, AttachLevel attachLevel) {
         switch (entityMember.getAttachLevel()) {
         case Attached:
-            throw new RuntimeException("Values of " + entityMember.getPath() + " already Attached");
+            if (!entityMember.isNull()) { // Null is considered  Attached for simplicity
+                throw new RuntimeException("Values of " + entityMember.getPath() + " already Attached");
+            }
+            break;
         case IdOnly:
         case ToStringMembers:
             retrieve(entityMember, attachLevel, false);
@@ -1404,6 +1407,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
             } finally {
                 endCallContext();
             }
+            break;
+        case CollectionSizeOnly:
+            throw new IllegalArgumentException();
         }
     }
 
