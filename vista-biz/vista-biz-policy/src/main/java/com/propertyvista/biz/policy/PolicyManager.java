@@ -300,13 +300,12 @@ class PolicyManager {
         return policy;
     }
 
+    /** Create empty policy (in memory) to avoid service failure on returning null */
     private static <POLICY extends Policy> POLICY createEmptyPolicy(PolicyNode policyNode, Class<POLICY> policyClass) {
         if (EvictionFlowPolicy.class.isAssignableFrom(policyClass)) {
             try {
                 POLICY policy = EntityFactory.create(policyClass);
                 policy.node().set(policyNode);
-                Persistence.service().persist(policy);
-                Persistence.service().commit();
                 return policy;
             } catch (Throwable ignore) {
             }
