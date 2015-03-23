@@ -34,6 +34,7 @@ import com.pyx4j.config.server.ApplicationVersionServlet;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.servlet.InitializationServletContextListener;
 import com.pyx4j.essentials.server.admin.DeployVerificationServlet;
+import com.pyx4j.essentials.server.admin.HostInfoServlet;
 import com.pyx4j.essentials.server.dev.DebugRequestEchoServlet;
 import com.pyx4j.essentials.server.dev.DebugServlet;
 import com.pyx4j.essentials.server.dev.DevDumpProxyServlet;
@@ -278,6 +279,13 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
                 sc.addMapping(urlPattern(VistaApplication.env, "o/status"));
                 sc.addMapping(urlPattern(VistaApplication.env, "public/status"));
                 sc.addMapping(urlPattern(VistaApplication.staticContext, "public/status"));
+            }
+
+            {
+                ServletRegistration.Dynamic sc = ctx.addServlet("HostInfoServlet", HostInfoServlet.class);
+                sc.addMapping(urlPattern(VistaApplication.env, "o/host-inventory"));
+                sc.addMapping(urlPattern(VistaApplication.env, "public/host-inventory"));
+                sc.addMapping(urlPattern(VistaApplication.staticContext, "public/host-inventory"));
             }
 
             {
