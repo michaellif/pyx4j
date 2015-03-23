@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
@@ -27,6 +28,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.framework.PolicyNode;
+import com.propertyvista.domain.policy.policies.EvictionFlowPolicy;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssignmentType;
@@ -83,13 +85,16 @@ class PolicyManager {
         } while (currentNode != null);
 
         if (policy == null) {
-            Persistence.ensureRetrieve(node, AttachLevel.ToStringMembers);
-            throw new PolicyNotFoundException(policyClass, node.getStringView());
-        } else {
-            policy = correctAccordingToVistaFeatures(policy);
-            CacheService.put(policyCacheKey(policyClass, node), policy);
-            return policy;
+            policy = createEmptyPolicy(node, policyClass);
+            if (policy == null) {
+                Persistence.ensureRetrieve(node, AttachLevel.ToStringMembers);
+                throw new PolicyNotFoundException(policyClass, node.getStringView());
+            }
         }
+
+        policy = correctAccordingToVistaFeatures(policy);
+        CacheService.put(policyCacheKey(policyClass, node), policy);
+        return policy;
     }
 
     private static String policyCacheKey(final Class<? extends Policy> policyClass, PolicyNode node) {
@@ -294,4 +299,19 @@ class PolicyManager {
 
         return policy;
     }
+
+    private static <POLICY extends Policy> POLICY createEmptyPolicy(PolicyNode policyNode, Class<POLICY> policyClass) {
+        if (EvictionFlowPolicy.class.isAssignableFrom(policyClass)) {
+            try {
+                POLICY policy = EntityFactory.create(policyClass);
+                policy.node().set(policyNode);
+                Persistence.service().persist(policy);
+                Persistence.service().commit();
+                return policy;
+            } catch (Throwable ignore) {
+            }
+        }
+        return null;
+    }
+
 }
