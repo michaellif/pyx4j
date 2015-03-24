@@ -19,12 +19,14 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
+import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.DeliveryHandle;
@@ -58,9 +60,9 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
             String email;
             for (Employee crmUser : listEmployees) {
                 email = crmUser.email().getStringView();
-                if ("m001@pyx4j.com".equals(email)) {
+                if (new String("m001" + DemoData.USERS_DOMAIN).equals(email)) {
                     m001 = crmUser;
-                } else if ("e001@pyx4j.com".equals(email)) {
+                } else if (new String("e001" + DemoData.USERS_DOMAIN).equals(email)) {
                     e001 = crmUser;
                 }
             }
@@ -81,13 +83,13 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
             String email;
             for (Tenant customerUser : listTenants) {
                 email = customerUser.customer().person().email().getStringView();
-                if ("t001@pyx4j.com".equals(email)) {
+                if (new String("t001" + DemoData.USERS_DOMAIN).equals(email)) {
                     t001 = customerUser;
-                } else if ("t002@pyx4j.com".equals(email)) {
+                } else if (new String("t002" + DemoData.USERS_DOMAIN).equals(email)) {
                     t002 = customerUser;
-                } else if ("t003@pyx4j.com".equals(email)) {
+                } else if (new String("t003" + DemoData.USERS_DOMAIN).equals(email)) {
                     t003 = customerUser;
-                } else if (email.matches("p\\d{3}@propertyvista.com")) {
+                } else if (ApplicationMode.isDemo() && email.matches("p\\d{3}" + DemoData.USERS_DOMAIN)) {
                     pTenants.add(customerUser);
                 }
             }
@@ -119,8 +121,8 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
             createMessage(i, t001, m001, msg1, "No water", "Hi,\n     Thanks for communication, I went to Black Sea to become White :)", true, false, mg, sep);
             createMessage(i, t002, e001, null, "How to use this?",
                     "Hey,\n    I would like to know how to use this portal thing, stuff here, is there a quick tutorial?", true, false, mg, sep);
-            createMessage(i, m001, e001, null, "We miss you", "Please come back from hollyday we miss you, mostly because there is to mucjh work for us.",
-                    false, false, mg, sep);
+            createMessage(i, m001, e001, null, "We miss you", "Please come back from holiday we miss you, mostly because there is to much work for us.", false,
+                    false, mg, sep);
             createMessage(i, m001, t002, null, "Happy New Year", "We wish you Happy New Year, all best", false, false, mg, sep);
             CommunicationThread msg6 = createMessage(i, m001, t001, null, "Late payment notification",
                     "Dear Kenneth Puent,\nWe inform you are late on payment. Please play it ASAP!\n\nRegards,\n", true, false, mg, sep);
