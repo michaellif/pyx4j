@@ -117,15 +117,17 @@ public class OperationsNotificationManager {
 
     public static MailMessage createBuildingSuspendedEmail(Building building) {
         final Pmc pmc = VistaDeployment.getCurrentPmc();
+        String newStatus = building.suspended().getValue(false) ? "Suspended" : "Unsuspended";
         MailMessage email = new MailMessage();
         email.setSender(getSender());
         email.addToList("leonard@propertyvista.com, support@propertyvista.com");
-        email.setSubject(i18n.tr("Building {0} Suspended in PMC {1}", building.propertyCode(), pmc.name()));
+        email.setSubject(i18n.tr("Building {0} is {1} in PMC {2}", building.propertyCode(), newStatus, pmc.name()));
 
         MessageTemplate template = new MessageTemplate();
-        template.setBodyTemplate("Building ${propertyCode} Suspended.<br/>\nPlease confirm with customer ${pmc}!");
+        template.setBodyTemplate("Building ${propertyCode} has been ${status}.<br/>\nPlease confirm with customer ${pmc}!");
 
         template.variable("${propertyCode}", building.propertyCode());
+        template.variable("${status}", newStatus);
         template.variable("${pmc}", pmc.name());
 
         email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
