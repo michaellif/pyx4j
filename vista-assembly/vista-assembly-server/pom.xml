@@ -503,6 +503,29 @@
             </build>
         </profile>
 
+        <!-- remove all but WAR file -->
+        <profile>
+            <id>clean.build.hdd</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <configuration>
+                            <excludeDefaultDirectories>true</excludeDefaultDirectories>        
+                            <filesets>
+                                <fileset>
+                                    <directory>${basedir}/target</directory>
+                                    <excludes>
+                                        <exclude>*.war</exclude>
+                                    </excludes>
+                                </fileset>
+                            </filesets>
+                        </configuration>    
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
         <profile>
             <id>deploy-target-env-11</id>
             <properties>
