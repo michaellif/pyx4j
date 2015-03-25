@@ -37,6 +37,7 @@ import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -178,11 +179,17 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
                     return isCreditCardNumberValid;
                 }
                 return null;
-
             }
         });
 
         get(proto().expiryDate()).addComponentValidator(new FutureDateValidator());
+        get(proto().expiryDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
+            @Override
+            public AbstractValidationError isValid() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+        });
 
         get(proto().securityCode()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
@@ -203,7 +210,7 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
 
     private void validateCreditCardNumberAsync(final CComponent<?, ?, ?, ?> component, CreditCardNumberIdentity value) {
         // check preconditions:
-        if (value == null || get(proto().cardType()).getValue() == null || get(proto().expiryDate()).getValue() == null || !get(proto().expiryDate()).isValid()) {
+        if (value == null || !isCardTypeReady() || !isExpiryDateReady()) {
             return;
         }
 
@@ -231,6 +238,14 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
                 isCreditCardNumberCheckSent = true;
             }
         }
+    }
+
+    boolean isCardTypeReady() {
+        return (get(proto().cardType()).getValue() != null);
+    }
+
+    boolean isExpiryDateReady() {
+        return (get(proto().expiryDate()).getValue() != null && get(proto().expiryDate()).isValid());
     }
 
     private String[] retrieveCreditCardTypePatterns() {
