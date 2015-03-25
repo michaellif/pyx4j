@@ -34,10 +34,10 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextComponent;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -57,9 +57,12 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
 
     private static final I18n i18n = I18n.get(CreditCardInfoEditor.class);
 
-    // a hack for async creditCardNumber Validation
     private boolean isCreditCardNumberCheckSent;
 
+    // Asynchronous creditCardNumber Validation:
+    // first time isValid() - run async validation then on receiving result set
+    // isCreditCardNumberCheckRecieved to 'true', store validation result (isCreditCardNumberValid) and call revalidate;
+    // second time isValid() - release isCreditCardNumberCheckRecieved to false and display validation result;
     private boolean isCreditCardNumberCheckRecieved;
 
     private BasicValidationError isCreditCardNumberValid;
@@ -95,32 +98,12 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
     protected void contentTweaks() {
         get(proto().securityCode()).setVisible(isEditable());
         get(proto().securityCode()).setMandatory(false);
-        // manage security code mandatory state:
-        get(proto().nameOn()).addValueChangeHandler(new ValueChangeHandler<String>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<String> event) {
-                get(proto().securityCode()).setMandatory(true);
-            }
-        });
-        get(proto().cardType()).addValueChangeHandler(new ValueChangeHandler<CreditCardType>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<CreditCardType> event) {
-                get(proto().securityCode()).setMandatory(true);
-                cardEditor.revalidate();
-            }
-        });
-        get(proto().card()).addValueChangeHandler(new ValueChangeHandler<CreditCardNumberIdentity>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<CreditCardNumberIdentity> event) {
-                get(proto().securityCode()).setMandatory(true);
-            }
 
-        });
-        get(proto().expiryDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+        // manage security code mandatory state:
+        this.addValueChangeHandler(new ValueChangeHandler<CreditCardInfo>() {
             @Override
-            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
+            public void onValueChange(ValueChangeEvent<CreditCardInfo> event) {
                 get(proto().securityCode()).setMandatory(true);
-                cardEditor.revalidate();
             }
         });
     }
@@ -174,15 +157,12 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
                 return null;
             }
         });
+        // this data used during card validation - so do not forget to revalidate card:
+        get(proto().cardType()).addValueChangeHandler(new RevalidationTrigger<CreditCardType>(cardEditor));
+        get(proto().expiryDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(cardEditor));
+        // END OF set up validation for credit card number.
 
         get(proto().expiryDate()).addComponentValidator(new FutureDateValidator());
-        get(proto().expiryDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
-            @Override
-            public AbstractValidationError isValid() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-        });
 
         get(proto().securityCode()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
