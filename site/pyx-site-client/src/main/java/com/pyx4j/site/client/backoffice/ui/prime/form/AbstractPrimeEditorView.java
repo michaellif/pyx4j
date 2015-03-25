@@ -202,6 +202,11 @@ public abstract class AbstractPrimeEditorView<E extends IEntity> extends Abstrac
         btnApply.setVisible(enabled);
     }
 
+    protected void setCancelButtonVisible(boolean enabled) {
+        btnCancel.setEnabled(enabled);
+        btnCancel.setVisible(enabled);
+    }
+
     protected void setBtnCancelCaption(String caption) {
         btnCancel.setCaption(caption);
     }
