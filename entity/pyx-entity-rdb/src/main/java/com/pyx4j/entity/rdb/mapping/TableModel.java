@@ -910,9 +910,6 @@ public class TableModel {
             if (PersistenceTrace.traceEntityFilter(entity)) {
                 log.info("Retrieve {} as {}\n{}", entity.getDebugExceptionInfoString(), attachLevel, PersistenceTrace.getCallOrigin());
             }
-            if (entity.getValueClass().getSimpleName().equals("CE3")) {
-                System.out.println("RRR");
-            }
         }
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -1182,7 +1179,7 @@ public class TableModel {
         }
     }
 
-    public <T extends IEntity> List<Key> queryKeys(PersistenceContext persistenceContext, EntityQueryCriteria<T> criteria, int limit) {
+    public <T extends IEntity> List<Key> queryKeys(PersistenceContext persistenceContext, EntityQueryCriteria<T> criteria, int maxRows) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         String sql = null;
@@ -1190,6 +1187,22 @@ public class TableModel {
             QueryBuilder<T> qb = new QueryBuilder<T>(persistenceContext, mappings, "m1", entityOperationsMeta, criteria);
             sql = "SELECT " + (qb.addDistinct() ? "DISTINCT" : "") + " m1." + dialect.getNamingConvention().sqlIdColumnName() + qb.getColumnsSQL() + " FROM "
                     + qb.getSQL(getFullTableName());
+
+            boolean hasLimitCriteria = false;
+            int limit = -1;
+            int offset = 0;
+            if (criteria instanceof EntityListCriteria) {
+                EntityListCriteria<T> c = (EntityListCriteria<T>) criteria;
+                if (c.getPageSize() > 0) {
+                    offset = c.getPageSize() * c.getPageNumber();
+                    limit = c.getPageSize() + 1;
+                    sql = dialect.applyLimitCriteria(sql);
+                    hasLimitCriteria = true;
+                }
+            } else if (maxRows > 0) {
+                limit = maxRows;
+            }
+
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
@@ -1200,8 +1213,22 @@ public class TableModel {
                 // zero means there is no limit, Need for pooled connections
                 stmt.setMaxRows(0);
             }
-            qb.bindParameters(persistenceContext, stmt);
-
+            int parameterIndex = qb.bindParameters(persistenceContext, stmt);
+            if (hasLimitCriteria) {
+                switch (dialect.limitCriteriaType()) {
+                case AbsolutCriteria:
+                    stmt.setInt(parameterIndex, offset + limit);
+                    parameterIndex++;
+                    break;
+                case Standard:
+                    stmt.setInt(parameterIndex, limit);
+                    parameterIndex++;
+                    break;
+                default:
+                    break;
+                }
+                stmt.setInt(parameterIndex, offset);
+            }
             rs = stmt.executeQuery();
 
             List<Key> rc = new Vector<Key>();
@@ -1392,15 +1419,15 @@ public class TableModel {
             persistenceContext.setUncommittedChanges();
             int[] rc = stmt.executeBatch();
             int count = 0;
-            for (int i = 0; i < rc.length; i++) {
-                switch (rc[i]) {
+            for (int element : rc) {
+                switch (element) {
                 case Statement.EXECUTE_FAILED:
                     throw new RuntimeException("SQL delete failed");
                 case Statement.SUCCESS_NO_INFO:
                     count++;
                     break;
                 default:
-                    count += rc[i];
+                    count += element;
                 }
             }
             return count;
@@ -1455,8 +1482,8 @@ public class TableModel {
             }
             persistenceContext.setUncommittedChanges();
             vals = stmt.executeBatch(); // INSERTs
-            for (int i = 0; i < vals.length; i++) {
-                if (vals[i] == 0) {
+            for (int val : vals) {
+                if (val == 0) {
                     // not inserted ???
                 }
             }
@@ -1519,8 +1546,8 @@ public class TableModel {
             }
             persistenceContext.setUncommittedChanges();
             vals = stmt.executeBatch(); // INSERTs
-            for (int i = 0; i < vals.length; i++) {
-                if (vals[i] == 0) {
+            for (int val : vals) {
+                if (val == 0) {
                     // not inserted ???
                 }
             }
