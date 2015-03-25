@@ -1,7 +1,7 @@
 streetNumber,streetName,city,province,country,postalCode
 572,Weber St N,Waterloo,Ontario,Canada,N2L 5C6
-92,Erb E,Waterloo,Ontario,Canada,N2J 1L9
-572,Weber N,Waterloo,Ontario,Canada,N2L 5C6
+92,Erb St E,Waterloo,Ontario,Canada,N2J 1M1
+560,Weber St N,Waterloo,Ontario,Canada,N2L 5C6
 140,University Ave W,Waterloo,Ontario,Canada,N2L 6J3
 190,King William St,Hamilton,Ontario,Canada,L8R 1A8
 100,Main St W,Hamilton,Ontario,Canada,L8P 1H6
@@ -9,20 +9,20 @@ streetNumber,streetName,city,province,country,postalCode
 124,Hunter St W,Hamilton,Ontario,Canada,L8P 1R1
 2037,Pine St,Burlington,Ontario,Canada,L7R 1E9
 441,Elizabeth St,Burlington,Ontario,Canada,L7R 2L8
-477,Guelph Ln,Burlington,Ontario,Canada,L7R 3L8
+477,Guelph Line,Burlington,Ontario,Canada,L7R 1K3
 1363,Lakeshore Road,Burlington,Ontario,Canada,L7S 1B2
 81,Millside Dr,Milton,Ontario,Canada,L9T 1S8
 45,Martin St,Milton,Ontario,Canada,L9T 2R2
 41,Main St E,Milton,Ontario,Canada,L9T 1N2
 426,Pine St,Milton,Ontario,Canada,L9T 1L4
 675,Queen St S,Kitchener,Ontario,Canada,N2M 1A1
-604,Belmont W,Kitchener,Ontario,Canada,N2M 1N5
+604,Belmont Ave W,Kitchener,Ontario,Canada,N2M 1N5
 97,King St W,Kitchener,Ontario,Canada,N2G 1A7
-1264,Victoria N,Kitchener,Ontario,Canada,N2B 3C9
-341,MacLaren,Ottawa,Ontario,Canada,K2P 2E2
-343,O'Connor,Ottawa,Ontario,Canada,K2P 1V9
+1264,Victoria St N,Kitchener,Ontario,Canada,N2B 3C9
+341,MacLaren St,Ottawa,Ontario,Canada,K2P 2E2
+343,O'Connor St,Ottawa,Ontario,Canada,K2P 1V9
 3332,McCarthy Rd,Ottawa,Ontario,Canada,K1V 0H9
-428,Kent,Ottawa,Ontario,Canada,K2P 2B3
+428,Kent St,Ottawa,Ontario,Canada,K2P 2B3
 2222,Webster Ave,Ottawa,Ontario,Canada,K1H 7H2
 28,Helene St N,Mississauga,Ontario,Canada,L5G 3B7
 55,Port St E,Mississauga,Ontario,Canada,L5G 4P3
@@ -32,7 +32,7 @@ streetNumber,streetName,city,province,country,postalCode
 21,Classic Ave,Toronto,Ontario,Canada,M5S 3J7
 19,Russell St,Toronto,Ontario,Canada,M5S 2S2
 121,Harbord St,Toronto,Ontario,Canada,M5S 1G9
-645,Gardiners,Kingston,Ontario,Canada,K7M 8K2
+645,Gardiners Rd,Kingston,Ontario,Canada,K7M 8K2
 221,Portsmouth Ave,Kingston,Ontario,Canada,K7M 1V5
 120,Stuart St,Kingston,Ontario,Canada,K7L 2V8
 49,King St W,Kingston,Ontario,Canada,K7L 0A6
@@ -43,7 +43,7 @@ streetNumber,streetName,city,province,country,postalCode
 8874,Hudson St,Vancouver,British Columbia,Canada,V6P 4N2
 8465,Granville St,Vancouver,British Columbia,Canada,V6P 4Z9
 1616,Pendrell St,Vancouver,British Columbia,Canada,V6G 1S8
-788,Richards St,Vancouver,British Columbia,Canada,V6B OC8
+788,Richards St,Vancouver,British Columbia,Canada,V6B 34A
 1807,W 1st Ave,Vancouver,British Columbia,Canada,V6J 5B8
 2880,W 13th Ave,Vancouver,British Columbia,Canada,V6K 2T7
 200,Albert St,Regina,Saskatchewan,Canada,S4R 2N4
@@ -63,15 +63,15 @@ streetNumber,streetName,city,province,country,postalCode
 610,Idylwyld Dr N,Saskatoon,Saskatchewan,Canada,S7L 0Z2
 1915,Ontario Ave,Saskatoon,Saskatchewan,Canada,S7K 1T5
 2705,Wentz Ave,Saskatoon,Saskatchewan,Canada,S7K 4B6
-409,Haviland Cres,Saskatoon,Saskatchewan,Canada,S7L 5B3
-210,Faithful Cres,Saskatoon,Saskatchewan,Canada,S7K 8H8
+409,Haviland Crescent,Saskatoon,Saskatchewan,Canada,S7L 5B3
+210,Faithful Crescent,Saskatoon,Saskatchewan,Canada,S7K 8H8
 1206,Emerson Ave,Saskatoon,Saskatchewan,Canada,S7H 2X1
 707,Brand Rd,Saskatoon,Saskatchewan,Canada,S7J 5L5
 2625,Airport Dr,Saskatoon,Saskatchewan,Canada,S7L 7L1
 651,Rue de la Montagne,Montreal,Quebec,Canada,H3C 0G2
 1010,Rue William,Montreal,Quebec,Canada,H3C 0K8
 551,Rue Dominion,Montreal,Quebec,Canada,H3J 2N5
-3822,St Denis,Montreal,Quebec,Canada,H2W 2M2
+3822,Rue Saint-Denis,Montreal,Quebec,Canada,H2W 2M2
 3931,Rue de Mentana,Montreal,Quebec,Canada,H2L 3R7
 2430,Rue de Chambly,Montreal,Quebec,Canada,H1W 3J5
 455,Rue Saint Germain,Quebec,Quebec,Canada,G1K 4N2
@@ -81,10 +81,10 @@ streetNumber,streetName,city,province,country,postalCode
 5,John Hirsch Pl,Winnipeg,Manitoba,Canada,R3B 0R4
 207,Fort St,Winnipeg,Manitoba,Canada,R3C 1E2
 210,La Verendrye St,Winnipeg,Manitoba,Canada,R2H 0B7
-310,Broadway,Winnipeg,Manitoba,Canada,R3C 0S6
+86,Donald St,Winnipeg,Manitoba,Canada,R3C 1L6
 1600,Church Ave,Winnipeg,Manitoba,Canada,R2X 1G8
-167,McPhillips,Winnipeg,Manitoba,Canada,R3E 2K1
-420,DesMeurons,Winnipeg,Manitoba,Canada,R2H 2N9
+167,McPhillips St,Winnipeg,Manitoba,Canada,R3E 2K1
+420,DesMeurons St,Winnipeg,Manitoba,Canada,R2H 2N9
 566,Osborne St,Winnipeg,Manitoba,Canada,R3L 2B4
 157,Annabella St,Winnipeg,Manitoba,Canada,R2W 3J1
 5650,Russell St,Halifax,Nova Scotia,Canada,B3K 4G2
@@ -96,4 +96,4 @@ streetNumber,streetName,city,province,country,postalCode
 1568,Hollis St,Halifax,Nova Scotia,Canada,B3J 1V3
 114,Chain Lake Dr,Halifax,Nova Scotia,Canada,B3S 1B1
 5657,Spring Garden Rd,Halifax,Nova Scotia,Canada,B3J 3R4
-6112,Willow,Halifax,Nova Scotia,Canada,B3K 1M2
+6112,Willow St,Halifax,Nova Scotia,Canada,B3K 1M2
