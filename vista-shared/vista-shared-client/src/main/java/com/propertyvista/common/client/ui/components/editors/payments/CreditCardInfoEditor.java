@@ -56,10 +56,6 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
 
     private static final I18n i18n = I18n.get(CreditCardInfoEditor.class);
 
-    private boolean isCreditCardTypeSet = false;
-
-    private boolean isExpiryDateSet = false;
-
     // a hack for async creditCardNumber Validation
     private boolean isCreditCardNumberCheckSent;
 
@@ -116,7 +112,6 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
             @Override
             public void onValueChange(ValueChangeEvent<CreditCardType> event) {
                 get(proto().securityCode()).setMandatory(true);
-                isCreditCardTypeSet = event.getValue() != null ? true : false;
                 cardEditor.revalidate();
             }
         });
@@ -131,7 +126,6 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
             @Override
             public void onValueChange(ValueChangeEvent<LogicalDate> event) {
                 get(proto().securityCode()).setMandatory(true);
-                isExpiryDateSet = event.getValue() != null ? true : false;
                 cardEditor.revalidate();
             }
         });
@@ -208,12 +202,12 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
     }
 
     private void validateCreditCardNumberAsync(final CComponent<?, ?, ?, ?> component, CreditCardNumberIdentity value) {
-
-        if (!isCreditCardTypeSet || !isExpiryDateSet || !get(proto().expiryDate()).isValid()) {
+        // check preconditions:
+        if (value == null || get(proto().cardType()).getValue() == null || get(proto().expiryDate()).getValue() == null || !get(proto().expiryDate()).isValid()) {
             return;
         }
 
-        if (!isCreditCardNumberCheckSent && value != null) {
+        if (!isCreditCardNumberCheckSent) {
             resetCreditCardNumberValidationResult();
 
             if (ValidationUtils.isCreditCardNumberIinValid(retrieveCreditCardTypePatterns(), value.newNumber().getValue())) {
