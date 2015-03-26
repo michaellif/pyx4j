@@ -23,7 +23,7 @@ import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.portal.resident.ui.services.insurance.tenantsurepaymentmethod.TenantSurePaymentMethodWizardView;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.InsurancePaymentMethodDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.services.TenantSurePaymentMethodCrudService;
+import com.propertyvista.portal.rpc.portal.resident.services.insurance.TenantSurePaymentMethodCrudService;
 import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
 
 public class TenantSurePaymentMethodUpdateWizardActivity extends AbstractWizardCrudActivity<InsurancePaymentMethodDTO, TenantSurePaymentMethodWizardView>

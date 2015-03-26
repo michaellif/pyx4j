@@ -10,7 +10,7 @@
  * Created on 2013-10-10
  * @author ArtyomB
  */
-package com.propertyvista.portal.server.portal.resident.services.services;
+package com.propertyvista.portal.server.portal.resident.services.insurance;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -30,7 +30,7 @@ import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.InsurancePaymentMethodDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.services.TenantSurePaymentMethodCrudService;
+import com.propertyvista.portal.rpc.portal.resident.services.insurance.TenantSurePaymentMethodCrudService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 

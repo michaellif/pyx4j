@@ -10,7 +10,7 @@
  * Created on 2012-11-09
  * @author ArtyomB
  */
-package com.propertyvista.portal.server.portal.resident.services.services;
+package com.propertyvista.portal.server.portal.resident.services.insurance;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -62,7 +62,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureAgre
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureQuoteDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.services.TenantSureInsurancePolicyCrudService;
+import com.propertyvista.portal.rpc.portal.resident.services.insurance.TenantSureInsurancePolicyCrudService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureAlreadyPurchasedException;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureOnMaintenanceException;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;

@@ -10,7 +10,7 @@
  * Created on Sep 11, 2013
  * @author michaellif
  */
-package com.propertyvista.portal.server.portal.resident.services.services;
+package com.propertyvista.portal.server.portal.resident.services.insurance;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -19,7 +19,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.InsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceService;
+import com.propertyvista.portal.rpc.portal.resident.services.insurance.InsuranceService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 
 public class InsuranceServiceImpl implements InsuranceService {

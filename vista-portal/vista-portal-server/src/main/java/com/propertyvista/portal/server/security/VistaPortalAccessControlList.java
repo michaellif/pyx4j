@@ -75,6 +75,10 @@ import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticat
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentSelfRegistrationService;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.AutoPayWizardService;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.BillingService;
+import com.propertyvista.portal.rpc.portal.resident.services.insurance.GeneralInsurancePolicyCrudService;
+import com.propertyvista.portal.rpc.portal.resident.services.insurance.InsuranceCertificateScanResidentUploadService;
+import com.propertyvista.portal.rpc.portal.resident.services.insurance.TenantSureInsurancePolicyCrudService;
+import com.propertyvista.portal.rpc.portal.resident.services.insurance.TenantSurePaymentMethodCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestPictureUploadPortalService;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseAgreementService;
@@ -83,10 +87,6 @@ import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseTermBla
 import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveInWizardService;
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentProfileCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentSummaryService;
-import com.propertyvista.portal.rpc.portal.resident.services.services.GeneralInsurancePolicyCrudService;
-import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceCertificateScanResidentUploadService;
-import com.propertyvista.portal.rpc.portal.resident.services.services.TenantSureInsurancePolicyCrudService;
-import com.propertyvista.portal.rpc.portal.resident.services.services.TenantSurePaymentMethodCrudService;
 import com.propertyvista.portal.rpc.portal.shared.services.CustomerPicturePortalUploadService;
 import com.propertyvista.portal.rpc.portal.shared.services.PasswordChangeUserService;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalContentService;
@@ -209,7 +209,7 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(ResidentSummaryService.class));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(
-                com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceService.class));
+                com.propertyvista.portal.rpc.portal.resident.services.insurance.InsuranceService.class));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(InsuranceCertificateScanResidentUploadService.class));
 
