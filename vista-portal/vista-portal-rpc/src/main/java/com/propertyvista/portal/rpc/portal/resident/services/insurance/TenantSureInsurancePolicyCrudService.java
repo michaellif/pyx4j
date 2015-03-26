@@ -10,7 +10,7 @@
  * Created on 2012-11-09
  * @author ArtyomB
  */
-package com.propertyvista.portal.rpc.portal.resident.services.services;
+package com.propertyvista.portal.rpc.portal.resident.services.insurance;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

@@ -24,7 +24,7 @@ import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.services.insurance.GeneralPolicyPageView;
 import com.propertyvista.portal.resident.ui.services.insurance.GeneralPolicyPageView.GeneralPolicyPagePresenter;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.GeneralInsurancePolicyDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.services.GeneralInsurancePolicyCrudService;
+import com.propertyvista.portal.rpc.portal.resident.services.insurance.GeneralInsurancePolicyCrudService;
 import com.propertyvista.portal.shared.activity.AbstractEditorActivity;
 
 public class GeneralPolicyPageActivity extends AbstractEditorActivity<GeneralInsurancePolicyDTO> implements GeneralPolicyPagePresenter {

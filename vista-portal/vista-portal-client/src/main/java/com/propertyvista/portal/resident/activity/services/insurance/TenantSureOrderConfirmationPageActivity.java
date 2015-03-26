@@ -25,7 +25,7 @@ import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.services.insurance.TenantSureOrderConfirmationView;
 import com.propertyvista.portal.resident.ui.services.insurance.TenantSureOrderConfirmationView.TenantSureOrderConfirmationPresenter;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsurancePolicyDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.services.TenantSureInsurancePolicyCrudService;
+import com.propertyvista.portal.rpc.portal.resident.services.insurance.TenantSureInsurancePolicyCrudService;
 import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
 public class TenantSureOrderConfirmationPageActivity extends SecurityAwareActivity implements TenantSureOrderConfirmationPresenter {

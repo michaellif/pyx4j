@@ -26,7 +26,7 @@ import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureQuoteDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.services.TenantSureInsurancePolicyCrudService;
+import com.propertyvista.portal.rpc.portal.resident.services.insurance.TenantSureInsurancePolicyCrudService;
 import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
 
 public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<TenantSureInsurancePolicyDTO, TenantSureOrderWizardView> implements

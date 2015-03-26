@@ -10,7 +10,7 @@
  * Created on Sep 16, 2013
  * @author michaellif
  */
-package com.propertyvista.portal.server.portal.resident.services.services;
+package com.propertyvista.portal.server.portal.resident.services.insurance;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -32,7 +32,7 @@ import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.GeneralInsurancePolicy;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.GeneralInsurancePolicyDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.services.GeneralInsurancePolicyCrudService;
+import com.propertyvista.portal.rpc.portal.resident.services.insurance.GeneralInsurancePolicyCrudService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 
 public class GeneralInsurancePolicyCrudServiceImpl extends AbstractCrudServiceDtoImpl<GeneralInsurancePolicy, GeneralInsurancePolicyDTO> implements

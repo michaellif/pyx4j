@@ -10,7 +10,7 @@
  * Created on Jul 19, 2013
  * @author stanp
  */
-package com.propertyvista.portal.rpc.portal.resident.services.services;
+package com.propertyvista.portal.rpc.portal.resident.services.insurance;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
