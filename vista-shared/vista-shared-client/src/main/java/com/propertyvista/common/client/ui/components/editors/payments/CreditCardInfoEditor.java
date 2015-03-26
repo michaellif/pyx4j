@@ -96,14 +96,22 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
     }
 
     protected void contentTweaks() {
+        // manage security code mandatory state:
         get(proto().securityCode()).setVisible(isEditable());
         get(proto().securityCode()).setMandatory(false);
-
-        // manage security code mandatory state:
         this.addValueChangeHandler(new ValueChangeHandler<CreditCardInfo>() {
             @Override
             public void onValueChange(ValueChangeEvent<CreditCardInfo> event) {
                 get(proto().securityCode()).setMandatory(true);
+            }
+        });
+        // END OF manage security code mandatory state.
+
+        // clear card # on type change:
+        get(proto().cardType()).addValueChangeHandler(new ValueChangeHandler<CreditCardInfo.CreditCardType>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<CreditCardType> event) {
+                cardEditor.clear();
             }
         });
     }
