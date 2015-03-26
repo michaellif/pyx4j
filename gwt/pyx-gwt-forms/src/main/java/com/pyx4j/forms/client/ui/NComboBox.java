@@ -113,11 +113,18 @@ public class NComboBox<E> extends NFocusField<E, ListBox, CComboBox<E>, HTML> im
     }
 
     public void refreshOption(E opt) {
-        getEditor().setItemText(getNativeOptionIndex(opt), getCComponent().getItemName(opt));
+        int index = getNativeOptionIndex(opt);
+        if (index >= 0) {
+            getEditor().setItemText(index, getCComponent().getItemName(opt));
+        }
     }
 
     public void removeOption(E opt) {
-        getEditor().removeItem(getNativeOptionIndex(opt));
+        int index = getNativeOptionIndex(opt);
+        if (index >= 0) {
+            getEditor().removeItem(index);
+            shownOptions.remove(index);
+        }
     }
 
     // The same as in CComponent
