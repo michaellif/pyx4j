@@ -650,7 +650,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         return siteImage;
     }
 
-    private String getContactUs() {
+    protected String getContactUs() {
         StringBuffer contactUsText = new StringBuffer();
         contactUsText.append("info");
         contactUsText.append("@");

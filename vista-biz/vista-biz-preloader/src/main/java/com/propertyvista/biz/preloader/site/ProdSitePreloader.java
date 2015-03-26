@@ -134,4 +134,9 @@ public class ProdSitePreloader extends AbstractSitePreloader {
     protected String fax() {
         return "";
     }
+
+    @Override
+    protected String getContactUs() {
+        return "TBD";
+    }
 }
