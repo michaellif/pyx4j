@@ -206,7 +206,7 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
                     public void onSuccess(CreditCardValidationResponce result) {
                         //TODO use valid type validCardType
                         setCreditCardNumberValidationResult(result.validWithTypeProvided().getValue(false) ? null : new BasicValidationError(component,
-                                i18n.tr("Invalid Card Number or Expiry Date")));
+                                i18n.tr("Invalid Card Type, Card Number or Expiry Date")));
                     }
 
                     @Override
