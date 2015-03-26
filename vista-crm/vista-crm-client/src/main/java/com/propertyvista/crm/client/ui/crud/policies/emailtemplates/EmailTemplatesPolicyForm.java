@@ -101,6 +101,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
                 }
                 formPanel.append(Location.Dual, proto().content(), editor).decorate();
                 if (isEditable()) {
+                    final CComponent<?, EmailTemplateType, ?, ?> comp = get(proto().templateType());
                     final TemplateInsertSelector vm = new TemplateInsertSelector();
                     editor.getNativeComponent().getEditor().setTemplateAction(new RichTextTemplateAction() {
                         @Override
@@ -115,12 +116,12 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
                                         onComplete.execute();
                                     }
                                 });
+                                vm.setItems(vm.getTemplateObjects(comp.getValue()));
                                 vm.showBelow(target);
                             }
                         }
                     });
                     // change template object list when template type selection changes
-                    final CComponent<?, EmailTemplateType, ?, ?> comp = get(proto().templateType());
                     comp.addValueChangeHandler(new ValueChangeHandler<EmailTemplateType>() {
                         @Override
                         public void onValueChange(ValueChangeEvent<EmailTemplateType> event) {
