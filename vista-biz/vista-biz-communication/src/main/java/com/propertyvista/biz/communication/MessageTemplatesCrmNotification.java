@@ -12,6 +12,7 @@
  */
 package com.propertyvista.biz.communication;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +32,7 @@ import com.propertyvista.biz.communication.NotificationFacade.BatchErrorType;
 import com.propertyvista.biz.communication.template.MessageKeywords;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
@@ -467,6 +469,72 @@ class MessageTemplatesCrmNotification {
             MessageKeywords.addToKeywords(email, lease);
         }
         template.variable("${leaseLinks}", leaseLinks);
+
+        email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
+        return email;
+    }
+
+    public static MailMessage createLeaseApplicationNotificationEmail(Lease lease, Notification.AlertType alertType) {
+        MailMessage email = new MailMessage();
+        email.setSender(getSender());
+
+        String templateFile = null;
+
+        switch (alertType) {
+        case ApplicationInProgress:
+            templateFile = "application-notification-inprogress.html";
+            email.setSubject(i18n.tr("Lease Application: In-Progress"));
+            break;
+        case ApplicationSubmitted:
+            templateFile = "application-notification-submitted.html";
+            email.setSubject(i18n.tr("Lease Application: Submitted"));
+            break;
+        case ApplicationPendingDecision:
+            templateFile = "application-notification-pending.html";
+            email.setSubject(i18n.tr("Lease Application: Pending Decision"));
+            break;
+        case ApplicationApproved:
+            templateFile = "application-notification-approved.html";
+            email.setSubject(i18n.tr("Lease Application: Approved"));
+            break;
+        case ApplicationDeclined:
+            templateFile = "application-notification-declined.html";
+            email.setSubject(i18n.tr("Lease Application: Declined"));
+            break;
+        case ApplicationInformationRequired:
+            templateFile = "application-notification-moreinfo.html";
+            email.setSubject(i18n.tr("Lease Application: Further Information Required"));
+            break;
+        case ApplicationLeaseSigning:
+            templateFile = "application-notification-signature.html";
+            email.setSubject(i18n.tr("Lease Application: Signature Required"));
+            break;
+        default:
+            throw new Error("Type not supported: " + (alertType == null ? "null" : alertType.toString()));
+        }
+
+        MessageTemplate template = new MessageTemplate("email/notification/" + templateFile);
+
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
+        String buildingName = lease.unit().building().info().name().getStringView();
+        if (StringUtils.isEmpty(buildingName)) {
+            buildingName = lease.unit().building().propertyCode().getStringView();
+        }
+        template.variable("${buildingName}", buildingName);
+        template.variable("${buildingAddress}", lease.unit().building().info().address().getStringView());
+
+        Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
+        template.variable("${tenantName}", lease._applicant().customer().person().name().getStringView());
+        template.variable("${unitNo}", lease.unit().info().number().getStringView());
+        template.variable("${leaseFrom}", lease.leaseFrom().getStringView());
+        template.variable("${leaseTo}", lease.leaseTo().getStringView());
+
+        Persistence.ensureRetrieve(lease.currentTerm().version().leaseProducts().serviceItem(), AttachLevel.Attached);
+        template.variable("${rentPrice}", lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue(BigDecimal.ZERO));
+        template.variable("${leaseAppNo}", lease.leaseApplication().applicationId().getStringView());
+
+        String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
+        template.variable("${leaseUrl}", AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formViewerPlace(lease.getPrimaryKey())));
 
         email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
         return email;

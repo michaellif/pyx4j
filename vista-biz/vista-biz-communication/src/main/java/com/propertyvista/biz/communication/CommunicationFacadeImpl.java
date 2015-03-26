@@ -34,6 +34,7 @@ import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Notification;
+import com.propertyvista.domain.company.Notification.AlertType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.payment.AutopayAgreement;
@@ -418,5 +419,12 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         if (m != null) {
             Mail.queue(m, null, null);
         }
+    }
+
+    @Override
+    public void sendLeaseApplicationNotification(List<String> targetEmails, Lease lease, AlertType alertType) {
+        MailMessage m = MessageTemplatesCrmNotification.createLeaseApplicationNotificationEmail(lease, alertType);
+        m.setTo(targetEmails);
+        Mail.queue(m, null, null);
     }
 }
