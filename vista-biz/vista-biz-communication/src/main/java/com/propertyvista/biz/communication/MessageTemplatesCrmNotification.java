@@ -12,7 +12,7 @@
  */
 package com.propertyvista.biz.communication;
 
-import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +20,10 @@ import org.apache.commons.lang.StringUtils;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
@@ -29,7 +32,10 @@ import com.pyx4j.server.mail.MessageTemplate;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.biz.communication.NotificationFacade.BatchErrorType;
+import com.propertyvista.biz.communication.template.EmailTemplateManager;
 import com.propertyvista.biz.communication.template.MessageKeywords;
+import com.propertyvista.biz.communication.template.model.LeaseApplicationNotificationT;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.company.Notification;
@@ -474,7 +480,7 @@ class MessageTemplatesCrmNotification {
         return email;
     }
 
-    public static MailMessage createLeaseApplicationNotificationEmail(Lease lease, Notification.AlertType alertType) {
+    public static MailMessage createLeaseApplicationNotificationEmail(Lease leaseId, Notification.AlertType alertType) {
         MailMessage email = new MailMessage();
         email.setSender(getSender());
 
@@ -515,26 +521,30 @@ class MessageTemplatesCrmNotification {
 
         MessageTemplate template = new MessageTemplate("email/notification/" + templateFile);
 
+        Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, false);
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
         String buildingName = lease.unit().building().info().name().getStringView();
         if (StringUtils.isEmpty(buildingName)) {
             buildingName = lease.unit().building().propertyCode().getStringView();
         }
-        template.variable("${buildingName}", buildingName);
-        template.variable("${buildingAddress}", lease.unit().building().info().address().getStringView());
+        LeaseApplicationNotificationT model = EntityFactory.create(LeaseApplicationNotificationT.class);
+        model.buildingName().setValue(buildingName);
+        model.buildingAddress().setValue(lease.unit().building().info().address().getStringView());
 
         Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
-        template.variable("${tenantName}", lease._applicant().customer().person().name().getStringView());
-        template.variable("${unitNo}", lease.unit().info().number().getStringView());
-        template.variable("${leaseFrom}", lease.leaseFrom().getStringView());
-        template.variable("${leaseTo}", lease.leaseTo().getStringView());
+        model.tenantName().setValue(lease._applicant().customer().person().name().getStringView());
+        model.unitNo().setValue(lease.unit().info().number().getStringView());
+        model.leaseFrom().setValue(lease.leaseFrom().getStringView());
+        model.leaseTo().setValue(lease.leaseTo().getStringView());
 
         Persistence.ensureRetrieve(lease.currentTerm().version().leaseProducts().serviceItem(), AttachLevel.Attached);
-        template.variable("${rentPrice}", lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue(BigDecimal.ZERO));
-        template.variable("${leaseAppNo}", lease.leaseApplication().applicationId().getStringView());
+        model.rentPrice().setValue(lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getStringView());
+        model.leaseAppNo().setValue(lease.leaseApplication().applicationId().getStringView());
 
         String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
-        template.variable("${leaseUrl}", AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formViewerPlace(lease.getPrimaryKey())));
+        model.leaseUrl().setValue(AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formViewerPlace(lease.getPrimaryKey())));
+
+        template.setBodyTemplate(EmailTemplateManager.parseTemplate(template.getBody(), Arrays.asList((IEntity) model)));
 
         email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
         return email;
