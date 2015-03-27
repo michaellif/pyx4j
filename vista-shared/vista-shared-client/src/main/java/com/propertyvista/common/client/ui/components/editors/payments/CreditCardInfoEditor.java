@@ -96,8 +96,17 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
     }
 
     protected void contentTweaks() {
-        // manage security code mandatory state:
+        // manage security code visibility and mandatory state:
         get(proto().securityCode()).setVisible(isEditable());
+        this.addPropertyChangeHandler(new PropertyChangeHandler() {
+            @Override
+            public void onPropertyChange(PropertyChangeEvent event) {
+                if (event.getPropertyName() == PropertyName.editable) {
+                    get(proto().securityCode()).setVisible(isEditable());
+                }
+            }
+        });
+
         get(proto().securityCode()).setMandatory(false);
         this.addValueChangeHandler(new ValueChangeHandler<CreditCardInfo>() {
             @Override
@@ -105,7 +114,7 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
                 get(proto().securityCode()).setMandatory(true);
             }
         });
-        // END OF manage security code mandatory state.
+        // END OF manage security code visibility and mandatory state.
 
         // clear card # on type change:
         get(proto().cardType()).addValueChangeHandler(new ValueChangeHandler<CreditCardInfo.CreditCardType>() {
@@ -133,15 +142,6 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
 
     @Override
     public void addValidations() {
-        this.addPropertyChangeHandler(new PropertyChangeHandler() {
-            @Override
-            public void onPropertyChange(PropertyChangeEvent event) {
-                if (event.getPropertyName() == PropertyName.editable) {
-                    get(proto().securityCode()).setVisible(isEditable());
-                }
-            }
-        });
-
         // set up validation for credit card number:
         // sync validation:
         cardEditor.addComponentValidator(new CreditCardNumberTypeValidator(new CreditCardTypeProvider() {
