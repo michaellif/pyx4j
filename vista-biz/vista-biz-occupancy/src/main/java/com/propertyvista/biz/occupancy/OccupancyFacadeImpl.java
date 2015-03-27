@@ -149,6 +149,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     @Override
     public void scopeOffMarket(Key unitPk, final OffMarketType type) {
         LogicalDate now = SystemDateManager.getLogicalDate();
+
         if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
             AptUnitOccupancySegment segment = EntityFactory.create(AptUnitOccupancySegment.class);
             segment.status().setValue(Status.offMarket);
@@ -188,6 +189,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     @Override
     public void scopeRenovation(Key unitPk, LogicalDate renovationEndDate) {
         LogicalDate now = SystemDateManager.getLogicalDate();
+
         if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
             AptUnitOccupancySegment segment = EntityFactory.create(AptUnitOccupancySegment.class);
             segment.status().setValue(Status.pending);
@@ -254,6 +256,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         if (vacantFrom == null) {
             throw new IllegalArgumentException("vacantFrom must not be null");
         }
+
         LogicalDate now = SystemDateManager.getLogicalDate();
         MakeVacantConstraintsDTO constraints = getMakeVacantConstraints(unitPk);
         LogicalDate min = constraints.minVacantFrom().getValue();
@@ -341,6 +344,8 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
                 }
             });
 
+            setUnitAvailableFrom(lease.unit().getPrimaryKey(), null); // reset unit availability
+
             new AvailabilityReportManager(lease.unit().getPrimaryKey()).generateUnitAvailablity(now);
         } else {
             AptUnitOccupancyManagerHelper.dumpOccupancy(lease.unit().getPrimaryKey());
@@ -359,7 +364,6 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
         AptUnitOccupancySegment segment = Persistence.service().retrieve(criteria);
         if (segment != null) {
-
             EntityQueryCriteria<AptUnitOccupancySegment> prevCriteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
             prevCriteria.eq(criteria.proto().status(), AptUnitOccupancySegment.Status.available);
             prevCriteria.eq(criteria.proto().dateTo(), DateUtils.daysAdd(segment.dateFrom().getValue(), -1));
@@ -372,6 +376,8 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             segment.status().setValue(Status.available);
             segment.lease().set(null);
             Persistence.service().persist(segment);
+
+            setUnitAvailableFrom(lease.unit().getPrimaryKey(), segment.dateFrom().getValue()); // restore unit availability
 
             new AvailabilityReportManager(lease.unit().getPrimaryKey()).generateUnitAvailablity(SystemDateManager.getLogicalDate());
         } else {
@@ -412,7 +418,6 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
                 throw new OccupancyOperationException("cannot reschedule moveout because the unit=" + unitPk + " is scheduled for "
                         + segment.status().getValue().name());
             }
-
         }
 
         // get the next segment or create a new next segment if a next segment doesn't exist
@@ -487,7 +492,6 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         }
         new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
         setUnitAvailableFrom(unitPk, unitAvailableFrom);
-
     }
 
     @Override
@@ -591,7 +595,6 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
                 maxVacantFromCandidate = segment.dateFrom().getValue();
             default:
                 break;
-
             }
         }
 
@@ -676,7 +679,6 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
     @Override
     public void migrateStart(AptUnit unitStub, final Lease leaseStub) {
-
         LogicalDate now = SystemDateManager.getLogicalDate();
 
         if (!isMigrateStartAvailable(unitStub)) {
@@ -698,7 +700,6 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
     @Override
     public void migratedApprove(AptUnit unitStub) {
-
         if (!isMigratedApproveAvailable(unitStub)) {
             throw new IllegalStateException(i18n.tr("Operation 'migrate approve' is not permitted"));
         }
@@ -786,13 +787,11 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     @Override
     public void reserve(final Lease leaseId, final int durationHours) {
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
-
             @Override
             public Void execute() throws RuntimeException {
                 new ReservationManager().reserve(leaseId, durationHours);
                 return null;
             }
-
         });
     }
 
@@ -821,6 +820,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         if (fromDeadline != null) {
             criteria.gt(unitProto.unitOccupancySegments().$().dateFrom(), fromDeadline);
         }
+
         return criteria;
     }
 
@@ -865,5 +865,4 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     public Lease retriveCurrentLease(AptUnit unitId) {
         return AptUnitOccupancyManagerHelper.retriveCurrentLease(unitId);
     }
-
 }
