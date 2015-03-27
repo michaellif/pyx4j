@@ -264,6 +264,10 @@ public abstract class Dialect {
 
     public abstract String sqlDropForeignKey(String tableName, String constraintName);
 
+    public String enabelConstraint(String tableName, String constraintName, boolean enable) {
+        return "ALTER TABLE " + tableName + (enable ? " ENABLE " : " DISABLE ") + " CONSTRAINT " + constraintName;
+    }
+
     public boolean isForeignKeyDeferrableSupported() {
         return false;
     }
