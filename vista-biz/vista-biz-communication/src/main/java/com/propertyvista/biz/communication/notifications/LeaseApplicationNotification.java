@@ -15,6 +15,7 @@ package com.propertyvista.biz.communication.notifications;
 import java.util.List;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.company.Employee;
@@ -23,12 +24,12 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public class LeaseApplicationNotification extends AbstractNotification {
 
-    private final Lease lease;
+    private final Lease leaseId;
 
     private final Notification.AlertType alertType;
 
-    public LeaseApplicationNotification(Lease lease, Notification.AlertType alertType) {
-        this.lease = lease;
+    public LeaseApplicationNotification(Lease leaseId, Notification.AlertType alertType) {
+        this.leaseId = leaseId;
         this.alertType = alertType;
     }
 
@@ -39,6 +40,7 @@ public class LeaseApplicationNotification extends AbstractNotification {
 
     @Override
     public void send() {
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
         List<Employee> employees = NotificationsUtils.getNotificationTraget(lease, alertType);
         if (!employees.isEmpty()) {
             ServerSideFactory.create(CommunicationFacade.class).sendLeaseApplicationNotification(NotificationsUtils.toEmails(employees), lease, alertType);
