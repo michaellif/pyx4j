@@ -51,6 +51,10 @@ public interface Configuration extends IPersistenceConfiguration {
 
         public int maxPoolPreparedStatements = 1000;
 
+        public boolean testConnectionOnCheckout;
+
+        public boolean testConnectionOnCheckin = false;
+
         /**
          * Set the default values for all DB types
          */
@@ -62,13 +66,20 @@ public interface Configuration extends IPersistenceConfiguration {
                 maxPoolSize = 20;
                 unreturnedConnectionTimeout = 1 * Consts.HOURS2SEC;
                 checkoutTimeout = 20 * Consts.MIN2SEC;
+                testConnectionOnCheckout = true;
                 break;
             case TransactionProcessing:
                 maxPoolSize = 40;
                 unreturnedConnectionTimeout = 10 * Consts.MIN2SEC;
                 checkoutTimeout = 2 * Consts.MIN2SEC;
+                testConnectionOnCheckout = true;
                 break;
             default:
+                if (ServerSideConfiguration.isRunningInDeveloperEnviroment()) {
+                    testConnectionOnCheckout = true;
+                } else {
+                    testConnectionOnCheckout = false;
+                }
                 break;
             }
             if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
@@ -108,6 +119,14 @@ public interface Configuration extends IPersistenceConfiguration {
 
         public int maxPoolPreparedStatements() {
             return maxPoolPreparedStatements;
+        }
+
+        public boolean testConnectionOnCheckout() {
+            return testConnectionOnCheckout;
+        }
+
+        public boolean testConnectionOnCheckin() {
+            return testConnectionOnCheckin;
         }
 
     }

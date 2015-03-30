@@ -103,6 +103,9 @@ public class ConfigurationProperties {
             cpc.checkoutTimeout = c.getSecondsValue(connectionType.name() + ".checkoutTimeout", cpc.checkoutTimeout);
             cpc.maxPoolPreparedStatements = c.getIntegerValue(connectionType.name() + ".maxPoolPreparedStatements", cpc.maxPoolPreparedStatements);
             cpc.unreturnedConnectionTimeout = c.getSecondsValue(connectionType.name() + ".unreturnedConnectionTimeout", cpc.unreturnedConnectionTimeout);
+
+            cpc.testConnectionOnCheckout = c.getBooleanValue(connectionType.name() + ".testConnectionOnCheckout", cpc.testConnectionOnCheckout);
+            cpc.testConnectionOnCheckin = c.getBooleanValue(connectionType.name() + ".testConnectionOnCheckin", cpc.testConnectionOnCheckin);
         }
 
         this.tablesIdentityOffset = c.getIntegerValue("tablesIdentityOffset", this.tablesIdentityOffset);
