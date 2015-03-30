@@ -15,6 +15,7 @@ package com.propertyvista.test.mock;
 import java.util.List;
 
 import com.propertyvista.biz.communication.NotificationFacade;
+import com.propertyvista.domain.company.Notification.AlertType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -89,6 +90,10 @@ public class NotificationFacadeMock implements NotificationFacade {
 
     @Override
     public void billingAlertNotification(Lease leaseId, String alert) {
+    }
+
+    @Override
+    public void leaseApplicationNotification(Lease leaseId, AlertType alertType) {
     }
 
 }

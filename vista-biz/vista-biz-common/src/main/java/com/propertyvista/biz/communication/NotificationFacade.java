@@ -14,6 +14,7 @@ package com.propertyvista.biz.communication;
 
 import java.util.List;
 
+import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -53,6 +54,8 @@ public interface NotificationFacade {
     public void yardiUnableToPostPaymentBatch(BatchErrorType batchErrorType, String batchId, String errorMessage);
 
     public void billingAlertNotification(Lease leaseId, String alert);
+
+    public void leaseApplicationNotification(Lease leaseId, Notification.AlertType alertType);
 
     public void autoPaySetupCompleted(AutopayAgreement autopayAgreement);
 
