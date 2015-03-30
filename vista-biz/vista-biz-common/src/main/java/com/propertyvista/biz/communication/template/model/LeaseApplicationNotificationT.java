@@ -12,6 +12,9 @@
  */
 package com.propertyvista.biz.communication.template.model;
 
+import java.math.BigDecimal;
+
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -31,7 +34,8 @@ public interface LeaseApplicationNotificationT extends IEntity {
 
     IPrimitive<String> leaseTo();
 
-    IPrimitive<String> rentPrice();
+    @Format("$#,##0.00")
+    IPrimitive<BigDecimal> rentPrice();
 
     IPrimitive<String> leaseAppNo();
 

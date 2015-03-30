@@ -429,8 +429,9 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     }
 
     private boolean isEmployeeSignatureRequired(Lease lease) {
-        boolean isRequired = true;
+        boolean isRequired = false;
         if (lease.currentTerm().employeeSignature().isEmpty()) {
+            isRequired = true;
             LeaseAgreementSigningProgressDTO signingProgress = ServerSideFactory.create(LeaseTermAgreementSigningProgressFacade.class)
                     .getSigningProgress(lease);
             for (LeaseAgreementStakeholderSigningProgressDTO progress : signingProgress.stackholdersProgressBreakdown()) {
@@ -439,8 +440,6 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
                     break;
                 }
             }
-        } else {
-            isRequired = false;
         }
         return isRequired;
     }

@@ -12,6 +12,7 @@
  */
 package com.propertyvista.biz.communication;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -538,7 +539,7 @@ class MessageTemplatesCrmNotification {
         model.leaseTo().setValue(lease.leaseTo().getStringView());
 
         Persistence.ensureRetrieve(lease.currentTerm().version().leaseProducts().serviceItem(), AttachLevel.Attached);
-        model.rentPrice().setValue(lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getStringView());
+        model.rentPrice().setValue(lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue(BigDecimal.ZERO));
         model.leaseAppNo().setValue(lease.leaseApplication().applicationId().getStringView());
 
         String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
