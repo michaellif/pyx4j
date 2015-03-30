@@ -141,9 +141,9 @@ public class CommunicationPortalCrudServiceImpl extends AbstractCrudServiceDtoIm
 
         EntityListCriteria<CommunicationThreadDTO> messageCriteria = EntityListCriteria.create(CommunicationThreadDTO.class);
         if (directThreads != null && directThreads.size() > 0) {
-            messageCriteria.add(PropertyCriterion.in(messageCriteria.proto().id(), directThreads));
+            messageCriteria.in(messageCriteria.proto().id(), directThreads);
         } else {
-            messageCriteria.notExists(messageCriteria.proto());
+            messageCriteria.notExists(messageCriteria.proto().id());
         }
 
         ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Long(0L));
