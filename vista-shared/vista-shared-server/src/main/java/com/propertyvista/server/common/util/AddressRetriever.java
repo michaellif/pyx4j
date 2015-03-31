@@ -55,7 +55,7 @@ public class AddressRetriever {
             return toLegalAddress(getUnitAddress(unit));
         } else {
             LegalAddress address = unit.info().legalAddress().duplicate();
-            if (!CommonsStringUtils.isEmpty(address.suiteNumber().getValue())) { // do not allow empty suiteNumber in unit address!
+            if (CommonsStringUtils.isEmpty(address.suiteNumber().getValue())) { // do not allow empty suiteNumber in unit address!
                 address.suiteNumber().setValue(unit.info().number().getValue());
             }
             return address;
