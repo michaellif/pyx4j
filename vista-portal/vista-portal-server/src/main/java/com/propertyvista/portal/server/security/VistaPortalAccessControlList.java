@@ -55,6 +55,7 @@ import com.propertyvista.domain.tenant.CustomerPreferences;
 import com.propertyvista.domain.tenant.insurance.GeneralInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.domain.tenant.lease.AgreementDigitalSignatures;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationContextSelectionService;
@@ -113,7 +114,9 @@ import com.propertyvista.portal.server.security.access.resident.CustomerDelivery
 import com.propertyvista.portal.server.security.access.resident.CustomerPictureTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.GeneralInsurancePolicyDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.InsuranceCertificateScanDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.resident.LeaseGuarantorDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.LeasePaymentMethodTenantDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.resident.LeaseTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.MaintenanceRequestPictureTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.MaintenanceRequestTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.MessagePortalAccessRule;
@@ -340,6 +343,10 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(LeaseTermBlankAgreementDocumentDownloadService.class));
         grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(DeferredProcessService.class));
 
+        // Lease signing progress
+        grant(PortalResidentBehavior.Resident, new EntityPermission(Lease.class, EntityPermission.READ));
+        grant(PortalResidentBehavior.Guarantor, new EntityPermission(Lease.class, EntityPermission.READ));
+
         // Dev
         if (ApplicationMode.isDevelopment()) {
             grant(new IServiceExecutePermission(MockDataGenerator.class));
@@ -364,10 +371,12 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(VistaDataAccessBehavior.ResidentInPortal, new MessagePortalAccessRule(), Message.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new CommunicationThreadPortalAccessRule(), CommunicationThread.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new CustomerDeliveryPreferencesDatasetAccessRule(), CustomerDeliveryPreferences.class);
+        grant(VistaDataAccessBehavior.ResidentInPortal, new LeaseTenantDatasetAccessRule(), Lease.class);
 
         grant(PortalResidentBehavior.Guarantor, VistaDataAccessBehavior.GuarantorInPortal);
         grant(VistaDataAccessBehavior.GuarantorInPortal, new MessagePortalAccessRule(), Message.class);
         grant(VistaDataAccessBehavior.GuarantorInPortal, new CommunicationThreadPortalAccessRule(), CommunicationThread.class);
+        grant(VistaDataAccessBehavior.GuarantorInPortal, new LeaseGuarantorDatasetAccessRule(), Lease.class);
 
         grant(PortalProspectBehavior.Prospect, VistaDataAccessBehavior.ProspectInPortal);
         grant(VistaDataAccessBehavior.ProspectInPortal, new CustomerPictureProspectDatasetAccessRule(), CustomerPicture.class);

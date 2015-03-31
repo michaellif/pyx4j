@@ -132,4 +132,19 @@ public class LeaseTermAgreementSigningProgressFacadeImpl implements LeaseTermAgr
         return stakeholderParticipants;
     }
 
+    @Override
+    public boolean isEmployeeSignatureRequired(Lease lease) {
+        boolean isRequired = false;
+        if (lease.currentTerm().employeeSignature().isEmpty()) {
+            isRequired = true;
+            LeaseAgreementSigningProgressDTO signingProgress = getSigningProgress(lease);
+            for (LeaseAgreementStakeholderSigningProgressDTO progress : signingProgress.stackholdersProgressBreakdown()) {
+                if (!progress.hasSigned().getValue(false)) {
+                    isRequired = false;
+                    break;
+                }
+            }
+        }
+        return isRequired;
+    }
 }

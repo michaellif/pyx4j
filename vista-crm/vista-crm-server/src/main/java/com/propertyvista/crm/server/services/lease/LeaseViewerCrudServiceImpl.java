@@ -65,8 +65,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseAgreementDocumentsDTO;
-import com.propertyvista.dto.LeaseAgreementSigningProgressDTO;
-import com.propertyvista.dto.LeaseAgreementStakeholderSigningProgressDTO;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<LeaseDTO> implements LeaseViewerCrudService {
@@ -404,7 +402,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
             }
         }
 
-        if (isEmployeeSignatureRequired(lease)) {
+        if (ServerSideFactory.create(LeaseTermAgreementSigningProgressFacade.class).isEmployeeSignatureRequired(lease)) {
             final Lease leaseFinal = leaseId;
             Persistence.service().addTransactionCompletionHandler(new Executable<Void, RuntimeException>() {
 
@@ -426,21 +424,5 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         if (status != null) {
             lease.currentLegalStatus().set(status.evictionStep().name());
         }
-    }
-
-    private boolean isEmployeeSignatureRequired(Lease lease) {
-        boolean isRequired = false;
-        if (lease.currentTerm().employeeSignature().isEmpty()) {
-            isRequired = true;
-            LeaseAgreementSigningProgressDTO signingProgress = ServerSideFactory.create(LeaseTermAgreementSigningProgressFacade.class)
-                    .getSigningProgress(lease);
-            for (LeaseAgreementStakeholderSigningProgressDTO progress : signingProgress.stackholdersProgressBreakdown()) {
-                if (!progress.hasSigned().getValue(false)) {
-                    isRequired = false;
-                    break;
-                }
-            }
-        }
-        return isRequired;
     }
 }
