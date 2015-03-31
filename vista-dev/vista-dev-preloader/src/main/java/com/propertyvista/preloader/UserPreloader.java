@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.download.MimeMap;
@@ -37,12 +38,11 @@ import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CrmUserCredential;
 import com.propertyvista.generator.util.CommonsGenerator;
+import com.propertyvista.generator.util.RandomUtil;
 
 public class UserPreloader extends BaseVistaDevDataPreloader {
 
     private final static Logger log = LoggerFactory.getLogger(UserPreloader.class);
-
-    private final static String IMG_SIGNATURE = "signature.png";
 
     @Override
     public String create() {
@@ -61,7 +61,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
             CrmUser crmUser = ServerSideFactory.create(UserPreloaderFacade.class).createCrmUser(emp.name().getStringView(), email, email, defaultRole);
             emp.user().set(crmUser);
 
-            if (i == 1) {
+            if (i == 1 || ApplicationMode.isDemo()) {
                 EmployeeSignature signature = createEmployeeSignature(emp);
                 if (signature != null) {
                     emp.signature().set(signature);
@@ -86,6 +86,15 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
             CrmUser crmUser = ServerSideFactory.create(UserPreloaderFacade.class).createCrmUser(emp.name().getStringView(), email, email, defaultRole);
             emp.user().set(crmUser);
 
+            if (ApplicationMode.isDemo()) {
+                EmployeeSignature signature = createEmployeeSignature(emp);
+                if (signature != null) {
+                    emp.signature().set(signature);
+                } else {
+                    log.warn("Could't create default signature for EMPLOYEE '{}'", emp.email().getValue());
+                }
+            }
+
             Persistence.service().persist(emp);
             userCount++;
         }
@@ -102,43 +111,70 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
                     CrmRolesPreloader.getOapiRole());
             emp.user().set(crmUser);
 
+            if (ApplicationMode.isDemo()) {
+                EmployeeSignature signature = createEmployeeSignature(emp);
+                if (signature != null) {
+                    emp.signature().set(signature);
+                } else {
+                    log.warn("Could't create default signature for EMPLOYEE '{}'", emp.email().getValue());
+                }
+            }
+
             Persistence.service().persist(emp);
             userCount++;
         }
 
-        //TODO
-        //PmcCreator.createVistaSupportUsers();
         ServerSideFactory.create(UserPreloaderFacade.class).createVistaSupportUsers();
 
         return "Created " + userCount + " Employee/Users";
     }
 
     private EmployeeSignature createEmployeeSignature(Employee emp) {
-
         EmployeeSignature signature = null;
 
-        try {
-            byte bytes[] = IOUtils.getBinaryResource(IMG_SIGNATURE, this.getClass());
-            if (bytes != null) {
-                // Create Signature Blob
-                EmployeeSignatureBlob blob = EntityFactory.create(EmployeeSignatureBlob.class);
-                blob.contentType().setValue(MimeMap.getContentType(FilenameUtils.getExtension(IMG_SIGNATURE)));
-                blob.data().setValue(bytes);
-                Persistence.service().persist(blob);
+        String signatureFileName = getRandomSignatureFileName();
+        byte bytes[] = getSignatureImageBytes(signatureFileName);
 
-                // Create Employee Signature
-                signature = EntityFactory.create(EmployeeSignature.class);
-                signature.file().fileName().setValue(IMG_SIGNATURE);
-                signature.file().fileSize().setValue(bytes.length);
-                signature.file().blobKey().setValue(blob.getPrimaryKey());
-                signature.employee().set(emp);
-            }
-        } catch (IOException e) {
-            log.error("Error preloading image '{}' for signature. ", IMG_SIGNATURE, e);
+        if (bytes != null) {
+            // Create Signature Blob
+            EmployeeSignatureBlob blob = EntityFactory.create(EmployeeSignatureBlob.class);
+            blob.contentType().setValue(MimeMap.getContentType(FilenameUtils.getExtension(signatureFileName)));
+            blob.data().setValue(bytes);
+            Persistence.service().persist(blob);
+
+            // Create Employee Signature
+            signature = EntityFactory.create(EmployeeSignature.class);
+            signature.file().fileName().setValue(signatureFileName);
+            signature.file().fileSize().setValue(bytes.length);
+            signature.file().blobKey().setValue(blob.getPrimaryKey());
+            signature.employee().set(emp);
         }
 
         return signature;
+    }
 
+    private byte[] getSignatureImageBytes(String signatureFileName) {
+        boolean newData = false;
+        byte bytes[] = CacheService.get(UserPreloader.class.getName() + signatureFileName);
+        if (bytes == null) {
+            try {
+                bytes = IOUtils.getBinaryResource(signatureFileName, this.getClass());
+                newData = true;
+            } catch (IOException e) {
+                log.error("Error preloading image '{}' for signature. ", signatureFileName, e);
+            }
+        }
+
+        if (newData) {
+            CacheService.put(UserPreloader.class.getName() + signatureFileName, bytes);
+        }
+
+        return bytes;
+    }
+
+    private String getRandomSignatureFileName() {
+        int imageIndex = RandomUtil.nextInt(5, "signature", 4) + 1;
+        return "signature-" + imageIndex + ".png";
     }
 
     @SuppressWarnings("unchecked")
