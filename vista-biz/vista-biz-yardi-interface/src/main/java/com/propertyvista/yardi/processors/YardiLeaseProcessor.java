@@ -116,6 +116,7 @@ public class YardiLeaseProcessor {
                     });
                 } catch (Throwable e) {
                     log.error("Lease {} Processing error {}", leaseId, e);
+                    rtd.getExecutionMonitor().addErredEvent("Lease", SimpleMessageFormat.format("lease {0}", leaseId), e);
                 }
 
                 if (rtd.getExecutionMonitor().isTerminationRequested()) {
