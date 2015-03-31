@@ -8,19 +8,23 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Feb 18, 2014
- * @author Artyom
+ * @author stanp
  */
-package com.propertyvista.biz.tenant.lease.print;
+package com.propertyvista.portal.server.security.access.resident;
+
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.security.DatasetAccessRule;
 
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
-import com.propertyvista.dto.LeaseAgreementSigningProgressDTO;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 
-public interface LeaseTermAgreementSigningProgressFacade {
+public class LeaseTenantDatasetAccessRule implements DatasetAccessRule<Lease> {
 
-    boolean shouldSign(LeaseTermParticipant<?> participant);
+    private static final long serialVersionUID = 1L;
 
-    LeaseAgreementSigningProgressDTO getSigningProgress(Lease leaseId);
+    @Override
+    public void applyRule(EntityQueryCriteria<Lease> criteria) {
+        criteria.eq(criteria.proto().id(), ResidentPortalContext.getLeaseIdStub());
+    }
 
-    boolean isEmployeeSignatureRequired(Lease lease);
 }
