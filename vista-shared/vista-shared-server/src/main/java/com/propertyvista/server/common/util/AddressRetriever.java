@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -17,6 +17,7 @@ import java.text.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -53,7 +54,11 @@ public class AddressRetriever {
         if (!unit.info().legalAddressOverride().getValue(false)) {
             return toLegalAddress(getUnitAddress(unit));
         } else {
-            return unit.info().legalAddress();
+            LegalAddress address = unit.info().legalAddress().duplicate();
+            if (!CommonsStringUtils.isEmpty(address.suiteNumber().getValue())) { // do not allow empty suiteNumber in unit address!
+                address.suiteNumber().setValue(unit.info().number().getValue());
+            }
+            return address;
         }
     }
 
@@ -108,7 +113,7 @@ public class AddressRetriever {
         return legal;
     }
 
-    // Simple form address retrieving: 
+    // Simple form address retrieving:
 
     public static InternationalAddress getLeaseParticipantCurrentAddress(LeaseParticipant<?> participant) {
         return getLeaseAddress(participant.lease());

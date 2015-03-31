@@ -35,6 +35,7 @@ import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.blob.LandlordMediaBlob;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.media.IdentificationDocument;
@@ -203,16 +204,16 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
 
         LeaseTerm term = Persistence.retrieveDraftForEdit(LeaseTerm.class, lease.currentTerm().getPrimaryKey());
+        InternationalAddress address = AddressRetriever.getLeaseLegalAddress(lease);
+
         leaseSection.landlordName().setValue(lease.unit().building().landlord().name().getValue());
         leaseSection.unitNumber().setValue(lease.unit().info().number().getValue());
-        leaseSection.address().setValue(AddressRetriever.getLeaseLegalAddress(lease).getStringView());
+        leaseSection.address().setValue(address.getStringView());
         leaseSection.floorplan().setValue(lease.unit().floorplan().marketingName().getValue());
-        leaseSection.city().setValue(AddressRetriever.getLeaseLegalAddress(lease).city().getValue());
-        leaseSection.province().setValue(AddressRetriever.getLeaseLegalAddress(lease).province().getValue());
-        leaseSection.postalCode().setValue(AddressRetriever.getLeaseLegalAddress(lease).postalCode().getValue());
-        leaseSection.street().setValue(
-                AddressRetriever.getLeaseLegalAddress(lease).streetNumber().getValue() + " "
-                        + (AddressRetriever.getLeaseLegalAddress(lease).streetName().getValue()));
+        leaseSection.city().setValue(address.city().getValue());
+        leaseSection.province().setValue(address.province().getValue());
+        leaseSection.postalCode().setValue(address.postalCode().getValue());
+        leaseSection.street().setValue(address.streetNumber().getValue() + " " + (address.streetName().getValue()));
         leaseSection.includedUtilities().setValue(retrieveUtilities(term));
 
         leaseSection.leaseFrom().setValue(lease.currentTerm().termFrom().getValue());

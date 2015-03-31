@@ -193,6 +193,7 @@ public class ExportTenantsSecurityCodesDeferredProcess extends AbstractDeferredP
 
     public static TenantPortalAccessInformationDTO convert(Tenant tenant) {
         TenantPortalAccessInformationDTO dto = EntityFactory.create(TenantPortalAccessInformationDTO.class);
+
         dto.leaseId().setValue(tenant.lease().leaseId().getValue());
 
         InternationalAddress address = AddressRetriever.getLeaseLegalAddress(tenant.lease());
@@ -201,7 +202,8 @@ public class ExportTenantsSecurityCodesDeferredProcess extends AbstractDeferredP
         dto.city().setValue(address.city().getValue());
         dto.postalCode().setValue(address.postalCode().getValue());
         dto.province().setValue(address.province().getStringView());
-        dto.unit().set(tenant.lease().unit().info().number());
+        dto.unit().setValue(address.suiteNumber().getValue());
+
         dto.firstName().setValue(tenant.customer().person().name().firstName().getStringView());
         if (!tenant.customer().person().name().middleName().isNull()) {
             dto.middleName().setValue(tenant.customer().person().name().middleName().getStringView());
@@ -213,6 +215,7 @@ public class ExportTenantsSecurityCodesDeferredProcess extends AbstractDeferredP
 
         dto.portalRegistrationBuiding().setValue(tenant.lease().unit().building().info().address().getStringView());
         dto.portalRegistrationToken().setValue(tenant.customer().portalRegistrationToken().getValue());
+
         return dto;
     }
 
