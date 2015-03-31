@@ -57,9 +57,9 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority.PriorityLevel;
-import com.propertyvista.domain.maintenance.MaintenanceRequestWorkOrder;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
+import com.propertyvista.domain.maintenance.MaintenanceRequestWorkOrder;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.IntegrationSystem;
 import com.propertyvista.domain.pmc.Pmc;
@@ -1111,6 +1111,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         // crmUser
         crmUser = EntityFactory.create(CrmUser.class);
         crmUser.name().setValue(TestLoaderRandomGen.getFirstName() + " " + TestLoaderRandomGen.getLastName());
+        crmUser.email().setValue(crmUser.name().getValue().toLowerCase().replace(" ", ".") + "@propertyvista.com");
         Persistence.service().persist(crmUser);
         // load building
         ISOProvince prov = ISOProvince.Ontario;
