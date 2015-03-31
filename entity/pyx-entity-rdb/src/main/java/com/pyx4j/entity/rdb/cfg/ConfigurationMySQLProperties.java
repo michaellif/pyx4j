@@ -137,6 +137,11 @@ public class ConfigurationMySQLProperties extends ConfigurationMySQL {
         return properties.tablesCreateOption;
     }
 
+    @Override
+    public String tableCreateOption(String entityShortName) {
+        return properties.tableCreateOptions.get(entityShortName);
+    }
+
     public void readProperties(String prefix, Map<String, String> properties) {
         PropertiesConfiguration c = new PropertiesConfiguration(prefix, properties);
 

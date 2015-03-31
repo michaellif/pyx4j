@@ -185,7 +185,10 @@ class TableDDL {
 
         sql.append(')');
 
-        if (configuration.tablesCreateOption() != null) {
+        String opt = configuration.tableCreateOption(tableModel.entityMeta().getEntityClass().getSimpleName());
+        if (opt != null) {
+            sql.append(' ').append(opt);
+        } else if (configuration.tablesCreateOption() != null) {
             sql.append(' ').append(configuration.tablesCreateOption());
         }
 

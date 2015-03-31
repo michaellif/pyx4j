@@ -97,8 +97,8 @@ public class ConfigurationPostgreSQLProperties extends ConfigurationPostgreSQL {
     }
 
     @Override
-    public Integer tableIdentityOffset(String entityShortName) {
-        return properties.tableIdentityOffset.get(entityShortName);
+    public String tableCreateOption(String entityShortName) {
+        return properties.tableCreateOptions.get(entityShortName);
     }
 
     @Override
@@ -123,6 +123,11 @@ public class ConfigurationPostgreSQLProperties extends ConfigurationPostgreSQL {
     @Override
     public String tablesCreateOption() {
         return properties.tablesCreateOption;
+    }
+
+    @Override
+    public Integer tableIdentityOffset(String entityShortName) {
+        return properties.tableIdentityOffset.get(entityShortName);
     }
 
     @Override

@@ -67,6 +67,8 @@ public class ConfigurationProperties {
 
     public final Map<String, Integer> tableIdentityOffset = new HashMap<>();
 
+    public final Map<String, String> tableCreateOptions = new HashMap<>();
+
     ConfigurationProperties() {
         for (ConnectionPoolType connectionType : ConnectionPoolType.poolable()) {
             connectionPoolCfg.put(connectionType, new ConnectionPoolConfiguration(connectionType));
@@ -111,6 +113,7 @@ public class ConfigurationProperties {
         this.tablesIdentityOffset = c.getIntegerValue("tablesIdentityOffset", this.tablesIdentityOffset);
 
         this.tableIdentityOffset.putAll(c.getIntegerValues("tableIdentityOffset"));
+        this.tableCreateOptions.putAll(c.getValues("tableCreateOption"));
 
         this.ddl = c.getEnumValue("ddl", Ddl.class, ddl);
     }
