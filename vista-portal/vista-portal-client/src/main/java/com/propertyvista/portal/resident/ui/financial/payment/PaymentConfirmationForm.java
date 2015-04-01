@@ -12,6 +12,7 @@
  */
 package com.propertyvista.portal.resident.ui.financial.payment;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -62,8 +63,6 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
                 AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
             }
         }), ThemeColor.contrast4);
-
-        errorMessage.addStyleName(VistaTheme.StyleName.ErrorMessage.name());
     }
 
     @Override
@@ -79,7 +78,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
         formPanel.hr();
 
-        formPanel.append(Location.Left, proto().transactionErrorMessage()).decorate().labelWidth(250);
+        formPanel.append(Location.Left, proto().transactionErrorMessage()).decorate().labelWidth(220);
 
         formPanel.append(Location.Left, autoPaySignupPanel = createAutoPaySignupPanel());
 
@@ -87,7 +86,10 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
         formPanel.append(Location.Left, errorMessage);
 
         // tweak:
-        get(proto().transactionErrorMessage()).asWidget().setStyleName(VistaTheme.StyleName.ErrorMessage.name());
+        get(proto().transactionErrorMessage()).getNativeComponent().asWidget().setStyleName(VistaTheme.StyleName.ErrorMessage.name());
+
+        errorMessage.addStyleName(VistaTheme.StyleName.ErrorMessage.name());
+        errorMessage.getElement().getStyle().setFontWeight(FontWeight.BOLDER);
         errorMessage.setVisible(false);
 
         return formPanel;
@@ -95,6 +97,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
     private Widget createAutoPaySignupPanel() {
         VerticalPanel text = new VerticalPanel();
+
         text.add(new HTML(i18n.tr("Want an Easy way to save time on your payments?")));
         text.add(new HTML(i18n.tr("Let us manage your monthly payments for you.")));
         text.add(new Anchor(i18n.tr("Sign up for Auto Pay today"), new Command() {
@@ -117,9 +120,9 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
         if (getDecorator() instanceof FormDecorator) {
             FormDecorator<?> decorator = ((FormDecorator<?>) getDecorator());
-            decorator.setCaption(headerUndefined);
             decorator.getCaptionLabel().addStyleName(VistaTheme.StyleName.WarningMessage.name());
             decorator.getCaptionLabel().removeStyleName(VistaTheme.StyleName.ErrorMessage.name());
+            decorator.setCaption(headerUndefined);
         }
 
         get(proto().transactionErrorMessage()).setVisible(false);
@@ -137,16 +140,16 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
             FormDecorator<?> decorator = ((FormDecorator<?>) getDecorator());
             decorator.getCaptionLabel().removeStyleName(VistaTheme.StyleName.WarningMessage.name());
             if (getValue().paymentStatus().getValue().isFailed()) {
-                decorator.setCaption(headerFailed);
                 decorator.getCaptionLabel().addStyleName(VistaTheme.StyleName.ErrorMessage.name());
+                decorator.setCaption(headerFailed);
             } else {
                 decorator.setCaption(headerSuccess);
             }
         }
 
         if (getValue().paymentStatus().getValue().isFailed()) {
-            get(proto().transactionErrorMessage()).setVisible(true);
             autoPaySignupPanel.setVisible(false);
+            get(proto().transactionErrorMessage()).setVisible(true);
         } else {
             get(proto().transactionAuthorizationNumber()).setVisible(!getValue().transactionAuthorizationNumber().isNull());
             get(proto().convenienceFeeTransactionAuthorizationNumber()).setVisible(!getValue().convenienceFeeTransactionAuthorizationNumber().isNull());
@@ -156,13 +159,15 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
     }
 
     void didplayError(String message) {
-        FormDecorator<?> decorator = ((FormDecorator<?>) getDecorator());
-        decorator.setCaption(headerFailed);
-        decorator.getCaptionLabel().addStyleName(VistaTheme.StyleName.ErrorMessage.name());
+        autoPaySignupPanel.setVisible(false);
+
+        if (getDecorator() instanceof FormDecorator) {
+            FormDecorator<?> decorator = ((FormDecorator<?>) getDecorator());
+            decorator.getCaptionLabel().addStyleName(VistaTheme.StyleName.ErrorMessage.name());
+            decorator.setCaption(headerFailed);
+        }
 
         errorMessage.setHTML(message);
         errorMessage.setVisible(true);
-
-        autoPaySignupPanel.setVisible(false);
     }
 }
