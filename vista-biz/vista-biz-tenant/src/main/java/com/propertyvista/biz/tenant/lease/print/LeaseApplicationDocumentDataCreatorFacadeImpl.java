@@ -14,7 +14,9 @@ package com.propertyvista.biz.tenant.lease.print;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Vector;
 
@@ -609,6 +611,24 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     }
 
     private int getTotalMonths(LogicalDate start, LogicalDate end) {
-        return 12 * (end.getYear() - start.getYear()) + end.getMonth() - start.getMonth();
+        int totalMonths = 12 * (end.getYear() - start.getYear()) + end.getMonth() - start.getMonth();
+
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTime(start);
+
+        int startDay = calendar.get(Calendar.DAY_OF_MONTH);
+        if (startDay != 1) { //is not the first day of month
+            totalMonths--;
+        }
+
+        calendar.setTime(end);
+        int endDay = calendar.get(Calendar.DAY_OF_MONTH);
+        calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
+
+        if (calendar.get(Calendar.DAY_OF_MONTH) == endDay) { //is the last day of month
+            totalMonths++;
+        }
+
+        return totalMonths;
     }
 }
