@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.RangeCriterion;
@@ -173,7 +174,10 @@ public class NumberFilterEditor extends FilterEditorBase {
                     NumberType numberType = null;
 
                     try {
-                        if (meta.getValueClass().equals(Integer.class)) {
+                        if (meta.getValueClass().equals(Key.class)) {
+                            numberType = NumberType.integer;
+                            return Long.parseLong(string);
+                        } else if (meta.getValueClass().equals(Integer.class)) {
                             numberType = NumberType.integer;
                             return Integer.parseInt(string);
                         } else if (meta.getValueClass().equals(Long.class)) {
