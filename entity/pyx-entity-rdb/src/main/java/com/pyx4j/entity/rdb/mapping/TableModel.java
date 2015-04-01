@@ -16,7 +16,6 @@
  *
  * Created on 2010-07-08
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.rdb.mapping;
 
@@ -778,11 +777,17 @@ public class TableModel {
             if (dialect.databaseType() == DatabaseType.MySQL) {
                 sql.append("UPDATE ").append(qb.getUpdateSQL(getFullTableName(), sqlUpdateBulk("m1", entityTemplate)));
             } else {
-                sql.append("UPDATE ").append(getFullTableName()).append(sqlUpdateBulk(null, entityTemplate));
-                sql.append("WHERE ").append(dialect.getNamingConvention().sqlIdColumnName()).append(" IN (");
-                sql.append("SELECT " + (qb.addDistinct() ? "DISTINCT" : "") + " m1." + dialect.getNamingConvention().sqlIdColumnName() + qb.getColumnsSQL()
-                        + " FROM " + qb.getSQL(getFullTableName()));
-                sql.append(')');
+                sql.append("UPDATE ").append(getFullTableName()).append(" m1 ").append(sqlUpdateBulk(null, entityTemplate));
+                if (qb.isMainTableOnly(criteria.getFilters())) {
+                    sql.append(qb.getWhere());
+                } else {
+                    sql.append("WHERE ").append(dialect.getNamingConvention().sqlIdColumnName());
+                    sql.append(" IN (");
+                    sql.append("SELECT " + (qb.addDistinct() ? "DISTINCT" : "") + " m1." + dialect.getNamingConvention().sqlIdColumnName() + qb.getColumnsSQL()
+                            + " FROM " + qb.getSQL(getFullTableName()));
+                    sql.append(')');
+                }
+
             }
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());

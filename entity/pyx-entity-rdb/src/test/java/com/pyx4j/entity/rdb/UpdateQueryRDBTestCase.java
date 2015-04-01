@@ -16,7 +16,6 @@
  *
  * Created on Feb 3, 2014
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.entity.rdb;
 
@@ -32,6 +31,59 @@ import com.pyx4j.entity.test.shared.domain.Simple1;
 public abstract class UpdateQueryRDBTestCase extends DatastoreTestBase {
 
     public void testSingelTableUpdate() {
+        String testId = uniqueString();
+        Simple1 ent1;
+        Simple1 ent2;
+        Simple1 ent3;
+        {
+            Simple1 ent = EntityFactory.create(Simple1.class);
+            ent.testId().setValue(testId);
+            ent.name().setValue("A");
+            srv.persist(ent);
+            ent1 = ent;
+        }
+        {
+            Simple1 ent = EntityFactory.create(Simple1.class);
+            ent.testId().setValue(testId);
+            ent.name().setValue("B");
+            srv.persist(ent);
+            ent2 = ent;
+        }
+        String testIdOther = uniqueString();
+        {
+            Simple1 ent = EntityFactory.create(Simple1.class);
+            ent.testId().setValue(testIdOther);
+            ent.name().setValue("C");
+            srv.persist(ent);
+            ent3 = ent;
+        }
+
+        // test
+
+        EntityQueryCriteria<Simple1> criteria = EntityQueryCriteria.create(Simple1.class);
+        criteria.eq(criteria.proto().testId(), testId);
+
+        Simple1 entityTemplate = EntityFactory.create(Simple1.class);
+        entityTemplate.name().setValue("C");
+
+        srv.update(criteria, entityTemplate);
+
+        {
+            Simple1 ent = srv.retrieve(Simple1.class, ent1.getPrimaryKey());
+            Assert.assertEquals("Name updated", entityTemplate.name().getValue(), ent.name().getValue());
+        }
+        {
+            Simple1 ent = srv.retrieve(Simple1.class, ent2.getPrimaryKey());
+            Assert.assertEquals("Name updated", entityTemplate.name().getValue(), ent.name().getValue());
+        }
+        {
+            Simple1 ent = srv.retrieve(Simple1.class, ent3.getPrimaryKey());
+            Assert.assertEquals("Name not updated", ent3.name().getValue(), ent.name().getValue());
+        }
+
+    }
+
+    public void testUpdateByPK() {
         String testId = uniqueString();
         Simple1 ent1;
         Simple1 ent2;
@@ -53,7 +105,7 @@ public abstract class UpdateQueryRDBTestCase extends DatastoreTestBase {
         // test
 
         EntityQueryCriteria<Simple1> criteria = EntityQueryCriteria.create(Simple1.class);
-        criteria.eq(criteria.proto().testId(), testId);
+        criteria.eq(criteria.proto().id(), ent1);
 
         Simple1 entityTemplate = EntityFactory.create(Simple1.class);
         entityTemplate.name().setValue("C");
@@ -66,7 +118,7 @@ public abstract class UpdateQueryRDBTestCase extends DatastoreTestBase {
         }
         {
             Simple1 ent = srv.retrieve(Simple1.class, ent2.getPrimaryKey());
-            Assert.assertEquals("Name updated", entityTemplate.name().getValue(), ent.name().getValue());
+            Assert.assertEquals("Name not updated", ent2.name().getValue(), ent.name().getValue());
         }
 
     }

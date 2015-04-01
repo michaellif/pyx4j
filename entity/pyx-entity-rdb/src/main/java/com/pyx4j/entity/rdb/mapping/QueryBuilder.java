@@ -174,6 +174,10 @@ public class QueryBuilder<T extends IEntity> {
         return value.contains("*");
     }
 
+    boolean isMainTableOnly(List<Criterion> filters) {
+        return (queryJoin.getMemberJoinAliases().size() == 0);
+    }
+
     private void appendFilters(StringBuilder criterionSql, QueryJoinBuilder joinBuilder, List<Criterion> filters, boolean firstInSentence, boolean required) {
         for (Criterion criterion : filters) {
             if (firstInSentence) {
@@ -552,7 +556,7 @@ public class QueryBuilder<T extends IEntity> {
         return mainTableSqlAlias;
     }
 
-    private String getWhere() {
+    String getWhere() {
         if (sql.length() == 0) {
             return "";
         } else {
