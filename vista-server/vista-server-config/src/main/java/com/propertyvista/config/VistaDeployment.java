@@ -17,6 +17,7 @@ import java.util.List;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
@@ -169,20 +170,24 @@ public class VistaDeployment {
         return VistaSettings.googleAPIKey;
     }
 
-    public static Key getPmcYardiInterfaceId(Building building) {
-        final String namespace = NamespaceManager.getNamespace();
-        assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "Function not available when running in operations namespace";
-        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.eq(criteria.proto().id(), building);
-        Building buildingOrigin = Persistence.service().retrieve(criteria);
-        return buildingOrigin.integrationSystemId().getValue();
+    public static Key getPmcYardiInterfaceId(Building buildingId) {
+        if (buildingId.getAttachLevel() == AttachLevel.Attached) {
+            return buildingId.integrationSystemId().getValue();
+        } else {
+            final String namespace = NamespaceManager.getNamespace();
+            assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "Function not available when running in operations namespace";
+            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+            criteria.eq(criteria.proto().id(), buildingId);
+            Building buildingOrigin = Persistence.service().retrieve(criteria);
+            return buildingOrigin.integrationSystemId().getValue();
+        }
     }
 
-    public static PmcYardiCredential getPmcYardiCredential(Building building) {
+    public static PmcYardiCredential getPmcYardiCredential(Building buildingId) {
         final String namespace = NamespaceManager.getNamespace();
         assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "Function not available when running in operations namespace";
         try {
-            Key yardiInterfaceId = getPmcYardiInterfaceId(building);
+            Key yardiInterfaceId = getPmcYardiInterfaceId(buildingId);
             if (yardiInterfaceId != null) {
                 NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
                 EntityQueryCriteria<PmcYardiCredential> criteria = EntityQueryCriteria.create(PmcYardiCredential.class);
