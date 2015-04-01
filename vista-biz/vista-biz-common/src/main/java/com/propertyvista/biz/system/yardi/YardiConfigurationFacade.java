@@ -13,6 +13,7 @@
 package com.propertyvista.biz.system.yardi;
 
 import java.rmi.RemoteException;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -36,7 +37,7 @@ public interface YardiConfigurationFacade {
      */
     PmcYardiCredential getYardiCredential(Building building);
 
-    List<PmcYardiCredential> getYardiCredentials();
+    Collection<PmcYardiCredential> getYardiCredentials();
 
     /** Initialize ThreadLocal timer to count Yardi execution time */
     void startYardiTimer();
