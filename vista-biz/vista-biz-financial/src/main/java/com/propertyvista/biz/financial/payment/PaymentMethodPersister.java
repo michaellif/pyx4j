@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -34,6 +34,7 @@ import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
+import com.propertyvista.domain.pmc.payment.CustomerCreditCheckTransaction;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.insurance.TenantSureTransaction;
 import com.propertyvista.shared.util.AccountNumberFormatter;
@@ -209,7 +210,7 @@ class PaymentMethodPersister {
             // Keep history of payment methods that were used.
             origPaymentMethod = Persistence.service().retrieve(PmcPaymentMethod.class, paymentMethod.getPrimaryKey());
             if (isAccountNumberChange(paymentMethod, origPaymentMethod)) {
-                EntityQueryCriteria<TenantSureTransaction> criteria = EntityQueryCriteria.create(TenantSureTransaction.class);
+                EntityQueryCriteria<CustomerCreditCheckTransaction> criteria = EntityQueryCriteria.create(CustomerCreditCheckTransaction.class);
                 criteria.eq(criteria.proto().paymentMethod(), paymentMethod);
                 criteria.ne(criteria.proto().status(), TenantSureTransaction.TransactionStatus.Draft);
                 if (Persistence.service().count(criteria) != 0) {
