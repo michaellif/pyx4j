@@ -234,6 +234,10 @@ public abstract class Dialect {
         return "LIKE";
     }
 
+    public String falseCondition() {
+        return "FALSE = TRUE";
+    }
+
     public boolean isFunctionIndexesSupported() {
         return false;
     }

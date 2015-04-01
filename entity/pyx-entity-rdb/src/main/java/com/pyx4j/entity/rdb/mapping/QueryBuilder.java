@@ -351,7 +351,7 @@ public class QueryBuilder<T extends IEntity> {
                     throw new RuntimeException("Unsupported Type for IN " + bindHolder.bindValue.getClass().getName());
                 }
                 if (items.isEmpty()) {
-                    criterionSql.append(" = 0 AND FALSE = TRUE ");
+                    criterionSql.append(" = 0 AND ").append(dialect.falseCondition());
                 } else {
                     criterionSql.append(" IN (");
                     boolean first = true;
