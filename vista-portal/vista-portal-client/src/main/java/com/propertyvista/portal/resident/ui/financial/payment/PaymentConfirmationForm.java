@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -53,6 +53,8 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
     private Widget autoPaySignupPanel;
 
+    private HTML errorMessage = new HTML();
+
     public PaymentConfirmationForm(AbstractFormView<PaymentRecordDTO> view) {
         super(PaymentRecordDTO.class, view, i18n.tr("Payment Submitted Successfully!"), new Button(i18n.tr("Continue"), new Command() {
             @Override
@@ -79,8 +81,12 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
         formPanel.append(Location.Left, autoPaySignupPanel = createAutoPaySignupPanel());
 
+        formPanel.br();
+        formPanel.append(Location.Left, errorMessage);
+
         // tweak:
         get(proto().transactionErrorMessage()).asWidget().setStyleName(VistaTheme.StyleName.ErrorMessage.name());
+        errorMessage.setVisible(false);
 
         return formPanel;
     }
@@ -106,6 +112,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
     @Override
     public void onReset() {
         super.onReset();
+        errorMessage.setVisible(false);
 
         if (getDecorator() instanceof FormDecorator) {
             FormDecorator<?> decorator = ((FormDecorator<?>) getDecorator());
@@ -123,6 +130,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
+        errorMessage.setVisible(false);
 
         if (getDecorator() instanceof FormDecorator) {
             FormDecorator<?> decorator = ((FormDecorator<?>) getDecorator());
@@ -144,5 +152,14 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
         }
 
         get(proto().convenienceFee()).setVisible(!getValue().convenienceFee().isNull());
+    }
+
+    void didplayError(String message) {
+        FormDecorator<?> decorator = ((FormDecorator<?>) getDecorator());
+        decorator.setCaption(headerFailed);
+        decorator.getCaptionLabel().addStyleName(VistaTheme.StyleName.ErrorMessage.name());
+
+        errorMessage.setHTML(message);
+        errorMessage.setVisible(true);
     }
 }
