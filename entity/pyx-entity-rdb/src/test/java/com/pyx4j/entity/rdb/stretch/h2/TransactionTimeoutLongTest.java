@@ -16,9 +16,8 @@
  *
  * Created on Oct 13, 2014
  * @author vlads
- * @version $Id$
  */
-package com.pyx4j.entity.rdb.h2;
+package com.pyx4j.entity.rdb.stretch.h2;
 
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
 import com.pyx4j.entity.rdb.TransactionTimeoutLongTestCase;

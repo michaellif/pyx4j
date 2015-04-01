@@ -16,9 +16,8 @@
  *
  * Created on Oct 13, 2014
  * @author vlads
- * @version $Id$
  */
-package com.pyx4j.entity.rdb.postgresql;
+package com.pyx4j.entity.rdb.stretch.mysql;
 
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
 import com.pyx4j.entity.rdb.TransactionTimeoutLongTestCase;
@@ -28,7 +27,7 @@ public class TransactionTimeoutLongTest extends TransactionTimeoutLongTestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {
-        return PersistenceEnvironmentFactory.getPostgreSQLPersistenceEnvironment();
+        return PersistenceEnvironmentFactory.getMySQLPersistenceEnvironment();
     }
 
 }
