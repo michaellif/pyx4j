@@ -62,6 +62,8 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
                 AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
             }
         }), ThemeColor.contrast4);
+
+        errorMessage.addStyleName(VistaTheme.StyleName.ErrorMessage.name());
     }
 
     @Override
@@ -77,7 +79,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
         formPanel.hr();
 
-        formPanel.append(Location.Left, proto().transactionErrorMessage()).decorate();
+        formPanel.append(Location.Left, proto().transactionErrorMessage()).decorate().labelWidth(250);
 
         formPanel.append(Location.Left, autoPaySignupPanel = createAutoPaySignupPanel());
 
@@ -112,7 +114,6 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
     @Override
     public void onReset() {
         super.onReset();
-        errorMessage.setVisible(false);
 
         if (getDecorator() instanceof FormDecorator) {
             FormDecorator<?> decorator = ((FormDecorator<?>) getDecorator());
@@ -125,12 +126,12 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
         get(proto().transactionAuthorizationNumber()).setVisible(false);
         get(proto().convenienceFeeTransactionAuthorizationNumber()).setVisible(false);
         autoPaySignupPanel.setVisible(true);
+        errorMessage.setVisible(false);
     }
 
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        errorMessage.setVisible(false);
 
         if (getDecorator() instanceof FormDecorator) {
             FormDecorator<?> decorator = ((FormDecorator<?>) getDecorator());
@@ -161,5 +162,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
         errorMessage.setHTML(message);
         errorMessage.setVisible(true);
+
+        autoPaySignupPanel.setVisible(false);
     }
 }
