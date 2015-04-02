@@ -33,8 +33,6 @@ public interface LeaseApplicationDTO extends LeaseDTO {
 
     IList<TenantFinancialDTO> tenantFinancials();
 
-    LeaseApprovalDTO leaseApproval();
-
     IList<TenantInfoDTO> tenantInfo();
 
     IPrimitive<Integer> numberOfOccupants();
@@ -50,6 +48,8 @@ public interface LeaseApplicationDTO extends LeaseDTO {
     IList<LeaseApplicationDocument> applicationDocuments();
 
     IPrimitive<String> currentTermNote();
+
+    LeaseApprovalDTO leaseApproval();
 
     IPrimitive<Boolean> isYardiApproved();
 

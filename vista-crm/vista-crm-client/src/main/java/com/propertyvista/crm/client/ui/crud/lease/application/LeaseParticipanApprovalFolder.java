@@ -163,12 +163,11 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
                 public void execute() {
                     ((LeaseApplicationViewerView.Presenter) ((IPrimeViewerView<?>) view).getPresenter())
                             .isCreditCheckViewAllowed(new DefaultAsyncCallback<VoidSerializable>() {
-
                                 @Override
                                 public void onSuccess(VoidSerializable result) {
                                     AppSite.getPlaceController().goTo(
                                             new CrmSiteMap.Tenants.CustomerCreditCheckLongReport().formViewerPlace(LeaseParticipanApprovalViewer.this
-                                                    .getValue().leaseParticipant().leaseParticipant().customer().getPrimaryKey()));
+                                                    .getValue().creditCheck().getPrimaryKey()));
                                 }
                             });
                 }

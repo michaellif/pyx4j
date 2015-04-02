@@ -24,14 +24,15 @@ import com.pyx4j.rpc.shared.ServiceExecution;
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.crm.rpc.services.customer.CustomerCreditCheckLongReportService;
-import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.CustomerCreditCheck;
 
 public class CustomerCreditCheckLongReportServiceImpl implements CustomerCreditCheckLongReportService {
 
     @Override
     public void retrieve(AsyncCallback<CustomerCreditCheckLongReportDTO> callback, Key entityId, RetrieveTarget retrieveTarget) {
         if (retrieveTarget == RetrieveTarget.View) {
-            callback.onSuccess(ServerSideFactory.create(ScreeningFacade.class).retriveLongReport(Persistence.service().retrieve(Customer.class, entityId)));
+            callback.onSuccess(ServerSideFactory.create(ScreeningFacade.class).retriveLongReport(
+                    Persistence.service().retrieve(CustomerCreditCheck.class, entityId)));
         } else {
             throw new Error("Not intended for Edit!");
         }

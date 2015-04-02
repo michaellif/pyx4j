@@ -63,5 +63,5 @@ public interface ScreeningFacade {
     /**
      * @return null if Report storage already expired
      */
-    CustomerCreditCheckLongReportDTO retriveLongReport(Customer customerId);
+    CustomerCreditCheckLongReportDTO retriveLongReport(CustomerCreditCheck creditCheckId);
 }

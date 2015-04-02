@@ -21,6 +21,7 @@ import java.util.concurrent.Callable;
 
 import org.apache.commons.lang.time.DateUtils;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
@@ -371,14 +372,16 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
     @Override
     public CustomerCreditCheck retrivePersonCreditCheck(Customer customerId) {
         EntityQueryCriteria<CustomerCreditCheck> criteria = EntityQueryCriteria.create(CustomerCreditCheck.class);
+
         criteria.add(PropertyCriterion.eq(criteria.proto().screening().screene(), customerId));
         criteria.add(PropertyCriterion.ge(criteria.proto().creditCheckDate(), DateUtils.addDays(new Date(), -30)));
         criteria.desc(criteria.proto().creditCheckDate());
+
         return Persistence.service().retrieve(criteria);
     }
 
     @Override
-    public CustomerCreditCheckLongReportDTO retriveLongReport(Customer customerId) {
+    public CustomerCreditCheckLongReportDTO retriveLongReport(CustomerCreditCheck creditCheckId) {
         PmcEquifaxInfo equifaxInfo = getCurrentPmcEquifaxInfo();
         if (!isCreditCheckActivated(equifaxInfo)) {
             throw new UserRuntimeException(i18n.tr("Credit Check interface was not activated in Onboarding"));
@@ -386,7 +389,10 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         if (equifaxInfo.reportType().getValue() != CreditCheckReportType.FullCreditReport) {
             throw new UserRuntimeException(i18n.tr("Credit Check Full Credit Report was not activated"));
         }
-        CustomerCreditCheck ccc = retrivePersonCreditCheck(customerId);
+        CustomerCreditCheck ccc = Persistence.service().retrieve(CustomerCreditCheck.class, creditCheckId.getPrimaryKey());
+        if (ccc == null) {
+            throw new IllegalArgumentException(SimpleMessageFormat.format("CustomerCreditCheck (pk={0}) does not exists", creditCheckId.getPrimaryKey()));
+        }
         return updateCustomerCreditCheckLongReport(EquifaxCreditCheck.createLongReport(ccc), ccc);
     }
 
