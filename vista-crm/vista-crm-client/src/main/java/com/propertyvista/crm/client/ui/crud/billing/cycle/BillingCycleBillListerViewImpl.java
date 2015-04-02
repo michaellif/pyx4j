@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -15,13 +15,16 @@ package com.propertyvista.crm.client.ui.crud.billing.cycle;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.ActionPermission;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractListerView;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
+import com.propertyvista.crm.rpc.services.lease.ac.LeaseConfirmBill;
 
 public class BillingCycleBillListerViewImpl extends AbstractListerView<BillDataDTO> implements BillingCycleBillListerView {
 
@@ -45,7 +48,7 @@ public class BillingCycleBillListerViewImpl extends AbstractListerView<BillDataD
                     ((BillingCycleBillListerView.Presenter) getPresenter()).confirm(getDataTablePanel().getDataTable().getSelectedItems());
                 }
             }
-        });
+        }, new ActionPermission(LeaseConfirmBill.class));
         addHeaderToolbarItem(approveAction.asWidget());
 
         rejectAction = new Button(i18n.tr("Reject Selected"), new Command() {
@@ -65,7 +68,7 @@ public class BillingCycleBillListerViewImpl extends AbstractListerView<BillDataD
                     }.show();
                 }
             }
-        });
+        }, new ActionPermission(LeaseConfirmBill.class));
         addHeaderToolbarItem(rejectAction.asWidget());
 
         print = new Button(i18n.tr("Print Selected"), new Command() {
@@ -75,9 +78,8 @@ public class BillingCycleBillListerViewImpl extends AbstractListerView<BillDataD
                     ((BillingCycleBillListerView.Presenter) getPresenter()).print(getDataTablePanel().getDataTable().getSelectedItems());
                 }
             }
-        });
+        }, DataModelPermission.permissionRead(BillDataDTO.class));
         addHeaderToolbarItem(print.asWidget());
-
     }
 
     @Override

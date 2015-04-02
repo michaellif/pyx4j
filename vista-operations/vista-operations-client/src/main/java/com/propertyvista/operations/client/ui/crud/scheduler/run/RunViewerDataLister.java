@@ -18,8 +18,8 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.domain.scheduler.RunData;
@@ -37,10 +37,10 @@ public class RunViewerDataLister extends SiteDataTablePanel<RunData> {
         List<ColumnDescriptor> c = Arrays.asList(//@formatter:off
                 new ColumnDescriptor.Builder(proto().pmc()).build(),
                 new ColumnDescriptor.Builder(proto().pmc().namespace()).columnTitle("Pmc namespace").searchableOnly().build(),
-                new ColumnDescriptor.Builder(proto().execution().trigger()).build(),
+                new ColumnDescriptor.Builder(proto().execution().trigger()).width("150px").build(),
                 new ColumnDescriptor.Builder(proto().execution().trigger().name()).columnTitle("Trigger Name").searchableOnly().build(),
                 new ColumnDescriptor.Builder(proto().execution().trigger().triggerType()).visible(false).build(),
-                new ColumnDescriptor.Builder(proto().started()).build(),
+                new ColumnDescriptor.Builder(proto().started()).width("130px").build(),
                 new ColumnDescriptor.Builder(proto().status()).build(),
                 new ColumnDescriptor.Builder(proto().executionReport().total()).build(),
                 new ColumnDescriptor.Builder(proto().executionReport().processed()).build(),
@@ -59,7 +59,7 @@ public class RunViewerDataLister extends SiteDataTablePanel<RunData> {
         List<ColumnDescriptor> c = Arrays.asList(//@formatter:off
                 new ColumnDescriptor.Builder(proto().pmc()).build(),
                 new ColumnDescriptor.Builder(proto().pmc().namespace()).columnTitle("Pmc namespace").searchableOnly().build(),
-                new ColumnDescriptor.Builder(proto().started()).build(),
+                new ColumnDescriptor.Builder(proto().started()).width("130px").build(),
                 new ColumnDescriptor.Builder(proto().status()).build(),
                 new ColumnDescriptor.Builder(proto().executionReport().total()).build(),
                 new ColumnDescriptor.Builder(proto().executionReport().processed()).build(),

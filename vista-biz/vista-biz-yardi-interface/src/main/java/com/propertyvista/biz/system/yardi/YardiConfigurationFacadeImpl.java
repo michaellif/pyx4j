@@ -14,6 +14,7 @@ package com.propertyvista.biz.system.yardi;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -50,7 +51,7 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
     }
 
     @Override
-    public List<PmcYardiCredential> getYardiCredentials() {
+    public Collection<PmcYardiCredential> getYardiCredentials() {
         return YardiCredentials.getAll();
     }
 

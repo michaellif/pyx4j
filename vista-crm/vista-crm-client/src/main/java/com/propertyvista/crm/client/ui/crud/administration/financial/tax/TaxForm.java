@@ -30,8 +30,9 @@ public class TaxForm extends CrmEntityForm<Tax> {
         FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, proto().name()).decorate();
         formPanel.append(Location.Left, proto().authority()).decorate();
-        formPanel.append(Location.Left, proto().rate()).decorate().componentWidth(100);
-        formPanel.append(Location.Left, proto().compound()).decorate().componentWidth(80);
+
+        formPanel.append(Location.Right, proto().rate()).decorate().componentWidth(100);
+        formPanel.append(Location.Right, proto().compound()).decorate().componentWidth(80);
 
         setTabBarVisible(false);
         selectTab(addTab(formPanel, i18n.tr("General")));

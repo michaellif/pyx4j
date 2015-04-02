@@ -42,8 +42,8 @@ import com.propertyvista.portal.server.portal.prospect.services.IdentificationDo
 import com.propertyvista.portal.server.portal.prospect.services.ProofOfAssetDocumentProspectUploadServiceImpl;
 import com.propertyvista.portal.server.portal.prospect.services.ProofOfIncomeDocumentProspectUploadServiceImpl;
 import com.propertyvista.portal.server.portal.resident.services.MessageAttachmentUploadPortalServiceImpl;
+import com.propertyvista.portal.server.portal.resident.services.insurance.InsuranceCertificateScanResidentUploadServiceImpl;
 import com.propertyvista.portal.server.portal.resident.services.maintenance.MaintenanceRequestPictureUploadPortalServiceImpl;
-import com.propertyvista.portal.server.portal.resident.services.services.InsuranceCertificateScanResidentUploadServiceImpl;
 import com.propertyvista.portal.server.portal.shared.services.CustomerPicturePortalUploadServiceImpl;
 
 @SuppressWarnings("serial")

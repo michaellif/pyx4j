@@ -7,19 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 11, 2013
- * @author michaellif
+ * Created on 2013-04-02
+ * @author VladL
  */
-package com.propertyvista.portal.rpc.portal.resident.services.services;
+package com.propertyvista.portal.rpc.portal.resident.services.insurance;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.pyx4j.rpc.shared.IService;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.GeneralInsurancePolicyDTO;
 
-import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.InsuranceStatusDTO;
-
-public interface InsuranceService extends IService {
-
-    void retreiveInsuranceStatus(AsyncCallback<InsuranceStatusDTO> callback);
+public interface GeneralInsurancePolicyCrudService extends AbstractCrudService<GeneralInsurancePolicyDTO> {
 
 }

@@ -36,10 +36,12 @@ import com.propertyvista.preloader.CreditChecksPaymentsPreloader;
 import com.propertyvista.preloader.CrmRolesDevPreloader;
 import com.propertyvista.preloader.MaintenanceRequestsMockupPreloader;
 import com.propertyvista.preloader.MerchantAccountPreloader;
+import com.propertyvista.preloader.N4BatchesPreloader;
 import com.propertyvista.preloader.PreloadNewTenantsAndLeads;
 import com.propertyvista.preloader.UpdateArrearsHistoryDevPreloader;
 import com.propertyvista.preloader.UserPreloader;
 import com.propertyvista.preloader.leases.LeasePreloader;
+import com.propertyvista.preloader.policy.MockupN4PolicyPreloader;
 import com.propertyvista.preloader.policy.PaymentMethodSelectionPolicyDevPreloader;
 import com.propertyvista.preloader.site.demo.DemoSitePreloader;
 import com.propertyvista.preloader.site.gondor.GondorSitePreloader;
@@ -124,12 +126,11 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         if (production) {
             //DEMO add(new ProdSitePreloader());
         } else {
-
             add(new CrmRolesDevPreloader());
-
             add(new UserPreloader());
             add(new MerchantAccountPreloader());
             add(new PaymentMethodSelectionPolicyDevPreloader());
+            add(new MockupN4PolicyPreloader());
             add(new CampaignPreloader());
 
             PmcDataPreloader pmcDataPreloader = new PmcDataPreloader();
@@ -147,6 +148,7 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
             add(new CommunicationDevPreloader());
             add(new ILSMarketingDevPreloader());
             add(new CreditChecksPaymentsPreloader());
+            add(new N4BatchesPreloader());
         }
     }
 

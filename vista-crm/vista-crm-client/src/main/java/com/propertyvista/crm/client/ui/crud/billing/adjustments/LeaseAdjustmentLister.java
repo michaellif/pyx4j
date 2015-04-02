@@ -31,6 +31,7 @@ public class LeaseAdjustmentLister extends SiteDataTablePanel<LeaseAdjustment> {
                 new ColumnDescriptor.Builder(proto().executionType()).build(), //
                 new ColumnDescriptor.Builder(proto().receivedDate()).visible(false).build(), //
                 new ColumnDescriptor.Builder(proto().targetDate()).build(), //
+                new ColumnDescriptor.Builder(proto().amount()).build(), //
                 new ColumnDescriptor.Builder(proto().tax()).build(), //
                 new ColumnDescriptor.Builder(proto().status()).filterAlwaysShown(true).build(), //
                 new ColumnDescriptor.Builder(proto().description()).visible(false).build(), //

@@ -26,6 +26,7 @@ import com.propertyvista.biz.communication.notifications.AutoPayCancelledBySyste
 import com.propertyvista.biz.communication.notifications.AutoPayCreatedByResidentNotification;
 import com.propertyvista.biz.communication.notifications.AutoPayReviewRequiredNotification;
 import com.propertyvista.biz.communication.notifications.BillingAlertNotification;
+import com.propertyvista.biz.communication.notifications.LeaseApplicationNotification;
 import com.propertyvista.biz.communication.notifications.NotificationsAggregator;
 import com.propertyvista.biz.communication.notifications.PostToYardiFailedNotification;
 import com.propertyvista.biz.communication.notifications.RejectPaymentNotification;
@@ -33,6 +34,7 @@ import com.propertyvista.biz.communication.notifications.UnableToPostPaymentBatc
 import com.propertyvista.biz.communication.notifications.YardiConfigurationNotification;
 import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.biz.system.VistaContext;
+import com.propertyvista.domain.company.Notification.AlertType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.PaymentType;
@@ -103,6 +105,11 @@ public class NotificationFacadeImpl implements NotificationFacade {
     @Override
     public void billingAlertNotification(Lease leaseId, String alert) {
         aggregateOrSend(new BillingAlertNotification(leaseId, alert));
+    }
+
+    @Override
+    public void leaseApplicationNotification(Lease leaseId, AlertType alertType) {
+        aggregateOrSend(new LeaseApplicationNotification(leaseId, alertType));
     }
 
     @Override

@@ -15,13 +15,18 @@ package com.propertyvista.portal.server.portal.resident.services.movein;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.ServerContext;
 
+import com.propertyvista.biz.communication.NotificationFacade;
+import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementSigningProgressFacade;
+import com.propertyvista.domain.company.Notification.AlertType;
 import com.propertyvista.domain.policy.policies.domain.LeaseAgreementConfirmationTerm;
 import com.propertyvista.domain.policy.policies.domain.LeaseAgreementLegalTerm;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
@@ -79,6 +84,19 @@ public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
         agreementSignatures.confirmationTermSignatures().addAll(editableEntity.confirmationTerms());
 
         Persistence.secureSave(agreementSignatures);
+
+        final Lease lease = editableEntity.leaseTerm().lease();
+        if (ServerSideFactory.create(LeaseTermAgreementSigningProgressFacade.class).isEmployeeSignatureRequired(lease)) {
+            Persistence.service().addTransactionCompletionHandler(new Executable<Void, RuntimeException>() {
+
+                @Override
+                public Void execute() {
+                    ServerSideFactory.create(NotificationFacade.class).leaseApplicationNotification(lease, AlertType.ApplicationLeaseSigning);
+                    return null;
+                }
+            });
+        }
+
         Persistence.service().commit();
 
         ServerContext.getVisit().setAclRevalidationRequired();

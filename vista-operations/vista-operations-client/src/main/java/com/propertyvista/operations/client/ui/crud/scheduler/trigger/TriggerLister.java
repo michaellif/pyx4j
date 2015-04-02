@@ -35,7 +35,7 @@ public class TriggerLister extends SiteDataTablePanel<TriggerDTO> {
         setColumnDescriptors( //
                 new ColumnDescriptor.Builder(proto().triggerType()).build(), //
                 new ColumnDescriptor.Builder(proto().options()).visible(false).sortable(false).searchable(false).build(), //
-                new ColumnDescriptor.Builder(proto().name()).build(), //
+                new ColumnDescriptor.Builder(proto().name()).width("150px").build(), //
                 new ColumnDescriptor.Builder(proto().scheduleSuspended()).sortable(false).searchable(false).build(), //
                 new ColumnDescriptor.Builder(proto().schedule()).sortable(false).searchable(false).build(), //
                 new ColumnDescriptor.Builder(proto().nextScheduledFireTime()).sortable(false).searchable(false).build(), //

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -12,6 +12,7 @@
  */
 package com.propertyvista.portal.resident.ui.financial.payment;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -53,6 +54,8 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
     private Widget autoPaySignupPanel;
 
+    private HTML errorMessage = new HTML();
+
     public PaymentConfirmationForm(AbstractFormView<PaymentRecordDTO> view) {
         super(PaymentRecordDTO.class, view, i18n.tr("Payment Submitted Successfully!"), new Button(i18n.tr("Continue"), new Command() {
             @Override
@@ -75,18 +78,26 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
         formPanel.hr();
 
-        formPanel.append(Location.Left, proto().transactionErrorMessage()).decorate();
+        formPanel.append(Location.Left, proto().transactionErrorMessage()).decorate().labelWidth(220);
 
         formPanel.append(Location.Left, autoPaySignupPanel = createAutoPaySignupPanel());
 
+        formPanel.br();
+        formPanel.append(Location.Left, errorMessage);
+
         // tweak:
-        get(proto().transactionErrorMessage()).asWidget().setStyleName(VistaTheme.StyleName.ErrorMessage.name());
+        get(proto().transactionErrorMessage()).getNativeComponent().asWidget().setStyleName(VistaTheme.StyleName.ErrorMessage.name());
+
+        errorMessage.addStyleName(VistaTheme.StyleName.ErrorMessage.name());
+        errorMessage.getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+        errorMessage.setVisible(false);
 
         return formPanel;
     }
 
     private Widget createAutoPaySignupPanel() {
         VerticalPanel text = new VerticalPanel();
+
         text.add(new HTML(i18n.tr("Want an Easy way to save time on your payments?")));
         text.add(new HTML(i18n.tr("Let us manage your monthly payments for you.")));
         text.add(new Anchor(i18n.tr("Sign up for Auto Pay today"), new Command() {
@@ -109,15 +120,16 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
         if (getDecorator() instanceof FormDecorator) {
             FormDecorator<?> decorator = ((FormDecorator<?>) getDecorator());
-            decorator.setCaption(headerUndefined);
             decorator.getCaptionLabel().addStyleName(VistaTheme.StyleName.WarningMessage.name());
             decorator.getCaptionLabel().removeStyleName(VistaTheme.StyleName.ErrorMessage.name());
+            decorator.setCaption(headerUndefined);
         }
 
         get(proto().transactionErrorMessage()).setVisible(false);
         get(proto().transactionAuthorizationNumber()).setVisible(false);
         get(proto().convenienceFeeTransactionAuthorizationNumber()).setVisible(false);
         autoPaySignupPanel.setVisible(true);
+        errorMessage.setVisible(false);
     }
 
     @Override
@@ -128,21 +140,34 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
             FormDecorator<?> decorator = ((FormDecorator<?>) getDecorator());
             decorator.getCaptionLabel().removeStyleName(VistaTheme.StyleName.WarningMessage.name());
             if (getValue().paymentStatus().getValue().isFailed()) {
-                decorator.setCaption(headerFailed);
                 decorator.getCaptionLabel().addStyleName(VistaTheme.StyleName.ErrorMessage.name());
+                decorator.setCaption(headerFailed);
             } else {
                 decorator.setCaption(headerSuccess);
             }
         }
 
         if (getValue().paymentStatus().getValue().isFailed()) {
-            get(proto().transactionErrorMessage()).setVisible(true);
             autoPaySignupPanel.setVisible(false);
+            get(proto().transactionErrorMessage()).setVisible(true);
         } else {
             get(proto().transactionAuthorizationNumber()).setVisible(!getValue().transactionAuthorizationNumber().isNull());
             get(proto().convenienceFeeTransactionAuthorizationNumber()).setVisible(!getValue().convenienceFeeTransactionAuthorizationNumber().isNull());
         }
 
         get(proto().convenienceFee()).setVisible(!getValue().convenienceFee().isNull());
+    }
+
+    void didplayError(String message) {
+        autoPaySignupPanel.setVisible(false);
+
+        if (getDecorator() instanceof FormDecorator) {
+            FormDecorator<?> decorator = ((FormDecorator<?>) getDecorator());
+            decorator.getCaptionLabel().addStyleName(VistaTheme.StyleName.ErrorMessage.name());
+            decorator.setCaption(headerFailed);
+        }
+
+        errorMessage.setHTML(message);
+        errorMessage.setVisible(true);
     }
 }

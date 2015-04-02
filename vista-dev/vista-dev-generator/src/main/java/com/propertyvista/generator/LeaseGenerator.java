@@ -20,9 +20,11 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 
+import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
@@ -31,9 +33,12 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.person.Person.Sex;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.ReferenceSource;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -41,6 +46,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.misc.VistaDevPreloadConfig;
+import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.shared.util.AccountNumberFormatter;
 
 public class LeaseGenerator extends DataGenerator {
@@ -100,6 +106,8 @@ public class LeaseGenerator extends DataGenerator {
         ServerSideFactory.create(LeaseFacade.class).setUnit(lease, unit);
 
         ensureProductPrices(lease);
+
+        ensureServiceDepositPrices(lease);
 
         lease.creationDate().setValue(createdDate);
         return lease;
@@ -192,6 +200,56 @@ public class LeaseGenerator extends DataGenerator {
 
         for (BillableItem billableItem : lease.currentTerm().version().leaseProducts().featureItems()) {
             ensureAgreedPrice(billableItem);
+        }
+    }
+
+    public static void ensureServiceDepositPrices(Lease lease) {
+        BillableItem rent = lease.currentTerm().version().leaseProducts().serviceItem();
+        BigDecimal rentPrice = rent.agreedPrice().getValue();
+
+        for (Deposit deposit : rent.deposits()) {
+            if (deposit.amount().getValue().compareTo(BigDecimal.ZERO) == 0) {
+                switch (deposit.type().getValue()) {
+                case MoveInDeposit:
+                    deposit.amount().setValue(rentPrice.divideToIntegralValue(new BigDecimal(2)));
+                    break;
+                case SecurityDeposit:
+                    deposit.amount().setValue(new BigDecimal(100 + RandomUtil.randomInt(50)));
+                    break;
+                case LastMonthDeposit:
+                    deposit.amount().setValue(rentPrice);
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Ensures there is only one LastMonthDeposit for draft status LeaseApplications if country is not US
+     *
+     * @param lease
+     */
+    public static void ensureDepositsForDraftApplications(Lease lease) {
+
+        if (!lease.leaseApplication().status().getValue().isDraft()) {
+            return;
+        }
+
+        BillableItem rent = lease.currentTerm().version().leaseProducts().serviceItem();
+        BigDecimal rentPrice = rent.agreedPrice().getValue();
+
+        // Delete deposits
+        rent.deposits().clear();
+        Persistence.service().persist(rent);
+
+        if (VistaFeatures.instance().countryOfOperation() != null && !VistaFeatures.instance().countryOfOperation().country.equals(ISOCountry.UnitedStates)) {
+            // Create LastMonthDeposit to rent
+            Deposit newDeposit = ServerSideFactory.create(DepositFacade.class).createDeposit(DepositType.LastMonthDeposit, rent);
+            newDeposit.amount().setValue(rentPrice);
+            rent.deposits().add(newDeposit);
+            Persistence.service().merge(newDeposit);
         }
     }
 

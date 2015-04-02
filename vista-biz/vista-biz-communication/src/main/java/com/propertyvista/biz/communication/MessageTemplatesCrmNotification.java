@@ -12,6 +12,8 @@
  */
 package com.propertyvista.biz.communication;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +21,10 @@ import org.apache.commons.lang.StringUtils;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
@@ -28,9 +33,13 @@ import com.pyx4j.server.mail.MessageTemplate;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.biz.communication.NotificationFacade.BatchErrorType;
+import com.propertyvista.biz.communication.template.EmailTemplateManager;
 import com.propertyvista.biz.communication.template.MessageKeywords;
+import com.propertyvista.biz.communication.template.model.LeaseApplicationNotificationT;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
@@ -467,6 +476,76 @@ class MessageTemplatesCrmNotification {
             MessageKeywords.addToKeywords(email, lease);
         }
         template.variable("${leaseLinks}", leaseLinks);
+
+        email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
+        return email;
+    }
+
+    public static MailMessage createLeaseApplicationNotificationEmail(Lease leaseId, Notification.AlertType alertType) {
+        MailMessage email = new MailMessage();
+        email.setSender(getSender());
+
+        String templateFile = null;
+
+        switch (alertType) {
+        case ApplicationInProgress:
+            templateFile = "application-notification-inprogress.html";
+            email.setSubject(i18n.tr("Lease Application: In-Progress"));
+            break;
+        case ApplicationSubmitted:
+            templateFile = "application-notification-submitted.html";
+            email.setSubject(i18n.tr("Lease Application: Submitted"));
+            break;
+        case ApplicationPendingDecision:
+            templateFile = "application-notification-pending.html";
+            email.setSubject(i18n.tr("Lease Application: Pending Decision"));
+            break;
+        case ApplicationApproved:
+            templateFile = "application-notification-approved.html";
+            email.setSubject(i18n.tr("Lease Application: Approved"));
+            break;
+        case ApplicationDeclined:
+            templateFile = "application-notification-declined.html";
+            email.setSubject(i18n.tr("Lease Application: Declined"));
+            break;
+        case ApplicationInformationRequired:
+            templateFile = "application-notification-moreinfo.html";
+            email.setSubject(i18n.tr("Lease Application: Further Information Required"));
+            break;
+        case ApplicationLeaseSigning:
+            templateFile = "application-notification-signature.html";
+            email.setSubject(i18n.tr("Lease Application: Signature Required"));
+            break;
+        default:
+            throw new Error("Type not supported: " + (alertType == null ? "null" : alertType.toString()));
+        }
+
+        MessageTemplate template = new MessageTemplate("email/notification/" + templateFile);
+
+        Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, false);
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
+        String buildingName = lease.unit().building().info().name().getStringView();
+        if (StringUtils.isEmpty(buildingName)) {
+            buildingName = lease.unit().building().propertyCode().getStringView();
+        }
+        LeaseApplicationNotificationT model = EntityFactory.create(LeaseApplicationNotificationT.class);
+        model.buildingName().setValue(buildingName);
+        model.buildingAddress().setValue(lease.unit().building().info().address().getStringView());
+
+        Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
+        model.tenantName().setValue(lease._applicant().customer().person().name().getStringView());
+        model.unitNo().setValue(lease.unit().info().number().getStringView());
+        model.leaseFrom().setValue(lease.leaseFrom().getStringView());
+        model.leaseTo().setValue(lease.leaseTo().getStringView());
+
+        Persistence.ensureRetrieve(lease.currentTerm().version().leaseProducts().serviceItem(), AttachLevel.Attached);
+        model.rentPrice().setValue(lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue(BigDecimal.ZERO));
+        model.leaseAppNo().setValue(lease.leaseApplication().applicationId().getStringView());
+
+        String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
+        model.leaseUrl().setValue(AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formViewerPlace(lease.getPrimaryKey())));
+
+        template.setBodyTemplate(EmailTemplateManager.parseTemplate(template.getBody(), Arrays.asList((IEntity) model)));
 
         email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
         return email;

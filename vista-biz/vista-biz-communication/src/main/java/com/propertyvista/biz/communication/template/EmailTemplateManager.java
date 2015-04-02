@@ -25,7 +25,6 @@ import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.meta.EntityMeta;
@@ -308,13 +307,10 @@ public class EmailTemplateManager {
             if ((member instanceof IEntity) && ((IEntity) member).isValueDetached()) {
                 throw new Error("Copying detached entity " + ((IEntity) member).getDebugExceptionInfoString());
             }
-            if (member instanceof IPrimitive<?>) {
-                return member.getValue().toString();
-            }
+            return member.getStringView();
         } catch (Exception e) {
-            // ignore
+            throw new Error("Could not evaluate member '" + memberPath + "' of entity " + toEntity.getDebugExceptionInfoString());
         }
-        return null;
     }
 
     private static List<Path> getTemplateEntityMemberGraph(IEntity entity, List<Path> graph) {

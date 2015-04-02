@@ -561,6 +561,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         viewFutureTerm.setVisible(false);
         viewHistoricTerms.setVisible(false);
 
+        leaseAgreementButton.setVisible(false);
+
         setViewVisible(viewApplication, false);
 
         setActionVisible(sendMailAction, false);
@@ -610,9 +612,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         viewHistoricTerms.setVisible(value.historyPresent().getValue(false));
 
         Lease.Status status = value.status().getValue();
-
-        // set buttons state:
         CompletionType completion = value.completion().getValue();
+
+        leaseAgreementButton.setVisible(!status.isFormer());
 
         setViewVisible(viewApplication, !value.leaseApplication().isNull());
 

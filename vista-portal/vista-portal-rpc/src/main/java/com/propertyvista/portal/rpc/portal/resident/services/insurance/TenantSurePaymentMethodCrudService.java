@@ -7,15 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-02
- * @author VladL
+ * Created on 2013-10-10
+ * @author ArtyomB
  */
-package com.propertyvista.portal.rpc.portal.resident.services.services;
+package com.propertyvista.portal.rpc.portal.resident.services.insurance;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.portal.rpc.portal.resident.dto.insurance.GeneralInsurancePolicyDTO;
+import com.propertyvista.domain.contact.InternationalAddress;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.InsurancePaymentMethodDTO;
 
-public interface GeneralInsurancePolicyCrudService extends AbstractCrudService<GeneralInsurancePolicyDTO> {
+public interface TenantSurePaymentMethodCrudService extends AbstractCrudService<InsurancePaymentMethodDTO> {
+
+    void getCurrentAddress(AsyncCallback<InternationalAddress> callback);
 
 }

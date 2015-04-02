@@ -35,6 +35,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
@@ -42,6 +43,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
+import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
@@ -59,6 +61,7 @@ import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.biz.validation.validators.lease.LeaseApprovalValidator;
 import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.company.Notification.AlertType;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -126,6 +129,7 @@ public abstract class LeaseAbstractManager {
         case Application:
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(lease.leaseApplication());
             lease.leaseApplication().status().setValue(LeaseApplication.Status.InProgress);
+            fireLeaseApplicationNotification(lease, AlertType.ApplicationInProgress);
             break; // ok, allowed value...
         case NewLease:
         case ExistingLease:
@@ -313,6 +317,7 @@ public abstract class LeaseAbstractManager {
         ServerSideFactory.create(OnlineApplicationFacade.class).cancelMasterOnlineApplication(lease.leaseApplication().onlineApplication());
 
         lease.leaseApplication().status().setValue(LeaseApplication.Status.InProgress);
+        fireLeaseApplicationNotification(lease, AlertType.ApplicationInProgress);
 
         Persistence.service().merge(lease);
     }
@@ -336,6 +341,7 @@ public abstract class LeaseAbstractManager {
         Lease lease = load(leaseId, false);
 
         lease.leaseApplication().status().setValue(LeaseApplication.Status.PendingFurtherInformation);
+        fireLeaseApplicationNotification(lease, AlertType.ApplicationInformationRequired);
 
         Persistence.service().merge(lease);
         addLeaseNote(lease, "Pending Further Information on Application", decisionReason, decidedBy);
@@ -345,6 +351,8 @@ public abstract class LeaseAbstractManager {
         Lease lease = load(leaseId, false);
 
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Submitted);
+        fireLeaseApplicationNotification(lease, AlertType.ApplicationSubmitted);
+
         initializeApprovalChecklist(lease.leaseApplication());
 
         if (decidedBy != null) {
@@ -361,6 +369,7 @@ public abstract class LeaseAbstractManager {
         Lease lease = load(leaseId, false);
 
         lease.leaseApplication().status().setValue(LeaseApplication.Status.PendingDecision);
+        fireLeaseApplicationNotification(lease, AlertType.ApplicationPendingDecision);
         if (decidedBy != null) {
             lease.leaseApplication().validation().decidedBy().set(decidedBy);
             lease.leaseApplication().validation().decisionReason().setValue(decisionReason);
@@ -378,6 +387,8 @@ public abstract class LeaseAbstractManager {
         // TODO Review the status
         lease.status().setValue(Lease.Status.Cancelled);
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Declined);
+        fireLeaseApplicationNotification(lease, AlertType.ApplicationDeclined);
+
         if (decidedBy != null) {
             lease.leaseApplication().approval().decidedBy().set(decidedBy);
             lease.leaseApplication().approval().decisionReason().setValue(decisionReason);
@@ -443,6 +454,7 @@ public abstract class LeaseAbstractManager {
 
         if (leaseStatus == Status.Application) {
             lease.leaseApplication().status().setValue(LeaseApplication.Status.Approved);
+            fireLeaseApplicationNotification(lease, AlertType.ApplicationApproved);
 
             if (decidedBy != null) {
                 lease.leaseApplication().approval().decidedBy().set(decidedBy);
@@ -1376,5 +1388,16 @@ public abstract class LeaseAbstractManager {
 
             leaseApplication.approvalChecklist().add(checklistItem);
         }
+    }
+
+    private void fireLeaseApplicationNotification(final Lease leaseId, final AlertType type) {
+        Persistence.service().addTransactionCompletionHandler(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() {
+                ServerSideFactory.create(NotificationFacade.class).leaseApplicationNotification(leaseId, type);
+                return null;
+            }
+        });
     }
 }

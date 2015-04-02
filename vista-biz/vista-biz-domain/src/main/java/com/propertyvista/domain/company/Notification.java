@@ -34,6 +34,20 @@ public interface Notification extends IEntity {
 
     @I18n
     public static enum AlertType implements Serializable {
+        // Lease Application Alerts
+        ApplicationInProgress,
+
+        ApplicationSubmitted,
+
+        ApplicationPendingDecision,
+
+        ApplicationApproved,
+
+        ApplicationDeclined,
+
+        ApplicationInformationRequired,
+
+        ApplicationLeaseSigning,
 
         @Translate("Electronic Payment Rejected")
         ElectronicPaymentRejectedNsf,

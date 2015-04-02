@@ -22,6 +22,7 @@ import com.pyx4j.server.mail.MailDeliveryCallback;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.biz.communication.NotificationFacade.BatchErrorType;
+import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.payment.AutopayAgreement;
@@ -119,6 +120,8 @@ public interface CommunicationFacade {
     void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail);
 
     void sendBillingAlertNotification(List<String> targetEmails, List<Lease> leaseIds, Map<Lease, List<String>> billingAlerts);
+
+    void sendLeaseApplicationNotification(List<String> targetEmails, Lease lease, Notification.AlertType alertType);
 
     //void sendCustomerMessage(CustomerCustomMessageTemplate customMessageTemplate, Customer customer);
 

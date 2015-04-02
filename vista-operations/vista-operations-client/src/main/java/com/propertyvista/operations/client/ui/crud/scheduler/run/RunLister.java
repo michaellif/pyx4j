@@ -21,8 +21,8 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
 import com.propertyvista.operations.domain.scheduler.Run;
@@ -44,8 +44,8 @@ public class RunLister extends SiteDataTablePanel<Run> {
         Run proto = EntityFactory.getEntityPrototype(Run.class);
         List<ColumnDescriptor> c = Arrays.asList(//@formatter:off
                 new ColumnDescriptor.Builder(proto.status()).build(),
-                new ColumnDescriptor.Builder(proto.started()).build(),
-                new ColumnDescriptor.Builder(proto.completed()).build(),
+                new ColumnDescriptor.Builder(proto.started()).width("130px").build(),
+                new ColumnDescriptor.Builder(proto.completed()).width("130px").build(),
                 new ColumnDescriptor.Builder(proto.forDate()).build(),
                 new ColumnDescriptor.Builder(proto.executionReport().total()).build(),
                 new ColumnDescriptor.Builder(proto.executionReport().processed()).build(),
@@ -63,8 +63,8 @@ public class RunLister extends SiteDataTablePanel<Run> {
     static List<ColumnDescriptor> createViewColumnDescriptors() {
         Run proto = EntityFactory.getEntityPrototype(Run.class);
         List<ColumnDescriptor> c = new Vector<ColumnDescriptor>(Arrays.asList(//@formatter:off
-                new ColumnDescriptor.Builder(proto.trigger().name()).columnTitle("Trigger Name").build(),
-                new ColumnDescriptor.Builder(proto.trigger().triggerType()).build(),
+                new ColumnDescriptor.Builder(proto.trigger().name()).width("150px").columnTitle("Trigger Name").build(),
+                new ColumnDescriptor.Builder(proto.trigger().triggerType()).width("130px").build(),
                 new ColumnDescriptor.Builder(proto.trigger()).searchableOnly().build()
         ));//@formatter:on
         c.addAll(createInlineViewColumnDescriptors());

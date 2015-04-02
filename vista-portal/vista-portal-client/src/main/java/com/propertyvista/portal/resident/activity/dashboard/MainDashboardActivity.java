@@ -35,9 +35,9 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingSummary
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceSummaryDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.BillingService;
+import com.propertyvista.portal.rpc.portal.resident.services.insurance.InsuranceService;
 import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentSummaryService;
-import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceService;
 import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
 public class MainDashboardActivity extends SecurityAwareActivity implements MainDashboardPresenter {

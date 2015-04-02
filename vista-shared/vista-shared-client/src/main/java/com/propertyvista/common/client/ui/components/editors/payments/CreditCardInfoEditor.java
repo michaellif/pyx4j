@@ -34,6 +34,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextComponent;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -56,13 +57,12 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
 
     private static final I18n i18n = I18n.get(CreditCardInfoEditor.class);
 
-    private boolean isCreditCardTypeSet = false;
-
-    private boolean isExpiryDateSet = false;
-
-    // a hack for async creditCardNumber Validation
     private boolean isCreditCardNumberCheckSent;
 
+    // Asynchronous creditCardNumber Validation:
+    // first time isValid() - run async validation then on receiving result set
+    // isCreditCardNumberCheckRecieved to 'true', store validation result (isCreditCardNumberValid) and call revalidate;
+    // second time isValid() - release isCreditCardNumberCheckRecieved to false and display validation result;
     private boolean isCreditCardNumberCheckRecieved;
 
     private BasicValidationError isCreditCardNumberValid;
@@ -96,43 +96,31 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
     }
 
     protected void contentTweaks() {
-        get(proto().cardType()).addValueChangeHandler(new ValueChangeHandler<CreditCardType>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<CreditCardType> event) {
-                cardEditor.revalidate();
-            }
-        });
-
+        // manage security code visibility and mandatory state:
         get(proto().securityCode()).setVisible(isEditable());
-        get(proto().securityCode()).setMandatory(false);
-        // manage security code mandatory state:
-        get(proto().nameOn()).addValueChangeHandler(new ValueChangeHandler<String>() {
+        this.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
-            public void onValueChange(ValueChangeEvent<String> event) {
+            public void onPropertyChange(PropertyChangeEvent event) {
+                if (event.getPropertyName() == PropertyName.editable) {
+                    get(proto().securityCode()).setVisible(isEditable());
+                }
+            }
+        });
+
+        get(proto().securityCode()).setMandatory(false);
+        this.addValueChangeHandler(new ValueChangeHandler<CreditCardInfo>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<CreditCardInfo> event) {
                 get(proto().securityCode()).setMandatory(true);
             }
         });
-        get(proto().cardType()).addValueChangeHandler(new ValueChangeHandler<CreditCardType>() {
+        // END OF manage security code visibility and mandatory state.
+
+        // clear card # on type change:
+        get(proto().cardType()).addValueChangeHandler(new ValueChangeHandler<CreditCardInfo.CreditCardType>() {
             @Override
             public void onValueChange(ValueChangeEvent<CreditCardType> event) {
-                get(proto().securityCode()).setMandatory(true);
-                isCreditCardTypeSet = event.getValue() != null ? true : false;
-                cardEditor.revalidate();
-            }
-        });
-        get(proto().card()).addValueChangeHandler(new ValueChangeHandler<CreditCardNumberIdentity>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<CreditCardNumberIdentity> event) {
-                get(proto().securityCode()).setMandatory(true);
-            }
-
-        });
-        get(proto().expiryDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
-                get(proto().securityCode()).setMandatory(true);
-                isExpiryDateSet = event.getValue() != null ? true : false;
-                cardEditor.revalidate();
+                cardEditor.clear();
             }
         });
     }
@@ -154,15 +142,6 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
 
     @Override
     public void addValidations() {
-        this.addPropertyChangeHandler(new PropertyChangeHandler() {
-            @Override
-            public void onPropertyChange(PropertyChangeEvent event) {
-                if (event.getPropertyName() == PropertyName.editable) {
-                    get(proto().securityCode()).setVisible(isEditable());
-                }
-            }
-        });
-
         // set up validation for credit card number:
         // sync validation:
         cardEditor.addComponentValidator(new CreditCardNumberTypeValidator(new CreditCardTypeProvider() {
@@ -184,9 +163,12 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
                     return isCreditCardNumberValid;
                 }
                 return null;
-
             }
         });
+        // this data used during card validation - so do not forget to revalidate card:
+        get(proto().cardType()).addValueChangeHandler(new RevalidationTrigger<CreditCardType>(cardEditor));
+        get(proto().expiryDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(cardEditor));
+        // END OF set up validation for credit card number.
 
         get(proto().expiryDate()).addComponentValidator(new FutureDateValidator());
 
@@ -208,12 +190,12 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
     }
 
     private void validateCreditCardNumberAsync(final CComponent<?, ?, ?, ?> component, CreditCardNumberIdentity value) {
-
-        if (!isCreditCardTypeSet || !isExpiryDateSet || !get(proto().expiryDate()).isValid()) {
+        // check preconditions:
+        if (value == null || !isCardTypeReady() || !isExpiryDateReady()) {
             return;
         }
 
-        if (!isCreditCardNumberCheckSent && value != null) {
+        if (!isCreditCardNumberCheckSent) {
             resetCreditCardNumberValidationResult();
 
             if (ValidationUtils.isCreditCardNumberIinValid(retrieveCreditCardTypePatterns(), value.newNumber().getValue())) {
@@ -224,7 +206,7 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
                     public void onSuccess(CreditCardValidationResponce result) {
                         //TODO use valid type validCardType
                         setCreditCardNumberValidationResult(result.validWithTypeProvided().getValue(false) ? null : new BasicValidationError(component,
-                                i18n.tr("Invalid Card Number or Expiry Date")));
+                                i18n.tr("Invalid Card Type, Card Number or Expiry Date")));
                     }
 
                     @Override
@@ -237,6 +219,14 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
                 isCreditCardNumberCheckSent = true;
             }
         }
+    }
+
+    boolean isCardTypeReady() {
+        return (get(proto().cardType()).getValue() != null);
+    }
+
+    boolean isExpiryDateReady() {
+        return (get(proto().expiryDate()).getValue() != null && get(proto().expiryDate()).isValid());
     }
 
     private String[] retrieveCreditCardTypePatterns() {

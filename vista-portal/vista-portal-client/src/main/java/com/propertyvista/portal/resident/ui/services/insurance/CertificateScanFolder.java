@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
-import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceCertificateScanResidentUploadService;
+import com.propertyvista.portal.rpc.portal.resident.services.insurance.InsuranceCertificateScanResidentUploadService;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class CertificateScanFolder extends PortalBoxFolder<InsuranceCertificateScan> {

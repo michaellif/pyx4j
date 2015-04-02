@@ -31,6 +31,7 @@ import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
@@ -38,6 +39,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
+import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.legal.eviction.EvictionCaseFacade;
@@ -51,6 +53,7 @@ import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudService
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.company.Notification.AlertType;
 import com.propertyvista.domain.eviction.EvictionCaseStatus;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.security.CrmUserSignature;
@@ -399,6 +402,18 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
             }
         }
 
+        if (ServerSideFactory.create(LeaseTermAgreementSigningProgressFacade.class).isEmployeeSignatureRequired(lease)) {
+            final Lease leaseFinal = leaseId;
+            Persistence.service().addTransactionCompletionHandler(new Executable<Void, RuntimeException>() {
+
+                @Override
+                public Void execute() {
+                    ServerSideFactory.create(NotificationFacade.class).leaseApplicationNotification(leaseFinal, AlertType.ApplicationLeaseSigning);
+                    return null;
+                }
+            });
+        }
+
         Persistence.service().commit();
 
         callback.onSuccess(null);
@@ -410,5 +425,4 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
             lease.currentLegalStatus().set(status.evictionStep().name());
         }
     }
-
 }

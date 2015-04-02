@@ -7,15 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Oct 23, 2013
+ * Created on Sep 11, 2013
  * @author michaellif
  */
-package com.propertyvista.portal.server.portal.resident.services.services;
+package com.propertyvista.portal.rpc.portal.resident.services.insurance;
 
-import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceCertificateScanResidentUploadService;
-import com.propertyvista.server.common.upload.AbstractInsuranceCertificateScanUploadServiceImpl;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class InsuranceCertificateScanResidentUploadServiceImpl extends AbstractInsuranceCertificateScanUploadServiceImpl implements
-        InsuranceCertificateScanResidentUploadService {
+import com.pyx4j.rpc.shared.IService;
+
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.InsuranceStatusDTO;
+
+public interface InsuranceService extends IService {
+
+    void retreiveInsuranceStatus(AsyncCallback<InsuranceStatusDTO> callback);
 
 }

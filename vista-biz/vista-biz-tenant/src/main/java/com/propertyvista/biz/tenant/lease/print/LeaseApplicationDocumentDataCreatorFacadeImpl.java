@@ -14,7 +14,9 @@ package com.propertyvista.biz.tenant.lease.print;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Vector;
 
@@ -35,6 +37,7 @@ import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.blob.LandlordMediaBlob;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.media.IdentificationDocument;
@@ -203,16 +206,16 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
 
         LeaseTerm term = Persistence.retrieveDraftForEdit(LeaseTerm.class, lease.currentTerm().getPrimaryKey());
+        InternationalAddress address = AddressRetriever.getLeaseLegalAddress(lease);
+
         leaseSection.landlordName().setValue(lease.unit().building().landlord().name().getValue());
         leaseSection.unitNumber().setValue(lease.unit().info().number().getValue());
-        leaseSection.address().setValue(AddressRetriever.getLeaseLegalAddress(lease).getStringView());
+        leaseSection.address().setValue(address.getStringView());
         leaseSection.floorplan().setValue(lease.unit().floorplan().marketingName().getValue());
-        leaseSection.city().setValue(AddressRetriever.getLeaseLegalAddress(lease).city().getValue());
-        leaseSection.province().setValue(AddressRetriever.getLeaseLegalAddress(lease).province().getValue());
-        leaseSection.postalCode().setValue(AddressRetriever.getLeaseLegalAddress(lease).postalCode().getValue());
-        leaseSection.street().setValue(
-                AddressRetriever.getLeaseLegalAddress(lease).streetNumber().getValue() + " "
-                        + (AddressRetriever.getLeaseLegalAddress(lease).streetName().getValue()));
+        leaseSection.city().setValue(address.city().getValue());
+        leaseSection.province().setValue(address.province().getValue());
+        leaseSection.postalCode().setValue(address.postalCode().getValue());
+        leaseSection.street().setValue(address.streetNumber().getValue() + " " + (address.streetName().getValue()));
         leaseSection.includedUtilities().setValue(retrieveUtilities(term));
 
         leaseSection.leaseFrom().setValue(lease.currentTerm().termFrom().getValue());
@@ -608,6 +611,24 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     }
 
     private int getTotalMonths(LogicalDate start, LogicalDate end) {
-        return 12 * (end.getYear() - start.getYear()) + end.getMonth() - start.getMonth();
+        int totalMonths = 12 * (end.getYear() - start.getYear()) + end.getMonth() - start.getMonth();
+
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTime(start);
+
+        int startDay = calendar.get(Calendar.DAY_OF_MONTH);
+        if (startDay != 1) { //is not the first day of month
+            totalMonths--;
+        }
+
+        calendar.setTime(end);
+        int endDay = calendar.get(Calendar.DAY_OF_MONTH);
+        calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
+
+        if (calendar.get(Calendar.DAY_OF_MONTH) == endDay) { //is the last day of month
+            totalMonths++;
+        }
+
+        return totalMonths;
     }
 }

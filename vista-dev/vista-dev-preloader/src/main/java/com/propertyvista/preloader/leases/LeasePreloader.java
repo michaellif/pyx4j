@@ -276,8 +276,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
             }
 
-            ensureLeaseDepositsNotZero(lease);
-
             numCreated++;
         }
 
@@ -289,6 +287,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             unit = makeAvailable(unit);
 
             Lease lease = generator.createLeaseWithTenants(unit);
+
             LeaseGenerator.ensureOneYearLeaseFromNextMonthOn(lease);
             LeaseGenerator.attachDocumentData(lease);
 
@@ -342,6 +341,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 SystemDateManager.setDate(lease.currentTerm().termFrom().getValue());
             }
             ServerSideFactory.create(LeaseFacade.class).persist(lease);
+
             for (LeaseTermTenant participant : lease.currentTerm().version().tenants()) {
                 setPictureToTenantIfDemo(participant.leaseParticipant().customer());
                 participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
@@ -360,12 +360,12 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 }
             }
 
+            ensureDepositsForDraftApplicationsIfDemo(lease);
+
             if (lease.leaseApplication().status().getValue() == LeaseApplication.Status.InProgress) {
                 LeaseTermParticipant<? extends LeaseParticipant<?>> leaseTermParticipant = lease.currentTerm().version().tenants().get(0);
                 LeasePreloaderHelper.addDefaultPaymentToLeaseApplication(leaseTermParticipant);
             }
-
-            ensureLeaseDepositsNotZero(lease);
 
             SystemDateManager.resetDate();
         }
@@ -395,8 +395,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 LeaseTermParticipant<? extends LeaseParticipant<?>> leaseTermParticipant = lease.currentTerm().version().tenants().get(0);
                 LeasePreloaderHelper.addDefaultPaymentToLeaseApplication(leaseTermParticipant);
             }
-
-            ensureLeaseDepositsNotZero(lease);
         }
 
         StringBuilder b = new StringBuilder();
@@ -405,15 +403,17 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         return b.toString();
     }
 
+    private void ensureDepositsForDraftApplicationsIfDemo(Lease lease) {
+        if (ApplicationMode.isDemo()) {
+            LeaseGenerator.ensureDepositsForDraftApplications(lease);
+        }
+    }
+
     private void setPictureToTenantIfDemo(Customer customer) {
         if (ApplicationMode.isDemo()) {
             TenantsGenerator.setCustomerPicture(customer);
             Persistence.service().persist(customer.picture());
         }
-    }
-
-    private void ensureLeaseDepositsNotZero(Lease lease) {
-        // TODO IMPLEMENT PROPER WAY TO DO THIS
     }
 
     private void skipResidentWizard(LeaseTermParticipant<?> tenant) {

@@ -22,4 +22,5 @@ public interface LeaseTermAgreementSigningProgressFacade {
 
     LeaseAgreementSigningProgressDTO getSigningProgress(Lease leaseId);
 
+    boolean isEmployeeSignatureRequired(Lease lease);
 }
