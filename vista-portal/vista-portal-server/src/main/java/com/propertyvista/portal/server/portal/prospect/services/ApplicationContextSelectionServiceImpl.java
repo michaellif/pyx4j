@@ -54,7 +54,7 @@ public class ApplicationContextSelectionServiceImpl implements ApplicationContex
             if (Lease.Status.isApplicationUnitSelected(onlineApplication.masterOnlineApplication().leaseApplication().lease())) {
                 choice.leaseApplicationUnitAddress().setValue(AddressRetriever.getOnlineApplicationAddress(onlineApplication).getStringView());
             } else {
-                choice.leaseApplicationUnitAddress().setValue("< NEW APPICATION >");
+                choice.leaseApplicationUnitAddress().setValue("< New Application - no Unit selected yet >");
             }
             choices.add(choice);
         }
