@@ -91,6 +91,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         policy.templates().add(defaultEmailTemplatePaymentReturned());
 
         policy.templates().add(defaultEmailTemplateDirectDebitAccountChanged());
+        policy.templates().add(defaultEmailTemplateDirectDebitToSoldBuilding());
 
         return policy;
     }
@@ -1159,4 +1160,35 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         return template;
     }
 
+    private EmailTemplate defaultEmailTemplateDirectDebitToSoldBuilding() {
+        EmailTemplateType type = EmailTemplateType.DirectDebitToSoldBuilding;
+
+        PaymentT paymentT = templateFacade.getProto(type, PaymentT.class);
+        TenantT tenantT = templateFacade.getProto(type, TenantT.class);
+        LeaseT leaseT = templateFacade.getProto(type, LeaseT.class);
+        PortalLinksT portalT = templateFacade.getProto(type, PortalLinksT.class);
+
+        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.useHeader().setValue(Boolean.TRUE);
+        template.useFooter().setValue(Boolean.TRUE);
+        template.templateType().setValue(type);
+        template.subject().setValue(i18n.tr("Payment Error - Building Ownership Change"));
+        template.content().setValue(i18n.tr(//@formatter:off
+                "Dear {0},<br/><br/>" +
+                "Our records indicate that a Direct Debit Rent Payment of <b>{1}</b> was withdrawn as per your request from your bank on <b>{2}</b>.<br/><br/>" +
+                "Due to the building ownership change your original Account Number <b>{3}</b> " +
+                "was deactivated and our system was not able to process this payment.<br/><br/>" +
+                "In order to receive your money back you have to request your bank to reverse the payment as it was deposited to the " +
+                "wrong account. As soon as the bank initiates this process we will be able to reverse the payment in our system.<br/><br/>" +
+                "<b><u>Please Note: If you have Monthly Automatic Rent Payments set up for account {3} in your bank you have to cancel it.</u></b><br/><br/>" +
+                "We apologize for the inconvenience.<br/><br/>" +
+                "Thank you for choosing {4}.",
+                templateFacade.getVarname(tenantT.FirstName()),
+                templateFacade.getVarname(paymentT.Amount()),
+                templateFacade.getVarname(paymentT.Date()),
+                templateFacade.getVarname(leaseT.BillingAccount()),
+                templateFacade.getVarname(portalT.CompanyName())
+        ));//@formatter:on
+        return template;
+    }
 }

@@ -40,7 +40,9 @@ import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 
 public class NotificationFacadeImpl implements NotificationFacade {
 
@@ -164,6 +166,11 @@ public class NotificationFacadeImpl implements NotificationFacade {
     @Override
     public void directDebitAccountChanged(LeaseTermTenant tenant) {
         ServerSideFactory.create(CommunicationFacade.class).sendDirectDebitAccountChangedNote(tenant);
+    }
+
+    @Override
+    public void directDebitToSoldBuilding(DirectDebitRecord record, LeaseTermParticipant<?> leaseTermParticipant) {
+        ServerSideFactory.create(CommunicationFacade.class).sendDirectDebitToSoldBuildingNote(record, leaseTermParticipant);
     }
 
     @Override

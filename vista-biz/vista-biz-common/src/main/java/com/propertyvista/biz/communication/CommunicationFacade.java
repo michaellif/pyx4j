@@ -38,6 +38,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
+import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 
 /**
  * to Tenant/Applicant (Lease)
@@ -74,6 +75,8 @@ public interface CommunicationFacade {
     void sendTenantInvitation(LeaseTermTenant tenant);
 
     void sendDirectDebitAccountChangedNote(LeaseTermTenant tenant);
+
+    void sendDirectDebitToSoldBuildingNote(DirectDebitRecord record, LeaseTermParticipant<?> leaseTermParticipant);
 
     void sendNewPmcEmail(OnboardingUser user, Pmc pmc);
 

@@ -20,6 +20,7 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -54,9 +55,11 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
+import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 
 class MessageTemplatesCustomizable {
 
@@ -303,6 +306,46 @@ class MessageTemplatesCustomizable {
             Persistence.service().retrieve(tenant.leaseParticipant().customer().user());
         }
         email.setTo(AddresseUtils.getCompleteEmail(user));
+        email.setSender(getSender());
+        // set email subject and body from the template
+        buildEmail(email, emailTemplate, context, data);
+
+        return email;
+    }
+
+    public static MailMessage createDirectDebitToSoldBuildingEmail(DirectDebitRecord record, LeaseTermParticipant<?> leaseTermParticipant) {
+        Persistence.ensureRetrieve(leaseTermParticipant, AttachLevel.Attached);
+        Persistence.ensureRetrieve(leaseTermParticipant.leaseTermV().holder().lease(), AttachLevel.Attached);
+
+        EmailTemplateType type = EmailTemplateType.DirectDebitToSoldBuilding;
+
+        // get building policy node
+        EmailTemplate emailTemplate = getEmailTemplate(type, leaseTermParticipant.leaseTermV().holder().lease().billingAccount());
+
+        EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
+        // populate context properties required by template type
+        context.paymentRecord().amount().set(record.amount());
+        context.paymentRecord().receivedDate().setValue(new LogicalDate(record.directDebitFile().created().getValue()));
+        context.paymentRecord().billingAccount().accountNumber().setValue(record.accountNumber().getValue());
+        context.leaseTermParticipant().set(leaseTermParticipant);
+        context.lease().set(leaseTermParticipant.leaseTermV().holder().lease());
+
+        ArrayList<IEntity> data = new ArrayList<IEntity>();
+        for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(type)) {
+            // ObjectLoader will load required T-Objects using context data
+            data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
+        }
+
+        MailMessage email = new MailMessage();
+        CustomerUser user = leaseTermParticipant.leaseParticipant().customer().user();
+
+        if (user.isValueDetached()) {
+            Persistence.service().retrieve(leaseTermParticipant.leaseParticipant().customer().user());
+        }
+        email.setTo(AddresseUtils.getCompleteEmail(user));
+
+        MessageKeywords.addToKeywords(email, record);
+
         email.setSender(getSender());
         // set email subject and body from the template
         buildEmail(email, emailTemplate, context, data);

@@ -19,7 +19,9 @@ import com.propertyvista.domain.company.Notification.AlertType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 
 public class NotificationFacadeMock implements NotificationFacade {
 
@@ -94,6 +96,11 @@ public class NotificationFacadeMock implements NotificationFacade {
 
     @Override
     public void leaseApplicationNotification(Lease leaseId, AlertType alertType) {
+    }
+
+    @Override
+    public void directDebitToSoldBuilding(DirectDebitRecord payment, LeaseTermParticipant<?> leaseTermParticipant) {
+
     }
 
 }

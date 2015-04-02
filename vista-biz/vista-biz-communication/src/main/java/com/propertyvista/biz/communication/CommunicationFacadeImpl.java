@@ -53,6 +53,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
+import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 import com.propertyvista.server.common.security.AccessKey;
 
 public class CommunicationFacadeImpl implements CommunicationFacade {
@@ -416,6 +417,14 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     @Override
     public void sendDirectDebitAccountChangedNote(LeaseTermTenant tenant) {
         MailMessage m = MessageTemplatesCustomizable.createDirectDebitAccountChangesEmail(tenant);
+        if (m != null) {
+            Mail.queue(m, null, null);
+        }
+    }
+
+    @Override
+    public void sendDirectDebitToSoldBuildingNote(DirectDebitRecord record, LeaseTermParticipant<?> leaseTermParticipant) {
+        MailMessage m = MessageTemplatesCustomizable.createDirectDebitToSoldBuildingEmail(record, leaseTermParticipant);
         if (m != null) {
             Mail.queue(m, null, null);
         }

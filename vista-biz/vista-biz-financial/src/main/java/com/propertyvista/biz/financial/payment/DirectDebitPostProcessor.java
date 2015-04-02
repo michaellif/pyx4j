@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -108,19 +108,7 @@ public class DirectDebitPostProcessor {
         // Find tenant by name in debitRecord.customerName()
         LeaseTermParticipant<? extends LeaseParticipant<?>> leaseTermParticipant = billingAccount.lease().currentTerm().version().tenants().get(0);
         String customerNametoMatch = normalizeName(debitRecord.customerName().getStringView().replace(',', ' '));
-        leaseTermParticipant = findParticipantByExactNameMatch(customerNametoMatch, billingAccount.lease().currentTerm().version().tenants());
-        if (leaseTermParticipant == null) {
-            leaseTermParticipant = findParticipantByExactNameMatch(customerNametoMatch, billingAccount.lease().currentTerm().version().guarantors());
-        }
-        // Fallback to primary tenant, Applicant
-        if (leaseTermParticipant == null) {
-            for (LeaseTermTenant leaseParticipant : billingAccount.lease().currentTerm().version().tenants()) {
-                if (leaseParticipant.role().getValue() == LeaseTermParticipant.Role.Applicant) {
-                    leaseTermParticipant = leaseParticipant;
-                    break;
-                }
-            }
-        }
+        leaseTermParticipant = findTenantByName(customerNametoMatch, billingAccount);
 
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
         paymentRecord.billingAccount().set(billingAccount);
@@ -141,12 +129,31 @@ public class DirectDebitPostProcessor {
         ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
     }
 
-    private static String normalizeName(String name) {
+    static LeaseTermParticipant<? extends LeaseParticipant<?>> findTenantByName(String customerNametoMatch, BillingAccount billingAccount) {
+        LeaseTermParticipant<? extends LeaseParticipant<?>> leaseTermParticipant = findParticipantByExactNameMatch(customerNametoMatch, billingAccount.lease()
+                .currentTerm().version().tenants());
+
+        if (leaseTermParticipant == null) {
+            leaseTermParticipant = findParticipantByExactNameMatch(customerNametoMatch, billingAccount.lease().currentTerm().version().guarantors());
+        }
+        // Fallback to primary tenant, Applicant
+        if (leaseTermParticipant == null) {
+            for (LeaseTermTenant leaseParticipant : billingAccount.lease().currentTerm().version().tenants()) {
+                if (leaseParticipant.role().getValue() == LeaseTermParticipant.Role.Applicant) {
+                    leaseTermParticipant = leaseParticipant;
+                    break;
+                }
+            }
+        }
+
+        return leaseTermParticipant;
+    }
+
+    static String normalizeName(String name) {
         return name.trim().replaceAll("\\s+", " ").toLowerCase(Locale.ENGLISH);
     }
 
-    @SuppressWarnings("unchecked")
-    private <E extends LeaseTermParticipant<? extends LeaseParticipant<?>>> E findParticipantByExactNameMatch(String customerName, List<E> participants) {
+    static <E extends LeaseTermParticipant<? extends LeaseParticipant<?>>> E findParticipantByExactNameMatch(String customerName, List<E> participants) {
         for (E participant : participants) {
             Name name = participant.leaseParticipant().customer().person().name();
             if (customerName.equals(normalizeName(EntityFormatUtils.nvl_concat(" ", name.firstName(), name.lastName())))) {

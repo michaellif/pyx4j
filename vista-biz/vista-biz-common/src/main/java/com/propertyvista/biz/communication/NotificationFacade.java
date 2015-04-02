@@ -18,7 +18,9 @@ import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 
 /**
  * CRM and Tenant Notifications.
@@ -70,6 +72,8 @@ public interface NotificationFacade {
     public void autoPayCancelledByResidentNotification(Lease leaseId, List<AutopayAgreement> canceledAgreements);
 
     public void directDebitAccountChanged(LeaseTermTenant tenant);
+
+    public void directDebitToSoldBuilding(DirectDebitRecord payment, LeaseTermParticipant<?> leaseTermParticipant);
 
     public void aggregateNotificationsStart();
 

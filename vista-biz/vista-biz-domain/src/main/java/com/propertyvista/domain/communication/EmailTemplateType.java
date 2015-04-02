@@ -69,6 +69,8 @@ public enum EmailTemplateType {
 
     DirectDebitAccountChanged,
 
+    DirectDebitToSoldBuilding,
+
     // Message Broadcast templates
     MessageBroadcastEmployee,
 

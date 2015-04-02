@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -23,6 +23,7 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.communication.OperationsNotificationFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.SftpTransportConnectionException;
@@ -30,6 +31,8 @@ import com.propertyvista.biz.system.eft.EFTTransportFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.MerchantAccount.MerchantElectronicPaymentSetup;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitFile;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
@@ -112,6 +115,7 @@ class DirectDebitReceiveProcessor {
                                 criteria.eq(criteria.proto().units().$().leases(), billingAccount.lease());
                                 Building building = Persistence.service().retrieve(criteria);
                                 if (building.suspended().getValue(false)) {
+                                    notifyTenant(record, getLeaseTermParticipant(record, billingAccount));
                                     billingAccount = null;
                                     addOperationsNotes(record, "Building " + building.propertyCode().getStringView() + " Suspended in PMC '"
                                             + record.pmc().name().getStringView() + "'");
@@ -153,5 +157,22 @@ class DirectDebitReceiveProcessor {
     private static void addOperationsNotes(DirectDebitRecord record, String message) {
         record.operationsNotes().setValue( //
                 CommonsStringUtils.nvl_concat(record.operationsNotes().getValue(), message, "\n"));
+    }
+
+    private static void notifyTenant(DirectDebitRecord record, LeaseTermParticipant<?> leaseTermParticipant) {
+        ServerSideFactory.create(NotificationFacade.class).directDebitToSoldBuilding(record, leaseTermParticipant);
+    }
+
+    private LeaseTermParticipant<?> getLeaseTermParticipant(DirectDebitRecord debitRecord, BillingAccount billingAccount) {
+        Persistence.service().retrieve(billingAccount.lease());
+        Persistence.service().retrieve(billingAccount.lease().currentTerm().version().tenants());
+        Persistence.service().retrieve(billingAccount.lease().currentTerm().version().guarantors());
+
+        // Find tenant by name in debitRecord.customerName()
+        LeaseTermParticipant<? extends LeaseParticipant<?>> leaseTermParticipant = billingAccount.lease().currentTerm().version().tenants().get(0);
+        String customerNametoMatch = DirectDebitPostProcessor.normalizeName(debitRecord.customerName().getStringView().replace(',', ' '));
+        leaseTermParticipant = DirectDebitPostProcessor.findTenantByName(customerNametoMatch, billingAccount);
+
+        return leaseTermParticipant;
     }
 }
