@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -14,22 +14,26 @@ package com.propertyvista.portal.prospect.ui;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.rpc.InMemeoryListService;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationContextChoiceDTO;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
@@ -39,21 +43,27 @@ public class ApplicationContextSelectionViewImpl extends SimplePanel implements 
 
     private final static I18n i18n = I18n.get(ApplicationContextSelectionViewImpl.class);
 
-    private final ApplicationLister lister;
+    private final ApplicationLister lister = new ApplicationLister();
+
+    private final Anchor newApplication = new Anchor("New Application", new Command() {
+        @Override
+        public void execute() {
+            presenter.createNewApplication();
+        }
+    });
 
     private ApplicationContextSelectionPresenter presenter;
 
     public ApplicationContextSelectionViewImpl() {
         setStyleName(DashboardTheme.StyleName.Dashboard.name());
-
-        lister = new ApplicationLister();
-        ApplicationContextSelectionGadget gadget = new ApplicationContextSelectionGadget(lister);
-        setWidget(gadget);
+        setWidget(new ApplicationContextSelectionGadget(lister));
     }
 
     @Override
     public void setPresenter(ApplicationContextSelectionPresenter presenter) {
         this.presenter = presenter;
+
+        newApplication.setVisible(Window.Location.getParameter(ProspectPortalSiteMap.ARG_ILS_BUILDING_ID) != null);
     }
 
     @Override
@@ -67,11 +77,10 @@ public class ApplicationContextSelectionViewImpl extends SimplePanel implements 
         ApplicationContextSelectionGadget(ApplicationLister lister) {
             super(ApplicationContextSelectionViewImpl.this, null, i18n.tr("Select an Application"), ThemeColor.foreground, 0.3);
 
-            lister.setWidth("100%");
-
             lister.getDataTable().setColumnSelectorVisible(false);
             lister.addUpperActionItem(new Label(i18n.tr("Please select the Application you want to manage and click \"Continue\"")));
             setContent(lister);
+
             setActionsToolbar(new ApplicationContextSelectionToolbar());
         }
 
@@ -79,7 +88,6 @@ public class ApplicationContextSelectionViewImpl extends SimplePanel implements 
             public ApplicationContextSelectionToolbar() {
 
                 final Button continueButton = new Button("Continue", new Command() {
-
                     @Override
                     public void execute() {
                         OnlineApplicationContextChoiceDTO choice = lister.getDataTable().getSelectedItem();
@@ -96,8 +104,12 @@ public class ApplicationContextSelectionViewImpl extends SimplePanel implements 
                         continueButton.setEnabled(lister.getDataTable().getSelectedItem() != null);
                     }
                 });
+
                 continueButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.foreground, 0.4));
                 addItem(continueButton);
+
+                newApplication.getElement().getStyle().setFontSize(18, Unit.PX);
+                addItem(newApplication);
             }
         }
     }
@@ -108,7 +120,9 @@ public class ApplicationContextSelectionViewImpl extends SimplePanel implements 
             super(OnlineApplicationContextChoiceDTO.class, false, false);
             setFilteringEnabled(false);
 
-            setColumnDescriptors(new ColumnDescriptor.Builder(proto().leaseApplicationUnitAddress()).build());
+            setColumnDescriptors(//
+                    new ColumnDescriptor.Builder(proto().leaseAplicationId()).width("100px").build(), //
+                    new ColumnDescriptor.Builder(proto().leaseApplicationUnitAddress()).width("200px").build());
             setDataTableModel(new DataTableModel<OnlineApplicationContextChoiceDTO>());
         }
     }
@@ -118,6 +132,5 @@ public class ApplicationContextSelectionViewImpl extends SimplePanel implements 
         public ApplicationDataSource(List<OnlineApplicationContextChoiceDTO> applicationChoices) {
             super(OnlineApplicationContextChoiceDTO.class, new InMemeoryListService<OnlineApplicationContextChoiceDTO>(applicationChoices));
         }
-
     }
 }

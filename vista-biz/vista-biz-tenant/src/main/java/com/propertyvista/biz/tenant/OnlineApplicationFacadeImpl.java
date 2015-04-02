@@ -46,7 +46,7 @@ import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
-import com.propertyvista.domain.tenant.ProspectSignUp;
+import com.propertyvista.domain.tenant.ProspectData;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
@@ -67,7 +67,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     private static final I18n i18n = I18n.get(OnlineApplicationFacadeImpl.class);
 
     @Override
-    public void prospectSignUp(ProspectSignUp request) {
+    public Lease prospectSignUp(ProspectData request) {
         // Minimal Validation first
         Validate.isFalse(request.firstName().isNull(), "First name required");
         Validate.isFalse(request.lastName().isNull(), "Last name required");
@@ -81,6 +81,27 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
                 throw new UserRuntimeException(true, i18n.tr("E-mail address already registered, please login to your account"));
             }
         }
+
+        return createLeaseApplication(request, null);
+    }
+
+    @Override
+    public Lease prospectLogIn(ProspectData request) {
+        // Minimal Validation first
+        Validate.isFalse(request.email().isNull(), "Email required");
+
+        request.email().setValue(EmailValidator.normalizeEmailAddress(request.email().getValue()));
+        EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
+        criteria.eq(criteria.proto().user().email(), request.email());
+        Customer customer = Persistence.service().retrieve(criteria);
+        if (customer == null) {
+            throw new UserRuntimeException(true, i18n.tr("There is no existing customer with e-mail: {0}", request.email()));
+        }
+
+        return createLeaseApplication(request, customer);
+    }
+
+    private Lease createLeaseApplication(ProspectData request, Customer customer) {
         // Validate Building and floorplan
         Building building;
         Floorplan floorplan = null;
@@ -115,10 +136,14 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         LeaseTermTenant mainTenant = lease.currentTerm().version().tenants().$();
         lease.currentTerm().version().tenants().add(mainTenant);
 
-        mainTenant.leaseParticipant().customer().person().name().firstName().setValue(request.firstName().getValue());
-        mainTenant.leaseParticipant().customer().person().name().middleName().setValue(request.middleName().getValue());
-        mainTenant.leaseParticipant().customer().person().name().lastName().setValue(request.lastName().getValue());
-        mainTenant.leaseParticipant().customer().person().email().setValue(request.email().getValue());
+        if (customer != null) {
+            mainTenant.leaseParticipant().customer().set(customer);
+        } else {
+            mainTenant.leaseParticipant().customer().person().name().firstName().setValue(request.firstName().getValue());
+            mainTenant.leaseParticipant().customer().person().name().middleName().setValue(request.middleName().getValue());
+            mainTenant.leaseParticipant().customer().person().name().lastName().setValue(request.lastName().getValue());
+            mainTenant.leaseParticipant().customer().person().email().setValue(request.email().getValue());
+        }
 
         mainTenant.role().setValue(LeaseTermParticipant.Role.Applicant);
 
@@ -126,7 +151,11 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
         ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease, building, floorplan);
 
-        ServerSideFactory.create(CustomerFacade.class).setCustomerPassword(mainTenant.leaseParticipant().customer(), request.password().getValue());
+        if (customer == null) {
+            ServerSideFactory.create(CustomerFacade.class).setCustomerPassword(mainTenant.leaseParticipant().customer(), request.password().getValue());
+        }
+
+        return lease;
     }
 
     @Override
@@ -281,6 +310,26 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         }
 
         return applications;
+    }
+
+    @Override
+    public OnlineApplication getOnlineApplication(CustomerUser customerUser, Lease lease) {
+        Validate.isFalse(customerUser.isNull(), "Customer User can't be null");
+        Validate.isFalse(lease.isNull(), "lease can't be null");
+
+        Persistence.ensureRetrieve(lease.leaseApplication().onlineApplication(), AttachLevel.IdOnly);
+
+        // See if active Application exists
+        EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
+
+        criteria.eq(criteria.proto().customer().user(), customerUser);
+        criteria.ne(criteria.proto().status(), OnlineApplication.Status.Cancelled);
+        criteria.eq(criteria.proto().masterOnlineApplication(), lease.leaseApplication().onlineApplication());
+        criteria.in(criteria.proto().masterOnlineApplication().status(), MasterOnlineApplication.Status.inProgress());
+        criteria.in(criteria.proto().masterOnlineApplication().leaseApplication().status(), LeaseApplication.Status.draft());
+        criteria.eq(criteria.proto().masterOnlineApplication().leaseApplication().lease().status(), Lease.Status.Application);
+
+        return Persistence.service().retrieve(criteria);
     }
 
     @Override

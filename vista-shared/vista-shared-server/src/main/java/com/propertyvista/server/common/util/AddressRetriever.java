@@ -46,7 +46,7 @@ public class AddressRetriever {
     // Legal Address:
 
     public static InternationalAddress getLeaseLegalAddress(Lease lease) {
-        Persistence.ensureRetrieve(lease, AttachLevel.Attached);
+        Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
         return toInternationalAddress(getUnitLegalAddress(lease.unit()));
     }
 

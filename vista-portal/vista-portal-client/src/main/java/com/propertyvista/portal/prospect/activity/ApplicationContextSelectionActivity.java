@@ -17,17 +17,21 @@ import java.util.Vector;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.domain.tenant.ProspectData;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.prospect.ProspectPortalSite;
 import com.propertyvista.portal.prospect.ui.ApplicationContextSelectionView;
 import com.propertyvista.portal.prospect.ui.ApplicationContextSelectionView.ApplicationContextSelectionPresenter;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationContextChoiceDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationContextSelectionService;
 
@@ -65,7 +69,6 @@ public class ApplicationContextSelectionActivity extends AbstractActivity implem
                 @Override
                 public void onSuccess(VoidSerializable result) {
                     AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
-
                 }
             }, onlineApplication);
         } else {
@@ -74,4 +77,19 @@ public class ApplicationContextSelectionActivity extends AbstractActivity implem
 
     }
 
+    @Override
+    public void createNewApplication() {
+        ProspectData data = EntityFactory.create(ProspectData.class);
+
+        data.ilsBuildingId().setValue(Window.Location.getParameter(ProspectPortalSiteMap.ARG_ILS_BUILDING_ID));
+        data.ilsFloorplanId().setValue(Window.Location.getParameter(ProspectPortalSiteMap.ARG_ILS_FLOORPLAN_ID));
+        data.ilsUnitId().setValue(Window.Location.getParameter(ProspectPortalSiteMap.ARG_ILS_UNIT_ID));
+
+        service.createNewApplication(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
+            }
+        }, data);
+    }
 }

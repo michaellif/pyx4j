@@ -19,7 +19,8 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.PortalProspectBehavior;
-import com.propertyvista.domain.tenant.ProspectSignUp;
+import com.propertyvista.domain.tenant.ProspectData;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
@@ -29,7 +30,15 @@ import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm
 
 public interface OnlineApplicationFacade {
 
-    void prospectSignUp(ProspectSignUp request);
+    /*
+     * Creates new Customer and new Application.
+     */
+    Lease prospectSignUp(ProspectData request);
+
+    /*
+     * Creates new Application with existing Customer.
+     */
+    Lease prospectLogIn(ProspectData request);
 
     void createMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication, Building building, Floorplan floorplan);
 
@@ -42,6 +51,8 @@ public interface OnlineApplicationFacade {
     void resendInvitationEmail(LeaseTermParticipant<?> leaseParticipant);
 
     List<OnlineApplication> getOnlineApplications(CustomerUser customerUser);
+
+    OnlineApplication getOnlineApplication(CustomerUser customerUser, Lease lease);
 
     Collection<PortalProspectBehavior> getOnlineApplicationBehavior(OnlineApplication applicationId);
 

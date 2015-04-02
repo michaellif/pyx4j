@@ -18,11 +18,15 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
+import com.propertyvista.domain.tenant.ProspectData;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectUserVisit;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationContextChoiceDTO;
@@ -43,7 +47,15 @@ public class ApplicationContextSelectionServiceImpl implements ApplicationContex
         for (OnlineApplication onlineApplication : activeApplications) {
             OnlineApplicationContextChoiceDTO choice = EntityFactory.create(OnlineApplicationContextChoiceDTO.class);
             choice.onlineApplication().set(onlineApplication.createIdentityStub());
-            choice.leaseApplicationUnitAddress().setValue(AddressRetriever.getOnlineApplicationAddress(onlineApplication).getStringView());
+            Persistence.ensureRetrieve(onlineApplication.masterOnlineApplication().leaseApplication(), AttachLevel.Attached);
+            choice.leaseAplicationId().setValue(onlineApplication.masterOnlineApplication().leaseApplication().applicationId().getValue());
+
+            Persistence.ensureRetrieve(onlineApplication.masterOnlineApplication().leaseApplication().lease(), AttachLevel.Attached);
+            if (Lease.Status.isApplicationUnitSelected(onlineApplication.masterOnlineApplication().leaseApplication().lease())) {
+                choice.leaseApplicationUnitAddress().setValue(AddressRetriever.getOnlineApplicationAddress(onlineApplication).getStringView());
+            } else {
+                choice.leaseApplicationUnitAddress().setValue("< NEW APPICATION >");
+            }
             choices.add(choice);
         }
 
@@ -57,4 +69,16 @@ public class ApplicationContextSelectionServiceImpl implements ApplicationContex
         callback.onSuccess(null);
     }
 
+    @Override
+    public void createNewApplication(AsyncCallback<VoidSerializable> callback, ProspectData data) {
+        data.email().setValue(ServerContext.visit(ProspectUserVisit.class).getCurrentUser().email().getValue());
+        Lease lease = ServerSideFactory.create(OnlineApplicationFacade.class).prospectLogIn(data);
+        Persistence.service().commit();
+
+        OnlineApplication application = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplication(
+                ServerContext.visit(ProspectUserVisit.class).getCurrentUser(), lease);
+        ProspectPortalContext.setOnlineApplication(ServerContext.visit(ProspectUserVisit.class), application);
+        ServerContext.getVisit().setAclRevalidationRequired();
+        callback.onSuccess(null);
+    }
 }

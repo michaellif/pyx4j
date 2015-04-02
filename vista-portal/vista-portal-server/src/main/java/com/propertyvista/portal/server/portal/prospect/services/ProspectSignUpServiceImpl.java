@@ -20,7 +20,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
-import com.propertyvista.domain.tenant.ProspectSignUp;
+import com.propertyvista.domain.tenant.ProspectData;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ProspectSignUpDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectSignUpService;
 
@@ -28,7 +28,7 @@ public class ProspectSignUpServiceImpl implements ProspectSignUpService {
 
     @Override
     public void signUp(AsyncCallback<VoidSerializable> callback, ProspectSignUpDTO dto) {
-        ProspectSignUp request = EntityFactory.create(ProspectSignUp.class);
+        ProspectData request = EntityFactory.create(ProspectData.class);
 
         request.firstName().setValue(dto.firstName().getValue());
         request.middleName().setValue(dto.middleName().getValue());

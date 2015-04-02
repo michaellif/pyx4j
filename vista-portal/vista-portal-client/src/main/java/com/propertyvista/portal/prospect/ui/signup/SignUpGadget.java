@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -55,7 +55,7 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
     private final SignUpForm signupForm;
 
     SignUpGadget(SignUpViewImpl view) {
-        super(view, null, i18n.tr("Create an Account to Begin"), ThemeColor.contrast2, 1);
+        super(view, null, i18n.tr("Create an Account to Begin"), ThemeColor.contrast3, 1);
         setActionsToolbar(new SignUpToolbar());
 
         final FlowPanel contentPanel = new FlowPanel();

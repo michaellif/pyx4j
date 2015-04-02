@@ -19,6 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.domain.tenant.ProspectData;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationContextChoiceDTO;
 
@@ -28,4 +29,5 @@ public interface ApplicationContextSelectionService extends IService {
 
     void setApplicationContext(AsyncCallback<VoidSerializable> callback, OnlineApplication applicationStub);
 
+    void createNewApplication(AsyncCallback<VoidSerializable> callback, ProspectData data);
 }
