@@ -54,7 +54,7 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDataDTO> imple
             public void execute() {
                 ((BillViewerView.Presenter) getPresenter()).print();
             }
-        }, DataModelPermission.permissionUpdate(BillDataDTO.class));
+        }, DataModelPermission.permissionRead(BillDataDTO.class));
         addAction(printAction);
 
         approveAction = new SecureMenuItem(APPROVE, new Command() {
