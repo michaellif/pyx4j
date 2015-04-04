@@ -88,7 +88,7 @@ public class OracleDialect extends Dialect {
 
     @Override
     public String falseCondition() {
-        return "1 != 1";
+        return "1 = 2";
     }
 
     @Override
