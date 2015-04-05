@@ -124,7 +124,7 @@ public class HostInfoServlet extends HttpServlet {
         case containerVersion:
             String serverInfo = request.getServletContext().getServerInfo();
             if (serverInfo.startsWith("Apache Tomcat/")) {
-                serverInfo = serverInfo.substring(serverInfo.indexOf("/"));
+                serverInfo = serverInfo.substring(serverInfo.indexOf("/") + 1);
             }
             return serverInfo;
         default:
