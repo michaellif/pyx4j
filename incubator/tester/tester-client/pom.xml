@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0">
+    <!-- @version $Revision$ ($Author$) $Date$ -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.pyx4j</groupId>
+        <artifactId>pyx</artifactId>
+        <version>2.2.7-SNAPSHOT</version><!--pyx-version-->
+        <relativePath>../../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>tester-client</artifactId>
+    <name>tester-client</name>
+    <description>tester-client implementations</description>
+
+    <distributionManagement>
+        <!-- not for deployment in repository -->
+        <repository>
+            <id>pyx4j.com-no-deployment</id>
+            <url>file:///${basedir}/target/tmp</url>
+        </repository>
+        <snapshotRepository>
+            <id>pyx4j.com-no-deployment</id>
+            <url>file:///${basedir}/target/tmp</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-rpc-shared</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-security-gwt</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-entity-tests</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-rpc-gwt</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-unit-gwt</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-commons</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-unit-gwt</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-rpc-gwt</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-gwt-serialization</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-gwt-serialization</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-gwt-commons</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+        </dependency>
+
+       <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-gwt-forms</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+       <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-gwt-forms</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-i18n-shared</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-unit-runner</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-log-gwt-rpcappender</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
+
+    <properties>
+        <gwtModule>agregation.test</gwtModule>
+        <gwtModuleCompile>${gwtModule}</gwtModuleCompile>
+        <gwtDestinationWarFolder>${basedir}/../tester-gae-server/war</gwtDestinationWarFolder>
+    </properties>
+
+    <profiles>
+
+        <profile>
+            <id>gwtct</id>
+            <build>
+                <plugins>
+
+                    <plugin>
+                        <groupId>com.pyx4j</groupId>
+                        <artifactId>gwt-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>compile-java2script</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <module>${gwtModuleCompile}</module>
+                            <logLevel>INFO</logLevel>
+                            <style>${gwtCompilerOutputStyle}</style>
+                            <webappDirectory>${gwtDestinationWarFolder}</webappDirectory>
+                            <generated>${project.build.directory}/gwt-generated</generated>
+                            <localWorkers>${gwtLocalWorkers}</localWorkers>
+                            <draftCompile>${gwtDraftCompile}</draftCompile>
+                            <compileReport>false</compileReport>
+                            <enableAssertions>true</enableAssertions>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.google.gwt</groupId>
+                                <artifactId>gwt-dev</artifactId>
+                                <version>${gwtVersion}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
+
+</project>

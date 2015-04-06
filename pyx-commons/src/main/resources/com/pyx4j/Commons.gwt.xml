@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
+<!-- @version $Revision$ ($Author$) $Date$ -->
+<module>
+	<source path="commons"/> 
+	<extend-configuration-property name="rpc.blacklist" value="com.pyx4j.commons.LoopCounter.*" />
+	
+	<!--
+    	When disableClassMetadata GWT compile flag is used should enable this for site to work.
+ 	-->
+ 	<define-configuration-property name="pyx.classNamePreserve" is-multi-valued="false" />
+	<set-configuration-property name="pyx.classNamePreserve" value="false" />
+	
+    <generate-with class="com.pyx4j.rebind.ClassNameGenerator">
+        <when-type-assignable class="com.pyx4j.commons.ClassName.ClassNames"/>
+    </generate-with>
+    
+    <super-source path="emul"/>
+  
+</module>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
+<!-- @version $Revision$ ($Author$) $Date$ -->
+<module>
+	<inherits name='com.pyx4j.config.ConfigShared'/>
+    <source path="client"/>
+	
+	<define-configuration-property name="pyx.compileTimeSystemProperty.project.version" is-multi-valued="false" />
+    <set-configuration-property name="pyx.compileTimeSystemProperty.project.version" value="project.version" />
+
+    <define-configuration-property name="pyx.compileTimeSystemProperty.patch.number" is-multi-valued="false" />
+    <set-configuration-property name="pyx.compileTimeSystemProperty.patch.number" value="patch.number" />
+    
+    <define-configuration-property name="pyx.compileTimeSystemProperty.build.number" is-multi-valued="false" />
+    <set-configuration-property name="pyx.compileTimeSystemProperty.build.number" value="build.number" />
+    
+    <define-configuration-property name="pyx.compileTimeSystemProperty.build.time" is-multi-valued="false" />
+    <set-configuration-property name="pyx.compileTimeSystemProperty.build.time" value="build.time" />
+    
+    <define-configuration-property name="pyx.compileTimeSystemProperty.scm.revision" is-multi-valued="false" />
+    <set-configuration-property name="pyx.compileTimeSystemProperty.scm.revision" value="scm.revision" />
+    
+    <define-configuration-property name="pyx.compileTimeSystemProperty.build.timeFormat" is-multi-valued="false" />
+    <set-configuration-property name="pyx.compileTimeSystemProperty.build.timeFormat" value="yyyyMMdd HH:mm" />
+
+    <define-configuration-property name="pyx.build.forceRPCVersion" is-multi-valued="false" />
+    <set-configuration-property name="pyx.build.forceRPCVersion" value="false" />
+    
+    <generate-with class="com.pyx4j.config.rebind.ClientApplicationVersionGenerator">
+        <when-type-assignable class="com.pyx4j.config.client.ClientApplicationVersion"/>
+    </generate-with>
+    
+	<replace-with class="com.pyx4j.config.client.ClientApplicationMode">
+        <when-type-is class="com.pyx4j.config.shared.ApplicationMode.Mode"/>
+    </replace-with>
+    
+</module>

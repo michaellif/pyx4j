@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
+<!-- @version $Revision$ ($Author$) $Date$ -->
+<module>
+    <inherits name='com.google.gwt.user.User'/>
+    <inherits name="com.google.gwt.i18n.I18N"/>
+
+    <inherits name='com.pyx4j.i18n.I18NShared'/>
+
+    <!-- our java.text.MessageFormat -->
+    <inherits name='com.pyx4j.gwt.GwtCommons'/>
+
+    <define-configuration-property name="pyx.locale.default" is-multi-valued="false" />
+    <!--  Locale used in Java code e.g. No translation required -->
+	<set-configuration-property name="pyx.locale.default" value="default"/>
+
+    <replace-with class="com.pyx4j.i18n.client.ClientI18nFactory">
+        <when-type-is class="com.pyx4j.i18n.shared.II18nFactory"/>
+    </replace-with>
+  
+    <generate-with class="com.pyx4j.i18n.rebind.I18nResourceBundleGenerator">
+        <when-type-assignable class="com.pyx4j.i18n.client.I18nResourceBundle"/>
+    </generate-with>
+
+    <generate-with class="com.pyx4j.i18n.rebind.I18nEnumResourceBundleGenerator">
+        <when-type-assignable class="com.pyx4j.i18n.client.I18nEnumResourceBundle"/>
+    </generate-with>
+    
+    <source path="client"/>
+</module>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+<!-- @version $Revision$ ($Author$) $Date$ -->
+
+    <display-name>Pyx UI Tester ${buildLabel} svn:${scm.revision} ts:${timestamp}</display-name>
+
+    <listener>
+        <listener-class>com.pyx4j.entity.server.servlet.InitializationServletContextListener</listener-class>
+    </listener>
+
+    <filter>
+        <filter-name>LifecycleFilter</filter-name>
+        <filter-class>com.pyx4j.server.contexts.LifecycleFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>LifecycleFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <servlet>
+        <servlet-name>RemoteServiceServlet</servlet-name>
+        <servlet-class>com.pyx4j.rpc.server.RemoteServiceServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RemoteServiceServlet</servlet-name>
+        <url-pattern>/tester/srv/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>RemoteServiceServlet</servlet-name>
+        <url-pattern>/srv/*</url-pattern>
+    </servlet-mapping>
+
+	<servlet>
+        <servlet-name>UploadServlet</servlet-name>
+        <servlet-class>com.pyx4j.tester.server.file.TestUploadServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>UploadServlet</servlet-name>
+        <url-pattern>/tester/upload/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>FileResourceServlet</servlet-name>
+        <servlet-class>com.pyx4j.tester.server.file.TFileResourceServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>FileResourceServlet</servlet-name>
+        <url-pattern>/file-view/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Default page to serve -->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+
+</web-app>

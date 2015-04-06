@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+	<!--
+		@version $Revision$ ($Author$) $Date: 2009-12-27
+		15:41:17 -0500 (Sun, 27 Dec 2009) $
+	-->
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.pyx4j</groupId>
+		<artifactId>pyx</artifactId>
+		<version>2.2.7-SNAPSHOT</version><!--pyx-version-->
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>pyx-unit-runner</artifactId>
+	<name>pyx-unit-runner</name>
+	<description>Server side Unit Tests invocation for GWT</description>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.pyx4j</groupId>
+			<artifactId>pyx-unit-shared</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.pyx4j</groupId>
+			<artifactId>pyx-unit-gwt</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-rpc-gwt</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+	</dependencies>
+
+    <properties>
+        <project.jar-source-4gwt>true</project.jar-source-4gwt>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>source-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

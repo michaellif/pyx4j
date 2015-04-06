@@ -1,0 +1,62 @@
+
+1.
+   Do not build eclipse projects with maven (for now!)
+   Use m2 ecipse for project sync.
+
+2.
+
+TODO
+ Misha:
+
+    DONE - Module for MessageDialog and Message
+    DONE - MessageDialog created in widgets.
+    TODO - Create error with option to "see details" and throwable as parameter
+
+    - DefaultExceptionHandler ->  pyx-gwt-commons
+
+    - Module for ClientState class
+
+ Vlad:
+   DONE - Ivestigate common logger!
+   DONE - Send client log event to server over RPC
+   Better client log configuration. e.g. ability to create diferent Logger at least in development mode. Now we have one global flag debugOn
+
+   DONE - GWT side EntityMeta and MemberMeta
+   DONE Persistence tests Commons for Maven/Server side * GAE/RDBMS. How to run the same abstract tests in GAE and in Hibernate.
+   DONE - Module for UncaughtHandler -> pyx-gwt-commons
+
+----   idea for ICriteria -----
+
+public interface DateWithCriteria extends IPrimitiveICriteria<java.sql.Date> {
+
+    @Transient
+    IPrimitive<java.sql.Date> dateFrom();
+
+    @Transient
+    IPrimitive<java.sql.Date> dateTo();
+}
+
+public interface OrderCriteria extends Order, ICriteria<Order> {
+
+    @Override
+    DateWithCriteria completedDate();
+
+}
+
+
+---- GWT Compile speed verifications ---
+   dev on i7 / CC are different
+GWT 2.1.1  (March 2011)
+------------------------------------------
+                |   mvn    |  mvn(CC) |  Eclipse Dev
+  Examples      |   58     |          |  38
+  Entree        |   60     |          |  38
+  MEF           |   77     |          |  37
+  VISTA Portal  |   67     |          |  37
+-----------------------------------------------------
+GWT 2.2.0
+-----------------------------------------------------
+  Examples      |   59     |          |  34
+  Entree        |   60     |          |  34
+  MEF           |   76     |          |  36
+  VISTA Portal  |   67     |          |  34

@@ -1,0 +1,1128 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0">
+    <!-- @version $Revision$ ($Author$) $Date$ -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.pyx4j</groupId>
+    <artifactId>pyx-parent</artifactId>
+    <version>2.2.7-SNAPSHOT</version><!--pyx-version-->
+
+    <packaging>pom</packaging>
+    <name>pyx-parent</name>
+    <description>pyx-parent</description>
+
+    <prerequisites>
+        <maven>3.0.4</maven>
+    </prerequisites>
+
+    <organization>
+        <name>Pyx Software Services Inc.</name>
+        <url>http://www.pyx4j.com</url>
+    </organization>
+    <inceptionYear>2006</inceptionYear>
+
+    <url>http://code.pyx4j.com</url>
+
+    <ciManagement>
+        <system>Cruisecontrol</system>
+        <url>https://pyx4j.com/cruisecontrol/</url>
+    </ciManagement>
+
+    <issueManagement>
+        <system>Bugzilla</system>
+        <url>https://pyx4j.com/bug/</url>
+    </issueManagement>
+
+    <distributionManagement>
+        <site>
+            <id>test-pyx4j-site</id>
+            <!--url>${scp-apache-site-snapshot-base}/pyx/pyx-parent</url-->
+            <url>file:///data/apache/pyx/pyx-parent</url>
+        </site>
+        <repository>
+            <id>pyx4j.com-file-release</id>
+            <url>${scp-apache-repository-release}</url>
+        </repository>
+        <snapshotRepository>
+            <id>pyx4j.com-file-development</id>
+            <url>${scp-apache-repository-snapshot}</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <scm>
+        <url>https://stash.devpv.com/projects/PYX4J/repos/pyx4j/browse/essentials/pyx-parent</url>
+        <connection>scm:git:ssh://git@stash-ssh.devpv.com:7999/pyx4j/pyx4j.git</connection>
+        <developerConnection>scm:git:ssh://git@stash-ssh.devpv.com:7999/pyx4j/pyx4j.git</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Vlad Skarzhevskyy</name>
+            <id>vlads</id>
+            <email>skarzhevskyy@gmail.com</email>
+            <organization>Pyx Software Services Inc.</organization>
+            <organizationUrl>http://www.pyx4j.com</organizationUrl>
+            <roles>
+                <role>Project admin and developer</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
+            <name>Michael Lifshits</name>
+            <id>michaellif</id>
+            <email>michael.lifschitz@gmail.com</email>
+            <organization>Pyx Software Services Inc.</organization>
+            <organizationUrl>http://www.pyx4j.com</organizationUrl>
+            <roles>
+                <role>Developer, Architect</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+    </developers>
+
+    <repositories>
+
+        <repository>
+            <id>pyx4j-internal</id>
+            <url>http://repository-m2.pyx4j.com</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+
+        <repository>
+            <id>codehaus.org</id>
+            <url>http://snapshots.repository.codehaus.org</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+
+    </repositories>
+
+    <pluginRepositories>
+
+        <!-- lifecycle-mapping -->
+        <pluginRepository>
+            <id>pyx4j-internal</id>
+            <url>http://repository-m2.pyx4j.com</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+
+        <pluginRepository>
+            <id>codehaus.org</id>
+            <url>http://snapshots.repository.codehaus.org</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </pluginRepository>
+
+    </pluginRepositories>
+
+    <properties>
+        <buildLabel>${project.version}</buildLabel>
+
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm z</maven.build.timestamp.format>
+        <timestamp>${maven.build.timestamp}</timestamp>
+
+        <gwtVersion>2.7.0</gwtVersion>
+        <gaeVersion>1.9.15</gaeVersion>
+        <gaeVersion.kindleit.deploy>1.8.8</gaeVersion.kindleit.deploy>
+        <gae.version>${gaeVersion}</gae.version>
+
+
+        <jettyVersion>9.2.3.v20140905</jettyVersion>
+
+        <slf4jVersion>1.7.7</slf4jVersion>
+
+        <jasperreportsVersion>5.2.0</jasperreportsVersion>
+        <dynamicreportsVersion>3.1.6</dynamicreportsVersion>
+        <batikVersion>1.7</batikVersion>
+
+        <!-- Used for speed up the GWT compiler for developers -->
+        <gwtDraftCompile>false</gwtDraftCompile>
+        <!-- OBFUSCATED, PRETTY, or DETAILED -->
+        <gwtCompilerOutputStyle>OBFUSCATED</gwtCompilerOutputStyle>
+        <gwtEnableAssertions>false</gwtEnableAssertions>
+        <gwtCompileReport>false</gwtCompileReport>
+        <gwtDisableCastChecking>false</gwtDisableCastChecking>
+        <gwtDisableClassMetadata>false</gwtDisableClassMetadata>
+
+
+        <surefire.parallelThreadCount>8</surefire.parallelThreadCount>
+
+        <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
+
+        <gaeDeployServerId>appengine.google.com-pyx</gaeDeployServerId>
+        <appengine.sdk.root>${CORP_TOOLS}/3p-libs/gae/appengine-java-sdk-${gaeVersion}</appengine.sdk.root>
+
+        <!--
+            dependency.details takes significant time on build server for site creation
+            http://maven.apache.org/plugins/maven-project-info-reports-plugin/dependencies-mojo.html
+        -->
+        <dependency.details.enabled>false</dependency.details.enabled>
+        <dependency.locations.enabled>false</dependency.locations.enabled>
+
+        <gwtDestinationWarFolder>${project.build.directory}/__/webapp</gwtDestinationWarFolder>
+        <webappDirectory>${gwtDestinationWarFolder}</webappDirectory>
+        <deploy>${warFolder}/WEB-INF/deploy</deploy>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>3.1.0</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-servlet</artifactId>
+                <version>${gwtVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-user</artifactId>
+                <version>${gwtVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>1.0.0.GA</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <classifier>sources</classifier>
+                <version>1.0.0.GA</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-dev</artifactId>
+                <version>${gwtVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-codeserver</artifactId>
+                <version>${gwtVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava-gwt</artifactId>
+                <version>18.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>18.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.appengine</groupId>
+                <artifactId>appengine-api-stubs</artifactId>
+                <version>${gaeVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.appengine</groupId>
+                <artifactId>appengine-api-1.0-sdk</artifactId>
+                <version>${gaeVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.appengine</groupId>
+                <artifactId>appengine-testing</artifactId>
+                <version>${gaeVersion}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.appengine</groupId>
+                <artifactId>appengine-api-labs</artifactId>
+                <version>${gaeVersion}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4jVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-jdk14</artifactId>
+                <version>${slf4jVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jul-to-slf4j</artifactId>
+                <version>${slf4jVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${slf4jVersion}</version>
+            </dependency>
+
+            <!-- log4j replacement for C3P0 and other libraries that are using log4j -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>log4j-over-slf4j</artifactId>
+                <version>${slf4jVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.17</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>1.1.2</version>
+            </dependency>
+
+            <!-- MemoryLeakPrevention remove META-INF/services on build server -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>5.1.33</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>9.3-1102-jdbc41-dls</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hsqldb</groupId>
+                <artifactId>hsqldb</artifactId>
+                <version>2.3.2</version>
+                <classifier>jdk6debug</classifier>
+            </dependency>
+
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>1.4.181</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-dbcp2</artifactId>
+                <version>2.0.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>c3p0</groupId>
+                <artifactId>c3p0</artifactId>
+                <version>0.9.1.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.sf.ehcache</groupId>
+                <artifactId>ehcache-core</artifactId>
+                <version>2.6.5</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.quartz-scheduler</groupId>
+                <artifactId>quartz</artifactId>
+                <version>2.2.1</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>c3p0</groupId>
+                        <artifactId>c3p0</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>2.6</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>4.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>1.3.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.9</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>1.9.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-configuration</groupId>
+                <artifactId>commons-configuration</artifactId>
+                <version>1.10</version>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.11</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.derby</groupId>
+                <artifactId>derby</artifactId>
+                <version>10.11.1.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-java</artifactId>
+                <version>2.44.0</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.testng</groupId>
+                        <artifactId>testng</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.gwt.google-apis</groupId>
+                <artifactId>gwt-maps</artifactId>
+                <version>1.1.0-gwt.2.2</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-user</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.gwt.google-apis</groupId>
+                <artifactId>gwt-ajaxloader</artifactId>
+                <version>1.1.0</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-user</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.gwt.google-apis</groupId>
+                <artifactId>gwt-visualization</artifactId>
+                <version>1.1.2</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-user</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>pl.rmalinowski.gwt2swf</groupId>
+                <artifactId>gwt2swf</artifactId>
+                <version>0.6.0</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-user</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>net.tanesha.recaptcha4j</groupId>
+                <artifactId>recaptcha4j</artifactId>
+                <version>0.0.7</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>3.18.2-GA</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.sourceforge.saxon</groupId>
+                <artifactId>saxon</artifactId>
+                <version>9.1.0.8</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.itextpdf</groupId>
+                <artifactId>itextpdf</artifactId>
+                <version>5.4.4</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.bouncycastle</groupId>
+                        <artifactId>bcmail-jdk14</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.bouncycastle</groupId>
+                        <artifactId>bcprov-jdk14</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.bouncycastle</groupId>
+                        <artifactId>bctsp-jdk14</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>net.sf.jasperreports</groupId>
+                <artifactId>jasperreports</artifactId>
+                <!-- check poi version when updating -->
+                <version>${jasperreportsVersion}</version>
+                <exclusions>
+                    <!--exclusion><groupId>commons-collections</groupId><artifactId>commons-collections</artifactId></exclusion-->
+                    <!--exclusion><groupId>commons-logging</groupId><artifactId>commons-logging</artifactId></exclusion-->
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>jfree</groupId><artifactId>jfreechart</artifactId></exclusion>
+                    <exclusion><groupId>jfree</groupId><artifactId>jcommon</artifactId></exclusion>
+                    <exclusion><groupId>org.apache.poi</groupId><artifactId>poi-ooxml</artifactId></exclusion>
+                    <exclusion><groupId>org.codehaus.castor</groupId><artifactId>castor</artifactId></exclusion>
+                    <exclusion><groupId>org.codehaus.jackson</groupId><artifactId>jackson-core-lgpl</artifactId></exclusion>
+                    <exclusion><groupId>org.codehaus.jackson</groupId><artifactId>jackson-mapper-lgpl</artifactId></exclusion>
+                    <!--exclusion><groupId>commons-digester</groupId><artifactId>commons-digester</artifactId></exclusion-->
+                   <!--exclusion><groupId>org.apache.poi</groupId><artifactId>poi</artifactId></exclusion-->
+                </exclusions>
+            </dependency>
+
+            <!-- The version shuld match jasperreports -->
+	        <dependency>
+	            <groupId>net.sourceforge.dynamicreports</groupId>
+	            <artifactId>dynamicreports-core</artifactId>
+	            <version>${dynamicreportsVersion}</version>
+	            <exclusions>
+                    <exclusion><groupId>javax.servlet</groupId><artifactId>servlet-api</artifactId></exclusion>
+                    <exclusion><groupId>avalon-framework</groupId><artifactId>avalon-framework-impl</artifactId></exclusion>
+                </exclusions>
+	        </dependency>
+
+	        <dependency>
+	            <groupId>net.sourceforge.dynamicreports</groupId>
+	            <artifactId>dynamicreports-adhoc</artifactId>
+	            <version>${dynamicreportsVersion}</version>
+	        </dependency>
+
+            <!-- latest version for jasperreports -->
+            <dependency>
+                <groupId>com.lowagie</groupId>
+                <artifactId>itext</artifactId>
+                <version>4.2.1</version>
+                <exclusions>
+                    <exclusion><groupId>bouncycastle</groupId><artifactId>bcmail-jdk14</artifactId></exclusion>
+                    <exclusion><groupId>bouncycastle</groupId><artifactId>bcprov-jdk14</artifactId></exclusion>
+                    <!-- Again magic, where it is comming from ?  -->
+                    <exclusion><groupId>org.bouncycastle</groupId><artifactId>bctsp-jdk14</artifactId></exclusion>
+                    <exclusion><groupId>org.bouncycastle</groupId><artifactId>bcmail-jdk14</artifactId></exclusion>
+                    <exclusion><groupId>org.bouncycastle</groupId><artifactId>bcprov-jdk14</artifactId></exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>3.10.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>3.10.1</version>
+            </dependency>
+
+            <!-- use the latest version instead of one ref by poi -->
+            <dependency>
+                <groupId>org.apache.xmlbeans</groupId>
+                <artifactId>xmlbeans</artifactId>
+                <version>2.6.0</version>
+            </dependency>
+
+            <!-- poi need this  -->
+            <dependency>
+                <groupId>dom4j</groupId>
+                <artifactId>dom4j</artifactId>
+                <version>1.6.1</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jasypt</groupId>
+                <artifactId>jasypt</artifactId>
+                <version>1.9.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jtidy</groupId>
+                <artifactId>jtidy</artifactId>
+                <version>8.0-branchJ5-r1118</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.allen-sauer.gwt.dnd</groupId>
+                <artifactId>gwt-dnd</artifactId>
+                <version>3.3.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.mail</groupId>
+                <artifactId>mail</artifactId>
+                <version>1.4.7</version>
+            </dependency>
+
+            <dependency>
+				<groupId>org.jsoup</groupId>
+				<artifactId>jsoup</artifactId>
+				<version>1.7.2</version>
+			</dependency>
+
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-bridge</artifactId>
+                <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-gvt</artifactId>
+                <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-util</artifactId>
+                <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-svg-dom</artifactId>
+                <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-dom</artifactId>
+                <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-script</artifactId>
+                <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-css</artifactId>
+                <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-svggen</artifactId>
+                <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-awt-util</artifactId>
+                <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-swing</artifactId>
+                <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-transcoder</artifactId>
+                <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
+            </dependency>
+
+        </dependencies>
+
+    </dependencyManagement>
+
+    <build>
+        <defaultGoal>install</defaultGoal>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.1</version>
+                    <configuration>
+                        <source>1.7</source>
+                        <target>1.7</target>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.4</version>
+                    <configuration>
+                        <archive>
+                            <manifestEntries>
+                                <Version>${buildLabel}</Version>
+                                <Build-Date>${timestamp}</Build-Date>
+                                <Revision>${scm.revision}</Revision>
+                                <Implementation-Version>${project.version}</Implementation-Version>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.16</version>
+                    <configuration>
+                        <!--parallel>classes</parallel>
+                        <threadCount>${surefire.parallelThreadCount}</threadCount-->
+                        <argLine>-Djava.awt.headless=true -Xms64m -Xmx128m</argLine>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>2.5</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>net.kindleit</groupId>
+                    <artifactId>maven-gae-plugin</artifactId>
+                    <version>0.9.6</version>
+                    <configuration>
+                        <serverId>${gaeDeployServerId}</serverId>
+                        <sdkDir>${appengine.sdk.root}</sdkDir>
+                        <appDir>${basedir}/war</appDir>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>net.kindleit</groupId>
+                            <artifactId>gae-runtime</artifactId>
+                            <version>${gaeVersion.kindleit.deploy}</version>
+                            <type>pom</type>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
+<!--
+                <plugin>
+                    <groupId>org.zeroturnaround</groupId>
+                    <artifactId>jrebel-maven-plugin</artifactId>
+                    <version>1.0.7</version>
+                </plugin>
+-->
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.3</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.7</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.2.1</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.6</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.8</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-scm-plugin</artifactId>
+                    <version>1.9.2</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.cargo</groupId>
+                    <artifactId>cargo-maven2-plugin</artifactId>
+                    <version>1.4.5</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.2.1</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>1.9.1</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.6</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.apache.ant</groupId>
+                            <artifactId>ant-nodeps</artifactId>
+                            <version>1.8.1</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>ant-contrib</groupId>
+                            <artifactId>ant-contrib</artifactId>
+                            <version>1.0b3</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
+                <!--This plugin's configuration is used to store Eclipse  m2e settings only. It has no influence on the Maven build itself. -->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.zeroturnaround</groupId>
+                                        <artifactId>jrebel-maven-plugin</artifactId>
+                                        <versionRange>[1.0,)</versionRange>
+                                        <goals>
+                                            <goal>generate</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-dependency-plugin</artifactId>
+                                        <versionRange>[1.0,)</versionRange>
+                                        <goals>
+                                            <goal>copy-dependencies</goal>
+                                            <goal>unpack-dependencies</goal>
+                                            <goal>unpack</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.xnap.commons</groupId>
+                                        <artifactId>maven-gettext-plugin</artifactId>
+                                        <versionRange>[1.0,)</versionRange>
+                                        <goals>
+                                            <goal>dist</goal>
+                                            <goal>merge</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.codehaus.mojo</groupId>
+                                        <artifactId>exec-maven-plugin</artifactId>
+                                        <versionRange>[1.0,)</versionRange>
+                                        <goals>
+                                            <goal>exec</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-antrun-plugin</artifactId>
+                                        <versionRange>[1.0,)</versionRange>
+                                        <goals>
+                                            <goal>run</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-plugin-plugin</artifactId>
+                                        <versionRange>[1.0,)</versionRange>
+                                        <goals>
+                                            <goal>descriptor</goal>
+                                            <goal>generate-resources</goal>
+                                            <goal>process-classes</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.codehaus.mojo</groupId>
+                                        <artifactId>jasperreports-maven-plugin</artifactId>
+                                        <versionRange>[1.0-beta-2]</versionRange>
+                                        <goals>
+                                            <goal>compile-reports</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*GWTTest.java</exclude>
+                    </excludes>
+                    <includes>
+                        <include>**/*Test.java</include>
+                        <include>**/*Tests.java</include>
+                    </includes>
+                    <systemProperties>
+                        <property>
+                            <name>java.awt.headless</name>
+                            <value>true</value>
+                        </property>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+
+                    <execution>
+                        <id>site.build-version</id>
+                        <phase>site</phase>
+                        <goals>
+                          <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <replace dir="${project.build.directory}/site" includes="*.html,statscm/*.html">
+                                    <replacefilter token="#build#" value="${buildLabel}"/>
+                                    <replacefilter token="#version#" value="${project.version}"/>
+                                    <replacefilter token="@version@" value="${project.version}"/>
+                                </replace>
+                                <taskdef name="if" classname="net.sf.antcontrib.logic.IfTask" classpathref="maven.plugin.classpath"/>
+                                <if>
+                                    <and>
+                                        <equals arg1="${gwtCompileReport}" arg2="true" />
+                                        <available file="${project.build.directory}/gwt-extra/${gwtModule}/soycReport/compile-report"/>
+                                    </and>
+                                    <then>
+                                        <copy todir="${project.build.directory}/site/soycReport" preservelastmodified="true" overwrite="true" failonerror="false">
+                                            <fileset dir="${project.build.directory}/gwt-extra/${gwtModule}/soycReport/compile-report"/>
+                                        </copy>
+                                    </then>
+                                </if>
+                            </target>
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${basedir}/logs</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${basedir}/src/main/gwt-unitCache</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${basedir}/src/test/gwt-unitCache</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${gwtDestinationWarFolder}/${gwtModule}</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${gwtDestinationWarFolder}/../gwt-unitCache</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${gwtDestinationWarFolder}/WEB-INF/deploy/${gwtModule}</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+<!--
+    <profiles>
+        <profile>
+            <id>developer-env</id>
+            <build>
+                <plugins>
+                    <plugin>
+                       <groupId>org.zeroturnaround</groupId>
+                       <artifactId>jrebel-maven-plugin</artifactId>
+                       <executions>
+                           <execution>
+                               <id>generate-rebel-xml</id>
+                               <phase>process-resources</phase>
+                               <goals>
+                                   <goal>generate</goal>
+                               </goals>
+                           </execution>
+                       </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+-->
+
+</project>

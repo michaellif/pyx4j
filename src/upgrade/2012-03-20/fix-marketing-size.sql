@@ -1,1 +1,0 @@
- ALTER TABLE Building MODIFY  marketing_description  VARCHAR(4000);

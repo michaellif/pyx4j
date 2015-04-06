@@ -1,76 +1,126 @@
 # @version $Revision$ ($Author$) $Date$
 
-========= Environment setup =========
+========= Install Eclipse ==========
 
-1. Folow setup instruction http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Vista+Development+Environment+Setup
+1. Get: Latest Eclipse SDK
+      eclipse-standard-kepler-R-win32-x86_64.zip or eclipse-standard-kepler-R-win32.zip
+
+2. Unzip it to directory: eclipse-4.3.0   (Optionally)
+
+3. Create Shortcut, provide path to JDK (for example -vm "C:\My\Programs\Java\jdk1.7.0\bin\javaw.exe")
+   Or full Target on Windows 32:
+        D:\prog\dev\eclipse\eclipse-4.2.2\eclipse.exe -vm D:/jdk1.7.0/bin/javaw.exe -vmargs -Xmx456M -XX:MaxPermSize=256m
+
+   On Windows 64 When using 64-bit JDK set:
+        -Xmx1024M -XX:MaxPermSize=512m -XX:ReservedCodeCacheSize=128m
+
+4. Install Eclipse Plugins.
+    - Subclipse     (latest)               (From Eclipse Marketplace)
+    - Google plugins for Eclipse v3.2.0    (From Eclipse Marketplace)
+    - Google Web Toolkin SDK v2.5.0        (From Eclipse Marketplace)
+    - Google App Engine SDK                (From Eclipse Marketplace)
+    - M2-Eclipse ** (latest)
+
+========= Install Subclipse =========
+
+     Subclipse for SVN 1.7  From Eclipse Marketplace
+     Official Update Site:  http://subclipse.tigris.org/update_1.8.x
+
+========= Install M2-Eclipse =========
+
+    Is part of Eclipse distribution, Select  Indigo repository and type "maven"
+
+========= maven build =========
+
+for cmd line maven build add OS env variable (this values are for 32bit os)
+MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k -XX:ReservedCodeCacheSize=64m
+
+* Maven build with "GWT" modules compilations to JavaScript
+
+  ** tester-client:
+        mvn -P gwtct
+
+  ** examples-*:
+        mvn -P gwtce
+
+  all GWT modules if you are in hurry (20% faster):
+        mvn -P gwtce,draft
+
+  on Core 2 Duo CPU  you can run build 25% faster
+       mvn -P gwtce -DgwtLocalWorkers=2
+    Change  maven settings.xml to have <properties><gwtLocalWorkers>2</gwtLocalWorkers></properties> in default profile to make it permanent.
 
 
-maven profiles used in build:
+* Before deployment to appengine run:
 
-    * pyx
-        Build together with pyx framework
+        mvn -P prod
 
-    * full
-        PreCompile jasperreports reports
-        Generate IEnity implemenations on server
+========= Install Google App Engine SDK for Java =========
 
-    * gwtc
-        Compile Main GWT modules to Javascript.
+1. Install "Google plugins for Eclipse 4.2 ..."
+    site url: http://dl.google.com/eclipse/plugin/4.2
 
-        Additional profile to use with 'gwtc'
+    You may install SDKs bundle for GAE and GWT from google site for faster download.
+    In client projects we don't use GAE SDK installed inside Eclipse!
 
-        * draft  (default)
-            Do GWT compilation in 'draft' mode for "safari,gecko1_8,ie9" only and single locale (runs faster)
+    For project that store Eclipse **-server.launch in SVN.
+    Star this bugs: http://code.google.com/p/googleappengine/issues/detail?id=3401
+                    http://code.google.com/p/googleappengine/issues/detail?id=2282
 
-            N.B. to compile for all locale use
+2. Download and unzip appengine-java-sdk-1.8.8.zip  http://googleappengine.googlecode.com/files/appengine-java-sdk-1.8.8.zip
+		from http://code.google.com/appengine/downloads.html
+3. Unzip GAE SDK to C:\3p-libs\gae\appengine-java-sdk-1.8.8  (or make NTFS link)
+4. Configure Eclipse -> Preferences -> Google -> App Engine to use SDK above!
 
-               mvn -P gwtc -P !draft -P !developer-env
-             or
-               bg-prod.cmd
+4. For heavy server side development use jrebel
+   Star this bug: http://code.google.com/p/googleappengine/issues/detail?id=4122
+   Install it to C:\3p-libs\jrebel
 
-        * soyc
-            Generate soyc reports for created GWT modules
+========= Eclipse Configuration for a new Workspace =========
 
-    * gwtct
-        Compile Test GWT modules to Javascript.
+1. Change Eclipse config
+      Window->Preferences  Java\Compiler  Set: 1.6
 
-    * i18n
-        Extract text catalogs
+      Set proper Java Code Style see http://code.pyx4j.com/dev-env.html
 
-    * i18n,i18n-merge
-        Extract text catalogs and create translations (ru and fr, ...) using Translation Catalog in vista-i18n-catalog\src\main\resources\translations
 
-        use:
-          mvn package -P i18n,i18n-merge  -Dmaven.test.skip=true
+2.  To Server web applications start add "Program argumets:"
+   --disable_update_check
+ or run
+   pyx\src\make.appcfg_no_nag.cmd
 
-    * i18n,i18n-auto
-        Extract text catalogs and create automatic translations (ru and fr) using Google translate and vista-i18n-catalog\src\main\resources\translations
+   Set CORP_TOOLS=C:  (it asumes that you installed GAE SDK to C:\3p-libs\gae\)
 
-    * i18n,i18n-auto,i18n-ru
-        Only auto translate "ru"
+ For mvn -P deploy-gae (mvn gae:deploy) to work add appengine.google.com-pyx to ./m2/settings.xml
+    <settings>
+        <servers>
+            ....
+            <server>
+                <id>appengine.google.com-pyx</id>
+                <username>MyEmail@gmail.com</username>
+                <password>MyPassword</password>
+            </server>
 
-    * i18n,i18n-auto-all
-        Using Google translate update Vista calog vista-i18n-catalog\src\main\resources\translations
+        </servers>
 
-    * i18n,i18n-auto,i18n-auto-all
-	    Generate .po for "ru", "fr" and other while updating Translation Catalog using Google translate
+        <profiles>
+            ....
+        </profiles>
+    </settings>
 
-    * i18n,i18n-auto,i18n-auto-all,i18n-ru
-	    Generate .po for "ru" while updating Translation Catalog using Google translate
+    Please ensure that your passwords are encrypted! Follow this guide http://maven.apache.org/guides/mini/guide-encryption.html
+    On linux don't worget ro run history -c or export HISTSIZE=0; mvn --encrypt-password <password>
 
-    * caledon-tests
-        Enable caledon tests
 
-    * selenium
-        Enable selenium tests execution
+Cleaning up Indexes in Google App Engine/Java
+  Use Python  SDK
+    D:\etc\3p-libs\gae\appengine-python-1.3.6/appcfg.py vacuum_indexes D:\devGwt\pyx4j\incubator\tester\tester-gae-server
+    D:\etc\3p-libs\gae\appengine-python-1.3.6/appcfg.py vacuum_indexes D:\devGwt\pyx4j\examples\examples-gae-server
 
-maven profiles for build server
+rollback from pyx2 server
 
-    * build-full
-    * build-ci (for cruisecontrol)
-    * build-selenium
-    * deploy (deploy to tomcat)
-    * deploy-target-www11
-    * deploy-target-www22
-    * deploy-target-www33
-    * deploy-target-www44
+    cd /data/build/work/pyx/incubator/tester/tester-gae-server/
+    mvn gae:rollback
+  or
+    cd /data/build/work/pyx/examples/examples-gae-server/war
+    mvn gae:rollback

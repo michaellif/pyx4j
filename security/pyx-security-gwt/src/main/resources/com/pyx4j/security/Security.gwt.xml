@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
+<!-- @version $Revision$ ($Author$) $Date$ -->
+<module>
+	<inherits name='com.pyx4j.security.SecurityShared'/>
+    <inherits name='com.pyx4j.rpc.RPC'/>
+	<inherits name='com.pyx4j.security.RPC'/>
+	
+    <inherits name='com.pyx4j.webstorage.HTML5Storage'/>
+    
+    <replace-with class="com.pyx4j.security.client.ClientSecurityController">
+        <when-type-is class="com.pyx4j.security.shared.SecurityController"/>
+    </replace-with>
+    
+    <replace-with class="com.pyx4j.security.client.ClientContext">
+        <when-type-is class="com.pyx4j.security.shared.Context"/>
+    </replace-with>
+        
+	<source path="client"/>
+</module>

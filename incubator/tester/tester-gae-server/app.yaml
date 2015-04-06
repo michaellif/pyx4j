@@ -1,0 +1,8 @@
+application: pyx4j-tester
+version: 2
+runtime: python
+api_version: 1
+
+handlers:
+- url: .*
+  script: main.py
