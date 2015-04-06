@@ -175,8 +175,10 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
             }
             if (component instanceof CTextComponent) {
                 ((CTextComponent<?, ?>) component).setMaxLength(mm.getLength());
+            }
+            if (component instanceof CValueBoxBase) {
                 if (mm.getWatermark() != null && !mm.getWatermark().trim().equals("")) {
-                    ((CTextComponent<?, ?>) component).setWatermark(mm.getWatermark());
+                    ((CValueBoxBase<?, ?>) component).setWatermark(mm.getWatermark());
                 }
             }
             if (mm.getDescription() != null) {
