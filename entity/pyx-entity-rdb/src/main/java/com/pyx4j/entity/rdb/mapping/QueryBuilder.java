@@ -174,10 +174,6 @@ public class QueryBuilder<T extends IEntity> {
         return value.contains("*");
     }
 
-    boolean isMainTableOnly(List<Criterion> filters) {
-        return (queryJoin.getMemberJoinAliases().size() == 0);
-    }
-
     private void appendFilters(StringBuilder criterionSql, QueryJoinBuilder joinBuilder, List<? extends Criterion> filters, boolean firstInSentence,
             boolean required) {
         for (Criterion criterion : filters) {
@@ -536,6 +532,10 @@ public class QueryBuilder<T extends IEntity> {
             sql.append(sqlName.replace(".", "_"));
         }
         return sql.toString();
+    }
+
+    boolean isMainTableOnly(List<Criterion> filters) {
+        return (queryJoin.getMemberJoinAliases().size() == 0);
     }
 
     String getSQL(String mainTableSqlName) {
