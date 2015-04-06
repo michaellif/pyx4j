@@ -17,7 +17,7 @@
  * Created on Oct 13, 2014
  * @author vlads
  */
-package com.pyx4j.entity.rdb.hsql;
+package com.pyx4j.entity.rdb.stretch.hsql;
 
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
 import com.pyx4j.entity.rdb.TransactionTimeoutLongTestCase;

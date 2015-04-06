@@ -33,7 +33,6 @@ import com.mchange.v2.c3p0.DataSources;
 import com.mchange.v2.c3p0.impl.C3P0ImplUtils;
 
 import com.pyx4j.commons.Consts;
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolConfiguration;
 import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
@@ -68,9 +67,8 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
             dataSource.setUnreturnedConnectionTimeout(cpc.unreturnedConnectionTimeout());
             dataSource.setDebugUnreturnedConnectionStackTraces(true);
 
-            if (ServerSideConfiguration.isRunningInDeveloperEnviroment() || (connectionType != ConnectionPoolType.Web)) {
-                dataSource.setTestConnectionOnCheckout(true);
-            }
+            dataSource.setTestConnectionOnCheckout(cpc.testConnectionOnCheckout());
+            dataSource.setTestConnectionOnCheckin(cpc.testConnectionOnCheckin());
 
             log.debug("{} Pool size is {} min and {} max", connectionType, dataSource.getMinPoolSize(), dataSource.getMaxPoolSize());
             dataSource.setIdentityToken(C3P0ImplUtils.allocateIdentityToken(dataSource));

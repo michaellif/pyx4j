@@ -350,7 +350,7 @@ public class QueryBuilder<T extends IEntity> {
                     throw new RuntimeException("Unsupported Type for IN " + bindHolder.bindValue.getClass().getName());
                 }
                 if (items.isEmpty()) {
-                    criterionSql.append(" = 0 AND FALSE = TRUE ");
+                    criterionSql.append(" = 0 AND ").append(dialect.falseCondition());
                 } else {
                     criterionSql.append(" IN (");
                     boolean first = true;
@@ -536,6 +536,10 @@ public class QueryBuilder<T extends IEntity> {
         return sql.toString();
     }
 
+    boolean isMainTableOnly(List<Criterion> filters) {
+        return (queryJoin.getMemberJoinAliases().size() == 0);
+    }
+
     String getSQL(String mainTableSqlName) {
         return getJoins(mainTableSqlName) + getWhere() + getSorts();
     }
@@ -555,7 +559,7 @@ public class QueryBuilder<T extends IEntity> {
         return mainTableSqlAlias;
     }
 
-    private String getWhere() {
+    String getWhere() {
         if (sql.length() == 0) {
             return "";
         } else {

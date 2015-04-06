@@ -78,6 +78,18 @@ public class PropertiesConfiguration implements CanReloadProperties {
         }
     }
 
+    public Map<String, String> getValues(String propertyPrefix) {
+        Map<String, String> m = new HashMap<>();
+        String keyPrefix = getKey(propertyPrefix) + ".";
+        for (String key : properties.keySet()) {
+            if (key.startsWith(keyPrefix)) {
+                String keyShort = key.substring(keyPrefix.length());
+                m.put(keyShort, getValue(propertyPrefix + "." + keyShort));
+            }
+        }
+        return m;
+    }
+
     public int getIntegerValue(String key, int defaultValue) {
         String value = getValue(key);
         if (value == null) {

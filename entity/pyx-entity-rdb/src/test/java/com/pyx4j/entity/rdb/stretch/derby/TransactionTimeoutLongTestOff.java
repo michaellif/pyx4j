@@ -17,17 +17,20 @@
  * Created on Oct 13, 2014
  * @author vlads
  */
-package com.pyx4j.entity.rdb.mysql;
+package com.pyx4j.entity.rdb.stretch.derby;
+
+import org.junit.Ignore;
 
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
 import com.pyx4j.entity.rdb.TransactionTimeoutLongTestCase;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-public class TransactionTimeoutLongTest extends TransactionTimeoutLongTestCase {
+@Ignore
+public class TransactionTimeoutLongTestOff extends TransactionTimeoutLongTestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {
-        return PersistenceEnvironmentFactory.getMySQLPersistenceEnvironment();
+        return PersistenceEnvironmentFactory.getDerbyPersistenceEnvironment();
     }
 
 }

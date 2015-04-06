@@ -109,6 +109,11 @@ public abstract class ConfigurationH2 implements Configuration {
     }
 
     @Override
+    public String tableCreateOption(String entityShortName) {
+        return null;
+    }
+
+    @Override
     public String sharedSequencesSchema() {
         return null;
     }

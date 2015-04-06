@@ -544,6 +544,20 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
         }
     }
 
+    public int enabelForeignKeys(Class<? extends IEntity> entityClass, boolean enable) {
+        startCallContext(ConnectionReason.forDDL);
+        try {
+            EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
+            TableModel tm = new TableModel(getPersistenceContext().getDialect(), mappings, entityMeta);
+            return tm.enabelForeignKeys(getPersistenceContext(), enable);
+        } catch (SQLException e) {
+            log.error("drop ForeignKeys error", e);
+            throw new RuntimeExceptionSerializable(e);
+        } finally {
+            endCallContext();
+        }
+    }
+
     TableModel tableModel(EntityMeta entityMeta) {
         return mappings.ensureTable(getPersistenceContext(), entityMeta.getEntityClass(), false);
     }

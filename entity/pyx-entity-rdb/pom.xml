@@ -205,6 +205,7 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <excludes>
+                                <exclude>**/stretch/*/*.*</exclude>
                                 <exclude>**/*LongTest.*</exclude>
                                 <exclude>**/mysql/*.*</exclude>
                                 <exclude>**/oracle/*.*</exclude>
@@ -256,6 +257,7 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <excludes>
+                                <exclude>**/stretch/*/*.*</exclude>
                                 <exclude>**/oracle/*.*</exclude>
                                 <exclude>**/postgresql/*.*</exclude>
                                 <exclude>**/h2/*.*</exclude>
@@ -305,6 +307,8 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <excludes>
+                                <exclude>**/stretch/*/*.*</exclude>
+                                <exclude>**/hsql/*.*</exclude>
                                 <exclude>**/mysql/*.*</exclude>
                                 <exclude>**/postgresql/*.*</exclude>
                                 <exclude>**/h2/*.*</exclude>
@@ -360,6 +364,8 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <excludes>
+                                <exclude>**/stretch/*/*.*</exclude>
+                                <exclude>**/hsql/*.*</exclude>
                                 <exclude>**/oracle/*.*</exclude>
                                 <exclude>**/mysql/*.*</exclude>
                                 <exclude>**/h2/*.*</exclude>
@@ -431,7 +437,7 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <excludes>
-                                <exclude>**/*LongTest.*</exclude>
+                                <exclude>**/stretch/*/*.*</exclude>
                                 <exclude>**/oracle/*.*</exclude>
                             </excludes>
                         </configuration>
