@@ -38,10 +38,6 @@ public abstract class SingleWordSuggestOptionsGrabber<E> implements IOptionsGrab
         this.filtered = new LinkedList<E>();
     }
 
-    @Override
-    public abstract void grabOptions(com.pyx4j.widgets.client.selector.IOptionsGrabber.Request request,
-            com.pyx4j.widgets.client.selector.IOptionsGrabber.Callback<E> callback);
-
     protected abstract int evaluate(E item, String suggestion);
 
     protected void filter(Vector<E> result, String suggestion) {

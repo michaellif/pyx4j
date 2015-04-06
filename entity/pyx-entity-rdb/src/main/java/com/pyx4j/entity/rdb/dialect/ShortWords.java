@@ -35,7 +35,7 @@ public class ShortWords {
     }
 
     public String getShortForm(String word) {
-        String shortForm = words.get(word);
+        String shortForm = words.get(word.toLowerCase());
         if (shortForm != null) {
             return shortForm;
         } else {

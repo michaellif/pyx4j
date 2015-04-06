@@ -112,6 +112,10 @@ class TableDDL {
             return b.toString();
         }
 
+        public boolean isPk() {
+            return (columns.size() == 1) && columns.values().iterator().next().secondaryColumnNumber == -1;
+        }
+
     }
 
     private static final boolean NS_PART_OF_PK = true;
@@ -140,6 +144,14 @@ class TableDDL {
         }
 
         List<IndexDef> indexes = new Vector<IndexDef>();
+        {
+            MemberOperationsMeta member = tableModel.operationsMeta().getPkMember();
+            if (member.getMemberMeta().isIndexed()) {
+                // -1  is just to identify PK,  no other ordering ideas behind this.
+                addIndexDef(indexes, member, dialect.getNamingConvention().sqlIdColumnName(), -1, member.getMemberMeta().getAnnotation(Indexed.class));
+            }
+
+        }
 
         for (MemberOperationsMeta member : tableModel.operationsMeta().getColumnMembers()) {
             int secondaryColumnNumber = 0;
@@ -172,7 +184,10 @@ class TableDDL {
 
         sql.append(')');
 
-        if (configuration.tablesCreateOption() != null) {
+        String opt = configuration.tableCreateOption(tableModel.entityMeta().getEntityClass().getSimpleName());
+        if (opt != null) {
+            sql.append(' ').append(opt);
+        } else if (configuration.tablesCreateOption() != null) {
             sql.append(' ').append(configuration.tablesCreateOption());
         }
 
@@ -184,6 +199,9 @@ class TableDDL {
         Map<String, IndexDef> indexValidations = new HashMap<String, IndexDef>();
 
         for (IndexDef indexDef : indexes) {
+            if (indexDef.isPk()) {
+                continue;
+            }
             sqls.add(createIndexSql(dialect, tableModel, indexDef));
 
             if (indexValidations.containsKey(indexDef.name)) {

@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2013 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,20 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Oct 13, 2014
+ * Created on Mar 10, 2015
  * @author vlads
  */
-package com.pyx4j.entity.rdb.hsql;
+package com.pyx4j.entity.rdb.postgresql;
 
+import com.pyx4j.entity.rdb.CachedTestCase;
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
-import com.pyx4j.entity.rdb.TransactionTimeoutLongTestCase;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-public class TransactionTimeoutLongTest extends TransactionTimeoutLongTestCase {
+public class CachedTest extends CachedTestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {
-        return PersistenceEnvironmentFactory.getHSQLPersistenceEnvironment();
+        return PersistenceEnvironmentFactory.getPostgreSQLPersistenceEnvironment();
     }
 
 }

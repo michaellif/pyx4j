@@ -102,6 +102,11 @@ public abstract class ConfigurationMySQL implements Configuration {
     }
 
     @Override
+    public String tableCreateOption(String entityShortName) {
+        return null;
+    }
+
+    @Override
     public String sharedSequencesSchema() {
         return null;
     }

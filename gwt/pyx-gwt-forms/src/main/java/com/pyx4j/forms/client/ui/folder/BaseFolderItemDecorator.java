@@ -19,7 +19,6 @@
  */
 package com.pyx4j.forms.client.ui.folder;
 
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.core.IEntity;
@@ -34,19 +33,8 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
 
     private CFolderItem<E> folderItem;
 
-    private IsWidget content;
-
     public BaseFolderItemDecorator(FolderImages images) {
         this.images = images;
-    }
-
-    @Override
-    public void setContent(IsWidget content) {
-        this.content = content;
-    }
-
-    public IsWidget getContent() {
-        return content;
     }
 
     @Override
