@@ -66,6 +66,8 @@ public class ConfigurationProperties {
 
     public final Map<String, Integer> tableIdentityOffset = new HashMap<>();
 
+    public final Map<String, String> tableCreateOptions = new HashMap<>();
+
     ConfigurationProperties() {
         for (ConnectionPoolType connectionType : ConnectionPoolType.poolable()) {
             connectionPoolCfg.put(connectionType, new ConnectionPoolConfiguration(connectionType));
@@ -102,11 +104,15 @@ public class ConfigurationProperties {
             cpc.checkoutTimeout = c.getSecondsValue(connectionType.name() + ".checkoutTimeout", cpc.checkoutTimeout);
             cpc.maxPoolPreparedStatements = c.getIntegerValue(connectionType.name() + ".maxPoolPreparedStatements", cpc.maxPoolPreparedStatements);
             cpc.unreturnedConnectionTimeout = c.getSecondsValue(connectionType.name() + ".unreturnedConnectionTimeout", cpc.unreturnedConnectionTimeout);
+
+            cpc.testConnectionOnCheckout = c.getBooleanValue(connectionType.name() + ".testConnectionOnCheckout", cpc.testConnectionOnCheckout);
+            cpc.testConnectionOnCheckin = c.getBooleanValue(connectionType.name() + ".testConnectionOnCheckin", cpc.testConnectionOnCheckin);
         }
 
         this.tablesIdentityOffset = c.getIntegerValue("tablesIdentityOffset", this.tablesIdentityOffset);
 
         this.tableIdentityOffset.putAll(c.getIntegerValues("tableIdentityOffset"));
+        this.tableCreateOptions.putAll(c.getValues("tableCreateOption"));
 
         this.ddl = c.getEnumValue("ddl", Ddl.class, ddl);
     }

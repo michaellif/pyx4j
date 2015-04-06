@@ -96,6 +96,8 @@ public class EntityOperationsMeta {
 
     final Map<String, Class<? extends IEntity>> impClasses;
 
+    private MemberOperationsMeta pkMember;
+
     EntityOperationsMeta(Dialect dialect, EntityMeta entityMeta) {
         mainEntityMeta = entityMeta;
         String path = GWTJava5Helper.getSimpleName(entityMeta.getEntityClass());
@@ -143,9 +145,9 @@ public class EntityOperationsMeta {
         {
             MemberMeta memberMeta = entityMeta.getMemberMeta(IEntity.PRIMARY_KEY);
             ValueAdapter valueAdapter = createValueAdapter(dialect, memberMeta);
-            MemberOperationsMeta member = new MemberOperationsMeta(new EntityMemberDirectAccess(IEntity.PRIMARY_KEY), valueAdapter, dialect
-                    .getNamingConvention().sqlIdColumnName(), memberMeta, path + Path.PATH_SEPARATOR + IEntity.PRIMARY_KEY + Path.PATH_SEPARATOR);
-            membersByPath.put(member.getMemberPath(), member);
+            pkMember = new MemberOperationsMeta(new EntityMemberDirectAccess(IEntity.PRIMARY_KEY), valueAdapter, dialect.getNamingConvention()
+                    .sqlIdColumnName(), memberMeta, path + Path.PATH_SEPARATOR + IEntity.PRIMARY_KEY + Path.PATH_SEPARATOR);
+            membersByPath.put(pkMember.getMemberPath(), pkMember);
         }
     }
 
@@ -517,6 +519,10 @@ public class EntityOperationsMeta {
 
     public List<MemberOperationsMeta> getAllMembers() {
         return allMembers;
+    }
+
+    public MemberOperationsMeta getPkMember() {
+        return pkMember;
     }
 
     public List<MemberOperationsMeta> getColumnMembers() {

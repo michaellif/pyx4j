@@ -50,6 +50,8 @@ public class PersistenceContext {
 
     private static final I18n i18n = I18n.get(PersistenceContext.class);
 
+    private static Boolean assertTransactionManangementCallOriginEnabled;
+
     private final PersistenceContext suppressedPersistenceContext;
 
     private final ConnectionProvider connectionProvider;
@@ -243,9 +245,20 @@ public class PersistenceContext {
         return connection;
     }
 
+    private boolean assertTransactionManangementCallOriginEnabled() {
+        if (assertTransactionManangementCallOriginEnabled == null) {
+            if (Boolean.valueOf(System.getProperty("com.pyx4j.performanceTestEnviroment"))) {
+                assertTransactionManangementCallOriginEnabled = false;
+            } else {
+                assertTransactionManangementCallOriginEnabled = ServerSideConfiguration.isStartedUnderUnitTest()
+                        || ServerSideConfiguration.isStartedUnderJvmDebugMode() || ServerSideConfiguration.isStartedUnderEclipse();
+            }
+        }
+        return assertTransactionManangementCallOriginEnabled;
+    }
+
     public void setAssertTransactionManangementCallOrigin() {
-        if (ServerSideConfiguration.isStartedUnderUnitTest() || ServerSideConfiguration.isStartedUnderJvmDebugMode()
-                || ServerSideConfiguration.isStartedUnderEclipse()) {
+        if (assertTransactionManangementCallOriginEnabled()) {
             assertTransactionManangementCallOrigin();
             options().assertTransactionManangementCallOrigin = Trace.getCallOriginMethod(EntityPersistenceServiceRDB.class);
             if (options().assertTransactionManangementCallOrigin.startsWith(UnitOfWork.class.getName())) {

@@ -86,6 +86,11 @@ public class OracleDialect extends Dialect {
     }
 
     @Override
+    public String falseCondition() {
+        return "1 = 2";
+    }
+
+    @Override
     public String sqlSequenceMetaData() {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT sequence_name ");

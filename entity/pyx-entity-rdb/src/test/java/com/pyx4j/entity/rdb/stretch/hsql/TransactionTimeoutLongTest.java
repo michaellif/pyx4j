@@ -17,20 +17,17 @@
  * Created on Oct 13, 2014
  * @author vlads
  */
-package com.pyx4j.entity.rdb.derby;
-
-import org.junit.Ignore;
+package com.pyx4j.entity.rdb.stretch.hsql;
 
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
 import com.pyx4j.entity.rdb.TransactionTimeoutLongTestCase;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-@Ignore
-public class TransactionTimeoutLongTestOff extends TransactionTimeoutLongTestCase {
+public class TransactionTimeoutLongTest extends TransactionTimeoutLongTestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {
-        return PersistenceEnvironmentFactory.getDerbyPersistenceEnvironment();
+        return PersistenceEnvironmentFactory.getHSQLPersistenceEnvironment();
     }
 
 }

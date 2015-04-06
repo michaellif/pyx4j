@@ -50,6 +50,10 @@ public interface Configuration extends IPersistenceConfiguration {
 
         public int maxPoolPreparedStatements = 1000;
 
+        public boolean testConnectionOnCheckout;
+
+        public boolean testConnectionOnCheckin = false;
+
         /**
          * Set the default values for all DB types
          */
@@ -61,13 +65,20 @@ public interface Configuration extends IPersistenceConfiguration {
                 maxPoolSize = 20;
                 unreturnedConnectionTimeout = 1 * Consts.HOURS2SEC;
                 checkoutTimeout = 20 * Consts.MIN2SEC;
+                testConnectionOnCheckout = true;
                 break;
             case TransactionProcessing:
                 maxPoolSize = 40;
                 unreturnedConnectionTimeout = 10 * Consts.MIN2SEC;
                 checkoutTimeout = 2 * Consts.MIN2SEC;
+                testConnectionOnCheckout = true;
                 break;
             default:
+                if (ServerSideConfiguration.isRunningInDeveloperEnviroment()) {
+                    testConnectionOnCheckout = true;
+                } else {
+                    testConnectionOnCheckout = false;
+                }
                 break;
             }
             if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
@@ -91,7 +102,7 @@ public interface Configuration extends IPersistenceConfiguration {
          * The number of seconds a client calling getConnection() will wait for a Connection to be checked-in or acquired when the pool is exhausted. Zero
          * means wait indefinitely. Setting any positive value will cause the getConnection() call to time-out and break with an SQLException after the
          * specified number of seconds.
-         * 
+         *
          */
         public int getCheckoutTimeout() {
             return checkoutTimeout;
@@ -107,6 +118,14 @@ public interface Configuration extends IPersistenceConfiguration {
 
         public int maxPoolPreparedStatements() {
             return maxPoolPreparedStatements;
+        }
+
+        public boolean testConnectionOnCheckout() {
+            return testConnectionOnCheckout;
+        }
+
+        public boolean testConnectionOnCheckin() {
+            return testConnectionOnCheckin;
         }
 
     }
@@ -156,6 +175,8 @@ public interface Configuration extends IPersistenceConfiguration {
      */
     public String tablesCreateOption();
 
+    public String tableCreateOption(String entityShortName);
+
     public boolean sequencesBaseIdentity();
 
     /**
@@ -169,14 +190,14 @@ public interface Configuration extends IPersistenceConfiguration {
 
     /**
      * Used in development to create sparse identity values for every table, to ensure pseudo-unique value of every key.
-     * 
+     *
      * @return 0 if all id starts with the same value 0
      */
     public int tablesIdentityOffset();
 
     /**
      * Allow to change Sequence START WITH for specific Entity/Table
-     * 
+     *
      * @param entityShortName
      * @return initial Sequence value
      */
@@ -198,7 +219,7 @@ public interface Configuration extends IPersistenceConfiguration {
     public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionPoolType connectionType);
 
     /**
-     * 
+     *
      * @return return null to use framework default
      */
     public NamingConvention namingConvention();

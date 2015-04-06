@@ -118,7 +118,6 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
     @Override
     public void setContent(IsWidget content) {
-        super.setContent(content);
         contentHolder.setWidget(content);
     }
 
