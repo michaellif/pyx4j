@@ -79,6 +79,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
             protected void onPopulate() {
                 super.onPopulate();
                 EntitySelectorTableDialog.super.show();
+                getOkButton().setEnabled(lister.getDataTable().getDataTableModel().isAnyRowSelected());
             }
         };
         lister.getDataTable().addItemSelectionHandler(new ItemSelectionHandler() {
@@ -91,8 +92,8 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         setFilters(createRestrictionFilterForAlreadySelected());
         lister.setHeight("500px");
 
+        getOkButton().setEnabled(false);
         setBody(createBody());
-
     }
 
     @Override
@@ -110,7 +111,6 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
     }
 
     protected Widget createBody() {
-        getOkButton().setEnabled(!lister.getSelectedItems().isEmpty());
         ScrollPanel scrollPanel = new ScrollPanel(lister);
         return scrollPanel;
     }
@@ -167,7 +167,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
      * Called from within constructor.
      * In order to add additional filters - overwrite it in your class
      * and use addFilter(s) AFTER call to super.setFilters(filters)!..
-     * 
+     *
      * @param filters
      */
     protected void setFilters(List<Criterion> filters) {

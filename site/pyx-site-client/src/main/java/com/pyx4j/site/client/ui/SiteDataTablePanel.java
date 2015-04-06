@@ -212,20 +212,6 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
         return getDataTableModel().getSortCriteria();
     }
 
-    public void resetSorting() {
-        setSortCriteria(getDefaultSorting());
-    }
-
-    /**
-     * Override in descendants to supply desired set
-     *
-     * @return default sorting list (null);
-     */
-    @Override
-    public List<Sort> getDefaultSorting() {
-        return null;
-    }
-
     protected Class<? extends CrudAppPlace> getItemOpenPlaceClass() {
         return AppPlaceEntityMapper.resolvePlaceClass(getEntityClass());
     }
@@ -239,4 +225,5 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
 
         DataTableDocCreation.createExcelExport(getDataSource().getDocCreationService(), criteria, getDataTable().getColumnDescriptors());
     }
+
 }

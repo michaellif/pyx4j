@@ -359,10 +359,6 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         }
     }
 
-    public void resetFilters() {
-        setFilters(getDefaultFilters());
-    }
-
     public void setFilteringEnabled(boolean enabled) {
         filterPanel.setVisible(enabled);
     }
@@ -460,14 +456,21 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
             if (externalFilters == null) {
                 Integer pageNumberInteger = (Integer) memento.read();
                 pageNumber = pageNumberInteger == null ? 0 : pageNumberInteger;
-                filters = (List<Criterion>) memento.read();
-                sorts = (List<Sort>) memento.read();
+                List<Criterion> mementoFilters = (List<Criterion>) memento.read();
+                if (mementoFilters != null) {
+                    filters = mementoFilters;
+                }
+                List<Sort> mementoSorts = (List<Sort>) memento.read();
+                if (mementoSorts != null) {
+                    sorts = mementoSorts;
+                }
             } else if (externalFilters != null) {
+                //TODO ml check what happens to externalFilters and why sorts are ignored
                 filters = externalFilters;
             }
 
             setFilters(filters);
-            getDataTableModel().setSortCriteria(sorts);
+            setSortCriteria(sorts);
         }
     }
 

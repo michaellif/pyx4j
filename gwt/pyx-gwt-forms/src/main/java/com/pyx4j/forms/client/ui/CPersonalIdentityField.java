@@ -32,7 +32,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 /**
  * This field is used to protect personal identity by hiding part of ID
- * 
+ *
  * NOTE - It's made generic to allow for properly typed new entity creation (see CPersonalIdentityField#parse())
  * This however should not be considered as a final solution as the new entity may also require some additional
  * business-related initialization steps...
@@ -105,7 +105,7 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
             value = getValue();
         }
         // return a copy so that CComponent#isValuesEqual() gets different object
-        return value.duplicate();
+        return (value == null ? value : value.<T> duplicate());
     }
 
     public void clear(boolean clearNative) {
@@ -128,8 +128,10 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
 
     @Override
     public void setValueByString(String name) {
-        // clear obfuscatedNumber to indicate new input
-        getValue().obfuscatedNumber().setValue(null);
+        if (getValue() != null) {
+            // clear obfuscatedNumber to indicate new input
+            getValue().obfuscatedNumber().setValue(null);
+        }
         super.setValueByString(name);
     }
 
