@@ -55,6 +55,8 @@ public class ClientApplicationVersionGenerator extends Generator {
 
     public static final String PATCH_NUMBER = "pyx.compileTimeSystemProperty.patch.number";
 
+    public static final String BRANCH_NAME_SHORT = "pyx.compileTimeSystemProperty.branch.name.short";
+
     public static final String BUILD_NUMBER = "pyx.compileTimeSystemProperty.build.number";
 
     public static final String BUILD_TIME = "pyx.compileTimeSystemProperty.build.time";
@@ -86,12 +88,16 @@ public class ClientApplicationVersionGenerator extends Generator {
         if (patchNumber != null && patchNumber.startsWith("${")) {
             patchNumber = "";
         }
+        String branchNameShort = getConfigurationProperty(logger, context, BRANCH_NAME_SHORT);
+        if (branchNameShort != null && branchNameShort.startsWith("${")) {
+            branchNameShort = "";
+        }
         String buildNumber = getConfigurationProperty(logger, context, BUILD_NUMBER);
         if (buildNumber != null && buildNumber.startsWith("${")) {
             buildNumber = "n/a";
         }
 
-        String buildLabel = productVersion + patchNumber + "." + buildNumber;
+        String buildLabel = productVersion + patchNumber + branchNameShort + "." + buildNumber;
         String buildTime = getConfigurationProperty(logger, context, BUILD_TIME);
         String buildFromat = getConfigurationProperty(logger, context, BUILD_TIME_FORMAT);
         String scmRevision = getConfigurationProperty(logger, context, SCM_REVISION);
