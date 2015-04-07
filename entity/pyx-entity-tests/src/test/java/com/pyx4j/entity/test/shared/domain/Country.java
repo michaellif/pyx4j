@@ -20,6 +20,7 @@
 package com.pyx4j.entity.test.shared.domain;
 
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.core.IEntity;
@@ -31,6 +32,7 @@ public interface Country extends IEntity {
 
     @ToString
     @Indexed
+    @Length(100)
     IPrimitive<String> name();
 
     ISet<Province> province();

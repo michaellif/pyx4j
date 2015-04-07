@@ -20,6 +20,7 @@
 package com.pyx4j.entity.test.shared.domain;
 
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -35,6 +36,7 @@ public interface Department extends IEntity {
     IPrimitive<String> testId();
 
     @Indexed
+    @Length(100)
     IPrimitive<String> name();
 
     @Indexed

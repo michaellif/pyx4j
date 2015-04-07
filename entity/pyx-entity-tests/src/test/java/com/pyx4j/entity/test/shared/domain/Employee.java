@@ -29,6 +29,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.RpcTransient;
@@ -64,6 +65,7 @@ public interface Employee extends IEntity {
 
     @Indexed
     @ToString
+    @Length(100)
     IPrimitive<String> firstName();
 
     @Indexed
