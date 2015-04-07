@@ -46,6 +46,7 @@ import com.pyx4j.entity.test.shared.domain.inherit.constr.CS2Concrete2;
 import com.pyx4j.entity.test.shared.domain.inherit.constr.CS2Concrete3;
 import com.pyx4j.entity.test.shared.domain.inherit.single.SBase;
 import com.pyx4j.entity.test.shared.domain.inherit.single.SConcrete1;
+import com.pyx4j.entity.test.shared.domain.inherit.single.SConcrete1Ext;
 import com.pyx4j.entity.test.shared.domain.inherit.single.SConcrete2;
 import com.pyx4j.entity.test.shared.domain.inherit.single.SReference;
 import com.pyx4j.entity.test.shared.domain.inherit.single.SReferenceToSubType;
@@ -496,7 +497,7 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         }
 
         // Empty IN condition
-        if (false) {
+        {
             List<Concrete1Entity> inValues = Collections.emptyList();
 
             EntityQueryCriteria<ReferenceNotOwnerEntity> criteria = EntityQueryCriteria.create(ReferenceNotOwnerEntity.class);
@@ -702,11 +703,65 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         }
 
         {
+            EntityQueryCriteria<SConcrete2> criteria = EntityQueryCriteria.create(SConcrete2.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            List<SConcrete2> found = srv.query(criteria);
+            Assert.assertEquals("retrieved size", 1, found.size());
+        }
+
+        {
             EntityQueryCriteria<SBase> criteria = EntityQueryCriteria.create(SBase.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
             criteria.add(PropertyCriterion.eq(criteria.proto().nameB1(), ent2.nameB1()));
             List<SBase> found = srv.query(criteria);
             Assert.assertEquals("retrieved size", 1, found.size());
+        }
+
+        SConcrete1Ext ent3 = EntityFactory.create(SConcrete1Ext.class);
+        ent3.testId().setValue(testId);
+        ent3.nameC1().setValue("c2" + uniqueString());
+        ent3.nameC1Ext().setValue("C1ext:" + uniqueString());
+        ent3.nameB1().setValue("b1:" + uniqueString());
+        srv.persist(ent3);
+
+        // Test Query by 3 types
+        {
+            EntityQueryCriteria<SBase> criteria = EntityQueryCriteria.create(SBase.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            List<SBase> found = srv.query(criteria);
+            Assert.assertEquals("retrieved size", 3, found.size());
+        }
+
+        // Test Query by Selected type and its Sub Types
+        {
+            EntityQueryCriteria<SConcrete1> criteria = EntityQueryCriteria.create(SConcrete1.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            List<SConcrete1> found = srv.query(criteria);
+            Assert.assertEquals("retrieved size", 2, found.size());
+            Assert.assertTrue("retrieved SConcrete1", found.contains(ent1));
+            Assert.assertTrue("retrieved SConcrete1Ext", found.contains(ent3));
+        }
+
+        // Test Query by Selected types only
+        {
+            EntityQueryCriteria<SBase> criteria = EntityQueryCriteria.create(SBase.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.in(criteria.proto().instanceValueClass(), SConcrete1.class, SConcrete2.class);
+            List<SBase> found = srv.query(criteria);
+            Assert.assertEquals("retrieved size", 2, found.size());
+            Assert.assertTrue("retrieved SConcrete1", found.contains(ent1));
+            Assert.assertTrue("retrieved SConcrete2", found.contains(ent2));
+        }
+
+        // Test Query by Selected types only
+        {
+            EntityQueryCriteria<SBase> criteria = EntityQueryCriteria.create(SBase.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.in(criteria.proto().instanceValueClass(), SConcrete1Ext.class, SConcrete2.class);
+            List<SBase> found = srv.query(criteria);
+            Assert.assertEquals("retrieved size", 2, found.size());
+            Assert.assertTrue("retrieved SConcrete2", found.contains(ent2));
+            Assert.assertTrue("retrieved SConcrete1Ext", found.contains(ent3));
         }
     }
 
@@ -736,7 +791,7 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         }
 
     }
-    
+
     public void testPolymorphicNotNullConstraintSingle() {
         String testId = uniqueString();
 

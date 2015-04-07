@@ -153,7 +153,7 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
             }
             Class<? extends IEntity> entityClass = impClasses.get(discriminatorValue);
             if (entityClass == null) {
-                throw new SQLException("Unmaped discriminator '" + discriminatorValue + "' " + SQLUtils.debugInfo(dialect, rs));
+                throw new SQLException("Unmapped discriminator '" + discriminatorValue + "' " + SQLUtils.debugInfo(dialect, rs));
             }
             IEntity entityValue = EntityFactory.create(entityClass);
             entityValue.setPrimaryKey(new Key(value));

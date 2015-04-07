@@ -152,6 +152,10 @@ public class PropertyCriterion implements Criterion {
         return new PropertyCriterion(member, Restriction.IN, values);
     }
 
+    public static PropertyCriterion in(IObject<?> member, Class<? extends IEntity> values) {
+        return new PropertyCriterion(member, Restriction.IN, values);
+    }
+
     public static <T extends Enum<T>> PropertyCriterion in(IObject<T> member, EnumSet<T> values) {
         return new PropertyCriterion(member, Restriction.IN, (Collection<T>) values);
     }

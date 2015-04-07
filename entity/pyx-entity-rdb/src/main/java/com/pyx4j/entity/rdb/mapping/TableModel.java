@@ -848,21 +848,25 @@ public class TableModel {
     }
 
     private TableModel retrieveDiscriminator(PersistenceContext persistenceContext, ResultSet rs, IEntity entity) throws SQLException {
-        if (classModel != ModelType.regular) {
+        if (classModel == ModelType.regular) {
+            return this;
+        } else {
             String discriminator = rs.getString(dialect.sqlDiscriminatorColumnName());
-            if (classModel == ModelType.superclass) {
-                Class<? extends IEntity> subclass = entityOperationsMeta.impClasses.get(discriminator);
+            Class<? extends IEntity> subclass = entityOperationsMeta.impClasses.get(discriminator);
+            if (subclass == null) {
+                throw new SQLException("Unmapped discriminator '" + discriminator + "' " + SQLUtils.debugInfo(dialect, rs));
+            }
+            if (subclass == entityMeta.getEntityClass()) {
+                return this;
+            } else {
                 TableModel subclassModel = mappings.getTableModel(persistenceContext, subclass);
 
                 IEntity subclassValue = EntityFactory.create(subclass);
                 subclassValue.setPrimaryKey(entity.getPrimaryKey());
                 entity.set(subclassValue);
                 return subclassModel;
-            } else {
-                //TODO assert discriminator value
             }
         }
-        return this;
     }
 
     private void retrieveValues(ResultSet rs, IEntity entity) throws SQLException {
