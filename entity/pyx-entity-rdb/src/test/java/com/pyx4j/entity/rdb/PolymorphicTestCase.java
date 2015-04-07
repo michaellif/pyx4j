@@ -50,6 +50,10 @@ import com.pyx4j.entity.test.shared.domain.inherit.single.SConcrete1Ext;
 import com.pyx4j.entity.test.shared.domain.inherit.single.SConcrete2;
 import com.pyx4j.entity.test.shared.domain.inherit.single.SReference;
 import com.pyx4j.entity.test.shared.domain.inherit.single.SReferenceToSubType;
+import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.st3.STNonAbstractBase;
+import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.st3.STNonAbstractC1;
+import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.st3.STNonAbstractC1Ext;
+import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.st3.STNonAbstractC2;
 
 public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
@@ -763,6 +767,66 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
             Assert.assertTrue("retrieved SConcrete2", found.contains(ent2));
             Assert.assertTrue("retrieved SConcrete1Ext", found.contains(ent3));
         }
+    }
+
+    public void testSingleTableNonAbstractQuery() {
+        String testId = uniqueString();
+
+        STNonAbstractBase ent0 = EntityFactory.create(STNonAbstractBase.class);
+        ent0.testId().setValue(testId);
+        srv.persist(ent0);
+
+        STNonAbstractC1 ent1 = EntityFactory.create(STNonAbstractC1.class);
+        ent1.testId().setValue(testId);
+        ent1.nameC1().setValue("c1:" + uniqueString());
+        srv.persist(ent1);
+
+        STNonAbstractC2 ent2 = EntityFactory.create(STNonAbstractC2.class);
+        ent2.testId().setValue(testId);
+        ent2.nameC2().setValue("c2:" + uniqueString());
+        srv.persist(ent2);
+
+        // Test Query
+        {
+            EntityQueryCriteria<STNonAbstractBase> criteria = EntityQueryCriteria.create(STNonAbstractBase.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            List<STNonAbstractBase> found = srv.query(criteria);
+            Assert.assertEquals("retrieved size", 3, found.size());
+
+            Assert.assertEquals("base class", STNonAbstractBase.class, found.get(found.indexOf(ent0)).getValueClass());
+            Assert.assertEquals("C1 value", ent1.nameC1().getValue(), ((STNonAbstractC1) found.get(found.indexOf(ent1))).nameC1().getValue());
+            Assert.assertEquals("C2 value", ent2.nameC2().getValue(), ((STNonAbstractC2) found.get(found.indexOf(ent2))).nameC2().getValue());
+        }
+
+        STNonAbstractC1Ext ent1ex = EntityFactory.create(STNonAbstractC1Ext.class);
+        ent1ex.testId().setValue(testId);
+        ent1ex.nameC1().setValue("c1x:" + uniqueString());
+        ent1ex.nameC1Ext().setValue("c1ext:" + uniqueString());
+        srv.persist(ent1ex);
+
+        {
+            EntityQueryCriteria<STNonAbstractBase> criteria = EntityQueryCriteria.create(STNonAbstractBase.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            List<STNonAbstractBase> found = srv.query(criteria);
+            Assert.assertEquals("retrieved size", 4, found.size());
+
+            Assert.assertEquals("C1Ext as C1 value", ent1ex.nameC1().getValue(), ((STNonAbstractC1) found.get(found.indexOf(ent1ex))).nameC1().getValue());
+        }
+
+        // Test Query by Selected type and its Sub Types
+        {
+            EntityQueryCriteria<STNonAbstractC1> criteria = EntityQueryCriteria.create(STNonAbstractC1.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            List<STNonAbstractC1> found = srv.query(criteria);
+            Assert.assertEquals("retrieved size", 2, found.size());
+            Assert.assertTrue("retrieved STNonAbstractC1", found.contains(ent1));
+            Assert.assertTrue("retrieved STNonAbstractC1Ext", found.contains(ent1ex));
+
+            Assert.assertEquals("C1 value", ent1.nameC1().getValue(), found.get(found.indexOf(ent1)).nameC1().getValue());
+            Assert.assertEquals("C1Ext as C1 value", ent1ex.nameC1().getValue(), found.get(found.indexOf(ent1ex)).nameC1().getValue());
+            Assert.assertEquals("C1Ext value", ent1ex.nameC1Ext().getValue(), ((STNonAbstractC1Ext) found.get(found.indexOf(ent1ex))).nameC1Ext().getValue());
+        }
+
     }
 
     public void testSingleTableExternalMember() {
