@@ -146,7 +146,7 @@ public class ApplicationVersion {
 
         productBuild = properties.getProperty(PRODUCT_BUILD);
         if ((productBuild != null) && productBuild.startsWith("${")) {
-            productBuild = productVersion + patchNumber + "." + buildNumber;
+            productBuild = productVersion + patchNumber + branchNameShort + "." + buildNumber;
         }
 
         scmRevision = properties.getProperty("scm.revision", "");
