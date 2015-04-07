@@ -127,7 +127,7 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
             }
         }
 
-        // save new        
+        // save new
         XMLStringWriter stringWriter = new XMLStringWriter();
         XMLEntityWriter entityWriter = new XMLEntityWriter(stringWriter, new XMLEntityNamingConventionDefault());
         entityWriter.write(entity);
@@ -193,7 +193,7 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
 
     /**
      * Deletes multiple customizations matching having <code>idPattern</code> as a substring
-     * 
+     *
      * @param idPattern
      *            a substring used for matching the IDs, can contain standard SQL matching syntax ('%' and '?')
      */
@@ -227,7 +227,13 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
             builder.setErrorHandler(null);
             Document doc = builder.parse(new InputSource(new StringReader(cusomizationHolder.serializedForm().getValue())));
 
-            return (E) new XMLEntityParser().parse(proto != null ? proto.getInstanceValueClass() : baseClass, doc.getDocumentElement());
+            Class<E> xmlEntityClass = baseClass;
+            if (proto != null) {
+                @SuppressWarnings("unchecked")
+                Class<E> entityClass = (Class<E>) proto.getInstanceValueClass();
+                xmlEntityClass = entityClass;
+            }
+            return new XMLEntityParser().parse(xmlEntityClass, doc.getDocumentElement());
 
         } catch (Throwable e) {
             throw new RuntimeException("failed to deserialize data", e);
