@@ -25,6 +25,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.core.IEntity;
@@ -45,6 +46,7 @@ public interface Task extends IEntity {
     @ToString(index = 2)
     @BusinessEqualValue
     @Indexed
+    @Length(100)
     IPrimitive<String> description();
 
     @ToString(index = 1)
@@ -54,6 +56,7 @@ public interface Task extends IEntity {
     IPrimitive<Date> deadLine();
 
     @Indexed
+    @Length(100)
     IPrimitiveSet<String> notes();
 
     IPrimitiveSet<Status> oldStatus();
