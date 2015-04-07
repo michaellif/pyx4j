@@ -154,6 +154,7 @@
                             <systemProperty>project.version</systemProperty>
                             <systemProperty>patch.number</systemProperty>
                             <systemProperty>build.number</systemProperty>
+                            <systemProperty>branch.name.short</systemProperty>
                             <systemProperty>timestamp</systemProperty>
                         </systemProperties>
                     </configuration>

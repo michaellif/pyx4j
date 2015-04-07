@@ -53,11 +53,19 @@ public class ApplicationVersion {
 
     private static final String PATCH_NUMBER = "patch.number";
 
+    private static final String BRANCH_NAME = "branch.name";
+
+    private static final String BRANCH_NAME_SHORT = "branch.name.short";
+
     private static final String BUILD_TIME_FORMAT = "yyyy-MM-dd HH:mm z";
 
     private static String productVersion = null;
 
     private static String patchNumber;
+
+    private static String branchName;
+
+    private static String branchNameShort;
 
     private static String buildNumber;
 
@@ -126,9 +134,19 @@ public class ApplicationVersion {
             patchNumber = "";
         }
 
+        branchName = properties.getProperty(BRANCH_NAME, "");
+        if (branchName.startsWith("${")) {
+            branchName = "";
+        }
+
+        branchNameShort = properties.getProperty(BRANCH_NAME_SHORT, "");
+        if (branchNameShort.startsWith("${")) {
+            branchNameShort = "";
+        }
+
         productBuild = properties.getProperty(PRODUCT_BUILD);
         if ((productBuild != null) && productBuild.startsWith("${")) {
-            productBuild = productVersion + patchNumber + "." + buildNumber;
+            productBuild = productVersion + patchNumber + branchNameShort + "." + buildNumber;
         }
 
         scmRevision = properties.getProperty("scm.revision", "");
@@ -247,6 +265,14 @@ public class ApplicationVersion {
 
     public static String getBuildLabel() {
         return getProductBuild();
+    }
+
+    public static String getBranchName() {
+        return branchName;
+    }
+
+    public static String getBranchNameShort() {
+        return branchNameShort;
     }
 
     public static String getBuildNumber() {
