@@ -1077,8 +1077,9 @@ public class TableModel {
                 }
                 TableModel subclassModel = retrieveDiscriminator(persistenceContext, rs, entity);
                 if (attachLevel.ordinal() > AttachLevel.IdOnly.ordinal()) {
-                    subclassModel.retrieveValues(rs, entity.cast());
-                    subclassModel.retrieveExternal(persistenceContext, entity.cast(), attachLevel);
+                    entity = entity.cast();
+                    subclassModel.retrieveValues(rs, entity);
+                    subclassModel.retrieveExternal(persistenceContext, entity, attachLevel);
                 }
                 rc.add(entity);
             }
