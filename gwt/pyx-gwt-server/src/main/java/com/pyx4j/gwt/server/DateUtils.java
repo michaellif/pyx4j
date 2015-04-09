@@ -36,7 +36,7 @@ public class DateUtils extends TimeUtils {
 
     /**
      * Quickly create a date object
-     * 
+     *
      * @param year
      * @param month
      *            starts with 0, January == 0
@@ -137,33 +137,33 @@ public class DateUtils extends TimeUtils {
     public static Date detectDateformat(String str) {
         final String[] formats = {
 
-        "yyyy-MM-dd'T'HH:mm:ss",
+                "yyyy-MM-dd'T'HH:mm:ss",
 
-        "yyyy-MM-dd HH:mm:ss.SSS",
+                "yyyy-MM-dd HH:mm:ss.SSS",
 
-        "yyyy-MM-dd HH:mm:ss",
+                "yyyy-MM-dd HH:mm:ss",
 
-        "yyyy-MM-dd HH:mm",
+                "yyyy-MM-dd HH:mm",
 
-        "MM-dd-yyyy HH:mm:ss.SSS",
+                "MM-dd-yyyy HH:mm:ss.SSS",
 
-        "MM-dd-yyyy HH:mm:ss",
+                "MM-dd-yyyy HH:mm:ss",
 
-        "MM-dd-yyyy HH:mm",
+                "MM-dd-yyyy HH:mm",
 
-        "MM/dd/yyyy HH:mm:ss.SSS",
+                "MM/dd/yyyy HH:mm:ss.SSS",
 
-        "MM/dd/yyyy HH:mm:ss",
+                "MM/dd/yyyy HH:mm:ss",
 
-        "MM/dd/yyyy HH:mm",
+                "MM/dd/yyyy HH:mm",
 
-        "MM-dd-yyyy",
+                "MM-dd-yyyy",
 
-        "yyyy-MM-dd",
+                "yyyy-MM-dd",
 
-        "MM/dd/yyyy", "M/dd/yyyy", "MM/d/yyyy", "M/d/yyyy",
+                "MM/dd/yyyy", "M/dd/yyyy", "MM/d/yyyy", "M/d/yyyy",
 
-        "MMM-dd-yyyy", "MMM/dd/yyyy", "dd-MMM-yyyy", "d-MMM-yyyy", };
+                "MMM-dd-yyyy", "MMM/dd/yyyy", "dd-MMM-yyyy", "d-MMM-yyyy", };
 
         str = str.trim();
 
@@ -211,6 +211,9 @@ public class DateUtils extends TimeUtils {
         for (String pattern : patterns) {
             try {
                 SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+                if (str.endsWith("UTC")) {
+                    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                }
                 Date dateObj = dateFormat.parse(str);
                 if (!str.equals(dateFormat.format(dateObj))) {
                     continue;
