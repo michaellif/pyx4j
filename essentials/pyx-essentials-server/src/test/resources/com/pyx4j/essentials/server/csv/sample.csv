@@ -1,0 +1,10 @@
+a,"",d
+a,"b"c,d
+a,"b"c",d
+a,"b""c",d
+
+a,b\c,d
+a,b\u1141c,d
+a,b\\c,d
+a,b\"c,d
+a,"b\"c",d

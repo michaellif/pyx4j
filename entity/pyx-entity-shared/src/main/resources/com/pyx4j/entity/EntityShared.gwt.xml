@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
+<!-- @version $Revision$ ($Author$) $Date$ -->
+<module>
+	<inherits name='com.pyx4j.security.SecurityShared'/>
+	<inherits name='com.pyx4j.Commons'/>
+	<inherits name='com.pyx4j.gwt.GwtCommons'/>
+	<inherits name='com.pyx4j.Geo'/>
+	
+    <source path="core"/>
+    <source path="annotations"/>
+	<source path="security"/>
+	<source path="shared"/>
+    
+    <define-configuration-property name="pyx.validateReservedKeywordsMembers" is-multi-valued="false" />
+	<set-configuration-property name="pyx.validateReservedKeywordsMembers" value="true"/>
+
+	<!--
+  		Remove IEntity type names from the Generated Code. 
+ 	-->
+ 	<define-configuration-property name="pyx.ElideEntityClasses" is-multi-valued="true" />
+ 	
+    <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.entity.annotations.*" />
+</module>

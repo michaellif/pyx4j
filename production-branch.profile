@@ -1,1 +1,0 @@
-Marker for maven profile activation.  Properies in pom do not work. And system properties are the same in bamboo for master and branches

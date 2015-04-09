@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
+<!-- @version $Revision$ ($Author$) $Date$ -->
+
+<module rename-to='site'>
+	<inherits name='com.google.gwt.user.User'/>
+	<inherits name="com.google.gwt.i18n.I18N"/>
+    <inherits name='com.pyx4j.essentials.Essentials' />
+    <inherits name='com.pyx4j.gwt.GwtGeo' />
+    <inherits name='com.pyx4j.examples.ExamplesDomain' />
+    <inherits name='com.pyx4j.examples.ExamplesRpc' />
+    <inherits name='com.pyx4j.security.Security' />
+    <inherits name='com.pyx4j.log4gwt.Log4gwtRPCAppender'/>
+    <inherits name='com.pyx4j.essentials.EssentialsSwf' />
+    <inherits name='com.pyx4j.essentials.EssentialsGeo'/>
+    
+     <inherits name='com.pyx4j.site.Site' />
+    
+    <replace-with class="com.pyx4j.examples.site.client.ExamplesInlineWidgetFactory">
+		<when-type-is class="com.pyx4j.site.client.InlineWidgetFactoryGlobal"/>
+	</replace-with>
+	
+	<entry-point class='com.pyx4j.examples.site.client.ExamplesSiteDispatcher'/>
+	
+</module>

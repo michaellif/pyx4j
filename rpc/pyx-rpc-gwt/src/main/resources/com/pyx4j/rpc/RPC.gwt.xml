@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
+<!-- @version $Revision$ ($Author$) $Date$ -->
+<module>
+    <inherits name='com.pyx4j.rpc.RPCShared'/>
+    <inherits name='com.pyx4j.serialization.Serialization'/>
+    <inherits name='com.pyx4j.gwt.GwtCommons'/>
+    
+    <source path="client"/>
+
+	<!--
+  		Remove Service type names from the RPC payload. 
+  		Can be: classMetadata, preserve, obfuscated or trunk
+  		Also see com.google.gwt.user.RemoteServiceObfuscateTypeNames and disableClassMetadata GWT compile flag
+ 	-->
+ 	<define-configuration-property name="pyx.ElideServiceNamesFromRPC" is-multi-valued="false" />
+	<set-configuration-property name="pyx.ElideServiceNamesFromRPC" value="classMetadata" />
+	
+    <generate-with class="com.pyx4j.rpc.rebind.ServiceNamesGenerator">
+        <when-type-assignable class="com.pyx4j.rpc.client.ServiceNames"/>
+    </generate-with>
+    
+    <generate-with class="com.pyx4j.rpc.rebind.IServiceGenerator">
+        <when-type-assignable class="com.pyx4j.rpc.shared.IService"/>
+    </generate-with>
+    
+    
+    <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.rpc.client.*" />
+
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.aria.client.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.core.client.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.canvas.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.cell.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.http.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.safehtml.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.safecss.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.event.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.cellview.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.view.client.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.validation.client.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.client.DocumentModeAsserter.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.client.ui.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.dom.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.jsonp.client.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.i18n.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.layout.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.libideas.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.widgetideas.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.resources.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.xml.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.xhr.client.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.client.rpc.SerializableException" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.client.rpc.ServiceDefTarget.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.client.rpc.impl.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.ajaxloader.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.web.bindery.event.*" />
+    
+    <extend-configuration-property name="rpc.blacklist" value="java.util.Random" />
+    <extend-configuration-property name="rpc.blacklist" value="java.lang.annotation.*" />
+
+    <!-- See module com.pyx4j.rpc.RPCBlacklist for other JVM classes not use by framework -->
+
+</module>

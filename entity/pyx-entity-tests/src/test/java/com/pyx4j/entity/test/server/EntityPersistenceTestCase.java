@@ -1,0 +1,315 @@
+/*
+ * Pyx4j framework
+ * Copyright (C) 2008-2010 pyx4j.com.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ *
+ * Created on Jan 23, 2010
+ * @author vlads
+ */
+package com.pyx4j.entity.test.server;
+
+import java.util.Iterator;
+
+import org.junit.Assert;
+
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.test.shared.domain.Address;
+import com.pyx4j.entity.test.shared.domain.Country;
+import com.pyx4j.entity.test.shared.domain.Department;
+import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.Status;
+import com.pyx4j.entity.test.shared.domain.Task;
+
+public abstract class EntityPersistenceTestCase extends DatastoreTestBase {
+
+    public void testPersist() {
+        Assert.assertNotNull("getPersistenceService", srv);
+
+        Country country = EntityFactory.create(Country.class);
+        String countryName = "Canada" + uniqueString();
+        country.name().setValue(countryName);
+
+        srv.persist(country);
+
+        Key primaryKey = country.getPrimaryKey();
+
+        Country country2 = srv.retrieve(Country.class, primaryKey);
+        Assert.assertNotNull("retrieve", country2);
+        Assert.assertEquals("name Value", countryName, country2.name().getValue());
+        Assert.assertEquals("primaryKey Value", primaryKey, country2.getPrimaryKey());
+    }
+
+    public void testUpdate() {
+        Employee emp1 = EntityFactory.create(Employee.class);
+        emp1.firstName().setValue("Firstname" + uniqueString());
+        emp1.holidays().setValue(Long.valueOf(System.currentTimeMillis()));
+
+        srv.persist(emp1);
+        Key pk = emp1.getPrimaryKey();
+        Employee emp1r = srv.retrieve(Employee.class, pk);
+        Assert.assertNotNull("retrieved by PK", emp1r);
+        Assert.assertEquals("holidays saved", emp1.holidays().getValue(), emp1r.holidays().getValue());
+
+        Employee emp2 = EntityFactory.create(Employee.class);
+        emp2.setPrimaryKey(pk);
+        emp2.firstName().setValue("Name" + uniqueString());
+        srv.merge(emp2);
+
+        Employee emp3 = srv.retrieve(Employee.class, pk);
+        Assert.assertEquals("firstName updated", emp2.firstName().getValue(), emp3.firstName().getValue());
+        Assert.assertNull("holidays not removed", emp3.holidays().getValue());
+    }
+
+    public void testUnownedOneToOnePersist() {
+        Country country = EntityFactory.create(Country.class);
+        String countryName = "Canada" + uniqueString();
+        country.name().setValue(countryName);
+        srv.persist(country);
+
+        Address address = EntityFactory.create(Address.class);
+        address.country().set(country);
+        srv.persist(address);
+
+        Key primaryKey = address.getPrimaryKey();
+        Address address2 = srv.retrieve(Address.class, primaryKey);
+        Assert.assertNotNull("retrieve", address2);
+
+        Assert.assertEquals("address.country Value", countryName, address2.country().name().getValue());
+
+    }
+
+    public void testOwnedOneToOnePersistNonPersisted() {
+        Country country = EntityFactory.create(Country.class);
+        String countryName = "Canada" + uniqueString();
+        country.name().setValue(countryName);
+        // Do not save!
+        //srv.persist(country);
+
+        Address address = EntityFactory.create(Address.class);
+        address.country().set(country);
+        boolean saved = false;
+        try {
+            srv.persist(address);
+            saved = true;
+        } catch (Error e) {
+            // OK
+        }
+        if (saved) {
+            fail("Should not save non persisted reference");
+        }
+    }
+
+    public void testOwnedOneToOnePersist() {
+        Employee employee = EntityFactory.create(Employee.class);
+        employee.firstName().setValue("Firstname");
+
+        String addressStreet = "Home Street " + uniqueString();
+
+        Address address = EntityFactory.create(Address.class);
+        address.streetName().setValue(addressStreet);
+        employee.homeAddress().set(address);
+
+        srv.persist(employee);
+        Key primaryKey = employee.getPrimaryKey();
+        Employee employee2 = srv.retrieve(Employee.class, primaryKey);
+        Assert.assertNotNull("retrieve", employee2);
+
+        Assert.assertNotNull("retrieve owned", employee2.homeAddress());
+        Assert.assertNotNull("retrieve owned member", employee2.homeAddress().streetName());
+
+        Assert.assertEquals("streetName is wrong", addressStreet, employee2.homeAddress().streetName().getValue());
+    }
+
+    public void testEmbeddedPersist() {
+        Employee emp = EntityFactory.create(Employee.class);
+        emp.firstName().setValue(uniqueString());
+        emp.workAddress().streetName().setValue(uniqueString());
+        emp.workAddress().city().name().setValue(uniqueString());
+        emp.workAddress().effectiveFrom().setValue(randomSqlDate());
+        emp.workAddress().effectiveTo().setValue(randomDate());
+        srv.persist(emp);
+
+        Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
+        Assert.assertNotNull("retrieve", emp2);
+        Assert.assertEquals("address.streetName Value", emp.workAddress().streetName().getValue(), emp2.workAddress().streetName().getValue());
+        Assert.assertEquals("address.city Value", emp.workAddress().city().name().getValue(), emp2.workAddress().city().name().getValue());
+        Assert.assertEquals("address.effectiveFrom Value", emp.workAddress().effectiveFrom().getValue(), emp2.workAddress().effectiveFrom().getValue());
+        Assert.assertEquals("address.effectiveTo Value", emp.workAddress().effectiveTo().getValue(), emp2.workAddress().effectiveTo().getValue());
+        assertFullyEqual("After persist", emp, emp2);
+
+        srv.merge(srv.retrieve(Employee.class, emp.getPrimaryKey()));
+
+        Employee emp3 = srv.retrieve(Employee.class, emp.getPrimaryKey());
+        Assert.assertNotNull("retrieve", emp3);
+        Assert.assertEquals("address.streetName Value", emp.workAddress().streetName().getValue(), emp3.workAddress().streetName().getValue());
+        Assert.assertEquals("address.city Value", emp.workAddress().city().name().getValue(), emp3.workAddress().city().name().getValue());
+        Assert.assertEquals("address.effectiveFrom Value", emp.workAddress().effectiveFrom().getValue(), emp3.workAddress().effectiveFrom().getValue());
+        Assert.assertEquals("address.effectiveTo Value", emp.workAddress().effectiveTo().getValue(), emp3.workAddress().effectiveTo().getValue());
+        assertFullyEqual("After merge", emp2, emp3);
+    }
+
+    public void testEmbeddedMerge() {
+        Employee emp = EntityFactory.create(Employee.class);
+        emp.firstName().setValue(uniqueString());
+        srv.persist(emp);
+
+        emp.workAddress().streetName().setValue(uniqueString());
+        emp.workAddress().city().name().setValue(uniqueString());
+        emp.workAddress().effectiveFrom().setValue(randomSqlDate());
+        emp.workAddress().effectiveTo().setValue(randomDate());
+        srv.merge(emp);
+
+        Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
+        Assert.assertNotNull("retrieve", emp2);
+        Assert.assertEquals("address.streetName Value", emp.workAddress().streetName().getValue(), emp2.workAddress().streetName().getValue());
+        Assert.assertEquals("address.city Value", emp.workAddress().city().name().getValue(), emp2.workAddress().city().name().getValue());
+        Assert.assertEquals("address.effectiveFrom Value", emp.workAddress().effectiveFrom().getValue(), emp2.workAddress().effectiveFrom().getValue());
+        Assert.assertEquals("address.effectiveTo Value", emp.workAddress().effectiveTo().getValue(), emp2.workAddress().effectiveTo().getValue());
+        assertFullyEqual("After merge", emp, emp2);
+
+    }
+
+    public void testUnownedSetPersist() {
+        Department department = EntityFactory.create(Department.class);
+        String deptName = "Dept " + uniqueString();
+        department.name().setValue(deptName);
+        srv.persist(department);
+
+        Employee employee1 = EntityFactory.create(Employee.class);
+        employee1.firstName().setValue("Firstname1");
+        srv.persist(employee1);
+        department.employees().add(employee1);
+
+        Employee employee2 = EntityFactory.create(Employee.class);
+        employee2.firstName().setValue("Firstname2");
+        srv.persist(employee2);
+        department.employees().add(employee2);
+
+        srv.persist(department);
+        //System.out.println(((IFullDebug) department).debugString());
+
+        Assert.assertEquals("Set size", 2, department.employees().getValue().size());
+        Assert.assertTrue("contains(emp1)", department.employees().contains(employee1));
+        Assert.assertTrue("contains(emp2)", department.employees().contains(employee2));
+
+        Department departmentR = srv.retrieve(Department.class, department.getPrimaryKey());
+        //System.out.println(((IFullDebug) departmentR).debugString());
+
+        Assert.assertEquals("Retr. department.name", deptName, departmentR.name().getValue());
+        Assert.assertEquals("Retr. Set size", 2, departmentR.employees().size());
+        Assert.assertTrue("Retr. contains(emp1)", departmentR.employees().contains(employee1));
+        Assert.assertTrue("Retr. contains(emp2)", departmentR.employees().contains(employee2));
+
+    }
+
+    public void testPrimitiveSetPersist() {
+        testPrimitiveSet(TestCaseMethod.Persist);
+    }
+
+    public void testPrimitiveSetMerge() {
+        testPrimitiveSet(TestCaseMethod.Merge);
+    }
+
+    public void testPrimitiveSet(TestCaseMethod testCaseMethod) {
+        Task task = EntityFactory.create(Task.class);
+        task.notes().add("Note1");
+        task.notes().add("Note2");
+
+        srv.persist(task);
+        Task task2 = srv.retrieve(Task.class, task.getPrimaryKey());
+
+        assertTrue("contains(1)", task2.notes().contains("Note1"));
+        assertTrue("contains(2)", task2.notes().contains("Note2"));
+
+        Iterator<String> it = task2.notes().iterator();
+        assertEquals("iterator.hasNext() first", true, it.hasNext());
+        String el1 = it.next();
+        assertEquals("iterator.hasNext() second", true, it.hasNext());
+        String el2 = it.next();
+        assertEquals("iterator.hasNext()", false, it.hasNext());
+        if (el1.equals("Note1")) {
+            assertEquals("iterator. second()", "Note2", el2);
+        } else {
+            assertEquals("iterator. first()", "Note2", el1);
+            assertEquals("iterator. second()", "Note1", el2);
+        }
+
+        // Test update/remove
+        task.notes().remove("Note2");
+        srvSave(task, testCaseMethod);
+        task2 = srv.retrieve(Task.class, task.getPrimaryKey());
+        assertEquals("removed size", 1, task2.notes().size());
+        assertTrue("contains(1)", task2.notes().contains("Note1"));
+        assertFalse("not contains(2)", task2.notes().contains("Note2"));
+
+        // Test update/add
+        task.notes().add("Note3");
+        srvSave(task, testCaseMethod);
+        task2 = srv.retrieve(Task.class, task.getPrimaryKey());
+        assertEquals("added size", 2, task2.notes().size());
+        assertTrue("contains(1)", task2.notes().contains("Note1"));
+        assertTrue("contains(3)", task2.notes().contains("Note3"));
+    }
+
+    public void testPrimitiveSetEnumPersist() {
+        testPrimitiveSetEnum(TestCaseMethod.Persist);
+    }
+
+    public void testPrimitiveSetEnumMerge() {
+        testPrimitiveSetEnum(TestCaseMethod.Merge);
+    }
+
+    public void testPrimitiveSetEnum(TestCaseMethod testCaseMethod) {
+        Task task = EntityFactory.create(Task.class);
+        task.oldStatus().add(Status.ACTIVE);
+        task.oldStatus().add(Status.DEACTIVATED);
+
+        srv.persist(task);
+        Task task2 = srv.retrieve(Task.class, task.getPrimaryKey());
+
+        assertTrue("contains(1)", task2.oldStatus().contains(Status.ACTIVE));
+        assertTrue("contains(2)", task2.oldStatus().contains(Status.DEACTIVATED));
+
+        Iterator<Status> it = task2.oldStatus().iterator();
+        assertEquals("iterator.hasNext() first", true, it.hasNext());
+        Status el1 = it.next();
+        assertEquals("iterator.hasNext() second", true, it.hasNext());
+        Status el2 = it.next();
+        assertEquals("iterator.hasNext()", false, it.hasNext());
+        if (el1.equals(Status.ACTIVE)) {
+            assertEquals("iterator. second()", Status.DEACTIVATED, el2);
+        } else {
+            assertEquals("iterator. first()", Status.DEACTIVATED, el1);
+            assertEquals("iterator. second()", Status.ACTIVE, el2);
+        }
+
+        // Test update/remove
+        task.oldStatus().remove(Status.DEACTIVATED);
+        srvSave(task, testCaseMethod);
+        task2 = srv.retrieve(Task.class, task.getPrimaryKey());
+        assertEquals("removed size", 1, task2.oldStatus().size());
+        assertTrue("contains(1)", task2.oldStatus().contains(Status.ACTIVE));
+        assertFalse("not contains(2)", task2.oldStatus().contains(Status.DEACTIVATED));
+
+        // Test update/add
+        task.oldStatus().add(Status.SUSPENDED);
+        srvSave(task, testCaseMethod);
+        task2 = srv.retrieve(Task.class, task.getPrimaryKey());
+        assertEquals("added size", 2, task2.oldStatus().size());
+        assertTrue("contains(1)", task2.oldStatus().contains(Status.ACTIVE));
+        assertTrue("contains(3)", task2.oldStatus().contains(Status.SUSPENDED));
+    }
+
+}

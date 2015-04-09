@@ -1,0 +1,1 @@
+echo > %HOMEDRIVE%\%HOMEPATH%\.appcfg_no_nag

@@ -1,0 +1,7 @@
+<queue-entries>
+    <queue>
+        <name>internal</name>
+        <rate>1/m</rate>
+        <bucket-size>5</bucket-size>
+    </queue>
+</queue-entries>

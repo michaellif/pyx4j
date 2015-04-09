@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0">
+    <!-- @version $Revision$ ($Author$) $Date$ -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.pyx4j</groupId>
+        <artifactId>pyx-parent</artifactId>
+        <version>2.2.7-SNAPSHOT</version><!--pyx-version-->
+        <relativePath>../pyx-parent/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>pyx-projects-parent</artifactId>
+
+    <packaging>pom</packaging>
+    <name>pyx-projects-parent</name>
+    <description>pyx-projects-parent</description>
+
+    <distributionManagement>
+        <site>
+            <id>test-pyx4j-site</id>
+            <!--url>${scp-apache-site-snapshot-base}/pyx/pyx-projects-parent</url-->
+            <url>file:///data/apache/pyx/pyx-projects-parent</url>
+        </site>
+        <repository>
+            <id>pyx4j.com-file-release</id>
+            <url>${scp-apache-repository-release}</url>
+        </repository>
+        <snapshotRepository>
+            <id>pyx4j.com-file-development</id>
+            <url>${scp-apache-repository-snapshot}</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <scm>
+        <url>https://svn.pyx4j.com/svn/trunk/essentials/pyx-projects-parent</url>
+        <connection>scm:svn:https://svn.pyx4j.com/svn/trunk/essentials/pyx-projects-parent</connection>
+        <developerConnection>scm:svn:https://svn.pyx4j.com/svn/trunk/essentials/pyx-projects-parent</developerConnection>
+    </scm>
+
+    <properties>
+        <pyxVersion>2.2.7-SNAPSHOT</pyxVersion><!--pyx-version-->
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-essentials-server</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-essentials-data</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-entity-shared</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-entity-j2se</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-entity-server</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-rpc-shared</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-entity-rpc</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-essentials-shared</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+            <dependency>
+		        <groupId>com.pyx4j</groupId>
+		        <artifactId>pyx-essentials-gwt</artifactId>
+                <version>${pyxVersion}</version>
+		    </dependency>
+
+            <dependency>
+		        <groupId>com.pyx4j</groupId>
+		        <artifactId>pyx-i18n-gwt</artifactId>
+                <version>${pyxVersion}</version>
+		    </dependency>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-site-shared</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-site-client</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-entity-gae</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+             <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-unit-gwt</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-unit-selenium</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+       </dependencies>
+    </dependencyManagement>
+
+    <build>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.pyx4j</groupId>
+                    <artifactId>gwt-maven-plugin</artifactId>
+                    <version>${pyxVersion}</version>
+                    <configuration>
+                        <systemProperties>
+                            <systemProperty>project.version</systemProperty>
+                            <systemProperty>patch.number</systemProperty>
+                            <systemProperty>build.number</systemProperty>
+                            <systemProperty>branch.name.short</systemProperty>
+                            <systemProperty>timestamp</systemProperty>
+                        </systemProperties>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>source-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-dev</artifactId>
+                        <version>${gwtVersion}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

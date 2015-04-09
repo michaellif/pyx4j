@@ -1,0 +1,43 @@
+~~ @version $Revision$ ($Author$) $Date$
+~~ See this file format http://maven.apache.org/guides/mini/guide-apt-format.html
+
+                                    ------------------
+                                    Developer Workstation configuration
+                                    ------------------
+
+
+Developer Workstation configuration
+
+* Installations
+
+    The master document is located here: {{{https://pyx4j.com/svn/trunk/README.txt}https://pyx4j.com/svn/trunk/README.txt}}
+
+* Subversion Configuration Files
+
+   This is client configuration to ignore all generated files and directories.
+Also for proper mime-type and eol-style for new files in SVN
+
+   To install copy https://pyx4j.com/svn/trunk/src/env/subversion/subversion_config to "%APPDATA%\Subversion\config on Windows and ~/.subversion/config on Unix
+
+   See the files in your local source tree: src\env\subversion
+
+
+* Eclipse Java Code Style
+
+    Code style is required to simplify patches contribution to the project.
+
+    Configure naming conventions, style rules and comment settings in Eclipse. Upload templates from https://pyx4j.com/svn/trunk/src/env/eclipse
+
+    See the files in your local source tree: src\env\eclipse
+
+    * In Eclipse IDE Use Window > Preferences > Java > Code Style > Formatter  [Import]  select file 'code-formater.xml'
+
+    * Java > Code Style > Clean Up  [Import]  use the file 'clean-up.xml' from the same location.
+
+    * Java > Code Style > Code Templates [Import] use the file 'code-templates.xml'
+
+    * Java > Code Style > Organize Imports  [Import]  use the file 'code.importorder'
+
+    * Java > Editor > Save Actions select all sugested actions. This will format the code on each save.  See the screenshot
+
+[images/eclipse-save-actions.png] Eclipse Save Actions

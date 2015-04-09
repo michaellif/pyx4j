@@ -6,51 +6,63 @@
                                     ------------------
 
 
-Property Vista
+pyx
 
-* Links
+* Overview
 
-    * {{{http://jira.birchwoodsoftwaregroup.com/builds/browse/VISTA}Continuous integration (Bamboo)}};  {{{http://jira.birchwoodsoftwaregroup.com/builds-workplace/}Access to Build Working Directories}}
+    This is the second generation framework we are using for our web applications.
 
-    * {{{http://vista.22.birchwoodsoftwaregroup.com/}env22}} Nightly build Application; {{{http://www22.birchwoodsoftwaregroup.com/logs}logs}}
+    This framework simplify domain driven application development on GAE with GWT.
 
-    * {{{http://vista.33.birchwoodsoftwaregroup.com/}env33}} QA Test Application;  {{{http://www33.birchwoodsoftwaregroup.com/logs}logs}}
+    {{{http://pyx4j.com/snapshot/pyx4j/pyx4j-gwt/}Old framework}} is still maintained.
 
-    * {{{http://vista.44.birchwoodsoftwaregroup.com/}env44}} Customer Delivery Application (staging env)
+* IEntity
 
-    * {{{http://dev.birchwoodsoftwaregroup.com/managedb/}dev.birchwoodsoftwaregroup.com/managedb/}} Testing Environment DB Browsing
+    This is our approach to make data object and its metadata in one declaration.
 
-    * {{{http://dev.birchwoodsoftwaregroup.com/} TestEnv Tomcat Admin site}}
+    We selected this approach because we need
 
-    * {{{http://jira.birchwoodsoftwaregroup.com/pyx-site/}Framework site}}
+    * Refactoring safe domain
 
-~~    * {{{http://code.pyx4j.com/}Framework site}}
+    * The same domain objects in GWT client mode and on server side
 
-* Project reports and statistics
+    * Type safety using Java 5 generics
 
-    * {{{./changelog.html}Change Log}} - Generated change log report from SVN for Vista.
+    []
 
-    * {{{http://code.pyx4j.com/changelog.html}Change Log}} - Generated change log report from SVN for Framework.
+---
+public interface Car extends IEntity {
 
-    * {{{./statscm/index.html}StatSCM}} -  Source Code Management Metrics and Statistic for Vista.
+    IPrimitive<String> name();
 
-    * {{{http://code.pyx4j.com/statscm/index.html}StatSCM}} -  Source Code Management Metrics and Statistic for Framework.
+}
+...
+Car car = EntityFactory.create(Car.class);
+---
 
-~~    {{{./mef-gwt-public-site/javancss.html}Code metric analysis(JavaNCSS) Report for Client site Module}}.
+    Implementation objects are created using bytecode manipulations (Javassist) on server and GWT rebind for client.
 
-~~    {{{./mef-server/javancss.html}Code metric analysis(JavaNCSS) Report for Server Module}}.
+    Build-time bytecode enhancement are optional. Implementations can be dynamically created at run-time during development.
+We can create Entity implementation classes at build-time so bytecode manipulations can be avoided on production to speed up application start-up. This is the final step and optional for application deployment.
 
 
-* GWT Compile Reports
+* CComponent(s)
 
-    * {{{./vista-portal/vista-portal-client/soycReport/}GWT Compile Report 'vista-portal-client'}}
+    Forms and data binging detached from DOM objects.
 
-    * {{{./vista-server/rpc/portal/@version@}RPC files}} - Portal Client Site RPC policy files.
 
-    * {{{./reports/rpc/portal/@version@}RPC files}} - Portal Client Site RPC policy files with history.
+* Interesting alternatives
 
-    * {{{./vista-crm/vista-crm-client/soycReport/}GWT Compile Report 'CRM'}}
+    * {{{http://code.google.com/p/objectify-appengine/}Objectify-Appengine}}
 
-    * {{{./vista-server/rpc/crm/@version@}RPC files}} - CRM RPC policy files.
+    * {{{http://code.google.com/p/simpleds/}SimpleDS}}
 
-    * {{{./reports/rpc/crm/@version@}RPC files}} - CRM RPC policy files with history.
+    * {{{http://code.google.com/p/gwt-ent/}GWT ENT}}
+
+* GWT Compile Report
+
+~~    * {{{./incubator/tester/tester-client/soycReport/}GWT Compile Report for 'tester'}}
+
+    * {{{./examples/examples-site/soycReport/}GWT Compile Report for 'examples'}}
+
+    * {{{./examples/examples-gae-server/rpc/#version#}RPC files}} - 'examples' client site RPC policy files with history.

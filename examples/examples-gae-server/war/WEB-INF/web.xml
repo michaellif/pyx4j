@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app
+    version="2.5"
+    xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_5.xsd">
+
+    <!-- @version $Revision$ ($Author$) $Date$ -->
+
+    <context-param>
+        <param-name>com.pyx4j.config.server.ServerSideConfiguration</param-name>
+        <param-value>com.pyx4j.examples.server.ExamplesServerSideConfiguration</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>com.pyx4j.entity.server.servlet.InitializationServletContextListener</listener-class>
+    </listener>
+
+    <!--
+    <security-constraint>
+        <web-resource-collection>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>*</role-name>
+        </auth-constraint>
+    </security-constraint>
+    -->
+
+    <security-constraint>
+        <web-resource-collection>
+            <url-pattern>/internal/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <filter>
+        <filter-name>LifecycleFilter</filter-name>
+        <filter-class>com.pyx4j.server.contexts.LifecycleFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>LifecycleFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- Servlets -->
+    <servlet>
+        <servlet-name>RemoteServiceServlet</servlet-name>
+        <servlet-class>com.pyx4j.rpc.server.RemoteServiceServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RemoteServiceServlet</servlet-name>
+        <url-pattern>/g.site/srv/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>RemoteServiceServlet</servlet-name>
+        <url-pattern>/g.ria/srv/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>GoogleAccountsLoginHttpServlet</servlet-name>
+        <servlet-class>com.pyx4j.examples.server.GoogleAccountsLoginHttpServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>GoogleAccountsLoginHttpServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>GoogleAccountsLoginHttpServlet</servlet-name>
+        <url-pattern>/loginCompleted</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>GoogleAccountsLoginHttpServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>GoogleAccountsLoginHttpServlet</servlet-name>
+        <url-pattern>/logoutCompleted</url-pattern>
+    </servlet-mapping>
+        
+    <servlet>
+        <servlet-name>CronServlet</servlet-name>
+        <servlet-class>com.pyx4j.essentials.server.admin.CronServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>CronServlet</servlet-name>
+        <url-pattern>/internal/cron/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DeferredProcessTaskWorkerServlet</servlet-name>
+        <servlet-class>com.pyx4j.essentials.server.deferred.DeferredProcessTaskWorkerServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DeferredProcessTaskWorkerServlet</servlet-name>
+        <url-pattern>/internal/worker/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DownloadServlet</servlet-name>
+        <servlet-class>com.pyx4j.essentials.server.download.DownloadServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DownloadServlet</servlet-name>
+        <url-pattern>/download/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>DebugServlet</servlet-name>
+        <servlet-class>com.pyx4j.essentials.server.dev.DebugServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DebugServlet</servlet-name>
+        <url-pattern>/debug/*</url-pattern>
+    </servlet-mapping>
+    
+    
+    <!-- Default page -->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+</web-app>

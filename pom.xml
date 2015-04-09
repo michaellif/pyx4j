@@ -1,63 +1,186 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0">
     <!-- @version $Revision$ ($Author$) $Date$ -->
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>com.pyx4j</groupId>
-        <artifactId>pyx-projects-parent</artifactId>
-        <version>2.2.7-SNAPSHOT</version><!--pyx-version -->
-        <relativePath>../pyx4j/essentials/pyx-projects-parent/pom.xml</relativePath>
+        <artifactId>pyx-parent</artifactId>
+        <version>2.2.7-SNAPSHOT</version><!--pyx-version-->
+        <relativePath>essentials/pyx-parent/pom.xml</relativePath>
     </parent>
 
-    <groupId>com.propertyvista</groupId>
-    <artifactId>vista</artifactId>
-    <version>1.4.2-SNAPSHOT</version><!--vista-version-->
+    <groupId>com.pyx4j</groupId>
+    <artifactId>pyx</artifactId>
+    <version>2.2.7-SNAPSHOT</version><!--pyx-version-->
 
     <packaging>pom</packaging>
-    <name>vista</name>
-    <description>Property Vista</description>
+    <name>pyx</name>
+    <description>pyx</description>
+
+    <prerequisites>
+        <maven>2.2.1</maven>
+    </prerequisites>
 
     <organization>
-        <name>Property Vista Software Inc.</name>
-        <url>http://birchwoodsoftwaregroup.com/</url>
+        <name>Pyx Software Services Inc.</name>
+        <url>http://www.pyx4j.com</url>
     </organization>
-    <inceptionYear>2010</inceptionYear>
+    <inceptionYear>2006</inceptionYear>
 
     <licenses>
         <license>
-            <name>Proprietary Property Vista Software Inc.</name>
-            <distribution>manual</distribution>
-            <comments>This software is the confidential and proprietary information of Property Vista Software Inc.</comments>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
         </license>
     </licenses>
 
-    <url>http://jira.birchwoodsoftwaregroup.com/site/</url>
+    <url>http://code.pyx4j.com</url>
+
+    <ciManagement>
+        <system>Bamboo</system>
+        <url>http://jira.birchwoodsoftwaregroup.com/builds/browse/PYX</url>
+    </ciManagement>
+
+    <issueManagement>
+        <system>Bugzilla</system>
+        <url>https://pyx4j.com/bug/</url>
+    </issueManagement>
 
     <distributionManagement>
         <site>
-            <id>vista-staging-site</id>
-            <!-- Bug http://jira.codehaus.org/browse/MSITE-604 -->
-            <!--url>${scp-apache-site-snapshot-base}/vista</url -->
-            <url>file:///data/apache/vista</url>
+            <id>test-pyx4j-site</id>
+            <!--url>${scp-apache-site-snapshot-base}/pyx</url-->
+            <url>file:///data/apache/pyx</url>
         </site>
-        <!-- not public, no-deployment -->
         <repository>
-            <id>pyx4j.com-no-deployment</id>
-            <url>file:///${basedir}/target/tmp</url>
+            <id>pyx4j.com-file-release</id>
+            <url>${scp-apache-repository-release}</url>
         </repository>
         <snapshotRepository>
-            <id>pyx4j.com-no-deployment</id>
-            <url>file:///${basedir}/target/tmp</url>
+            <id>pyx4j.com-file-development</id>
+            <url>${scp-apache-repository-snapshot}</url>
         </snapshotRepository>
     </distributionManagement>
 
     <scm>
-        <url>https://stash.devpv.com/projects/VISTA/repos/vista/browse</url>
-        <connection>scm:git:ssh://git@stash-ssh.devpv.com:7999/vista/vista.git</connection>
-        <developerConnection>scm:git:ssh://git@stash-ssh.devpv.com:7999/vista/vista.git</developerConnection>
+        <url>https://stash.devpv.com/projects/PYX4J/repos/pyx4j/browse</url>
+        <connection>scm:git:ssh://git@stash-ssh.devpv.com:7999/pyx4j/pyx4j.git</connection>
+        <developerConnection>scm:git:ssh://git@stash-ssh.devpv.com:7999/pyx4j/pyx4j.git</developerConnection>
     </scm>
+
+    <modules>
+        <module>maven/gwt-maven-plugin</module>
+
+        <module>pyx-commons</module>
+
+        <module>rpc/pyx-rpc-shared</module>
+        <module>log/pyx-log-shared</module>
+        <module>security/pyx-security-shared</module>
+
+        <module>app-config/pyx-config-shared</module>
+        <module>app-config/pyx-config-gwt</module>
+        <module>app-config/pyx-config-server</module>
+        <module>app-config/pyx-tests-config</module>
+
+        <module>gwt/pyx-gwt-server</module>
+        <module>security/pyx-security-server</module>
+        <module>rpc/pyx-rpc-server</module>
+        <module>rpc/pyx-rpc-j2se</module>
+
+        <module>log/pyx-slf4j-api-gwt</module>
+        <module>log/pyx-log-gwt</module>
+
+        <module>i18n/pyx-i18n-shared</module>
+        <module>i18n/pyx-i18n-gettext</module>
+        <module>i18n/pyx-i18n-j2se</module>
+
+        <module>gwt/pyx-gwt-commons</module>
+        <module>i18n/pyx-i18n-gwt</module>
+        <module>rpc/pyx-rpc-gwt</module>
+        <module>security/pyx-security-gwt</module>
+        <module>log/pyx-log-gwt-rpcappender</module>
+        <module>log/pyx-log-server</module>
+        <module>unit/pyx-unit-gwt</module>
+        <module>gwt/pyx-gwt-widgets</module>
+        <module>gwt/pyx-gwt-forms</module>
+
+        <module>gwt/pyx-gwt-shared</module>
+        <module>gwt/pyx-gwt-client</module>
+
+        <module>gwt/pyx-gwt-dnd</module>
+
+        <module>gwt/pyx-gwt-serialization</module>
+
+        <module>entity/pyx-entity-shared</module>
+        <module>security/pyx-security-rpc</module>
+        <module>entity/pyx-entity-rpc</module>
+        <module>entity/pyx-entity-gwt</module>
+        <module>entity/pyx-entity-j2se</module>
+        <module>entity/pyx-entity-server</module>
+        <module>entity/pyx-entity-tests</module>
+        <module>entity/pyx-entity-gae</module>
+        <module>entity/pyx-entity-rdb</module>
+
+        <module>entity/pyx-entity-assert</module>
+<!--
+        <module>entity/entity-hibernate</module>
+-->
+        <module>entity/pyx-entity-report</module>
+
+        <module>security/pyx-security-tests</module>
+
+        <module>unit/pyx-unit-shared</module>
+        <module>unit/pyx-unit-server</module>
+        <module>unit/pyx-unit-runner</module>
+        <module>unit/pyx-unit-selenium</module>
+
+        <module>site/pyx-site-shared</module>
+        <module>site/pyx-site-client</module>
+        <module>site/pyx-site-server</module>
+
+<!--
+        <module>site/pyx-site-admin</module>
+-->
+
+        <module>svg/pyx-svg-shared</module>
+        <module>svg/pyx-svg-j2se</module>
+        <module>svg/pyx-svg-gwt</module>
+
+        <module>maven/password-maven-plugin</module>
+        <module>maven/i18n-maven-plugin</module>
+
+        <module>essentials/pyx-essentials-shared</module>
+        <module>essentials/pyx-essentials-gwt</module>
+        <module>essentials/pyx-essentials-data</module>
+        <module>essentials/pyx-essentials-server</module>
+        <module>essentials/pyx-essentials-j2se</module>
+        <module>essentials/pyx-mail-server</module>
+        <module>essentials/pyx-quartz</module>
+
+        <module>essentials/pyx-jetty-runtime</module>
+
+        <module>tester/pyx-tester-shared</module>
+        <module>tester/pyx-tester-ui</module>
+        <module>tester/pyx-tester-server</module>
+
+        <module>incubator/tester/tester-client</module>
+        <module>incubator/tester/tester-gae-server</module>
+
+        <module>tester/pyx-tester-selenium</module>
+
+        <module>examples/examples-domain</module>
+        <module>examples/examples-site</module>
+
+        <module>examples/examples-gae-server</module>
+
+        <module>essentials/pyx-parent</module>
+        <module>essentials/pyx-projects-parent</module>
+    </modules>
 
     <developers>
         <developer>
@@ -85,43 +208,34 @@
         <developer>
             <name>Pinchuk Vadym</name>
             <id>vadymp</id>
-            <email>vadymp@birchwoodsoftwaregroup.com</email>
+            <email>vadymp@gmail.com</email>
             <roles>
-                <role>developer</role>
+                <role>contributor</role>
             </roles>
             <timezone>-5</timezone>
         </developer>
         <developer>
             <name>Vlad Loukiantchenko</name>
             <id>vladlouk</id>
-            <email>vladlouk@propertyvista.com</email>
+            <email>vladlouk@gmail.com</email>
             <roles>
-                <role>developer</role>
+                <role>contributor</role>
             </roles>
             <timezone>-5</timezone>
         </developer>
         <developer>
             <name>Dmitry Tumanov</name>
             <id>dmitryt</id>
-            <email>dmitryt@birchwoodsoftwaregroup.com</email>
+            <email>tumanov@gmail.com</email>
             <roles>
-                <role>developer</role>
-            </roles>
-            <timezone>-5</timezone>
-        </developer>
-        <developer>
-            <name>Artur Roytburg</name>
-            <id>aroytbur</id>
-            <email>aroytbur@propertyvista.com</email>
-            <roles>
-                <role>developer</role>
+                <role>contributor</role>
             </roles>
             <timezone>-5</timezone>
         </developer>
         <developer>
             <name>Leon Tager</name>
             <id>leont</id>
-            <email>leont@birchwoodsoftwaregroup.com</email>
+            <email>leontager@gmail.com</email>
             <roles>
                 <role>developer</role>
             </roles>
@@ -137,347 +251,46 @@
             <timezone>-5</timezone>
         </developer>
         <developer>
-            <name>Artyom Bondarev</name>
-            <id>artyom</id>
-            <email>artyom@propertyvista.com</email>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <timezone>-5</timezone>
-        </developer>
-        <developer>
-            <name>Yuriy Levandovskyy</name>
-            <id>yuriyl</id>
-            <email>yuriyl@propertyvista.com</email>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <timezone>-5</timezone>
-        </developer>
-        <developer>
-            <name>Stan Porter</name>
-            <id>stanp</id>
-            <email>stanp@propertyvista.com</email>
+            <name>Flora Lifschitz</name>
+            <id>floral</id>
+            <email>flora.lifschitz@pyx4j.com</email>
             <organization>Pyx Software Services Inc.</organization>
             <organizationUrl>http://www.pyx4j.com</organizationUrl>
             <roles>
-                <role>developer</role>
+                <role>Developer</role>
             </roles>
             <timezone>-5</timezone>
         </developer>
     </developers>
 
-    <modules>
-        <module>vista-biz</module>
-        <module>vista-server</module>
-        <module>vista-shared</module>
-        <module>vista-dev</module>
-        <module>vista-portal</module>
-        <module>vista-oapi</module>
-        <module>vista-operations</module>
-        <module>vista-onboarding</module>
-        <module>vista-crm</module>
-        <module>vista-site</module>
-        <module>vista-assembly</module>
-    </modules>
-
-    <properties>
-        <patch.number>.2</patch.number>
-
-        <appGWTModuleSufix></appGWTModuleSufix>
-        <gwtEnableAssertions>false</gwtEnableAssertions>
-
-        <scm.revision></scm.revision>
-	    <axis2Version>1.6.2</axis2Version>
-	    <jerseyVersion>2.11</jerseyVersion>
-        <wicket.version>1.5.0</wicket.version>
-
-        <google.translate.apiKey>AIzaSyB4epMBre3NeR-_1fgKFz3-V6iA1qpfh-M</google.translate.apiKey>
-        <i18n.translate>en_GB,en_CA,ru,fr,es,zh_CN,zh_TW</i18n.translate>
-        <poSaveLocation>true</poSaveLocation>
-        <poSufix></poSufix>
-
-        <!--
-            dependency.details takes significant time on build server for site creation
-            http://maven.apache.org/plugins/maven-project-info-reports-plugin/dependencies-mojo.html
-        -->
-        <dependency.details.enabled>true</dependency.details.enabled>
-        <dependency.locations.enabled>true</dependency.locations.enabled>
-    </properties>
-
-    <dependencyManagement>
-        <dependencies>
-
-            <dependency>
-                <groupId>com.pyx4j</groupId>
-                <artifactId>pyx-essentials-server</artifactId>
-                <version>${pyxVersion}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.google.appengine</groupId>
-                        <artifactId>appengine-api-stubs</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.google.appengine</groupId>
-                        <artifactId>appengine-api-1.0-sdk</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.google.appengine</groupId>
-                        <artifactId>appengine-api-stubs</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.google.appengine</groupId>
-                        <artifactId>appengine-testing</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.google.appengine</groupId>
-                        <artifactId>appengine-api-stubs</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.google.appengine</groupId>
-                        <artifactId>appengine-api-labs</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.google.appengine</groupId>
-                        <artifactId>appengine-api-labs</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>com.pyx4j</groupId>
-                <artifactId>pyx-essentials-j2se</artifactId>
-                <version>${pyxVersion}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.google.appengine</groupId>
-                        <artifactId>appengine-api-stubs</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.google.appengine</groupId>
-                        <artifactId>appengine-api-1.0-sdk</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.google.appengine</groupId>
-                        <artifactId>appengine-api-stubs</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.google.appengine</groupId>
-                        <artifactId>appengine-testing</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.google.appengine</groupId>
-                        <artifactId>appengine-api-stubs</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.google.appengine</groupId>
-                        <artifactId>appengine-api-labs</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.google.appengine</groupId>
-                        <artifactId>appengine-api-labs</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>commons-httpclient</groupId>
-                <artifactId>commons-httpclient</artifactId>
-                <version>3.1</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jsoup</groupId>
-                <artifactId>jsoup</artifactId>
-                <version>1.7.2</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpclient</artifactId>
-                <version>4.3.3</version>
-            </dependency>
-
-            <dependency>
-                <groupId>commons-net</groupId>
-                <artifactId>commons-net</artifactId>
-                <version>3.3</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.openid4java</groupId>
-                <artifactId>openid4java</artifactId>
-                <version>0.9.8</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>xml-apis</groupId>
-                        <artifactId>xml-apis</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>xerces</groupId>
-                        <artifactId>xercesImpl</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.httpcomponents</groupId>
-                        <artifactId>httpclient</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>com.jcraft</groupId>
-                <artifactId>jsch</artifactId>
-                <version>0.1.51</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.hsqldb</groupId>
-                <artifactId>hsqldb</artifactId>
-                <version>2.3.1</version>
-                <classifier>jdk6debug</classifier>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.axis2</groupId>
-                <artifactId>axis2-adb</artifactId>
-                <version>${axis2Version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.ant</groupId>
-                        <artifactId>ant</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.geronimo.specs</groupId>
-                        <artifactId>geronimo-javamail_1.4_spec</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.geronimo.specs</groupId>
-                        <artifactId>geronimo-activation_1.1_spec</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.geronimo.specs</groupId>
-                        <artifactId>geronimo-jta_1.1_spec</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.geronimo.specs</groupId>
-                        <artifactId>geronimo-stax-api_1.0_spec</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.geronimo.specs</groupId>
-                        <artifactId>geronimo-ws-metadata_2.0_spec</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>xerces</groupId>
-                        <artifactId>xercesImpl</artifactId>
-                    </exclusion>
-                    <exclusion>
-                         <groupId>javax.servlet</groupId>
-                         <artifactId>servlet-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.axis2</groupId>
-                <artifactId>axis2-transport-http</artifactId>
-                <version>${axis2Version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.httpcomponents</groupId>
-                        <artifactId>httpclient</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.httpcomponents</groupId>
-                        <artifactId>httpcore</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.axis2</groupId>
-                <artifactId>axis2-transport-local</artifactId>
-                <version>${axis2Version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.glassfish.jersey.core</groupId>
-                <artifactId>jersey-server</artifactId>
-                <version>${jerseyVersion}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.glassfish.jersey.containers</groupId>
-                <artifactId>jersey-container-servlet-core</artifactId>
-                <version>${jerseyVersion}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.glassfish.jersey.core</groupId>
-                <artifactId>jersey-client</artifactId>
-                <version>${jerseyVersion}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.glassfish.jersey.test-framework.providers</groupId>
-                <artifactId>jersey-test-framework-provider-jdk-http</artifactId>
-                <version>${jerseyVersion}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.glassfish.jersey.test-framework.providers</groupId>
-                <artifactId>jersey-test-framework-provider-inmemory</artifactId>
-                <version>${jerseyVersion}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.xml.ws</groupId>
-                <artifactId>jaxws-rt</artifactId>
-                <version>2.2.8</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.xml.bind</groupId>
-                <artifactId>jaxb-impl</artifactId>
-                <version>2.2.7</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.googlecode.jatl</groupId>
-                <artifactId>jatl</artifactId>
-                <version>0.2.2</version>
-            </dependency>
-
-        </dependencies>
-    </dependencyManagement>
-
     <build>
+
         <pluginManagement>
             <plugins>
 
                 <plugin>
-                    <groupId>org.apache.axis2</groupId>
-                    <artifactId>axis2-wsdl2code-maven-plugin</artifactId>
-                    <version>${axis2Version}</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.apache.neethi</groupId>
-                            <artifactId>neethi</artifactId>
-                            <version>2.0.4</version>
-                        </dependency>
-                    </dependencies>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <!--
+                        <parallel>classes</parallel>
+                        <threadCount>${surefire.parallelThreadCount}</threadCount>
+                        -->
+                        <argLine>-Djava.awt.headless=true -Xms64m -Xmx128m</argLine>
+                    </configuration>
                 </plugin>
 
                 <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>jaxb2-maven-plugin</artifactId>
-                    <version>1.5</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.jvnet.jax-ws-commons</groupId>
-                    <artifactId>jaxws-maven-plugin</artifactId>
-                    <version>2.2</version>
+                    <groupId>com.pyx4j</groupId>
+                    <artifactId>gwt-maven-plugin</artifactId>
+                    <version>${project.version}</version>
+                    <configuration>
+                        <systemProperties>
+                            <systemProperty>project.version</systemProperty>
+                            <systemProperty>build.number</systemProperty>
+                            <systemProperty>timestamp</systemProperty>
+                        </systemProperties>
+                    </configuration>
                 </plugin>
 
             </plugins>
@@ -491,16 +304,34 @@
                 <version>3.3</version>
             </plugin>
 
+<!--
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.7</version>
+                <inherited>false</inherited>
+                <configuration>
+                    <quiet>true</quiet>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>aggregate</id>
+                        <goals>
+                            <goal>aggregate</goal>
+                        </goals>
+                        <phase>site</phase>
+                    </execution>
+                </executions>
+            </plugin>
+-->
         </plugins>
-
     </build>
 
     <profiles>
 
         <profile>
-            <id>build-gwt-report</id>
+            <id>cruisecontrol-env</id>
             <properties>
-                <gwt.compiler.force>true</gwt.compiler.force>
                 <gwtCompileReport>true</gwtCompileReport>
             </properties>
         </profile>
@@ -509,29 +340,11 @@
             <id>hasBuildLabel</id>
             <activation>
                 <property>
-                    <name>bamboo.buildNumber</name>
+                    <name>label</name>
                 </property>
             </activation>
             <properties>
-                <buildLabel>${bamboo.buildNumber}</buildLabel>
-                <build.number>${bamboo.buildNumber}</build.number>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>build-ci</id>
-            <properties>
-                <gwt.compiler.force>true</gwt.compiler.force>
-                <gwtDraftCompile>true</gwtDraftCompile>
-                <appGWTModuleSufix>Developer</appGWTModuleSufix>
-                <gwtEnableAssertions>true</gwtEnableAssertions>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>gwt-ea</id>
-            <properties>
-                <gwtEnableAssertions>true</gwtEnableAssertions>
+                <buildLabel>${label}</buildLabel>
             </properties>
         </profile>
 
@@ -540,7 +353,6 @@
             <id>draft</id>
             <properties>
                 <gwtDraftCompile>true</gwtDraftCompile>
-                <appGWTModuleSufix>Developer</appGWTModuleSufix>
             </properties>
         </profile>
 
@@ -548,17 +360,6 @@
             <id>developer-env</id>
             <properties>
                 <gwtDraftCompile>true</gwtDraftCompile>
-                <appGWTModuleSufix>Developer</appGWTModuleSufix>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>full</id>
-            <properties>
-                <gwt.compiler.force>true</gwt.compiler.force>
-                <gwtEnableAssertions>true</gwtEnableAssertions>
-                <gwtDraftCompile>false</gwtDraftCompile>
-                <appGWTModuleSufix></appGWTModuleSufix>
             </properties>
         </profile>
 
@@ -566,26 +367,6 @@
             <id>soyc</id>
             <properties>
                 <gwtCompileReport>true</gwtCompileReport>
-                <appGWTModuleSufix>DeveloperWebKit</appGWTModuleSufix>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>pyx</id>
-            <activation>
-                <property>
-                    <name>pyx</name>
-                </property>
-            </activation>
-            <modules>
-                <module>../pyx4j</module>
-            </modules>
-        </profile>
-
-        <profile>
-            <id>i18n-ru</id>
-            <properties>
-                <i18n.translate>ru</i18n.translate>
             </properties>
         </profile>
 
@@ -604,6 +385,26 @@
             </build>
         </profile>
 
+        <profile>
+            <id>attach-sources</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <executions>
+                            <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                          </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
     </profiles>
 
     <reporting>
@@ -613,37 +414,44 @@
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>2.7</version>
                 <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>index</report>
-                            <report>dependencies</report>
-                            <report>dependency-convergence</report>
-                            <!-- see property dependency.details.enabled above -->
-                            <report>dependency-management</report>
-                            <report>project-team</report>
-                            <report>plugin-management</report>
-                            <report>cim</report>
-                            <report>issue-tracking</report>
-                            <report>license</report>
-                            <report>scm</report>
-                            <report>modules</report>
-                            <report>summary</report>
-                        </reports>
-                    </reportSet>
+                   <reportSet>
+                      <reports>
+                         <report>index</report>
+                         <report>dependencies</report>
+                         <report>dependency-convergence</report>
+                         <report>project-team</report>
+                         <report>plugin-management</report>
+                         <!--report>mailing-list</report-->
+                         <report>cim</report>
+                         <report>issue-tracking</report>
+                         <report>license</report>
+                         <report>scm</report>
+                         <report>summary</report>
+                      </reports>
+                   </reportSet>
                 </reportSets>
                 <configuration>
                     <linkOnly>true</linkOnly>
                 </configuration>
             </plugin>
+            <!--
+            <plugin>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <configuration>
+                    <configLocation>etc/conventions/checkstyle.xml</configLocation>
+                </configuration>
+            </plugin>
+            -->
 <!-- Removed for Java 8 compatibility
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.8.1</version>
+                <version>2.9.1</version>
                 <inherited>false</inherited>
                 <configuration>
                     <quiet>true</quiet>
-                    <nohelp>true</nohelp>
+                    <~-~- For Linux 64-bit -~->
+                    <~-~-maxmemory>256m</maxmemory-~->
                 </configuration>
                 <reportSets>
                     <reportSet>
@@ -651,7 +459,7 @@
                         <configuration>
                         </configuration>
                         <reports>
-                            <~-~-report>javadoc</report -~->
+                            <~-~-report>javadoc</report-~->
                         </reports>
                     </reportSet>
                     <reportSet>
@@ -677,11 +485,10 @@
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jxr-plugin</artifactId>
-                <version>2.4</version>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jdepend-maven-plugin</artifactId>
+                <version>2.0</version>
             </plugin>
-
 <!-- Removed for Java 8 compatibility
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -689,6 +496,13 @@
                 <version>2.5.4</version>
             </plugin>
 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>2.4</version>
+                <!-- http://maven.apache.org/plugins/maven-jxr-plugin/jxr-mojo.html -->
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
@@ -702,13 +516,13 @@
                 </reportSets>
             </plugin>
 
-            <!-- TODO list -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>taglist-maven-plugin</artifactId>
                 <version>2.4</version>
+                <!-- TODO list -->
             </plugin>
-
+<!--
             <plugin>
                 <groupId>net.sf</groupId>
                 <artifactId>stat-scm</artifactId>
@@ -717,20 +531,15 @@
                 <configuration>
                     <excludes>
                         <exclude>**/*.cvs</exclude>
+                        <exclude>**/*.txt</exclude>
                         <exclude>**/*.po</exclude>
                     </excludes>
                     <nonDeveloperLogins>
                         <nonDeveloperLogin>cruisecontrol</nonDeveloperLogin>
                     </nonDeveloperLogins>
-                    <systemProperties>
-                        <property>
-                            <name>java.util.logging.config.file</name>
-                            <value>src/site/stat-scm-logging-error.properties</value>
-                        </property>
-                    </systemProperties>
                 </configuration>
             </plugin>
-
+-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-changelog-plugin</artifactId>
@@ -751,11 +560,10 @@
                             <report>file-activity</report>
                             <report>dev-activity</report>
                         </reports>
-                    </reportSet>
+                  </reportSet>
                 </reportSets>
             </plugin>
 
         </plugins>
     </reporting>
-
 </project>

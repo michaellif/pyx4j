@@ -1,5 +1,0 @@
-  id  | previous_balance | merchant_balance | funds_released | status | pad_reconciliation_summary_key 
-------+------------------+------------------+----------------+--------+--------------------------------
- 2810 |             0.00 |          3093.91 |           0.00 | Hold   |                           2822
-(1 row)
-

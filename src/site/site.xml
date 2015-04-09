@@ -6,23 +6,23 @@
     <publishDate position="left" format="MM-dd-yyyy HH:mm" />
 
     <bannerLeft>
-        <name>Property Vista</name>
-        <src>http://jira.birchwoodsoftwaregroup.com/public-static/logo48x48-32bit.png</src>
-        <href>http://jira.birchwoodsoftwaregroup.com/</href>
+        <name>Pyx</name>
+        <alt>Pyx Software Service - application development</alt>
+        <src>pyx_logo-143x59.png</src>
+        <href>http://code.pyx4j.com/</href>
     </bannerLeft>
 
     <body>
         <links>
-            <item name="Jira" href="http://jira.birchwoodsoftwaregroup.com/"/>
-            <item name="Wiki" href="http://jira.birchwoodsoftwaregroup.com/wiki"/>
-            <item name="Live" href="http://vista.22.birchwoodsoftwaregroup.com/demo/"/>
+            <item name="CC" href="http://pyx4j.com/cruisecontrol-public/"/>
+            <item name="Live" href="http://pyx4j-demo.pyx4j.com"/>
         </links>
 
-        <breadcrumbs>
-            <item name="Vista" href="http://jira.birchwoodsoftwaregroup.com/site"/>
-        </breadcrumbs>
+        <menu name="Ver #build#" inherit="top">
+            <item name="Pyx" href="http://code.pyx4j.com/index.html" />
+        </menu>
 
-        <menu ref="modules" inherit="bottom" />
+        <menu ref="modules" />
 
         <menu ref="reports" inherit="bottom" />
 
