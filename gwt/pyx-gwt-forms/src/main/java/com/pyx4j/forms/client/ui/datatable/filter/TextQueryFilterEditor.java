@@ -62,7 +62,7 @@ public class TextQueryFilterEditor extends FilterEditorBase {
                 throw new Error("Filter criterion isn't supported by editor");
             }
 
-            if (!getMember().getPath().toString().equals(propertyCriterion.getPropertyPath())) {
+            if (!getMember().getPath().toString().equals(propertyCriterion.getPropertyPathX())) {
                 throw new Error("Filter editor member doesn't mach filter criterion path");
             }
 

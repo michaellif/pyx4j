@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.Path;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.CheckGroup;
 import com.pyx4j.widgets.client.OptionGroup.Layout;
@@ -116,9 +117,9 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
         return null;
     }
 
-    public ColumnDescriptor getColumnDescriptor(String columnName) {
+    public ColumnDescriptor getColumnDescriptor(Path columnPath) {
         for (ColumnDescriptor descriptor : columnDescriptors) {
-            if (descriptor.getColumnName().equals(columnName)) {
+            if (descriptor.getColumnPath().equals(columnPath)) {
                 return descriptor;
             }
         }

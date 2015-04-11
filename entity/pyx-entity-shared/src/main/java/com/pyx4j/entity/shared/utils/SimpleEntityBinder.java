@@ -40,7 +40,7 @@ import com.pyx4j.entity.core.Path;
 
 /**
  * The target of this class is bidirectional copy of data between two objects.
- * 
+ *
  * bind() function should be implemented to map members that needs to be copied of one class to another.
  */
 public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity> implements EntityBinder<BO, TO> {
@@ -170,7 +170,7 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
         if (b != null) {
             return b.boMemberPath;
         }
-        // The binding may have been done by Entity member,
+        // The binding may have been done by full member of type Entity
         StringBuilder shortDTOMemberPath = new StringBuilder();
         shortDTOMemberPath.append(toMemberPath.getRootObjectClassName()).append(Path.PATH_SEPARATOR);
         Iterator<String> it = toMemberPath.getPathMembers().iterator();

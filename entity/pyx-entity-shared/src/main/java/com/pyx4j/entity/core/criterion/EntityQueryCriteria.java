@@ -33,6 +33,7 @@ import com.pyx4j.commons.IHaveServiceCallMarker;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.Path;
 
 /**
  * Representation of a query criterion.
@@ -55,7 +56,7 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
 
         private static final long serialVersionUID = -9007568149350718889L;
 
-        private String propertyPath;
+        private Path propertyPath;
 
         private boolean descending;
 
@@ -63,17 +64,16 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
 
         }
 
-        @Deprecated
-        public Sort(String propertyPath, boolean descending) {
+        public Sort(Path propertyPath, boolean descending) {
             this.propertyPath = propertyPath;
             this.descending = descending;
         }
 
         public Sort(IObject<?> member, boolean descending) {
-            this(member.getPath().toString(), descending);
+            this(member.getPath(), descending);
         }
 
-        public String getPropertyPath() {
+        public Path getPropertyPath() {
             return this.propertyPath;
         }
 
@@ -180,20 +180,20 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
         }
     }
 
-    public EntityQueryCriteria<E> asc(String propertyPath) {
+    public EntityQueryCriteria<E> asc(Path propertyPath) {
         return sort(new Sort(propertyPath, false));
     }
 
     public EntityQueryCriteria<E> asc(IObject<?> member) {
-        return asc(member.getPath().toString());
+        return asc(member.getPath());
     }
 
-    public EntityQueryCriteria<E> desc(String propertyPath) {
+    public EntityQueryCriteria<E> desc(Path propertyPath) {
         return sort(new Sort(propertyPath, true));
     }
 
     public EntityQueryCriteria<E> desc(IObject<?> member) {
-        return desc(member.getPath().toString());
+        return desc(member.getPath());
     }
 
     public EntityQueryCriteria<E> sort(Sort sort) {
@@ -213,7 +213,7 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
             return null;
         } else {
             for (Criterion citerion : getFilters()) {
-                if ((citerion instanceof PropertyCriterion) && (member.getPath().toString().equals(((PropertyCriterion) citerion).getPropertyPath()))) {
+                if ((citerion instanceof PropertyCriterion) && (member.getPath().equals(((PropertyCriterion) citerion).getPropertyPath()))) {
                     return (PropertyCriterion) citerion;
                 }
             }
@@ -225,7 +225,7 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
         if (getFilters() != null) {
             List<PropertyCriterion> criterions = new ArrayList<>();
             for (Criterion citerion : getFilters()) {
-                if ((citerion instanceof PropertyCriterion) && (member.getPath().toString().equals(((PropertyCriterion) citerion).getPropertyPath()))) {
+                if ((citerion instanceof PropertyCriterion) && (member.getPath().equals(((PropertyCriterion) citerion).getPropertyPath()))) {
                     criterions.add((PropertyCriterion) citerion);
                 }
             }
@@ -240,7 +240,8 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
             Iterator<Criterion> it = getFilters().iterator();
             while (it.hasNext()) {
                 Criterion citerion = it.next();
-                if ((citerion instanceof PropertyCriterion) && (member.getPath().toString().startsWith(((PropertyCriterion) citerion).getPropertyPath()))) {
+                if ((citerion instanceof PropertyCriterion)
+                        && (member.getPath().toString().startsWith(((PropertyCriterion) citerion).getPropertyPath().toString()))) {
                     it.remove();
                 }
             }

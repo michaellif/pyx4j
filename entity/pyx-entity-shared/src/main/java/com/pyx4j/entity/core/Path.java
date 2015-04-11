@@ -142,6 +142,8 @@ public class Path implements Serializable, IDebugId {
 
     @Override
     public boolean equals(Object other) {
+        // This assert will be commented out after migration
+        assert (other == null) || other instanceof Path : "Do not try to compare Path to " + other.getClass().getSimpleName();
         if (!(other instanceof Path)) {
             return false;
         }

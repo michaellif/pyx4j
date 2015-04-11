@@ -116,12 +116,12 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
         }
         if ((toCriteria.getSorts() != null) && (!toCriteria.getSorts().isEmpty())) {
             for (Sort s : toCriteria.getSorts()) {
-                Path toPath = new Path(s.getPropertyPath());
+                Path toPath = s.getPropertyPath();
                 Path boPath = boPath(toPath);
                 if (s.isDescending()) {
-                    boCriteria.desc(boPath.toString());
+                    boCriteria.desc(boPath);
                 } else {
-                    boCriteria.asc(boPath.toString());
+                    boCriteria.asc(boPath);
                 }
             }
         }
@@ -146,7 +146,7 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
             return converter.convertCriterion(toCriterion);
         } else if (toCriterion instanceof PropertyCriterion) {
             PropertyCriterion propertyCriterion = (PropertyCriterion) toCriterion;
-            Path toPath = new Path(propertyCriterion.getPropertyPath());
+            Path toPath = propertyCriterion.getPropertyPath();
             return new PropertyCriterion(boPath(toPath), propertyCriterion.getRestriction(), convertValue(toPath, propertyCriterion));
         } else if (toCriterion instanceof OrCriterion) {
             OrCriterion boCriterion = new OrCriterion();
