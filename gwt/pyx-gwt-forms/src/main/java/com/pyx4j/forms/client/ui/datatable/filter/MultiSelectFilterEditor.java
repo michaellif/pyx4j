@@ -113,7 +113,7 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
                 throw new Error("Filter criterion isn't supported by editor");
             }
 
-            if (!getMember().getPath().toString().equals(propertyCriterion.getPropertyPathX())) {
+            if (!getMember().getPath().equals(propertyCriterion.getPropertyPath())) {
                 throw new Error("Filter editor member doesn't mach filter criterion path");
             }
 
