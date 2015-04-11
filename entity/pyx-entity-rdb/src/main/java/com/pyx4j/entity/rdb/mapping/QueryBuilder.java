@@ -221,9 +221,10 @@ public class QueryBuilder<T extends IEntity> {
         bindHolder.bindValue = propertyCriterion.getValue();
 
         String secondPersistenceName = null;
-        if (propertyCriterion.getPropertyPathX().endsWith(IndexAdapter.SECONDARY_PRROPERTY_SUFIX)) {
+        if (propertyCriterion.getPropertyPath().toString().endsWith(IndexAdapter.SECONDARY_PRROPERTY_SUFIX)) {
             // TODO create index binders and value adapters
-            criterionSql.append(mainTableSqlAlias).append('.').append(dialect.getNamingConvention().sqlFieldName(propertyCriterion.getPropertyPathX()));
+            criterionSql.append(mainTableSqlAlias).append('.')
+                    .append(dialect.getNamingConvention().sqlFieldName(propertyCriterion.getPropertyPath().toString()));
         } else {
             boolean leftJoin = false;
             if (!required) {
@@ -234,13 +235,13 @@ public class QueryBuilder<T extends IEntity> {
                 if (bindHolder.bindValue == null) {
                     leftJoin = true;
                 } else if (bindHolder.bindValue instanceof Criterion) {
-                    buildSubQuery(criterionSql, joinBuilder, propertyCriterion.getPropertyPathX(), (Criterion) bindHolder.bindValue);
+                    buildSubQuery(criterionSql, joinBuilder, propertyCriterion.getPropertyPath().toString(), (Criterion) bindHolder.bindValue);
                     return;
                 }
             }
-            QueryMember queryMember = joinBuilder.buildQueryMember(propertyCriterion.getPropertyPathX(), leftJoin, false);
+            QueryMember queryMember = joinBuilder.buildQueryMember(propertyCriterion.getPropertyPath().toString(), leftJoin, false);
             if (queryMember == null) {
-                throw new RuntimeException("Unknown member " + propertyCriterion.getPropertyPathX() + " in "
+                throw new RuntimeException("Unknown member " + propertyCriterion.getPropertyPath() + " in "
                         + joinBuilder.operationsMeta.entityMeta().getEntityClass().getName());
             }
             bindHolder.adapter = queryMember.memberOper.getValueAdapter().getQueryValueBindAdapter(propertyCriterion.getRestriction(), bindHolder.bindValue);

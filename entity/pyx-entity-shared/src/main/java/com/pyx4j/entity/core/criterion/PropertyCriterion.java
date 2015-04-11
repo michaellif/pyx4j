@@ -211,11 +211,6 @@ public class PropertyCriterion implements Criterion {
         return this.propertyPath;
     }
 
-    @Deprecated
-    public String getPropertyPathX() {
-        return this.propertyPath.toString();
-    }
-
     public Restriction getRestriction() {
         return this.restriction;
     }

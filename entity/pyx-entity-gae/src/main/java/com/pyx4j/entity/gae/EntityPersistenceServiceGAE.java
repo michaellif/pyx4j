@@ -1425,13 +1425,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     private Query.FilterOperator addFilter(Query query, EntityMeta entityMeta, PropertyCriterion propertyCriterion) {
-        String propertyName = propertyCriterion.getPropertyPathX();
+        String propertyName = propertyCriterion.getPropertyPath().toString();
         Object value;
         if (propertyName.equals(IEntity.PRIMARY_KEY)) {
             value = datastoreValue(entityMeta, propertyName, propertyCriterion.getValue());
             propertyName = Entity.KEY_RESERVED_PROPERTY;
         } else if (!propertyName.endsWith(SECONDARY_PRROPERTY_SUFIX)) {
-            MemberMeta mm = entityMeta.getMemberMeta(new Path(propertyName));
+            MemberMeta mm = entityMeta.getMemberMeta(propertyCriterion.getPropertyPath());
             // TODO Query by embeded properies
             propertyName = mm.getFieldName();
             value = datastoreValue(entityMeta, propertyName, propertyCriterion.getValue());
@@ -1456,7 +1456,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         if (criteria.getFilters() != null) {
             for (Criterion cr : criteria.getFilters()) {
                 if (cr instanceof PropertyCriterion) {
-                    if (GLOBAL_KEYWORD_PRROPERTY.equals(((PropertyCriterion) cr).getPropertyPathX())) {
+                    if (GLOBAL_KEYWORD_PRROPERTY.equals(((PropertyCriterion) cr).getPropertyPath())) {
                         if ((keyFilter >= 2) && allowSort && (criteria.getSorts() != null)) {
                             break;
                         }
