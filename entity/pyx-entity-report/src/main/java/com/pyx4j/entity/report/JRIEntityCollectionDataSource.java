@@ -105,7 +105,7 @@ public class JRIEntityCollectionDataSource<E extends IEntity> implements JRRewin
 
     /**
      * Returns the underlying bean collection used by this data source.
-     * 
+     *
      * @return the underlying bean collection
      */
     public Collection<E> getData() {
@@ -114,7 +114,7 @@ public class JRIEntityCollectionDataSource<E extends IEntity> implements JRRewin
 
     /**
      * Returns the total number of records/beans that this data source contains.
-     * 
+     *
      * @return the total number of records of this data source
      */
     public int getRecordCount() {
@@ -124,7 +124,7 @@ public class JRIEntityCollectionDataSource<E extends IEntity> implements JRRewin
     /**
      * Clones this data source by creating a new instance that reuses the same underlying
      * bean collection.
-     * 
+     *
      * @return a clone of this data source
      */
     public JRIEntityCollectionDataSource<E> cloneDataSource() {
@@ -149,7 +149,7 @@ public class JRIEntityCollectionDataSource<E extends IEntity> implements JRRewin
             value = entity;
         } else if (entity != null) {
 
-            IObject<?> member = entity.getMember(new Path(entity.getObjectClass().getSimpleName() + "/" + propertyName + "/"));
+            IObject<?> member = entity.getMember(new Path(entity.getObjectClass(), propertyName));
             if (member instanceof IPrimitive) {
                 value = member.getValue();
             } else {

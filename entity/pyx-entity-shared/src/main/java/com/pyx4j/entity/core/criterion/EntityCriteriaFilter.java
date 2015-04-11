@@ -26,7 +26,6 @@ import com.pyx4j.commons.Filter;
 import com.pyx4j.commons.SimpleRegExp;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.entity.core.Path;
 
 /**
  * Simple in memory criteria Filter
@@ -66,7 +65,7 @@ public class EntityCriteriaFilter<E extends IEntity> implements Filter<E> {
     }
 
     private boolean accept(E input, PropertyCriterion propertyCriterion) {
-        IObject<?> valueMember = input.getMember(new Path(propertyCriterion.getPropertyPath()));
+        IObject<?> valueMember = input.getMember(propertyCriterion.getPropertyPath());
         Object value;
         if (valueMember instanceof IEntity) {
             value = valueMember;
