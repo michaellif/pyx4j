@@ -53,9 +53,9 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
 
     protected IEditableComponentFactory factory;
 
-    private final E entityPrototype;
-
     private E origEntity;
+
+    private Class<E> clazz;
 
     // Bidirectional map CComponent to Path
     private final Map<Path, CComponent<?, ?, ?, ?>> components = new LinkedHashMap<Path, CComponent<?, ?, ?, ?>>();
@@ -67,16 +67,20 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
     }
 
     public CForm(Class<E> clazz, IEditableComponentFactory factory) {
+        this.clazz = clazz;
         if (factory == null) {
             factory = new BaseEditableComponentFactory();
         }
-        this.entityPrototype = EntityFactory.getEntityPrototype(clazz);
         this.factory = factory;
         setDebugIdSuffix(new StringDebugId(GWTJava5Helper.getSimpleName(clazz)));
     }
 
     public E proto() {
-        return entityPrototype;
+        return EntityFactory.getEntityPrototype(clazz);
+    }
+
+    public <T extends E> E proto(Class<T> subclass) {
+        return EntityFactory.getEntityPrototype(subclass);
     }
 
     @Override
@@ -141,7 +145,8 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
 
     public void bind(CComponent<?, ?, ?, ?> component, IObject<?> member) {
         // verify that member actually exists in entity.
-        assert (proto().getMember(member.getPath()) != null);
+        // assert EntityFactory.getEntityPrototype(clazz).isAssignableFrom(member.getOwner().getClass());
+
         CComponent<?, ?, ?, ?> alreadyBound = components.get(member.getPath());
         if (alreadyBound != null) {
             throw new Error("Path '" + member.getPath() + "' already bound");
@@ -168,7 +173,8 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
     public void adopt(CComponent<?, ?, ?, ?> component) {
         Path path = binding.get(component);
         if (path != null) {
-            IObject<?> member = proto().getMember(path);
+            @SuppressWarnings("unchecked")
+            IObject<?> member = proto((Class<E>) path.getRootEntityClass()).getMember(path);
             MemberMeta mm = member.getMeta();
             if (mm.isAnnotationPresent(NotNull.class)) {
                 component.setMandatory(true);
@@ -193,8 +199,8 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
     @Override
     @SuppressWarnings("unchecked")
     protected void onValuePropagation(E value, boolean fireEvent, boolean populate) {
-        assert (value == null) || proto().isAssignableFrom(value.getInstanceValueClass()) : "Trying to set value of a wrong type, expected "
-                + proto().getValueClass() + ", got " + value.getInstanceValueClass() + " in form " + getTitle();
+//        assert (value == null) || proto().isAssignableFrom(value.getInstanceValueClass()) : "Trying to set value of a wrong type, expected "
+//                + proto().getValueClass() + ", got " + value.getInstanceValueClass() + " in form " + getTitle();
         if (populate) {
             assert value != null : "Entity Editor should not be populated with null. Use reset() instead";
             if (!isAttached()) {
