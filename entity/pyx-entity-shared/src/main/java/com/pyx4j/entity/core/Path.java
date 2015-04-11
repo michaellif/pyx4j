@@ -40,21 +40,25 @@ public class Path implements Serializable, IDebugId {
 
     private transient String rootObjectClassName;
 
+    private transient Class<? extends IEntity> rootEntityClass;
+
     private transient List<String> pathMembers;
 
     protected Path() {
-
     }
 
+    @Deprecated
     public Path(String path) {
         this.path = path;
     }
 
     public Path(Class<? extends IEntity> entityClass, String memberName) {
+        this.rootEntityClass = entityClass;
         this.path = GWTJava5Helper.getSimpleName(entityClass) + PATH_SEPARATOR + memberName + PATH_SEPARATOR;
     }
 
     public Path(Class<? extends IEntity> entityClass, List<String> pathMembers) {
+        this.rootEntityClass = entityClass;
         this.rootObjectClassName = GWTJava5Helper.getSimpleName(entityClass);
         this.pathMembers = pathMembers;
         this.path = rootObjectClassName + PATH_SEPARATOR;
@@ -71,6 +75,7 @@ public class Path implements Serializable, IDebugId {
             if (object.getParent() instanceof ICollection) {
                 pathElement = COLLECTION_SEPARATOR;
             } else if (object.getFieldName() == null) {
+                this.rootEntityClass = ((IEntity) object).getInstanceValueClass();
                 rootObjectClassName = GWTJava5Helper.getSimpleName(object.getObjectClass());
                 this.path = rootObjectClassName + PATH_SEPARATOR + this.path;
             } else {
@@ -121,6 +126,11 @@ public class Path implements Serializable, IDebugId {
             parsPath();
         }
         return rootObjectClassName;
+    }
+
+    public Class<? extends IEntity> getRootEntityClass() {
+        assert rootEntityClass != null : "Can't access EntityClass after serialization";
+        return rootEntityClass;
     }
 
     public List<String> getPathMembers() {
