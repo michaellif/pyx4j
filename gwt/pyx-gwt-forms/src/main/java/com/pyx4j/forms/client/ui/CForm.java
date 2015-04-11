@@ -79,7 +79,7 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
         return EntityFactory.getEntityPrototype(clazz);
     }
 
-    public <T extends E> E proto(Class<T> subclass) {
+    public <T extends E> T proto(Class<T> subclass) {
         return EntityFactory.getEntityPrototype(subclass);
     }
 
@@ -143,9 +143,9 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
         return components.containsKey(member.getPath());
     }
 
-    public void bind(CComponent<?, ?, ?, ?> component, IObject<?> member) {
+    public void bind(CComponent<?, ?, ?, ?> component, final IObject<?> member) {
         // verify that member actually exists in entity.
-        // assert EntityFactory.getEntityPrototype(clazz).isAssignableFrom(member.getOwner().getClass());
+        assert member.getOwner().isInstanceOf(clazz);
 
         CComponent<?, ?, ?, ?> alreadyBound = components.get(member.getPath());
         if (alreadyBound != null) {
@@ -153,6 +153,34 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
         }
         binding.put(component, member.getPath());
         components.put(member.getPath(), component);
+
+        component.addAccessAdapter(new IAccessAdapter() {
+
+            @Override
+            public Boolean isVisible() {
+                if (getValue() == null) {
+                    return null;
+                } else {
+                    return getValue().isInstanceOf(member.getPath().getRootEntityClass());
+                }
+            }
+
+            @Override
+            public Boolean isViewable() {
+                return null;
+            }
+
+            @Override
+            public Boolean isEnabled() {
+                return null;
+            }
+
+            @Override
+            public Boolean isEditable() {
+                return null;
+            }
+        });
+
         adopt(component);
     }
 
@@ -225,21 +253,25 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
         } else {
             for (CComponent component : getComponents()) {
                 Path memberPath = binding.get(component);
-                IObject<?> m = entity.getMember(memberPath);
-                try {
-                    if (m instanceof IEntity) {
-                        component.setValue(((IEntity) m).cast(), fireEvent, populate);
-                    } else if (m instanceof ICollection) {
-                        component.setValue(m, fireEvent, populate);
-                    } else {
-                        component.setValue(m.getValue(), fireEvent, populate);
+
+                if (entity.isInstanceOf(memberPath.getRootEntityClass())) {
+                    IObject<?> m = entity.getMember(memberPath);
+                    try {
+                        if (m instanceof IEntity) {
+                            component.setValue(((IEntity) m).cast(), fireEvent, populate);
+                        } else if (m instanceof ICollection) {
+                            component.setValue(m, fireEvent, populate);
+                        } else {
+                            component.setValue(m.getValue(), fireEvent, populate);
+                        }
+                    } catch (ClassCastException e) {
+                        log.error("Invalid property access {} valueClass: {}", memberPath, m.getMeta().getValueClass());
+                        log.error("Error", e);
+                        throw new UnrecoverableClientError("Invalid property access " + memberPath + "; valueClass:" + m.getMeta().getValueClass() + " error:"
+                                + e.getMessage());
                     }
-                } catch (ClassCastException e) {
-                    log.error("Invalid property access {} valueClass: {}", memberPath, m.getMeta().getValueClass());
-                    log.error("Error", e);
-                    throw new UnrecoverableClientError("Invalid property access " + memberPath + "; valueClass:" + m.getMeta().getValueClass() + " error:"
-                            + e.getMessage());
                 }
+                component.applyAccessibilityRules();
             }
         }
     }
