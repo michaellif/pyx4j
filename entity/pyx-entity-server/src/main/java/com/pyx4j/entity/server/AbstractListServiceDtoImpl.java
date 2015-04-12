@@ -40,6 +40,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
@@ -152,7 +153,8 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
                 path = convertPropertyDTOPathToDBOPath(propertyCriterion.getPropertyPath(), boProto, toProto);
             }
             IObject<?> boMember = boProto.getMember(path);
-            if (Date.class.equals(boProto.getMember(path).getValueClass()) && propertyCriterion.getValue() instanceof LogicalDate) {
+            if (propertyCriterion.getRestriction() == Restriction.EQUAL && Date.class.equals(boProto.getMember(path).getValueClass())
+                    && propertyCriterion.getValue() instanceof LogicalDate) {
                 AndCriterion criterion = new AndCriterion();
                 criterion.add(PropertyCriterion.ge(boMember, propertyCriterion.getValue()));
                 criterion.add(PropertyCriterion.lt(boMember, DateUtils.dayEnd((Date) propertyCriterion.getValue())));
