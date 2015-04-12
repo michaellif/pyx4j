@@ -145,7 +145,7 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
 
     public void bind(CComponent<?, ?, ?, ?> component, final IObject<?> member) {
         // verify that member actually exists in entity.
-        assert member.getOwner().isInstanceOf(clazz);
+        assert EntityFactory.getEntityPrototype(clazz).isAssignableFrom(member.getPath().getRootEntityClass());
 
         CComponent<?, ?, ?, ?> alreadyBound = components.get(member.getPath());
         if (alreadyBound != null) {
