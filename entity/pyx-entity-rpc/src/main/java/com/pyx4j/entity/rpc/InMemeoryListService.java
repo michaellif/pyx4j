@@ -89,7 +89,7 @@ public class InMemeoryListService<E extends IEntity> implements AbstractListCrud
     }
 
     private Comparator<? super E> createComparator(final Sort sort) {
-        final Path path = new Path(sort.getPropertyPath());
+        final Path path = sort.getPropertyPath();
 
         return new Comparator<E>() {
 

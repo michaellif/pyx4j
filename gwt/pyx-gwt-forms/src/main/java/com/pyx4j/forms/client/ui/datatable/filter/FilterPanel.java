@@ -31,6 +31,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.RangeCriterion;
@@ -140,7 +141,7 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
             }
         }
         for (Criterion criterion : filters) {
-            String propertyPath = null;
+            Path propertyPath = null;
             if (criterion instanceof PropertyCriterion) {
                 propertyPath = ((PropertyCriterion) criterion).getPropertyPath();
             } else if (criterion instanceof RangeCriterion) {
@@ -148,7 +149,7 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
             }
             if (propertyPath != null) {
                 for (ColumnDescriptor columnDescriptor : columnDescriptors) {
-                    if (propertyPath.equals(columnDescriptor.getColumnPath().toString())) {
+                    if (propertyPath.equals(columnDescriptor.getColumnPath())) {
                         FilterItem item = new FilterItem(columnDescriptor);
                         if (items.contains(item)) {
                             items.get(items.indexOf(item)).setCriterion(criterion);

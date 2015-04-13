@@ -117,7 +117,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
 
     @Override
     public Class<? extends IEntity> getInstanceValueClass() {
-        if (isPrototypeEntity) {
+        if (isPrototype()) {
             return getObjectClass();
         } else {
             Map<String, Serializable> entityValue = getValue();
@@ -181,7 +181,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
         }
         if (getOwner() != null) {
             b.append(" '").append(this.getFieldName()).append("' of '").append(GWTJava5Helper.getSimpleName(getOwner().getObjectClass())).append("' ")
-                    .append(getOwner().getPath());
+            .append(getOwner().getPath());
         }
         return b.toString();
     }
@@ -237,25 +237,25 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
     @SuppressWarnings("unchecked")
     private Map<String, Serializable> getValue(boolean assertDetached) {
         assert !isPrototypeEntity : "Prototype Entity '" + getObjectClass().getName() + "' data manipulations disabled";
-        if (delegateValue) {
-            Map<String, Serializable> ownerValue = ((SharedEntityHandler) getOwner()).getValue(assertDetached);
-            if (ownerValue == null) {
-                return null;
-            } else {
-                Map<String, Serializable> value = (Map<String, Serializable>) ownerValue.get(getFieldName());
-                if (assertDetached && (value != null) && value.containsKey(DETACHED_ATTR)) {
-                    //log.error("Access to detached entity {}", exceptionInfo(v), new Throwable());
-                    throw new RuntimeException("Access to detached " + value.get(DETACHED_ATTR) + " entity " + exceptionInfo(value));
-                }
-                return value;
-            }
+    if (delegateValue) {
+        Map<String, Serializable> ownerValue = ((SharedEntityHandler) getOwner()).getValue(assertDetached);
+        if (ownerValue == null) {
+            return null;
         } else {
-            if (assertDetached && (data != null) && data.containsKey(DETACHED_ATTR)) {
-                //log.error("Access to detached entity {}", exceptionInfo(data), new Throwable());
-                throw new RuntimeException("Access to detached " + data.get(DETACHED_ATTR) + " entity " + exceptionInfo(data));
+            Map<String, Serializable> value = (Map<String, Serializable>) ownerValue.get(getFieldName());
+            if (assertDetached && (value != null) && value.containsKey(DETACHED_ATTR)) {
+                //log.error("Access to detached entity {}", exceptionInfo(v), new Throwable());
+                throw new RuntimeException("Access to detached " + value.get(DETACHED_ATTR) + " entity " + exceptionInfo(value));
             }
-            return data;
+            return value;
         }
+    } else {
+        if (assertDetached && (data != null) && data.containsKey(DETACHED_ATTR)) {
+            //log.error("Access to detached entity {}", exceptionInfo(data), new Throwable());
+            throw new RuntimeException("Access to detached " + data.get(DETACHED_ATTR) + " entity " + exceptionInfo(data));
+        }
+        return data;
+    }
     }
 
     /**
@@ -289,27 +289,27 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
     @Override
     public void setValue(Map<String, Serializable> value) {
         assert !isPrototypeEntity : "Prototype Entity '" + getObjectClass().getName() + "' data manipulations disabled";
-        if ((value != null) && !(value instanceof EntityValueMap)) {
-            throw new ClassCastException("Entity expects EntityValueMap as value");
-        }
-        if (delegateValue) {
-            Map<String, Serializable> ownerValue = ((SharedEntityHandler) getOwner()).ensureValue();
-            ownerValue.put(getFieldName(), (Serializable) value);
-            // ensure @Owner value is set properly.
-            String ownerMemberName = getEntityMeta().getOwnerMemberName();
-            if ((ownerMemberName != null) && (value != null) && (isActualOwner(ownerMemberName))) {
-                value.put(ownerMemberName, (Serializable) ownerValue);
-                if (!this.getMember(ownerMemberName).getObjectClass().equals(getOwner().getInstanceValueClass())) {
-                    ownerValue.put(CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype(getOwner().getInstanceValueClass()));
-                }
+    if ((value != null) && !(value instanceof EntityValueMap)) {
+        throw new ClassCastException("Entity expects EntityValueMap as value");
+    }
+    if (delegateValue) {
+        Map<String, Serializable> ownerValue = ((SharedEntityHandler) getOwner()).ensureValue();
+        ownerValue.put(getFieldName(), (Serializable) value);
+        // ensure @Owner value is set properly.
+        String ownerMemberName = getEntityMeta().getOwnerMemberName();
+        if ((ownerMemberName != null) && (value != null) && (isActualOwner(ownerMemberName))) {
+            value.put(ownerMemberName, (Serializable) ownerValue);
+            if (!this.getMember(ownerMemberName).getObjectClass().equals(getOwner().getInstanceValueClass())) {
+                ownerValue.put(CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype(getOwner().getInstanceValueClass()));
             }
-        } else if ((this.data != null) && (getParent() instanceof ICollection<?, ?>)) {
-            // Replace value in Collection
-            ((AbstractCollectionHandler<?, ?>) getParent()).replaceItemValue(this.data, value);
-            this.data = value;
-        } else {
-            this.data = value;
         }
+    } else if ((this.data != null) && (getParent() instanceof ICollection<?, ?>)) {
+        // Replace value in Collection
+        ((AbstractCollectionHandler<?, ?>) getParent()).replaceItemValue(this.data, value);
+        this.data = value;
+    } else {
+        this.data = value;
+    }
     }
 
     @Override
@@ -375,7 +375,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
                     }
                 }
             }
-                break;
+            break;
             case EntityList:
             case EntitySet: {
                 IObject<?> member = root.getMember(memberName);
@@ -411,7 +411,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
         } else {
             assert !((SharedEntityHandler) entity).isPrototypeEntity : "Prototype Entity '" + getObjectClass().getName() + "' data manipulations disabled";
             assert this.getEntityMeta().isEntityClassAssignableFrom(entity) : this.getEntityMeta().getCaption() + " is not assignable from "
-                    + entity.cast().getEntityMeta().getCaption();
+            + entity.cast().getEntityMeta().getCaption();
             Map<String, Serializable> value = ((SharedEntityHandler) entity).ensureValue();
 
             AttachLevel level = entity.getAttachLevel();

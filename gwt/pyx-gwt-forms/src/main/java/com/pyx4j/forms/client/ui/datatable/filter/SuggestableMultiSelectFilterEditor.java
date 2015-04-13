@@ -74,7 +74,7 @@ public class SuggestableMultiSelectFilterEditor<E extends IEntity> extends Filte
                 throw new Error("Filter criterion isn't supported by editor");
             }
 
-            if (!getMember().getPath().toString().equals(propertyCriterion.getPropertyPath())) {
+            if (!getMember().getPath().equals(propertyCriterion.getPropertyPath())) {
                 throw new Error("Filter editor member doesn't match filter criterion path");
             }
 

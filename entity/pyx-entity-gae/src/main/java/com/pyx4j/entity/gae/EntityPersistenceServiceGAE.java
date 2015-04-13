@@ -98,9 +98,9 @@ import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.shared.SecurityViolationException;
 
 /**
- * 
+ *
  * @see PersistenceServicesFactory#GAE_IMPL_CLASS
- * 
+ *
  */
 public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
@@ -1425,13 +1425,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     private Query.FilterOperator addFilter(Query query, EntityMeta entityMeta, PropertyCriterion propertyCriterion) {
-        String propertyName = propertyCriterion.getPropertyPath();
+        String propertyName = propertyCriterion.getPropertyPath().toString();
         Object value;
         if (propertyName.equals(IEntity.PRIMARY_KEY)) {
             value = datastoreValue(entityMeta, propertyName, propertyCriterion.getValue());
             propertyName = Entity.KEY_RESERVED_PROPERTY;
         } else if (!propertyName.endsWith(SECONDARY_PRROPERTY_SUFIX)) {
-            MemberMeta mm = entityMeta.getMemberMeta(new Path(propertyName));
+            MemberMeta mm = entityMeta.getMemberMeta(propertyCriterion.getPropertyPath());
             // TODO Query by embeded properies
             propertyName = mm.getFieldName();
             value = datastoreValue(entityMeta, propertyName, propertyCriterion.getValue());
@@ -1470,7 +1470,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
         if (allowSort && (criteria.getSorts() != null)) {
             for (EntityQueryCriteria.Sort sort : criteria.getSorts()) {
-                query.addSort(sort.getPropertyPath(), sort.isDescending() ? Query.SortDirection.DESCENDING : Query.SortDirection.ASCENDING);
+                query.addSort(sort.getPropertyPath().toString(), sort.isDescending() ? Query.SortDirection.DESCENDING : Query.SortDirection.ASCENDING);
             }
             log.debug("sort by {}", query.getSortPredicates());
         }

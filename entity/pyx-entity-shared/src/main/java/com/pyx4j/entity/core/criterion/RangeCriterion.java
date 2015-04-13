@@ -32,7 +32,7 @@ public class RangeCriterion implements Criterion {
 
     private static final long serialVersionUID = 1L;
 
-    private String propertyPath;
+    private Path propertyPath;
 
     private Serializable fromValue;
 
@@ -43,7 +43,7 @@ public class RangeCriterion implements Criterion {
     }
 
     public RangeCriterion(IObject<?> member, Serializable fromValue, Serializable toValue) {
-        this.propertyPath = member.getPath().toString();
+        this.propertyPath = member.getPath();
         this.fromValue = fromValue;
         this.toValue = toValue;
     }
@@ -51,15 +51,15 @@ public class RangeCriterion implements Criterion {
     public Vector<? extends Criterion> getFilters() {
         Vector<Criterion> filters = new Vector<>();
         if (fromValue != null) {
-            filters.add(new PropertyCriterion(new Path(propertyPath), Restriction.GREATER_THAN_OR_EQUAL, fromValue));
+            filters.add(new PropertyCriterion(propertyPath, Restriction.GREATER_THAN_OR_EQUAL, fromValue));
         }
         if (toValue != null) {
-            filters.add(new PropertyCriterion(new Path(propertyPath), Restriction.LESS_THAN_OR_EQUAL, toValue));
+            filters.add(new PropertyCriterion(propertyPath, Restriction.LESS_THAN_OR_EQUAL, toValue));
         }
         return filters;
     }
 
-    public String getPropertyPath() {
+    public Path getPropertyPath() {
         return propertyPath;
     }
 

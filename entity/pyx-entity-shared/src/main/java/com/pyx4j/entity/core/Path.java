@@ -20,15 +20,17 @@
 package com.pyx4j.entity.core;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.commons.GWTJava5Helper;
+import com.pyx4j.commons.ICloneable;
 import com.pyx4j.commons.IDebugId;
 
-public class Path implements Serializable, IDebugId {
+public class Path implements Serializable, IDebugId, ICloneable {
 
     private static final long serialVersionUID = -1723967141846287126L;
 
@@ -40,27 +42,35 @@ public class Path implements Serializable, IDebugId {
 
     private transient String rootObjectClassName;
 
+    private transient Class<? extends IEntity> rootEntityClass;
+
     private transient List<String> pathMembers;
 
     protected Path() {
-
     }
 
+    @Deprecated
     public Path(String path) {
         this.path = path;
     }
 
     public Path(Class<? extends IEntity> entityClass, String memberName) {
+        this.rootEntityClass = entityClass;
         this.path = GWTJava5Helper.getSimpleName(entityClass) + PATH_SEPARATOR + memberName + PATH_SEPARATOR;
     }
 
     public Path(Class<? extends IEntity> entityClass, List<String> pathMembers) {
+        this.rootEntityClass = entityClass;
         this.rootObjectClassName = GWTJava5Helper.getSimpleName(entityClass);
         this.pathMembers = pathMembers;
         this.path = rootObjectClassName + PATH_SEPARATOR;
         for (String pathMember : pathMembers) {
             path += pathMember + Path.PATH_SEPARATOR;
         }
+    }
+
+    public Path(Path path, List<String> pathMembers) {
+        this(path.getRootEntityClass(), concat(path.getPathMembers(), pathMembers));
     }
 
     public Path(IObject<?> object) {
@@ -71,6 +81,7 @@ public class Path implements Serializable, IDebugId {
             if (object.getParent() instanceof ICollection) {
                 pathElement = COLLECTION_SEPARATOR;
             } else if (object.getFieldName() == null) {
+                this.rootEntityClass = ((IEntity) object).getInstanceValueClass();
                 rootObjectClassName = GWTJava5Helper.getSimpleName(object.getObjectClass());
                 this.path = rootObjectClassName + PATH_SEPARATOR + this.path;
             } else {
@@ -88,6 +99,12 @@ public class Path implements Serializable, IDebugId {
             object = object.getParent();
         }
         pathMembers = Collections.unmodifiableList(members);
+    }
+
+    private static List<String> concat(List<String> pathMembers1, List<String> pathMembers2) {
+        List<String> r = new ArrayList<>(pathMembers1);
+        r.addAll(pathMembers2);
+        return r;
     }
 
     public boolean isUndefinedCollectionPath() {
@@ -123,6 +140,11 @@ public class Path implements Serializable, IDebugId {
         return rootObjectClassName;
     }
 
+    public Class<? extends IEntity> getRootEntityClass() {
+        assert rootEntityClass != null : "Can't access EntityClass after serialization";
+        return rootEntityClass;
+    }
+
     public List<String> getPathMembers() {
         if (pathMembers == null) {
             parsPath();
@@ -132,6 +154,8 @@ public class Path implements Serializable, IDebugId {
 
     @Override
     public boolean equals(Object other) {
+        // This assert will be commented out after migration
+        assert (other == null) || other instanceof Path : "Do not try to compare Path to " + other.getClass().getSimpleName();
         if (!(other instanceof Path)) {
             return false;
         }
@@ -146,6 +170,16 @@ public class Path implements Serializable, IDebugId {
     @Override
     public String toString() {
         return path;
+    }
+
+    /**
+     * The same change as happening in serialization
+     */
+    @Override
+    public Path iclone() {
+        Path p = new Path();
+        p.path = this.path;
+        return p;
     }
 
     @Override

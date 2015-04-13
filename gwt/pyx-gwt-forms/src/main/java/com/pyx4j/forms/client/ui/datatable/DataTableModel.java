@@ -22,7 +22,6 @@ package com.pyx4j.forms.client.ui.datatable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 import com.pyx4j.entity.core.IEntity;
@@ -77,7 +76,7 @@ public class DataTableModel<E extends IEntity> {
     /**
      * Adds a listener to the list that's notified each time a change to the data model
      * occurs.
-     * 
+     *
      * @param l
      *            the DataTableModelListener
      */
@@ -88,7 +87,7 @@ public class DataTableModel<E extends IEntity> {
     /**
      * Removes a listener from the list that's notified each time a change to the data
      * model occurs.
-     * 
+     *
      * @param l
      *            the TableModelListener
      */
@@ -101,8 +100,7 @@ public class DataTableModel<E extends IEntity> {
     }
 
     protected void fireTableChanged(DataTableModelEvent e) {
-        for (Iterator<DataTableModelListener> iter = listenerList.iterator(); iter.hasNext();) {
-            DataTableModelListener listener = iter.next();
+        for (DataTableModelListener listener : listenerList) {
             listener.onDataTableModelChanged(e);
         }
     }
@@ -143,11 +141,11 @@ public class DataTableModel<E extends IEntity> {
         List<Sort> sorting = new ArrayList<Sort>(2);
         ColumnDescriptor primarySortColumn = getSortColumn();
         if (primarySortColumn != null) {
-            sorting.add(new Sort(primarySortColumn.getColumnName(), !isSortAscending()));
+            sorting.add(new Sort(primarySortColumn.getColumnPath(), !isSortAscending()));
         }
         ColumnDescriptor secondarySortColumn = getSecondarySortColumn();
         if (secondarySortColumn != null) {
-            sorting.add(new Sort(secondarySortColumn.getColumnName(), !isSecondarySortAscending()));
+            sorting.add(new Sort(secondarySortColumn.getColumnPath(), !isSecondarySortAscending()));
         }
         return sorting;
     }

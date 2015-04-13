@@ -53,9 +53,9 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
 
     protected IEditableComponentFactory factory;
 
-    private final E entityPrototype;
-
     private E origEntity;
+
+    private Class<E> clazz;
 
     // Bidirectional map CComponent to Path
     private final Map<Path, CComponent<?, ?, ?, ?>> components = new LinkedHashMap<Path, CComponent<?, ?, ?, ?>>();
@@ -67,16 +67,20 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
     }
 
     public CForm(Class<E> clazz, IEditableComponentFactory factory) {
+        this.clazz = clazz;
         if (factory == null) {
             factory = new BaseEditableComponentFactory();
         }
-        this.entityPrototype = EntityFactory.getEntityPrototype(clazz);
         this.factory = factory;
         setDebugIdSuffix(new StringDebugId(GWTJava5Helper.getSimpleName(clazz)));
     }
 
     public E proto() {
-        return entityPrototype;
+        return EntityFactory.getEntityPrototype(clazz);
+    }
+
+    public <T extends E> T proto(Class<T> subclass) {
+        return EntityFactory.getEntityPrototype(subclass);
     }
 
     @Override
@@ -139,15 +143,44 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
         return components.containsKey(member.getPath());
     }
 
-    public void bind(CComponent<?, ?, ?, ?> component, IObject<?> member) {
+    public void bind(CComponent<?, ?, ?, ?> component, final IObject<?> member) {
         // verify that member actually exists in entity.
-        assert (proto().getMember(member.getPath()) != null);
+        assert EntityFactory.getEntityPrototype(clazz).isAssignableFrom(member.getPath().getRootEntityClass());
+
         CComponent<?, ?, ?, ?> alreadyBound = components.get(member.getPath());
         if (alreadyBound != null) {
             throw new Error("Path '" + member.getPath() + "' already bound");
         }
         binding.put(component, member.getPath());
         components.put(member.getPath(), component);
+
+        component.addAccessAdapter(new IAccessAdapter() {
+
+            @Override
+            public Boolean isVisible() {
+                if (getValue() == null) {
+                    return null;
+                } else {
+                    return getValue().isInstanceOf(member.getPath().getRootEntityClass());
+                }
+            }
+
+            @Override
+            public Boolean isViewable() {
+                return null;
+            }
+
+            @Override
+            public Boolean isEnabled() {
+                return null;
+            }
+
+            @Override
+            public Boolean isEditable() {
+                return null;
+            }
+        });
+
         adopt(component);
     }
 
@@ -168,7 +201,8 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
     public void adopt(CComponent<?, ?, ?, ?> component) {
         Path path = binding.get(component);
         if (path != null) {
-            IObject<?> member = proto().getMember(path);
+            @SuppressWarnings("unchecked")
+            IObject<?> member = proto((Class<E>) path.getRootEntityClass()).getMember(path);
             MemberMeta mm = member.getMeta();
             if (mm.isAnnotationPresent(NotNull.class)) {
                 component.setMandatory(true);
@@ -219,21 +253,25 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
         } else {
             for (CComponent component : getComponents()) {
                 Path memberPath = binding.get(component);
-                IObject<?> m = entity.getMember(memberPath);
-                try {
-                    if (m instanceof IEntity) {
-                        component.setValue(((IEntity) m).cast(), fireEvent, populate);
-                    } else if (m instanceof ICollection) {
-                        component.setValue(m, fireEvent, populate);
-                    } else {
-                        component.setValue(m.getValue(), fireEvent, populate);
+
+                if (entity.isInstanceOf(memberPath.getRootEntityClass())) {
+                    IObject<?> m = entity.getMember(memberPath);
+                    try {
+                        if (m instanceof IEntity) {
+                            component.setValue(((IEntity) m).cast(), fireEvent, populate);
+                        } else if (m instanceof ICollection) {
+                            component.setValue(m, fireEvent, populate);
+                        } else {
+                            component.setValue(m.getValue(), fireEvent, populate);
+                        }
+                    } catch (ClassCastException e) {
+                        log.error("Invalid property access {} valueClass: {}", memberPath, m.getMeta().getValueClass());
+                        log.error("Error", e);
+                        throw new UnrecoverableClientError("Invalid property access " + memberPath + "; valueClass:" + m.getMeta().getValueClass() + " error:"
+                                + e.getMessage());
                     }
-                } catch (ClassCastException e) {
-                    log.error("Invalid property access {} valueClass: {}", memberPath, m.getMeta().getValueClass());
-                    log.error("Error", e);
-                    throw new UnrecoverableClientError("Invalid property access " + memberPath + "; valueClass:" + m.getMeta().getValueClass() + " error:"
-                            + e.getMessage());
                 }
+                component.applyAccessibilityRules();
             }
         }
     }

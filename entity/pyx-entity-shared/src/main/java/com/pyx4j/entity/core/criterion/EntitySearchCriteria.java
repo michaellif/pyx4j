@@ -29,6 +29,7 @@ import com.pyx4j.commons.IHaveServiceCallMarker;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 
 public class EntitySearchCriteria<E extends IEntity> implements Serializable, IHaveServiceCallMarker {
@@ -112,8 +113,7 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable, IH
         return sort(new Sort(member, false));
     }
 
-    @Deprecated
-    public EntitySearchCriteria<E> asc(String propertyName) {
+    public EntitySearchCriteria<E> asc(Path propertyName) {
         return sort(new Sort(propertyName, false));
     }
 
@@ -121,8 +121,7 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable, IH
         return sort(new Sort(member, true));
     }
 
-    @Deprecated
-    public EntitySearchCriteria<E> desc(String propertyName) {
+    public EntitySearchCriteria<E> desc(Path propertyName) {
         return sort(new Sort(propertyName, true));
     }
 
