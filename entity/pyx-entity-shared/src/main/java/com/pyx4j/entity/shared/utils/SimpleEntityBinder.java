@@ -22,7 +22,6 @@ package com.pyx4j.entity.shared.utils;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -171,19 +170,13 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
             return b.boMemberPath;
         }
         // The binding may have been done by full member of type Entity
-        StringBuilder shortDTOMemberPath = new StringBuilder();
-        shortDTOMemberPath.append(toMemberPath.getRootObjectClassName()).append(Path.PATH_SEPARATOR);
-        Iterator<String> it = toMemberPath.getPathMembers().iterator();
-        while (it.hasNext()) {
-            String member = it.next();
-            shortDTOMemberPath.append(member).append(Path.PATH_SEPARATOR);
-            b = bindingByTOMemberPath.get(new Path(shortDTOMemberPath.toString()));
+        // Find longest bound path.
+        for (int l = toMemberPath.getPathMembers().size() - 1; l > 0; l--) {
+            List<String> pathMembers = toMemberPath.getPathMembers().subList(0, l);
+            Path toMemberPathShort = new Path(toClass, pathMembers);
+            b = bindingByTOMemberPath.get(toMemberPathShort);
             if (b != null) {
-                StringBuilder shortDBOMemberPath = new StringBuilder(b.boMemberPath.toString());
-                while (it.hasNext()) {
-                    shortDBOMemberPath.append(it.next()).append(Path.PATH_SEPARATOR);
-                }
-                return new Path(shortDBOMemberPath.toString());
+                return new Path(b.boMemberPath, toMemberPath.getPathMembers().subList(l, toMemberPath.getPathMembers().size()));
             }
         }
         return null;

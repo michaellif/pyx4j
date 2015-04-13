@@ -487,7 +487,7 @@ public class QueryBuilder<T extends IEntity> {
                 if ((type == ObjectClassType.Entity) || (type == ObjectClassType.EntityList) || (type == ObjectClassType.EntitySet)) {
                     @SuppressWarnings("unchecked")
                     Class<? extends IEntity> targetEntityClass = (Class<? extends IEntity>) memberMeta.getValueClass();
-                    List<Sort> expanded = expandEntityToStringMembers(sort.getPropertyPath().toString(), targetEntityClass, sort.isDescending());
+                    List<Sort> expanded = expandEntityToStringMembers(sort.getPropertyPath(), targetEntityClass, sort.isDescending());
                     if (expanded.size() > 0) {
                         result.addAll(expanded);
                     } else {
@@ -501,7 +501,7 @@ public class QueryBuilder<T extends IEntity> {
         return result;
     }
 
-    private List<Sort> expandEntityToStringMembers(String propertyPath, Class<? extends IEntity> targetEntityClass, boolean descending) {
+    private List<Sort> expandEntityToStringMembers(Path propertyPath, Class<? extends IEntity> targetEntityClass, boolean descending) {
         List<Sort> result = new ArrayList<Sort>();
         EntityMeta entityMeta = EntityFactory.getEntityMeta(targetEntityClass);
         for (String sortMemberName : entityMeta.getToStringMemberNames()) {
@@ -514,9 +514,9 @@ public class QueryBuilder<T extends IEntity> {
             if ((type == ObjectClassType.Entity) || (type == ObjectClassType.EntityList) || (type == ObjectClassType.EntitySet)) {
                 @SuppressWarnings("unchecked")
                 Class<? extends IEntity> childEntityClass = (Class<? extends IEntity>) memberMeta.getValueClass();
-                result.addAll(expandEntityToStringMembers(propertyPath + sortMemberName + Path.PATH_SEPARATOR, childEntityClass, descending));
+                result.addAll(expandEntityToStringMembers(new Path(propertyPath, Arrays.asList(sortMemberName)), childEntityClass, descending));
             } else {
-                result.add(new Sort(new Path(propertyPath + sortMemberName + Path.PATH_SEPARATOR), descending));
+                result.add(new Sort(new Path(propertyPath, Arrays.asList(sortMemberName)), descending));
             }
         }
         return result;

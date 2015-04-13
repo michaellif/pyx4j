@@ -47,6 +47,8 @@ public class EntityDtoBinderTest extends InitializerTestBase {
             bind(toProto.employmentStatus(), boProto.employmentStatus());
             bind(toProto.tasksSorted(), boProto.tasksSorted());
             bind(toProto.workAddress(), boProto.workAddress());
+            bind(toProto.department(), boProto.department());
+            bind(toProto.department().name(), boProto.department().organization().name());
         }
 
     }
@@ -58,6 +60,9 @@ public class EntityDtoBinderTest extends InitializerTestBase {
         Assert.assertNull("Not Bound", b.getBoundBOMemberPath(emp1.from().getPath()));
         Assert.assertEquals("Bound by full member", emp1.workAddress().streetName().getPath(),
                 b.getBoundBOMemberPath(emp1.workAddress().streetName().getPath()));
+
+        Assert.assertEquals("Bound", emp1.department().organization().name().getPath(), b.getBoundBOMemberPath(emp1.department().name().getPath()));
+        //TODO test the longest bound path.
     }
 
     public void testUpdate() {

@@ -20,15 +20,17 @@
 package com.pyx4j.entity.core;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.commons.GWTJava5Helper;
+import com.pyx4j.commons.ICloneable;
 import com.pyx4j.commons.IDebugId;
 
-public class Path implements Serializable, IDebugId {
+public class Path implements Serializable, IDebugId, ICloneable {
 
     private static final long serialVersionUID = -1723967141846287126L;
 
@@ -67,6 +69,10 @@ public class Path implements Serializable, IDebugId {
         }
     }
 
+    public Path(Path path, List<String> pathMembers) {
+        this(path.getRootEntityClass(), concat(path.getPathMembers(), pathMembers));
+    }
+
     public Path(IObject<?> object) {
         path = "";
         List<String> members = new Vector<String>();
@@ -93,6 +99,12 @@ public class Path implements Serializable, IDebugId {
             object = object.getParent();
         }
         pathMembers = Collections.unmodifiableList(members);
+    }
+
+    private static List<String> concat(List<String> pathMembers1, List<String> pathMembers2) {
+        List<String> r = new ArrayList<>(pathMembers1);
+        r.addAll(pathMembers2);
+        return r;
     }
 
     public boolean isUndefinedCollectionPath() {
@@ -158,6 +170,16 @@ public class Path implements Serializable, IDebugId {
     @Override
     public String toString() {
         return path;
+    }
+
+    /**
+     * The same change as happening in serialization
+     */
+    @Override
+    public Path iclone() {
+        Path p = new Path();
+        p.path = this.path;
+        return p;
     }
 
     @Override
