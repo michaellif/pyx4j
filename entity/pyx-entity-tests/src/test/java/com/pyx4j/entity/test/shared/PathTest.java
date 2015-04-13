@@ -44,11 +44,12 @@ public class PathTest extends InitializerTestBase {
     }
 
     public void testPathParsing() {
-        Path p = new Path("Employee/tasks/");
+        Employee emp = EntityFactory.create(Employee.class);
+        Path p = emp.tasks().getPath().iclone();
         assertEquals("path Root", "Employee", p.getRootObjectClassName());
         assertEquals("path Root", "tasks", p.getPathMembers().get(0));
 
-        Path p2 = new Path("Employee/tasks/[]/deadLine/");
+        Path p2 = emp.tasks().$().deadLine().getPath().iclone();
         assertEquals("path Root", "Employee", p2.getRootObjectClassName());
         assertEquals("path Root", "tasks", p2.getPathMembers().get(0));
         assertEquals("path Root", "[]", p2.getPathMembers().get(1));

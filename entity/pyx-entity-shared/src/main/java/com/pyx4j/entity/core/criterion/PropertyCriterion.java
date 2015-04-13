@@ -73,9 +73,6 @@ public class PropertyCriterion implements Criterion {
 
     @Deprecated
     public PropertyCriterion(String propertyPath, Restriction restriction, Serializable value) {
-        if (false) {
-            throw new Error("@Deprecated");
-        }
         this.propertyPath = new Path(propertyPath);
         this.restriction = restriction;
         if ((value instanceof IObject) && (((IObject<?>) value).isPrototype())) {
