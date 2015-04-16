@@ -21,6 +21,9 @@ package com.pyx4j.widgets.client;
 
 import java.text.ParseException;
 
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.UIObject;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
@@ -31,6 +34,7 @@ public class TextArea extends ValueBoxBase<String> {
 
     public TextArea() {
         textBoxWidget = new com.google.gwt.user.client.ui.TextArea();
+
         textBoxWidget.getElement().getStyle().setProperty("resize", "vertical");
         setTextBoxWidget(textBoxWidget);
     }
@@ -55,6 +59,11 @@ public class TextArea extends ValueBoxBase<String> {
         return super.getFormatter();
     }
 
+    public void insertText(String text) {
+        int cursorPos = textBoxWidget.getCursorPos();
+        textBoxWidget.setText(textBoxWidget.getText().substring(0, cursorPos) + text + textBoxWidget.getText().substring(cursorPos));
+    }
+
     private class StringFormat implements IFormatter<String, String> {
 
         @Override
@@ -75,5 +84,18 @@ public class TextArea extends ValueBoxBase<String> {
             }
             return string;
         }
+    }
+
+    public void setTemplateAction(final TextTemplateAction tyextTemplateAction) {
+        setAction(new Command() {
+            @Override
+            public void execute() {
+                tyextTemplateAction.perform(getActionButton());
+            }
+        }, ImageFactory.getImages().action());
+    }
+
+    public interface TextTemplateAction {
+        void perform(final UIObject target);
     }
 }
