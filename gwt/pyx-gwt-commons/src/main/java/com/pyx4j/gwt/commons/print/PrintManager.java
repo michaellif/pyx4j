@@ -47,22 +47,30 @@ public class PrintManager {
     }
 
     public static void print(Element element) {
-        Element headElement = Document.get().getElementsByTagName("head").getItem(0);
-        Node headClone = HeadElement.as(headElement).cloneNode(true);
-        StringBuilder contentBuilder = new StringBuilder("<html>");
-        contentBuilder.append(headClone.toString()).append("<body>").append(element.getInnerHTML()).append("</body>").append("</html>");
-        fillIframe(instance().iframe, contentBuilder.toString());
+        fillIframe(element);
         printIframe(instance().iframe);
     }
 
     public static void preview(Element element) {
+        fillIframe(element);
+        previewIframe(instance().iframe);
+    }
+
+    private static String createHead() {
         Element headElement = Document.get().getElementsByTagName("head").getItem(0);
         Node headClone = HeadElement.as(headElement).cloneNode(true);
-        StringBuilder contentBuilder = new StringBuilder("<html>");
-        contentBuilder.append(headClone.toString()).append("<body>").append(element.getInnerHTML()).append("</body>").append("</html>");
+        for (int i = 0; i < headElement.getChildNodes().getLength(); i++) {
+            if ("script".equals(headElement.getChildNodes().getItem(i).getNodeName().toLowerCase())) {
+                headClone.getChild(i).removeFromParent();
+            }
+        }
+        return headClone.toString();
+    }
 
+    private static void fillIframe(Element element) {
+        StringBuilder contentBuilder = new StringBuilder("<html>");
+        contentBuilder.append(createHead()).append("<body>").append(element.getInnerHTML()).append("</body>").append("</html>");
         fillIframe(instance().iframe, contentBuilder.toString());
-        previewIframe(instance().iframe);
     }
 
     private static final native void fillIframeHead(IFrameElement iframe, String content)// @formatter:off
