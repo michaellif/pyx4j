@@ -25,7 +25,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
@@ -112,9 +111,7 @@ public abstract class AbstractPrimeListerActivity<E extends IEntity> extends Abs
     protected void parseExternalFilters(AppPlace place, Class<E> entityClass, EntityFiltersBuilder<E> filters) {
         String val;
         if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_PARENT_ID)) != null) {
-            String ownerMemberName = EntityFactory.getEntityMeta(entityClass).getOwnerMemberName();
-            IEntity owner = (IEntity) filters.proto().getMember(ownerMemberName);
-            filters.eq(owner, EntityFactory.createIdentityStub(owner.getValueClass(), new Key(val)));
+            getView().getDataTablePanel().getDataSource().setParentEntityId(new Key(val));
         }
     }
 
