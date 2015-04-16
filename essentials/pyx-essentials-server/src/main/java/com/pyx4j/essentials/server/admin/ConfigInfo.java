@@ -92,17 +92,17 @@ public class ConfigInfo {
         }
     }
 
-    private String applicationUptime() {
+    public static String applicationUptime() {
         return TimeUtils.durationFormatSeconds((int) (System.currentTimeMillis() - ServerSideConfiguration.getStartTime()) / Consts.SEC2MSEC) + ", since: "
                 + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z").format(new Date(ServerSideConfiguration.getStartTime()));
     }
 
-    private String systemUptime() {
+    public static String systemUptime() {
         try {
             long jvmStartTime = ManagementFactory.getRuntimeMXBean().getStartTime();
             long jvmUpTime = ManagementFactory.getRuntimeMXBean().getUptime();
             return TimeUtils.durationFormatSeconds((int) jvmUpTime / Consts.SEC2MSEC) + ", since: "
-            + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z").format(new Date(jvmStartTime));
+                    + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z").format(new Date(jvmStartTime));
         } catch (Throwable e) {
             return "n/a " + e.getMessage();
         }
