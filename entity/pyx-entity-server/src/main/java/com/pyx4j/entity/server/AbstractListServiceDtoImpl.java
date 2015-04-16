@@ -22,14 +22,17 @@ package com.pyx4j.entity.server;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.Criterion;
@@ -38,12 +41,14 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.core.criterion.RangeCriterion;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.security.shared.SecurityController;
 
 public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends IEntity> implements AbstractListCrudService<TO>, CursorSource<TO> {
@@ -165,7 +170,16 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
             if (path == null) {
                 path = convertPropertyDTOPathToDBOPath(propertyCriterion.getPropertyPath(), boProto, toProto);
             }
-            return new PropertyCriterion(path, propertyCriterion.getRestriction(), convertValue(criteria, propertyCriterion));
+            IObject<?> boMember = boProto.getMember(path);
+            if (propertyCriterion.getRestriction() == Restriction.EQUAL && Date.class.equals(boProto.getMember(path).getValueClass())
+                    && propertyCriterion.getValue() instanceof LogicalDate) {
+                AndCriterion criterion = new AndCriterion();
+                criterion.add(PropertyCriterion.ge(boMember, propertyCriterion.getValue()));
+                criterion.add(PropertyCriterion.lt(boMember, DateUtils.dayEnd((Date) propertyCriterion.getValue())));
+                return criterion;
+            } else {
+                return new PropertyCriterion(path, propertyCriterion.getRestriction(), convertValue(criteria, propertyCriterion));
+            }
         } else if (cr instanceof OrCriterion) {
             OrCriterion criterion = new OrCriterion();
             criterion.addRight(convertFilters(criteria, ((OrCriterion) cr).getFiltersRight()));
