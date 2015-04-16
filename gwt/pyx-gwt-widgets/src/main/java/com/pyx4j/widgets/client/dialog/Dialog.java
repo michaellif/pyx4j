@@ -64,6 +64,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.CSSClass;
+import com.pyx4j.gwt.commons.layout.ILayoutable;
+import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -296,7 +298,7 @@ public class Dialog implements ProvidesResize, IsWidget {
 
     /**
      * This is alternative to using CustomOption. Override to change the text in dialog.
-     * 
+     *
      * @return text for 'OK' button
      */
     protected String optionTextOk() {
@@ -309,7 +311,7 @@ public class Dialog implements ProvidesResize, IsWidget {
 
     /**
      * This is alternative to using CustomOption. Override to change the text in dialog.
-     * 
+     *
      * @return text for 'Cancel' button
      */
     protected String optionTextCancel() {
@@ -322,7 +324,7 @@ public class Dialog implements ProvidesResize, IsWidget {
 
     /**
      * This is alternative to using CustomOption. Override to change the text in dialog.
-     * 
+     *
      * @return text for 'Close' button
      */
     protected String optionTextClose() {
@@ -411,6 +413,19 @@ public class Dialog implements ProvidesResize, IsWidget {
         int top = Math.max(Window.getScrollTop() + (Window.getClientHeight() - popupPanel.getOffsetHeight()) / 2, 0);
         popupPanel.getElement().getStyle().setPropertyPx("top", top);
 
+        onLayout(this, LayoutType.getLayoutType(dialogPixelWidth));
+    }
+
+    private static void onLayout(IsWidget widget, LayoutType layoutType) {
+        if (widget instanceof ILayoutable) {
+            ILayoutable component = (ILayoutable) widget;
+            component.doLayout(layoutType);
+        }
+        if (widget instanceof HasWidgets) {
+            for (Widget childWidget : (HasWidgets) widget) {
+                onLayout(childWidget, layoutType);
+            }
+        }
     }
 
     public void show() {
