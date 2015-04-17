@@ -61,7 +61,9 @@ public class TextArea extends ValueBoxBase<String> {
 
     public void insertText(String text) {
         int cursorPos = textBoxWidget.getCursorPos();
-        textBoxWidget.setText(textBoxWidget.getText().substring(0, cursorPos) + text + textBoxWidget.getText().substring(cursorPos));
+        setValue(textBoxWidget.getText().substring(0, cursorPos) + text + textBoxWidget.getText().substring(cursorPos));
+        textBoxWidget.setCursorPos(cursorPos + text.length());
+        setFocus(true);
     }
 
     private class StringFormat implements IFormatter<String, String> {
@@ -86,13 +88,13 @@ public class TextArea extends ValueBoxBase<String> {
         }
     }
 
-    public void setTemplateAction(final TextTemplateAction tyextTemplateAction) {
+    public void setTemplateAction(final TextTemplateAction textTemplateAction) {
         setAction(new Command() {
             @Override
             public void execute() {
-                tyextTemplateAction.perform(getActionButton());
+                textTemplateAction.perform(getActionButton());
             }
-        }, ImageFactory.getImages().action());
+        }, ImageFactory.getImages().mergeImage());
     }
 
     public interface TextTemplateAction {
