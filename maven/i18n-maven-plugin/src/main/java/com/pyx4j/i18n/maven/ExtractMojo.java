@@ -29,6 +29,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,7 +52,11 @@ import org.xml.sax.SAXException;
 
 import com.pyx4j.i18n.extractor.ConstantEntry;
 import com.pyx4j.i18n.extractor.Extractor;
+import com.pyx4j.i18n.gettext.MessageFormatTokenizer;
+import com.pyx4j.i18n.gettext.MessageFormatTokenizer.I18nConstantsHelper;
+import com.pyx4j.i18n.gettext.MessageFormatTokenizer.SplitLinesTranslatorHelper;
 import com.pyx4j.i18n.gettext.POCatalog;
+import com.pyx4j.i18n.gettext.POCatalog.CatalogIgnore;
 import com.pyx4j.i18n.gettext.POEntry;
 import com.pyx4j.i18n.gettext.POFile;
 import com.pyx4j.i18n.gettext.POFileWriter;
@@ -517,10 +523,14 @@ public class ExtractMojo extends AbstractMojo {
     }
 
     private void autoTranslate(POFile po) throws MojoExecutionException {
-        for (String lang : translates) {
-            GoogleTranslate gt = new GoogleTranslate(this.googleApiKey);
+        for (final String lang : translates) {
+            final GoogleTranslate gt = new GoogleTranslate(this.googleApiKey);
 
-            POCatalog catalog = new POCatalog(lang, true);
+            CatalogIgnore catalogIgnore = new CatalogIgnore();
+//            catalogIgnore.messageFormat = true;
+//            catalogIgnore.multiLine = true;
+
+            final POCatalog catalog = new POCatalog(lang, true, catalogIgnore);
             if (translationCatalog != null) {
                 if (!translationCatalog.canRead()) {
                     throw new MojoExecutionException("Can't read translationCatalog '" + translationCatalog.getAbsolutePath() + "'");
@@ -531,27 +541,62 @@ public class ExtractMojo extends AbstractMojo {
             getLog().info(
                     "Translating " + sourceLanguage + " -> " + lang + " ; entries to translate " + poTransl.entries.size() + ", use Local catalog "
                             + catalog.size());
+
             int translated = 0;
-            int apiCalls = 0;
-            for (POEntry entry : poTransl.entries) {
-                entry.translated = catalog.translate(entry.context, entry.untranslated);
-                //TODO add proper java format handling
-                if (((entry.translated == null) || (entry.translated.length() == 0)) && (!entry.contanisFlag("java-format"))) {
-                    try {
-                        entry.translated = gt.translate(entry.untranslated, sourceLanguage, lang);
-                        if (entry.translated == null) {
-                            getLog().info("Can't translate \"" + entry.untranslated + "\"");
+            final AtomicInteger apiCalls = new AtomicInteger();
+
+            final AtomicBoolean translatorContextMessageFormat = new AtomicBoolean();
+
+            final I18nConstantsHelper catalogCashedTranslator = new I18nConstantsHelper() {
+
+                @Override
+                public String translateConstant(String text) {
+                    String translated = catalog.translate(null, text);
+                    if (translated == null) {
+                        try {
+                            apiCalls.incrementAndGet();
+                            translated = gt.translate(text, sourceLanguage, lang);
+                            if (translated == null) {
+                                getLog().info("Can't translate \"" + text + "\"");
+                            }
+                            catalog.update(null, text, translated);
+                        } catch (Throwable e) {
+                            throw new Error("translate error", e);
                         }
-                    } catch (Throwable e) {
-                        throw new MojoExecutionException("translate error", e);
                     }
-                    catalog.update(entry.context, entry.untranslated, entry.translated);
-                    apiCalls++;
+                    return translated;
+                }
+            };
+
+            final I18nConstantsHelper splitLinesTranslator = new SplitLinesTranslatorHelper(catalogCashedTranslator) {
+
+                @Override
+                protected boolean translateAlways() {
+                    return translatorContextMessageFormat.get();
+                }
+
+            };
+
+            for (final POEntry entry : poTransl.entries) {
+                entry.translated = catalog.translate(entry.context, entry.untranslated);
+
+                if (((entry.translated == null) || (entry.translated.length() == 0))) {
+                    if (entry.contanisFlag("java-format")) {
+                        if (entry.untranslated.indexOf("}") != -1) {
+                            translatorContextMessageFormat.set(true);
+                            entry.translated = MessageFormatTokenizer.translate(splitLinesTranslator, entry.untranslated);
+                            catalog.update(entry.context, entry.untranslated, entry.translated);
+                        }
+                    } else {
+                        translatorContextMessageFormat.set(false);
+                        entry.translated = splitLinesTranslator.translateConstant(entry.untranslated);
+                        catalog.update(entry.context, entry.untranslated, entry.translated);
+                    }
                 }
                 translated++;
             }
-            getLog().info("Translated:" + translated + "; api calls:" + apiCalls);
-            if (apiCalls > 0) {
+            getLog().info("Translated:" + translated + "; api calls:" + apiCalls.get());
+            if (apiCalls.get() > 0) {
                 catalog.write();
             }
             writePO(poTransl, new File(poDirectory, lang + ".po"), true, false);
