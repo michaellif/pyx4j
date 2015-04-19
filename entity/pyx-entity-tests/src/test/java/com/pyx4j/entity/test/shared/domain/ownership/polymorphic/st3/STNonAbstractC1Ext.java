@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,13 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 1, 2010
- * @author Misha
+ * Created on Apr 7, 2015
+ * @author vlads
  */
-package com.pyx4j.commons;
+package com.pyx4j.entity.test.shared.domain.ownership.polymorphic.st3;
 
-public interface Printable {
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.core.IPrimitive;
 
-    public String getStringView();
+@DiscriminatorValue("C1Ext")
+public interface STNonAbstractC1Ext extends STNonAbstractC1 {
 
+    IPrimitive<String> nameC1Ext();
 }

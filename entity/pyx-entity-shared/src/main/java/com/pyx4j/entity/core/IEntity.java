@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.Printable;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Indexed;
@@ -36,7 +35,7 @@ import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 import com.pyx4j.security.shared.AccessControlContext;
 
 @I18n(strategy = I18nStrategy.DerivedOnly)
-public interface IEntity extends IObject<Map<String, Serializable>>, Serializable, Printable, AccessControlContext {
+public interface IEntity extends IObject<Map<String, Serializable>>, Serializable, AccessControlContext {
 
     public static String PRIMARY_KEY = "id";
 

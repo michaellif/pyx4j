@@ -138,7 +138,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
      * @deprecated TODO VladS switch to EntityQueryCriteriaBinder
      */
     @Deprecated
-    protected Path convertPropertyDTOPathToDBOPath(String path, BO boProto, TO toProto) {
+    protected Path convertPropertyDTOPathToDBOPath(Path path, BO boProto, TO toProto) {
         throw new Error("Unsupported query property path " + path);
     }
 
@@ -166,7 +166,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     protected Criterion convertCriterion(EntityListCriteria<BO> criteria, Criterion cr) {
         if (cr instanceof PropertyCriterion) {
             PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
-            Path path = binder.getBoundBOMemberPath(new Path(propertyCriterion.getPropertyPath()));
+            Path path = binder.getBoundBOMemberPath(propertyCriterion.getPropertyPath());
             if (path == null) {
                 path = convertPropertyDTOPathToDBOPath(propertyCriterion.getPropertyPath(), boProto, toProto);
             }
@@ -208,7 +208,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         if (value instanceof Path) {
             Path path = binder.getBoundBOMemberPath((Path) value);
             if (path == null) {
-                path = convertPropertyDTOPathToDBOPath(value.toString(), boProto, toProto);
+                path = convertPropertyDTOPathToDBOPath((Path) value, boProto, toProto);
             }
             return path;
         } else if (value instanceof Criterion) {
@@ -229,14 +229,14 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         }
         if ((toCriteria.getSorts() != null) && (!toCriteria.getSorts().isEmpty())) {
             for (Sort s : toCriteria.getSorts()) {
-                Path path = binder.getBoundBOMemberPath(new Path(s.getPropertyPath()));
+                Path path = binder.getBoundBOMemberPath(s.getPropertyPath());
                 if (path == null) {
                     path = convertPropertyDTOPathToDBOPath(s.getPropertyPath(), boCriteria.proto(), toCriteria.proto());
                 }
                 if (s.isDescending()) {
-                    boCriteria.desc(path.toString());
+                    boCriteria.desc(path);
                 } else {
-                    boCriteria.asc(path.toString());
+                    boCriteria.asc(path);
                 }
             }
         }

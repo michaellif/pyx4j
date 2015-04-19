@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
@@ -40,6 +41,7 @@ public interface Employee2 extends IEntity {
     IPrimitive<String> testId();
 
     @Indexed
+    @Length(100)
     IPrimitive<String> name();
 
     interface Department2ColumnId extends ColumnId {

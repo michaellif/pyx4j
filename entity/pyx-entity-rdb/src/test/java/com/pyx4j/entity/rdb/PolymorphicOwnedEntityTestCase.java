@@ -562,9 +562,8 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
         // test search IN criteria by Classes
         {
             EntityQueryCriteria<BidirectionalOneToMany2PlmSTParent> criteria = EntityQueryCriteria.create(BidirectionalOneToMany2PlmSTParent.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
-            criteria.add(PropertyCriterion
-                    .in(criteria.proto().childrenA(), BidirectionalOneToMany2PlmSTChildA.class, BidirectionalOneToMany2PlmSTChildAC.class));
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.in(criteria.proto().childrenA(), BidirectionalOneToMany2PlmSTChildA.class, BidirectionalOneToMany2PlmSTChildAC.class);
             List<BidirectionalOneToMany2PlmSTParent> papas = srv.query(criteria);
 
             assertNotNull(papas);

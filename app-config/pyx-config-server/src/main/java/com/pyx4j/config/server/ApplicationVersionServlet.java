@@ -44,6 +44,8 @@ public class ApplicationVersionServlet extends HttpServlet {
 
         scmRevision,
 
+        branchName,
+
         buildLabelPyx,
 
         buildDatePyx,
@@ -112,6 +114,8 @@ public class ApplicationVersionServlet extends HttpServlet {
             return ApplicationVersion.getBuildLabel();
         case scmRevision:
             return ApplicationVersion.getScmRevision();
+        case branchName:
+            return ApplicationVersion.getBranchName();
         case buildLabelPyx:
             return ApplicationVersion.getPyxBuildLabel();
         case buildDatePyx:

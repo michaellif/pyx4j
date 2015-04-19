@@ -31,6 +31,7 @@ import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Base2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
+import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntity;
 
 public class EntityReflectionTest extends InitializerTestBase {
 
@@ -84,6 +85,12 @@ public class EntityReflectionTest extends InitializerTestBase {
         assertFalse("ConcreteEntity isAssignableFrom Base2Entity", concreteEntity.isAssignableFrom(Base2Entity.class));
         assertFalse("ConcreteEntity instanceOf Address", concreteEntity.isInstanceOf(Address.class));
         assertFalse("ConcreteEntity isAssignableFrom Address", concreteEntity.isAssignableFrom(Address.class));
+    }
+
+    public void testEntityPrototypeOperations() {
+        ReferenceEntity proto = EntityFactory.getEntityPrototype(ReferenceEntity.class);
+
+        assertTrue("Member.Owner() isAssignableFrom", proto.reference().getOwner().isAssignableFrom(ReferenceEntity.class));
     }
 
     public void testIsNullAndEmpty() {

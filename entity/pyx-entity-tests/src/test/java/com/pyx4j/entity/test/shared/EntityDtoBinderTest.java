@@ -35,9 +35,9 @@ import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntityDTO;
 
 public class EntityDtoBinderTest extends InitializerTestBase {
 
-    private class SimpleEntityDtoBinder extends SimpleEntityBinder<Employee, Employee> {
+    private class EmployeeSimpleEntityBinder extends SimpleEntityBinder<Employee, Employee> {
 
-        protected SimpleEntityDtoBinder() {
+        protected EmployeeSimpleEntityBinder() {
             super(Employee.class, Employee.class);
         }
 
@@ -47,8 +47,22 @@ public class EntityDtoBinderTest extends InitializerTestBase {
             bind(toProto.employmentStatus(), boProto.employmentStatus());
             bind(toProto.tasksSorted(), boProto.tasksSorted());
             bind(toProto.workAddress(), boProto.workAddress());
+            bind(toProto.department(), boProto.department());
+            bind(toProto.department().name(), boProto.department().organization().name());
         }
 
+    }
+
+    public void testGetBoundBOMemberPath() {
+        EmployeeSimpleEntityBinder b = new EmployeeSimpleEntityBinder();
+        Employee emp1 = EntityFactory.create(Employee.class);
+        Assert.assertEquals("Bound", emp1.firstName().getPath(), b.getBoundBOMemberPath(emp1.firstName().getPath()));
+        Assert.assertNull("Not Bound", b.getBoundBOMemberPath(emp1.from().getPath()));
+        Assert.assertEquals("Bound by full member", emp1.workAddress().streetName().getPath(),
+                b.getBoundBOMemberPath(emp1.workAddress().streetName().getPath()));
+
+        Assert.assertEquals("Bound", emp1.department().organization().name().getPath(), b.getBoundBOMemberPath(emp1.department().name().getPath()));
+        //TODO test the longest bound path.
     }
 
     public void testUpdate() {
@@ -65,7 +79,7 @@ public class EntityDtoBinderTest extends InitializerTestBase {
         task1.notes().add("note1");
         emp1.tasksSorted().add(task1);
 
-        Employee emp2 = new SimpleEntityDtoBinder().createBO(emp1);
+        Employee emp2 = new EmployeeSimpleEntityBinder().createBO(emp1);
         Assert.assertEquals(emp1.firstName().getValue(), emp2.firstName().getValue());
         Assert.assertEquals(emp1.employmentStatus().getValue(), emp2.employmentStatus().getValue());
 
@@ -81,13 +95,13 @@ public class EntityDtoBinderTest extends InitializerTestBase {
 
         emp2 = emp2.duplicate();
 
-        Assert.assertFalse(new SimpleEntityDtoBinder().updateBO(emp1, emp2));
+        Assert.assertFalse(new EmployeeSimpleEntityBinder().updateBO(emp1, emp2));
 
         emp1.workAddress().streetName().setValue("street m");
 
-        Assert.assertTrue(new SimpleEntityDtoBinder().updateBO(emp1, emp2));
+        Assert.assertTrue(new EmployeeSimpleEntityBinder().updateBO(emp1, emp2));
         //Second pass will not change the value
-        Assert.assertFalse(new SimpleEntityDtoBinder().updateBO(emp1, emp2));
+        Assert.assertFalse(new EmployeeSimpleEntityBinder().updateBO(emp1, emp2));
         Assert.assertEquals("address.streetName Value", emp1.workAddress().streetName().getValue(), emp2.workAddress().streetName().getValue());
     }
 
@@ -100,10 +114,10 @@ public class EntityDtoBinderTest extends InitializerTestBase {
         emp1.workAddress().country().setPrimaryKey(new Key(22));
         emp1.workAddress().city().name().setValue("city");
 
-        Employee emp2 = new SimpleEntityDtoBinder().createBO(emp1);
+        Employee emp2 = new EmployeeSimpleEntityBinder().createBO(emp1);
         emp2 = emp2.duplicate();
 
-        Assert.assertFalse(new SimpleEntityDtoBinder().updateBO(emp1, emp2));
+        Assert.assertFalse(new EmployeeSimpleEntityBinder().updateBO(emp1, emp2));
         Assert.assertEquals("address.country Value", emp1.workAddress().country().name().getValue(), emp2.workAddress().country().name().getValue());
         Assert.assertEquals("address.country Value", emp1.workAddress().country().id().getValue(), emp2.workAddress().country().id().getValue());
         Assert.assertEquals("owned PK Value", emp1.workAddress().id().getValue(), emp2.workAddress().id().getValue());
@@ -112,7 +126,7 @@ public class EntityDtoBinderTest extends InitializerTestBase {
         emp1.workAddress().country().setPrimaryKey(null);
         emp1.workAddress().streetName().setValue("street m");
 
-        Assert.assertTrue(new SimpleEntityDtoBinder().updateBO(emp1, emp2));
+        Assert.assertTrue(new EmployeeSimpleEntityBinder().updateBO(emp1, emp2));
         Assert.assertEquals("address.country Value", emp1.workAddress().country().name().getValue(), emp2.workAddress().country().name().getValue());
         Assert.assertTrue("address.country Value", emp2.workAddress().country().id().isNull());
 

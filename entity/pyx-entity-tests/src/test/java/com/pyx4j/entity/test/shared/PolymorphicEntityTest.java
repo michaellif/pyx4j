@@ -74,6 +74,16 @@ public class PolymorphicEntityTest extends InitializerTestBase {
         assertTrue("Member instanceOf Base1Entity its base", entDTO.reference().isInstanceOf(Base1Entity.class));
     }
 
+    public void testIsAssignableFromWithEntityPrototypes() {
+        ReferenceEntity entDTO = EntityFactory.getEntityPrototype(ReferenceEntity.class);
+
+        assertTrue("isAssignableFrom same", entDTO.isAssignableFrom(ReferenceEntity.class));
+        assertTrue("isAssignableFrom from subClass", entDTO.isAssignableFrom(ReferenceEntityDTO.class));
+
+        assertTrue("Member isAssignableFrom same", entDTO.reference().isAssignableFrom(Base1Entity.class));
+        assertTrue("Member.Member isAssignableFrom same", entDTO.reference().ownedItem().isAssignableFrom(OwnedByDiferentOwners.class));
+    }
+
     public void testOwnerAssignment() {
         {
             Concrete2Entity master = EntityFactory.create(Concrete2Entity.class);

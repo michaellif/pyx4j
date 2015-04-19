@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,26 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 28, 2010
+ * Created on Apr 7, 2015
  * @author vlads
  */
-package com.pyx4j.entity.test.shared.domain;
+package com.pyx4j.entity.test.shared.domain.ownership.polymorphic.st3;
 
-import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.entity.core.ISet;
-import com.pyx4j.entity.shared.adapters.index.CaseInsensitiveIndexAdapter;
 
+@Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @Table(prefix = "test")
-public interface Province extends IEntity {
+@DiscriminatorValue("B")
+public interface STNonAbstractBase extends IEntity {
 
-    @Indexed(adapters = CaseInsensitiveIndexAdapter.class)
-    @Length(150)
-    IPrimitive<String> name();
+    IPrimitive<String> testId();
 
-    @Indexed
-    ISet<City> cities();
 }

@@ -23,6 +23,8 @@ import java.io.Serializable;
 
 import junit.framework.TestCase;
 
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
@@ -32,24 +34,25 @@ import com.pyx4j.entity.test.shared.domain.Province;
 public class DOEqualsTest extends TestCase {
 
     public void testPropertyCriterion() {
-        PropertyCriterion d1 = new PropertyCriterion("one", Restriction.EQUAL, "1");
-        PropertyCriterion d2 = new PropertyCriterion("one", Restriction.EQUAL, "1");
+        City c = EntityFactory.create(City.class);
+        PropertyCriterion d1 = new PropertyCriterion(c.name(), Restriction.EQUAL, "1");
+        PropertyCriterion d2 = new PropertyCriterion(c.name(), Restriction.EQUAL, "1");
         assertTrue("DO are the same", d1.equals(d2));
         assertEquals("DO are the same", d1.hashCode(), d2.hashCode());
 
-        d2 = new PropertyCriterion("one", Restriction.EQUAL, "2");
+        d2 = new PropertyCriterion(c.name(), Restriction.EQUAL, "2");
         assertFalse("DO are different", d1.equals(d2));
         assertTrue("DO are different", d1.hashCode() != d2.hashCode());
 
-        d2 = new PropertyCriterion("two", Restriction.EQUAL, "1");
+        d2 = new PropertyCriterion(c.instanceValueClass(), Restriction.EQUAL, "1");
         assertFalse("DO are different", d1.equals(d2));
         assertTrue("DO are different", d1.hashCode() != d2.hashCode());
 
-        d2 = new PropertyCriterion("one", Restriction.GREATER_THAN, "1");
+        d2 = new PropertyCriterion(c.name(), Restriction.GREATER_THAN, "1");
         assertFalse("DO are different", d1.equals(d2));
         assertTrue("DO are different", d1.hashCode() != d2.hashCode());
 
-        d2 = new PropertyCriterion((String) null, Restriction.EQUAL, (Serializable) null);
+        d2 = new PropertyCriterion((Path) null, Restriction.EQUAL, (Serializable) null);
 
         assertFalse("DO are different", d1.equals(d2));
         assertFalse("DO are different", d2.equals(d1));

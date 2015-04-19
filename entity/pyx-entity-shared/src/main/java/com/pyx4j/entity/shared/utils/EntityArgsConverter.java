@@ -20,12 +20,12 @@
 package com.pyx4j.entity.shared.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.core.EntityFactory;
@@ -130,8 +130,7 @@ public class EntityArgsConverter {
         return builder.toString();
     }
 
-    public static Path convertDotNotationToPath(Class<? extends IObject<?>> root, String string) {
-        string = GWTJava5Helper.getSimpleName(root) + Path.PATH_SEPARATOR + string.replace('.', Path.PATH_SEPARATOR);
-        return new Path(string);
+    public static Path convertDotNotationToPath(Class<? extends IEntity> root, String string) {
+        return new Path(root, Arrays.asList(string.split("\\.")));
     }
 }

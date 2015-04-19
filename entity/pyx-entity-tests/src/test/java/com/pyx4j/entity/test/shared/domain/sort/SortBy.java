@@ -20,6 +20,7 @@
 package com.pyx4j.entity.test.shared.domain.sort;
 
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
@@ -34,10 +35,12 @@ public interface SortBy extends IEntity {
 
     @ToString
     @Indexed
+    @Length(100)
     IPrimitive<String> name();
 
     @ToString
     @Indexed
+    @Length(100)
     IPrimitive<String> amount();
 
     @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)

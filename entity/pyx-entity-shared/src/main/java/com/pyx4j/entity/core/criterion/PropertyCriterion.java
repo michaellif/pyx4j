@@ -43,7 +43,7 @@ public class PropertyCriterion implements Criterion {
         RDB_LIKE, NOT_EXISTS
     }
 
-    private String propertyPath;
+    private Path propertyPath;
 
     private Restriction restriction;
 
@@ -60,12 +60,20 @@ public class PropertyCriterion implements Criterion {
     }
 
     public PropertyCriterion(Path path, Restriction restriction, Serializable value) {
-        this(path.toString(), restriction, value);
+        this.propertyPath = path;
+        this.restriction = restriction;
+        if ((value instanceof IObject) && (((IObject<?>) value).isPrototype())) {
+            this.value = ((IObject<?>) value).getPath();
+        } else if (value instanceof IEntity) {
+            this.value = ((IEntity) value).createIdentityStub();
+        } else {
+            this.value = value;
+        }
     }
 
     @Deprecated
     public PropertyCriterion(String propertyPath, Restriction restriction, Serializable value) {
-        this.propertyPath = propertyPath;
+        this.propertyPath = new Path(propertyPath);
         this.restriction = restriction;
         if ((value instanceof IObject) && (((IObject<?>) value).isPrototype())) {
             this.value = ((IObject<?>) value).getPath();
@@ -77,7 +85,7 @@ public class PropertyCriterion implements Criterion {
     }
 
     public PropertyCriterion(IObject<?> member, Restriction restriction, IPrimitive<?> value) {
-        this.propertyPath = member.getPath().toString();
+        this.propertyPath = member.getPath();
         this.restriction = restriction;
         if (value.isPrototype()) {
             this.value = value.getPath();
@@ -152,6 +160,10 @@ public class PropertyCriterion implements Criterion {
         return new PropertyCriterion(member, Restriction.IN, values);
     }
 
+    public static PropertyCriterion in(IObject<?> member, Class<? extends IEntity> values) {
+        return new PropertyCriterion(member, Restriction.IN, values);
+    }
+
     public static <T extends Enum<T>> PropertyCriterion in(IObject<T> member, EnumSet<T> values) {
         return new PropertyCriterion(member, Restriction.IN, (Collection<T>) values);
     }
@@ -192,7 +204,7 @@ public class PropertyCriterion implements Criterion {
         return new PropertyCriterion(member, Restriction.LESS_THAN_OR_EQUAL, value);
     }
 
-    public String getPropertyPath() {
+    public Path getPropertyPath() {
         return this.propertyPath;
     }
 

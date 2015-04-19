@@ -221,9 +221,10 @@ public class QueryBuilder<T extends IEntity> {
         bindHolder.bindValue = propertyCriterion.getValue();
 
         String secondPersistenceName = null;
-        if (propertyCriterion.getPropertyPath().endsWith(IndexAdapter.SECONDARY_PRROPERTY_SUFIX)) {
+        if (propertyCriterion.getPropertyPath().toString().endsWith(IndexAdapter.SECONDARY_PRROPERTY_SUFIX)) {
             // TODO create index binders and value adapters
-            criterionSql.append(mainTableSqlAlias).append('.').append(dialect.getNamingConvention().sqlFieldName(propertyCriterion.getPropertyPath()));
+            criterionSql.append(mainTableSqlAlias).append('.')
+            .append(dialect.getNamingConvention().sqlFieldName(propertyCriterion.getPropertyPath().toString()));
         } else {
             boolean leftJoin = false;
             if (!required) {
@@ -234,7 +235,7 @@ public class QueryBuilder<T extends IEntity> {
                 if (bindHolder.bindValue == null) {
                     leftJoin = true;
                 } else if (bindHolder.bindValue instanceof Criterion) {
-                    buildSubQuery(criterionSql, joinBuilder, propertyCriterion.getPropertyPath(), (Criterion) bindHolder.bindValue);
+                    buildSubQuery(criterionSql, joinBuilder, propertyCriterion.getPropertyPath().toString(), (Criterion) bindHolder.bindValue);
                     return;
                 }
             }
@@ -282,7 +283,7 @@ public class QueryBuilder<T extends IEntity> {
                 throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction() + " for PathReference");
             }
 
-            String property2Path = bindHolder.bindValue.toString();
+            Path property2Path = (Path) bindHolder.bindValue;
 
             boolean leftJoin = false;
             if (!required) {
@@ -469,10 +470,10 @@ public class QueryBuilder<T extends IEntity> {
         List<Sort> result = new ArrayList<Sort>();
         if (sorts != null) {
             for (Sort sort : sorts) {
-                Path path = new Path(sort.getPropertyPath());
+                Path path = sort.getPropertyPath();
 
                 // Sort by collections is unsupported on postgresql
-                if (path.isUndefinedCollectionPath() || (sort.getPropertyPath().endsWith(Path.COLLECTION_SEPARATOR + Path.PATH_SEPARATOR))) {
+                if (path.isUndefinedCollectionPath() || (sort.getPropertyPath().toString().endsWith(Path.COLLECTION_SEPARATOR + Path.PATH_SEPARATOR))) {
                     throw new Error("Sort by collections is unsupported");
                 }
 
@@ -500,7 +501,7 @@ public class QueryBuilder<T extends IEntity> {
         return result;
     }
 
-    private List<Sort> expandEntityToStringMembers(String propertyPath, Class<? extends IEntity> targetEntityClass, boolean descending) {
+    private List<Sort> expandEntityToStringMembers(Path propertyPath, Class<? extends IEntity> targetEntityClass, boolean descending) {
         List<Sort> result = new ArrayList<Sort>();
         EntityMeta entityMeta = EntityFactory.getEntityMeta(targetEntityClass);
         for (String sortMemberName : entityMeta.getToStringMemberNames()) {
@@ -513,9 +514,9 @@ public class QueryBuilder<T extends IEntity> {
             if ((type == ObjectClassType.Entity) || (type == ObjectClassType.EntityList) || (type == ObjectClassType.EntitySet)) {
                 @SuppressWarnings("unchecked")
                 Class<? extends IEntity> childEntityClass = (Class<? extends IEntity>) memberMeta.getValueClass();
-                result.addAll(expandEntityToStringMembers(propertyPath + sortMemberName + Path.PATH_SEPARATOR, childEntityClass, descending));
+                result.addAll(expandEntityToStringMembers(new Path(propertyPath, Arrays.asList(sortMemberName)), childEntityClass, descending));
             } else {
-                result.add(new Sort(propertyPath + sortMemberName + Path.PATH_SEPARATOR, descending));
+                result.add(new Sort(new Path(propertyPath, Arrays.asList(sortMemberName)), descending));
             }
         }
         return result;

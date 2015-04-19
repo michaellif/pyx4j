@@ -22,6 +22,7 @@ package com.pyx4j.entity.test.shared.domain.join.org2;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
@@ -34,6 +35,7 @@ public interface Department2 extends IEntity {
     IPrimitive<String> testId();
 
     @Indexed
+    @Length(100)
     IPrimitive<String> name();
 
     @Indexed
