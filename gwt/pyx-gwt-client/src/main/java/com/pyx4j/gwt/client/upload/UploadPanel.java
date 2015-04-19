@@ -40,6 +40,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.client.ClientDeploymentConfig;
+import com.pyx4j.config.shared.ApplicationBackend;
+import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.entity.shared.IFile;
@@ -55,7 +57,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class UploadPanel<U extends IEntity, B extends AbstractIFileBlob> extends SimplePanel implements FormPanel.SubmitCompleteHandler,
-        FormPanel.SubmitHandler, DeferredProgressListener {
+FormPanel.SubmitHandler, DeferredProgressListener {
 
     private final static Logger log = LoggerFactory.getLogger(UploadPanel.class);
 
@@ -113,7 +115,7 @@ public class UploadPanel<U extends IEntity, B extends AbstractIFileBlob> extends
         content.add(line);
 
         line.add(upload);
-        line.add(deferredProgressPanel = new DeferredProgressPanel("Connecting...", false, this));
+        line.add(deferredProgressPanel = new DeferredProgressPanel("Connecting...", ApplicationBackend.getBackendType() == ApplicationBackendType.GAE, this));
         deferredProgressPanel.setSize("100%", "20px");
         deferredProgressPanel.getElement().getStyle().setPaddingLeft(25, Style.Unit.PX);
         deferredProgressPanel.setVisible(false);
