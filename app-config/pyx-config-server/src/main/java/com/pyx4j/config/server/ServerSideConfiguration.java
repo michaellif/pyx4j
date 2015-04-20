@@ -26,7 +26,6 @@ import java.util.Properties;
 import java.util.Vector;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.LoggerFactory;
 
@@ -178,7 +177,7 @@ public class ServerSideConfiguration {
         return null;
     }
 
-    public NamespaceResolver getNamespaceResolver(HttpServletRequest httpRequest) {
+    public NamespaceResolver getNamespaceResolver() {
         return new EmptyNamespaceDataResolver();
     }
 
