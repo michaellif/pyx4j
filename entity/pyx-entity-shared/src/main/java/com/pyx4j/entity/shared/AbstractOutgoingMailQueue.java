@@ -25,6 +25,7 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -47,6 +48,7 @@ public interface AbstractOutgoingMailQueue extends IEntity {
         GiveUp
     }
 
+    @Indexed
     IPrimitive<MailQueueStatus> status();
 
     IPrimitive<String> namespace();
