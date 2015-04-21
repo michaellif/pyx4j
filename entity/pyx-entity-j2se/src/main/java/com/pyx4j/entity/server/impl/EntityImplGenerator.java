@@ -84,6 +84,8 @@ public class EntityImplGenerator {
         javaVersion.put("6", new int[] { 50, 0 });
         javaVersion.put("1.7", new int[] { 51, 0 });
         javaVersion.put("7", new int[] { 51, 0 });
+        javaVersion.put("1.8", new int[] { 52, 0 });
+        javaVersion.put("8", new int[] { 52, 0 });
     }
 
     private static EntityImplGenerator instance;
@@ -366,7 +368,7 @@ public class EntityImplGenerator {
             implClass.setSuperclass(pool.get(SharedEntityHandler.class.getName()));
             implClass.addInterface(interfaceCtClass);
             // Constructors
-            // N.B. transient fields are not initialized during deserialization 
+            // N.B. transient fields are not initialized during deserialization
             CtConstructor defaultConstructor = new CtConstructor(null, implClass);
             defaultConstructor.setBody("super(" + interfaceName + ".class, null, null);");
             implClass.addConstructor(defaultConstructor);
