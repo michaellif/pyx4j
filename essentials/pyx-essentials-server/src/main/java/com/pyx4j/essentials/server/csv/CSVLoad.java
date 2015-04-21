@@ -67,7 +67,7 @@ public class CSVLoad {
         return -1;
     }
 
-    public static void loadResourceFile(String resourceName, Charset charset, CSVReciver reciver) {
+    public static void loadResourceFile(String resourceName, Charset charset, CSVReceiver reciver) {
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
         if (is == null) {
             throw new RuntimeException("Resouce [" + resourceName + "] not found");
@@ -75,11 +75,11 @@ public class CSVLoad {
         loadFile(is, charset, new CSVParser(), reciver);
     }
 
-    public static void loadFile(InputStream is, TextParser parser, CSVReciver reciver) {
+    public static void loadFile(InputStream is, TextParser parser, CSVReceiver reciver) {
         loadFile(is, Charset.forName("Cp1252"), parser, reciver);
     }
 
-    public static void loadFile(InputStream in, Charset charset, TextParser parser, CSVReciver reciver) {
+    public static void loadFile(InputStream in, Charset charset, TextParser parser, CSVReceiver reciver) {
         int lineNumber = 0;
         try {
             BufferedReader reader = new BufferedReader((charset == null) ? new InputStreamReader(in) : new InputStreamReader(in, charset));
@@ -136,7 +136,7 @@ public class CSVLoad {
 
     public static String[] loadFile(String resourceName, Charset charset, final String columName) {
         final List<String> data = new Vector<String>();
-        loadResourceFile(resourceName, charset, new CSVReciver() {
+        loadResourceFile(resourceName, charset, new CSVReceiver() {
 
             int columnIndex = 0;
 
