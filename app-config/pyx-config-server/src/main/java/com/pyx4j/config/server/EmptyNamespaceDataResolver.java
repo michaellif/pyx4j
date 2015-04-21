@@ -19,14 +19,12 @@
  */
 package com.pyx4j.config.server;
 
-public class EmptyNamespaceDataResolver extends NamespaceDataResolver {
+import javax.servlet.http.HttpServletRequest;
 
-    public EmptyNamespaceDataResolver() {
-        super(null);
-    }
+public class EmptyNamespaceDataResolver implements NamespaceResolver {
 
     @Override
-    public NamespaceData getNamespaceData() {
+    public NamespaceData getNamespaceData(HttpServletRequest httpRequest) {
         return new NamespaceData("-");
     }
 
