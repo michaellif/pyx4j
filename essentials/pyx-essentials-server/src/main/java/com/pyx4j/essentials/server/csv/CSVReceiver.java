@@ -19,8 +19,7 @@
  */
 package com.pyx4j.essentials.server.csv;
 
-//TODO  rename to CSVReceiver
-public interface CSVReciver {
+public interface CSVReceiver {
 
     /**
      * @return true when header is loaded completely.
