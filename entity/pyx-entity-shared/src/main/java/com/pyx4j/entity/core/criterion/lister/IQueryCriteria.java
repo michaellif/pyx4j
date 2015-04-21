@@ -20,11 +20,15 @@
 package com.pyx4j.entity.core.criterion.lister;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.i18n.annotations.I18n;
 
 @AbstractEntity
+@Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface IQueryCriteria<E extends IEntity> extends IEntity {
+
+    E proto();
 
 }

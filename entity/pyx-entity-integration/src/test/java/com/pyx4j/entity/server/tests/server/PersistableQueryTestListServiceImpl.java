@@ -35,7 +35,7 @@ public abstract class PersistableQueryTestListServiceImpl extends AbstractListSe
         }
 
         protected void bind() {
-            bind(boProto.firstName(), criteriaProto.firstName());
+            map(boProto.firstName(), criteriaProto.firstName());
         }
     }
 
