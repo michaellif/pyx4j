@@ -59,7 +59,7 @@ public class XLSLoad {
 
     private boolean ignoreCellValueErrors;
 
-    public static XLSLoad loadResourceFile(String resourceName, boolean xlsx, CSVReciver reciver) {
+    public static XLSLoad loadResourceFile(String resourceName, boolean xlsx, CSVReceiver reciver) {
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
         if (is == null) {
             throw new RuntimeException("Resource [" + resourceName + "] not found");
@@ -67,7 +67,7 @@ public class XLSLoad {
         return loadFile(is, xlsx, reciver);
     }
 
-    public static XLSLoad loadFile(InputStream is, boolean xlsx, CSVReciver reciver) {
+    public static XLSLoad loadFile(InputStream is, boolean xlsx, CSVReceiver reciver) {
         try {
             XLSLoad l = new XLSLoad(is, xlsx);
             Sheet sheet = l.wb.getSheetAt(0);
@@ -130,7 +130,7 @@ public class XLSLoad {
      * @param reciver
      * @return true is sheet is not empty
      */
-    public boolean loadSheet(int sheetNumber, CSVReciver reciver) {
+    public boolean loadSheet(int sheetNumber, CSVReceiver reciver) {
         Sheet sheet = wb.getSheetAt(sheetNumber);
         return loadSheet(sheet, reciver);
     }
@@ -140,7 +140,7 @@ public class XLSLoad {
      * @param reciver
      * @return true is sheet is not empty
      */
-    public boolean loadSheet(Sheet sheet, CSVReciver reciver) {
+    public boolean loadSheet(Sheet sheet, CSVReceiver reciver) {
         int lineNumber = 0;
         try {
             boolean header = true;

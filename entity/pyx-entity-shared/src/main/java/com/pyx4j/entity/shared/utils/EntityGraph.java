@@ -175,7 +175,7 @@ public class EntityGraph {
         public boolean ignoreRpcTransient = false;
 
         // Detached on one side members will be ignored.
-        public boolean ignoreDetachedMemebers = false;
+        public boolean ignoreDetachedMembers = false;
 
         public EntityGraphEqualOptions() {
 
@@ -286,7 +286,7 @@ public class EntityGraph {
             }
 
             IObject<?> member2 = ent2.getMember(memberName);
-            if ((options.ignoreDetachedMemebers) && ((member1.getAttachLevel() == AttachLevel.Detached) || (member2.getAttachLevel() == AttachLevel.Detached))) {
+            if ((options.ignoreDetachedMembers) && ((member1.getAttachLevel() == AttachLevel.Detached) || (member2.getAttachLevel() == AttachLevel.Detached))) {
                 continue;
             } else if ((member1.getAttachLevel() == AttachLevel.Detached) && (member2.getAttachLevel() == AttachLevel.Detached)) {
                 continue;
