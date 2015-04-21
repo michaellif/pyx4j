@@ -20,24 +20,29 @@
 package com.pyx4j.entity.server;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.lister.IQueryCriteria;
 import com.pyx4j.entity.core.criterion.lister.QueryCriteriaBinder;
 
-public abstract class AbstractQueryCriteriaBinder<BO extends IEntity, C extends IQueryCriteria<BO>> implements QueryCriteriaBinder<BO, C> {
+public class AbstractQueryCriteriaBinder<E extends IEntity, C extends IQueryCriteria<E>> implements QueryCriteriaBinder<E, C> {
 
-    protected Class<BO> boClass;
+    protected Class<E> boClass;
 
     protected Class<C> criteriaClass;
 
-    protected final BO boProto;
+    protected final E boProto;
 
     protected final C criteriaProto;
 
-    protected AbstractQueryCriteriaBinder(Class<BO> boClass, Class<C> criteriaClass) {
+    private final Map<Path, Path> pathBinding = new HashMap<>();
+
+    protected AbstractQueryCriteriaBinder(Class<E> boClass, Class<C> criteriaClass) {
         this.boClass = boClass;
         this.criteriaClass = criteriaClass;
 
@@ -45,7 +50,13 @@ public abstract class AbstractQueryCriteriaBinder<BO extends IEntity, C extends 
         criteriaProto = EntityFactory.getEntityPrototype(criteriaClass);
     }
 
-    protected final <TYPE extends Serializable, TCO extends IEntity> void bind(IPrimitive<TYPE> boMember, TCO criteriaMember) {
-        //TODO
+    protected final <TYPE extends Serializable, TCO extends IEntity> void map(IPrimitive<TYPE> boMember, TCO criteriaMember) {
+        pathBinding.put(criteriaMember.getPath(), boMember.getPath());
+    }
+
+    @Override
+    public Path toEntityPath(Path criteriaPath) {
+        assert criteriaPath.getRootEntityClass() == criteriaClass;
+        return pathBinding.get(criteriaPath);
     }
 }

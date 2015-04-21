@@ -20,6 +20,7 @@
 package com.pyx4j.entity.core.criterion.lister;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
@@ -32,19 +33,20 @@ import com.pyx4j.entity.core.IPrimitive;
 
 /**
  * TODO
- * 
+ *
  * DateRange,
- * 
+ *
  * IntegerRange,
- * 
+ *
  * DecimalRange,
- * 
+ *
  * Enum,
- * 
+ *
  * Entity
- * 
+ *
  */
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
+@AbstractEntity
 public interface ICriterion extends IEntity {
 
     @Owner
