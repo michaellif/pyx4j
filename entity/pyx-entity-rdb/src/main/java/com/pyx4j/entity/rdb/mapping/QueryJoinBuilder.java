@@ -108,8 +108,8 @@ class QueryJoinBuilder {
         this.versionedCriteria = versionedCriteria;
     }
 
-    QueryMember buildQueryMember(String propertyPath, boolean leftJoin, boolean usedInSort) {
-        JoinDef join = buildJoin(null, operationsMeta, mainTableSqlAlias, propertyPath, leftJoin, usedInSort, false);
+    QueryMember buildQueryMember(Path propertyPath, boolean leftJoin, boolean usedInSort) {
+        JoinDef join = buildJoin(null, operationsMeta, mainTableSqlAlias, propertyPath.toString(), leftJoin, usedInSort, false);
         if (join != null) {
             return new QueryMember(join.alias, join.memberOper);
         } else {

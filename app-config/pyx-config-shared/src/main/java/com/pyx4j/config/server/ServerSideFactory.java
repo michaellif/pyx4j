@@ -43,10 +43,17 @@ public class ServerSideFactory {
     @SuppressWarnings("unchecked")
     public static <T> T create(Class<T> interfaceCalss) {
         if (registeredImplementations != null) {
-            Class<T> klass = (Class<T>) registeredImplementations.get(interfaceCalss);
+            Class<?> klass = registeredImplementations.get(interfaceCalss);
             if (klass != null) {
                 try {
-                    return klass.newInstance();
+                    if (interfaceCalss.isAssignableFrom(klass)) {
+                        return ((Class<T>) klass).newInstance();
+                    } else if (FacadeFactory.class.isAssignableFrom(klass)) {
+                        FacadeFactory<T> factory = ((Class<FacadeFactory<T>>) klass).newInstance();
+                        return factory.getFacade();
+                    } else {
+                        throw new Error("Invalid registration");
+                    }
                 } catch (Throwable e) {
                     throw new RuntimeException("Can't create " + klass.getName(), e);
                 }
@@ -190,6 +197,16 @@ public class ServerSideFactory {
             registeredImplementations = new HashMap<Class<?>, Class<?>>();
         }
         registeredImplementations.put(interfaceCalss, implCalss);
+    }
+
+    /**
+     * Should be used only during unit tests
+     */
+    public static <T> void registerFactory(Class<T> interfaceCalss, Class<? extends FacadeFactory<T>> factoryImplCalss) {
+        if (registeredImplementations == null) {
+            registeredImplementations = new HashMap<Class<?>, Class<?>>();
+        }
+        registeredImplementations.put(interfaceCalss, factoryImplCalss);
     }
 
     public static <T> void unregister(Class<T> interfaceCalss) {
