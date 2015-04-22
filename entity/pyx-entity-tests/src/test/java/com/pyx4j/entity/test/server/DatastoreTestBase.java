@@ -94,6 +94,12 @@ public abstract class DatastoreTestBase extends TestCase {
         return persistenceEnvironment.getBackendType();
     }
 
+    public static void requireJavaAssertEnabled() {
+        if (!InitializerTestBase.isJavaAssertEnabled()) {
+            throw new Error("This test is expected to run with assertion on; add -ea to java start arguments");
+        }
+    }
+
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();

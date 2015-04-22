@@ -33,7 +33,7 @@ public abstract class InitializerTestBase extends TestCase {
         ConfigureTestsEnv.configure();
     }
 
-    boolean isJavaAssertEnabled() {
+    public static boolean isJavaAssertEnabled() {
         try {
             int i = 2;
             assert i == 3;
