@@ -31,8 +31,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import javassist.CannotCompileException;
@@ -84,6 +86,8 @@ public class EntityImplGenerator {
         javaVersion.put("6", new int[] { 50, 0 });
         javaVersion.put("1.7", new int[] { 51, 0 });
         javaVersion.put("7", new int[] { 51, 0 });
+        javaVersion.put("1.8", new int[] { 52, 0 });
+        javaVersion.put("8", new int[] { 52, 0 });
     }
 
     private static EntityImplGenerator instance;
@@ -366,7 +370,7 @@ public class EntityImplGenerator {
             implClass.setSuperclass(pool.get(SharedEntityHandler.class.getName()));
             implClass.addInterface(interfaceCtClass);
             // Constructors
-            // N.B. transient fields are not initialized during deserialization 
+            // N.B. transient fields are not initialized during deserialization
             CtConstructor defaultConstructor = new CtConstructor(null, implClass);
             defaultConstructor.setBody("super(" + interfaceName + ".class, null, null);");
             implClass.addConstructor(defaultConstructor);
@@ -394,7 +398,8 @@ public class EntityImplGenerator {
 
             List<CtMethod> allMethodsSortedByDeclaration = getAllMethodsSortedByDeclaration(interfaceCtClass);
 
-            StringBuilder membersNamesStringArray = new StringBuilder();
+            Set<String> memberNames = new HashSet<>();
+            StringBuilder memberNamesStringArray = new StringBuilder();
             // Members access, Use CtClass to get the list of Methods ordered by declaration order.
             for (CtMethod method : allMethodsSortedByDeclaration) {
                 CtClass type = method.getReturnType();
@@ -411,17 +416,21 @@ public class EntityImplGenerator {
                 member.setBody("return (" + type.getName() + ")getMember(\"" + method.getName() + "\");");
                 implClass.addMethod(member);
                 addAnnotation(member, Override.class);
-                if (membersNamesStringArray.length() > 0) {
-                    membersNamesStringArray.append(", ");
+
+                if (!memberNames.contains(method.getName())) { // Allow for Overloaded members
+                    memberNames.add(method.getName());
+                    if (memberNamesStringArray.length() > 0) {
+                        memberNamesStringArray.append(", ");
+                    }
+                    memberNamesStringArray.append("\"").append(method.getName()).append("\"");
                 }
-                membersNamesStringArray.append("\"").append(method.getName()).append("\"");
             }
 
             CtMethod getMembersMethod = new CtMethod(pool.get(String[].class.getName()), "getMembers", null, implClass);
-            if (membersNamesStringArray.length() == 0) {
+            if (memberNamesStringArray.length() == 0) {
                 getMembersMethod.setBody("{ return new String[0]; }");
             } else {
-                getMembersMethod.setBody("{ return new String[] {" + membersNamesStringArray + "}; }");
+                getMembersMethod.setBody("{ return new String[] {" + memberNamesStringArray + "}; }");
             }
             implClass.addMethod(getMembersMethod);
 
@@ -453,8 +462,12 @@ public class EntityImplGenerator {
         }
     }
 
+    private String sinature(CtMethod method) {
+        return method.getSignature() + method.getName();
+    }
+
     List<CtMethod> getAllMethodsSortedByDeclaration(CtClass interfaceCtClass) throws NotFoundException {
-        List<String> allMethodsNames = new Vector<String>();
+        List<String> allMethodsSignature = new Vector<String>();
         List<CtMethod> allMethodsSortedByDeclaration = new Vector<CtMethod>();
         for (CtMethod method : interfaceCtClass.getDeclaredMethods()) {
 //            if (method.getDeclaringClass().equals(ctClassObject) || (method.getDeclaringClass().equals(ctClassIEntity))
@@ -462,14 +475,14 @@ public class EntityImplGenerator {
 //                continue;
 //            }
             allMethodsSortedByDeclaration.add(method);
-            allMethodsNames.add(method.getName());
+            allMethodsSignature.add(sinature(method));
         }
         List<CtMethod> allSuperMethods = new ArrayList<CtMethod>();
         for (CtClass itf : getInterfacesSortedByDeclaration(interfaceCtClass)) {
             for (CtMethod method : itf.getDeclaredMethods()) {
-                if ((!allMethodsNames.contains(method.getName()))) {
+                if ((!allMethodsSignature.contains(sinature(method)))) {
                     allSuperMethods.add(method);
-                    allMethodsNames.add(method.getName());
+                    allMethodsSignature.add(sinature(method));
                 }
             }
         }
