@@ -455,8 +455,12 @@ public class EntityImplGenerator {
         }
     }
 
+    private String sinature(CtMethod method) {
+        return method.getSignature() + method.getName();
+    }
+
     List<CtMethod> getAllMethodsSortedByDeclaration(CtClass interfaceCtClass) throws NotFoundException {
-        List<String> allMethodsNames = new Vector<String>();
+        List<String> allMethodsSignature = new Vector<String>();
         List<CtMethod> allMethodsSortedByDeclaration = new Vector<CtMethod>();
         for (CtMethod method : interfaceCtClass.getDeclaredMethods()) {
 //            if (method.getDeclaringClass().equals(ctClassObject) || (method.getDeclaringClass().equals(ctClassIEntity))
@@ -464,14 +468,14 @@ public class EntityImplGenerator {
 //                continue;
 //            }
             allMethodsSortedByDeclaration.add(method);
-            allMethodsNames.add(method.getName());
+            allMethodsSignature.add(sinature(method));
         }
         List<CtMethod> allSuperMethods = new ArrayList<CtMethod>();
         for (CtClass itf : getInterfacesSortedByDeclaration(interfaceCtClass)) {
             for (CtMethod method : itf.getDeclaredMethods()) {
-                if ((!allMethodsNames.contains(method.getName()))) {
+                if ((!allMethodsSignature.contains(sinature(method)))) {
                     allSuperMethods.add(method);
-                    allMethodsNames.add(method.getName());
+                    allMethodsSignature.add(sinature(method));
                 }
             }
         }
