@@ -24,9 +24,11 @@ import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.shared.ApplicationBackend;
+import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Lifecycle;
+import com.pyx4j.server.contexts.ServerContext;
 
 public class DeferredProcessRegistry {
 
@@ -41,23 +43,26 @@ public class DeferredProcessRegistry {
         if (ServerContext.getSession() == null) {
             Lifecycle.beginAnonymousSession();
         }
-        HashMap<String, DeferredProcessInfo> m = (HashMap<String, DeferredProcessInfo>) ServerContext.getSession().getAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE);
+        HashMap<String, DeferredProcessInfo> m = (HashMap<String, DeferredProcessInfo>) ServerContext.getSession().getAttribute(
+                DEFERRED_PROCESS_SESSION_ATTRIBUTE);
         if (m == null) {
-            m = new HashMap<String, DeferredProcessInfo>();
+            m = new HashMap<>();
             ServerContext.getSession().setAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE, m);
         }
         return m;
     }
 
     /**
-     * This is required on GAE?
+     * This is required on GAE. Otherwise the session is not stored.
      */
-    public static void saveMap() {
-        ServerContext.getSession().setAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE, getMap());
+    public static synchronized void saveMap() {
+        if (ApplicationBackend.getBackendType() == ApplicationBackendType.GAE) {
+            ServerContext.getSession().setAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE, getMap());
+        }
     }
 
     /**
-     * 
+     *
      * @return DeferredCorrelationId to be used by client to query for status
      */
     public static synchronized String register(IDeferredProcess process) {
@@ -65,14 +70,14 @@ public class DeferredProcessRegistry {
         String deferredCorrelationId = String.valueOf(System.currentTimeMillis());
         map.put(deferredCorrelationId, new DeferredProcessInfo(process));
         saveMap();
-        log.debug("process created {}", deferredCorrelationId);
+        log.debug("process {} created in session {}", deferredCorrelationId, ServerContext.getSessionId());
         return deferredCorrelationId;
     }
 
     /**
      * Implementation dependent fork. For now just creates a new Thread.
      * In future we may move this execution to another server.
-     * 
+     *
      * @return DeferredCorrelationId to be used by client to query for status
      */
     public static synchronized String fork(IDeferredProcess process, String threadPoolName) {
@@ -95,7 +100,12 @@ public class DeferredProcessRegistry {
     }
 
     public static synchronized IDeferredProcess get(String deferredCorrelationId) {
-        return getMap().get(deferredCorrelationId).process;
+        DeferredProcessInfo info = getMap().get(deferredCorrelationId);
+        if (info == null) {
+            return null;
+        } else {
+            return info.process;
+        }
     }
 
     public static synchronized DeferredProcessProgressResponse getStatus(String deferredCorrelationId) {
@@ -113,6 +123,7 @@ public class DeferredProcessRegistry {
 
     public static synchronized void remove(String deferredCorrelationId) {
         getMap().remove(deferredCorrelationId);
+        log.debug("process {} remove from session {}", deferredCorrelationId, ServerContext.getSessionId());
         saveMap();
     }
 }

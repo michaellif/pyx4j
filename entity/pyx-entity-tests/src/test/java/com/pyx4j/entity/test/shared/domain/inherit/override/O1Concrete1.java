@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,18 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-06-12
+ * Created on Apr 21, 2015
  * @author vlads
  */
-package com.pyx4j.config.server;
+package com.pyx4j.entity.test.shared.domain.inherit.override;
 
-import javax.servlet.http.HttpServletRequest;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-public class EmptyNamespaceDataResolver implements NamespaceResolver {
+@DiscriminatorValue("o1c1")
+public interface O1Concrete1 extends O1Base {
 
     @Override
-    public NamespaceData getNamespaceData(HttpServletRequest httpRequest) {
-        return new NamespaceData("-");
-    }
+    O2Concrete1 o2Base();
 
 }
