@@ -24,7 +24,7 @@ import com.pyx4j.entity.test.shared.domain.inherit.override.O1Base;
 import com.pyx4j.entity.test.shared.domain.inherit.override.O1Concrete1;
 import com.pyx4j.entity.test.shared.domain.inherit.override.O2Concrete1;
 
-public class EntityMemeberOverrideTest extends InitializerTestBase {
+public class EntityMemberOverrideTest extends InitializerTestBase {
 
     public void testOveloadedMemeberAccess() {
 
