@@ -31,8 +31,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import javassist.CannotCompileException;
@@ -396,7 +398,8 @@ public class EntityImplGenerator {
 
             List<CtMethod> allMethodsSortedByDeclaration = getAllMethodsSortedByDeclaration(interfaceCtClass);
 
-            StringBuilder membersNamesStringArray = new StringBuilder();
+            Set<String> memberNames = new HashSet<>();
+            StringBuilder memberNamesStringArray = new StringBuilder();
             // Members access, Use CtClass to get the list of Methods ordered by declaration order.
             for (CtMethod method : allMethodsSortedByDeclaration) {
                 CtClass type = method.getReturnType();
@@ -413,17 +416,21 @@ public class EntityImplGenerator {
                 member.setBody("return (" + type.getName() + ")getMember(\"" + method.getName() + "\");");
                 implClass.addMethod(member);
                 addAnnotation(member, Override.class);
-                if (membersNamesStringArray.length() > 0) {
-                    membersNamesStringArray.append(", ");
+
+                if (!memberNames.contains(method.getName())) { // Allow for Overloaded members
+                    memberNames.add(method.getName());
+                    if (memberNamesStringArray.length() > 0) {
+                        memberNamesStringArray.append(", ");
+                    }
+                    memberNamesStringArray.append("\"").append(method.getName()).append("\"");
                 }
-                membersNamesStringArray.append("\"").append(method.getName()).append("\"");
             }
 
             CtMethod getMembersMethod = new CtMethod(pool.get(String[].class.getName()), "getMembers", null, implClass);
-            if (membersNamesStringArray.length() == 0) {
+            if (memberNamesStringArray.length() == 0) {
                 getMembersMethod.setBody("{ return new String[0]; }");
             } else {
-                getMembersMethod.setBody("{ return new String[] {" + membersNamesStringArray + "}; }");
+                getMembersMethod.setBody("{ return new String[] {" + memberNamesStringArray + "}; }");
             }
             implClass.addMethod(getMembersMethod);
 

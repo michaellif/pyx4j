@@ -20,6 +20,7 @@
 package com.pyx4j.entity.test.shared;
 
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.test.shared.domain.inherit.override.O1Base;
 import com.pyx4j.entity.test.shared.domain.inherit.override.O1Concrete1;
 import com.pyx4j.entity.test.shared.domain.inherit.override.O2Concrete1;
@@ -30,14 +31,28 @@ public class EntityMemberOverrideTest extends InitializerTestBase {
 
         {
             O1Concrete1 o1c1 = EntityFactory.create(O1Concrete1.class);
+            // Just test that we can access it.
             o1c1.o2Base().set(EntityFactory.create(O2Concrete1.class));
         }
 
         {
             O1Base o1c1 = EntityFactory.create(O1Concrete1.class);
+            // Just test that we can access it.
             o1c1.o2Base().set(EntityFactory.create(O2Concrete1.class));
         }
 
+    }
+
+    public void testOveloadedMemeberMeta() {
+        {
+            EntityMeta meta = EntityFactory.getEntityMeta(O1Base.class);
+            assertEquals("members", 3, meta.getMemberNames().size());
+        }
+
+        {
+            EntityMeta meta = EntityFactory.getEntityMeta(O1Concrete1.class);
+            assertEquals("no new members added", 3, meta.getMemberNames().size());
+        }
     }
 
 }
