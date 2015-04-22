@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,18 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-06-12
+ * Created on Apr 21, 2015
  * @author vlads
  */
-package com.pyx4j.config.server;
+package com.pyx4j.entity.test.shared.domain.inherit.override;
 
-import javax.servlet.http.HttpServletRequest;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
-public class EmptyNamespaceDataResolver implements NamespaceResolver {
+@AbstractEntity
+@Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
+@Table(prefix = "test")
+public interface O1Base extends IEntity {
 
-    @Override
-    public NamespaceData getNamespaceData(HttpServletRequest httpRequest) {
-        return new NamespaceData("-");
-    }
+    IPrimitive<String> testId();
 
+    IPrimitive<String> nameO1();
+
+    O2Base o2Base();
 }

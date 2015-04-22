@@ -306,6 +306,7 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
     }
 
     public void testDetachedCompletelySave(TestCaseMethod testCaseMethod) {
+        requireJavaAssertEnabled();
         String testId = uniqueString();
         DetachedCompletely o = EntityFactory.create(DetachedCompletely.class);
         o.testId().setValue(testId);

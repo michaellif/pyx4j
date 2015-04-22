@@ -61,7 +61,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
-public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
+public class EntityCSVReciver<E extends IEntity> implements CSVReceiver {
 
     private final static Logger log = LoggerFactory.getLogger(EntityCSVReciver.class);
 
