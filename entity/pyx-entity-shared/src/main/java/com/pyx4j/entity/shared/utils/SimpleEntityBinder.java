@@ -201,6 +201,8 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
     public void copyBOtoTO(BO bo, TO to) {
         init();
         to.setAttachLevel(AttachLevel.Attached);
+        bo = bo.cast();
+        to = to.cast();
         for (Binding b : binding) {
             IObject dtoM = to.getMember(b.toMemberPath);
             IObject dboM = bo.getMember(b.boMemberPath);
@@ -268,6 +270,8 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void copyTOtoBO(TO to, BO bo) {
         init();
+        bo = bo.cast();
+        to = to.cast();
         for (Binding b : binding) {
             IObject dtoM = to.getMember(b.toMemberPath);
             IObject dboM = bo.getMember(b.boMemberPath);
