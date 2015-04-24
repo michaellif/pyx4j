@@ -26,16 +26,24 @@ import org.junit.Assert;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.shared.utils.PolymorphicEntityBinder;
 import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntity;
 import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntityDTO;
+import com.pyx4j.entity.test.shared.domain.inherit.binder.B1sub1;
+import com.pyx4j.entity.test.shared.domain.inherit.binder.B1sub1TO;
+import com.pyx4j.entity.test.shared.domain.inherit.binder.B1sub2;
+import com.pyx4j.entity.test.shared.domain.inherit.binder.B1sub2TO;
+import com.pyx4j.entity.test.shared.domain.inherit.binder.B1super;
+import com.pyx4j.entity.test.shared.domain.inherit.binder.B1superHolder;
+import com.pyx4j.entity.test.shared.domain.inherit.binder.B1superTO;
 
 public class EntityDtoBinderTest extends InitializerTestBase {
 
-    private class EmployeeSimpleEntityBinder extends SimpleEntityBinder<Employee, Employee> {
+    private static class EmployeeSimpleEntityBinder extends SimpleEntityBinder<Employee, Employee> {
 
         protected EmployeeSimpleEntityBinder() {
             super(Employee.class, Employee.class);
@@ -134,7 +142,7 @@ public class EntityDtoBinderTest extends InitializerTestBase {
         Assert.assertEquals("address.streetName Value", emp1.workAddress().streetName().getValue(), emp2.workAddress().streetName().getValue());
     }
 
-    private class PolymorphicEntityDtoBinder extends SimpleEntityBinder<ReferenceEntityDTO, ReferenceEntity> {
+    private static class PolymorphicEntityDtoBinder extends SimpleEntityBinder<ReferenceEntityDTO, ReferenceEntity> {
 
         protected PolymorphicEntityDtoBinder() {
             super(ReferenceEntityDTO.class, ReferenceEntity.class);
@@ -174,5 +182,99 @@ public class EntityDtoBinderTest extends InitializerTestBase {
         ReferenceEntityDTO ent2 = new PolymorphicEntityDtoBinder().createBO(ent1);
 
         Assert.assertEquals("Proper instance", Concrete2Entity.class, ent2.reference().getInstanceValueClass());
+    }
+
+    private static class PluralPolymorphicBinder extends PolymorphicEntityBinder<B1super, B1superTO> {
+
+        protected PluralPolymorphicBinder() {
+            super(B1super.class, B1superTO.class);
+        }
+
+        @Override
+        protected void bind() {
+            //bind(toProto.nameB1to(), boProto.nameB1());
+            bind(B1sub1TO.class, B1sub1.class, new SimpleEntityBinder<B1sub1, B1sub1TO>(B1sub1.class, B1sub1TO.class) {
+
+                @Override
+                protected void bind() {
+                    bindCompleteObject();
+                }
+            });
+
+            bind(B1sub2TO.class, B1sub2.class, new SimpleEntityBinder<B1sub2, B1sub2TO>(B1sub2.class, B1sub2TO.class) {
+
+                @Override
+                protected void bind() {
+                    bindCompleteObject();
+                }
+
+                @Override
+                public B1sub2TO createTO(B1sub2 bo) {
+                    return super.createTO(bo);
+                }
+
+                @Override
+                public void copyBOtoTO(B1sub2 bo, B1sub2TO to) {
+                    super.copyBOtoTO(bo, to);
+                    to.nameB1sub2to().setValue("_to_" + bo.nameB1sub2().getValue());
+                }
+
+            });
+        }
+
+    }
+
+    public void testPluralPolymorphicBinding() {
+        {
+            B1sub1 ent1 = EntityFactory.create(B1sub1.class);
+            ent1.nameB1sub1().setValue(String.valueOf(System.currentTimeMillis()));
+
+            B1superTO ent1to = new PluralPolymorphicBinder().createTO(ent1);
+
+            Assert.assertEquals("Proper instance", B1sub1TO.class, ent1to.getInstanceValueClass());
+
+            Assert.assertEquals("value", ent1.nameB1sub1().getValue(), ent1to.<B1sub1TO> cast().nameB1sub1().getValue());
+        }
+
+        // Test InstanceValueClass, binding of Polymorphic member
+        {
+            B1superHolder holder = EntityFactory.create(B1superHolder.class);
+            B1sub1 ent1 = EntityFactory.create(B1sub1.class);
+            ent1.nameB1sub1().setValue(String.valueOf(System.currentTimeMillis()));
+            holder.item().set(ent1);
+
+            B1superTO ent1to = new PluralPolymorphicBinder().createTO(holder.item());
+
+            Assert.assertEquals("Proper instance", B1sub1TO.class, ent1to.getInstanceValueClass());
+
+            Assert.assertEquals("value", ent1.nameB1sub1().getValue(), ent1to.<B1sub1TO> cast().nameB1sub1().getValue());
+        }
+
+        // Test overloaded copy and create
+        {
+            B1sub2 ent1 = EntityFactory.create(B1sub2.class);
+            ent1.nameB1sub2().setValue(String.valueOf(System.currentTimeMillis()));
+
+            B1superTO ent1to = new PluralPolymorphicBinder().createTO(ent1);
+
+            Assert.assertEquals("Proper instance", B1sub2TO.class, ent1to.getInstanceValueClass());
+
+            Assert.assertEquals("value", ent1.nameB1sub2().getValue(), ent1to.<B1sub2TO> cast().nameB1sub2().getValue());
+            Assert.assertEquals("value", "_to_" + ent1.nameB1sub2().getValue(), ent1to.<B1sub2TO> cast().nameB1sub2to().getValue());
+        }
+
+        B1superHolder holder = EntityFactory.create(B1superHolder.class);
+        {
+            B1sub2 ent1 = EntityFactory.create(B1sub2.class);
+            ent1.nameB1sub2().setValue(String.valueOf(System.currentTimeMillis()));
+            holder.item().set(ent1);
+
+            B1superTO ent1to = new PluralPolymorphicBinder().createTO(holder.item());
+
+            Assert.assertEquals("Proper instance", B1sub2TO.class, ent1to.getInstanceValueClass());
+
+            Assert.assertEquals("value", ent1.nameB1sub2().getValue(), ent1to.<B1sub2TO> cast().nameB1sub2().getValue());
+            Assert.assertEquals("value", "_to_" + ent1.nameB1sub2().getValue(), ent1to.<B1sub2TO> cast().nameB1sub2to().getValue());
+        }
     }
 }
