@@ -87,7 +87,7 @@ public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEn
     public TO createTO(BO bo) {
         EntityBinder<BO, TO> subBinder = getBinderByBO(bo);
         assert subBinder != null : "Binder no found for " + bo.getDebugExceptionInfoString();
-        return subBinder.createTO(bo);
+        return subBinder.createTO(bo.<BO> cast());
     }
 
     @Override
@@ -101,7 +101,7 @@ public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEn
     public BO createBO(TO to) {
         EntityBinder<BO, TO> subBinder = getBinderByTO(to);
         assert subBinder != null : "Binder no found for " + to.getDebugExceptionInfoString();
-        return subBinder.createBO(to);
+        return subBinder.createBO(to.<TO> cast());
     }
 
     @Override
