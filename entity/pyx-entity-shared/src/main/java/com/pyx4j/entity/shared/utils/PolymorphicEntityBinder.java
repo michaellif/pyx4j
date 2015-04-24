@@ -86,28 +86,28 @@ public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEn
     @Override
     public TO createTO(BO bo) {
         EntityBinder<BO, TO> subBinder = getBinderByBO(bo);
-        assert subBinder != null : "Binder no found for " + bo.getDebugExceptionInfoString();
+        assert subBinder != null : "Binder not found for " + bo.getDebugExceptionInfoString();
         return subBinder.createTO(bo.<BO> cast());
     }
 
     @Override
     public void copyBOtoTO(BO bo, TO to) {
         EntityBinder<BO, TO> subBinder = getBinderByBO(bo);
-        assert subBinder != null : "Binder no found for " + bo.getDebugExceptionInfoString();
+        assert subBinder != null : "Binder not found for " + bo.getDebugExceptionInfoString();
         subBinder.copyBOtoTO(bo, to);
     }
 
     @Override
     public BO createBO(TO to) {
         EntityBinder<BO, TO> subBinder = getBinderByTO(to);
-        assert subBinder != null : "Binder no found for " + to.getDebugExceptionInfoString();
+        assert subBinder != null : "Binder not found for " + to.getDebugExceptionInfoString();
         return subBinder.createBO(to.<TO> cast());
     }
 
     @Override
     public void copyTOtoBO(TO to, BO bo) {
         EntityBinder<BO, TO> subBinder = getBinderByTO(to);
-        assert subBinder != null : "Binder no found for " + to.getDebugExceptionInfoString();
+        assert subBinder != null : "Binder not found for " + to.getDebugExceptionInfoString();
         subBinder.copyTOtoBO(to, bo);
     }
 
