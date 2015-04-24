@@ -207,6 +207,18 @@ public class EntityDtoBinderTest extends InitializerTestBase {
                 protected void bind() {
                     bindCompleteObject();
                 }
+
+                @Override
+                public B1sub2TO createTO(B1sub2 bo) {
+                    return super.createTO(bo);
+                }
+
+                @Override
+                public void copyBOtoTO(B1sub2 bo, B1sub2TO to) {
+                    super.copyBOtoTO(bo, to);
+                    to.nameB1sub2to().setValue("_to_" + bo.nameB1sub2().getValue());
+                }
+
             });
         }
 
@@ -238,5 +250,31 @@ public class EntityDtoBinderTest extends InitializerTestBase {
             Assert.assertEquals("value", ent1.nameB1sub1().getValue(), ent1to.<B1sub1TO> cast().nameB1sub1().getValue());
         }
 
+        // Test overloaded copy and create
+        {
+            B1sub2 ent1 = EntityFactory.create(B1sub2.class);
+            ent1.nameB1sub2().setValue(String.valueOf(System.currentTimeMillis()));
+
+            B1superTO ent1to = new PluralPolymorphicBinder().createTO(ent1);
+
+            Assert.assertEquals("Proper instance", B1sub2TO.class, ent1to.getInstanceValueClass());
+
+            Assert.assertEquals("value", ent1.nameB1sub2().getValue(), ent1to.<B1sub2TO> cast().nameB1sub2().getValue());
+            Assert.assertEquals("value", "_to_" + ent1.nameB1sub2().getValue(), ent1to.<B1sub2TO> cast().nameB1sub2to().getValue());
+        }
+
+        B1superHolder holder = EntityFactory.create(B1superHolder.class);
+        {
+            B1sub2 ent1 = EntityFactory.create(B1sub2.class);
+            ent1.nameB1sub2().setValue(String.valueOf(System.currentTimeMillis()));
+            holder.item().set(ent1);
+
+            B1superTO ent1to = new PluralPolymorphicBinder().createTO(holder.item());
+
+            Assert.assertEquals("Proper instance", B1sub2TO.class, ent1to.getInstanceValueClass());
+
+            Assert.assertEquals("value", ent1.nameB1sub2().getValue(), ent1to.<B1sub2TO> cast().nameB1sub2().getValue());
+            Assert.assertEquals("value", "_to_" + ent1.nameB1sub2().getValue(), ent1to.<B1sub2TO> cast().nameB1sub2to().getValue());
+        }
     }
 }
