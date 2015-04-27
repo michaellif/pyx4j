@@ -119,6 +119,10 @@ public class ServerSideConfiguration {
         return this;
     }
 
+    public void configurationInstanceSelected(ServletContext servletContext) {
+
+    }
+
     public boolean isDevelopmentBehavior() {
         return true;
     }
