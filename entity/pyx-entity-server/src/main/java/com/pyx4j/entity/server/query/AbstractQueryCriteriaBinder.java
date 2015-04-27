@@ -17,7 +17,7 @@
  * Created on Apr 13, 2015
  * @author vlads
  */
-package com.pyx4j.entity.server;
+package com.pyx4j.entity.server.query;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -27,8 +27,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.Path;
-import com.pyx4j.entity.core.criterion.lister.IQueryCriteria;
-import com.pyx4j.entity.core.criterion.lister.QueryCriteriaBinder;
+import com.pyx4j.entity.core.query.IQueryCriteria;
+import com.pyx4j.entity.core.query.QueryCriteriaBinder;
 
 public class AbstractQueryCriteriaBinder<E extends IEntity, C extends IQueryCriteria<E>> implements QueryCriteriaBinder<E, C> {
 

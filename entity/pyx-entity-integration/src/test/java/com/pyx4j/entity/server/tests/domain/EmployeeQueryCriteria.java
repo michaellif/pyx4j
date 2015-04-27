@@ -19,8 +19,8 @@
  */
 package com.pyx4j.entity.server.tests.domain;
 
-import com.pyx4j.entity.core.criterion.lister.IQueryCriteria;
-import com.pyx4j.entity.core.criterion.lister.IStringCriterion;
+import com.pyx4j.entity.core.query.IQueryCriteria;
+import com.pyx4j.entity.core.query.IStringCriterion;
 import com.pyx4j.entity.test.shared.domain.Employee;
 
 public interface EmployeeQueryCriteria extends IQueryCriteria<Employee> {

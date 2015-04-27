@@ -22,11 +22,11 @@ package com.pyx4j.entity.server.query;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.lister.ICriterion;
-import com.pyx4j.entity.core.criterion.lister.IQueryCriteria;
-import com.pyx4j.entity.core.criterion.lister.QueryCriteriaBinder;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.entity.core.query.ICriterion;
+import com.pyx4j.entity.core.query.IQueryCriteria;
+import com.pyx4j.entity.core.query.QueryCriteriaBinder;
 
 public class PersistableQueryManager {
 
