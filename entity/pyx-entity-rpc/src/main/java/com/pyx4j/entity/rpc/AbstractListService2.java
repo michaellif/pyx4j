@@ -22,7 +22,7 @@ package com.pyx4j.entity.rpc;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.criterion.lister.IQueryCriteria;
+import com.pyx4j.entity.core.query.IQueryCriteria;
 import com.pyx4j.rpc.shared.IService;
 
 public interface AbstractListService2<E extends IEntity> extends IService {

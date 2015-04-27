@@ -19,10 +19,16 @@
  */
 package com.pyx4j.entity.server.query;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.criterion.lister.IQueryCriteria;
-import com.pyx4j.entity.core.criterion.lister.QueryCriteriaBinder;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.core.query.IQueryCriteria;
+import com.pyx4j.entity.core.query.QueryCriteriaBinder;
 
 public class QueryCriteriaBinderBuilder<E extends IEntity, C extends IQueryCriteria<E>> {
 
@@ -32,17 +38,30 @@ public class QueryCriteriaBinderBuilder<E extends IEntity, C extends IQueryCrite
 
     protected final E proto;
 
+    private final Map<Path, Path> pathBinding = new HashMap<>();
+
+    @SuppressWarnings("unchecked")
     public QueryCriteriaBinderBuilder(Class<C> criteriaClass) {
         this.criteriaClass = criteriaClass;
         criteriaProto = EntityFactory.getEntityPrototype(criteriaClass);
-        proto = criteriaProto.proto();
+        proto = EntityFactory.getEntityPrototype((Class<E>) criteriaProto.proto().getValueClass());
     }
 
-    public static <E extends IEntity, C extends IQueryCriteria<E>> QueryCriteriaBinderBuilder<E, C> create(Class<E> boClass, Class<C> criteriaClass) {
-        return null;
+    public final C criteriaProto() {
+        return criteriaProto;
+    }
+
+    public final E proto() {
+        return proto;
+    }
+
+    public final <TYPE extends Serializable, TCO extends IEntity> void map(IPrimitive<TYPE> boMember, TCO criteriaMember) {
+        assert criteriaMember.getPath().getRootEntityClass() == criteriaClass;
+        assert boMember.getPath().getRootEntityClass() == proto().getValueClass() : "BO member expected; got path from " + boMember.getPath();
+        pathBinding.put(criteriaMember.getPath(), boMember.getPath());
     }
 
     public QueryCriteriaBinder<E, C> build() {
-        return null;
+        return new DefaultQueryCriteriaBinder<>(criteriaClass, pathBinding);
     }
 }

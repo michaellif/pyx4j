@@ -22,7 +22,7 @@ package com.pyx4j.entity.server.query;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.lister.ICriterion;
+import com.pyx4j.entity.core.query.ICriterion;
 
 public interface CriterionTranslation<C extends ICriterion> {
 

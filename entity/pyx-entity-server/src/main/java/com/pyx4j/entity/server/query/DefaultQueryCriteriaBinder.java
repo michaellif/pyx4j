@@ -14,24 +14,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 21, 2015
+ * Created on Apr 27, 2015
  * @author vlads
  */
 package com.pyx4j.entity.server.query;
 
+import java.util.Map;
+
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
-import com.pyx4j.entity.core.query.IStringCriterion;
+import com.pyx4j.entity.core.query.IQueryCriteria;
+import com.pyx4j.entity.core.query.QueryCriteriaBinder;
 
-public class CriterionTranslationString implements CriterionTranslation<IStringCriterion> {
+public class DefaultQueryCriteriaBinder<E extends IEntity, C extends IQueryCriteria<E>> implements QueryCriteriaBinder<E, C> {
+
+    private final Map<Path, Path> pathBinding;
+
+    private final Class<C> criteriaClass;
+
+    DefaultQueryCriteriaBinder(Class<C> criteriaClass, Map<Path, Path> pathBinding) {
+        this.criteriaClass = criteriaClass;
+        this.pathBinding = pathBinding;
+    }
 
     @Override
-    public <E extends IEntity> void addCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, IStringCriterion criterion) {
-        if (!criterion.value().isNull()) {
-            query.add(new PropertyCriterion(entityMemeberPath, Restriction.RDB_LIKE, criterion.value().getValue()));
-        }
+    public Path toEntityPath(Path criteriaPath) {
+        assert criteriaPath.getRootEntityClass() == criteriaClass;
+        return pathBinding.get(criteriaPath);
     }
+
 }

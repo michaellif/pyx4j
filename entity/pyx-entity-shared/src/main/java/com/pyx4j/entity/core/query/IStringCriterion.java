@@ -17,13 +17,14 @@
  * Created on Apr 13, 2015
  * @author vlads
  */
-package com.pyx4j.entity.core.criterion.lister;
+package com.pyx4j.entity.core.query;
 
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.core.IPrimitive;
 
-public interface QueryCriteriaStorage extends IEntity {
+@DiscriminatorValue("String")
+public interface IStringCriterion extends ICriterion {
 
-    IList<ICriterion> criterions();
+    IPrimitive<String> value();
 
 }
