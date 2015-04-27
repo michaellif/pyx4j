@@ -24,6 +24,13 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.i18n.annotations.I18n;
 
+/**
+ * Each implementation represents Persistable Query.
+ * Storage in DB is managed by PersistableQueryManager.
+ * Use QueryCriteriaStorage to store pointers to this Query.
+ *
+ * Implementations of this class may have @Transient members
+ */
 @AbstractEntity
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
