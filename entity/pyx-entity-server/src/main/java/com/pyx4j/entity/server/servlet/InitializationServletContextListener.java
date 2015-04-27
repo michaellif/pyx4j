@@ -66,6 +66,8 @@ public class InitializationServletContextListener implements ServletContextListe
                 ServerSideConfiguration.setInstance(new ServerSideConfiguration());
             }
 
+            ServerSideConfiguration.instance().configurationInstanceSelected(servletContext);
+
             Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
             log.debug("ServerInfo {}", servletContext.getServerInfo());
             log.debug("Java Servlet API {} {}", servletContext.getMajorVersion(), servletContext.getMinorVersion());
