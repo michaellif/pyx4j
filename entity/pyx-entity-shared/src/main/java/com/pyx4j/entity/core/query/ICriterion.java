@@ -57,6 +57,11 @@ public interface ICriterion extends IEntity {
     @MemberColumn(notNull = true)
     QueryCriteriaStorage owner();
 
+    /**
+     * The link to AbstractQueryCriteriaColumnStorage.
+     *
+     * TODO PYX-10 cross schema queries and constraints
+     */
     IPrimitive<Key> columnId();
 
 }

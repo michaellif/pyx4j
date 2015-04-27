@@ -26,6 +26,7 @@ import org.junit.Assert;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.query.QueryCriteriaBinder;
+import com.pyx4j.entity.core.query.QueryCriteriaStorage;
 import com.pyx4j.entity.server.query.PersistableQueryManager;
 import com.pyx4j.entity.server.query.QueryCriteriaBinderBuilder;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
@@ -59,12 +60,15 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
         srv.persist(emp2);
     }
 
-    public void testQuery() {
-
+    //TODO need a global factory for this binders
+    private QueryCriteriaBinder<Employee, EmployeeQueryCriteria> binder() {
         QueryCriteriaBinderBuilder<Employee, EmployeeQueryCriteria> b = new QueryCriteriaBinderBuilder<>(EmployeeQueryCriteria.class);
         b.map(b.proto().firstName(), b.criteriaProto().firstName());
+        return b.build();
+    }
 
-        QueryCriteriaBinder<Employee, EmployeeQueryCriteria> binder = b.build();
+    public void testQuery() {
+        QueryCriteriaBinder<Employee, EmployeeQueryCriteria> binder = binder();
 
         // Query
         {
@@ -86,4 +90,30 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
             Assert.assertEquals("right selection ", emp2, emps.get(0));
         }
     }
+
+    public void testQueryPersistence() {
+        QueryCriteriaStorage storeHere = EntityFactory.create(QueryCriteriaStorage.class);
+
+        {
+            EmployeeQueryCriteria query = EntityFactory.create(EmployeeQueryCriteria.class);
+            query.firstName().value().setValue("Bob");
+            PersistableQueryManager.saveCriteria(query, storeHere);
+        }
+
+        // Query
+        {
+            QueryCriteriaStorage storeHereId = storeHere.<QueryCriteriaStorage> createIdentityStub();
+
+            EmployeeQueryCriteria query = PersistableQueryManager.retriveCriteria(EmployeeQueryCriteria.class, storeHereId);
+
+            Assert.assertEquals("stored value", "Bob", query.firstName().value().getValue());
+
+            // Use stored  Query
+            EntityQueryCriteria<Employee> criteria = PersistableQueryManager.convertQueryCriteria(query, binder());
+            List<Employee> emps = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, emps.size());
+            Assert.assertEquals("right selection ", emp1, emps.get(0));
+        }
+    }
+
 }

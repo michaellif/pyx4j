@@ -19,6 +19,8 @@
  */
 package com.pyx4j.entity.server.query;
 
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -27,24 +29,58 @@ import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.core.query.ICriterion;
 import com.pyx4j.entity.core.query.IQueryCriteria;
 import com.pyx4j.entity.core.query.QueryCriteriaBinder;
+import com.pyx4j.entity.core.query.QueryCriteriaStorage;
+import com.pyx4j.entity.server.Persistence;
 
 public class PersistableQueryManager {
 
-    public static <E extends IEntity, C extends IQueryCriteria<E>> EntityQueryCriteria<E> convertQueryCriteria(C criteria, QueryCriteriaBinder<E, C> binder) {
+    public static <E extends IEntity, C extends IQueryCriteria<E>> EntityQueryCriteria<E> convertQueryCriteria(C query, QueryCriteriaBinder<E, C> binder) {
         @SuppressWarnings("unchecked")
-        EntityQueryCriteria<E> query = EntityQueryCriteria.create((Class<E>) criteria.proto().getEntityMeta().getEntityClass());
+        EntityQueryCriteria<E> criteria = EntityQueryCriteria.create((Class<E>) query.proto().getEntityMeta().getEntityClass());
 
-        EntityMeta cm = criteria.getEntityMeta();
+        EntityMeta cm = query.getEntityMeta();
         for (String memberName : cm.getMemberNames()) {
             MemberMeta memberMeta = cm.getMemberMeta(memberName);
             if (memberMeta.isTransient()) {
                 continue;
             }
-            IObject<?> criteriaMember = criteria.getMember(memberName);
+            IObject<?> criteriaMember = query.getMember(memberName);
             if (criteriaMember instanceof ICriterion) {
-                DefaultCriterionTranslation.addCriteria(query, binder.toEntityPath(criteriaMember.getPath()), (ICriterion) criteriaMember);
+                DefaultCriterionTranslation.addCriteria(criteria, binder.toEntityPath(criteriaMember.getPath()), (ICriterion) criteriaMember);
             }
         }
+        return criteria;
+    }
+
+    /**
+     * @param query
+     *            PersistableQuery to save
+     * @param queryCriteriaStorage
+     *            persists and update this object so app can save pointer.
+     */
+    public static <E extends IEntity> void saveCriteria(IQueryCriteria<E> query, QueryCriteriaStorage queryCriteriaStorage) {
+        if (!queryCriteriaStorage.id().isNull()) {
+            Persistence.ensureRetrieve(queryCriteriaStorage, AttachLevel.Attached);
+        }
+        EntityMeta cm = query.getEntityMeta();
+        for (String memberName : cm.getMemberNames()) {
+            MemberMeta memberMeta = cm.getMemberMeta(memberName);
+            if (memberMeta.isTransient()) {
+                continue;
+            }
+            IObject<?> criteriaMember = query.getMember(memberName);
+            if (criteriaMember instanceof ICriterion) {
+                // TODO find existing criterion in a list by columnId
+                queryCriteriaStorage.criterions().add((ICriterion) criteriaMember);
+            }
+        }
+    }
+
+    public static <C extends IQueryCriteria<? extends IEntity>> C retriveCriteria(Class<C> criteriaClass, QueryCriteriaStorage queryCriteriaStorageId) {
+        QueryCriteriaStorage queryCriteriaStorage = Persistence.service().retrieve(QueryCriteriaStorage.class, queryCriteriaStorageId.getPrimaryKey());
+
+        C query = EntityFactory.create(criteriaClass);
+
         return query;
     }
 }
