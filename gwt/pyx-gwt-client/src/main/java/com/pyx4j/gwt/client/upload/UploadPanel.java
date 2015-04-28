@@ -247,11 +247,15 @@ public class UploadPanel<U extends IEntity, B extends AbstractIFileBlob> extends
             if (message.startsWith(UploadService.ResponseOk)) {
                 //Continue monitoring using deferredProgressPanel
             } else {
+                int idxEnd = message.indexOf(UploadService.ResponseSufix);
+                if (idxEnd >= 0) {
+                    message = message.substring(0, idxEnd);
+                }
                 log.error("Upload server message [{}]", message);
                 onUploadError(UploadError.ServerMessage, message);
             }
         } else {
-            log.error("Upload server message [{}]", message);
+            log.error("Upload server message do not have response tag [{}]", message);
             onUploadError(UploadError.ServerMessage, "Error uploading file");
         }
 
