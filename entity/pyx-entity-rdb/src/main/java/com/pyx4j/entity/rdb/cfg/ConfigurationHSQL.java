@@ -22,6 +22,7 @@ package com.pyx4j.entity.rdb.cfg;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 
@@ -140,6 +141,11 @@ public abstract class ConfigurationHSQL implements Configuration {
     @Override
     public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionPoolType connectionType) {
         return new ConnectionPoolConfiguration(connectionType);
+    }
+
+    @Override
+    public void setConnectionProperties(Properties properties, ConnectionPoolType connectionType) {
+
     }
 
     @Override

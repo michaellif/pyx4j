@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rdb.cfg;
 
 import java.util.List;
+import java.util.Properties;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.IPersistenceConfiguration;
@@ -218,6 +219,8 @@ public interface Configuration extends IPersistenceConfiguration {
     public ConnectionPoolProvider connectionPool();
 
     public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionPoolType connectionType);
+
+    public void setConnectionProperties(Properties properties, ConnectionPoolType connectionType);
 
     /**
      *

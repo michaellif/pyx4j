@@ -22,6 +22,7 @@ package com.pyx4j.entity.rdb;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.sql.DataSource;
 
@@ -37,6 +38,7 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolConfiguration;
 import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
+import com.pyx4j.entity.rdb.dialect.Dialect;
 
 public class ConnectionPoolC3P0 implements ConnectionPool {
 
@@ -46,7 +48,7 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
 
     private final Map<ConnectionPoolType, DataSource> dataSources = new HashMap<ConnectionPoolType, DataSource>();
 
-    public ConnectionPoolC3P0(Configuration configuration) throws Exception {
+    public ConnectionPoolC3P0(Configuration configuration, Dialect dialect) throws Exception {
         if (singleInstanceCreated) {
             throw new Error("Only single Instance of  ConnectionPoolC3P0 supported");
         }
@@ -55,7 +57,7 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
         for (ConnectionPoolType connectionType : ConnectionPoolType.poolable()) {
             ConnectionPoolConfiguration cpc = configuration.connectionPoolConfiguration(connectionType);
 
-            ComboPooledDataSource dataSource = createDataSource(configuration);
+            ComboPooledDataSource dataSource = createDataSource(configuration, createConnectionProperties(configuration, connectionType));
             dataSource.setDataSourceName(connectionType.name());
 
             dataSource.setInitialPoolSize(cpc.initialPoolSize());
@@ -70,6 +72,13 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
 
             dataSource.setTestConnectionOnCheckout(cpc.testConnectionOnCheckout());
             dataSource.setTestConnectionOnCheckin(cpc.testConnectionOnCheckin());
+
+            Map<String, Object> extensions = new HashMap<>();
+            extensions.put(ConnectionPoolType.class.getName(), connectionType);
+            extensions.put(Dialect.class.getName(), dialect);
+            dataSource.setExtensions(extensions);
+
+            dataSource.setConnectionCustomizerClassName(ConnectionCustomizer.class.getName());
 
             log.debug("{} Pool size is {} min and {} max", connectionType, dataSource.getMinPoolSize(), dataSource.getMaxPoolSize());
             dataSource.setIdentityToken(C3P0ImplUtils.allocateIdentityToken(dataSource));
@@ -87,8 +96,15 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
         singleInstanceCreated = true;
     }
 
-    private ComboPooledDataSource createDataSource(Configuration cfg) throws Exception {
+    private Properties createConnectionProperties(Configuration configuration, ConnectionPoolType connectionType) {
+        Properties properties = new Properties();
+        configuration.setConnectionProperties(properties, connectionType);
+        return properties;
+    }
+
+    private ComboPooledDataSource createDataSource(Configuration cfg, Properties properties) throws Exception {
         ComboPooledDataSource dataSource = new ComboPooledDataSource(false);
+        dataSource.setProperties(properties);
         dataSource.setDriverClass(cfg.driverClass()); // load the jdbc driver
         dataSource.setJdbcUrl(cfg.connectionUrl());
         dataSource.setUser(cfg.userName());

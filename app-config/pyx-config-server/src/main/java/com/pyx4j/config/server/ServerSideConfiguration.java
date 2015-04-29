@@ -190,6 +190,14 @@ public class ServerSideConfiguration {
         return false;
     }
 
+    public String getApplicationName() {
+        return null;
+    }
+
+    public String getEnviromentName() {
+        return null;
+    }
+
     /**
      * May use appengine-web.xml to define system-properties or override this method
      */

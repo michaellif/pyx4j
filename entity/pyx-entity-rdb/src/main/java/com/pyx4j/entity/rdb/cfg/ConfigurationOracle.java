@@ -21,8 +21,10 @@
 package com.pyx4j.entity.rdb.cfg;
 
 import java.util.List;
+import java.util.Properties;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
 
@@ -155,6 +157,19 @@ public abstract class ConfigurationOracle implements Configuration {
     @Override
     public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionPoolType connectionType) {
         return new ConnectionPoolConfiguration(connectionType);
+    }
+
+    @Override
+    public void setConnectionProperties(Properties properties, ConnectionPoolType connectionType) {
+        String programName = CommonsStringUtils.nvl_concat(ServerSideConfiguration.instance().getApplicationName(), //
+                ServerSideConfiguration.instance().getEnviromentName(), " ");
+        if (CommonsStringUtils.isStringSet(programName)) {
+            properties.put("v$session.program", programName);
+
+        }
+        if (connectionType != null) {
+            properties.put("v$session.terminal", connectionType.name());
+        }
     }
 
     @Override

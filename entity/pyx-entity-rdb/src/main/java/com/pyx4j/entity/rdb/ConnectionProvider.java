@@ -73,21 +73,6 @@ public class ConnectionProvider {
             }
         }
 
-        // connection pool
-        try {
-            if (configuration.connectionPool() == ConnectionPoolProvider.dbcp) {
-                connectionPool = new ConnectionPoolDBCP(configuration);
-            } else if (configuration.connectionPool() == ConnectionPoolProvider.c3p0) {
-                connectionPool = new ConnectionPoolC3P0(configuration);
-            } else {
-                throw new SQLException("Configuration does not specify proper connection pool " + configuration.connectionPool());
-            }
-
-            log.debug("Using connection pool {}", connectionPool);
-        } catch (Exception e) {
-            throw new SQLException("Failed to initialize connection pool: " + e.getMessage(), e);
-        }
-
         NamingConvention namingConvention = configuration.namingConvention();
         if (namingConvention == null) {
             namingConvention = new NamingConventionOracle(64, null);
@@ -115,6 +100,22 @@ public class ConnectionProvider {
         default:
             throw new Error("Unsupported driver Dialect " + configuration.driverClass());
         }
+
+        // connection pool
+        try {
+            if (configuration.connectionPool() == ConnectionPoolProvider.dbcp) {
+                connectionPool = new ConnectionPoolDBCP(configuration);
+            } else if (configuration.connectionPool() == ConnectionPoolProvider.c3p0) {
+                connectionPool = new ConnectionPoolC3P0(configuration, dialect);
+            } else {
+                throw new SQLException("Configuration does not specify proper connection pool " + configuration.connectionPool());
+            }
+
+            log.debug("Using connection pool {}", connectionPool);
+        } catch (Exception e) {
+            throw new SQLException("Failed to initialize connection pool: " + e.getMessage(), e);
+        }
+
     }
 
     public void reconnect(Configuration configuration) throws SQLException {
