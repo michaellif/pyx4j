@@ -84,7 +84,7 @@ public class RichTextTheme extends Theme {
         style.addProperty("height", "100%");
         style.addProperty("max-height", "15em");
         style.addProperty("line-height", "2.6em");
-        style.addProperty("background", ThemeColor.foreground, 0.1);
+        style.addProperty("background", ThemeColor.foreground, 0.02);
         style.addProperty("padding", "2px");
         addStyle(style);
 
