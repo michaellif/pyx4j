@@ -34,7 +34,7 @@ import com.pyx4j.i18n.annotations.I18n;
 @AbstractEntity
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface IQueryCriteria<E extends IEntity> extends IEntity {
+public interface IQueryFilterList<E extends IEntity> extends IEntity {
 
     E proto();
 

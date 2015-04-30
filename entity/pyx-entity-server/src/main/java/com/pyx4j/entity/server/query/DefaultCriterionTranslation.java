@@ -22,14 +22,14 @@ package com.pyx4j.entity.server.query;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.query.ICriterion;
-import com.pyx4j.entity.core.query.IStringCriterion;
+import com.pyx4j.entity.core.query.IQueryFilter;
+import com.pyx4j.entity.core.query.IStringQueryFilter;
 
 public class DefaultCriterionTranslation {
 
-    public static <E extends IEntity> void addCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, ICriterion criterion) {
-        if (criterion.isInstanceOf(IStringCriterion.class)) {
-            new CriterionTranslationString().addCriteria(query, entityMemeberPath, criterion.<IStringCriterion> cast());
+    public static <E extends IEntity> void addCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, IQueryFilter criterion) {
+        if (criterion.isInstanceOf(IStringQueryFilter.class)) {
+            new CriterionTranslationString().addCriteria(query, entityMemeberPath, criterion.<IStringQueryFilter> cast());
         } else {
             throw new Error("Unknown criterion class " + criterion.getInstanceValueClass().getName());
         }

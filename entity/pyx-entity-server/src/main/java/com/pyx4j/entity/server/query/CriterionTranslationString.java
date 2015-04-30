@@ -24,12 +24,12 @@ import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
-import com.pyx4j.entity.core.query.IStringCriterion;
+import com.pyx4j.entity.core.query.IStringQueryFilter;
 
-public class CriterionTranslationString implements CriterionTranslation<IStringCriterion> {
+public class CriterionTranslationString implements CriterionTranslation<IStringQueryFilter> {
 
     @Override
-    public <E extends IEntity> void addCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, IStringCriterion criterion) {
+    public <E extends IEntity> void addCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, IStringQueryFilter criterion) {
         if (!criterion.value().isNull()) {
             query.add(new PropertyCriterion(entityMemeberPath, Restriction.RDB_LIKE, criterion.value().getValue()));
         }

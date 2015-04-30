@@ -26,7 +26,7 @@ import org.junit.Assert;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.query.QueryCriteriaBinder;
-import com.pyx4j.entity.core.query.QueryCriteriaStorage;
+import com.pyx4j.entity.core.query.QueryFilterStorage;
 import com.pyx4j.entity.server.query.ColumnStorage;
 import com.pyx4j.entity.server.query.PersistableQueryManager;
 import com.pyx4j.entity.server.query.QueryCriteriaBinderBuilder;
@@ -95,17 +95,17 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
 
     public void testQueryPersistence() {
         ColumnStorage.instance().initialize(TestsQueryCriteriaColumnStorage.class);
-        QueryCriteriaStorage storeHere = EntityFactory.create(QueryCriteriaStorage.class);
+        QueryFilterStorage storeHere = EntityFactory.create(QueryFilterStorage.class);
 
         {
             EmployeeQueryCriteria query = EntityFactory.create(EmployeeQueryCriteria.class);
             query.firstName().value().setValue("Bob");
-            PersistableQueryManager.saveCriteria(query, storeHere);
+            PersistableQueryManager.persistCriteria(query, storeHere);
         }
 
         // Query
         {
-            QueryCriteriaStorage storeHereId = storeHere.<QueryCriteriaStorage> createIdentityStub();
+            QueryFilterStorage storeHereId = storeHere.<QueryFilterStorage> createIdentityStub();
 
             EmployeeQueryCriteria query = PersistableQueryManager.retriveCriteria(EmployeeQueryCriteria.class, storeHereId);
 

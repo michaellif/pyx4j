@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2015 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,35 +14,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 27, 2015
+ * Created on Apr 13, 2015
  * @author vlads
  */
 package com.pyx4j.entity.core.query;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderBy;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 /**
- * This class acts as check constraint for ICriterion.columnId() in QueryCriteriaStorage
+ * When using this entity as member user @Detached and @Owned(cascade = {}) for Storage.
  *
- * Instance of the class should be defined in application, just like AbstractOutgoingMailQueue.
- *
- * see com.pyx4j.entity.server.query.ColumnStorage#initialize(Class persistableEntityClass)
+ * To get IQueryCriteria use PersistableQueryManager.retriveCriteria.
+ * To save IQueryCriteria in this object use PersistableQueryManager.saveCriteria.
  */
-@AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface AbstractQueryCriteriaColumnStorage extends IEntity {
+public interface QueryFilterStorage extends IEntity {
 
-    @Indexed
-    @MemberColumn(notNull = true)
-    IPrimitive<String> queryClass();
+    @Owned
+    @OrderBy(PrimaryKey.class)
+    IList<IQueryFilter> criterions();
 
-    //TODO use serialized path, Today this is limited to one memberName!
-    @MemberColumn(notNull = true)
-    IPrimitive<String> columnPath();
+    //Set to false during version update/DB migration
+    IPrimitive<Boolean> valid();
+
+    IPrimitive<String> stringQuery();
 
 }

@@ -22,7 +22,7 @@ package com.pyx4j.entity.core.query;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
 
-public interface QueryCriteriaBinder<BO extends IEntity, C extends IQueryCriteria<BO>> {
+public interface QueryCriteriaBinder<BO extends IEntity, C extends IQueryFilterList<BO>> {
 
     Path toEntityPath(Path criteriaPath);
 
