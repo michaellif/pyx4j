@@ -137,7 +137,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     private boolean editingInProgress = false;
 
-    protected Set<AbstractValidationError> validationErrors = new HashSet<>();
+    private Set<AbstractValidationError> validationErrors = new HashSet<>();
 
     private DECORATOR_TYPE decorator;
 
