@@ -22,9 +22,9 @@ package com.pyx4j.entity.server.query;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.query.ICriterion;
+import com.pyx4j.entity.core.query.IQueryFilter;
 
-public interface CriterionTranslation<C extends ICriterion> {
+public interface CriterionTranslation<C extends IQueryFilter> {
 
     public <E extends IEntity> void addCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, C criterion);
 

@@ -22,15 +22,15 @@ package com.pyx4j.entity.rpc;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.query.IQueryCriteria;
+import com.pyx4j.entity.core.query.IQueryFilterList;
 import com.pyx4j.rpc.shared.IService;
 
 public interface AbstractListService2<E extends IEntity> extends IService {
 
-    public void obtainCriteriaMeta(AsyncCallback<IQueryCriteria<E>> callback);
+    public void obtainCriteriaMeta(AsyncCallback<IQueryFilterList<E>> callback);
 
-    public void obtainCriteria(AsyncCallback<IQueryCriteria<E>> callback, String saveName);
+    public void obtainCriteria(AsyncCallback<IQueryFilterList<E>> callback, String saveName);
 
-    public void list(AsyncCallback<EntitySearchResult<E>> callback, IQueryCriteria<E> criteria);
+    public void list(AsyncCallback<EntitySearchResult<E>> callback, IQueryFilterList<E> criteria);
 
 }

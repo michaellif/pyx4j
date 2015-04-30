@@ -23,10 +23,10 @@ import java.util.Map;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
-import com.pyx4j.entity.core.query.IQueryCriteria;
+import com.pyx4j.entity.core.query.IQueryFilterList;
 import com.pyx4j.entity.core.query.QueryCriteriaBinder;
 
-public class DefaultQueryCriteriaBinder<E extends IEntity, C extends IQueryCriteria<E>> implements QueryCriteriaBinder<E, C> {
+public class DefaultQueryCriteriaBinder<E extends IEntity, C extends IQueryFilterList<E>> implements QueryCriteriaBinder<E, C> {
 
     private final Map<Path, Path> pathBinding;
 

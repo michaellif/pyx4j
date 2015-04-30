@@ -27,10 +27,10 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.Path;
-import com.pyx4j.entity.core.query.IQueryCriteria;
+import com.pyx4j.entity.core.query.IQueryFilterList;
 import com.pyx4j.entity.core.query.QueryCriteriaBinder;
 
-public class QueryCriteriaBinderBuilder<E extends IEntity, C extends IQueryCriteria<E>> {
+public class QueryCriteriaBinderBuilder<E extends IEntity, C extends IQueryFilterList<E>> {
 
     protected final Class<C> criteriaClass;
 

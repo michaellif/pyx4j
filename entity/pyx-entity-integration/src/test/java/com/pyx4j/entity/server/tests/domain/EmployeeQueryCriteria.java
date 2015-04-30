@@ -19,13 +19,15 @@
  */
 package com.pyx4j.entity.server.tests.domain;
 
-import com.pyx4j.entity.core.query.IQueryCriteria;
-import com.pyx4j.entity.core.query.IStringCriterion;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.core.query.IQueryFilterList;
+import com.pyx4j.entity.core.query.IStringQueryFilter;
 import com.pyx4j.entity.test.shared.domain.Employee;
 
-public interface EmployeeQueryCriteria extends IQueryCriteria<Employee> {
+@Transient
+public interface EmployeeQueryCriteria extends IQueryFilterList<Employee> {
 
-    IStringCriterion firstName();
+    IStringQueryFilter firstName();
 
 //    ICriterionRef<Department> complex();
 //

@@ -23,7 +23,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.core.IPrimitive;
 
 @DiscriminatorValue("String")
-public interface IStringCriterion extends ICriterion {
+public interface IStringQueryFilter extends IQueryFilter {
 
     IPrimitive<String> value();
 

@@ -22,14 +22,14 @@ package com.pyx4j.entity.server;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.query.IQueryCriteria;
+import com.pyx4j.entity.core.query.IQueryFilterList;
 import com.pyx4j.entity.rpc.AbstractListService2;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 
 public abstract class AbstractListService2Impl<BO extends IEntity, TO extends IEntity> implements AbstractListService2<TO> {
 
     @Override
-    public void list(AsyncCallback<EntitySearchResult<TO>> callback, IQueryCriteria<TO> criteria) {
+    public void list(AsyncCallback<EntitySearchResult<TO>> callback, IQueryFilterList<TO> criteria) {
         // TODO Auto-generated method stub
 
     }
