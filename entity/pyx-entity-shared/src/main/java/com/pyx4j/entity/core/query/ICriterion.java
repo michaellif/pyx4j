@@ -62,6 +62,7 @@ public interface ICriterion extends IEntity {
      *
      * TODO PYX-10 cross schema queries and constraints
      */
+    @MemberColumn(notNull = true)
     IPrimitive<Key> columnId();
 
 }

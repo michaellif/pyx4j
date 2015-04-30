@@ -19,6 +19,7 @@
  */
 package com.pyx4j.entity.core.query;
 
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
@@ -34,6 +35,7 @@ import com.pyx4j.i18n.annotations.I18n;
 public interface QueryCriteriaStorage extends IEntity {
 
     @Owned
+    @OrderBy(PrimaryKey.class)
     IList<ICriterion> criterions();
 
 }

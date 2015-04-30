@@ -27,11 +27,13 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.query.QueryCriteriaBinder;
 import com.pyx4j.entity.core.query.QueryCriteriaStorage;
+import com.pyx4j.entity.server.query.ColumnStorage;
 import com.pyx4j.entity.server.query.PersistableQueryManager;
 import com.pyx4j.entity.server.query.QueryCriteriaBinderBuilder;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.EmployeeQueryCriteria;
+import com.pyx4j.entity.test.shared.domain.TestsQueryCriteriaColumnStorage;
 
 public abstract class PersistableQueryTestCase extends DatastoreTestBase {
 
@@ -92,6 +94,7 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
     }
 
     public void testQueryPersistence() {
+        ColumnStorage.instance().initialize(TestsQueryCriteriaColumnStorage.class);
         QueryCriteriaStorage storeHere = EntityFactory.create(QueryCriteriaStorage.class);
 
         {
