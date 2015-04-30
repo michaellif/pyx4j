@@ -20,6 +20,8 @@
 package com.pyx4j.entity.core.query;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -28,11 +30,19 @@ import com.pyx4j.i18n.annotations.I18n;
  * This class acts as check constraint for ICriterion.columnId() in QueryCriteriaStorage
  *
  * Instance of the class should be defined in application, just like AbstractOutgoingMailQueue.
+ *
+ * see com.pyx4j.entity.server.query.ColumnStorage#initialize(Class persistableEntityClass)
  */
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface AbstractQueryCriteriaColumnStorage extends IEntity {
 
+    @Indexed
+    @MemberColumn(notNull = true)
+    IPrimitive<String> queryClass();
+
+    //TODO use serialized path, Today this is limited to one memberName!
+    @MemberColumn(notNull = true)
     IPrimitive<String> columnPath();
 
 }

@@ -19,10 +19,14 @@
  */
 package com.pyx4j.entity.server.query;
 
+import org.apache.commons.collections4.BidiMap;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
@@ -58,10 +62,13 @@ public class PersistableQueryManager {
      * @param queryCriteriaStorage
      *            persists and update this object so app can save pointer.
      */
-    public static <E extends IEntity> void saveCriteria(IQueryCriteria<E> query, QueryCriteriaStorage queryCriteriaStorage) {
+    public static <C extends IQueryCriteria<? extends IEntity>> void saveCriteria(C query, QueryCriteriaStorage queryCriteriaStorage) {
         if (!queryCriteriaStorage.id().isNull()) {
             Persistence.ensureRetrieve(queryCriteriaStorage, AttachLevel.Attached);
         }
+        @SuppressWarnings("unchecked")
+        BidiMap<Key, Path> map = ColumnStorage.instance().getCriteriaColumns((Class<? extends IQueryCriteria<?>>) query.getInstanceValueClass());
+
         EntityMeta cm = query.getEntityMeta();
         for (String memberName : cm.getMemberNames()) {
             MemberMeta memberMeta = cm.getMemberMeta(memberName);
@@ -70,16 +77,26 @@ public class PersistableQueryManager {
             }
             IObject<?> criteriaMember = query.getMember(memberName);
             if (criteriaMember instanceof ICriterion) {
-                // TODO find existing criterion in a list by columnId
-                queryCriteriaStorage.criterions().add((ICriterion) criteriaMember);
+                // find existing criterion in a list by columnId
+                ICriterion criterion = (ICriterion) criteriaMember;
+                criterion.columnId().setValue(map.getKey(criterion.getPath()));
+
+                queryCriteriaStorage.criterions().add(criterion);
             }
         }
+        Persistence.service().persist(queryCriteriaStorage);
     }
 
     public static <C extends IQueryCriteria<? extends IEntity>> C retriveCriteria(Class<C> criteriaClass, QueryCriteriaStorage queryCriteriaStorageId) {
         QueryCriteriaStorage queryCriteriaStorage = Persistence.service().retrieve(QueryCriteriaStorage.class, queryCriteriaStorageId.getPrimaryKey());
 
+        BidiMap<Key, Path> map = ColumnStorage.instance().getCriteriaColumns(criteriaClass);
+
         C query = EntityFactory.create(criteriaClass);
+        for (ICriterion criterion : queryCriteriaStorage.criterions()) {
+            ICriterion member = (ICriterion) query.getMember(map.get(criterion.columnId().getValue()));
+            member.set(criterion);
+        }
 
         return query;
     }
