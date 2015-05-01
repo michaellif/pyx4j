@@ -21,7 +21,7 @@ package com.pyx4j.gwt.commons.layout;
 
 import com.google.gwt.event.shared.EventHandler;
 
-public interface LayoutChangeRerquestHandler extends EventHandler {
+public interface LayoutChangeRequestHandler extends EventHandler {
 
     public void onLayoutChangeRequest(LayoutChangeRequestEvent event);
 

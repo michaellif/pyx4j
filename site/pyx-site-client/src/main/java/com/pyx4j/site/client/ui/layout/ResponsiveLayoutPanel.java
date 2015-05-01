@@ -34,12 +34,12 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.gwt.commons.layout.ILayoutable;
 import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
-import com.pyx4j.gwt.commons.layout.LayoutChangeRerquestHandler;
+import com.pyx4j.gwt.commons.layout.LayoutChangeRequestHandler;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.DisplayPanel;
 
-public abstract class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResize, ProvidesResize, LayoutChangeRerquestHandler {
+public abstract class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResize, ProvidesResize, LayoutChangeRequestHandler {
 
     public static final int ANIMATION_TIME = 500;
 
