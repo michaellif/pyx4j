@@ -47,14 +47,23 @@ public enum ConnectionPoolType {
     BackgroundProcess,
 
     /**
+     * Quartz connection pool
+     */
+    Scheduler,
+
+    /**
      * Internal administrative transactions.
      * Table structure update and verification is done in this connection.
      * This corresponds to UnPooled DataSource.
      */
     DDL;
 
-    public static Collection<ConnectionPoolType> poolable() {
+    public static Collection<ConnectionPoolType> managedByPersistenceService() {
         return EnumSet.of(ConnectionPoolType.Web, ConnectionPoolType.BackgroundProcess, ConnectionPoolType.TransactionProcessing);
+    }
+
+    public static Collection<ConnectionPoolType> poolable() {
+        return EnumSet.of(ConnectionPoolType.Web, ConnectionPoolType.BackgroundProcess, ConnectionPoolType.TransactionProcessing, ConnectionPoolType.Scheduler);
     }
 
     public static ConnectionPoolType translate(ConnectionTarget connectionTarget) {

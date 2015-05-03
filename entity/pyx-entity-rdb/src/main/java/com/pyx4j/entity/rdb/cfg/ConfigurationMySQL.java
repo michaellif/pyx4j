@@ -21,7 +21,6 @@
 package com.pyx4j.entity.rdb.cfg;
 
 import java.util.List;
-import java.util.Properties;
 
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 
@@ -157,8 +156,8 @@ public abstract class ConfigurationMySQL implements Configuration {
     }
 
     @Override
-    public void setConnectionProperties(Properties properties, ConnectionPoolType connectionType) {
-
+    public ConnectionCustomizer connectionCustomizer() {
+        return null;
     }
 
     @Override

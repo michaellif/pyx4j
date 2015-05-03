@@ -23,16 +23,20 @@ import java.sql.Connection;
 
 import com.mchange.v2.c3p0.AbstractConnectionCustomizer;
 
+import com.pyx4j.entity.rdb.cfg.ConnectionCustomizer;
 import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
-import com.pyx4j.entity.rdb.dialect.Dialect;
 
-public class ConnectionCustomizer extends AbstractConnectionCustomizer {
+public class C3P0ConnectionCustomizer extends AbstractConnectionCustomizer {
 
     @Override
     public void onAcquire(Connection c, String dataSourceIdentityToken) throws Exception {
         ConnectionPoolType connectionPoolType = (ConnectionPoolType) extensionsForToken(dataSourceIdentityToken).get(ConnectionPoolType.class.getName());
-        Dialect dialect = (Dialect) extensionsForToken(dataSourceIdentityToken).get(Dialect.class.getName());
-        dialect.pooledConnectionAcquired(c, connectionPoolType);
+        ConnectionCustomizer connectionCustomizer = (ConnectionCustomizer) extensionsForToken(dataSourceIdentityToken)
+                .get(ConnectionCustomizer.class.getName());
+
+        if (connectionCustomizer != null) {
+            connectionCustomizer.pooledConnectionAcquired(c, connectionPoolType);
+        }
     }
 
 }

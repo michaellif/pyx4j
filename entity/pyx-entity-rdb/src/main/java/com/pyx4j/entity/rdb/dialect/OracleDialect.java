@@ -21,24 +21,14 @@
 package com.pyx4j.entity.rdb.dialect;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Types;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.config.server.ApplicationVersion;
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
-import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
 
 public class OracleDialect extends Dialect {
-
-    private static final Logger log = LoggerFactory.getLogger(OracleDialect.class);
 
     public OracleDialect(NamingConvention namingConvention, MultitenancyType multitenancyType) {
         super(DatabaseType.Oracle, namingConvention, multitenancyType);
@@ -176,18 +166,6 @@ public class OracleDialect extends Dialect {
             return (e.getErrorCode() == 1);
         } else {
             return false;
-        }
-    }
-
-    @Override
-    public void pooledConnectionAcquired(Connection connection, ConnectionPoolType connectionPoolType) throws Exception {
-        try {
-            String moduleName = CommonsStringUtils.nvl_concat(ServerSideConfiguration.instance().getApplicationName(), //
-                    ApplicationVersion.getProductBuild(), " ");
-            moduleName = CommonsStringUtils.nvl_concat(moduleName, connectionPoolType, " ");
-            connection.setClientInfo("OCSID.MODULE", moduleName);
-        } catch (Throwable e) {
-            log.error("JDBC setClientInfo failed", e);
         }
     }
 

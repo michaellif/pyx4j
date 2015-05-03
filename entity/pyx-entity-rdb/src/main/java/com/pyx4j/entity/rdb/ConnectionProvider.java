@@ -106,7 +106,7 @@ public class ConnectionProvider {
             if (configuration.connectionPool() == ConnectionPoolProvider.dbcp) {
                 connectionPool = new ConnectionPoolDBCP(configuration);
             } else if (configuration.connectionPool() == ConnectionPoolProvider.c3p0) {
-                connectionPool = new ConnectionPoolC3P0(configuration, dialect);
+                connectionPool = new ConnectionPoolC3P0(configuration);
             } else {
                 throw new SQLException("Configuration does not specify proper connection pool " + configuration.connectionPool());
             }

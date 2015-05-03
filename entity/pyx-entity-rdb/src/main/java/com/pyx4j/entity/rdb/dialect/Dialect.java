@@ -21,7 +21,6 @@
 package com.pyx4j.entity.rdb.dialect;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Types;
@@ -33,7 +32,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
-import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
 import com.pyx4j.entity.rdb.mapping.QueryBuilder;
 
 public abstract class Dialect {
@@ -296,7 +294,4 @@ public abstract class Dialect {
         return (e instanceof SQLIntegrityConstraintViolationException);
     }
 
-    public void pooledConnectionAcquired(Connection connection, ConnectionPoolType connectionPoolType) throws Exception {
-
-    }
 }

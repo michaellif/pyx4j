@@ -21,14 +21,18 @@
 package com.pyx4j.entity.rdb.cfg;
 
 import java.util.List;
-import java.util.Properties;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
+import com.pyx4j.entity.rdb.dialect.OracleConnectionCustomizer;
 
 public abstract class ConfigurationOracle implements Configuration {
+
+    private static final Logger log = LoggerFactory.getLogger(ConfigurationOracle.class);
 
     @Override
     public DatabaseType databaseType() {
@@ -160,16 +164,8 @@ public abstract class ConfigurationOracle implements Configuration {
     }
 
     @Override
-    public void setConnectionProperties(Properties properties, ConnectionPoolType connectionType) {
-        String programName = CommonsStringUtils.nvl_concat(ServerSideConfiguration.instance().getApplicationName(), //
-                ServerSideConfiguration.instance().getEnviromentName(), " ");
-        if (CommonsStringUtils.isStringSet(programName)) {
-            properties.put("v$session.program", programName);
-
-        }
-        if (connectionType != null) {
-            properties.put("v$session.terminal", connectionType.name());
-        }
+    public ConnectionCustomizer connectionCustomizer() {
+        return new OracleConnectionCustomizer();
     }
 
     @Override
