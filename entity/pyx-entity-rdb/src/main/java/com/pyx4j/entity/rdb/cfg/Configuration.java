@@ -77,6 +77,7 @@ public interface Configuration extends IPersistenceConfiguration {
                     break;
                 case Scheduler:
                     maxPoolSize = 4;
+                    unreturnedConnectionTimeout = 10 * Consts.MIN2SEC;
                     testConnectionOnCheckout = true;
                     break;
                 default:
