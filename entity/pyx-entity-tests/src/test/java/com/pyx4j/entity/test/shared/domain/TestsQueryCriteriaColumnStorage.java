@@ -20,7 +20,7 @@
 package com.pyx4j.entity.test.shared.domain;
 
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.core.query.AbstractQueryFilterColumnStorage;
+import com.pyx4j.entity.core.filter.AbstractQueryFilterColumnStorage;
 
 @Table(prefix = "test")
 public interface TestsQueryCriteriaColumnStorage extends AbstractQueryFilterColumnStorage {

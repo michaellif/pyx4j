@@ -22,7 +22,7 @@ package com.pyx4j.entity.server;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.query.IQueryFilterList;
+import com.pyx4j.entity.core.filter.IQueryFilterList;
 import com.pyx4j.entity.rpc.AbstractListService2;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 

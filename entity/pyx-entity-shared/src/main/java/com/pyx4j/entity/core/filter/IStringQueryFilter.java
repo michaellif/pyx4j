@@ -17,13 +17,14 @@
  * Created on Apr 13, 2015
  * @author vlads
  */
-package com.pyx4j.entity.core.query;
+package com.pyx4j.entity.core.filter;
 
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.core.IPrimitive;
 
-public interface QueryCriteriaBinder<BO extends IEntity, C extends IQueryFilterList<BO>> {
+@DiscriminatorValue("String")
+public interface IStringQueryFilter extends IQueryFilter {
 
-    Path toEntityPath(Path criteriaPath);
+    IPrimitive<String> value();
 
 }

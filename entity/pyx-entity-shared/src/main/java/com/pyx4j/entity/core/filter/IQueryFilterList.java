@@ -17,31 +17,25 @@
  * Created on Apr 13, 2015
  * @author vlads
  */
-package com.pyx4j.entity.core.query;
+package com.pyx4j.entity.core.filter;
 
-import com.pyx4j.entity.annotations.OrderBy;
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IList;
-import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 /**
- * When using this entity as member user @Detached and @Owned(cascade = {}) for Storage.
+ * Each implementation represents Persistable Query.
+ * Storage in DB is managed by PersistableQueryManager.
+ * Use QueryCriteriaStorage to store pointers to this Query.
  *
- * To get IQueryCriteria use PersistableQueryManager.retriveCriteria.
- * To save IQueryCriteria in this object use PersistableQueryManager.saveCriteria.
+ * Implementations of this class may have @Transient members
  */
-@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface QueryFilterStorage extends IEntity {
+@AbstractEntity
+@Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+public interface IQueryFilterList<E extends IEntity> extends IEntity {
 
-    @Owned
-    @OrderBy(PrimaryKey.class)
-    IList<IQueryFilter> criterions();
-
-    //Set to false during version update/DB migration
-    IPrimitive<Boolean> valid();
-
-    IPrimitive<String> stringQuery();
+    E proto();
 
 }

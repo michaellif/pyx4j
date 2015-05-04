@@ -17,7 +17,7 @@
  * Created on Apr 13, 2015
  * @author vlads
  */
-package com.pyx4j.entity.core.query;
+package com.pyx4j.entity.core.filter;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.AbstractEntity;

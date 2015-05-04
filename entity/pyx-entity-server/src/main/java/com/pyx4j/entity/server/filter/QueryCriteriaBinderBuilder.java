@@ -17,7 +17,7 @@
  * Created on Apr 21, 2015
  * @author vlads
  */
-package com.pyx4j.entity.server.query;
+package com.pyx4j.entity.server.filter;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -27,8 +27,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.Path;
-import com.pyx4j.entity.core.query.IQueryFilterList;
-import com.pyx4j.entity.core.query.QueryCriteriaBinder;
+import com.pyx4j.entity.core.filter.IQueryFilterList;
+import com.pyx4j.entity.core.filter.QueryFilterBinder;
 
 public class QueryCriteriaBinderBuilder<E extends IEntity, C extends IQueryFilterList<E>> {
 
@@ -61,7 +61,7 @@ public class QueryCriteriaBinderBuilder<E extends IEntity, C extends IQueryFilte
         pathBinding.put(criteriaMember.getPath(), boMember.getPath());
     }
 
-    public QueryCriteriaBinder<E, C> build() {
+    public QueryFilterBinder<E, C> build() {
         return new DefaultQueryCriteriaBinder<>(criteriaClass, pathBinding);
     }
 }

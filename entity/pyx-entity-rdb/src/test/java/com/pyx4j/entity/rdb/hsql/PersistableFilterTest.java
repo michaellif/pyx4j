@@ -19,11 +19,11 @@
  */
 package com.pyx4j.entity.rdb.hsql;
 
-import com.pyx4j.entity.rdb.PersistableQueryTestCase;
+import com.pyx4j.entity.rdb.PersistableFilterTestCase;
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-public class PersistableQueryTest extends PersistableQueryTestCase {
+public class PersistableFilterTest extends PersistableFilterTestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {
