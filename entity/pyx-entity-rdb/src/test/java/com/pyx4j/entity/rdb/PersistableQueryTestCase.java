@@ -66,6 +66,7 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
     private QueryBinder<Employee, EmployeeQuery> binder() {
         QueryBinderBuilder<Employee, EmployeeQuery> b = new QueryBinderBuilder<>(EmployeeQuery.class);
         b.map(b.proto().firstName(), b.criteriaProto().firstName());
+        b.map(b.proto().department(), b.criteriaProto().department());
         return b.build();
     }
 
@@ -94,6 +95,32 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
     }
 
     public void testQueryPersistence() {
+        ColumnStorage.instance().initialize(TestsQueryCriteriaColumnStorage.class);
+        QueryStorage storeHere = EntityFactory.create(QueryStorage.class);
+
+        {
+            EmployeeQuery query = EntityFactory.create(EmployeeQuery.class);
+            query.firstName().value().setValue("Bob");
+            PersistableQueryManager.persistQuery(query, storeHere);
+        }
+
+        // Query
+        {
+            QueryStorage storeHereId = storeHere.<QueryStorage> createIdentityStub();
+
+            EmployeeQuery query = PersistableQueryManager.retriveQuery(EmployeeQuery.class, storeHereId);
+
+            Assert.assertEquals("stored value", "Bob", query.firstName().value().getValue());
+
+            // Use stored  Query
+            EntityQueryCriteria<Employee> criteria = PersistableQueryManager.convertToCriteria(query, binder());
+            List<Employee> emps = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, emps.size());
+            Assert.assertEquals("right selection ", emp1, emps.get(0));
+        }
+    }
+
+    public void testQueryEntityConditionPersistence() {
         ColumnStorage.instance().initialize(TestsQueryCriteriaColumnStorage.class);
         QueryStorage storeHere = EntityFactory.create(QueryStorage.class);
 

@@ -50,7 +50,7 @@ public class PersistableQueryManager {
             }
             IObject<?> criteriaMember = query.getMember(memberName);
             if (criteriaMember instanceof ICondition) {
-                DefaultCriterionTranslation.addCriteria(criteria, binder.toEntityPath(criteriaMember.getPath()), (ICondition) criteriaMember);
+                ConditionTranslationRegistry.addCriteria(criteria, binder.toEntityPath(criteriaMember.getPath()), (ICondition) criteriaMember);
             }
         }
         return criteria;
