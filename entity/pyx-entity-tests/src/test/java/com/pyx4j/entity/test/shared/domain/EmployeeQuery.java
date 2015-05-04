@@ -20,6 +20,7 @@
 package com.pyx4j.entity.test.shared.domain;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.core.query.IDateCondition;
 import com.pyx4j.entity.core.query.IEntityCondition;
 import com.pyx4j.entity.core.query.IQuery;
 import com.pyx4j.entity.core.query.IStringCondition;
@@ -29,7 +30,7 @@ public interface EmployeeQuery extends IQuery<Employee> {
 
     IStringCondition firstName();
 
-    IStringCondition hireDate();
+    IDateCondition hireDate();
 
     IEntityCondition<Department> department();
 }

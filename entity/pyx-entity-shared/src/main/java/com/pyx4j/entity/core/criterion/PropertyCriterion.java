@@ -102,6 +102,10 @@ public class PropertyCriterion implements Criterion {
         this(member, restriction, createSerializableCollection(value));
     }
 
+    public PropertyCriterion(Path path, Restriction restriction, Collection<?> value) {
+        this(path, restriction, createSerializableCollection(value));
+    }
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private static Serializable createSerializableCollection(Collection<?> collection) {
         Vector result = new Vector();

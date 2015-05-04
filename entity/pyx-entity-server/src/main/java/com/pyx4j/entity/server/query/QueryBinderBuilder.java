@@ -27,6 +27,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.core.query.IEntityCondition;
 import com.pyx4j.entity.core.query.IQuery;
 import com.pyx4j.entity.core.query.QueryBinder;
 
@@ -55,7 +56,13 @@ public class QueryBinderBuilder<E extends IEntity, C extends IQuery<E>> {
         return proto;
     }
 
-    public final <TYPE extends Serializable, TCO extends IEntity> void map(IPrimitive<TYPE> boMember, TCO criteriaMember) {
+    public final <TYPE extends Serializable, TC extends IEntity> void map(IPrimitive<TYPE> boMember, TC criteriaMember) {
+        assert criteriaMember.getPath().getRootEntityClass() == criteriaClass;
+        assert boMember.getPath().getRootEntityClass() == proto().getValueClass() : "BO member expected; got path from " + boMember.getPath();
+        pathBinding.put(criteriaMember.getPath(), boMember.getPath());
+    }
+
+    public final <T extends IEntity, EC extends IEntityCondition<T>> void map(T boMember, EC criteriaMember) {
         assert criteriaMember.getPath().getRootEntityClass() == criteriaClass;
         assert boMember.getPath().getRootEntityClass() == proto().getValueClass() : "BO member expected; got path from " + boMember.getPath();
         pathBinding.put(criteriaMember.getPath(), boMember.getPath());

@@ -19,20 +19,37 @@
  */
 package com.pyx4j.entity.server.query;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.query.ICondition;
+import com.pyx4j.entity.core.query.IDateCondition;
+import com.pyx4j.entity.core.query.IEntityCondition;
 import com.pyx4j.entity.core.query.IStringCondition;
 
-public class DefaultCriterionTranslation {
+@SuppressWarnings("rawtypes")
+public class ConditionTranslationRegistry {
 
+    private static Map<Class<?>, ConditionTranslation<?>> registry = new HashMap<>();
+
+    // TODO add ability to Register custom IConditions
+
+    static {
+        registry.put(IStringCondition.class, new ConditionTranslationString());
+        registry.put(IDateCondition.class, new ConditionTranslationDate());
+        registry.put(IEntityCondition.class, new ConditionTranslationEntity());
+    }
+
+    @SuppressWarnings("unchecked")
     public static <E extends IEntity> void addCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, ICondition criterion) {
-        if (criterion.isInstanceOf(IStringCondition.class)) {
-            new ConditionTranslationString().addCriteria(query, entityMemeberPath, criterion.<IStringCondition> cast());
+        ConditionTranslation ct = registry.get(criterion.getInstanceValueClass());
+        if (ct != null) {
+            ct.addCriteria(query, entityMemeberPath, criterion.<ICondition> cast());
         } else {
             throw new Error("Unknown criterion class " + criterion.getInstanceValueClass().getName());
         }
     }
-
 }
