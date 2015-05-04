@@ -22,7 +22,7 @@ package com.pyx4j.entity.server.tests.tests;
 import junit.framework.TestCase;
 
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.server.tests.domain.EmployeeQueryCriteria;
+import com.pyx4j.entity.server.tests.domain.EmployeeQuery;
 import com.pyx4j.entity.server.tests.rpc.PersistableQueryTestListService;
 import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.mock.TestLifecycle;
@@ -37,7 +37,7 @@ public class PersistableQueryServiceTest extends TestCase {
     public void testPersistableQueryUsage() {
         PersistableQueryTestListService service = TestServiceFactory.create(PersistableQueryTestListService.class);
 
-        EmployeeQueryCriteria criteria = EntityFactory.create(EmployeeQueryCriteria.class);
+        EmployeeQuery criteria = EntityFactory.create(EmployeeQuery.class);
         criteria.firstName().value().setValue("Bob");
 
         service.list(null, criteria);

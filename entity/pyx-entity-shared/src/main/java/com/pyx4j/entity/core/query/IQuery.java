@@ -17,21 +17,25 @@
  * Created on Apr 13, 2015
  * @author vlads
  */
-package com.pyx4j.entity.server.tests.domain;
+package com.pyx4j.entity.core.query;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.filter.IQueryFilterList;
-import com.pyx4j.entity.core.filter.IStringQueryFilter;
-import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.i18n.annotations.I18n;
 
+/**
+ * Each implementation represents Persistable Query.
+ * Storage in DB is managed by PersistableQueryManager.
+ * Use QueryCriteriaStorage to store pointers to this Query.
+ *
+ * Implementations of this class may have @Transient members
+ */
+@AbstractEntity
 @Transient
-public interface EmployeeQueryCriteria extends IQueryFilterList<Employee> {
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+public interface IQuery<E extends IEntity> extends IEntity {
 
-    IStringQueryFilter firstName();
+    E proto();
 
-//    ICriterionRef<Department> complex();
-//
-//    ICriterionOptions<Boolean> reliable();
-//
-//    ICriterionNumber<Integer> rating();
 }

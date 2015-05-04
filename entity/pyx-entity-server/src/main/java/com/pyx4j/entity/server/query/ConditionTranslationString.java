@@ -17,15 +17,21 @@
  * Created on Apr 21, 2015
  * @author vlads
  */
-package com.pyx4j.entity.server.filter;
+package com.pyx4j.entity.server.query;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.filter.IQueryFilter;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.entity.core.query.IStringCondition;
 
-public interface CriterionTranslation<C extends IQueryFilter> {
+public class ConditionTranslationString implements ConditionTranslation<IStringCondition> {
 
-    public <E extends IEntity> void addCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, C criterion);
-
+    @Override
+    public <E extends IEntity> void addCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, IStringCondition criterion) {
+        if (!criterion.value().isNull()) {
+            query.add(new PropertyCriterion(entityMemeberPath, Restriction.RDB_LIKE, criterion.value().getValue()));
+        }
+    }
 }

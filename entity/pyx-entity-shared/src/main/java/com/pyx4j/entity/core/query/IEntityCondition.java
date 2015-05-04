@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2013 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,16 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 13, 2015
+ * Created on May 4, 2015
  * @author vlads
  */
-package com.pyx4j.entity.core.filter;
+package com.pyx4j.entity.core.query;
 
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.core.IPrimitiveSet;
+import com.pyx4j.entity.core.ISet;
 
-public interface QueryFilterBinder<BO extends IEntity, C extends IQueryFilterList<BO>> {
+@DiscriminatorValue("Entity")
+public interface IEntityCondition<E extends IEntity> extends ICondition {
 
-    Path toEntityPath(Path criteriaPath);
+    // has a set of PK of selected entities.
 
+    IPrimitiveSet<Key> refs();
+
+    @Transient
+    ISet<E> references();
 }

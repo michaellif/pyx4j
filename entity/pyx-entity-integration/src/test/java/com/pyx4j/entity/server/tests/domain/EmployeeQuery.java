@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2015 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,20 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 21, 2015
+ * Created on Apr 13, 2015
  * @author vlads
  */
-package com.pyx4j.entity.rdb.hsql;
+package com.pyx4j.entity.server.tests.domain;
 
-import com.pyx4j.entity.rdb.PersistableFilterTestCase;
-import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
-import com.pyx4j.entity.test.server.PersistenceEnvironment;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.core.query.IQuery;
+import com.pyx4j.entity.core.query.IStringCondition;
+import com.pyx4j.entity.test.shared.domain.Employee;
 
-public class PersistableFilterTest extends PersistableFilterTestCase {
+@Transient
+public interface EmployeeQuery extends IQuery<Employee> {
 
-    @Override
-    protected PersistenceEnvironment getPersistenceEnvironment() {
-        return PersistenceEnvironmentFactory.getHSQLPersistenceEnvironment();
-    }
+    IStringCondition firstName();
 
+//    ICriterionRef<Department> complex();
+//
+//    ICriterionOptions<Boolean> reliable();
+//
+//    ICriterionNumber<Integer> rating();
 }

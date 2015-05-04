@@ -20,18 +20,18 @@
 package com.pyx4j.entity.server.tests.server;
 
 import com.pyx4j.entity.server.AbstractListService2Impl;
-import com.pyx4j.entity.server.filter.AbstractQueryCriteriaBinder;
-import com.pyx4j.entity.server.tests.domain.EmployeeQueryCriteria;
+import com.pyx4j.entity.server.query.AbstractQueryBinder;
+import com.pyx4j.entity.server.tests.domain.EmployeeQuery;
 import com.pyx4j.entity.server.tests.rpc.PersistableQueryTestListService;
 import com.pyx4j.entity.test.shared.domain.Employee;
 
 public abstract class PersistableQueryTestListServiceImpl extends AbstractListService2Impl<Employee, Employee> implements PersistableQueryTestListService {
 
     // TODO need builder pattern for this.
-    public static class QueryBinder extends AbstractQueryCriteriaBinder<Employee, EmployeeQueryCriteria> {
+    public static class QueryBinder extends AbstractQueryBinder<Employee, EmployeeQuery> {
 
         public QueryBinder() {
-            super(Employee.class, EmployeeQueryCriteria.class);
+            super(Employee.class, EmployeeQuery.class);
         }
 
         protected void bind() {

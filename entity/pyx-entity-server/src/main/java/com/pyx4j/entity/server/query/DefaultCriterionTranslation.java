@@ -17,19 +17,19 @@
  * Created on Apr 21, 2015
  * @author vlads
  */
-package com.pyx4j.entity.server.filter;
+package com.pyx4j.entity.server.query;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.filter.IQueryFilter;
-import com.pyx4j.entity.core.filter.IStringQueryFilter;
+import com.pyx4j.entity.core.query.ICondition;
+import com.pyx4j.entity.core.query.IStringCondition;
 
 public class DefaultCriterionTranslation {
 
-    public static <E extends IEntity> void addCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, IQueryFilter criterion) {
-        if (criterion.isInstanceOf(IStringQueryFilter.class)) {
-            new CriterionTranslationString().addCriteria(query, entityMemeberPath, criterion.<IStringQueryFilter> cast());
+    public static <E extends IEntity> void addCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, ICondition criterion) {
+        if (criterion.isInstanceOf(IStringCondition.class)) {
+            new ConditionTranslationString().addCriteria(query, entityMemeberPath, criterion.<IStringCondition> cast());
         } else {
             throw new Error("Unknown criterion class " + criterion.getInstanceValueClass().getName());
         }

@@ -14,15 +14,35 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 27, 2015
+ * Created on May 4, 2015
  * @author vlads
  */
-package com.pyx4j.entity.test.shared.domain;
+package com.pyx4j.entity.core.query;
 
-import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.core.query.AbstractQueryColumnStorage;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
-@Table(prefix = "test")
-public interface TestsQueryCriteriaColumnStorage extends AbstractQueryColumnStorage {
+@DiscriminatorValue("DateOffset")
+public interface IDateOffsetCondition extends IDateCondition {
 
+    @I18n
+    public enum DateOffset {
+
+        Days,
+
+        Weeks,
+
+        Month;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
+    IPrimitive<DateOffset> dateOffsetType();
+
+    IPrimitive<Integer> dateOffsetValue();
 }

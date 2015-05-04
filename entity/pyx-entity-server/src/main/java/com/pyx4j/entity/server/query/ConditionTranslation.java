@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2013 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,28 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 13, 2015
+ * Created on Apr 21, 2015
  * @author vlads
  */
-package com.pyx4j.entity.core.filter;
+package com.pyx4j.entity.server.query;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.query.ICondition;
 
-/**
- * Each implementation represents Persistable Query.
- * Storage in DB is managed by PersistableQueryManager.
- * Use QueryCriteriaStorage to store pointers to this Query.
- *
- * Implementations of this class may have @Transient members
- */
-@AbstractEntity
-@Transient
-@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface IQueryFilterList<E extends IEntity> extends IEntity {
+public interface ConditionTranslation<C extends ICondition> {
 
-    E proto();
+    public <E extends IEntity> void addCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, C criterion);
 
 }

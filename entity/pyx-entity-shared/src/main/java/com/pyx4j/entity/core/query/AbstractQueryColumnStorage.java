@@ -17,7 +17,7 @@
  * Created on Apr 27, 2015
  * @author vlads
  */
-package com.pyx4j.entity.core.filter;
+package com.pyx4j.entity.core.query;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Indexed;
@@ -35,7 +35,7 @@ import com.pyx4j.i18n.annotations.I18n;
  */
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface AbstractQueryFilterColumnStorage extends IEntity {
+public interface AbstractQueryColumnStorage extends IEntity {
 
     @Indexed
     @MemberColumn(notNull = true)

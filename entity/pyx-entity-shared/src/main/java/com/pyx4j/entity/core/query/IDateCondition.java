@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2013 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,23 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 13, 2015
+ * Created on May 4, 2015
  * @author vlads
  */
-package com.pyx4j.entity.rpc;
+package com.pyx4j.entity.core.query;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import java.util.Date;
 
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.query.IQuery;
-import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.core.IPrimitive;
 
-public interface AbstractListService2<E extends IEntity> extends IService {
+@DiscriminatorValue("Date")
+public interface IDateCondition extends ICondition {
 
-    public void obtainCriteriaMeta(AsyncCallback<IQuery<E>> callback);
+    IPrimitive<Date> fromDate();
 
-    public void obtainCriteria(AsyncCallback<IQuery<E>> callback, String saveName);
-
-    public void list(AsyncCallback<EntitySearchResult<E>> callback, IQuery<E> criteria);
-
+    IPrimitive<Date> toDate();
 }

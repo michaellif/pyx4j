@@ -17,16 +17,16 @@
  * Created on Apr 27, 2015
  * @author vlads
  */
-package com.pyx4j.entity.server.filter;
+package com.pyx4j.entity.server.query;
 
 import java.util.Map;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
-import com.pyx4j.entity.core.filter.IQueryFilterList;
-import com.pyx4j.entity.core.filter.QueryFilterBinder;
+import com.pyx4j.entity.core.query.IQuery;
+import com.pyx4j.entity.core.query.QueryBinder;
 
-public class DefaultQueryCriteriaBinder<E extends IEntity, C extends IQueryFilterList<E>> implements QueryFilterBinder<E, C> {
+public class DefaultQueryCriteriaBinder<E extends IEntity, C extends IQuery<E>> implements QueryBinder<E, C> {
 
     private final Map<Path, Path> pathBinding;
 

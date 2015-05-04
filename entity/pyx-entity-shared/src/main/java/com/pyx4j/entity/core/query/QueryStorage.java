@@ -17,7 +17,7 @@
  * Created on Apr 13, 2015
  * @author vlads
  */
-package com.pyx4j.entity.core.filter;
+package com.pyx4j.entity.core.query;
 
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
@@ -33,11 +33,12 @@ import com.pyx4j.i18n.annotations.I18n;
  * To save IQueryFilterList in this object use PersistableQueryManager.saveCriteria.
  */
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface QueryFilterStorage extends IEntity {
+public interface QueryStorage extends IEntity {
 
     @Owned
+    // TODO change sort order
     @OrderBy(PrimaryKey.class)
-    IList<IQueryFilter> filters();
+    IList<ICondition> conditions();
 
     //Set to false during version update/DB migration
     IPrimitive<Boolean> valid();

@@ -17,7 +17,7 @@
  * Created on Apr 21, 2015
  * @author vlads
  */
-package com.pyx4j.entity.server.filter;
+package com.pyx4j.entity.server.query;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -27,10 +27,10 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.Path;
-import com.pyx4j.entity.core.filter.IQueryFilterList;
-import com.pyx4j.entity.core.filter.QueryFilterBinder;
+import com.pyx4j.entity.core.query.IQuery;
+import com.pyx4j.entity.core.query.QueryBinder;
 
-public class QueryCriteriaBinderBuilder<E extends IEntity, C extends IQueryFilterList<E>> {
+public class QueryBinderBuilder<E extends IEntity, C extends IQuery<E>> {
 
     protected final Class<C> criteriaClass;
 
@@ -41,7 +41,7 @@ public class QueryCriteriaBinderBuilder<E extends IEntity, C extends IQueryFilte
     private final Map<Path, Path> pathBinding = new HashMap<>();
 
     @SuppressWarnings("unchecked")
-    public QueryCriteriaBinderBuilder(Class<C> criteriaClass) {
+    public QueryBinderBuilder(Class<C> criteriaClass) {
         this.criteriaClass = criteriaClass;
         criteriaProto = EntityFactory.getEntityPrototype(criteriaClass);
         proto = EntityFactory.getEntityPrototype((Class<E>) criteriaProto.proto().getValueClass());
@@ -61,7 +61,7 @@ public class QueryCriteriaBinderBuilder<E extends IEntity, C extends IQueryFilte
         pathBinding.put(criteriaMember.getPath(), boMember.getPath());
     }
 
-    public QueryFilterBinder<E, C> build() {
+    public QueryBinder<E, C> build() {
         return new DefaultQueryCriteriaBinder<>(criteriaClass, pathBinding);
     }
 }
