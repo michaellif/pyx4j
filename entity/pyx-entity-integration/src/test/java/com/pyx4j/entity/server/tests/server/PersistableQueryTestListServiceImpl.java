@@ -20,7 +20,7 @@
 package com.pyx4j.entity.server.tests.server;
 
 import com.pyx4j.entity.server.AbstractListService2Impl;
-import com.pyx4j.entity.server.query.AbstractQueryCriteriaBinder;
+import com.pyx4j.entity.server.filter.AbstractQueryCriteriaBinder;
 import com.pyx4j.entity.server.tests.domain.EmployeeQueryCriteria;
 import com.pyx4j.entity.server.tests.rpc.PersistableQueryTestListService;
 import com.pyx4j.entity.test.shared.domain.Employee;

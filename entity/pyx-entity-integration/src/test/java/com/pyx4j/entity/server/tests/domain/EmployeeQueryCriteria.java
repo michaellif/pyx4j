@@ -20,8 +20,8 @@
 package com.pyx4j.entity.server.tests.domain;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.query.IQueryFilterList;
-import com.pyx4j.entity.core.query.IStringQueryFilter;
+import com.pyx4j.entity.core.filter.IQueryFilterList;
+import com.pyx4j.entity.core.filter.IStringQueryFilter;
 import com.pyx4j.entity.test.shared.domain.Employee;
 
 @Transient

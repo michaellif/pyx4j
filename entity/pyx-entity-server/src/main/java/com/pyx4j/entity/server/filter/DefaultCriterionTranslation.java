@@ -17,21 +17,22 @@
  * Created on Apr 21, 2015
  * @author vlads
  */
-package com.pyx4j.entity.server.query;
+package com.pyx4j.entity.server.filter;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
-import com.pyx4j.entity.core.query.IStringQueryFilter;
+import com.pyx4j.entity.core.filter.IQueryFilter;
+import com.pyx4j.entity.core.filter.IStringQueryFilter;
 
-public class CriterionTranslationString implements CriterionTranslation<IStringQueryFilter> {
+public class DefaultCriterionTranslation {
 
-    @Override
-    public <E extends IEntity> void addCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, IStringQueryFilter criterion) {
-        if (!criterion.value().isNull()) {
-            query.add(new PropertyCriterion(entityMemeberPath, Restriction.RDB_LIKE, criterion.value().getValue()));
+    public static <E extends IEntity> void addCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, IQueryFilter criterion) {
+        if (criterion.isInstanceOf(IStringQueryFilter.class)) {
+            new CriterionTranslationString().addCriteria(query, entityMemeberPath, criterion.<IStringQueryFilter> cast());
+        } else {
+            throw new Error("Unknown criterion class " + criterion.getInstanceValueClass().getName());
         }
     }
+
 }

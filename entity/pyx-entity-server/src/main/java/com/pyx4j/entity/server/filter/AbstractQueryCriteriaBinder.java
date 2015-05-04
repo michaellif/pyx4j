@@ -17,7 +17,7 @@
  * Created on Apr 13, 2015
  * @author vlads
  */
-package com.pyx4j.entity.server.query;
+package com.pyx4j.entity.server.filter;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -27,10 +27,10 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.Path;
-import com.pyx4j.entity.core.query.IQueryFilterList;
-import com.pyx4j.entity.core.query.QueryCriteriaBinder;
+import com.pyx4j.entity.core.filter.IQueryFilterList;
+import com.pyx4j.entity.core.filter.QueryFilterBinder;
 
-public class AbstractQueryCriteriaBinder<E extends IEntity, C extends IQueryFilterList<E>> implements QueryCriteriaBinder<E, C> {
+public class AbstractQueryCriteriaBinder<E extends IEntity, C extends IQueryFilterList<E>> implements QueryFilterBinder<E, C> {
 
     protected Class<E> boClass;
 

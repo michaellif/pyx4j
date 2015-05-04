@@ -20,8 +20,8 @@
 package com.pyx4j.entity.test.shared.domain;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.query.IQueryFilterList;
-import com.pyx4j.entity.core.query.IStringQueryFilter;
+import com.pyx4j.entity.core.filter.IQueryFilterList;
+import com.pyx4j.entity.core.filter.IStringQueryFilter;
 
 @Transient
 public interface EmployeeQueryCriteria extends IQueryFilterList<Employee> {

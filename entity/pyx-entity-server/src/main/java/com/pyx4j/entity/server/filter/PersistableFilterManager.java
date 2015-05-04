@@ -17,7 +17,7 @@
  * Created on Apr 21, 2015
  * @author vlads
  */
-package com.pyx4j.entity.server.query;
+package com.pyx4j.entity.server.filter;
 
 import org.apache.commons.collections4.BidiMap;
 
@@ -28,17 +28,17 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.filter.IQueryFilter;
+import com.pyx4j.entity.core.filter.IQueryFilterList;
+import com.pyx4j.entity.core.filter.QueryFilterBinder;
+import com.pyx4j.entity.core.filter.QueryFilterStorage;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
-import com.pyx4j.entity.core.query.IQueryFilter;
-import com.pyx4j.entity.core.query.IQueryFilterList;
-import com.pyx4j.entity.core.query.QueryCriteriaBinder;
-import com.pyx4j.entity.core.query.QueryFilterStorage;
 import com.pyx4j.entity.server.Persistence;
 
-public class PersistableQueryManager {
+public class PersistableFilterManager {
 
-    public static <E extends IEntity, C extends IQueryFilterList<E>> EntityQueryCriteria<E> convertQueryCriteria(C query, QueryCriteriaBinder<E, C> binder) {
+    public static <E extends IEntity, C extends IQueryFilterList<E>> EntityQueryCriteria<E> convertQueryCriteria(C query, QueryFilterBinder<E, C> binder) {
         @SuppressWarnings("unchecked")
         EntityQueryCriteria<E> criteria = EntityQueryCriteria.create((Class<E>) query.proto().getEntityMeta().getEntityClass());
 
@@ -81,7 +81,7 @@ public class PersistableQueryManager {
                 IQueryFilter criterion = (IQueryFilter) criteriaMember;
                 criterion.columnId().setValue(map.getKey(criterion.getPath()));
 
-                queryCriteriaStorage.criterions().add(criterion);
+                queryCriteriaStorage.filters().add(criterion);
             }
         }
         Persistence.service().persist(queryCriteriaStorage);
@@ -93,7 +93,7 @@ public class PersistableQueryManager {
         BidiMap<Key, Path> map = ColumnStorage.instance().getCriteriaColumns(criteriaClass);
 
         C query = EntityFactory.create(criteriaClass);
-        for (IQueryFilter criterion : queryCriteriaStorage.criterions()) {
+        for (IQueryFilter criterion : queryCriteriaStorage.filters()) {
             IQueryFilter member = (IQueryFilter) query.getMember(map.get(criterion.columnId().getValue()));
             member.set(criterion);
         }

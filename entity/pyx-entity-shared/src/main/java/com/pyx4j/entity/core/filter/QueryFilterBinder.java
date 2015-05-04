@@ -17,25 +17,13 @@
  * Created on Apr 13, 2015
  * @author vlads
  */
-package com.pyx4j.entity.core.query;
+package com.pyx4j.entity.core.filter;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.entity.core.Path;
 
-/**
- * Each implementation represents Persistable Query.
- * Storage in DB is managed by PersistableQueryManager.
- * Use QueryCriteriaStorage to store pointers to this Query.
- *
- * Implementations of this class may have @Transient members
- */
-@AbstractEntity
-@Transient
-@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface IQueryFilterList<E extends IEntity> extends IEntity {
+public interface QueryFilterBinder<BO extends IEntity, C extends IQueryFilterList<BO>> {
 
-    E proto();
+    Path toEntityPath(Path criteriaPath);
 
 }

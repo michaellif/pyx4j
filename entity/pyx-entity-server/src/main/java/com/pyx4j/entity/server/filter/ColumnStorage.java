@@ -17,7 +17,7 @@
  * Created on Apr 30, 2015
  * @author vlads
  */
-package com.pyx4j.entity.server.query;
+package com.pyx4j.entity.server.filter;
 
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
@@ -32,11 +32,11 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.filter.AbstractQueryFilterColumnStorage;
+import com.pyx4j.entity.core.filter.IQueryFilter;
+import com.pyx4j.entity.core.filter.IQueryFilterList;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
-import com.pyx4j.entity.core.query.AbstractQueryFilterColumnStorage;
-import com.pyx4j.entity.core.query.IQueryFilter;
-import com.pyx4j.entity.core.query.IQueryFilterList;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ServerEntityFactory;
 

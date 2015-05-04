@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2013 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,17 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 13, 2015
+ * Created on Apr 21, 2015
  * @author vlads
  */
-package com.pyx4j.entity.core.query;
+package com.pyx4j.entity.server.filter;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.filter.IQueryFilter;
 
-@DiscriminatorValue("String")
-public interface IStringQueryFilter extends IQueryFilter {
+public interface CriterionTranslation<C extends IQueryFilter> {
 
-    IPrimitive<String> value();
+    public <E extends IEntity> void addCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, C criterion);
 
 }
