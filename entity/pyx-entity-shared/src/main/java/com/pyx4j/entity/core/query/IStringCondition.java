@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2015 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,18 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 21, 2015
+ * Created on Apr 13, 2015
  * @author vlads
  */
-package com.pyx4j.entity.test.shared.domain;
+package com.pyx4j.entity.core.query;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.filter.IQueryFilterList;
-import com.pyx4j.entity.core.filter.IStringQueryFilter;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.core.IPrimitive;
 
-@Transient
-public interface EmployeeQueryCriteria extends IQueryFilterList<Employee> {
+@DiscriminatorValue("String")
+public interface IStringCondition extends ICondition {
 
-    IStringQueryFilter firstName();
+    IPrimitive<String> value();
 
 }

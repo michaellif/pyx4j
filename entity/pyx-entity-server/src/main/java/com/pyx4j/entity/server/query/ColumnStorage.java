@@ -17,7 +17,7 @@
  * Created on Apr 30, 2015
  * @author vlads
  */
-package com.pyx4j.entity.server.filter;
+package com.pyx4j.entity.server.query;
 
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
@@ -32,11 +32,11 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.filter.AbstractQueryFilterColumnStorage;
-import com.pyx4j.entity.core.filter.IQueryFilter;
-import com.pyx4j.entity.core.filter.IQueryFilterList;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.entity.core.query.AbstractQueryColumnStorage;
+import com.pyx4j.entity.core.query.ICondition;
+import com.pyx4j.entity.core.query.IQuery;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ServerEntityFactory;
 
@@ -52,25 +52,25 @@ public class ColumnStorage {
         return SingletonHolder.INSTANCE;
     }
 
-    private Class<? extends AbstractQueryFilterColumnStorage> persistableEntityClass;
+    private Class<? extends AbstractQueryColumnStorage> persistableEntityClass;
 
     private ColumnStorage() {
 
     }
 
     @SuppressWarnings("unchecked")
-    public void initialize(Class<? extends AbstractQueryFilterColumnStorage> persistableEntityClass) {
+    public void initialize(Class<? extends AbstractQueryColumnStorage> persistableEntityClass) {
         this.persistableEntityClass = persistableEntityClass;
-        for (Class<? extends IEntity> ec : ServerEntityFactory.getAllAssignableFrom(IQueryFilterList.class)) {
+        for (Class<? extends IEntity> ec : ServerEntityFactory.getAllAssignableFrom(IQuery.class)) {
             if ((ec.getAnnotation(AbstractEntity.class) == null) && (ec.getAnnotation(EmbeddedEntity.class) == null)) {
-                createOrUpdateCriteriaColumnStorage((Class<? extends IQueryFilterList<?>>) ec);
+                createOrUpdateCriteriaColumnStorage((Class<? extends IQuery<?>>) ec);
             }
         }
     }
 
-    private void createOrUpdateCriteriaColumnStorage(Class<? extends IQueryFilterList<?>> criteriaClass) {
+    private void createOrUpdateCriteriaColumnStorage(Class<? extends IQuery<?>> criteriaClass) {
         BidiMap<Key, Path> map = getCriteriaColumns(criteriaClass);
-        IQueryFilterList<?> proto = EntityFactory.getEntityPrototype(criteriaClass);
+        IQuery<?> proto = EntityFactory.getEntityPrototype(criteriaClass);
         EntityMeta cm = proto.getEntityMeta();
         for (String memberName : cm.getMemberNames()) {
             MemberMeta memberMeta = cm.getMemberMeta(memberName);
@@ -78,11 +78,11 @@ public class ColumnStorage {
                 continue;
             }
             IObject<?> criteriaMember = proto.getMember(memberName);
-            if (criteriaMember instanceof IQueryFilter) {
+            if (criteriaMember instanceof ICondition) {
                 if (!map.containsValue(criteriaMember.getPath())) {
                     log.debug("adding new query column {}", criteriaMember.getPath());
 
-                    AbstractQueryFilterColumnStorage storage = EntityFactory.create(persistableEntityClass);
+                    AbstractQueryColumnStorage storage = EntityFactory.create(persistableEntityClass);
                     storage.queryClass().setValue(criteriaClass.getName());
                     storage.columnPath().setValue(memberName);
                     Persistence.service().persist(storage);
@@ -92,14 +92,14 @@ public class ColumnStorage {
     }
 
     //TODO add memory cash
-    public <C extends IQueryFilterList<?>> BidiMap<Key, Path> getCriteriaColumns(Class<C> criteriaClass) {
+    public <C extends IQuery<?>> BidiMap<Key, Path> getCriteriaColumns(Class<C> criteriaClass) {
         @SuppressWarnings("unchecked")
-        EntityQueryCriteria<AbstractQueryFilterColumnStorage> criteria = (EntityQueryCriteria<AbstractQueryFilterColumnStorage>) EntityQueryCriteria
+        EntityQueryCriteria<AbstractQueryColumnStorage> criteria = (EntityQueryCriteria<AbstractQueryColumnStorage>) EntityQueryCriteria
                 .create(persistableEntityClass);
         criteria.eq(criteria.proto().queryClass(), criteriaClass.getName());
 
         BidiMap<Key, Path> map = new DualHashBidiMap<>();
-        for (AbstractQueryFilterColumnStorage column : Persistence.service().query(criteria)) {
+        for (AbstractQueryColumnStorage column : Persistence.service().query(criteria)) {
             map.put(column.getPrimaryKey(), new Path(criteriaClass, column.columnPath().getValue()));
         }
 

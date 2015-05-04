@@ -17,7 +17,7 @@
  * Created on Apr 13, 2015
  * @author vlads
  */
-package com.pyx4j.entity.core.filter;
+package com.pyx4j.entity.core.query;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.AbstractEntity;
@@ -28,6 +28,7 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
@@ -47,7 +48,7 @@ import com.pyx4j.entity.core.IPrimitive;
  */
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @AbstractEntity
-public interface IQueryFilter extends IEntity {
+public interface ICondition extends IEntity {
 
     @Owner
     @ReadOnly
@@ -55,7 +56,7 @@ public interface IQueryFilter extends IEntity {
     @Indexed
     @JoinColumn
     @MemberColumn(notNull = true)
-    QueryFilterStorage owner();
+    QueryStorage owner();
 
     /**
      * The link to AbstractQueryCriteriaColumnStorage.
@@ -66,5 +67,10 @@ public interface IQueryFilter extends IEntity {
     IPrimitive<Key> columnId();
 
     IPrimitive<Integer> order();
+
+    // MetaData required to build the UI for this Condition
+
+    @Transient
+    IPrimitive<Integer> title();
 
 }

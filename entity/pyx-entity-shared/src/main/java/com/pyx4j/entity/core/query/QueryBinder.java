@@ -17,20 +17,13 @@
  * Created on Apr 13, 2015
  * @author vlads
  */
-package com.pyx4j.entity.rpc;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
+package com.pyx4j.entity.core.query;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.query.IQuery;
-import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.entity.core.Path;
 
-public interface AbstractListService2<E extends IEntity> extends IService {
+public interface QueryBinder<BO extends IEntity, C extends IQuery<BO>> {
 
-    public void obtainCriteriaMeta(AsyncCallback<IQuery<E>> callback);
-
-    public void obtainCriteria(AsyncCallback<IQuery<E>> callback, String saveName);
-
-    public void list(AsyncCallback<EntitySearchResult<E>> callback, IQuery<E> criteria);
+    Path toEntityPath(Path criteriaPath);
 
 }
