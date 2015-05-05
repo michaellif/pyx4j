@@ -57,10 +57,9 @@ public class PrintManager {
     }
 
     private static String createHead() {
-        Element headElement = Document.get().getElementsByTagName("head").getItem(0);
-        Node headClone = HeadElement.as(headElement).cloneNode(true);
-        for (int i = 0; i < headElement.getChildNodes().getLength(); i++) {
-            if ("script".equals(headElement.getChildNodes().getItem(i).getNodeName().toLowerCase())) {
+        Node headClone = HeadElement.as(Document.get().getElementsByTagName("head").getItem(0)).cloneNode(true);
+        for (int i = headClone.getChildNodes().getLength() - 1; i >= 0; i--) {
+            if ("script".equals(headClone.getChildNodes().getItem(i).getNodeName().toLowerCase())) {
                 headClone.getChild(i).removeFromParent();
             }
         }

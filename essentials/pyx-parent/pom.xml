@@ -152,7 +152,7 @@
 
         <slf4jVersion>1.7.7</slf4jVersion>
 
-        <jasperreportsVersion>5.2.0</jasperreportsVersion>
+        <jasperreportsVersion>6.0.4</jasperreportsVersion>
         <dynamicreportsVersion>3.1.6</dynamicreportsVersion>
         <batikVersion>1.7</batikVersion>
 
@@ -1001,6 +1001,32 @@
                                         <versionRange>[1.0-beta-2]</versionRange>
                                         <goals>
                                             <goal>compile-reports</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>com.alexnederlof</groupId>
+                                        <artifactId>jasperreports-plugin</artifactId>
+                                        <versionRange>[1.9,)</versionRange>
+                                        <goals>
+                                            <goal>jasper</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>com.pyx4j</groupId>
+                                        <artifactId>gwt-maven-plugin</artifactId>
+                                        <versionRange>[2.2.8,)</versionRange>
+                                        <goals>
+                                            <goal>source-jar</goal>
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
