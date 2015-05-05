@@ -22,105 +22,82 @@ package com.pyx4j.entity.core.criterion;
 import java.util.Collection;
 import java.util.Vector;
 
+import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.GWTSerializable;
 
 /**
  * For usage examples @see com.pyx4j.entity.rdb.QueryRDBTestCase#testCriterionOr()
  */
-public class OrCriterion implements Criterion {
+public class OrCriterion extends FiltersBuilder implements Criterion {
 
     private static final long serialVersionUID = 1L;
 
     //N.B. this is should final; but it is not to enable GWT serialization
     @GWTSerializable
-    private Vector<Criterion> filtersLeft;
-
-    //N.B. this is should final; but it is not to enable GWT serialization
-    @GWTSerializable
-    private Vector<Criterion> filtersRight;
+    private Vector<Criterion> filters;
 
     public OrCriterion() {
-        this.filtersLeft = new Vector<Criterion>();
-        this.filtersRight = new Vector<Criterion>();
+        this(new Vector<Criterion>());
     }
 
-    public OrCriterion(Criterion criterionL, Criterion criterionR) {
+    OrCriterion(Vector<Criterion> filters) {
+        this.filters = filters;
+    }
+
+    public OrCriterion(Criterion... criterions) {
         this();
-        left(criterionL);
-        right(criterionR);
-    }
-
-    public FiltersBuilder left() {
-        return new AndCriterion(filtersLeft);
-    }
-
-    public FiltersBuilder right() {
-        return new AndCriterion(filtersRight);
+        for (Criterion criterion : criterions) {
+            add(criterion);
+        }
     }
 
     //N.B. this is hack to avoid adding 'final' to filters; To enable GWT serialization
     @SuppressWarnings("unused")
     private final void setFilters() {
-        this.filtersLeft = null;
-        this.filtersRight = null;
+        this.filters = null;
     }
 
-    public OrCriterion left(Criterion criterion) {
-        filtersLeft.add(criterion);
+    public OrCriterion add(Criterion criterion) {
+        this.filters.add(criterion);
         return this;
     }
 
-    public OrCriterion addLeft(Collection<Criterion> filters) {
-        filtersLeft.addAll(filters);
+    public OrCriterion addAll(Collection<Criterion> filters) {
+        this.filters.addAll(filters);
         return this;
     }
 
-    public OrCriterion right(Criterion criterion) {
-        filtersRight.add(criterion);
-        return this;
+    @Override
+    protected FiltersBuilder addCriterion(Criterion criterion) {
+        return add(criterion);
     }
 
-    public OrCriterion addRight(Collection<Criterion> filters) {
-        filtersRight.addAll(filters);
-        return this;
-    }
-
-    public Vector<Criterion> getFiltersLeft() {
-        return filtersLeft;
-    }
-
-    public Vector<Criterion> getFiltersRight() {
-        return filtersRight;
+    public Vector<Criterion> getFilters() {
+        return filters;
     }
 
     @Override
     public int hashCode() {
         int hashCode = 0;
-        if (this.filtersLeft != null) {
-            hashCode += this.filtersLeft.hashCode();
-        }
-        hashCode *= 0x1F;
-        if (this.filtersRight != null) {
-            hashCode += this.filtersRight.hashCode();
+        if (this.filters != null) {
+            hashCode += this.filters.hashCode();
         }
         return hashCode;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof OrCriterion)) {
+        if (!(o instanceof AndCriterion)) {
             return false;
         } else {
-            return EqualsHelper.equals(this.filtersLeft, ((OrCriterion) o).filtersLeft)
-                    && EqualsHelper.equals(this.filtersRight, ((OrCriterion) o).filtersRight);
+            return EqualsHelper.equals(this.filters, ((OrCriterion) o).filters);
         }
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(getFiltersLeft()).append(" OR ").append(getFiltersRight());
-        return builder.toString();
+        return ConverterUtils.convertCollection(getFilters(), " OR ");
     }
+
 }
