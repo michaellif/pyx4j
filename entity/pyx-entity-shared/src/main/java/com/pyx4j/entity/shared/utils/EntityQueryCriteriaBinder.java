@@ -40,7 +40,7 @@ import com.pyx4j.entity.core.criterion.RangeCriterion;
 
 public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEntity> {
 
-    public interface CriteriaValueConverter<TO extends IEntity> {
+    public interface CriteriaValueConverter {
 
         public Serializable convertValue(PropertyCriterion toPropertyCriterion);
 
@@ -62,7 +62,7 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
 
     private final Map<Path, Path> pathBinding = new HashMap<>();
 
-    private final Map<Path, CriteriaValueConverter<TO>> valueConverterBinding = new HashMap<>();
+    private final Map<Path, CriteriaValueConverter> valueConverterBinding = new HashMap<>();
 
     private final Map<Class<? extends Criterion>, CriterionConverter<?>> criterionConverterBinding = new HashMap<>();
 
@@ -102,7 +102,11 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
         pathBinding.put(toPath, boPath);
     }
 
-    public final void addCriteriaValueConverter(Path toPath, CriteriaValueConverter<TO> valueConvertor) {
+    public final void addCriteriaValueConverter(IObject<?> toMember, CriteriaValueConverter valueConvertor) {
+        addCriteriaValueConverter(toMember.getPath(), valueConvertor);
+    }
+
+    public final void addCriteriaValueConverter(Path toPath, CriteriaValueConverter valueConvertor) {
         valueConverterBinding.put(toPath, valueConvertor);
     }
 
@@ -204,7 +208,7 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
     }
 
     protected final Serializable convertValue(EntityQueryCriteria<BO> boCriteria, Path toPath, PropertyCriterion toPropertyCriterion) {
-        CriteriaValueConverter<TO> converter = valueConverterBinding.get(toPath);
+        CriteriaValueConverter converter = valueConverterBinding.get(toPath);
         if (converter != null) {
             return converter.convertValue(toPropertyCriterion);
         } else {

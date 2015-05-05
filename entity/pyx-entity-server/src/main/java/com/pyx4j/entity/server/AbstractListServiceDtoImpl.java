@@ -19,8 +19,6 @@
  */
 package com.pyx4j.entity.server;
 
-import java.io.Serializable;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -32,7 +30,6 @@ import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
@@ -142,15 +139,6 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
      */
     @Deprecated
     protected Criterion convertCriterion(EntityListCriteria<BO> criteria, Criterion cr) {
-        throw new Error("deprecated");
-    }
-
-    /**
-     *
-     * @deprecated TODO VladS switch to EntityQueryCriteriaBinder
-     */
-    @Deprecated
-    protected Serializable convertValue(EntityListCriteria<BO> criteria, PropertyCriterion propertyCriterion) {
         throw new Error("deprecated");
     }
 
