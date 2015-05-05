@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.Path;
@@ -51,6 +52,12 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
 
     }
 
+    public interface CriteriaEnhancer<BO extends IEntity> {
+
+        public void enhanceCriteria(PropertyCriterion toCriterion, EntityQueryCriteria<BO> criteria);
+
+    }
+
     private final EntityBinder<BO, TO> binder;
 
     private final Map<Path, Path> pathBinding = new HashMap<>();
@@ -59,31 +66,44 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
 
     private final Map<Class<? extends Criterion>, CriterionConverter<?>> criterionConverterBinding = new HashMap<>();
 
+    private final Map<Path, CriteriaEnhancer<BO>> criteriaEnhancerBinding = new HashMap<>();
+
+    private final TO toProto;
+
     public static <BO extends IEntity, TO extends IEntity> EntityQueryCriteriaBinder<BO, TO> create(EntityBinder<BO, TO> binder) {
         return new EntityQueryCriteriaBinder<BO, TO>(binder);
     }
 
     public EntityQueryCriteriaBinder(EntityBinder<BO, TO> binder) {
         this.binder = binder;
+        this.toProto = EntityFactory.getEntityPrototype(binder.toClass());
     }
 
-    public void bind(IObject<?> toMember, IObject<?> boMember) {
+    public final TO proto() {
+        return toProto;
+    }
+
+    public final void bind(IObject<?> toMember, IObject<?> boMember) {
         bind(toMember.getPath(), boMember.getPath());
     }
 
-    public void bind(Path toPath, Path boPath) {
+    public final void bind(Path toPath, Path boPath) {
         pathBinding.put(toPath, boPath);
     }
 
-    public void addCriteriaValueConverter(Path toPath, CriteriaValueConverter<TO> valueConvertor) {
+    public final void addCriteriaValueConverter(Path toPath, CriteriaValueConverter<TO> valueConvertor) {
         valueConverterBinding.put(toPath, valueConvertor);
     }
 
-    public <C extends Criterion> void addCriterionConverter(Class<C> toCriterionClass, CriterionConverter<C> criterionConverter) {
+    public final <C extends Criterion> void addCriterionConverter(Class<C> toCriterionClass, CriterionConverter<C> criterionConverter) {
         criterionConverterBinding.put(toCriterionClass, criterionConverter);
     }
 
-    public EntityListCriteria<BO> convertListCriteria(EntityListCriteria<TO> toCriteria) {
+    public final void addCriteriaEnhancer(IObject<?> toMember, CriteriaEnhancer<BO> valueConvertor) {
+        criteriaEnhancerBinding.put(toMember.getPath(), valueConvertor);
+    }
+
+    public final EntityListCriteria<BO> convertListCriteria(EntityListCriteria<TO> toCriteria) {
         EntityListCriteria<BO> boCriteria = EntityListCriteria.create(binder.boClass());
         boCriteria.setPageNumber(toCriteria.getPageNumber());
         boCriteria.setPageSize(toCriteria.getPageSize());
@@ -92,7 +112,7 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
         return boCriteria;
     }
 
-    public EntityQueryCriteria<BO> convertQueryCriteria(EntityQueryCriteria<TO> toCriteria) {
+    public final EntityQueryCriteria<BO> convertQueryCriteria(EntityQueryCriteria<TO> toCriteria) {
         EntityQueryCriteria<BO> boCriteria = EntityQueryCriteria.create(binder.boClass());
         boCriteria.setVersionedCriteria(toCriteria.getVersionedCriteria());
         convertCriteria(toCriteria, boCriteria);
@@ -112,7 +132,7 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
 
     private void convertCriteria(EntityQueryCriteria<TO> toCriteria, EntityQueryCriteria<BO> boCriteria) {
         if ((toCriteria.getFilters() != null) && (!toCriteria.getFilters().isEmpty())) {
-            boCriteria.addAll(convertFilters(toCriteria.getFilters()));
+            boCriteria.addAll(convertFilters(boCriteria, toCriteria.getFilters()));
         }
         if ((toCriteria.getSorts() != null) && (!toCriteria.getSorts().isEmpty())) {
             for (Sort s : toCriteria.getSorts()) {
@@ -127,10 +147,10 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
         }
     }
 
-    private Collection<Criterion> convertFilters(Collection<? extends Criterion> toFilters) {
+    private Collection<Criterion> convertFilters(EntityQueryCriteria<BO> boCriteria, Collection<? extends Criterion> toFilters) {
         Collection<Criterion> boFilters = new ArrayList<Criterion>();
         for (Criterion toCriterion : toFilters) {
-            Criterion criterion = convertCriterion(toCriterion);
+            Criterion criterion = convertCriterion(boCriteria, toCriterion);
             if (criterion != null) {
                 boFilters.add(criterion);
             }
@@ -139,7 +159,7 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
     }
 
     @SuppressWarnings("unchecked")
-    protected Criterion convertCriterion(Criterion toCriterion) {
+    protected final Criterion convertCriterion(EntityQueryCriteria<BO> boCriteria, Criterion toCriterion) {
         @SuppressWarnings("rawtypes")
         CriterionConverter converter = criterionConverterBinding.get(toCriterion.getClass());
         if (converter != null) {
@@ -147,26 +167,33 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
         } else if (toCriterion instanceof PropertyCriterion) {
             PropertyCriterion propertyCriterion = (PropertyCriterion) toCriterion;
             Path toPath = propertyCriterion.getPropertyPath();
-            return new PropertyCriterion(boPath(toPath), propertyCriterion.getRestriction(), convertValue(toPath, propertyCriterion));
+
+            CriteriaEnhancer<BO> valueConvertor = criteriaEnhancerBinding.get(toPath);
+            if (valueConvertor != null) {
+                valueConvertor.enhanceCriteria(propertyCriterion, boCriteria);
+                return null;
+            } else {
+                return new PropertyCriterion(boPath(toPath), propertyCriterion.getRestriction(), convertValue(boCriteria, toPath, propertyCriterion));
+            }
         } else if (toCriterion instanceof OrCriterion) {
             OrCriterion boCriterion = new OrCriterion();
-            boCriterion.addRight(convertFilters(((OrCriterion) toCriterion).getFiltersRight()));
-            boCriterion.addLeft(convertFilters(((OrCriterion) toCriterion).getFiltersLeft()));
+            boCriterion.addRight(convertFilters(boCriteria, ((OrCriterion) toCriterion).getFiltersRight()));
+            boCriterion.addLeft(convertFilters(boCriteria, ((OrCriterion) toCriterion).getFiltersLeft()));
             return boCriterion;
         } else if (toCriterion instanceof AndCriterion) {
             AndCriterion criterion = new AndCriterion();
-            criterion.addAll(convertFilters(((AndCriterion) toCriterion).getFilters()));
+            criterion.addAll(convertFilters(boCriteria, ((AndCriterion) toCriterion).getFilters()));
             return criterion;
         } else if (toCriterion instanceof RangeCriterion) {
             AndCriterion criterion = new AndCriterion();
-            criterion.addAll(convertFilters(((RangeCriterion) toCriterion).getFilters()));
+            criterion.addAll(convertFilters(boCriteria, ((RangeCriterion) toCriterion).getFilters()));
             return criterion;
         } else {
             throw new IllegalArgumentException("Can't convert " + toCriterion.getClass() + " criteria");
         }
     }
 
-    protected Serializable convertValue(Path toPath, PropertyCriterion toPropertyCriterion) {
+    protected final Serializable convertValue(EntityQueryCriteria<BO> boCriteria, Path toPath, PropertyCriterion toPropertyCriterion) {
         CriteriaValueConverter<TO> converter = valueConverterBinding.get(toPath);
         if (converter != null) {
             return converter.convertValue(toPropertyCriterion);
@@ -175,7 +202,7 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
             if (value instanceof Path) {
                 return boPath((Path) value);
             } else if (value instanceof Criterion) {
-                return convertCriterion((Criterion) value);
+                return convertCriterion(boCriteria, (Criterion) value);
             } else {
                 return value;
             }
