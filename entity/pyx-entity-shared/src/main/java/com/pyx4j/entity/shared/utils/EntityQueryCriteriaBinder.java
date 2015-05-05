@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.pyx4j.entity.core.EntityFactory;
@@ -67,6 +68,8 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
     private final Map<Class<? extends Criterion>, CriterionConverter<?>> criterionConverterBinding = new HashMap<>();
 
     private final Map<Path, CriteriaEnhancer<BO>> criteriaEnhancerBinding = new HashMap<>();
+
+    private final List<CriteriaEnhancer<BO>> defaultCriteriaEnhancers = new ArrayList<>();
 
     private final TO toProto;
 
@@ -114,6 +117,10 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
         criterionConverterBinding.put(toCriterionClass, criterionConverter);
     }
 
+    public final void addDefaultCriteriaEnhancer(CriteriaEnhancer<BO> valueConvertor) {
+        defaultCriteriaEnhancers.add(valueConvertor);
+    }
+
     public final void addCriteriaEnhancer(IObject<?> toMember, CriteriaEnhancer<BO> valueConvertor) {
         criteriaEnhancerBinding.put(toMember.getPath(), valueConvertor);
     }
@@ -146,6 +153,9 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
     }
 
     private void convertCriteria(EntityQueryCriteria<TO> toCriteria, EntityQueryCriteria<BO> boCriteria) {
+        for (CriteriaEnhancer<BO> enhancer : defaultCriteriaEnhancers) {
+            enhancer.enhanceCriteria(null, boCriteria);
+        }
         if ((toCriteria.getFilters() != null) && (!toCriteria.getFilters().isEmpty())) {
             boCriteria.addAll(convertFilters(boCriteria, toCriteria.getFilters()));
         }
