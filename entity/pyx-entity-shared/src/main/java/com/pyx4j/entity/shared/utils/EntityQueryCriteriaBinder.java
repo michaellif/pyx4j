@@ -188,8 +188,7 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
             }
         } else if (toCriterion instanceof OrCriterion) {
             OrCriterion boCriterion = new OrCriterion();
-            boCriterion.addRight(convertFilters(boCriteria, ((OrCriterion) toCriterion).getFiltersRight()));
-            boCriterion.addLeft(convertFilters(boCriteria, ((OrCriterion) toCriterion).getFiltersLeft()));
+            boCriterion.addAll(convertFilters(boCriteria, ((OrCriterion) toCriterion).getFilters()));
             return boCriterion;
         } else if (toCriterion instanceof AndCriterion) {
             AndCriterion criterion = new AndCriterion();
