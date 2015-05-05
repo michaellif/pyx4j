@@ -83,6 +83,17 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
         return toProto;
     }
 
+    /**
+     * This is used to create column Sorting
+     */
+    public final void map(IObject<?> toMember, IObject<?> boMember) {
+        bind(toMember.getPath(), boMember.getPath());
+    }
+
+    /**
+     * @deprecated use map()
+     */
+    @Deprecated
     public final void bind(IObject<?> toMember, IObject<?> boMember) {
         bind(toMember.getPath(), boMember.getPath());
     }
