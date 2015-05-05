@@ -56,7 +56,9 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
 
     private final List<Binding> binding = new Vector<Binding>();
 
-    private final Map<Path, Binding> bindingByTOMemberPath = new HashMap<Path, Binding>();
+    private final Map<Path, Binding> bindingByTOMemberPath = new HashMap<>();
+
+    private final Map<Path, ValueConverter<?, ?>> converterBindingByTOMemberPath = new HashMap<>();
 
     private static class Binding {
 
@@ -152,6 +154,16 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
         }
     }
 
+    @Override
+    public <TYPE extends Serializable> void addValueConverter(IPrimitive<TYPE> toMember, ValueConverter<BO, TYPE> valueConverter) {
+        converterBindingByTOMemberPath.put(toMember.getPath(), valueConverter);
+    }
+
+    @Override
+    public <TYPE extends IEntity> void addValueConverter(TYPE toMember, ValueConverter<BO, TYPE> valueConverter) {
+        converterBindingByTOMemberPath.put(toMember.getPath(), valueConverter);
+    }
+
     private void init() {
         if (binding.isEmpty()) {
             synchronized (binding) {
@@ -219,7 +231,14 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
                     dtoM.setAttachLevel(AttachLevel.Detached);
                 }
             } else if (b.binder == null) {
-                if (dboM instanceof ICollection) {
+                ValueConverter valueConverter = converterBindingByTOMemberPath.get(b.toMemberPath);
+                if (valueConverter != null) {
+                    Object value = valueConverter.convertValue(bo);
+                    if (dtoM instanceof IEntity) {
+                        value = ((IEntity) value).getValue();
+                    }
+                    to.setValue(b.toMemberPath, (Serializable) value);
+                } else if (dboM instanceof ICollection) {
                     if (dboM.getAttachLevel() == AttachLevel.CollectionSizeOnly) {
                         ((ICollection<IEntity, ?>) dtoM).setCollectionSizeOnly(((ICollection<IEntity, ?>) dboM).size());
                     } else {

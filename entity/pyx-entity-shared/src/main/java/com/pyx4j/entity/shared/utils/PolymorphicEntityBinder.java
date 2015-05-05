@@ -25,21 +25,17 @@ import java.util.Map;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
 
-public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEntity> implements EntityBinder<BO, TO> {
-
-    protected Class<BO> boClass;
-
-    protected Class<TO> toClass;
+public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEntity> extends SimpleEntityBinder<BO, TO> {
 
     private final Map<Class<? extends BO>, EntityBinder<BO, TO>> bindingByBO = new HashMap<>();
 
     private final Map<Class<? extends TO>, EntityBinder<BO, TO>> bindingByTO = new HashMap<>();
 
     protected PolymorphicEntityBinder(Class<BO> boClass, Class<TO> toClass) {
-        this.boClass = boClass;
-        this.toClass = toClass;
+        super(boClass, toClass);
     }
 
+    @Override
     protected abstract void bind();
 
     @SuppressWarnings("unchecked")
@@ -71,16 +67,6 @@ public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEn
     @SuppressWarnings("unchecked")
     private EntityBinder<BO, TO> getBinderByTO(TO to) {
         return getBinderByTO((Class<TO>) to.getInstanceValueClass());
-    }
-
-    @Override
-    public Class<BO> boClass() {
-        return boClass;
-    }
-
-    @Override
-    public Class<TO> toClass() {
-        return toClass;
     }
 
     @Override
