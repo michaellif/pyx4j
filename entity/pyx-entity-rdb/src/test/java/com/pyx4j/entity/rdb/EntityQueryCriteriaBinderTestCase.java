@@ -97,6 +97,7 @@ public abstract class EntityQueryCriteriaBinderTestCase extends DatastoreTestBas
         // Query
         {
             EntityQueryCriteria<EmployeeTO> toCriteria = EntityQueryCriteria.create(EmployeeTO.class);
+            toCriteria.eq(toCriteria.proto().workAddress().streetName(), setId);
             toCriteria.eq(toCriteria.proto().employmentBusinessStatus(), EmploymentBusinessStatus.Past);
 
             List<Employee> emps = srv.query(criteriaBinder.convertQueryCriteria(toCriteria));
@@ -106,6 +107,7 @@ public abstract class EntityQueryCriteriaBinderTestCase extends DatastoreTestBas
 
         {
             EntityQueryCriteria<EmployeeTO> toCriteria = EntityQueryCriteria.create(EmployeeTO.class);
+            toCriteria.eq(toCriteria.proto().workAddress().streetName(), setId);
             toCriteria.eq(toCriteria.proto().employmentBusinessStatus(), EmploymentBusinessStatus.Current);
 
             List<Employee> emps = srv.query(criteriaBinder.convertQueryCriteria(toCriteria));
