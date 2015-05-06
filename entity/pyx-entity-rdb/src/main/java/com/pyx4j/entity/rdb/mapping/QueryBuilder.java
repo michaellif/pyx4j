@@ -195,9 +195,14 @@ public class QueryBuilder<T extends IEntity> {
             criterionSql.append(" ) ");
         } else if (criterion instanceof OrCriterion) {
             criterionSql.append(" (( ");
-            appendFilters(criterionSql, joinBuilder, ((OrCriterion) criterion).getFiltersLeft(), true, false);
-            criterionSql.append(" ) OR ( ");
-            appendFilters(criterionSql, joinBuilder, ((OrCriterion) criterion).getFiltersRight(), true, false);
+            boolean nextOr = false;
+            for (Criterion cr2 : ((OrCriterion) criterion).getFilters()) {
+                if (nextOr) {
+                    criterionSql.append(" ) OR ( ");
+                }
+                appendCriterion(criterionSql, joinBuilder, cr2, false);
+                nextOr = true;
+            }
             criterionSql.append(" )) ");
         } else if (criterion instanceof RangeCriterion) {
             appendFilters(criterionSql, joinBuilder, ((RangeCriterion) criterion).getFilters(), true, required);

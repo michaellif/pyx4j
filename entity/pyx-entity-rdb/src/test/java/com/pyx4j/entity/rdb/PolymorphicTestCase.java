@@ -581,10 +581,10 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
             EntityQueryCriteria<ReferenceNotOwnerEntity> criteria = EntityQueryCriteria.create(ReferenceNotOwnerEntity.class);
             criteria.eq(criteria.proto().testId(), testId);
             OrCriterion or = criteria.or();
-            or.left().eq(criteria.proto().reference(), ent11);
-            OrCriterion or2 = or.right().or();
-            or2.left().eq(criteria.proto().reference(), ent21);
-            or2.right().eq(criteria.proto().reference(), ent11);
+            or.eq(criteria.proto().reference(), ent11);
+            OrCriterion or2 = or.or();
+            or2.eq(criteria.proto().reference(), ent21);
+            or2.eq(criteria.proto().reference(), ent11);
 
             List<ReferenceNotOwnerEntity> found = srv.query(criteria);
             Assert.assertEquals("retrieved size", 1, found.size());
