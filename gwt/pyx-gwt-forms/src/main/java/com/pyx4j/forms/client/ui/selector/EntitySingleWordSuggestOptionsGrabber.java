@@ -19,19 +19,15 @@
  */
 package com.pyx4j.forms.client.ui.selector;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.selector.IOptionsGrabber;
 import com.pyx4j.widgets.client.selector.SingleWordSuggestOptionsGrabber;
 
 public abstract class EntitySingleWordSuggestOptionsGrabber<E extends IEntity> extends SingleWordSuggestOptionsGrabber<E> {
 
-    private EntityListCriteria<E> criteria;
+    private final EntityListCriteria<E> criteria;
 
     public EntitySingleWordSuggestOptionsGrabber(AbstractListCrudService<E> service, EntityListCriteria<E> criteria) {
         super(service);
@@ -41,17 +37,17 @@ public abstract class EntitySingleWordSuggestOptionsGrabber<E extends IEntity> e
     @Override
     public void grabOptions(IOptionsGrabber.Request request, IOptionsGrabber.Callback<E> callback) {
 
-        AsyncCallback<EntitySearchResult<E>> callbackOptionsGrabber = new DefaultAsyncCallback<EntitySearchResult<E>>() {
-
-            @Override
-            public void onSuccess(EntitySearchResult<E> result) {
-                filter(result, request.getQuery().toLowerCase());
-                callback.onOptionsReady(request, new Response<E>(filtered));
-            }
-
-        };
-
-        service.list(callbackOptionsGrabber, criteria);
+//        AsyncCallback<EntitySearchResult<E>> callbackOptionsGrabber = new DefaultAsyncCallback<EntitySearchResult<E>>() {
+//
+//            @Override
+//            public void onSuccess(EntitySearchResult<E> result) {
+//                filter(result, request.getQuery().toLowerCase());
+//                callback.onOptionsReady(request, new Response<E>(filtered));
+//            }
+//
+//        };
+//
+//        service.list(callbackOptionsGrabber, criteria);
     }
 
 }
