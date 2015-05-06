@@ -19,36 +19,22 @@
  */
 package com.pyx4j.entity.server;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.Path;
-import com.pyx4j.entity.core.criterion.AndCriterion;
-import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.core.criterion.OrCriterion;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
-import com.pyx4j.entity.core.criterion.RangeCriterion;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.shared.utils.EntityBinder;
-import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.entity.shared.utils.EntityQueryCriteriaBinder;
 import com.pyx4j.security.shared.SecurityController;
 
 public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends IEntity> implements AbstractListCrudService<TO>, CursorSource<TO> {
@@ -62,6 +48,8 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     protected final TO toProto;
 
     protected final EntityBinder<BO, TO> binder;
+
+    protected final EntityQueryCriteriaBinder<BO, TO> criteriaBinder;
 
     protected final boolean strictDataModelPermissions = ServerSideConfiguration.instance().strictDataModelPermissions();
 
@@ -82,6 +70,8 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         boProto = EntityFactory.getEntityPrototype(boClass);
         toProto = EntityFactory.getEntityPrototype(toClass);
         this.binder = binder;
+        this.criteriaBinder = EntityQueryCriteriaBinder.create(binder);
+
     }
 
     @Deprecated
@@ -147,99 +137,8 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
      * @deprecated TODO VladS switch to EntityQueryCriteriaBinder
      */
     @Deprecated
-    private Collection<Criterion> convertFilters(EntityListCriteria<BO> criteria, Collection<? extends Criterion> toFilters) {
-        Collection<Criterion> boFilters = new ArrayList<Criterion>();
-        for (Criterion cr : toFilters) {
-            Criterion criterion = convertCriterion(criteria, cr);
-            if (criterion != null) {
-                boFilters.add(criterion);
-            }
-        }
-        return boFilters;
-    }
-
-    /**
-     *
-     * @deprecated TODO VladS switch to EntityQueryCriteriaBinder
-     */
-    @Deprecated
-    protected Criterion convertCriterion(EntityListCriteria<BO> criteria, Criterion cr) {
-        if (cr instanceof PropertyCriterion) {
-            PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
-            Path path = binder.getBoundBOMemberPath(propertyCriterion.getPropertyPath());
-            if (path == null) {
-                path = convertPropertyDTOPathToDBOPath(propertyCriterion.getPropertyPath(), boProto, toProto);
-            }
-            IObject<?> boMember = boProto.getMember(path);
-            if (propertyCriterion.getRestriction() == Restriction.EQUAL && Date.class.equals(boProto.getMember(path).getValueClass())
-                    && propertyCriterion.getValue() instanceof LogicalDate) {
-                AndCriterion criterion = new AndCriterion();
-                criterion.add(PropertyCriterion.ge(boMember, propertyCriterion.getValue()));
-                criterion.add(PropertyCriterion.lt(boMember, DateUtils.dayEnd((Date) propertyCriterion.getValue())));
-                return criterion;
-            } else {
-                return new PropertyCriterion(path, propertyCriterion.getRestriction(), convertValue(criteria, propertyCriterion));
-            }
-        } else if (cr instanceof OrCriterion) {
-            OrCriterion criterion = new OrCriterion();
-            criterion.addRight(convertFilters(criteria, ((OrCriterion) cr).getFiltersRight()));
-            criterion.addLeft(convertFilters(criteria, ((OrCriterion) cr).getFiltersLeft()));
-            return criterion;
-        } else if (cr instanceof AndCriterion) {
-            AndCriterion criterion = new AndCriterion();
-            criterion.addAll(convertFilters(criteria, ((AndCriterion) cr).getFilters()));
-            return criterion;
-        } else if (cr instanceof RangeCriterion) {
-            AndCriterion criterion = new AndCriterion();
-            criterion.addAll(convertFilters(criteria, ((RangeCriterion) cr).getFilters()));
-            return criterion;
-        } else {
-            throw new IllegalArgumentException("Can't convert " + cr.getClass() + " criteria");
-        }
-    }
-
-    /**
-     *
-     * @deprecated TODO VladS switch to EntityQueryCriteriaBinder
-     */
-    @Deprecated
-    protected Serializable convertValue(EntityListCriteria<BO> criteria, PropertyCriterion propertyCriterion) {
-        Serializable value = propertyCriterion.getValue();
-        if (value instanceof Path) {
-            Path path = binder.getBoundBOMemberPath((Path) value);
-            if (path == null) {
-                path = convertPropertyDTOPathToDBOPath((Path) value, boProto, toProto);
-            }
-            return path;
-        } else if (value instanceof Criterion) {
-            return convertCriterion(criteria, (Criterion) value);
-        } else {
-            return value;
-        }
-    }
-
-    /**
-     *
-     * @deprecated TODO VladS switch to EntityQueryCriteriaBinder
-     */
-    @Deprecated
     protected void enhanceListCriteria(EntityListCriteria<BO> boCriteria, EntityListCriteria<TO> toCriteria) {
-        if ((toCriteria.getFilters() != null) && (!toCriteria.getFilters().isEmpty())) {
-            boCriteria.addAll(convertFilters(boCriteria, toCriteria.getFilters()));
-        }
-        if ((toCriteria.getSorts() != null) && (!toCriteria.getSorts().isEmpty())) {
-            for (Sort s : toCriteria.getSorts()) {
-                Path path = binder.getBoundBOMemberPath(s.getPropertyPath());
-                if (path == null) {
-                    path = convertPropertyDTOPathToDBOPath(s.getPropertyPath(), boCriteria.proto(), toCriteria.proto());
-                }
-                if (s.isDescending()) {
-                    boCriteria.desc(path);
-                } else {
-                    boCriteria.asc(path);
-                }
-            }
-        }
+        throw new Error("deprecated");
     }
 
     @Deprecated
@@ -263,11 +162,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
 
     @Override
     public ICursorIterator<TO> getCursor(String encodedCursorReference, EntityListCriteria<TO> dtoCriteria, AttachLevel attachLevel) {
-        EntityListCriteria<BO> criteria = EntityListCriteria.create(boClass);
-        criteria.setPageNumber(dtoCriteria.getPageNumber());
-        criteria.setPageSize(dtoCriteria.getPageSize());
-        criteria.setVersionedCriteria(dtoCriteria.getVersionedCriteria());
-        enhanceListCriteria(criteria, dtoCriteria);
+        EntityListCriteria<BO> criteria = criteriaBinder.convertListCriteria(dtoCriteria);
 
         return new CursorIteratorDelegate<TO, BO>(getQueryCursor(encodedCursorReference, criteria, attachLevel)) {
 
@@ -288,11 +183,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         if (!dtoCriteria.getEntityClass().equals(toClass)) {
             throw new Error("Service " + this.getClass().getName() + " declaration error. " + toClass + "!=" + dtoCriteria.getEntityClass());
         }
-        EntityListCriteria<BO> criteria = EntityListCriteria.create(boClass);
-        criteria.setPageNumber(dtoCriteria.getPageNumber());
-        criteria.setPageSize(dtoCriteria.getPageSize());
-        criteria.setVersionedCriteria(dtoCriteria.getVersionedCriteria());
-        enhanceListCriteria(criteria, dtoCriteria);
+        EntityListCriteria<BO> criteria = criteriaBinder.convertListCriteria(dtoCriteria);
         EntitySearchResult<BO> dbResults = query(criteria);
 
         EntitySearchResult<TO> result = new EntitySearchResult<TO>();

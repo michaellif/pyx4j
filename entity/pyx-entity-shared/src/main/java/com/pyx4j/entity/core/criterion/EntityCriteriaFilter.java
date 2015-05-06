@@ -53,7 +53,12 @@ public class EntityCriteriaFilter<E extends IEntity> implements Filter<E> {
             if (cr instanceof PropertyCriterion) {
                 accept = accept(input, (PropertyCriterion) cr);
             } else if (cr instanceof OrCriterion) {
-                accept = (accept(input, ((OrCriterion) cr).getFiltersLeft()) || accept(input, ((OrCriterion) cr).getFiltersRight()));
+                for (Criterion cr2 : ((OrCriterion) cr).getFilters()) {
+                    accept |= accept(input, (PropertyCriterion) cr2);
+                    if (accept) {
+                        break;
+                    }
+                }
             } else {
                 throw new RuntimeException("Unsupported Operator " + cr.getClass());
             }
