@@ -27,7 +27,6 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
-import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
@@ -131,15 +130,6 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     @Deprecated
     protected Path convertPropertyDTOPathToDBOPath(Path path, BO boProto, TO toProto) {
         throw new Error("Unsupported query property path " + path);
-    }
-
-    /**
-     *
-     * @deprecated TODO VladS switch to EntityQueryCriteriaBinder
-     */
-    @Deprecated
-    protected Criterion convertCriterion(EntityListCriteria<BO> criteria, Criterion cr) {
-        throw new Error("deprecated");
     }
 
     /**

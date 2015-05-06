@@ -47,9 +47,9 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
 
     }
 
-    public interface CriterionConverter<C extends Criterion> {
+    public interface CriterionConverter<C extends Criterion, BO extends IEntity> {
 
-        public Criterion convertCriterion(C toCriterion);
+        public Criterion convertCriterion(C toCriterion, EntityQueryCriteria<BO> criteria);
 
     }
 
@@ -59,17 +59,23 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
 
     }
 
+    public interface DefaultCriteriaEnhancer<BO extends IEntity> {
+
+        public void enhanceCriteria(EntityQueryCriteria<BO> criteria);
+
+    }
+
     private final EntityBinder<BO, TO> binder;
 
     private final Map<Path, Path> pathBinding = new HashMap<>();
 
     private final Map<Path, CriteriaValueConverter> valueConverterBinding = new HashMap<>();
 
-    private final Map<Class<? extends Criterion>, CriterionConverter<?>> criterionConverterBinding = new HashMap<>();
+    private final Map<Class<? extends Criterion>, CriterionConverter<?, BO>> criterionConverterBinding = new HashMap<>();
 
     private final Map<Path, CriteriaEnhancer<BO>> criteriaEnhancerBinding = new HashMap<>();
 
-    private final List<CriteriaEnhancer<BO>> defaultCriteriaEnhancers = new ArrayList<>();
+    private final List<DefaultCriteriaEnhancer<BO>> defaultCriteriaEnhancers = new ArrayList<>();
 
     private final TO toProto;
 
@@ -106,18 +112,17 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
     }
 
     public final void addCriteriaValueConverter(IObject<?> toMember, CriteriaValueConverter valueConvertor) {
-        addCriteriaValueConverter(toMember.getPath(), valueConvertor);
+        valueConverterBinding.put(toMember.getPath(), valueConvertor);
     }
 
-    public final void addCriteriaValueConverter(Path toPath, CriteriaValueConverter valueConvertor) {
-        valueConverterBinding.put(toPath, valueConvertor);
-    }
-
-    public final <C extends Criterion> void addCriterionConverter(Class<C> toCriterionClass, CriterionConverter<C> criterionConverter) {
+    public final <C extends Criterion> void addCriterionConverter(Class<C> toCriterionClass, CriterionConverter<C, BO> criterionConverter) {
         criterionConverterBinding.put(toCriterionClass, criterionConverter);
     }
 
-    public final void addDefaultCriteriaEnhancer(CriteriaEnhancer<BO> valueConvertor) {
+    /**
+     * This Enhancer executed last, after all TO Criteria converted
+     */
+    public final void addDefaultCriteriaEnhancer(DefaultCriteriaEnhancer<BO> valueConvertor) {
         defaultCriteriaEnhancers.add(valueConvertor);
     }
 
@@ -153,9 +158,6 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
     }
 
     private void convertCriteria(EntityQueryCriteria<TO> toCriteria, EntityQueryCriteria<BO> boCriteria) {
-        for (CriteriaEnhancer<BO> enhancer : defaultCriteriaEnhancers) {
-            enhancer.enhanceCriteria(null, boCriteria);
-        }
         if ((toCriteria.getFilters() != null) && (!toCriteria.getFilters().isEmpty())) {
             boCriteria.addAll(convertFilters(boCriteria, toCriteria.getFilters()));
         }
@@ -169,6 +171,9 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
                     boCriteria.asc(boPath);
                 }
             }
+        }
+        for (DefaultCriteriaEnhancer<BO> enhancer : defaultCriteriaEnhancers) {
+            enhancer.enhanceCriteria(boCriteria);
         }
     }
 
@@ -188,7 +193,7 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
         @SuppressWarnings("rawtypes")
         CriterionConverter converter = criterionConverterBinding.get(toCriterion.getClass());
         if (converter != null) {
-            return converter.convertCriterion(toCriterion);
+            return converter.convertCriterion(toCriterion, boCriteria);
         } else if (toCriterion instanceof PropertyCriterion) {
             PropertyCriterion propertyCriterion = (PropertyCriterion) toCriterion;
             Path toPath = propertyCriterion.getPropertyPath();
