@@ -27,13 +27,13 @@ import java.util.Vector;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 
-public abstract class SingleWordSuggestOptionsGrabber<E> implements IOptionsGrabber<E> {
+public abstract class SingleWordSuggestOptionsGrabber<E extends IEntity> implements IOptionsGrabber<E> {
 
-    protected final AbstractListCrudService<? extends IEntity> service;
+    protected final AbstractListCrudService<E> service;
 
     protected List<E> filtered;
 
-    public SingleWordSuggestOptionsGrabber(AbstractListCrudService<? extends IEntity> service) {
+    public SingleWordSuggestOptionsGrabber(AbstractListCrudService<E> service) {
         this.service = service;
         this.filtered = new LinkedList<E>();
     }
