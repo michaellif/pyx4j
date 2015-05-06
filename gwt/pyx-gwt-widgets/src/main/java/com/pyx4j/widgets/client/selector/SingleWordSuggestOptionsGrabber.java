@@ -29,11 +29,11 @@ import com.pyx4j.entity.rpc.AbstractListCrudService;
 
 public abstract class SingleWordSuggestOptionsGrabber<E extends IEntity> implements IOptionsGrabber<E> {
 
-    protected final AbstractListCrudService<E> service;
+    protected final AbstractListCrudService<? extends IEntity> service;
 
     protected List<E> filtered;
 
-    public SingleWordSuggestOptionsGrabber(AbstractListCrudService<E> service) {
+    public SingleWordSuggestOptionsGrabber(AbstractListCrudService<? extends IEntity> service) {
         this.service = service;
         this.filtered = new LinkedList<E>();
     }
