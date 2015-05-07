@@ -11,7 +11,7 @@ import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 public class RichTextTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        ReachTextEditor, ReachTextArea, RteToolbar, RteToolbarButton, RteToolbarButtonNoToggle, RteCheckBox,
+        ReachTextEditor, ReachTextArea, RteToolbar, RteToolbarTop, RteToolbarBottom, RteToolbarButton, RteToolbarButtonNoToggle, RteCheckBox,
 
         ReachTextViewer
     }
@@ -86,6 +86,14 @@ public class RichTextTheme extends Theme {
         style.addProperty("line-height", "2.6em");
         style.addProperty("background", ThemeColor.foreground, 0.02);
         style.addProperty("padding", "2px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.RteToolbarTop);
+        style.addProperty("text-align", "left");
+        addStyle(style);
+
+        style = new Style(".", StyleName.RteToolbarBottom);
+        style.addProperty("text-align", "left");
         addStyle(style);
 
     }
