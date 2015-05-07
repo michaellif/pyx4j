@@ -139,6 +139,9 @@ public class MailQueue implements Runnable {
             persistable.statusCallbackClass().setValue(callbackClass.getName());
         }
         Collection<String> sendTo = CollectionUtils.union(CollectionUtils.union(mailMessage.getTo(), mailMessage.getCc()), mailMessage.getBcc());
+        if (sendTo.isEmpty()) {
+            throw new Error("No destination E-Mail addresses found");
+        }
         persistable.sendTo().setValue(ConverterUtils.convertStringCollection(sendTo, ", "));
         persistable.keywords().setValue(ConverterUtils.convertStringCollection(mailMessage.getKeywords(), ", "));
 
@@ -195,7 +198,7 @@ public class MailQueue implements Runnable {
                         return;
                     }
                 }
-                // Do try not to make delivery upon shutdown or System Maintenance.  
+                // Do try not to make delivery upon shutdown or System Maintenance.
                 if (shutdown || ServerSideConfiguration.instance().datastoreReadOnly()) {
                     break;
                 }
@@ -339,18 +342,18 @@ public class MailQueue implements Runnable {
 
                         AbstractOutgoingMailQueue persistable = runInEntityNamespace(persistableEntityClass,
                                 new Executable<AbstractOutgoingMailQueue, RuntimeException>() {
-                                    @Override
-                                    public AbstractOutgoingMailQueue execute() {
-                                        @SuppressWarnings("unchecked")
-                                        EntityListCriteria<AbstractOutgoingMailQueue> criteria = (EntityListCriteria<AbstractOutgoingMailQueue>) EntityListCriteria
-                                                .create(persistableEntityClass);
-                                        criteria.eq(criteria.proto().status(), MailQueueStatus.Queued);
-                                        criteria.asc(criteria.proto().attempts());
-                                        criteria.desc(criteria.proto().priority());
-                                        criteria.asc(criteria.proto().updated());
-                                        return Persistence.service().retrieve(criteria);
-                                    }
-                                });
+                            @Override
+                            public AbstractOutgoingMailQueue execute() {
+                                @SuppressWarnings("unchecked")
+                                EntityListCriteria<AbstractOutgoingMailQueue> criteria = (EntityListCriteria<AbstractOutgoingMailQueue>) EntityListCriteria
+                                .create(persistableEntityClass);
+                                criteria.eq(criteria.proto().status(), MailQueueStatus.Queued);
+                                criteria.asc(criteria.proto().attempts());
+                                criteria.desc(criteria.proto().priority());
+                                criteria.asc(criteria.proto().updated());
+                                return Persistence.service().retrieve(criteria);
+                            }
+                        });
 
                         if (persistable != null) {
                             return persistable;

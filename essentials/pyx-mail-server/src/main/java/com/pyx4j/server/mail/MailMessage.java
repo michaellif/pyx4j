@@ -114,7 +114,11 @@ public class MailMessage implements Serializable {
     }
 
     public Collection<String> getTo() {
-        return to;
+        if (this.to == null) {
+            return Collections.emptyList();
+        } else {
+            return to;
+        }
     }
 
     public void setTo(Collection<String> to) {
