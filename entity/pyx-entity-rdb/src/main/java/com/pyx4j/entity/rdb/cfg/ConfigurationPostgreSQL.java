@@ -137,6 +137,11 @@ public abstract class ConfigurationPostgreSQL implements Configuration {
     }
 
     @Override
+    public ConnectionCustomizer connectionCustomizer() {
+        return null;
+    }
+
+    @Override
     public NamingConvention namingConvention() {
         return null;
     }

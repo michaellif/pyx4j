@@ -42,4 +42,15 @@ public class EntityFormatUtils {
     public static void append(IPrimitive<String> member, String sep, String text) {
         member.setValue(CommonsStringUtils.nvl_concat(member.getValue(), text, sep));
     }
+
+    public static boolean trimToLength(IPrimitive<String> member) {
+        if (!member.isNull()) {
+            int len = member.getMeta().getLength();
+            if ((member.getValue().length() > len)) {
+                member.setValue(member.getValue().substring(0, len - 3) + "...");
+                return true;
+            }
+        }
+        return false;
+    }
 }

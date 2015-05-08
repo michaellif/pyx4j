@@ -45,6 +45,7 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AbstractOutgoingMailQueue;
 import com.pyx4j.entity.shared.AbstractOutgoingMailQueue.MailQueueStatus;
+import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.server.contexts.NamespaceManager;
 
@@ -140,6 +141,7 @@ public class MailQueue implements Runnable {
         }
         Collection<String> sendTo = CollectionUtils.union(CollectionUtils.union(mailMessage.getTo(), mailMessage.getCc()), mailMessage.getBcc());
         persistable.sendTo().setValue(ConverterUtils.convertStringCollection(sendTo, ", "));
+        EntityFromatUtils.trimToLength(persistable.sendTo());
         persistable.keywords().setValue(ConverterUtils.convertStringCollection(mailMessage.getKeywords(), ", "));
 
         runInEntityNamespace(persistable.getEntityMeta().getEntityClass(), new Executable<Void, RuntimeException>() {
@@ -244,6 +246,7 @@ public class MailQueue implements Runnable {
                             }
                             persistableUpdate.lastAttemptErrorMessage().setValue(
                                     trunkLength(mailMessage.getDeliveryErrorMessage(), persistableUpdate.lastAttemptErrorMessage().getMeta().getLength()));
+                            EntityFromatUtils.trimToLength(persistableUpdate.lastAttemptErrorMessage());
                             persistableUpdate.attempts().setValue(persistable.attempts().getValue(0) + 1);
                             if ((persistable.attempts().getValue() > mailConfig.maxDeliveryAttempts())
                                     && (persistableUpdate.status().getValue() != MailQueueStatus.Success)) {

@@ -349,9 +349,9 @@
             </dependency>
 
             <dependency>
-                <groupId>c3p0</groupId>
+                <groupId>com.mchange</groupId>
                 <artifactId>c3p0</artifactId>
-                <version>0.9.1.2</version>
+                <version>0.9.5</version>
             </dependency>
 
             <dependency>
@@ -496,7 +496,7 @@
             <dependency>
                 <groupId>org.javassist</groupId>
                 <artifactId>javassist</artifactId>
-                <version>3.18.2-GA</version>
+                <version>3.19.0-GA</version>
             </dependency>
 
             <dependency>
