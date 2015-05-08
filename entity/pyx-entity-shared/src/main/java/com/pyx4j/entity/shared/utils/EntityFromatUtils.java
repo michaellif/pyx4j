@@ -25,7 +25,7 @@ import com.pyx4j.entity.core.IPrimitive;
 
 public class EntityFromatUtils {
 
-    public static String nvl_concat(String sep, IPrimitive<String>... values) {
+    public static String nvl_concat(String sep, @SuppressWarnings("unchecked") IPrimitive<String>... values) {
         StringBuilder b = new StringBuilder();
         for (IPrimitive<String> s : values) {
             if (CommonsStringUtils.isEmpty(s.getValue())) {
@@ -43,12 +43,14 @@ public class EntityFromatUtils {
         member.setValue(CommonsStringUtils.nvl_concat(member.getValue(), text, sep));
     }
 
-    public static void trimToLength(IPrimitive<String> member) {
+    public static boolean trimToLength(IPrimitive<String> member) {
         if (!member.isNull()) {
             int len = member.getMeta().getLength();
             if ((member.getValue().length() > len)) {
                 member.setValue(member.getValue().substring(0, len - 3) + "...");
+                return true;
             }
         }
+        return false;
     }
 }
