@@ -25,7 +25,8 @@ import com.pyx4j.entity.core.IPrimitive;
 
 public class EntityFromatUtils {
 
-    public static String nvl_concat(String sep, @SuppressWarnings("unchecked") IPrimitive<String>... values) {
+    @SafeVarargs
+    public static String nvl_concat(String sep, IPrimitive<String>... values) {
         StringBuilder b = new StringBuilder();
         for (IPrimitive<String> s : values) {
             if (CommonsStringUtils.isEmpty(s.getValue())) {
