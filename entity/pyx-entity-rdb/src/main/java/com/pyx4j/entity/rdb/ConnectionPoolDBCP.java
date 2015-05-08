@@ -55,7 +55,7 @@ public class ConnectionPoolDBCP implements ConnectionPool {
 
     public ConnectionPoolDBCP(Configuration cfg) {
 
-        for (ConnectionPoolType connectionType : ConnectionPoolType.poolable()) {
+        for (ConnectionPoolType connectionType : ConnectionPoolType.managedByPersistenceService()) {
             ConnectionPoolConfiguration cpc = cfg.connectionPoolConfiguration(connectionType);
 
             ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(cfg.connectionUrl(), cfg.userName(), cfg.password());

@@ -21,11 +21,17 @@ package com.pyx4j.entity.rdb.cfg;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
+import com.pyx4j.entity.rdb.dialect.OracleConnectionCustomizer;
 
 public abstract class ConfigurationOracle implements Configuration {
+
+    private static final Logger log = LoggerFactory.getLogger(ConfigurationOracle.class);
 
     @Override
     public DatabaseType databaseType() {
@@ -154,6 +160,11 @@ public abstract class ConfigurationOracle implements Configuration {
     @Override
     public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionPoolType connectionType) {
         return new ConnectionPoolConfiguration(connectionType);
+    }
+
+    @Override
+    public ConnectionCustomizer connectionCustomizer() {
+        return new OracleConnectionCustomizer();
     }
 
     @Override
