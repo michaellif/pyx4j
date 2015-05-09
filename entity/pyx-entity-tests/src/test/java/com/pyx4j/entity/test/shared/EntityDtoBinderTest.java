@@ -26,9 +26,15 @@ import org.junit.Assert;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.server.CrudEntityBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder.ValueConverter;
 import com.pyx4j.entity.shared.utils.PolymorphicEntityBinder;
 import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.Employee.EmploymentStatus;
+import com.pyx4j.entity.test.shared.domain.EmployeeTO;
+import com.pyx4j.entity.test.shared.domain.EmployeeTO.EmploymentBusinessStatus;
 import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntity;
@@ -140,6 +146,39 @@ public class EntityDtoBinderTest extends InitializerTestBase {
 
         Assert.assertEquals("owned PK Value", emp1.workAddress().id().getValue(), emp2.workAddress().id().getValue());
         Assert.assertEquals("address.streetName Value", emp1.workAddress().streetName().getValue(), emp2.workAddress().streetName().getValue());
+    }
+
+    public void testValueConverter() {
+        EmployeeTO toProto = EntityFactory.getEntityPrototype(EmployeeTO.class);
+
+        EntityBinder<Employee, EmployeeTO> binder = new CrudEntityBinder<Employee, EmployeeTO>(Employee.class, EmployeeTO.class) {
+
+            @Override
+            protected void bind() {
+                bindCompleteObject();
+            }
+
+        };
+
+        binder.addValueConverter(toProto.employmentBusinessStatus(), new ValueConverter<Employee, EmploymentBusinessStatus>() {
+            @Override
+            public EmploymentBusinessStatus convertValue(Employee bo) {
+                if (bo.employmentStatus().getValue() == EmploymentStatus.DISMISSED) {
+                    return EmploymentBusinessStatus.Past;
+                } else {
+                    return EmploymentBusinessStatus.Current;
+                }
+            }
+        });
+
+        {
+            Employee emp1 = EntityFactory.create(Employee.class);
+            emp1.employmentStatus().setValue(EmploymentStatus.DISMISSED);
+
+            EmployeeTO empTo = binder.createTO(emp1);
+            Assert.assertEquals("Value Converted", EmploymentBusinessStatus.Past, empTo.employmentBusinessStatus().getValue());
+        }
+
     }
 
     private static class PolymorphicEntityDtoBinder extends SimpleEntityBinder<ReferenceEntityDTO, ReferenceEntity> {
