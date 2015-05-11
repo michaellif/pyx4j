@@ -47,13 +47,13 @@ class ValueAdapterString extends ValueAdapterPrimitive {
     }
 
     @Override
-    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String columnName) {
-        super.appendColumnDefinition(sql, dialect, member, columnName);
+    public String sqlColumnTypeDefinition(Dialect dialect, MemberOperationsMeta member, String columnName) {
         int maxLength = member.getMemberMeta().getLength();
         if (maxLength == 0) {
             maxLength = TableModel.ORDINARY_STRING_LENGHT_MAX;
         }
-        sql.append('(').append(maxLength).append(')');
+        return super.sqlColumnTypeDefinition(dialect, member, columnName) //
+                + '(' + maxLength + ')';
     }
 
     @Override
@@ -105,7 +105,7 @@ class ValueAdapterString extends ValueAdapterPrimitive {
 
     /**
      * Adapter without size validation for Query
-     * 
+     *
      */
 
     private class QueryStringValueBindAdapter implements ValueBindAdapter {

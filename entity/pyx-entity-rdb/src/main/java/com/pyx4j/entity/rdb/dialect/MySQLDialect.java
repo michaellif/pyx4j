@@ -73,9 +73,8 @@ public class MySQLDialect extends Dialect {
     }
 
     @Override
-    public String getChangeNullableDDL(String columnSqlName, boolean nullable) {
-        return "ALTER COLUMN " + columnSqlName + " " + (nullable ? "" : "NOT ") + "NULL";
-        //return "ALTER COLUMN (" + columnSqlName + (nullable ? " NULL" : " NOT NULL") + ")";
+    public String sqlChangeNullable(String columnSqlName, String columnTypeSQLDefinition, boolean nullable) {
+        return sqlChangeDateType(columnSqlName) + ' ' + columnTypeSQLDefinition + (nullable ? "" : " NOT NULL ");
     }
 
     @Override

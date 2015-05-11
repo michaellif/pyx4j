@@ -250,27 +250,27 @@ public abstract class Dialect {
         throw new Error("Dialect does not support sequences");
     }
 
-    public String getSequenceNextValSql(String sequenceName) {
+    public String sqlSequenceNextVal(String sequenceName) {
         throw new Error("Dialect does not support sequences");
     }
 
-    public String getSequenceCurentValueSql(String sequenceName) {
+    public String sqlSequenceCurentValue(String sequenceName) {
         throw new Error("Dialect does not support sequences");
     }
 
-    public String getCreateSequenceSql(String sequenceName, int identityOffset) {
+    public String sqlCreateSequence(String sequenceName, int identityOffset) {
         throw new Error("Dialect does not support sequences");
     }
 
-    public String getDropSequenceSql(String sequenceName) {
+    public String sqlDropSequence(String sequenceName) {
         throw new Error("Dialect does not support sequences");
     }
 
-    public String getChangeDateTypeDDL(String columnSqlName) {
+    public String sqlChangeDateType(String columnSqlName) {
         return "MODIFY COLUMN " + columnSqlName;
     }
 
-    public abstract String getChangeNullableDDL(String columnSqlName, boolean nullable);
+    public abstract String sqlChangeNullable(String columnSqlName, String columnTypeSQLDefinition, boolean nullable);
 
     public abstract String sqlDropForeignKey(String tableName, String constraintName);
 

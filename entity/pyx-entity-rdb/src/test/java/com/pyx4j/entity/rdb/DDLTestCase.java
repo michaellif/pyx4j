@@ -224,7 +224,7 @@ public abstract class DDLTestCase extends DatastoreTestBase {
     }
 
     public void testAlterStringColumnAddNotNull() {
-        setUpStrAlt();
+        setUpStrNNAlt();
 
         String setId = uniqueString();
 

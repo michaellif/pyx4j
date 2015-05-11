@@ -29,7 +29,7 @@ import com.pyx4j.entity.rdb.dialect.Dialect;
 
 interface ValueAdapter extends ValueBindAdapter {
 
-    void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String sqlColumnName);
+    String sqlColumnTypeDefinition(Dialect dialect, MemberOperationsMeta member, String sqlColumnName);
 
     boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String sqlColumnName);
 

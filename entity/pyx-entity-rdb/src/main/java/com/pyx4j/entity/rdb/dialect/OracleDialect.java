@@ -108,32 +108,32 @@ public class OracleDialect extends Dialect {
     }
 
     @Override
-    public String getSequenceNextValSql(String sequenceName) {
+    public String sqlSequenceNextVal(String sequenceName) {
         return sequenceName + ".nextval";
     }
 
     @Override
-    public String getSequenceCurentValueSql(String sequenceName) {
+    public String sqlSequenceCurentValue(String sequenceName) {
         return "SELECT  " + sequenceName + ".currval FROM dual";
     }
 
     @Override
-    public String getCreateSequenceSql(String sequenceName, int identityOffset) {
+    public String sqlCreateSequence(String sequenceName, int identityOffset) {
         return "CREATE SEQUENCE " + sequenceName + ((identityOffset != 0) ? (" START WITH " + identityOffset) : "");
     }
 
     @Override
-    public String getDropSequenceSql(String sequenceName) {
+    public String sqlDropSequence(String sequenceName) {
         return "DROP SEQUENCE " + sequenceName;
     }
 
     @Override
-    public String getChangeDateTypeDDL(String columnSqlName) {
+    public String sqlChangeDateType(String columnSqlName) {
         return "MODIFY " + columnSqlName;
     }
 
     @Override
-    public String getChangeNullableDDL(String columnSqlName, boolean nullable) {
+    public String sqlChangeNullable(String columnSqlName, String columnTypeSQLDefinition, boolean nullable) {
         return "MODIFY (" + columnSqlName + (nullable ? " NULL" : " NOT NULL") + ")";
     }
 

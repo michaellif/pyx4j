@@ -53,8 +53,8 @@ class ValueAdapterConvertion implements ValueAdapter {
     }
 
     @Override
-    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String columnName) {
-        valueAdapter.appendColumnDefinition(sql, dialect, member, columnName);
+    public String sqlColumnTypeDefinition(Dialect dialect, MemberOperationsMeta member, String columnName) {
+        return valueAdapter.sqlColumnTypeDefinition(dialect, member, columnName);
     }
 
     @Override

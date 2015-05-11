@@ -452,7 +452,7 @@ public class TableModel {
         ResultSet rs = null;
         String sql = null;
         try {
-            sql = dialect.getSequenceCurentValueSql(sequenceName);
+            sql = dialect.sqlSequenceCurentValue(sequenceName);
             stmt = persistenceContext.getConnection().prepareStatement(sql);
             rs = stmt.executeQuery();
             if (rs.next()) {
@@ -537,7 +537,7 @@ public class TableModel {
                 if (mappings.sharedSequencesSchema() != null) {
                     sequenceName = mappings.sharedSequencesSchema() + "." + sequenceName;
                 }
-                sql.append(dialect.getSequenceNextValSql(sequenceName));
+                sql.append(dialect.sqlSequenceNextVal(sequenceName));
             }
             sql.append(")");
             sqlInsert = sql.toString();

@@ -382,13 +382,13 @@ public class Mappings {
 
     private void createSequence(PersistenceContext persistenceContext, String entityShortName, String sequenceName) throws SQLException {
         SQLUtils.execute(persistenceContext.getConnection(),
-                persistenceContext.getDialect().getCreateSequenceSql(sequenceName, tableIdentityOffset(entityShortName)));
+                persistenceContext.getDialect().sqlCreateSequence(sequenceName, tableIdentityOffset(entityShortName)));
     }
 
     private void createSharedSequence(PersistenceContext persistenceContext, String entityShortName, String sequenceName) throws SQLException {
         Connection connection = connectionProvider.getConnection(ConnectionReason.forDDL);
         try {
-            SQLUtils.execute(connection, persistenceContext.getDialect().getCreateSequenceSql(sequenceName, tableIdentityOffset(entityShortName)));
+            SQLUtils.execute(connection, persistenceContext.getDialect().sqlCreateSequence(sequenceName, tableIdentityOffset(entityShortName)));
         } finally {
             SQLUtils.closeQuietly(connection);
         }
@@ -420,7 +420,7 @@ public class Mappings {
         initSequences(persistenceContext);
         if (sequences.contains(sequenceName.toLowerCase(Locale.ENGLISH))) {
             try {
-                SQLUtils.execute(persistenceContext.getConnection(), persistenceContext.getDialect().getDropSequenceSql(sequenceName));
+                SQLUtils.execute(persistenceContext.getConnection(), persistenceContext.getDialect().sqlDropSequence(sequenceName));
             } catch (SQLException e) {
                 log.error("sequence deletion error", e);
                 throw new RuntimeException(e);

@@ -116,12 +116,12 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
     }
 
     @Override
-    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String columnName) {
+    public String sqlColumnTypeDefinition(Dialect dialect, MemberOperationsMeta member, String columnName) {
         if (columnName.endsWith(discriminatorColumnNameSufix)) {
-            sql.append(dialect.getSqlType(String.class));
-            sql.append('(').append(TableModel.ENUM_STRING_LENGHT_MAX).append(')');
+            return dialect.getSqlType(String.class) //
+                    + '(' + TableModel.ENUM_STRING_LENGHT_MAX + ')';
         } else {
-            sql.append(dialect.getSqlType(Long.class));
+            return dialect.getSqlType(Long.class);
         }
     }
 

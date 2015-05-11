@@ -155,7 +155,7 @@ public class TableModelCollections {
                 if (mappings.sharedSequencesSchema() != null) {
                     sequenceName = mappings.sharedSequencesSchema() + "." + sequenceName;
                 }
-                sql.append(", ").append(dialect.getSequenceNextValSql(sequenceName));
+                sql.append(", ").append(dialect.sqlSequenceNextVal(sequenceName));
             }
 
             sql.append(")");
