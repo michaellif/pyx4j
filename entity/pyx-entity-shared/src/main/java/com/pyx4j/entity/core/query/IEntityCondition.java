@@ -26,6 +26,11 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitiveSet;
 import com.pyx4j.entity.core.ISet;
 
+/**
+ * You need to create implementation of this Entity for now. TODO See PYX-14.
+ *
+ * @param <E>
+ */
 @DiscriminatorValue("Entity")
 public interface IEntityCondition<E extends IEntity> extends ICondition {
 
