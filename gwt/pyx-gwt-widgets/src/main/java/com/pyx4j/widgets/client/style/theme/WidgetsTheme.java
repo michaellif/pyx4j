@@ -565,7 +565,7 @@ public class WidgetsTheme extends Theme {
         style = new Style(".", StyleName.SelectedItemHolderLabel);
         style.addProperty("display", "inline-block");
         style.addProperty("vertical-align", "middle");
-        style.addProperty("max-width", "150px");
+        style.addProperty("max-width", "200px");
         style.addProperty("overflow", "hidden");
         style.addProperty("text-overflow", "ellipsis");
         style.addProperty("white-space", "nowrap");
