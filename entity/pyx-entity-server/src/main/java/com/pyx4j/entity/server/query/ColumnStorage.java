@@ -85,6 +85,7 @@ public class ColumnStorage {
                     AbstractQueryColumnStorage storage = EntityFactory.create(persistableEntityClass);
                     storage.queryClass().setValue(criteriaClass.getName());
                     storage.columnPath().setValue(memberName);
+                    storage.criterionType().setValue(criteriaMember.getValueClass().getName());
                     Persistence.service().persist(storage);
                 }
             }

@@ -36,8 +36,7 @@ import com.pyx4j.i18n.annotations.I18n;
 public interface QueryStorage extends IEntity {
 
     @Owned
-    // TODO change sort order
-    @OrderBy(PrimaryKey.class)
+    @OrderBy(ICondition.DisplayOrderId.class)
     IList<ICondition> conditions();
 
     //Set to false during version update/DB migration
