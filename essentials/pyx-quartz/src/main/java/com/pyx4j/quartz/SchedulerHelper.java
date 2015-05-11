@@ -38,11 +38,9 @@ import org.quartz.impl.jdbcjobstore.JobStoreTX;
 import org.quartz.impl.jdbcjobstore.PostgreSQLDelegate;
 import org.quartz.impl.jdbcjobstore.StdJDBCDelegate;
 import org.quartz.impl.jdbcjobstore.oracle.OracleDelegate;
-import org.quartz.utils.PoolingConnectionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.RDBUtils;
@@ -117,21 +115,11 @@ public class SchedulerHelper {
         quartzProperties.put(StdSchedulerFactory.PROP_THREAD_POOL_PREFIX + ".threadNamePrefix", LoggerConfig.getContextName()
                 + "_DefaultQuartzSchedulerWorkerThread");
 
-        // Lets quartz manage its connections pool for now.
         String dataSourceName = "main";
         quartzProperties.put(StdSchedulerFactory.PROP_JOB_STORE_PREFIX + ".dataSource", dataSourceName);
         String dsConfigPrefix = StdSchedulerFactory.PROP_DATASOURCE_PREFIX + "." + dataSourceName + ".";
-        quartzProperties.put(dsConfigPrefix + PoolingConnectionProvider.DB_DRIVER, rdbConfiguration.driverClass());
-        quartzProperties.put(dsConfigPrefix + PoolingConnectionProvider.DB_URL, rdbConfiguration.connectionUrl());
-        quartzProperties.put(dsConfigPrefix + PoolingConnectionProvider.DB_USER, rdbConfiguration.userName());
-        quartzProperties.put(dsConfigPrefix + PoolingConnectionProvider.DB_PASSWORD, rdbConfiguration.password());
-        quartzProperties.put(dsConfigPrefix + PoolingConnectionProvider.DB_MAX_CONNECTIONS, 4);
-        quartzProperties.put(dsConfigPrefix + PoolingConnectionProvider.DB_VALIDATE_ON_CHECKOUT, true);
-        // PoolingConnectionProvider.DB_DISCARD_IDLE_CONNECTIONS_SECONDS
-        quartzProperties.put(dsConfigPrefix + "discardIdleConnectionsSeconds", 20 * Consts.MIN2SEC);
-        if (rdbConfiguration.connectionValidationQuery() != null) {
-            quartzProperties.put(dsConfigPrefix + PoolingConnectionProvider.DB_VALIDATION_QUERY, rdbConfiguration.connectionValidationQuery());
-        }
+
+        quartzProperties.put(dsConfigPrefix + StdSchedulerFactory.PROP_CONNECTION_PROVIDER_CLASS, QuartzPoolingConnectionProvider.class.getName());
 
         log.debug("use DB configuration {}", rdbConfiguration);
         log.debug("quartzProperties {}", quartzProperties);

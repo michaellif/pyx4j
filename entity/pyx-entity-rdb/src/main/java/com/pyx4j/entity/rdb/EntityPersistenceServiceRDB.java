@@ -635,6 +635,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
             throw new RuntimeException("Saving detached entity " + entity.getDebugExceptionInfoString());
         }
         ensureEntityValue(entity);
+        fireModificationAdaptersNewEntity(tm, entity);
         for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembers()) {
             MemberMeta memberMeta = member.getMemberMeta();
             IEntity childEntity = (IEntity) member.getMember(entity);

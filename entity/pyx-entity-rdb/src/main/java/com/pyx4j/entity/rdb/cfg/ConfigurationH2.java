@@ -157,6 +157,11 @@ public abstract class ConfigurationH2 implements Configuration {
     }
 
     @Override
+    public ConnectionCustomizer connectionCustomizer() {
+        return null;
+    }
+
+    @Override
     public String connectionAutomaticTestTable() {
         return "_c3p0_connection_test";
     }
