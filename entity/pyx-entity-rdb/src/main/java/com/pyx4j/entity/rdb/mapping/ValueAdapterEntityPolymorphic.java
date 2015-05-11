@@ -126,6 +126,11 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
     }
 
     @Override
+    public boolean isColumnTypeChanges(Dialect dialect, String typeName, int columnSize, MemberOperationsMeta member, String sqlColumnName) {
+        return false;
+    }
+
+    @Override
     public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
         IEntity childEntity = (IEntity) value;
         Key primaryKey = childEntity.getPrimaryKey();

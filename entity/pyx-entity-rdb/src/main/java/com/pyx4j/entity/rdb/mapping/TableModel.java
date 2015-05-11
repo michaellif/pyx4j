@@ -75,6 +75,8 @@ public class TableModel {
 
     private static final Logger log = LoggerFactory.getLogger(TableModel.class);
 
+    private static final Logger ddlLog = LoggerFactory.getLogger("db.ddl");
+
     private static final I18n i18n = I18n.get(TableModel.class);
 
     final String tableName;
@@ -205,14 +207,22 @@ public class TableModel {
                 List<String> sqlChanges = TableDDL.validateAndAlter(dialect, tableMetadata, this);
                 switch (ddl) {
                 case auto:
-                    SQLUtils.execute(persistenceContext.getConnection(), sqlChanges);
+                    if (!sqlChanges.isEmpty()) {
+                        ddlLog.info("{}", sqlChanges);
+                        SQLUtils.execute(persistenceContext.getConnection(), sqlChanges);
+                    }
                     break;
                 case disabled:
                     // ignore
+                    if (!sqlChanges.isEmpty()) {
+                        ddlLog.warn("DLL operations required {}", sqlChanges);
+                    }
                     break;
                 case validate:
-                    log.error("DLL operations required {}", sqlChanges);
-                    throw new Error("Table '" + tableName + "' requires structural changes");
+                    if (!sqlChanges.isEmpty()) {
+                        ddlLog.error("DLL operations required {}", sqlChanges);
+                        throw new Error("Table '" + tableName + "' requires structural changes");
+                    }
                 }
             }
         }

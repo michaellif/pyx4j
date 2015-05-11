@@ -116,6 +116,11 @@ public class HSQLDialect extends Dialect {
     }
 
     @Override
+    public String getChangeDateTypeDDL(String columnSqlName) {
+        return "ALTER COLUMN " + columnSqlName;
+    }
+
+    @Override
     public String sqlDropForeignKey(String tableName, String constraintName) {
         return "ALTER TABLE " + tableName + " DROP CONSTRAINT " + constraintName;
     }

@@ -57,6 +57,18 @@ class ValueAdapterString extends ValueAdapterPrimitive {
     }
 
     @Override
+    public boolean isColumnTypeChanges(Dialect dialect, String typeName, int columnSize, MemberOperationsMeta member, String sqlColumnName) {
+        int maxLength = member.getMemberMeta().getLength();
+        if (maxLength == 0) {
+            maxLength = TableModel.ORDINARY_STRING_LENGHT_MAX;
+        }
+        if (maxLength != columnSize) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
         String str = (String) value;
         if (str == null) {

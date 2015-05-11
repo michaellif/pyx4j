@@ -128,6 +128,11 @@ public class OracleDialect extends Dialect {
     }
 
     @Override
+    public String getChangeDateTypeDDL(String columnSqlName) {
+        return "MODIFY " + columnSqlName;
+    }
+
+    @Override
     public String sqlDropForeignKey(String tableName, String constraintName) {
         return "ALTER TABLE " + tableName + " DROP CONSTRAINT " + constraintName;
     }

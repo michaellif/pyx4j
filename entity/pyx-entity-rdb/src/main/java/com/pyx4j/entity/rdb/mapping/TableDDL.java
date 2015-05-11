@@ -493,7 +493,7 @@ class TableDDL {
                 if (columnMeta == null) {
                     StringBuilder sql = new StringBuilder("ALTER TABLE ");
                     sql.append(tableModel.getFullTableName());
-                    sql.append(" ADD "); // [ column ]
+                    sql.append(" ADD "); // [ column ] not in Oracle
                     sql.append(sqlName).append(' ');
                     member.getValueAdapter().appendColumnDefinition(sql, dialect, member, sqlName);
                     alterSqls.add(sql.toString());
@@ -501,6 +501,13 @@ class TableDDL {
                     if (!member.getValueAdapter().isCompatibleType(dialect, columnMeta.getTypeName(), member, sqlName)) {
                         throw new RuntimeException(tableModel.tableName + "." + member.sqlName() + " incompatible SQL type '" + columnMeta.getTypeName()
                                 + "' for Java type " + memberMeta.getValueClass());
+                    }
+                    if (member.getValueAdapter().isColumnTypeChanges(dialect, columnMeta.getTypeName(), columnMeta.getColumnSize(), member, sqlName)) {
+                        StringBuilder sql = new StringBuilder("ALTER TABLE ");
+                        sql.append(tableModel.getFullTableName()).append(' ');
+                        sql.append(dialect.getChangeDateTypeDDL(sqlName)).append(' ');
+                        member.getValueAdapter().appendColumnDefinition(sql, dialect, member, sqlName);
+                        alterSqls.add(sql.toString());
                     }
                 }
             }
@@ -515,7 +522,7 @@ class TableDDL {
                 }
                 StringBuilder sql = new StringBuilder("ALTER TABLE ");
                 sql.append(tableModel.getFullTableName());
-                sql.append(" ADD "); // [ column ]
+                sql.append(" ADD "); // [ column ] not in Oracle
                 sql.append(member.sqlName()).append(' ');
                 sql.append(indexSqlType(dialect, member));
                 alterSqls.add(sql.toString());

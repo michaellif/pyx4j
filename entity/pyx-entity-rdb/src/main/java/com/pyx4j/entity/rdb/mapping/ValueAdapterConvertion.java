@@ -62,6 +62,11 @@ class ValueAdapterConvertion implements ValueAdapter {
         return valueAdapter.isCompatibleType(dialect, typeName, member, columnName);
     }
 
+    @Override
+    public boolean isColumnTypeChanges(Dialect dialect, String typeName, int columnSize, MemberOperationsMeta member, String sqlColumnName) {
+        return valueAdapter.isColumnTypeChanges(dialect, typeName, columnSize, member, sqlColumnName);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {

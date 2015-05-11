@@ -266,6 +266,10 @@ public abstract class Dialect {
         throw new Error("Dialect does not support sequences");
     }
 
+    public String getChangeDateTypeDDL(String columnSqlName) {
+        return "MODIFY COLUMN " + columnSqlName;
+    }
+
     public abstract String sqlDropForeignKey(String tableName, String constraintName);
 
     public String enabelConstraint(String tableName, String constraintName, boolean enable) {

@@ -24,7 +24,9 @@ import java.util.Date;
 
 import org.junit.Assert;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
@@ -41,9 +43,7 @@ import com.pyx4j.gwt.server.DateUtils;
 
 public abstract class DDLTestCase extends DatastoreTestBase {
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    protected void setUpAltAdd() {
         try {
             if (((EntityPersistenceServiceRDB) srv).isTableExists(TaskAlt1.class)) {
                 ((EntityPersistenceServiceRDB) srv).dropTable(TaskAlt1.class);
@@ -52,7 +52,7 @@ public abstract class DDLTestCase extends DatastoreTestBase {
         }
     }
 
-    @Table(prefix = "test", name = "ddl")
+    @Table(prefix = "test", name = "ddl_add")
     public interface TaskAlt1 extends IEntity {
 
         IPrimitive<Boolean> finished();
@@ -71,7 +71,7 @@ public abstract class DDLTestCase extends DatastoreTestBase {
         ISet<Task> tasks();
     }
 
-    @Table(prefix = "test", name = "ddl")
+    @Table(prefix = "test", name = "ddl_add")
     public interface TaskAlt2 extends IEntity {
 
         IPrimitive<Boolean> finished();
@@ -93,6 +93,8 @@ public abstract class DDLTestCase extends DatastoreTestBase {
     }
 
     public void testCreateAndAlterTable() {
+        setUpAltAdd();
+
         TaskAlt1 task1 = EntityFactory.create(TaskAlt1.class);
         srv.persist(task1);
 
@@ -105,6 +107,8 @@ public abstract class DDLTestCase extends DatastoreTestBase {
     }
 
     public void testAlterCollectionsTable() {
+        setUpAltAdd();
+
         TaskAlt1 task1 = EntityFactory.create(TaskAlt1.class);
 
         Task subTask11 = EntityFactory.create(Task.class);
@@ -120,5 +124,73 @@ public abstract class DDLTestCase extends DatastoreTestBase {
         // retrieve original Set as List
         TaskAlt2 task12 = srv.retrieve(TaskAlt2.class, task1.getPrimaryKey());
         Assert.assertNotNull("can get it", task12);
+    }
+
+    @Table(prefix = "test", name = "ddl_str1")
+    public interface EntStrAlt1 extends IEntity {
+
+        IPrimitive<String> testId();
+
+        @ToString
+        @Length(165)
+        IPrimitive<String> name();
+    }
+
+    @Table(prefix = "test", name = "ddl_str1")
+    public interface EntStrAlt2 extends IEntity {
+
+        IPrimitive<String> testId();
+
+        @ToString
+        @Length(487)
+        IPrimitive<String> name();
+    }
+
+    protected void setUpStrAlt() {
+        try {
+            if (((EntityPersistenceServiceRDB) srv).isTableExists(EntStrAlt1.class)) {
+                ((EntityPersistenceServiceRDB) srv).dropTable(EntStrAlt1.class);
+            }
+        } catch (RuntimeExceptionSerializable ignore) {
+        }
+    }
+
+    public void testAlterStringColumnType() {
+        setUpStrAlt();
+
+        String setId = uniqueString();
+
+        EntStrAlt1 ent1 = EntityFactory.create(EntStrAlt1.class);
+        ent1.testId().setValue(setId);
+        ent1.name().setValue("A1" + uniqueString());
+        srv.persist(ent1);
+
+        // Try to store more
+        {
+            EntStrAlt1 ent1m = srv.retrieve(EntStrAlt1.class, ent1.getPrimaryKey());
+            ent1m.name().setValue(CommonsStringUtils.paddingRight("M1", 200, 'z'));
+            try {
+                srv.persist(ent1m);
+                Assert.fail("Should not be able to save large column");
+            } catch (RuntimeException ok) {
+
+            }
+        }
+
+        ((IEntityPersistenceServiceRDB) srv).resetMapping();
+        ((IEntityPersistenceServiceRDB) srv).resetConnectionPool();
+
+        // see if data preserved
+        {
+            EntStrAlt2 ent2 = srv.retrieve(EntStrAlt2.class, ent1.getPrimaryKey());
+            Assert.assertEquals("data preserved", ent2.name().getValue(), ent1.name().getValue());
+        }
+
+        // Try to store more
+        {
+            EntStrAlt2 ent1m = srv.retrieve(EntStrAlt2.class, ent1.getPrimaryKey());
+            ent1m.name().setValue(CommonsStringUtils.paddingRight("M2", 200, 'z'));
+            srv.persist(ent1m);
+        }
     }
 }
