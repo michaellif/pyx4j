@@ -141,13 +141,17 @@ public class MemberOperationsMeta implements EntityMemberAccess {
         return sqlName;
     }
 
-    public boolean hasNotNullConstraint() {
+    public boolean isNotNull() {
         MemberColumn memberColumn = memberMeta.getAnnotation(MemberColumn.class);
         if (memberColumn == null) {
             return false;
         } else {
             return memberColumn.notNull();
         }
+    }
+
+    public boolean hasNotNullConstraint() {
+        return isNotNull() && (getSubclassDiscriminators() == null);
     }
 
     public TypeMetaConfiguration getTypeConfiguration() {

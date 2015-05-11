@@ -67,11 +67,16 @@ class ValueAdapterEntityVersioned implements ValueAdapter {
     }
 
     @Override
-    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String columnName) {
+    public boolean isColumnTypeChanges(Dialect dialect, String typeName, int columnSize, MemberOperationsMeta member, String sqlColumnName) {
+        return false;
+    }
+
+    @Override
+    public String sqlColumnTypeDefinition(Dialect dialect, MemberOperationsMeta member, String columnName) {
         if (columnName.endsWith(FOR_DATE_COLUNM_NAME_SUFIX)) {
-            sql.append(dialect.getSqlType(java.util.Date.class));
+            return dialect.getSqlType(java.util.Date.class);
         } else {
-            sql.append(dialect.getSqlType(Long.class));
+            return dialect.getSqlType(Long.class);
         }
     }
 
