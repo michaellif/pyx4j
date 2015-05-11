@@ -19,6 +19,7 @@
  */
 package com.pyx4j.entity.test.shared.domain;
 
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.query.IDateCondition;
 import com.pyx4j.entity.core.query.IEntityCondition;
@@ -32,5 +33,11 @@ public interface EmployeeQuery extends IQuery<Employee> {
 
     IDateCondition hireDate();
 
-    IEntityCondition<Department> department();
+    //TODO See PYX-14.
+    @DiscriminatorValue("Entity.Department")
+    public interface DepartmentEntityCondition extends IEntityCondition<Department> {
+
+    }
+
+    DepartmentEntityCondition department();
 }

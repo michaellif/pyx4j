@@ -46,6 +46,12 @@ public class ConditionTranslationRegistry {
     @SuppressWarnings("unchecked")
     public static <E extends IEntity> void addCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, ICondition criterion) {
         ConditionTranslation ct = registry.get(criterion.getInstanceValueClass());
+
+        //TODO See PYX-14.
+        if (ct == null && criterion instanceof IEntityCondition) {
+            ct = registry.get(IEntityCondition.class);
+        }
+
         if (ct != null) {
             ct.addCriteria(query, entityMemeberPath, criterion.<ICondition> cast());
         } else {

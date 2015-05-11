@@ -31,6 +31,7 @@ import com.pyx4j.entity.server.query.ColumnStorage;
 import com.pyx4j.entity.server.query.PersistableQueryManager;
 import com.pyx4j.entity.server.query.QueryBinderBuilder;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
+import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.EmployeeQuery;
 import com.pyx4j.entity.test.shared.domain.TestsQueryCriteriaColumnStorage;
@@ -46,6 +47,8 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+
+        srv.delete(EntityQueryCriteria.create(Employee.class));
 
         // Setup Data
         setId = uniqueString();
@@ -120,13 +123,19 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
         }
     }
 
-    public void testQueryEntityConditionPersistence() {
+    public void TODO_testQueryEntityConditionPersistence() {
+        Department department1 = EntityFactory.create(Department.class);
+        department1.name().setValue("A" + uniqueString());
+        srv.persist(department1);
+        emp1.department().set(department1);
+        srv.persist(emp1);
+
         ColumnStorage.instance().initialize(TestsQueryCriteriaColumnStorage.class);
         QueryStorage storeHere = EntityFactory.create(QueryStorage.class);
 
         {
             EmployeeQuery query = EntityFactory.create(EmployeeQuery.class);
-            query.firstName().value().setValue("Bob");
+            query.department().references().add(department1);
             PersistableQueryManager.persistQuery(query, storeHere);
         }
 
@@ -136,7 +145,7 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
 
             EmployeeQuery query = PersistableQueryManager.retriveQuery(EmployeeQuery.class, storeHereId);
 
-            Assert.assertEquals("stored value", "Bob", query.firstName().value().getValue());
+            Assert.assertTrue("stored value", query.department().refs().contains(department1.getPrimaryKey()));
 
             // Use stored  Query
             EntityQueryCriteria<Employee> criteria = PersistableQueryManager.convertToCriteria(query, binder());
