@@ -25,21 +25,17 @@ import java.util.Map;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
 
-public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEntity> implements EntityBinder<BO, TO> {
-
-    protected Class<BO> boClass;
-
-    protected Class<TO> toClass;
+public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEntity> extends SimpleEntityBinder<BO, TO> {
 
     private final Map<Class<? extends BO>, EntityBinder<BO, TO>> bindingByBO = new HashMap<>();
 
     private final Map<Class<? extends TO>, EntityBinder<BO, TO>> bindingByTO = new HashMap<>();
 
     protected PolymorphicEntityBinder(Class<BO> boClass, Class<TO> toClass) {
-        this.boClass = boClass;
-        this.toClass = toClass;
+        super(boClass, toClass);
     }
 
+    @Override
     protected abstract void bind();
 
     @SuppressWarnings("unchecked")
@@ -60,7 +56,7 @@ public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEn
 
     private EntityBinder<BO, TO> getBinderByBO(BO bo) {
         init();
-        return bindingByBO.get(bo.getObjectClass());
+        return bindingByBO.get(bo.getInstanceValueClass());
     }
 
     private EntityBinder<BO, TO> getBinderByTO(Class<? extends TO> toClass) {
@@ -70,43 +66,41 @@ public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEn
 
     @SuppressWarnings("unchecked")
     private EntityBinder<BO, TO> getBinderByTO(TO to) {
-        return getBinderByTO((Class<TO>) to.getObjectClass());
-    }
-
-    @Override
-    public Class<BO> boClass() {
-        return boClass;
-    }
-
-    @Override
-    public Class<TO> toClass() {
-        return toClass;
+        return getBinderByTO((Class<TO>) to.getInstanceValueClass());
     }
 
     @Override
     public TO createTO(BO bo) {
-        return getBinderByBO(bo).createTO(bo);
+        EntityBinder<BO, TO> subBinder = getBinderByBO(bo);
+        assert subBinder != null : "Binder not found for " + bo.getDebugExceptionInfoString();
+        return subBinder.createTO(bo.<BO> cast());
     }
 
     @Override
     public void copyBOtoTO(BO bo, TO to) {
-        getBinderByBO(bo).copyBOtoTO(bo, to);
+        EntityBinder<BO, TO> subBinder = getBinderByBO(bo);
+        assert subBinder != null : "Binder not found for " + bo.getDebugExceptionInfoString();
+        subBinder.copyBOtoTO(bo, to);
     }
 
     @Override
     public BO createBO(TO to) {
-        return getBinderByTO(to).createBO(to);
+        EntityBinder<BO, TO> subBinder = getBinderByTO(to);
+        assert subBinder != null : "Binder not found for " + to.getDebugExceptionInfoString();
+        return subBinder.createBO(to.<TO> cast());
     }
 
     @Override
     public void copyTOtoBO(TO to, BO bo) {
-        getBinderByTO(to).copyTOtoBO(to, bo);
+        EntityBinder<BO, TO> subBinder = getBinderByTO(to);
+        assert subBinder != null : "Binder not found for " + to.getDebugExceptionInfoString();
+        subBinder.copyTOtoBO(to, bo);
     }
 
     @Override
     public Path getBoundBOMemberPath(Path toMemberPath) {
         init();
-        // Find by members of super type 
+        // Find by members of super type
         if (toClass.getSimpleName().equals(toMemberPath.getRootObjectClassName())) {
             for (Class<? extends TO> toClass : bindingByTO.keySet()) {
                 Path boMemberPath = getBinderByTO(toClass).getBoundBOMemberPath(new Path(toClass, toMemberPath.getPathMembers()));

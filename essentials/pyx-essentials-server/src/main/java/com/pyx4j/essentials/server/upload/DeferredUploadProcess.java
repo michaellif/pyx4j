@@ -23,23 +23,28 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.gwt.server.deferred.IDeferredProcess;
 
 /**
  * Upload status and progress holder.
  * The reply is stored in this class.
- * 
+ *
  * You may override onUploadProcessed() and execute() implementation of this process to add more Deferred processing
  */
 
 @SuppressWarnings("serial")
 public class DeferredUploadProcess<U extends IEntity, B extends AbstractIFileBlob> implements IDeferredProcess {
 
-    private final DeferredProcessProgressResponse status;
+    private DeferredProcessProgressResponse status;
 
-    private final U uploadInitiationData;
+    private U uploadInitiationData;
 
     private IFile<B> response;
+
+    // serializable
+    protected DeferredUploadProcess() {
+    }
 
     public DeferredUploadProcess(U uploadInitiationData) {
         this.status = new DeferredProcessProgressResponse();
@@ -48,6 +53,7 @@ public class DeferredUploadProcess<U extends IEntity, B extends AbstractIFileBlo
 
     protected void onUploadProcessed(final UploadedData data, final IFile<B> response) {
         this.status().setCompleted();
+        DeferredProcessRegistry.saveMap();
     }
 
     public final void uploadProcessed(final UploadedData data, final IFile<B> response) {
@@ -62,6 +68,7 @@ public class DeferredUploadProcess<U extends IEntity, B extends AbstractIFileBlo
     @Override
     public void cancel() {
         status.setCanceled();
+        DeferredProcessRegistry.saveMap();
     }
 
     @Override

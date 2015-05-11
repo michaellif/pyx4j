@@ -92,7 +92,7 @@ public class LifecycleFilter implements Filter {
                     return;
                 }
                 try {
-                    NamespaceManager.setNamespace(ServerSideConfiguration.instance().getNamespaceResolver(httprequest).getNamespaceData().getNamespace());
+                    NamespaceManager.setNamespace(ServerSideConfiguration.instance().getNamespaceResolver().getNamespaceData(httprequest).getNamespace());
                     String remoteAddr = ServletUtils.getActualRequestRemoteAddr(httprequest);
                     if (remoteAddr != null) {
                         LoggerConfig.mdcPut(LoggerConfig.MDC_remoteAddr, remoteAddr);

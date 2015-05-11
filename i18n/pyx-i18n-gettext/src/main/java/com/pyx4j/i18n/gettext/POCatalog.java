@@ -39,10 +39,25 @@ public class POCatalog implements Translator {
 
     private boolean updated = false;
 
+    public static class CatalogIgnore {
+
+        public boolean messageFormat = false;
+
+        public boolean multiLine = false;
+
+    }
+
+    private CatalogIgnore catalogIgnore;
+
     public static boolean debug = false;
 
     public POCatalog(String lang, boolean loadDefault) {
+        this(lang, loadDefault, null);
+    }
+
+    public POCatalog(String lang, boolean loadDefault, CatalogIgnore catalogIgnore) {
         this.lang = lang;
+        this.catalogIgnore = catalogIgnore;
         if (loadDefault) {
             poDirectory = new File(System.getProperty("user.home"), ".po-catalog");
             readMainFile();
@@ -100,6 +115,26 @@ public class POCatalog implements Translator {
     private void buildTranslations(POFile po) {
         for (POEntry entry : po.entries) {
             if ((entry.translated != null) && (entry.translated.length() != 0)) {
+
+                if (catalogIgnore != null) {
+                    if (catalogIgnore.messageFormat) {
+                        if (entry.contanisFlag("java-format")) {
+                            continue;
+                        }
+                        if (entry.translated.contains("{")) {
+                            continue;
+                        }
+                        if (entry.untranslated.contains("{")) {
+                            continue;
+                        }
+                    }
+                    if (catalogIgnore.multiLine) {
+                        if (entry.untranslated.contains("\n") || entry.translated.contains("\n")) {
+                            continue;
+                        }
+                    }
+                }
+
                 if ((entry.context != null) && (entry.context.length() > 0)) {
                     translations.put(entry.context + I18n.CONTEXT_GLUE + entry.untranslated, entry.translated);
                 } else {
