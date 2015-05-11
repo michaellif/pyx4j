@@ -128,7 +128,7 @@ public class QueryBuilder<T extends IEntity> {
         // Build JOIN for ORDER BY. This will not allow us to Use DISTINCT and add special criteria for collections
         if ((criteria.getSorts() != null) && (!criteria.getSorts().isEmpty())) {
             for (EntityQueryCriteria.Sort sort : expandToStringMembers(criteria.getSorts())) {
-                queryJoin.buildQueryMember(sort.getPropertyPath().toString(), true, true);
+                queryJoin.buildQueryMember(sort.getPropertyPath(), true, true);
             }
         }
 
@@ -148,7 +148,7 @@ public class QueryBuilder<T extends IEntity> {
                 } else {
                     sortsSql.append(", ");
                 }
-                QueryMember queryMember = queryJoin.buildQueryMember(sort.getPropertyPath().toString(), true, true);
+                QueryMember queryMember = queryJoin.buildQueryMember(sort.getPropertyPath(), true, true);
                 if (queryMember == null) {
                     throw new RuntimeException("Unknown member " + sort.getPropertyPath() + " in " + operationsMeta.entityMeta().getEntityClass().getName());
                 }
@@ -195,9 +195,14 @@ public class QueryBuilder<T extends IEntity> {
             criterionSql.append(" ) ");
         } else if (criterion instanceof OrCriterion) {
             criterionSql.append(" (( ");
-            appendFilters(criterionSql, joinBuilder, ((OrCriterion) criterion).getFiltersLeft(), true, false);
-            criterionSql.append(" ) OR ( ");
-            appendFilters(criterionSql, joinBuilder, ((OrCriterion) criterion).getFiltersRight(), true, false);
+            boolean nextOr = false;
+            for (Criterion cr2 : ((OrCriterion) criterion).getFilters()) {
+                if (nextOr) {
+                    criterionSql.append(" ) OR ( ");
+                }
+                appendCriterion(criterionSql, joinBuilder, cr2, false);
+                nextOr = true;
+            }
             criterionSql.append(" )) ");
         } else if (criterion instanceof RangeCriterion) {
             appendFilters(criterionSql, joinBuilder, ((RangeCriterion) criterion).getFilters(), true, required);
@@ -224,7 +229,7 @@ public class QueryBuilder<T extends IEntity> {
         if (propertyCriterion.getPropertyPath().toString().endsWith(IndexAdapter.SECONDARY_PRROPERTY_SUFIX)) {
             // TODO create index binders and value adapters
             criterionSql.append(mainTableSqlAlias).append('.')
-                    .append(dialect.getNamingConvention().sqlFieldName(propertyCriterion.getPropertyPath().toString()));
+            .append(dialect.getNamingConvention().sqlFieldName(propertyCriterion.getPropertyPath().toString()));
         } else {
             boolean leftJoin = false;
             if (!required) {
@@ -239,7 +244,7 @@ public class QueryBuilder<T extends IEntity> {
                     return;
                 }
             }
-            QueryMember queryMember = joinBuilder.buildQueryMember(propertyCriterion.getPropertyPath().toString(), leftJoin, false);
+            QueryMember queryMember = joinBuilder.buildQueryMember(propertyCriterion.getPropertyPath(), leftJoin, false);
             if (queryMember == null) {
                 throw new RuntimeException("Unknown member " + propertyCriterion.getPropertyPath() + " in "
                         + joinBuilder.operationsMeta.entityMeta().getEntityClass().getName());
@@ -283,7 +288,7 @@ public class QueryBuilder<T extends IEntity> {
                 throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction() + " for PathReference");
             }
 
-            String property2Path = bindHolder.bindValue.toString();
+            Path property2Path = (Path) bindHolder.bindValue;
 
             boolean leftJoin = false;
             if (!required) {

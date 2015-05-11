@@ -69,9 +69,6 @@ public class DeferredProcessServiceImpl implements DeferredProcessService {
                 log.debug("execute process {}", deferredCorrelationId);
                 process.execute();
                 DeferredProcessProgressResponse r = process.status();
-                if (r.isCompleted()) {
-                    DeferredProcessRegistry.remove(deferredCorrelationId);
-                }
                 callback.onSuccess(r);
             } catch (Throwable e) {
                 log.error("execute error", e);

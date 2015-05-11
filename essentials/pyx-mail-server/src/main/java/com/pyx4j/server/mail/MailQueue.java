@@ -87,6 +87,16 @@ public class MailQueue implements Runnable {
         }
     }
 
+    public static synchronized void setActive(boolean active) {
+        if (active) {
+            if (!isRunning()) {
+                init();
+            }
+        } else {
+            shutdown();
+        }
+    }
+
     public static void shutdown() {
         if (instance != null) {
             instance.notifyAndWaitCompletion();
@@ -111,8 +121,10 @@ public class MailQueue implements Runnable {
     }
 
     public static void sendQueued() {
-        synchronized (instance.monitor) {
-            instance.monitor.notifyAll();
+        if (instance != null) {
+            synchronized (instance.monitor) {
+                instance.monitor.notifyAll();
+            }
         }
     }
 

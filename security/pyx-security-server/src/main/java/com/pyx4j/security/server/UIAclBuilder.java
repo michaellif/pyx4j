@@ -31,6 +31,10 @@ import com.pyx4j.security.shared.Behavior;
 
 public class UIAclBuilder extends ServletContainerAclBuilder {
 
+    protected void grant(Class<? extends ActionId> actionClass) {
+        grant(new ActionPermission(actionClass));
+    }
+
     protected void grant(Behavior behavior, Class<? extends ActionId> actionClass) {
         grant(behavior, new ActionPermission(actionClass));
     }
