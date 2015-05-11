@@ -411,10 +411,6 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
         } else {
             assert !((SharedEntityHandler) entity).isPrototypeEntity : "Prototype Entity '" + getObjectClass().getName() + "' data manipulations disabled";
 
-            if (!this.getEntityMeta().isEntityClassAssignableFrom(entity)) {
-                System.out.println("++++++++++++++" + entity);
-            }
-
             assert this.getEntityMeta().isEntityClassAssignableFrom(entity) : this.getEntityMeta().getCaption() + " is not assignable from "
                     + entity.cast().getEntityMeta().getCaption();
 
@@ -422,7 +418,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
 
             AttachLevel level = entity.getAttachLevel();
             if (level == AttachLevel.Detached) {
-                throw new RuntimeException("Access to detached " + level + " entity " + exceptionInfo(value));
+                throw new RuntimeException("Access to '" + level + "' entity " + entity.getDebugExceptionInfoString());
             }
 
             //TODO Test type safety at runtime.
