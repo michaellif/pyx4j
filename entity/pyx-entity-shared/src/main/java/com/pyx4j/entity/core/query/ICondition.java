@@ -21,11 +21,13 @@ package com.pyx4j.entity.core.query;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Transient;
@@ -66,7 +68,11 @@ public interface ICondition extends IEntity {
     @MemberColumn(notNull = true)
     IPrimitive<Key> columnId();
 
-    IPrimitive<Integer> order();
+    interface DisplayOrderId extends ColumnId {
+    }
+
+    @OrderColumn(DisplayOrderId.class)
+    IPrimitive<Integer> displayOrder();
 
     // MetaData required to build the UI for this Condition
 
