@@ -37,6 +37,7 @@ import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.EntityWithGwtAnnotations;
+import com.pyx4j.entity.test.shared.domain.EntityWithTextMeta;
 import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.inherit.AddressExt;
 import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
@@ -277,4 +278,11 @@ public class EntityMetaTest extends InitializerTestBase {
         assertTrue("@SecurityEnabled present", ent1.getEntityMeta().isAnnotationPresent(SecurityEnabled.class));
     }
 
+    public void testJavaEscapeSequences() {
+        EntityWithTextMeta ent1 = EntityFactory.create(EntityWithTextMeta.class);
+        assertEquals("javaEscape in generated code", "Java Escape Sequences:\n\\t - tab\n", ent1.javaEscapeSequences().getMeta().getDescription());
+
+        ent1.name().setValue("aValue");
+        assertEquals("javaEscape in generated code", "\"aValue\"", ent1.getStringView());
+    }
 }
