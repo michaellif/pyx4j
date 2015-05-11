@@ -27,6 +27,7 @@ import org.junit.Assert;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
@@ -190,6 +191,77 @@ public abstract class DDLTestCase extends DatastoreTestBase {
         {
             EntStrAlt2 ent1m = srv.retrieve(EntStrAlt2.class, ent1.getPrimaryKey());
             ent1m.name().setValue(CommonsStringUtils.paddingRight("M2", 200, 'z'));
+            srv.persist(ent1m);
+        }
+    }
+
+    @Table(prefix = "test", name = "ddl_str2")
+    public interface EntStrNNAlt1 extends IEntity {
+
+        IPrimitive<String> testId();
+
+        @ToString
+        IPrimitive<String> name();
+    }
+
+    @Table(prefix = "test", name = "ddl_str2")
+    public interface EntStrNNAlt2 extends IEntity {
+
+        IPrimitive<String> testId();
+
+        @ToString
+        @MemberColumn(notNull = true)
+        IPrimitive<String> name();
+    }
+
+    protected void setUpStrNNAlt() {
+        try {
+            if (((EntityPersistenceServiceRDB) srv).isTableExists(EntStrNNAlt1.class)) {
+                ((EntityPersistenceServiceRDB) srv).dropTable(EntStrNNAlt1.class);
+            }
+        } catch (RuntimeExceptionSerializable ignore) {
+        }
+    }
+
+    public void testAlterStringColumnAddNotNull() {
+        setUpStrAlt();
+
+        String setId = uniqueString();
+
+        EntStrNNAlt1 ent1 = EntityFactory.create(EntStrNNAlt1.class);
+        ent1.testId().setValue(setId);
+        ent1.name().setValue("A1" + uniqueString());
+        srv.persist(ent1);
+
+        ((IEntityPersistenceServiceRDB) srv).resetMapping();
+        ((IEntityPersistenceServiceRDB) srv).resetConnectionPool();
+
+        // see if data preserved
+        {
+            EntStrNNAlt2 ent2 = srv.retrieve(EntStrNNAlt2.class, ent1.getPrimaryKey());
+            Assert.assertEquals("data preserved", ent2.name().getValue(), ent1.name().getValue());
+        }
+
+        // Try to store null
+        {
+            EntStrNNAlt2 ent1m = srv.retrieve(EntStrNNAlt2.class, ent1.getPrimaryKey());
+            ent1m.name().setValue(null);
+            try {
+                srv.persist(ent1m);
+                Assert.fail("Should not be able to save null value");
+            } catch (RuntimeException ok) {
+
+            }
+        }
+
+        // changing it no nullable
+
+        ((IEntityPersistenceServiceRDB) srv).resetMapping();
+        ((IEntityPersistenceServiceRDB) srv).resetConnectionPool();
+
+        {
+            EntStrNNAlt1 ent1m = srv.retrieve(EntStrNNAlt1.class, ent1.getPrimaryKey());
+            ent1m.name().setValue(null);
             srv.persist(ent1m);
         }
     }

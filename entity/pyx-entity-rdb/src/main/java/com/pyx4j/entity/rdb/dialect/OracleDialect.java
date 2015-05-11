@@ -133,6 +133,11 @@ public class OracleDialect extends Dialect {
     }
 
     @Override
+    public String getChangeNullableDDL(String columnSqlName, boolean nullable) {
+        return "MODIFY (" + columnSqlName + (nullable ? " NULL" : " NOT NULL") + ")";
+    }
+
+    @Override
     public String sqlDropForeignKey(String tableName, String constraintName) {
         return "ALTER TABLE " + tableName + " DROP CONSTRAINT " + constraintName;
     }

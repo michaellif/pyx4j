@@ -270,6 +270,8 @@ public abstract class Dialect {
         return "MODIFY COLUMN " + columnSqlName;
     }
 
+    public abstract String getChangeNullableDDL(String columnSqlName, boolean nullable);
+
     public abstract String sqlDropForeignKey(String tableName, String constraintName);
 
     public String enabelConstraint(String tableName, String constraintName, boolean enable) {

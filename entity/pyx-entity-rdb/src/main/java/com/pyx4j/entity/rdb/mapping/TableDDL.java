@@ -160,7 +160,7 @@ class TableDDL {
                 sql.append(", ");
                 sql.append(sqlName).append(' ');
                 member.getValueAdapter().appendColumnDefinition(sql, dialect, member, sqlName);
-                if (member.hasNotNullConstraint() && (member.getSubclassDiscriminators() == null)) {
+                if (member.hasNotNullConstraint()) {
                     sql.append(" NOT NULL ");
                 }
                 if (member.getMemberMeta().isIndexed()) {
@@ -219,7 +219,7 @@ class TableDDL {
         // create Polymorphic Value and NotNull constraint
         for (MemberOperationsMeta member : tableModel.operationsMeta().getColumnMembers()) {
             for (String sqlName : member.getValueAdapter().getColumnNames(member.sqlName())) {
-                if (member.hasNotNullConstraint() && (member.getSubclassDiscriminators() != null)) {
+                if (member.isNotNull() && (member.getSubclassDiscriminators() != null)) {
                     sqls.add(createPolymorphicNotNullConstraint(dialect, tableModel, sqlName, member));
                 }
             }
@@ -496,6 +496,9 @@ class TableDDL {
                     sql.append(" ADD "); // [ column ] not in Oracle
                     sql.append(sqlName).append(' ');
                     member.getValueAdapter().appendColumnDefinition(sql, dialect, member, sqlName);
+                    if (member.hasNotNullConstraint()) {
+                        sql.append(" NOT NULL ");
+                    }
                     alterSqls.add(sql.toString());
                 } else {
                     if (!member.getValueAdapter().isCompatibleType(dialect, columnMeta.getTypeName(), member, sqlName)) {
@@ -507,6 +510,13 @@ class TableDDL {
                         sql.append(tableModel.getFullTableName()).append(' ');
                         sql.append(dialect.getChangeDateTypeDDL(sqlName)).append(' ');
                         member.getValueAdapter().appendColumnDefinition(sql, dialect, member, sqlName);
+                        alterSqls.add(sql.toString());
+                    }
+
+                    if (columnMeta.getNullable() != null && columnMeta.getNullable() != (!member.hasNotNullConstraint())) {
+                        StringBuilder sql = new StringBuilder("ALTER TABLE ");
+                        sql.append(tableModel.getFullTableName()).append(' ');
+                        sql.append(dialect.getChangeNullableDDL(sqlName, !member.hasNotNullConstraint()));
                         alterSqls.add(sql.toString());
                     }
                 }

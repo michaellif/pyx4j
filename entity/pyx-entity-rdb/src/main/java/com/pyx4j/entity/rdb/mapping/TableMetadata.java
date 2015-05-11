@@ -212,14 +212,21 @@ public class TableMetadata {
 
         private final int columnSize;
 
-        private final String isNullable;
+        private final Boolean isNullable;
 
         ColumnMetadata(ResultSet rs) throws SQLException {
             name = rs.getString("COLUMN_NAME").toUpperCase(Locale.ENGLISH);
             sqlDataType = rs.getInt("DATA_TYPE");
             typeName = rs.getString("TYPE_NAME");
             columnSize = rs.getInt("COLUMN_SIZE");
-            isNullable = rs.getString("IS_NULLABLE");
+            String nullable = rs.getString("IS_NULLABLE");
+            if (nullable == null) {
+                isNullable = null;
+            } else if (nullable.equals("YES")) {
+                isNullable = true;
+            } else {
+                isNullable = false;
+            }
         }
 
         public String getName() {
@@ -238,13 +245,13 @@ public class TableMetadata {
             return columnSize;
         }
 
-        public String getNullable() {
+        public Boolean getNullable() {
             return isNullable;
         }
 
         @Override
         public String toString() {
-            return getName() + ' ' + getTypeName() + ' ' + getColumnSize();
+            return getName() + ' ' + getTypeName() + ' ' + getColumnSize() + ", Nullable " + isNullable;
         }
     }
 
