@@ -106,7 +106,7 @@ public class EntityMetaWriter {
         if (value == null) {
             return "null";
         } else {
-            return "\"" + value.replace("\\", "\\\\").replace("\n", "\\n") + "\"";
+            return "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n") + "\"";
         }
     }
 
