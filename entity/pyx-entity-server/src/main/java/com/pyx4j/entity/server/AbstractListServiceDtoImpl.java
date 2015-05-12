@@ -113,7 +113,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
 
     /**
      *
-     * This called after boFilter
+     * This called before boFilter
      *
      * Used to retrieve bound detached members before they are copied to DTO
      *
@@ -124,7 +124,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
 
     /**
      *
-     * this is called after toFilter
+     * This is called after toFilter when all required data is loaded to TO
      *
      * This method called for every entity returned to the GWT client for listing. As opposite to single entity in retrieve/save operations.
      * This function is empty no need to call when you override this method
@@ -166,8 +166,11 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     }
 
     public final ICursorIterator<BO> getBOCursor(String encodedCursorReference, EntityQueryCriteria<BO> criteria, AttachLevel attachLevel) {
-        return new CursorIteratorDelegate<BO, BO>(//
-                new CursorIteratorFilter<BO>(Persistence.secureQuery(encodedCursorReference, criteria, attachLevel), boFilter(criteria))) {
+
+        CursorIteratorFilter<BO> boFilterIterator = new CursorIteratorFilter<BO>(Persistence.secureQuery(encodedCursorReference, criteria, attachLevel),
+                boFilter(criteria));
+
+        return new CursorIteratorDelegate<BO, BO>(boFilterIterator) {
 
             @Override
             public BO next() {
@@ -192,7 +195,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     public final ICursorIterator<TO> getTOCursor(String encodedCursorReference, EntityListCriteria<TO> dtoCriteria, AttachLevel attachLevel) {
         EntityListCriteria<BO> criteria = criteriaBinder.convertListCriteria(dtoCriteria);
 
-        ICursorIterator<TO> raw = new CursorIteratorDelegate<TO, BO>(getBOCursor(encodedCursorReference, criteria, attachLevel)) {
+        ICursorIterator<TO> toCreateIterator = new CursorIteratorDelegate<TO, BO>(getBOCursor(encodedCursorReference, criteria, attachLevel)) {
 
             @Override
             public TO next() {
@@ -204,7 +207,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
 
         };
 
-        return new CursorIteratorFilter<TO>(raw, toFilter(dtoCriteria));
+        return new CursorIteratorFilter<TO>(toCreateIterator, toFilter(dtoCriteria));
     }
 
     @Override
