@@ -53,8 +53,10 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
 
     /**
      * Used to retrieve bound detached members before they are copied to DTO
-     * 
+     *
      * retrieveTarget is null when called for save operations
+     *
+     * TODO eod143 rename onBeforeBind AbstractListServiceDtoImpl
      */
     protected void retrievedSingle(BO bo, RetrieveTarget retrieveTarget) {
     }
@@ -62,8 +64,11 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
     /**
      * This method called for single entity returned to the GWT client. As opposite to entries in list.
      * This is empty callback function that don't need to be called from implementation.
-     * 
+     *
+     * TODO eod143 rename onAfterBind AbstractListServiceDtoImpl
+     *
      * @param retrieveTarget
+     *
      */
     protected void enhanceRetrieved(BO bo, TO to, RetrieveTarget retrieveTarget) {
     }
@@ -86,7 +91,7 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
 
     /**
      * Default implementation calls persist(...)
-     * 
+     *
      * @param bo
      * @param to
      */
@@ -96,7 +101,7 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
 
     /**
      * Default implementation calls persist(...)
-     * 
+     *
      * @param bo
      * @param to
      * @return true is entity was updated/changed in DB
@@ -106,7 +111,7 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
     }
 
     /**
-     * 
+     *
      * @param bo
      * @param to
      * @return true is entity was updated/changed in DB
