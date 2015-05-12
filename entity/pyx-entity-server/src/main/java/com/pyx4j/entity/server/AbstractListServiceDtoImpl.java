@@ -118,6 +118,8 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
      * Used to retrieve bound detached members before they are copied to DTO
      *
      * To make it work magically we have implemented retriveDetachedMember
+     *
+     * TODO eod143 rename onBeforeBind(BO bo, RetrieveTarget target)
      */
     protected void retrievedForList(BO bo) {
     }
@@ -128,6 +130,8 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
      *
      * This method called for every entity returned to the GWT client for listing. As opposite to single entity in retrieve/save operations.
      * This function is empty no need to call when you override this method
+     *
+     * TODO eod143 rename onAfterBind
      */
     protected void enhanceListRetrieved(BO bo, TO to) {
     }
