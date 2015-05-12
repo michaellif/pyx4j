@@ -72,6 +72,11 @@ public class MySQLDialect extends Dialect {
     }
 
     @Override
+    public String sqlChangeNullable(String columnSqlName, String columnTypeSQLDefinition, boolean nullable) {
+        return sqlChangeDateType(columnSqlName) + ' ' + columnTypeSQLDefinition + (nullable ? "" : " NOT NULL ");
+    }
+
+    @Override
     public String sqlDropForeignKey(String tableName, String constraintName) {
         return "ALTER TABLE " + tableName + " DROP FOREIGN KEY " + constraintName;
     }
