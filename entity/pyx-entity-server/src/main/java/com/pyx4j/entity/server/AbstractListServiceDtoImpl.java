@@ -21,6 +21,7 @@ package com.pyx4j.entity.server;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Filter;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.core.AttachLevel;
@@ -35,6 +36,7 @@ import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.entity.shared.utils.EntityQueryCriteriaBinder;
+import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.security.shared.SecurityController;
 
 public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends IEntity> implements AbstractListCrudService<TO>, CursorSource<TO> {
@@ -110,17 +112,24 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     }
 
     /**
+     *
+     * This called after boFilter
+     *
+     * Used to retrieve bound detached members before they are copied to DTO
+     *
+     * To make it work magically we have implemented retriveDetachedMember
+     */
+    protected void retrievedForList(BO bo) {
+    }
+
+    /**
+     *
+     * this is called after toFilter
+     *
      * This method called for every entity returned to the GWT client for listing. As opposite to single entity in retrieve/save operations.
      * This function is empty no need to call when you override this method
      */
     protected void enhanceListRetrieved(BO bo, TO to) {
-    }
-
-    /**
-     * Used to retrieve bound detached members before they are copied to DTO
-     * TODO To make it work magically we have implemented retriveDetachedMember
-     */
-    protected void retrievedForList(BO bo) {
     }
 
     /**
@@ -142,13 +151,23 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     }
 
     @Deprecated
-    // TODO use getQueryCursor
+    // TODO use getQueryCursor or filters
     protected EntitySearchResult<BO> query(EntityListCriteria<BO> criteria) {
         return Persistence.secureQuery(criteria);
     }
 
-    public final ICursorIterator<BO> getQueryCursor(String encodedCursorReference, EntityQueryCriteria<BO> criteria, AttachLevel attachLevel) {
-        return new CursorIteratorDelegate<BO, BO>(Persistence.secureQuery(encodedCursorReference, criteria, attachLevel)) {
+    protected Filter<BO> boFilter(EntityQueryCriteria<BO> criteria) {
+        return new Filter<BO>() {
+            @Override
+            public boolean accept(BO input) {
+                return true;
+            }
+        };
+    }
+
+    public final ICursorIterator<BO> getBOCursor(String encodedCursorReference, EntityQueryCriteria<BO> criteria, AttachLevel attachLevel) {
+        return new CursorIteratorDelegate<BO, BO>(//
+                new CursorIteratorFilter<BO>(Persistence.secureQuery(encodedCursorReference, criteria, attachLevel), boFilter(criteria))) {
 
             @Override
             public BO next() {
@@ -160,11 +179,20 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         };
     }
 
+    protected Filter<TO> toFilter(EntityQueryCriteria<TO> criteria) {
+        return new Filter<TO>() {
+            @Override
+            public boolean accept(TO input) {
+                return true;
+            }
+        };
+    }
+
     @Override
-    public ICursorIterator<TO> getCursor(String encodedCursorReference, EntityListCriteria<TO> dtoCriteria, AttachLevel attachLevel) {
+    public final ICursorIterator<TO> getTOCursor(String encodedCursorReference, EntityListCriteria<TO> dtoCriteria, AttachLevel attachLevel) {
         EntityListCriteria<BO> criteria = criteriaBinder.convertListCriteria(dtoCriteria);
 
-        return new CursorIteratorDelegate<TO, BO>(getQueryCursor(encodedCursorReference, criteria, attachLevel)) {
+        ICursorIterator<TO> raw = new CursorIteratorDelegate<TO, BO>(getBOCursor(encodedCursorReference, criteria, attachLevel)) {
 
             @Override
             public TO next() {
@@ -175,29 +203,51 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
             }
 
         };
+
+        return new CursorIteratorFilter<TO>(raw, toFilter(dtoCriteria));
     }
 
-    //TODO make it final
     @Override
-    public void list(AsyncCallback<EntitySearchResult<TO>> callback, EntityListCriteria<TO> dtoCriteria) {
-        if (!dtoCriteria.getEntityClass().equals(toClass)) {
-            throw new Error("Service " + this.getClass().getName() + " declaration error. " + toClass + "!=" + dtoCriteria.getEntityClass());
-        }
-        EntityListCriteria<BO> criteria = criteriaBinder.convertListCriteria(dtoCriteria);
-        EntitySearchResult<BO> dbResults = query(criteria);
+    public final void list(AsyncCallback<EntitySearchResult<TO>> callback, EntityListCriteria<TO> toCriteria) {
+        callback.onSuccess(list(toCriteria).execute());
+    }
 
+    protected Executable<EntitySearchResult<TO>, RuntimeException> list(final EntityListCriteria<TO> toCriteria) {
+        return new Executable<EntitySearchResult<TO>, RuntimeException>() {
+
+            @Override
+            public EntitySearchResult<TO> execute() {
+                return listImpl(toCriteria);
+            }
+        };
+    }
+
+    private final EntitySearchResult<TO> listImpl(EntityListCriteria<TO> toCriteria) {
+        if (!toCriteria.getEntityClass().equals(toClass)) {
+            throw new Error("Service " + this.getClass().getName() + " declaration error. " + toClass + "!=" + toCriteria.getEntityClass());
+        }
         EntitySearchResult<TO> result = new EntitySearchResult<TO>();
-        result.setEncodedCursorReference(dbResults.getEncodedCursorReference());
-        result.hasMoreData(dbResults.hasMoreData());
-        result.setTotalRows(dbResults.getTotalRows());
-        for (BO bo : dbResults.getData()) {
-            retrievedForList(bo);
-            TO dto = binder.createTO(bo);
-            enhanceListRetrieved(bo, dto);
-            result.getData().add(dto);
+        ICursorIterator<TO> cursor = null;
+        try {
+            cursor = getTOCursor(null, toCriteria, AttachLevel.Attached);
+            while (cursor.hasNext()) {
+                TO to = cursor.next();
+                result.getData().add(to);
+                if ((toCriteria.getPageSize() > 0) && result.getData().size() >= toCriteria.getPageSize()) {
+                    break;
+                }
+            }
+            // The position is important, hasNext may retrieve one more row.
+            result.setEncodedCursorReference(cursor.encodedCursorReference());
+            result.hasMoreData(cursor.hasNext());
+        } finally {
+            IOUtils.closeQuietly(cursor);
         }
-        callback.onSuccess(result);
 
+        EntityListCriteria<BO> criteria = criteriaBinder.convertListCriteria(toCriteria);
+        result.setTotalRows(Persistence.service().count(criteria));
+
+        return result;
     }
 
     protected void delete(BO bo) {
