@@ -48,8 +48,6 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        srv.delete(EntityQueryCriteria.create(Employee.class));
-
         // Setup Data
         setId = uniqueString();
         emp1 = EntityFactory.create(Employee.class);
@@ -63,6 +61,14 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
         emp2.firstName().setValue(emp2Name);
         emp2.workAddress().streetName().setValue(setId);
         srv.persist(emp2);
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+        criteria.eq(criteria.proto().workAddress().streetName(), setId);
+        srv.delete(criteria);
+        super.tearDown();
     }
 
     //TODO need a global factory for this binders
@@ -82,6 +88,7 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
             query.firstName().value().setValue("Bob");
 
             EntityQueryCriteria<Employee> criteria = PersistableQueryManager.convertToCriteria(query, binder);
+            criteria.eq(criteria.proto().workAddress().streetName(), setId);
             List<Employee> emps = srv.query(criteria);
             Assert.assertEquals("result set size", 1, emps.size());
             Assert.assertEquals("right selection ", emp1, emps.get(0));
@@ -91,6 +98,7 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
             query.firstName().value().setValue("Harry");
 
             EntityQueryCriteria<Employee> criteria = PersistableQueryManager.convertToCriteria(query, binder);
+            criteria.eq(criteria.proto().workAddress().streetName(), setId);
             List<Employee> emps = srv.query(criteria);
             Assert.assertEquals("result set size", 1, emps.size());
             Assert.assertEquals("right selection ", emp2, emps.get(0));
@@ -117,6 +125,7 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
 
             // Use stored  Query
             EntityQueryCriteria<Employee> criteria = PersistableQueryManager.convertToCriteria(query, binder());
+            criteria.eq(criteria.proto().workAddress().streetName(), setId);
             List<Employee> emps = srv.query(criteria);
             Assert.assertEquals("result set size", 1, emps.size());
             Assert.assertEquals("right selection ", emp1, emps.get(0));
@@ -149,6 +158,7 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
 
             // Use stored  Query
             EntityQueryCriteria<Employee> criteria = PersistableQueryManager.convertToCriteria(query, binder());
+            criteria.eq(criteria.proto().workAddress().streetName(), setId);
             List<Employee> emps = srv.query(criteria);
             Assert.assertEquals("result set size", 1, emps.size());
             Assert.assertEquals("right selection ", emp1, emps.get(0));
