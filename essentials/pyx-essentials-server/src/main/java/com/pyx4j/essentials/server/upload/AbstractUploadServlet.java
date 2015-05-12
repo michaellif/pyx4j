@@ -90,17 +90,19 @@ public abstract class AbstractUploadServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/plain");
+        response.setContentType("text/html");
         PrintWriter out = response.getWriter();
+        // https://code.google.com/p/gwtupload/issues/detail?id=66
+        out.print("<html><head><title>Upload Response</title></head><body>");
         out.print(UploadService.ResponsePrefix);
-        Visit v = ServerContext.getVisit();
-        if ((v == null) || (!v.isUserLoggedIn())) {
-            log.trace("no session");
-            out.println(i18n.tr("No Session"));
-            return;
-        }
         DeferredUploadProcess<IEntity, AbstractIFileBlob> process = null;
         try {
+            Visit v = ServerContext.getVisit();
+            if ((v == null) || (!v.isUserLoggedIn())) {
+                log.trace("no session");
+                out.println(i18n.tr("No Session"));
+                return;
+            }
             if (!ServletFileUpload.isMultipartContent(request)) {
                 out.println(i18n.tr("Invalid Request Type"));
                 return;
@@ -246,6 +248,8 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                 process.status().setError();
             }
         } finally {
+            out.print(UploadService.ResponseSufix);
+            out.print("\n--></body></html>");
             out.flush();
             out.close();
         }

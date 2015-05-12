@@ -56,6 +56,11 @@
         </encoder>
     </appender>
 
+    <logger name="db.ddl" additivity="false">
+        <appender-ref ref="FileAppender" />
+        <appender-ref ref="FileAppender.warn" />
+    </logger>
+        
     <logger name="com.pyx4j" level="DEBUG" />
     <logger name="org.apache" level="INFO" />
     <logger name="com.mchange" level="ERROR" />

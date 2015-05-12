@@ -55,8 +55,13 @@ class ValueAdapterEntity implements ValueAdapter {
     }
 
     @Override
-    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String columnName) {
-        sql.append(dialect.getSqlType(Long.class));
+    public boolean isColumnTypeChanges(Dialect dialect, String typeName, int columnSize, MemberOperationsMeta member, String sqlColumnName) {
+        return false;
+    }
+
+    @Override
+    public String sqlColumnTypeDefinition(Dialect dialect, MemberOperationsMeta member, String columnName) {
+        return dialect.getSqlType(Long.class);
     }
 
     @Override

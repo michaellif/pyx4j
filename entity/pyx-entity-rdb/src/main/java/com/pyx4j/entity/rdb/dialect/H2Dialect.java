@@ -64,7 +64,7 @@ public class H2Dialect extends Dialect {
     }
 
     @Override
-    public String getSequenceNextValSql(String sequenceName) {
+    public String sqlSequenceNextVal(String sequenceName) {
         if (sequencesBaseIdentity) {
             return "NEXT VALUE FOR " + sequenceName;
         } else {
@@ -73,7 +73,7 @@ public class H2Dialect extends Dialect {
     }
 
     @Override
-    public String getSequenceCurentValueSql(String sequenceName) {
+    public String sqlSequenceCurentValue(String sequenceName) {
         if (sequencesBaseIdentity) {
             return "CURRENT VALUE FOR " + sequenceName;
         } else {
@@ -87,16 +87,16 @@ public class H2Dialect extends Dialect {
     }
 
     @Override
-    public String getCreateSequenceSql(String sequenceName, int identityOffset) {
+    public String sqlCreateSequence(String sequenceName, int identityOffset) {
         if (sequencesBaseIdentity) {
             return "CREATE SEQUENCE " + sequenceName + ((identityOffset != 0) ? (" START WITH " + identityOffset) : "");
         } else {
-            return super.getCreateSequenceSql(sequenceName, identityOffset);
+            return super.sqlCreateSequence(sequenceName, identityOffset);
         }
     }
 
     @Override
-    public String getDropSequenceSql(String sequenceName) {
+    public String sqlDropSequence(String sequenceName) {
         if (sequencesBaseIdentity) {
             return "DROP SEQUENCE " + sequenceName;
         } else {
@@ -112,6 +112,11 @@ public class H2Dialect extends Dialect {
             return "ALTER TABLE " + tableName + " ALTER COLUMN " + this.getNamingConvention().sqlIdColumnName() + " BIGINT AUTO_INCREMENT (" + identityOffset
                     + ")";
         }
+    }
+
+    @Override
+    public String sqlChangeNullable(String columnSqlName, String columnTypeSQLDefinition, boolean nullable) {
+        return "ALTER COLUMN " + columnSqlName + " SET " + (nullable ? "" : "NOT ") + "NULL";
     }
 
     @Override
