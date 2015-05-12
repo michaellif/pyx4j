@@ -20,11 +20,13 @@
 package com.pyx4j.entity.core.query;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.core.IPrimitive;
 
 @DiscriminatorValue("String")
 public interface IStringCondition extends ICondition {
 
+    @MemberColumn(name = "val")
     IPrimitive<String> value();
 
 }
