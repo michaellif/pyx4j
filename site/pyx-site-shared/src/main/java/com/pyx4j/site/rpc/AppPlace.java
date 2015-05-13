@@ -69,7 +69,7 @@ public class AppPlace extends Place {
         formPlace(itemID);
     }
 
-    public AppPlace queryArg(String key, String... value) {
+    public AppPlace addQueryArg(String key, String... value) {
         if (queryArgs == null) {
             queryArgs = new HashMap<String, List<String>>();
         }
@@ -79,7 +79,7 @@ public class AppPlace extends Place {
         return this;
     }
 
-    public AppPlace placeArg(String key, String... value) {
+    public AppPlace addPlaceArg(String key, String... value) {
         if (placeArgs == null) {
             placeArgs = new HashMap<String, List<String>>();
         }
@@ -89,7 +89,7 @@ public class AppPlace extends Place {
         return this;
     }
 
-    public void parseArgs(String queryString) {
+    public void addQueryArgs(String queryString) {
         if (queryArgs == null) {
             queryArgs = new HashMap<String, List<String>>();
         }
@@ -238,7 +238,7 @@ public class AppPlace extends Place {
     }
 
     public AppPlace formPlace(Key itemID) {
-        return queryArg(ARG_NAME_ID, itemID.toString());
+        return addQueryArg(ARG_NAME_ID, itemID.toString());
     }
 
     /**

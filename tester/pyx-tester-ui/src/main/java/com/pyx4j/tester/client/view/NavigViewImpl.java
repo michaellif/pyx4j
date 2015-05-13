@@ -63,7 +63,7 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
 
     private TreeItem createNavigItem(TestFormType formType) {
         AppPlace place = new TesterSiteMap.FormTester();
-        place.queryArg(FormTesterActivity.FORM_TYPE, formType.name());
+        place.addQueryArg(FormTesterActivity.FORM_TYPE, formType.name());
         return new TreeItem(new NavigItemAnchor(place, formType.name()));
     }
 

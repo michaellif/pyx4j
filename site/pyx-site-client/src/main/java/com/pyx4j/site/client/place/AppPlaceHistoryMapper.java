@@ -37,7 +37,7 @@ public class AppPlaceHistoryMapper implements PlaceHistoryMapper {
         AppPlace place = listing.getPlace(siteMapClass, placeId);
 
         if (queryString != null) {
-            place.parseArgs(queryString);
+            place.addQueryArgs(queryString);
         }
         return place;
     }
