@@ -17,7 +17,7 @@
  * Created on Mar 12, 2014
  * @author vlads
  */
-package com.pyx4j.entity.rdb.poc.dls;
+package com.pyx4j.entity.rdb.postgresql.dls;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

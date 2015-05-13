@@ -17,7 +17,7 @@
  * Created on Mar 11, 2014
  * @author vlads
  */
-package com.pyx4j.entity.rdb.poc.dls;
+package com.pyx4j.entity.rdb.postgresql.dls;
 
 import java.util.Calendar;
 
@@ -31,7 +31,7 @@ import com.pyx4j.entity.test.server.PersistenceEnvironment;
 import com.pyx4j.entity.test.shared.domain.temporal.JustDate;
 import com.pyx4j.gwt.server.DateUtils;
 
-public class DaylightSaving extends DatastoreTestBase {
+public class DaylightSavingTest extends DatastoreTestBase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {
