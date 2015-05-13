@@ -66,7 +66,7 @@ public class SheetCreationDeferredProcess<E extends IEntity> extends AbstractDef
             public Void execute() throws RuntimeException {
                 ICursorIterator<E> cursor = null;
                 try {
-                    cursor = cursorSource.getCursor(null, criteria, AttachLevel.Attached);
+                    cursor = cursorSource.getTOCursor(null, criteria, AttachLevel.Attached);
                     while (cursor.hasNext()) {
                         E model = cursor.next();
                         entityFormatter.reportEntity(formatter, model);

@@ -71,18 +71,28 @@ public class NamespaceManager {
         }
     }
 
-    public static <R, E extends Throwable> R runInTargetNamespace(final String targetNamespace, final Executable<R, E> task) throws E {
-        final String namespace = NamespaceManager.getNamespace();
-        try {
-            NamespaceManager.setNamespace(targetNamespace);
-            return task.execute();
-        } finally {
-            if (namespace != null) {
-                NamespaceManager.setNamespace(namespace);
-            } else {
-                NamespaceManager.remove();
+    public static <R, E extends Throwable> Executable<R, E> wrapInTargetNamespace(final String targetNamespace, final Executable<R, E> task) {
+        return new Executable<R, E>() {
+
+            @Override
+            public R execute() throws E {
+                final String namespace = NamespaceManager.getNamespace();
+                try {
+                    NamespaceManager.setNamespace(targetNamespace);
+                    return task.execute();
+                } finally {
+                    if (namespace != null) {
+                        NamespaceManager.setNamespace(namespace);
+                    } else {
+                        NamespaceManager.remove();
+                    }
+                }
             }
-        }
+        };
+    }
+
+    public static <R, E extends Throwable> R runInTargetNamespace(final String targetNamespace, final Executable<R, E> task) throws E {
+        return wrapInTargetNamespace(targetNamespace, task).execute();
     }
 
     public static <R, E extends Exception> R runUnitOfWorkInTargetNamespace(final String targetNamespace, final TransactionScopeOption transactionScopeOption,
