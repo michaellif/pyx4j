@@ -38,6 +38,7 @@ public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEn
     @Override
     protected abstract void bind();
 
+    //TODO Change order of parameters or order of generics
     @SuppressWarnings("unchecked")
     protected final <TBO extends BO, TTO extends TO> void bind(Class<TTO> toClass, Class<TBO> boClass, EntityBinder<TBO, TTO> binder) {
         bindingByBO.put(boClass, (EntityBinder<BO, TO>) binder);
