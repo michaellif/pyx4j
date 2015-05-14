@@ -42,6 +42,7 @@ import com.pyx4j.entity.core.Path;
  *
  * bind() function should be implemented to map members that needs to be copied of one class to another.
  */
+//TODO Change order of parameters or order of generics
 public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity> implements EntityBinder<BO, TO> {
 
     protected Class<BO> boClass;
