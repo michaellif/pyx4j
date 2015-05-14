@@ -14,20 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 23, 2015
+ * Created on May 13, 2015
  * @author vlads
  */
 package com.pyx4j.entity.test.shared.domain.inherit.binder;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IPrimitive;
 
 @Transient
-public interface B1superHolder extends IEntity {
+public interface B1superHolderTO extends B1superHolder {
 
-    IPrimitive<String> nameB1Holder();
-
-    B1super item();
-
+    @Override
+    B1superTO item();
 }

@@ -14,20 +14,31 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 23, 2015
+ * Created on May 13, 2015
  * @author vlads
  */
-package com.pyx4j.entity.test.shared.domain.inherit.binder;
+package com.pyx4j.entity.shared.utils;
 
-import com.pyx4j.entity.annotations.Transient;
+import java.io.Serializable;
+import java.util.IdentityHashMap;
+import java.util.Map;
+
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IPrimitive;
 
-@Transient
-public interface B1superHolder extends IEntity {
+/**
+ * Used to ensure that each Entity in TO converted to the same single entity in BO and back
+ *
+ */
+//TODO pass this as argument in EntityBinder functions
+public class BindingContext {
 
-    IPrimitive<String> nameB1Holder();
+    private Map<Map<String, Serializable>, IEntity> mapped = new IdentityHashMap<>();
 
-    B1super item();
+    void put(IEntity from, IEntity to) {
+        mapped.put(from.getValue(), to);
+    }
 
+    IEntity get(IEntity from) {
+        return mapped.get(from.getValue());
+    }
 }
