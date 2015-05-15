@@ -19,17 +19,42 @@
  */
 package com.pyx4j.entity.server.textsearch;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.textsearch.TextSearchFacade.KeywordUpdateRule;
 import com.pyx4j.entity.server.textsearch.TextSearchFacade.UpdateChain;
 import com.pyx4j.entity.shared.ITextSearchIndex;
+import com.pyx4j.entity.shared.TextSearchDocument;
 
 class TextSearchIndexManager {
 
     private static Logger log = LoggerFactory.getLogger(TextSearchIndexManager.class);
+
+    private class UpdateChainData<T extends IEntity> {
+
+        Class<? extends ITextSearchIndex<T>> indexClass;
+
+        UpdateChain<? extends IEntity, T> updateChain;
+
+        public UpdateChainData(Class<? extends ITextSearchIndex<T>> indexClass, UpdateChain<? extends IEntity, T> updateChain) {
+            this.indexClass = indexClass;
+            this.updateChain = updateChain;
+        }
+
+    }
+
+    // TODO This should have many UpdateChainData
+    private Map<Class<? extends IEntity>, UpdateChainData<? extends IEntity>> chains = new HashMap<>();
+
+    private Map<Class<? extends ITextSearchIndex<?>>, Class<? extends KeywordUpdateRule<?>>> updateRules = new HashMap<>();
 
     private TextSearchIndexManager() {
     }
@@ -44,17 +69,60 @@ class TextSearchIndexManager {
 
     public <T extends IEntity, E extends IEntity> void registerUpdateChain(Class<T> entityClass, Class<? extends ITextSearchIndex<E>> indexClass,
             UpdateChain<T, E> updateChain) {
-        // TODO Auto-generated method stub
-
+        chains.put(entityClass, new UpdateChainData<E>(indexClass, updateChain));
     }
 
     public <E extends IEntity> void registerUpdateRule(Class<? extends ITextSearchIndex<E>> indexClass, Class<? extends KeywordUpdateRule<E>> ruleClass) {
-        // TODO Auto-generated method stub
+        chains.put(EntityFactory.getEntityPrototype(indexClass).owner().getValueClass(), new UpdateChainData<E>(indexClass, null));
 
+        if (updateRules.containsKey(indexClass)) {
+            throw new Error("Duplicate rule definition for index " + indexClass.getName());
+        }
+        updateRules.put(indexClass, ruleClass);
     }
 
-    public void queueIndexUpdate(IEntity entity) {
-        // TODO Auto-generated method stub
+    public <E extends IEntity> void queueIndexUpdate(E entity) {
+        if (entity.getPrimaryKey() == null) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        UpdateChainData<E> update = (UpdateChainData<E>) chains.get(entity.getValueClass());
+        if (update == null) {
+            throw new Error("No registered chains for class " + entity.getValueClass().getName());
+        }
 
+        if (update.updateChain != null) {
+            @SuppressWarnings("unchecked")
+            EntityQueryCriteria<IEntity> criteria = ((UpdateChain<E, IEntity>) update.updateChain).criteria(entity);
+            for (IEntity indexed : Persistence.service().query(criteria)) {
+                update(indexed, update.indexClass);
+            }
+        } else {
+            update(entity, update.indexClass);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void update(IEntity indexed, Class<? extends ITextSearchIndex<? extends IEntity>> indexClass) {
+        Class<? extends KeywordUpdateRule<?>> updaterClass = updateRules.get(indexClass);
+        KeywordUpdateRule<IEntity> updater;
+        try {
+            updater = (KeywordUpdateRule<IEntity>) updaterClass.newInstance();
+        } catch (ReflectiveOperationException e) {
+            throw new Error(e);
+        }
+
+        EntityQueryCriteria<ITextSearchIndex<IEntity>> criteria = new EntityQueryCriteria<ITextSearchIndex<IEntity>>(
+                (Class<ITextSearchIndex<IEntity>>) indexClass);
+        criteria.eq(criteria.proto().owner(), indexed);
+
+        ITextSearchIndex<IEntity> index = Persistence.service().retrieve(criteria);
+
+        if (index.keywords().isNull()) {
+            index.keywords().setValue(new TextSearchDocument());
+        }
+        index.keywords().getValue().setText(updater.buildIndex(indexed));
+
+        Persistence.service().persist(index);
     }
 }

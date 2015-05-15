@@ -36,7 +36,7 @@ public class TextSearchFacadeImpl implements TextSearchFacade {
     }
 
     @Override
-    public void queueIndexUpdate(IEntity entity) {
+    public <E extends IEntity> void queueIndexUpdate(E entity) {
         TextSearchIndexManager.instance().queueIndexUpdate(entity);
     }
 
