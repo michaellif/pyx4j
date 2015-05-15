@@ -201,7 +201,7 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
     // TODO This will be refactored! for this prototype this classes are not reused so it is safe to keep it as member.
     BindingContext context;
 
-    protected BindingContext context() {
+    public BindingContext context() {
         if (context == null) {
             context = new BindingContext();
         }
