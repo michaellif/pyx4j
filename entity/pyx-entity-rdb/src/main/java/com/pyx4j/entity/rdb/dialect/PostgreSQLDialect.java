@@ -25,6 +25,7 @@ import java.sql.Types;
 
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
+import com.pyx4j.entity.shared.TextSearchDocument;
 
 public class PostgreSQLDialect extends Dialect {
 
@@ -44,6 +45,8 @@ public class PostgreSQLDialect extends Dialect {
         addTypeMeta(byte[].class, "bytea");
 
         addTypeMeta(java.util.Date.class, "timestamp");
+        
+        addTypeMeta(TextSearchDocument.class, "tsvector");
     }
 
     @Override
