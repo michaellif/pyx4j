@@ -59,14 +59,14 @@ public class FullTextSearchTest extends DatastoreTestBase {
         ServerSideFactory.create(TextSearchFacade.class).registerUpdateChain(FtsAuthor.class, FtsBookIndex.class,
                 new TextSearchFacade.UpdateChain<FtsAuthor, FtsBook>() {
 
-                    @Override
-                    public EntityQueryCriteria<FtsBook> criteria(FtsAuthor triggerEntity) {
-                        EntityQueryCriteria<FtsBook> criteria = EntityQueryCriteria.create(FtsBook.class);
-                        criteria.eq(criteria.proto().authors(), triggerEntity);
-                        return criteria;
-                    }
+            @Override
+            public EntityQueryCriteria<FtsBook> criteria(FtsAuthor triggerEntity) {
+                EntityQueryCriteria<FtsBook> criteria = EntityQueryCriteria.create(FtsBook.class);
+                criteria.eq(criteria.proto().authors(), triggerEntity);
+                return criteria;
+            }
 
-                });
+        });
 
     }
 
@@ -86,6 +86,7 @@ public class FullTextSearchTest extends DatastoreTestBase {
             book.testId().setValue(testId);
             book.title().setValue("BT" + i);
             book.authors().add(author);
+            srv.persist(book);
             srv.persist(book);
         }
 

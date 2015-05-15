@@ -64,6 +64,6 @@ public interface TextSearchFacade {
      *
      * Need to have UpdateChain registered for this entityClass or this entity will update its own indexes. Or you will get Error
      */
-    public void queueIndexUpdate(IEntity entity);
+    <E extends IEntity> void queueIndexUpdate(E entity);
 
 }
