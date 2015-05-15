@@ -194,7 +194,7 @@
 
         <!-- Hack: have the 2nd profile's excludes override the 1st -->
         <profile>
-            <id>pyx4j-no-mysql-tests</id>
+            <id>pyx4j-in-memory-db-tests</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
@@ -210,6 +210,7 @@
                                 <exclude>**/mysql/*.*</exclude>
                                 <exclude>**/oracle/*.*</exclude>
                                 <exclude>**/postgresql/*.*</exclude>
+                                <exclude>**/postgresql/*/*.*</exclude>
                                 <exclude>**/h2/*.*</exclude>
                                 <exclude>**/derby/*.*</exclude>
                             </excludes>
@@ -260,6 +261,7 @@
                                 <exclude>**/stretch/*/*.*</exclude>
                                 <exclude>**/oracle/*.*</exclude>
                                 <exclude>**/postgresql/*.*</exclude>
+                                <exclude>**/postgresql/*/*.*</exclude>
                                 <exclude>**/h2/*.*</exclude>
                                 <exclude>**/derby/*.*</exclude>
                             </excludes>
@@ -311,6 +313,7 @@
                                 <exclude>**/hsql/*.*</exclude>
                                 <exclude>**/mysql/*.*</exclude>
                                 <exclude>**/postgresql/*.*</exclude>
+                                <exclude>**/postgresql/*/*.*</exclude>
                                 <exclude>**/h2/*.*</exclude>
                                 <exclude>**/derby/*.*</exclude>
                             </excludes>
