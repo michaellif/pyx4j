@@ -32,7 +32,20 @@ import com.pyx4j.entity.core.IEntity;
 //TODO pass this as argument in EntityBinder functions
 public class BindingContext {
 
-    private Map<Map<String, Serializable>, IEntity> mapped = new IdentityHashMap<>();
+    public static enum BindingType {
+
+        List,
+
+        View,
+
+        Edit;
+
+    }
+
+    //TODO remove default
+    private BindingType bindingType = BindingType.List;
+
+    private final Map<Map<String, Serializable>, IEntity> mapped = new IdentityHashMap<>();
 
     void put(IEntity from, IEntity to) {
         mapped.put(from.getValue(), to);
@@ -40,5 +53,13 @@ public class BindingContext {
 
     IEntity get(IEntity from) {
         return mapped.get(from.getValue());
+    }
+
+    public BindingType getBindingType() {
+        return bindingType;
+    }
+
+    public void setBindingType(BindingType bindingType) {
+        this.bindingType = bindingType;
     }
 }
