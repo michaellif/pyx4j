@@ -19,8 +19,6 @@
  */
 package com.pyx4j.entity.server;
 
-import javafx.scene.control.ButtonBar.ButtonData;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,9 +31,9 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.entity.security.EntityPermission;
+import com.pyx4j.entity.shared.utils.BindingContext.BindingType;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
-import com.pyx4j.entity.shared.utils.BindingContext.BindingType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
