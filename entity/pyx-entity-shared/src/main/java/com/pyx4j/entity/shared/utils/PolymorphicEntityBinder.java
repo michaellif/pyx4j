@@ -74,7 +74,7 @@ public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEn
     public TO createTO(BO bo) {
         EntityBinder<BO, TO> subBinder = getBinderByBO(bo);
         assert subBinder != null : "Binder not found for " + bo.getDebugExceptionInfoString();
-        ((SimpleEntityBinder) subBinder).context = context(); // TODO pass this as argument
+        ((SimpleEntityBinder) subBinder).inContext(context()); // TODO pass this as argument
         return subBinder.createTO(bo.<BO> cast());
     }
 
@@ -82,7 +82,7 @@ public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEn
     public void copyBOtoTO(BO bo, TO to) {
         EntityBinder<BO, TO> subBinder = getBinderByBO(bo);
         assert subBinder != null : "Binder not found for " + bo.getDebugExceptionInfoString();
-        ((SimpleEntityBinder) subBinder).context = context(); // TODO pass this as argument
+        ((SimpleEntityBinder) subBinder).inContext(context()); // TODO pass this as argument
         subBinder.copyBOtoTO(bo, to);
         super.copyBOtoTO(bo, to);
     }
@@ -91,7 +91,7 @@ public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEn
     public BO createBO(TO to) {
         EntityBinder<BO, TO> subBinder = getBinderByTO(to);
         assert subBinder != null : "Binder not found for " + to.getDebugExceptionInfoString();
-        ((SimpleEntityBinder) subBinder).context = context(); // TODO pass this as argument
+        ((SimpleEntityBinder) subBinder).inContext(context()); // TODO pass this as argument
         return subBinder.createBO(to.<TO> cast());
     }
 
@@ -99,7 +99,7 @@ public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEn
     public void copyTOtoBO(TO to, BO bo) {
         EntityBinder<BO, TO> subBinder = getBinderByTO(to);
         assert subBinder != null : "Binder not found for " + to.getDebugExceptionInfoString();
-        ((SimpleEntityBinder) subBinder).context = context(); // TODO pass this as argument
+        ((SimpleEntityBinder) subBinder).inContext(context()); // TODO pass this as argument
         subBinder.copyTOtoBO(to, bo);
         super.copyTOtoBO(to, bo);
     }

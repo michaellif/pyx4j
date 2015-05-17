@@ -51,7 +51,7 @@ public class BindingContext {
         mapped.put(from.getValue(), to);
     }
 
-    IEntity get(IEntity from) {
+    public IEntity get(IEntity from) {
         return mapped.get(from.getValue());
     }
 
