@@ -93,6 +93,22 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
         super(clazz, parent, fieldName);
         delegateValue = (parent != null) && (getOwner() == parent);
         isPrototypeEntity = ".".equals(fieldName);
+
+        // Enable this is you have problem with StackOverflow
+        if (false) {
+            assert !stackOverflow(0) : " Possible stackOverflow in Object Tree " + getDebugExceptionInfoString();
+        }
+    }
+
+    // The dummies way to find if there are  cyclic references in a tree.
+    private boolean stackOverflow(int n) {
+        if (getOwner() == null) {
+            return false;
+        } else if (n > 30) {
+            return true;
+        } else {
+            return ((SharedEntityHandler) getOwner()).stackOverflow(n + 1);
+        }
     }
 
     @Override
