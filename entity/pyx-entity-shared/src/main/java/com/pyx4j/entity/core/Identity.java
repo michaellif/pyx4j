@@ -28,7 +28,7 @@ public final class Identity<E extends IEntity> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private E identityStab;
+    private E identityStub;
 
     @GWTSerializable
     protected Identity() {
@@ -36,11 +36,11 @@ public final class Identity<E extends IEntity> implements Serializable {
     }
 
     public Identity(E entity) {
-        identityStab = entity.createIdentityStub();
+        identityStub = entity.createIdentityStub();
     }
 
-    public E getIdentityStab() {
-        return identityStab;
+    public E getIdentityStub() {
+        return identityStub;
     }
 
     public static <T extends IEntity> Identity<T> key(T entity) {
