@@ -89,7 +89,7 @@ public class PostgreSQLDialect extends Dialect {
         String value = searchValue.toString();
         for (String str : value.split(" ")) {
             if (query.length() > 0) {
-                query.append(" ");
+                query.append(" & ");
             }
             query.append(str.trim()).append(":*");
         }
