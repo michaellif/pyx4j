@@ -90,7 +90,7 @@ public class JasperReportFactory {
     private static JasperReport findInCahsOrCompiled(String reportName) {
         JasperReport jasperReport = null;
 
-        if (!ServerSideConfiguration.instance().isDevelopmentBehavior()) {
+        if (isProductionOrDemo()) {
             jasperReport = cashReports.get(reportName);
             if (jasperReport == null) {
                 InputStream compiledStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(getCompiledResourceName(reportName));
@@ -126,10 +126,14 @@ public class JasperReportFactory {
             IOUtils.closeQuietly(designStream);
         }
         // Save in cash:
-        if (!ServerSideConfiguration.instance().isDevelopmentBehavior()) {
+        if (isProductionOrDemo()) {
             cashReports.put(reportName, jasperReport);
         }
 
         return jasperReport;
+    }
+
+    private static boolean isProductionOrDemo() {
+        return (!ServerSideConfiguration.instance().isDevelopmentBehavior() || ServerSideConfiguration.instance().isDemoBehavior());
     }
 }
