@@ -51,8 +51,7 @@ class ValueAdapterString extends ValueAdapterPrimitive {
         if (maxLength == 0) {
             maxLength = TableModel.ORDINARY_STRING_LENGHT_MAX;
         }
-        return super.sqlColumnTypeDefinition(dialect, member, columnName) //
-                + '(' + maxLength + ')';
+        return super.sqlColumnTypeDefinition(dialect, member, columnName) + '(' + maxLength + ')';
     }
 
     @Override

@@ -184,7 +184,7 @@ public class EntityOperationsMeta {
                     // if was not defined on super
                     if ((subclassDiscriminator != null) && (alreadyMapped.getSubclassDiscriminators() != null)) {
                         alreadyMapped.addSubclassDiscriminator(subclassDiscriminator);
-                    }                    
+                    }
                     continue;
                 }
             }
@@ -514,7 +514,7 @@ public class EntityOperationsMeta {
         } else if (valueClass.equals(GeoPoint.class)) {
             return new ValueAdapterGeoPoint(dialect);
         } else if (valueClass.equals(TextSearchDocument.class)) {
-            return new ValueAdapterTextSearchDocument(dialect, memberMeta);
+            return new ValueAdapterTextSearchDocument(dialect);
         } else {
             return null;
         }

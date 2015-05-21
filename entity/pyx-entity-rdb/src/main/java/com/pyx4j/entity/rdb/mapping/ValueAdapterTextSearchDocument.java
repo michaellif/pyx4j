@@ -4,27 +4,32 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.Arrays;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
-import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.TextSearchDocument;
 
 public class ValueAdapterTextSearchDocument extends ValueAdapterPrimitive {
 
-    private static final Logger log = LoggerFactory.getLogger(ValueAdapterTextSearchDocument.class);
-
-    private final MemberMeta memberMeta;
-
-    protected ValueAdapterTextSearchDocument(Dialect dialect, MemberMeta memberMeta) {
+    protected ValueAdapterTextSearchDocument(Dialect dialect) {
         super(dialect, TextSearchDocument.class);
-        this.memberMeta = memberMeta;
+    }
+
+    @Override
+    public String sqlColumnTypeDefinition(Dialect dialect, MemberOperationsMeta member, String columnName) {
+        if (sqlType == Types.VARCHAR) {
+            int maxLength = member.getMemberMeta().getLength();
+            if (maxLength == 0) {
+                maxLength = TableModel.ORDINARY_STRING_LENGHT_MAX;
+            }
+            return super.sqlColumnTypeDefinition(dialect, member, columnName) + '(' + maxLength + ')';
+        } else {
+            return super.sqlColumnTypeDefinition(dialect, member, columnName);
+        }
     }
 
     @Override
