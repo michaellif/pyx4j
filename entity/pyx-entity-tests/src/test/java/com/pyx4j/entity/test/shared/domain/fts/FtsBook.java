@@ -42,9 +42,10 @@ public interface FtsBook extends IEntity {
     IPrimitive<String> title();
 
     @JoinTable(value = FtsAuthorBook.class, cascade = CascadeType.ALL)
+    @Detached(level = AttachLevel.Detached)
     ISet<FtsAuthor> authors();
 
     @Detached(level = AttachLevel.Detached)
-    @Owned(forceCreation = true)
+    @Owned(cascade = {})
     FtsBookIndex fts();
 }

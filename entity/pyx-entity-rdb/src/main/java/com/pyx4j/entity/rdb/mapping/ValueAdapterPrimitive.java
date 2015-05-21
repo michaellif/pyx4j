@@ -58,6 +58,11 @@ abstract class ValueAdapterPrimitive implements ValueAdapter {
     }
 
     @Override
+    public String toSqlValue(Dialect dialect, String columnName, String argumentPlaceHolder) {
+        return argumentPlaceHolder;
+    }
+
+    @Override
     public ValueBindAdapter getQueryValueBindAdapter(Restriction restriction, Object value) {
         return this;
     }
