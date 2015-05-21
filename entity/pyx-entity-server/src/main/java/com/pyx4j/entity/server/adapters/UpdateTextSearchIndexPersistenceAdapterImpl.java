@@ -17,11 +17,22 @@
  * Created on May 14, 2015
  * @author vlads
  */
-package com.pyx4j.entity.shared.adapters;
+package com.pyx4j.entity.server.adapters;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.adapters.EntityModificationAdapter;
+import com.pyx4j.entity.server.textsearch.TextSearchFacade;
+import com.pyx4j.entity.shared.adapters.UpdateTextSearchIndexPersistenceAdapter;
 
-public interface UpdateTextSearchIndexModificationAdapter extends EntityModificationAdapter<IEntity> {
+public class UpdateTextSearchIndexPersistenceAdapterImpl implements UpdateTextSearchIndexPersistenceAdapter {
+
+    @Override
+    public void onBeforePersist(IEntity origEntity, IEntity newEntity) {
+    }
+
+    @Override
+    public void onAfterPersist(IEntity entity) {
+        ServerSideFactory.create(TextSearchFacade.class).queueIndexUpdate(entity);
+    }
 
 }

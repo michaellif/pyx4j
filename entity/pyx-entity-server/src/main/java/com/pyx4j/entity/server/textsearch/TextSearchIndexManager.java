@@ -82,9 +82,6 @@ class TextSearchIndexManager {
     }
 
     public <E extends IEntity> void queueIndexUpdate(E entity) {
-        if (entity.getPrimaryKey() == null) {
-            return;
-        }
         @SuppressWarnings("unchecked")
         UpdateChainData<E> update = (UpdateChainData<E>) chains.get(entity.getValueClass());
         if (update == null) {
