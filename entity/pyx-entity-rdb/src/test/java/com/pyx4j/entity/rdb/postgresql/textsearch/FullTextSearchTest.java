@@ -24,9 +24,11 @@ import java.util.List;
 import org.junit.Assert;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.textsearch.TextSearchFacade;
 import com.pyx4j.entity.server.textsearch.TextSearchFacade.KeywordUpdateRule;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
@@ -46,6 +48,7 @@ public class FullTextSearchTest extends DatastoreTestBase {
 
         @Override
         public String buildIndex(FtsBook book) {
+            Persistence.ensureRetrieve(book.authors(), AttachLevel.Attached);
             return book.getStringView() + " " + book.authors().getStringView();
         }
 
@@ -59,14 +62,14 @@ public class FullTextSearchTest extends DatastoreTestBase {
         ServerSideFactory.create(TextSearchFacade.class).registerUpdateChain(FtsAuthor.class, FtsBookIndex.class,
                 new TextSearchFacade.UpdateChain<FtsAuthor, FtsBook>() {
 
-            @Override
-            public EntityQueryCriteria<FtsBook> criteria(FtsAuthor triggerEntity) {
-                EntityQueryCriteria<FtsBook> criteria = EntityQueryCriteria.create(FtsBook.class);
-                criteria.eq(criteria.proto().authors(), triggerEntity);
-                return criteria;
-            }
+                    @Override
+                    public EntityQueryCriteria<FtsBook> criteria(FtsAuthor triggerEntity) {
+                        EntityQueryCriteria<FtsBook> criteria = EntityQueryCriteria.create(FtsBook.class);
+                        criteria.eq(criteria.proto().authors(), triggerEntity);
+                        return criteria;
+                    }
 
-        });
+                });
 
     }
 
@@ -87,17 +90,24 @@ public class FullTextSearchTest extends DatastoreTestBase {
             book.title().setValue("BT" + i);
             book.authors().add(author);
             srv.persist(book);
+            // TODO this is limitation of EntityModificationAdapters
             srv.persist(book);
         }
 
         {
             EntityQueryCriteria<FtsBook> criteria = EntityQueryCriteria.create(FtsBook.class);
             criteria.eq(criteria.proto().testId(), testId);
-
-            criteria.eq(criteria.proto().fts().keywords(), "FN1 BT1");
-
+            criteria.textSearch(criteria.proto().fts().keywords(), "FN1");
             List<FtsBook> retrived = srv.query(criteria);
             Assert.assertEquals("result set size", 1, retrived.size());
+        }
+
+        {
+            EntityQueryCriteria<FtsBook> criteria = EntityQueryCriteria.create(FtsBook.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.textSearch(criteria.proto().fts().keywords(), "BT");
+            List<FtsBook> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 3, retrived.size());
         }
 
     }

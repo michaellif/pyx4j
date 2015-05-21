@@ -112,11 +112,14 @@ class TextSearchIndexManager {
             throw new Error(e);
         }
 
-        EntityQueryCriteria<ITextSearchIndex<IEntity>> criteria = new EntityQueryCriteria<ITextSearchIndex<IEntity>>(
-                (Class<ITextSearchIndex<IEntity>>) indexClass);
+        EntityQueryCriteria<ITextSearchIndex<IEntity>> criteria = new EntityQueryCriteria<>((Class<ITextSearchIndex<IEntity>>) indexClass);
         criteria.eq(criteria.proto().owner(), indexed);
 
         ITextSearchIndex<IEntity> index = Persistence.service().retrieve(criteria);
+        if (index == null) {
+            index = EntityFactory.create((Class<ITextSearchIndex<IEntity>>) indexClass);
+            index.owner().set(indexed);
+        }
 
         if (index.keywords().isNull()) {
             index.keywords().setValue(new TextSearchDocument());

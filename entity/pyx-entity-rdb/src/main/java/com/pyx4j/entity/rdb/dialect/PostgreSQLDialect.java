@@ -45,7 +45,7 @@ public class PostgreSQLDialect extends Dialect {
         addTypeMeta(byte[].class, "bytea");
 
         addTypeMeta(java.util.Date.class, "timestamp");
-        
+
         addTypeMeta(TextSearchDocument.class, "tsvector");
     }
 
@@ -71,6 +71,34 @@ public class PostgreSQLDialect extends Dialect {
     @Override
     public String likeOperator() {
         return "ILIKE";
+    }
+
+    @Override
+    public String textSearchToSqlValue(String argumentPlaceHolder) {
+        return "to_tsvector(" + argumentPlaceHolder + ")";
+    }
+
+    @Override
+    public String textSearchOperator() {
+        return "@@";
+    }
+
+    @Override
+    public String textSearchQueryBindValue(Object searchValue) {
+        StringBuilder query = new StringBuilder();
+        String value = searchValue.toString();
+        for (String str : value.split(" ")) {
+            if (query.length() > 0) {
+                query.append(" ");
+            }
+            query.append(str.trim()).append(":*");
+        }
+        return query.toString();
+    }
+
+    @Override
+    public String textSearchToSqlQueryValue(String argumentPlaceHolder) {
+        return "to_tsquery(" + argumentPlaceHolder + ")";
     }
 
     @Override

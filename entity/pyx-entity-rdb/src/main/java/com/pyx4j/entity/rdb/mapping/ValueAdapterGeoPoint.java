@@ -60,6 +60,11 @@ class ValueAdapterGeoPoint implements ValueAdapter {
     }
 
     @Override
+    public String toSqlValue(Dialect dialect, String columnName, String argumentPlaceHolder) {
+        return argumentPlaceHolder;
+    }
+
+    @Override
     public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
         if (value == null) {
             stmt.setNull(parameterIndex, sqlType);

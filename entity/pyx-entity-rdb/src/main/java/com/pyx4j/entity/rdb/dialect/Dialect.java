@@ -72,7 +72,7 @@ public abstract class Dialect {
         addTypeMeta(java.sql.Date.class, "date");
         addTypeMeta(LogicalDate.class, "date");
         addTypeMeta(java.sql.Time.class, "time");
-        
+
         addTypeMeta(TextSearchDocument.class, "varchar");
     }
 
@@ -236,6 +236,35 @@ public abstract class Dialect {
     // case-insensitive search. TODO use lower(col) = lower(?)
     public String likeOperator() {
         return "LIKE";
+    }
+
+    public String likeQueryBindValue(Object searchValue) {
+        String value = searchValue.toString();
+        if (hasLikeValue(value)) {
+            return value.trim().replace('*', likeWildCards());
+        } else {
+            return likeWildCards() + value.trim() + likeWildCards();
+        }
+    }
+
+    private static boolean hasLikeValue(String value) {
+        return value.contains("*");
+    }
+
+    public String textSearchOperator() {
+        return likeOperator();
+    }
+
+    public String textSearchToSqlValue(String argumentPlaceHolder) {
+        return argumentPlaceHolder;
+    }
+
+    public String textSearchQueryBindValue(Object searchValue) {
+        return likeQueryBindValue(searchValue);
+    }
+
+    public String textSearchToSqlQueryValue(String argumentPlaceHolder) {
+        return argumentPlaceHolder;
     }
 
     public String falseCondition() {
