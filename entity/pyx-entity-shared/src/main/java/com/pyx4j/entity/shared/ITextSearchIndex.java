@@ -31,7 +31,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @AbstractEntity
 public interface ITextSearchIndex<E extends IEntity> extends IEntity {
 

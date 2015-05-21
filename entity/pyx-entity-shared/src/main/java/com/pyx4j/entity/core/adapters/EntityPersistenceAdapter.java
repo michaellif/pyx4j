@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2015 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,21 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 14, 2015
+ * Created on Jan 13, 2012
  * @author vlads
  */
-package com.pyx4j.entity.server.adapters;
+package com.pyx4j.entity.core.adapters;
 
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.server.textsearch.TextSearchFacade;
-import com.pyx4j.entity.shared.adapters.UpdateTextSearchIndexModificationAdapter;
 
-public class UpdateTextSearchIndexModificationAdapterImpl implements UpdateTextSearchIndexModificationAdapter {
+public interface EntityPersistenceAdapter<E extends IEntity> {
 
-    @Override
-    public void onBeforeUpdate(IEntity origEntity, IEntity newEntity) {
-        ServerSideFactory.create(TextSearchFacade.class).queueIndexUpdate(newEntity);
-    }
+    /**
+     *
+     * @param origEntity
+     *            null on Entity creation
+     * @param newEntity
+     */
+    public void onBeforePersist(E origEntity, E newEntity);
+
+    public void onAfterPersist(E entity);
 
 }

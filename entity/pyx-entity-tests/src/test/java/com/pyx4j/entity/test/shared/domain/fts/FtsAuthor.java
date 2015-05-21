@@ -28,10 +28,10 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.ISet;
-import com.pyx4j.entity.shared.adapters.UpdateTextSearchIndexModificationAdapter;
+import com.pyx4j.entity.shared.adapters.UpdateTextSearchIndexPersistenceAdapter;
 
 @Table(prefix = "test")
-@Adapters(entityModificationAdapters = UpdateTextSearchIndexModificationAdapter.class)
+@Adapters(entityPersistenceAdapters = UpdateTextSearchIndexPersistenceAdapter.class)
 public interface FtsAuthor extends IEntity {
 
     IPrimitive<String> testId();
