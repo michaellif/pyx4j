@@ -48,6 +48,16 @@ public class TextSearchFacadeImpl implements TextSearchFacade {
     }
 
     @Override
+    public void flushQueue() {
+        TextSearchIndexManager.instance().getQueue().flushQueue();
+    }
+
+    @Override
+    public void shutdown() {
+        TextSearchIndexManager.instance().getQueue().shutdown();
+    }
+
+    @Override
     public <E extends IEntity> void updateIndex(E entity) {
         TextSearchIndexManager.instance().updateIndex(entity);
     }
