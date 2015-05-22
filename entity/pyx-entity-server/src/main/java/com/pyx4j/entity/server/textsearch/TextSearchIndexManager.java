@@ -19,8 +19,13 @@
  */
 package com.pyx4j.entity.server.textsearch;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,6 +86,16 @@ class TextSearchIndexManager {
         updateRules.put(indexClass, ruleClass);
     }
 
+    public Collection<Class<? extends IEntity>> getIndexedEntityClasses() {
+        List<Class<? extends IEntity>> classes = new ArrayList<>();
+        for (Entry<Class<? extends IEntity>, UpdateChainData<? extends IEntity>> chainEntry : chains.entrySet()) {
+            if (chainEntry.getValue().updateChain == null) {
+                classes.add(chainEntry.getKey());
+            }
+        }
+        return Collections.unmodifiableCollection(classes);
+    }
+
     public <E extends IEntity> void queueIndexUpdate(E entity) {
         @SuppressWarnings("unchecked")
         UpdateChainData<E> update = (UpdateChainData<E>) chains.get(entity.getValueClass());
@@ -97,6 +112,12 @@ class TextSearchIndexManager {
         } else {
             update(entity, update.indexClass);
         }
+    }
+
+    public <E extends IEntity> void updateIndex(E entity) {
+        @SuppressWarnings("unchecked")
+        UpdateChainData<E> update = (UpdateChainData<E>) chains.get(entity.getValueClass());
+        update(entity, update.indexClass);
     }
 
     @SuppressWarnings("unchecked")

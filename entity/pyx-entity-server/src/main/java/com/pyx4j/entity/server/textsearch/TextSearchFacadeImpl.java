@@ -19,6 +19,8 @@
  */
 package com.pyx4j.entity.server.textsearch;
 
+import java.util.Collection;
+
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.ITextSearchIndex;
 
@@ -38,6 +40,16 @@ public class TextSearchFacadeImpl implements TextSearchFacade {
     @Override
     public <E extends IEntity> void queueIndexUpdate(E entity) {
         TextSearchIndexManager.instance().queueIndexUpdate(entity);
+    }
+
+    @Override
+    public Collection<Class<? extends IEntity>> getIndexedEntityClasses() {
+        return TextSearchIndexManager.instance().getIndexedEntityClasses();
+    }
+
+    @Override
+    public <E extends IEntity> void updateIndex(E entity) {
+        TextSearchIndexManager.instance().updateIndex(entity);
     }
 
 }
