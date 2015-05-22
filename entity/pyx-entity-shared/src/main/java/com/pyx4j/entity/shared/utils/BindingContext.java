@@ -48,11 +48,17 @@ public class BindingContext {
     private final Map<Map<String, Serializable>, IEntity> mapped = new IdentityHashMap<>();
 
     void put(IEntity from, IEntity to) {
-        mapped.put(from.getValue(), to);
+        if (!from.isNull()) {
+            mapped.put(from.getValue(), to);
+        }
     }
 
     public IEntity get(IEntity from) {
-        return mapped.get(from.getValue());
+        if (!from.isNull()) {
+            return mapped.get(from.getValue());
+        } else {
+            return null;
+        }
     }
 
     public BindingType getBindingType() {
