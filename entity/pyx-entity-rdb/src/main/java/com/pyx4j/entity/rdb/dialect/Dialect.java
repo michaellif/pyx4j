@@ -260,7 +260,17 @@ public abstract class Dialect {
     }
 
     public String textSearchQueryBindValue(Object searchValue) {
-        return likeQueryBindValue(searchValue);
+        StringBuilder query = new StringBuilder();
+        String value = searchValue.toString();
+        query.append(likeWildCards());
+        for (String str : value.split(" ")) {
+            if (query.length() > 0) {
+                query.append(likeWildCards());
+            }
+            query.append(str.trim());
+        }
+        query.append(likeWildCards());
+        return query.toString();
     }
 
     public String textSearchToSqlQueryValue(String argumentPlaceHolder) {

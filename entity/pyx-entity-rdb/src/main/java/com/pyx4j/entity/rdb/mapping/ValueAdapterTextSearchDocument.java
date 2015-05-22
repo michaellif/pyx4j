@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class ValueAdapterTextSearchDocument extends ValueAdapterPrimitive {
 
     @Override
     public String sqlColumnTypeDefinition(Dialect dialect, MemberOperationsMeta member, String columnName) {
-        if (sqlType == Types.VARCHAR) {
+        if ("varchar".equals(dialect.getSqlType(TextSearchDocument.class))) {
             int maxLength = member.getMemberMeta().getLength();
             if (maxLength == 0) {
                 maxLength = TableModel.ORDINARY_STRING_LENGHT_MAX;

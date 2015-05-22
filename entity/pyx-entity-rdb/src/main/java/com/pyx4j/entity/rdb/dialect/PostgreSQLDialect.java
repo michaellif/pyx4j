@@ -29,6 +29,8 @@ import com.pyx4j.entity.shared.TextSearchDocument;
 
 public class PostgreSQLDialect extends Dialect {
 
+    private final boolean enableTextSearchSupport = true;
+
     public PostgreSQLDialect(NamingConvention namingConvention, MultitenancyType multitenancyType) {
         super(DatabaseType.PostgreSQL, namingConvention, multitenancyType);
         addTypeMeta(Byte.class, "smallint", "int2");
@@ -46,7 +48,9 @@ public class PostgreSQLDialect extends Dialect {
 
         addTypeMeta(java.util.Date.class, "timestamp");
 
-        addTypeMeta(TextSearchDocument.class, "tsvector");
+        if (enableTextSearchSupport) {
+            addTypeMeta(TextSearchDocument.class, "tsvector");
+        }
     }
 
     @Override
@@ -75,30 +79,46 @@ public class PostgreSQLDialect extends Dialect {
 
     @Override
     public String textSearchToSqlValue(String argumentPlaceHolder) {
-        return "to_tsvector(" + argumentPlaceHolder + ")";
+        if (enableTextSearchSupport) {
+            return "to_tsvector(" + argumentPlaceHolder + ")";
+        } else {
+            return super.textSearchToSqlValue(argumentPlaceHolder);
+        }
     }
 
     @Override
     public String textSearchOperator() {
-        return "@@";
+        if (enableTextSearchSupport) {
+            return "@@";
+        } else {
+            return super.textSearchOperator();
+        }
     }
 
     @Override
     public String textSearchQueryBindValue(Object searchValue) {
-        StringBuilder query = new StringBuilder();
-        String value = searchValue.toString();
-        for (String str : value.split(" ")) {
-            if (query.length() > 0) {
-                query.append(" & ");
+        if (enableTextSearchSupport) {
+            StringBuilder query = new StringBuilder();
+            String value = searchValue.toString();
+            for (String str : value.split(" ")) {
+                if (query.length() > 0) {
+                    query.append(" & ");
+                }
+                query.append(str.trim()).append(":*");
             }
-            query.append(str.trim()).append(":*");
+            return query.toString();
+        } else {
+            return super.textSearchQueryBindValue(searchValue);
         }
-        return query.toString();
     }
 
     @Override
     public String textSearchToSqlQueryValue(String argumentPlaceHolder) {
-        return "to_tsquery(" + argumentPlaceHolder + ")";
+        if (enableTextSearchSupport) {
+            return "to_tsquery(" + argumentPlaceHolder + ")";
+        } else {
+            return super.textSearchToSqlQueryValue(argumentPlaceHolder);
+        }
     }
 
     @Override
