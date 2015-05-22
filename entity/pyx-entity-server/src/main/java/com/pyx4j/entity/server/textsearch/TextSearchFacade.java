@@ -68,6 +68,10 @@ public interface TextSearchFacade {
      */
     <E extends IEntity> void queueIndexUpdate(E entity);
 
+    void flushQueue();
+
+    void shutdown();
+
     Collection<Class<? extends IEntity>> getIndexedEntityClasses();
 
     <E extends IEntity> void updateIndex(E entity);

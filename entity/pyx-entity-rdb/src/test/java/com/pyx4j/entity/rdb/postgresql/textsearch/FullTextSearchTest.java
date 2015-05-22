@@ -76,6 +76,8 @@ public class FullTextSearchTest extends DatastoreTestBase {
     public void testTextQuery() {
         String testId = uniqueString();
 
+        srv.startTransaction();
+
         final int dataSize = 3;
         for (int i = 0; i < dataSize; i++) {
 
@@ -91,6 +93,10 @@ public class FullTextSearchTest extends DatastoreTestBase {
             book.authors().add(author);
             srv.persist(book);
         }
+        srv.commit();
+        srv.endTransaction();
+
+        ServerSideFactory.create(TextSearchFacade.class).flushQueue();
 
         {
             EntityQueryCriteria<FtsBook> criteria = EntityQueryCriteria.create(FtsBook.class);
