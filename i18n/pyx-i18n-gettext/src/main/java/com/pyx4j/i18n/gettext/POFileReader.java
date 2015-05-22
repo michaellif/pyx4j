@@ -29,6 +29,8 @@ import java.io.LineNumberReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 public class POFileReader {
 
     public POFile read(File file) throws IOException {
@@ -146,17 +148,17 @@ public class POFileReader {
                 throw new IOException("invalid format [" + line + "] at line#" + (lnr.getLineNumber() + 1));
             }
             line = line.substring(1, line.length() - 1);
-            b.append(line.replace("\\n", "\n"));
+            b.append(line);
 
             // peek next line
             lnr.mark(1024);
             line = lnr.readLine();
             if ((line == null) || !line.startsWith("\"")) {
-                // push back 
+                // push back
                 lnr.reset();
                 break;
             }
         }
-        return b.toString().replace("\\t", "\t").replace("\\\"", "\"").replace("\\\\", "\\");
+        return StringEscapeUtils.unescapeJava(b.toString());
     }
 }

@@ -22,8 +22,9 @@ package com.pyx4j.i18n.gettext;
 
 import java.io.IOException;
 
-import org.junit.Assert;
 import junit.framework.TestCase;
+
+import org.junit.Assert;
 
 public class POFileReaderTest extends TestCase {
 
@@ -31,10 +32,10 @@ public class POFileReaderTest extends TestCase {
         POFile po = new POFileReader().readResource(this.getClass().getClassLoader(), "sample1.po");
         Assert.assertNotNull(po);
 
-        Assert.assertEquals(3, po.entries.size());
+        Assert.assertEquals(4, po.entries.size());
 
         Assert.assertEquals("''{0}'' is not valid. {1}", po.entries.get(0).untranslated);
-        Assert.assertEquals("''{0}''n'est pas valide. {1}", po.entries.get(0).translated);
+        Assert.assertEquals("''{0}'' n'est pas valide. {1}", po.entries.get(0).translated);
         Assert.assertTrue(po.entries.get(0).references.contains("com/pyx4j/entity/client/ui/flex/CEntityContainer.java:87"));
 
         Assert.assertTrue(po.entries.get(0).flags.contains("java-format"));
@@ -48,5 +49,9 @@ public class POFileReaderTest extends TestCase {
 
         Assert.assertEquals("Click the link <a style=\"color:#929733\" href=\"{1}{2}\">Link</a>", po.entries.get(2).untranslated);
         Assert.assertEquals("Cliquez sur le lien <a style=\"color:\"#929733\" href=\"{1}{2}\">Lien</a>", po.entries.get(2).translated);
+
+        //Java Escape Sequences
+        Assert.assertEquals("\\t - tab;\\n - eol\n", po.entries.get(3).untranslated);
+        Assert.assertEquals("\\t - languette\n", po.entries.get(3).translated);
     }
 }
