@@ -19,6 +19,8 @@
  */
 package com.pyx4j.entity.server.textsearch;
 
+import java.util.Collection;
+
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.ITextSearchIndex;
@@ -65,5 +67,9 @@ public interface TextSearchFacade {
      * Need to have UpdateChain registered for this entityClass or this entity will update its own indexes. Or you will get Error
      */
     <E extends IEntity> void queueIndexUpdate(E entity);
+
+    Collection<Class<? extends IEntity>> getIndexedEntityClasses();
+
+    <E extends IEntity> void updateIndex(E entity);
 
 }
