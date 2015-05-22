@@ -302,9 +302,13 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
                     dtoM.setValue(dboM.getValue());
                 }
             } else if (dtoM instanceof IEntity) {
-                b.binder.context = context();
-                // TODO pass context as argument
-                ((IEntity) dtoM).set(b.binder.createTO((IEntity) dboM));
+                if (((IEntity) dboM).isNull()) {
+                    ((IEntity) dtoM).set(null);
+                } else {
+                    b.binder.context = context();
+                    // TODO pass context as argument
+                    ((IEntity) dtoM).set(b.binder.createTO((IEntity) dboM));
+                }
             } else if (dboM instanceof ICollection) {
                 b.binder.context = context();
                 ((ICollection<IEntity, ?>) dtoM).clear();
@@ -379,8 +383,13 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
                     dboM.setValue(dtoM.getValue());
                 }
             } else if (dtoM instanceof IEntity) {
-                b.binder.context = context();
-                ((IEntity) dboM).set(b.binder.createBO((IEntity) dtoM));
+                if (((IEntity) dtoM).isNull()) {
+                    ((IEntity) dboM).set(null);
+                    continue;
+                } else {
+                    b.binder.context = context();
+                    ((IEntity) dboM).set(b.binder.createBO((IEntity) dtoM));
+                }
             } else if (dtoM instanceof ICollection) {
                 b.binder.context = context();
                 ((ICollection<IEntity, ?>) dboM).clear();
