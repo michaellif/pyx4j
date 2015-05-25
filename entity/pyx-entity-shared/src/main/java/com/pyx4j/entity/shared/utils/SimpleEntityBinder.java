@@ -226,6 +226,11 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
         if (copyPrimaryKey) {
             to.setPrimaryKey(bo.getPrimaryKey());
         }
+
+        if (bo.getAttachLevel() != AttachLevel.Attached) {
+            to.setAttachLevel(bo.getAttachLevel());
+        }
+
         context().put(bo, to);
         // TODO pass context as argument
         copyBOtoTO(bo, to);
@@ -264,6 +269,7 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
             }
 
             if (dboM.getAttachLevel() == AttachLevel.Detached) {
+                //TODO slava, considre refactoring in order to merge functionality with copyTOtoBO
                 if (!(dtoM instanceof IPrimitive<?>)) {
                     dtoM.setAttachLevel(AttachLevel.Detached);
                 }
@@ -331,6 +337,11 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
         if (copyPrimaryKey) {
             dbo.setPrimaryKey(to.getPrimaryKey());
         }
+
+        if (to.getAttachLevel() != AttachLevel.Attached) {
+            dbo.setAttachLevel(to.getAttachLevel());
+        }
+
         context().put(to, dbo);
         // TODO pass context as argument
         copyTOtoBO(to, dbo);
@@ -357,7 +368,9 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
             }
 
             if (dtoM.getAttachLevel() == AttachLevel.Detached) {
-                dboM.setAttachLevel(AttachLevel.Detached);
+                if (dboM.getAttachLevel() != AttachLevel.Detached) {
+                    dboM.setAttachLevel(AttachLevel.Detached);
+                }
             } else if (b.binder == null) {
                 if (dtoM instanceof ICollection) {
                     ICollection<IEntity, ?> dboMc = (ICollection<IEntity, ?>) dboM;
