@@ -39,7 +39,7 @@ public interface ITextSearchIndex<E extends IEntity> extends IEntity {
     @NotNull
     @MemberColumn(notNull = true)
     @ReadOnly
-    @Indexed
+    @Indexed(uniqueConstraint = true)
     @JoinColumn
     @Detached
     E owner();

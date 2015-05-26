@@ -24,14 +24,17 @@ import com.pyx4j.entity.core.IEntity;
 
 class UpdateQueueItem {
 
-    private final IEntity identityStub;
-
     private final String namespace;
 
-    UpdateQueueItem(IEntity identityStub, String namespace) {
+    private final IEntity identityStub;
+
+    private final boolean fireChains;
+
+    UpdateQueueItem(String namespace, IEntity identityStub, boolean fireChains) {
         super();
-        this.identityStub = identityStub;
         this.namespace = namespace;
+        this.identityStub = identityStub;
+        this.fireChains = fireChains;
     }
 
     public IEntity getIdentityStub() {
@@ -42,10 +45,15 @@ class UpdateQueueItem {
         return namespace;
     }
 
+    public boolean isFireChains() {
+        return fireChains;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + (fireChains ? 1231 : 1237);
         result = prime * result + ((identityStub == null) ? 0 : identityStub.hashCode());
         result = prime * result + ((namespace == null) ? 0 : namespace.hashCode());
         return result;
@@ -63,7 +71,7 @@ class UpdateQueueItem {
             return false;
         }
         UpdateQueueItem other = (UpdateQueueItem) obj;
-        return EqualsHelper.equals(identityStub, other.identityStub) && EqualsHelper.equals(namespace, other.namespace);
+        return EqualsHelper.equals(identityStub, other.identityStub) && EqualsHelper.equals(namespace, other.namespace) && this.fireChains == other.fireChains;
     }
 
     @Override

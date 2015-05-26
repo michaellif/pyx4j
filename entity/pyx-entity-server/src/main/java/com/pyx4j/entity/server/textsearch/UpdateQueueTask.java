@@ -22,8 +22,10 @@ package com.pyx4j.entity.server.textsearch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Executables;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 
@@ -44,7 +46,13 @@ class UpdateQueueTask implements Runnable {
 
                 @Override
                 public Void execute() {
-                    TextSearchIndexManager.instance().updateAllIndexes(item.getIdentityStub());
+                    if (item.isFireChains()) {
+                        TextSearchIndexManager.instance().queueIndexUpdateChains(item.getIdentityStub());
+                    } else {
+                        IEntity entity = item.getIdentityStub().duplicate();
+                        Persistence.service().retrieve(entity);
+                        TextSearchIndexManager.instance().updateIndex(entity);
+                    }
                     return null;
                 }
             };
@@ -54,9 +62,8 @@ class UpdateQueueTask implements Runnable {
             }
             new UnitOfWork(TransactionScopeOption.RequiresNew).execute(update);
         } catch (Throwable e) {
-            log.error("Failed to update index for {}", this);
+            log.error("Failed to update index for {}", item, e);
         }
 
     }
-
 }

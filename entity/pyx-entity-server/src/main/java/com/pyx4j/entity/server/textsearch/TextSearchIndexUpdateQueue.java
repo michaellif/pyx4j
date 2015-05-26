@@ -58,11 +58,11 @@ class TextSearchIndexUpdateQueue {
         scheduledThreadPool = new ScheduledThreadPoolExecutor(2, new NamedThreadFactory(LoggerConfig.getContextName() + "-TextSearchIndexUpdate", "Updater"));
     }
 
-    void queue(IEntity identityStub, String namespace) {
-        UpdateQueueItem item = new UpdateQueueItem(identityStub, namespace);
+    void queue(String namespace, IEntity identityStub, boolean fireChains) {
+        UpdateQueueItem item = new UpdateQueueItem(namespace, identityStub, fireChains);
         if (!queuedItems.contains(item)) {
             queuedItems.add(item);
-            scheduledThreadPool.schedule(new UpdateQueueTaskWrapper(item), 5, TimeUnit.SECONDS);
+            scheduledThreadPool.schedule(new UpdateQueueTaskWrapper(item), fireChains ? 2 : 5, TimeUnit.SECONDS);
         }
     }
 
