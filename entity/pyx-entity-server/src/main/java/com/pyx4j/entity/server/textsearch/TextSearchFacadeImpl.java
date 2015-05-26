@@ -48,6 +48,11 @@ public class TextSearchFacadeImpl implements TextSearchFacade {
     }
 
     @Override
+    public void reset() {
+        TextSearchIndexManager.instance().reset();
+    }
+
+    @Override
     public void flushQueue() {
         TextSearchIndexManager.instance().getQueue().flushQueue();
     }
@@ -55,6 +60,7 @@ public class TextSearchFacadeImpl implements TextSearchFacade {
     @Override
     public void shutdown() {
         TextSearchIndexManager.instance().getQueue().shutdown();
+        TextSearchIndexManager.instance().reset();
     }
 
     @Override

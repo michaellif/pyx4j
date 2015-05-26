@@ -57,7 +57,7 @@ public class FullTextSearchTest extends DatastoreTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-
+        ServerSideFactory.create(TextSearchFacade.class).reset();
         ServerSideFactory.create(TextSearchFacade.class).registerUpdateRule(FtsBookIndex.class, BookKeywordUpdateRule.class);
         ServerSideFactory.create(TextSearchFacade.class).registerUpdateChain(FtsAuthor.class, FtsBookIndex.class,
                 new TextSearchFacade.UpdateChain<FtsAuthor, FtsBook>() {
@@ -71,6 +71,12 @@ public class FullTextSearchTest extends DatastoreTestBase {
 
         });
 
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        ServerSideFactory.create(TextSearchFacade.class).shutdown();
+        super.tearDown();
     }
 
     public void testTextQuery() {
