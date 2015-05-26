@@ -64,12 +64,18 @@ public interface TextSearchFacade {
     /**
      * This will trigger UpdateChain asynchronously.
      *
-     * Need to have UpdateChain registered for this entityClass or this entity will update its own indexes. Or you will get Error
+     * Need to have UpdateChain or KeywordUpdateRule registered for this entityClass or this entity will update its own indexes. Or you will get Error
      */
     <E extends IEntity> void queueIndexUpdate(E entity);
 
+    /**
+     * Remove all registered UpdateChain and KeywordUpdateRule
+     */
     void reset();
 
+    /**
+     * Process Queue without delay
+     */
     void flushQueue();
 
     void shutdown();

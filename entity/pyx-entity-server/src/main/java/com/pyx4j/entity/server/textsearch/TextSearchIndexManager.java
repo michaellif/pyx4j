@@ -27,9 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -43,10 +41,9 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 class TextSearchIndexManager {
 
-    private static Logger log = LoggerFactory.getLogger(TextSearchIndexManager.class);
-
     private static class UpdateChainData<T extends IEntity> {
 
+        //TODO This is not used.  Will need to add optimization in future
         Class<? extends ITextSearchIndex<T>> indexClass;
 
         UpdateChain<? extends IEntity, T> updateChain;
@@ -59,6 +56,8 @@ class TextSearchIndexManager {
     }
 
     private Map<Class<? extends IEntity>, List<UpdateChainData<? extends IEntity>>> chains = new HashMap<>();
+
+    private Map<Class<? extends IEntity>, List<Class<? extends ITextSearchIndex<?>>>> indexes = new HashMap<>();
 
     private Map<Class<? extends ITextSearchIndex<?>>, Class<? extends KeywordUpdateRule<?>>> updateRules = new HashMap<>();
 
@@ -75,7 +74,7 @@ class TextSearchIndexManager {
         return SingletonHolder.INSTANCE;
     }
 
-    public void reset() {
+    void reset() {
         chains.clear();
         updateRules.clear();
     }
@@ -89,13 +88,22 @@ class TextSearchIndexManager {
         classChains.add(updateChainData);
     }
 
-    public <T extends IEntity, E extends IEntity> void registerUpdateChain(Class<T> entityClass, Class<? extends ITextSearchIndex<E>> indexClass,
+    <T extends IEntity, E extends IEntity> void registerUpdateChain(Class<T> entityClass, Class<? extends ITextSearchIndex<E>> indexClass,
             UpdateChain<T, E> updateChain) {
         addUpdateChainData(entityClass, new UpdateChainData<E>(indexClass, updateChain));
     }
 
-    public <E extends IEntity> void registerUpdateRule(Class<? extends ITextSearchIndex<E>> indexClass, Class<? extends KeywordUpdateRule<E>> ruleClass) {
-        addUpdateChainData(EntityFactory.getEntityPrototype(indexClass).owner().getValueClass(), new UpdateChainData<E>(indexClass, null));
+    private void addIndex(Class<? extends IEntity> entityClass, Class<? extends ITextSearchIndex<?>> indexClass) {
+        List<Class<? extends ITextSearchIndex<?>>> indexClassesList = indexes.get(entityClass);
+        if (indexClassesList == null) {
+            indexClassesList = new ArrayList<>();
+            indexes.put(entityClass, indexClassesList);
+        }
+        indexClassesList.add(indexClass);
+    }
+
+    <E extends IEntity> void registerUpdateRule(Class<? extends ITextSearchIndex<E>> indexClass, Class<? extends KeywordUpdateRule<E>> ruleClass) {
+        addIndex(EntityFactory.getEntityPrototype(indexClass).owner().getValueClass(), indexClass);
 
         if (updateRules.containsKey(indexClass)) {
             throw new Error("Duplicate rule definition for index " + indexClass.getName());
@@ -103,7 +111,7 @@ class TextSearchIndexManager {
         updateRules.put(indexClass, ruleClass);
     }
 
-    public Collection<Class<? extends IEntity>> getIndexedEntityClasses() {
+    Collection<Class<? extends IEntity>> getIndexedEntityClasses() {
         List<Class<? extends IEntity>> classes = new ArrayList<>();
         for (Entry<Class<? extends IEntity>, List<UpdateChainData<? extends IEntity>>> chainEntry : chains.entrySet()) {
             for (UpdateChainData<? extends IEntity> updateChainData : chainEntry.getValue()) {
@@ -116,46 +124,53 @@ class TextSearchIndexManager {
         return Collections.unmodifiableCollection(classes);
     }
 
-    public <E extends IEntity> void queueIndexUpdate(final E entity) {
+    <E extends IEntity> void queueIndexUpdate(final E entity) {
         List<UpdateChainData<? extends IEntity>> classChains = chains.get(entity.getValueClass());
-        if (classChains == null) {
-            throw new Error("No registered chains for class " + entity.getValueClass().getName());
+        if (classChains != null) {
+            Persistence.service().addTransactionCompletionHandler(new Executable<Void, RuntimeException>() {
+                @Override
+                public Void execute() {
+                    getQueue().queue(NamespaceManager.getNamespace(), entity.createIdentityStub(), true);
+                    return null;
+                }
+            });
         }
 
-        Persistence.service().addTransactionCompletionHandler(new Executable<Void, RuntimeException>() {
-            @Override
-            public Void execute() {
-                getQueue().queue(entity.createIdentityStub(), NamespaceManager.getNamespace());
-                return null;
-            }
-        });
+        List<Class<? extends ITextSearchIndex<?>>> indexClassesList = indexes.get(entity.getValueClass());
+        if (indexClassesList != null) {
+            Persistence.service().addTransactionCompletionHandler(new Executable<Void, RuntimeException>() {
+                @Override
+                public Void execute() {
+                    getQueue().queue(NamespaceManager.getNamespace(), entity.createIdentityStub(), false);
+                    return null;
+                }
+            });
+        }
 
+        if ((classChains == null) && (indexClassesList == null)) {
+            throw new Error("No registered chains or update Rules for class " + entity.getValueClass().getName());
+        }
+    }
+
+    <E extends IEntity> void queueIndexUpdateChains(E entity) {
+        List<UpdateChainData<? extends IEntity>> classChains = chains.get(entity.getValueClass());
+        for (UpdateChainData<? extends IEntity> updateChainData : classChains) {
+            @SuppressWarnings("unchecked")
+            EntityQueryCriteria<IEntity> criteria = ((UpdateChain<E, IEntity>) updateChainData.updateChain).criteria(entity);
+            for (IEntity indexed : Persistence.service().query(criteria, AttachLevel.IdOnly)) {
+                getQueue().queue(NamespaceManager.getNamespace(), indexed, false);
+            }
+        }
     }
 
     TextSearchIndexUpdateQueue getQueue() {
         return queue;
     }
 
-    public <E extends IEntity> void updateIndex(E entity) {
-        List<UpdateChainData<? extends IEntity>> classChains = chains.get(entity.getValueClass());
-        for (UpdateChainData<? extends IEntity> updateChainData : classChains) {
-            update(entity, updateChainData.indexClass);
-        }
-    }
-
-    public <E extends IEntity> void updateAllIndexes(E entity) {
-        List<UpdateChainData<? extends IEntity>> classChains = chains.get(entity.getValueClass());
-        for (UpdateChainData<? extends IEntity> updateChainData : classChains) {
-            if (updateChainData.updateChain != null) {
-                @SuppressWarnings("unchecked")
-                EntityQueryCriteria<IEntity> criteria = ((UpdateChain<E, IEntity>) updateChainData.updateChain).criteria(entity);
-                for (IEntity indexed : Persistence.service().query(criteria)) {
-                    update(indexed, updateChainData.indexClass);
-                }
-            } else {
-                Persistence.service().retrieve(entity);
-                update(entity, updateChainData.indexClass);
-            }
+    <E extends IEntity> void updateIndex(E entity) {
+        List<Class<? extends ITextSearchIndex<?>>> indexClassesList = indexes.get(entity.getValueClass());
+        for (Class<? extends ITextSearchIndex<? extends IEntity>> indexClass : indexClassesList) {
+            update(entity, indexClass);
         }
     }
 
