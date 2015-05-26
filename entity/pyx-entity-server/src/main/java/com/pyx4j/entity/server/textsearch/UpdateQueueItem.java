@@ -65,4 +65,10 @@ class UpdateQueueItem {
         UpdateQueueItem other = (UpdateQueueItem) obj;
         return EqualsHelper.equals(identityStub, other.identityStub) && EqualsHelper.equals(namespace, other.namespace);
     }
+
+    @Override
+    public String toString() {
+        return "UpdateQueueItem [" + namespace + "@" + getIdentityStub().getDebugExceptionInfoString() + "]";
+    }
+
 }
