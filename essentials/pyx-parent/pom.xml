@@ -3,7 +3,6 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="http://maven.apache.org/POM/4.0.0">
-    <!-- @version $Revision$ ($Author$) $Date$ -->
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.pyx4j</groupId>
@@ -377,7 +376,13 @@
                 <artifactId>commons-lang</artifactId>
                 <version>2.6</version>
             </dependency>
-
+ 
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.4</version>
+            </dependency>
+            
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-collections4</artifactId>
@@ -1014,6 +1019,19 @@
                                         <versionRange>[1.9,)</versionRange>
                                         <goals>
                                             <goal>jasper</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.codehaus.mojo</groupId>
+                                        <artifactId>versions-maven-plugin</artifactId>
+                                        <versionRange>[1.0,]</versionRange>
+                                        <goals>
+                                            <goal>set</goal>
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>

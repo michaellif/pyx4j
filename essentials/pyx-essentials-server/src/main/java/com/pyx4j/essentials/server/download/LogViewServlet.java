@@ -21,27 +21,18 @@ package com.pyx4j.essentials.server.download;
 
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Paths;
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Queue;
-import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -58,6 +49,7 @@ import org.apache.commons.io.IOUtils;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.HtmlUtils;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.log4j.LoggerConfig;
@@ -170,7 +162,7 @@ public class LogViewServlet extends HttpServlet {
             return;
         }
         response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
+        final PrintWriter out = response.getWriter();
         out.println("<!DOCTYPE html>");
         out.println("<html><head><title>LogView</title>");
         out.println("<META HTTP-EQUIV=\"PRAGMA\" CONTENT=\"NO-CACHE\">");
@@ -185,6 +177,32 @@ public class LogViewServlet extends HttpServlet {
         out.println(dir.getAbsolutePath());
         out.println("</h1>");
 
+        out.println("<span id =\"searchProcess\">");
+
+        long start = System.currentTimeMillis();
+
+        List<File> files;
+        if (searchEnabled()) {
+            files = FileSearch.searchFileNio(new FileSearchFilter(request), dir.toPath(), new FileSearchProgressCallback() {
+
+                long keepAlive = System.currentTimeMillis();
+
+                @Override
+                public void onVisitDirectory() {
+                    if (System.currentTimeMillis() - keepAlive > Consts.SEC2MILLISECONDS) {
+                        out.println(".");
+                        keepAlive = System.currentTimeMillis();
+                        out.flush();
+                    }
+                }
+
+            });
+        } else {
+            files = Arrays.asList(dir.listFiles());
+        }
+
+        out.println("</span>");
+
         out.println("<form method=\"get\">");
         out.println("<table>");
 
@@ -194,13 +212,6 @@ public class LogViewServlet extends HttpServlet {
             out.println("<tr><td></td><td>");
             out.println("<a href=\"../\">..</a>");
             out.println("</td><td>-</td></tr>");
-        }
-
-        List<File> files;
-        if (searchEnabled()) {
-            files = searchFile(request, dir);
-        } else {
-            files = Arrays.asList(dir.listFiles());
         }
 
         Comparator<File> fileByNameComparator = new Comparator<File>() {
@@ -273,153 +284,19 @@ public class LogViewServlet extends HttpServlet {
 
         out.println("</table>");
 
+        out.println("<br/>");
+
         out.println("<input type=\"submit\" value=\"Download Selected as zip\" />");
 
         out.println("</form>");
 
+        out.println("Generated in <i>" + TimeUtils.secSince(start) + "</i>");
+
+        out.println("<script>document.getElementById(\"searchProcess\").style.visibility = \"hidden\";</script>");
+
         out.println("</body>");
         out.println("</html>");
 
-    }
-
-    protected List<File> searchFile(HttpServletRequest request, File dir) {
-        final String text = request.getParameter("text");
-        final Time fromTime = timeValue(dateValue(request, "ft", "HH:mm"));
-        final Time toTime = timeValue(dateValue(request, "tt", "HH:mm"));
-
-        final Date fromDate = datePlusTime(dateValue(request, "fd", "yyyy-MM-dd"), fromTime, false);
-        final Date toDate = datePlusTime(dateValue(request, "td", "yyyy-MM-dd"), toTime, true);
-
-        final boolean recursive = "true".equalsIgnoreCase(request.getParameter("recursive"));
-
-        final Calendar fromTimeC = new GregorianCalendar();
-        if (fromTime != null) {
-            DateUtils.setTime(fromTimeC, fromTime);
-        }
-
-        final Calendar toTimeC = new GregorianCalendar();
-        if (toTime != null) {
-            DateUtils.setTime(toTimeC, toTime);
-        }
-
-        List<File> allFiles = new ArrayList<>();
-        final Queue<File> dirs = new LinkedList<>();
-        dirs.add(dir);
-        while (!dirs.isEmpty()) {
-            File cdir = dirs.poll();
-            File[] files = cdir.listFiles(new FileFilter() {
-
-                @Override
-                public boolean accept(File file) {
-                    if (recursive && file.isDirectory()) {
-                        dirs.add(file);
-                    }
-
-                    Date fileDate = new Date(file.lastModified());
-                    Calendar fileTimeC = new GregorianCalendar();
-                    DateUtils.setTime(fileTimeC, new Time(fileDate.getTime()));
-
-                    if (fromDate != null) {
-                        if (fileDate.before(fromDate)) {
-                            return false;
-                        }
-                    } else if (fromTime != null) {
-                        if (fileTimeC.before(fromTimeC)) {
-                            return false;
-                        }
-                    }
-
-                    if (toDate != null) {
-                        if (fileDate.after(toDate)) {
-                            return false;
-                        }
-                    } else if (toTime != null) {
-                        if (fileTimeC.after(toTimeC)) {
-                            return false;
-                        }
-                    }
-
-                    if (file.isDirectory()) {
-                        return !CommonsStringUtils.isStringSet(text);
-                    } else if (CommonsStringUtils.isStringSet(text)) {
-                        return contains(file, text);
-                    } else {
-                        return true;
-                    }
-                }
-            });
-
-            allFiles.addAll(Arrays.asList(files));
-        }
-
-        return allFiles;
-
-    }
-
-    protected boolean contains(File file, String text) {
-        Scanner scanner;
-        try {
-            scanner = new Scanner(file);
-        } catch (FileNotFoundException e) {
-            return false;
-        }
-        try {
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                if (line.contains(text)) {
-                    return true;
-                }
-            }
-        } finally {
-            scanner.close();
-        }
-        return false;
-    }
-
-    private Date datePlusTime(Date date, Time time, boolean nextDay) {
-        if (date == null) {
-            return null;
-        }
-
-        if (time == null) {
-            if (nextDay) {
-                return DateUtils.dayEnd(date);
-            } else {
-                return date;
-            }
-        } else {
-            Calendar c = new GregorianCalendar();
-            c.setTime(date);
-            DateUtils.setTime(c, time);
-            return c.getTime();
-        }
-    }
-
-    private Time timeValue(Date date) {
-        if (date == null) {
-            return null;
-        } else {
-            return new Time(date.getTime());
-        }
-    }
-
-    private Date dateValue(HttpServletRequest request, String name, String format) {
-        String text = request.getParameter(name);
-        if (text == null) {
-            return null;
-        } else {
-            Date date;
-            try {
-                date = new SimpleDateFormat(format, Locale.ENGLISH).parse(text.trim());
-            } catch (ParseException e1) {
-                try {
-                    date = DateUtils.detectDateformat(text.trim());
-                } catch (RuntimeException e2) {
-                    return null;
-                }
-            }
-            return date;
-        }
     }
 
     protected void searchForm(HttpServletRequest request, PrintWriter out) {

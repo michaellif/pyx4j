@@ -155,6 +155,26 @@ public class MessageFormatTokenizerTest extends TestCase {
         }
     }
 
+    public void testNextedChoice() {
+        {
+            I18nConstantsTestsHelper t = new I18nConstantsTestsHelper();
+            t.map("X", "Z");
+            assertTranslatedFormat(t, //
+                    "{0,choice,7#{1,choice,8#{1}|9#Z}|9#{0}}", //
+                    "{0,choice,7#{1,choice,8#{1}|9#X}|9#{0}}");
+            assertEquals("translateCallCount", 1, t.translateCallCount);
+        }
+
+        {
+            I18nConstantsTestsHelper t = new I18nConstantsTestsHelper();
+            t.map("Default", "Fault");
+            assertTranslatedFormat(t, //
+                    "{1,choice,A#{2,choice,null#|!null#Fault {2}}|B#{1}}", //
+                    "{1,choice,A#{2,choice,null#|!null#Default {2}}|B#{1}}");
+            assertEquals("translateCallCount", 1, t.translateCallCount);
+        }
+    }
+
     public void testSpaceStripTranslations() {
         {
             I18nConstantsTestsHelper t = new I18nConstantsTestsHelper();
