@@ -75,6 +75,11 @@ class TextSearchIndexManager {
         return SingletonHolder.INSTANCE;
     }
 
+    public void reset() {
+        chains.clear();
+        updateRules.clear();
+    }
+
     private void addUpdateChainData(Class<? extends IEntity> entityClass, UpdateChainData<? extends IEntity> updateChainData) {
         List<UpdateChainData<? extends IEntity>> classChains = chains.get(entityClass);
         if (classChains == null) {
@@ -180,4 +185,5 @@ class TextSearchIndexManager {
 
         Persistence.service().persist(index);
     }
+
 }
