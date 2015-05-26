@@ -19,8 +19,10 @@
  */
 package com.pyx4j.i18n.gettext;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -249,12 +251,15 @@ public class MessageFormatTokenizer {
                 recursionLevel++;
                 String res = pars();
                 recursionLevel--;
+                if (recursionLevel == 0) {
+                    res = parsPatternFormat(res);
+                }
 
                 addTo.append(res);
+                addTo.append(DELIM_STOP);
                 break;
             case DELIM_STOP:
-                result.append(parsPatternFormat(formatPattern.toString()));
-                result.append(c);
+                result.append(formatPattern);
                 break nextChar;
             default:
                 if (recursionLevel == 0) {
@@ -310,7 +315,7 @@ public class MessageFormatTokenizer {
         } else {
             if (formatType.equals("choice")) {
                 StringBuilder result = new StringBuilder(formatPattern.substring(0, comaIdx + 1));
-                String[] choices = formatStyle.split("\\|");
+                String[] choices = splitNestedChoices(formatStyle);
                 for (int i = 0; i < choices.length; i++) {
                     if (i != 0) {
                         result.append('|');
@@ -350,4 +355,29 @@ public class MessageFormatTokenizer {
             }
         }
     }
+
+    private static String[] splitNestedChoices(final String pattern) {
+        List<String> choices = new ArrayList<>();
+        StringBuilder text = new StringBuilder();
+        int nested = 0;
+        for (int i = 0; i < pattern.length(); i++) {
+            char c = pattern.charAt(i);
+            if (nested == 0 && c == '|') {
+                choices.add(text.toString());
+                text = new StringBuilder();
+            } else {
+                text.append(c);
+                if (c == '{') {
+                    nested++;
+                } else if (c == '}') {
+                    nested--;
+                }
+            }
+        }
+        if (text.length() > 0) {
+            choices.add(text.toString());
+        }
+        return choices.toArray(new String[choices.size()]);
+    }
+
 }

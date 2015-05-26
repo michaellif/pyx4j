@@ -93,7 +93,7 @@ public class ConfigInfo {
     }
 
     public static String applicationUptime() {
-        return TimeUtils.durationFormatSeconds((int) (System.currentTimeMillis() - ServerSideConfiguration.getStartTime()) / Consts.SEC2MSEC) + ", since: "
+        return TimeUtils.durationFormatSeconds((int) ((System.currentTimeMillis() - ServerSideConfiguration.getStartTime()) / Consts.SEC2MSEC)) + ", since: "
                 + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z").format(new Date(ServerSideConfiguration.getStartTime()));
     }
 
@@ -101,8 +101,8 @@ public class ConfigInfo {
         try {
             long jvmStartTime = ManagementFactory.getRuntimeMXBean().getStartTime();
             long jvmUpTime = ManagementFactory.getRuntimeMXBean().getUptime();
-            return TimeUtils.durationFormatSeconds((int) jvmUpTime / Consts.SEC2MSEC) + ", since: "
-                    + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z").format(new Date(jvmStartTime));
+            return TimeUtils.durationFormatSeconds((int) (jvmUpTime / Consts.SEC2MSEC)) + ", since: "
+            + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z").format(new Date(jvmStartTime));
         } catch (Throwable e) {
             return "n/a " + e.getMessage();
         }
