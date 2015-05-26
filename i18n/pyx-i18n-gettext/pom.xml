@@ -4,7 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="http://maven.apache.org/POM/4.0.0">
 <!-- @version $Revision$ ($Author$) $Date$ -->
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>com.pyx4j</groupId>
@@ -17,7 +17,7 @@
     <name>pyx-i18n-gettext</name>
     <description>pyx i18n gettext components</description>
 
-	<dependencies>
+    <dependencies>
 
         <dependency>
             <groupId>com.pyx4j</groupId>
@@ -26,12 +26,17 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
-        
-	</dependencies>
+
+    </dependencies>
 
 </project>
