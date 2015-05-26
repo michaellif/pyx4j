@@ -22,6 +22,7 @@ package com.pyx4j.rpc.rebind;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.TreeLogger.Type;
 import com.google.gwt.core.ext.UnableToCompleteException;
@@ -129,7 +130,7 @@ public class IServiceImplMethodCreator extends AbstractMethodCreator {
         if (value == null) {
             return "null";
         } else {
-            return "\"" + value.replace("\"", "\\\"").replace("\n", "\\n") + "\"";
+            return "\"" + Generator.escape(value) + "\"";
         }
     }
 

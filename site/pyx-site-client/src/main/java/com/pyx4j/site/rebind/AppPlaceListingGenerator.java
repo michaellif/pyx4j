@@ -108,7 +108,7 @@ public class AppPlaceListingGenerator extends Generator {
         if (value == null) {
             return "null";
         } else {
-            return "\"" + value.replace("\"", "\\\"").replace("\n", "\\n") + "\"";
+            return "\"" + escape(value) + "\"";
         }
     }
 

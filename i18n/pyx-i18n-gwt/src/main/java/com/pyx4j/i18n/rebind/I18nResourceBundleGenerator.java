@@ -153,7 +153,7 @@ public class I18nResourceBundleGenerator extends Generator {
         if (value == null) {
             return "null";
         } else {
-            return "\"" + value.replace("\"", "\\\"").replace("\n", "\\n") + "\"";
+            return "\"" + Generator.escape(value) + "\"";
         }
     }
 }
