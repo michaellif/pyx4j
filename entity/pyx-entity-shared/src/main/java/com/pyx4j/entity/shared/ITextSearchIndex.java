@@ -44,6 +44,7 @@ public interface ITextSearchIndex<E extends IEntity> extends IEntity {
     @Detached
     E owner();
 
+    @Indexed(method = "GIN")
     IPrimitive<TextSearchDocument> keywords();
 
 }
