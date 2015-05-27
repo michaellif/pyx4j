@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
@@ -112,16 +111,7 @@ class TextSearchIndexManager {
     }
 
     Collection<Class<? extends IEntity>> getIndexedEntityClasses() {
-        List<Class<? extends IEntity>> classes = new ArrayList<>();
-        for (Entry<Class<? extends IEntity>, List<UpdateChainData<? extends IEntity>>> chainEntry : chains.entrySet()) {
-            for (UpdateChainData<? extends IEntity> updateChainData : chainEntry.getValue()) {
-                if (updateChainData.updateChain == null) {
-                    classes.add(chainEntry.getKey());
-                    break;
-                }
-            }
-        }
-        return Collections.unmodifiableCollection(classes);
+        return Collections.unmodifiableCollection(indexes.keySet());
     }
 
     <E extends IEntity> void queueIndexUpdate(final E entity) {
