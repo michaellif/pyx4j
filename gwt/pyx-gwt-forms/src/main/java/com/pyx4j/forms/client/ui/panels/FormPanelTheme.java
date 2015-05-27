@@ -40,7 +40,7 @@ public abstract class FormPanelTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        collapsed, left, right, dual;
+        collapsed, left, right, dual, absolute;
     }
 
     public FormPanelTheme() {
@@ -81,6 +81,11 @@ public abstract class FormPanelTheme extends Theme {
         style.addProperty("text-align", "center");
         addStyle(style);
 
+        style = new Style(".", StyleName.FluidPanelBlock, "-", StyleDependent.absolute);
+        style.addProperty("width", "100%");
+        style.addProperty("text-align", "center");
+        addStyle(style);
+
         style = new Style(".", StyleName.FormPanelCell);
         style.addProperty("margin", "0 auto");
         style.addProperty("line-height", "1em");
@@ -98,19 +103,27 @@ public abstract class FormPanelTheme extends Theme {
         style.addProperty("text-align", "center");
         addStyle(style);
 
+        style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.absolute);
+        style.addProperty("text-align", "left");
+        addStyle(style);
+
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.left, ">.", CComponentTheme.StyleName.ComponentHolder, ">.",
                 WidgetDecoratorTheme.StyleName.WidgetDecorator, ">.", WidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
-        style.addProperty("width", getSingleColumnWidth() + "px");
+        style.addProperty("width", getContainerWidth() + "px");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.right, ">.", CComponentTheme.StyleName.ComponentHolder, ">.",
                 WidgetDecoratorTheme.StyleName.WidgetDecorator, ">.", WidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
-        style.addProperty("width", getSingleColumnWidth() + "px");
+        style.addProperty("width", getContainerWidth() + "px");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.dual, ">.", CComponentTheme.StyleName.ComponentHolder, ">.",
                 WidgetDecoratorTheme.StyleName.WidgetDecorator, ">.", WidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
-        style.addProperty("width", getDualColumnWidth() + "px");
+        style.addProperty("width", getContainerWidth() * 2 + getLabelWidth() + "px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.absolute);
+        style.addProperty("width", ((getContainerWidth() + getLabelWidth()) * 2) + "px");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCaptionLabel);
@@ -203,20 +216,27 @@ public abstract class FormPanelTheme extends Theme {
         style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FluidPanelBlock, "-", StyleDependent.dual);
         addStyle(style);
 
+        style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FluidPanelBlock, "-", StyleDependent.absolute);
+        addStyle(style);
+
         style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FormPanelCell);
         style.addProperty("text-align", "center");
         addStyle(style);
 
         style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FormPanelCell, "-", StyleDependent.dual, ">.",
                 CComponentTheme.StyleName.ComponentHolder, " .", WidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
-        style.addProperty("width", getSingleColumnWidth() + "px");
+        style.addProperty("width", getContainerWidth() + "px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FormPanelCell, "-", StyleDependent.absolute);
+        style.addProperty("width", (getContainerWidth() + getLabelWidth()) + "px");
         addStyle(style);
     }
 
     protected abstract ThemeColor getBackgroundColor();
 
-    protected abstract int getSingleColumnWidth();
+    protected abstract int getContainerWidth();
 
-    protected abstract int getDualColumnWidth();
+    protected abstract int getLabelWidth();
 
 }
