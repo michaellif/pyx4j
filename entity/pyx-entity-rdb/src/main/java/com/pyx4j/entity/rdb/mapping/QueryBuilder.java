@@ -170,10 +170,6 @@ public class QueryBuilder<T extends IEntity> {
         }
     }
 
-    private static boolean hasLikeValue(String value) {
-        return value.contains("*");
-    }
-
     private void appendFilters(StringBuilder criterionSql, QueryJoinBuilder joinBuilder, List<? extends Criterion> filters, boolean firstInSentence,
             boolean required) {
         for (Criterion criterion : filters) {
@@ -401,13 +397,13 @@ public class QueryBuilder<T extends IEntity> {
                 return;
             case RDB_LIKE:
                 if (bindHolder.bindValue != null) {
-                    if (hasLikeValue(bindHolder.bindValue.toString())) {
-                        bindHolder.bindValue = bindHolder.bindValue.toString().trim().replace('*', dialect.likeWildCards());
-                    } else {
-                        bindHolder.bindValue = dialect.likeWildCards() + bindHolder.bindValue.toString().trim() + dialect.likeWildCards();
-                    }
+                    bindHolder.bindValue = dialect.likeQueryBindValue(bindHolder.bindValue);
                 }
                 sqlOperator = " " + dialect.likeOperator() + " ? ";
+                break;
+            case TEXT_SEARCH:
+                bindHolder.bindValue = dialect.textSearchQueryBindValue(bindHolder.bindValue);
+                sqlOperator = " " + dialect.textSearchOperator() + " " + dialect.textSearchToSqlQueryValue("?") + " ";
                 break;
             default:
                 throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction());

@@ -57,12 +57,6 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-entity-server</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.pyx4j</groupId>
             <artifactId>pyx-i18n-j2se</artifactId>
             <version>${project.version}</version>
         </dependency>

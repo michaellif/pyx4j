@@ -35,6 +35,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.entity.shared.TextSearchDocument;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.annotations.I18nContext;
@@ -198,6 +199,8 @@ public class PrimitiveHandler<TYPE extends Serializable> extends ObjectHandler<T
             return (value instanceof Pair);
         } else if (valueClass.equals(PasswordSerializable.class)) {
             return (value instanceof PasswordSerializable);
+        } else if (valueClass.equals(TextSearchDocument.class)) {
+            return (value instanceof TextSearchDocument);
         } else {
             throw new RuntimeException("Unsupported type " + valueClass.getName());
         }

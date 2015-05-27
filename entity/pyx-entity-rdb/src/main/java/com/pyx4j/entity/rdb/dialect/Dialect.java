@@ -32,6 +32,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 import com.pyx4j.entity.rdb.mapping.QueryBuilder;
+import com.pyx4j.entity.shared.TextSearchDocument;
 
 public abstract class Dialect {
 
@@ -71,6 +72,8 @@ public abstract class Dialect {
         addTypeMeta(java.sql.Date.class, "date");
         addTypeMeta(LogicalDate.class, "date");
         addTypeMeta(java.sql.Time.class, "time");
+
+        addTypeMeta(TextSearchDocument.class, "varchar");
     }
 
     public DatabaseType databaseType() {
@@ -196,6 +199,8 @@ public abstract class Dialect {
             return Types.TINYINT;
         } else if (valueClass.equals(byte[].class)) {
             return Types.BLOB;
+        } else if (valueClass.equals(TextSearchDocument.class)) {
+            return Types.VARCHAR;
         } else {
             throw new RuntimeException("Unsupported type " + valueClass.getName());
         }
@@ -231,6 +236,45 @@ public abstract class Dialect {
     // case-insensitive search. TODO use lower(col) = lower(?)
     public String likeOperator() {
         return "LIKE";
+    }
+
+    public String likeQueryBindValue(Object searchValue) {
+        String value = searchValue.toString();
+        if (hasLikeValue(value)) {
+            return value.trim().replace('*', likeWildCards());
+        } else {
+            return likeWildCards() + value.trim() + likeWildCards();
+        }
+    }
+
+    private static boolean hasLikeValue(String value) {
+        return value.contains("*");
+    }
+
+    public String textSearchOperator() {
+        return likeOperator();
+    }
+
+    public String textSearchToSqlValue(String argumentPlaceHolder) {
+        return argumentPlaceHolder;
+    }
+
+    public String textSearchQueryBindValue(Object searchValue) {
+        StringBuilder query = new StringBuilder();
+        String value = searchValue.toString();
+        query.append(likeWildCards());
+        for (String str : value.split(" ")) {
+            if (query.length() > 0) {
+                query.append(likeWildCards());
+            }
+            query.append(str.trim());
+        }
+        query.append(likeWildCards());
+        return query.toString();
+    }
+
+    public String textSearchToSqlQueryValue(String argumentPlaceHolder) {
+        return argumentPlaceHolder;
     }
 
     public String falseCondition() {

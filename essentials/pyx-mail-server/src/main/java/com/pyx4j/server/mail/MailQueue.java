@@ -40,6 +40,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.Executables;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
@@ -340,7 +341,7 @@ public class MailQueue implements Runnable {
         if (targetNamespace == null) {
             call.execute();
         } else {
-            NamespaceManager.runInTargetNamespace(targetNamespace, call);
+            Executables.runInTargetNamespace(targetNamespace, call);
         }
     }
 
@@ -400,7 +401,7 @@ public class MailQueue implements Runnable {
     private static <T> T runInEntityNamespace(Class<? extends IEntity> entityClass, final Executable<T, RuntimeException> task) {
         String targetNamespace = getNamespace(entityClass);
         if (targetNamespace != null) {
-            return NamespaceManager.runInTargetNamespace(targetNamespace, task);
+            return Executables.runInTargetNamespace(targetNamespace, task);
         } else {
             return task.execute();
         }
