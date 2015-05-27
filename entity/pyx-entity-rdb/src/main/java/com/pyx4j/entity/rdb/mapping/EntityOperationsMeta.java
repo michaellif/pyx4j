@@ -52,6 +52,7 @@ import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.server.AdapterFactory;
+import com.pyx4j.entity.shared.TextSearchDocument;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.rpc.shared.DevInfoUnRecoverableRuntimeException;
 
@@ -183,7 +184,7 @@ public class EntityOperationsMeta {
                     // if was not defined on super
                     if ((subclassDiscriminator != null) && (alreadyMapped.getSubclassDiscriminators() != null)) {
                         alreadyMapped.addSubclassDiscriminator(subclassDiscriminator);
-                    }                    
+                    }
                     continue;
                 }
             }
@@ -512,6 +513,8 @@ public class EntityOperationsMeta {
             return new ValueAdapterByteArray(dialect, memberMeta);
         } else if (valueClass.equals(GeoPoint.class)) {
             return new ValueAdapterGeoPoint(dialect);
+        } else if (valueClass.equals(TextSearchDocument.class)) {
+            return new ValueAdapterTextSearchDocument(dialect);
         } else {
             return null;
         }

@@ -33,25 +33,34 @@ import com.pyx4j.entity.core.adapters.IndexAdapter;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Indexed {
 
+    // Name of this index in DB
     String name() default "";
 
     boolean uniqueConstraint() default false;
 
+    //Create case insensitive index on LOWER(value), works when FunctionIndexesSupported.
     boolean ignoreCase() default false;
 
+    // GAE heritage: add column value to index
     boolean indexPrimaryValue() default true;
 
     Class<? extends IndexAdapter<?>>[] adapters() default {};
 
+    // GAE heritage:
     int keywordLength() default 0;
 
+    // GAE heritage:
     char global() default 0;
 
     /**
-     * Allow for multi column indexes,
-     * 
+     * Allow for multi-column indexes, And multiple indexes on the same column.
+     *
      * Unique per hierarchy: start with discriminator
      */
     String[] group() default {};
 
+    // PostgreSQL:  btree(default), hash, gist, and gin
+    // Oracle:  btree(default), bitmap
+    // Ignored for other database types.
+    String method() default "";
 }
