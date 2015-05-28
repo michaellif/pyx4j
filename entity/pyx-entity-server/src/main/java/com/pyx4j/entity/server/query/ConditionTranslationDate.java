@@ -26,10 +26,10 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.core.query.IDateCondition;
 
-public class ConditionTranslationDate implements ConditionTranslation<IDateCondition> {
+public class ConditionTranslationDate extends AbstractConditionTranslation<IDateCondition> {
 
     @Override
-    public <E extends IEntity> void addCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, IDateCondition criterion) {
+    public <E extends IEntity> void enhanceCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, IDateCondition criterion) {
         if (!criterion.fromDate().isNull()) {
             query.add(new PropertyCriterion(entityMemeberPath, Restriction.GREATER_THAN_OR_EQUAL, criterion.fromDate().getValue()));
         }

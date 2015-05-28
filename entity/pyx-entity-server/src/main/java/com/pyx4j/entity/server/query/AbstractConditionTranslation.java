@@ -14,21 +14,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 21, 2015
+ * Created on May 28, 2015
  * @author vlads
  */
 package com.pyx4j.entity.server.query;
 
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.Path;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.query.ICondition;
 
-public interface ConditionTranslation<C extends ICondition> {
+public abstract class AbstractConditionTranslation<C extends ICondition> implements ConditionTranslation<C> {
 
-    public <E extends IEntity> void enhanceCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, C criterion);
+    /*
+     * empty implementation
+     */
+    @Override
+    public void onBeforePersist(C criterion) {
+    }
 
-    public void onBeforePersist(C criterion);
+    /*
+     * empty implementation
+     */
+    @Override
+    public void onAfterRetrive(C criterion) {
 
-    public void onAfterRetrive(C criterion);
+    }
+
 }
