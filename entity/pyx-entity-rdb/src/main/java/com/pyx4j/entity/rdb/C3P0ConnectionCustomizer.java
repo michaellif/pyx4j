@@ -20,6 +20,7 @@
 package com.pyx4j.entity.rdb;
 
 import java.sql.Connection;
+import java.util.Map;
 
 import com.mchange.v2.c3p0.AbstractConnectionCustomizer;
 
@@ -30,11 +31,11 @@ public class C3P0ConnectionCustomizer extends AbstractConnectionCustomizer {
 
     @Override
     public void onAcquire(Connection c, String dataSourceIdentityToken) throws Exception {
-        ConnectionPoolType connectionPoolType = (ConnectionPoolType) extensionsForToken(dataSourceIdentityToken).get(ConnectionPoolType.class.getName());
-        ConnectionCustomizer connectionCustomizer = (ConnectionCustomizer) extensionsForToken(dataSourceIdentityToken)
-                .get(ConnectionCustomizer.class.getName());
-
+        @SuppressWarnings("unchecked")
+        Map<String, Object> tokenExtensions = extensionsForToken(dataSourceIdentityToken);
+        ConnectionCustomizer connectionCustomizer = (ConnectionCustomizer) tokenExtensions.get(ConnectionCustomizer.class.getName());
         if (connectionCustomizer != null) {
+            ConnectionPoolType connectionPoolType = (ConnectionPoolType) tokenExtensions.get(ConnectionPoolType.class.getName());
             connectionCustomizer.pooledConnectionAcquired(c, connectionPoolType);
         }
     }
