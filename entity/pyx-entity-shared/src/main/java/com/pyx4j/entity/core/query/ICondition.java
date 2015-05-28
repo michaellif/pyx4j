@@ -30,9 +30,11 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 /**
  * TODO
@@ -49,7 +51,9 @@ import com.pyx4j.entity.core.IPrimitive;
  *
  */
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
+@Table(name = "query_storage_condition")
 @AbstractEntity
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface ICondition extends IEntity {
 
     @Owner
