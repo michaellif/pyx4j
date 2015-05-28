@@ -29,6 +29,7 @@ import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
+import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 public class RDBDatastorePersistenceEnvironment extends PersistenceEnvironment {
@@ -47,6 +48,7 @@ public class RDBDatastorePersistenceEnvironment extends PersistenceEnvironment {
     @Override
     @Before
     public IEntityPersistenceService setupDatastore() {
+        LoggerConfig.setContextName("tests");
         NamespaceManager.setNamespace("-t");
         EntityPersistenceServiceRDB srv = new EntityPersistenceServiceRDB(configuration);
         return srv;

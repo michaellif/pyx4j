@@ -52,7 +52,7 @@ abstract class AbstractSourceJarMojo extends AbstractMojo {
     /**
      * List of files to exclude. Specified as fileset patterns which are relative to the
      * input directory whose contents is being packaged into the JAR.
-     * 
+     *
      */
     @Parameter
     private String[] excludes;
@@ -131,6 +131,9 @@ abstract class AbstractSourceJarMojo extends AbstractMojo {
             // Add Sources first since they may already be present in jar from previous run and changed.
             for (String sourceDirectory : getCompileSourceRoots()) {
                 File dir = new File(sourceDirectory);
+                if (!dir.exists()) {
+                    continue;
+                }
                 DirectoryScanner srcScanner = new DirectoryScanner();
                 srcScanner.setBasedir(dir);
                 srcScanner.setIncludes(getIncludes());

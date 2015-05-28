@@ -29,12 +29,16 @@ import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.webstorage.client.StorageEvent.NativeStorageEvent;
 
 /**
- * 
+ *
  * @see <a href="http://www.w3.org/TR/webstorage/#storage-0">W3C Web Storage - Storage</a>
  */
 public final class HTML5Storage extends JavaScriptObject {
 
     private static EventBus eventBus;
+
+    private static boolean disabled = false;
+
+    private static boolean verified = false;
 
     private static JavaScriptObject dispatchStorageEvent;
 
@@ -45,8 +49,23 @@ public final class HTML5Storage extends JavaScriptObject {
         if (BrowserType.isIE() && !GWT.isScript()) {
             return false;
         } else {
-            return isSupportedNative();
+            return isSupportedNative() && verifyOnce();
         }
+    }
+
+    // We will get the QuotaExceededError in Safari Private Browser Mode on both iOS and OS X
+    private static boolean verifyOnce() {
+        if (!verified) {
+            try {
+                getLocalStorage().setItem("localStorageTest", "1");
+                getLocalStorage().removeItem("localStorageTest");
+            } catch (Throwable t) {
+                disabled = true;
+            }
+            verified = true;
+        }
+        return !disabled;
+
     }
 
     private static final native boolean isSupportedNative() /*-{
@@ -69,7 +88,7 @@ public final class HTML5Storage extends JavaScriptObject {
      * The getItem(key) method return a structured clone of the current value associated
      * with the given key. If the given key does not exist in the list associated with the
      * object then this method must return null.
-     * 
+     *
      * @param key
      * @return current value or null if key does not exist.
      */
@@ -84,10 +103,10 @@ public final class HTML5Storage extends JavaScriptObject {
     /**
      * New key/value pair added to the list, with the given key and with its value set to
      * the newly obtained clone of value.
-     * 
+     *
      * If the given key does exist in the list, then its value updated to the newly
      * obtained clone of value.
-     * 
+     *
      * @param key
      * @param data
      */

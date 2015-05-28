@@ -34,6 +34,8 @@ interface ValueAdapter extends ValueBindAdapter {
 
     boolean isColumnTypeChanges(Dialect dialect, String typeName, int columnSize, MemberOperationsMeta member, String sqlColumnName);
 
+    String toSqlValue(Dialect dialect, String columnName, String argumentPlaceHolder);
+
     Serializable retrieveValue(ResultSet rs, String memberSqlName) throws SQLException;
 
     ValueBindAdapter getQueryValueBindAdapter(Restriction restriction, Object value);

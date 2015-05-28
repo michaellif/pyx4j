@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.core.adapters.EntityModificationAdapter;
+import com.pyx4j.entity.core.adapters.EntityPersistenceAdapter;
 import com.pyx4j.entity.core.adapters.IndexAdapter;
 import com.pyx4j.entity.core.adapters.MemberModificationAdapter;
 import com.pyx4j.entity.core.adapters.PersistenceAdapter;
@@ -34,7 +34,7 @@ public class AdapterFactory {
 
     private static Map<Class<? extends MemberModificationAdapter<?>>, MemberModificationAdapter<?>> memberModificationAdapters;
 
-    private static Map<Class<? extends EntityModificationAdapter<?>>, EntityModificationAdapter<?>> entityModificationAdapters;
+    private static Map<Class<? extends EntityPersistenceAdapter<?>>, EntityPersistenceAdapter<?>> entityModificationAdapters;
 
     private static Map<Class<? extends PersistenceAdapter<?, ?>>, PersistenceAdapter<?, ?>> persistenceAdapters;
 
@@ -86,10 +86,10 @@ public class AdapterFactory {
         return adapter;
     }
 
-    public static EntityModificationAdapter<?> getEntityModificationAdapters(Class<? extends EntityModificationAdapter<?>> adapterClass) {
-        EntityModificationAdapter<?> adapter = null;
+    public static EntityPersistenceAdapter<?> getEntityModificationAdapters(Class<? extends EntityPersistenceAdapter<?>> adapterClass) {
+        EntityPersistenceAdapter<?> adapter = null;
         if (entityModificationAdapters == null) {
-            entityModificationAdapters = new HashMap<Class<? extends EntityModificationAdapter<?>>, EntityModificationAdapter<?>>();
+            entityModificationAdapters = new HashMap<Class<? extends EntityPersistenceAdapter<?>>, EntityPersistenceAdapter<?>>();
         } else {
             adapter = entityModificationAdapters.get(adapterClass);
         }
