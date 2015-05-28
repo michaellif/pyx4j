@@ -26,14 +26,19 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.core.query.IEntityCondition;
 
-public class ConditionTranslationEntity<E extends IEntity> implements ConditionTranslation<IEntityCondition<E>> {
+public class ConditionTranslationEntity<E extends IEntity> extends AbstractConditionTranslation<IEntityCondition<E>> {
 
     @Override
-    public <T extends IEntity> void addCriteria(EntityQueryCriteria<T> query, Path entityMemeberPath, IEntityCondition<E> criterion) {
+    public <T extends IEntity> void enhanceCriteria(EntityQueryCriteria<T> query, Path entityMemeberPath, IEntityCondition<E> criterion) {
         if (!criterion.refs().isNull()) {
             query.add(new PropertyCriterion(entityMemeberPath, Restriction.IN, criterion.refs()));
         }
-
     }
 
+    @Override
+    public void onBeforePersist(IEntityCondition<E> criterion) {
+        for (E entity : criterion.references()) {
+            criterion.refs().add(entity.getPrimaryKey());
+        }
+    }
 }

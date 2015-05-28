@@ -26,10 +26,10 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.core.query.IStringCondition;
 
-public class ConditionTranslationString implements ConditionTranslation<IStringCondition> {
+public class ConditionTranslationString extends AbstractConditionTranslation<IStringCondition> {
 
     @Override
-    public <E extends IEntity> void addCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, IStringCondition criterion) {
+    public <E extends IEntity> void enhanceCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, IStringCondition criterion) {
         if (!criterion.value().isNull()) {
             query.add(new PropertyCriterion(entityMemeberPath, Restriction.RDB_LIKE, criterion.value().getValue()));
         }

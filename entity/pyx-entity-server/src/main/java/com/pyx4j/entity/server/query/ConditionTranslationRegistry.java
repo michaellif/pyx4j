@@ -53,7 +53,7 @@ public class ConditionTranslationRegistry {
         }
 
         if (ct != null) {
-            ct.addCriteria(query, entityMemeberPath, criterion.<ICondition> cast());
+            ct.enhanceCriteria(query, entityMemeberPath, criterion.<ICondition> cast());
         } else {
             throw new Error("Unknown criterion class " + criterion.getInstanceValueClass().getName());
         }
