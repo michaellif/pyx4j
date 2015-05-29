@@ -55,32 +55,40 @@ public interface Configuration extends IPersistenceConfiguration {
         public boolean testConnectionOnCheckin = false;
 
         /**
-         * Set the default values for all DB types
+         * Set the default values for all DB connection types
          */
         public ConnectionPoolConfiguration(ConnectionPoolType connectionType) {
             assert connectionType != ConnectionPoolType.DDL;
 
-            switch (connectionType) {
-            case BackgroundProcess:
-                maxPoolSize = 20;
-                unreturnedConnectionTimeout = 1 * Consts.HOURS2SEC;
-                checkoutTimeout = 20 * Consts.MIN2SEC;
-                testConnectionOnCheckout = true;
-                break;
-            case TransactionProcessing:
-                maxPoolSize = 40;
-                unreturnedConnectionTimeout = 10 * Consts.MIN2SEC;
-                checkoutTimeout = 2 * Consts.MIN2SEC;
-                testConnectionOnCheckout = true;
-                break;
-            default:
-                if (ServerSideConfiguration.isRunningInDeveloperEnviroment()) {
+            if (connectionType != null) {
+                switch (connectionType) {
+                case BackgroundProcess:
+                    maxPoolSize = 20;
+                    unreturnedConnectionTimeout = 1 * Consts.HOURS2SEC;
+                    checkoutTimeout = 20 * Consts.MIN2SEC;
                     testConnectionOnCheckout = true;
-                } else {
-                    testConnectionOnCheckout = false;
+                    break;
+                case TransactionProcessing:
+                    maxPoolSize = 40;
+                    unreturnedConnectionTimeout = 10 * Consts.MIN2SEC;
+                    checkoutTimeout = 2 * Consts.MIN2SEC;
+                    testConnectionOnCheckout = true;
+                    break;
+                case Scheduler:
+                    maxPoolSize = 4;
+                    unreturnedConnectionTimeout = 10 * Consts.MIN2SEC;
+                    testConnectionOnCheckout = true;
+                    break;
+                default:
+                    if (ServerSideConfiguration.isRunningInDeveloperEnviroment()) {
+                        testConnectionOnCheckout = true;
+                    } else {
+                        testConnectionOnCheckout = false;
+                    }
+                    break;
                 }
-                break;
             }
+
             if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
                 unreturnedConnectionTimeout = 0;
             }
@@ -217,6 +225,8 @@ public interface Configuration extends IPersistenceConfiguration {
     public ConnectionPoolProvider connectionPool();
 
     public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionPoolType connectionType);
+
+    public ConnectionCustomizer connectionCustomizer();
 
     /**
      *

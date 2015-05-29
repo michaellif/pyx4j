@@ -77,6 +77,8 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
 
     protected final CellStyle cellStyleDateTime;
 
+    protected final CellStyle cellStyleTime;
+
     protected final CellStyle cellStyleDollar;
 
     protected final CellStyle cellStyleInteger;
@@ -139,6 +141,10 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         this.cellStyleDateTime = this.workbook.createCellStyle();
         this.cellStyleDateTime.setFont(font);
         this.cellStyleDateTime.setDataFormat((short) BuiltinFormats.getBuiltinFormat("m/d/yy h:mm"));
+
+        this.cellStyleTime = this.workbook.createCellStyle();
+        this.cellStyleTime.setFont(font);
+        this.cellStyleTime.setDataFormat((short) BuiltinFormats.getBuiltinFormat("hh:mm:ss"));
 
         // Create currency style
         this.cellStyleDollar = this.workbook.createCellStyle();
@@ -288,6 +294,8 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
             cell((String) value);
         } else if (value instanceof java.sql.Date) {
             cell((java.sql.Date) value);
+        } else if (value instanceof java.sql.Time) {
+            cell((java.sql.Time) value);
         } else if (value instanceof Date) {
             cell((Date) value);
         } else if (value instanceof Boolean) {
@@ -362,6 +370,14 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
     public void cell(Date value) {
         Cell cell = createCell();
         cell.setCellStyle(this.cellStyleDateTime);
+        if (value != null) {
+            cell.setCellValue(value);
+        }
+    }
+
+    public void cell(java.sql.Time value) {
+        Cell cell = createCell();
+        cell.setCellStyle(this.cellStyleTime);
         if (value != null) {
             cell.setCellValue(value);
         }

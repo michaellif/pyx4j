@@ -13,7 +13,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Created on Apr 17, 2011
  * @author vlads
  */
@@ -29,7 +29,10 @@ import com.pyx4j.rpc.shared.ServiceExecution;
 
 public interface AbstractCrudService<E extends IEntity> extends AbstractListCrudService<E> {
 
+    //TODO eod143 RetrieveOperation
     public static enum RetrieveTarget {
+
+        //TODO eod143 List,
 
         View,
 

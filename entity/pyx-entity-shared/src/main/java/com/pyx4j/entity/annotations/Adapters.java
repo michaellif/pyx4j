@@ -24,7 +24,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.pyx4j.entity.core.adapters.EntityModificationAdapter;
+import com.pyx4j.entity.core.adapters.EntityPersistenceAdapter;
 import com.pyx4j.entity.core.adapters.MemberModificationAdapter;
 
 /**
@@ -43,5 +43,5 @@ public @interface Adapters {
     /**
      * EntityModificationAdapters are fired after all MemberModificationAdapters
      */
-    Class<? extends EntityModificationAdapter<?>>[] entityModificationAdapters() default {};
+    Class<? extends EntityPersistenceAdapter<?>>[] entityPersistenceAdapters() default {};
 }

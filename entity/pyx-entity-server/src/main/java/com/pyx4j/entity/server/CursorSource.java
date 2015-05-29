@@ -26,6 +26,6 @@ import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 
 public interface CursorSource<T extends IEntity> {
 
-    public ICursorIterator<T> getCursor(String encodedCursorReference, EntityListCriteria<T> criteria, AttachLevel attachLevel);
+    public ICursorIterator<T> getTOCursor(String encodedCursorReference, EntityListCriteria<T> criteria, AttachLevel attachLevel);
 
 }

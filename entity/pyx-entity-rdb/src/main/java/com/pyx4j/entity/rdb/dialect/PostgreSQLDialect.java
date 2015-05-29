@@ -25,8 +25,11 @@ import java.sql.Types;
 
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
+import com.pyx4j.entity.shared.TextSearchDocument;
 
 public class PostgreSQLDialect extends Dialect {
+
+    private final boolean enableTextSearchSupport = true;
 
     public PostgreSQLDialect(NamingConvention namingConvention, MultitenancyType multitenancyType) {
         super(DatabaseType.PostgreSQL, namingConvention, multitenancyType);
@@ -44,6 +47,10 @@ public class PostgreSQLDialect extends Dialect {
         addTypeMeta(byte[].class, "bytea");
 
         addTypeMeta(java.util.Date.class, "timestamp");
+
+        if (enableTextSearchSupport) {
+            addTypeMeta(TextSearchDocument.class, "tsvector");
+        }
     }
 
     @Override
@@ -71,6 +78,50 @@ public class PostgreSQLDialect extends Dialect {
     }
 
     @Override
+    public String textSearchToSqlValue(String argumentPlaceHolder) {
+        if (enableTextSearchSupport) {
+            return "to_tsvector(" + argumentPlaceHolder + ")";
+        } else {
+            return super.textSearchToSqlValue(argumentPlaceHolder);
+        }
+    }
+
+    @Override
+    public String textSearchOperator() {
+        if (enableTextSearchSupport) {
+            return "@@";
+        } else {
+            return super.textSearchOperator();
+        }
+    }
+
+    @Override
+    public String textSearchQueryBindValue(Object searchValue) {
+        if (enableTextSearchSupport) {
+            StringBuilder query = new StringBuilder();
+            String value = searchValue.toString();
+            for (String str : value.split(" ")) {
+                if (query.length() > 0) {
+                    query.append(" & ");
+                }
+                query.append(str.trim()).append(":*");
+            }
+            return query.toString();
+        } else {
+            return super.textSearchQueryBindValue(searchValue);
+        }
+    }
+
+    @Override
+    public String textSearchToSqlQueryValue(String argumentPlaceHolder) {
+        if (enableTextSearchSupport) {
+            return "to_tsquery(" + argumentPlaceHolder + ")";
+        } else {
+            return super.textSearchToSqlQueryValue(argumentPlaceHolder);
+        }
+    }
+
+    @Override
     public boolean isFunctionIndexesSupported() {
         return true;
     }
@@ -81,12 +132,12 @@ public class PostgreSQLDialect extends Dialect {
     }
 
     @Override
-    public String getSequenceNextValSql(String sequenceName) {
+    public String sqlSequenceNextVal(String sequenceName) {
         return "nextval ('" + sequenceName + "')";
     }
 
     @Override
-    public String getSequenceCurentValueSql(String sequenceName) {
+    public String sqlSequenceCurentValue(String sequenceName) {
         return "SELECT last_value FROM " + sequenceName;
     }
 
@@ -100,13 +151,23 @@ public class PostgreSQLDialect extends Dialect {
     }
 
     @Override
-    public String getCreateSequenceSql(String sequenceName, int identityOffset) {
+    public String sqlCreateSequence(String sequenceName, int identityOffset) {
         return "CREATE SEQUENCE " + sequenceName + ((identityOffset != 0) ? (" START WITH " + identityOffset) : "");
     }
 
     @Override
-    public String getDropSequenceSql(String sequenceName) {
+    public String sqlDropSequence(String sequenceName) {
         return "DROP SEQUENCE " + sequenceName;
+    }
+
+    @Override
+    public String sqlChangeDateType(String columnSqlName) {
+        return "ALTER COLUMN " + columnSqlName + " TYPE";
+    }
+
+    @Override
+    public String sqlChangeNullable(String columnSqlName, String columnTypeSQLDefinition, boolean nullable) {
+        return "ALTER COLUMN " + columnSqlName + (nullable ? " DROP" : " SET") + " NOT NULL";
     }
 
     @Override
