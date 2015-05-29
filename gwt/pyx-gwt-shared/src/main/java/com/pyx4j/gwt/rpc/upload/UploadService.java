@@ -31,20 +31,24 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 /**
  * UI client facing part of upload, see UploadReciver
- * 
+ *
  * @param <U>
  *            Upload initiation data, Maybe file description or other option.
  *            Context of Upload dialog form.
  *            May be unused the use IEnity.
  * @param <R>
  *            The IFile Response
- * 
+ *
  */
 public interface UploadService<U extends IEntity, B extends AbstractIFileBlob> extends IService {
 
     public static final String PostCorrelationID = "correlationID";
 
-    public static final String ResponsePrefix = "UploadResponse";
+    public static final String UploadResponseTag = "UploadResponse";
+
+    public static final String ResponsePrefix = "<!--<" + UploadResponseTag + ">";
+
+    public static final String ResponseSufix = "</" + UploadResponseTag + ">";
 
     public static final String ResponseOk = "_OK_";
 

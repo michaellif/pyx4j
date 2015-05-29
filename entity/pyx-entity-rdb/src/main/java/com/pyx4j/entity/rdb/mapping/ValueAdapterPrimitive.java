@@ -48,8 +48,18 @@ abstract class ValueAdapterPrimitive implements ValueAdapter {
     }
 
     @Override
-    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String columnName) {
-        sql.append(dialect.getSqlType(valueClass, member.getMemberMeta().getLength()));
+    public boolean isColumnTypeChanges(Dialect dialect, String typeName, int columnSize, MemberOperationsMeta member, String sqlColumnName) {
+        return false;
+    }
+
+    @Override
+    public String sqlColumnTypeDefinition(Dialect dialect, MemberOperationsMeta member, String columnName) {
+        return dialect.getSqlType(valueClass, member.getMemberMeta().getLength());
+    }
+
+    @Override
+    public String toSqlValue(Dialect dialect, String columnName, String argumentPlaceHolder) {
+        return argumentPlaceHolder;
     }
 
     @Override

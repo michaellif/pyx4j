@@ -142,6 +142,11 @@ public abstract class ConfigurationHSQL implements Configuration {
     }
 
     @Override
+    public ConnectionCustomizer connectionCustomizer() {
+        return null;
+    }
+
+    @Override
     public String connectionAutomaticTestTable() {
         return "_c3p0_connection_test";
     }

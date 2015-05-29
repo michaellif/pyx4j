@@ -38,7 +38,7 @@
         </dependency>
 
         <dependency>
-            <groupId>c3p0</groupId>
+            <groupId>com.mchange</groupId>
             <artifactId>c3p0</artifactId>
         </dependency>
 
@@ -194,7 +194,7 @@
 
         <!-- Hack: have the 2nd profile's excludes override the 1st -->
         <profile>
-            <id>pyx4j-no-mysql-tests</id>
+            <id>pyx4j-in-memory-db-tests</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
@@ -210,6 +210,7 @@
                                 <exclude>**/mysql/*.*</exclude>
                                 <exclude>**/oracle/*.*</exclude>
                                 <exclude>**/postgresql/*.*</exclude>
+                                <exclude>**/postgresql/*/*.*</exclude>
                                 <exclude>**/h2/*.*</exclude>
                                 <exclude>**/derby/*.*</exclude>
                             </excludes>
@@ -260,6 +261,7 @@
                                 <exclude>**/stretch/*/*.*</exclude>
                                 <exclude>**/oracle/*.*</exclude>
                                 <exclude>**/postgresql/*.*</exclude>
+                                <exclude>**/postgresql/*/*.*</exclude>
                                 <exclude>**/h2/*.*</exclude>
                                 <exclude>**/derby/*.*</exclude>
                             </excludes>
@@ -311,6 +313,7 @@
                                 <exclude>**/hsql/*.*</exclude>
                                 <exclude>**/mysql/*.*</exclude>
                                 <exclude>**/postgresql/*.*</exclude>
+                                <exclude>**/postgresql/*/*.*</exclude>
                                 <exclude>**/h2/*.*</exclude>
                                 <exclude>**/derby/*.*</exclude>
                             </excludes>
@@ -370,6 +373,60 @@
                                 <exclude>**/mysql/*.*</exclude>
                                 <exclude>**/h2/*.*</exclude>
                                 <exclude>**/derby/*.*</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>pyx4j-postgresql-plus-tests</id>
+            <activation>
+                <property>
+                    <name>pyx4j-postgresql-tests</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>test-reset-postgresql-db</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>psql</executable>
+                                    <environmentVariables>
+                                        <PGPASSWORD>tst_entity</PGPASSWORD>
+                                    </environmentVariables>
+                                    <arguments>
+                                        <argument>--username</argument>
+                                        <argument>tst_entity</argument>
+                                        <argument>-h</argument>
+                                        <argument>localhost</argument>
+                                        <argument>-q</argument>
+                                        <argument>-f</argument>
+                                        <argument>${basedir}${file.separator}scripts${file.separator}postgre${file.separator}postgre-reset.sql</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/stretch/*/*.*</exclude>
+                                <exclude>**/oracle/*.*</exclude>
+                                <exclude>**/mysql/*.*</exclude>
                             </excludes>
                         </configuration>
                     </plugin>

@@ -40,11 +40,13 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.Executables;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AbstractOutgoingMailQueue;
 import com.pyx4j.entity.shared.AbstractOutgoingMailQueue.MailQueueStatus;
+import com.pyx4j.entity.shared.utils.EntityFormatUtils;
 import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.server.contexts.NamespaceManager;
 
@@ -87,6 +89,16 @@ public class MailQueue implements Runnable {
         }
     }
 
+    public static synchronized void setActive(boolean active) {
+        if (active) {
+            if (!isRunning()) {
+                init();
+            }
+        } else {
+            shutdown();
+        }
+    }
+
     public static void shutdown() {
         if (instance != null) {
             instance.notifyAndWaitCompletion();
@@ -111,8 +123,10 @@ public class MailQueue implements Runnable {
     }
 
     public static void sendQueued() {
-        synchronized (instance.monitor) {
-            instance.monitor.notifyAll();
+        if (instance != null) {
+            synchronized (instance.monitor) {
+                instance.monitor.notifyAll();
+            }
         }
     }
 
@@ -143,6 +157,7 @@ public class MailQueue implements Runnable {
             throw new Error("No destination E-Mail addresses found");
         }
         persistable.sendTo().setValue(ConverterUtils.convertStringCollection(sendTo, ", "));
+        EntityFormatUtils.trimToLength(persistable.sendTo());
         persistable.keywords().setValue(ConverterUtils.convertStringCollection(mailMessage.getKeywords(), ", "));
 
         runInEntityNamespace(persistable.getEntityMeta().getEntityClass(), new Executable<Void, RuntimeException>() {
@@ -247,6 +262,7 @@ public class MailQueue implements Runnable {
                             }
                             persistableUpdate.lastAttemptErrorMessage().setValue(
                                     trunkLength(mailMessage.getDeliveryErrorMessage(), persistableUpdate.lastAttemptErrorMessage().getMeta().getLength()));
+                            EntityFormatUtils.trimToLength(persistableUpdate.lastAttemptErrorMessage());
                             persistableUpdate.attempts().setValue(persistable.attempts().getValue(0) + 1);
                             if ((persistable.attempts().getValue() > mailConfig.maxDeliveryAttempts())
                                     && (persistableUpdate.status().getValue() != MailQueueStatus.Success)) {
@@ -328,7 +344,7 @@ public class MailQueue implements Runnable {
         if (targetNamespace == null) {
             call.execute();
         } else {
-            NamespaceManager.runInTargetNamespace(targetNamespace, call);
+            Executables.runInTargetNamespace(targetNamespace, call);
         }
     }
 
@@ -388,7 +404,7 @@ public class MailQueue implements Runnable {
     private static <T> T runInEntityNamespace(Class<? extends IEntity> entityClass, final Executable<T, RuntimeException> task) {
         String targetNamespace = getNamespace(entityClass);
         if (targetNamespace != null) {
-            return NamespaceManager.runInTargetNamespace(targetNamespace, task);
+            return Executables.runInTargetNamespace(targetNamespace, task);
         } else {
             return task.execute();
         }

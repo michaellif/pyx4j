@@ -276,7 +276,13 @@
                         <parallel>classes</parallel>
                         <threadCount>${surefire.parallelThreadCount}</threadCount>
                         -->
-                        <argLine>-Djava.awt.headless=true -Xms64m -Xmx128m</argLine>
+                        <argLine>-Xms64m -Xmx128m</argLine>
+                        <systemProperties>
+                            <property>
+                                <name>java.awt.headless</name>
+                                <value>true</value>
+                            </property>
+                        </systemProperties>
                     </configuration>
                 </plugin>
 

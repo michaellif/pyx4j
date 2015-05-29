@@ -41,6 +41,7 @@ import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.adapters.IndexAdapter;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.rdb.cfg.Configuration;
+import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.mapping.TableMetadata.ColumnMetadata;
 import com.pyx4j.entity.rdb.mapping.TableModel.ModelType;
@@ -92,6 +93,8 @@ class TableDDL {
         String group;
 
         boolean uniqueConstraint;
+
+        String method;
 
         // Sported by insertion-order
         Map<String, IndexColumnDef> columns = new LinkedHashMap<>();
@@ -158,8 +161,8 @@ class TableDDL {
             for (String sqlName : member.getValueAdapter().getColumnNames(member.sqlName())) {
                 sql.append(", ");
                 sql.append(sqlName).append(' ');
-                member.getValueAdapter().appendColumnDefinition(sql, dialect, member, sqlName);
-                if (member.hasNotNullConstraint() && (member.getSubclassDiscriminators() == null)) {
+                sql.append(member.getValueAdapter().sqlColumnTypeDefinition(dialect, member, sqlName));
+                if (member.hasNotNullConstraint()) {
                     sql.append(" NOT NULL ");
                 }
                 if (member.getMemberMeta().isIndexed()) {
@@ -218,7 +221,7 @@ class TableDDL {
         // create Polymorphic Value and NotNull constraint
         for (MemberOperationsMeta member : tableModel.operationsMeta().getColumnMembers()) {
             for (String sqlName : member.getValueAdapter().getColumnNames(member.sqlName())) {
-                if (member.hasNotNullConstraint() && (member.getSubclassDiscriminators() != null)) {
+                if (member.isNotNull() && (member.getSubclassDiscriminators() != null)) {
                     sqls.add(createPolymorphicNotNullConstraint(dialect, tableModel, sqlName, member));
                 }
             }
@@ -326,7 +329,7 @@ class TableDDL {
         sql.append(" (");
         List<String> discriminators = new ArrayList<String>(member.getSubclassDiscriminators());
         Collections.sort(discriminators);
-        
+
         sql.append(" ((");
         boolean firstDescr = true;
         for (String discriminator : discriminators) {
@@ -348,7 +351,7 @@ class TableDDL {
         sql.append(sqlName).append(" IS NULL");
         sql.append(")");
         sql.append(")");
-        
+
         return sql.toString();
     }
 
@@ -406,6 +409,7 @@ class TableDDL {
                 IndexDef def = new IndexDef();
                 def.name = indexedAnnotation.name();
                 def.uniqueConstraint = indexedAnnotation.uniqueConstraint();
+                def.method = indexedAnnotation.method();
                 def.group = group;
                 def.columns.put(sqlName, new IndexColumnDef(position, secondaryColumnNumber, indexedAnnotation.ignoreCase(), member));
                 indexes.add(def);
@@ -414,6 +418,7 @@ class TableDDL {
             IndexDef def = new IndexDef();
             def.name = indexedAnnotation.name();
             def.uniqueConstraint = indexedAnnotation.uniqueConstraint();
+            def.method = indexedAnnotation.method();
             def.columns.put(sqlName, new IndexColumnDef("", secondaryColumnNumber, indexedAnnotation.ignoreCase(), member));
             indexes.add(def);
         }
@@ -446,6 +451,11 @@ class TableDDL {
 
         StringBuilder sql = new StringBuilder();
         sql.append("CREATE ");
+
+        if (CommonsStringUtils.isStringSet(indexDef.method) && dialect.databaseType() == DatabaseType.Oracle) {
+            sql.append(indexDef.method).append(" ");
+        }
+
         if (indexDef.uniqueConstraint) {
             sql.append("UNIQUE ");
         }
@@ -455,7 +465,14 @@ class TableDDL {
         }
         sql.append(indexDef.name);
 
-        sql.append(" ON ").append(tableModel.getFullTableName()).append(" (");
+        sql.append(" ON ").append(tableModel.getFullTableName()).append(" ");
+
+        // TODO figure it out to to create more complex index with NameSpace part of it.
+        if (!dialect.isMultitenantSharedSchema() && CommonsStringUtils.isStringSet(indexDef.method) && dialect.databaseType() == DatabaseType.PostgreSQL) {
+            sql.append("USING ").append(indexDef.method).append(" ");
+        }
+
+        sql.append("(");
         boolean first = true;
         if (dialect.isMultitenantSharedSchema()) {
             sql.append(dialect.getNamingConvention().sqlNameSpaceColumnName());
@@ -492,14 +509,32 @@ class TableDDL {
                 if (columnMeta == null) {
                     StringBuilder sql = new StringBuilder("ALTER TABLE ");
                     sql.append(tableModel.getFullTableName());
-                    sql.append(" ADD "); // [ column ]
+                    sql.append(" ADD "); // [ column ] not in Oracle
                     sql.append(sqlName).append(' ');
-                    member.getValueAdapter().appendColumnDefinition(sql, dialect, member, sqlName);
+                    sql.append(member.getValueAdapter().sqlColumnTypeDefinition(dialect, member, sqlName));
+                    if (member.hasNotNullConstraint()) {
+                        sql.append(" NOT NULL ");
+                    }
                     alterSqls.add(sql.toString());
                 } else {
                     if (!member.getValueAdapter().isCompatibleType(dialect, columnMeta.getTypeName(), member, sqlName)) {
                         throw new RuntimeException(tableModel.tableName + "." + member.sqlName() + " incompatible SQL type '" + columnMeta.getTypeName()
                                 + "' for Java type " + memberMeta.getValueClass());
+                    }
+                    if (member.getValueAdapter().isColumnTypeChanges(dialect, columnMeta.getTypeName(), columnMeta.getColumnSize(), member, sqlName)) {
+                        StringBuilder sql = new StringBuilder("ALTER TABLE ");
+                        sql.append(tableModel.getFullTableName()).append(' ');
+                        sql.append(dialect.sqlChangeDateType(sqlName)).append(' ');
+                        sql.append(member.getValueAdapter().sqlColumnTypeDefinition(dialect, member, sqlName));
+                        alterSqls.add(sql.toString());
+                    }
+
+                    if (columnMeta.getNullable() != null && columnMeta.getNullable() != (!member.hasNotNullConstraint())) {
+                        StringBuilder sql = new StringBuilder("ALTER TABLE ");
+                        sql.append(tableModel.getFullTableName()).append(' ');
+                        sql.append(dialect.sqlChangeNullable(sqlName, member.getValueAdapter().sqlColumnTypeDefinition(dialect, member, sqlName),
+                                !member.hasNotNullConstraint()));
+                        alterSqls.add(sql.toString());
                     }
                 }
             }
@@ -514,7 +549,7 @@ class TableDDL {
                 }
                 StringBuilder sql = new StringBuilder("ALTER TABLE ");
                 sql.append(tableModel.getFullTableName());
-                sql.append(" ADD "); // [ column ]
+                sql.append(" ADD "); // [ column ] not in Oracle
                 sql.append(member.sqlName()).append(' ');
                 sql.append(indexSqlType(dialect, member));
                 alterSqls.add(sql.toString());
@@ -569,7 +604,7 @@ class TableDDL {
         for (String sqlName : member.getValueAdapter().getColumnNames(dialect.getNamingConvention().sqlAutoGeneratedJoinValueColumnName())) {
             sql.append(", ");
             sql.append(sqlName).append(' ');
-            member.getValueAdapter().appendColumnDefinition(sql, dialect, member, sqlName);
+            sql.append(member.getValueAdapter().sqlColumnTypeDefinition(dialect, member, sqlName));
         }
 
         if (member.getMemberMeta().getObjectClassType() == ObjectClassType.EntityList) {
@@ -598,7 +633,7 @@ class TableDDL {
         sqlIdx.append(dialect.getNamingConvention().sqlTableIndexName(tableName,
                 Arrays.asList(dialect.getNamingConvention().sqlAutoGeneratedJoinOwnerColumnName())));
         sqlIdx.append(" ON ").append(tableModel.getFullTableName(tableName)).append(" (")
-                .append(dialect.getNamingConvention().sqlAutoGeneratedJoinOwnerColumnName()).append(")");
+        .append(dialect.getNamingConvention().sqlAutoGeneratedJoinOwnerColumnName()).append(")");
 
         sqls.add(sqlIdx.toString());
 
@@ -627,7 +662,7 @@ class TableDDL {
                 sql.append(fullTableName);
                 sql.append(" ADD "); // [ column ]
                 sql.append(sqlName).append(' ');
-                member.getValueAdapter().appendColumnDefinition(sql, dialect, member, sqlName);
+                sql.append(member.getValueAdapter().sqlColumnTypeDefinition(dialect, member, sqlName));
                 alterSqls.add(sql.toString());
             } else {
                 if (!member.getValueAdapter().isCompatibleType(dialect, columnMeta.getTypeName(), member, sqlName)) {

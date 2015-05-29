@@ -66,7 +66,7 @@ public class DerbyDialect extends Dialect {
     }
 
     @Override
-    public String getSequenceNextValSql(String sequenceName) {
+    public String sqlSequenceNextVal(String sequenceName) {
         if (sequencesBaseIdentity) {
             return "NEXT VALUE FOR " + sequenceName;
         } else {
@@ -75,7 +75,7 @@ public class DerbyDialect extends Dialect {
     }
 
     @Override
-    public String getSequenceCurentValueSql(String sequenceName) {
+    public String sqlSequenceCurentValue(String sequenceName) {
         if (sequencesBaseIdentity) {
             return "CURRENT VALUE FOR " + sequenceName;
         } else {
@@ -89,16 +89,16 @@ public class DerbyDialect extends Dialect {
     }
 
     @Override
-    public String getCreateSequenceSql(String sequenceName, int identityOffset) {
+    public String sqlCreateSequence(String sequenceName, int identityOffset) {
         if (sequencesBaseIdentity) {
             return "CREATE SEQUENCE " + sequenceName + ((identityOffset != 0) ? (" START WITH " + identityOffset) : "");
         } else {
-            return super.getCreateSequenceSql(sequenceName, identityOffset);
+            return super.sqlCreateSequence(sequenceName, identityOffset);
         }
     }
 
     @Override
-    public String getDropSequenceSql(String sequenceName) {
+    public String sqlDropSequence(String sequenceName) {
         if (sequencesBaseIdentity) {
             return "DROP SEQUENCE " + sequenceName;
         } else {
@@ -113,6 +113,16 @@ public class DerbyDialect extends Dialect {
         } else {
             return "ALTER TABLE  " + tableName + "  ALTER COLUMN " + this.getNamingConvention().sqlIdColumnName() + " RESTART WITH " + identityOffset + "";
         }
+    }
+
+    @Override
+    public String sqlChangeDateType(String columnSqlName) {
+        return "ALTER COLUMN " + columnSqlName + " SET DATA TYPE";
+    }
+
+    @Override
+    public String sqlChangeNullable(String columnSqlName, String columnTypeSQLDefinition, boolean nullable) {
+        return "ALTER COLUMN " + columnSqlName + (nullable ? " " : " NOT") + " NULL";
     }
 
     @Override

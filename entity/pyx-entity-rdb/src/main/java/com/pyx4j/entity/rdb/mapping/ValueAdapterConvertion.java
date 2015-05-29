@@ -52,13 +52,23 @@ class ValueAdapterConvertion implements ValueAdapter {
     }
 
     @Override
-    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String columnName) {
-        valueAdapter.appendColumnDefinition(sql, dialect, member, columnName);
+    public String sqlColumnTypeDefinition(Dialect dialect, MemberOperationsMeta member, String columnName) {
+        return valueAdapter.sqlColumnTypeDefinition(dialect, member, columnName);
     }
 
     @Override
     public boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String columnName) {
         return valueAdapter.isCompatibleType(dialect, typeName, member, columnName);
+    }
+
+    @Override
+    public boolean isColumnTypeChanges(Dialect dialect, String typeName, int columnSize, MemberOperationsMeta member, String sqlColumnName) {
+        return valueAdapter.isColumnTypeChanges(dialect, typeName, columnSize, member, sqlColumnName);
+    }
+
+    @Override
+    public String toSqlValue(Dialect dialect, String columnName, String argumentPlaceHolder) {
+        return valueAdapter.toSqlValue(null, columnName, argumentPlaceHolder);
     }
 
     @SuppressWarnings("unchecked")

@@ -28,9 +28,13 @@ import com.pyx4j.entity.rdb.dialect.Dialect;
 
 interface ValueAdapter extends ValueBindAdapter {
 
-    void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String columnName);
+    String sqlColumnTypeDefinition(Dialect dialect, MemberOperationsMeta member, String sqlColumnName);
 
-    boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String columnName);
+    boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String sqlColumnName);
+
+    boolean isColumnTypeChanges(Dialect dialect, String typeName, int columnSize, MemberOperationsMeta member, String sqlColumnName);
+
+    String toSqlValue(Dialect dialect, String columnName, String argumentPlaceHolder);
 
     Serializable retrieveValue(ResultSet rs, String memberSqlName) throws SQLException;
 

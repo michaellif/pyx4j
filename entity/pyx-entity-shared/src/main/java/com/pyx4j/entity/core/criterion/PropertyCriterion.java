@@ -38,9 +38,12 @@ public class PropertyCriterion implements Criterion {
     public static final char WILDCARD_CHAR = '*';
 
     public static enum Restriction {
+
         LESS_THAN, LESS_THAN_OR_EQUAL, GREATER_THAN, GREATER_THAN_OR_EQUAL, EQUAL, NOT_EQUAL, IN, NOT_IN,
 
-        RDB_LIKE, NOT_EXISTS
+        RDB_LIKE, TEXT_SEARCH,
+
+        NOT_EXISTS
     }
 
     private Path propertyPath;
@@ -146,6 +149,10 @@ public class PropertyCriterion implements Criterion {
 
     public static PropertyCriterion like(IObject<?> member, String value) {
         return new PropertyCriterion(member, Restriction.RDB_LIKE, value);
+    }
+
+    public static PropertyCriterion textSearch(IObject<?> member, String value) {
+        return new PropertyCriterion(member, Restriction.TEXT_SEARCH, value);
     }
 
     public static PropertyCriterion ne(IObject<?> member, IPrimitive<?> value) {
