@@ -44,14 +44,11 @@ public class ListServiceSuggestOptionsGrabber<E extends IEntity> implements IOpt
     @Override
     public void grabOptions(final Request request, final Callback<E> callback) {
 
-        if (CommonsStringUtils.isEmpty(request.getQuery())) {
-            callback.onOptionsReady(request, new Response<E>());
-            return;
-        }
-
         EntityListCriteria<E> criteria = EntityListCriteria.create(entityClass);
         criteria.setPageSize(request.getLimit());
-        criteria.add(new TextSearchCriterion(request.getQuery()));
+        if (!CommonsStringUtils.isEmpty(request.getQuery())) {
+            criteria.add(new TextSearchCriterion(request.getQuery()));
+        }
 
         service.list(new AsyncCallback<EntitySearchResult<E>>() {
 
