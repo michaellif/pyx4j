@@ -288,11 +288,6 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         }
     }
 
-    @Override
-    public void onAbandon() {
-        super.onAbandon();
-    }
-
     public void addValidations() {
 
     }

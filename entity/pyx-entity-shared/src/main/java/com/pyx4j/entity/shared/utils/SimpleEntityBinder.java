@@ -42,6 +42,7 @@ import com.pyx4j.entity.core.Path;
  *
  * bind() function should be implemented to map members that needs to be copied of one class to another.
  */
+//TODO Change order of parameters or order of generics, Binding to use EntityBinder interface
 public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity> implements EntityBinder<BO, TO> {
 
     protected Class<BO> boClass;
@@ -135,7 +136,10 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
         if (canAddToBinding(b.boMemberPath) && canAddToBinding(b.toMemberPath)) {
             binding.add(b);
         }
-        bindingByTOMemberPath.put(b.toMemberPath, b);
+        Binding previous = bindingByTOMemberPath.put(b.toMemberPath, b);
+        if (previous != null) {
+            binding.remove(previous);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -221,12 +225,41 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
         return null;
     }
 
+    // TODO This will be refactored! for this prototype this classes are not reused so it is safe to keep it as member.
+    private BindingContext context;
+
+    // TODO move to argument of createTO
+    public void inContext(BindingContext context) {
+        this.context = context;
+    }
+
+    // TODO move to argument of createTO
+    public BindingContext context() {
+        if (context == null) {
+            context = new BindingContext();
+        }
+        return context;
+    }
+
     @Override
     public TO createTO(BO bo) {
-        TO to = EntityFactory.create(toClass);
+        @SuppressWarnings("unchecked")
+        TO to = (TO) context().get(bo);
+        if (to != null) {
+            return to;
+        }
+
+        to = EntityFactory.create(toClass);
         if (copyPrimaryKey) {
             to.setPrimaryKey(bo.getPrimaryKey());
         }
+
+        if (bo.getAttachLevel() != AttachLevel.Attached) {
+            to.setAttachLevel(bo.getAttachLevel());
+        }
+
+        context().put(bo, to);
+        // TODO pass context as argument
         copyBOtoTO(bo, to);
         return to;
     }
@@ -260,7 +293,17 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
                     }
                 }
 
+                // Bypass copy if it was already copied.
+                if (dboM instanceof IEntity) {
+                    IEntity processed = context().get((IEntity) dboM);
+                    if (processed != null) {
+                        ((IEntity) dtoM).set(processed);
+                        continue;
+                    }
+                }
+
                 if (dboM.getAttachLevel() == AttachLevel.Detached) {
+                    //TODO slava, considre refactoring in order to merge functionality with copyTOtoBO
                     if (!(dtoM instanceof IPrimitive<?>)) {
                         dtoM.setAttachLevel(AttachLevel.Detached);
                     }
@@ -292,8 +335,15 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
                         dtoM.setValue(dboM.getValue());
                     }
                 } else if (dtoM instanceof IEntity) {
-                    b.binder.copyBOtoTO((IEntity) dboM, (IEntity) dtoM);
+                    if (((IEntity) dboM).isNull()) {
+                        ((IEntity) dtoM).set(null);
+                    } else {
+                        b.binder.context = context();
+                        // TODO pass context as argument
+                        ((IEntity) dtoM).set(b.binder.createTO((IEntity) dboM));
+                    }
                 } else if (dboM instanceof ICollection) {
+                    b.binder.context = context();
                     ((ICollection<IEntity, ?>) dtoM).clear();
                     for (IEntity dboMi : (ICollection<IEntity, ?>) dboM) {
                         ((ICollection<IEntity, ?>) dtoM).add(b.binder.createTO(dboMi));
@@ -305,10 +355,23 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
 
     @Override
     public BO createBO(TO to) {
-        BO dbo = EntityFactory.create(boClass);
+        @SuppressWarnings("unchecked")
+        BO dbo = (BO) context().get(to);
+        if (dbo != null) {
+            return dbo;
+        }
+
+        dbo = EntityFactory.create(boClass);
         if (copyPrimaryKey) {
             dbo.setPrimaryKey(to.getPrimaryKey());
         }
+
+        if (to.getAttachLevel() != AttachLevel.Attached) {
+            dbo.setAttachLevel(to.getAttachLevel());
+        }
+
+        context().put(to, dbo);
+        // TODO pass context as argument
         copyTOtoBO(to, dbo);
         return dbo;
     }
@@ -324,8 +387,19 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
             if (b.boMemberPath != null) {
                 IObject dboM = bo.getMember(b.boMemberPath);
 
+                // Bypass copy if it was already copied.
+                if (dboM instanceof IEntity) {
+                    IEntity processed = context().get((IEntity) dtoM);
+                    if (processed != null) {
+                        ((IEntity) dboM).set(processed);
+                        continue;
+                    }
+                }
+
                 if (dtoM.getAttachLevel() == AttachLevel.Detached) {
-                    dboM.setAttachLevel(AttachLevel.Detached);
+                    if (dboM.getAttachLevel() != AttachLevel.Detached) {
+                        dboM.setAttachLevel(AttachLevel.Detached);
+                    }
                 } else if (b.binder == null) {
                     if (dtoM instanceof ICollection) {
                         ICollection<IEntity, ?> dboMc = (ICollection<IEntity, ?>) dboM;
@@ -351,8 +425,15 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
                         dboM.setValue(dtoM.getValue());
                     }
                 } else if (dtoM instanceof IEntity) {
-                    b.binder.copyTOtoBO((IEntity) dtoM, (IEntity) dboM);
+                    if (((IEntity) dtoM).isNull()) {
+                        ((IEntity) dboM).set(null);
+                        continue;
+                    } else {
+                        b.binder.context = context();
+                        ((IEntity) dboM).set(b.binder.createBO((IEntity) dtoM));
+                    }
                 } else if (dtoM instanceof ICollection) {
+                    b.binder.context = context();
                     ((ICollection<IEntity, ?>) dboM).clear();
                     for (IEntity dtoMi : (ICollection<IEntity, ?>) dtoM) {
                         ((ICollection<IEntity, ?>) dboM).add(b.binder.createBO(dtoMi));

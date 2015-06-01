@@ -152,6 +152,7 @@ public class RichTextToolbar extends FlowPanel {
 
     private void initTopToolbar() {
         topToolbar = new FlowPanel();
+        topToolbar.setStyleName(RichTextTheme.StyleName.RteToolbarTop.name());
         topToolbar.setWidth("100%");
 
         topButtonBar = new Toolbar();
@@ -196,6 +197,8 @@ public class RichTextToolbar extends FlowPanel {
 
     private void initInsertToolbar() {
         insertToolbar = new FlowPanel();
+        insertToolbar.setStyleName(RichTextTheme.StyleName.RteToolbarBottom.name());
+
         insertToolbar.setVisible(false);
 
         topButtonBar.addItem(insertButton = createButton(i18n.tr("Insert"), i18n.tr("Insert"), new Command() {
@@ -303,6 +306,8 @@ public class RichTextToolbar extends FlowPanel {
 
     private void initFontToolbar() {
         fontToolbar = new FlowPanel();
+        fontToolbar.setStyleName(RichTextTheme.StyleName.RteToolbarBottom.name());
+
         fontToolbar.setVisible(false);
 
         topButtonBar.addItem(fontButton = createButton(i18n.tr("Font"), i18n.tr("Font"), new Command() {
@@ -344,6 +349,7 @@ public class RichTextToolbar extends FlowPanel {
 
     private void initFormatToolbar() {
         formatToolbar = new FlowPanel();
+        formatToolbar.setStyleName(RichTextTheme.StyleName.RteToolbarBottom.name());
         formatToolbar.setVisible(false);
 
         topButtonBar.addItem(formatButton = createButton(i18n.tr("Format"), i18n.tr("Format"), new Command() {

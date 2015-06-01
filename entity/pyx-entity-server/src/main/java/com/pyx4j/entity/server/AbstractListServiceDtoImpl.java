@@ -27,7 +27,6 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
@@ -134,15 +133,6 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
      * TODO eod143 rename onAfterBind
      */
     protected void enhanceListRetrieved(BO bo, TO to) {
-    }
-
-    /**
-     *
-     * @deprecated TODO VladS switch to EntityQueryCriteriaBinder
-     */
-    @Deprecated
-    protected Path convertPropertyDTOPathToDBOPath(Path path, BO boProto, TO toProto) {
-        throw new Error("Unsupported query property path " + path);
     }
 
     /**

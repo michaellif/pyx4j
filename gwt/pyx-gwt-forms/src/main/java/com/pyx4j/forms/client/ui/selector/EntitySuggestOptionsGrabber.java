@@ -32,10 +32,10 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.forms.client.ui.ReferenceDataManager;
 import com.pyx4j.widgets.client.selector.MultyWordSuggestOptionsGrabber;
 
-class EntitySuggestOptionsGrabber<E extends IEntity> extends MultyWordSuggestOptionsGrabber<IEntity> {
+public class EntitySuggestOptionsGrabber<E extends IEntity> extends MultyWordSuggestOptionsGrabber<IEntity> {
 
     @SuppressWarnings("unchecked")
-    EntitySuggestOptionsGrabber(MemberMeta memberMeta) {
+    public EntitySuggestOptionsGrabber(MemberMeta memberMeta) {
 
         setFormatter(new IFormatter<IEntity, String>() {
             @Override

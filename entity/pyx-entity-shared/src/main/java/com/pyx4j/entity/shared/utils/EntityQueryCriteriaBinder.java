@@ -75,6 +75,8 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
 
     private final Map<Path, CriteriaEnhancer<BO>> criteriaEnhancerBinding = new HashMap<>();
 
+    private final List<DefaultCriteriaEnhancer<TO>> defaultTOCriteriaEnhancers = new ArrayList<>();
+
     private final List<DefaultCriteriaEnhancer<BO>> defaultCriteriaEnhancers = new ArrayList<>();
 
     private final TO toProto;
@@ -109,6 +111,13 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
 
     public final void bind(Path toPath, Path boPath) {
         pathBinding.put(toPath, boPath);
+    }
+
+    /**
+     * This Enhancer executed First, to setup default TO Criteria override what had came from UI
+     */
+    public final void addDefaultTOCriteriaEnhancer(DefaultCriteriaEnhancer<TO> valueConvertor) {
+        defaultTOCriteriaEnhancers.add(valueConvertor);
     }
 
     public final void addCriteriaValueConverter(IObject<?> toMember, CriteriaValueConverter valueConvertor) {
@@ -158,6 +167,10 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
     }
 
     private void convertCriteria(EntityQueryCriteria<TO> toCriteria, EntityQueryCriteria<BO> boCriteria) {
+        for (DefaultCriteriaEnhancer<TO> enhancer : defaultTOCriteriaEnhancers) {
+            enhancer.enhanceCriteria(toCriteria);
+        }
+
         if ((toCriteria.getFilters() != null) && (!toCriteria.getFilters().isEmpty())) {
             boCriteria.addAll(convertFilters(boCriteria, toCriteria.getFilters()));
         }

@@ -34,4 +34,7 @@ public interface B1super extends IEntity {
 
     IPrimitive<String> nameB1();
 
+    // Not Owner to ensure all cases are covered
+    B1superHolder holder();
+
 }

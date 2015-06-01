@@ -153,6 +153,9 @@ public class MailQueue implements Runnable {
             persistable.statusCallbackClass().setValue(callbackClass.getName());
         }
         Collection<String> sendTo = CollectionUtils.union(CollectionUtils.union(mailMessage.getTo(), mailMessage.getCc()), mailMessage.getBcc());
+        if (sendTo.isEmpty()) {
+            throw new Error("No destination E-Mail addresses found");
+        }
         persistable.sendTo().setValue(ConverterUtils.convertStringCollection(sendTo, ", "));
         EntityFormatUtils.trimToLength(persistable.sendTo());
         persistable.keywords().setValue(ConverterUtils.convertStringCollection(mailMessage.getKeywords(), ", "));

@@ -33,7 +33,7 @@ public class DualColumnFluidPanel implements IsWidget {
     public static final String CSS_VAR_FORM_COLLAPSING_LAYOUT_TYPE = "FormCollapsingLayoutType";
 
     public static enum Location {
-        Dual, Left, Right
+        Dual, Left, Right, Absolute
     }
 
     private final ContentPanel contentPanel;
@@ -49,6 +49,7 @@ public class DualColumnFluidPanel implements IsWidget {
         if (widgetCount == 0) {
             switch (location) {
             case Dual:
+            case Absolute:
                 panel = new BlockPanel(Location.Dual);
                 contentPanel.add(panel);
                 break;
@@ -68,6 +69,7 @@ public class DualColumnFluidPanel implements IsWidget {
             if (panel.location != location) {
                 switch (location) {
                 case Dual:
+                case Absolute:
                     panel = new BlockPanel(Location.Dual);
                     contentPanel.add(panel);
                     break;
@@ -166,6 +168,7 @@ public class DualColumnFluidPanel implements IsWidget {
                 addStyleDependentName(FormPanelTheme.StyleDependent.right.name());
                 break;
             case Dual:
+            case Absolute:
                 addStyleDependentName(FormPanelTheme.StyleDependent.dual.name());
                 break;
             }

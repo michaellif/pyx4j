@@ -278,8 +278,11 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        // TODO implement this
-        throw new UnsupportedOperationException();
+        boolean changed = false;
+        for (Object object : c) {
+            changed |= remove(object);
+        }
+        return changed;
     }
 
     @Override

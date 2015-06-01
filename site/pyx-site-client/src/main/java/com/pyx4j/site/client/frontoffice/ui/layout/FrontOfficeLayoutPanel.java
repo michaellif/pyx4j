@@ -28,10 +28,10 @@ import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.layout.client.Layout.Layer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.gwt.commons.BrowserType;
@@ -328,6 +328,14 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         } else {
             popupCommHolder.hide();
         }
+    }
+
+    public boolean isPopupCommVisible() {
+        return popupCommHolder.isShowing();
+    }
+
+    public boolean isSideCommVisible() {
+        return sideCommVisible;
     }
 
     @Override

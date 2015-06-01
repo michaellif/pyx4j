@@ -295,6 +295,10 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
         }
     }
 
+    public Button getActionButton() {
+        return actionButton;
+    }
+
     @Override
     public void setWatermark(String watermark) {
         this.watermark = watermark;

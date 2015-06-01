@@ -137,7 +137,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     private boolean editingInProgress = false;
 
-    protected Set<AbstractValidationError> validationErrors = new HashSet<>();
+    private Set<AbstractValidationError> validationErrors = new HashSet<>();
 
     private DECORATOR_TYPE decorator;
 
@@ -757,6 +757,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         info.append("editable").append("=").append(isEditable()).append(";");
         info.append("visible").append("=").append(isVisible()).append(";");
         info.append("visited").append("=").append(isVisited()).append(";");
+        info.append("viewable").append("=").append(isViewable()).append(";");
         info.append("valid").append("=").append(isValid()).append(";");
         if (!isValid()) {
             info.append("validationErrors").append("=[");
