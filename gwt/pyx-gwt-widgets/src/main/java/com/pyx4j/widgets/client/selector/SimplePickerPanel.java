@@ -146,7 +146,7 @@ public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E>
         }
         table.setRowData(suggestions.subList(0, suggestions.size() < SUGGESTIONS_PER_PAGE ? suggestions.size() : SUGGESTIONS_PER_PAGE));
 
-        if (options.size() > 0) {
+        if (options != null && options.size() > 0) {
             Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
                 @Override
@@ -184,7 +184,7 @@ public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E>
         if (selectionModel.getSelectedObject() != null) {
             return selectionModel.getSelectedObject();
         } else if (table.getKeyboardSelectedRow() >= 0) {
-            return suggestions.get(table.getKeyboardSelectedRow());
+            return suggestions == null ? null : suggestions.get(table.getKeyboardSelectedRow());
         } else {
             return null;
         }
