@@ -40,4 +40,9 @@ public class TextSearchCriterion implements Criterion {
         return textQuery;
     }
 
+    @Override
+    public String toString() {
+        return "TextSearchCriterion [textQuery=" + textQuery + "]";
+    }
+
 }
