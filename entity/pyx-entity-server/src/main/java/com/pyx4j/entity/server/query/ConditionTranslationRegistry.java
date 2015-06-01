@@ -28,20 +28,30 @@ import com.pyx4j.entity.core.query.IEntityCondition;
 import com.pyx4j.entity.core.query.IStringCondition;
 
 @SuppressWarnings("rawtypes")
-public class ConditionTranslationRegistry {
+class ConditionTranslationRegistry {
 
-    private static Map<Class<?>, ConditionTranslation<?>> registry = new HashMap<>();
+    private Map<Class<?>, ConditionTranslation<?>> registry = new HashMap<>();
 
-    // TODO add ability to Register custom IConditions
+    private static class SingletonHolder {
+        public static final ConditionTranslationRegistry INSTANCE = new ConditionTranslationRegistry();
+    }
 
-    static {
-        registry.put(IStringCondition.class, new ConditionTranslationString());
-        registry.put(IDateCondition.class, new ConditionTranslationDate());
-        registry.put(IEntityCondition.class, new ConditionTranslationEntity());
+    static ConditionTranslationRegistry instance() {
+        return SingletonHolder.INSTANCE;
+    }
+
+    private ConditionTranslationRegistry() {
+        register(IStringCondition.class, new ConditionTranslationString());
+        register(IDateCondition.class, new ConditionTranslationDate());
+        register(IEntityCondition.class, new ConditionTranslationEntity());
+    }
+
+    <C extends ICondition> void register(Class<C> conditionClass, ConditionTranslation<C> conditionTranslation) {
+        registry.put(conditionClass, conditionTranslation);
     }
 
     @SuppressWarnings("unchecked")
-    static ConditionTranslation<ICondition> getConditionTranslation(ICondition condition) {
+    ConditionTranslation<ICondition> getConditionTranslation(ICondition condition) {
         ConditionTranslation ct = registry.get(condition.getInstanceValueClass());
         //TODO See PYX-14.
         if (ct == null && condition instanceof IEntityCondition) {

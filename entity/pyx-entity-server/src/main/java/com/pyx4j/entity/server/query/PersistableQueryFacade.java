@@ -22,11 +22,15 @@ package com.pyx4j.entity.server.query;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.query.AbstractQueryColumnStorage;
+import com.pyx4j.entity.core.query.ICondition;
 import com.pyx4j.entity.core.query.IQuery;
-import com.pyx4j.entity.core.query.IStringCondition;
 import com.pyx4j.entity.core.query.QueryBinder;
 import com.pyx4j.entity.core.query.QueryStorage;
 
+/**
+ * see PersistableQueryTestCase for usage example
+ *
+ */
 public interface PersistableQueryFacade {
 
     public <E extends IEntity, Q extends IQuery<E>> EntityQueryCriteria<E> convertToCriteria(Q query, QueryBinder<E, Q> binder);
@@ -41,8 +45,9 @@ public interface PersistableQueryFacade {
 
     public <Q extends IQuery<? extends IEntity>> Q retriveQuery(Class<Q> queryClass, QueryStorage queryStorageId);
 
-    public void registerColumnStorageClass(Class<AbstractQueryColumnStorage> persistableEntityClass);
+    public void registerColumnStorageClass(Class<? extends AbstractQueryColumnStorage> persistableEntityClass);
 
-    //register  IConditionAdapter
-    // register(IStringMishaCondition.class, new ConditionTranslationStringMisha());
+    public void preloadColumnStorage();
+
+    public <C extends ICondition> void register(Class<C> conditionClass, ConditionTranslation<C> conditionTranslation);
 }

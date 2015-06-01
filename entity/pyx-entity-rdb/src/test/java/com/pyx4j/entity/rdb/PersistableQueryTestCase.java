@@ -23,12 +23,12 @@ import java.util.List;
 
 import org.junit.Assert;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.query.QueryBinder;
 import com.pyx4j.entity.core.query.QueryStorage;
-import com.pyx4j.entity.server.query.ColumnStorage;
-import com.pyx4j.entity.server.query.PersistableQueryManager;
+import com.pyx4j.entity.server.query.PersistableQueryFacade;
 import com.pyx4j.entity.server.query.QueryBinderBuilder;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.Department;
@@ -87,7 +87,7 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
             EmployeeQuery query = EntityFactory.create(EmployeeQuery.class);
             query.firstName().value().setValue("Bob");
 
-            EntityQueryCriteria<Employee> criteria = PersistableQueryManager.convertToCriteria(query, binder);
+            EntityQueryCriteria<Employee> criteria = ServerSideFactory.create(PersistableQueryFacade.class).convertToCriteria(query, binder);
             criteria.eq(criteria.proto().workAddress().streetName(), setId);
             List<Employee> emps = srv.query(criteria);
             Assert.assertEquals("result set size", 1, emps.size());
@@ -97,7 +97,7 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
             EmployeeQuery query = EntityFactory.create(EmployeeQuery.class);
             query.firstName().value().setValue("Harry");
 
-            EntityQueryCriteria<Employee> criteria = PersistableQueryManager.convertToCriteria(query, binder);
+            EntityQueryCriteria<Employee> criteria = ServerSideFactory.create(PersistableQueryFacade.class).convertToCriteria(query, binder);
             criteria.eq(criteria.proto().workAddress().streetName(), setId);
             List<Employee> emps = srv.query(criteria);
             Assert.assertEquals("result set size", 1, emps.size());
@@ -106,25 +106,27 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
     }
 
     public void testQueryPersistence() {
-        ColumnStorage.instance().initialize(TestsQueryCriteriaColumnStorage.class);
+        ServerSideFactory.create(PersistableQueryFacade.class).registerColumnStorageClass(TestsQueryCriteriaColumnStorage.class);
+        ServerSideFactory.create(PersistableQueryFacade.class).preloadColumnStorage();
+
         QueryStorage storeHere = EntityFactory.create(QueryStorage.class);
 
         {
             EmployeeQuery query = EntityFactory.create(EmployeeQuery.class);
             query.firstName().value().setValue("Bob");
-            PersistableQueryManager.persistQuery(query, storeHere);
+            ServerSideFactory.create(PersistableQueryFacade.class).persistQuery(query, storeHere);
         }
 
         // Query
         {
             QueryStorage storeHereId = storeHere.<QueryStorage> createIdentityStub();
 
-            EmployeeQuery query = PersistableQueryManager.retriveQuery(EmployeeQuery.class, storeHereId);
+            EmployeeQuery query = ServerSideFactory.create(PersistableQueryFacade.class).retriveQuery(EmployeeQuery.class, storeHereId);
 
             Assert.assertEquals("stored value", "Bob", query.firstName().value().getValue());
 
             // Use stored  Query
-            EntityQueryCriteria<Employee> criteria = PersistableQueryManager.convertToCriteria(query, binder());
+            EntityQueryCriteria<Employee> criteria = ServerSideFactory.create(PersistableQueryFacade.class).convertToCriteria(query, binder());
             criteria.eq(criteria.proto().workAddress().streetName(), setId);
             List<Employee> emps = srv.query(criteria);
             Assert.assertEquals("result set size", 1, emps.size());
@@ -139,25 +141,26 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
         emp1.department().set(department1);
         srv.persist(emp1);
 
-        ColumnStorage.instance().initialize(TestsQueryCriteriaColumnStorage.class);
+        ServerSideFactory.create(PersistableQueryFacade.class).registerColumnStorageClass(TestsQueryCriteriaColumnStorage.class);
+        ServerSideFactory.create(PersistableQueryFacade.class).preloadColumnStorage();
         QueryStorage storeHere = EntityFactory.create(QueryStorage.class);
 
         {
             EmployeeQuery query = EntityFactory.create(EmployeeQuery.class);
             query.department().references().add(department1);
-            PersistableQueryManager.persistQuery(query, storeHere);
+            ServerSideFactory.create(PersistableQueryFacade.class).persistQuery(query, storeHere);
         }
 
         // Query
         {
             QueryStorage storeHereId = storeHere.<QueryStorage> createIdentityStub();
 
-            EmployeeQuery query = PersistableQueryManager.retriveQuery(EmployeeQuery.class, storeHereId);
+            EmployeeQuery query = ServerSideFactory.create(PersistableQueryFacade.class).retriveQuery(EmployeeQuery.class, storeHereId);
 
             Assert.assertTrue("stored value", query.department().refs().contains(department1.getPrimaryKey()));
 
             // Use stored  Query
-            EntityQueryCriteria<Employee> criteria = PersistableQueryManager.convertToCriteria(query, binder());
+            EntityQueryCriteria<Employee> criteria = ServerSideFactory.create(PersistableQueryFacade.class).convertToCriteria(query, binder());
             criteria.eq(criteria.proto().workAddress().streetName(), setId);
             List<Employee> emps = srv.query(criteria);
             Assert.assertEquals("result set size", 1, emps.size());
