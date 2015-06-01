@@ -223,7 +223,7 @@ public class EntityDtoBinderTest extends InitializerTestBase {
         Assert.assertEquals("Proper instance", Concrete2Entity.class, ent2.reference().getInstanceValueClass());
     }
 
-    private static class PluralPolymorphicBinder extends PolymorphicEntityBinder<B1super, B1superTO> {
+    public static class PluralPolymorphicBinder extends PolymorphicEntityBinder<B1super, B1superTO> {
 
         protected PluralPolymorphicBinder() {
             super(B1super.class, B1superTO.class);

@@ -25,21 +25,24 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Safe to use as simple Singleton sequence instance.
- * 
+ *
  * Example:
- * 
+ *
  * public final static UniqueInteger singleton = new UniqueInteger("accountNumbers");
  * or
  * singleton = UniqueInteger.getInstance("accountNumbers");
- * 
+ *
  */
 public class UniqueInteger {
 
     private static final Map<String, UniqueInteger> registry = new HashMap<>();
 
+    private String reservedName;
+
     private AtomicInteger atomicInteger;
 
     public UniqueInteger(String reservedName) {
+        this.reservedName = reservedName;
         synchronized (registry) {
             UniqueInteger sameName = registry.get(reservedName);
             if (sameName != null) {
@@ -68,6 +71,10 @@ public class UniqueInteger {
 
     public String nextAsString() {
         return String.valueOf(next());
+    }
+
+    public String nextIdAsString() {
+        return reservedName + String.valueOf(next());
     }
 
     @Override

@@ -38,6 +38,7 @@ public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEn
     @Override
     protected abstract void bind();
 
+    //TODO Change order of parameters or order of generics
     @SuppressWarnings("unchecked")
     protected final <TBO extends BO, TTO extends TO> void bind(Class<TTO> toClass, Class<TBO> boClass, EntityBinder<TBO, TTO> binder) {
         bindingByBO.put(boClass, (EntityBinder<BO, TO>) binder);
@@ -73,6 +74,7 @@ public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEn
     public TO createTO(BO bo) {
         EntityBinder<BO, TO> subBinder = getBinderByBO(bo);
         assert subBinder != null : "Binder not found for " + bo.getDebugExceptionInfoString();
+        ((SimpleEntityBinder) subBinder).inContext(context()); // TODO pass this as argument
         return subBinder.createTO(bo.<BO> cast());
     }
 
@@ -80,21 +82,26 @@ public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEn
     public void copyBOtoTO(BO bo, TO to) {
         EntityBinder<BO, TO> subBinder = getBinderByBO(bo);
         assert subBinder != null : "Binder not found for " + bo.getDebugExceptionInfoString();
+        ((SimpleEntityBinder) subBinder).inContext(context()); // TODO pass this as argument
         subBinder.copyBOtoTO(bo, to);
+        super.copyBOtoTO(bo, to);
     }
 
     @Override
     public BO createBO(TO to) {
         EntityBinder<BO, TO> subBinder = getBinderByTO(to);
-        assert subBinder != null : "Binder not found for " + to.getDebugExceptionInfoString();
+        assert subBinder != null : "Binder not found for " + to.getDebugExceptionInfoString() + " in binder " + this.getClass().getName();
+        ((SimpleEntityBinder) subBinder).inContext(context()); // TODO pass this as argument
         return subBinder.createBO(to.<TO> cast());
     }
 
     @Override
     public void copyTOtoBO(TO to, BO bo) {
         EntityBinder<BO, TO> subBinder = getBinderByTO(to);
-        assert subBinder != null : "Binder not found for " + to.getDebugExceptionInfoString();
+        assert subBinder != null : "Binder not found for " + to.getDebugExceptionInfoString() + " in binder " + this.getClass().getName();
+        ((SimpleEntityBinder) subBinder).inContext(context()); // TODO pass this as argument
         subBinder.copyTOtoBO(to, bo);
+        super.copyTOtoBO(to, bo);
     }
 
     @Override

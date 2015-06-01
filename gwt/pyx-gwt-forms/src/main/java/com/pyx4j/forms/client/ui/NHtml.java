@@ -37,7 +37,9 @@ public class NHtml<E> extends NField<E, Label, CHtml<E>, Label> {
         if (isViewable()) {
             getViewer().setHTML(newValue);
         } else {
-            if (!newValue.equals(getEditor().getText())) {
+            if (newValue == null) {
+                getEditor().setHTML("");
+            } else if (!newValue.equals(getEditor().getText())) {
                 getEditor().setHTML(newValue);
             }
         }

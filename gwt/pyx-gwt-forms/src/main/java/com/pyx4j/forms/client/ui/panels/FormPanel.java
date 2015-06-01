@@ -71,6 +71,9 @@ public class FormPanel extends AbstractFormPanel implements IsWidget {
         case Dual:
             handlerPanel.addStyleDependentName(FormPanelTheme.StyleDependent.dual.name());
             break;
+        case Absolute:
+            handlerPanel.addStyleDependentName(FormPanelTheme.StyleDependent.absolute.name());
+            break;
         }
         fluidPanel.append(location, handlerPanel);
     }

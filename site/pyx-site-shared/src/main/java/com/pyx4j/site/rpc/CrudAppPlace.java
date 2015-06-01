@@ -54,7 +54,7 @@ public abstract class CrudAppPlace extends AppPlace {
     }
 
     public void setType(Type type) {
-        queryArg(ARG_NAME_CRUD_TYPE, type.name());
+        addQueryArg(ARG_NAME_CRUD_TYPE, type.name());
     }
 
     public Type getType() {
@@ -69,7 +69,7 @@ public abstract class CrudAppPlace extends AppPlace {
     public CrudAppPlace formListerPlace(Key parentID) {
         setType(Type.lister);
         if (parentID != null) {
-            queryArg(ARG_NAME_PARENT_ID, parentID.toString());
+            addQueryArg(ARG_NAME_PARENT_ID, parentID.toString());
         }
         return this;
     }
@@ -81,7 +81,7 @@ public abstract class CrudAppPlace extends AppPlace {
 
     public CrudAppPlace formViewerPlace(Key itemID, int tabIndex) {
         if (tabIndex >= 0) {
-            placeArg(ARG_NAME_TAB_IDX, String.valueOf(tabIndex));
+            addPlaceArg(ARG_NAME_TAB_IDX, String.valueOf(tabIndex));
         }
         return formViewerPlace(itemID);
     }
@@ -93,7 +93,7 @@ public abstract class CrudAppPlace extends AppPlace {
 
     public CrudAppPlace formEditorPlace(Key itemID, int tabIndex) {
         if (tabIndex >= 0) {
-            placeArg(ARG_NAME_TAB_IDX, String.valueOf(tabIndex));
+            addPlaceArg(ARG_NAME_TAB_IDX, String.valueOf(tabIndex));
         }
         return formEditorPlace(itemID);
     }
@@ -102,14 +102,14 @@ public abstract class CrudAppPlace extends AppPlace {
         setType(Type.editor);
         setStable(false);
         if (parentID != null) {
-            placeArg(ARG_NAME_PARENT_ID, parentID.toString());
+            addPlaceArg(ARG_NAME_PARENT_ID, parentID.toString());
         }
-        return (CrudAppPlace) placeArg(ARG_NAME_TAB_IDX, String.valueOf(0));
+        return (CrudAppPlace) addPlaceArg(ARG_NAME_TAB_IDX, String.valueOf(0));
     }
 
     public CrudAppPlace formNewItemPlace(Key parentID, Class<?> parentClass) {
         if (parentClass != null) {
-            placeArg(ARG_NAME_PARENT_CLASS, parentClass.getName());
+            addPlaceArg(ARG_NAME_PARENT_CLASS, parentClass.getName());
         }
         return formNewItemPlace(parentID);
     }
@@ -118,7 +118,7 @@ public abstract class CrudAppPlace extends AppPlace {
         this.initializationData = initializationData;
         setType(Type.editor);
         setStable(false);
-        return (CrudAppPlace) placeArg(ARG_NAME_TAB_IDX, String.valueOf(0));
+        return (CrudAppPlace) addPlaceArg(ARG_NAME_TAB_IDX, String.valueOf(0));
     }
 
     public InitializationData getInitializationData() {

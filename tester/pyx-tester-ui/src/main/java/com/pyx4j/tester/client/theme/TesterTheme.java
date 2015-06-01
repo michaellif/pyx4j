@@ -82,13 +82,13 @@ public class TesterTheme extends Theme {
             }
 
             @Override
-            protected int getSingleColumnWidth() {
+            protected int getContainerWidth() {
                 return 250;
             }
 
             @Override
-            protected int getDualColumnWidth() {
-                return 650;
+            protected int getLabelWidth() {
+                return 150;
             }
         });
 
