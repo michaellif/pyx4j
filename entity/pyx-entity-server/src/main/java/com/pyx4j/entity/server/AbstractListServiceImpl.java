@@ -21,11 +21,16 @@ package com.pyx4j.entity.server;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 
 public abstract class AbstractListServiceImpl<E extends IEntity> extends AbstractListServiceDtoImpl<E, E> implements AbstractListCrudService<E> {
 
     public AbstractListServiceImpl(Class<E> entityClass) {
         super(entityClass, entityClass);
+    }
+
+    public AbstractListServiceImpl(EntityBinder<E, E> binder) {
+        super(binder);
     }
 
 }
