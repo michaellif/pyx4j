@@ -36,6 +36,14 @@ public interface PersistableQueryFacade {
     public <E extends IEntity, Q extends IQuery<E>> EntityQueryCriteria<E> convertToCriteria(Q query, QueryBinder<E, Q> binder);
 
     /**
+     * Use already registered QueryBinder
+     *
+     * @param query
+     * @return
+     */
+    public <E extends IEntity, Q extends IQuery<E>> EntityQueryCriteria<E> convertToCriteria(Q query);
+
+    /**
      * @param query
      *            PersistableQuery to save
      * @param queryStorage
@@ -49,5 +57,7 @@ public interface PersistableQueryFacade {
 
     public void preloadColumnStorage();
 
-    public <C extends ICondition> void register(Class<C> conditionClass, ConditionTranslation<C> conditionTranslation);
+    public <C extends ICondition> void registerCondition(Class<C> conditionClass, ConditionTranslation<C> conditionTranslation);
+
+    public <E extends IEntity, Q extends IQuery<E>> void registerBinder(Class<Q> queryClass, QueryBinder<E, Q> binder);
 }

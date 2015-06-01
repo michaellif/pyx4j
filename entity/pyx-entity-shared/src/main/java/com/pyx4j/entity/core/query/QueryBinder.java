@@ -24,6 +24,6 @@ import com.pyx4j.entity.core.Path;
 
 public interface QueryBinder<BO extends IEntity, C extends IQuery<BO>> {
 
-    Path toEntityPath(Path criteriaPath);
+    Path toEntityPath(Path conditionPath);
 
 }
