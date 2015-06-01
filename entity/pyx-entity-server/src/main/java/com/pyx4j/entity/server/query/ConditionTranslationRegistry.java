@@ -22,9 +22,6 @@ package com.pyx4j.entity.server.query;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.Path;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.query.ICondition;
 import com.pyx4j.entity.core.query.IDateCondition;
 import com.pyx4j.entity.core.query.IEntityCondition;
@@ -44,18 +41,15 @@ public class ConditionTranslationRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    public static <E extends IEntity> void addCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, ICondition criterion) {
-        ConditionTranslation ct = registry.get(criterion.getInstanceValueClass());
-
+    static ConditionTranslation<ICondition> getConditionTranslation(ICondition condition) {
+        ConditionTranslation ct = registry.get(condition.getInstanceValueClass());
         //TODO See PYX-14.
-        if (ct == null && criterion instanceof IEntityCondition) {
+        if (ct == null && condition instanceof IEntityCondition) {
             ct = registry.get(IEntityCondition.class);
         }
-
-        if (ct != null) {
-            ct.enhanceCriteria(query, entityMemeberPath, criterion.<ICondition> cast());
-        } else {
-            throw new Error("Unknown criterion class " + criterion.getInstanceValueClass().getName());
+        if (ct == null) {
+            throw new Error("Unknown criterion class " + condition.getInstanceValueClass().getName());
         }
+        return ct;
     }
 }

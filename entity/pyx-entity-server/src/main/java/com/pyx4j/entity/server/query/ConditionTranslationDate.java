@@ -29,12 +29,12 @@ import com.pyx4j.entity.core.query.IDateCondition;
 public class ConditionTranslationDate extends AbstractConditionTranslation<IDateCondition> {
 
     @Override
-    public <E extends IEntity> void enhanceCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, IDateCondition criterion) {
-        if (!criterion.fromDate().isNull()) {
-            query.add(new PropertyCriterion(entityMemeberPath, Restriction.GREATER_THAN_OR_EQUAL, criterion.fromDate().getValue()));
+    public <E extends IEntity> void enhanceCriteria(EntityQueryCriteria<E> criteria, Path entityMemeberPath, IDateCondition condition) {
+        if (!condition.fromDate().isNull()) {
+            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.GREATER_THAN_OR_EQUAL, condition.fromDate().getValue()));
         }
-        if (!criterion.toDate().isNull()) {
-            query.add(new PropertyCriterion(entityMemeberPath, Restriction.LESS_THAN_OR_EQUAL, criterion.toDate().getValue()));
+        if (!condition.toDate().isNull()) {
+            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.LESS_THAN_OR_EQUAL, condition.toDate().getValue()));
         }
     }
 

@@ -29,9 +29,9 @@ import com.pyx4j.entity.core.query.IStringCondition;
 public class ConditionTranslationString extends AbstractConditionTranslation<IStringCondition> {
 
     @Override
-    public <E extends IEntity> void enhanceCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, IStringCondition criterion) {
-        if (!criterion.value().isNull()) {
-            query.add(new PropertyCriterion(entityMemeberPath, Restriction.RDB_LIKE, criterion.value().getValue()));
+    public <E extends IEntity> void enhanceCriteria(EntityQueryCriteria<E> criteria, Path entityMemeberPath, IStringCondition condition) {
+        if (!condition.value().isNull()) {
+            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.RDB_LIKE, condition.value().getValue()));
         }
     }
 }
