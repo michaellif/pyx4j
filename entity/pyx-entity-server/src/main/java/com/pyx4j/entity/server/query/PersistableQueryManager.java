@@ -36,9 +36,9 @@ import com.pyx4j.entity.core.query.QueryBinder;
 import com.pyx4j.entity.core.query.QueryStorage;
 import com.pyx4j.entity.server.Persistence;
 
-public class PersistableQueryManager {
+class PersistableQueryManager {
 
-    public static <E extends IEntity, Q extends IQuery<E>> EntityQueryCriteria<E> convertToCriteria(Q query, QueryBinder<E, Q> binder) {
+    static <E extends IEntity, Q extends IQuery<E>> EntityQueryCriteria<E> convertToCriteria(Q query, QueryBinder<E, Q> binder) {
         @SuppressWarnings("unchecked")
         EntityQueryCriteria<E> criteria = EntityQueryCriteria.create((Class<E>) query.proto().getEntityMeta().getEntityClass());
 
@@ -51,7 +51,7 @@ public class PersistableQueryManager {
             IObject<?> queryMember = query.getMember(memberName);
             if (queryMember instanceof ICondition) {
                 ICondition condition = (ICondition) queryMember;
-                ConditionTranslation<ICondition> ct = ConditionTranslationRegistry.getConditionTranslation(condition);
+                ConditionTranslation<ICondition> ct = ConditionTranslationRegistry.instance().getConditionTranslation(condition);
                 ct.enhanceCriteria(criteria, binder.toEntityPath(condition.getPath()), condition);
             }
         }
@@ -64,7 +64,7 @@ public class PersistableQueryManager {
      * @param queryStorage
      *            persists and update this object so app can save pointer.
      */
-    public static <Q extends IQuery<? extends IEntity>> void persistQuery(Q query, QueryStorage queryStorage) {
+    static <Q extends IQuery<? extends IEntity>> void persistQuery(Q query, QueryStorage queryStorage) {
         if (!queryStorage.id().isNull()) {
             Persistence.ensureRetrieve(queryStorage, AttachLevel.Attached);
         }
@@ -83,7 +83,7 @@ public class PersistableQueryManager {
                 ICondition condition = (ICondition) member;
                 condition.columnId().setValue(map.getKey(condition.getPath()));
 
-                ConditionTranslation<ICondition> ct = ConditionTranslationRegistry.getConditionTranslation(condition);
+                ConditionTranslation<ICondition> ct = ConditionTranslationRegistry.instance().getConditionTranslation(condition);
                 ct.onBeforePersist(condition);
 
                 queryStorage.conditions().add(condition);
@@ -92,7 +92,7 @@ public class PersistableQueryManager {
         Persistence.service().persist(queryStorage);
     }
 
-    public static <Q extends IQuery<? extends IEntity>> Q retriveQuery(Class<Q> queryClass, QueryStorage queryStorageId) {
+    static <Q extends IQuery<? extends IEntity>> Q retriveQuery(Class<Q> queryClass, QueryStorage queryStorageId) {
         QueryStorage queryCriteriaStorage = Persistence.service().retrieve(QueryStorage.class, queryStorageId.getPrimaryKey());
 
         BidiMap<Key, Path> map = ColumnStorage.instance().getCriteriaColumns(queryClass);
@@ -100,7 +100,7 @@ public class PersistableQueryManager {
         Q query = EntityFactory.create(queryClass);
         for (ICondition criterion : queryCriteriaStorage.conditions()) {
             ICondition condition = (ICondition) query.getMember(map.get(criterion.columnId().getValue()));
-            ConditionTranslation<ICondition> ct = ConditionTranslationRegistry.getConditionTranslation(condition);
+            ConditionTranslation<ICondition> ct = ConditionTranslationRegistry.instance().getConditionTranslation(condition);
             condition.set(criterion);
             ct.onAfterRetrive(condition);
         }

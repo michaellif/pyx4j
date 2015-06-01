@@ -40,7 +40,7 @@ import com.pyx4j.entity.core.query.IQuery;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ServerEntityFactory;
 
-public class ColumnStorage {
+class ColumnStorage {
 
     private static Logger log = LoggerFactory.getLogger(ColumnStorage.class);
 
@@ -58,9 +58,12 @@ public class ColumnStorage {
 
     }
 
-    @SuppressWarnings("unchecked")
-    public void initialize(Class<? extends AbstractQueryColumnStorage> persistableEntityClass) {
+    void registerColumnStorageClass(Class<? extends AbstractQueryColumnStorage> persistableEntityClass) {
         this.persistableEntityClass = persistableEntityClass;
+    }
+
+    @SuppressWarnings("unchecked")
+    void preloadColumnStorage() {
         for (Class<? extends IEntity> ec : ServerEntityFactory.getAllAssignableFrom(IQuery.class)) {
             if ((ec.getAnnotation(AbstractEntity.class) == null) && (ec.getAnnotation(EmbeddedEntity.class) == null)) {
                 createOrUpdateCriteriaColumnStorage((Class<? extends IQuery<?>>) ec);
@@ -93,7 +96,7 @@ public class ColumnStorage {
     }
 
     //TODO add memory cash
-    public <C extends IQuery<?>> BidiMap<Key, Path> getCriteriaColumns(Class<C> criteriaClass) {
+    <C extends IQuery<?>> BidiMap<Key, Path> getCriteriaColumns(Class<C> criteriaClass) {
         @SuppressWarnings("unchecked")
         EntityQueryCriteria<AbstractQueryColumnStorage> criteria = (EntityQueryCriteria<AbstractQueryColumnStorage>) EntityQueryCriteria
                 .create(persistableEntityClass);
@@ -105,6 +108,5 @@ public class ColumnStorage {
         }
 
         return map;
-
     }
 }

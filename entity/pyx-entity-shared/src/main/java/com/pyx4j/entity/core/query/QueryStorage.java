@@ -27,10 +27,12 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 /**
- * When using this entity as member user @Detached and @Owned(cascade = {}) for Storage.
+ * When using this entity as member use @Detached and @Owned(cascade = {}) for Storage.
  *
- * To get IQueryFilterList use PersistableQueryManager.retriveCriteria.
- * To save IQueryFilterList in this object use PersistableQueryManager.saveCriteria.
+ * You should not Extend this entity.
+ *
+ * To get IQuery use ServerSideFactory.create(PersistableQueryFacade.class).retriveCriteria();
+ * To save IQuery defined in this object use ServerSideFactory.create(PersistableQueryFacade.class).saveCriteria();
  */
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface QueryStorage extends IEntity {
