@@ -26,9 +26,22 @@ import com.pyx4j.entity.core.query.ICondition;
 
 public interface ConditionTranslation<C extends ICondition> {
 
-    public <E extends IEntity> void enhanceCriteria(EntityQueryCriteria<E> query, Path entityMemeberPath, C criterion);
+    public <E extends IEntity> void enhanceCriteria(EntityQueryCriteria<E> criteria, Path entityMemeberPath, C condition);
 
-    public void onBeforePersist(C criterion);
+    /**
+     * Called by PersistableQueryFacade.persistQuery
+     *
+     * @param condition
+     *            instance of the ICondition to be enhanced
+     */
+    public void onBeforePersist(C condition);
 
-    public void onAfterRetrive(C criterion);
+    /**
+     *
+     * Called by PersistableQueryFacade.retriveQuery
+     *
+     * @param condition
+     *            instance of the ICondition to be enhanced
+     */
+    public void onAfterRetrive(C condition);
 }

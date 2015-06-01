@@ -48,9 +48,11 @@ public class PersistableQueryManager {
             if (memberMeta.isTransient()) {
                 continue;
             }
-            IObject<?> criteriaMember = query.getMember(memberName);
-            if (criteriaMember instanceof ICondition) {
-                ConditionTranslationRegistry.addCriteria(criteria, binder.toEntityPath(criteriaMember.getPath()), (ICondition) criteriaMember);
+            IObject<?> queryMember = query.getMember(memberName);
+            if (queryMember instanceof ICondition) {
+                ICondition condition = (ICondition) queryMember;
+                ConditionTranslation<ICondition> ct = ConditionTranslationRegistry.getConditionTranslation(condition);
+                ct.enhanceCriteria(criteria, binder.toEntityPath(condition.getPath()), condition);
             }
         }
         return criteria;
@@ -75,13 +77,16 @@ public class PersistableQueryManager {
             if (memberMeta.isTransient()) {
                 continue;
             }
-            IObject<?> criteriaMember = query.getMember(memberName);
-            if (criteriaMember instanceof ICondition) {
+            IObject<?> member = query.getMember(memberName);
+            if (member instanceof ICondition) {
                 // find existing criterion in a list by columnId
-                ICondition criterion = (ICondition) criteriaMember;
-                criterion.columnId().setValue(map.getKey(criterion.getPath()));
+                ICondition condition = (ICondition) member;
+                condition.columnId().setValue(map.getKey(condition.getPath()));
 
-                queryStorage.conditions().add(criterion);
+                ConditionTranslation<ICondition> ct = ConditionTranslationRegistry.getConditionTranslation(condition);
+                ct.onBeforePersist(condition);
+
+                queryStorage.conditions().add(condition);
             }
         }
         Persistence.service().persist(queryStorage);
@@ -94,8 +99,10 @@ public class PersistableQueryManager {
 
         Q query = EntityFactory.create(queryClass);
         for (ICondition criterion : queryCriteriaStorage.conditions()) {
-            ICondition member = (ICondition) query.getMember(map.get(criterion.columnId().getValue()));
-            member.set(criterion);
+            ICondition condition = (ICondition) query.getMember(map.get(criterion.columnId().getValue()));
+            ConditionTranslation<ICondition> ct = ConditionTranslationRegistry.getConditionTranslation(condition);
+            condition.set(criterion);
+            ct.onAfterRetrive(condition);
         }
 
         return query;

@@ -31,7 +31,8 @@ import com.pyx4j.i18n.annotations.I18n;
  *
  * Instance of the class should be defined in application, just like AbstractOutgoingMailQueue.
  *
- * see com.pyx4j.entity.server.query.ColumnStorage#initialize(Class persistableEntityClass)
+ * see PersistableQueryFacade#registerColumnStorageClass(Class persistableEntityClass)
+ *
  */
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)

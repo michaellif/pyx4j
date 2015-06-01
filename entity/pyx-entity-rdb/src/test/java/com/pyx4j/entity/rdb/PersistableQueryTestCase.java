@@ -132,7 +132,7 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
         }
     }
 
-    public void TODO_testQueryEntityConditionPersistence() {
+    public void testQueryEntityConditionPersistence() {
         Department department1 = EntityFactory.create(Department.class);
         department1.name().setValue("A" + uniqueString());
         srv.persist(department1);

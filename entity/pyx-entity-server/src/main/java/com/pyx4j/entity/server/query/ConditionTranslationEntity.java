@@ -19,26 +19,43 @@
  */
 package com.pyx4j.entity.server.query;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.core.query.IEntityCondition;
+import com.pyx4j.entity.server.Persistence;
 
 public class ConditionTranslationEntity<E extends IEntity> extends AbstractConditionTranslation<IEntityCondition<E>> {
 
     @Override
-    public <T extends IEntity> void enhanceCriteria(EntityQueryCriteria<T> query, Path entityMemeberPath, IEntityCondition<E> criterion) {
-        if (!criterion.refs().isNull()) {
-            query.add(new PropertyCriterion(entityMemeberPath, Restriction.IN, criterion.refs()));
+    public <T extends IEntity> void enhanceCriteria(EntityQueryCriteria<T> criteria, Path entityMemeberPath, IEntityCondition<E> condition) {
+        if (!condition.refs().isNull()) {
+            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.IN, condition.refs()));
         }
     }
 
     @Override
-    public void onBeforePersist(IEntityCondition<E> criterion) {
-        for (E entity : criterion.references()) {
-            criterion.refs().add(entity.getPrimaryKey());
+    public void onBeforePersist(IEntityCondition<E> condition) {
+        if (!condition.references().isValueDetached()) {
+            condition.refs().clear();
+            for (E entity : condition.references()) {
+                condition.refs().add(entity.getPrimaryKey());
+            }
+        }
+    }
+
+    @Override
+    public void onAfterRetrive(IEntityCondition<E> condition) {
+        for (Key pk : condition.refs()) {
+            E entity = condition.references().$();
+            entity.setPrimaryKey(pk);
+            if (!Persistence.service().retrieve(entity)) {
+                throw new Error("Entity  " + entity.getDebugExceptionInfoString() + " refferenced in sotrage not found");
+            }
+            condition.references().add(entity);
         }
     }
 }

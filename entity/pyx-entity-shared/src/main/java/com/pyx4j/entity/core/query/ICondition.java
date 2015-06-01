@@ -31,7 +31,6 @@ import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -78,9 +77,9 @@ public interface ICondition extends IEntity {
     @OrderColumn(DisplayOrderId.class)
     IPrimitive<Integer> displayOrder();
 
-    // MetaData required to build the UI for this Condition
-
-    @Transient
-    IPrimitive<Integer> title();
+//TODO MetaData required to build the UI for this Condition.  Do we need this ?
+//
+//    @Transient
+//    IPrimitive<Integer> title();
 
 }

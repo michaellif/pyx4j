@@ -23,19 +23,18 @@ import com.pyx4j.entity.core.query.ICondition;
 
 public abstract class AbstractConditionTranslation<C extends ICondition> implements ConditionTranslation<C> {
 
-    /*
+    /**
      * empty implementation
      */
     @Override
-    public void onBeforePersist(C criterion) {
+    public void onBeforePersist(C condition) {
     }
 
-    /*
+    /**
      * empty implementation
      */
     @Override
-    public void onAfterRetrive(C criterion) {
-
+    public void onAfterRetrive(C condition) {
     }
 
 }
