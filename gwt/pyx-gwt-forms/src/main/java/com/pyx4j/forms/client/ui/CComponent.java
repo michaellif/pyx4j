@@ -293,6 +293,10 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
             applyVisibilityRules();
             revalidate();
         }
+
+        if (decorator != null) {
+            decorator.asWidget().setVisible(visible);
+        }
     }
 
     public final void inheritVisible(boolean flag) {
