@@ -139,7 +139,11 @@ public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E>
 
         selectionModel.clear();
 
-        suggestions = new ArrayList<E>(options);
+        if (options == null) {
+            suggestions = new ArrayList<E>();
+        } else {
+            suggestions = new ArrayList<E>(options);
+        }
         table.setRowData(suggestions.subList(0, suggestions.size() < SUGGESTIONS_PER_PAGE ? suggestions.size() : SUGGESTIONS_PER_PAGE));
 
         if (options.size() > 0) {
