@@ -71,8 +71,7 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
         super.tearDown();
     }
 
-    //TODO need a global factory for this binders
-    private QueryBinder<Employee, EmployeeQuery> binder() {
+    private QueryBinder<Employee, EmployeeQuery> createEmployeeQueryBinder() {
         QueryBinderBuilder<Employee, EmployeeQuery> b = new QueryBinderBuilder<>(EmployeeQuery.class);
         b.map(b.proto().firstName(), b.criteriaProto().firstName());
         b.map(b.proto().department(), b.criteriaProto().department());
@@ -80,7 +79,7 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
     }
 
     public void testQuery() {
-        QueryBinder<Employee, EmployeeQuery> binder = binder();
+        QueryBinder<Employee, EmployeeQuery> binder = createEmployeeQueryBinder();
 
         // Query
         {
@@ -126,7 +125,8 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
             Assert.assertEquals("stored value", "Bob", query.firstName().value().getValue());
 
             // Use stored  Query
-            EntityQueryCriteria<Employee> criteria = ServerSideFactory.create(PersistableQueryFacade.class).convertToCriteria(query, binder());
+            EntityQueryCriteria<Employee> criteria = ServerSideFactory.create(PersistableQueryFacade.class).convertToCriteria(query,
+                    createEmployeeQueryBinder());
             criteria.eq(criteria.proto().workAddress().streetName(), setId);
             List<Employee> emps = srv.query(criteria);
             Assert.assertEquals("result set size", 1, emps.size());
@@ -143,6 +143,8 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
 
         ServerSideFactory.create(PersistableQueryFacade.class).registerColumnStorageClass(TestsQueryCriteriaColumnStorage.class);
         ServerSideFactory.create(PersistableQueryFacade.class).preloadColumnStorage();
+        ServerSideFactory.create(PersistableQueryFacade.class).registerBinder(EmployeeQuery.class, createEmployeeQueryBinder());
+
         QueryStorage storeHere = EntityFactory.create(QueryStorage.class);
 
         {
@@ -160,7 +162,7 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
             Assert.assertTrue("stored value", query.department().refs().contains(department1.getPrimaryKey()));
 
             // Use stored  Query
-            EntityQueryCriteria<Employee> criteria = ServerSideFactory.create(PersistableQueryFacade.class).convertToCriteria(query, binder());
+            EntityQueryCriteria<Employee> criteria = ServerSideFactory.create(PersistableQueryFacade.class).convertToCriteria(query);
             criteria.eq(criteria.proto().workAddress().streetName(), setId);
             List<Employee> emps = srv.query(criteria);
             Assert.assertEquals("result set size", 1, emps.size());

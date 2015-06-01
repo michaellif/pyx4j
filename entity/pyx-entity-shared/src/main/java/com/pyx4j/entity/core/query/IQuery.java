@@ -29,6 +29,8 @@ import com.pyx4j.i18n.annotations.I18n;
  * Storage in DB is managed by PersistableQueryManager.
  * Use QueryCriteriaStorage to store pointers to this Query.
  *
+ * To use the implementations you need to implement QueryBinder and optionally call registerBinder
+ *
  * Implementations of this class may have @Transient members
  */
 @AbstractEntity

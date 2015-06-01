@@ -35,6 +35,16 @@ public class PersistableQueryFacadeImpl implements PersistableQueryFacade {
     }
 
     @Override
+    public <E extends IEntity, Q extends IQuery<E>> EntityQueryCriteria<E> convertToCriteria(Q query) {
+        return PersistableQueryManager.convertToCriteria(query, QueryBinderRegistry.instance().getBinder(query));
+    }
+
+    @Override
+    public <E extends IEntity, Q extends IQuery<E>> void registerBinder(Class<Q> queryClass, QueryBinder<E, Q> binder) {
+        QueryBinderRegistry.instance().registerBinder(queryClass, binder);
+    }
+
+    @Override
     public <Q extends IQuery<? extends IEntity>> void persistQuery(Q query, QueryStorage queryStorage) {
         PersistableQueryManager.persistQuery(query, queryStorage);
     }
@@ -56,8 +66,8 @@ public class PersistableQueryFacadeImpl implements PersistableQueryFacade {
     }
 
     @Override
-    public <C extends ICondition> void register(Class<C> conditionClass, ConditionTranslation<C> conditionTranslation) {
-        ConditionTranslationRegistry.instance().register(conditionClass, conditionTranslation);
+    public <C extends ICondition> void registerCondition(Class<C> conditionClass, ConditionTranslation<C> conditionTranslation) {
+        ConditionTranslationRegistry.instance().registerCondition(conditionClass, conditionTranslation);
     }
 
 }

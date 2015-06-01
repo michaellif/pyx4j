@@ -40,13 +40,14 @@ class ConditionTranslationRegistry {
         return SingletonHolder.INSTANCE;
     }
 
+    @SuppressWarnings("unchecked")
     private ConditionTranslationRegistry() {
-        register(IStringCondition.class, new ConditionTranslationString());
-        register(IDateCondition.class, new ConditionTranslationDate());
-        register(IEntityCondition.class, new ConditionTranslationEntity());
+        registerCondition(IStringCondition.class, new ConditionTranslationString());
+        registerCondition(IDateCondition.class, new ConditionTranslationDate());
+        registerCondition(IEntityCondition.class, new ConditionTranslationEntity());
     }
 
-    <C extends ICondition> void register(Class<C> conditionClass, ConditionTranslation<C> conditionTranslation) {
+    <C extends ICondition> void registerCondition(Class<C> conditionClass, ConditionTranslation<C> conditionTranslation) {
         registry.put(conditionClass, conditionTranslation);
     }
 
