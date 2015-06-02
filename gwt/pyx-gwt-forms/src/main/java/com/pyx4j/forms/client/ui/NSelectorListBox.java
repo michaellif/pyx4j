@@ -22,19 +22,27 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 import java.util.Collection;
 
+import com.google.gwt.dom.client.AnchorElement;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.widgets.client.IWatermarkWidget;
-import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.selector.SelectorListBox;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
-public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<E>, SelectorListBox<E>, CSelectorListBox<E>, HTML> {
+public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<E>, SelectorListBox<E>, CSelectorListBox<E>, FlowPanel> {
+
+    private NavigationCommand<E> navigationCommand;
 
     public NSelectorListBox(final CSelectorListBox<E> cSuggestBox) {
         super(cSuggestBox);
@@ -42,8 +50,8 @@ public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<
     }
 
     @Override
-    protected Label createViewer() {
-        return new Label();
+    protected FlowPanel createViewer() {
+        return new FlowPanel();
     }
 
     @Override
@@ -93,17 +101,11 @@ public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<
     public void setNativeValue(Collection<E> value) {
         if (isViewable()) {
             if (value == null) {
-                getViewer().setText(null);
+                getViewer().clear();
             } else {
-                StringBuilder text = new StringBuilder();
                 for (E val : value) {
-                    if (text.length() == 0) {
-                        text.append(getCComponent().getFormatter().format(val));
-                    } else {
-                        text.append(",").append(getCComponent().getFormatter().format(val));
-                    }
+                    getViewer().add(new Link(val));
                 }
-                getViewer().setText(text.toString());
             }
         } else {
             getEditor().setValue(value);
@@ -120,4 +122,29 @@ public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<
         }
     }
 
+    public void setNavigationCommand(NavigationCommand<E> navigationCommand) {
+        this.navigationCommand = navigationCommand;
+    }
+
+    class Link extends SimplePanel {
+        private static final String DEFAULT_HREF = "javascript:;";
+
+        public Link(final E item) {
+            super(DOM.createAnchor());
+            setWidget(new HTML(getCComponent().getFormatter().format(item)));
+
+            if (navigationCommand != null) {
+                addDomHandler(new ClickHandler() {
+
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        navigationCommand.navigate(item);
+                    }
+                }, ClickEvent.getType());
+
+                AnchorElement.as(getElement()).setHref(DEFAULT_HREF);
+                setStylePrimaryName(WidgetsTheme.StyleName.Anchor.name());
+            }
+        }
+    }
 }

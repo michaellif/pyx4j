@@ -38,15 +38,15 @@ public abstract class SingleWordSuggestOptionsGrabber<E extends IEntity> impleme
         this.filtered = new LinkedList<E>();
     }
 
-    protected abstract int evaluate(E item, String suggestion);
+    protected abstract int evaluate(E item, String query);
 
-    protected void filter(Vector<E> result, String suggestion) {
+    protected void filter(Vector<E> result, String query) {
         filtered = new LinkedList<E>();
-        if ("".equals(suggestion)) {
+        if ("".equals(query)) {
             filtered.addAll(result);
         } else {
             for (E item : result) {
-                if (evaluate(item, suggestion) > 0) {
+                if (evaluate(item, query) > 0) {
                     filtered.add(item);
                 }
             }
