@@ -36,7 +36,7 @@ public class CSelectorListBox<E extends IEntity> extends CAbstractSelectorBox<Co
         setNativeComponent(new NSelectorListBox<E>(this));
     }
 
-    public void setCommand(Command addItemCommand) {
+    public void setAddItemCommand(Command addItemCommand) {
         this.addItemCommand = addItemCommand;
     }
 
