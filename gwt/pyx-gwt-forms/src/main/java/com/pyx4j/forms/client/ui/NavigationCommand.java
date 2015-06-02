@@ -16,7 +16,6 @@
  *
  * Created on Jun 2, 2015
  * @author michaellif
- * @version $Id: code-templates.xml 12647 2013-05-01 18:01:19Z vlads $
  */
 package com.pyx4j.forms.client.ui;
 
