@@ -392,7 +392,7 @@ public class WidgetsTheme extends Theme {
         style = new Style(".", StyleName.OptionGroupItem);
         style.addProperty("white-space", "nowrap");
         style.addProperty("line-height", "1.5em");
-        style.addProperty("padding", "0 10px");
+        style.addProperty("padding", "0 5px");
         style.addProperty("display", "block");
         addStyle(style);
 
