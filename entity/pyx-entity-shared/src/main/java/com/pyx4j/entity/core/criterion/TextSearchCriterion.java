@@ -14,32 +14,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 25, 2015
+ * Created on Jun 1, 2015
  * @author michaellif
  */
-package com.pyx4j.commons.css;
+package com.pyx4j.entity.core.criterion;
 
-public class AtRule {
+import com.pyx4j.commons.GWTSerializable;
 
-    public static enum AtKeyword {
-        media
+public class TextSearchCriterion implements Criterion {
+
+    private static final long serialVersionUID = 1L;
+
+    private String textQuery;
+
+    @GWTSerializable
+    public TextSearchCriterion() {
     }
 
-    private final AtKeyword keyword;
-
-    private final String directive;
-
-    public AtRule(AtKeyword keyword, String directive) {
-        this.keyword = keyword;
-        this.directive = directive;
+    public TextSearchCriterion(String textQuery) {
+        this.textQuery = textQuery;
     }
 
-    public AtKeyword getKeyword() {
-        return keyword;
+    public String getTextQuery() {
+        return textQuery;
     }
 
-    public String getDirective() {
-        return directive;
+    @Override
+    public String toString() {
+        return "TextSearchCriterion [textQuery=" + textQuery + "]";
     }
 
 }

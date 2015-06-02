@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.Types;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 import com.pyx4j.entity.shared.TextSearchDocument;
@@ -101,6 +102,9 @@ public class PostgreSQLDialect extends Dialect {
             StringBuilder query = new StringBuilder();
             String value = searchValue.toString();
             for (String str : value.split(" ")) {
+                if (CommonsStringUtils.isEmpty(str)) {
+                    continue;
+                }
                 if (query.length() > 0) {
                     query.append(" & ");
                 }

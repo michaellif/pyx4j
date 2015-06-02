@@ -14,32 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 25, 2015
+ * Created on Jun 2, 2015
  * @author michaellif
  */
-package com.pyx4j.commons.css;
+package com.pyx4j.forms.client.ui;
 
-public class AtRule {
+public interface NavigationCommand<E> {
 
-    public static enum AtKeyword {
-        media
-    }
-
-    private final AtKeyword keyword;
-
-    private final String directive;
-
-    public AtRule(AtKeyword keyword, String directive) {
-        this.keyword = keyword;
-        this.directive = directive;
-    }
-
-    public AtKeyword getKeyword() {
-        return keyword;
-    }
-
-    public String getDirective() {
-        return directive;
-    }
+    void navigate(E value);
 
 }
