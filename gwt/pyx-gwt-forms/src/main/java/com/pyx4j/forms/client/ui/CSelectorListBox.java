@@ -54,4 +54,7 @@ public class CSelectorListBox<E extends IEntity> extends CAbstractSelectorBox<Co
         return getValue() == null || getValue().size() == 0;
     }
 
+    public void setNavigationCommand(NavigationCommand<E> navigationCommand) {
+        getNativeComponent().setNavigationCommand(navigationCommand);
+    }
 }
