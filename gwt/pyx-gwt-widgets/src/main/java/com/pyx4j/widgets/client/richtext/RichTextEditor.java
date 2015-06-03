@@ -68,10 +68,7 @@ public class RichTextEditor extends FlowPanel implements IValueBoxWidget<String>
         add(toolbar);
         add(richTextArea);
 
-        toolbar.getElement().getStyle().setOpacity(0.3);
-
-        sinkEvents(Event.ONMOUSEOVER);
-        sinkEvents(Event.ONMOUSEOUT);
+        toolbar.getElement().getStyle().setOpacity(0.7);
 
         editable = true;
     }
@@ -103,11 +100,9 @@ public class RichTextEditor extends FlowPanel implements IValueBoxWidget<String>
         }
         switch (event.getTypeInt()) {
         case Event.ONMOUSEOUT:
-            toolbar.getElement().getStyle().setOpacity(0.3);
             richTextArea.ignoreBlur(false);
             break;
         case Event.ONMOUSEOVER:
-            toolbar.getElement().getStyle().setOpacity(1);
             richTextArea.ignoreBlur(true);
             break;
         }
