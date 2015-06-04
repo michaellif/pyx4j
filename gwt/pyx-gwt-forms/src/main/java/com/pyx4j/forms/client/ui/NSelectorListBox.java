@@ -31,12 +31,12 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.widgets.client.IWatermarkWidget;
+import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.selector.SelectorListBox;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
@@ -100,9 +100,8 @@ public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<
     @Override
     public void setNativeValue(Collection<E> value) {
         if (isViewable()) {
-            if (value == null) {
-                getViewer().clear();
-            } else {
+            getViewer().clear();
+            if (value != null) {
                 for (E val : value) {
                     getViewer().add(new Link(val));
                 }
@@ -131,8 +130,7 @@ public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<
 
         public Link(final E item) {
             super(DOM.createAnchor());
-            setWidget(new HTML(getCComponent().getFormatter().format(item)));
-
+            setWidget(new Label(getCComponent().getFormatter().format(item)));
             if (navigationCommand != null) {
                 addDomHandler(new ClickHandler() {
 
