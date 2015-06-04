@@ -105,8 +105,9 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TY
         boolean visible = isVisible();
         if (getNativeComponent().isVisible() != visible) {
             getNativeComponent().setVisible(visible);
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.visible);
         }
+        asWidget().setVisible(isVisible());
+        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.visible);
     }
 
     @Override
