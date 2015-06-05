@@ -159,7 +159,7 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
 
             EmployeeQuery query = ServerSideFactory.create(PersistableQueryFacade.class).retriveQuery(EmployeeQuery.class, storeHereId);
 
-            Assert.assertTrue("stored value", query.department().refs().contains(department1.getPrimaryKey()));
+            Assert.assertTrue("stored value", query.department().keys().contains(department1.getPrimaryKey()));
 
             // Use stored  Query
             EntityQueryCriteria<Employee> criteria = ServerSideFactory.create(PersistableQueryFacade.class).convertToCriteria(query);
