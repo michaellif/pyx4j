@@ -23,8 +23,10 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.query.IDateCondition;
 import com.pyx4j.entity.core.query.IEntityCondition;
+import com.pyx4j.entity.core.query.IEnumCondition;
 import com.pyx4j.entity.core.query.IQuery;
 import com.pyx4j.entity.core.query.IStringCondition;
+import com.pyx4j.entity.test.shared.domain.Employee.EmploymentStatus;
 
 @Transient
 public interface EmployeeQuery extends IQuery<Employee> {
@@ -34,10 +36,17 @@ public interface EmployeeQuery extends IQuery<Employee> {
     IDateCondition hireDate();
 
     //TODO See PYX-14.
-    @DiscriminatorValue("Entity.Department")
+    @DiscriminatorValue("Entity.text.Department")
     public interface DepartmentEntityCondition extends IEntityCondition<Department> {
 
     }
 
     DepartmentEntityCondition department();
+
+    @DiscriminatorValue("Enum.text.EmploymentStatus")
+    public interface EmploymentStatusCondition extends IEnumCondition<EmploymentStatus> {
+
+    }
+
+    EmploymentStatusCondition employmentStatus();
 }

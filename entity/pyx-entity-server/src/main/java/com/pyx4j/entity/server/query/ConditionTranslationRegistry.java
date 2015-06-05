@@ -24,7 +24,9 @@ import java.util.Map;
 
 import com.pyx4j.entity.core.query.ICondition;
 import com.pyx4j.entity.core.query.IDateCondition;
+import com.pyx4j.entity.core.query.IDateOffsetCondition;
 import com.pyx4j.entity.core.query.IEntityCondition;
+import com.pyx4j.entity.core.query.IEnumCondition;
 import com.pyx4j.entity.core.query.IStringCondition;
 
 @SuppressWarnings("rawtypes")
@@ -44,7 +46,9 @@ class ConditionTranslationRegistry {
     private ConditionTranslationRegistry() {
         registerCondition(IStringCondition.class, new ConditionTranslationString());
         registerCondition(IDateCondition.class, new ConditionTranslationDate());
+        registerCondition(IDateOffsetCondition.class, new ConditionTranslationDateOffset());
         registerCondition(IEntityCondition.class, new ConditionTranslationEntity());
+        registerCondition(IEnumCondition.class, new ConditionTranslationEnum());
     }
 
     <C extends ICondition> void registerCondition(Class<C> conditionClass, ConditionTranslation<C> conditionTranslation) {
@@ -57,7 +61,10 @@ class ConditionTranslationRegistry {
         //TODO See PYX-14.
         if (ct == null && condition instanceof IEntityCondition) {
             ct = registry.get(IEntityCondition.class);
+        } else if (ct == null && condition instanceof IEnumCondition) {
+            ct = registry.get(IEnumCondition.class);
         }
+
         if (ct == null) {
             throw new Error("Unknown criterion class " + condition.getInstanceValueClass().getName());
         }

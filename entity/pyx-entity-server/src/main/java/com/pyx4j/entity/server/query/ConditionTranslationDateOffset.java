@@ -14,20 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on June 5, 2015
- * @author michaellif
+ * Created on Jun 5, 2015
+ * @author vlads
  */
-package com.pyx4j.entity.core.query;
+package com.pyx4j.entity.server.query;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.IPrimitiveSet;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.query.IDateOffsetCondition;
 
-@DiscriminatorValue("Enum")
-public interface IEnumCondition<E extends Enum<E>> extends ICondition {
+public class ConditionTranslationDateOffset extends AbstractConditionTranslation<IDateOffsetCondition> {
 
-    IPrimitiveSet<String> keys();
+    @Override
+    public <E extends IEntity> void enhanceCriteria(EntityQueryCriteria<E> criteria, Path entityMemeberPath, IDateOffsetCondition condition) {
+        //TODO implement this
+        throw new Error("TODO not implemented");
+    }
 
-    @Transient
-    IPrimitiveSet<E> values();
 }
