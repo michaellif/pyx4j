@@ -14,30 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 4, 2015
- * @author vlads
+ * Created on June 5, 2015
+ * @author michaellif
  */
 package com.pyx4j.entity.core.query;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitiveSet;
-import com.pyx4j.entity.core.ISet;
 
-/**
- * You need to create implementation of this Entity for now. TODO See PYX-14.
- *
- * @param <E>
- */
-@DiscriminatorValue("Entity")
-public interface IEntityCondition<E extends IEntity> extends ICondition {
+@DiscriminatorValue("Enum")
+public interface IEnumCondition<E extends Enum<?>> extends ICondition {
 
-    // has a set of PK of selected entities.
-
-    IPrimitiveSet<Key> keys();
+    IPrimitiveSet<String> keys();
 
     @Transient
-    ISet<E> references();
+    IPrimitiveSet<E> values();
 }

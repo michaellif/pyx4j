@@ -32,24 +32,24 @@ public class ConditionTranslationEntity<E extends IEntity> extends AbstractCondi
 
     @Override
     public <T extends IEntity> void enhanceCriteria(EntityQueryCriteria<T> criteria, Path entityMemeberPath, IEntityCondition<E> condition) {
-        if (!condition.refs().isNull()) {
-            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.IN, condition.refs()));
+        if (!condition.keys().isNull()) {
+            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.IN, condition.keys()));
         }
     }
 
     @Override
     public void onBeforePersist(IEntityCondition<E> condition) {
         if (!condition.references().isValueDetached()) {
-            condition.refs().clear();
+            condition.keys().clear();
             for (E entity : condition.references()) {
-                condition.refs().add(entity.getPrimaryKey());
+                condition.keys().add(entity.getPrimaryKey());
             }
         }
     }
 
     @Override
     public void onAfterRetrive(IEntityCondition<E> condition) {
-        for (Key pk : condition.refs()) {
+        for (Key pk : condition.keys()) {
             E entity = condition.references().$();
             entity.setPrimaryKey(pk);
             if (!Persistence.service().retrieve(entity)) {
