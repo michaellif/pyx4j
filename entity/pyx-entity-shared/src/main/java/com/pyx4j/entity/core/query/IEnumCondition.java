@@ -19,11 +19,13 @@
  */
 package com.pyx4j.entity.core.query;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IPrimitiveSet;
 
 @DiscriminatorValue("Enum")
+@AbstractEntity(generateMetadata = false)
 public interface IEnumCondition<E extends Enum<E>> extends ICondition {
 
     IPrimitiveSet<String> keys();
