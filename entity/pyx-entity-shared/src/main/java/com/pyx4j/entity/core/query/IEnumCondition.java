@@ -28,7 +28,8 @@ import com.pyx4j.entity.core.IPrimitiveSet;
 @AbstractEntity(generateMetadata = false)
 public interface IEnumCondition<E extends Enum<E>> extends ICondition {
 
-    IPrimitiveSet<String> keys();
+    // TODO use Keys  to enums table
+    IPrimitiveSet<String> enums();
 
     @Transient
     IPrimitiveSet<E> values();
