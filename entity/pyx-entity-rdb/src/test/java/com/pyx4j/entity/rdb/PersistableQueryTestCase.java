@@ -147,6 +147,7 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
             EmployeeQuery query = ServerSideFactory.create(PersistableQueryFacade.class).retriveQuery(EmployeeQuery.class, storeHere);
             EntityQueryCriteria<Employee> criteria = ServerSideFactory.create(PersistableQueryFacade.class).convertToCriteria(query,
                     createEmployeeQueryBinder());
+            criteria.eq(criteria.proto().workAddress().streetName(), setId);
             List<Employee> emps = srv.query(criteria);
             Assert.assertEquals("result set size", 0, emps.size());
         }
@@ -233,6 +234,7 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
             EmployeeQuery query = ServerSideFactory.create(PersistableQueryFacade.class).retriveQuery(EmployeeQuery.class, storeHere);
             EntityQueryCriteria<Employee> criteria = ServerSideFactory.create(PersistableQueryFacade.class).convertToCriteria(query,
                     createEmployeeQueryBinder());
+            criteria.eq(criteria.proto().workAddress().streetName(), setId);
             List<Employee> emps = srv.query(criteria);
             Assert.assertEquals("result set size", 0, emps.size());
         }
