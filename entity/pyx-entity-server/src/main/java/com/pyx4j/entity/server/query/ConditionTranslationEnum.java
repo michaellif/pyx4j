@@ -22,13 +22,17 @@ package com.pyx4j.entity.server.query;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.core.query.IEnumCondition;
 
 public class ConditionTranslationEnum<E extends Enum<E>> extends AbstractConditionTranslation<IEnumCondition<E>> {
 
     @Override
     public <T extends IEntity> void enhanceCriteria(EntityQueryCriteria<T> criteria, Path entityMemeberPath, IEnumCondition<E> condition) {
-
+        if (!condition.values().isNull()) {
+            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.IN, condition.values()));
+        }
     }
 
     @Override
@@ -43,8 +47,7 @@ public class ConditionTranslationEnum<E extends Enum<E>> extends AbstractConditi
 
     @Override
     public void onAfterRetrive(IEnumCondition<E> condition) {
-        @SuppressWarnings("unchecked")
-        Class<E> enumValueClass = (Class<E>) condition.getValueClass();
+        Class<E> enumValueClass = condition.values().getValueClass();
         for (String valueName : condition.enums()) {
             condition.values().add(Enum.valueOf(enumValueClass, valueName));
         }

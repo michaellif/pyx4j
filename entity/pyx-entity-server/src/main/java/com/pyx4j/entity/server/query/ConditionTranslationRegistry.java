@@ -22,11 +22,14 @@ package com.pyx4j.entity.server.query;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pyx4j.entity.core.query.IBooleanCondition;
 import com.pyx4j.entity.core.query.ICondition;
 import com.pyx4j.entity.core.query.IDateCondition;
 import com.pyx4j.entity.core.query.IDateOffsetCondition;
+import com.pyx4j.entity.core.query.IDoubleRangeCondition;
 import com.pyx4j.entity.core.query.IEntityCondition;
 import com.pyx4j.entity.core.query.IEnumCondition;
+import com.pyx4j.entity.core.query.IIntegerRangeCondition;
 import com.pyx4j.entity.core.query.IStringCondition;
 
 @SuppressWarnings("rawtypes")
@@ -49,6 +52,9 @@ class ConditionTranslationRegistry {
         registerCondition(IDateOffsetCondition.class, new ConditionTranslationDateOffset());
         registerCondition(IEntityCondition.class, new ConditionTranslationEntity());
         registerCondition(IEnumCondition.class, new ConditionTranslationEnum());
+        registerCondition(IBooleanCondition.class, new ConditionTranslationBoolean());
+        registerCondition(IIntegerRangeCondition.class, new ConditionTranslationIntegerRange());
+        registerCondition(IDoubleRangeCondition.class, new ConditionTranslationDoubleRange());
     }
 
     <C extends ICondition> void registerCondition(Class<C> conditionClass, ConditionTranslation<C> conditionTranslation) {

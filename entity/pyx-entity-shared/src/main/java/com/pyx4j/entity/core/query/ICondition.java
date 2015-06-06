@@ -35,20 +35,6 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-/**
- * TODO
- *
- * DateRange,
- *
- * IntegerRange,
- *
- * DecimalRange,
- *
- * Enum,
- *
- * Entity
- *
- */
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @Table(name = "query_storage_condition")
 @AbstractEntity
