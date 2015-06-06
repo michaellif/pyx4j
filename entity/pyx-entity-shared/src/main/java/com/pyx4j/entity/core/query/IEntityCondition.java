@@ -20,6 +20,7 @@
 package com.pyx4j.entity.core.query;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
@@ -32,6 +33,7 @@ import com.pyx4j.entity.core.ISet;
  * @param <E>
  */
 @DiscriminatorValue("Entity")
+@AbstractEntity(generateMetadata = false)
 public interface IEntityCondition<E extends IEntity> extends ICondition {
 
     // has a set of PK of selected entities.
