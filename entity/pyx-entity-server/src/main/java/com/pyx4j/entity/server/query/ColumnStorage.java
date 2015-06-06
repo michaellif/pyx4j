@@ -19,6 +19,8 @@
  */
 package com.pyx4j.entity.server.query;
 
+import java.util.List;
+
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 import org.slf4j.Logger;
@@ -37,6 +39,8 @@ import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.core.query.AbstractQueryColumnStorage;
 import com.pyx4j.entity.core.query.ICondition;
 import com.pyx4j.entity.core.query.IQuery;
+import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.Executables;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ServerEntityFactory;
 
@@ -98,12 +102,20 @@ class ColumnStorage {
     //TODO add memory cash
     <C extends IQuery<?>> BidiMap<Key, Path> getCriteriaColumns(Class<C> criteriaClass) {
         @SuppressWarnings("unchecked")
-        EntityQueryCriteria<AbstractQueryColumnStorage> criteria = (EntityQueryCriteria<AbstractQueryColumnStorage>) EntityQueryCriteria
+        final EntityQueryCriteria<AbstractQueryColumnStorage> criteria = (EntityQueryCriteria<AbstractQueryColumnStorage>) EntityQueryCriteria
                 .create(persistableEntityClass);
         criteria.eq(criteria.proto().queryClass(), criteriaClass.getName());
 
+        List<AbstractQueryColumnStorage> columns = Executables.wrapInEntityNamespace(persistableEntityClass,
+                new Executable<List<AbstractQueryColumnStorage>, RuntimeException>() {
+                    @Override
+                    public List<AbstractQueryColumnStorage> execute() {
+                        return Persistence.service().query(criteria);
+                    }
+                }).execute();
+
         BidiMap<Key, Path> map = new DualHashBidiMap<>();
-        for (AbstractQueryColumnStorage column : Persistence.service().query(criteria)) {
+        for (AbstractQueryColumnStorage column : columns) {
             map.put(column.getPrimaryKey(), new Path(criteriaClass, column.columnPath().getValue()));
         }
 
