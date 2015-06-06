@@ -34,9 +34,9 @@ public class ConditionTranslationEnum<E extends Enum<E>> extends AbstractConditi
     @Override
     public void onBeforePersist(IEnumCondition<E> condition) {
         if (!condition.values().isValueDetached()) {
-            condition.keys().clear();
+            condition.enums().clear();
             for (E enm : condition.values()) {
-                condition.keys().add(enm.name());
+                condition.enums().add(enm.name());
             }
         }
     }
@@ -45,7 +45,7 @@ public class ConditionTranslationEnum<E extends Enum<E>> extends AbstractConditi
     public void onAfterRetrive(IEnumCondition<E> condition) {
         @SuppressWarnings("unchecked")
         Class<E> enumValueClass = (Class<E>) condition.getValueClass();
-        for (String valueName : condition.keys()) {
+        for (String valueName : condition.enums()) {
             condition.values().add(Enum.valueOf(enumValueClass, valueName));
         }
     }
