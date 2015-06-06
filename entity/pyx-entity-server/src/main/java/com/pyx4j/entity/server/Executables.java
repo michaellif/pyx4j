@@ -19,6 +19,7 @@
  */
 package com.pyx4j.entity.server;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 public final class Executables {
@@ -41,6 +42,15 @@ public final class Executables {
                 }
             }
         };
+    }
+
+    public static <R, E extends Throwable> Executable<R, E> wrapInEntityNamespace(Class<? extends IEntity> entityClass, final Executable<R, E> task) {
+        String targetNamespace = Persistence.getNamespace(entityClass);
+        if (targetNamespace == null) {
+            return task;
+        } else {
+            return wrapInTargetNamespace(targetNamespace, task);
+        }
     }
 
     public static <R, E extends Throwable> R runInTargetNamespace(final String targetNamespace, final Executable<R, E> task) throws E {
