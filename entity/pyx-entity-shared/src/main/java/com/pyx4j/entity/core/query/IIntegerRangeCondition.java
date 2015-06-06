@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2013 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 13, 2015
+ * Created on Jun 6, 2015
  * @author vlads
  */
 package com.pyx4j.entity.core.query;
@@ -23,10 +23,12 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.core.IPrimitive;
 
-@DiscriminatorValue("String")
-public interface IStringCondition extends ICondition {
+@DiscriminatorValue("IntegerRange")
+public interface IIntegerRangeCondition extends ICondition {
 
-    @MemberColumn(name = "val_str")
-    IPrimitive<String> value();
+    @MemberColumn(name = "val_int_from")
+    IPrimitive<Integer> valueFrom();
 
+    @MemberColumn(name = "val_int_to")
+    IPrimitive<Integer> valueTo();
 }

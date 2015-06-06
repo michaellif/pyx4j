@@ -19,9 +19,13 @@
  */
 package com.pyx4j.entity.server.query;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.collections4.BidiMap;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.Validate;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
@@ -68,8 +72,11 @@ class PersistableQueryManager {
         if (!queryStorage.id().isNull()) {
             Persistence.ensureRetrieve(queryStorage, AttachLevel.Attached);
         }
+        query = query.detach(); // Use short/local Path
         @SuppressWarnings("unchecked")
         BidiMap<Key, Path> map = ColumnStorage.instance().getCriteriaColumns((Class<? extends IQuery<?>>) query.getInstanceValueClass());
+
+        List<ICondition> newConditions = new ArrayList<>();
 
         EntityMeta cm = query.getEntityMeta();
         for (String memberName : cm.getMemberNames()) {
@@ -79,17 +86,36 @@ class PersistableQueryManager {
             }
             IObject<?> member = query.getMember(memberName);
             if (member instanceof ICondition) {
-                // find existing criterion in a list by columnId
                 ICondition condition = (ICondition) member;
-                condition.columnId().setValue(map.getKey(condition.getPath()));
+                Key columnId = map.getKey(condition.getPath());
+                Validate.notNull(columnId, "Unmapped query member " + condition.getPath());
+
+                // find existing condition in stored list: by pk ,  by columnId
+                ICondition origCondition = findByColumnId(queryStorage.conditions(), columnId);
+                if (origCondition != null) {
+                    Validate.isEquals(origCondition.id(), condition.id(), "attached to different graph; query member " + condition.getPath());
+                }
+
+                condition.columnId().setValue(columnId);
 
                 ConditionTranslation<ICondition> ct = ConditionTranslationRegistry.instance().getConditionTranslation(condition);
                 ct.onBeforePersist(condition);
 
-                queryStorage.conditions().add(condition);
+                newConditions.add(condition);
             }
         }
+        queryStorage.conditions().clear();
+        queryStorage.conditions().addAll(newConditions);
         Persistence.service().persist(queryStorage);
+    }
+
+    private static ICondition findByColumnId(List<ICondition> conditions, Key columnId) {
+        for (ICondition condition : conditions) {
+            if (columnId.equals(condition.columnId().getValue())) {
+                return condition;
+            }
+        }
+        return null;
     }
 
     static <Q extends IQuery<? extends IEntity>> Q retriveQuery(Class<Q> queryClass, QueryStorage queryStorageId) {
