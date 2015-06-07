@@ -30,11 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
@@ -76,18 +73,13 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
         }
 
         for (Class<? extends IEntity> subclass : Mappings.getPersistableAssignableFrom(entityClass)) {
-            DiscriminatorValue discriminator = subclass.getAnnotation(DiscriminatorValue.class);
+            DiscriminatorValue discriminator = Mappings.getDiscriminatorfor(subclass);
             if (discriminator != null) {
-                if (CommonsStringUtils.isEmpty(discriminator.value())) {
-                    throw new Error("Missing value of @DiscriminatorValue annotation on class " + subclass.getName());
-                }
                 if (impClasses.containsKey(discriminator.value())) {
                     throw new Error("Duplicate value of @DiscriminatorValue annotation on class " + subclass.getName() + "; the same as in class "
                             + impClasses.get(discriminator.value()));
                 }
                 impClasses.put(discriminator.value(), subclass);
-            } else if ((subclass.getAnnotation(AbstractEntity.class) == null) && (subclass.getAnnotation(EmbeddedEntity.class) == null)) {
-                throw new Error("Class " + subclass.getName() + " require @AbstractEntity or @DiscriminatorValue annotation");
             }
         }
     }

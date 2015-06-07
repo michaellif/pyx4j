@@ -35,8 +35,10 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Table;
@@ -182,6 +184,20 @@ public class Mappings {
             }
         }
         return allAssignableClasses;
+    }
+
+    public static DiscriminatorValue getDiscriminatorfor(Class<? extends IEntity> entityClass) {
+        DiscriminatorValue discriminator = entityClass.getAnnotation(DiscriminatorValue.class);
+        if (discriminator != null) {
+            if (CommonsStringUtils.isEmpty(discriminator.value())) {
+                throw new Error("Missing value of @DiscriminatorValue annotation on class " + entityClass.getName());
+            }
+            return discriminator;
+        } else if (entityClass.getAnnotation(AbstractEntity.class) == null) {
+            throw new Error("Class " + entityClass.getName() + " require @AbstractEntity or @DiscriminatorValue annotation");
+        } else {
+            return null;
+        }
     }
 
     public void ensureSchemaModel(PersistenceContext persistenceContext, Iterable<Class<? extends IEntity>> classes) {
