@@ -86,7 +86,7 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
         // Query
         {
             EmployeeQuery query = EntityFactory.create(EmployeeQuery.class);
-            query.firstName().value().setValue("Bob");
+            query.firstName().stringValue().setValue("Bob");
 
             EntityQueryCriteria<Employee> criteria = ServerSideFactory.create(PersistableQueryFacade.class).convertToCriteria(query, binder);
             criteria.eq(criteria.proto().workAddress().streetName(), setId);
@@ -96,7 +96,7 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
         }
         {
             EmployeeQuery query = EntityFactory.create(EmployeeQuery.class);
-            query.firstName().value().setValue("Harry");
+            query.firstName().stringValue().setValue("Harry");
 
             EntityQueryCriteria<Employee> criteria = ServerSideFactory.create(PersistableQueryFacade.class).convertToCriteria(query, binder);
             criteria.eq(criteria.proto().workAddress().streetName(), setId);
@@ -114,7 +114,7 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
 
         {
             EmployeeQuery query = EntityFactory.create(EmployeeQuery.class);
-            query.firstName().value().setValue("Bob");
+            query.firstName().stringValue().setValue("Bob");
             ServerSideFactory.create(PersistableQueryFacade.class).persistQuery(query, storeHere);
         }
 
@@ -124,7 +124,7 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
 
             EmployeeQuery query = ServerSideFactory.create(PersistableQueryFacade.class).retriveQuery(EmployeeQuery.class, storeHereId);
 
-            Assert.assertEquals("stored value", "Bob", query.firstName().value().getValue());
+            Assert.assertEquals("stored value", "Bob", query.firstName().stringValue().getValue());
 
             // Use stored  Query
             EntityQueryCriteria<Employee> criteria = ServerSideFactory.create(PersistableQueryFacade.class).convertToCriteria(query,
@@ -138,7 +138,7 @@ public abstract class PersistableQueryTestCase extends DatastoreTestBase {
         // Modify
         {
             EmployeeQuery query = ServerSideFactory.create(PersistableQueryFacade.class).retriveQuery(EmployeeQuery.class, storeHere);
-            query.firstName().value().setValue("Other");
+            query.firstName().stringValue().setValue("Other");
             ServerSideFactory.create(PersistableQueryFacade.class).persistQuery(query, storeHere);
         }
 

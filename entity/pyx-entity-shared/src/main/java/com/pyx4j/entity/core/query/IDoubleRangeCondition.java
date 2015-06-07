@@ -27,8 +27,8 @@ import com.pyx4j.entity.core.IPrimitive;
 public interface IDoubleRangeCondition extends ICondition {
 
     @MemberColumn(name = "val_double_from")
-    IPrimitive<Double> valueFrom();
+    IPrimitive<Double> doubleValueFrom();
 
     @MemberColumn(name = "val_double_to")
-    IPrimitive<Double> valueTo();
+    IPrimitive<Double> doubleValueTo();
 }

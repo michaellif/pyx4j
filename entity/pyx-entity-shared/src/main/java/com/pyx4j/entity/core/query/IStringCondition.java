@@ -27,6 +27,6 @@ import com.pyx4j.entity.core.IPrimitive;
 public interface IStringCondition extends ICondition {
 
     @MemberColumn(name = "val_str")
-    IPrimitive<String> value();
+    IPrimitive<String> stringValue();
 
 }
