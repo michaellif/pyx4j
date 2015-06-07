@@ -402,9 +402,6 @@ public class EntityOperationsMeta {
                     if ((createdTimestampMember == null) && (memberName.equals(mainEntityMeta.getCreatedTimestampMember()))) {
                         createdTimestampMember = member;
                     }
-                    if (PersistenceTrace.traceMeta) {
-                        log.info("{} added member {}", Trace.id(), member.getMemberPath());
-                    }
                 }
 
                 Indexed index = memberMeta.getAnnotation(Indexed.class);
