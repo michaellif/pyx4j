@@ -30,8 +30,8 @@ public class ConditionTranslationBoolean extends AbstractConditionTranslation<IB
 
     @Override
     public <E extends IEntity> void enhanceCriteria(EntityQueryCriteria<E> criteria, Path entityMemeberPath, IBooleanCondition condition) {
-        if (!condition.value().isNull()) {
-            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.EQUAL, condition.value().getValue()));
+        if (!condition.booleanValue().isNull()) {
+            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.EQUAL, condition.booleanValue().getValue()));
         }
     }
 

@@ -20,11 +20,15 @@
 package com.pyx4j.entity.rdb.mapping;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Filter;
@@ -32,6 +36,7 @@ import com.pyx4j.commons.FilterIterator;
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Indexed;
@@ -49,6 +54,7 @@ import com.pyx4j.entity.core.adapters.IndexAdapter;
 import com.pyx4j.entity.core.adapters.PersistenceAdapter;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.entity.rdb.PersistenceTrace;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.server.AdapterFactory;
@@ -60,6 +66,8 @@ import com.pyx4j.rpc.shared.DevInfoUnRecoverableRuntimeException;
  * Categorize member types for later use in the frequent update/select operations
  */
 public class EntityOperationsMeta {
+
+    private static final Logger log = LoggerFactory.getLogger(EntityOperationsMeta.class);
 
     private final EntityMeta mainEntityMeta;
 
@@ -102,14 +110,27 @@ public class EntityOperationsMeta {
     EntityOperationsMeta(Dialect dialect, EntityMeta entityMeta) {
         mainEntityMeta = entityMeta;
         String path = GWTJava5Helper.getSimpleName(entityMeta.getEntityClass());
+
+        if (PersistenceTrace.traceMeta) {
+            log.info("{} create Meta {}", Trace.enter(), entityMeta.getEntityClass().getName());
+        }
+
         build(dialect, dialect.getNamingConvention(), entityMeta, path, null, null, entityMeta, null);
 
         Inheritance inheritance = entityMeta.getAnnotation(Inheritance.class);
         if ((entityMeta.getPersistableSuperClass() != null)
                 || ((inheritance != null) && (inheritance.strategy() == Inheritance.InheritanceStrategy.SINGLE_TABLE))) {
             impClasses = new HashMap<String, Class<? extends IEntity>>();
-            for (Class<? extends IEntity> subclass : Mappings.getPersistableAssignableFrom(entityMeta.getEntityClass())) {
+            Collection<Class<? extends IEntity>> allAssignableClasses = Mappings.getPersistableAssignableFrom(entityMeta.getEntityClass());
+            if (PersistenceTrace.traceMeta) {
+                log.info("{} has {} siblings", Trace.id(), allAssignableClasses.size());
+            }
+            for (Class<? extends IEntity> subclass : allAssignableClasses) {
+                // This handles entityMeta.getEntityClass() again .... TODO review
                 EntityMeta subclassMeta = EntityFactory.getEntityMeta(subclass);
+                if (PersistenceTrace.traceMeta) {
+                    log.info("{} build subclass meta {}", Trace.id(), subclassMeta.getEntityClass().getName());
+                }
 
                 // TODO this is duplicate code from ValueAdapterEntityPolymorphic
                 DiscriminatorValue discriminator = subclass.getAnnotation(DiscriminatorValue.class);
@@ -150,6 +171,10 @@ public class EntityOperationsMeta {
                     .sqlIdColumnName(), memberMeta, path + Path.PATH_SEPARATOR + IEntity.PRIMARY_KEY + Path.PATH_SEPARATOR);
             membersByPath.put(pkMember.getMemberPath(), pkMember);
         }
+
+        if (PersistenceTrace.traceMeta) {
+            log.info("{} create Meta {}", Trace.returns(), entityMeta.getEntityClass().getName());
+        }
     }
 
     public EntityMeta entityMeta() {
@@ -167,6 +192,9 @@ public class EntityOperationsMeta {
 
     private void build(Dialect dialect, NamingConvention namingConvention, EntityMeta rootEntityMeta, String path, List<String> accessPath,
             List<String> namesPath, EntityMeta entityMeta, DiscriminatorValue subclassDiscriminator) {
+        if (PersistenceTrace.traceMeta) {
+            log.info("{} build {}", Trace.enter(), entityMeta.getEntityClass().getName());
+        }
         String ownerMemberName = entityMeta.getOwnerMemberName();
         for (String memberName : entityMeta.getMemberNames()) {
             MemberMeta memberMeta = entityMeta.getMemberMeta(memberName);
@@ -176,7 +204,9 @@ public class EntityOperationsMeta {
             String memberPersistenceName = memberPersistenceName(memberMeta);
             String memberPathBase = path + Path.PATH_SEPARATOR + memberName;
             String memberPath = memberPathBase + Path.PATH_SEPARATOR;
-
+            if (PersistenceTrace.traceMeta) {
+                log.info("{} build member {}", Trace.id(), memberPath);
+            }
             MemberOperationsMeta alreadyMapped = membersByPath.get(memberPath);
             if (alreadyMapped != null) {
                 if (!memberMeta.isEmbedded()) {
@@ -372,6 +402,9 @@ public class EntityOperationsMeta {
                     if ((createdTimestampMember == null) && (memberName.equals(mainEntityMeta.getCreatedTimestampMember()))) {
                         createdTimestampMember = member;
                     }
+                    if (PersistenceTrace.traceMeta) {
+                        log.info("{} added member {}", Trace.id(), member.getMemberPath());
+                    }
                 }
 
                 Indexed index = memberMeta.getAnnotation(Indexed.class);
@@ -413,12 +446,15 @@ public class EntityOperationsMeta {
                 }
             }
         }
+        if (PersistenceTrace.traceMeta) {
+            log.info("{} build {}", Trace.returns(), entityMeta.getEntityClass().getName());
+        }
     }
 
     private void assertTypeCompativility(MemberMeta memberMetaSuper, MemberMeta memberMetaOverride) {
         if (memberMetaSuper.getValueClass() != memberMetaOverride.getValueClass()
-                && memberMetaSuper.getValueClass().isAssignableFrom(memberMetaOverride.getValueClass())) {
-            throw new DevInfoUnRecoverableRuntimeException("Incompatible mapping {0} {1} and {2} {3}", memberMetaSuper.getFieldName(),
+                && (!memberMetaSuper.getValueClass().isAssignableFrom(memberMetaOverride.getValueClass()))) {
+            throw new DevInfoUnRecoverableRuntimeException("Incompatible mapping '{0}' {1} and '{2}' {3}", memberMetaSuper.getFieldName(),
                     memberMetaSuper.getValueClass(), memberMetaOverride.getFieldName(), memberMetaOverride.getValueClass());
         }
     }

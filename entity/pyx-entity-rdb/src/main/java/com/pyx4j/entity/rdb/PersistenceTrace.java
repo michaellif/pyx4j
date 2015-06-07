@@ -37,6 +37,8 @@ public final class PersistenceTrace {
 
     public static final boolean trace = false;
 
+    public static final boolean traceMeta = false;
+
     public static final boolean traceSql = false;
 
     public static final boolean traceOpenSession = false;

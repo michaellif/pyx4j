@@ -30,11 +30,11 @@ public class ConditionTranslationDoubleRange extends AbstractConditionTranslatio
 
     @Override
     public <E extends IEntity> void enhanceCriteria(EntityQueryCriteria<E> criteria, Path entityMemeberPath, IDoubleRangeCondition condition) {
-        if (!condition.valueFrom().isNull()) {
-            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.GREATER_THAN_OR_EQUAL, condition.valueFrom().getValue()));
+        if (!condition.doubleValueFrom().isNull()) {
+            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.GREATER_THAN_OR_EQUAL, condition.doubleValueFrom().getValue()));
         }
-        if (!condition.valueTo().isNull()) {
-            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.LESS_THAN_OR_EQUAL, condition.valueTo().getValue()));
+        if (!condition.doubleValueTo().isNull()) {
+            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.LESS_THAN_OR_EQUAL, condition.doubleValueTo().getValue()));
         }
     }
 

@@ -30,8 +30,8 @@ public class ConditionTranslationString extends AbstractConditionTranslation<ISt
 
     @Override
     public <E extends IEntity> void enhanceCriteria(EntityQueryCriteria<E> criteria, Path entityMemeberPath, IStringCondition condition) {
-        if (!condition.value().isNull()) {
-            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.RDB_LIKE, condition.value().getValue()));
+        if (!condition.stringValue().isNull()) {
+            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.RDB_LIKE, condition.stringValue().getValue()));
         }
     }
 }

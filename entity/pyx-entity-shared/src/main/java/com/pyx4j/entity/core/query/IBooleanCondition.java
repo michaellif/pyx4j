@@ -27,5 +27,5 @@ import com.pyx4j.entity.core.IPrimitive;
 public interface IBooleanCondition extends ICondition {
 
     @MemberColumn(name = "val_bln")
-    IPrimitive<Boolean> value();
+    IPrimitive<Boolean> booleanValue();
 }
