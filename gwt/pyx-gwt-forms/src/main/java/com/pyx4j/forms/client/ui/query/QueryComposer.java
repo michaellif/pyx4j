@@ -20,20 +20,170 @@
  */
 package com.pyx4j.forms.client.ui.query;
 
-import com.pyx4j.commons.IFormatter;
-import com.pyx4j.entity.core.query.IQuery;
-import com.pyx4j.widgets.client.IFocusWidget;
-import com.pyx4j.widgets.client.TextBox;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.Composite;
 
-public class QueryComposer<E extends IQuery<?>> extends TextBox<E> implements IFocusWidget {
+import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.core.query.IQuery;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.IFocusWidget;
+import com.pyx4j.widgets.client.dialog.OkCancelOption;
+import com.pyx4j.widgets.client.selector.ItemHolderFactory;
+import com.pyx4j.widgets.client.selector.SelectorListBox;
+import com.pyx4j.widgets.client.selector.SelectorListBoxValuePanel;
+
+@SuppressWarnings("rawtypes")
+public class QueryComposer<E extends IQuery> extends Composite implements IFocusWidget {
+
+    private static final I18n i18n = I18n.get(QueryComposer.class);
+
+    private IQuery value;
+
+    private SelectorListBox<FilterItem> content;
 
     public QueryComposer() {
-        setFormatter(new IFormatter<E, String>() {
+        content = new SelectorListBox<FilterItem>(new FilterItemOptionsGrabber(), new IFormatter<FilterItem, SafeHtml>() {
+            @Override
+            public SafeHtml format(FilterItem value) {
+                SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                builder.appendHtmlConstant(SimpleMessageFormat.format("<div style=\"padding:2px;\">{0}</div>", value.toString()));
+                return builder.toSafeHtml();
+            }
+        }, new ItemHolderFactory<FilterItem>() {
 
             @Override
-            public String format(E value) {
-                return value.getStringView();
+            public FilterItemHolder createItemHolder(FilterItem item, SelectorListBoxValuePanel<FilterItem> valuePanel) {
+                return new FilterItemHolder(item, valuePanel);
             }
         });
+
+        initWidget(content);
+
+        content.setAction(new Command() {
+            @Override
+            public void execute() {
+                final FilterItemAddDialog dialog = new FilterItemAddDialog(QueryComposer.this);
+
+                dialog.setDialogOptions(new OkCancelOption() {
+
+                    @Override
+                    public boolean onClickOk() {
+//                        List<FilterItem> items = new ArrayList<>(getValue());
+//
+//                        for (ColumnDescriptor cd : getColumnDescriptors()) {
+//                            if (cd.isSearchable() && !cd.isFilterAlwaysShown()) {
+//                                FilterItem item = new FilterItem(cd);
+//                                if (dialog.getSelectedItems().contains(cd) && !items.contains(item)) {
+//                                    items.add(item);
+//                                } else if (!dialog.getSelectedItems().contains(cd) && items.contains(item)) {
+//                                    items.remove(item);
+//                                }
+//                            }
+//                        }
+//                        if (items.size() > 0) {
+//                            items.get(items.size() - 1).setEditorShownOnAttach(true);
+//                        }
+//                        QueryComposer.this.setValue(items);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onClickCancel() {
+                        return true;
+                    }
+                });
+                dialog.show();
+            }
+        });
+
+        content.setWatermark(i18n.tr("+ Add Filter"));
+    }
+
+    public IQuery getValue() {
+        return value;
+    }
+
+    public void setValue(IQuery value) {
+        this.value = value;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        content.setEnabled(enabled);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return content.isEnabled();
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+        content.setEditable(editable);
+    }
+
+    @Override
+    public boolean isEditable() {
+        return content.isEditable();
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        content.setDebugId(debugId);
+    }
+
+    @Override
+    public int getTabIndex() {
+        return content.getTabIndex();
+    }
+
+    @Override
+    public void setAccessKey(char key) {
+        content.setAccessKey(key);
+    }
+
+    @Override
+    public void setFocus(boolean focused) {
+        content.setFocus(focused);
+    }
+
+    @Override
+    public void setTabIndex(int index) {
+        content.setTabIndex(index);
+    }
+
+    @Override
+    public HandlerRegistration addFocusHandler(FocusHandler handler) {
+        return content.addFocusHandler(handler);
+    }
+
+    @Override
+    public HandlerRegistration addBlurHandler(BlurHandler handler) {
+        return content.addBlurHandler(handler);
+    }
+
+    @Override
+    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
+        return content.addKeyUpHandler(handler);
+    }
+
+    @Override
+    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
+        return content.addKeyDownHandler(handler);
+    }
+
+    @Override
+    public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
+        return content.addKeyPressHandler(handler);
     }
 }

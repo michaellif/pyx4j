@@ -26,7 +26,8 @@ import com.pyx4j.entity.core.query.IQuery;
 import com.pyx4j.forms.client.ui.query.QueryComposer;
 import com.pyx4j.widgets.client.Label;
 
-public class NQuery<E extends IQuery<?>> extends NFocusField<E, QueryComposer<E>, CQuery<E>, Label> {
+@SuppressWarnings("rawtypes")
+public class NQuery<E extends IQuery> extends NFocusField<E, QueryComposer<E>, CQuery<E>, Label> {
 
     public NQuery(final CQuery<E> cQuery) {
         super(cQuery);
@@ -52,14 +53,14 @@ public class NQuery<E extends IQuery<?>> extends NFocusField<E, QueryComposer<E>
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public E getNativeValue() throws ParseException {
         if (isViewable()) {
             assert false : "getNativeValue() shouldn't be called in viewable mode";
             return null;
         } else {
-            return getEditor().getValue();
+            return (E) getEditor().getValue();
         }
     }
-
 }
