@@ -37,7 +37,6 @@ import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.Trace;
-import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
@@ -76,6 +75,8 @@ public class EntityOperationsMeta {
     private final List<MemberOperationsMeta> columnMembers = new Vector<MemberOperationsMeta>();
 
     private final Map<String, MemberOperationsMeta> membersByPath = new HashMap<String, MemberOperationsMeta>();
+
+    private final Map<String, MemberOperationsMeta> superMembersByPath = new HashMap<String, MemberOperationsMeta>();
 
     private final List<MemberOperationsMeta> cascadePersistMembers = new Vector<MemberOperationsMeta>();
 
@@ -116,35 +117,36 @@ public class EntityOperationsMeta {
         }
 
         build(dialect, dialect.getNamingConvention(), entityMeta, path, null, null, entityMeta, null);
+        superMembersByPath.putAll(membersByPath);
 
         Inheritance inheritance = entityMeta.getAnnotation(Inheritance.class);
         if ((entityMeta.getPersistableSuperClass() != null)
                 || ((inheritance != null) && (inheritance.strategy() == Inheritance.InheritanceStrategy.SINGLE_TABLE))) {
             impClasses = new HashMap<String, Class<? extends IEntity>>();
+            DiscriminatorValue discriminatorMain = Mappings.getDiscriminatorfor(entityMeta.getEntityClass());
+            if (discriminatorMain != null) {
+                impClasses.put(discriminatorMain.value(), entityMeta.getEntityClass());
+            }
             Collection<Class<? extends IEntity>> allAssignableClasses = Mappings.getPersistableAssignableFrom(entityMeta.getEntityClass());
+            allAssignableClasses.remove(entityMeta.getEntityClass());
+
             if (PersistenceTrace.traceMeta) {
                 log.info("{} has {} siblings", Trace.id(), allAssignableClasses.size());
             }
             for (Class<? extends IEntity> subclass : allAssignableClasses) {
-                // This handles entityMeta.getEntityClass() again .... TODO review
                 EntityMeta subclassMeta = EntityFactory.getEntityMeta(subclass);
                 if (PersistenceTrace.traceMeta) {
                     log.info("{} build subclass meta {}", Trace.id(), subclassMeta.getEntityClass().getName());
                 }
 
                 // TODO this is duplicate code from ValueAdapterEntityPolymorphic
-                DiscriminatorValue discriminator = subclass.getAnnotation(DiscriminatorValue.class);
+                DiscriminatorValue discriminator = Mappings.getDiscriminatorfor(subclass);
                 if (discriminator != null) {
-                    if (CommonsStringUtils.isEmpty(discriminator.value())) {
-                        throw new Error("Missing value of @DiscriminatorValue annotation on class " + subclass.getName());
-                    }
                     if (impClasses.containsKey(discriminator.value())) {
                         throw new Error("Duplicate value of @DiscriminatorValue annotation on class " + subclass.getName() + "; the same as in class "
                                 + impClasses.get(discriminator.value()));
                     }
                     impClasses.put(discriminator.value(), subclass);
-                } else if (subclass.getAnnotation(AbstractEntity.class) == null) {
-                    throw new Error("Class " + subclass.getName() + " require @AbstractEntity or @DiscriminatorValue annotation");
                 }
 
                 build(dialect, dialect.getNamingConvention(), subclassMeta, path, null, null, subclassMeta, discriminator);
@@ -205,14 +207,16 @@ public class EntityOperationsMeta {
             String memberPathBase = path + Path.PATH_SEPARATOR + memberName;
             String memberPath = memberPathBase + Path.PATH_SEPARATOR;
             if (PersistenceTrace.traceMeta) {
-                log.info("{} build member {}", Trace.id(), memberPath);
+                log.info("{} build member {} {}", Trace.id(), memberPath, memberMeta.getValueClass().getSimpleName());
             }
             MemberOperationsMeta alreadyMapped = membersByPath.get(memberPath);
             if (alreadyMapped != null) {
                 if (!memberMeta.isEmbedded()) {
-                    assertTypeCompativility(memberMeta, alreadyMapped.getMemberMeta());
-                    // if was not defined on super
-                    if ((subclassDiscriminator != null) && (alreadyMapped.getSubclassDiscriminators() != null)) {
+                    if (superMembersByPath.containsKey(memberPath)) {
+                        assertTypeCompativilityAssignable(superMembersByPath.get(memberPath).getMemberMeta(), memberMeta);
+                    } else {
+                        // if was not defined on super
+                        assertTypeCompativilityStrict(alreadyMapped.getMemberMeta(), memberMeta);
                         alreadyMapped.addSubclassDiscriminator(subclassDiscriminator);
                     }
                     continue;
@@ -448,11 +452,22 @@ public class EntityOperationsMeta {
         }
     }
 
-    private void assertTypeCompativility(MemberMeta memberMetaSuper, MemberMeta memberMetaOverride) {
+    private void assertTypeCompativilityAssignable(MemberMeta memberMetaSuper, MemberMeta memberMetaOverride) {
         if (memberMetaSuper.getValueClass() != memberMetaOverride.getValueClass()
                 && (!memberMetaSuper.getValueClass().isAssignableFrom(memberMetaOverride.getValueClass()))) {
-            throw new DevInfoUnRecoverableRuntimeException("Incompatible mapping '{0}' {1} and '{2}' {3}", memberMetaSuper.getFieldName(),
-                    memberMetaSuper.getValueClass(), memberMetaOverride.getFieldName(), memberMetaOverride.getValueClass());
+            throw new DevInfoUnRecoverableRuntimeException("Incompatible mapping\n ''{0}'' {1}\n and\n ''{2}'' {3}\n in hierarchy of {4}", //
+                    memberMetaSuper.getFieldName(), memberMetaSuper.getValueClass(), //
+                    memberMetaOverride.getFieldName(), memberMetaOverride.getValueClass(), //
+                    mainEntityMeta.getEntityClass());
+        }
+    }
+
+    private void assertTypeCompativilityStrict(MemberMeta memberMetaSuper, MemberMeta memberMetaOverride) {
+        if (memberMetaSuper.getValueClass() != memberMetaOverride.getValueClass()) {
+            throw new DevInfoUnRecoverableRuntimeException("Incompatible mapping\n ''{0}'' {1}\n and\n ''{2}'' {3}\n in hierarchy of {4}", //
+                    memberMetaSuper.getFieldName(), memberMetaSuper.getValueClass(), //
+                    memberMetaOverride.getFieldName(), memberMetaOverride.getValueClass(), //
+                    mainEntityMeta.getEntityClass());
         }
     }
 
