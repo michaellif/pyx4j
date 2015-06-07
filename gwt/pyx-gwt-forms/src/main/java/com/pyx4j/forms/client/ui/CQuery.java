@@ -22,7 +22,8 @@ package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.entity.core.query.IQuery;
 
-public class CQuery<E extends IQuery<?>> extends CFocusComponent<E, NQuery<E>> {
+@SuppressWarnings("rawtypes")
+public class CQuery<E extends IQuery> extends CFocusComponent<E, NQuery<E>> {
 
     public CQuery() {
         super();
