@@ -31,6 +31,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.shared.TextSearchDocument;
 
 @SuppressWarnings("serial")
 public class PropertyCriterion implements Criterion {
@@ -155,8 +156,12 @@ public class PropertyCriterion implements Criterion {
         return new PropertyCriterion(member, Restriction.RDB_LIKE, value);
     }
 
-    public static PropertyCriterion textSearch(IObject<?> member, String value) {
-        return new PropertyCriterion(member, Restriction.TEXT_SEARCH, value);
+    public static Criterion textSearch(IPrimitive<?> member, String textQuery) {
+        if (member.getValueClass() == TextSearchDocument.class) {
+            return new PropertyCriterion(member, Restriction.TEXT_SEARCH, textQuery);
+        } else {
+            return TextSearchCriterion.translateToLike(member, textQuery);
+        }
     }
 
     public static PropertyCriterion ne(IObject<?> member, IPrimitive<?> value) {

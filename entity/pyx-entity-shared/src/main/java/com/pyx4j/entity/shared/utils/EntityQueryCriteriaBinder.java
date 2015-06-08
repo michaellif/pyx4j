@@ -49,6 +49,9 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
 
     public interface CriterionConverter<C extends Criterion, BO extends IEntity> {
 
+        /**
+         * If returns not null Criterion will be added to criteria.
+         */
         public Criterion convertCriterion(C toCriterion, EntityQueryCriteria<BO> criteria);
 
     }
