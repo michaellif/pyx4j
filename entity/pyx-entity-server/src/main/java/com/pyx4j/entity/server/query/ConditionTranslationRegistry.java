@@ -26,7 +26,7 @@ import com.pyx4j.entity.core.query.IBooleanCondition;
 import com.pyx4j.entity.core.query.ICondition;
 import com.pyx4j.entity.core.query.IDateCondition;
 import com.pyx4j.entity.core.query.IDateOffsetCondition;
-import com.pyx4j.entity.core.query.IDoubleRangeCondition;
+import com.pyx4j.entity.core.query.IDecimalRangeCondition;
 import com.pyx4j.entity.core.query.IEntityCondition;
 import com.pyx4j.entity.core.query.IEnumCondition;
 import com.pyx4j.entity.core.query.IIntegerRangeCondition;
@@ -54,7 +54,7 @@ class ConditionTranslationRegistry {
         registerCondition(IEnumCondition.class, new ConditionTranslationEnum());
         registerCondition(IBooleanCondition.class, new ConditionTranslationBoolean());
         registerCondition(IIntegerRangeCondition.class, new ConditionTranslationIntegerRange());
-        registerCondition(IDoubleRangeCondition.class, new ConditionTranslationDoubleRange());
+        registerCondition(IDecimalRangeCondition.class, new ConditionTranslationDecimalRange());
     }
 
     <C extends ICondition> void registerCondition(Class<C> conditionClass, ConditionTranslation<C> conditionTranslation) {

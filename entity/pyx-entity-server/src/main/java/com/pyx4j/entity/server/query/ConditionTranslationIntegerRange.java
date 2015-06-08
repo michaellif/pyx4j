@@ -30,11 +30,11 @@ public class ConditionTranslationIntegerRange extends AbstractConditionTranslati
 
     @Override
     public <E extends IEntity> void enhanceCriteria(EntityQueryCriteria<E> criteria, Path entityMemeberPath, IIntegerRangeCondition condition) {
-        if (!condition.integerValueFrom().isNull()) {
-            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.GREATER_THAN_OR_EQUAL, condition.integerValueFrom().getValue()));
+        if (!condition.fromInteger().isNull()) {
+            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.GREATER_THAN_OR_EQUAL, condition.fromInteger().getValue()));
         }
-        if (!condition.integerValueTo().isNull()) {
-            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.LESS_THAN_OR_EQUAL, condition.integerValueTo().getValue()));
+        if (!condition.toInteger().isNull()) {
+            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.LESS_THAN_OR_EQUAL, condition.toInteger().getValue()));
         }
     }
 

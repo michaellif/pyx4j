@@ -23,12 +23,12 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.core.IPrimitive;
 
-@DiscriminatorValue("DoubleRange")
-public interface IDoubleRangeCondition extends ICondition {
+@DiscriminatorValue("DecimalRange")
+public interface IDecimalRangeCondition extends ICondition {
 
     @MemberColumn(name = "val_double_from")
-    IPrimitive<Double> doubleValueFrom();
+    IPrimitive<Double> fromDecimal();
 
     @MemberColumn(name = "val_double_to")
-    IPrimitive<Double> doubleValueTo();
+    IPrimitive<Double> toDecimal();
 }

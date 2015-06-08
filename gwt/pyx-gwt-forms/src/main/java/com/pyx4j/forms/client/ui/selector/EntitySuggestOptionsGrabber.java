@@ -27,7 +27,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.forms.client.ui.ReferenceDataManager;
 import com.pyx4j.widgets.client.selector.MultyWordSuggestOptionsGrabber;
@@ -35,7 +34,7 @@ import com.pyx4j.widgets.client.selector.MultyWordSuggestOptionsGrabber;
 public class EntitySuggestOptionsGrabber<E extends IEntity> extends MultyWordSuggestOptionsGrabber<IEntity> {
 
     @SuppressWarnings("unchecked")
-    public EntitySuggestOptionsGrabber(MemberMeta memberMeta) {
+    public EntitySuggestOptionsGrabber(Class<E> entityClass) {
 
         setFormatter(new IFormatter<IEntity, String>() {
             @Override
@@ -54,7 +53,7 @@ public class EntitySuggestOptionsGrabber<E extends IEntity> extends MultyWordSug
 
         });
 
-        ReferenceDataManager.<IEntity> getDataSource().obtain(new EntityQueryCriteria<IEntity>((Class<IEntity>) memberMeta.getObjectClass()),
+        ReferenceDataManager.<IEntity> getDataSource().obtain(new EntityQueryCriteria<IEntity>((Class<IEntity>) entityClass),
                 new AsyncCallback<EntitySearchResult<IEntity>>() {
 
                     @Override
