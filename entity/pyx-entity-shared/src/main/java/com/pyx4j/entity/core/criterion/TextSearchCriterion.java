@@ -19,7 +19,9 @@
  */
 package com.pyx4j.entity.core.criterion;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.GWTSerializable;
+import com.pyx4j.entity.core.IObject;
 
 public class TextSearchCriterion implements Criterion {
 
@@ -37,6 +39,20 @@ public class TextSearchCriterion implements Criterion {
 
     public String getTextQuery() {
         return textQuery;
+    }
+
+    /**
+     * Translates to Like operators for unindexed property
+     */
+    public static Criterion translateToLike(IObject<?> member, String textQuery) {
+        AndCriterion and = new AndCriterion();
+        for (String str : textQuery.split(" ")) {
+            if (CommonsStringUtils.isEmpty(str)) {
+                continue;
+            }
+            and.or().like(member, str.trim() + "*").like(member, "* " + str.trim() + "*");
+        }
+        return and;
     }
 
     @Override
