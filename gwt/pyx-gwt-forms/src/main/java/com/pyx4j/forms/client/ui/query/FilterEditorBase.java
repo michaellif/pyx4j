@@ -19,18 +19,30 @@
  */
 package com.pyx4j.forms.client.ui.query;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Composite;
 
 import com.pyx4j.entity.core.query.ICondition;
 
-public interface IFilterEditor extends IsWidget {
+public abstract class FilterEditorBase<E extends ICondition> extends Composite implements IFilterEditor {
 
-    ICondition getCondition();
+    private final E condition;
 
-    void save() throws ConditionInitializationException;
+    public FilterEditorBase(E condition) {
+        this.condition = condition;
+    }
 
-    void onShown();
+    @Override
+    public E getCondition() {
+        return condition;
+    }
 
-    void onHidden();
+    @Override
+    public void onShown() {
 
+    }
+
+    @Override
+    public void onHidden() {
+
+    }
 }

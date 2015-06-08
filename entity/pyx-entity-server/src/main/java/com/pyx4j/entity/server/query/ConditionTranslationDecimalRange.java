@@ -24,17 +24,17 @@ import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
-import com.pyx4j.entity.core.query.IDoubleRangeCondition;
+import com.pyx4j.entity.core.query.IDecimalRangeCondition;
 
-public class ConditionTranslationDoubleRange extends AbstractConditionTranslation<IDoubleRangeCondition> {
+public class ConditionTranslationDecimalRange extends AbstractConditionTranslation<IDecimalRangeCondition> {
 
     @Override
-    public <E extends IEntity> void enhanceCriteria(EntityQueryCriteria<E> criteria, Path entityMemeberPath, IDoubleRangeCondition condition) {
-        if (!condition.doubleValueFrom().isNull()) {
-            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.GREATER_THAN_OR_EQUAL, condition.doubleValueFrom().getValue()));
+    public <E extends IEntity> void enhanceCriteria(EntityQueryCriteria<E> criteria, Path entityMemeberPath, IDecimalRangeCondition condition) {
+        if (!condition.fromDecimal().isNull()) {
+            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.GREATER_THAN_OR_EQUAL, condition.fromDecimal().getValue()));
         }
-        if (!condition.doubleValueTo().isNull()) {
-            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.LESS_THAN_OR_EQUAL, condition.doubleValueTo().getValue()));
+        if (!condition.toDecimal().isNull()) {
+            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.LESS_THAN_OR_EQUAL, condition.toDecimal().getValue()));
         }
     }
 

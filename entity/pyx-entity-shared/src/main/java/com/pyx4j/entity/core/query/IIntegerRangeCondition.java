@@ -27,8 +27,8 @@ import com.pyx4j.entity.core.IPrimitive;
 public interface IIntegerRangeCondition extends ICondition {
 
     @MemberColumn(name = "val_int_from")
-    IPrimitive<Integer> integerValueFrom();
+    IPrimitive<Long> fromInteger();
 
     @MemberColumn(name = "val_int_to")
-    IPrimitive<Integer> integerValueTo();
+    IPrimitive<Long> toInteger();
 }

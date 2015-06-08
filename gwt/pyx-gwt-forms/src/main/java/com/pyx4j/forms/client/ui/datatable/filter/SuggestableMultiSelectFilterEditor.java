@@ -37,12 +37,13 @@ public class SuggestableMultiSelectFilterEditor<E extends IEntity> extends Filte
 
     private EntitySelectorListBox<E> selector;
 
+    @SuppressWarnings("unchecked")
     public SuggestableMultiSelectFilterEditor(E member) {
         super(member);
         MemberMeta mm = member.getMeta();
 
         if (mm.isEntity()) {
-            selector = new EntitySelectorListBox<>(member);
+            selector = new EntitySelectorListBox<>((Class<E>) member.getValueClass());
             selector.setWatermark(i18n.tr("+ Add item"));
         }
         initWidget(selector);

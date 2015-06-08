@@ -39,11 +39,11 @@ import com.pyx4j.widgets.client.selector.SelectorListBox;
 
 public class EntitySelectorListBox<E extends IEntity> extends SelectorListBox<E> {
 
-    private E member;
+    private Class<E> entityClass;
 
     @SuppressWarnings("unchecked")
-    public EntitySelectorListBox(E member) {
-        super((IOptionsGrabber<E>) new EntitySuggestOptionsGrabber<E>(member.getMeta()), new IFormatter<E, String>() {
+    public EntitySelectorListBox(Class<E> entityClass) {
+        super((IOptionsGrabber<E>) new EntitySuggestOptionsGrabber<E>(entityClass), new IFormatter<E, String>() {
 
             @Override
             public String format(E value) {
@@ -60,7 +60,7 @@ public class EntitySelectorListBox<E extends IEntity> extends SelectorListBox<E>
             }
         });
 
-        this.member = member;
+        this.entityClass = entityClass;
     }
 
     @Override
@@ -79,8 +79,7 @@ public class EntitySelectorListBox<E extends IEntity> extends SelectorListBox<E>
             keys.add(value.getPrimaryKey());
         }
 
-        @SuppressWarnings("unchecked")
-        EntityQueryCriteria<E> criteria = new EntityQueryCriteria<E>((Class<E>) this.member.getObjectClass());
+        EntityQueryCriteria<E> criteria = new EntityQueryCriteria<E>(this.entityClass);
         criteria.add(PropertyCriterion.in(criteria.proto().id(), keys));
         ReferenceDataManager.<E> getDataSource().obtain(criteria, new AsyncCallback<EntitySearchResult<E>>() {
 

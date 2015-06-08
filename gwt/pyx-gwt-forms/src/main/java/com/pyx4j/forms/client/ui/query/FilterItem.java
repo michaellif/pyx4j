@@ -23,7 +23,7 @@ import com.pyx4j.entity.core.query.ICondition;
 
 public class FilterItem implements Comparable<FilterItem> {
 
-    private ICondition condition;
+    private final ICondition condition;
 
     public FilterItem(ICondition condition) {
         this.condition = condition;
@@ -31,10 +31,6 @@ public class FilterItem implements Comparable<FilterItem> {
 
     public ICondition getCondition() {
         return condition;
-    }
-
-    public void setCondition(ICondition condition) {
-        this.condition = condition;
     }
 
     @Override
