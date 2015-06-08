@@ -28,7 +28,6 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.IVersionData;
 import com.pyx4j.entity.core.IVersionedEntity;
-import com.pyx4j.entity.shared.TextSearchDocument;
 
 /**
  *
@@ -111,7 +110,7 @@ public abstract class FiltersBuilder {
         return this;
     }
 
-    public final FiltersBuilder textSearch(IPrimitive<TextSearchDocument> criteria_proto_member, String value) {
+    public final FiltersBuilder textSearch(IPrimitive<?> criteria_proto_member, String value) {
         addCriterion(PropertyCriterion.textSearch(criteria_proto_member, value));
         return this;
     }
