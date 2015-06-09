@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.query.QueryComposer;
 import com.pyx4j.widgets.client.Label;
 
 @SuppressWarnings("rawtypes")
-public class NQuery<E extends IQuery> extends NFocusField<E, QueryComposer<E>, CQuery<E>, Label> {
+public class NQuery<E extends IQuery> extends NField<E, QueryComposer<E>, CQuery<E>, Label> {
 
     public NQuery(final CQuery<E> cQuery) {
         super(cQuery);
