@@ -63,4 +63,5 @@ public class NQuery<E extends IQuery> extends NFocusField<E, QueryComposer<E>, C
             return (E) getEditor().getQuery();
         }
     }
+
 }
