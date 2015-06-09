@@ -80,4 +80,14 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
     public boolean isEditorShownOnAttach() {
         return getItem().isEditorShownOnAttach();
     }
+
+    @Override
+    protected boolean onEditingComplete() {
+        try {
+            getEditor().save();
+            return super.onEditingComplete();
+        } catch (ConditionInitializationException e) {
+            return false;
+        }
+    }
 }

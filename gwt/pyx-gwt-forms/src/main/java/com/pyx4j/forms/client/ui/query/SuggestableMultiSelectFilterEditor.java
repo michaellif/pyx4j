@@ -49,7 +49,8 @@ public class SuggestableMultiSelectFilterEditor extends FilterEditorBase<IEntity
     @SuppressWarnings("unchecked")
     @Override
     public void save() {
-        getCondition().references().setValue(selector.getValue());
+        getCondition().references().clear();
+        getCondition().references().addAll(selector.getValue());
     }
 
     @Override
