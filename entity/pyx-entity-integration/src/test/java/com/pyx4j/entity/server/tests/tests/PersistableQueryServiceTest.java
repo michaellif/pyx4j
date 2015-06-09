@@ -38,7 +38,7 @@ public class PersistableQueryServiceTest extends TestCase {
         PersistableQueryTestListService service = TestServiceFactory.create(PersistableQueryTestListService.class);
 
         EmployeeQuery criteria = EntityFactory.create(EmployeeQuery.class);
-        criteria.firstName().value().setValue("Bob");
+        criteria.firstName().stringValue().setValue("Bob");
 
         service.list(null, criteria);
     }
