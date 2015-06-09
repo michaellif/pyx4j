@@ -123,29 +123,28 @@ public class QueryComposer<E extends IQuery> extends Composite implements IFocus
     }
 
     public void setQuery(IQuery query) {
-        if (this.query != query) {
-            this.query = query;
+        this.query = query;
 
-            List<FilterItem> items = new ArrayList<>();
-            options.clear();
+        List<FilterItem> items = new ArrayList<>();
+        options.clear();
 
-            if (query != null) {
-                for (String memberName : query.getEntityMeta().getMemberNames()) {
-                    IObject<?> member = query.getMember(memberName);
-                    if (member instanceof ICondition) {
-                        FilterItem item = new FilterItem((ICondition) query.getMember(memberName));
-                        options.add(item);
-                        if (!member.isNull()) {
-                            items.add(item);
-                        }
+        if (query != null) {
+            for (String memberName : query.getEntityMeta().getMemberNames()) {
+                IObject<?> member = query.getMember(memberName);
+                if (member instanceof ICondition) {
+                    FilterItem item = new FilterItem((ICondition) query.getMember(memberName));
+                    options.add(item);
+                    if (!member.isNull()) {
+                        items.add(item);
                     }
                 }
             }
-
-            content.setValue(items);
-
-            ((FilterOptionsGrabber) content.getOptionsGrabber()).updateFilterOptions(options);
         }
+
+        content.setValue(items);
+
+        ((FilterOptionsGrabber) content.getOptionsGrabber()).updateFilterOptions(options);
+
     }
 
     public List<FilterItem> getOptions() {
