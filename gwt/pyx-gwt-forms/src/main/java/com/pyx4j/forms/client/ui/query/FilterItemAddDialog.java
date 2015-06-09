@@ -31,44 +31,31 @@ public class FilterItemAddDialog extends Dialog {
 
     private static final I18n i18n = I18n.get(FilterItemAddDialog.class);
 
-    private final CheckGroup<ColumnDescriptor> checkGroup;
+    private final CheckGroup<FilterItem> checkGroup;
 
-    public FilterItemAddDialog(QueryComposer parent) {
+    public FilterItemAddDialog(QueryComposer<?> parent) {
         super(i18n.tr("Select Additional Filter Items"));
 
         checkGroup = new CheckGroup<>(Layout.VERTICAL);
-        checkGroup.setFormatter(new IFormatter<ColumnDescriptor, SafeHtml>() {
+        checkGroup.setFormatter(new IFormatter<FilterItem, SafeHtml>() {
 
             @Override
-            public SafeHtml format(ColumnDescriptor value) {
-                return SafeHtmlUtils.fromTrustedString(value.getColumnTitle());
+            public SafeHtml format(FilterItem value) {
+                return SafeHtmlUtils.fromTrustedString(value.toString());
             }
         });
 
         checkGroup.setHeight("200px");
         checkGroup.setWidth("100%");
 
-        List<ColumnDescriptor> options = new ArrayList<>();
-
-//        for (ColumnDescriptor cd : parent.getColumnDescriptors()) {
-//            if (cd.isSearchable() && !cd.isFilterAlwaysShown()) {
-//                options.add(cd);
-//            }
-//        }
-
-        checkGroup.setOptions(options);
-
-        List<ColumnDescriptor> descriptors = new ArrayList<>();
-//        for (FilterItem item : parent.getValue()) {
-//            descriptors.add(item.getColumnDescriptor());
-//        }
-        checkGroup.setValue(descriptors);
+        checkGroup.setOptions(parent.getOptions());
+        checkGroup.setValue(parent.getValue());
 
         setDialogPixelWidth(300);
         setBody(new ScrollPanel(checkGroup));
     }
 
-    public Collection<ColumnDescriptor> getSelectedItems() {
+    public Collection<FilterItem> getSelectedItems() {
         return checkGroup.getValue();
     }
 

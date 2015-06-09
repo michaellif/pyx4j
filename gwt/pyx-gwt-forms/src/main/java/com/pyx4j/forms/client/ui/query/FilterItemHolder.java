@@ -40,19 +40,19 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
 
     private static IFilterEditor createFilterEditor(ICondition condition) {
         IFilterEditor editor = null;
-        if (condition.equals(IEntityCondition.class)) {
+        if (condition instanceof IEntityCondition) {
             editor = new SuggestableMultiSelectFilterEditor((IEntityCondition) condition);
-        } else if (condition.equals(IEnumCondition.class)) {
+        } else if (condition instanceof IEnumCondition) {
             editor = new MultiSelectFilterEditor((IEnumCondition) condition);
-        } else if (condition.equals(IBooleanCondition.class)) {
+        } else if (condition instanceof IBooleanCondition) {
             editor = new BooleanFilterEditor((IBooleanCondition) condition);
-        } else if (condition.equals(IStringCondition.class)) {
+        } else if (condition instanceof IStringCondition) {
             editor = new TextQueryFilterEditor((IStringCondition) condition);
-        } else if (condition.equals(IDateCondition.class)) {
+        } else if (condition instanceof IDateCondition) {
             editor = new DateFilterEditor((IDateCondition) condition);
-        } else if (condition.equals(IIntegerRangeCondition.class)) {
+        } else if (condition instanceof IIntegerRangeCondition) {
             editor = new IntegerFilterEditor((IIntegerRangeCondition) condition);
-        } else if (condition.equals(IDecimalRangeCondition.class)) {
+        } else if (condition instanceof IDecimalRangeCondition) {
             editor = new DecimalFilterEditor((IDecimalRangeCondition) condition);
         } else {
             throw new Error("Filter can't be created");
@@ -78,6 +78,6 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
 
     @Override
     public boolean isEditorShownOnAttach() {
-        return true;
+        return getItem().isEditorShownOnAttach();
     }
 }

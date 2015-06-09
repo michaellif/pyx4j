@@ -20,6 +20,10 @@
  */
 package com.pyx4j.forms.client.ui.query;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -34,6 +38,8 @@ import com.google.gwt.user.client.ui.Composite;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.query.ICondition;
 import com.pyx4j.entity.core.query.IQuery;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.IFocusWidget;
@@ -47,12 +53,17 @@ public class QueryComposer<E extends IQuery> extends Composite implements IFocus
 
     private static final I18n i18n = I18n.get(QueryComposer.class);
 
-    private IQuery value;
+    private IQuery query;
 
     private SelectorListBox<FilterItem> content;
 
+    private List<FilterItem> options;
+
     public QueryComposer() {
-        content = new SelectorListBox<FilterItem>(new FilterItemOptionsGrabber(), new IFormatter<FilterItem, SafeHtml>() {
+
+        options = new ArrayList<>();
+
+        content = new SelectorListBox<FilterItem>(new FilterOptionsGrabber(), new IFormatter<FilterItem, SafeHtml>() {
             @Override
             public SafeHtml format(FilterItem value) {
                 SafeHtmlBuilder builder = new SafeHtmlBuilder();
@@ -78,22 +89,20 @@ public class QueryComposer<E extends IQuery> extends Composite implements IFocus
 
                     @Override
                     public boolean onClickOk() {
-//                        List<FilterItem> items = new ArrayList<>(getValue());
-//
-//                        for (ColumnDescriptor cd : getColumnDescriptors()) {
-//                            if (cd.isSearchable() && !cd.isFilterAlwaysShown()) {
-//                                FilterItem item = new FilterItem(cd);
-//                                if (dialog.getSelectedItems().contains(cd) && !items.contains(item)) {
-//                                    items.add(item);
-//                                } else if (!dialog.getSelectedItems().contains(cd) && items.contains(item)) {
-//                                    items.remove(item);
-//                                }
-//                            }
-//                        }
-//                        if (items.size() > 0) {
-//                            items.get(items.size() - 1).setEditorShownOnAttach(true);
-//                        }
-//                        QueryComposer.this.setValue(items);
+                        List<FilterItem> items = new ArrayList<>(content.getValue());
+
+                        for (FilterItem item : options) {
+                            if (dialog.getSelectedItems().contains(item) && !items.contains(item)) {
+                                items.add(item);
+                            } else if (!dialog.getSelectedItems().contains(item) && items.contains(item)) {
+                                items.remove(item);
+                            }
+                        }
+                        if (items.size() > 0) {
+                            items.get(items.size() - 1).setEditorShownOnAttach(true);
+                        }
+
+                        content.setValue(items);
                         return true;
                     }
 
@@ -109,12 +118,41 @@ public class QueryComposer<E extends IQuery> extends Composite implements IFocus
         content.setWatermark(i18n.tr("+ Add Filter"));
     }
 
-    public IQuery getValue() {
-        return value;
+    public IQuery getQuery() {
+        return query;
     }
 
-    public void setValue(IQuery value) {
-        this.value = value;
+    public void setQuery(IQuery query) {
+        this.query = query;
+
+        List<FilterItem> items = new ArrayList<>();
+        options.clear();
+
+        if (query != null) {
+            for (String memberName : query.getEntityMeta().getMemberNames()) {
+                IObject<?> member = query.getMember(memberName);
+                if (member instanceof ICondition) {
+                    FilterItem item = new FilterItem((ICondition) query.getMember(memberName));
+                    options.add(item);
+                    if (!member.isNull()) {
+                        items.add(item);
+                    }
+                }
+            }
+        }
+
+        content.setValue(items);
+
+        ((FilterOptionsGrabber) content.getOptionsGrabber()).updateFilterOptions(options);
+
+    }
+
+    public List<FilterItem> getOptions() {
+        return options;
+    }
+
+    public Collection<FilterItem> getValue() {
+        return content.getValue();
     }
 
     @Override
