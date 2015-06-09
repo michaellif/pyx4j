@@ -25,6 +25,8 @@ public class FilterItem implements Comparable<FilterItem> {
 
     private final ICondition condition;
 
+    private boolean editorShownOnAttach;
+
     public FilterItem(ICondition condition) {
         this.condition = condition;
     }
@@ -59,4 +61,11 @@ public class FilterItem implements Comparable<FilterItem> {
         return 31 + ((condition == null) ? 0 : condition.hashCode());
     }
 
+    public boolean isEditorShownOnAttach() {
+        return editorShownOnAttach;
+    }
+
+    public void setEditorShownOnAttach(boolean editorShownOnAttach) {
+        this.editorShownOnAttach = editorShownOnAttach;
+    }
 }
