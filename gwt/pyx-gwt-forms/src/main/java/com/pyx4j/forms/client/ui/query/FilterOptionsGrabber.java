@@ -20,11 +20,25 @@
  */
 package com.pyx4j.forms.client.ui.query;
 
+import java.util.List;
+
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.selector.MultyWordSuggestOptionsGrabber;
 
-public class FilterItemOptionsGrabber extends MultyWordSuggestOptionsGrabber<FilterItem> {
+public class FilterOptionsGrabber extends MultyWordSuggestOptionsGrabber<FilterItem> {
 
-    public FilterItemOptionsGrabber() {
+    public FilterOptionsGrabber() {
+        setFormatter(new IFormatter<FilterItem, String>() {
+
+            @Override
+            public String format(FilterItem value) {
+                return value.toString();
+            }
+        });
+    }
+
+    public void updateFilterOptions(List<FilterItem> options) {
+        setAllOptions(options);
     }
 
 }
