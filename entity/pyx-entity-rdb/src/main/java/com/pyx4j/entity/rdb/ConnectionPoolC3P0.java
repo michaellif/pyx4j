@@ -132,12 +132,14 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
         dataSource.setTestConnectionOnCheckout(cpConfiguration.testConnectionOnCheckout());
         dataSource.setTestConnectionOnCheckin(cpConfiguration.testConnectionOnCheckin());
 
-        Map<String, Object> extensions = new HashMap<>();
-        extensions.put(ConnectionPoolType.class.getName(), connectionType);
-        extensions.put(ConnectionCustomizer.class.getName(), connectionCustomizer);
-        dataSource.setExtensions(extensions);
+        if (connectionCustomizer != null) {
+            Map<String, Object> extensions = new HashMap<>();
+            extensions.put(ConnectionPoolType.class.getName(), connectionType);
+            extensions.put(ConnectionCustomizer.class.getName(), connectionCustomizer);
+            dataSource.setExtensions(extensions);
 
-        dataSource.setConnectionCustomizerClassName(C3P0ConnectionCustomizer.class.getName());
+            dataSource.setConnectionCustomizerClassName(C3P0ConnectionCustomizer.class.getName());
+        }
 
         log.debug("{} Pool size is {} min and {} max", connectionType, dataSource.getMinPoolSize(), dataSource.getMaxPoolSize());
 
