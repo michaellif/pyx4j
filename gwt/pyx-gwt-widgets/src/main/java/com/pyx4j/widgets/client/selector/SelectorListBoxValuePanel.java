@@ -132,13 +132,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
                     this.itemsPanel.insert(itemHolder, itemsPanel.getWidgetCount() - 1);
                     if (itemHolder instanceof EditableItemHolder) {
                         if (((EditableItemHolder<E>) itemHolder).isEditorShownOnAttach()) {
-                            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-
-                                @Override
-                                public void execute() {
-                                    ((EditableItemHolder<E>) itemHolder).showEditor();
-                                }
-                            });
+                            ((EditableItemHolder<E>) itemHolder).showEditor();
                         }
                     }
                 }
