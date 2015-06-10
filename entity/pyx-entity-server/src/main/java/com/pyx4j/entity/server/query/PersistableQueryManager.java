@@ -96,12 +96,13 @@ class PersistableQueryManager {
                     Validate.isEquals(origCondition.id(), condition.id(), "attached to different graph; query member " + condition.getPath());
                 }
 
-                condition.columnId().setValue(columnId);
-
                 ConditionTranslation<ICondition> ct = ConditionTranslationRegistry.instance().getConditionTranslation(condition);
                 ct.onBeforePersist(condition);
 
-                newConditions.add(condition);
+                if (!condition.isNull()) {
+                    condition.columnId().setValue(columnId);
+                    newConditions.add(condition);
+                }
             }
         }
         queryStorage.conditions().clear();

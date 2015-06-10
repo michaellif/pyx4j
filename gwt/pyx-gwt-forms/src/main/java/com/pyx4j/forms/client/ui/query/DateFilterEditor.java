@@ -80,8 +80,8 @@ public class DateFilterEditor extends FilterEditorBase<IDateCondition> {
             }
         });
 
-        fromBox.setValue(new LogicalDate(getCondition().fromDate().getValue()));
-        toBox.setValue(new LogicalDate(getCondition().toDate().getValue()));
+        fromBox.setValue(getCondition().fromDate().isNull() ? null : new LogicalDate(getCondition().fromDate().getValue()));
+        toBox.setValue(getCondition().toDate().isNull() ? null : new LogicalDate(getCondition().toDate().getValue()));
 
     }
 
