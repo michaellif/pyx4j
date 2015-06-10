@@ -55,7 +55,7 @@ public class QueryComposer<E extends IQuery> extends Composite implements IFocus
 
     private IQuery query;
 
-    private SelectorListBox<FilterItem> content;
+    private FilterListBox content;
 
     private List<FilterItem> options;
 
@@ -63,20 +63,7 @@ public class QueryComposer<E extends IQuery> extends Composite implements IFocus
 
         options = new ArrayList<>();
 
-        content = new SelectorListBox<FilterItem>(new FilterOptionsGrabber(), new IFormatter<FilterItem, SafeHtml>() {
-            @Override
-            public SafeHtml format(FilterItem value) {
-                SafeHtmlBuilder builder = new SafeHtmlBuilder();
-                builder.appendHtmlConstant(SimpleMessageFormat.format("<div style=\"padding:2px;\">{0}</div>", value.toString()));
-                return builder.toSafeHtml();
-            }
-        }, new ItemHolderFactory<FilterItem>() {
-
-            @Override
-            public FilterItemHolder createItemHolder(FilterItem item, SelectorListBoxValuePanel<FilterItem> valuePanel) {
-                return new FilterItemHolder(item, valuePanel);
-            }
-        });
+        content = new FilterListBox();
 
         initWidget(content);
 
@@ -223,5 +210,30 @@ public class QueryComposer<E extends IQuery> extends Composite implements IFocus
     @Override
     public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
         return content.addKeyPressHandler(handler);
+    }
+
+    class FilterListBox extends SelectorListBox<FilterItem> {
+        public FilterListBox() {
+            super(new FilterOptionsGrabber(), new IFormatter<FilterItem, SafeHtml>() {
+                @Override
+                public SafeHtml format(FilterItem value) {
+                    SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                    builder.appendHtmlConstant(SimpleMessageFormat.format("<div style=\"padding:2px;\">{0}</div>", value.toString()));
+                    return builder.toSafeHtml();
+                }
+            }, new ItemHolderFactory<FilterItem>() {
+
+                @Override
+                public FilterItemHolder createItemHolder(FilterItem item, SelectorListBoxValuePanel<FilterItem> valuePanel) {
+                    return new FilterItemHolder(item, valuePanel);
+                }
+            });
+        }
+
+        @Override
+        public void setSelection(FilterItem item) {
+            item.setEditorShownOnAttach(true);
+            super.setSelection(item);
+        }
     }
 }

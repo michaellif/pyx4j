@@ -21,6 +21,8 @@ package com.pyx4j.widgets.client.selector;
 
 import java.util.Collection;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -125,12 +127,18 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
         if (value.size() > 0) {
             for (E item : value) {
                 if (item != null) {
-                    ItemHolder<E> itemHolder = itemHolderFactory.createItemHolder(item, this);
+                    final ItemHolder<E> itemHolder = itemHolderFactory.createItemHolder(item, this);
                     itemHolder.setSelectorListBoxValuePanel(this);
                     this.itemsPanel.insert(itemHolder, itemsPanel.getWidgetCount() - 1);
                     if (itemHolder instanceof EditableItemHolder) {
                         if (((EditableItemHolder<E>) itemHolder).isEditorShownOnAttach()) {
-                            ((EditableItemHolder<E>) itemHolder).showEditor();
+                            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+
+                                @Override
+                                public void execute() {
+                                    ((EditableItemHolder<E>) itemHolder).showEditor();
+                                }
+                            });
                         }
                     }
                 }
