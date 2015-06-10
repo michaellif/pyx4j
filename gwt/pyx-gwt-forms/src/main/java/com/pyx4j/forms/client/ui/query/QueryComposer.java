@@ -76,20 +76,13 @@ public class QueryComposer<E extends IQuery> extends Composite implements IFocus
 
                     @Override
                     public boolean onClickOk() {
-                        List<FilterItem> items = new ArrayList<>(content.getValue());
-
-                        for (FilterItem item : options) {
-                            if (dialog.getSelectedItems().contains(item) && !items.contains(item)) {
-                                items.add(item);
-                            } else if (!dialog.getSelectedItems().contains(item) && items.contains(item)) {
-                                items.remove(item);
-                            }
+                        FilterItem selectedItem = dialog.getSelectedItem();
+                        if (selectedItem != null) {
+                            List<FilterItem> items = new ArrayList<>(content.getValue());
+                            selectedItem.setEditorShownOnAttach(true);
+                            items.add(selectedItem);
+                            content.setValue(items);
                         }
-                        if (items.size() > 0) {
-                            items.get(items.size() - 1).setEditorShownOnAttach(true);
-                        }
-
-                        content.setValue(items);
                         return true;
                     }
 
