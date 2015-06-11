@@ -127,6 +127,7 @@
         <module>entity/pyx-entity-rdb</module>
 
         <module>entity/pyx-entity-assert</module>
+        <module>entity/pyx-entity-integration</module>
 <!--
         <module>entity/entity-hibernate</module>
 -->

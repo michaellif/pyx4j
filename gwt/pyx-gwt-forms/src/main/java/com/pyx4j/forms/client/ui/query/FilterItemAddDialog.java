@@ -13,7 +13,6 @@
 package com.pyx4j.forms.client.ui.query;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -21,54 +20,42 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.CheckGroup;
 import com.pyx4j.widgets.client.OptionGroup.Layout;
+import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
 public class FilterItemAddDialog extends Dialog {
 
     private static final I18n i18n = I18n.get(FilterItemAddDialog.class);
 
-    private final CheckGroup<ColumnDescriptor> checkGroup;
+    private final RadioGroup<FilterItem> checkGroup;
 
-    public FilterItemAddDialog(QueryComposer parent) {
+    public FilterItemAddDialog(QueryComposer<?> parent) {
         super(i18n.tr("Select Additional Filter Items"));
 
-        checkGroup = new CheckGroup<>(Layout.VERTICAL);
-        checkGroup.setFormatter(new IFormatter<ColumnDescriptor, SafeHtml>() {
+        checkGroup = new RadioGroup<>(Layout.VERTICAL);
+        checkGroup.setFormatter(new IFormatter<FilterItem, SafeHtml>() {
 
             @Override
-            public SafeHtml format(ColumnDescriptor value) {
-                return SafeHtmlUtils.fromTrustedString(value.getColumnTitle());
+            public SafeHtml format(FilterItem value) {
+                return SafeHtmlUtils.fromTrustedString(value.toString());
             }
         });
 
         checkGroup.setHeight("200px");
         checkGroup.setWidth("100%");
 
-        List<ColumnDescriptor> options = new ArrayList<>();
-
-//        for (ColumnDescriptor cd : parent.getColumnDescriptors()) {
-//            if (cd.isSearchable() && !cd.isFilterAlwaysShown()) {
-//                options.add(cd);
-//            }
-//        }
+        List<FilterItem> options = new ArrayList<>(parent.getOptions());
+        options.removeAll(parent.getValue());
 
         checkGroup.setOptions(options);
-
-        List<ColumnDescriptor> descriptors = new ArrayList<>();
-//        for (FilterItem item : parent.getValue()) {
-//            descriptors.add(item.getColumnDescriptor());
-//        }
-        checkGroup.setValue(descriptors);
 
         setDialogPixelWidth(300);
         setBody(new ScrollPanel(checkGroup));
     }
 
-    public Collection<ColumnDescriptor> getSelectedItems() {
+    public FilterItem getSelectedItem() {
         return checkGroup.getValue();
     }
 

@@ -29,9 +29,4 @@ public interface EmployeeQuery extends IQuery<Employee> {
 
     IStringCondition firstName();
 
-//    ICriterionRef<Department> complex();
-//
-//    ICriterionOptions<Boolean> reliable();
-//
-//    ICriterionNumber<Integer> rating();
 }

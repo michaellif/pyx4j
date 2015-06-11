@@ -19,27 +19,46 @@
  */
 package com.pyx4j.entity.server.tests.tests;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.tests.domain.EmployeeQuery;
 import com.pyx4j.entity.server.tests.rpc.PersistableQueryTestListService;
+import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.unit.server.AsyncCallbackAssertion;
 import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
-public class PersistableQueryServiceTest extends TestCase {
+@Ignore
+public class PersistableQueryServiceTest {
 
-    @Override
-    protected void tearDown() throws Exception {
+    @Before
+    public void setUp() {
+        // Need DB
+    }
+
+    @After
+    public void tearDown() throws Exception {
         TestLifecycle.tearDown();
     }
 
+    @Test
     public void testPersistableQueryUsage() {
         PersistableQueryTestListService service = TestServiceFactory.create(PersistableQueryTestListService.class);
 
         EmployeeQuery criteria = EntityFactory.create(EmployeeQuery.class);
-        criteria.firstName().value().setValue("Bob");
+        criteria.firstName().stringValue().setValue("Bob");
 
-        service.list(null, criteria);
+        service.list(new AsyncCallbackAssertion<EntitySearchResult<Employee>>() {
+
+            @Override
+            public void onSuccess(EntitySearchResult<Employee> result) {
+                // TODO Auto-generated method stub
+            }
+        }, criteria);
     }
 }
