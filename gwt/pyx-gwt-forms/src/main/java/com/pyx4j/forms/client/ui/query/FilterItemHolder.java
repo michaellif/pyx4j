@@ -22,6 +22,7 @@ package com.pyx4j.forms.client.ui.query;
 import com.pyx4j.entity.core.query.IBooleanCondition;
 import com.pyx4j.entity.core.query.ICondition;
 import com.pyx4j.entity.core.query.IDateCondition;
+import com.pyx4j.entity.core.query.IDateOffsetCondition;
 import com.pyx4j.entity.core.query.IDecimalRangeCondition;
 import com.pyx4j.entity.core.query.IEntityCondition;
 import com.pyx4j.entity.core.query.IEnumCondition;
@@ -48,6 +49,8 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
             editor = new BooleanFilterEditor((IBooleanCondition) condition);
         } else if (condition instanceof IStringCondition) {
             editor = new TextQueryFilterEditor((IStringCondition) condition);
+        } else if (condition instanceof IDateOffsetCondition) {
+            editor = new DateOffsetFilterEditor((IDateOffsetCondition) condition);
         } else if (condition instanceof IDateCondition) {
             editor = new DateFilterEditor((IDateCondition) condition);
         } else if (condition instanceof IIntegerRangeCondition) {
