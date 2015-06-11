@@ -25,7 +25,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @DiscriminatorValue("DateOffset")
-public interface IDateOffsetCondition extends IDateCondition {
+public interface IDateOffsetCondition extends ICondition {
 
     @I18n
     public enum DateOffset {
