@@ -51,7 +51,8 @@ public class MultiSelectFilterEditor extends FilterEditorBase<IEnumCondition> {
     @SuppressWarnings("unchecked")
     @Override
     public void save() {
-        getCondition().values().setValue(checkGroup.getValue());
+        getCondition().values().clear();
+        getCondition().values().addAll(checkGroup.getValue());
     }
 
     @Override
