@@ -138,8 +138,8 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
         defaultCriteriaEnhancers.add(valueConvertor);
     }
 
-    public final void addCriteriaEnhancer(IObject<?> toMember, CriteriaEnhancer<BO> valueConvertor) {
-        criteriaEnhancerBinding.put(toMember.getPath(), valueConvertor);
+    public final void addCriteriaEnhancer(IObject<?> toMember, CriteriaEnhancer<BO> criteriaEnhancer) {
+        criteriaEnhancerBinding.put(toMember.getPath(), criteriaEnhancer);
     }
 
     public final EntityListCriteria<BO> convertListCriteria(EntityListCriteria<TO> toCriteria) {
