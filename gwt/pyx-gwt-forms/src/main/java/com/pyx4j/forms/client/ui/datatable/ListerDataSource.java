@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -44,7 +44,7 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
 
     private Criterion parentFiltering;
 
-    private List<Criterion> preDefinedFilters = new LinkedList<Criterion>();
+    private List<Criterion> preDefinedFilters = newPreDefinedFilters();
 
     private Key parentEntityID;
 
@@ -128,7 +128,12 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
     }
 
     public void clearPreDefinedFilters() {
-        this.preDefinedFilters.clear();
+//        this.preDefinedFilters.clear(); // not implemented in GWT - replace on:
+        this.preDefinedFilters = newPreDefinedFilters();
+    }
+
+    private List<Criterion> newPreDefinedFilters() {
+        return new LinkedList<Criterion>();
     }
 
     protected EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
