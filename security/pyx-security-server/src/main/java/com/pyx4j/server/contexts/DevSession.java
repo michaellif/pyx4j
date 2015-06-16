@@ -100,6 +100,10 @@ public class DevSession {
         return devSession;
     }
 
+    static DevSession getSession(String devSessionId) {
+        return sessions.get(devSessionId);
+    }
+
     public static DevSession beginSession() {
         DevSession session = new DevSession();
 
