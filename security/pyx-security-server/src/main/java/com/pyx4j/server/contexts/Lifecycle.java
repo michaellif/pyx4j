@@ -273,6 +273,13 @@ public class Lifecycle {
         }
     }
 
+    public static void inheritDevSession(String devSessionId) {
+        DevSession devSession = DevSession.getSession(devSessionId);
+        if (devSession != null) {
+            ServerContext.setDevSession(devSession);
+        }
+    }
+
     public static void startElevatedUserContext() {
         Visit visit = new Visit(null);
         visit.beginSession(null, new AclCreatorAllowAll().createAcl(null));
