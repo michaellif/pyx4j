@@ -55,6 +55,8 @@ public class Lifecycle {
 
     private final static Logger log = LoggerFactory.getLogger(Lifecycle.class);
 
+    private static String START_SESSION_ATR = "pyx.startSession";
+
     private static String END_SESSION_ATR = "pyx.endSession";
 
     private static String END_REQUEST_ATR = "pyx.endRpcRequest";
@@ -238,6 +240,7 @@ public class Lifecycle {
         }
         ServerContext.getVisit().beginSession(userVisit, SecurityController.instance().authorize(behaviours));
         ServerContext.getRequest().removeAttribute(END_SESSION_ATR);
+        ServerContext.getRequest().setAttribute(START_SESSION_ATR, true);
         return ServerContext.getVisit().getSessionToken();
     }
 
@@ -270,6 +273,22 @@ public class Lifecycle {
         I18nManager.setThreadLocale(inheritableUserContext.locale);
         if (inheritableUserContext.sysDate != null) {
             SystemDateManager.setDate(inheritableUserContext.sysDate);
+        }
+    }
+
+    public static boolean isSessionStartRequest() {
+        if (ServerContext.getRequest() == null) {
+            return false;
+        } else {
+            return ServerContext.getRequest().getAttribute(START_SESSION_ATR) != null;
+        }
+    }
+
+    public static boolean isSessionEndRequest() {
+        if (ServerContext.getRequest() == null) {
+            return false;
+        } else {
+            return ServerContext.getRequest().getAttribute(END_SESSION_ATR) != null;
         }
     }
 
