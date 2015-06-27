@@ -40,9 +40,9 @@ public class DateOffsetFilterEditor extends FilterEditorBase<IDateOffsetConditio
 
     private final IntegerBox offsetBox;
 
-    private final ValidationLabel dateOffsetTypeValidationLabel;
+    private final ValidationLabel offsetTypeValidationLabel;
 
-    private final ValidationLabel toBoxValidationLabel;
+    private final ValidationLabel offsetValidationLabel;
 
     public DateOffsetFilterEditor(IDateOffsetCondition condition) {
         super(condition);
@@ -56,24 +56,24 @@ public class DateOffsetFilterEditor extends FilterEditorBase<IDateOffsetConditio
             offsetTypeBox.addItem(dateOffset.toString());
         }
         contentPanel.add(offsetTypeBox);
-        dateOffsetTypeValidationLabel = new ValidationLabel(offsetTypeBox);
-        dateOffsetTypeValidationLabel.getElement().getStyle().setColor("red");
-        contentPanel.add(dateOffsetTypeValidationLabel);
+        offsetTypeValidationLabel = new ValidationLabel(offsetTypeBox);
+        offsetTypeValidationLabel.getElement().getStyle().setColor("red");
+        contentPanel.add(offsetTypeValidationLabel);
 
         contentPanel.add(new Label(i18n.tr("Offset")));
 
         offsetBox = new IntegerBox();
         offsetBox.setWidth("100px");
         contentPanel.add(offsetBox);
-        toBoxValidationLabel = new ValidationLabel(offsetBox);
-        toBoxValidationLabel.getElement().getStyle().setColor("red");
-        contentPanel.add(toBoxValidationLabel);
+        offsetValidationLabel = new ValidationLabel(offsetBox);
+        offsetValidationLabel.getElement().getStyle().setColor("red");
+        contentPanel.add(offsetValidationLabel);
 
         offsetBox.addValueChangeHandler(new ValueChangeHandler<Integer>() {
 
             @Override
             public void onValueChange(ValueChangeEvent<Integer> event) {
-                toBoxValidationLabel.setMessage(offsetBox.isParsedOk() ? null : offsetBox.getParseExceptionMessage());
+                offsetValidationLabel.setMessage(offsetBox.isParsedOk() ? null : offsetBox.getParseExceptionMessage());
             }
         });
 
