@@ -24,8 +24,11 @@ import java.text.ParseException;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
+import com.pyx4j.i18n.shared.I18n;
 
 public class IntegerBox extends TextBox<Integer> {
+
+    private static final I18n i18n = I18n.get(IntegerBox.class);
 
     public IntegerBox() {
 
@@ -36,7 +39,12 @@ public class IntegerBox extends TextBox<Integer> {
                 if (string == null || string.trim().equals("")) {
                     return null;
                 }
-                return Integer.parseInt(string);
+                try {
+                    return Integer.parseInt(string);
+                } catch (NumberFormatException e) {
+                    throw new ParseException(i18n.tr("Invalid format."), 0);
+                }
+
             }
         });
 
