@@ -22,7 +22,17 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.query.IBooleanCondition;
+import com.pyx4j.entity.core.query.ICondition;
+import com.pyx4j.entity.core.query.IDateCondition;
+import com.pyx4j.entity.core.query.IDateOffsetCondition;
+import com.pyx4j.entity.core.query.IDecimalRangeCondition;
+import com.pyx4j.entity.core.query.IEntityCondition;
+import com.pyx4j.entity.core.query.IEnumCondition;
+import com.pyx4j.entity.core.query.IIntegerRangeCondition;
 import com.pyx4j.entity.core.query.IQuery;
+import com.pyx4j.entity.core.query.IStringCondition;
 import com.pyx4j.forms.client.ui.query.QueryComposer;
 import com.pyx4j.widgets.client.Label;
 
@@ -47,7 +57,7 @@ public class NQuery<E extends IQuery> extends NField<E, QueryComposer<E>, CQuery
     @Override
     public void setNativeValue(E value) {
         if (isViewable()) {
-            getViewer().setText(value == null ? "" : value.getStringView());
+            getViewer().setText(queryToString(value));
         } else {
             getEditor().setQuery(value);
         }
@@ -61,6 +71,50 @@ public class NQuery<E extends IQuery> extends NField<E, QueryComposer<E>, CQuery
             return null;
         } else {
             return (E) getEditor().getQuery();
+        }
+    }
+
+    private String queryToString(E value) {
+        StringBuilder builder = new StringBuilder();
+        if (value != null) {
+            for (String memberName : value.getEntityMeta().getMemberNames()) {
+                IObject<?> member = value.getMember(memberName);
+                if (member instanceof ICondition) {
+                    ICondition condition = (ICondition) member;
+                    if (!condition.isNull()) {
+                        if (builder.length() > 0) {
+                            builder.append(", ");
+                        }
+                        builder.append(condition.getMeta().getCaption());
+                        builder.append("[");
+                        builder.append(conditionToString(condition));
+                        builder.append("]");
+                    }
+                }
+            }
+        }
+        return builder.toString();
+    }
+
+    private String conditionToString(ICondition condition) {
+        if (condition instanceof IEntityCondition) {
+            return ((IEntityCondition) condition).references().size() + "";
+        } else if (condition instanceof IEnumCondition) {
+            return ((IEnumCondition) condition).values().size() + "";
+        } else if (condition instanceof IBooleanCondition) {
+            return ((IBooleanCondition) condition).booleanValue().getValue() + "";
+        } else if (condition instanceof IStringCondition) {
+            return ((IStringCondition) condition).stringValue().getValue();
+        } else if (condition instanceof IDateOffsetCondition) {
+            return ((IDateOffsetCondition) condition).dateOffsetValue().getValue() + " " + ((IDateOffsetCondition) condition).dateOffsetType().getValue();
+        } else if (condition instanceof IDateCondition) {
+            return ((IDateCondition) condition).fromDate().getValue() + "-" + ((IDateCondition) condition).toDate().getValue();
+        } else if (condition instanceof IIntegerRangeCondition) {
+            return ((IIntegerRangeCondition) condition).fromInteger().getValue() + "-" + ((IIntegerRangeCondition) condition).toInteger().getValue();
+        } else if (condition instanceof IDecimalRangeCondition) {
+            return ((IDecimalRangeCondition) condition).fromDecimal().getValue() + "-" + ((IDecimalRangeCondition) condition).toDecimal().getValue();
+        } else {
+            throw new Error("Filter can't be created");
         }
     }
 
