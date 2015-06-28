@@ -110,7 +110,7 @@ public abstract class FiltersBuilder {
         return this;
     }
 
-    public final FiltersBuilder textSearch(IObject<?> criteria_proto_member, String value) {
+    public final FiltersBuilder textSearch(IPrimitive<?> criteria_proto_member, String value) {
         addCriterion(PropertyCriterion.textSearch(criteria_proto_member, value));
         return this;
     }
