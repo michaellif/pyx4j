@@ -184,6 +184,7 @@ public class MailQueue implements Runnable {
     public void run() {
         try {
             running = true;
+            log.info("MailQueue started");
             int deliveryErrorCount = 0;
             int mailQueueEmptyCount = 0;
             do {
@@ -355,18 +356,18 @@ public class MailQueue implements Runnable {
 
                         AbstractOutgoingMailQueue persistable = Executables.wrapInEntityNamespace(persistableEntityClass,
                                 new Executable<AbstractOutgoingMailQueue, RuntimeException>() {
-                                    @Override
-                                    public AbstractOutgoingMailQueue execute() {
-                                        @SuppressWarnings("unchecked")
-                                        EntityListCriteria<AbstractOutgoingMailQueue> criteria = (EntityListCriteria<AbstractOutgoingMailQueue>) EntityListCriteria
-                                                .create(persistableEntityClass);
-                                        criteria.eq(criteria.proto().status(), MailQueueStatus.Queued);
-                                        criteria.asc(criteria.proto().attempts());
-                                        criteria.desc(criteria.proto().priority());
-                                        criteria.asc(criteria.proto().updated());
-                                        return Persistence.service().retrieve(criteria);
-                                    }
-                                }).execute();
+                            @Override
+                            public AbstractOutgoingMailQueue execute() {
+                                @SuppressWarnings("unchecked")
+                                EntityListCriteria<AbstractOutgoingMailQueue> criteria = (EntityListCriteria<AbstractOutgoingMailQueue>) EntityListCriteria
+                                .create(persistableEntityClass);
+                                criteria.eq(criteria.proto().status(), MailQueueStatus.Queued);
+                                criteria.asc(criteria.proto().attempts());
+                                criteria.desc(criteria.proto().priority());
+                                criteria.asc(criteria.proto().updated());
+                                return Persistence.service().retrieve(criteria);
+                            }
+                        }).execute();
 
                         if (persistable != null) {
                             return persistable;
