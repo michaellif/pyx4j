@@ -42,7 +42,7 @@ public class FilterItem implements Comparable<FilterItem> {
 
     @Override
     public String toString() {
-        return condition.getFieldName();
+        return condition.getMeta().getCaption();
     }
 
     @Override
