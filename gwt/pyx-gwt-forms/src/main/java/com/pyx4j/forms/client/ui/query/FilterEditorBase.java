@@ -38,7 +38,7 @@ public abstract class FilterEditorBase<E extends ICondition> extends Composite i
 
     @Override
     public void onShown() {
-
+        populate();
     }
 
     @Override
