@@ -33,8 +33,11 @@ public class TextQueryFilterEditor extends FilterEditorBase<IStringCondition> {
         super(condition);
         queryBox = new StringBox();
         initWidget(queryBox);
+    }
 
-        queryBox.setValue(condition.stringValue().getValue());
+    @Override
+    public void populate() {
+        queryBox.setValue(getCondition().stringValue().getValue());
     }
 
     @Override

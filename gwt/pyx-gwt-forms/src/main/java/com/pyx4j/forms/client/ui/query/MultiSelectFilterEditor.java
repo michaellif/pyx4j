@@ -44,8 +44,12 @@ public class MultiSelectFilterEditor extends FilterEditorBase<IEnumCondition> {
 
         initWidget(checkGroup);
 
-        checkGroup.setValue(getCondition().values());
+    }
 
+    @Override
+    @SuppressWarnings({ "unchecked" })
+    public void populate() {
+        checkGroup.setValue(getCondition().values());
     }
 
     @SuppressWarnings("unchecked")
