@@ -89,9 +89,9 @@ public class NQuery<E extends IQuery> extends NField<E, QueryComposer<E>, CQuery
                             builder.append(", ");
                         }
                         builder.append(condition.getMeta().getCaption());
-                        builder.append("[");
+                        builder.append("(");
                         builder.append(conditionToString(condition));
-                        builder.append("]");
+                        builder.append(")");
                     }
                 }
             }
@@ -101,9 +101,9 @@ public class NQuery<E extends IQuery> extends NField<E, QueryComposer<E>, CQuery
 
     private String conditionToString(ICondition condition) {
         if (condition instanceof IEntityCondition) {
-            return i18n.tr("Count") + "=" + ((IEntityCondition) condition).references().size();
+            return i18n.tr("count") + "=" + ((IEntityCondition) condition).references().size();
         } else if (condition instanceof IEnumCondition) {
-            return i18n.tr("Values") + "=" + ((IEnumCondition) condition).values().getStringView();
+            return ((IEnumCondition) condition).values().getStringView();
         } else if (condition instanceof IBooleanCondition) {
             return ((IBooleanCondition) condition).booleanValue().getValue() + "";
         } else if (condition instanceof IStringCondition) {
