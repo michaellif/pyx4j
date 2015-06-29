@@ -87,4 +87,8 @@ public class UnitOfWork {
     public static void addTransactionCompensationHandler(CompensationHandler handler) {
         Persistence.service().addTransactionCompensationHandler(handler);
     }
+
+    public static void addTransactionCompletionHandler(Executable<Void, RuntimeException> handler) {
+        Persistence.service().addTransactionCompletionHandler(handler);
+    }
 }

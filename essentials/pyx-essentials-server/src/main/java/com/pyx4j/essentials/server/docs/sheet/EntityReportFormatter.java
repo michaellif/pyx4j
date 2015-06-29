@@ -21,6 +21,7 @@ package com.pyx4j.essentials.server.docs.sheet;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -115,6 +116,13 @@ public class EntityReportFormatter<E extends IEntity> {
         } else {
             return memberMeta.getCaption();
         }
+    }
+
+    public void sortMembers(Comparator<Path> comparator) {
+        if (selectedMemberNames == null) {
+            selectMemebers();
+        }
+        selectedMemberNames.sort(comparator);
     }
 
     protected void createHeaderEnds(ReportTableFormatter formatter) {
