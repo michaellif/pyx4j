@@ -34,10 +34,13 @@ import com.pyx4j.entity.core.query.IIntegerRangeCondition;
 import com.pyx4j.entity.core.query.IQuery;
 import com.pyx4j.entity.core.query.IStringCondition;
 import com.pyx4j.forms.client.ui.query.QueryComposer;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
 @SuppressWarnings("rawtypes")
 public class NQuery<E extends IQuery> extends NField<E, QueryComposer<E>, CQuery<E>, Label> {
+
+    private static final I18n i18n = I18n.get(NQuery.class);
 
     public NQuery(final CQuery<E> cQuery) {
         super(cQuery);
@@ -98,9 +101,9 @@ public class NQuery<E extends IQuery> extends NField<E, QueryComposer<E>, CQuery
 
     private String conditionToString(ICondition condition) {
         if (condition instanceof IEntityCondition) {
-            return ((IEntityCondition) condition).references().size() + "";
+            return i18n.tr("Count") + "=" + ((IEntityCondition) condition).references().size();
         } else if (condition instanceof IEnumCondition) {
-            return ((IEnumCondition) condition).values().size() + "";
+            return i18n.tr("Values") + "=" + ((IEnumCondition) condition).values().getStringView();
         } else if (condition instanceof IBooleanCondition) {
             return ((IBooleanCondition) condition).booleanValue().getValue() + "";
         } else if (condition instanceof IStringCondition) {
