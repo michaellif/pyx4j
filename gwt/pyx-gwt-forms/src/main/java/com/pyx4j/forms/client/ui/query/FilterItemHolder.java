@@ -39,6 +39,7 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
         super(item, new FilterItemFormatter(), true, valuePanel);
     }
 
+    @SuppressWarnings("rawtypes")
     private static IFilterEditor createFilterEditor(ICondition condition) {
         IFilterEditor editor = null;
         if (condition instanceof IEntityCondition) {
