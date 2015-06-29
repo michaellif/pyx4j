@@ -22,17 +22,14 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
+import com.pyx4j.commons.formatters.PhoneFormatter;
+import com.pyx4j.commons.formatters.PhoneType;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CPhoneField extends CTextFieldBase<String, NTextBox<String>> {
 
     private static final I18n i18n = I18n.get(CPhoneField.class);
-
-    public enum PhoneType {
-        northAmerica, northAmericaWithExtension, search
-    }
 
     public CPhoneField() {
         this(PhoneType.northAmericaWithExtension);
@@ -58,39 +55,6 @@ public class CPhoneField extends CTextFieldBase<String, NTextBox<String>> {
             break;
         default:
             break;
-        }
-    }
-
-    public static class PhoneFormatter implements IFormatter<String, String> {
-
-        final PhoneType phoneType;
-
-        public PhoneFormatter(PhoneType phoneType) {
-            this.phoneType = phoneType;
-        }
-
-        @Override
-        public String format(String value) {
-            if (value == null) {
-                return null;
-            }
-            String unformatedPhone = normalize(value);
-            if (unformatedPhone.length() == 10) {
-                return "(" + unformatedPhone.subSequence(0, 3) + ") " + unformatedPhone.subSequence(3, 6) + "-" + unformatedPhone.subSequence(6, 10);
-            } else if (unformatedPhone.length() > 10) {
-                return "(" + unformatedPhone.subSequence(0, 3) + ") " + unformatedPhone.subSequence(3, 6) + "-" + unformatedPhone.subSequence(6, 10) + " "
-                        + unformatedPhone.subSequence(10, unformatedPhone.length());
-            } else {
-                return unformatedPhone;
-            }
-        }
-
-        String normalize(String value) {
-            if (value == null) {
-                return null;
-            } else {
-                return value.replaceAll("[\\s\\(\\)-]+", "");
-            }
         }
     }
 
