@@ -14,25 +14,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jun 5, 2015
+ * Created on Jun 30, 2015
  * @author vlads
  */
 package com.pyx4j.entity.server.query;
 
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.Path;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.core.query.IEnumCondition;
 
-public class ConditionTranslationEnum<E extends Enum<E>> extends AbstractConditionTranslationEnum<E, IEnumCondition<E>> {
+public abstract class AbstractConditionTranslationEnum<E extends Enum<E>, T extends IEnumCondition<E>> extends AbstractConditionTranslation<T> {
 
     @Override
-    public <T extends IEntity> void enhanceCriteria(EntityQueryCriteria<T> criteria, Path entityMemeberPath, IEnumCondition<E> condition) {
-        if (!condition.values().isNull()) {
-            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.IN, condition.values()));
+    public void onBeforePersist(T condition) {
+        if (!condition.values().isValueDetached()) {
+            condition.enums().clear();
+            for (E enm : condition.values()) {
+                condition.enums().add(enm.name());
+            }
         }
     }
 
+    @Override
+    public void onAfterRetrive(T condition) {
+        Class<E> enumValueClass = condition.values().getValueClass();
+        for (String valueName : condition.enums()) {
+            condition.values().add(Enum.valueOf(enumValueClass, valueName));
+        }
+    }
 }
