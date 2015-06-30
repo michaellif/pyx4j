@@ -30,7 +30,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.commons.IDebugId;
@@ -98,27 +97,6 @@ public class RichTextEditor extends FlowPanel implements IFocusGroup, IValueBoxW
 
     public void setImageProvider(RichTextImageProvider provider) {
         toolbar.setImageProvider(provider);
-    }
-
-    @Override
-    public void onBrowserEvent(Event event) {
-        super.onBrowserEvent(event);
-        /*
-         * This is needed to help handling richTextArea onBlur events. When toolbar is inOperation state
-         * it may open other dialogs that may have focusable components. When those components receive
-         * focus it should not fire onBlur for the editor (see RichTextArea#ignoreBlur())
-         */
-        if (toolbar.inOperation()) {
-            return;
-        }
-        switch (event.getTypeInt()) {
-        case Event.ONMOUSEOUT:
-            richTextArea.ignoreBlur(false);
-            break;
-        case Event.ONMOUSEOVER:
-            richTextArea.ignoreBlur(true);
-            break;
-        }
     }
 
     @Override

@@ -28,7 +28,6 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Window;
 
@@ -42,8 +41,6 @@ public class RichTextArea extends com.google.gwt.user.client.ui.RichTextArea {
     }
 
     private EditMode editMode = EditMode.text;
-
-    private boolean ignoreBlur;
 
     private final boolean isIEUserAgent;
 
@@ -76,8 +73,6 @@ public class RichTextArea extends com.google.gwt.user.client.ui.RichTextArea {
                 removeStyleDependentName(WidgetsTheme.StyleDependent.focused.name());
             }
         });
-
-        ignoreBlur = false;
 
     }
 
@@ -193,22 +188,6 @@ public class RichTextArea extends com.google.gwt.user.client.ui.RichTextArea {
 
         return ua.contains("msie") || ua.contains("trident");
 
-    }
-
-    /*
-     * This method is used by containing component (ExtendedRichTextArea) to ignore blur events
-     * triggered by toolbar buttons. This prevents from loosing text selections due to accessing
-     * the text value by onEditiongStop() method via onBlur handler.
-     */
-    public void ignoreBlur(boolean ignore) {
-        ignoreBlur = ignore;
-    }
-
-    @Override
-    public void fireEvent(GwtEvent<?> event) {
-        if (!event.getAssociatedType().equals(BlurEvent.getType()) || !ignoreBlur) {
-            super.fireEvent(event);
-        }
     }
 
     public void setEditMode(EditMode editMode) {
