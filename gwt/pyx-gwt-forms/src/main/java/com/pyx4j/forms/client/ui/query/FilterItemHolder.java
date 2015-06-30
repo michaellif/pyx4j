@@ -22,6 +22,7 @@ package com.pyx4j.forms.client.ui.query;
 import com.pyx4j.entity.core.query.IBooleanCondition;
 import com.pyx4j.entity.core.query.ICondition;
 import com.pyx4j.entity.core.query.IDateCondition;
+import com.pyx4j.entity.core.query.IDateOffsetCondition;
 import com.pyx4j.entity.core.query.IDecimalRangeCondition;
 import com.pyx4j.entity.core.query.IEntityCondition;
 import com.pyx4j.entity.core.query.IEnumCondition;
@@ -38,6 +39,7 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
         super(item, new FilterItemFormatter(), true, valuePanel);
     }
 
+    @SuppressWarnings("rawtypes")
     private static IFilterEditor createFilterEditor(ICondition condition) {
         IFilterEditor editor = null;
         if (condition instanceof IEntityCondition) {
@@ -48,6 +50,8 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
             editor = new BooleanFilterEditor((IBooleanCondition) condition);
         } else if (condition instanceof IStringCondition) {
             editor = new TextQueryFilterEditor((IStringCondition) condition);
+        } else if (condition instanceof IDateOffsetCondition) {
+            editor = new DateOffsetFilterEditor((IDateOffsetCondition) condition);
         } else if (condition instanceof IDateCondition) {
             editor = new DateFilterEditor((IDateCondition) condition);
         } else if (condition instanceof IIntegerRangeCondition) {
@@ -59,6 +63,8 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
         }
         editor.asWidget().getElement().getStyle().setProperty("maxWidth", "250px");
         editor.asWidget().getElement().getStyle().setProperty("minWidth", "200px");
+        editor.populate();
+
         return editor;
     }
 

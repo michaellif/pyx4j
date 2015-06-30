@@ -88,9 +88,12 @@ public class IntegerFilterEditor extends FilterEditorBase<IIntegerRangeCondition
         descrLabel.getElement().getStyle().setPaddingTop(10, Unit.PX);
         contentPanel.add(descrLabel);
 
+    }
+
+    @Override
+    public void populate() {
         fromBox.setValue(getCondition().fromInteger().getValue());
         toBox.setValue(getCondition().toInteger().getValue());
-
     }
 
     @Override

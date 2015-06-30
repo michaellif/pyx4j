@@ -88,9 +88,12 @@ public class DecimalFilterEditor extends FilterEditorBase<IDecimalRangeCondition
         descrLabel.getElement().getStyle().setPaddingTop(10, Unit.PX);
         contentPanel.add(descrLabel);
 
+    }
+
+    @Override
+    public void populate() {
         fromBox.setValue(getCondition().fromDecimal().getValue());
         toBox.setValue(getCondition().toDecimal().getValue());
-
     }
 
     @Override
