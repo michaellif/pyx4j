@@ -207,6 +207,7 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
             }
         }, true));
         insertButton.addStyleName(RichTextTheme.StyleName.RteToolbarButton.name());
+        groupFocusHandler.addFocusable(insertButton);
 
         Toolbar linkPanel = new Toolbar();
         linkPanel.addItem(createButton(images.createLink(), i18n.tr("Create Link"), new Command() {
@@ -316,6 +317,8 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
             }
         }, true));
         fontButton.addStyleName(RichTextTheme.StyleName.RteToolbarButton.name());
+        groupFocusHandler.addFocusable(fontButton);
+
         fontToolbar.add(foreColors = createColorList(i18n.tr("Font Color"), new ChangeHandler() {
 
             @Override
@@ -358,6 +361,7 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
             }
         }, true));
         formatButton.addStyleName(RichTextTheme.StyleName.RteToolbarButton.name());
+        groupFocusHandler.addFocusable(formatButton);
 
         Toolbar formatPanel = new Toolbar();
 
@@ -567,6 +571,7 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
 
         button.addStyleName(toggleable ? RichTextTheme.StyleName.RteToolbarButton.name() : RichTextTheme.StyleName.RteToolbarButtonNoToggle.name());
         button.setTitle(tip);
+        groupFocusHandler.addFocusable(button);
 
         return button;
     }
@@ -620,7 +625,6 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
         formatter.createLink(url);
         // make sure the richTextArea will receive focus and will handle onBlur after this method completes.
         inOperation = false;
-        richTextEditor.getRichTextArea().ignoreBlur(false);
         richTextEditor.getRichTextArea().setFocus(true);
     }
 
@@ -630,7 +634,6 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
         formatter.insertImage(url);
         // make sure the richTextArea will receive focus and will handle onBlur after this method completes.
         inOperation = false;
-        richTextEditor.getRichTextArea().ignoreBlur(false);
         richTextEditor.getRichTextArea().setFocus(true);
     }
 
