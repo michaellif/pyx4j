@@ -20,6 +20,7 @@
 package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.commons.HtmlUtils;
+import com.pyx4j.widgets.client.richtext.RichTextArea.EditMode;
 import com.pyx4j.widgets.client.richtext.RichTextEditor.RichTextFormat;
 import com.pyx4j.widgets.client.richtext.RichTextEditor.RichTextParser;
 import com.pyx4j.widgets.client.richtext.RichTextImageProvider;
@@ -31,6 +32,7 @@ public class CRichTextArea extends CTextComponent<String, NRichTextArea> {
     private RichTextImageProvider imageProvider;
 
     public CRichTextArea() {
+        super();
         setFormatter(new RichTextFormat());
         setParser(new RichTextParser());
         setNativeComponent(new NRichTextArea(this));
@@ -62,6 +64,14 @@ public class CRichTextArea extends CTextComponent<String, NRichTextArea> {
     @Override
     public boolean isValueEmpty() {
         return super.isValueEmpty() || HtmlUtils.isEmpty(getValue());
+    }
+
+    @Override
+    protected void onReset() {
+        super.onReset();
+        if (getNativeComponent() != null) {
+            getNativeComponent().setEditMode(EditMode.text);
+        }
     }
 
 }

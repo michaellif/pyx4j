@@ -19,6 +19,8 @@
  */
 package com.pyx4j.widgets.client;
 
-public interface IFocusGroup extends IFocusWidget {
+import com.google.gwt.event.dom.client.HasAllFocusHandlers;
+
+public interface IFocusGroup extends HasAllFocusHandlers {
     GroupFocusHandler getGroupFocusHandler();
 }

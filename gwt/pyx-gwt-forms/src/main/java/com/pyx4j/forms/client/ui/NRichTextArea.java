@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.widgets.client.richtext.RichTextEditor;
 import com.pyx4j.widgets.client.richtext.RichTextImageProvider;
 import com.pyx4j.widgets.client.richtext.RichTextViewer;
+import com.pyx4j.widgets.client.richtext.RichTextArea.EditMode;
 
 public class NRichTextArea extends NValueBoxBase<String, RichTextEditor, CRichTextArea> {
 
@@ -37,12 +38,6 @@ public class NRichTextArea extends NValueBoxBase<String, RichTextEditor, CRichTe
     }
 
     @Override
-    protected void onEditorCreate() {
-        super.onEditorCreate();
-        getEditor().setImageProvider(getCComponent().getImageProvider());
-    }
-
-    @Override
     protected RichTextEditor createEditor() {
         RichTextEditor area = new RichTextEditor();
         area.setAreaHeight("20em");
@@ -52,6 +47,12 @@ public class NRichTextArea extends NValueBoxBase<String, RichTextEditor, CRichTe
     @Override
     protected HTML createViewer() {
         return new RichTextViewer();
+    }
+
+    @Override
+    protected void onEditorCreate() {
+        super.onEditorCreate();
+        getEditor().setImageProvider(getCComponent().getImageProvider());
     }
 
     public void scrollToBottom() {
@@ -88,4 +89,9 @@ public class NRichTextArea extends NValueBoxBase<String, RichTextEditor, CRichTe
         }
     }
 
+    public void setEditMode(EditMode editMode) {
+        if (getEditor() != null) {
+            getEditor().setEditMode(editMode);
+        }
+    }
 }
