@@ -29,6 +29,8 @@ public interface IFilterEditor extends IsWidget {
 
     void save() throws ConditionInitializationException;
 
+    void populate();
+
     void onShown();
 
     void onHidden();

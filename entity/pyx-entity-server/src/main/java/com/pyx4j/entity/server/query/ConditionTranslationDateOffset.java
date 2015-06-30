@@ -28,8 +28,10 @@ public class ConditionTranslationDateOffset extends AbstractConditionTranslation
 
     @Override
     public <E extends IEntity> void enhanceCriteria(EntityQueryCriteria<E> criteria, Path entityMemeberPath, IDateOffsetCondition condition) {
-        //TODO implement this
-        throw new Error("TODO not implemented");
+        if (!condition.dateOffsetType().isNull()) {
+            //TODO implement this
+            throw new Error("TODO not implemented");
+        }
     }
 
 }
