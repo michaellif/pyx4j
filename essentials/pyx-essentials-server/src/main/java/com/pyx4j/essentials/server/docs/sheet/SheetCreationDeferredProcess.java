@@ -25,6 +25,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.CursorSource;
 import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.Executables;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
@@ -61,7 +62,7 @@ public class SheetCreationDeferredProcess<E extends IEntity> extends AbstractDef
     @Override
     public void execute() {
         entityFormatter.createHeader(formatter);
-        new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(new Executable<Void, RuntimeException>() {
+        Executable<Void, RuntimeException> task = new Executable<Void, RuntimeException>() {
             @Override
             public Void execute() throws RuntimeException {
                 ICursorIterator<E> cursor = null;
@@ -82,7 +83,11 @@ public class SheetCreationDeferredProcess<E extends IEntity> extends AbstractDef
                 }
                 return null;
             }
-        });
+        };
+
+        task = Executables.wrapInEntityNamespace(criteria.getEntityClass(), task);
+
+        new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(task);
 
         if (!canceled) {
             Downloadable d = new Downloadable(formatter.getBinaryData(), formatter.getContentType());
