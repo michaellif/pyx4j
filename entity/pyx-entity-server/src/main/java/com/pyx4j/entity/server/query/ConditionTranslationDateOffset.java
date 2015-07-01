@@ -19,9 +19,16 @@
  */
 package com.pyx4j.entity.server.query;
 
+import java.util.Date;
+
+import org.apache.commons.lang3.time.DateUtils;
+
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.core.query.IDateOffsetCondition;
 
 public class ConditionTranslationDateOffset extends AbstractConditionTranslation<IDateOffsetCondition> {
@@ -29,9 +36,22 @@ public class ConditionTranslationDateOffset extends AbstractConditionTranslation
     @Override
     public <E extends IEntity> void enhanceCriteria(EntityQueryCriteria<E> criteria, Path entityMemeberPath, IDateOffsetCondition condition) {
         if (!condition.dateOffsetType().isNull()) {
-            //TODO implement this
-            throw new Error("TODO not implemented");
+            Date date = SystemDateManager.getDate();
+            switch (condition.dateOffsetType().getValue()) {
+            case Days:
+                date = DateUtils.addDays(date, condition.dateOffsetValue().getValue());
+                break;
+            case Weeks:
+                date = DateUtils.addWeeks(date, condition.dateOffsetValue().getValue());
+                break;
+            case Month:
+                date = DateUtils.addMonths(date, condition.dateOffsetValue().getValue());
+                break;
+            }
+            Date fromDate = com.pyx4j.gwt.server.DateUtils.dayStart(date);
+            Date toDate = com.pyx4j.gwt.server.DateUtils.dayEnd(date);
+            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.GREATER_THAN_OR_EQUAL, fromDate));
+            criteria.add(new PropertyCriterion(entityMemeberPath, Restriction.LESS_THAN_OR_EQUAL, toDate));
         }
     }
-
 }
