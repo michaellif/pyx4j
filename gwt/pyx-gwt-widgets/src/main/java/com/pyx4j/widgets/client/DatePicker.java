@@ -100,7 +100,11 @@ public class DatePicker extends ValueBoxBase<LogicalDate> implements HasValueCha
 
     @Override
     public LogicalDate getValue() {
-        return new LogicalDate(super.getValue());//Copy-constructor to simulate immutable state
+        if (super.getValue() == null) {
+            return null;
+        } else {
+            return new LogicalDate(super.getValue());//Copy-constructor to simulate immutable state
+        }
     }
 
     @Override
