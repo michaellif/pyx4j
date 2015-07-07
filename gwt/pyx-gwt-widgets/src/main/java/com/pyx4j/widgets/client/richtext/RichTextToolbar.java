@@ -104,14 +104,6 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
 
     private Button underlineButton;
 
-    /*
-     * This is needed to help handling richTextArea onBlur events. When toolbar is inOperation state
-     * it may open other dialogs that may have focusable components. This should not fire onBlur for
-     * the editor (see RichTextArea#ignoreBlur()). Note that those dialogs may require some custom
-     * handling (see ExtendedRichTextToolbar#onLinkUrl() and ExtendedRichTextToolbar#onImageUrl())
-     */
-    private boolean inOperation;
-
     private final GroupFocusHandler groupFocusHandler;
 
     /**
@@ -154,8 +146,6 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
                 updateStatus();
             }
         });
-
-        inOperation = false;
 
     }
 
@@ -214,7 +204,7 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
 
             @Override
             public void execute() {
-                inOperation = true;
+                groupFocusHandler.setGroupFocusLocked(true);
                 new EditUrlDialog(i18n.tr("Enter target resource URL:")) {
 
                     @Override
@@ -242,7 +232,7 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
             @Override
             public void execute() {
 
-                inOperation = true;
+                groupFocusHandler.setGroupFocusLocked(true);
                 if (provider != null) {
                     provider.selectImage(new AsyncCallback<String>() {
                         @Override
@@ -279,11 +269,11 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
             public void execute() {
                 RichTextTemplateAction action = getTemplateAction();
                 if (action != null) {
-                    inOperation = true;
+                    groupFocusHandler.setGroupFocusLocked(true);
                     action.perform(formatter, new Command() {
                         @Override
                         public void execute() {
-                            inOperation = false;
+                            groupFocusHandler.setGroupFocusLocked(false);
                         }
                     }, templateActionButton);
                 }
@@ -369,30 +359,24 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
 
             @Override
             public void execute() {
-                if (!inOperation) {
-                    richTextEditor.getRichTextArea().restoreSelectionAndRange();
-                    formatter.toggleBold();
-                }
+                richTextEditor.getRichTextArea().restoreSelectionAndRange();
+                formatter.toggleBold();
             }
         }, true));
         formatPanel.addItem(italicButton = createButton(images.italic(), i18n.tr("Italic"), new Command() {
 
             @Override
             public void execute() {
-                if (!inOperation) {
-                    richTextEditor.getRichTextArea().restoreSelectionAndRange();
-                    formatter.toggleItalic();
-                }
+                richTextEditor.getRichTextArea().restoreSelectionAndRange();
+                formatter.toggleItalic();
             }
         }, true));
         formatPanel.addItem(underlineButton = createButton(images.underline(), i18n.tr("Underline"), new Command() {
 
             @Override
             public void execute() {
-                if (!inOperation) {
-                    richTextEditor.getRichTextArea().restoreSelectionAndRange();
-                    formatter.toggleUnderline();
-                }
+                richTextEditor.getRichTextArea().restoreSelectionAndRange();
+                formatter.toggleUnderline();
             }
         }, true));
         formatPanel.addItem(new HTML("&emsp;"));
@@ -604,7 +588,7 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
      * Updates the status of all the stateful buttons.
      */
     private void updateStatus() {
-        inOperation = true;
+        groupFocusHandler.setGroupFocusLocked(true);
         if (formatter.isBold() != boldButton.isActive()) {
             boldButton.toggleActive();
         }
@@ -616,7 +600,7 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
         if (formatter.isUnderlined() != underlineButton.isActive()) {
             underlineButton.toggleActive();
         }
-        inOperation = false;
+        groupFocusHandler.setGroupFocusLocked(false);
     }
 
     public void onLinkUrl(String url) {
@@ -624,7 +608,7 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
         richTextEditor.getRichTextArea().restoreSelectionAndRange();
         formatter.createLink(url);
         // make sure the richTextArea will receive focus and will handle onBlur after this method completes.
-        inOperation = false;
+        groupFocusHandler.setGroupFocusLocked(false);
         richTextEditor.getRichTextArea().setFocus(true);
     }
 
@@ -632,17 +616,12 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
 
         richTextEditor.getRichTextArea().restoreSelectionAndRange();
         formatter.insertImage(url);
-        // make sure the richTextArea will receive focus and will handle onBlur after this method completes.
-        inOperation = false;
+        groupFocusHandler.setGroupFocusLocked(false);
         richTextEditor.getRichTextArea().setFocus(true);
     }
 
     public void setImageProvider(RichTextImageProvider provider) {
         this.provider = provider;
-    }
-
-    public boolean inOperation() {
-        return inOperation;
     }
 
     public void setTemplateAction(RichTextTemplateAction action) {
