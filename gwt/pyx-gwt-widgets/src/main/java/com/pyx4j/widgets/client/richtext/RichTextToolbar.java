@@ -307,7 +307,6 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
             }
         }, true));
         fontButton.addStyleName(RichTextTheme.StyleName.RteToolbarButton.name());
-        groupFocusHandler.addFocusable(fontButton);
 
         fontToolbar.add(foreColors = createColorList(i18n.tr("Font Color"), new ChangeHandler() {
 
@@ -479,6 +478,9 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
         lb.addItem(i18n.tr("Blue"), "blue");
 
         lb.getElement().getStyle().setMarginRight(4, Unit.PX);
+
+        groupFocusHandler.addFocusable(lb);
+
         return lb;
     }
 
@@ -504,6 +506,9 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
         lb.addItem(i18n.tr("Verdana"), "Verdana");
 
         lb.getElement().getStyle().setMarginRight(4, Unit.PX);
+
+        groupFocusHandler.addFocusable(lb);
+
         return lb;
     }
 
@@ -531,6 +536,9 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
         lb.addItem(i18n.tr("XX-Large"));
 
         lb.getElement().getStyle().setMarginRight(4, Unit.PX);
+
+        groupFocusHandler.addFocusable(lb);
+
         return lb;
     }
 
