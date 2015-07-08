@@ -365,7 +365,7 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
         String searchByL2 = uniqueString();
         String searchByL3 = uniqueString();
 
-        for (int o = 0; o < 3; o++) {
+        for (int o = 0; o < 2; o++) {
             OneToManyE3L1 owner1 = EntityFactory.create(OneToManyE3L1.class);
             owner1.name().setValue("O" + o);
             owner1.testId().setValue(testId);
@@ -393,20 +393,21 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
         {
             EntityQueryCriteria<OneToManyE3L1> criteria = EntityQueryCriteria.create(OneToManyE3L1.class);
             criteria.eq(criteria.proto().testId(), testId);
-            criteria.notExists(criteria.proto().children(), PropertyCriterion.eq(criteria.proto().children().$().name(), searchByL2 + 1));
+            criteria.notExists(criteria.proto().children(), PropertyCriterion.eq(criteria.proto().children().$().name(), searchByL2 + 1 + "o" + 1));
 
             List<OneToManyE3L1> results = srv.query(criteria);
-            Assert.assertEquals("result set size", 0, results.size());
+            Assert.assertEquals("result set size", 1, results.size());
 
         }
 
         {
             EntityQueryCriteria<OneToManyE3L1> criteria = EntityQueryCriteria.create(OneToManyE3L1.class);
             criteria.eq(criteria.proto().testId(), testId);
-            criteria.notExists(criteria.proto().children(), PropertyCriterion.eq(criteria.proto().children().$().children().$().name(), searchByL3 + 1));
+            criteria.notExists(criteria.proto().children(),
+                    PropertyCriterion.eq(criteria.proto().children().$().children().$().name(), searchByL3 + 1 + "o" + 1));
 
             List<OneToManyE3L1> results = srv.query(criteria);
-            Assert.assertEquals("result set size", 0, results.size());
+            Assert.assertEquals("result set size", 1, results.size());
 
         }
 
@@ -414,10 +415,10 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
             EntityQueryCriteria<OneToManyE3L1> criteria = EntityQueryCriteria.create(OneToManyE3L1.class);
             criteria.eq(criteria.proto().testId(), testId);
             criteria.notExists(criteria.proto().children().$().children(),
-                    PropertyCriterion.eq(criteria.proto().children().$().children().$().name(), searchByL3 + 1));
+                    PropertyCriterion.eq(criteria.proto().children().$().children().$().name(), searchByL3 + 1 + "o" + 1));
 
             List<OneToManyE3L1> results = srv.query(criteria);
-            Assert.assertEquals("result set size", 0, results.size());
+            Assert.assertEquals("result set size", 3, results.size());
 
         }
 
