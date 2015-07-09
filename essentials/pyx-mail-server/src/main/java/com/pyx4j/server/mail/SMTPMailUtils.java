@@ -115,7 +115,12 @@ class SMTPMailUtils {
                 if (email == null) {
                     throw new NullPointerException("Email Address is null");
                 }
-                addreses.add(new InternetAddress(forwardAllTo, email.trim(), "UTF-8"));
+                if (allowDestinations(forwardAllTo, email)) {
+                    // Already forwarded.
+                    addreses.add(newInternetAddress(email));
+                } else {
+                    addreses.add(new InternetAddress(forwardAllTo, email.trim(), "UTF-8"));
+                }
             } catch (UnsupportedEncodingException e) {
                 throw new Error(e);
             }
