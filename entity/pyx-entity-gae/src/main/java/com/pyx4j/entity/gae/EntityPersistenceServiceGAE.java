@@ -1293,7 +1293,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
-    public <T extends IEntity> void retrieveMember(T entityMember, AttachLevel attachLevel) {
+    public <T extends IEntity> boolean retrieveMember(T entityMember, AttachLevel attachLevel) {
         //TODO implement this
         throw new Error("implement this");
     }

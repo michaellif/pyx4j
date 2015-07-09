@@ -927,10 +927,10 @@ public class TableModel {
         return entityOperationsMeta.getMember(new Path(entity.getValueClass(), entityMember.getFieldName()).toString()) instanceof MemberExternalOperationsMeta;
     }
 
-    public void retrieveMember(PersistenceContext persistenceContext, IEntity entity, IEntity entityMember) {
+    public boolean retrieveMember(PersistenceContext persistenceContext, IEntity entity, IEntity entityMember) {
         MemberOperationsMeta member = entityOperationsMeta.getMember(new Path(entity.getValueClass(), entityMember.getFieldName()).toString());
         assert (member != null) : "Member " + entityMember.getFieldName() + " not found";
-        TableModelExternal.retrieve(persistenceContext, entity, (MemberExternalOperationsMeta) member);
+        return TableModelExternal.retrieve(persistenceContext, entity, (MemberExternalOperationsMeta) member);
     }
 
     public void retrieveMember(PersistenceContext persistenceContext, IEntity entity, ICollection<?, ?> collectionMember) {
