@@ -287,9 +287,15 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
                 IObject dboM = bo.getMember(b.boMemberPath);
 
                 // Assert that all data has been retrieved
-                if ((dboM instanceof IEntity) && ((IEntity) dboM).isValueDetached() && !dtoM.getMeta().isDetached()) {
-                    if (!retriveDetachedMember((IEntity) dboM)) {
-                        throw new Error("Copying detached entity " + ((IEntity) dboM).getDebugExceptionInfoString());
+                if (dboM.isValueDetached() && !dtoM.getMeta().isDetached()) {
+                    IEntity retrive;
+                    if (dboM instanceof IEntity) {
+                        retrive = (IEntity) dboM;
+                    } else {
+                        retrive = dboM.getOwner();
+                    }
+                    if (!retriveDetachedMember(retrive)) {
+                        throw new Error("Copying detached entity " + retrive.getDebugExceptionInfoString());
                     }
                 }
 

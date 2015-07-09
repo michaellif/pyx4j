@@ -143,7 +143,7 @@ public interface IEntityPersistenceService {
     //TODO make @Deprecated and use retrieve
     public <T extends IEntity> void retrieveMember(T entityMember);
 
-    public <T extends IEntity> void retrieveMember(T entityMember, AttachLevel attachLevel);
+    public <T extends IEntity> boolean retrieveMember(T entityMember, AttachLevel attachLevel);
 
     public <T extends IEntity> void retrieve(Iterable<T> entityIterable);
 

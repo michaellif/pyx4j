@@ -245,15 +245,17 @@ public class Persistence {
         });
     }
 
-    public static <T extends IEntity> void ensureRetrieve(T entityMember, AttachLevel attachLevel) {
+    public static <T extends IEntity> boolean ensureRetrieve(T entityMember, AttachLevel attachLevel) {
         if ((entityMember.getAttachLevel() == AttachLevel.Detached) && (entityMember.getOwner() != null) && (entityMember.getOwner().isValueDetached())) {
             ensureRetrieve(entityMember.getOwner(), AttachLevel.Attached);
         }
         if (entityMember.getAttachLevel() == AttachLevel.Detached) {
-            service().retrieveMember(entityMember, attachLevel);
+            return service().retrieveMember(entityMember, attachLevel);
         } else {
             if (entityMember.getAttachLevel().ordinal() < attachLevel.ordinal()) {
-                service().retrieve(entityMember, attachLevel, false);
+                return service().retrieve(entityMember, attachLevel, false);
+            } else {
+                return true;
             }
         }
     }

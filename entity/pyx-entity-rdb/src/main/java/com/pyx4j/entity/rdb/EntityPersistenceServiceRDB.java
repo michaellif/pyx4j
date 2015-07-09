@@ -1406,26 +1406,26 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
     }
 
     @Override
-    public <T extends IEntity> void retrieveMember(T entityMember, AttachLevel attachLevel) {
+    public <T extends IEntity> boolean retrieveMember(T entityMember, AttachLevel attachLevel) {
         switch (entityMember.getAttachLevel()) {
         case Attached:
             if (!entityMember.isNull()) { // Null is considered  Attached for simplicity
                 throw new RuntimeException("Values of " + entityMember.getPath() + " already Attached");
             }
-            break;
+            return true;
         case IdOnly:
         case ToStringMembers:
-            retrieve(entityMember, attachLevel, false);
-            break;
+            return retrieve(entityMember, attachLevel, false);
         case Detached:
             assert (entityMember.getOwner().getPrimaryKey() != null);
             startCallContext(ConnectionReason.forRead);
+            boolean retrieved;
             try {
                 TableModel tm = tableModel(entityMember.getOwner().getEntityMeta());
                 if (tm.isExternalMember(entityMember.getOwner(), entityMember)) {
-                    tm.retrieveMember(getPersistenceContext(), entityMember.getOwner(), entityMember);
+                    retrieved = tm.retrieveMember(getPersistenceContext(), entityMember.getOwner(), entityMember);
                 } else {
-                    retrieve(entityMember.getOwner());
+                    retrieved = retrieve(entityMember.getOwner());
                 }
                 if (entityMember.getPrimaryKey() != null) {
                     if (cascadeRetrieve(entityMember, attachLevel, false) == null) {
@@ -1436,8 +1436,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
             } finally {
                 endCallContext();
             }
-            break;
+            return retrieved;
         case CollectionSizeOnly:
+        default:
             throw new IllegalArgumentException();
         }
     }
