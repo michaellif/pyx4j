@@ -53,29 +53,7 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
         super(binder);
     }
 
-    /**
-     * Used to retrieve bound detached members before they are copied to DTO
-     *
-     * retrieveTarget is null when called for save operations
-     *
-     * TODO eod143 rename onBeforeBind AbstractListServiceDtoImpl
-     */
-    protected void retrievedSingle(BO bo, RetrieveTarget retrieveTarget) {
-    }
-
-    /**
-     * This method called for single entity returned to the GWT client. As opposite to entries in list.
-     * This is empty callback function that don't need to be called from implementation.
-     *
-     * TODO eod143 rename onAfterBind AbstractListServiceDtoImpl
-     *
-     * @param retrieveTarget
-     *
-     */
-    protected void enhanceRetrieved(BO bo, TO to, RetrieveTarget retrieveTarget) {
-    }
-
-    protected BO retrieve(Key entityId, RetrieveTarget retrieveTarget) {
+    protected BO retrieve(Key entityId, RetrieveOperation retrieveOperation) {
         BO bo = Persistence.secureRetrieve(boClass, entityId);
         if (bo == null) {
             log.error("Entity {} {} not found", boClass, entityId);
@@ -123,22 +101,22 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
     }
 
     @Override
-    public final void retrieve(AsyncCallback<TO> callback, Key toId, RetrieveTarget retrieveTarget) {
+    public final void retrieve(AsyncCallback<TO> callback, Key toId, RetrieveOperation retrieveOperation) {
         if (strictDataModelPermissions || toProto.getEntityMeta().isAnnotationPresent(SecurityEnabled.class)) {
             SecurityController.assertPermission(DataModelPermission.permissionRead(toClass));
         }
-        BO bo = retrieve(getBOKey(EntityFactory.createIdentityStub(toClass, toId)), retrieveTarget);
+        BO bo = retrieve(getBOKey(EntityFactory.createIdentityStub(toClass, toId)), retrieveOperation);
         if (bo != null) {
-            retrievedSingle(bo, retrieveTarget);
+            onBeforeBind(bo, retrieveOperation);
         }
-        ((SimpleEntityBinder<BO, TO>) binder).context().setBindingType(retrieveTarget == RetrieveTarget.View ? BindingType.View : BindingType.List);
+        ((SimpleEntityBinder<BO, TO>) binder).context().setBindingType(retrieveOperation == RetrieveOperation.View ? BindingType.View : BindingType.List);
         TO to = binder.createTO(bo);
 
         // Allow  for TO to be calculated base on original input
         to.setPrimaryKey(toId);
         to.setPrimaryKey(getTOKey(bo, to));
 
-        enhanceRetrieved(bo, to, retrieveTarget);
+        onAfterBind(bo, to, retrieveOperation);
         if (strictDataModelPermissions || toProto.getEntityMeta().isAnnotationPresent(SecurityEnabled.class)) {
             SecurityController.assertPermission(to, DataModelPermission.permissionRead(to.getValueClass()));
         }
@@ -178,7 +156,7 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
             SecurityController.assertPermission(to, DataModelPermission.permissionUpdate(to.getValueClass()));
         }
         BO bo = retrieveForSave(to);
-        retrievedSingle(bo, null);
+        onBeforeBind(bo, RetrieveOperation.Save);
         binder.copyTOtoBO(to, bo);
         save(bo, to);
         Persistence.service().commit();

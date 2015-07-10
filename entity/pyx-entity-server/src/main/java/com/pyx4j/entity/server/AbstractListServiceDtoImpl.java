@@ -29,6 +29,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveOperation;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
@@ -75,16 +76,6 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
 
     }
 
-    @Deprecated
-    protected void bind() {
-
-    }
-
-    @Deprecated
-    protected void bindCompleteObject() {
-
-    }
-
     /**
      * Allows to map BO to id of different TO entity.
      * if changed, need to change getTOKey
@@ -118,9 +109,9 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
      *
      * To make it work magically we have implemented retriveDetachedMember
      *
-     * TODO eod143 rename onBeforeBind(BO bo, RetrieveTarget target)
+     * @param retrieveOperation
      */
-    protected void retrievedForList(BO bo) {
+    protected void onBeforeBind(BO bo, RetrieveOperation retrieveOperation) {
     }
 
     /**
@@ -130,18 +121,9 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
      * This method called for every entity returned to the GWT client for listing. As opposite to single entity in retrieve/save operations.
      * This function is empty no need to call when you override this method
      *
-     * TODO eod143 rename onAfterBind
+     * @param retrieveOperation
      */
-    protected void enhanceListRetrieved(BO bo, TO to) {
-    }
-
-    /**
-     *
-     * @deprecated TODO VladS switch to EntityQueryCriteriaBinder
-     */
-    @Deprecated
-    protected void enhanceListCriteria(EntityListCriteria<BO> boCriteria, EntityListCriteria<TO> toCriteria) {
-        throw new Error("deprecated");
+    protected void onAfterBind(BO bo, TO to, RetrieveOperation retrieveOperation) {
     }
 
     @Deprecated
@@ -169,7 +151,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
             @Override
             public BO next() {
                 BO bo = unfiltered.next();
-                retrievedForList(bo);
+                onBeforeBind(bo, RetrieveOperation.List);
                 return bo;
             }
 
@@ -195,7 +177,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
             public TO next() {
                 BO bo = unfiltered.next();
                 TO to = binder.createTO(bo);
-                enhanceListRetrieved(bo, to);
+                onAfterBind(bo, to, RetrieveOperation.List);
                 return to;
             }
 

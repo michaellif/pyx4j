@@ -30,8 +30,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
-import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
@@ -53,10 +53,10 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEn
     }
 
     @Override
-    protected E retrieve(Key entityId, RetrieveTarget retrieveTarget) {
+    protected E retrieve(Key entityId, RetrieveOperation retrieveOperation) {
         // Force draft for edit
         E bo;
-        if ((retrieveTarget == RetrieveTarget.Edit) || (entityId.isDraft())) {
+        if ((retrieveOperation == RetrieveOperation.Edit) || (entityId.isDraft())) {
             bo = Persistence.secureRetrieveDraftForEdit(boClass, entityId);
         } else {
             bo = Persistence.secureRetrieve(boClass, entityId);
