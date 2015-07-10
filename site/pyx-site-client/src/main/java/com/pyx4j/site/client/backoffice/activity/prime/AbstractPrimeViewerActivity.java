@@ -136,7 +136,7 @@ public abstract class AbstractPrimeViewerActivity<E extends IEntity> extends Abs
             public void onSuccess(E result) {
                 onPopulateSuccess(result);
             }
-        }, entityId, AbstractCrudService.RetrieveTarget.View);
+        }, entityId, AbstractCrudService.RetrieveOperation.View);
     }
 
     @Override
@@ -146,7 +146,7 @@ public abstract class AbstractPrimeViewerActivity<E extends IEntity> extends Abs
             public void onSuccess(E result) {
                 onPopulateSuccess(result);
             }
-        }, entityId, AbstractCrudService.RetrieveTarget.View);
+        }, entityId, AbstractCrudService.RetrieveOperation.View);
     }
 
     protected void onPopulateSuccess(E result) {
