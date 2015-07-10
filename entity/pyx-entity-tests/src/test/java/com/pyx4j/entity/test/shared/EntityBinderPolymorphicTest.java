@@ -22,6 +22,8 @@ package com.pyx4j.entity.test.shared;
 import org.junit.Assert;
 
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.shared.utils.BindingContext;
+import com.pyx4j.entity.shared.utils.BindingContext.BindingType;
 import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 import com.pyx4j.entity.test.shared.domain.inherit.binder.B1sub1;
 import com.pyx4j.entity.test.shared.domain.inherit.binder.B1sub1TO;
@@ -54,7 +56,7 @@ public class EntityBinderPolymorphicTest extends InitializerTestBase {
         boItem.holder().set(bo);
         bo.item().set(boItem);
 
-        B1superHolderTO to = new PolymorphicMemberBinder().createTO(bo);
+        B1superHolderTO to = new PolymorphicMemberBinder().createTO(bo, new BindingContext(BindingType.List));
 
         Assert.assertEquals("Item Proper instance", B1sub1TO.class, to.item().getInstanceValueClass());
         Assert.assertEquals("Holder Proper instance", B1superHolderTO.class, to.item().holder().getInstanceValueClass());
