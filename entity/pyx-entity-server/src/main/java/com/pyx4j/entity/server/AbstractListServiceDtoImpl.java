@@ -34,6 +34,8 @@ import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
+import com.pyx4j.entity.shared.utils.BindingContext;
+import com.pyx4j.entity.shared.utils.BindingContext.BindingType;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.entity.shared.utils.EntityQueryCriteriaBinder;
 import com.pyx4j.gwt.server.IOUtils;
@@ -176,7 +178,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
             @Override
             public TO next() {
                 BO bo = unfiltered.next();
-                TO to = binder.createTO(bo);
+                TO to = binder.createTO(bo, new BindingContext(BindingType.List));
                 onAfterBind(bo, to, RetrieveOperation.List);
                 return to;
             }

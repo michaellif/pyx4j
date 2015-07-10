@@ -29,7 +29,6 @@ import com.pyx4j.entity.core.IEntity;
  * Used to ensure that each Entity in TO converted to the same single entity in BO and back
  *
  */
-//TODO pass this as argument in EntityBinder functions
 public class BindingContext {
 
     public static enum BindingType {
@@ -38,14 +37,19 @@ public class BindingContext {
 
         View,
 
-        Edit;
+        Edit,
+
+        Save;
 
     }
 
-    //TODO remove default
-    private BindingType bindingType = BindingType.List;
+    private final BindingType bindingType;
 
     private final Map<Map<String, Serializable>, IEntity> mapped = new IdentityHashMap<>();
+
+    public BindingContext(BindingType bindingType) {
+        this.bindingType = bindingType;
+    }
 
     void put(IEntity from, IEntity to) {
         if (!from.isNull()) {
@@ -65,7 +69,4 @@ public class BindingContext {
         return bindingType;
     }
 
-    public void setBindingType(BindingType bindingType) {
-        this.bindingType = bindingType;
-    }
 }
