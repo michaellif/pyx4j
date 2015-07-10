@@ -63,6 +63,8 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
 
     private final FlexTable flexTable;
 
+    private long renderingId;
+
     private final DataTable<E> dataTable;
 
     private ItemZoomInCommand<E> itemZoomInCommand;
@@ -232,11 +234,14 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
     }
 
     private void renderBody() {
+        renderingId++;
         clearTable();
 
         final DataTableModel<E> model = dataTable.getDataTableModel();
 
         Scheduler.get().scheduleIncremental(new RepeatingCommand() {
+
+            final long initiationRenderingId = renderingId;
 
             final Iterator<DataItem<E>> dataIterator = model.getData().iterator();
 
@@ -246,6 +251,13 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
 
             @Override
             public boolean execute() {
+                // Prevent deferred execution of stale model.
+                // Happens on slow computers.
+                // Error example: IndexOutOfBoundsException: Row index: 2, Row size: 2
+                if (initiationRenderingId != renderingId) {
+                    return false;
+                }
+
                 if (!dataIterator.hasNext()) {
                     updateSelectionHighlights();
                     return false;
