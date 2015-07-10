@@ -29,11 +29,16 @@ import com.google.gwt.user.client.Window.ClosingHandler;
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IsWarningException;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.config.shared.ClientVersionMismatchError;
+import com.pyx4j.i18n.shared.I18n;
 
 public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableErrorHandler {
+
+    private static final I18n i18n = I18n.get(DefaultUnrecoverableErrorHandler.class);
 
     private ClosingEvent lastClosingEvent;
 
@@ -175,4 +180,42 @@ public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableE
     protected abstract void showInternetConnectionError();
 
     protected abstract void showDefaultError(Throwable caught, String errorCode);
+
+    protected boolean includeErrorCodeInUserMessage() {
+        return ApplicationMode.isDevelopment();
+    }
+
+    protected String formatDefaultErrorMessage(Throwable caught, String errorCode) {
+
+        String detailsMessage = "";
+        if (CommonsStringUtils.isStringSet(caught.getMessage()) && caught.getMessage().length() < 220) {
+            detailsMessage += "\n" + caught.getMessage();
+        }
+        if (includeErrorCodeInUserMessage() && (errorCode != null)) {
+            detailsMessage += "\n\nErrorCode [" + errorCode + "]";
+        }
+
+        if (includeErrorCodeInUserMessage() && (caught != null)) {
+            detailsMessage += "\n" + caught.getClass();
+            if (caught instanceof StatusCodeException) {
+                detailsMessage += " StatusCode: " + (((StatusCodeException) caught).getStatusCode());
+            }
+        }
+
+        boolean sessionClosed = closeSessionOnUnrecoverableError();
+
+        String userMessage = i18n.tr("Please report the incident to technical support,\n" //
+                + "describing the steps taken prior to the error.\n");
+
+        if (sessionClosed) {
+            userMessage += "\n" + i18n.tr("This Session Has Been Terminated To Prevent Data Corruption");
+        }
+
+        //TODO  cyclic dependencies problem for  pyx-security-gwt in this module
+        //userMessage += "\n\n" + TimeUtils.simpleFormat(ClientContext.getServerDate(), "yyyy-MM-dd HH:mm:ss");
+
+        userMessage += detailsMessage;
+
+        return userMessage;
+    }
 }

@@ -20,7 +20,9 @@
  */
 package com.pyx4j.essentials.client;
 
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.gwt.commons.UncaughtHandler;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 
 public class DefaultErrorHandlerDialog extends UnrecoverableErrorHandlerDialog {
@@ -45,4 +47,10 @@ public class DefaultErrorHandlerDialog extends UnrecoverableErrorHandlerDialog {
         return includeErrorCodeInUserMessage && super.includeErrorCodeInUserMessage();
     }
 
+    // This moved here due to  cyclic dependencies problem for  pyx-security-gwt in pyx-gwt-widgets
+    @Override
+    protected String formatDefaultErrorMessage(Throwable caught, String errorCode) {
+        return super.formatDefaultErrorMessage(caught, errorCode) //
+                + "\n\n" + TimeUtils.simpleFormat(ClientContext.getServerDate(), "yyyy-MM-dd HH:mm:ss");
+    }
 }
