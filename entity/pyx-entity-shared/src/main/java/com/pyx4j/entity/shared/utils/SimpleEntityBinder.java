@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.ICollection;
@@ -48,6 +49,8 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
     protected Class<BO> boClass;
 
     protected Class<TO> toClass;
+
+    protected final boolean preserveType;
 
     protected final BO boProto;
 
@@ -96,7 +99,17 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
     }
 
     protected SimpleEntityBinder(Class<BO> boClass, Class<TO> toClass) {
-        this(boClass, toClass, true);
+        this(boClass, toClass, false, true);
+    }
+
+    /**
+     * Preserve Type in binding, Like in PolymorphicEntityBinder but don't need to explicit
+     */
+    @SuppressWarnings("unchecked")
+    protected SimpleEntityBinder(Class<BO> boClass) {
+        this(boClass, (Class<TO>) boClass, true, true);
+        // Ensure AbstractType
+        assert boProto.getEntityMeta().isAnnotationPresent(AbstractEntity.class) : "AbstractEntity expected in preserveType binder; got " + boClass;
     }
 
     @Override
@@ -108,12 +121,18 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
      * Allow to skip automatic copy of PK, Used to allow duplicated in XML
      */
     protected SimpleEntityBinder(Class<BO> boClass, Class<TO> toClass, boolean copyPrimaryKey) {
+        this(boClass, toClass, false, copyPrimaryKey);
+    }
+
+    private SimpleEntityBinder(Class<BO> boClass, Class<TO> toClass, boolean preserveType, boolean copyPrimaryKey) {
         this.boClass = boClass;
         this.toClass = toClass;
+        this.preserveType = preserveType;
         this.copyPrimaryKey = copyPrimaryKey;
 
         boProto = EntityFactory.getEntityPrototype(boClass);
         toProto = EntityFactory.getEntityPrototype(toClass);
+
     }
 
     @Override
@@ -233,7 +252,13 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
             return to;
         }
 
-        to = EntityFactory.create(toClass);
+        if (preserveType) {
+            @SuppressWarnings("unchecked")
+            Class<TO> polymorphicToClass = (Class<TO>) bo.getInstanceValueClass();
+            to = EntityFactory.create(polymorphicToClass);
+        } else {
+            to = EntityFactory.create(toClass);
+        }
         if (copyPrimaryKey) {
             to.setPrimaryKey(bo.getPrimaryKey());
         }
@@ -343,23 +368,29 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
     @Override
     public BO createBO(TO to, BindingContext context) {
         @SuppressWarnings("unchecked")
-        BO dbo = (BO) context.get(to);
-        if (dbo != null) {
-            return dbo;
+        BO bo = (BO) context.get(to);
+        if (bo != null) {
+            return bo;
         }
 
-        dbo = EntityFactory.create(boClass);
+        if (preserveType) {
+            @SuppressWarnings("unchecked")
+            Class<BO> polymorphicBoClass = (Class<BO>) to.getInstanceValueClass();
+            bo = EntityFactory.create(polymorphicBoClass);
+        } else {
+            bo = EntityFactory.create(boClass);
+        }
         if (copyPrimaryKey) {
-            dbo.setPrimaryKey(to.getPrimaryKey());
+            bo.setPrimaryKey(to.getPrimaryKey());
         }
 
         if (to.getAttachLevel() != AttachLevel.Attached) {
-            dbo.setAttachLevel(to.getAttachLevel());
+            bo.setAttachLevel(to.getAttachLevel());
         }
 
-        context.put(to, dbo);
-        copyTOtoBO(to, dbo, context);
-        return dbo;
+        context.put(to, bo);
+        copyTOtoBO(to, bo, context);
+        return bo;
     }
 
     @Override
