@@ -31,13 +31,13 @@ public interface EntityBinder<BO extends IEntity, TO extends IEntity> {
 
     public Class<TO> toClass();
 
-    public TO createTO(BO bo);
+    public TO createTO(BO bo, BindingContext context);
 
-    public void copyBOtoTO(BO bo, TO to);
+    public void copyBOtoTO(BO bo, TO to, BindingContext context);
 
-    public BO createBO(TO to);
+    public BO createBO(TO to, BindingContext context);
 
-    public void copyTOtoBO(TO to, BO bo);
+    public void copyTOtoBO(TO to, BO bo, BindingContext context);
 
     public Path getBoundBOMemberPath(Path toMemberPath);
 

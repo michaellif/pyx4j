@@ -225,26 +225,10 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
         return null;
     }
 
-    // TODO This will be refactored! for this prototype this classes are not reused so it is safe to keep it as member.
-    private BindingContext context;
-
-    // TODO move to argument of createTO
-    public void inContext(BindingContext context) {
-        this.context = context;
-    }
-
-    // TODO move to argument of createTO
-    public BindingContext context() {
-        if (context == null) {
-            context = new BindingContext();
-        }
-        return context;
-    }
-
     @Override
-    public TO createTO(BO bo) {
+    public TO createTO(BO bo, BindingContext context) {
         @SuppressWarnings("unchecked")
-        TO to = (TO) context().get(bo);
+        TO to = (TO) context.get(bo);
         if (to != null) {
             return to;
         }
@@ -258,9 +242,9 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
             to.setAttachLevel(bo.getAttachLevel());
         }
 
-        context().put(bo, to);
+        context.put(bo, to);
         // TODO pass context as argument
-        copyBOtoTO(bo, to);
+        copyBOtoTO(bo, to, context);
         return to;
     }
 
@@ -270,7 +254,7 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
 
     @Override
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public void copyBOtoTO(BO bo, TO to) {
+    public void copyBOtoTO(BO bo, TO to, BindingContext context) {
         init();
         to.setAttachLevel(AttachLevel.Attached);
         bo = bo.cast();
@@ -301,7 +285,7 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
 
                 // Bypass copy if it was already copied.
                 if (dboM instanceof IEntity) {
-                    IEntity processed = context().get((IEntity) dboM);
+                    IEntity processed = context.get((IEntity) dboM);
                     if (processed != null) {
                         ((IEntity) dtoM).set(processed);
                         continue;
@@ -344,15 +328,12 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
                     if (((IEntity) dboM).isNull()) {
                         ((IEntity) dtoM).set(null);
                     } else {
-                        b.binder.context = context();
-                        // TODO pass context as argument
-                        ((IEntity) dtoM).set(b.binder.createTO((IEntity) dboM));
+                        ((IEntity) dtoM).set(b.binder.createTO((IEntity) dboM, context));
                     }
                 } else if (dboM instanceof ICollection) {
-                    b.binder.context = context();
                     ((ICollection<IEntity, ?>) dtoM).clear();
                     for (IEntity dboMi : (ICollection<IEntity, ?>) dboM) {
-                        ((ICollection<IEntity, ?>) dtoM).add(b.binder.createTO(dboMi));
+                        ((ICollection<IEntity, ?>) dtoM).add(b.binder.createTO(dboMi, context));
                     }
                 }
             }
@@ -360,9 +341,9 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
     }
 
     @Override
-    public BO createBO(TO to) {
+    public BO createBO(TO to, BindingContext context) {
         @SuppressWarnings("unchecked")
-        BO dbo = (BO) context().get(to);
+        BO dbo = (BO) context.get(to);
         if (dbo != null) {
             return dbo;
         }
@@ -376,15 +357,14 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
             dbo.setAttachLevel(to.getAttachLevel());
         }
 
-        context().put(to, dbo);
-        // TODO pass context as argument
-        copyTOtoBO(to, dbo);
+        context.put(to, dbo);
+        copyTOtoBO(to, dbo, context);
         return dbo;
     }
 
     @Override
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public void copyTOtoBO(TO to, BO bo) {
+    public void copyTOtoBO(TO to, BO bo, BindingContext context) {
         init();
         bo = bo.cast();
         to = to.cast();
@@ -395,7 +375,7 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
 
                 // Bypass copy if it was already copied.
                 if (dboM instanceof IEntity) {
-                    IEntity processed = context().get((IEntity) dtoM);
+                    IEntity processed = context.get((IEntity) dtoM);
                     if (processed != null) {
                         ((IEntity) dboM).set(processed);
                         continue;
@@ -435,14 +415,12 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
                         ((IEntity) dboM).set(null);
                         continue;
                     } else {
-                        b.binder.context = context();
-                        ((IEntity) dboM).set(b.binder.createBO((IEntity) dtoM));
+                        ((IEntity) dboM).set(b.binder.createBO((IEntity) dtoM, context));
                     }
                 } else if (dtoM instanceof ICollection) {
-                    b.binder.context = context();
                     ((ICollection<IEntity, ?>) dboM).clear();
                     for (IEntity dtoMi : (ICollection<IEntity, ?>) dtoM) {
-                        ((ICollection<IEntity, ?>) dboM).add(b.binder.createBO(dtoMi));
+                        ((ICollection<IEntity, ?>) dboM).add(b.binder.createBO(dtoMi, context));
                     }
                 }
             }
@@ -450,7 +428,7 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public boolean updateBO(TO to, BO bo) {
+    public boolean updateBO(TO to, BO bo, BindingContext context) {
         init();
         boolean updated = false;
         Set<IEntity> processed = new HashSet<IEntity>();
@@ -479,7 +457,7 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
                     }
                 }
             } else if (dtoM instanceof IEntity) {
-                updated |= b.binder.updateBO((IEntity) dtoM, (IEntity) dboM);
+                updated |= b.binder.updateBO((IEntity) dtoM, (IEntity) dboM, context);
             } else if (dtoM instanceof ICollection) {
                 ICollection<IEntity, ?> dboMc = (ICollection<IEntity, ?>) dboM;
                 for (IEntity dtoMi : (ICollection<IEntity, ?>) dtoM) {
@@ -488,13 +466,13 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
                     for (IEntity dboMi : dboMc) {
                         if (dtoMi.equals(dboMi) || dtoMi.businessEquals(dboMi)) {
                             found = true;
-                            updated |= b.binder.updateBO(dtoMi, dboMi);
+                            updated |= b.binder.updateBO(dtoMi, dboMi, context);
                             break;
                         }
                     }
 
                     if (!found) {
-                        ((ICollection<IEntity, ?>) dboM).add(b.binder.createBO(dtoMi));
+                        ((ICollection<IEntity, ?>) dboM).add(b.binder.createBO(dtoMi, context));
                         updated = true;
                     }
                 }
