@@ -19,6 +19,8 @@
  */
 package com.pyx4j.entity.rpc;
 
+import java.io.Serializable;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -29,15 +31,23 @@ import com.pyx4j.rpc.shared.ServiceExecution;
 
 public interface AbstractCrudService<E extends IEntity> extends AbstractListCrudService<E> {
 
-    //TODO eod143 RetrieveOperation
-    public static enum RetrieveTarget {
+    public static enum RetrieveOperation implements Serializable {
 
-        //TODO eod143 List,
+        List,
 
         View,
 
-        Edit;
+        Edit,
 
+        Save;
+
+        public boolean isRead() {
+            return this == List || this == View;
+        }
+
+        public boolean isEdit() {
+            return this == Edit || this == Save;
+        }
     }
 
     /**
@@ -54,7 +64,7 @@ public interface AbstractCrudService<E extends IEntity> extends AbstractListCrud
      */
     public void init(AsyncCallback<E> callback, InitializationData initializationData);
 
-    public void retrieve(AsyncCallback<E> callback, Key entityId, RetrieveTarget retrieveTarget);
+    public void retrieve(AsyncCallback<E> callback, Key entityId, RetrieveOperation retrieveOperation);
 
     public void create(AsyncCallback<Key> callback, E editableEntity);
 

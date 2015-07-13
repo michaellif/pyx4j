@@ -71,37 +71,33 @@ public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEn
     }
 
     @Override
-    public TO createTO(BO bo) {
+    public TO createTO(BO bo, BindingContext context) {
         EntityBinder<BO, TO> subBinder = getBinderByBO(bo);
         assert subBinder != null : "Binder not found for " + bo.getDebugExceptionInfoString();
-        ((SimpleEntityBinder) subBinder).inContext(context()); // TODO pass this as argument
-        return subBinder.createTO(bo.<BO> cast());
+        return subBinder.createTO(bo.<BO> cast(), context);
     }
 
     @Override
-    public void copyBOtoTO(BO bo, TO to) {
+    public void copyBOtoTO(BO bo, TO to, BindingContext context) {
         EntityBinder<BO, TO> subBinder = getBinderByBO(bo);
         assert subBinder != null : "Binder not found for " + bo.getDebugExceptionInfoString();
-        ((SimpleEntityBinder) subBinder).inContext(context()); // TODO pass this as argument
-        subBinder.copyBOtoTO(bo, to);
-        super.copyBOtoTO(bo, to);
+        subBinder.copyBOtoTO(bo, to, context);
+        super.copyBOtoTO(bo, to, context);
     }
 
     @Override
-    public BO createBO(TO to) {
+    public BO createBO(TO to, BindingContext context) {
         EntityBinder<BO, TO> subBinder = getBinderByTO(to);
         assert subBinder != null : "Binder not found for " + to.getDebugExceptionInfoString() + " in binder " + this.getClass().getName();
-        ((SimpleEntityBinder) subBinder).inContext(context()); // TODO pass this as argument
-        return subBinder.createBO(to.<TO> cast());
+        return subBinder.createBO(to.<TO> cast(), context);
     }
 
     @Override
-    public void copyTOtoBO(TO to, BO bo) {
+    public void copyTOtoBO(TO to, BO bo, BindingContext context) {
         EntityBinder<BO, TO> subBinder = getBinderByTO(to);
         assert subBinder != null : "Binder not found for " + to.getDebugExceptionInfoString() + " in binder " + this.getClass().getName();
-        ((SimpleEntityBinder) subBinder).inContext(context()); // TODO pass this as argument
-        subBinder.copyTOtoBO(to, bo);
-        super.copyTOtoBO(to, bo);
+        subBinder.copyTOtoBO(to, bo, context);
+        super.copyTOtoBO(to, bo, context);
     }
 
     @Override

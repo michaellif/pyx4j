@@ -30,7 +30,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
-import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget;
+import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveOperation;
 import com.pyx4j.forms.client.ui.ReferenceDataManager;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
@@ -158,7 +158,7 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
                 public void onSuccess(E result) {
                     onPopulateSuccess(result);
                 }
-            }, entityId, AbstractCrudService.RetrieveTarget.Edit);
+            }, entityId, AbstractCrudService.RetrieveOperation.Edit);
         }
     }
 
@@ -170,7 +170,7 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
                 public void onSuccess(E result) {
                     onPopulateSuccess(result);
                 }
-            }, entityId, RetrieveTarget.Edit);
+            }, entityId, RetrieveOperation.Edit);
         }
     }
 
