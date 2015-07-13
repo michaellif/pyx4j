@@ -170,38 +170,54 @@ public class QueryBuilder<T extends IEntity> {
         }
     }
 
-    private void appendFilters(StringBuilder criterionSql, QueryJoinBuilder joinBuilder, List<? extends Criterion> filters, boolean firstInSentence,
+    private boolean appendFilters(StringBuilder criterionSql, QueryJoinBuilder joinBuilder, List<? extends Criterion> filters, boolean firstInSentence,
             boolean required) {
+        boolean operandAdded = false;
         for (Criterion criterion : filters) {
-            if (firstInSentence) {
-                firstInSentence = false;
-            } else {
+            if (!firstInSentence) {
                 criterionSql.append(" AND ");
             }
-            appendCriterion(criterionSql, joinBuilder, criterion, required);
+            if (appendCriterion(criterionSql, joinBuilder, criterion, required)) {
+                firstInSentence = false;
+                operandAdded = true;
+            }
         }
+        return operandAdded;
     }
 
-    private void appendCriterion(StringBuilder criterionSql, QueryJoinBuilder joinBuilder, Criterion criterion, boolean required) {
+    private boolean appendCriterion(StringBuilder criterionSql, QueryJoinBuilder joinBuilder, Criterion criterion, boolean required) {
         if (criterion instanceof PropertyCriterion) {
             appendPropertyCriterion(criterionSql, joinBuilder, (PropertyCriterion) criterion, required);
+            return true;
         } else if (criterion instanceof AndCriterion) {
-            criterionSql.append(" ( ");
-            appendFilters(criterionSql, joinBuilder, ((AndCriterion) criterion).getFilters(), true, required);
-            criterionSql.append(" ) ");
-        } else if (criterion instanceof OrCriterion) {
-            criterionSql.append(" (( ");
-            boolean nextOr = false;
-            for (Criterion cr2 : ((OrCriterion) criterion).getFilters()) {
-                if (nextOr) {
-                    criterionSql.append(" ) OR ( ");
-                }
-                appendCriterion(criterionSql, joinBuilder, cr2, false);
-                nextOr = true;
+            List<? extends Criterion> filters = ((AndCriterion) criterion).getFilters();
+            if (!filters.isEmpty()) {
+                criterionSql.append(" ( ");
+                appendFilters(criterionSql, joinBuilder, filters, true, required);
+                criterionSql.append(" ) ");
+                return true;
+            } else {
+                return false;
             }
-            criterionSql.append(" )) ");
+        } else if (criterion instanceof OrCriterion) {
+            List<? extends Criterion> filters = ((OrCriterion) criterion).getFilters();
+            if (!filters.isEmpty()) {
+                criterionSql.append(" (( ");
+                boolean nextOr = false;
+                for (Criterion cr2 : filters) {
+                    if (nextOr) {
+                        criterionSql.append(" ) OR ( ");
+                    }
+                    appendCriterion(criterionSql, joinBuilder, cr2, false);
+                    nextOr = true;
+                }
+                criterionSql.append(" )) ");
+                return true;
+            } else {
+                return false;
+            }
         } else if (criterion instanceof RangeCriterion) {
-            appendFilters(criterionSql, joinBuilder, ((RangeCriterion) criterion).getFilters(), true, required);
+            return appendFilters(criterionSql, joinBuilder, ((RangeCriterion) criterion).getFilters(), true, required);
         } else {
             throw new RuntimeException("Unsupported Operator " + criterion.getClass());
         }
