@@ -115,9 +115,10 @@ class SMTPMailUtils {
                 if (email == null) {
                     throw new NullPointerException("Email Address is null");
                 }
-                if (allowDestinations(forwardAllTo, email)) {
+                InternetAddress address = newInternetAddress(email);
+                if (allowDestinations(forwardAllTo, address.getAddress())) {
                     // Already forwarded.
-                    addreses.add(newInternetAddress(email));
+                    addreses.add(address);
                 } else {
                     addreses.add(new InternetAddress(forwardAllTo, email.trim(), "UTF-8"));
                 }
