@@ -33,6 +33,13 @@ public abstract class CrudEntityBinder<BO extends IEntity, TO extends IEntity> e
         super(boClass, toClass, copyPrimaryKey);
     }
 
+    /**
+     * Preserve Type in binding, Like in PolymorphicEntityBinder but don't need to explicit
+     */
+    protected CrudEntityBinder(Class<BO> boClass) {
+        super(boClass);
+    }
+
     @Override
     protected boolean retriveDetachedMember(IEntity boMember) {
         Persistence.ensureRetrieve(boMember, AttachLevel.Attached);
