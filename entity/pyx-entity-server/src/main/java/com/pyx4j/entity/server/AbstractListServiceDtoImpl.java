@@ -128,12 +128,6 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     protected void onAfterBind(BO bo, TO to, RetrieveOperation retrieveOperation) {
     }
 
-    @Deprecated
-    // TODO use getQueryCursor or filters
-    protected EntitySearchResult<BO> query(EntityListCriteria<BO> criteria) {
-        return Persistence.secureQuery(criteria);
-    }
-
     protected Filter<BO> boFilter(EntityQueryCriteria<BO> criteria) {
         return new Filter<BO>() {
             @Override
