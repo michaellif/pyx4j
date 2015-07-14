@@ -70,4 +70,9 @@ public class PersistableQueryFacadeImpl implements PersistableQueryFacade {
         ConditionTranslationRegistry.instance().registerCondition(conditionClass, conditionTranslation);
     }
 
+    @Override
+    public <C extends ICondition> void registerCondition(C queryMember, ConditionTranslation<C> conditionTranslation) {
+        ConditionTranslationRegistry.instance().registerCondition(queryMember, conditionTranslation);
+    }
+
 }

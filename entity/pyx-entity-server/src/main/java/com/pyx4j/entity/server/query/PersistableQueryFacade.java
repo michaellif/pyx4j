@@ -59,5 +59,8 @@ public interface PersistableQueryFacade {
 
     public <C extends ICondition> void registerCondition(Class<C> conditionClass, ConditionTranslation<C> conditionTranslation);
 
+    public <C extends ICondition> void registerCondition(C queryMember, ConditionTranslation<C> conditionTranslation);
+
     public <E extends IEntity, Q extends IQuery<E>> void registerBinder(Class<Q> queryClass, QueryBinder<E, Q> binder);
+
 }

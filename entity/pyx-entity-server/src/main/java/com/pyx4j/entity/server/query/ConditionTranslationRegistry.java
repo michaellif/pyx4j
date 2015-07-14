@@ -22,6 +22,7 @@ package com.pyx4j.entity.server.query;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.query.IBooleanCondition;
 import com.pyx4j.entity.core.query.ICondition;
 import com.pyx4j.entity.core.query.IDateCondition;
@@ -35,7 +36,9 @@ import com.pyx4j.entity.core.query.IStringCondition;
 @SuppressWarnings("rawtypes")
 class ConditionTranslationRegistry {
 
-    private Map<Class<?>, ConditionTranslation<?>> registry = new HashMap<>();
+    private Map<Class<?>, ConditionTranslation<?>> classRegistry = new HashMap<>();
+
+    private Map<Path, ConditionTranslation<?>> pathRegistry = new HashMap<>();
 
     private static class SingletonHolder {
         public static final ConditionTranslationRegistry INSTANCE = new ConditionTranslationRegistry();
@@ -58,17 +61,25 @@ class ConditionTranslationRegistry {
     }
 
     <C extends ICondition> void registerCondition(Class<C> conditionClass, ConditionTranslation<C> conditionTranslation) {
-        registry.put(conditionClass, conditionTranslation);
+        classRegistry.put(conditionClass, conditionTranslation);
+    }
+
+    <C extends ICondition> void registerCondition(C queryMember, ConditionTranslation<C> conditionTranslation) {
+        pathRegistry.put(queryMember.getPath(), conditionTranslation);
     }
 
     @SuppressWarnings("unchecked")
     ConditionTranslation<ICondition> getConditionTranslation(ICondition condition) {
-        ConditionTranslation ct = registry.get(condition.getInstanceValueClass());
+        ConditionTranslation ct;
+        ct = pathRegistry.get(condition.getPath());
+        if (ct == null) {
+            ct = classRegistry.get(condition.getInstanceValueClass());
+        }
         //TODO See PYX-14.
         if (ct == null && condition instanceof IEntityCondition) {
-            ct = registry.get(IEntityCondition.class);
+            ct = classRegistry.get(IEntityCondition.class);
         } else if (ct == null && condition instanceof IEnumCondition) {
-            ct = registry.get(IEnumCondition.class);
+            ct = classRegistry.get(IEnumCondition.class);
         }
 
         if (ct == null) {
