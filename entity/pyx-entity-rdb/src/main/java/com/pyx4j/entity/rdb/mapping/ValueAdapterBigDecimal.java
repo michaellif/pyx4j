@@ -24,7 +24,10 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 
+import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 
@@ -57,5 +60,33 @@ class ValueAdapterBigDecimal extends ValueAdapterPrimitive {
         } else {
             return value;
         }
+    }
+
+    @Override
+    public ValueBindAdapter getQueryValueBindAdapter(Restriction restriction, Object value) {
+        if (value == null || value instanceof BigDecimal) {
+            return this;
+        } else {
+            return new QueryByDoubleValueBindAdapter();
+        }
+    }
+
+    class QueryByDoubleValueBindAdapter implements ValueBindAdapter {
+
+        @Override
+        public List<String> getColumnNames(String memberSqlName) {
+            return Arrays.asList(memberSqlName);
+        }
+
+        @Override
+        public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
+            if (value == null) {
+                stmt.setNull(parameterIndex, sqlType);
+            } else {
+                stmt.setDouble(parameterIndex, (Double) value);
+            }
+            return 1;
+        }
+
     }
 }
