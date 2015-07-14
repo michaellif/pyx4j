@@ -21,6 +21,8 @@ package com.pyx4j.config.server.module;
 
 public interface IModule {
 
+    void register();
+
     void init();
 
     void shutdown();

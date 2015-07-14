@@ -40,6 +40,7 @@ public class ModuleRegistry {
 
     public static void register(IModule module) {
         instance().registry.add(module);
+        module.register();
     }
 
     public static synchronized void init() {
