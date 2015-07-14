@@ -21,6 +21,7 @@ package com.pyx4j.widgets.client.selector;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -119,7 +120,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
         listBox.showValue(this.value);
     }
 
-    public Collection<E> getValue() {
+    public List<E> getValue() {
         return new ArrayList<E>(this.value);
     }
 
