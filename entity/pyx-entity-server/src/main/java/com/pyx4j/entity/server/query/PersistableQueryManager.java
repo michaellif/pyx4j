@@ -92,8 +92,8 @@ class PersistableQueryManager {
 
                 // find existing condition in stored list: by pk ,  by columnId
                 ICondition origCondition = findByColumnId(queryStorage.conditions(), columnId);
-                if (origCondition != null) {
-                    Validate.isEquals(origCondition.id(), condition.id(), "attached to different graph; query member " + condition.getPath());
+                if ((origCondition != null) && (!condition.isNull())) {
+                    Validate.isEquals(origCondition.id(), condition.id(), "Attached to different graph; query member {0}", condition.getPath());
                 }
 
                 ConditionTranslation<ICondition> ct = ConditionTranslationRegistry.instance().getConditionTranslation(condition);
