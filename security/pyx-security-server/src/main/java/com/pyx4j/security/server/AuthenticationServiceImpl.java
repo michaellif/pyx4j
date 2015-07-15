@@ -123,6 +123,7 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
         }
         ar.setProductionBackend(ServerSideConfiguration.instance().isProductionBackend());
         ar.setDevelopmentBehavior(ApplicationMode.isDevelopment());
+        ar.setQaBehavior(ApplicationMode.isQa());
         ar.setDemoBehavior(ApplicationMode.isDemo());
 
         ar.setServertTime(System.currentTimeMillis());

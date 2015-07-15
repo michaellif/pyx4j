@@ -26,10 +26,16 @@ public class ClientApplicationMode implements com.pyx4j.config.shared.Applicatio
 
     private static boolean development = false;
 
+    private static boolean qa = false;
+
     private static boolean demo = false;
 
     public static void setDevelopment(boolean development) {
         ClientApplicationMode.development = development;
+    }
+
+    public static void setQa(boolean qa) {
+        ClientApplicationMode.qa = qa;
     }
 
     public static void setDemo(boolean demo) {
@@ -44,6 +50,11 @@ public class ClientApplicationMode implements com.pyx4j.config.shared.Applicatio
     @Override
     public boolean isDevelopment() {
         return development;
+    }
+
+    @Override
+    public boolean isQa() {
+        return qa;
     }
 
     @Override

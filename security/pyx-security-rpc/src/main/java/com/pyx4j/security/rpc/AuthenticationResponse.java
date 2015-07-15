@@ -52,6 +52,8 @@ public class AuthenticationResponse implements Serializable {
 
     private boolean developmentBehavior;
 
+    private boolean qaBehavior;
+
     private boolean demoBehavior;
 
     private boolean productionBackend;
@@ -152,6 +154,14 @@ public class AuthenticationResponse implements Serializable {
 
     public void setDevelopmentBehavior(boolean developmentBehavior) {
         this.developmentBehavior = developmentBehavior;
+    }
+
+    public boolean isQaBehavior() {
+        return qaBehavior;
+    }
+
+    public void setQaBehavior(boolean qaBehavior) {
+        this.qaBehavior = qaBehavior;
     }
 
     public boolean isDemoBehavior() {
