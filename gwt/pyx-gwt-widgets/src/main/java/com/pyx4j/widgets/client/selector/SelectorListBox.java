@@ -169,7 +169,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
     @Override
     public void setSelection(E item) {
-        if (!value.contains(item)) {
+        if (item != null && !value.contains(item)) {
             ArrayList<E> newValue = new ArrayList<>(value);
             newValue.add(item);
             setValue(newValue);
@@ -178,13 +178,11 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
     }
 
     public void removeItem(E item) {
-        if (null != item) {
-            if (this.value.contains(item)) {
-                ArrayList<E> newValue = new ArrayList<>(value);
-                newValue.remove(item);
-                setValue(newValue);
-                fireValueChangeEvent();
-            }
+        if (item != null && value.contains(item)) {
+            ArrayList<E> newValue = new ArrayList<>(value);
+            newValue.remove(item);
+            setValue(newValue);
+            fireValueChangeEvent();
         }
     }
 

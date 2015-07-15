@@ -30,6 +30,7 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -135,6 +136,10 @@ public class QueryComposer<E extends IQuery> extends Composite implements IFocus
 
     public Collection<FilterItem> getValue() {
         return content.getValue();
+    }
+
+    public void addValueChangeHandler(ValueChangeHandler<Collection<FilterItem>> handler) {
+        content.addValueChangeHandler(handler);
     }
 
     @Override
