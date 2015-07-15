@@ -21,6 +21,10 @@
 package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
+import java.util.Collection;
+
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.query.IBooleanCondition;
@@ -52,9 +56,19 @@ public class NQuery<E extends IQuery> extends NField<E, QueryComposer<E>, CQuery
         return new Label();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected QueryComposer<E> createEditor() {
-        return new QueryComposer<E>();
+        QueryComposer queryComposer = new QueryComposer<E>();
+        queryComposer.addValueChangeHandler(new ValueChangeHandler<Collection<E>>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<Collection<E>> event) {
+                //TODO 
+                //  getCComponent().stopEditing();
+            }
+        });
+        return queryComposer;
     }
 
     @Override
