@@ -233,10 +233,10 @@ public class QueryComposer<E extends IQuery> extends Composite implements IFocus
         @Override
         public void setSelection(FilterItem item) {
             item.setEditorShownOnAttach(true);
+            super.setSelection(item);
             for (int i = 0; i < getValue().size(); i++) {
                 getValue().get(i).getCondition().displayOrder().setValue(i);
             }
-            super.setSelection(item);
         }
 
         @Override

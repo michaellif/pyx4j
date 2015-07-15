@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
@@ -154,7 +156,13 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
     }
 
     private void fireValueChangeEvent() {
-        ValueChangeEvent.fire(this, value);
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+
+            @Override
+            public void execute() {
+                ValueChangeEvent.fire(SelectorListBox.this, value);
+            }
+        });
     }
 
     @Override

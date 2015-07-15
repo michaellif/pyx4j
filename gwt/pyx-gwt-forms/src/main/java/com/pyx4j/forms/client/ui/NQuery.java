@@ -64,8 +64,7 @@ public class NQuery<E extends IQuery> extends NField<E, QueryComposer<E>, CQuery
 
             @Override
             public void onValueChange(ValueChangeEvent<Collection<E>> event) {
-                //TODO 
-                //  getCComponent().stopEditing();
+                getCComponent().stopEditing();
             }
         });
         return queryComposer;
