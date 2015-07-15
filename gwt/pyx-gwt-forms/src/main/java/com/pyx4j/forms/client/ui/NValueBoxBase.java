@@ -56,7 +56,11 @@ public abstract class NValueBoxBase<DATA, WIDGET extends IValueBoxWidget<DATA>, 
             @Override
             public void onKeyDown(KeyDownEvent event) {
                 if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                    boolean editingInProgress = getCComponent().isEditingInProgress();
                     getCComponent().stopEditing();
+                    if (editingInProgress) {
+                        getCComponent().startEditing();
+                    }
                 }
             }
         });
@@ -65,6 +69,13 @@ public abstract class NValueBoxBase<DATA, WIDGET extends IValueBoxWidget<DATA>, 
             @SuppressWarnings({ "rawtypes", "unchecked" })
             @Override
             public void onValueChange(ValueChangeEvent<DATA> event) {
+                if (getEditor().isParsedOk()) {
+                    boolean editingInProgress = getCComponent().isEditingInProgress();
+                    getCComponent().stopEditing();
+                    if (editingInProgress) {
+                        getCComponent().startEditing();
+                    }
+                }
                 NativeValueChangeEvent.fire((CValueBoxBase) getCComponent(), getEditor().getValue());
             }
         });
