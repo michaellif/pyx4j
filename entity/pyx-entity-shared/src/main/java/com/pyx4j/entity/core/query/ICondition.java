@@ -27,7 +27,6 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
@@ -60,7 +59,7 @@ public interface ICondition extends IEntity {
     interface DisplayOrderId extends ColumnId {
     }
 
-    @OrderColumn(DisplayOrderId.class)
+    @MemberColumn(DisplayOrderId.class)
     IPrimitive<Integer> displayOrder();
 
 //TODO MetaData required to build the UI for this Condition.  Do we need this ?
