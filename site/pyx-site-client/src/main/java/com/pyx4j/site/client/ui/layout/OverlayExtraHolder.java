@@ -71,10 +71,10 @@ public class OverlayExtraHolder extends AbstractOverlayHolder {
 
     public void layout() {
 
-        if (parent.getDisplay(DisplayType.devConsole).getWidget() != null) {
+        if (parent.getDisplay(DisplayType.console).getWidget() != null) {
             setTabVisible(getTabIndex(overlayDevConsoleHolder), true);
             if (overlayDevConsoleHolder.getWidgetCount() == 0) {
-                overlayDevConsoleHolder.add(parent.getDisplay(DisplayType.devConsole));
+                overlayDevConsoleHolder.add(parent.getDisplay(DisplayType.console));
             }
         } else {
             setTabVisible(getTabIndex(overlayDevConsoleHolder), false);

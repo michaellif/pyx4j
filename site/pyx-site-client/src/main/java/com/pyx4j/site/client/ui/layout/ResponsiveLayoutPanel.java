@@ -50,7 +50,7 @@ public abstract class ResponsiveLayoutPanel extends ComplexPanel implements Requ
     private final Map<DisplayType, DisplayPanel> displays;
 
     public enum DisplayType {
-        header, toolbar, menu, content, footer, communication, devConsole, extra1, extra2, extra3, extra4, notification
+        header, toolbar, menu, content, footer, communication, console, extra1, extra2, extra3, extra4, notification
     }
 
     public ResponsiveLayoutPanel() {
