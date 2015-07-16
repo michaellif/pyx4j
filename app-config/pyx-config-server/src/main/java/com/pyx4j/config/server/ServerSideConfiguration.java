@@ -130,6 +130,10 @@ public class ServerSideConfiguration {
         return false;
     }
 
+    public boolean isQaBehavior() {
+        return false;
+    }
+
     public boolean isProductionBackend() {
         return false;
     }

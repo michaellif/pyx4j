@@ -274,6 +274,7 @@ public class ClientContext extends Context {
     public static void authenticated(AuthenticationResponse authenticationResponse) {
         try {
             ClientApplicationMode.setDevelopment(authenticationResponse.isDevelopmentBehavior());
+            ClientApplicationMode.setQa(authenticationResponse.isQaBehavior());
             ClientApplicationMode.setDemo(authenticationResponse.isDemoBehavior());
             authenticationObtained = true;
             userVisit = authenticationResponse.getUserVisit();

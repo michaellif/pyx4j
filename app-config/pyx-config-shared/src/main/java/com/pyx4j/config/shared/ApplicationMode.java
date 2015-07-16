@@ -78,6 +78,8 @@ public class ApplicationMode {
 
         boolean isDevelopment();
 
+        boolean isQa();
+
         boolean isDemo();
     }
 
@@ -97,6 +99,10 @@ public class ApplicationMode {
 
     public final static boolean isDemo() {
         return impl.isDemo();
+    }
+
+    public final static boolean isQa() {
+        return impl.isQa();
     }
 
     public final static boolean isProduction() {
