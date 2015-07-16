@@ -32,6 +32,7 @@ import com.pyx4j.entity.core.query.IEntityCondition;
 import com.pyx4j.entity.core.query.IEnumCondition;
 import com.pyx4j.entity.core.query.IIntegerRangeCondition;
 import com.pyx4j.entity.core.query.IStringCondition;
+import com.pyx4j.entity.core.query.IValuePresentCondition;
 
 @SuppressWarnings("rawtypes")
 class ConditionTranslationRegistry {
@@ -56,6 +57,7 @@ class ConditionTranslationRegistry {
         registerCondition(IEntityCondition.class, new ConditionTranslationEntity());
         registerCondition(IEnumCondition.class, new ConditionTranslationEnum());
         registerCondition(IBooleanCondition.class, new ConditionTranslationBoolean());
+        registerCondition(IValuePresentCondition.class, new ConditionTranslationValuePresent());
         registerCondition(IIntegerRangeCondition.class, new ConditionTranslationIntegerRange());
         registerCondition(IDecimalRangeCondition.class, new ConditionTranslationDecimalRange());
     }
