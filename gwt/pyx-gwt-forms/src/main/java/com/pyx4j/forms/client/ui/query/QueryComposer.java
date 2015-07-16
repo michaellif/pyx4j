@@ -22,6 +22,7 @@ package com.pyx4j.forms.client.ui.query;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -29,6 +30,7 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -112,7 +114,7 @@ public class QueryComposer<E extends IQuery> extends Composite implements IFocus
             for (String memberName : query.getEntityMeta().getMemberNames()) {
                 IObject<?> member = query.getMember(memberName);
                 if (member instanceof ICondition) {
-                    FilterItem item = new FilterItem((ICondition) query.getMember(memberName));
+                    FilterItem item = new FilterItem((ICondition) member);
                     options.add(item);
                     if (!member.isNull()) {
                         items.add(item);
@@ -121,6 +123,7 @@ public class QueryComposer<E extends IQuery> extends Composite implements IFocus
             }
         }
 
+        Collections.sort(items);
         content.setValue(items);
 
         ((FilterOptionsGrabber) content.getOptionsGrabber()).updateFilterOptions(options);
@@ -133,6 +136,10 @@ public class QueryComposer<E extends IQuery> extends Composite implements IFocus
 
     public Collection<FilterItem> getValue() {
         return content.getValue();
+    }
+
+    public void addValueChangeHandler(ValueChangeHandler<Collection<FilterItem>> handler) {
+        content.addValueChangeHandler(handler);
     }
 
     @Override
@@ -227,6 +234,15 @@ public class QueryComposer<E extends IQuery> extends Composite implements IFocus
         public void setSelection(FilterItem item) {
             item.setEditorShownOnAttach(true);
             super.setSelection(item);
+            for (int i = 0; i < getValue().size(); i++) {
+                getValue().get(i).getCondition().displayOrder().setValue(i);
+            }
+        }
+
+        @Override
+        public void removeItem(FilterItem item) {
+            super.removeItem(item);
+            item.getCondition().set(null);
         }
     }
 }

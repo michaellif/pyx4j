@@ -21,6 +21,14 @@
 package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.query.IBooleanCondition;
@@ -52,9 +60,18 @@ public class NQuery<E extends IQuery> extends NField<E, QueryComposer<E>, CQuery
         return new Label();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected QueryComposer<E> createEditor() {
-        return new QueryComposer<E>();
+        QueryComposer queryComposer = new QueryComposer<E>();
+        queryComposer.addValueChangeHandler(new ValueChangeHandler<Collection<E>>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<Collection<E>> event) {
+                getCComponent().stopEditing();
+            }
+        });
+        return queryComposer;
     }
 
     @Override
@@ -80,20 +97,30 @@ public class NQuery<E extends IQuery> extends NField<E, QueryComposer<E>, CQuery
     private String queryToString(E value) {
         StringBuilder builder = new StringBuilder();
         if (value != null) {
+            List<ICondition> conditions = new ArrayList<>();
             for (String memberName : value.getEntityMeta().getMemberNames()) {
                 IObject<?> member = value.getMember(memberName);
                 if (member instanceof ICondition) {
-                    ICondition condition = (ICondition) member;
-                    if (!condition.isNull()) {
-                        if (builder.length() > 0) {
-                            builder.append(", ");
-                        }
-                        builder.append(condition.getMeta().getCaption());
-                        builder.append("(");
-                        builder.append(conditionToString(condition));
-                        builder.append(")");
+                    if (!member.isNull()) {
+                        conditions.add((ICondition) member);
                     }
                 }
+            }
+
+            Collections.sort(conditions, new Comparator<ICondition>() {
+                @Override
+                public int compare(ICondition o1, ICondition o2) {
+                    return o1.displayOrder().getValue(Integer.MAX_VALUE) - o2.displayOrder().getValue(Integer.MAX_VALUE);
+                }
+            });
+            for (ICondition condition : conditions) {
+                if (builder.length() > 0) {
+                    builder.append(", ");
+                }
+                builder.append(condition.getMeta().getCaption());
+                builder.append("(");
+                builder.append(conditionToString(condition));
+                builder.append(")");
             }
         }
         return builder.toString();

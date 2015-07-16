@@ -37,7 +37,7 @@ public class FilterItem implements Comparable<FilterItem> {
 
     @Override
     public int compareTo(FilterItem o) {
-        return 0;
+        return condition.displayOrder().getValue(Integer.MAX_VALUE) - o.condition.displayOrder().getValue(Integer.MAX_VALUE);
     }
 
     @Override

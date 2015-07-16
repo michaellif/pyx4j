@@ -21,7 +21,10 @@ package com.pyx4j.widgets.client.selector;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
@@ -119,7 +122,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
         listBox.showValue(this.value);
     }
 
-    public Collection<E> getValue() {
+    public List<E> getValue() {
         return new ArrayList<E>(this.value);
     }
 
@@ -153,7 +156,13 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
     }
 
     private void fireValueChangeEvent() {
-        ValueChangeEvent.fire(this, value);
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+
+            @Override
+            public void execute() {
+                ValueChangeEvent.fire(SelectorListBox.this, value);
+            }
+        });
     }
 
     @Override
@@ -168,7 +177,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
     @Override
     public void setSelection(E item) {
-        if (!value.contains(item)) {
+        if (item != null && !value.contains(item)) {
             ArrayList<E> newValue = new ArrayList<>(value);
             newValue.add(item);
             setValue(newValue);
@@ -177,13 +186,11 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
     }
 
     public void removeItem(E item) {
-        if (null != item) {
-            if (this.value.contains(item)) {
-                ArrayList<E> newValue = new ArrayList<>(value);
-                newValue.remove(item);
-                setValue(newValue);
-                fireValueChangeEvent();
-            }
+        if (item != null && value.contains(item)) {
+            ArrayList<E> newValue = new ArrayList<>(value);
+            newValue.remove(item);
+            setValue(newValue);
+            fireValueChangeEvent();
         }
     }
 
