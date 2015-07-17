@@ -564,13 +564,13 @@
             <dependency>
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi</artifactId>
-                <version>3.10.1</version>
+                <version>3.12</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>
-                <version>3.10.1</version>
+                <version>3.12</version>
             </dependency>
 
             <!-- use the latest version instead of one ref by poi -->
