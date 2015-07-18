@@ -278,6 +278,9 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
     public void setSecurityContext(AccessControlContext context) {
         visible.setContext(context);
         setVisibleImpl();
+        if (menu != null) {
+            menu.setSecurityContext(context);
+        }
     }
 
     public boolean isActive() {
