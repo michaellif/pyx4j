@@ -20,6 +20,7 @@
 package com.pyx4j.config.server;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.EnumSet;
@@ -147,8 +148,8 @@ public class PropertiesConfiguration implements CanReloadProperties {
                 }
                 valuesText.append(t.name());
             }
-            throw new IllegalArgumentException("No enum constant '" + value + "' for key " + key + " of type " + enumClass.getSimpleName() + ", expected ["
-                    + valuesText.toString() + "]");
+            throw new IllegalArgumentException(
+                    "No enum constant '" + value + "' for key " + key + " of type " + enumClass.getSimpleName() + ", expected [" + valuesText.toString() + "]");
         }
     }
 
@@ -202,6 +203,24 @@ public class PropertiesConfiguration implements CanReloadProperties {
             }
         }
         return m;
+    }
+
+    public static void saveProperties(File file, Map<String, String> properties) {
+        Properties props = new Properties();
+        props.putAll(properties);
+        FileOutputStream out = null;
+        try {
+            props.store(out = new FileOutputStream(file), null);
+        } catch (IOException e) {
+            throw new Error(e.getLocalizedMessage());
+        } finally {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException ignore) {
+                }
+            }
+        }
     }
 
     public static String stringView(String prefix, Map<String, String> properties) {
