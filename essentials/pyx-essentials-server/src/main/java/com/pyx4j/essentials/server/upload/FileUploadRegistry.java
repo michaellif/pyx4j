@@ -65,7 +65,7 @@ public class FileUploadRegistry {
             return true;
         }
         if (entity.file().accessKey().isNull()) {
-            log.debug("file of entity {} do not have accessKey", entity);
+            log.debug("file of entity {} do not have accessKey", entity.getDebugExceptionInfoString());
             return false;
         }
         IFile<?> userUploadedFile = get(entity.file().accessKey().getValue());
