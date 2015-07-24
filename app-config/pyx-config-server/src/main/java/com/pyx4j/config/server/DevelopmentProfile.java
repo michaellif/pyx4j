@@ -20,38 +20,34 @@
 package com.pyx4j.config.server;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
-public class DevelopmentProfile {
+import com.pyx4j.commons.Consts;
+
+/**
+ * Persistable Development settings changeable by application.
+ */
+public abstract class DevelopmentProfile {
+
+    public interface ValueProvider<T> {
+
+        T getValue();
+    }
 
     public static final String DEV_STORAGE = "dev.storage.properties";
 
-    public static final String BRANCH_PROFILE = "development-branch.profile";
+    private final File directory;
 
-    public static File getDevelopmentProfileDirectory() {
-        File currentDir = new File(".").getAbsoluteFile();
-        File profileDir = currentDir;
-        while (new File(profileDir, "pom.xml").exists()) {
-            profileDir = profileDir.getParentFile();
-            if (new File(profileDir, BRANCH_PROFILE + ".template").exists() || new File(profileDir, BRANCH_PROFILE).exists()) {
-                return profileDir;
-            }
-        }
-        return currentDir;
-    }
+    private final File file;
 
-    private PropertiesConfiguration devStorage;
+    private final PropertiesConfiguration devStorage;
 
-    private static class SingletonHolder {
-        public static final DevelopmentProfile INSTANCE = new DevelopmentProfile();
-    }
-
-    static DevelopmentProfile instance() {
-        return SingletonHolder.INSTANCE;
-    }
-
-    private DevelopmentProfile() {
-        File file = new File(getDevelopmentProfileDirectory(), DEV_STORAGE);
+    protected DevelopmentProfile(String appName) {
+        directory = new File(System.getProperty("user.home"), appName);
+        file = new File(directory, DEV_STORAGE);
         if (file.canRead()) {
             devStorage = new PropertiesConfiguration(null, PropertiesConfiguration.loadProperties(file));
         } else {
@@ -59,14 +55,45 @@ public class DevelopmentProfile {
         }
     }
 
+    public File getDirectory() {
+        return directory;
+    }
+
     /**
      * Persistable build/dev environment storage.
      */
-    public static PropertiesConfiguration getDevStorage() {
-        return instance().devStorage;
+    public PropertiesConfiguration getDevStorage() {
+        return devStorage;
     }
 
-    public static void saveDevStorage() {
-        PropertiesConfiguration.saveProperties(new File(getDevelopmentProfileDirectory(), DEV_STORAGE), getDevStorage().getProperties());
+    public void saveDevStorage() {
+        directory.mkdirs();
+        PropertiesConfiguration.saveProperties(file, getDevStorage().getProperties());
+    }
+
+    public boolean getCacheBooleanValue(String key, int checkEveyMinutes, ValueProvider<Boolean> valueProvider) {
+        boolean value = getDevStorage().getBooleanValue(key, false);
+        String checked = getDevStorage().getValue(key + ".checked", null);
+
+        boolean needToCheck = false;
+        if (checked != null) {
+            try {
+                Date checkedDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(checked);
+                needToCheck = (Math.abs(checkedDate.getTime() - System.currentTimeMillis()) > checkEveyMinutes * Consts.MIN2MSEC);
+            } catch (ParseException e) {
+                needToCheck = true;
+            }
+        } else {
+            needToCheck = true;
+        }
+
+        if (needToCheck) {
+            value = valueProvider.getValue();
+            getDevStorage().getProperties().put(key, String.valueOf(value));
+            getDevStorage().getProperties().put(key + ".checked", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
+            saveDevStorage();
+        }
+
+        return value;
     }
 }
