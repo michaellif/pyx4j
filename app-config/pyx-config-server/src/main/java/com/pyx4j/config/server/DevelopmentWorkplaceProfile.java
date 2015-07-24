@@ -25,9 +25,9 @@ import java.util.Collections;
 /**
  * Persistable Development settings changeable by developer.
  */
-public abstract class DevelopmentBranchProfile {
+public abstract class DevelopmentWorkplaceProfile {
 
-    public static final String BRANCH_PROFILE = "development-branch.profile";
+    public static final String WORKPLACE_PROFILE = "development-workplace.profile";
 
     private static File getDevelopmentProfileDirectory(String appName) {
         File currentDir = new File(".").getAbsoluteFile();
@@ -35,8 +35,8 @@ public abstract class DevelopmentBranchProfile {
         while (new File(rootDir, "pom.xml").exists()) {
             rootDir = rootDir.getParentFile();
             File dir = new File(rootDir, appName);
-            if (new File(dir, BRANCH_PROFILE).exists() // Configuration file Exists
-                    || new File(rootDir, BRANCH_PROFILE).exists()) { // Configuration template
+            if (new File(dir, WORKPLACE_PROFILE).exists() // Configuration file Exists
+                    || new File(rootDir, WORKPLACE_PROFILE).exists()) { // Configuration template
                 return dir;
             }
         }
@@ -47,9 +47,9 @@ public abstract class DevelopmentBranchProfile {
 
     private PropertiesConfiguration configProperties;
 
-    protected DevelopmentBranchProfile(String appName) {
+    protected DevelopmentWorkplaceProfile(String appName) {
         directory = getDevelopmentProfileDirectory(appName);
-        File file = new File(directory, BRANCH_PROFILE);
+        File file = new File(directory, WORKPLACE_PROFILE);
         if (file.canRead()) {
             configProperties = new PropertiesConfiguration(null, PropertiesConfiguration.loadProperties(file));
         } else {
