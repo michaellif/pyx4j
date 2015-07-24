@@ -44,11 +44,16 @@ public abstract class ClientApplicationVersion {
 
     public String getBuildInformation() {
         String version = "";
-        if (ApplicationMode.isDevelopment()) {
-            version = "Dev Mode ";
+        if (ApplicationMode.isDemo()) {
+            version += "Demo ";
         }
-        version += getBuildLabel() + " " + TimeUtils.simpleFormat(getBuildDate(), "yyyy-MM-dd HH:mm") + " svn:" + getScmRevision() + " pyx.svn:"
-                + getPyxScmRevision();
+        if (ApplicationMode.isQa()) {
+            version += "QA ";
+        }
+        if (ApplicationMode.isDevelopment()) {
+            version += "Dev Mode ";
+        }
+        version += getBuildLabel() + " " + TimeUtils.simpleFormat(getBuildDate(), "yyyy-MM-dd HH:mm");
         return version;
     }
 }
