@@ -26,6 +26,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
@@ -39,6 +42,8 @@ import com.pyx4j.entity.shared.TextSearchDocument;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 class TextSearchIndexManager {
+
+    private static final Logger log = LoggerFactory.getLogger(TextSearchIndexManager.class);
 
     private static class UpdateChainData<T extends IEntity> {
 
@@ -114,13 +119,19 @@ class TextSearchIndexManager {
         return Collections.unmodifiableCollection(indexes.keySet());
     }
 
-    <E extends IEntity> void queueIndexUpdate(final E entity) {
+    <E extends IEntity> void queueIndexUpdate(E entity) {
+        if (entity.isValueDetached()) {
+            log.warn("ignoring request to index Detached entity {}", entity.getDebugExceptionInfoString(), new RuntimeException("CallStack"));
+            return;
+        }
+        // entity itself may change in a flow before transaction completed.
+        final IEntity entityId = entity.createIdentityStub();
         List<UpdateChainData<? extends IEntity>> classChains = chains.get(entity.getValueClass());
         if (classChains != null) {
             Persistence.service().addTransactionCompletionHandler(new Executable<Void, RuntimeException>() {
                 @Override
                 public Void execute() {
-                    getQueue().queue(NamespaceManager.getNamespace(), entity.createIdentityStub(), true);
+                    getQueue().queue(NamespaceManager.getNamespace(), entityId, true);
                     return null;
                 }
             });
@@ -131,7 +142,7 @@ class TextSearchIndexManager {
             Persistence.service().addTransactionCompletionHandler(new Executable<Void, RuntimeException>() {
                 @Override
                 public Void execute() {
-                    getQueue().queue(NamespaceManager.getNamespace(), entity.createIdentityStub(), false);
+                    getQueue().queue(NamespaceManager.getNamespace(), entityId, false);
                     return null;
                 }
             });
