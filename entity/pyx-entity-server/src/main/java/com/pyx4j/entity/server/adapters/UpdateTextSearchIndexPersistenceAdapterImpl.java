@@ -19,9 +19,6 @@
  */
 package com.pyx4j.entity.server.adapters;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.server.textsearch.TextSearchFacade;
@@ -29,25 +26,12 @@ import com.pyx4j.entity.shared.adapters.UpdateTextSearchIndexPersistenceAdapter;
 
 public class UpdateTextSearchIndexPersistenceAdapterImpl implements UpdateTextSearchIndexPersistenceAdapter {
 
-    private static final Logger log = LoggerFactory.getLogger(UpdateTextSearchIndexPersistenceAdapterImpl.class);
-
-    private static int todo_remove = 100;
-
     @Override
     public void onBeforePersist(IEntity origEntity, IEntity newEntity) {
     }
 
     @Override
     public void onAfterPersist(IEntity entity) {
-        if (entity.isValueDetached()) {
-            // TODO This should not happen investigate later. VISTA-6711
-            todo_remove++;
-            if (todo_remove >= 100) {
-                log.warn("TODO This should not happen investigate", new RuntimeException());
-                todo_remove = 0;
-            }
-            return;
-        }
         ServerSideFactory.create(TextSearchFacade.class).queueIndexUpdate(entity);
     }
 
