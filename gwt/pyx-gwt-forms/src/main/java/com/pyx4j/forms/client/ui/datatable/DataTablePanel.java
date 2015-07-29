@@ -256,16 +256,13 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
             topActionsBar.getToolbar().insertItem(exportButton = new Button(i18n.tr("Export"), new Command() {
                 @Override
                 public void execute() {
-                    onExport();
+                    getDataSource().export();
                 }
             }), 0);
         }
         if (exportButton != null) {
             exportButton.setVisible(enabled);
         }
-    }
-
-    protected void onExport() {
     }
 
     public void setFirstActionHandler(Command firstActionCommand) {

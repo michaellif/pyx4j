@@ -161,6 +161,9 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
         return criteria;
     }
 
+    protected void export() {
+    }
+
     @Override
     public HandlerRegistration addDataChangeHandler(ValueChangeHandler<Class<E>> handler) {
         // TODO Auto-generated method stub
