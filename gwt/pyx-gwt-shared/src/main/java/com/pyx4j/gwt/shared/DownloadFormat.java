@@ -40,6 +40,8 @@ public enum DownloadFormat {
 
     ODT("odt", "OpenDocument Text Document (ODT)"),
 
+    ODS("ods", " OpenDocument Spreadsheet (ODS)"),
+
     XML("xml", "XML format"),
 
     HTML("html", "HTML Document"),
@@ -78,7 +80,7 @@ public enum DownloadFormat {
 
     /**
      * get name
-     * 
+     *
      * @return name
      */
     public String getName() {
@@ -87,7 +89,7 @@ public enum DownloadFormat {
 
     /**
      * get default extension
-     * 
+     *
      * @return default extension
      */
     public String getExtension() {
@@ -96,7 +98,7 @@ public enum DownloadFormat {
 
     /**
      * get all extensions
-     * 
+     *
      * @return array of all extensions
      */
     public String[] getExtensions() {

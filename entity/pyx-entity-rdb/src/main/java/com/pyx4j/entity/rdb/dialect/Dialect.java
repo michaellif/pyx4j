@@ -245,6 +245,11 @@ public abstract class Dialect {
         return false;
     }
 
+    //Return DB time as String in "yyyy-MM-dd HH:mm:ss" format
+    public String sqlDBSystemDate() {
+        throw new Error("Not implemented");
+    }
+
     public String sqlSequenceMetaData() {
         throw new Error("Dialect does not support sequences");
     }

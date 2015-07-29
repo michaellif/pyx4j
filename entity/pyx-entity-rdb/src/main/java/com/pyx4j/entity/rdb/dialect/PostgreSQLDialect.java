@@ -81,6 +81,11 @@ public class PostgreSQLDialect extends Dialect {
     }
 
     @Override
+    public String sqlDBSystemDate() {
+        return "SELECT TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI:SS')";
+    }
+
+    @Override
     public String sqlSequenceNextVal(String sequenceName) {
         return "nextval ('" + sequenceName + "')";
     }

@@ -109,8 +109,8 @@ public class Button extends ButtonBase {
     protected void updateImageState() {
         if (imageResource != null) {
             getImageHolder().getElement().getStyle().setProperty("paddingLeft", imageResource.getWidth() + "px");
-            getImageHolder().getElement().getStyle()
-                    .setProperty("background", "url('" + imageResource.getSafeUri().asString() + "') no-repeat scroll left center");
+            getImageHolder().getElement().getStyle().setProperty("background",
+                    "url('" + imageResource.getSafeUri().asString() + "') no-repeat scroll left center");
         } else {
             super.updateImageState();
         }
@@ -121,6 +121,14 @@ public class Button extends ButtonBase {
         if (menu != null) {
             getTextLabel().addStyleName(WidgetsTheme.StyleName.DownArrow.name());
             getTextLabel().addStyleName(WidgetsTheme.StyleName.DownArrow + ":after");
+        }
+    }
+
+    @Override
+    public void setSecurityContext(AccessControlContext context) {
+        super.setSecurityContext(context);
+        if (menu != null) {
+            menu.setSecurityContext(context);
         }
     }
 
