@@ -180,14 +180,14 @@ public class DataTableModel<E extends IEntity> {
 
     public void populateData(List<E> dataItems, int pageNumber, boolean hasMoreData, int totalRows) {
         data.clear();
+        clearSelection();
         if (dataItems != null) {
-            for (E dataItem : dataItems) {
-                data.add(dataItem);
-            }
+            data.addAll(dataItems);
         }
         this.pageNumber = pageNumber;
         this.hasMoreData = hasMoreData;
         this.totalRows = totalRows;
+
         fireTableChanged(new DataTableModelEvent());
     }
 

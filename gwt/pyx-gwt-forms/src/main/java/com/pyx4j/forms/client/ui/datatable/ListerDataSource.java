@@ -44,7 +44,7 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
 
     private Criterion parentFiltering;
 
-    private List<Criterion> preDefinedFilters = newPreDefinedFilters();
+    private List<Criterion> preDefinedFilters = new LinkedList<Criterion>();
 
     private Key parentEntityID;
 
@@ -129,11 +129,11 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
 
     public void clearPreDefinedFilters() {
 //        this.preDefinedFilters.clear(); // not implemented in GWT - replace on:
-        this.preDefinedFilters = newPreDefinedFilters();
+        this.preDefinedFilters = new LinkedList<Criterion>();
     }
 
-    private List<Criterion> newPreDefinedFilters() {
-        return new LinkedList<Criterion>();
+    public List<Criterion> getPreDefinedFilters() {
+        return preDefinedFilters;
     }
 
     protected EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
