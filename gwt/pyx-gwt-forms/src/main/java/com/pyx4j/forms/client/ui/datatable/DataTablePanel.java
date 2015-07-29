@@ -394,13 +394,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
                     @Override
                     public void execute() {
                         List<E> dataItems = new ArrayList<E>();
-                        for (E entity : result.getData()) {
-                            dataItems.add(entity);
-                        }
+                        dataItems.addAll(result.getData());
                         getDataTableModel().populateData(dataItems, pageNumber, result.hasMoreData(), result.getTotalRows());
-                        if (delButton != null) {
-                            delButton.setEnabled(getDataTableModel().isAnyRowSelected());
-                        }
                         onPopulate();
                     }
                 });
@@ -507,6 +502,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
                 }
             }
         }
+
         return criteria;
     }
 
