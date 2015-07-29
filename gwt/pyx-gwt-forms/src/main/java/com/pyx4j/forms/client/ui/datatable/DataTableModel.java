@@ -39,9 +39,9 @@ public class DataTableModel<E extends IEntity> {
     /** List of listeners */
     private final ArrayList<DataTableModelListener> listenerList = new ArrayList<DataTableModelListener>();
 
-    private final ArrayList<DataItem<E>> data = new ArrayList<DataItem<E>>();
+    private final ArrayList<E> data = new ArrayList<E>();
 
-    private final Collection<DataItem<E>> selected = new HashSet<DataItem<E>>();
+    private final Collection<E> selected = new HashSet<E>();
 
     private boolean multipleSelection = false;
 
@@ -170,18 +170,18 @@ public class DataTableModel<E extends IEntity> {
         }
     }
 
-    public ArrayList<DataItem<E>> getData() {
+    public ArrayList<E> getData() {
         return data;
     }
 
-    public int indexOf(DataItem<E> item) {
+    public int indexOf(E item) {
         return data.indexOf(item);
     }
 
-    public void populateData(List<DataItem<E>> dataItems, int pageNumber, boolean hasMoreData, int totalRows) {
+    public void populateData(List<E> dataItems, int pageNumber, boolean hasMoreData, int totalRows) {
         data.clear();
         if (dataItems != null) {
-            for (DataItem<E> dataItem : dataItems) {
+            for (E dataItem : dataItems) {
                 data.add(dataItem);
             }
         }
@@ -260,11 +260,11 @@ public class DataTableModel<E extends IEntity> {
         fireTableChanged(new DataTableModelEvent(DataTableModelEvent.Type.SELECTION));
     }
 
-    public Collection<DataItem<E>> getSelectedRows() {
+    public Collection<E> getSelectedRows() {
         return selected;
     }
 
-    public boolean isRowSelected(DataItem<E> dataItem) {
+    public boolean isRowSelected(E dataItem) {
         return selected.contains(dataItem);
     }
 
@@ -273,7 +273,7 @@ public class DataTableModel<E extends IEntity> {
     }
 
     public boolean isAllRowsSelected() {
-        for (DataItem<E> dataItem : data) {
+        for (E dataItem : data) {
             if (!selected.contains(dataItem)) {
                 return false;
             }
@@ -282,7 +282,7 @@ public class DataTableModel<E extends IEntity> {
     }
 
     public boolean isAnyRowSelected() {
-        for (DataItem<E> dataItem : data) {
+        for (E dataItem : data) {
             if (selected.contains(dataItem)) {
                 return true;
             }

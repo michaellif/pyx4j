@@ -306,9 +306,9 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     @Deprecated
     public void populateData(List<E> entityes, int pageNumber, boolean hasMoreData, int totalRows) {
-        List<DataItem<E>> dataItems = new ArrayList<DataItem<E>>();
+        List<E> dataItems = new ArrayList<E>();
         for (E entity : entityes) {
-            dataItems.add(new DataItem<E>(entity));
+            dataItems.add(entity);
         }
         getDataTableModel().populateData(dataItems, pageNumber, hasMoreData, totalRows);
         if (delButton != null) {
@@ -393,9 +393,9 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
                 Scheduler.get().scheduleFinally(new ScheduledCommand() {
                     @Override
                     public void execute() {
-                        List<DataItem<E>> dataItems = new ArrayList<DataItem<E>>();
+                        List<E> dataItems = new ArrayList<E>();
                         for (E entity : result.getData()) {
-                            dataItems.add(new DataItem<E>(entity));
+                            dataItems.add(entity);
                         }
                         getDataTableModel().populateData(dataItems, pageNumber, result.hasMoreData(), result.getTotalRows());
                         if (delButton != null) {
