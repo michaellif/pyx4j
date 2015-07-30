@@ -100,7 +100,7 @@ public class PostgreSQLDialect extends Dialect {
     public String textSearchQueryBindValue(Object searchValue) {
         if (enableTextSearchSupport) {
             StringBuilder query = new StringBuilder();
-            String value = searchValue.toString();
+            String value = searchValue.toString().replaceAll("[^A-Za-z0-9 ]", "");
             for (String str : value.split(" ")) {
                 if (CommonsStringUtils.isEmpty(str)) {
                     continue;
