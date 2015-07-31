@@ -86,7 +86,16 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
             }
         });
 
-        setDataSource(new ListerDataSource<E>(entityClass, service));
+        setDataSource(new ListerDataSource<E>(entityClass, service) {
+            @Override
+            protected void export() {
+                // TODO This should be EntityQueryCriteria or Filters
+                EntityListCriteria<E> criteria = EntityListCriteria.create(getEntityClass());
+                criteria.setSorts(getDataTableModel().getSortCriteria());
+                updateCriteria(SiteDataTablePanel.this.updateCriteria(criteria));
+                DataTableDocCreation.createExcelExport(getDataSource().getDocCreationService(), criteria, getDataTable().getColumnDescriptors());
+            }
+        });
 
         setExportActionEnabled(getDataSource().getDocCreationService() != null);
     }
@@ -214,16 +223,6 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
 
     protected Class<? extends CrudAppPlace> getItemOpenPlaceClass() {
         return AppPlaceEntityMapper.resolvePlaceClass(getEntityClass());
-    }
-
-    @Override
-    protected void onExport() {
-        // TODO This should be EntityQueryCriteria or Filters
-        EntityListCriteria<E> criteria = EntityListCriteria.create(getEntityClass());
-        criteria.setSorts(getDataTableModel().getSortCriteria());
-        updateCriteria(criteria);
-
-        DataTableDocCreation.createExcelExport(getDataSource().getDocCreationService(), criteria, getDataTable().getColumnDescriptors());
     }
 
 }
