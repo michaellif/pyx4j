@@ -94,7 +94,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
                     }
                 } else if (cell.getCellIndex() >= (dataTable.isMultipleSelection() ? 1 : 0)) {
                     if (itemZoomInCommand != null) {
-                        itemZoomInCommand.execute(dataTable.getDataTableModel().getData().get(cell.getRowIndex() - 1).getEntity());
+                        itemZoomInCommand.execute(dataTable.getDataTableModel().getData().get(cell.getRowIndex() - 1));
                     } else {
                         dataTable.getDataTableModel().setRowSelected(!dataTable.getDataTableModel().isRowSelected(cell.getRowIndex() - 1),
                                 cell.getRowIndex() - 1);
@@ -245,7 +245,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
 
             final long initiationRenderingId = renderingId;
 
-            final Iterator<DataItem<E>> dataIterator = model.getData().iterator();
+            final Iterator<E> dataIterator = model.getData().iterator();
 
             final List<ColumnDescriptor> visibleColumnDescriptors = dataTable.getVisibleColumnDescriptors();
 
@@ -265,7 +265,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
                     return false;
                 }
 
-                DataItem<E> dataItem;
+                E dataItem;
                 try {
                     dataItem = dataIterator.next();
                 } catch (ConcurrentModificationException e) {
@@ -288,9 +288,9 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
 
                 for (ColumnDescriptor columnDescriptor : visibleColumnDescriptors) {
 
-                    Widget contentHtml = new HTML(dataItem.getCellValue(columnDescriptor));
+                    Widget contentHtml = new HTML(columnDescriptor.getFormatter().format(dataItem));
                     contentHtml.setStyleName(DataTableTheme.StyleName.DataTableCellContent.name());
-                    contentHtml.setTitle(HtmlUtils.removeHtmlTags(dataItem.getCellValue(columnDescriptor).asString()));
+                    contentHtml.setTitle(HtmlUtils.removeHtmlTags(columnDescriptor.getFormatter().format(dataItem).asString()));
 
                     SimplePanel contentHolder = new SimplePanel(contentHtml);
                     contentHolder.setStyleName(DataTableTheme.StyleName.DataTableCellHolder.name());
