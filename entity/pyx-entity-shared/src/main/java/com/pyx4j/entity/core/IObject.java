@@ -71,11 +71,13 @@ public interface IObject<VALUE_TYPE> extends IStringView {
     /**
      * This is IEntity in the Entity Graph that holds the value of this Entity. This is not business parent @Owner!
      */
+    //TODO rename to getParentEntity()
     public IEntity getOwner();
 
     /**
      * This may be ICollection or IEntity in the Entity Graph. This is not business parent @Owner!
      */
+    //TODO rename to getParentObject()
     public IObject<?> getParent();
 
     /**

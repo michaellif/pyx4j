@@ -145,6 +145,10 @@ public class SchedulerHelper {
         }
     }
 
+    public static boolean isInitialized() {
+        return (instance != null);
+    }
+
     public static synchronized void shutdown() {
         if (instance != null) {
             // TODO verify all closed and stopped when run in tomcat...

@@ -28,13 +28,19 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Window;
 
+import com.pyx4j.widgets.client.NotImplementedException;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class RichTextArea extends com.google.gwt.user.client.ui.RichTextArea {
-    private boolean ignoreBlur;
+
+    public enum EditMode {
+        text, html
+    }
+
+    private EditMode editMode = EditMode.text;
 
     private final boolean isIEUserAgent;
 
@@ -67,8 +73,6 @@ public class RichTextArea extends com.google.gwt.user.client.ui.RichTextArea {
                 removeStyleDependentName(WidgetsTheme.StyleDependent.focused.name());
             }
         });
-
-        ignoreBlur = false;
 
     }
 
@@ -186,19 +190,75 @@ public class RichTextArea extends com.google.gwt.user.client.ui.RichTextArea {
 
     }
 
-    /*
-     * This method is used by containing component (ExtendedRichTextArea) to ignore blur events
-     * triggered by toolbar buttons. This prevents from loosing text selections due to accessing
-     * the text value by onEditiongStop() method via onBlur handler.
-     */
-    public void ignoreBlur(boolean ignore) {
-        ignoreBlur = ignore;
+    public void setEditMode(EditMode editMode) {
+        this.editMode = editMode;
+        switch (editMode) {
+        case text:
+            super.setHTML(super.getText());
+            break;
+        case html:
+            super.setText(super.getHTML());
+            break;
+        default:
+            break;
+        }
+    }
+
+    public EditMode getEditMode() {
+        return editMode;
+    }
+
+    public void setValue(String value) {
+        switch (editMode) {
+        case text:
+            super.setHTML(value);
+            break;
+        case html:
+            super.setText(value);
+            break;
+        default:
+            break;
+        }
+    }
+
+    public String getValue() {
+        switch (editMode) {
+        case text:
+            return super.getHTML();
+        case html:
+            return super.getText();
+        default:
+            return null;
+        }
     }
 
     @Override
-    public void fireEvent(GwtEvent<?> event) {
-        if (!event.getAssociatedType().equals(BlurEvent.getType()) || !ignoreBlur) {
-            super.fireEvent(event);
-        }
+    public final void setHTML(String html) {
+        //Use setValue()
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public final void setHTML(SafeHtml html) {
+        //Use setValue()
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public final String getHTML() {
+        //Use getValue()
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public final void setText(String text) {
+        //Use setValue()
+        throw new NotImplementedException();
+    };
+
+    @Override
+    public final String getText() {
+        //Use setValue()
+        throw new NotImplementedException();
     }
 }

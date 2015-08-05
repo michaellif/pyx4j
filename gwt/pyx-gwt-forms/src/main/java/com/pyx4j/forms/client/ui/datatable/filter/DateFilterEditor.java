@@ -16,13 +16,11 @@
  *
  * Created on Dec 22, 2014
  * @author michaellif
- * @version $Id: code-templates.xml 12647 2013-05-01 18:01:19Z vlads $
  */
 package com.pyx4j.forms.client.ui.datatable.filter;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -109,7 +107,7 @@ public class DateFilterEditor extends FilterEditorBase {
 
             RangeCriterion rangeCriterion = (RangeCriterion) criterion;
 
-            if (!getMember().getPath().toString().equals(rangeCriterion.getPropertyPath())) {
+            if (!getMember().getPath().equals(rangeCriterion.getPropertyPath())) {
                 throw new Error("Filter editor member doesn't match filter criterion path");
             }
 

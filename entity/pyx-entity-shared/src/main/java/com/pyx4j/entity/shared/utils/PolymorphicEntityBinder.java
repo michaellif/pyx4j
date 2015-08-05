@@ -25,23 +25,20 @@ import java.util.Map;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
 
-public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEntity> implements EntityBinder<BO, TO> {
-
-    protected Class<BO> boClass;
-
-    protected Class<TO> toClass;
+public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEntity> extends SimpleEntityBinder<BO, TO> {
 
     private final Map<Class<? extends BO>, EntityBinder<BO, TO>> bindingByBO = new HashMap<>();
 
     private final Map<Class<? extends TO>, EntityBinder<BO, TO>> bindingByTO = new HashMap<>();
 
     protected PolymorphicEntityBinder(Class<BO> boClass, Class<TO> toClass) {
-        this.boClass = boClass;
-        this.toClass = toClass;
+        super(boClass, toClass);
     }
 
+    @Override
     protected abstract void bind();
 
+    //TODO Change order of parameters or order of generics
     @SuppressWarnings("unchecked")
     protected final <TBO extends BO, TTO extends TO> void bind(Class<TTO> toClass, Class<TBO> boClass, EntityBinder<TBO, TTO> binder) {
         bindingByBO.put(boClass, (EntityBinder<BO, TO>) binder);
@@ -60,7 +57,7 @@ public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEn
 
     private EntityBinder<BO, TO> getBinderByBO(BO bo) {
         init();
-        return bindingByBO.get(bo.getObjectClass());
+        return bindingByBO.get(bo.getInstanceValueClass());
     }
 
     private EntityBinder<BO, TO> getBinderByTO(Class<? extends TO> toClass) {
@@ -70,43 +67,43 @@ public abstract class PolymorphicEntityBinder<BO extends IEntity, TO extends IEn
 
     @SuppressWarnings("unchecked")
     private EntityBinder<BO, TO> getBinderByTO(TO to) {
-        return getBinderByTO((Class<TO>) to.getObjectClass());
+        return getBinderByTO((Class<TO>) to.getInstanceValueClass());
     }
 
     @Override
-    public Class<BO> boClass() {
-        return boClass;
+    public TO createTO(BO bo, BindingContext context) {
+        EntityBinder<BO, TO> subBinder = getBinderByBO(bo);
+        assert subBinder != null : "Binder not found for " + bo.getDebugExceptionInfoString();
+        return subBinder.createTO(bo.<BO> cast(), context);
     }
 
     @Override
-    public Class<TO> toClass() {
-        return toClass;
+    public void copyBOtoTO(BO bo, TO to, BindingContext context) {
+        EntityBinder<BO, TO> subBinder = getBinderByBO(bo);
+        assert subBinder != null : "Binder not found for " + bo.getDebugExceptionInfoString();
+        subBinder.copyBOtoTO(bo, to, context);
+        super.copyBOtoTO(bo, to, context);
     }
 
     @Override
-    public TO createTO(BO bo) {
-        return getBinderByBO(bo).createTO(bo);
+    public BO createBO(TO to, BindingContext context) {
+        EntityBinder<BO, TO> subBinder = getBinderByTO(to);
+        assert subBinder != null : "Binder not found for " + to.getDebugExceptionInfoString() + " in binder " + this.getClass().getName();
+        return subBinder.createBO(to.<TO> cast(), context);
     }
 
     @Override
-    public void copyBOtoTO(BO bo, TO to) {
-        getBinderByBO(bo).copyBOtoTO(bo, to);
-    }
-
-    @Override
-    public BO createBO(TO to) {
-        return getBinderByTO(to).createBO(to);
-    }
-
-    @Override
-    public void copyTOtoBO(TO to, BO bo) {
-        getBinderByTO(to).copyTOtoBO(to, bo);
+    public void copyTOtoBO(TO to, BO bo, BindingContext context) {
+        EntityBinder<BO, TO> subBinder = getBinderByTO(to);
+        assert subBinder != null : "Binder not found for " + to.getDebugExceptionInfoString() + " in binder " + this.getClass().getName();
+        subBinder.copyTOtoBO(to, bo, context);
+        super.copyTOtoBO(to, bo, context);
     }
 
     @Override
     public Path getBoundBOMemberPath(Path toMemberPath) {
         init();
-        // Find by members of super type 
+        // Find by members of super type
         if (toClass.getSimpleName().equals(toMemberPath.getRootObjectClassName())) {
             for (Class<? extends TO> toClass : bindingByTO.keySet()) {
                 Path boMemberPath = getBinderByTO(toClass).getBoundBOMemberPath(new Path(toClass, toMemberPath.getPathMembers()));

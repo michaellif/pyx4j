@@ -29,6 +29,11 @@ class ApplicationMode {
         }
 
         @Override
+        public boolean isQa() {
+            return ServerSideConfiguration.instance().isQaBehavior();
+        }
+
+        @Override
         public boolean isDemo() {
             return ServerSideConfiguration.instance().isDemoBehavior();
         }

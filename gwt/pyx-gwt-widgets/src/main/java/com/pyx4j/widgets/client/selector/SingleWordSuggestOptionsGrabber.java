@@ -27,7 +27,7 @@ import java.util.Vector;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 
-public abstract class SingleWordSuggestOptionsGrabber<E> implements IOptionsGrabber<E> {
+public abstract class SingleWordSuggestOptionsGrabber<E extends IEntity> implements IOptionsGrabber<E> {
 
     protected final AbstractListCrudService<? extends IEntity> service;
 
@@ -38,15 +38,15 @@ public abstract class SingleWordSuggestOptionsGrabber<E> implements IOptionsGrab
         this.filtered = new LinkedList<E>();
     }
 
-    protected abstract int evaluate(E item, String suggestion);
+    protected abstract int evaluate(E item, String query);
 
-    protected void filter(Vector<E> result, String suggestion) {
+    protected void filter(Vector<E> result, String query) {
         filtered = new LinkedList<E>();
-        if ("".equals(suggestion)) {
+        if ("".equals(query)) {
             filtered.addAll(result);
         } else {
             for (E item : result) {
-                if (evaluate(item, suggestion) > 0) {
+                if (evaluate(item, query) > 0) {
                     filtered.add(item);
                 }
             }

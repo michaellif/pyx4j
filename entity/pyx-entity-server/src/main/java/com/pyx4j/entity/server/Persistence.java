@@ -22,10 +22,13 @@ package com.pyx4j.entity.server;
 import java.util.List;
 import java.util.Vector;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.ICollection;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IVersionedEntity;
@@ -47,6 +50,23 @@ public class Persistence {
 
     public static synchronized IEntityPersistenceService service() {
         return PersistenceServicesFactory.getPersistenceService();
+    }
+
+    public static String getNamespace(Class<? extends IEntity> entityClass) {
+        Class<? extends IEntity> persistableEntityClass = EntityFactory.getEntityMeta(entityClass).getPersistableSuperClass();
+        if (persistableEntityClass != null) {
+            entityClass = persistableEntityClass;
+        }
+        Table table = entityClass.getAnnotation(Table.class);
+        if (table == null) {
+            return null;
+        } else {
+            if (CommonsStringUtils.isStringSet(table.namespace())) {
+                return table.namespace();
+            } else {
+                return null;
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -225,15 +245,17 @@ public class Persistence {
         });
     }
 
-    public static <T extends IEntity> void ensureRetrieve(T entityMember, AttachLevel attachLevel) {
+    public static <T extends IEntity> boolean ensureRetrieve(T entityMember, AttachLevel attachLevel) {
         if ((entityMember.getAttachLevel() == AttachLevel.Detached) && (entityMember.getOwner() != null) && (entityMember.getOwner().isValueDetached())) {
             ensureRetrieve(entityMember.getOwner(), AttachLevel.Attached);
         }
         if (entityMember.getAttachLevel() == AttachLevel.Detached) {
-            service().retrieveMember(entityMember, attachLevel);
+            return service().retrieveMember(entityMember, attachLevel);
         } else {
             if (entityMember.getAttachLevel().ordinal() < attachLevel.ordinal()) {
-                service().retrieve(entityMember, attachLevel, false);
+                return service().retrieve(entityMember, attachLevel, false);
+            } else {
+                return true;
             }
         }
     }
@@ -257,7 +279,7 @@ public class Persistence {
 
     /**
      * Update only members set in entityTemplate.
-     * 
+     *
      * @param primaryKey
      * @param entityTemplate
      * @return

@@ -23,9 +23,9 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.layout.client.Layout.Layer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutType;
@@ -189,6 +189,10 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
         }
     }
 
+    public boolean isSideCommVisible() {
+        return sideCommVisible;
+    }
+
     private void togglePopupCommVisible(final Widget anchor) {
         if (!popupCommHolder.isShowing()) {
             popupCommHolder.showRelativeTo(anchor, new PositionCallback() {
@@ -201,6 +205,10 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
         } else {
             popupCommHolder.hide();
         }
+    }
+
+    public boolean isPopupCommVisible() {
+        return popupCommHolder.isShowing();
     }
 
     public void setHeaderHeight(int height) {

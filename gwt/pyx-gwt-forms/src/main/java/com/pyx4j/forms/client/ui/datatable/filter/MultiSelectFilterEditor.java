@@ -16,7 +16,6 @@
  *
  * Created on Dec 22, 2014
  * @author michaellif
- * @version $Id: code-templates.xml 12647 2013-05-01 18:01:19Z vlads $
  */
 package com.pyx4j.forms.client.ui.datatable.filter;
 
@@ -91,7 +90,7 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
 
     @Override
     public PropertyCriterion getCriterion() {
-        if (checkGroup.isAllSelected()) {
+        if (checkGroup.isAllSelected() || checkGroup.isAllDeselected()) {
             return null;
         }
         return PropertyCriterion.in(getMember(), checkGroup.getValue());
@@ -114,7 +113,7 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
             }
 
             if (!getMember().getPath().equals(propertyCriterion.getPropertyPath())) {
-                throw new Error("Filter editor member doesn't mach filter criterion path");
+                throw new Error("Filter editor member doesn't match filter criterion path");
             }
 
             if (!(propertyCriterion.getValue() instanceof Collection)) {
@@ -156,6 +155,15 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
         public boolean isAllSelected() {
             for (E item : getButtons().keySet()) {
                 if (!getButtons().get(item).getValue()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean isAllDeselected() {
+            for (E item : getButtons().keySet()) {
+                if (getButtons().get(item).getValue()) {
                     return false;
                 }
             }

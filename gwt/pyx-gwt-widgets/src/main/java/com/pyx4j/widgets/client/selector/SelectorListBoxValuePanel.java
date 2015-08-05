@@ -125,7 +125,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
         if (value.size() > 0) {
             for (E item : value) {
                 if (item != null) {
-                    ItemHolder<E> itemHolder = itemHolderFactory.createItemHolder(item, this);
+                    final ItemHolder<E> itemHolder = itemHolderFactory.createItemHolder(item, this);
                     itemHolder.setSelectorListBoxValuePanel(this);
                     this.itemsPanel.insert(itemHolder, itemsPanel.getWidgetCount() - 1);
                     if (itemHolder instanceof EditableItemHolder) {

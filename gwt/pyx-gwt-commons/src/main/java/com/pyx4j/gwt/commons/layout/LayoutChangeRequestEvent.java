@@ -22,9 +22,9 @@ package com.pyx4j.gwt.commons.layout;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.Widget;
 
-public class LayoutChangeRequestEvent extends GwtEvent<LayoutChangeRerquestHandler> {
+public class LayoutChangeRequestEvent extends GwtEvent<LayoutChangeRequestHandler> {
 
-    public static Type<LayoutChangeRerquestHandler> TYPE = new Type<LayoutChangeRerquestHandler>();
+    public static Type<LayoutChangeRequestHandler> TYPE = new Type<LayoutChangeRequestHandler>();
 
     public static enum ChangeType {
 
@@ -45,12 +45,12 @@ public class LayoutChangeRequestEvent extends GwtEvent<LayoutChangeRerquestHandl
     }
 
     @Override
-    public GwtEvent.Type<LayoutChangeRerquestHandler> getAssociatedType() {
+    public GwtEvent.Type<LayoutChangeRequestHandler> getAssociatedType() {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(LayoutChangeRerquestHandler handler) {
+    protected void dispatch(LayoutChangeRequestHandler handler) {
         handler.onLayoutChangeRequest(this);
     }
 

@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.ICollection;
@@ -42,11 +43,14 @@ import com.pyx4j.entity.core.Path;
  *
  * bind() function should be implemented to map members that needs to be copied of one class to another.
  */
+//TODO Change order of parameters or order of generics, Binding to use EntityBinder interface
 public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity> implements EntityBinder<BO, TO> {
 
     protected Class<BO> boClass;
 
     protected Class<TO> toClass;
+
+    protected final boolean preserveType;
 
     protected final BO boProto;
 
@@ -54,41 +58,81 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
 
     protected final boolean copyPrimaryKey;
 
+    private boolean bindingInitialized = false;
+
     private final List<Binding> binding = new Vector<Binding>();
 
-    private final Map<Path, Binding> bindingByTOMemberPath = new HashMap<Path, Binding>();
+    private final Map<Path, Binding> bindingByTOMemberPath = new HashMap<>();
 
     private static class Binding {
 
-        Path toMemberPath;
+        final Path toMemberPath;
 
-        Path boMemberPath;
+        final Path boMemberPath;
 
         @SuppressWarnings("rawtypes")
         SimpleEntityBinder binder;
 
+        @SuppressWarnings("rawtypes")
+        ValueConverter valueConverter;
+
+        Binding(IObject<?> dtoMember, IObject<?> dboMember, ValueConverter<?, ?> valueConverter) {
+            this(dtoMember, dboMember);
+            this.valueConverter = valueConverter;
+        }
+
         Binding(IObject<?> dtoMember, IObject<?> dboMember, @SuppressWarnings("rawtypes") SimpleEntityBinder binder) {
-            toMemberPath = dtoMember.getPath();
-            boMemberPath = dboMember.getPath();
+            this(dtoMember, dboMember);
             this.binder = binder;
+        }
+
+        Binding(IObject<?> dtoMember, IObject<?> dboMember) {
+            toMemberPath = dtoMember.getPath();
+            boMemberPath = (dboMember != null) ? dboMember.getPath() : null;
+        }
+
+        @Override
+        public String toString() {
+            return "Binding:" + toMemberPath + " -> " + boMemberPath;
         }
 
     }
 
     protected SimpleEntityBinder(Class<BO> boClass, Class<TO> toClass) {
-        this(boClass, toClass, true);
+        this(boClass, toClass, false, true);
+    }
+
+    /**
+     * Preserve Type in binding, Like in PolymorphicEntityBinder but don't need to explicit
+     */
+    @SuppressWarnings("unchecked")
+    protected SimpleEntityBinder(Class<BO> boClass) {
+        this(boClass, (Class<TO>) boClass, true, true);
+        // Ensure AbstractType
+        assert boProto.getEntityMeta().isAnnotationPresent(AbstractEntity.class) : "AbstractEntity expected in preserveType binder; got " + boClass;
+    }
+
+    @Override
+    public String toString() {
+        return "SimpleEntityBinder: " + toClass.getSimpleName() + " -> " + boClass.getSimpleName();
     }
 
     /**
      * Allow to skip automatic copy of PK, Used to allow duplicated in XML
      */
     protected SimpleEntityBinder(Class<BO> boClass, Class<TO> toClass, boolean copyPrimaryKey) {
+        this(boClass, toClass, false, copyPrimaryKey);
+    }
+
+    private SimpleEntityBinder(Class<BO> boClass, Class<TO> toClass, boolean preserveType, boolean copyPrimaryKey) {
         this.boClass = boClass;
         this.toClass = toClass;
+        this.preserveType = preserveType;
         this.copyPrimaryKey = copyPrimaryKey;
 
         boProto = EntityFactory.getEntityPrototype(boClass);
         toProto = EntityFactory.getEntityPrototype(toClass);
+
     }
 
     @Override
@@ -103,11 +147,18 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
 
     protected abstract void bind();
 
+    private boolean canAddToBinding(Path path) {
+        return (path == null) || !path.isUndefinedCollectionPath();
+    }
+
     private void addBinding(Binding b) {
-        if (!b.boMemberPath.isUndefinedCollectionPath() && !b.toMemberPath.isUndefinedCollectionPath()) {
+        if (canAddToBinding(b.boMemberPath) && canAddToBinding(b.toMemberPath)) {
             binding.add(b);
         }
-        bindingByTOMemberPath.put(b.toMemberPath, b);
+        Binding previous = bindingByTOMemberPath.put(b.toMemberPath, b);
+        if (previous != null) {
+            binding.remove(previous);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -119,22 +170,22 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
      * binds TO member of BO type to BO
      */
     protected final void bindCompleteDtoMember(BO toEntityMember) {
-        addBinding(new Binding(toEntityMember.getMember(IEntity.PRIMARY_KEY), boProto.getMember(IEntity.PRIMARY_KEY), null));
+        addBinding(new Binding(toEntityMember.getMember(IEntity.PRIMARY_KEY), boProto.getMember(IEntity.PRIMARY_KEY)));
         for (String memberName : EntityFactory.getEntityMeta(boClass).getMemberNames()) {
-            addBinding(new Binding(toEntityMember.getMember(memberName), boProto.getMember(memberName), null));
+            addBinding(new Binding(toEntityMember.getMember(memberName), boProto.getMember(memberName)));
         }
     }
 
     protected final <TYPE extends Serializable> void bind(IPrimitive<TYPE> toMember, IPrimitive<TYPE> boMember) {
-        addBinding(new Binding(toMember, boMember, null));
+        addBinding(new Binding(toMember, boMember));
     }
 
     protected final <TYPE extends IEntity> void bind(IList<TYPE> toMember, IList<TYPE> boMember) {
-        addBinding(new Binding(toMember, boMember, null));
+        addBinding(new Binding(toMember, boMember));
     }
 
     protected final <TBO extends IEntity, TTO extends TBO> void bind(TTO toMember, TBO boMember) {
-        addBinding(new Binding(toMember, boMember, null));
+        addBinding(new Binding(toMember, boMember));
     }
 
     protected final <TBO extends IEntity, TTO extends IEntity> void bind(TTO toMember, TBO boMember, SimpleEntityBinder<TBO, TTO> binder) {
@@ -146,17 +197,28 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
     }
 
     protected final <F extends IEntity, S extends F, D extends F> void bind(Class<F> fragmentClass, S dto, D dbo) {
-        addBinding(new Binding(dto.getMember(IEntity.PRIMARY_KEY), dbo.getMember(IEntity.PRIMARY_KEY), null));
+        addBinding(new Binding(dto.getMember(IEntity.PRIMARY_KEY), dbo.getMember(IEntity.PRIMARY_KEY)));
         for (String memberName : EntityFactory.getEntityMeta(fragmentClass).getMemberNames()) {
-            addBinding(new Binding(dto.getMember(memberName), dbo.getMember(memberName), null));
+            addBinding(new Binding(dto.getMember(memberName), dbo.getMember(memberName)));
         }
     }
 
+    @Override
+    public <TYPE extends Serializable> void addValueConverter(IPrimitive<TYPE> toMember, ValueConverter<BO, TYPE> valueConverter) {
+        addBinding(new Binding(toMember, null, valueConverter));
+    }
+
+    @Override
+    public <TYPE extends IEntity> void addValueConverter(TYPE toMember, ValueConverter<BO, TYPE> valueConverter) {
+        addBinding(new Binding(toMember, null, valueConverter));
+    }
+
     private void init() {
-        if (binding.isEmpty()) {
+        if (!bindingInitialized) {
             synchronized (binding) {
-                if (binding.isEmpty()) {
+                if (!bindingInitialized) {
                     bind();
+                    bindingInitialized = true;
                 }
             }
         }
@@ -183,12 +245,31 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
     }
 
     @Override
-    public TO createTO(BO bo) {
-        TO to = EntityFactory.create(toClass);
+    public TO createTO(BO bo, BindingContext context) {
+        @SuppressWarnings("unchecked")
+        TO to = (TO) context.get(bo);
+        if (to != null) {
+            return to;
+        }
+
+        if (preserveType) {
+            @SuppressWarnings("unchecked")
+            Class<TO> polymorphicToClass = (Class<TO>) bo.getInstanceValueClass();
+            to = EntityFactory.create(polymorphicToClass);
+        } else {
+            to = EntityFactory.create(toClass);
+        }
         if (copyPrimaryKey) {
             to.setPrimaryKey(bo.getPrimaryKey());
         }
-        copyBOtoTO(bo, to);
+
+        if (bo.getAttachLevel() != AttachLevel.Attached) {
+            to.setAttachLevel(bo.getAttachLevel());
+        }
+
+        context.put(bo, to);
+        // TODO pass context as argument
+        copyBOtoTO(bo, to, context);
         return to;
     }
 
@@ -198,119 +279,187 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
 
     @Override
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public void copyBOtoTO(BO bo, TO to) {
+    public void copyBOtoTO(BO bo, TO to, BindingContext context) {
         init();
         to.setAttachLevel(AttachLevel.Attached);
+        bo = bo.cast();
+        to = to.cast();
         for (Binding b : binding) {
             IObject dtoM = to.getMember(b.toMemberPath);
-            IObject dboM = bo.getMember(b.boMemberPath);
-
-            // Assert that all data has been retrieved
-            if ((dboM instanceof IEntity) && ((IEntity) dboM).isValueDetached() && !dtoM.getMeta().isDetached()) {
-                if (!retriveDetachedMember((IEntity) dboM)) {
-                    throw new Error("Copying detached entity " + ((IEntity) dboM).getDebugExceptionInfoString());
+            if (b.boMemberPath == null) {
+                Object value = b.valueConverter.convertValue(bo);
+                if (dtoM instanceof IEntity) {
+                    value = ((IEntity) value).getValue();
                 }
-            }
+                to.setValue(b.toMemberPath, (Serializable) value);
+            } else {
+                IObject dboM = bo.getMember(b.boMemberPath);
 
-            if (dboM.getAttachLevel() == AttachLevel.Detached) {
-                if (!(dtoM instanceof IPrimitive<?>)) {
-                    dtoM.setAttachLevel(AttachLevel.Detached);
-                }
-            } else if (b.binder == null) {
-                if (dboM instanceof ICollection) {
-                    if (dboM.getAttachLevel() == AttachLevel.CollectionSizeOnly) {
-                        ((ICollection<IEntity, ?>) dtoM).setCollectionSizeOnly(((ICollection<IEntity, ?>) dboM).size());
+                // Assert that all data has been retrieved
+                if (dboM.isValueDetached() && !dtoM.getMeta().isDetached()) {
+                    IEntity retrive;
+                    if (dboM instanceof IEntity) {
+                        retrive = (IEntity) dboM;
                     } else {
-                        ((ICollection<IEntity, ?>) dtoM).clear();
-                        for (IEntity dboMi : (ICollection<IEntity, ?>) dboM) {
-                            if (dboMi.isValueDetached() && !dtoM.getMeta().isDetached()) {
-                                if (!retriveDetachedMember(dboMi)) {
-                                    throw new Error("Copying detached entity " + dboMi.getDebugExceptionInfoString());
+                        retrive = dboM.getOwner();
+                    }
+                    if (!retriveDetachedMember(retrive)) {
+                        throw new Error("Copying detached entity " + retrive.getDebugExceptionInfoString());
+                    }
+                }
+
+                // Bypass copy if it was already copied.
+                if (dboM instanceof IEntity) {
+                    IEntity processed = context.get((IEntity) dboM);
+                    if (processed != null) {
+                        ((IEntity) dtoM).set(processed);
+                        continue;
+                    }
+                }
+
+                if (dboM.getAttachLevel() == AttachLevel.Detached) {
+                    //TODO slava, considre refactoring in order to merge functionality with copyTOtoBO
+                    if (!(dtoM instanceof IPrimitive<?>)) {
+                        dtoM.setAttachLevel(AttachLevel.Detached);
+                    }
+                } else if (b.binder == null) {
+                    if (dboM instanceof ICollection) {
+                        if (dboM.getAttachLevel() == AttachLevel.CollectionSizeOnly) {
+                            ((ICollection<IEntity, ?>) dtoM).setCollectionSizeOnly(((ICollection<IEntity, ?>) dboM).size());
+                        } else {
+                            ((ICollection<IEntity, ?>) dtoM).clear();
+                            for (IEntity dboMi : (ICollection<IEntity, ?>) dboM) {
+                                if (dboMi.isValueDetached() && !dtoM.getMeta().isDetached()) {
+                                    if (!retriveDetachedMember(dboMi)) {
+                                        throw new Error("Copying detached entity " + dboMi.getDebugExceptionInfoString());
+                                    }
                                 }
+                                ((ICollection<IEntity, ?>) dtoM).add(dboMi);
                             }
-                            ((ICollection<IEntity, ?>) dtoM).add(dboMi);
                         }
-                    }
-                } else if (dboM.getAttachLevel() == AttachLevel.IdOnly) {
-                    if (!((IEntity) dboM).isObjectClassSameAsDef()) {
-                        ((IEntity) dtoM).set(((IEntity) dboM).createIdentityStub());
+                    } else if (dboM.getAttachLevel() == AttachLevel.IdOnly) {
+                        if (!((IEntity) dboM).isObjectClassSameAsDef()) {
+                            ((IEntity) dtoM).set(((IEntity) dboM).createIdentityStub());
+                        } else {
+                            ((IEntity) dtoM).setPrimaryKey(((IEntity) dboM).getPrimaryKey());
+                            dtoM.setAttachLevel(AttachLevel.IdOnly);
+                        }
+                    } else if (dboM.getAttachLevel() == AttachLevel.ToStringMembers) {
+                        ((IEntity) dboM).copyStringView((IEntity) dtoM);
                     } else {
-                        ((IEntity) dtoM).setPrimaryKey(((IEntity) dboM).getPrimaryKey());
-                        dtoM.setAttachLevel(AttachLevel.IdOnly);
+                        dtoM.setValue(dboM.getValue());
                     }
-                } else if (dboM.getAttachLevel() == AttachLevel.ToStringMembers) {
-                    ((IEntity) dboM).copyStringView((IEntity) dtoM);
-                } else {
-                    dtoM.setValue(dboM.getValue());
-                }
-            } else if (dtoM instanceof IEntity) {
-                b.binder.copyBOtoTO((IEntity) dboM, (IEntity) dtoM);
-            } else if (dboM instanceof ICollection) {
-                ((ICollection<IEntity, ?>) dtoM).clear();
-                for (IEntity dboMi : (ICollection<IEntity, ?>) dboM) {
-                    ((ICollection<IEntity, ?>) dtoM).add(b.binder.createTO(dboMi));
+                } else if (dtoM instanceof IEntity) {
+                    if (((IEntity) dboM).isNull()) {
+                        ((IEntity) dtoM).set(null);
+                    } else {
+                        ((IEntity) dtoM).set(b.binder.createTO((IEntity) dboM, context));
+                    }
+                } else if (dboM instanceof ICollection) {
+                    ((ICollection<IEntity, ?>) dtoM).clear();
+                    for (IEntity dboMi : (ICollection<IEntity, ?>) dboM) {
+                        ((ICollection<IEntity, ?>) dtoM).add(b.binder.createTO(dboMi, context));
+                    }
                 }
             }
         }
     }
 
     @Override
-    public BO createBO(TO to) {
-        BO dbo = EntityFactory.create(boClass);
-        if (copyPrimaryKey) {
-            dbo.setPrimaryKey(to.getPrimaryKey());
+    public BO createBO(TO to, BindingContext context) {
+        @SuppressWarnings("unchecked")
+        BO bo = (BO) context.get(to);
+        if (bo != null) {
+            return bo;
         }
-        copyTOtoBO(to, dbo);
-        return dbo;
+
+        if (preserveType) {
+            @SuppressWarnings("unchecked")
+            Class<BO> polymorphicBoClass = (Class<BO>) to.getInstanceValueClass();
+            bo = EntityFactory.create(polymorphicBoClass);
+        } else {
+            bo = EntityFactory.create(boClass);
+        }
+        if (copyPrimaryKey) {
+            bo.setPrimaryKey(to.getPrimaryKey());
+        }
+
+        if (to.getAttachLevel() != AttachLevel.Attached) {
+            bo.setAttachLevel(to.getAttachLevel());
+        }
+
+        context.put(to, bo);
+        copyTOtoBO(to, bo, context);
+        return bo;
     }
 
     @Override
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public void copyTOtoBO(TO to, BO bo) {
+    public void copyTOtoBO(TO to, BO bo, BindingContext context) {
         init();
+        bo = bo.cast();
+        to = to.cast();
         for (Binding b : binding) {
             IObject dtoM = to.getMember(b.toMemberPath);
-            IObject dboM = bo.getMember(b.boMemberPath);
+            if (b.boMemberPath != null) {
+                IObject dboM = bo.getMember(b.boMemberPath);
 
-            if (dtoM.getAttachLevel() == AttachLevel.Detached) {
-                dboM.setAttachLevel(AttachLevel.Detached);
-            } else if (b.binder == null) {
-                if (dtoM instanceof ICollection) {
-                    ICollection<IEntity, ?> dboMc = (ICollection<IEntity, ?>) dboM;
-                    if (dtoM.getAttachLevel() == AttachLevel.CollectionSizeOnly) {
-                        dboMc.setCollectionSizeOnly(((ICollection<IEntity, ?>) dtoM).size());
-                    } else {
-                        dboMc.setAttachLevel(AttachLevel.Attached);
-                        dboMc.clear();
-                        for (IEntity dtoMi : (ICollection<IEntity, ?>) dtoM) {
-                            ((ICollection<IEntity, ?>) dboM).add(dtoMi);
-                        }
+                // Bypass copy if it was already copied.
+                if (dboM instanceof IEntity) {
+                    IEntity processed = context.get((IEntity) dtoM);
+                    if (processed != null) {
+                        ((IEntity) dboM).set(processed);
+                        continue;
                     }
-                } else if (dtoM.getAttachLevel() == AttachLevel.IdOnly) {
-                    if (!((IEntity) dtoM).isObjectClassSameAsDef()) {
-                        ((IEntity) dboM).set(((IEntity) dtoM).createIdentityStub());
-                    } else {
-                        ((IEntity) dboM).setPrimaryKey(((IEntity) dtoM).getPrimaryKey());
-                        dboM.setAttachLevel(AttachLevel.IdOnly);
-                    }
-                } else if (dtoM.getAttachLevel() == AttachLevel.ToStringMembers) {
-                    ((IEntity) dtoM).copyStringView((IEntity) dboM);
-                } else {
-                    dboM.setValue(dtoM.getValue());
                 }
-            } else if (dtoM instanceof IEntity) {
-                b.binder.copyTOtoBO((IEntity) dtoM, (IEntity) dboM);
-            } else if (dtoM instanceof ICollection) {
-                ((ICollection<IEntity, ?>) dboM).clear();
-                for (IEntity dtoMi : (ICollection<IEntity, ?>) dtoM) {
-                    ((ICollection<IEntity, ?>) dboM).add(b.binder.createBO(dtoMi));
+
+                if (dtoM.getAttachLevel() == AttachLevel.Detached) {
+                    if (dboM.getAttachLevel() != AttachLevel.Detached) {
+                        dboM.setAttachLevel(AttachLevel.Detached);
+                    }
+                } else if (b.binder == null) {
+                    if (dtoM instanceof ICollection) {
+                        ICollection<IEntity, ?> dboMc = (ICollection<IEntity, ?>) dboM;
+                        if (dtoM.getAttachLevel() == AttachLevel.CollectionSizeOnly) {
+                            dboMc.setCollectionSizeOnly(((ICollection<IEntity, ?>) dtoM).size());
+                        } else {
+                            dboMc.setAttachLevel(AttachLevel.Attached);
+                            dboMc.clear();
+                            for (IEntity dtoMi : (ICollection<IEntity, ?>) dtoM) {
+                                ((ICollection<IEntity, ?>) dboM).add(dtoMi);
+                            }
+                        }
+                    } else if (dtoM.getAttachLevel() == AttachLevel.IdOnly) {
+                        if (!((IEntity) dtoM).isObjectClassSameAsDef()) {
+                            ((IEntity) dboM).set(((IEntity) dtoM).createIdentityStub());
+                        } else {
+                            ((IEntity) dboM).setPrimaryKey(((IEntity) dtoM).getPrimaryKey());
+                            dboM.setAttachLevel(AttachLevel.IdOnly);
+                        }
+                    } else if (dtoM.getAttachLevel() == AttachLevel.ToStringMembers) {
+                        ((IEntity) dtoM).copyStringView((IEntity) dboM);
+                    } else {
+                        dboM.setValue(dtoM.getValue());
+                    }
+                } else if (dtoM instanceof IEntity) {
+                    if (((IEntity) dtoM).isNull()) {
+                        ((IEntity) dboM).set(null);
+                        continue;
+                    } else {
+                        ((IEntity) dboM).set(b.binder.createBO((IEntity) dtoM, context));
+                    }
+                } else if (dtoM instanceof ICollection) {
+                    ((ICollection<IEntity, ?>) dboM).clear();
+                    for (IEntity dtoMi : (ICollection<IEntity, ?>) dtoM) {
+                        ((ICollection<IEntity, ?>) dboM).add(b.binder.createBO(dtoMi, context));
+                    }
                 }
             }
         }
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public boolean updateBO(TO to, BO bo) {
+    public boolean updateBO(TO to, BO bo, BindingContext context) {
         init();
         boolean updated = false;
         Set<IEntity> processed = new HashSet<IEntity>();
@@ -339,7 +488,7 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
                     }
                 }
             } else if (dtoM instanceof IEntity) {
-                updated |= b.binder.updateBO((IEntity) dtoM, (IEntity) dboM);
+                updated |= b.binder.updateBO((IEntity) dtoM, (IEntity) dboM, context);
             } else if (dtoM instanceof ICollection) {
                 ICollection<IEntity, ?> dboMc = (ICollection<IEntity, ?>) dboM;
                 for (IEntity dtoMi : (ICollection<IEntity, ?>) dtoM) {
@@ -348,13 +497,13 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
                     for (IEntity dboMi : dboMc) {
                         if (dtoMi.equals(dboMi) || dtoMi.businessEquals(dboMi)) {
                             found = true;
-                            updated |= b.binder.updateBO(dtoMi, dboMi);
+                            updated |= b.binder.updateBO(dtoMi, dboMi, context);
                             break;
                         }
                     }
 
                     if (!found) {
-                        ((ICollection<IEntity, ?>) dboM).add(b.binder.createBO(dtoMi));
+                        ((ICollection<IEntity, ?>) dboM).add(b.binder.createBO(dtoMi, context));
                         updated = true;
                     }
                 }

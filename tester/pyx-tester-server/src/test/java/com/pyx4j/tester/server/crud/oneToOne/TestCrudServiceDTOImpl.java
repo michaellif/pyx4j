@@ -28,7 +28,7 @@ import junit.framework.TestCase;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget;
+import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveOperation;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.test.shared.domain.join.OneToOneReadOwner;
@@ -91,7 +91,7 @@ public class TestCrudServiceDTOImpl extends TestCase {
             public void onSuccess(OneToOneReadOwnerDTO result) {
                 entityR1.set(result);
             }
-        }, entityPk.get(), RetrieveTarget.Edit);
+        }, entityPk.get(), RetrieveOperation.Edit);
 
         assertTrue("Not Same data", EntityGraph.fullyEqual(entityR1.get(), o));
 
@@ -115,7 +115,7 @@ public class TestCrudServiceDTOImpl extends TestCase {
             public void onSuccess(OneToOneReadOwnerDTO result) {
                 entityR2.set(result);
             }
-        }, entityPk.get(), RetrieveTarget.View);
+        }, entityPk.get(), RetrieveOperation.View);
 
         assertTrue("Not Same data", EntityGraph.fullyEqual(entityR2.get(), entityR1.get()));
     }

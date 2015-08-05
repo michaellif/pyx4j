@@ -19,6 +19,7 @@
  */
 package com.pyx4j.entity.server;
 
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
@@ -32,9 +33,17 @@ public abstract class CrudEntityBinder<BO extends IEntity, TO extends IEntity> e
         super(boClass, toClass, copyPrimaryKey);
     }
 
+    /**
+     * Preserve Type in binding, Like in PolymorphicEntityBinder but don't need to explicit
+     */
+    protected CrudEntityBinder(Class<BO> boClass) {
+        super(boClass);
+    }
+
     @Override
     protected boolean retriveDetachedMember(IEntity boMember) {
-        return Persistence.service().retrieve(boMember);
+        Persistence.ensureRetrieve(boMember, AttachLevel.Attached);
+        return true;
     }
 
 }

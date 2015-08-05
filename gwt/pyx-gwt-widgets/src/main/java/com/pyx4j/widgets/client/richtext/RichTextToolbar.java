@@ -18,12 +18,15 @@ package com.pyx4j.widgets.client.richtext;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -34,6 +37,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.CheckBox;
+import com.pyx4j.widgets.client.GroupFocusHandler;
+import com.pyx4j.widgets.client.IFocusGroup;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 import com.pyx4j.widgets.client.ListBox;
@@ -42,12 +47,13 @@ import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
+import com.pyx4j.widgets.client.richtext.RichTextArea.EditMode;
 
 /**
  * A sample toolbar for use with {@link RichTextArea}. It provides a simple UI for all
  * rich text formatting, dynamically displayed only for the available functionality.
  */
-public class RichTextToolbar extends FlowPanel {
+public class RichTextToolbar extends FlowPanel implements IFocusGroup {
     private static final I18n i18n = I18n.get(RichTextToolbar.class);
 
     private static final RichTextArea.FontSize[] fontSizesConstants = new RichTextArea.FontSize[] { RichTextArea.FontSize.XX_SMALL,
@@ -56,7 +62,7 @@ public class RichTextToolbar extends FlowPanel {
 
     private final WidgetsImageBundle images = ImageFactory.getImages();
 
-    private final RichTextArea richText;
+    private final RichTextEditor richTextEditor;
 
     private final RichTextArea.Formatter formatter;
 
@@ -90,7 +96,7 @@ public class RichTextToolbar extends FlowPanel {
 
     private Button insertButton;
 
-    private CheckBox textHtmlSwitch;
+    private CheckBox editModeSwitch;
 
     private Button boldButton;
 
@@ -98,13 +104,7 @@ public class RichTextToolbar extends FlowPanel {
 
     private Button underlineButton;
 
-    /*
-     * This is needed to help handling richTextArea onBlur events. When toolbar is inOperation state
-     * it may open other dialogs that may have focusable components. This should not fire onBlur for
-     * the editor (see RichTextArea#ignoreBlur()). Note that those dialogs may require some custom
-     * handling (see ExtendedRichTextToolbar#onLinkUrl() and ExtendedRichTextToolbar#onImageUrl())
-     */
-    private boolean inOperation;
+    private final GroupFocusHandler groupFocusHandler;
 
     /**
      * Creates a new toolbar that drives the given rich text area.
@@ -112,9 +112,10 @@ public class RichTextToolbar extends FlowPanel {
      * @param richText
      *            the rich text area to be controlled
      */
-    public RichTextToolbar(final RichTextArea richText) {
-        this.richText = richText;
-        this.formatter = richText.getFormatter();
+    public RichTextToolbar(final RichTextEditor richTextEditor) {
+        this.richTextEditor = richTextEditor;
+        this.formatter = richTextEditor.getRichTextArea().getFormatter();
+        groupFocusHandler = new GroupFocusHandler(this);
 
         initTopToolbar();
         initFormatToolbar();
@@ -125,7 +126,7 @@ public class RichTextToolbar extends FlowPanel {
 
         // We only use these listeners for updating status, so don't hook them up
         // unless at least basic editing is supported.
-        richText.addKeyUpHandler(new KeyUpHandler() {
+        richTextEditor.getRichTextArea().addKeyUpHandler(new KeyUpHandler() {
 
             @Override
             public void onKeyUp(KeyUpEvent event) {
@@ -135,7 +136,7 @@ public class RichTextToolbar extends FlowPanel {
                 updateStatus();
             }
         });
-        richText.addClickHandler(new ClickHandler() {
+        richTextEditor.getRichTextArea().addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
@@ -146,12 +147,11 @@ public class RichTextToolbar extends FlowPanel {
             }
         });
 
-        inOperation = false;
-
     }
 
     private void initTopToolbar() {
         topToolbar = new FlowPanel();
+        topToolbar.setStyleName(RichTextTheme.StyleName.RteToolbarTop.name());
         topToolbar.setWidth("100%");
 
         topButtonBar = new Toolbar();
@@ -159,50 +159,32 @@ public class RichTextToolbar extends FlowPanel {
         topButtonBar.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         topToolbar.add(topButtonBar);
 
-        textHtmlSwitch = new CheckBox(i18n.tr("HTML"));
-        textHtmlSwitch.addStyleName(RichTextTheme.StyleName.RteCheckBox.name());
-        textHtmlSwitch.setTitle(i18n.tr("Toggle HTML or Text mode"));
-        textHtmlSwitch.addClickHandler(new ClickHandler() {
+        editModeSwitch = new CheckBox(i18n.tr("HTML"));
+        groupFocusHandler.addFocusable(editModeSwitch);
+        editModeSwitch.addStyleName(RichTextTheme.StyleName.RteCheckBox.name());
+        editModeSwitch.setTitle(i18n.tr("Toggle HTML or Text mode"));
+        editModeSwitch.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-
-                richText.restoreSelectionAndRange();
-                if (((CheckBox) event.getSource()).getValue()) {
-                    richText.setText(richText.getHTML());
-                    formatToolbar.setVisible(false);
-                    fontToolbar.setVisible(false);
-                    insertToolbar.setVisible(false);
-
-                    formatButton.setVisible(false);
-                    fontButton.setVisible(false);
-                    insertButton.setVisible(false);
-                } else {
-                    richText.setHTML(richText.getText());
-                    formatToolbar.setVisible(false);
-                    fontToolbar.setVisible(false);
-                    insertToolbar.setVisible(false);
-
-                    formatButton.setVisible(true);
-                    fontButton.setVisible(true);
-                    insertButton.setVisible(true);
-                    formatButton.toggleActive();
-                }
+                richTextEditor.setEditMode(((CheckBox) event.getSource()).getValue() ? EditMode.html : EditMode.text);
             }
         });
 
-        topToolbar.add(textHtmlSwitch);
+        topToolbar.add(editModeSwitch);
         add(topToolbar);
     }
 
     private void initInsertToolbar() {
         insertToolbar = new FlowPanel();
+        insertToolbar.setStyleName(RichTextTheme.StyleName.RteToolbarBottom.name());
+
         insertToolbar.setVisible(false);
 
         topButtonBar.addItem(insertButton = createButton(i18n.tr("Insert"), i18n.tr("Insert"), new Command() {
 
             @Override
             public void execute() {
-                richText.restoreSelectionAndRange();
+                richTextEditor.getRichTextArea().restoreSelectionAndRange();
                 if (insertButton.isActive()) {
                     if (fontButton.isActive()) {
                         fontButton.toggleActive();
@@ -215,13 +197,14 @@ public class RichTextToolbar extends FlowPanel {
             }
         }, true));
         insertButton.addStyleName(RichTextTheme.StyleName.RteToolbarButton.name());
+        groupFocusHandler.addFocusable(insertButton);
 
         Toolbar linkPanel = new Toolbar();
         linkPanel.addItem(createButton(images.createLink(), i18n.tr("Create Link"), new Command() {
 
             @Override
             public void execute() {
-                inOperation = true;
+                groupFocusHandler.setGroupFocusLocked(true);
                 new EditUrlDialog(i18n.tr("Enter target resource URL:")) {
 
                     @Override
@@ -249,7 +232,7 @@ public class RichTextToolbar extends FlowPanel {
             @Override
             public void execute() {
 
-                inOperation = true;
+                groupFocusHandler.setGroupFocusLocked(true);
                 if (provider != null) {
                     provider.selectImage(new AsyncCallback<String>() {
                         @Override
@@ -286,11 +269,11 @@ public class RichTextToolbar extends FlowPanel {
             public void execute() {
                 RichTextTemplateAction action = getTemplateAction();
                 if (action != null) {
-                    inOperation = true;
+                    groupFocusHandler.setGroupFocusLocked(true);
                     action.perform(formatter, new Command() {
                         @Override
                         public void execute() {
-                            inOperation = false;
+                            groupFocusHandler.setGroupFocusLocked(false);
                         }
                     }, templateActionButton);
                 }
@@ -303,13 +286,15 @@ public class RichTextToolbar extends FlowPanel {
 
     private void initFontToolbar() {
         fontToolbar = new FlowPanel();
+        fontToolbar.setStyleName(RichTextTheme.StyleName.RteToolbarBottom.name());
+
         fontToolbar.setVisible(false);
 
         topButtonBar.addItem(fontButton = createButton(i18n.tr("Font"), i18n.tr("Font"), new Command() {
 
             @Override
             public void execute() {
-                richText.restoreSelectionAndRange();
+                richTextEditor.getRichTextArea().restoreSelectionAndRange();
                 if (fontButton.isActive()) {
                     if (insertButton.isActive()) {
                         insertButton.toggleActive();
@@ -322,6 +307,7 @@ public class RichTextToolbar extends FlowPanel {
             }
         }, true));
         fontButton.addStyleName(RichTextTheme.StyleName.RteToolbarButton.name());
+
         fontToolbar.add(foreColors = createColorList(i18n.tr("Font Color"), new ChangeHandler() {
 
             @Override
@@ -344,13 +330,14 @@ public class RichTextToolbar extends FlowPanel {
 
     private void initFormatToolbar() {
         formatToolbar = new FlowPanel();
+        formatToolbar.setStyleName(RichTextTheme.StyleName.RteToolbarBottom.name());
         formatToolbar.setVisible(false);
 
         topButtonBar.addItem(formatButton = createButton(i18n.tr("Format"), i18n.tr("Format"), new Command() {
 
             @Override
             public void execute() {
-                richText.restoreSelectionAndRange();
+                richTextEditor.getRichTextArea().restoreSelectionAndRange();
                 if (formatButton.isActive()) {
                     if (fontButton.isActive()) {
                         fontButton.toggleActive();
@@ -363,6 +350,7 @@ public class RichTextToolbar extends FlowPanel {
             }
         }, true));
         formatButton.addStyleName(RichTextTheme.StyleName.RteToolbarButton.name());
+        groupFocusHandler.addFocusable(formatButton);
 
         Toolbar formatPanel = new Toolbar();
 
@@ -370,30 +358,24 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
-                if (!inOperation) {
-                    richText.restoreSelectionAndRange();
-                    formatter.toggleBold();
-                }
+                richTextEditor.getRichTextArea().restoreSelectionAndRange();
+                formatter.toggleBold();
             }
         }, true));
         formatPanel.addItem(italicButton = createButton(images.italic(), i18n.tr("Italic"), new Command() {
 
             @Override
             public void execute() {
-                if (!inOperation) {
-                    richText.restoreSelectionAndRange();
-                    formatter.toggleItalic();
-                }
+                richTextEditor.getRichTextArea().restoreSelectionAndRange();
+                formatter.toggleItalic();
             }
         }, true));
         formatPanel.addItem(underlineButton = createButton(images.underline(), i18n.tr("Underline"), new Command() {
 
             @Override
             public void execute() {
-                if (!inOperation) {
-                    richText.restoreSelectionAndRange();
-                    formatter.toggleUnderline();
-                }
+                richTextEditor.getRichTextArea().restoreSelectionAndRange();
+                formatter.toggleUnderline();
             }
         }, true));
         formatPanel.addItem(new HTML("&emsp;"));
@@ -401,7 +383,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
-                richText.restoreSelectionAndRange();
+                richTextEditor.getRichTextArea().restoreSelectionAndRange();
                 formatter.setJustification(RichTextArea.Justification.LEFT);
             }
         }, false));
@@ -409,7 +391,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
-                richText.restoreSelectionAndRange();
+                richTextEditor.getRichTextArea().restoreSelectionAndRange();
                 formatter.setJustification(RichTextArea.Justification.CENTER);
             }
         }, false));
@@ -417,7 +399,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
-                richText.restoreSelectionAndRange();
+                richTextEditor.getRichTextArea().restoreSelectionAndRange();
                 formatter.setJustification(RichTextArea.Justification.RIGHT);
             }
         }, false));
@@ -430,7 +412,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
-                richText.restoreSelectionAndRange();
+                richTextEditor.getRichTextArea().restoreSelectionAndRange();
                 formatter.rightIndent();
             }
         }, false));
@@ -438,7 +420,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
-                richText.restoreSelectionAndRange();
+                richTextEditor.getRichTextArea().restoreSelectionAndRange();
                 formatter.leftIndent();
             }
         }, false));
@@ -447,7 +429,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
-                richText.restoreSelectionAndRange();
+                richTextEditor.getRichTextArea().restoreSelectionAndRange();
                 formatter.insertHorizontalRule();
             }
         }, false));
@@ -456,7 +438,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
-                richText.restoreSelectionAndRange();
+                richTextEditor.getRichTextArea().restoreSelectionAndRange();
                 formatter.insertOrderedList();
             }
         }, false));
@@ -464,7 +446,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
-                richText.restoreSelectionAndRange();
+                richTextEditor.getRichTextArea().restoreSelectionAndRange();
                 formatter.insertUnorderedList();
             }
         }, false));
@@ -473,7 +455,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
-                richText.restoreSelectionAndRange();
+                richTextEditor.getRichTextArea().restoreSelectionAndRange();
                 formatter.removeFormat();
             }
         }, false));
@@ -496,6 +478,9 @@ public class RichTextToolbar extends FlowPanel {
         lb.addItem(i18n.tr("Blue"), "blue");
 
         lb.getElement().getStyle().setMarginRight(4, Unit.PX);
+
+        groupFocusHandler.addFocusable(lb);
+
         return lb;
     }
 
@@ -505,7 +490,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void onChange(ChangeEvent event) {
-                richText.restoreSelectionAndRange();
+                richTextEditor.getRichTextArea().restoreSelectionAndRange();
                 formatter.setFontName(fonts.getValue(fonts.getSelectedIndex()));
             }
         });
@@ -521,6 +506,9 @@ public class RichTextToolbar extends FlowPanel {
         lb.addItem(i18n.tr("Verdana"), "Verdana");
 
         lb.getElement().getStyle().setMarginRight(4, Unit.PX);
+
+        groupFocusHandler.addFocusable(lb);
+
         return lb;
     }
 
@@ -530,7 +518,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void onChange(ChangeEvent event) {
-                richText.restoreSelectionAndRange();
+                richTextEditor.getRichTextArea().restoreSelectionAndRange();
                 if (fontSizes.getSelectedIndex() > 0) {
                     formatter.setFontSize(fontSizesConstants[fontSizes.getSelectedIndex() - 1]);
                 }
@@ -548,6 +536,9 @@ public class RichTextToolbar extends FlowPanel {
         lb.addItem(i18n.tr("XX-Large"));
 
         lb.getElement().getStyle().setMarginRight(4, Unit.PX);
+
+        groupFocusHandler.addFocusable(lb);
+
         return lb;
     }
 
@@ -572,15 +563,40 @@ public class RichTextToolbar extends FlowPanel {
 
         button.addStyleName(toggleable ? RichTextTheme.StyleName.RteToolbarButton.name() : RichTextTheme.StyleName.RteToolbarButtonNoToggle.name());
         button.setTitle(tip);
+        groupFocusHandler.addFocusable(button);
 
         return button;
+    }
+
+    public void onEditModeChange(EditMode editMode) {
+        editModeSwitch.setValue(editMode == EditMode.html);
+        switch (editMode) {
+        case text:
+            topButtonBar.asWidget().setVisible(true);
+            break;
+        case html:
+            topButtonBar.asWidget().setVisible(false);
+            if (fontButton.isActive()) {
+                fontButton.toggleActive();
+            }
+            if (insertButton.isActive()) {
+                insertButton.toggleActive();
+            }
+            if (formatButton.isActive()) {
+                formatButton.toggleActive();
+            }
+            break;
+        default:
+            break;
+        }
+
     }
 
     /**
      * Updates the status of all the stateful buttons.
      */
     private void updateStatus() {
-        inOperation = true;
+        groupFocusHandler.setGroupFocusLocked(true);
         if (formatter.isBold() != boldButton.isActive()) {
             boldButton.toggleActive();
         }
@@ -592,35 +608,28 @@ public class RichTextToolbar extends FlowPanel {
         if (formatter.isUnderlined() != underlineButton.isActive()) {
             underlineButton.toggleActive();
         }
-        inOperation = false;
+        groupFocusHandler.setGroupFocusLocked(false);
     }
 
     public void onLinkUrl(String url) {
 
-        richText.restoreSelectionAndRange();
+        richTextEditor.getRichTextArea().restoreSelectionAndRange();
         formatter.createLink(url);
         // make sure the richTextArea will receive focus and will handle onBlur after this method completes.
-        inOperation = false;
-        richText.ignoreBlur(false);
-        richText.setFocus(true);
+        groupFocusHandler.setGroupFocusLocked(false);
+        richTextEditor.getRichTextArea().setFocus(true);
     }
 
     public void onImageUrl(String url) {
 
-        richText.restoreSelectionAndRange();
+        richTextEditor.getRichTextArea().restoreSelectionAndRange();
         formatter.insertImage(url);
-        // make sure the richTextArea will receive focus and will handle onBlur after this method completes.
-        inOperation = false;
-        richText.ignoreBlur(false);
-        richText.setFocus(true);
+        groupFocusHandler.setGroupFocusLocked(false);
+        richTextEditor.getRichTextArea().setFocus(true);
     }
 
     public void setImageProvider(RichTextImageProvider provider) {
         this.provider = provider;
-    }
-
-    public boolean inOperation() {
-        return inOperation;
     }
 
     public void setTemplateAction(RichTextTemplateAction action) {
@@ -633,10 +642,6 @@ public class RichTextToolbar extends FlowPanel {
 
     private RichTextTemplateAction getTemplateAction() {
         return templateAction;
-    }
-
-    public boolean isHtmlMode() {
-        return !textHtmlSwitch.getValue();
     }
 
     private abstract class EditUrlDialog extends OkCancelDialog {
@@ -663,4 +668,20 @@ public class RichTextToolbar extends FlowPanel {
             return inputTextBox.getValue();
         }
     }
+
+    @Override
+    public GroupFocusHandler getGroupFocusHandler() {
+        return groupFocusHandler;
+    }
+
+    @Override
+    public HandlerRegistration addFocusHandler(FocusHandler handler) {
+        return groupFocusHandler.addFocusHandler(handler);
+    }
+
+    @Override
+    public HandlerRegistration addBlurHandler(BlurHandler handler) {
+        return groupFocusHandler.addBlurHandler(handler);
+    }
+
 }

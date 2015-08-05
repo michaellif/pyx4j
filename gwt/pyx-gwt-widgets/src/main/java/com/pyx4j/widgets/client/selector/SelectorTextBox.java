@@ -38,15 +38,12 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
 
     private final IFormatter<E, String> valueFormatter;
 
-    private final IFormatter<E, SafeHtml> optionFormatter;
-
     private final IPickerPanel<E> picker;
 
     @SuppressWarnings("unchecked")
     public SelectorTextBox(final IOptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, SafeHtml> optionFormatter) {
         super(new SelectorTextBoxValuePanel<E>(valueFormatter));
         this.valueFormatter = valueFormatter;
-        this.optionFormatter = optionFormatter;
         textBox = (SelectorTextBoxValuePanel<E>) getViewerPanel();
 
         picker = new SimplePickerPanel<E>(optionsGrabber, optionFormatter);

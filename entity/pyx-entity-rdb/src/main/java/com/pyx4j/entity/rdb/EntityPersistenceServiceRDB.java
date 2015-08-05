@@ -58,7 +58,7 @@ import com.pyx4j.entity.core.IVersionData;
 import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.Path;
-import com.pyx4j.entity.core.adapters.EntityModificationAdapter;
+import com.pyx4j.entity.core.adapters.EntityPersistenceAdapter;
 import com.pyx4j.entity.core.adapters.MemberModificationAdapter;
 import com.pyx4j.entity.core.adapters.ReferenceAdapter;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -664,6 +664,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
             }
         }
         CacheService.entityCache().remove(entity);
+        fireOnAfterPersist(entity);
     }
 
     private void insert(TableModel tm, IEntity entity) {
@@ -1130,11 +1131,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
                 }
             }
         }
-        if (updated && (adapters != null) && adapters.entityModificationAdapters() != null) {
-            for (Class<? extends EntityModificationAdapter<?>> adapterClass : adapters.entityModificationAdapters()) {
+        if (updated && (adapters != null) && adapters.entityPersistenceAdapters() != null) {
+            for (Class<? extends EntityPersistenceAdapter<?>> adapterClass : adapters.entityPersistenceAdapters()) {
                 @SuppressWarnings("rawtypes")
-                EntityModificationAdapter adapter = AdapterFactory.getEntityModificationAdapters(adapterClass);
-                adapter.onBeforeUpdate(baseEntity, entity);
+                EntityPersistenceAdapter adapter = AdapterFactory.getEntityModificationAdapters(adapterClass);
+                adapter.onBeforePersist(baseEntity, entity);
             }
         }
         return updated;
@@ -1240,11 +1241,23 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
                 }
             }
         }
-        if ((adapters != null) && (adapters.entityModificationAdapters() != null)) {
-            for (Class<? extends EntityModificationAdapter<?>> adapterClass : adapters.entityModificationAdapters()) {
+        if ((adapters != null) && (adapters.entityPersistenceAdapters() != null)) {
+            for (Class<? extends EntityPersistenceAdapter<?>> adapterClass : adapters.entityPersistenceAdapters()) {
                 @SuppressWarnings("rawtypes")
-                EntityModificationAdapter adapter = AdapterFactory.getEntityModificationAdapters(adapterClass);
-                adapter.onBeforeUpdate(null, entity);
+                EntityPersistenceAdapter adapter = AdapterFactory.getEntityModificationAdapters(adapterClass);
+                adapter.onBeforePersist(null, entity);
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void fireOnAfterPersist(IEntity entity) {
+        Adapters adapters = entity.getEntityMeta().getAnnotation(Adapters.class);
+        if ((adapters != null) && (adapters.entityPersistenceAdapters() != null)) {
+            for (Class<? extends EntityPersistenceAdapter<?>> adapterClass : adapters.entityPersistenceAdapters()) {
+                @SuppressWarnings("rawtypes")
+                EntityPersistenceAdapter adapter = AdapterFactory.getEntityModificationAdapters(adapterClass);
+                adapter.onAfterPersist(entity);
             }
         }
     }
@@ -1338,6 +1351,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
                 cascadeDelete(childEntityActual.getEntityMeta(), childEntityActual.getPrimaryKey());
             }
             CacheService.entityCache().remove(entity);
+            fireOnAfterPersist(entity);
         }
         return updated;
     }
@@ -1392,26 +1406,26 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
     }
 
     @Override
-    public <T extends IEntity> void retrieveMember(T entityMember, AttachLevel attachLevel) {
+    public <T extends IEntity> boolean retrieveMember(T entityMember, AttachLevel attachLevel) {
         switch (entityMember.getAttachLevel()) {
         case Attached:
             if (!entityMember.isNull()) { // Null is considered  Attached for simplicity
                 throw new RuntimeException("Values of " + entityMember.getPath() + " already Attached");
             }
-            break;
+            return true;
         case IdOnly:
         case ToStringMembers:
-            retrieve(entityMember, attachLevel, false);
-            break;
+            return retrieve(entityMember, attachLevel, false);
         case Detached:
             assert (entityMember.getOwner().getPrimaryKey() != null);
             startCallContext(ConnectionReason.forRead);
+            boolean retrieved;
             try {
                 TableModel tm = tableModel(entityMember.getOwner().getEntityMeta());
                 if (tm.isExternalMember(entityMember.getOwner(), entityMember)) {
-                    tm.retrieveMember(getPersistenceContext(), entityMember.getOwner(), entityMember);
+                    retrieved = tm.retrieveMember(getPersistenceContext(), entityMember.getOwner(), entityMember);
                 } else {
-                    retrieve(entityMember.getOwner());
+                    retrieved = retrieve(entityMember.getOwner());
                 }
                 if (entityMember.getPrimaryKey() != null) {
                     if (cascadeRetrieve(entityMember, attachLevel, false) == null) {
@@ -1422,8 +1436,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
             } finally {
                 endCallContext();
             }
-            break;
+            return retrieved;
         case CollectionSizeOnly:
+        default:
             throw new IllegalArgumentException();
         }
     }

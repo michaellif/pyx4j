@@ -31,6 +31,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.shared.TextSearchDocument;
 
 @SuppressWarnings("serial")
 public class PropertyCriterion implements Criterion {
@@ -38,9 +39,12 @@ public class PropertyCriterion implements Criterion {
     public static final char WILDCARD_CHAR = '*';
 
     public static enum Restriction {
+
         LESS_THAN, LESS_THAN_OR_EQUAL, GREATER_THAN, GREATER_THAN_OR_EQUAL, EQUAL, NOT_EQUAL, IN, NOT_IN,
 
-        RDB_LIKE, NOT_EXISTS
+        RDB_LIKE, TEXT_SEARCH,
+
+        NOT_EXISTS
     }
 
     private Path propertyPath;
@@ -102,6 +106,10 @@ public class PropertyCriterion implements Criterion {
         this(member, restriction, createSerializableCollection(value));
     }
 
+    public PropertyCriterion(Path path, Restriction restriction, Collection<?> value) {
+        this(path, restriction, createSerializableCollection(value));
+    }
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private static Serializable createSerializableCollection(Collection<?> collection) {
         Vector result = new Vector();
@@ -146,6 +154,14 @@ public class PropertyCriterion implements Criterion {
 
     public static PropertyCriterion like(IObject<?> member, String value) {
         return new PropertyCriterion(member, Restriction.RDB_LIKE, value);
+    }
+
+    public static Criterion textSearch(IPrimitive<?> member, String textQuery) {
+        if (member.getValueClass() == TextSearchDocument.class) {
+            return new PropertyCriterion(member, Restriction.TEXT_SEARCH, textQuery);
+        } else {
+            return TextSearchCriterion.translateToLike(member, textQuery);
+        }
     }
 
     public static PropertyCriterion ne(IObject<?> member, IPrimitive<?> value) {

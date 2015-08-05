@@ -16,7 +16,6 @@
  *
  * Created on Dec 22, 2014
  * @author michaellif
- * @version $Id: code-templates.xml 12647 2013-05-01 18:01:19Z vlads $
  */
 package com.pyx4j.forms.client.ui.datatable.filter;
 
@@ -38,12 +37,13 @@ public class SuggestableMultiSelectFilterEditor<E extends IEntity> extends Filte
 
     private EntitySelectorListBox<E> selector;
 
+    @SuppressWarnings("unchecked")
     public SuggestableMultiSelectFilterEditor(E member) {
         super(member);
         MemberMeta mm = member.getMeta();
 
         if (mm.isEntity()) {
-            selector = new EntitySelectorListBox<>(member);
+            selector = new EntitySelectorListBox<>((Class<E>) member.getValueClass());
             selector.setWatermark(i18n.tr("+ Add item"));
         }
         initWidget(selector);

@@ -37,6 +37,8 @@ public class GroupFocusHandler extends HandlerManager implements FocusHandler, B
 
     private boolean groupFocus = false;
 
+    private boolean groupFocusLocked = false;
+
     private GroupFocusHandler parentGroupFocusHandler;
 
     public GroupFocusHandler(Object source) {
@@ -66,7 +68,7 @@ public class GroupFocusHandler extends HandlerManager implements FocusHandler, B
 
                 @Override
                 public void execute() {
-                    if (groupFocus && focusLost) {
+                    if (!isGroupFocusLocked() && groupFocus && focusLost) {
                         groupFocus = false;
                         fireEvent(e);
                     }
@@ -74,6 +76,25 @@ public class GroupFocusHandler extends HandlerManager implements FocusHandler, B
             });
         }
 
+    }
+
+    public void setGroupFocusLocked(boolean locked) {
+        if (parentGroupFocusHandler != null) {
+            parentGroupFocusHandler.setGroupFocusLocked(locked);
+        } else {
+            groupFocusLocked = locked;
+            if (!groupFocusLocked && groupFocus && focusLost) {
+                groupFocus = false;
+            }
+        }
+    }
+
+    public boolean isGroupFocusLocked() {
+        if (parentGroupFocusHandler != null) {
+            return parentGroupFocusHandler.isGroupFocusLocked();
+        } else {
+            return groupFocusLocked;
+        }
     }
 
     @Override

@@ -99,6 +99,15 @@ public class DatePicker extends ValueBoxBase<LogicalDate> implements HasValueCha
     }
 
     @Override
+    public LogicalDate getValue() {
+        if (super.getValue() == null) {
+            return null;
+        } else {
+            return new LogicalDate(super.getValue());//Copy-constructor to simulate immutable state
+        }
+    }
+
+    @Override
     protected IParser<LogicalDate> getParser() {
         if (super.getParser() == null) {
             setParser(new DateParser(defaultDateFormat));

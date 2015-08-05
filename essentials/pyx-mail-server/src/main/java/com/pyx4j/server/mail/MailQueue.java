@@ -28,18 +28,16 @@ import org.apache.commons.lang.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.SystemDateManager;
-import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.Executables;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
@@ -88,6 +86,16 @@ public class MailQueue implements Runnable {
         }
     }
 
+    public static synchronized void setActive(boolean active) {
+        if (active) {
+            if (!isRunning()) {
+                init();
+            }
+        } else {
+            shutdown();
+        }
+    }
+
     public static void shutdown() {
         if (instance != null) {
             instance.notifyAndWaitCompletion();
@@ -112,8 +120,10 @@ public class MailQueue implements Runnable {
     }
 
     public static void sendQueued() {
-        synchronized (instance.monitor) {
-            instance.monitor.notifyAll();
+        if (instance != null) {
+            synchronized (instance.monitor) {
+                instance.monitor.notifyAll();
+            }
         }
     }
 
@@ -140,17 +150,20 @@ public class MailQueue implements Runnable {
             persistable.statusCallbackClass().setValue(callbackClass.getName());
         }
         Collection<String> sendTo = CollectionUtils.union(CollectionUtils.union(mailMessage.getTo(), mailMessage.getCc()), mailMessage.getBcc());
+        if (sendTo.isEmpty()) {
+            throw new Error("No destination E-Mail addresses found");
+        }
         persistable.sendTo().setValue(ConverterUtils.convertStringCollection(sendTo, ", "));
         EntityFormatUtils.trimToLength(persistable.sendTo());
         persistable.keywords().setValue(ConverterUtils.convertStringCollection(mailMessage.getKeywords(), ", "));
 
-        runInEntityNamespace(persistable.getEntityMeta().getEntityClass(), new Executable<Void, RuntimeException>() {
+        Executables.wrapInEntityNamespace(persistable.getEntityMeta().getEntityClass(), new Executable<Void, RuntimeException>() {
             @Override
             public Void execute() {
                 Persistence.service().persist(persistable);
                 return null;
             }
-        });
+        }).execute();
 
         if (isRunning()) {
             // Transaction is actually completed, wake up the delivery thread.
@@ -171,6 +184,7 @@ public class MailQueue implements Runnable {
     public void run() {
         try {
             running = true;
+            log.info("MailQueue started");
             int deliveryErrorCount = 0;
             int mailQueueEmptyCount = 0;
             do {
@@ -257,13 +271,13 @@ public class MailQueue implements Runnable {
 
                                 @Override
                                 public Void execute() {
-                                    runInEntityNamespace(persistable.getEntityMeta().getEntityClass(), new Executable<Void, RuntimeException>() {
+                                    Executables.wrapInEntityNamespace(persistable.getEntityMeta().getEntityClass(), new Executable<Void, RuntimeException>() {
                                         @Override
                                         public Void execute() {
                                             Persistence.service().update(EntityCriteriaByPK.create(persistable), persistableUpdate);
                                             return null;
                                         }
-                                    });
+                                    }).execute();
                                     return null;
                                 }
                             });
@@ -328,7 +342,7 @@ public class MailQueue implements Runnable {
         if (targetNamespace == null) {
             call.execute();
         } else {
-            NamespaceManager.runInTargetNamespace(targetNamespace, call);
+            Executables.runInTargetNamespace(targetNamespace, call);
         }
     }
 
@@ -340,7 +354,7 @@ public class MailQueue implements Runnable {
                 public AbstractOutgoingMailQueue execute() {
                     for (final Class<? extends AbstractOutgoingMailQueue> persistableEntityClass : persistableEntities.values()) {
 
-                        AbstractOutgoingMailQueue persistable = runInEntityNamespace(persistableEntityClass,
+                        AbstractOutgoingMailQueue persistable = Executables.wrapInEntityNamespace(persistableEntityClass,
                                 new Executable<AbstractOutgoingMailQueue, RuntimeException>() {
                             @Override
                             public AbstractOutgoingMailQueue execute() {
@@ -353,7 +367,7 @@ public class MailQueue implements Runnable {
                                 criteria.asc(criteria.proto().updated());
                                 return Persistence.service().retrieve(criteria);
                             }
-                        });
+                        }).execute();
 
                         if (persistable != null) {
                             return persistable;
@@ -365,32 +379,6 @@ public class MailQueue implements Runnable {
         } catch (Throwable e) {
             log.error("unable to read MailQueue tables", e);
             return null;
-        }
-    }
-
-    private static String getNamespace(Class<? extends IEntity> entityClass) {
-        Class<? extends IEntity> persistableEntityClass = EntityFactory.getEntityMeta(entityClass).getPersistableSuperClass();
-        if (persistableEntityClass != null) {
-            entityClass = persistableEntityClass;
-        }
-        Table table = entityClass.getAnnotation(Table.class);
-        if (table == null) {
-            return null;
-        } else {
-            if (CommonsStringUtils.isStringSet(table.namespace())) {
-                return table.namespace();
-            } else {
-                return null;
-            }
-        }
-    }
-
-    private static <T> T runInEntityNamespace(Class<? extends IEntity> entityClass, final Executable<T, RuntimeException> task) {
-        String targetNamespace = getNamespace(entityClass);
-        if (targetNamespace != null) {
-            return NamespaceManager.runInTargetNamespace(targetNamespace, task);
-        } else {
-            return task.execute();
         }
     }
 

@@ -51,6 +51,12 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-security-server</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.pyx4j</groupId>
             <artifactId>pyx-log-server</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -63,6 +69,11 @@
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
         </dependency>
 
         <dependency>

@@ -392,7 +392,7 @@ public class WidgetsTheme extends Theme {
         style = new Style(".", StyleName.OptionGroupItem);
         style.addProperty("white-space", "nowrap");
         style.addProperty("line-height", "1.5em");
-        style.addProperty("padding", "0 10px");
+        style.addProperty("padding", "0 5px");
         style.addProperty("display", "block");
         addStyle(style);
 
@@ -565,7 +565,7 @@ public class WidgetsTheme extends Theme {
         style = new Style(".", StyleName.SelectedItemHolderLabel);
         style.addProperty("display", "inline-block");
         style.addProperty("vertical-align", "middle");
-        style.addProperty("max-width", "150px");
+        style.addProperty("max-width", "200px");
         style.addProperty("overflow", "hidden");
         style.addProperty("text-overflow", "ellipsis");
         style.addProperty("white-space", "nowrap");

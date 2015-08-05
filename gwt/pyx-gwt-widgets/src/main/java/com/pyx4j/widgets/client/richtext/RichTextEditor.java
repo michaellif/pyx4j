@@ -30,15 +30,17 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
+import com.pyx4j.widgets.client.GroupFocusHandler;
+import com.pyx4j.widgets.client.IFocusGroup;
 import com.pyx4j.widgets.client.IValueBoxWidget;
+import com.pyx4j.widgets.client.richtext.RichTextArea.EditMode;
 
-public class RichTextEditor extends FlowPanel implements IValueBoxWidget<String> {
+public class RichTextEditor extends FlowPanel implements IFocusGroup, IValueBoxWidget<String> {
 
     private final RichTextArea richTextArea;
 
@@ -54,6 +56,8 @@ public class RichTextEditor extends FlowPanel implements IValueBoxWidget<String>
 
     private String parseExceptionMessage;
 
+    private final GroupFocusHandler groupFocusHandler;
+
     public RichTextEditor() {
         super();
 
@@ -63,17 +67,22 @@ public class RichTextEditor extends FlowPanel implements IValueBoxWidget<String>
         richTextArea.setWidth("100%");
         richTextArea.setHeight("15em");
 
-        toolbar = new RichTextToolbar(richTextArea);
+        toolbar = new RichTextToolbar(this);
 
         add(toolbar);
         add(richTextArea);
 
-        toolbar.getElement().getStyle().setOpacity(0.3);
+        groupFocusHandler = new GroupFocusHandler(this);
+        groupFocusHandler.addFocusable(toolbar);
+        groupFocusHandler.addFocusable(richTextArea);
 
-        sinkEvents(Event.ONMOUSEOVER);
-        sinkEvents(Event.ONMOUSEOUT);
+        toolbar.getElement().getStyle().setOpacity(0.7);
 
         editable = true;
+    }
+
+    public RichTextArea getRichTextArea() {
+        return richTextArea;
     }
 
     public void scrollToBottom() {
@@ -91,36 +100,18 @@ public class RichTextEditor extends FlowPanel implements IValueBoxWidget<String>
     }
 
     @Override
-    public void onBrowserEvent(Event event) {
-        super.onBrowserEvent(event);
-        /*
-         * This is needed to help handling richTextArea onBlur events. When toolbar is inOperation state
-         * it may open other dialogs that may have focusable components. When those components receive
-         * focus it should not fire onBlur for the editor (see RichTextArea#ignoreBlur())
-         */
-        if (toolbar.inOperation()) {
-            return;
-        }
-        switch (event.getTypeInt()) {
-        case Event.ONMOUSEOUT:
-            toolbar.getElement().getStyle().setOpacity(0.3);
-            richTextArea.ignoreBlur(false);
-            break;
-        case Event.ONMOUSEOVER:
-            toolbar.getElement().getStyle().setOpacity(1);
-            richTextArea.ignoreBlur(true);
-            break;
-        }
+    public GroupFocusHandler getGroupFocusHandler() {
+        return groupFocusHandler;
     }
 
     @Override
     public HandlerRegistration addFocusHandler(FocusHandler handler) {
-        return richTextArea.addFocusHandler(handler);
+        return groupFocusHandler.addFocusHandler(handler);
     }
 
     @Override
     public HandlerRegistration addBlurHandler(BlurHandler handler) {
-        return richTextArea.addBlurHandler(handler);
+        return groupFocusHandler.addBlurHandler(handler);
     }
 
     @Override
@@ -181,7 +172,7 @@ public class RichTextEditor extends FlowPanel implements IValueBoxWidget<String>
     @Override
     public String getValue() {
         try {
-            String value = getParser().parse(toolbar.isHtmlMode() ? richTextArea.getHTML() : richTextArea.getText());
+            String value = getParser().parse(richTextArea.getValue());
             parsedOk = true;
             parseExceptionMessage = null;
             return value;
@@ -194,11 +185,7 @@ public class RichTextEditor extends FlowPanel implements IValueBoxWidget<String>
 
     @Override
     public void setValue(String html) {
-        if (toolbar.isHtmlMode()) {
-            richTextArea.setHTML(getFormatter().format(html));
-        } else {
-            richTextArea.setText(getFormatter().format(html));
-        }
+        richTextArea.setValue(getFormatter().format(html));
     }
 
     @Override
@@ -257,6 +244,12 @@ public class RichTextEditor extends FlowPanel implements IValueBoxWidget<String>
 
     public void setAreaHeight(String string) {
         richTextArea.setHeight(string);
+    }
+
+    public void setEditMode(EditMode editMode) {
+        richTextArea.restoreSelectionAndRange();
+        richTextArea.setEditMode(editMode);
+        toolbar.onEditModeChange(editMode);
     }
 
     public static class RichTextFormat implements IFormatter<String, String> {

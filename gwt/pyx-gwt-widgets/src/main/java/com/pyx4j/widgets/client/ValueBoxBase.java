@@ -150,6 +150,10 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
 
     }
 
+    public void setCursorToEnd() {
+        textBoxWidget.setCursorPos(textBoxWidget.getText().length());
+    }
+
     protected com.google.gwt.user.client.ui.TextBoxBase getTextBoxWidget() {
         return textBoxWidget;
     }
@@ -293,6 +297,10 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
         if (actionButton != null) {
             actionButton.toggleActive();
         }
+    }
+
+    public Button getActionButton() {
+        return actionButton;
     }
 
     @Override

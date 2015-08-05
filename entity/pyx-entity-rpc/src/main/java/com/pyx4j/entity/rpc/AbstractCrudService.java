@@ -13,11 +13,13 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Created on Apr 17, 2011
  * @author vlads
  */
 package com.pyx4j.entity.rpc;
+
+import java.io.Serializable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -29,12 +31,23 @@ import com.pyx4j.rpc.shared.ServiceExecution;
 
 public interface AbstractCrudService<E extends IEntity> extends AbstractListCrudService<E> {
 
-    public static enum RetrieveTarget {
+    public static enum RetrieveOperation implements Serializable {
+
+        List,
 
         View,
 
-        Edit;
+        Edit,
 
+        Save;
+
+        public boolean isRead() {
+            return this == List || this == View;
+        }
+
+        public boolean isEdit() {
+            return this == Edit || this == Save;
+        }
     }
 
     /**
@@ -51,7 +64,7 @@ public interface AbstractCrudService<E extends IEntity> extends AbstractListCrud
      */
     public void init(AsyncCallback<E> callback, InitializationData initializationData);
 
-    public void retrieve(AsyncCallback<E> callback, Key entityId, RetrieveTarget retrieveTarget);
+    public void retrieve(AsyncCallback<E> callback, Key entityId, RetrieveOperation retrieveOperation);
 
     public void create(AsyncCallback<Key> callback, E editableEntity);
 

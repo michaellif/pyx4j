@@ -48,6 +48,8 @@ public class DevSession {
 
     private long eol;
 
+    private String name;
+
     protected Map<String, Object> attributes = new Hashtable<String, Object>();
 
     private DevSession() {
@@ -100,6 +102,10 @@ public class DevSession {
         return devSession;
     }
 
+    static DevSession getSession(String devSessionId) {
+        return sessions.get(devSessionId);
+    }
+
     public static DevSession beginSession() {
         DevSession session = new DevSession();
 
@@ -142,7 +148,7 @@ public class DevSession {
         if (session != null) {
             sessions.remove(session.id);
 
-            // Remove Session Cookie 
+            // Remove Session Cookie
             Cookie sessionCookie = new Cookie(ServerSideConfiguration.instance().getDevelopmentSessionCookieName(), "");
             sessionCookie.setPath("/");
             sessionCookie.setMaxAge(0);
@@ -181,4 +187,18 @@ public class DevSession {
     public void removeAttribute(String name) {
         attributes.remove(name);
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        if (name != null) {
+            return name;
+        } else {
+            return getId();
+        }
+    }
+
 }

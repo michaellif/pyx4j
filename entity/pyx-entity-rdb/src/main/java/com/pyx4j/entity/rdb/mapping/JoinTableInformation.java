@@ -21,6 +21,9 @@ package com.pyx4j.entity.rdb.mapping;
 
 import java.util.Collection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Inheritance;
@@ -35,6 +38,8 @@ import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 
 class JoinTableInformation extends JoinInformation {
+
+    private static final Logger log = LoggerFactory.getLogger(JoinTableInformation.class);
 
     private final EntityMeta rootEntityMeta;
 
@@ -65,7 +70,7 @@ class JoinTableInformation extends JoinInformation {
         case Entity:
             sqlName = TableModel.getTableName(dialect, joinEntityMeta);
             joinTableClass = joinEntityClass;
-            if (joinEntityClass == entityClass) {
+            if ((joinEntityClass == entityClass) || (joinEntityClass.isAssignableFrom(entityClass))) {
                 sqlValueName = dialect.getNamingConvention().sqlIdColumnName();
                 joinTableSameAsTarget = true;
             } else {
@@ -155,14 +160,23 @@ class JoinTableInformation extends JoinInformation {
         for (String jmemberName : joinEntityMeta.getMemberNames()) {
             MemberMeta jmemberMeta = joinEntityMeta.getMemberMeta(jmemberName);
             if (!jmemberMeta.isTransient()) {
-                if (jmemberMeta.getObjectClass().equals(entityClass)) {
+                if (jmemberMeta.getValueClass().equals(entityClass) || (jmemberMeta.getValueClass().isAssignableFrom(entityClass))) {
                     valueMemberMeta = jmemberMeta;
+                    break;
                 }
             }
         }
         if (valueMemberMeta == null) {
-            throw new AssertionError("Unmapped value member '" + entityClass.getName() + "' in join table '" + joinEntityMeta.getCaption() + "' for "
-                    + memberMeta.getFieldName() + " in " + entityMeta.getEntityClass().getName());
+            log.warn("Existing Members in Join Table: {}", joinEntityMeta.getEntityClass().getSimpleName());
+            for (String jmemberName : joinEntityMeta.getMemberNames()) {
+                MemberMeta jmemberMeta = joinEntityMeta.getMemberMeta(jmemberName);
+                if (!jmemberMeta.isTransient()) {
+                    log.warn("   {} {}", jmemberName, jmemberMeta.getValueClass());
+                }
+            }
+
+            throw new AssertionError("Unmapped value member of class '" + entityClass.getName() + "' in join table '" + joinEntityMeta.getCaption()
+                    + "\n' to map field '" + memberMeta.getFieldName() + "' in  table " + entityMeta.getEntityClass().getName());
         } else {
             return valueMemberMeta;
         }

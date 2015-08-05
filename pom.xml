@@ -127,6 +127,7 @@
         <module>entity/pyx-entity-rdb</module>
 
         <module>entity/pyx-entity-assert</module>
+        <module>entity/pyx-entity-integration</module>
 <!--
         <module>entity/entity-hibernate</module>
 -->
@@ -276,7 +277,13 @@
                         <parallel>classes</parallel>
                         <threadCount>${surefire.parallelThreadCount}</threadCount>
                         -->
-                        <argLine>-Djava.awt.headless=true -Xms64m -Xmx128m</argLine>
+                        <argLine>-Xms64m -Xmx128m</argLine>
+                        <systemProperties>
+                            <property>
+                                <name>java.awt.headless</name>
+                                <value>true</value>
+                            </property>
+                        </systemProperties>
                     </configuration>
                 </plugin>
 

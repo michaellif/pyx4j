@@ -118,11 +118,19 @@ public class ServerSideConfiguration {
         return this;
     }
 
+    public void configurationInstanceSelected(ServletContext servletContext) {
+
+    }
+
     public boolean isDevelopmentBehavior() {
         return true;
     }
 
     public boolean isDemoBehavior() {
+        return false;
+    }
+
+    public boolean isQaBehavior() {
         return false;
     }
 

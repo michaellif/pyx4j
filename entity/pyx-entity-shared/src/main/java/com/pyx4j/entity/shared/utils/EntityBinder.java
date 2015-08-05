@@ -19,7 +19,10 @@
  */
 package com.pyx4j.entity.shared.utils;
 
+import java.io.Serializable;
+
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.Path;
 
 public interface EntityBinder<BO extends IEntity, TO extends IEntity> {
@@ -28,14 +31,24 @@ public interface EntityBinder<BO extends IEntity, TO extends IEntity> {
 
     public Class<TO> toClass();
 
-    public TO createTO(BO bo);
+    public TO createTO(BO bo, BindingContext context);
 
-    public void copyBOtoTO(BO bo, TO to);
+    public void copyBOtoTO(BO bo, TO to, BindingContext context);
 
-    public BO createBO(TO to);
+    public BO createBO(TO to, BindingContext context);
 
-    public void copyTOtoBO(TO to, BO bo);
+    public void copyTOtoBO(TO to, BO bo, BindingContext context);
 
     public Path getBoundBOMemberPath(Path toMemberPath);
+
+    public interface ValueConverter<BO extends IEntity, Value> {
+
+        public Value convertValue(BO bo);
+
+    };
+
+    public <TYPE extends Serializable> void addValueConverter(IPrimitive<TYPE> toMember, ValueConverter<BO, TYPE> valueConverter);
+
+    public <TYPE extends IEntity> void addValueConverter(TYPE toMember, ValueConverter<BO, TYPE> valueConverter);
 
 }

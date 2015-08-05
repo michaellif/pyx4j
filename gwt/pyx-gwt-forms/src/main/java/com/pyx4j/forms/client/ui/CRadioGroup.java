@@ -94,6 +94,9 @@ public abstract class CRadioGroup<E> extends CFocusComponent<E, NRadioGroup<E>> 
 
     public final void setFormat(IFormatter<E, String> format) {
         this.format = format;
+        if (getNativeComponent() != null) {
+            getNativeComponent().setOptions(getOptions());
+        }
     }
 
 }
