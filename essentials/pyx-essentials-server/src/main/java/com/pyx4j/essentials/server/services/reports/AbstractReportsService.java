@@ -74,6 +74,11 @@ public abstract class AbstractReportsService<R extends ReportTemplate> implement
         }
 
         @Override
+        public void started() {
+            log.error("TODO", new Error("migrate to AbstractDeferredProcess"));
+        }
+
+        @Override
         public DeferredProcessProgressResponse status() {
             if (isReady) {
                 DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
@@ -152,6 +157,11 @@ public abstract class AbstractReportsService<R extends ReportTemplate> implement
             this.reportMetadata = reportMetadata;
             this.exported = null;
             this.isReady = false;
+        }
+
+        @Override
+        public void started() {
+            log.error("TODO", new Error("migrate to AbstractDeferredProcess"));
         }
 
         @Override

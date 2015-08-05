@@ -26,6 +26,8 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 
 public interface IDeferredProcess extends Serializable {
 
+    public void started();
+
     public void execute();
 
     public void cancel();

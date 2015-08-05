@@ -25,11 +25,12 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.InheritableUserContext;
 import com.pyx4j.server.contexts.Lifecycle;
+import com.pyx4j.server.contexts.ServerContext;
 
-class DeferredProcessWorkThread extends Thread {
+//TODO rename in master to DeferredProcessTask
+class DeferredProcessWorkThread implements Runnable {
 
     private final static Logger log = LoggerFactory.getLogger(DeferredProcessWorkThread.class);
 
@@ -37,8 +38,7 @@ class DeferredProcessWorkThread extends Thread {
 
     InheritableUserContext inheritableUserContext;
 
-    DeferredProcessWorkThread(String name, DeferredProcessInfo info) {
-        super(name + "Process");
+    DeferredProcessWorkThread(DeferredProcessInfo info) {
         this.info = info;
         inheritableUserContext = ServerContext.getInheritableUserContext();
     }
@@ -47,10 +47,13 @@ class DeferredProcessWorkThread extends Thread {
     public final void run() {
         try {
             Lifecycle.inheritUserContext(inheritableUserContext);
-            do {
-                info.process.execute();
-            } while (!info.process.status().isCompleted());
-            log.debug("process completed");
+            if (!info.process.status().isCanceled()) {
+                info.process.started();
+                do {
+                    info.process.execute();
+                } while (!info.process.status().isCompleted());
+                log.debug("process completed");
+            }
         } catch (UserRuntimeException e) {
             log.error("processor error", e);
             info.setProcessErrorWithStatusMessage(e.getMessage());
