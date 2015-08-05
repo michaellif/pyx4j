@@ -19,16 +19,15 @@
  */
 package com.pyx4j.widgets.client;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.HasAllFocusHandlers;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
@@ -38,16 +37,13 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Focusable;
-import com.google.gwt.user.client.ui.HasValue;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
-public class OptionGroup<E> extends FlowPanel implements IFocusWidget, HasValueChangeHandlers<E> {
+public abstract class OptionGroup<E> extends FlowPanel implements IFocusWidget, HasValueChangeHandlers<E> {
 
     public enum Layout {
         VERTICAL, HORIZONTAL;
@@ -57,22 +53,14 @@ public class OptionGroup<E> extends FlowPanel implements IFocusWidget, HasValueC
 
     private boolean editable = true;
 
-    private final String uniqueId;
+    final String uniqueId;
 
     private IFormatter<E, SafeHtml> formatter;
 
-    private final boolean multipleSelection;
+    protected final GroupFocusHandler focusHandlerManager;
 
-    private final Map<E, OptionGroupButton> buttons;
-
-    private final GroupFocusHandler focusHandlerManager;
-
-    public OptionGroup(Layout layout, boolean multipleSelection) {
-        this.multipleSelection = multipleSelection;
-
+    public OptionGroup(Layout layout) {
         uniqueId = Document.get().createUniqueId();
-
-        buttons = new LinkedHashMap<E, OptionGroupButton>();
 
         focusHandlerManager = new GroupFocusHandler(this);
 
@@ -85,29 +73,9 @@ public class OptionGroup<E> extends FlowPanel implements IFocusWidget, HasValueC
         }
     }
 
-    public void setOptions(List<E> options) {
-        clear();
-        buttons.clear();
+    abstract public void setOptions(List<E> options);
 
-        for (final E option : options) {
-            OptionGroupButton button = new OptionGroupButton(getFormatter().format(option));
-            buttons.put(option, button);
-            button.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-
-                @Override
-                public void onValueChange(ValueChangeEvent<Boolean> event) {
-                    if (event.getValue()) {
-                        applySelectionStyles();
-                        OptionGroup.this.fireEvent(event);
-                    }
-                }
-            });
-
-            button.addFocusHandler(focusHandlerManager);
-            button.addBlurHandler(focusHandlerManager);
-            add(button);
-        }
-    }
+    abstract protected Map<E, ? extends OptionGroupButton> getButtons();
 
     public void setFormatter(IFormatter<E, SafeHtml> formatter) {
         this.formatter = formatter;
@@ -149,13 +117,13 @@ public class OptionGroup<E> extends FlowPanel implements IFocusWidget, HasValueC
     }
 
     private void setGroupEnabled(boolean enabled) {
-        for (OptionGroupButton b : buttons.values()) {
+        for (OptionGroupButton b : getButtons().values()) {
             b.setEnabled(enabled);
         }
     }
 
     protected void applySelectionStyles() {
-        for (OptionGroupButton button : buttons.values()) {
+        for (OptionGroupButton button : getButtons().values()) {
             if (button.getValue()) {
                 button.addStyleDependentName(WidgetsTheme.StyleDependent.active.name());
             } else {
@@ -164,16 +132,12 @@ public class OptionGroup<E> extends FlowPanel implements IFocusWidget, HasValueC
         }
     }
 
-    protected Map<E, OptionGroupButton> getButtons() {
-        return buttons;
-    }
-
     @Override
     public void setFocus(boolean focused) {
         if (focused) {
-            buttons.values().iterator().next().setFocus(true);
+            getButtons().values().iterator().next().setFocus(true);
         } else {
-            for (OptionGroupButton b : buttons.values()) {
+            for (OptionGroupButton b : getButtons().values()) {
                 b.setFocus(false);
             }
         }
@@ -188,7 +152,7 @@ public class OptionGroup<E> extends FlowPanel implements IFocusWidget, HasValueC
     protected void onEnsureDebugId(String baseID) {
         super.onEnsureDebugId(baseID);
 
-        for (Map.Entry<E, OptionGroupButton> me : buttons.entrySet()) {
+        for (Entry<E, ? extends OptionGroupButton> me : getButtons().entrySet()) {
             me.getValue().ensureDebugId(baseID + "_" + getOptionDebugId(me.getKey()));
         }
     }
@@ -245,78 +209,6 @@ public class OptionGroup<E> extends FlowPanel implements IFocusWidget, HasValueC
     @Override
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<E> handler) {
         return addHandler(handler, ValueChangeEvent.getType());
-    }
-
-    protected class OptionGroupButton extends Composite implements HasValue<Boolean>, Focusable, HasAllFocusHandlers {
-
-        private final com.google.gwt.user.client.ui.CheckBox checkBox;
-
-        public OptionGroupButton(SafeHtml label) {
-            super();
-            if (multipleSelection) {
-                checkBox = new CheckBox(label);
-            } else {
-                checkBox = new RadioButton(uniqueId, label);
-            }
-            initWidget(checkBox);
-            setStyleName(WidgetsTheme.StyleName.OptionGroupItem.name());
-
-        }
-
-        @Override
-        public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Boolean> handler) {
-            return checkBox.addValueChangeHandler(handler);
-        }
-
-        @Override
-        public Boolean getValue() {
-            return checkBox.getValue();
-        }
-
-        @Override
-        public void setValue(Boolean value) {
-            checkBox.setValue(value);
-        }
-
-        @Override
-        public void setValue(Boolean value, boolean fireEvents) {
-            checkBox.setValue(value, fireEvents);
-        }
-
-        @Override
-        public int getTabIndex() {
-            return checkBox.getTabIndex();
-        }
-
-        @Override
-        public void setAccessKey(char key) {
-            checkBox.setAccessKey(key);
-        }
-
-        @Override
-        public void setFocus(boolean focused) {
-            checkBox.setFocus(focused);
-        }
-
-        @Override
-        public void setTabIndex(int index) {
-            checkBox.setTabIndex(index);
-        }
-
-        @Override
-        public HandlerRegistration addFocusHandler(FocusHandler handler) {
-            return checkBox.addFocusHandler(handler);
-        }
-
-        @Override
-        public HandlerRegistration addBlurHandler(BlurHandler handler) {
-            return checkBox.addBlurHandler(handler);
-        }
-
-        public void setEnabled(boolean enabled) {
-            checkBox.setEnabled(enabled);
-        }
-
     }
 
 }

@@ -23,11 +23,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.List;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -36,6 +40,7 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.CheckGroup;
 import com.pyx4j.widgets.client.OptionGroup.Layout;
 
@@ -43,15 +48,14 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
 
     private static final I18n i18n = I18n.get(MultiSelectFilterEditor.class);
 
-    private Selector<?> checkGroup;
+    private ExtendedSelector<?> checkGroup;
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public MultiSelectFilterEditor(IObject<?> member) {
         super(member);
         MemberMeta mm = member.getMeta();
         if (mm.getValueClass().isEnum()) {
-            checkGroup = new Selector<Enum>(Layout.VERTICAL);
-            checkGroup.setEmptyFieldFormatter();
+            checkGroup = new ExtendedSelector<Enum>(Layout.VERTICAL);
 
             ArrayList options = new ArrayList(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
             if (!mm.isAnnotationPresent(NotNull.class)) {
@@ -61,7 +65,7 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
 
         } else if (mm.getValueClass().equals(Boolean.class)) {
 
-            Selector<Boolean> booleanGroup = new Selector<>(Layout.HORIZONTAL);
+            ExtendedSelector<Boolean> booleanGroup = new ExtendedSelector<>(Layout.HORIZONTAL);
             booleanGroup.setFormatter(new IFormatter<Boolean, SafeHtml>() {
 
                 @Override
@@ -140,6 +144,82 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
         checkGroup.setValue(null);
     }
 
+    class ExtendedSelector<E> extends FlowPanel {
+        private CheckBox selectAll;
+
+        private Selector<E> selectGroup;
+
+        public ExtendedSelector(Layout layout) {
+            selectAll = new CheckBox("All");
+
+            selectGroup = new Selector<E>(layout);
+            selectGroup.setEmptyFieldFormatter();
+
+            selectAll.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+                @Override
+                public void onValueChange(ValueChangeEvent<Boolean> event) {
+                    if (event.getValue()) {
+                        selectGroup.setAllSelected();
+                    } else {
+                        selectGroup.deselectAll();
+                    }
+                }
+            });
+
+            selectGroup.addValueChangeHandler(new ValueChangeHandler<E>() {
+
+                @Override
+                public void onValueChange(ValueChangeEvent<E> event) {
+                    if (isAllSelected()) {
+                        selectAll.setValue(Boolean.TRUE);
+                    } else {
+                        selectAll.setValue(Boolean.FALSE);
+                    }
+                }
+            });
+
+            add(selectAll);
+            add(selectGroup);
+        }
+
+        public void setAllSelected() {
+            selectGroup.setAllSelected();
+        }
+
+        public void deselectAll() {
+            selectGroup.deselectAll();
+        }
+
+        public boolean isAllSelected() {
+            return selectGroup.isAllSelected();
+        }
+
+        public boolean isAllDeselected() {
+            return selectGroup.isAllDeselected();
+        }
+
+        public void setValue(Collection<E> value) {
+            selectGroup.setValue(value);
+        }
+
+        public Collection<E> getValue() {
+            return selectGroup.getValue();
+        }
+
+        public void setFocus(boolean focused) {
+            selectGroup.setFocus(focused);
+        }
+
+        public void setOptions(List<E> options) {
+            selectGroup.setOptions(options);
+        }
+
+        public void setFormatter(IFormatter<E, SafeHtml> formatter) {
+            selectGroup.setFormatter(formatter);
+        }
+    }
+
     class Selector<E> extends CheckGroup<E> {
 
         public Selector(Layout layout) {
@@ -168,6 +248,12 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
                 }
             }
             return true;
+        }
+
+        public void deselectAll() {
+            for (E item : getButtons().keySet()) {
+                getButtons().get(item).setValue(Boolean.FALSE);
+            }
         }
 
         public void setEmptyFieldFormatter() {

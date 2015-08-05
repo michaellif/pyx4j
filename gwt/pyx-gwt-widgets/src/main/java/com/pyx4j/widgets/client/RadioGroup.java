@@ -19,12 +19,23 @@
  */
 package com.pyx4j.widgets.client;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.safehtml.shared.SafeHtml;
+
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class RadioGroup<E> extends OptionGroup<E> {
 
+    private final Map<E, RadioGroupButton> buttons;
+
     public RadioGroup(Layout layout) {
-        super(layout, false);
+        super(layout);
+        this.buttons = new LinkedHashMap<E, RadioGroupButton>();
     }
 
     public void setValue(E value) {
@@ -32,7 +43,8 @@ public class RadioGroup<E> extends OptionGroup<E> {
     }
 
     public void setValue(E value, boolean fireChangeEvent) {
-        OptionGroupButton selectedButton = getButtons().get(value);
+        @SuppressWarnings("unchecked")
+        RadioGroupButton selectedButton = (RadioGroupButton) getButtons().get(value);
         if (selectedButton != null) {
             selectedButton.setValue(Boolean.TRUE);
             if (fireChangeEvent) {
@@ -55,5 +67,52 @@ public class RadioGroup<E> extends OptionGroup<E> {
             }
         }
         return null;
+    }
+
+    @Override
+    public void setOptions(List<E> options) {
+        clear();
+        buttons.clear();
+
+        for (final E option : options) {
+            RadioGroupButton button = new RadioGroupButton(getFormatter().format(option));
+            buttons.put(option, button);
+            button.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+                @Override
+                public void onValueChange(ValueChangeEvent<Boolean> event) {
+                    if (event.getValue()) {
+                        applySelectionStyles();
+                    }
+                    RadioGroup.this.fireEvent(event);
+                }
+            });
+
+            button.addFocusHandler(focusHandlerManager);
+            button.addBlurHandler(focusHandlerManager);
+            add(button);
+        }
+    }
+
+    @Override
+    public Map<E, ? extends OptionGroupButton> getButtons() {
+        return buttons;
+    }
+
+    private class RadioGroupButton extends OptionGroupButton {
+
+        public RadioGroupButton(SafeHtml label) {
+            super(label);
+        }
+
+        @Override
+        protected void initCheckBox(SafeHtml label) {
+            {
+                this.checkBox = new RadioButton(uniqueId, label);
+                initWidget(checkBox);
+                setStyleName(WidgetsTheme.StyleName.OptionGroupItem.name());
+            }
+        }
+
     }
 }
