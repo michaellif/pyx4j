@@ -16,7 +16,6 @@
  *
  * Created on 2010-05-10
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.essentials.server.report;
 
@@ -46,7 +45,7 @@ public class ReportTableCSVFormatter implements ReportTableFormatter {
     protected String charsetSerial;
 
     private boolean forceQuote;
-
+    
     private boolean emitUTF8BOM = true;
 
     private int rowCount = 0;
