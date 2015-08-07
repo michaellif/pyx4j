@@ -126,12 +126,13 @@ class TextSearchIndexManager {
         }
         // entity itself may change in a flow before transaction completed.
         final IEntity entityId = entity.createIdentityStub();
+        final String namespace = NamespaceManager.getNamespace();
         List<UpdateChainData<? extends IEntity>> classChains = chains.get(entity.getValueClass());
         if (classChains != null) {
             Persistence.service().addTransactionCompletionHandler(new Executable<Void, RuntimeException>() {
                 @Override
                 public Void execute() {
-                    getQueue().queue(NamespaceManager.getNamespace(), entityId, true);
+                    getQueue().queue(namespace, entityId, true);
                     return null;
                 }
             });
@@ -142,7 +143,7 @@ class TextSearchIndexManager {
             Persistence.service().addTransactionCompletionHandler(new Executable<Void, RuntimeException>() {
                 @Override
                 public Void execute() {
-                    getQueue().queue(NamespaceManager.getNamespace(), entityId, false);
+                    getQueue().queue(namespace, entityId, false);
                     return null;
                 }
             });
