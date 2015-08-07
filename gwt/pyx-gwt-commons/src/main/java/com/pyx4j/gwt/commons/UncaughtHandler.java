@@ -29,6 +29,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.web.bindery.event.shared.UmbrellaException;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.shared.ApplicationMode;
 
 public class UncaughtHandler implements UncaughtExceptionHandler {
@@ -91,13 +92,21 @@ public class UncaughtHandler implements UncaughtExceptionHandler {
                                 cause = cause.getCause();
                             }
                         }
-                        if (GWT.isScript()) {
-                            log.error(UNEXPECTED_ERROR_MESSAGE + ((errorCode != null) ? "[" + errorCode + "] " : " ") + ";\n Href " + Window.Location.getHref()
-                                    + ";\n UserAgent " + userAgent(), cause);
-                        } else {
-                            log.error(UNEXPECTED_ERROR_MESSAGE, cause);
+                        boolean skipLogStackTrace = false;
+                        if (cause instanceof UserRuntimeException) {
+                            skipLogStackTrace = ((UserRuntimeException) cause).isSkipLogStackTrace();
                         }
-                        GoogleAnalytics.track("unrecoverableError");
+
+                        if (!skipLogStackTrace) {
+                            if (GWT.isScript()) {
+                                log.error(
+                                        UNEXPECTED_ERROR_MESSAGE + ((errorCode != null) ? "[" + errorCode + "] " : " ") + ";\n Href "
+                                                + Window.Location.getHref() + ";\n UserAgent " + userAgent(), cause);
+                            } else {
+                                log.error(UNEXPECTED_ERROR_MESSAGE, cause);
+                            }
+                            GoogleAnalytics.track("unrecoverableError");
+                        }
                     } catch (Throwable ignore) {
                         System.out.println("error in exception handling" + ignore);
                     }
