@@ -120,10 +120,6 @@ public class EntityValueMap extends HashMap<String, Serializable> {
         }
     }
 
-    public int valueHashCode() {
-        return super.hashCode();
-    }
-
     private static void appendFiled(StringBuilder b, String ident, String name, Object value) {
         if (value != null) {
             if (ToStringStyle.fieldMultiLine) {
