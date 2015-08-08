@@ -63,7 +63,7 @@ import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 import com.pyx4j.security.shared.ProtectionDomain;
 
 @I18n(strategy = I18nStrategy.IgnoreAll)
-public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Serializable>> implements IEntity, IFullDebug, IHaveServiceCallMarker {
+public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Serializable>>implements IEntity, IFullDebug, IHaveServiceCallMarker {
 
     protected static final Logger log = LoggerFactory.getLogger(SharedEntityHandler.class);
 
@@ -96,7 +96,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
 
         // Enable this is you have problem with StackOverflow
         if (false) {
-            assert !stackOverflow(0) : " Possible stackOverflow in Object Tree " + getDebugExceptionInfoString();
+            assert!stackOverflow(0) : " Possible stackOverflow in Object Tree " + getDebugExceptionInfoString();
         }
     }
 
@@ -252,7 +252,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
 
     @SuppressWarnings("unchecked")
     private Map<String, Serializable> getValue(boolean assertDetached) {
-        assert !isPrototypeEntity : "Prototype Entity '" + getObjectClass().getName() + "' data manipulations disabled";
+        assert!isPrototypeEntity : "Prototype Entity '" + getObjectClass().getName() + "' data manipulations disabled";
         if (delegateValue) {
             Map<String, Serializable> ownerValue = ((SharedEntityHandler) getOwner()).getValue(assertDetached);
             if (ownerValue == null) {
@@ -304,7 +304,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
 
     @Override
     public void setValue(Map<String, Serializable> value) {
-        assert !isPrototypeEntity : "Prototype Entity '" + getObjectClass().getName() + "' data manipulations disabled";
+        assert!isPrototypeEntity : "Prototype Entity '" + getObjectClass().getName() + "' data manipulations disabled";
         if ((value != null) && !(value instanceof EntityValueMap)) {
             throw new ClassCastException("Entity expects EntityValueMap as value");
         }
@@ -425,7 +425,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
             }
             setValue(null);
         } else {
-            assert !((SharedEntityHandler) entity).isPrototypeEntity : "Prototype Entity '" + getObjectClass().getName() + "' data manipulations disabled";
+            assert!((SharedEntityHandler) entity).isPrototypeEntity : "Prototype Entity '" + getObjectClass().getName() + "' data manipulations disabled";
 
             assert this.getEntityMeta().isEntityClassAssignableFrom(entity) : this.getEntityMeta().getCaption() + " is not assignable from "
                     + entity.cast().getEntityMeta().getCaption();
@@ -485,14 +485,14 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
      */
     @Override
     public void setMemberValue(String memberName, Serializable value) {
-        assert (memberName != null);
-        assert (getEntityMeta().getMemberMeta(memberName) != null);
+        assert(memberName != null);
+        assert(getEntityMeta().getMemberMeta(memberName) != null);
         ensureValue(true).put(memberName, value);
     }
 
     @Override
     public <T extends IObject<?>> void set(T member, T value) {
-        assert (getEntityMeta().getMemberMeta(member.getFieldName()) != null);
+        assert(getEntityMeta().getMemberMeta(member.getFieldName()) != null);
         if (value instanceof IEntity) {
             ((IEntity) getMember(member.getFieldName())).set((IEntity) value);
         } else {
@@ -577,7 +577,22 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
             if (thisValue == null) {
                 return super.hashCode();
             } else {
-                return ((EntityValueMap) thisValue).valueHashCode();
+                int hashCode = 0;
+                for (String memberName : this.getEntityMeta().getMemberNames()) {
+                    hashCode *= 0x1F;
+                    Object value = thisValue.get(memberName);
+                    if (value != null) {
+                        if (value instanceof Map) {
+                            IEntity member = (IEntity) getMember(memberName);
+                            hashCode += member.valueHashCode();
+                        } else if (value instanceof Enum) {
+                            hashCode += ((Enum<?>) value).ordinal();
+                        } else {
+                            hashCode += value.hashCode();
+                        }
+                    }
+                }
+                return hashCode;
             }
         }
     }
@@ -732,7 +747,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
 
     @Override
     public IObject<?> getMember(String memberName) {
-        assert (memberName != null);
+        assert(memberName != null);
         if (members == null) {
             members = new HashMap<String, IObject<?>>();
         }
@@ -758,7 +773,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
      */
     @Override
     public Serializable getMemberValue(String memberName) {
-        assert (memberName != null);
+        assert(memberName != null);
         // Like Elvis operator
         Map<String, Serializable> v = getValue(true);
         if (v == null) {
