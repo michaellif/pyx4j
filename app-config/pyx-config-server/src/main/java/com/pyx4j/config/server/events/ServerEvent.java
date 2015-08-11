@@ -19,31 +19,13 @@
  */
 package com.pyx4j.config.server.events;
 
-import java.util.HashMap;
-import java.util.Map;
+/**
+ * This is empty interface for type safety and code refferences.
+ *
+ */
+public interface ServerEvent {
 
-import com.google.web.bindery.event.shared.Event;
+    public interface Handler {
 
-public abstract class ServerEvent<H> extends Event<H> {
-
-    // The Event.Type has a final hashCode so we can't create a proper equals functions
-    @SuppressWarnings("rawtypes")
-    private static Map<Class<? extends ServerEvent>, Type<?>> typesByClass = new HashMap<Class<? extends ServerEvent>, Type<?>>();
-
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    static synchronized <H> com.google.web.bindery.event.shared.Event.Type<H> getTypeByClass(Class<? extends ServerEvent<H>> eventClass) {
-        com.google.web.bindery.event.shared.Event.Type<?> type = typesByClass.get(eventClass);
-        if (type == null) {
-            type = new Type();
-            typesByClass.put(eventClass, type);
-        }
-        return (com.google.web.bindery.event.shared.Event.Type<H>) type;
     }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public final com.google.web.bindery.event.shared.Event.Type<H> getAssociatedType() {
-        return getTypeByClass((Class<? extends ServerEvent<H>>) this.getClass());
-    }
-
 }

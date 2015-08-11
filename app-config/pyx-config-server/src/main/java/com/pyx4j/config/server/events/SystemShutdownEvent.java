@@ -19,24 +19,22 @@
  */
 package com.pyx4j.config.server.events;
 
+import com.google.common.eventbus.Subscribe;
+
 /**
  * Maybe fired multiple times
  */
-public class SystemShutdownEvent extends ServerEvent<SystemShutdownEvent.Handler> {
+public class SystemShutdownEvent implements ServerEvent {
 
-    public interface Handler {
+    public interface Handler extends ServerEvent.Handler {
 
+        @Subscribe
         void onSystemShutdown(SystemShutdownEvent event);
 
     }
 
     public SystemShutdownEvent() {
         super();
-    }
-
-    @Override
-    protected final void dispatch(Handler handler) {
-        handler.onSystemShutdown(this);
     }
 
     @Override

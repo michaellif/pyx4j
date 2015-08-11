@@ -19,31 +19,33 @@
  */
 package com.pyx4j.config.server.events;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
-import com.google.web.bindery.event.shared.HandlerRegistration;
+public class HandlerRegistrations {
 
-public class HandlerRegistrations implements HandlerRegistration {
+    private List<ServerEvent.Handler> subscribers;
 
-    private List<HandlerRegistration> handlers;
-
-    public void add(HandlerRegistration handler) {
-        if (handlers == null) {
-            handlers = new ArrayList<>();
+    public void add(ServerEvent.Handler subscriber) {
+        if (subscribers == null) {
+            subscribers = new Vector<ServerEvent.Handler>();
         }
-        handlers.add(handler);
+        subscribers.add(subscriber);
     }
 
-    @Override
-    public void removeHandler() {
-        if (handlers == null) {
+    public void register(ServerEvent.Handler subscriber) {
+        ServerEventBus.register(subscriber);
+        add(subscriber);
+    }
+
+    public void unregister() {
+        if (subscribers == null) {
             return;
         }
-        for (HandlerRegistration handler : handlers) {
-            handler.removeHandler();
+        for (ServerEvent.Handler subscriber : subscribers) {
+            ServerEventBus.unregister(subscriber);
         }
-        handlers.clear();
+        subscribers.clear();
     }
 
 }
