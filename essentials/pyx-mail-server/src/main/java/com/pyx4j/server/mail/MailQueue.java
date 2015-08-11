@@ -151,7 +151,12 @@ public class MailQueue implements Runnable {
         }
         Collection<String> sendTo = CollectionUtils.union(CollectionUtils.union(mailMessage.getTo(), mailMessage.getCc()), mailMessage.getBcc());
         if (sendTo.isEmpty()) {
-            throw new Error("No destination E-Mail addresses found");
+            if (mailMessage.getKeywords().contains("bulk")) {
+                log.debug("No destination E-Mail addresses found in bulk, message delivery canceled");
+                persistable.status().setValue(MailQueueStatus.Cancelled);
+            } else {
+                throw new Error("No destination E-Mail addresses found");
+            }
         }
         persistable.sendTo().setValue(ConverterUtils.convertStringCollection(sendTo, ", "));
         EntityFormatUtils.trimToLength(persistable.sendTo());
@@ -225,8 +230,8 @@ public class MailQueue implements Runnable {
                             mailQueueEmptyCount++;
                         } else {
                             mailQueueEmptyCount = 0;
-                            final AbstractOutgoingMailQueue persistableUpdate = (AbstractOutgoingMailQueue) EntityFactory.create(persistable.getEntityMeta()
-                                    .getEntityClass());
+                            final AbstractOutgoingMailQueue persistableUpdate = (AbstractOutgoingMailQueue) EntityFactory
+                                    .create(persistable.getEntityMeta().getEntityClass());
                             persistableUpdate.status().setValue(persistable.status().getValue());
                             persistableUpdate.updated().setValue(SystemDateManager.getDate());
 
@@ -354,13 +359,13 @@ public class MailQueue implements Runnable {
                 public AbstractOutgoingMailQueue execute() {
                     for (final Class<? extends AbstractOutgoingMailQueue> persistableEntityClass : persistableEntities.values()) {
 
-                        AbstractOutgoingMailQueue persistable = Executables.wrapInEntityNamespace(persistableEntityClass,
-                                new Executable<AbstractOutgoingMailQueue, RuntimeException>() {
+                        AbstractOutgoingMailQueue persistable = Executables
+                                .wrapInEntityNamespace(persistableEntityClass, new Executable<AbstractOutgoingMailQueue, RuntimeException>() {
                             @Override
                             public AbstractOutgoingMailQueue execute() {
                                 @SuppressWarnings("unchecked")
                                 EntityListCriteria<AbstractOutgoingMailQueue> criteria = (EntityListCriteria<AbstractOutgoingMailQueue>) EntityListCriteria
-                                .create(persistableEntityClass);
+                                        .create(persistableEntityClass);
                                 criteria.eq(criteria.proto().status(), MailQueueStatus.Queued);
                                 criteria.asc(criteria.proto().attempts());
                                 criteria.desc(criteria.proto().priority());
