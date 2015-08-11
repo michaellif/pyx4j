@@ -21,19 +21,18 @@ package com.pyx4j.config.server.module;
 
 import com.pyx4j.config.server.events.HandlerRegistrations;
 import com.pyx4j.config.server.events.ServerEvent;
-import com.pyx4j.config.server.events.ServerEventBus;
 
 public abstract class AbstractModule implements IModule {
 
     protected final HandlerRegistrations handlers = new HandlerRegistrations();
 
-    protected <H> void handles(Class<? extends ServerEvent<H>> eventClass, H handler) {
-        handlers.add(ServerEventBus.addHandler(eventClass, handler));
+    protected void handles(ServerEvent.Handler handler) {
+        handlers.register(handler);
     }
 
     @Override
     public void shutdown() {
-        handlers.removeHandler();
+        handlers.unregister();
     }
 
 }
