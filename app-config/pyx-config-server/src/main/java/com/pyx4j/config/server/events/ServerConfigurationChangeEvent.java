@@ -19,24 +19,22 @@
  */
 package com.pyx4j.config.server.events;
 
+import com.google.common.eventbus.Subscribe;
+
 /**
  * Generic configuration change event
  */
-public class ServerConfigurationChangeEvent extends ServerEvent<ServerConfigurationChangeEvent.Handler> {
+public class ServerConfigurationChangeEvent implements ServerEvent {
 
-    public interface Handler {
+    public interface Handler extends ServerEvent.Handler {
 
+        @Subscribe
         void onConfigurationChanged(ServerConfigurationChangeEvent event);
 
     }
 
     public ServerConfigurationChangeEvent() {
         super();
-    }
-
-    @Override
-    protected final void dispatch(Handler handler) {
-        handler.onConfigurationChanged(this);
     }
 
     @Override
