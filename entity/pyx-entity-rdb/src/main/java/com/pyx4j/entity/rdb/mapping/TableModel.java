@@ -34,6 +34,8 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Joiner;
+
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ApplicationVersion;
 import com.pyx4j.config.server.Trace;
@@ -195,7 +197,7 @@ public class TableModel {
                 case auto:
                     List<String> sqlChanges = TableDDL.sqlCreate(dialect, this, this.mappings.getConfiguration());
                     logApplicationVersionOnce();
-                    ddlLog.info("{}", sqlChanges);
+                    ddlLog.info("{}", Joiner.on(";\n").join(sqlChanges));
                     SQLUtils.execute(persistenceContext.getConnection(), sqlChanges);
                     if (Mappings.traceInit) {
                         log.trace(Trace.id() + "table created {}", tableName);
@@ -214,7 +216,7 @@ public class TableModel {
                 case auto:
                     if (!sqlChanges.isEmpty()) {
                         logApplicationVersionOnce();
-                        ddlLog.info("{}", sqlChanges);
+                        ddlLog.info("{}", Joiner.on(";\n").join(sqlChanges));
                         SQLUtils.execute(persistenceContext.getConnection(), sqlChanges);
                     }
                     break;
@@ -222,13 +224,13 @@ public class TableModel {
                     // ignore
                     if (!sqlChanges.isEmpty()) {
                         logApplicationVersionOnce();
-                        ddlLog.warn("DLL operations required {}", sqlChanges);
+                        ddlLog.warn("DLL operations required \n{}", Joiner.on(";\n").join(sqlChanges));
                     }
                     break;
                 case validate:
                     if (!sqlChanges.isEmpty()) {
                         logApplicationVersionOnce();
-                        ddlLog.error("DLL operations required {}", sqlChanges);
+                        ddlLog.error("DLL operations required \n{}", Joiner.on(";\n").join(sqlChanges));
                         throw new Error("Table '" + tableName + "' requires structural changes");
                     }
                 }
@@ -248,7 +250,7 @@ public class TableModel {
                         List<String> sqlChanges = TableDDL.sqlCreateCollectionMember(dialect, this, member, this.mappings.getConfiguration());
                         if (!sqlChanges.isEmpty()) {
                             logApplicationVersionOnce();
-                            ddlLog.info("{}", sqlChanges);
+                            ddlLog.info("{}", Joiner.on(";\n").join(sqlChanges));
                             SQLUtils.execute(persistenceContext.getConnection(), sqlChanges);
                         }
                         tableCreated = true;
@@ -265,7 +267,7 @@ public class TableModel {
                     case auto:
                         if (!sqlChanges.isEmpty()) {
                             logApplicationVersionOnce();
-                            ddlLog.info("{}", sqlChanges);
+                            ddlLog.info("{}", Joiner.on(";\n").join(sqlChanges));
                             SQLUtils.execute(persistenceContext.getConnection(), sqlChanges);
                         }
                         break;
@@ -273,7 +275,7 @@ public class TableModel {
                         // ignore
                         break;
                     case validate:
-                        ddlLog.error("DLL operations required {}", sqlChanges);
+                        ddlLog.error("DLL operations required \n{}", Joiner.on(";\n").join(sqlChanges));
                         throw new Error("Table '" + member.sqlName() + "' requires structural changes");
                     }
                 }
@@ -325,7 +327,7 @@ public class TableModel {
                     String sql = TableDDL.sqlCreateForeignKey(dialect, this, this.getTableName(), member.sqlName(), refSqlTableName, mappings
                             .getConfiguration().allowForeignKeyDeferrable());
                     logApplicationVersionOnce();
-                    ddlLog.info("[{}]", sql);
+                    ddlLog.info("{}", sql);
                     SQLUtils.execute(persistenceContext.getConnection(), sql);
                 }
 
@@ -340,7 +342,7 @@ public class TableModel {
                         String sql = TableDDL.sqlCreateForeignKey(dialect, this, member.sqlName(), member.sqlOwnerName(), tableName, mappings
                                 .getConfiguration().allowForeignKeyDeferrable());
                         logApplicationVersionOnce();
-                        ddlLog.info("[{}]", sql);
+                        ddlLog.info("{}", sql);
                         SQLUtils.execute(persistenceContext.getConnection(), sql);
                     }
                 }
@@ -355,7 +357,7 @@ public class TableModel {
                             String sql = TableDDL.sqlCreateForeignKey(dialect, this, member.sqlName(), member.sqlValueName(), refSqlTableName, mappings
                                     .getConfiguration().allowForeignKeyDeferrable());
                             logApplicationVersionOnce();
-                            ddlLog.info("[{}]", sql);
+                            ddlLog.info("{}", sql);
                             SQLUtils.execute(persistenceContext.getConnection(), sql);
                         }
                     }
