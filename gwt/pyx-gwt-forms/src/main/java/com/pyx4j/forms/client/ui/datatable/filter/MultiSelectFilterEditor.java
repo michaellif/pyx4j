@@ -43,6 +43,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.CheckGroup;
 import com.pyx4j.widgets.client.OptionGroup.Layout;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class MultiSelectFilterEditor extends FilterEditorBase {
 
@@ -112,7 +113,8 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
 
             PropertyCriterion propertyCriterion = (PropertyCriterion) criterion;
 
-            if (!(propertyCriterion.getRestriction() == PropertyCriterion.Restriction.IN || propertyCriterion.getRestriction() == PropertyCriterion.Restriction.EQUAL)) {
+            if (!(propertyCriterion.getRestriction() == PropertyCriterion.Restriction.IN
+                    || propertyCriterion.getRestriction() == PropertyCriterion.Restriction.EQUAL)) {
                 throw new Error("Filter criterion isn't supported by editor");
             }
 
@@ -150,10 +152,8 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
         private Selector<E> selectGroup;
 
         public ExtendedSelector(Layout layout) {
-            selectAll = new CheckBox("All");
 
-            selectGroup = new Selector<E>(layout);
-            selectGroup.setEmptyFieldFormatter();
+            selectAll = new CheckBox("All");
 
             selectAll.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
@@ -166,6 +166,10 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
                     }
                 }
             });
+
+            selectGroup = new Selector<E>(layout);
+            selectGroup.setEmptyFieldFormatter();
+            selectGroup.setStyleName(WidgetsTheme.StyleName.ExtendedSelectorCheckGroup.name());
 
             selectGroup.addValueChangeHandler(new ValueChangeHandler<E>() {
 
