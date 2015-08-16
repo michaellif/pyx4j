@@ -21,6 +21,7 @@
 package com.pyx4j.entity.shared.utils;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -724,6 +725,7 @@ public class EntityGraph {
     }
 
     public static <E extends IEntity> void makeDuplicate(final E rootEntity) {
+        enshureSingleEntityValue(rootEntity);
         rootEntity.setPrimaryKey(null);
         applyRecursivelyAllObjects(rootEntity, new ApplyMethod() {
             @Override
@@ -736,6 +738,34 @@ public class EntityGraph {
                 } else {
                     return false;
                 }
+            }
+        });
+    }
+
+    /**
+     * Use entity.equals() by PK to make object present only once.
+     *
+     * NOTE: As of now persistence may retrieve cross references multiple times. (excluding root entity)
+     * Different references of the same entity may have different attach level... So represent using different shell instances and value map.
+     */
+    public static <E extends IEntity> void enshureSingleEntityValue(final E rootEntity) {
+        final Map<IEntity, IEntity> instances = new HashMap<>();
+        applyRecursivelyAllObjects(rootEntity, new ApplyMethod() {
+            @Override
+            public boolean apply(IEntity entity) {
+                if (entity == rootEntity) {
+                    instances.put(entity, entity);
+                } else {
+                    if (instances.containsKey(entity)) {
+                        IEntity valueInstance = instances.get(entity);
+                        if (valueInstance.getValue() != entity.getValue()) {
+                            entity.setValue(valueInstance.getValue());
+                        }
+                    } else {
+                        instances.put(entity, entity);
+                    }
+                }
+                return true;
             }
         });
     }
