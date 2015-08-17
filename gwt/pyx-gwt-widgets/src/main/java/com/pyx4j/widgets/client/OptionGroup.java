@@ -79,8 +79,6 @@ public abstract class OptionGroup<E> extends FlowPanel implements IFocusWidget, 
 
     }
 
-    abstract public void setOptions(List<E> options);
-
     public Map<E, OptionGroupButton> getButtons() {
         return buttons;
     }
@@ -217,6 +215,21 @@ public abstract class OptionGroup<E> extends FlowPanel implements IFocusWidget, 
     @Override
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<E> handler) {
         return addHandler(handler, ValueChangeEvent.getType());
+    }
+
+    protected abstract OptionGroupButton createGroupButtonImpl(SafeHtml label);
+
+    public void setOptions(List<E> options) {
+        clear();
+        getButtons().clear();
+
+        for (final E option : options) {
+            OptionGroupButton button = createGroupButtonImpl(getFormatter().format(option));
+            getButtons().put(option, button);
+            button.addFocusHandler(focusHandlerManager);
+            button.addBlurHandler(focusHandlerManager);
+            add(button);
+        }
     }
 
 }

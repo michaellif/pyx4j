@@ -19,8 +19,6 @@
  */
 package com.pyx4j.widgets.client;
 
-import java.util.List;
-
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -62,33 +60,25 @@ public class RadioGroup<E> extends OptionGroup<E> {
     }
 
     @Override
-    public void setOptions(List<E> options) {
-        clear();
-        getButtons().clear();
+    protected OptionGroupButton createGroupButtonImpl(SafeHtml label) {
+        OptionGroupButton button = new OptionGroupButton(label) {
+            @Override
+            protected com.google.gwt.user.client.ui.CheckBox createButtonImpl(SafeHtml label) {
+                return new RadioButton(uniqueId, label);
+            }
+        };
 
-        for (final E option : options) {
-            OptionGroupButton button = new OptionGroupButton(getFormatter().format(option)) {
-                @Override
-                protected com.google.gwt.user.client.ui.CheckBox createButtonImpl(SafeHtml label) {
-                    return new RadioButton(uniqueId, label);
+        button.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                if (event.getValue()) {
+                    applySelectionStyles();
                 }
-            };
-            getButtons().put(option, button);
-            button.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-
-                @Override
-                public void onValueChange(ValueChangeEvent<Boolean> event) {
-                    if (event.getValue()) {
-                        applySelectionStyles();
-                    }
-                    RadioGroup.this.fireEvent(event);
-                }
-            });
-
-            button.addFocusHandler(focusHandlerManager);
-            button.addBlurHandler(focusHandlerManager);
-            add(button);
-        }
+                RadioGroup.this.fireEvent(event);
+            }
+        });
+        return button;
     }
 
 }
