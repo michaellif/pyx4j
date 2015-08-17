@@ -75,7 +75,7 @@ public class WidgetsTheme extends Theme {
 
         DownArrow,
 
-        ExtendedSelectorCheckGroup;
+        SelectorCheckGroup;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -652,7 +652,7 @@ public class WidgetsTheme extends Theme {
         style.addProperty("border-color", ThemeColor.foreground, 0.11);
         addStyle(style);
 
-        style = new Style(".", StyleName.ExtendedSelectorCheckGroup);
+        style = new Style(".", StyleName.SelectorCheckGroup);
         style.addProperty("max-height", "310px");
         style.addProperty("overflow", "auto");
         style.addProperty("margin-top", "5px");

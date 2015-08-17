@@ -29,16 +29,19 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasValue;
 
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
+
 public abstract class OptionGroupButton extends Composite implements HasValue<Boolean>, Focusable, HasAllFocusHandlers {
 
     protected com.google.gwt.user.client.ui.CheckBox checkBox;
 
     public OptionGroupButton(SafeHtml label) {
         super();
-        initCheckBox(label);
+        initWidget(createButtonImpl(label));
+        setStyleName(WidgetsTheme.StyleName.OptionGroupItem.name());
     }
 
-    abstract protected void initCheckBox(SafeHtml label);
+    abstract protected com.google.gwt.user.client.ui.ButtonBase createButtonImpl(SafeHtml label);
 
     @Override
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Boolean> handler) {
