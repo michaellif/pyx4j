@@ -19,9 +19,7 @@
  */
 package com.pyx4j.widgets.client;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -29,11 +27,8 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 
 public class RadioGroup<E> extends OptionGroup<E> {
 
-    private final Map<E, RadioGroupButton> buttons;
-
     public RadioGroup(Layout layout) {
         super(layout);
-        this.buttons = new LinkedHashMap<E, RadioGroupButton>();
     }
 
     public void setValue(E value) {
@@ -41,8 +36,7 @@ public class RadioGroup<E> extends OptionGroup<E> {
     }
 
     public void setValue(E value, boolean fireChangeEvent) {
-        @SuppressWarnings("unchecked")
-        RadioGroupButton selectedButton = (RadioGroupButton) getButtons().get(value);
+        OptionGroupButton selectedButton = getButtons().get(value);
         if (selectedButton != null) {
             selectedButton.setValue(Boolean.TRUE);
             if (fireChangeEvent) {
@@ -70,11 +64,16 @@ public class RadioGroup<E> extends OptionGroup<E> {
     @Override
     public void setOptions(List<E> options) {
         clear();
-        buttons.clear();
+        getButtons().clear();
 
         for (final E option : options) {
-            RadioGroupButton button = new RadioGroupButton(getFormatter().format(option));
-            buttons.put(option, button);
+            OptionGroupButton button = new OptionGroupButton(getFormatter().format(option)) {
+                @Override
+                protected com.google.gwt.user.client.ui.ButtonBase createButtonImpl(SafeHtml label) {
+                    return new RadioButton(uniqueId, label);
+                }
+            };
+            getButtons().put(option, button);
             button.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
                 @Override
@@ -92,21 +91,4 @@ public class RadioGroup<E> extends OptionGroup<E> {
         }
     }
 
-    @Override
-    public Map<E, ? extends OptionGroupButton> getButtons() {
-        return buttons;
-    }
-
-    private class RadioGroupButton extends OptionGroupButton {
-
-        public RadioGroupButton(SafeHtml label) {
-            super(label);
-        }
-
-        @Override
-        protected com.google.gwt.user.client.ui.ButtonBase createButtonImpl(SafeHtml label) {
-            return new RadioButton(uniqueId, label);
-        }
-
-    }
 }
