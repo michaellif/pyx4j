@@ -20,11 +20,13 @@
 package com.pyx4j.widgets.client;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.safehtml.shared.SafeHtml;
 
 public class RadioGroup<E> extends OptionGroup<E> {
 
     public RadioGroup(Layout layout) {
-        super(layout, false);
+        super(layout);
     }
 
     public void setValue(E value) {
@@ -56,4 +58,27 @@ public class RadioGroup<E> extends OptionGroup<E> {
         }
         return null;
     }
+
+    @Override
+    protected OptionGroupButton createGroupButtonImpl(SafeHtml label) {
+        OptionGroupButton button = new OptionGroupButton(label) {
+            @Override
+            protected com.google.gwt.user.client.ui.CheckBox createButtonImpl(SafeHtml label) {
+                return new RadioButton(uniqueId, label);
+            }
+        };
+
+        button.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                if (event.getValue()) {
+                    applySelectionStyles();
+                }
+                RadioGroup.this.fireEvent(event);
+            }
+        });
+        return button;
+    }
+
 }
