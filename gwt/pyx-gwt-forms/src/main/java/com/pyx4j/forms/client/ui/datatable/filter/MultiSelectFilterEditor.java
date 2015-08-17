@@ -181,7 +181,7 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
                     return SafeHtmlUtils.fromTrustedString(title);
                 }
             });
-            selectGroup.setStyleName(WidgetsTheme.StyleName.ExtendedSelectorCheckGroup.name());
+            selectGroup.setStyleName(WidgetsTheme.StyleName.SelectorCheckGroup.name());
 
             selectGroup.addValueChangeHandler(new ValueChangeHandler<E>() {
 

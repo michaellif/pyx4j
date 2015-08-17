@@ -27,8 +27,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 
-import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
-
 public class RadioGroup<E> extends OptionGroup<E> {
 
     private final Map<E, RadioGroupButton> buttons;
@@ -106,12 +104,8 @@ public class RadioGroup<E> extends OptionGroup<E> {
         }
 
         @Override
-        protected void initCheckBox(SafeHtml label) {
-            {
-                this.checkBox = new RadioButton(uniqueId, label);
-                initWidget(checkBox);
-                setStyleName(WidgetsTheme.StyleName.OptionGroupItem.name());
-            }
+        protected com.google.gwt.user.client.ui.ButtonBase createButtonImpl(SafeHtml label) {
+            return new RadioButton(uniqueId, label);
         }
 
     }

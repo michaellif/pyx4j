@@ -109,12 +109,8 @@ public class CheckGroup<E> extends OptionGroup<E> {
         }
 
         @Override
-        protected void initCheckBox(SafeHtml label) {
-            {
-                this.checkBox = new CheckBox(label);
-                initWidget(checkBox);
-                setStyleName(WidgetsTheme.StyleName.OptionGroupItem.name());
-            }
+        protected com.google.gwt.user.client.ui.ButtonBase createButtonImpl(SafeHtml label) {
+            return new CheckBox(label);
         }
 
     }
