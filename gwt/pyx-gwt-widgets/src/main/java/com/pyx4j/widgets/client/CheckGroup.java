@@ -76,7 +76,7 @@ public class CheckGroup<E> extends OptionGroup<E> {
         for (final E option : options) {
             OptionGroupButton button = new OptionGroupButton(getFormatter().format(option)) {
                 @Override
-                protected com.google.gwt.user.client.ui.ButtonBase createButtonImpl(SafeHtml label) {
+                protected com.google.gwt.user.client.ui.CheckBox createButtonImpl(SafeHtml label) {
                     return new CheckBox(label);
                 }
             };

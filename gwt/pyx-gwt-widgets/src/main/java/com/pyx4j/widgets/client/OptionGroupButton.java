@@ -33,68 +33,69 @@ import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public abstract class OptionGroupButton extends Composite implements HasValue<Boolean>, Focusable, HasAllFocusHandlers {
 
-    protected com.google.gwt.user.client.ui.CheckBox checkBox;
+    protected com.google.gwt.user.client.ui.CheckBox button;
 
     public OptionGroupButton(SafeHtml label) {
         super();
-        initWidget(createButtonImpl(label));
+        button = createButtonImpl(label);
+        initWidget(button);
         setStyleName(WidgetsTheme.StyleName.OptionGroupItem.name());
     }
 
-    abstract protected com.google.gwt.user.client.ui.ButtonBase createButtonImpl(SafeHtml label);
+    abstract protected com.google.gwt.user.client.ui.CheckBox createButtonImpl(SafeHtml label);
 
     @Override
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Boolean> handler) {
-        return checkBox.addValueChangeHandler(handler);
+        return button.addValueChangeHandler(handler);
     }
 
     @Override
     public Boolean getValue() {
-        return checkBox.getValue();
+        return button.getValue();
     }
 
     @Override
     public void setValue(Boolean value) {
-        checkBox.setValue(value);
+        button.setValue(value);
     }
 
     @Override
     public void setValue(Boolean value, boolean fireEvents) {
-        checkBox.setValue(value, fireEvents);
+        button.setValue(value, fireEvents);
     }
 
     @Override
     public int getTabIndex() {
-        return checkBox.getTabIndex();
+        return button.getTabIndex();
     }
 
     @Override
     public void setAccessKey(char key) {
-        checkBox.setAccessKey(key);
+        button.setAccessKey(key);
     }
 
     @Override
     public void setFocus(boolean focused) {
-        checkBox.setFocus(focused);
+        button.setFocus(focused);
     }
 
     @Override
     public void setTabIndex(int index) {
-        checkBox.setTabIndex(index);
+        button.setTabIndex(index);
     }
 
     @Override
     public HandlerRegistration addFocusHandler(FocusHandler handler) {
-        return checkBox.addFocusHandler(handler);
+        return button.addFocusHandler(handler);
     }
 
     @Override
     public HandlerRegistration addBlurHandler(BlurHandler handler) {
-        return checkBox.addBlurHandler(handler);
+        return button.addBlurHandler(handler);
     }
 
     public void setEnabled(boolean enabled) {
-        checkBox.setEnabled(enabled);
+        button.setEnabled(enabled);
     }
 
 }
