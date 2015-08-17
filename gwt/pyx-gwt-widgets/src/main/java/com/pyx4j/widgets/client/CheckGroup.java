@@ -21,9 +21,7 @@ package com.pyx4j.widgets.client;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -33,12 +31,8 @@ import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class CheckGroup<E> extends OptionGroup<E> {
 
-    private final Map<E, CheckGroupButton> buttons;
-
     public CheckGroup(Layout layout) {
         super(layout);
-
-        this.buttons = new LinkedHashMap<E, CheckGroupButton>();
     }
 
     public void setValue(Collection<E> value) {
@@ -51,8 +45,7 @@ public class CheckGroup<E> extends OptionGroup<E> {
         }
         if (value != null) {
             for (E item : value) {
-                @SuppressWarnings("unchecked")
-                CheckGroupButton selectedButton = (CheckGroupButton) getButtons().get(item);
+                OptionGroupButton selectedButton = getButtons().get(item);
                 if (selectedButton != null) {
                     selectedButton.setValue(Boolean.TRUE);
                     if (fireChangeEvent) {
@@ -65,14 +58,29 @@ public class CheckGroup<E> extends OptionGroup<E> {
         applySelectionStyles();
     }
 
+    public Collection<E> getValue() {
+        List<E> value = new ArrayList<>();
+        for (E item : getButtons().keySet()) {
+            if (getButtons().get(item).getValue()) {
+                value.add(item);
+            }
+        }
+        return value;
+    }
+
     @Override
     public void setOptions(List<E> options) {
         clear();
-        buttons.clear();
+        getButtons().clear();
 
         for (final E option : options) {
-            CheckGroupButton button = new CheckGroupButton(getFormatter().format(option));
-            buttons.put(option, button);
+            OptionGroupButton button = new OptionGroupButton(getFormatter().format(option)) {
+                @Override
+                protected com.google.gwt.user.client.ui.ButtonBase createButtonImpl(SafeHtml label) {
+                    return new CheckBox(label);
+                }
+            };
+            getButtons().put(option, button);
             button.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
                 @Override
@@ -92,31 +100,4 @@ public class CheckGroup<E> extends OptionGroup<E> {
         }
     }
 
-    public Collection<E> getValue() {
-        List<E> value = new ArrayList<>();
-        for (E item : getButtons().keySet()) {
-            if (getButtons().get(item).getValue()) {
-                value.add(item);
-            }
-        }
-        return value;
-    }
-
-    private class CheckGroupButton extends OptionGroupButton {
-
-        public CheckGroupButton(SafeHtml label) {
-            super(label);
-        }
-
-        @Override
-        protected com.google.gwt.user.client.ui.ButtonBase createButtonImpl(SafeHtml label) {
-            return new CheckBox(label);
-        }
-
-    }
-
-    @Override
-    public Map<E, ? extends OptionGroupButton> getButtons() {
-        return buttons;
-    }
 }

@@ -19,6 +19,7 @@
  */
 package com.pyx4j.widgets.client;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -49,6 +50,8 @@ public abstract class OptionGroup<E> extends FlowPanel implements IFocusWidget, 
         VERTICAL, HORIZONTAL;
     }
 
+    private final Map<E, OptionGroupButton> buttons;
+
     private boolean enabled = true;
 
     private boolean editable = true;
@@ -71,11 +74,16 @@ public abstract class OptionGroup<E> extends FlowPanel implements IFocusWidget, 
         } else if (layout == Layout.VERTICAL) {
             addStyleDependentName(WidgetsTheme.StyleDependent.vertical.name());
         }
+
+        buttons = new LinkedHashMap<E, OptionGroupButton>();
+
     }
 
     abstract public void setOptions(List<E> options);
 
-    abstract protected Map<E, ? extends OptionGroupButton> getButtons();
+    public Map<E, OptionGroupButton> getButtons() {
+        return buttons;
+    }
 
     public void setFormatter(IFormatter<E, SafeHtml> formatter) {
         this.formatter = formatter;
@@ -117,13 +125,13 @@ public abstract class OptionGroup<E> extends FlowPanel implements IFocusWidget, 
     }
 
     private void setGroupEnabled(boolean enabled) {
-        for (OptionGroupButton b : getButtons().values()) {
+        for (OptionGroupButton b : buttons.values()) {
             b.setEnabled(enabled);
         }
     }
 
     protected void applySelectionStyles() {
-        for (OptionGroupButton button : getButtons().values()) {
+        for (OptionGroupButton button : buttons.values()) {
             if (button.getValue()) {
                 button.addStyleDependentName(WidgetsTheme.StyleDependent.active.name());
             } else {
@@ -135,9 +143,9 @@ public abstract class OptionGroup<E> extends FlowPanel implements IFocusWidget, 
     @Override
     public void setFocus(boolean focused) {
         if (focused) {
-            getButtons().values().iterator().next().setFocus(true);
+            buttons.values().iterator().next().setFocus(true);
         } else {
-            for (OptionGroupButton b : getButtons().values()) {
+            for (OptionGroupButton b : buttons.values()) {
                 b.setFocus(false);
             }
         }
@@ -152,7 +160,7 @@ public abstract class OptionGroup<E> extends FlowPanel implements IFocusWidget, 
     protected void onEnsureDebugId(String baseID) {
         super.onEnsureDebugId(baseID);
 
-        for (Entry<E, ? extends OptionGroupButton> me : getButtons().entrySet()) {
+        for (Entry<E, ? extends OptionGroupButton> me : buttons.entrySet()) {
             me.getValue().ensureDebugId(baseID + "_" + getOptionDebugId(me.getKey()));
         }
     }
