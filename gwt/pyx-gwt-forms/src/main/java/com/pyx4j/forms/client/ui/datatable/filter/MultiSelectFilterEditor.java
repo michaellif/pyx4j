@@ -49,14 +49,14 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
 
     private static final I18n i18n = I18n.get(MultiSelectFilterEditor.class);
 
-    private ExtendedSelector<?> checkGroup;
+    private Selector<?> checkGroup;
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public MultiSelectFilterEditor(IObject<?> member) {
         super(member);
         MemberMeta mm = member.getMeta();
         if (mm.getValueClass().isEnum()) {
-            checkGroup = new ExtendedSelector<Enum>(Layout.VERTICAL);
+            checkGroup = new Selector<Enum>(Layout.VERTICAL);
 
             ArrayList options = new ArrayList(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
             if (!mm.isAnnotationPresent(NotNull.class)) {
@@ -66,7 +66,7 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
 
         } else if (mm.getValueClass().equals(Boolean.class)) {
 
-            ExtendedSelector<Boolean> booleanGroup = new ExtendedSelector<>(Layout.HORIZONTAL);
+            Selector<Boolean> booleanGroup = new Selector<>(Layout.HORIZONTAL);
             booleanGroup.setFormatter(new IFormatter<Boolean, SafeHtml>() {
 
                 @Override
@@ -146,12 +146,12 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
         checkGroup.setValue(null);
     }
 
-    class ExtendedSelector<E> extends FlowPanel {
+    class Selector<E> extends FlowPanel {
         private final CheckBox selectAll;
 
         private final CheckGroup<E> selectGroup;
 
-        public ExtendedSelector(Layout layout) {
+        public Selector(Layout layout) {
 
             selectAll = new CheckBox("All");
 
