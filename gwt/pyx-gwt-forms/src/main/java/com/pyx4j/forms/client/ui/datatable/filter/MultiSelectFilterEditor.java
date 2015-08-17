@@ -147,9 +147,9 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
     }
 
     class ExtendedSelector<E> extends FlowPanel {
-        private CheckBox selectAll;
+        private final CheckBox selectAll;
 
-        private Selector<E> selectGroup;
+        private final CheckGroup<E> selectGroup;
 
         public ExtendedSelector(Layout layout) {
 
@@ -160,15 +160,27 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
                 @Override
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
                     if (event.getValue()) {
-                        selectGroup.setAllSelected();
+                        setAllSelected();
                     } else {
-                        selectGroup.deselectAll();
+                        deselectAll();
                     }
                 }
             });
 
-            selectGroup = new Selector<E>(layout);
-            selectGroup.setEmptyFieldFormatter();
+            selectGroup = new CheckGroup<E>(layout);
+            selectGroup.setFormatter(new IFormatter<E, SafeHtml>() {
+
+                @Override
+                public SafeHtml format(E value) {
+                    String title;
+                    if (value == null) {
+                        title = i18n.tr("<i>Empty</i>");
+                    } else {
+                        title = value.toString();
+                    }
+                    return SafeHtmlUtils.fromTrustedString(title);
+                }
+            });
             selectGroup.setStyleName(WidgetsTheme.StyleName.ExtendedSelectorCheckGroup.name());
 
             selectGroup.addValueChangeHandler(new ValueChangeHandler<E>() {
@@ -188,19 +200,33 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
         }
 
         public void setAllSelected() {
-            selectGroup.setAllSelected();
+            for (E item : selectGroup.getButtons().keySet()) {
+                selectGroup.getButtons().get(item).setValue(Boolean.TRUE);
+            }
         }
 
         public void deselectAll() {
-            selectGroup.deselectAll();
+            for (E item : selectGroup.getButtons().keySet()) {
+                selectGroup.getButtons().get(item).setValue(Boolean.FALSE);
+            }
         }
 
         public boolean isAllSelected() {
-            return selectGroup.isAllSelected();
+            for (E item : selectGroup.getButtons().keySet()) {
+                if (!selectGroup.getButtons().get(item).getValue()) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public boolean isAllDeselected() {
-            return selectGroup.isAllDeselected();
+            for (E item : selectGroup.getButtons().keySet()) {
+                if (selectGroup.getButtons().get(item).getValue()) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public void setValue(Collection<E> value) {
@@ -222,58 +248,7 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
         public void setFormatter(IFormatter<E, SafeHtml> formatter) {
             selectGroup.setFormatter(formatter);
         }
+
     }
 
-    class Selector<E> extends CheckGroup<E> {
-
-        public Selector(Layout layout) {
-            super(layout);
-        }
-
-        public void setAllSelected() {
-            for (E item : getButtons().keySet()) {
-                getButtons().get(item).setValue(Boolean.TRUE);
-            }
-        }
-
-        public boolean isAllSelected() {
-            for (E item : getButtons().keySet()) {
-                if (!getButtons().get(item).getValue()) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public boolean isAllDeselected() {
-            for (E item : getButtons().keySet()) {
-                if (getButtons().get(item).getValue()) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public void deselectAll() {
-            for (E item : getButtons().keySet()) {
-                getButtons().get(item).setValue(Boolean.FALSE);
-            }
-        }
-
-        public void setEmptyFieldFormatter() {
-            super.setFormatter(new IFormatter<E, SafeHtml>() {
-
-                @Override
-                public SafeHtml format(E value) {
-                    String title;
-                    if (value == null) {
-                        title = i18n.tr("<i>Empty</i>");
-                    } else {
-                        title = value.toString();
-                    }
-                    return SafeHtmlUtils.fromTrustedString(title);
-                }
-            });
-        }
-    }
 }
