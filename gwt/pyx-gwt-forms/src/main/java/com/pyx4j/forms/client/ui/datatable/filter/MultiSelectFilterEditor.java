@@ -23,11 +23,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.List;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -36,8 +40,10 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.CheckGroup;
 import com.pyx4j.widgets.client.OptionGroup.Layout;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class MultiSelectFilterEditor extends FilterEditorBase {
 
@@ -51,7 +57,6 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
         MemberMeta mm = member.getMeta();
         if (mm.getValueClass().isEnum()) {
             checkGroup = new Selector<Enum>(Layout.VERTICAL);
-            checkGroup.setEmptyFieldFormatter();
 
             ArrayList options = new ArrayList(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
             if (!mm.isAnnotationPresent(NotNull.class)) {
@@ -108,7 +113,8 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
 
             PropertyCriterion propertyCriterion = (PropertyCriterion) criterion;
 
-            if (!(propertyCriterion.getRestriction() == PropertyCriterion.Restriction.IN || propertyCriterion.getRestriction() == PropertyCriterion.Restriction.EQUAL)) {
+            if (!(propertyCriterion.getRestriction() == PropertyCriterion.Restriction.IN
+                    || propertyCriterion.getRestriction() == PropertyCriterion.Restriction.EQUAL)) {
                 throw new Error("Filter criterion isn't supported by editor");
             }
 
@@ -140,38 +146,29 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
         checkGroup.setValue(null);
     }
 
-    class Selector<E> extends CheckGroup<E> {
+    class Selector<E> extends FlowPanel {
+        private final CheckBox selectAll;
+
+        private final CheckGroup<E> selectGroup;
 
         public Selector(Layout layout) {
-            super(layout);
-        }
 
-        public void setAllSelected() {
-            for (E item : getButtons().keySet()) {
-                getButtons().get(item).setValue(Boolean.TRUE);
-            }
-        }
+            selectAll = new CheckBox("All");
 
-        public boolean isAllSelected() {
-            for (E item : getButtons().keySet()) {
-                if (!getButtons().get(item).getValue()) {
-                    return false;
+            selectAll.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+                @Override
+                public void onValueChange(ValueChangeEvent<Boolean> event) {
+                    if (event.getValue()) {
+                        setAllSelected();
+                    } else {
+                        deselectAll();
+                    }
                 }
-            }
-            return true;
-        }
+            });
 
-        public boolean isAllDeselected() {
-            for (E item : getButtons().keySet()) {
-                if (getButtons().get(item).getValue()) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public void setEmptyFieldFormatter() {
-            super.setFormatter(new IFormatter<E, SafeHtml>() {
+            selectGroup = new CheckGroup<E>(layout);
+            selectGroup.setFormatter(new IFormatter<E, SafeHtml>() {
 
                 @Override
                 public SafeHtml format(E value) {
@@ -184,6 +181,75 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
                     return SafeHtmlUtils.fromTrustedString(title);
                 }
             });
+            selectGroup.setStyleName(WidgetsTheme.StyleName.SelectorCheckGroup.name());
+
+            selectGroup.addValueChangeHandler(new ValueChangeHandler<E>() {
+
+                @Override
+                public void onValueChange(ValueChangeEvent<E> event) {
+                    if (isAllSelected()) {
+                        selectAll.setValue(Boolean.TRUE);
+                    } else {
+                        selectAll.setValue(Boolean.FALSE);
+                    }
+                }
+            });
+
+            add(selectAll);
+            add(selectGroup);
         }
+
+        public void setAllSelected() {
+            for (E item : selectGroup.getButtons().keySet()) {
+                selectGroup.getButtons().get(item).setValue(Boolean.TRUE);
+            }
+            selectAll.setValue(Boolean.TRUE);
+        }
+
+        public void deselectAll() {
+            for (E item : selectGroup.getButtons().keySet()) {
+                selectGroup.getButtons().get(item).setValue(Boolean.FALSE);
+            }
+        }
+
+        public boolean isAllSelected() {
+            for (E item : selectGroup.getButtons().keySet()) {
+                if (!selectGroup.getButtons().get(item).getValue()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean isAllDeselected() {
+            for (E item : selectGroup.getButtons().keySet()) {
+                if (selectGroup.getButtons().get(item).getValue()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public void setValue(Collection<E> value) {
+            selectGroup.setValue(value);
+        }
+
+        public Collection<E> getValue() {
+            return selectGroup.getValue();
+        }
+
+        public void setFocus(boolean focused) {
+            selectGroup.setFocus(focused);
+        }
+
+        public void setOptions(List<E> options) {
+            selectGroup.setOptions(options);
+        }
+
+        public void setFormatter(IFormatter<E, SafeHtml> formatter) {
+            selectGroup.setFormatter(formatter);
+        }
+
     }
+
 }
