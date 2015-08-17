@@ -203,6 +203,7 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
             for (E item : selectGroup.getButtons().keySet()) {
                 selectGroup.getButtons().get(item).setValue(Boolean.TRUE);
             }
+            selectAll.setValue(Boolean.TRUE);
         }
 
         public void deselectAll() {
