@@ -30,9 +30,6 @@ public class PersistenceRuntimeInfoToString {
         b.append("databaseProductVersion                            : ").append(info.getDatabaseProductVersion()).append("\n");
 
         for (ConnectionPoolType ct : ConnectionPoolType.poolable()) {
-            if (ct == ConnectionPoolType.Scheduler) {
-                continue;
-            }
             ConnectionPoolRuntimeInfo pri = info.connectionPoolRuntimeInfo(ct);
             b.append(CommonsStringUtils.paddingRight(ct.name() + ".NumBusyConnections", 50, ' ')).append(": ").append(pri.getNumBusyConnections()).append("\n");
             b.append(CommonsStringUtils.paddingRight(ct.name() + ".NumIdleConnections", 50, ' ')).append(": ").append(pri.getNumIdleConnections()).append("\n");

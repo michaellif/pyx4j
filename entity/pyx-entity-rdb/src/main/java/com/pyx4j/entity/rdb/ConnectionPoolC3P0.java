@@ -150,7 +150,11 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
 
     @Override
     public ConnectionPoolRuntimeInfo connectionPoolRuntimeInfo(ConnectionPoolType connectionType) {
-        return new ConnectionPoolC3P0RuntimeInfo(getDataSource(connectionType));
+        if (connectionType == ConnectionPoolType.Scheduler) {
+            return new ConnectionPoolC3P0RuntimeInfo(C3P0Registry.pooledDataSourceByName(LoggerConfig.getContextName() + "_" + connectionType.name()));
+        } else {
+            return new ConnectionPoolC3P0RuntimeInfo(getDataSource(connectionType));
+        }
     }
 
     @Override
