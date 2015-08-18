@@ -32,4 +32,5 @@ public interface IEntityPersistenceServiceExt {
 
     public void deregister();
 
+    public String getPersistenceRuntimeInfoAsString();
 }

@@ -42,4 +42,6 @@ public interface IEntityPersistenceServiceRDB extends IEntityPersistenceService,
 
     public void dropTable(Class<? extends IEntity> entityClass);
 
+    public PersistenceRuntimeInfo getPersistenceRuntime();
+
 }

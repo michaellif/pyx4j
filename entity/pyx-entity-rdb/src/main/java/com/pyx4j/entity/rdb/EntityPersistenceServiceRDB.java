@@ -116,6 +116,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
 
     private final ThreadLocal<PersistenceContext> threadSessions = new ThreadLocal<PersistenceContext>();
 
+    private PersistenceRuntimeInfo persistenceRuntimeInfo;
+
     public EntityPersistenceServiceRDB() {
         this(getRDBConfiguration());
     }
@@ -129,6 +131,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
                 throw new RuntimeException(e.getMessage());
             }
             this.configuration = configuration;
+            this.persistenceRuntimeInfo = new PersistenceRuntimeInfo(connectionProvider);
             boolean initialized = false;
             try {
                 mappings = new Mappings(connectionProvider, configuration);
@@ -146,12 +149,23 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
     private static Configuration getRDBConfiguration() {
         IPersistenceConfiguration cfg = ServerSideConfiguration.instance().getPersistenceConfiguration();
         if (cfg == null) {
-            throw new RuntimeException("Persistence Configuration is not defined (is null) in class " + ServerSideConfiguration.instance().getClass().getName());
+            throw new RuntimeException(
+                    "Persistence Configuration is not defined (is null) in class " + ServerSideConfiguration.instance().getClass().getName());
         }
         if (!(cfg instanceof Configuration)) {
             throw new RuntimeException("Invalid RDB configuration class " + cfg);
         }
         return (Configuration) cfg;
+    }
+
+    @Override
+    public PersistenceRuntimeInfo getPersistenceRuntime() {
+        return persistenceRuntimeInfo;
+    }
+
+    @Override
+    public String getPersistenceRuntimeInfoAsString() {
+        return getPersistenceRuntime().toString();
     }
 
     @Override
@@ -206,7 +220,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
         if (persistenceContext == null) {
             createTransactionContext(persistenceContext, TransactionType.SingelAPICallAutoCommit, ConnectionTarget.Web);
         } else {
-            assert (!persistenceContext.isSingelAPICallTransaction()) : "PersistenceContext leftover detected, Context open from "
+            assert(!persistenceContext.isSingelAPICallTransaction()) : "PersistenceContext leftover detected, Context open from "
                     + persistenceContext.getContextOpenFrom();
         }
     }
@@ -258,8 +272,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
             }
 
             // Web transactions are replaced with TransactionProcessing when started in context of BackgroundProcess.
-            if (newConnectionTarget == ConnectionTarget.Web
-                    && ((persistenceContext.getConnectionTarget() == ConnectionTarget.BackgroundProcess || persistenceContext.getConnectionTarget() == ConnectionTarget.TransactionProcessing))) {
+            if (newConnectionTarget == ConnectionTarget.Web && ((persistenceContext.getConnectionTarget() == ConnectionTarget.BackgroundProcess
+                    || persistenceContext.getConnectionTarget() == ConnectionTarget.TransactionProcessing))) {
                 newConnectionTarget = ConnectionTarget.TransactionProcessing;
             }
         }
@@ -358,7 +372,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
     @Override
     public void endTransaction() {
         PersistenceContext persistenceContext = getPersistenceContext();
-        assert (persistenceContext != null) : "Transaction Context was not started";
+        assert(persistenceContext != null) : "Transaction Context was not started";
 
         if (PersistenceTrace.traceTransaction) {
             log.info("{} endTransaction\n\tfrom:{}\t", persistenceContext.txId(), PersistenceTrace.getCallOrigin());
@@ -441,7 +455,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
         startCallContext(ConnectionReason.forRead);
         try {
             DatabaseMetaData dbMeta = getPersistenceContext().getConnection().getMetaData();
-            log.debug("DB {} {}", dbMeta.getDatabaseProductName(), dbMeta.getDatabaseProductVersion());
+            persistenceRuntimeInfo.databaseProductName = dbMeta.getDatabaseProductName();
+            persistenceRuntimeInfo.databaseProductVersion = dbMeta.getDatabaseProductVersion();
+            log.debug("DB {} {}", persistenceRuntimeInfo.getDatabaseProductName(), persistenceRuntimeInfo.getDatabaseProductVersion());
         } catch (SQLException e) {
             log.error("databaseMetaData access error", e);
             throw new RuntimeExceptionSerializable(e);
@@ -655,8 +671,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
         if (updatedTs != null) {
             updatedTs.setMemberValue(entity, DateUtils.getDBRounded(getPersistenceContext().getTimeNow()));
         }
-        boolean isNewEntity = ((entity.getPrimaryKey() == null) || ((tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) && (!tm.exists(
-                getPersistenceContext(), entity.getPrimaryKey()))));
+        boolean isNewEntity = ((entity.getPrimaryKey() == null)
+                || ((tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) && (!tm.exists(getPersistenceContext(), entity.getPrimaryKey()))));
         if (isNewEntity) {
             insert(tm, entity);
         } else {
@@ -713,8 +729,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
                                 log.error("attempt to attach {} to different entity graphs of {}\n" + PersistenceTrace.getCallOrigin() + "\n",
                                         childEntity.getDebugExceptionInfoString(), entity.getDebugExceptionInfoString());
                                 if (ApplicationMode.isDevelopment()) {
-                                    throw new SecurityViolationException(ApplicationMode.DEV + "attempt to attach to different entity graphs "
-                                            + childEntity.getDebugExceptionInfoString());
+                                    throw new SecurityViolationException(
+                                            ApplicationMode.DEV + "attempt to attach to different entity graphs " + childEntity.getDebugExceptionInfoString());
                                 } else {
                                     throw new SecurityViolationException("Permission denied");
                                 }
@@ -837,7 +853,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
             }
             for (MemberOperationsMeta member : tm.operationsMeta().getVersionInfoMembers()) {
                 if (!((IEntity) member.getMember(entity)).isValueDetached()) {
-                    for (IVersionData<IVersionedEntity<?>> memberEntity : TableModleVersioned.update(getPersistenceContext(), mappings, entity, false, member)) {
+                    for (IVersionData<IVersionedEntity<?>> memberEntity : TableModleVersioned.update(getPersistenceContext(), mappings, entity, false,
+                            member)) {
                         merge(tableModel(memberEntity.getEntityMeta()), memberEntity);
                     }
                 }
@@ -1256,8 +1273,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
         }
         final IEntity baseEntity = EntityFactory.create(tm.entityMeta().getEntityClass());
 
-        boolean isNewEntity = ((entity.getPrimaryKey() == null) || ((tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) && (!tm.exists(
-                getPersistenceContext(), entity.getPrimaryKey()))));
+        boolean isNewEntity = ((entity.getPrimaryKey() == null)
+                || ((tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) && (!tm.exists(getPersistenceContext(), entity.getPrimaryKey()))));
         ensureEntityValue(entity);
         boolean updated;
         if (!isNewEntity) {
@@ -1302,9 +1319,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
                     if (childEntity.getPrimaryKey() != null) {
                         log.debug("corrupted entity {}", entity);
                         if (ApplicationMode.isDevelopment()) {
-                            throw new SecurityViolationException(ApplicationMode.DEV
-                                    + "Child object already persisted; owned entity should not be attached to different entity graph, "
-                                    + childEntity.getDebugExceptionInfoString() + "; Original object key " + baseChildEntity.getPrimaryKey());
+                            throw new SecurityViolationException(
+                                    ApplicationMode.DEV + "Child object already persisted; owned entity should not be attached to different entity graph, "
+                                            + childEntity.getDebugExceptionInfoString() + "; Original object key " + baseChildEntity.getPrimaryKey());
                         } else {
                             throw new SecurityViolationException("Permission denied");
                         }
@@ -1402,7 +1419,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
             retrieve(entityMember, attachLevel, false);
             break;
         case Detached:
-            assert (entityMember.getOwner().getPrimaryKey() != null);
+            assert(entityMember.getOwner().getPrimaryKey() != null);
             startCallContext(ConnectionReason.forRead);
             try {
                 TableModel tm = tableModel(entityMember.getOwner().getEntityMeta());
@@ -1444,7 +1461,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
 
         case CollectionSizeOnly:
         case Detached:
-            assert (collectionMember.getOwner().getPrimaryKey() != null);
+            assert(collectionMember.getOwner().getPrimaryKey() != null);
             startCallContext(ConnectionReason.forRead);
             try {
                 TableModel tm = tableModel(collectionMember.getOwner().getEntityMeta());
