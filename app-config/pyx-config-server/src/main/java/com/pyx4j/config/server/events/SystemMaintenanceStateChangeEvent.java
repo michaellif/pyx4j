@@ -36,7 +36,7 @@ public class SystemMaintenanceStateChangeEvent implements ServerEvent {
 
     @Override
     public String toString() {
-        return "Shutdown";
+        return "SystemMaintenanceStateChange";
     }
 
 }
