@@ -400,6 +400,19 @@ public class ClientContext extends Context {
         select(authenticationService).logout(defaultCallback);
     }
 
+    public static void keepAlive() {
+        authenticationService.keepSessionAlive(new AsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                log.warn("keepAlive request failed");
+            }
+        });
+    }
+
     public static String getCurrentURL() {
         if (History.getToken() != null) {
             return Window.Location.getPath() + Window.Location.getQueryString() + "#" + History.getToken();
