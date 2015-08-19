@@ -23,6 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.SubscriberExceptionContext;
+import com.google.common.eventbus.SubscriberExceptionHandler;
 
 import com.pyx4j.config.server.Trace;
 
@@ -33,7 +35,13 @@ public class ServerEventBus {
     private final EventBus eventBus;
 
     private ServerEventBus() {
-        eventBus = new EventBus();
+        eventBus = new EventBus(new SubscriberExceptionHandler() {
+
+            @Override
+            public void handleException(Throwable exception, SubscriberExceptionContext context) {
+                log.error("Could not dispatch event: {} to {}", context.getSubscriber().getClass(), context.getSubscriberMethod(), exception);
+            }
+        });
     }
 
     private static class SingletonHolder {
