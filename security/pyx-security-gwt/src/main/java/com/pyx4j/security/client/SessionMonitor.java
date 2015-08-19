@@ -44,6 +44,8 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
 
     private static SessionMonitor instance;
 
+    private static UserActivitySource keepAliveUserActivitySource;
+
     private boolean monitoring = false;
 
     private long maxInactiveIntervalMillis;
@@ -121,6 +123,10 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
         if (instance != null) {
             instance.lastActivity = System.currentTimeMillis();
         }
+    }
+
+    public static void enableKeepAlive(UserActivitySource userActivitySource) {
+        keepAliveUserActivitySource = userActivitySource;
     }
 
     protected SessionMonitor() {
@@ -223,6 +229,14 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
         if (HTML5Storage.isSupported()) {
             HTML5Storage.getLocalStorage().setItem(HTML5_SESSION_ACTIVITY_KEY, String.valueOf(lastActivity));
         }
+        if ((keepAliveUserActivitySource != null)
+                && ((maxInactiveIntervalMillis > 0) && (System.currentTimeMillis() > (lastActivity + maxInactiveIntervalMillis / 4)))) {
+            // Verify that we have actual user activity and call server
+            if (keepAliveUserActivitySource.getUserActivityTimeStamp() > lastActivity) {
+                ClientContext.keepAlive();
+            }
+        }
+
         if ((maxInactiveIntervalMillis > 0) && (System.currentTimeMillis() > (lastActivity + maxInactiveIntervalMillis))) {
             log.debug("Session Inactive; lastActivity {} now {}", new Date(lastActivity), new Date());
             onSessionInactive(true);
@@ -250,7 +264,7 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
     @Override
     public void onStorageChange(StorageEvent event) {
         if (ClientContext.authenticationChanging) {
-            // Avoid infinite loop if Event handlers are changing Storage 
+            // Avoid infinite loop if Event handlers are changing Storage
             return;
         }
         String newHashCode = HTML5Storage.getLocalStorage().getItem(HTML5_SESSION_ID_KEY);

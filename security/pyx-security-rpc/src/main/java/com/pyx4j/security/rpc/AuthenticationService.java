@@ -23,6 +23,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.ServiceExecution;
+import com.pyx4j.rpc.shared.ServiceExecution.OperationType;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface AuthenticationService extends IService {
@@ -37,6 +39,9 @@ public interface AuthenticationService extends IService {
 
     public void obtainRecaptchaPublicKey(AsyncCallback<String> callback);
 
+    @ServiceExecution(operationType = OperationType.NonBlocking)
+    public void keepSessionAlive(AsyncCallback<VoidSerializable> callback);
+
     public void logout(AsyncCallback<AuthenticationResponse> callback);
 
     /**
@@ -50,14 +55,14 @@ public interface AuthenticationService extends IService {
 
     /**
      * Request E-mail to be sent to customer with 'token' for PasswordReset.
-     * 
+     *
      * E-mail is sent if no exception thrown.
      */
     public void requestPasswordReset(AsyncCallback<VoidSerializable> callback, PasswordRetrievalRequest request);
 
     /**
      * Login with temporary token that identifies the user and gives him privileges for resetting his password.
-     * 
+     *
      * @param callback
      * @param clientSystemInfo
      * @param accessToken

@@ -52,7 +52,7 @@ import com.pyx4j.server.contexts.Visit;
 
 /**
  * This implementation does not use DB to load and verify users.
- * 
+ *
  * You need to override authenticate in App.
  */
 public abstract class AuthenticationServiceImpl implements AuthenticationService {
@@ -66,10 +66,10 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
         if (clientSystemInfo == null) {
             throw new ClientVersionMismatchError(i18n.tr("Client version {0} does not match server version {1}", "", serverVersion));
         }
-        if (((clientSystemInfo.isScript()) && (!serverVersion.contains("n/a")) && (!serverVersion.endsWith("-SNAPSHOT")) && (!serverVersion
-                .equals(clientSystemInfo.getBuildLabel())))) {
-            throw new ClientVersionMismatchError(i18n.tr("Client version {0} does not match server version {1}", clientSystemInfo.getBuildLabel(),
-                    serverVersion));
+        if (((clientSystemInfo.isScript()) && (!serverVersion.contains("n/a")) && (!serverVersion.endsWith("-SNAPSHOT"))
+                && (!serverVersion.equals(clientSystemInfo.getBuildLabel())))) {
+            throw new ClientVersionMismatchError(
+                    i18n.tr("Client version {0} does not match server version {1}", clientSystemInfo.getBuildLabel(), serverVersion));
         }
     }
 
@@ -160,6 +160,12 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
     public void authenticate(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, String sessionToken) {
         assertClientSystemInfo(clientSystemInfo);
         callback.onSuccess(createAuthenticationResponse(sessionToken));
+    }
+
+    @Override
+    public void keepSessionAlive(AsyncCallback<VoidSerializable> callback) {
+        // Session is keepedAlive by container if requests are made, So we need nothing.
+        callback.onSuccess(null);
     }
 
     @Override
