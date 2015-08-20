@@ -41,11 +41,11 @@ import com.pyx4j.essentials.rpc.report.ReportColumn;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.gwt.server.deferred.IDeferredProcess;
+import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.security.shared.SecurityController;
 
-public class SearchReportDeferredProcess<E extends IEntity> implements IDeferredProcess {
+public class SearchReportDeferredProcess<E extends IEntity> extends AbstractDeferredProcess {
 
     private static final long serialVersionUID = -7944873735643401186L;
 
@@ -60,12 +60,6 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
     protected final Class<? extends IEntity> entityClass;
 
     private List<String> selectedMemberNames;
-
-    protected volatile boolean canceled;
-
-    private int maximum = 0;
-
-    private int fetchCount = 0;
 
     private boolean fetchCompleate;
 
@@ -96,11 +90,6 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
     }
 
     @Override
-    public void cancel() {
-        canceled = true;
-    }
-
-    @Override
     public void execute() {
         if (canceled) {
             return;
@@ -109,12 +98,13 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
             formatCompleate();
             createDownloadable();
             formatCompleate = true;
+            completed = true;
         } else {
             long start = System.currentTimeMillis();
             Persistence.service().startBackgroundProcessTransaction();
             try {
                 if (selectedMemberNames == null) {
-                    maximum = Persistence.service().count(request.getCriteria());
+                    progress.progressMaximum.set(Persistence.service().count(request.getCriteria()));
                     createHeader();
 
                 }
@@ -126,12 +116,12 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
                         E ent = it.next();
                         SecurityController.assertPermission(EntityPermission.permissionRead(ent.getValueClass()));
                         reportEntity(ent);
-                        fetchCount++;
+                        progress.progress.incrementAndGet();
                         currentFetchCount++;
                         if (ServerSideConfiguration.instance().getEnvironmentType() != ServerSideConfiguration.EnvironmentType.LocalJVM) {
                             if ((System.currentTimeMillis() - start > Consts.SEC2MSEC * 15) || (currentFetchCount > 200)) {
                                 log.warn("Executions time quota exceeded {}; rows {}", currentFetchCount, System.currentTimeMillis() - start);
-                                log.debug("fetch will continue rows {}; characters {}", fetchCount, formatter.getBinaryDataSize());
+                                log.debug("fetch will continue rows {}; characters {}", progress.progress.get(), formatter.getBinaryDataSize());
                                 encodedCursorReference = it.encodedCursorReference();
                                 return;
                             }
@@ -144,7 +134,7 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
                 } finally {
                     it.close();
                 }
-                log.debug("fetch complete rows {}; characters {}", fetchCount, formatter.getBinaryDataSize());
+                log.debug("fetch complete rows {}; characters {}", progress.progress.get(), formatter.getBinaryDataSize());
                 fetchCompleate = true;
             } finally {
                 Persistence.service().endTransaction();
@@ -202,7 +192,7 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
     }
 
     protected int getCount() {
-        return fetchCount;
+        return progress.progress.get();
     }
 
     protected boolean reportMember(E entity, String memberName, MemberMeta memberMeta) {
@@ -246,13 +236,7 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
             r.setDownloadLink(System.currentTimeMillis() + "/" + getFileName());
             return r;
         } else {
-            DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
-            r.setProgress(fetchCount);
-            r.setProgressMaximum(maximum);
-            if (canceled) {
-                r.setCanceled();
-            }
-            return r;
+            return super.status();
         }
     }
 

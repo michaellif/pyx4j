@@ -29,6 +29,10 @@ import com.pyx4j.commons.Consts;
  */
 public class ThrottleConfig {
 
+    public boolean isEnabled() {
+        return true;
+    }
+
     /**
      * Monitoring interval in milliseconds.
      */
