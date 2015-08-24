@@ -34,8 +34,8 @@ import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.selector.IOptionsGrabber;
 
-public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET extends INativeFocusField<DATA>> extends CFocusComponent<DATA, WIDGET> implements
-        IAcceptsWatermark, HasOptionsChangeHandlers<List<TYPE>> {
+public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET extends INativeFocusField<DATA>> extends CFocusComponent<DATA, WIDGET>
+        implements IAcceptsWatermark, HasOptionsChangeHandlers<List<TYPE>> {
 
     private IFormatter<TYPE, String> valueformatter;
 
@@ -44,6 +44,8 @@ public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET ex
     private final IOptionsGrabber<TYPE> optionsGrabber;
 
     private IFormatter<TYPE, SafeHtml> optionFormatter;
+
+    private IFormatter<TYPE, String> tooltipFormatter;
 
     public CAbstractSelectorBox(IOptionsGrabber<TYPE> optionsGrabber) {
         this.optionsGrabber = optionsGrabber;
@@ -64,6 +66,17 @@ public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET ex
                         .toSafeHtml();
             }
         });
+
+        setTooltipFormatter(new IFormatter<TYPE, String>() {
+            @Override
+            public String format(TYPE value) {
+                return value == null ? "" : value.getStringView();
+            }
+        });
+    }
+
+    public IOptionsGrabber<TYPE> getOptionsGrabber() {
+        return optionsGrabber;
     }
 
     public void setFormatter(IFormatter<TYPE, String> formatter) {
@@ -86,16 +99,20 @@ public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET ex
         return valueformatter;
     }
 
-    public IOptionsGrabber<TYPE> getOptionsGrabber() {
-        return optionsGrabber;
+    public void setOptionFormatter(IFormatter<TYPE, SafeHtml> formatter) {
+        this.optionFormatter = formatter;
     }
 
     public IFormatter<TYPE, SafeHtml> getOptionFormatter() {
         return optionFormatter;
     }
 
-    public void setOptionFormatter(IFormatter<TYPE, SafeHtml> formatter) {
-        this.optionFormatter = formatter;
+    public void setTooltipFormatter(IFormatter<TYPE, String> formatter) {
+        this.tooltipFormatter = formatter;
+    }
+
+    public IFormatter<TYPE, String> getTooltipFormatter() {
+        return tooltipFormatter;
     }
 
     @Override
