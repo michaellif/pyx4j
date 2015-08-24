@@ -84,6 +84,18 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
 
     }
 
+    public SelectorListBoxValuePanel(final IFormatter<E, String> valueFormatter, final IFormatter<E, String> tooltipFormatter) {
+        this();
+        this.itemHolderFactory = new ItemHolderFactory<E>() {
+
+            @Override
+            public ItemHolder<E> createItemHolder(E item, SelectorListBoxValuePanel<E> selectorListBoxValuePanel) {
+                return new ItemHolder<E>(item, valueFormatter, tooltipFormatter);
+            }
+        };
+
+    }
+
     private SelectorListBoxValuePanel() {
         setStyleName(WidgetsTheme.StyleName.SelectorListBoxValuePanel.name());
         addStyleName(WidgetsTheme.StyleName.ListBox.name());
