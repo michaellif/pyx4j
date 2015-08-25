@@ -48,16 +48,27 @@ public class ItemHolder<E> extends Composite {
 
     private IFormatter<E, String> valueFormatter;
 
+    private IFormatter<E, String> tooltipFormatter;
+
     private Label label;
 
     public ItemHolder(final E item, IFormatter<E, String> valueFormatter) {
-        this(item, valueFormatter, true);
+        this(item, valueFormatter, valueFormatter);
+    }
+
+    public ItemHolder(final E item, IFormatter<E, String> valueFormatter, IFormatter<E, String> tooltipFormatter) {
+        this(item, valueFormatter, tooltipFormatter, true);
     }
 
     public ItemHolder(final E item, IFormatter<E, String> valueFormatter, boolean removable) {
+        this(item, valueFormatter, valueFormatter, removable);
+    }
+
+    public ItemHolder(final E item, IFormatter<E, String> valueFormatter, IFormatter<E, String> tooltipFormatter, boolean removable) {
         super();
         this.item = item;
         this.valueFormatter = valueFormatter;
+        this.tooltipFormatter = tooltipFormatter;
 
         panel = new FlowPanel();
         panel.setStyleName(WidgetsTheme.StyleName.SelectedItemHolder.name());
@@ -66,16 +77,16 @@ public class ItemHolder<E> extends Composite {
         label.setStyleName(WidgetsTheme.StyleName.SelectedItemHolderLabel.name());
         panel.add(label);
 
-        setLabel(valueFormatter.format(item));
+        setLabel(item);
 
         setRemovable(removable);
 
         initWidget(panel);
     }
 
-    protected void setLabel(String text) {
-        label.setText(text);
-        label.setTitle(text);
+    protected void setLabel(E item) {
+        label.setText(getValueFormatter().format(item));
+        label.setTitle(getTooltipFormatter().format(item));
     }
 
     public void setSelectorListBoxValuePanel(SelectorListBoxValuePanel<E> parent) {
@@ -101,7 +112,7 @@ public class ItemHolder<E> extends Composite {
 
                 });
 
-                //Prevent focus grabbing on 'Remove' Button 
+                //Prevent focus grabbing on 'Remove' Button
                 removeButton.addMouseDownHandler(new MouseDownHandler() {
 
                     @Override
@@ -129,5 +140,9 @@ public class ItemHolder<E> extends Composite {
 
     protected IFormatter<E, String> getValueFormatter() {
         return valueFormatter;
+    }
+
+    protected IFormatter<E, String> getTooltipFormatter() {
+        return tooltipFormatter;
     }
 }
