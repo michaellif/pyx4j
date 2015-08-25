@@ -74,11 +74,11 @@ public abstract class EditableItemHolder<E> extends ItemHolder<E> {
     }
 
     /**
-     * 
+     *
      * @return true if item was edited successfully
      */
     protected boolean onEditingComplete() {
-        setLabel(getValueFormatter().format(getItem()));
+        setLabel(getItem());
         ValueChangeEvent.fire(parent.getSelectorListBox(), parent.getSelectorListBox().getValue());
         return true;
     }
