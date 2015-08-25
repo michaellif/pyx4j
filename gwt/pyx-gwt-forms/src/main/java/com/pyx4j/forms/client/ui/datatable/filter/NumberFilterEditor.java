@@ -130,7 +130,7 @@ public class NumberFilterEditor extends FilterEditorBase {
 
             RangeCriterion rangeCriterion = (RangeCriterion) criterion;
 
-            if (!getMember().getPath().toString().equals(rangeCriterion.getPropertyPath())) {
+            if (!getMember().getPath().equals(rangeCriterion.getPropertyPath())) {
                 throw new Error("Filter editor member doesn't match filter criterion path");
             }
 
