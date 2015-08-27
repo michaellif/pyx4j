@@ -19,10 +19,13 @@
  */
 package com.pyx4j.widgets.client.selector;
 
+import java.util.List;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.TextSearchCriterion;
 import com.pyx4j.entity.rpc.AbstractListService;
@@ -35,15 +38,26 @@ public class ListServiceSuggestOptionsGrabber<E extends IEntity> implements IOpt
 
     private final AbstractListService<E> service;
 
+    private List<Criterion> criterions;
+
     public ListServiceSuggestOptionsGrabber(Class<E> entityClass, AbstractListService<E> service) {
+        this(entityClass, service, null);
+    }
+
+    public ListServiceSuggestOptionsGrabber(Class<E> entityClass, AbstractListService<E> service, List<Criterion> criterions) {
         this.entityClass = entityClass;
         this.service = service;
+        this.criterions = criterions;
     }
 
     @Override
     public void grabOptions(final Request request, final Callback<E> callback) {
 
         EntityListCriteria<E> criteria = EntityListCriteria.create(entityClass);
+        if (criterions != null) {
+            criteria.addAll(criterions);
+        }
+
         criteria.setPageSize(request.getLimit());
         if (!CommonsStringUtils.isEmpty(request.getQuery())) {
             criteria.add(new TextSearchCriterion(request.getQuery()));
