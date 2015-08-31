@@ -113,6 +113,11 @@ public class DatastoreAdminRemoveAllDataDeferredProcess implements IDeferredProc
     }
 
     @Override
+    public void started() {
+
+    }
+
+    @Override
     public DeferredProcessProgressResponse status() {
         DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
         if (queue != null) {

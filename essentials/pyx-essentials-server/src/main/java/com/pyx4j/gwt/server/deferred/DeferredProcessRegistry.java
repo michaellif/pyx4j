@@ -20,6 +20,7 @@
 package com.pyx4j.gwt.server.deferred;
 
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,19 +85,18 @@ public class DeferredProcessRegistry {
         String deferredCorrelationId = register(process);
 
         DeferredProcessInfo info = getMap().get(deferredCorrelationId);
-        //TODO use ThreadPools
-        Thread t = new DeferredProcessWorkThread(threadPoolName + deferredCorrelationId, info);
-        t.setDaemon(true);
-        t.start();
+
+        ExecutorService executorService = DeferredProcessExecutors.instance().getExecutorService(threadPoolName);
+        executorService.submit(new DeferredProcessWorkThread(info));
+
         return deferredCorrelationId;
     }
 
     public static synchronized void start(String deferredCorrelationId, IDeferredProcess process, String threadPoolName) {
         DeferredProcessInfo info = getMap().get(deferredCorrelationId);
-        //TODO use ThreadPools
-        Thread t = new DeferredProcessWorkThread(threadPoolName + deferredCorrelationId, info);
-        t.setDaemon(true);
-        t.start();
+
+        ExecutorService executorService = DeferredProcessExecutors.instance().getExecutorService(threadPoolName);
+        executorService.submit(new DeferredProcessWorkThread(info));
     }
 
     public static synchronized IDeferredProcess get(String deferredCorrelationId) {

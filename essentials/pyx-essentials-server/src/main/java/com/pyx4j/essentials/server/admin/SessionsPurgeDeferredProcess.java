@@ -112,6 +112,11 @@ public class SessionsPurgeDeferredProcess implements IDeferredProcess {
     }
 
     @Override
+    public void started() {
+
+    }
+
+    @Override
     public DeferredProcessProgressResponse status() {
         DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
         r.setProgress(count);
