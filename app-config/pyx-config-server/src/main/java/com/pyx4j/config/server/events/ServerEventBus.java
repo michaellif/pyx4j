@@ -22,9 +22,9 @@ package com.pyx4j.config.server.events;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.web.bindery.event.shared.EventBus;
-import com.google.web.bindery.event.shared.HandlerRegistration;
-import com.google.web.bindery.event.shared.SimpleEventBus;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.SubscriberExceptionContext;
+import com.google.common.eventbus.SubscriberExceptionHandler;
 
 import com.pyx4j.config.server.Trace;
 
@@ -35,7 +35,13 @@ public class ServerEventBus {
     private final EventBus eventBus;
 
     private ServerEventBus() {
-        eventBus = new SimpleEventBus();
+        eventBus = new EventBus(new SubscriberExceptionHandler() {
+
+            @Override
+            public void handleException(Throwable exception, SubscriberExceptionContext context) {
+                log.error("Could not dispatch event: {} to {}", context.getSubscriber().getClass(), context.getSubscriberMethod(), exception);
+            }
+        });
     }
 
     private static class SingletonHolder {
@@ -46,12 +52,20 @@ public class ServerEventBus {
         return SingletonHolder.INSTANCE;
     }
 
-    public static <H> HandlerRegistration addHandler(Class<? extends ServerEvent<H>> eventClass, H handler) {
-        return instance().eventBus.addHandler(ServerEvent.getTypeByClass(eventClass), handler);
+    public static void register(ServerEvent.Handler subscriber) {
+        instance().eventBus.register(subscriber);
     }
 
-    public static void fireEvent(ServerEvent<?> event) {
-        log.debug("fireEvent {} {}, from {}", event.getClass().getSimpleName(), event, Trace.getCallOrigin(ServerEvent.class));
-        instance().eventBus.fireEvent(event);
+    public static void unregister(ServerEvent.Handler subscriber) {
+        instance().eventBus.unregister(subscriber);
+    }
+
+    public static void fireEvent(ServerEvent event) {
+        log.debug("fireEvent {} {}, from {}", event.getClass().getSimpleName(), event, Trace.getCallOrigin(ServerEventBus.class));
+        try {
+            instance().eventBus.post(event);
+        } catch (Throwable e) {
+            log.error("failed to fire event {}", event.getClass().getSimpleName(), e);
+        }
     }
 }

@@ -19,10 +19,13 @@
  */
 package com.pyx4j.config.server.events;
 
-public class SystemMaintenanceStateChangeEvent extends ServerEvent<SystemMaintenanceStateChangeEvent.Handler> {
+import com.google.common.eventbus.Subscribe;
 
-    public interface Handler {
+public class SystemMaintenanceStateChangeEvent implements ServerEvent {
 
+    public interface Handler extends ServerEvent.Handler {
+
+        @Subscribe
         void onMaintenanceStateChange(SystemMaintenanceStateChangeEvent event);
 
     }
@@ -32,13 +35,8 @@ public class SystemMaintenanceStateChangeEvent extends ServerEvent<SystemMainten
     }
 
     @Override
-    protected final void dispatch(Handler handler) {
-        handler.onMaintenanceStateChange(this);
-    }
-
-    @Override
     public String toString() {
-        return "Shutdown";
+        return "SystemMaintenanceStateChange";
     }
 
 }

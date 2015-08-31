@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,28 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 8, 2009
- * @author michaellif
+ * Created on Aug 19, 2015
+ * @author vlads
  */
-package com.pyx4j.forms.client.ui.datatable;
+package com.pyx4j.security.client;
 
-import com.google.gwt.safehtml.shared.SafeHtml;
+public interface UserActivitySource {
 
-import com.pyx4j.entity.core.IEntity;
+    public long getUserActivityTimeStamp();
 
-public class DataItem<E extends IEntity> {
-
-    private final E entity;
-
-    public DataItem(E entity) {
-        this.entity = entity;
-    }
-
-    public E getEntity() {
-        return entity;
-    }
-
-    public SafeHtml getCellValue(ColumnDescriptor descriptor) {
-        return descriptor.getFormatter().format(entity);
-    }
 }

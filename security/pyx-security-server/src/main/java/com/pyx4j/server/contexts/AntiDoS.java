@@ -66,7 +66,7 @@ public class AntiDoS {
     }
 
     public AccessCounter beginRequest(ServletRequest request, long requestStart) {
-        if (throttleConfig == null) {
+        if (throttleConfig == null || !throttleConfig.isEnabled()) {
             return new AccessCounter();
         }
         AccessCounter counter;

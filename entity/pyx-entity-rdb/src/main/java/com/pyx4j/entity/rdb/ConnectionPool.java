@@ -30,4 +30,6 @@ public interface ConnectionPool {
     public void resetConnectionPool();
 
     public void close() throws Throwable;
+
+    public ConnectionPoolRuntimeInfo connectionPoolRuntimeInfo(ConnectionPoolType connectionType);
 }

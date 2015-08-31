@@ -110,6 +110,13 @@ public class EntityReportFormatter<E extends IEntity> {
         customMemberCaptions.put(memberPath, caption);
     }
 
+    public void addMember(IObject<?> member) {
+        if (selectedMemberNames == null) {
+            selectMemebers();
+        }
+        selectedMemberNames.add(member.getPath());
+    }
+
     protected String getMemberCaption(Path memberPath, MemberMeta memberMeta) {
         String caption = customMemberCaptions.get(memberPath);
         if (caption != null) {

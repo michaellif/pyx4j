@@ -185,6 +185,11 @@ public class DeferredProgressPanel extends VerticalPanel {
                     }
                     deferredCorrelationId = null;
                     progressTimer = null;
+                } else if (result.isQueued()) {
+                    messageBar.setHTML("Queued");
+                    if (progressTimer != null) {
+                        progressTimer.schedule(checkProgressStatusMilliSec);
+                    }
                 } else {
                     messageBar.setHTML(CommonsStringUtils.isEmpty(result.getMessage()) ? "In Progress..." : result.getMessage());
                     progressBar.setMaxProgress(result.getProgressMaximum());
