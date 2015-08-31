@@ -32,7 +32,7 @@ import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.tester.rpc.TesterAuthenticationService;
 
-//TODO remove v2
+//TODO remove vv3
 public class TesterAuthenticationServiceImpl extends AuthenticationServiceImpl implements TesterAuthenticationService {
 
     @Override
