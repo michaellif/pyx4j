@@ -59,6 +59,7 @@ public class SystemMaintenance {
 
     private static long maintenanceScheduledEnd;
 
+    // Actually initialized in loadState()
     private static SystemMaintenanceState systemMaintenanceState = EntityFactory.create(getSystemMaintenanceStateClass());
 
     static {
@@ -66,7 +67,7 @@ public class SystemMaintenance {
     }
 
     private static Class<? extends SystemMaintenanceState> getSystemMaintenanceStateClass() {
-        return ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getSystemMaintenanceStateClass();
+        return ServerSideConfiguration.instance(EssentialsServerSideConfiguration.class).getSystemMaintenanceStateClass();
     }
 
     public static boolean isSystemMaintenance() {
@@ -108,6 +109,7 @@ public class SystemMaintenance {
         return maintenanceStarted - System.currentTimeMillis();
     }
 
+    @Deprecated
     public static void startSystemMaintenance(int gracePeriodMin) {
         maintenanceStarted = System.currentTimeMillis() + Consts.MIN2MSEC * gracePeriodMin;
         maintenanceScheduledEnd = System.currentTimeMillis() + Consts.MIN2MSEC * (gracePeriodMin + 60);
@@ -154,6 +156,7 @@ public class SystemMaintenance {
 
     @SuppressWarnings("deprecation")
     public static void setSystemMaintenanceInfo(SystemMaintenanceState state) {
+        //TODO refactor to have change state in event.
         if (!state.getValueClass().equals(getSystemMaintenanceStateClass())) {
             systemMaintenanceState = state.duplicate(getSystemMaintenanceStateClass());
         } else {
@@ -223,18 +226,19 @@ public class SystemMaintenance {
             File file = getStorageFile();
             if (file.canRead() && (file.length() > 0)) {
                 SystemMaintenanceState sm = XMLEntityConverter.readFile(getSystemMaintenanceStateClass(), file);
-                if (sm != null) {
-                    setSystemMaintenanceInfo(sm);
+                if (sm == null) {
+                    sm = EntityFactory.create(getSystemMaintenanceStateClass());
                 }
+                if (sm.type().isNull()) {
+                    sm.type().setValue(SystemState.Online);
+                }
+                if (sm.externalConnections().isNull()) {
+                    sm.externalConnections().setValue(SystemState.Online);
+                }
+                setSystemMaintenanceInfo(sm);
             }
         } catch (Throwable e) {
             log.error("system error", e);
-        }
-        if (systemMaintenanceState.type().isNull()) {
-            systemMaintenanceState.type().setValue(SystemState.Online);
-        }
-        if (systemMaintenanceState.externalConnections().isNull()) {
-            systemMaintenanceState.externalConnections().setValue(SystemState.Online);
         }
     }
 

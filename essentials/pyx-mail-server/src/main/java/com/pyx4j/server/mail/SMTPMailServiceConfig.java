@@ -48,6 +48,10 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
 
     protected String forwardAllTo;
 
+    protected Integer connectionTimeout;
+
+    protected Integer timeout;
+
     public SMTPMailServiceConfig() {
     }
 
@@ -89,6 +93,14 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
         return queuePriority;
     }
 
+    public Integer getConnectionTimeout() {
+        return connectionTimeout;
+    }
+
+    public Integer getTimeout() {
+        return timeout;
+    }
+
     public boolean isDebug() {
         return debug;
     }
@@ -124,6 +136,17 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
 
         this.user = c.getValue("user", this.user);
         this.password = c.getValue("password", this.password);
+
+        String connectionTimeOutStrValue = c.getValue("smtp.connectiontimeout");
+        if (null != connectionTimeOutStrValue) {
+            this.connectionTimeout = Integer.valueOf(connectionTimeOutStrValue.trim());
+        }
+
+        String timeout = c.getValue("smtp.timeout");
+        if (null != timeout) {
+            this.timeout = Integer.valueOf(timeout.trim());
+        }
+
     }
 
     @Override
@@ -134,12 +157,15 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
         b.append("port                                              : ").append(this.port).append("\n");
         b.append("starttls                                          : ").append(this.starttls).append("\n");
         b.append("user                                              : ").append(this.user).append("\n");
-        b.append("allowSendToEmailSufix                             : ").append(this.allowSendToEmailSufix).append("\n");
-        b.append("blockedMailForwardTo                              : ").append(this.blockedMailForwardTo).append("\n");
+        b.append("allowSendToEmailSufix                             : ").append(getAllowSendToEmailSufix()).append("\n");
+        b.append("blockedMailForwardTo                              : ").append(getBlockedMailForwardTo()).append("\n");
         b.append("forwardAllTo                                      : ").append(this.forwardAllTo).append("\n");
         b.append("forwardAllTo (active)                             : ").append(getForwardAllTo()).append("\n");
         b.append("maxDeliveryAttempts                               : ").append(this.maxDeliveryAttempts).append("\n");
         b.append("queuePriority                                     : ").append(this.queuePriority).append("\n");
+        b.append("smtp.connectionTimeout                            : ").append((null == this.connectionTimeout) ? "" : this.connectionTimeout.intValue())
+                .append("\n");
+        b.append("smtp.timeout                                      : ").append((null == this.timeout) ? "" : this.timeout.intValue()).append("\n");
 
         return b.toString();
     }

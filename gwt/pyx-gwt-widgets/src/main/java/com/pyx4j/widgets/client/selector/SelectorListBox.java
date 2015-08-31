@@ -41,7 +41,7 @@ import com.pyx4j.widgets.client.IFocusWidget;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
-public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements HasValueChangeHandlers<Collection<E>>, IFocusWidget, IWatermarkWidget {
+public class SelectorListBox<E> extends AbstractSelectorWidget<E>implements HasValueChangeHandlers<Collection<E>>, IFocusWidget, IWatermarkWidget {
 
     protected final ArrayList<E> value;
 
@@ -55,9 +55,19 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
         this(optionsGrabber, null, optionFormatter, valueFormatter);
     }
 
+    public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String> tooltipFormatter,
+            IFormatter<E, SafeHtml> optionFormatter) {
+        this(optionsGrabber, null, optionFormatter, valueFormatter, tooltipFormatter);
+    }
+
     public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, Command addItemCommand, IFormatter<E, SafeHtml> optionFormatter,
             IFormatter<E, String> valueFormatter) {
         this(optionsGrabber, addItemCommand, optionFormatter, new SelectorListBoxValuePanel<E>(valueFormatter));
+    }
+
+    public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, Command addItemCommand, IFormatter<E, SafeHtml> optionFormatter,
+            IFormatter<E, String> valueFormatter, IFormatter<E, String> tooltipFormatter) {
+        this(optionsGrabber, addItemCommand, optionFormatter, new SelectorListBoxValuePanel<E>(valueFormatter, tooltipFormatter));
     }
 
     public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, Command addItemCommand, IFormatter<E, SafeHtml> optionFormatter,

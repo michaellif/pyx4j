@@ -327,7 +327,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     public final boolean isViewable() {
         for (IAccessAdapter adapter : accessAdapters) {
             Boolean viewable = adapter.isViewable();
-            if (viewable != null && adapter.isViewable()) {
+            if (viewable != null && viewable) {
                 return true;
             }
         }

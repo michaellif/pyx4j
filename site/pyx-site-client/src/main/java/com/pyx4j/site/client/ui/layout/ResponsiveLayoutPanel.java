@@ -24,6 +24,9 @@ import java.util.Map;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.layout.client.Layout;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Event.NativePreviewEvent;
+import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -49,6 +52,8 @@ public abstract class ResponsiveLayoutPanel extends ComplexPanel implements Requ
 
     private final Map<DisplayType, DisplayPanel> displays;
 
+    private long lastUserInteraction;
+
     public enum DisplayType {
         header, toolbar, menu, content, footer, communication, console, extra1, extra2, extra3, extra4, notification
     }
@@ -63,6 +68,18 @@ public abstract class ResponsiveLayoutPanel extends ComplexPanel implements Requ
         }
 
         layoutType = LayoutType.getLayoutType(Window.getClientWidth());
+
+        Event.addNativePreviewHandler(new NativePreviewHandler() {
+
+            @Override
+            public void onPreviewNativeEvent(NativePreviewEvent event) {
+                switch (event.getTypeInt()) {
+                case Event.ONKEYPRESS:
+                case Event.ONCLICK:
+                    lastUserInteraction = System.currentTimeMillis();
+                }
+            }
+        });
     }
 
     public LayoutType getLayoutType() {
@@ -121,4 +138,7 @@ public abstract class ResponsiveLayoutPanel extends ComplexPanel implements Requ
         }
     }
 
+    public long getLastUserInteraction() {
+        return lastUserInteraction;
+    }
 }

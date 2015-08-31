@@ -24,11 +24,15 @@ import java.util.Collection;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.safehtml.shared.SafeHtml;
+
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class CheckGroup<E> extends OptionGroup<E> {
 
     public CheckGroup(Layout layout) {
-        super(layout, true);
+        super(layout);
     }
 
     public void setValue(Collection<E> value) {
@@ -62,6 +66,29 @@ public class CheckGroup<E> extends OptionGroup<E> {
             }
         }
         return value;
+    }
+
+    @Override
+    protected OptionGroupButton createGroupButtonImpl(SafeHtml label) {
+        OptionGroupButton button = new OptionGroupButton(label) {
+            @Override
+            protected com.google.gwt.user.client.ui.CheckBox createButtonImpl(SafeHtml label) {
+                return new CheckBox(label);
+            }
+        };
+        button.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                if (event.getValue()) {
+                    addStyleDependentName(WidgetsTheme.StyleDependent.active.name());
+                } else {
+                    removeStyleDependentName(WidgetsTheme.StyleDependent.active.name());
+                }
+                CheckGroup.this.fireEvent(event);
+            }
+        });
+        return button;
     }
 
 }

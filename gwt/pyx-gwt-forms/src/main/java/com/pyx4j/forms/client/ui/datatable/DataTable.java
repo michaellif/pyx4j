@@ -44,7 +44,7 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
 
     private static final I18n i18n = I18n.get(DataTable.class);
 
-    private ITablePane<E> tablePanel;
+    private final ITablePane<E> tablePanel;
 
     private DataTableModel<E> model;
 
@@ -69,11 +69,7 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
     }
 
     public DataTable() {
-        if (true) {
-            tablePanel = new FlexTablePane<E>(this);
-        } else {
-            tablePanel = new SectionTablePane<E>(this);
-        }
+        tablePanel = new FlexTablePane<E>(this);
     }
 
     @Override
@@ -171,8 +167,8 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
 
     public Collection<E> getSelectedItems() {
         HashSet<E> checked = new HashSet<E>();
-        for (DataItem<E> dataItem : model.getSelectedRows()) {
-            checked.add(dataItem.getEntity());
+        for (E dataItem : model.getSelectedRows()) {
+            checked.add(dataItem);
         }
         return checked;
     }
