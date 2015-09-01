@@ -145,6 +145,9 @@ public class XLSLoad {
             boolean header = true;
             boolean nonBlankRowFound = false;
             for (Row row : sheet) {
+                if (!reciver.canContuneLoad()) {
+                    break;
+                }
                 lineNumber++;
                 List<String> values = new Vector<String>();
                 short cells = row.getLastCellNum();

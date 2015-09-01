@@ -72,6 +72,11 @@ public class MySQLDialect extends Dialect {
     }
 
     @Override
+    public String sqlDBSystemDate() {
+        return "SELECT DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s')";
+    }
+
+    @Override
     public String sqlChangeNullable(String columnSqlName, String columnTypeSQLDefinition, boolean nullable) {
         return sqlChangeDateType(columnSqlName) + ' ' + columnTypeSQLDefinition + (nullable ? "" : " NOT NULL ");
     }
