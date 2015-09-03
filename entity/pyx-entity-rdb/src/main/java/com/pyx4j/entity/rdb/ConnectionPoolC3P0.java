@@ -69,10 +69,8 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
         }
 
         {
-            dataSources.put(
-                    ConnectionPoolType.DDL,
-                    DataSources.unpooledDataSource(configuration.connectionUrl(), configuration.dbAdministrationUserName(),
-                            configuration.dbAdministrationPassword()));
+            dataSources.put(ConnectionPoolType.DDL, DataSources.unpooledDataSource(configuration.connectionUrl(), configuration.dbAdministrationUserName(),
+                    configuration.dbAdministrationPassword()));
         }
         singleInstanceCreated = true;
     }
@@ -149,6 +147,15 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
     @Override
     public DataSource getDataSource(ConnectionPoolType connectionType) {
         return dataSources.get(connectionType);
+    }
+
+    @Override
+    public ConnectionPoolRuntimeInfo connectionPoolRuntimeInfo(ConnectionPoolType connectionType) {
+        if (connectionType == ConnectionPoolType.Scheduler) {
+            return new ConnectionPoolC3P0RuntimeInfo(C3P0Registry.pooledDataSourceByName(LoggerConfig.getContextName() + "_" + connectionType.name()));
+        } else {
+            return new ConnectionPoolC3P0RuntimeInfo(getDataSource(connectionType));
+        }
     }
 
     @Override

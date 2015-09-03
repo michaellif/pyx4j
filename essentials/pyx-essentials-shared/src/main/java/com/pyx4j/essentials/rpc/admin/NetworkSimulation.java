@@ -31,4 +31,13 @@ public interface NetworkSimulation extends IEntity {
 
     @Caption(name = "Delay", description = "milliseconds")
     IPrimitive<Integer> delay();
+
+    IPrimitive<String> httpRequestURIPattern();
+
+    IPrimitive<Integer> httpRequestStartNumber();
+
+    IPrimitive<Integer> httpRequestCount();
+
+    IPrimitive<Integer> httpResponseCode();
+
 }

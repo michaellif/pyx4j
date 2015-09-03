@@ -28,7 +28,7 @@ public class UserRuntimeException extends RuntimeExceptionSerializable {
 
     private transient Throwable cause;
 
-    private transient boolean skipLogStackTrace;
+    private boolean skipLogStackTrace;
 
     protected UserRuntimeException() {
         super();

@@ -62,6 +62,8 @@ public class Mappings {
 
     private static final Logger log = LoggerFactory.getLogger(Mappings.class);
 
+    private static final Logger ddlLog = LoggerFactory.getLogger("db.ddl");
+
     private final ConnectionProvider connectionProvider;
 
     private final Configuration configuration;
@@ -396,14 +398,17 @@ public class Mappings {
     }
 
     private void createSequence(PersistenceContext persistenceContext, String entityShortName, String sequenceName) throws SQLException {
-        SQLUtils.execute(persistenceContext.getConnection(),
-                persistenceContext.getDialect().sqlCreateSequence(sequenceName, tableIdentityOffset(entityShortName)));
+        String sqlChanges = persistenceContext.getDialect().sqlCreateSequence(sequenceName, tableIdentityOffset(entityShortName));
+        ddlLog.info("{}", sqlChanges);
+        SQLUtils.execute(persistenceContext.getConnection(), sqlChanges);
     }
 
     private void createSharedSequence(PersistenceContext persistenceContext, String entityShortName, String sequenceName) throws SQLException {
         Connection connection = connectionProvider.getConnection(ConnectionReason.forDDL);
         try {
-            SQLUtils.execute(connection, persistenceContext.getDialect().sqlCreateSequence(sequenceName, tableIdentityOffset(entityShortName)));
+            String sqlChanges = persistenceContext.getDialect().sqlCreateSequence(sequenceName, tableIdentityOffset(entityShortName));
+            ddlLog.info("{}", sqlChanges);
+            SQLUtils.execute(connection, sqlChanges);
         } finally {
             SQLUtils.closeQuietly(connection);
         }
