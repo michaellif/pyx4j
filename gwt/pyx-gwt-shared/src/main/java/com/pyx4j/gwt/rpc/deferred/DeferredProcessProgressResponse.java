@@ -28,6 +28,8 @@ public class DeferredProcessProgressResponse implements Serializable {
 
     public static enum ProcessStatus {
 
+        QUEUED,
+
         PROCESSING,
 
         COMPLETED_SUCCESS,
@@ -55,8 +57,18 @@ public class DeferredProcessProgressResponse implements Serializable {
         return status;
     }
 
+    public boolean isQueued() {
+        return status == ProcessStatus.QUEUED;
+    }
+
+    public void setQueued() {
+        if (!isCompleted()) {
+            status = ProcessStatus.QUEUED;
+        }
+    }
+
     public boolean isCompleted() {
-        return status != ProcessStatus.PROCESSING;
+        return status != ProcessStatus.PROCESSING && status != ProcessStatus.QUEUED;
     }
 
     public String getMessage() {

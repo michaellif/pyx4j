@@ -28,6 +28,8 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ApplicationVersion;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.server.contexts.ServerContext;
 
@@ -67,6 +69,11 @@ public class ConfigInfo {
 
         b.append("PersistenceConfiguration :\n  ").append(nvl(conf.getPersistenceConfiguration()).replaceAll("\n", "\n  ")).append("\n");
 
+        if (Persistence.service() instanceof IEntityPersistenceServiceExt) {
+            b.append("Persistence Runtime   :\n  ");
+            b.append(((IEntityPersistenceServiceExt) Persistence.service()).getPersistenceRuntimeInfoAsString().replaceAll("\n", "\n  ")).append("\n");
+        }
+
         b.append("MailService              :\n  ").append(nvl(conf.getMailServiceConfigConfiguration()).replaceAll("\n", "\n  ")).append("\n");
 
         b.append(applicationConfigurationText());
@@ -102,7 +109,7 @@ public class ConfigInfo {
             long jvmStartTime = ManagementFactory.getRuntimeMXBean().getStartTime();
             long jvmUpTime = ManagementFactory.getRuntimeMXBean().getUptime();
             return TimeUtils.durationFormatSeconds((int) (jvmUpTime / Consts.SEC2MSEC)) + ", since: "
-            + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z").format(new Date(jvmStartTime));
+                    + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z").format(new Date(jvmStartTime));
         } catch (Throwable e) {
             return "n/a " + e.getMessage();
         }

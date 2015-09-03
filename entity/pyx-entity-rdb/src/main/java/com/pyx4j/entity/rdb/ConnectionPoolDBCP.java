@@ -128,6 +128,11 @@ public class ConnectionPoolDBCP implements ConnectionPool {
     }
 
     @Override
+    public ConnectionPoolRuntimeInfo connectionPoolRuntimeInfo(ConnectionPoolType connectionType) {
+        return null;
+    }
+
+    @Override
     public String toString() {
         return "DBCP";
     }

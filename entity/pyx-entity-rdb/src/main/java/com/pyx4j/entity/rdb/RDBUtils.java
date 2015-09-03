@@ -22,9 +22,13 @@ package com.pyx4j.entity.rdb;
 import java.io.Closeable;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
@@ -81,6 +85,30 @@ public class RDBUtils implements Closeable {
         List<String> sqls = new Vector<String>();
         sqls.add("drop table " + tableName);
         SQLUtils.execute(connection(), sqls);
+    }
+
+    public static Date getDBSystemDate() throws SQLException {
+        RDBUtils utils = new RDBUtils();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = utils.connection().prepareStatement(((EntityPersistenceServiceRDB) Persistence.service()).getDialect().sqlDBSystemDate());
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                String systemDateString = rs.getString(1);
+                try {
+                    return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(systemDateString);
+                } catch (ParseException e) {
+                    throw new Error("Unable to pars SystemDate '" + systemDateString + "'. " + e.getMessage());
+                }
+            } else {
+                throw new Error("SystemDate in unavailable");
+            }
+        } finally {
+            SQLUtils.closeQuietly(rs);
+            SQLUtils.closeQuietly(stmt);
+            utils.close();
+        }
     }
 
     public void execute(List<String> sqls) throws SQLException {
