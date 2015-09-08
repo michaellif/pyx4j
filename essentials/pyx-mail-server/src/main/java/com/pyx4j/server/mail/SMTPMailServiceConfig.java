@@ -137,6 +137,8 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
         this.user = c.getValue("user", this.user);
         this.password = c.getValue("password", this.password);
 
+        this.debug = c.getBooleanValue("debug", this.debug);
+
         String connectionTimeOutStrValue = c.getValue("smtp.connectiontimeout");
         if (null != connectionTimeOutStrValue) {
             this.connectionTimeout = Integer.valueOf(connectionTimeOutStrValue.trim());
@@ -155,7 +157,7 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
         b.append("configurationClass                                : ").append(this.getClass().getName()).append("\n");
         b.append("host                                              : ").append(this.host).append("\n");
         b.append("port                                              : ").append(this.port).append("\n");
-        b.append("starttls                                          : ").append(this.starttls).append("\n");
+        b.append("starttls                                          : ").append(isStarttls()).append("\n");
         b.append("user                                              : ").append(this.user).append("\n");
         b.append("allowSendToEmailSufix                             : ").append(getAllowSendToEmailSufix()).append("\n");
         b.append("blockedMailForwardTo                              : ").append(getBlockedMailForwardTo()).append("\n");
@@ -163,9 +165,9 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
         b.append("forwardAllTo (active)                             : ").append(getForwardAllTo()).append("\n");
         b.append("maxDeliveryAttempts                               : ").append(this.maxDeliveryAttempts).append("\n");
         b.append("queuePriority                                     : ").append(this.queuePriority).append("\n");
-        b.append("smtp.connectionTimeout                            : ").append((null == this.connectionTimeout) ? "" : this.connectionTimeout.intValue())
-                .append("\n");
-        b.append("smtp.timeout                                      : ").append((null == this.timeout) ? "" : this.timeout.intValue()).append("\n");
+        b.append("debug                                             : ").append(isDebug()).append("\n");
+        b.append("smtp.connectionTimeout                            : ").append(getConnectionTimeout()).append("\n");
+        b.append("smtp.timeout                                      : ").append(getTimeout()).append("\n");
 
         return b.toString();
     }
