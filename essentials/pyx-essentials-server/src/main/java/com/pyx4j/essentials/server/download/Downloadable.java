@@ -20,16 +20,18 @@
 package com.pyx4j.essentials.server.download;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.sessionstorage.SessionBlobStorageFacade;
 import com.pyx4j.gwt.shared.DownloadFormat;
-import com.pyx4j.server.contexts.ServerContext;
 
 public class Downloadable implements Serializable {
 
@@ -75,70 +77,45 @@ public class Downloadable implements Serializable {
 
     @SuppressWarnings("unchecked")
     public void save(String fileName) {
-        synchronized (Downloadable.class) {
-            Map<String, Downloadable> map = (Map<String, Downloadable>) ServerContext.getVisit().getAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE);
-            if (map == null) {
-                map = new HashMap<String, Downloadable>();
-                ServerContext.getVisit().setAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE, (Serializable) map);
-            } else {
-                cleanOld(map);
-            }
-            map.put(fileName, this);
-            log.debug("download prepared [{}]; {} bytes", fileName, this.data.length);
-        }
+        Map<String, Serializable> map = ServerSideFactory.create(SessionBlobStorageFacade.class).getStorage(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE);
+        cleanOld(map);
+        map.put(fileName, this);
+        log.debug("download prepared [{}]; {} bytes", fileName, this.data.length);
     }
 
-    @SuppressWarnings("unchecked")
     public void remove() {
-        synchronized (Downloadable.class) {
-            Map<String, Downloadable> map = (Map<String, Downloadable>) ServerContext.getVisit().getAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE);
-            if (map != null) {
-                map.values().remove(this);
-                ServerContext.getVisit().setAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE, (Serializable) map);
-            }
-        }
+        Map<String, Serializable> map = ServerSideFactory.create(SessionBlobStorageFacade.class).getStorage(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE);
+        map.values().remove(this);
     }
 
-    @SuppressWarnings("unchecked")
     public static void cancel(String fileName) {
-        synchronized (Downloadable.class) {
-            Map<String, Downloadable> map = (Map<String, Downloadable>) ServerContext.getVisit().getAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE);
-            if (map != null) {
-                try {
-                    if (map.remove(fileName) != null) {
-                        log.debug("canceled download {}", fileName);
-                    }
-                } finally {
-                    cleanOld(map);
-                }
+        Map<String, Serializable> map = ServerSideFactory.create(SessionBlobStorageFacade.class).getStorage(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE);
+        if (map.remove(fileName) != null) {
+            log.debug("canceled download {}", fileName);
+        }
+        cleanOld(map);
+    }
+
+    private static void cleanOld(Map<String, Serializable> map) {
+        List<String> toRemove = new ArrayList<>();
+        for (Entry<String, Serializable> entry : map.entrySet()) {
+            Downloadable downloadable = (Downloadable) entry.getValue();
+            if (downloadable.isOutDated()) {
+                toRemove.add(entry.getKey());
             }
+        }
+        for (String key : toRemove) {
+            map.remove(key);
+            log.debug("remove outdated download {}", key);
         }
     }
 
-    private static void cleanOld(Map<String, Downloadable> map) {
-        for (Iterator<Map.Entry<String, Downloadable>> iterator = map.entrySet().iterator(); iterator.hasNext();) {
-            Map.Entry<String, Downloadable> entry = iterator.next();
-            if (entry.getValue().isOutDated()) {
-                log.debug("remove outdated download {}", entry.getKey());
-                iterator.remove();
-            }
-        }
-        ServerContext.getVisit().setAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE, (Serializable) map);
-    }
-
-    @SuppressWarnings("unchecked")
     public static Downloadable getDownloadable(String fileName) {
-        synchronized (Downloadable.class) {
-            Map<String, Downloadable> map = (Map<String, Downloadable>) ServerContext.getVisit().getAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE);
-            if (map == null) {
-                return null;
-            } else {
-                try {
-                    return map.get(fileName);
-                } finally {
-                    cleanOld(map);
-                }
-            }
+        Map<String, Serializable> map = ServerSideFactory.create(SessionBlobStorageFacade.class).getStorage(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE);
+        try {
+            return (Downloadable) map.get(fileName);
+        } finally {
+            cleanOld(map);
         }
     }
 
