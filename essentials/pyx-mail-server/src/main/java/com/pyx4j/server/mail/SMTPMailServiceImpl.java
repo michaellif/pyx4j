@@ -107,6 +107,7 @@ class SMTPMailServiceImpl implements IMailService {
             return MailDeliveryStatus.ConfigurationError;
         }
         SMTPMailServiceConfig config = (SMTPMailServiceConfig) mailConfig;
+        config = config.selectConfigurationInstance(mailMessage);
 
         Properties mailProperties = new Properties();
         mailProperties.put("mail.smtp.host", config.getHost());
