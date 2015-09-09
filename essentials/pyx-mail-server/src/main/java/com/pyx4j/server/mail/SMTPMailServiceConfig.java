@@ -19,7 +19,9 @@
  */
 package com.pyx4j.server.mail;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.PropertiesConfiguration;
@@ -53,6 +55,8 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
     protected Integer connectionTimeout;
 
     protected Integer timeout;
+
+    protected Map<String, String> headers;
 
     public SMTPMailServiceConfig() {
     }
@@ -127,6 +131,13 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
         this.blockedMailForwardTo = blockedMailForwardTo;
     }
 
+    public Set<Map.Entry<String, String>> getHeaders() {
+        if (headers == null) {
+            return Collections.emptySet();
+        }
+        return headers.entrySet();
+    }
+
     // Simplified solution callback to enable different email providers for different email types.
     public SMTPMailServiceConfig selectConfigurationInstance(MailMessage mailMessage) {
         return this;
@@ -139,6 +150,8 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
         this.starttls = c.getBooleanValue("starttls", this.starttls);
 
         this.sender = c.getValue("sender", this.sender);
+
+        this.headers = c.getValues("headers");
 
         this.maxDeliveryAttempts = c.getIntegerValue("maxDeliveryAttempts", this.maxDeliveryAttempts);
         this.queuePriority = c.getIntegerValue("queuePriority", this.queuePriority);
@@ -182,6 +195,7 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
         b.append("debug                                             : ").append(isDebug()).append("\n");
         b.append("smtp.connectionTimeout                            : ").append(getConnectionTimeout()).append("\n");
         b.append("smtp.timeout                                      : ").append(getTimeout()).append("\n");
+        b.append("smtp.headers                                      : ").append(getHeaders()).append("\n");
 
         return b.toString();
     }

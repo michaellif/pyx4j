@@ -188,6 +188,10 @@ class SMTPMailServiceImpl implements IMailService {
                 message.addHeader("Keywords", ConverterUtils.convertStringCollection(mailMessage.getKeywords(), ", "));
             }
 
+            for (Map.Entry<String, String> me : config.getHeaders()) {
+                message.addHeader(me.getKey(), me.getValue());
+            }
+
             Multipart content;
             if (mailMessage.getHtmlBody() == null) {
                 // Pain text
