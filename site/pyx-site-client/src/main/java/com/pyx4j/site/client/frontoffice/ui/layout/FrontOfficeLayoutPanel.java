@@ -204,24 +204,15 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         case phonePortrait:
         case phoneLandscape:
             sideMenuHolder.setDisplay(getDisplay(DisplayType.menu));
+            sideCommHolder.setDisplay(getDisplay(DisplayType.communication));
             headerHolder.setVisible(false);
             break;
         default:
             setSideMenuVisible(false);
-            inlineMenuHolder.setMenuDisplay(getDisplay(DisplayType.menu));
-            headerHolder.setVisible(true);
-            break;
-        }
-
-        switch (getLayoutType()) {
-        case phonePortrait:
-        case phoneLandscape:
-        case tabletPortrait:
-            sideCommHolder.setDisplay(getDisplay(DisplayType.communication));
-            break;
-        default:
             setSideCommVisible(false);
+            inlineMenuHolder.setMenuDisplay(getDisplay(DisplayType.menu));
             popupCommHolder.setWidget(getDisplay(DisplayType.communication));
+            headerHolder.setVisible(true);
             break;
         }
 
@@ -303,12 +294,12 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     private boolean isSideCommEnabled() {
         LayoutType layoutType = LayoutType.getLayoutType(Window.getClientWidth());
-        return LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType || LayoutType.tabletPortrait == layoutType;
+        return LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType;
     }
 
     private boolean isPopupCommEnabled() {
         LayoutType layoutType = LayoutType.getLayoutType(Window.getClientWidth());
-        return !(LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType || LayoutType.tabletPortrait == layoutType);
+        return !(LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType);
     }
 
     private void setSideMenuVisible(boolean visible) {
