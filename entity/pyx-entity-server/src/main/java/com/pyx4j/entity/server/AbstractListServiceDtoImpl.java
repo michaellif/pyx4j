@@ -166,13 +166,14 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     @Override
     public final ICursorIterator<TO> getTOCursor(String encodedCursorReference, EntityListCriteria<TO> dtoCriteria, AttachLevel attachLevel) {
         EntityListCriteria<BO> criteria = criteriaBinder.convertListCriteria(dtoCriteria);
+        final BindingContext context = new BindingContext(BindingType.List);
 
         ICursorIterator<TO> toCreateIterator = new CursorIteratorDelegate<TO, BO>(getBOCursor(encodedCursorReference, criteria, attachLevel)) {
 
             @Override
             public TO next() {
                 BO bo = unfiltered.next();
-                TO to = binder.createTO(bo, new BindingContext(BindingType.List));
+                TO to = binder.createTO(bo, context);
                 onAfterBind(bo, to, RetrieveOperation.List);
                 return to;
             }

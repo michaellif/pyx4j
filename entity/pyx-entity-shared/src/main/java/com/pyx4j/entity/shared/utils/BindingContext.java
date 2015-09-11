@@ -20,7 +20,6 @@
 package com.pyx4j.entity.shared.utils;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
@@ -46,21 +45,10 @@ public class BindingContext {
 
     private final BindingType bindingType;
 
-    private final Map<String, Object> attributes = new HashMap<>();
-
     private final Map<Map<String, Serializable>, IEntity> mapped = new IdentityHashMap<>();
 
     public BindingContext(BindingType bindingType) {
         this.bindingType = bindingType;
-    }
-
-    public void setAttribute(String key, Object value) {
-        attributes.put(key, value);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> T getAttribute(String key) {
-        return (T) attributes.get(key);
     }
 
     void put(IEntity from, IEntity to) {
