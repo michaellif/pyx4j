@@ -128,6 +128,9 @@ public class MailMessage implements Serializable {
     }
 
     public void setTo(String to) {
+        if (to == null) {
+            return;
+        }
         if (this.to == null) {
             this.to = new ArrayList<>();
         }
