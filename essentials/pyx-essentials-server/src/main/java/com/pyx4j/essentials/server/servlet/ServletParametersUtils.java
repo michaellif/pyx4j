@@ -26,6 +26,7 @@ import java.util.EnumSet;
 import javax.servlet.http.HttpServletRequest;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.shared.ApplicationFeature;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.ObjectClassType;
@@ -49,6 +50,9 @@ public class ServletParametersUtils {
                     Class<?> elementType = member.getValueClass();
                     for (Object value : EnumSet.allOf((Class<Enum>) elementType)) {
                         Enum<?> item = (Enum<?>) value;
+                        if ((item instanceof ApplicationFeature) && (!((ApplicationFeature) item).enabled())) {
+                            continue;
+                        }
                         out.html("<tr><td><a href=\"");
                         out.html("?", memberMeta.getFieldName(), "=", item.name(), "\">");
                         out.html(memberMeta.getFieldName(), "=", item.name());
