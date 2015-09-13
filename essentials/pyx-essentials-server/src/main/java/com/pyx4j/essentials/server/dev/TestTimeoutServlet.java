@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.commons.Timeout;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.EntityFactory;
@@ -61,9 +62,14 @@ public class TestTimeoutServlet extends HttpServlet {
         parameters.sleep().setValue(10);
 
         ServletParametersUtils.get(request, parameters);
+
+        out.html("Usage:");
         ServletParametersUtils.help(out, parameters);
 
+        ServletParametersUtils.write(out, parameters);
+
         long start = System.currentTimeMillis();
+        Timeout until = new Timeout(parameters.duration().getValue(1) * Consts.SEC2MILLISECONDS);
 
         for (;;) {
             try {
@@ -73,12 +79,13 @@ public class TestTimeoutServlet extends HttpServlet {
 
             out.text("time: ", TimeUtils.secSince(start));
 
-            if ((Math.abs(System.currentTimeMillis() - start) > parameters.duration().getValue(1) * Consts.SEC2MILLISECONDS)) {
+            if (until.timeout()) {
                 break;
             }
         }
 
         out.html("<p style=\"background-color:33FF33\">DONE</p>");
+        out.htmlScrollToEnd();
 
         IOUtils.closeQuietly(out);
     }

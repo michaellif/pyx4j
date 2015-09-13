@@ -38,6 +38,8 @@ public class ServletTextOutput implements Closeable {
 
     private boolean defaultHtmlBody = false;
 
+    private long lastOutputTime;
+
     private OutputStream out;
 
     public ServletTextOutput(HttpServletResponse response, boolean consumePipeExceptios) throws IOException {
@@ -68,6 +70,7 @@ public class ServletTextOutput implements Closeable {
 
             out.write("</pre>".getBytes());
             out.flush();
+            lastOutputTime = System.currentTimeMillis();
         } catch (IOException e) {
             pipeBroken = true;
             if (consumePipeExceptios) {
@@ -87,6 +90,7 @@ public class ServletTextOutput implements Closeable {
                 out.write(message.getBytes());
             }
             out.flush();
+            lastOutputTime = System.currentTimeMillis();
         } catch (IOException e) {
             pipeBroken = true;
             if (consumePipeExceptios) {
@@ -101,6 +105,10 @@ public class ServletTextOutput implements Closeable {
         return pipeBroken;
     }
 
+    public long getLastOutputTime() {
+        return lastOutputTime;
+    }
+
     @Override
     public void close() throws IOException {
         if (this.out != null) {
@@ -110,6 +118,10 @@ public class ServletTextOutput implements Closeable {
             this.out.close();
             this.out = null;
         }
+    }
+
+    public void htmlScrollToEnd() throws IOException {
+        html("<script>window.scrollTo(0,document.body.scrollHeight);</script>");
     }
 
 }
