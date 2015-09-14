@@ -223,13 +223,13 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
         }
     }
 
-    public PropertyCriterion getPropertyCriterion(IObject<?> member) {
-        for (Criterion citerion : getCriterionsOfType(PropertyCriterion.class)) {
-            if ((citerion instanceof PropertyCriterion) && (member.getPath().equals(((PropertyCriterion) citerion).getPropertyPath()))) {
-                return (PropertyCriterion) citerion;
-            }
+    public PropertyCriterion getFirstPropertyCriterion(IObject<?> member) {
+        List<PropertyCriterion> propertyCriterions = getPropertyCriterions(member);
+        if (propertyCriterions.size() > 0) {
+            return propertyCriterions.get(0);
+        } else {
+            return null;
         }
-        return null;
     }
 
     public List<PropertyCriterion> getPropertyCriterions(IObject<?> member) {
