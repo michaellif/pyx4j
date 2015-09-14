@@ -347,6 +347,10 @@ public class ServerSideConfiguration {
         return null;
     }
 
+    public PropertiesConfiguration getConfigProperties() {
+        return new PropertiesConfiguration(Collections.<String, String> emptyMap());
+    }
+
     public static String getSystemProperties() {
         StringBuffer sysProperties = new StringBuffer();
         Properties properties = System.getProperties();

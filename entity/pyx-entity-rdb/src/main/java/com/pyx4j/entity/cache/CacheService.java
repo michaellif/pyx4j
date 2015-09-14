@@ -141,7 +141,7 @@ public class CacheService {
     public static void resetAll() {
         List<CacheManager> knownCacheManagers = CacheManager.ALL_CACHE_MANAGERS;
         for (CacheManager cm : knownCacheManagers) {
-            cm.removalAll();
+            cm.removeAllCaches();
         }
     }
 

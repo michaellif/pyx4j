@@ -66,6 +66,10 @@ public class DeferredUploadProcess<U extends IEntity, B extends AbstractIFileBlo
     }
 
     @Override
+    public void started() {
+    }
+
+    @Override
     public void cancel() {
         status.setCanceled();
         DeferredProcessRegistry.saveMap();

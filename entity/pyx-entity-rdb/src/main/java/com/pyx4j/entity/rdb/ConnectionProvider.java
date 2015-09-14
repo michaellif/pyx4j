@@ -170,6 +170,10 @@ public class ConnectionProvider {
         }
     }
 
+    public ConnectionPoolRuntimeInfo connectionPoolRuntimeInfo(ConnectionPoolType connectionType) {
+        return connectionPool.connectionPoolRuntimeInfo(connectionType);
+    }
+
     public Connection getAdministrationConnection() {
         try {
             return connectionPool.getDataSource(ConnectionPoolType.DDL).getConnection();

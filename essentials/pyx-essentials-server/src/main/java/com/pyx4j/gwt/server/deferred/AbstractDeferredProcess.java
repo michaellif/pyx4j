@@ -42,6 +42,8 @@ public abstract class AbstractDeferredProcess implements IDeferredProcess {
 
     }
 
+    protected volatile boolean started = false;
+
     protected volatile boolean completed = false;
 
     //TODO use AtomicBoolean
@@ -49,6 +51,11 @@ public abstract class AbstractDeferredProcess implements IDeferredProcess {
 
     //TODO Use,this
     protected final RunningProcess progress = new RunningProcess();
+
+    @Override
+    public void started() {
+        started = true;
+    }
 
     @Override
     public void cancel() {
@@ -71,6 +78,8 @@ public abstract class AbstractDeferredProcess implements IDeferredProcess {
             r.setCompleted();
         } else if (canceled) {
             r.setCanceled();
+        } else if (!started) {
+            r.setQueued();
         } else {
             r.setMessage(progress.progressStatusMessage.get());
         }
