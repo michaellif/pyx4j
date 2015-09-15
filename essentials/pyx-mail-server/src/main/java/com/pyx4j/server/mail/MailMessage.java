@@ -63,6 +63,8 @@ public class MailMessage implements Serializable {
 
     private Collection<String> keywords;
 
+    private Collection<Serializable> applicationAttributes;
+
     private transient String deliveryErrorMessage;
 
     public MailMessage() {
@@ -126,6 +128,9 @@ public class MailMessage implements Serializable {
     }
 
     public void setTo(String to) {
+        if (to == null) {
+            return;
+        }
         if (this.to == null) {
             this.to = new ArrayList<>();
         }
@@ -246,6 +251,29 @@ public class MailMessage implements Serializable {
             this.keywords = new ArrayList<>();
         }
         this.keywords.addAll(Arrays.asList(keyword));
+    }
+
+    public void addApplicationAttribute(Serializable object) {
+        if (applicationAttributes == null) {
+            applicationAttributes = new ArrayList<>();
+        }
+        applicationAttributes.add(object);
+    }
+
+    public boolean containsApplicationAttribute(Serializable object) {
+        if (applicationAttributes == null) {
+            return false;
+        } else {
+            return applicationAttributes.contains(object);
+        }
+    }
+
+    public Collection<Serializable> getApplicationAttributes() {
+        if (applicationAttributes == null) {
+            return Collections.emptyList();
+        } else {
+            return applicationAttributes;
+        }
     }
 
     public List<MailAttachment> getAttachments() {

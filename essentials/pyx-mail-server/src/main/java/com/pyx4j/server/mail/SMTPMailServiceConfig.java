@@ -19,7 +19,9 @@
  */
 package com.pyx4j.server.mail;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.PropertiesConfiguration;
@@ -29,6 +31,8 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
     protected String host;
 
     protected int port = 465;
+
+    protected String sender;
 
     protected String user;
 
@@ -52,6 +56,8 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
 
     protected Integer timeout;
 
+    protected Map<String, String> headers;
+
     public SMTPMailServiceConfig() {
     }
 
@@ -69,6 +75,10 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
 
     public int getPort() {
         return port;
+    }
+
+    public String getSender() {
+        return sender;
     }
 
     public String getUser() {
@@ -121,11 +131,27 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
         this.blockedMailForwardTo = blockedMailForwardTo;
     }
 
+    public Set<Map.Entry<String, String>> getHeaders() {
+        if (headers == null) {
+            return Collections.emptySet();
+        }
+        return headers.entrySet();
+    }
+
+    // Simplified solution callback to enable different email providers for different email types.
+    public SMTPMailServiceConfig selectConfigurationInstance(MailMessage mailMessage) {
+        return this;
+    }
+
     public void readProperties(String prefix, Map<String, String> properties) {
         PropertiesConfiguration c = new PropertiesConfiguration(prefix, properties);
         this.host = c.getValue("host", this.host);
         this.port = c.getIntegerValue("port", this.port);
         this.starttls = c.getBooleanValue("starttls", this.starttls);
+
+        this.sender = c.getValue("sender", this.sender);
+
+        this.headers = c.getValues("headers");
 
         this.maxDeliveryAttempts = c.getIntegerValue("maxDeliveryAttempts", this.maxDeliveryAttempts);
         this.queuePriority = c.getIntegerValue("queuePriority", this.queuePriority);
@@ -136,6 +162,8 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
 
         this.user = c.getValue("user", this.user);
         this.password = c.getValue("password", this.password);
+
+        this.debug = c.getBooleanValue("debug", this.debug);
 
         String connectionTimeOutStrValue = c.getValue("smtp.connectiontimeout");
         if (null != connectionTimeOutStrValue) {
@@ -153,19 +181,21 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
     public String toString() {
         StringBuilder b = new StringBuilder();
         b.append("configurationClass                                : ").append(this.getClass().getName()).append("\n");
-        b.append("host                                              : ").append(this.host).append("\n");
-        b.append("port                                              : ").append(this.port).append("\n");
-        b.append("starttls                                          : ").append(this.starttls).append("\n");
-        b.append("user                                              : ").append(this.user).append("\n");
+        b.append("host                                              : ").append(getHost()).append("\n");
+        b.append("sender                                            : ").append(getSender()).append("\n");
+        b.append("port                                              : ").append(getPort()).append("\n");
+        b.append("starttls                                          : ").append(isStarttls()).append("\n");
+        b.append("user                                              : ").append(getUser()).append("\n");
         b.append("allowSendToEmailSufix                             : ").append(getAllowSendToEmailSufix()).append("\n");
         b.append("blockedMailForwardTo                              : ").append(getBlockedMailForwardTo()).append("\n");
         b.append("forwardAllTo                                      : ").append(this.forwardAllTo).append("\n");
         b.append("forwardAllTo (active)                             : ").append(getForwardAllTo()).append("\n");
-        b.append("maxDeliveryAttempts                               : ").append(this.maxDeliveryAttempts).append("\n");
-        b.append("queuePriority                                     : ").append(this.queuePriority).append("\n");
-        b.append("smtp.connectionTimeout                            : ").append((null == this.connectionTimeout) ? "" : this.connectionTimeout.intValue())
-                .append("\n");
-        b.append("smtp.timeout                                      : ").append((null == this.timeout) ? "" : this.timeout.intValue()).append("\n");
+        b.append("maxDeliveryAttempts                               : ").append(maxDeliveryAttempts()).append("\n");
+        b.append("queuePriority                                     : ").append(queuePriority()).append("\n");
+        b.append("debug                                             : ").append(isDebug()).append("\n");
+        b.append("smtp.connectionTimeout                            : ").append(getConnectionTimeout()).append("\n");
+        b.append("smtp.timeout                                      : ").append(getTimeout()).append("\n");
+        b.append("smtp.headers                                      : ").append(getHeaders()).append("\n");
 
         return b.toString();
     }
