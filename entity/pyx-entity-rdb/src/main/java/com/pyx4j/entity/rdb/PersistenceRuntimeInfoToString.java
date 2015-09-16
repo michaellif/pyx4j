@@ -34,7 +34,7 @@ public class PersistenceRuntimeInfoToString {
             b.append(CommonsStringUtils.paddingRight(ct.name() + ".NumBusyConnections", 50, ' ')).append(": ").append(pri.getNumBusyConnections()).append("\n");
             b.append(CommonsStringUtils.paddingRight(ct.name() + ".NumIdleConnections", 50, ' ')).append(": ").append(pri.getNumIdleConnections()).append("\n");
             b.append(CommonsStringUtils.paddingRight(ct.name() + ".NumFailedCheckouts", 50, ' ')).append(": ").append(pri.getNumFailedCheckouts()).append("\n");
-            b.append(CommonsStringUtils.paddingRight(ct.name() + ".Info", 50, ' ')).append(": ").append(pri.getStatementCacheInfo()).append("\n");
+            b.append(CommonsStringUtils.paddingRight(ct.name() + ".Info", 50, ' ')).append(": ").append(pri.getInfo()).append("\n");
             b.append(CommonsStringUtils.paddingRight(ct.name() + ".StatementCache", 50, ' ')).append(": ").append(pri.getStatementCacheInfo()).append("\n");
 
         }
