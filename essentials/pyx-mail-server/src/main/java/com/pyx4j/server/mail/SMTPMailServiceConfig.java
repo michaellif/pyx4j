@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.PropertiesConfiguration;
 
@@ -52,9 +53,15 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
 
     protected String forwardAllTo;
 
-    protected Integer connectionTimeout;
+    //Socket connection timeout value in milliseconds. This timeout is implemented by java.net.Socket. -1 is infinite timeout.
+    protected int connectionTimeout = 90 * Consts.SEC2MSEC;
 
-    protected Integer timeout;
+    //Socket read timeout value in milliseconds. This timeout is implemented by java.net.Socket. -1  is infinite timeout.
+    protected int timeout = 90 * Consts.SEC2MSEC;
+
+    //see https://javamail.java.net/nonav/docs/api/com/sun/mail/smtp/package-summary.html
+    // This is overridden by predefined properties we have in this config
+    protected Map<String, String> properties;
 
     protected Map<String, String> headers;
 
@@ -103,12 +110,19 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
         return queuePriority;
     }
 
-    public Integer getConnectionTimeout() {
+    public int getConnectionTimeout() {
         return connectionTimeout;
     }
 
-    public Integer getTimeout() {
+    public int getTimeout() {
         return timeout;
+    }
+
+    public Set<Map.Entry<String, String>> getProperties() {
+        if (properties == null) {
+            return Collections.emptySet();
+        }
+        return properties.entrySet();
     }
 
     public boolean isDebug() {
@@ -165,22 +179,16 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
 
         this.debug = c.getBooleanValue("debug", this.debug);
 
-        String connectionTimeOutStrValue = c.getValue("smtp.connectiontimeout");
-        if (null != connectionTimeOutStrValue) {
-            this.connectionTimeout = Integer.valueOf(connectionTimeOutStrValue.trim());
-        }
-
-        String timeout = c.getValue("smtp.timeout");
-        if (null != timeout) {
-            this.timeout = Integer.valueOf(timeout.trim());
-        }
-
+        this.connectionTimeout = c.getIntegerValue("smtp.connectiontimeout", this.connectionTimeout);
+        this.timeout = c.getIntegerValue("smtp.timeout", this.timeout);
+        this.properties = c.getValues("properties");
     }
 
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();
         b.append("configurationClass                                : ").append(this.getClass().getName()).append("\n");
+        b.append("configurationId                                   : ").append(configurationId()).append("\n");
         b.append("host                                              : ").append(getHost()).append("\n");
         b.append("sender                                            : ").append(getSender()).append("\n");
         b.append("port                                              : ").append(getPort()).append("\n");
@@ -195,7 +203,8 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
         b.append("debug                                             : ").append(isDebug()).append("\n");
         b.append("smtp.connectionTimeout                            : ").append(getConnectionTimeout()).append("\n");
         b.append("smtp.timeout                                      : ").append(getTimeout()).append("\n");
-        b.append("smtp.headers                                      : ").append(getHeaders()).append("\n");
+        b.append("headers                                           : ").append(getHeaders()).append("\n");
+        b.append("properties                                        : ").append(getProperties()).append("\n");
 
         return b.toString();
     }
