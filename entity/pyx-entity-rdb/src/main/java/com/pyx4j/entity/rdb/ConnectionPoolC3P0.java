@@ -122,6 +122,7 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
         dataSource.setMinPoolSize(cpConfiguration.minPoolSize());
         dataSource.setMaxPoolSize(cpConfiguration.maxPoolSize());
         dataSource.setMaxStatements(cpConfiguration.maxPoolPreparedStatements());
+        dataSource.setMaxStatementsPerConnection(cpConfiguration.maxStatementsPerConnection());
 
         dataSource.setCheckoutTimeout(Consts.SEC2MILLISECONDS * cpConfiguration.getCheckoutTimeout());
 

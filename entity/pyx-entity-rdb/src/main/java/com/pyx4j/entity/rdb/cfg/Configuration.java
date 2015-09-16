@@ -51,6 +51,8 @@ public interface Configuration extends IPersistenceConfiguration {
 
         public int maxPoolPreparedStatements = 1000;
 
+        public int maxStatementsPerConnection = 0;
+
         public boolean testConnectionOnCheckout;
 
         public boolean testConnectionOnCheckin = false;
@@ -127,6 +129,10 @@ public interface Configuration extends IPersistenceConfiguration {
 
         public int maxPoolPreparedStatements() {
             return maxPoolPreparedStatements;
+        }
+
+        public int maxStatementsPerConnection() {
+            return maxStatementsPerConnection;
         }
 
         public boolean testConnectionOnCheckout() {
