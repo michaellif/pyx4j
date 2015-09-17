@@ -124,8 +124,10 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
         dataSource.setInitialPoolSize(cpConfiguration.initialPoolSize());
         dataSource.setMinPoolSize(cpConfiguration.minPoolSize());
         dataSource.setMaxPoolSize(cpConfiguration.maxPoolSize());
+
         dataSource.setMaxStatements(cpConfiguration.maxPoolPreparedStatements());
         dataSource.setMaxStatementsPerConnection(cpConfiguration.maxStatementsPerConnection());
+        dataSource.setStatementCacheNumDeferredCloseThreads(cpConfiguration.statementCacheNumDeferredCloseThreads());
 
         dataSource.setCheckoutTimeout(Consts.SEC2MILLISECONDS * cpConfiguration.getCheckoutTimeout());
 
@@ -134,6 +136,8 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
 
         dataSource.setTestConnectionOnCheckout(cpConfiguration.testConnectionOnCheckout());
         dataSource.setTestConnectionOnCheckin(cpConfiguration.testConnectionOnCheckin());
+
+        dataSource.setNumHelperThreads(cpConfiguration.numHelperThreads());
 
         Map<String, Object> extensions = new HashMap<>();
         extensions.put(ConnectionPoolType.class.getName(), connectionType);

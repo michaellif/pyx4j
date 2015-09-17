@@ -44,12 +44,18 @@ public class ConfigurationToString {
             b.append(CommonsStringUtils.paddingRight(ct.name() + ".maxPoolSize", 50, ' ')).append(": ").append(cpc.maxPoolSize()).append("\n");
             b.append(CommonsStringUtils.paddingRight(ct.name() + ".checkoutTimeout", 50, ' ')).append(": ")
                     .append(TimeUtils.durationFormatSeconds(cpc.getCheckoutTimeout())).append("\n");
+
             b.append(CommonsStringUtils.paddingRight(ct.name() + ".unreturnedConnectionTimeout", 50, ' ')).append(": ")
                     .append(TimeUtils.durationFormatSeconds(cpc.unreturnedConnectionTimeout())).append("\n");
+            b.append(CommonsStringUtils.paddingRight(ct.name() + ".numHelperThreads", 50, ' ')).append(": ").append(cpc.numHelperThreads()).append("\n");
+
             b.append(CommonsStringUtils.paddingRight(ct.name() + ".maxPoolPreparedStatements", 50, ' ')).append(": ").append(cpc.maxPoolPreparedStatements())
                     .append("\n");
             b.append(CommonsStringUtils.paddingRight(ct.name() + ".maxStatementsPerConnection", 50, ' ')).append(": ").append(cpc.maxStatementsPerConnection())
                     .append("\n");
+            b.append(CommonsStringUtils.paddingRight(ct.name() + ".statementCacheNumDeferredCloseThreads", 50, ' ')).append(": ")
+                    .append(cpc.statementCacheNumDeferredCloseThreads()).append("\n");
+
             b.append(CommonsStringUtils.paddingRight(ct.name() + ".testConnectionOnCheckout", 50, ' ')).append(": ").append(cpc.testConnectionOnCheckout())
                     .append("\n");
             b.append(CommonsStringUtils.paddingRight(ct.name() + ".testConnectionOnCheckin", 50, ' ')).append(": ").append(cpc.testConnectionOnCheckin())

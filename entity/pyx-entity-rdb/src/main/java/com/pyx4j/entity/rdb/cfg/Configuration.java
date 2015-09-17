@@ -53,9 +53,13 @@ public interface Configuration extends IPersistenceConfiguration {
 
         public int maxStatementsPerConnection = 0;
 
+        public int statementCacheNumDeferredCloseThreads = 0;
+
         public boolean testConnectionOnCheckout;
 
         public boolean testConnectionOnCheckin = false;
+
+        public int numHelperThreads = 3;
 
         /**
          * Set the default values for all DB connection types
@@ -135,12 +139,20 @@ public interface Configuration extends IPersistenceConfiguration {
             return maxStatementsPerConnection;
         }
 
+        public int statementCacheNumDeferredCloseThreads() {
+            return statementCacheNumDeferredCloseThreads;
+        }
+
         public boolean testConnectionOnCheckout() {
             return testConnectionOnCheckout;
         }
 
         public boolean testConnectionOnCheckin() {
             return testConnectionOnCheckin;
+        }
+
+        public int numHelperThreads() {
+            return numHelperThreads;
         }
 
     }
