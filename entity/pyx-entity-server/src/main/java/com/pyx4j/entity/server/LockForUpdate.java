@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,25 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 10, 2011
- * @author dmitry
- * @version $Id$
+ * Created on Sep 17, 2015
+ * @author vlads
  */
-package com.pyx4j.entity.rdb;
+package com.pyx4j.entity.server;
 
-import javax.sql.DataSource;
+public enum LockForUpdate {
 
-import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
+    Wait,
 
-public interface ConnectionPool {
+    NoWait
 
-    public DataSource getDataSource(ConnectionPoolType connectionType);
-
-    public int getConnectionTimeout(ConnectionPoolType connectionType);
-
-    public void resetConnectionPool();
-
-    public void close() throws Throwable;
-
-    public ConnectionPoolRuntimeInfo connectionPoolRuntimeInfo(ConnectionPoolType connectionType);
 }

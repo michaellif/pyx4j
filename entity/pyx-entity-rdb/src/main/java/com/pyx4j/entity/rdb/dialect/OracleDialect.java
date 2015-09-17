@@ -176,6 +176,15 @@ public class OracleDialect extends Dialect {
     }
 
     @Override
+    public String sqlForUpdateWait(int seconds) {
+        if (seconds == 0) {
+            return "";
+        } else {
+            return " WAIT " + seconds;
+        }
+    }
+
+    @Override
     public boolean isUniqueConstraintException(SQLException e) {
         if (e instanceof SQLIntegrityConstraintViolationException) {
             return (e.getErrorCode() == 1);

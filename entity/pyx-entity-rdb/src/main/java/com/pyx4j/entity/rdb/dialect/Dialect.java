@@ -309,6 +309,10 @@ public abstract class Dialect {
         throw new Error("Dialect does not support limit");
     }
 
+    public String sqlForUpdateWait(int seconds) {
+        return "";
+    }
+
     public String sqlSortNulls(boolean descending) {
         return "";
     }

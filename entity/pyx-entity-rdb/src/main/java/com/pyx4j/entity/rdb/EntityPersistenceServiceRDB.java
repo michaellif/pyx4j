@@ -87,6 +87,7 @@ import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.LockForUpdate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.TransactionScopeOption;
@@ -1166,7 +1167,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
                 primaryKey = primaryKey.asCurrentKey();
             }
         }
-        if (!tm.retrieve(getPersistenceContext(), primaryKey, baseEntity, AttachLevel.Attached, true)) {
+        if (!tm.retrieve(getPersistenceContext(), primaryKey, baseEntity, AttachLevel.Attached, LockForUpdate.Wait)) {
             if (tm.getPrimaryKeyStrategy() != Table.PrimaryKeyStrategy.ASSIGNED) {
                 throw new RuntimeException("Entity '" + tm.entityMeta().getCaption() + "' " + entity.getPrimaryKey() + " NotFound");
             } else {
@@ -1369,14 +1370,19 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
 
     @Override
     public <T extends IEntity> T retrieve(Class<T> entityClass, Key primaryKey) {
-        return retrieve(entityClass, primaryKey, AttachLevel.Attached, false);
+        return retrieve(entityClass, primaryKey, AttachLevel.Attached, null);
     }
 
     @Override
     public <T extends IEntity> T retrieve(Class<T> entityClass, Key primaryKey, AttachLevel attachLevel, boolean forUpdate) {
+        return retrieve(entityClass, primaryKey, AttachLevel.Attached, forUpdate ? LockForUpdate.Wait : null);
+    }
+
+    @Override
+    public <T extends IEntity> T retrieve(Class<T> entityClass, Key primaryKey, AttachLevel attachLevel, LockForUpdate lockForUpdate) {
         final T entity = EntityFactory.create(entityClass);
         entity.setPrimaryKey(primaryKey);
-        if (retrieve(entity, attachLevel, forUpdate)) {
+        if (retrieve(entity, attachLevel, lockForUpdate)) {
             return entity;
         } else {
             return null;
@@ -1385,11 +1391,16 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
 
     @Override
     public <T extends IEntity> boolean retrieve(T entity) {
-        return retrieve(entity, AttachLevel.Attached, false);
+        return retrieve(entity, AttachLevel.Attached, null);
     }
 
     @Override
     public <T extends IEntity> boolean retrieve(T entity, AttachLevel attachLevel, boolean forUpdate) {
+        return retrieve(entity, AttachLevel.Attached, forUpdate ? LockForUpdate.Wait : null);
+    }
+
+    @Override
+    public <T extends IEntity> boolean retrieve(T entity, AttachLevel attachLevel, LockForUpdate lockForUpdate) {
         if (entity.getPrimaryKey() == null) {
             Mappings.assertQueryableEntity(entity.getEntityMeta());
             return false;
@@ -1398,7 +1409,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
         try {
             entity = entity.cast();
             clearRetrieveValues(entity);
-            return cascadeRetrieve(entity, attachLevel, forUpdate) != null;
+            return cascadeRetrieve(entity, attachLevel, lockForUpdate) != null;
         } finally {
             endCallContext();
         }
@@ -1429,7 +1440,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
                     retrieve(entityMember.getOwner());
                 }
                 if (entityMember.getPrimaryKey() != null) {
-                    if (cascadeRetrieve(entityMember, attachLevel, false) == null) {
+                    if (cascadeRetrieve(entityMember, attachLevel, null) == null) {
                         throw new RuntimeException("Entity '" + entityMember.getEntityMeta().getCaption() + "' " + entityMember.getPrimaryKey() + " "
                                 + entityMember.getPath() + " NotFound");
                     }
@@ -1473,7 +1484,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
                     collectionMember.setCollectionSizeOnly(collectionMember.size());
                 } else {
                     for (IEntity childEntity : collectionMember) {
-                        if (cascadeRetrieve(childEntity, attachLevel, false) == null) {
+                        if (cascadeRetrieve(childEntity, attachLevel, null) == null) {
                             throw new RuntimeException("Entity '" + childEntity.getEntityMeta().getCaption() + "' " + childEntity.getPrimaryKey() + " "
                                     + childEntity.getPath() + " NotFound");
                         }
@@ -1496,7 +1507,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends IEntity> T cascadeRetrieve(T entity, AttachLevel attachLevel, boolean forUpdate) {
+    private <T extends IEntity> T cascadeRetrieve(T entity, AttachLevel attachLevel, LockForUpdate lockForUpdate) {
         if (entity.getPrimaryKey() == null) {
             Mappings.assertQueryableEntity(entity.getEntityMeta());
             return null;
@@ -1512,7 +1523,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
         }
 
         TableModel tm = tableModel(entity.getEntityMeta());
-        if (tm.retrieve(getPersistenceContext(), entity.getPrimaryKey(), entity, attachLevel, forUpdate)) {
+        if (tm.retrieve(getPersistenceContext(), entity.getPrimaryKey(), entity, attachLevel, lockForUpdate)) {
             entity = cascadeRetrieveMembers(entity, attachLevel);
             entity.setAttachLevel(attachLevel);
             if (attachLevel == AttachLevel.Attached) {
@@ -1568,7 +1579,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
         if (memberMeta.isEntity()) {
             IEntity childEntity = ((IEntity) member.getMember(entity)).cast();
             if (childEntity.getPrimaryKey() != null) {
-                if (cascadeRetrieve(childEntity, retriveAttachLevel, false) == null) {
+                if (cascadeRetrieve(childEntity, retriveAttachLevel, null) == null) {
                     throw new RuntimeException("Entity '" + memberMeta.getCaption() + "' [primary key =  " + childEntity.getPrimaryKey() + "; path = "
                             + childEntity.getPath() + "] is not found");
                 }
@@ -1580,7 +1591,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
             @SuppressWarnings("unchecked")
             ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
             for (IEntity childEntity : iCollectionMember) {
-                if (cascadeRetrieve(childEntity, retriveAttachLevel, false) == null) {
+                if (cascadeRetrieve(childEntity, retriveAttachLevel, null) == null) {
                     throw new RuntimeException("Entity '" + childEntity.getEntityMeta().getCaption() + "' " + childEntity.getPrimaryKey() + " "
                             + childEntity.getPath() + " NotFound");
                 }
@@ -1900,7 +1911,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
         try {
             TableModel tm = tableModel(entityMeta);
             IEntity cascadedeleteDataEntity = EntityFactory.create(entityMeta.getEntityClass());
-            if (tm.retrieve(getPersistenceContext(), primaryKey, cascadedeleteDataEntity, AttachLevel.Attached, false)) {
+            if (tm.retrieve(getPersistenceContext(), primaryKey, cascadedeleteDataEntity, AttachLevel.Attached, null)) {
                 cascadeRetrieveMembers(cascadedeleteDataEntity, AttachLevel.Attached);
             } else {
                 throw new RuntimeException("Entity '" + entityMeta.getCaption() + "' " + primaryKey + " NotFound");

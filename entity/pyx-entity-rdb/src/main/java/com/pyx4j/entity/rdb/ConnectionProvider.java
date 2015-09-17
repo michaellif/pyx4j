@@ -171,6 +171,10 @@ public class ConnectionProvider {
         }
     }
 
+    public int getConnectionTimeout(ConnectionTarget connectionTarget) {
+        return connectionPool.getConnectionTimeout(ConnectionPoolType.translate(connectionTarget));
+    }
+
     public ConnectionPoolRuntimeInfo connectionPoolRuntimeInfo(ConnectionPoolType connectionType) {
         return connectionPool.connectionPoolRuntimeInfo(connectionType);
     }

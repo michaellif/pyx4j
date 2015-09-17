@@ -89,6 +89,7 @@ import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityCacheService;
 import com.pyx4j.entity.server.IEntityPersistenceService;
+import com.pyx4j.entity.server.LockForUpdate;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.shared.ConcurrentUpdateException;
@@ -99,9 +100,9 @@ import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.shared.SecurityViolationException;
 
 /**
- * 
+ *
  * @see PersistenceServicesFactory#GAE_IMPL_CLASS
- * 
+ *
  */
 public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
@@ -1203,11 +1204,16 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public <T extends IEntity> T retrieve(Class<T> entityClass, com.pyx4j.commons.Key primaryKey) {
-        return retrieve(entityClass, primaryKey, AttachLevel.Attached, false);
+        return retrieve(entityClass, primaryKey, AttachLevel.Attached, null);
     }
 
     @Override
     public <T extends IEntity> T retrieve(Class<T> entityClass, com.pyx4j.commons.Key primaryKey, AttachLevel attachLevel, boolean forUpdate) {
+        return retrieve(entityClass, primaryKey, AttachLevel.Attached, LockForUpdate.Wait);
+    }
+
+    @Override
+    public <T extends IEntity> T retrieve(Class<T> entityClass, com.pyx4j.commons.Key primaryKey, AttachLevel attachLevel, LockForUpdate lockForUpdate) {
         T iEntity = EntityFactory.create(entityClass);
         iEntity.setPrimaryKey(primaryKey);
         if (retrieve(iEntity, attachLevel, false)) {
@@ -1219,11 +1225,16 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public <T extends IEntity> boolean retrieve(T entity) {
-        return retrieve(entity, AttachLevel.Attached, false);
+        return retrieve(entity, AttachLevel.Attached, null);
     }
 
     @Override
     public <T extends IEntity> boolean retrieve(final T iEntity, AttachLevel attachLevel, boolean forUpdate) {
+        return retrieve(iEntity, AttachLevel.Attached, LockForUpdate.Wait);
+    }
+
+    @Override
+    public <T extends IEntity> boolean retrieve(final T iEntity, AttachLevel attachLevel, LockForUpdate lockForUpdate) {
         RetrieveRequestsAggregator globalAggregator = requestAggregator.get();
         final RetrieveRequestsAggregator aggregator = (globalAggregator != null) ? globalAggregator : new RetrieveRequestsAggregator(this);
 

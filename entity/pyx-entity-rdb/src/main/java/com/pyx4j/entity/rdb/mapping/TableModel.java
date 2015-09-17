@@ -65,6 +65,7 @@ import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.cfg.Configuration.Ddl;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
+import com.pyx4j.entity.server.LockForUpdate;
 import com.pyx4j.entity.shared.IntegrityConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
@@ -324,8 +325,8 @@ public class TableModel {
 
                 String constraintName = dialect.getNamingConvention().sqlForeignKeyName(this.tableName, member.sqlName(), refSqlTableName);
                 if (!tableMetadata.hasForeignKey(constraintName)) {
-                    String sql = TableDDL.sqlCreateForeignKey(dialect, this, this.getTableName(), member.sqlName(), refSqlTableName, mappings
-                            .getConfiguration().allowForeignKeyDeferrable());
+                    String sql = TableDDL.sqlCreateForeignKey(dialect, this, this.getTableName(), member.sqlName(), refSqlTableName,
+                            mappings.getConfiguration().allowForeignKeyDeferrable());
                     logApplicationVersionOnce();
                     ddlLog.info("{}", sql);
                     SQLUtils.execute(persistenceContext.getConnection(), sql);
@@ -339,8 +340,8 @@ public class TableModel {
                 {
                     String constraintName = dialect.getNamingConvention().sqlForeignKeyName(member.sqlName(), member.sqlOwnerName(), tableName);
                     if (!memberTableMetadata.hasForeignKey(constraintName)) {
-                        String sql = TableDDL.sqlCreateForeignKey(dialect, this, member.sqlName(), member.sqlOwnerName(), tableName, mappings
-                                .getConfiguration().allowForeignKeyDeferrable());
+                        String sql = TableDDL.sqlCreateForeignKey(dialect, this, member.sqlName(), member.sqlOwnerName(), tableName,
+                                mappings.getConfiguration().allowForeignKeyDeferrable());
                         logApplicationVersionOnce();
                         ddlLog.info("{}", sql);
                         SQLUtils.execute(persistenceContext.getConnection(), sql);
@@ -354,8 +355,8 @@ public class TableModel {
                         String refSqlTableName = TableModel.getTableName(dialect, EntityFactory.getEntityMeta(entityClass));
                         String constraintName = dialect.getNamingConvention().sqlForeignKeyName(member.sqlName(), member.sqlValueName(), refSqlTableName);
                         if (!memberTableMetadata.hasForeignKey(constraintName)) {
-                            String sql = TableDDL.sqlCreateForeignKey(dialect, this, member.sqlName(), member.sqlValueName(), refSqlTableName, mappings
-                                    .getConfiguration().allowForeignKeyDeferrable());
+                            String sql = TableDDL.sqlCreateForeignKey(dialect, this, member.sqlName(), member.sqlValueName(), refSqlTableName,
+                                    mappings.getConfiguration().allowForeignKeyDeferrable());
                             logApplicationVersionOnce();
                             ddlLog.info("{}", sql);
                             SQLUtils.execute(persistenceContext.getConnection(), sql);
@@ -732,7 +733,7 @@ public class TableModel {
             int parameterIndex = 1;
             if (classModel != ModelType.regular) {
                 DiscriminatorValue discriminator = entity.getValueClass().getAnnotation(DiscriminatorValue.class);
-                assert (discriminator != null) : "Can't persist Abstract " + entity.getValueClass();
+                assert(discriminator != null) : "Can't persist Abstract " + entity.getValueClass();
                 stmt.setString(parameterIndex, discriminator.value());
                 parameterIndex++;
             }
@@ -768,8 +769,9 @@ public class TableModel {
             log.error("{} SQL insert error", tableName, e);
             debugErrors(persistenceContext, e);
             if (dialect.isUniqueConstraintException(e)) {
-                throw new UniqueConstraintUserRuntimeException(i18n.tr("Unable to create \"{0}\", duplicate \"{1}\" exists", entityMeta().getCaption(),
-                        getUniqueConstraintFieldName()), EntityFactory.getEntityPrototype(entity.getValueClass()));
+                throw new UniqueConstraintUserRuntimeException(
+                        i18n.tr("Unable to create \"{0}\", duplicate \"{1}\" exists", entityMeta().getCaption(), getUniqueConstraintFieldName()),
+                        EntityFactory.getEntityPrototype(entity.getValueClass()));
             } else {
                 throw new RuntimeException(e);
             }
@@ -819,8 +821,9 @@ public class TableModel {
             log.error("{} SQL update error", tableName, e);
             debugErrors(persistenceContext, e);
             if (dialect.isUniqueConstraintException(e)) {
-                throw new UniqueConstraintUserRuntimeException(i18n.tr("Unable to update \"{0}\", duplicate \"{1}\" exists", entityMeta().getCaption(),
-                        getUniqueConstraintFieldName()), EntityFactory.getEntityPrototype(entity.getValueClass()));
+                throw new UniqueConstraintUserRuntimeException(
+                        i18n.tr("Unable to update \"{0}\", duplicate \"{1}\" exists", entityMeta().getCaption(), getUniqueConstraintFieldName()),
+                        EntityFactory.getEntityPrototype(entity.getValueClass()));
             } else {
                 throw new RuntimeException(e);
             }
@@ -867,8 +870,9 @@ public class TableModel {
             log.error("{} SQL update error", tableName, e);
             debugErrors(persistenceContext, e);
             if (dialect.isUniqueConstraintException(e)) {
-                throw new UniqueConstraintUserRuntimeException(i18n.tr("Unable to update \"{0}\", duplicate \"{1}\" exists", entityMeta().getCaption(),
-                        getUniqueConstraintFieldName()), EntityFactory.getEntityPrototype(entityTemplate.getValueClass()));
+                throw new UniqueConstraintUserRuntimeException(
+                        i18n.tr("Unable to update \"{0}\", duplicate \"{1}\" exists", entityMeta().getCaption(), getUniqueConstraintFieldName()),
+                        EntityFactory.getEntityPrototype(entityTemplate.getValueClass()));
             } else {
                 throw new RuntimeException(e);
             }
@@ -995,17 +999,17 @@ public class TableModel {
 
     public void retrieveMember(PersistenceContext persistenceContext, IEntity entity, IEntity entityMember) {
         MemberOperationsMeta member = entityOperationsMeta.getMember(new Path(entity.getValueClass(), entityMember.getFieldName()).toString());
-        assert (member != null) : "Member " + entityMember.getFieldName() + " not found";
+        assert(member != null) : "Member " + entityMember.getFieldName() + " not found";
         TableModelExternal.retrieve(persistenceContext, entity, (MemberExternalOperationsMeta) member);
     }
 
     public void retrieveMember(PersistenceContext persistenceContext, IEntity entity, ICollection<?, ?> collectionMember) {
         MemberOperationsMeta member = entityOperationsMeta.getMember(new Path(entity.getValueClass(), collectionMember.getFieldName()).toString());
-        assert (member != null) : "Member " + collectionMember.getFieldName() + " not found";
+        assert(member != null) : "Member " + collectionMember.getFieldName() + " not found";
         TableModelCollections.retrieve(persistenceContext, entity, (MemberCollectionOperationsMeta) member);
     }
 
-    public boolean retrieve(PersistenceContext persistenceContext, Key primaryKey, IEntity entity, AttachLevel attachLevel, boolean forUpdate) {
+    public boolean retrieve(PersistenceContext persistenceContext, Key primaryKey, IEntity entity, AttachLevel attachLevel, LockForUpdate lockForUpdate) {
         if (PersistenceTrace.traceEntity) {
             if (PersistenceTrace.traceEntityFilter(entity)) {
                 log.info("Retrieve {} as {}\n{}", entity.getDebugExceptionInfoString(), attachLevel, PersistenceTrace.getCallOrigin());
@@ -1020,8 +1024,16 @@ public class TableModel {
             if (dialect.isMultitenantSharedSchema()) {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
-            if (forUpdate) {
+            if (lockForUpdate != null) {
                 sql.append(" FOR UPDATE");
+                switch (lockForUpdate) {
+                case NoWait:
+                    sql.append(" NOWAIT");
+                    break;
+                case Wait:
+                    sql.append(dialect.sqlForUpdateWait(persistenceContext.getConnectionTimeout()));
+                    break;
+                }
             }
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
@@ -1421,7 +1433,8 @@ public class TableModel {
         return (Number) aggregate(persistenceContext, criteria, SQLAggregateFunctions.MAX, "m1." + sqlName);
     }
 
-    public <T extends IEntity> Object aggregate(PersistenceContext persistenceContext, EntityQueryCriteria<T> criteria, SQLAggregateFunctions func, String args) {
+    public <T extends IEntity> Object aggregate(PersistenceContext persistenceContext, EntityQueryCriteria<T> criteria, SQLAggregateFunctions func,
+            String args) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         String sql = null;
@@ -1481,8 +1494,9 @@ public class TableModel {
             log.error("{} SQL delete error", tableName, e);
             debugErrors(persistenceContext, e);
             if (dialect.isIntegrityConstraintException(e)) {
-                throw new IntegrityConstraintUserRuntimeException(i18n.tr("Unable to delete \"{0}\". The record is referenced by another record.", entityMeta()
-                        .getCaption()), EntityFactory.getEntityPrototype(entityMeta().getEntityClass()));
+                throw new IntegrityConstraintUserRuntimeException(
+                        i18n.tr("Unable to delete \"{0}\". The record is referenced by another record.", entityMeta().getCaption()),
+                        EntityFactory.getEntityPrototype(entityMeta().getEntityClass()));
             } else {
                 throw new RuntimeException(e);
             }

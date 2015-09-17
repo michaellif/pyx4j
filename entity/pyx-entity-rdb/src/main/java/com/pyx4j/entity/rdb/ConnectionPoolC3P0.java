@@ -50,12 +50,15 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
 
     private static boolean singleInstanceCreated = false;
 
+    private final Configuration configuration;
+
     private final Map<ConnectionPoolType, DataSource> dataSources = new HashMap<ConnectionPoolType, DataSource>();
 
     public ConnectionPoolC3P0(Configuration configuration) throws Exception {
         if (singleInstanceCreated) {
             throw new Error("Only single Instance of  ConnectionPoolC3P0 supported");
         }
+        this.configuration = configuration;
         initC3P0Management();
 
         log.debug("initialize DB ConnectionPool {}", configuration);
@@ -147,6 +150,11 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
     @Override
     public DataSource getDataSource(ConnectionPoolType connectionType) {
         return dataSources.get(connectionType);
+    }
+
+    @Override
+    public int getConnectionTimeout(ConnectionPoolType connectionType) {
+        return configuration.connectionPoolConfiguration(connectionType).unreturnedConnectionTimeout();
     }
 
     @Override
