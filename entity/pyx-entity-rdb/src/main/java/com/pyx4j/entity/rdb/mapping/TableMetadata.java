@@ -217,7 +217,7 @@ public class TableMetadata {
         ColumnMetadata(ResultSet rs) throws SQLException {
             name = rs.getString("COLUMN_NAME").toUpperCase(Locale.ENGLISH);
             sqlDataType = rs.getInt("DATA_TYPE");
-            typeName = rs.getString("TYPE_NAME");
+            typeName = rs.getString("TYPE_NAME").toLowerCase(Locale.ENGLISH);
             columnSize = rs.getInt("COLUMN_SIZE");
             String nullable = rs.getString("IS_NULLABLE");
             if (nullable == null) {
