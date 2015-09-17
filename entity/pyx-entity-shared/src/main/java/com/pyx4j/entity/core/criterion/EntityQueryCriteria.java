@@ -213,13 +213,25 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
         if (getFilters() != null) {
             List<T> criterions = new ArrayList<>();
             for (Criterion citerion : getFilters()) {
-                if ((clazz.equals(citerion.getClass()))) {
+                if (clazz.equals(citerion.getClass())) {
                     criterions.add((T) citerion);
                 }
             }
             return criterions;
         } else {
             return Collections.emptyList();
+        }
+    }
+
+    public void removeAllCriterionsOfType(Class<? extends Criterion> clazz) {
+        if (getFilters() != null) {
+            Iterator<Criterion> it = getFilters().iterator();
+            while (it.hasNext()) {
+                Criterion citerion = it.next();
+                if (clazz.equals(citerion.getClass())) {
+                    it.remove();
+                }
+            }
         }
     }
 
