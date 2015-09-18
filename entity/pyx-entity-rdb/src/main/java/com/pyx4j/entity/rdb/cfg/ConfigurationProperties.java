@@ -102,8 +102,13 @@ public class ConfigurationProperties {
             cpc.minPoolSize = c.getIntegerValue(connectionType.name() + ".minPoolSize", cpc.minPoolSize);
             cpc.maxPoolSize = c.getIntegerValue(connectionType.name() + ".maxPoolSize", cpc.maxPoolSize);
             cpc.checkoutTimeout = c.getSecondsValue(connectionType.name() + ".checkoutTimeout", cpc.checkoutTimeout);
+
             cpc.maxPoolPreparedStatements = c.getIntegerValue(connectionType.name() + ".maxPoolPreparedStatements", cpc.maxPoolPreparedStatements);
+            cpc.maxStatementsPerConnection = c.getIntegerValue(connectionType.name() + ".maxStatementsPerConnection", cpc.maxStatementsPerConnection);
+            cpc.maxStatementsPerConnection = c.getIntegerValue(connectionType.name() + ".maxStatementsPerConnection", cpc.maxStatementsPerConnection);
+
             cpc.unreturnedConnectionTimeout = c.getSecondsValue(connectionType.name() + ".unreturnedConnectionTimeout", cpc.unreturnedConnectionTimeout);
+            cpc.numHelperThreads = c.getIntegerValue(connectionType.name() + ".numHelperThreads", cpc.numHelperThreads);
 
             cpc.testConnectionOnCheckout = c.getBooleanValue(connectionType.name() + ".testConnectionOnCheckout", cpc.testConnectionOnCheckout);
             cpc.testConnectionOnCheckin = c.getBooleanValue(connectionType.name() + ".testConnectionOnCheckin", cpc.testConnectionOnCheckin);

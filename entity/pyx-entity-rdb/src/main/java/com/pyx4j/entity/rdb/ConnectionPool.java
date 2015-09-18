@@ -27,6 +27,8 @@ public interface ConnectionPool {
 
     public DataSource getDataSource(ConnectionPoolType connectionType);
 
+    public int getConnectionTimeout(ConnectionPoolType connectionType);
+
     public void resetConnectionPool();
 
     public void close() throws Throwable;
