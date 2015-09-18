@@ -236,7 +236,24 @@ public class MailQueue implements Runnable {
                             persistableUpdate.updated().setValue(SystemDateManager.getDate());
 
                             IMailServiceConfigConfiguration mailConfig = configurations.get(persistable.configurationId().getValue());
-                            MailMessage mailMessage = (MailMessage) SerializationUtils.deserialize(persistable.data().getValue());
+                            final MailMessage mailMessage = (MailMessage) SerializationUtils.deserialize(persistable.data().getValue());
+
+                            if (mailConfig instanceof SMTPMailServiceConfig) {
+                                final SMTPMailServiceConfig origConfig = (SMTPMailServiceConfig) mailConfig;
+                                Executable<IMailServiceConfigConfiguration, RuntimeException> selectConfiguration = new Executable<IMailServiceConfigConfiguration, RuntimeException>() {
+                                    @Override
+                                    public IMailServiceConfigConfiguration execute() {
+                                        return origConfig.selectConfigurationInstance(mailMessage);
+                                    }
+                                };
+
+                                if (persistable.namespace().isNull()) {
+                                    mailConfig = selectConfiguration.execute();
+                                } else {
+                                    mailConfig = Executables.runInTargetNamespace(persistable.namespace().getValue(), selectConfiguration);
+                                }
+                            }
+
                             MailDeliveryStatus status = Mail.send(mailMessage, mailConfig);
 
                             switch (status) {
@@ -245,18 +262,18 @@ public class MailQueue implements Runnable {
                                 persistableUpdate.messageId().setValue(mailMessage.getHeader("Message-ID"));
                                 persistableUpdate.sentDate().setValue(mailMessage.getHeader("Date"));
                                 deliveryErrorCount = 0;
-                                log.debug("message {} was sent", persistable.getPrimaryKey());
+                                log.debug("message {} was sent; mailConfig {}", persistable.getPrimaryKey(), mailConfig.configurationId());
                                 break;
                             case ConfigurationError:
                                 continueDelivery = false;
                                 deliveryErrorCount++;
-                                log.error("message {} was not sent because of the configuration error, administrator review required",
-                                        persistable.getPrimaryKey());
+                                log.error("message {} was not sent because of the configuration error, administrator review required ; mailConfig {}",
+                                        persistable.getPrimaryKey(), mailConfig.configurationId());
                                 break;
                             case ConnectionError:
                                 continueDelivery = false;
                                 deliveryErrorCount++;
-                                log.debug("message {} was not sent", persistable.getPrimaryKey());
+                                log.debug("message {} was not sent; mailConfig {}", persistable.getPrimaryKey(), mailConfig.configurationId());
                                 break;
                             case MessageDataError:
                                 persistableUpdate.status().setValue(MailQueueStatus.Cancelled);
@@ -270,7 +287,8 @@ public class MailQueue implements Runnable {
                             if ((persistable.attempts().getValue() > mailConfig.maxDeliveryAttempts())
                                     && (persistableUpdate.status().getValue() != MailQueueStatus.Success)) {
                                 persistableUpdate.status().setValue(MailQueueStatus.GiveUp);
-                                log.warn("message {} was not sent, delivery attempts stoppered", persistable.getPrimaryKey());
+                                log.warn("message {} was not sent, delivery attempts stoppered; mailConfig {}", persistable.getPrimaryKey(),
+                                        mailConfig.configurationId());
                             }
                             new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 

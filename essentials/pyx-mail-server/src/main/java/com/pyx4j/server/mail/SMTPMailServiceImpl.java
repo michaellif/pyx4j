@@ -107,18 +107,18 @@ class SMTPMailServiceImpl implements IMailService {
             return MailDeliveryStatus.ConfigurationError;
         }
         SMTPMailServiceConfig config = (SMTPMailServiceConfig) mailConfig;
+        config = config.selectConfigurationInstance(mailMessage);
 
         Properties mailProperties = new Properties();
+        for (Map.Entry<String, String> me : config.getProperties()) {
+            mailProperties.put(me.getKey(), me.getValue());
+        }
+
         mailProperties.put("mail.smtp.host", config.getHost());
         mailProperties.put("mail.smtp.port", String.valueOf(config.getPort()));
 
-        if (null != config.getConnectionTimeout()) {
-            mailProperties.put("mail.smtp.connectiontimeout", config.getConnectionTimeout());
-        }
-
-        if (null != config.getTimeout()) {
-            mailProperties.put("mail.smtp.timeout", config.getTimeout());
-        }
+        mailProperties.put("mail.smtp.connectiontimeout", config.getConnectionTimeout());
+        mailProperties.put("mail.smtp.timeout", config.getTimeout());
 
         // Enable SSL connection
         if (config.isStarttls()) {
@@ -185,6 +185,10 @@ class SMTPMailServiceImpl implements IMailService {
             }
             if (mailMessage.getKeywords().size() > 0) {
                 message.addHeader("Keywords", ConverterUtils.convertStringCollection(mailMessage.getKeywords(), ", "));
+            }
+
+            for (Map.Entry<String, String> me : config.getHeaders()) {
+                message.addHeader(me.getKey(), me.getValue());
             }
 
             Multipart content;
