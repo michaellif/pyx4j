@@ -20,6 +20,7 @@
 package com.pyx4j.entity.rdb;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.EmptyStackException;
@@ -245,6 +246,16 @@ public class PersistenceContext {
         return connection;
     }
 
+    public int getConnectionTimeout() {
+        return connectionProvider.getConnectionTimeout(getConnectionTarget());
+    }
+
+    public PreparedStatement prepareStatement(String sql) throws SQLException {
+        PreparedStatement stmt = getConnection().prepareStatement(sql);
+        stmt.setQueryTimeout(getConnectionTimeout());
+        return stmt;
+    }
+
     private boolean assertTransactionManangementCallOriginEnabled() {
         if (assertTransactionManangementCallOriginEnabled == null) {
             if (Boolean.valueOf(System.getProperty("com.pyx4j.performanceTestEnviroment"))) {
@@ -275,11 +286,9 @@ public class PersistenceContext {
         if ((options().assertTransactionManangementCallOrigin != null)
                 && (!options().assertTransactionManangementCallOrigin.equals(Trace.getCallOriginMethod(EntityPersistenceServiceRDB.class)))) {
             log.error("CallOrigin {} != {}", Trace.getCallOriginMethod(EntityPersistenceServiceRDB.class), options().assertTransactionManangementCallOrigin);
-            throw new IllegalAccessError(
-                    "Transaction Management of this thread can only performed from "
-                            + options().assertTransactionManangementCallOrigin //
-                            + ((options().transactionManangementCallOriginSetFrom != null) ? (", created from \n"
-                                    + options().transactionManangementCallOriginSetFrom + "\n") : ""));
+            throw new IllegalAccessError("Transaction Management of this thread can only performed from " + options().assertTransactionManangementCallOrigin //
+                    + ((options().transactionManangementCallOriginSetFrom != null)
+                            ? (", created from \n" + options().transactionManangementCallOriginSetFrom + "\n") : ""));
         }
     }
 
@@ -333,7 +342,7 @@ public class PersistenceContext {
     }
 
     private void savepointRelease() {
-        assert (savepoints > 0) : " Inconsistent Transaction end";
+        assert(savepoints > 0) : " Inconsistent Transaction end";
         savepoints--;
         if (options().enableSavepointAsNestedTransactions) {
             TransactionContext tc = transactionContexts.pop();
