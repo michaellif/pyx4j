@@ -20,6 +20,7 @@
 package com.pyx4j.entity.rdb.dialect;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -58,5 +59,10 @@ public class OracleConnectionCustomizer implements ConnectionCustomizer {
         } catch (Throwable e) {
             log.error("JDBC setClientInfo failed", e);
         }
+    }
+
+    @Override
+    public void pooledConnectionOnDestroy(Connection connection, ConnectionPoolType connectionPoolType) throws SQLException {
+        AsynchronousConnectionsDestoryer.instance().destroyConnection(connection);
     }
 }

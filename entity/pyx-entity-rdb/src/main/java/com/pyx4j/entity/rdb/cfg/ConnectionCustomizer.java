@@ -20,6 +20,7 @@
 package com.pyx4j.entity.rdb.cfg;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Properties;
 
 public interface ConnectionCustomizer {
@@ -27,4 +28,6 @@ public interface ConnectionCustomizer {
     public void initConnectionProperties(Properties properties, ConnectionPoolType connectionType);
 
     public void pooledConnectionAcquired(Connection connection, ConnectionPoolType connectionPoolType);
+
+    public void pooledConnectionOnDestroy(Connection connection, ConnectionPoolType connectionPoolType) throws SQLException;
 }

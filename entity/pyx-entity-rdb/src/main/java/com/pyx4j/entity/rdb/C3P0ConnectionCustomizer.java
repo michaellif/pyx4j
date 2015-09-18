@@ -40,4 +40,15 @@ public class C3P0ConnectionCustomizer extends AbstractConnectionCustomizer {
         }
     }
 
+    @Override
+    public void onDestroy(Connection c, String dataSourceIdentityToken) throws Exception {
+        @SuppressWarnings("unchecked")
+        Map<String, Object> tokenExtensions = extensionsForToken(dataSourceIdentityToken);
+        ConnectionCustomizer connectionCustomizer = (ConnectionCustomizer) tokenExtensions.get(ConnectionCustomizer.class.getName());
+        if (connectionCustomizer != null) {
+            ConnectionPoolType connectionPoolType = (ConnectionPoolType) tokenExtensions.get(ConnectionPoolType.class.getName());
+            connectionCustomizer.pooledConnectionOnDestroy(c, connectionPoolType);
+        }
+    }
+
 }

@@ -70,6 +70,7 @@ import com.pyx4j.entity.rdb.PersistenceContext.TransactionType;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
+import com.pyx4j.entity.rdb.dialect.AsynchronousConnectionsDestoryer;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
 import com.pyx4j.entity.rdb.mapping.Mappings;
@@ -200,6 +201,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
     @Override
     public void deregister() {
         connectionProvider.deregister();
+        // TODO this should shutdown on itself.
+        if (configuration.databaseType() == DatabaseType.Oracle) {
+            AsynchronousConnectionsDestoryer.instance().shutdown();
+        }
         CacheService.shutdown();
     }
 
