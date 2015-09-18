@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rdb;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.EmptyStackException;
@@ -248,6 +249,12 @@ public class PersistenceContext {
 
     public int getConnectionTimeout() {
         return connectionProvider.getConnectionTimeout(getConnectionTarget());
+    }
+
+    public PreparedStatement prepareStatement(String sql) throws SQLException {
+        PreparedStatement stmt = getConnection().prepareStatement(sql);
+        stmt.setQueryTimeout(getConnectionTimeout());
+        return stmt;
     }
 
     private boolean assertTransactionManangementCallOriginEnabled() {

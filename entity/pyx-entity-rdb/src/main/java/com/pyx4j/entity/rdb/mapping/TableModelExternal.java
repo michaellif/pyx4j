@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.PersistenceTrace;
 import com.pyx4j.entity.rdb.SQLUtils;
@@ -82,8 +81,8 @@ public class TableModelExternal {
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
-            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
-            // Just in case, used for pooled connections 
+            stmt = persistenceContext.prepareStatement(sql.toString());
+            // Just in case, used for pooled connections
             stmt.setMaxRows(1);
 
             int parameterIndex = 1;
@@ -97,8 +96,7 @@ public class TableModelExternal {
 
             IEntity childEntity = (IEntity) member.getMember(ownerEntity);
             if ((childEntity.getAttachLevel() != AttachLevel.Detached) && !childEntity.isNull()) {
-                log.warn("retrieving to not empty external member {}\n called from {}", member.getMemberPath(),
-                        PersistenceTrace.getCallOrigin());
+                log.warn("retrieving to not empty external member {}\n called from {}", member.getMemberPath(), PersistenceTrace.getCallOrigin());
             }
             if (rs.next()) {
                 Object value = member.getValueAdapter().retrieveValue(rs, member.sqlValueName());

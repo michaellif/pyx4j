@@ -504,7 +504,7 @@ public class TableModel {
         String sql = null;
         try {
             sql = dialect.sqlSequenceCurentValue(sequenceName);
-            stmt = persistenceContext.getConnection().prepareStatement(sql);
+            stmt = persistenceContext.prepareStatement(sql);
             rs = stmt.executeQuery();
             if (rs.next()) {
                 return rs.getLong(1);
@@ -795,7 +795,7 @@ public class TableModel {
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
-            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
+            stmt = persistenceContext.prepareStatement(sql.toString());
             // Just in case, used for pooled connections
             stmt.setMaxRows(1);
             int parameterIndex = 1;
@@ -855,7 +855,7 @@ public class TableModel {
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
-            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
+            stmt = persistenceContext.prepareStatement(sql.toString());
             int parameterIndex = 1;
             parameterIndex = bindPersistParametersBulk(parameterIndex, persistenceContext, stmt, entityTemplate);
             parameterIndex = qb.bindParameters(parameterIndex, persistenceContext, stmt);
@@ -1038,7 +1038,7 @@ public class TableModel {
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
-            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
+            stmt = persistenceContext.prepareStatement(sql.toString());
             // Just in case, used for pooled connections
             stmt.setMaxRows(1);
 
@@ -1106,7 +1106,7 @@ public class TableModel {
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
-            stmt = persistenceContext.getConnection().prepareStatement(sql);
+            stmt = persistenceContext.prepareStatement(sql);
             if (limit > 0) {
                 stmt.setMaxRows(limit);
             } else {
@@ -1184,7 +1184,7 @@ public class TableModel {
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
-            stmt = persistenceContext.getConnection().prepareStatement(sql);
+            stmt = persistenceContext.prepareStatement(sql);
             if (limit > 0) {
                 stmt.setMaxRows(limit);
             } else {
@@ -1261,7 +1261,7 @@ public class TableModel {
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
-            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
+            stmt = persistenceContext.prepareStatement(sql.toString());
             // Just in case, used for pooled connections
             stmt.setMaxRows(1);
 
@@ -1318,7 +1318,7 @@ public class TableModel {
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
-            stmt = persistenceContext.getConnection().prepareStatement(sql);
+            stmt = persistenceContext.prepareStatement(sql);
             if (limit > 0) {
                 stmt.setMaxRows(limit);
             } else {
@@ -1380,7 +1380,7 @@ public class TableModel {
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
-            stmt = persistenceContext.getConnection().prepareStatement(sql);
+            stmt = persistenceContext.prepareStatement(sql);
             if (limit > 0) {
                 stmt.setMaxRows(limit);
             } else {
@@ -1448,7 +1448,7 @@ public class TableModel {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
 
-            stmt = persistenceContext.getConnection().prepareStatement(sql);
+            stmt = persistenceContext.prepareStatement(sql);
             // Just in case, used for pooled connections
             stmt.setMaxRows(1);
             qb.bindParameters(persistenceContext, stmt);
@@ -1481,7 +1481,7 @@ public class TableModel {
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
-            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
+            stmt = persistenceContext.prepareStatement(sql.toString());
             stmt.setLong(1, primaryKey.asLong());
             if (dialect.isMultitenantSharedSchema()) {
                 stmt.setString(2, NamespaceManager.getNamespace());
@@ -1517,7 +1517,7 @@ public class TableModel {
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
-            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
+            stmt = persistenceContext.prepareStatement(sql.toString());
             int pkSize = 0;
             for (Key primaryKey : primaryKeys) {
                 stmt.setLong(1, primaryKey.asLong());
@@ -1558,7 +1558,7 @@ public class TableModel {
     public void truncate(PersistenceContext persistenceContext) {
         PreparedStatement stmt = null;
         try {
-            stmt = persistenceContext.getConnection().prepareStatement("TRUNCATE TABLE " + getFullTableName());
+            stmt = persistenceContext.prepareStatement("TRUNCATE TABLE " + getFullTableName());
             stmt.execute();
         } catch (SQLException e) {
             log.error("{} SQL delete error", tableName, e);
@@ -1644,7 +1644,7 @@ public class TableModel {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
             boolean hasKeys = (getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED);
-            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
+            stmt = persistenceContext.prepareStatement(sql.toString());
             for (T entity : entityIterable) {
                 int parameterIndex = 1;
                 parameterIndex = bindPersistParameters(parameterIndex, persistenceContext, stmt, entity);
@@ -1689,7 +1689,7 @@ public class TableModel {
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
-            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
+            stmt = persistenceContext.prepareStatement(sql.toString());
             // zero means there is no limit, Need for pooled connections
             stmt.setMaxRows(0);
             for (T entity : entityIterable) {
@@ -1755,7 +1755,7 @@ public class TableModel {
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
-            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
+            stmt = persistenceContext.prepareStatement(sql.toString());
             // zero means there is no limit, Need for pooled connections
             stmt.setMaxRows(0);
             if (dialect.isMultitenantSharedSchema()) {

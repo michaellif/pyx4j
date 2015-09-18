@@ -70,7 +70,8 @@ public class TableModelCollections {
         return isUpdatableMember((IObject) iCollectionMember);
     }
 
-    public static boolean isUpdatableMember(@SuppressWarnings("rawtypes") IObject iCollectionMember) {
+    public static boolean isUpdatableMember(@SuppressWarnings("rawtypes")
+    IObject iCollectionMember) {
         switch (iCollectionMember.getAttachLevel()) {
         case Detached:
             return false;
@@ -167,7 +168,7 @@ public class TableModelCollections {
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
-            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
+            stmt = persistenceContext.prepareStatement(sql.toString());
             int seq = 0;
             for (Object value : dataSet) {
                 if ((type == ObjectClassType.EntityList) || (type == ObjectClassType.EntitySet)) {
@@ -340,7 +341,8 @@ public class TableModelCollections {
                                     PersistenceTrace.getCallOrigin());
                         }
                         if (PersistenceTrace.traceSql) {
-                            log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), "delete row from cursor", PersistenceTrace.getCallOrigin());
+                            log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), "delete row from cursor",
+                                    PersistenceTrace.getCallOrigin());
                         }
                         persistenceContext.setUncommittedChanges();
                         rs.deleteRow();
@@ -358,8 +360,8 @@ public class TableModelCollections {
             log.error("{} SQL update error", member.sqlName(), e);
             if (dialect.isIntegrityConstraintException(e)) {
                 // TODO Use proper caption.
-                throw new IntegrityConstraintUserRuntimeException(i18n.tr("Unable to delete \"{0}\". The record is referenced by another record.", memberObject
-                        .getMeta().getCaption()), null, e);
+                throw new IntegrityConstraintUserRuntimeException(
+                        i18n.tr("Unable to delete \"{0}\". The record is referenced by another record.", memberObject.getMeta().getCaption()), null, e);
             } else {
                 throw new RuntimeException(e);
             }
@@ -420,7 +422,7 @@ public class TableModelCollections {
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
-            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
+            stmt = persistenceContext.prepareStatement(sql.toString());
             // zero means there is no limit, Need for pooled connections
             stmt.setMaxRows(0);
             int parameterIndex = 1;
@@ -495,7 +497,7 @@ public class TableModelCollections {
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
-            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
+            stmt = persistenceContext.prepareStatement(sql.toString());
             // zero means there is no limit, Need for pooled connections
             stmt.setMaxRows(0);
             int parameterIndex = 1;
@@ -545,7 +547,7 @@ public class TableModelCollections {
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
-            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
+            stmt = persistenceContext.prepareStatement(sql.toString());
             stmt.setLong(1, primaryKey.asLong());
             if (dialect.isMultitenantSharedSchema()) {
                 stmt.setString(2, NamespaceManager.getNamespace());
@@ -580,7 +582,7 @@ public class TableModelCollections {
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
-            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
+            stmt = persistenceContext.prepareStatement(sql.toString());
             int pkSize = 0;
             for (Key primaryKey : primaryKeys) {
                 stmt.setLong(1, primaryKey.asLong());
@@ -620,7 +622,7 @@ public class TableModelCollections {
             }
             sql.append(member.sqlName());
 
-            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
+            stmt = persistenceContext.prepareStatement(sql.toString());
             stmt.execute();
         } catch (SQLException e) {
             log.error("{} SQL truncate error", member.sqlName(), e);
