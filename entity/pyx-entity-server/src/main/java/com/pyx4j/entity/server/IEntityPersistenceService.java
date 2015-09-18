@@ -40,9 +40,9 @@ public interface IEntityPersistenceService {
 
     /**
      * Start short lived Online Persistence Context with Transaction without nested transactions.
-     * 
+     *
      * Usually called when on startRequest from Lifecycle.beginRequest
-     * 
+     *
      * ! TODO rename to startPersistenceContext
      */
     public void startTransaction();
@@ -50,7 +50,7 @@ public interface IEntityPersistenceService {
     public void startBackgroundProcessTransaction();
 
     /**
-     * 
+     *
      * @param transactionScopeOption
      * @param connectionType
      *            Web (Online Transaction), BackgroundProcess all the rest,
@@ -119,7 +119,7 @@ public interface IEntityPersistenceService {
 
     /**
      * Update only members set in entityTemplate, e.g. Bulk update; update ... where ...
-     * 
+     *
      * @param criteria
      * @param entityTemplate
      * @return
@@ -128,17 +128,23 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity> T retrieve(Class<T> entityClass, Key primaryKey);
 
+    @Deprecated
     public <T extends IEntity> T retrieve(Class<T> entityClass, Key primaryKey, AttachLevel attachLevel, boolean forUpdate);
+
+    public <T extends IEntity> T retrieve(Class<T> entityClass, Key primaryKey, AttachLevel attachLevel, LockForUpdate lockForUpdate);
 
     /**
      * Fill all the information to already existing entity object that has only PK value
      * set. e.g. @link Detached entity member.
-     * 
+     *
      * @return false If entity not found.
      */
     public <T extends IEntity> boolean retrieve(T entity);
 
+    @Deprecated
     public <T extends IEntity> boolean retrieve(T entity, AttachLevel attachLevel, boolean forUpdate);
+
+    public <T extends IEntity> boolean retrieve(T entity, AttachLevel attachLevel, LockForUpdate lockForUpdate);
 
     //TODO make @Deprecated and use retrieve
     public <T extends IEntity> void retrieveMember(T entityMember);

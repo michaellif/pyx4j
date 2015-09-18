@@ -72,4 +72,39 @@ class ConnectionPoolC3P0RuntimeInfo implements ConnectionPoolRuntimeInfo {
         }
     }
 
+    @Override
+    public String getInfo() {
+        if (dataSource instanceof PooledDataSource) {
+            try {
+                PooledDataSource ds = ((PooledDataSource) dataSource);
+                StringBuilder b = new StringBuilder();
+                b.append("Active Threads ").append(ds.getThreadPoolNumActiveThreads()).append("; ");
+                b.append("Tasks Pending ").append(ds.getThreadPoolNumTasksPending()).append("; ");
+                return b.toString();
+            } catch (SQLException e) {
+                return "n/a";
+            }
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public String getStatementCacheInfo() {
+        if (dataSource instanceof PooledDataSource) {
+            try {
+                PooledDataSource ds = ((PooledDataSource) dataSource);
+                StringBuilder b = new StringBuilder();
+                b.append("Cached ").append(ds.getStatementCacheNumStatementsDefaultUser()).append("; ");
+                b.append("Checked Out ").append(ds.getStatementCacheNumCheckedOutDefaultUser()).append("; ");
+                b.append("Destroyer Tasks Pending ").append(ds.getStatementDestroyerNumTasksPending()).append("; ");
+                return b.toString();
+            } catch (SQLException e) {
+                return "n/a";
+            }
+        } else {
+            return null;
+        }
+    }
+
 }

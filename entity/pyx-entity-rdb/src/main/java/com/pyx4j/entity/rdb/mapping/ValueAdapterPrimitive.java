@@ -49,7 +49,7 @@ abstract class ValueAdapterPrimitive implements ValueAdapter {
 
     @Override
     public boolean isColumnTypeChanges(Dialect dialect, String typeName, int columnSize, MemberOperationsMeta member, String sqlColumnName) {
-        return false;
+        return dialect.isPrimitiveTypeChanges(valueClass, member.getMemberMeta().getLength(), typeName);
     }
 
     @Override
@@ -69,7 +69,7 @@ abstract class ValueAdapterPrimitive implements ValueAdapter {
 
     @Override
     public Serializable ensureType(Serializable value) {
-        assert (value == null) || valueClass.isAssignableFrom(value.getClass()) : "Trying to set value of a wrong type '" + value.getClass() + "', expected "
+        assert(value == null) || valueClass.isAssignableFrom(value.getClass()) : "Trying to set value of a wrong type '" + value.getClass() + "', expected "
                 + valueClass;
         return value;
     }

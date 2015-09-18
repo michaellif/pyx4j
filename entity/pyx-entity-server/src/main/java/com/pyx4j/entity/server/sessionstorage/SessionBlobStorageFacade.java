@@ -14,21 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Aug 17, 2015
+ * Created on Sep 7, 2015
  * @author vlads
  */
-package com.pyx4j.entity.rdb;
+package com.pyx4j.entity.server.sessionstorage;
 
-public interface ConnectionPoolRuntimeInfo {
+import java.io.Serializable;
+import java.util.Map;
 
-    public int getNumBusyConnections();
+/**
+ * Abstraction to allow different implementations, Clusterable and DB persistable where applicable.
+ *
+ * Implementation should separate data between different user sessions.
+ */
+public interface SessionBlobStorageFacade {
 
-    public int getNumIdleConnections();
-
-    public long getNumFailedCheckouts();
-
-    public String getInfo();
-
-    public String getStatementCacheInfo();
+    Map<String, Serializable> getStorage(String storageType);
 
 }

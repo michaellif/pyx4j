@@ -41,6 +41,8 @@ import com.pyx4j.log4j.LoggerConfig;
 
 public class ConnectionPoolDBCP implements ConnectionPool {
 
+    private final Configuration cfg;
+
     private final Map<ConnectionPoolType, DataSource> dataSources = new HashMap<ConnectionPoolType, DataSource>();
 
     private final Map<ConnectionPoolType, GenericObjectPool<PoolableConnection>> connectionPools = new HashMap<>();
@@ -54,7 +56,7 @@ public class ConnectionPoolDBCP implements ConnectionPool {
     }
 
     public ConnectionPoolDBCP(Configuration cfg) {
-
+        this.cfg = cfg;
         for (ConnectionPoolType connectionType : ConnectionPoolType.managedByPersistenceService()) {
             ConnectionPoolConfiguration cpc = cfg.connectionPoolConfiguration(connectionType);
 
@@ -105,6 +107,11 @@ public class ConnectionPoolDBCP implements ConnectionPool {
     @Override
     public DataSource getDataSource(ConnectionPoolType connectionType) {
         return dataSources.get(connectionType);
+    }
+
+    @Override
+    public int getConnectionTimeout(ConnectionPoolType connectionType) {
+        return cfg.connectionPoolConfiguration(connectionType).unreturnedConnectionTimeout();
     }
 
     @Override

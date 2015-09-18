@@ -142,7 +142,7 @@
         <timestamp>${maven.build.timestamp}</timestamp>
 
         <gwtVersion>2.7.0</gwtVersion>
-        <gaeVersion>1.9.20</gaeVersion>
+        <gaeVersion>1.9.26</gaeVersion>
         <gaeVersion.kindleit.deploy>1.8.8</gaeVersion.kindleit.deploy>
         <gae.version>${gaeVersion}</gae.version>
 
@@ -376,13 +376,13 @@
                 <artifactId>commons-lang</artifactId>
                 <version>2.6</version>
             </dependency>
- 
+
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>3.4</version>
             </dependency>
-            
+
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-collections4</artifactId>

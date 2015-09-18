@@ -14,21 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Aug 17, 2015
+ * Created on Sep 7, 2015
  * @author vlads
  */
-package com.pyx4j.entity.rdb;
+package com.pyx4j.entity.server.sessionstorage;
 
-public interface ConnectionPoolRuntimeInfo {
+interface ObservableMapChangeListener {
 
-    public int getNumBusyConnections();
-
-    public int getNumIdleConnections();
-
-    public long getNumFailedCheckouts();
-
-    public String getInfo();
-
-    public String getStatementCacheInfo();
+    void onChanged();
 
 }

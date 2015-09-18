@@ -49,12 +49,15 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
 
     private static boolean singleInstanceCreated = false;
 
+    private final Configuration configuration;
+
     private final Map<ConnectionPoolType, DataSource> dataSources = new HashMap<ConnectionPoolType, DataSource>();
 
     public ConnectionPoolC3P0(Configuration configuration) throws Exception {
         if (singleInstanceCreated) {
             throw new Error("Only single Instance of  ConnectionPoolC3P0 supported");
         }
+        this.configuration = configuration;
         initC3P0Management();
 
         log.debug("initialize DB ConnectionPool {}", configuration);
@@ -120,7 +123,10 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
         dataSource.setInitialPoolSize(cpConfiguration.initialPoolSize());
         dataSource.setMinPoolSize(cpConfiguration.minPoolSize());
         dataSource.setMaxPoolSize(cpConfiguration.maxPoolSize());
+
         dataSource.setMaxStatements(cpConfiguration.maxPoolPreparedStatements());
+        dataSource.setMaxStatementsPerConnection(cpConfiguration.maxStatementsPerConnection());
+        dataSource.setStatementCacheNumDeferredCloseThreads(cpConfiguration.statementCacheNumDeferredCloseThreads());
 
         dataSource.setCheckoutTimeout(Consts.SEC2MILLISECONDS * cpConfiguration.getCheckoutTimeout());
 
@@ -135,9 +141,9 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
             extensions.put(ConnectionPoolType.class.getName(), connectionType);
             extensions.put(ConnectionCustomizer.class.getName(), connectionCustomizer);
             dataSource.setExtensions(extensions);
-
             dataSource.setConnectionCustomizerClassName(C3P0ConnectionCustomizer.class.getName());
         }
+        dataSource.setNumHelperThreads(cpConfiguration.numHelperThreads());
 
         log.debug("{} Pool size is {} min and {} max", connectionType, dataSource.getMinPoolSize(), dataSource.getMaxPoolSize());
 
@@ -147,6 +153,11 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
     @Override
     public DataSource getDataSource(ConnectionPoolType connectionType) {
         return dataSources.get(connectionType);
+    }
+
+    @Override
+    public int getConnectionTimeout(ConnectionPoolType connectionType) {
+        return configuration.connectionPoolConfiguration(connectionType).unreturnedConnectionTimeout();
     }
 
     @Override
