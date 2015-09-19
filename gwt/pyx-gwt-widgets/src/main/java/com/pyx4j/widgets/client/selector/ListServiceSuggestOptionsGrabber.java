@@ -41,12 +41,11 @@ public class ListServiceSuggestOptionsGrabber<E extends IEntity> implements IOpt
     private List<Criterion> criterions;
 
     public ListServiceSuggestOptionsGrabber(Class<E> entityClass, AbstractListService<E> service) {
-        this(entityClass, service, null);
-    }
-
-    public ListServiceSuggestOptionsGrabber(Class<E> entityClass, AbstractListService<E> service, List<Criterion> criterions) {
         this.entityClass = entityClass;
         this.service = service;
+    }
+
+    public void setCriterions(List<Criterion> criterions) {
         this.criterions = criterions;
     }
 
