@@ -34,6 +34,12 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.gwt.commons.AjaxJSLoader;
 import com.pyx4j.i18n.shared.I18n;
 
+/**
+ * This class Injects reCAPTCHA Client API V2 code.
+ *
+ * @see <a href="https://developers.google.com/recaptcha/docs/display">for more information</a>
+ *
+ */
 public class CaptchaCompositeV2 extends CaptchaCompositeAbstract implements HasValueChangeHandlers<String> {
 
     private static Logger log = LoggerFactory.getLogger(CaptchaCompositeV2.class);
@@ -42,36 +48,34 @@ public class CaptchaCompositeV2 extends CaptchaCompositeAbstract implements HasV
 
     private static int instanceId = 0;
 
-    private final String divName;
+    private String divName;
 
     private boolean created = false;
 
     private int captchaWidgetId;
 
-    private final SimplePanel divHolder;
+    private SimplePanel divHolder;
 
     private int tabindex;
 
     private static String javaScriptURL = "www.google.com/recaptcha/api.js";
 
     public CaptchaCompositeV2() {
-        instanceId++;
-        divName = "recaptcha_div" + String.valueOf(instanceId);
+        resetPlaceholder();
+    }
 
+    private void resetPlaceholder() {
+        this.clear();
+        divName = "recaptcha_div" + String.valueOf(instanceId++);
         divHolder = new SimplePanel();
         divHolder.getElement().getStyle().setWidth(100, Unit.PCT);
+        divHolder.getElement().getStyle().setHeight(74, Unit.PX);
         divHolder.getElement().setId(divName);
-
         this.add(divHolder);
     }
 
     private void createChallenge() {
         assert(publicKey != null) : "Captcha public key was not set";
-
-//        if (ApplicationMode.offlineDevelopment) {
-//            assigneRecaptchaId();
-//            return;
-//        }
 
         AjaxJSLoader.load(javaScriptURL, new AjaxJSLoader.IsJSLoaded() {
 
@@ -90,7 +94,6 @@ public class CaptchaCompositeV2 extends CaptchaCompositeAbstract implements HasV
 
             @Override
             public void onSuccess(Void result) {
-                //assigneRecaptchaId();
                 log.debug("createChallenge with key set [{}]", publicKey);
                 if (created) {
                     createNewChallengeImpl();
@@ -152,24 +155,27 @@ public class CaptchaCompositeV2 extends CaptchaCompositeAbstract implements HasV
     }
 
     @Override
+    protected void onUnload() {
+        created = false;
+        resetPlaceholder();
+    };
+
+    @Override
     public void setFocus(boolean focused) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void setWatermark(String watermark) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public String getWatermark() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public String getValueResponse() {
-        if (created) {
+        if (created && isVisible()) {
             return getValueResponseImpl();
         } else {
             return null;
