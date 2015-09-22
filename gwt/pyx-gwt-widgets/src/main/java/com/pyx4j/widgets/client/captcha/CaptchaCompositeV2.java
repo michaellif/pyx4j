@@ -17,7 +17,7 @@
  * Created on Sep 10, 2015
  * @author vlads
  */
-package com.pyx4j.widgets.client;
+package com.pyx4j.widgets.client.captcha;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ import com.pyx4j.i18n.shared.I18n;
  * @see <a href="https://developers.google.com/recaptcha/docs/display">for more information</a>
  *
  */
-public class CaptchaCompositeV2 extends CaptchaCompositeAbstract implements HasValueChangeHandlers<String> {
+public class CaptchaCompositeV2 extends AbstractCaptchaComposite implements HasValueChangeHandlers<String> {
 
     private static Logger log = LoggerFactory.getLogger(CaptchaCompositeV2.class);
 
@@ -110,18 +110,18 @@ public class CaptchaCompositeV2 extends CaptchaCompositeAbstract implements HasV
     /*-{
 		var thisComposite = this;
 		var verifyCallback = function(val) {
-			thisComposite.@com.pyx4j.widgets.client.CaptchaCompositeV2::successfulCAPTCHAcallback(Ljava/lang/String;)(val);
+			thisComposite.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV2::successfulCAPTCHAcallback(Ljava/lang/String;)(val);
 		};
 
 		return $wnd.grecaptcha
 				.render(
-						this.@com.pyx4j.widgets.client.CaptchaCompositeV2::divName,
+						this.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV2::divName,
 						{
-							'sitekey' : @com.pyx4j.widgets.client.CaptchaCompositeAbstract::publicKey,
+							'sitekey' : @com.pyx4j.widgets.client.captcha.AbstractCaptchaComposite::publicKey,
 							'callback' : verifyCallback,
 							'theme' : 'light',
 							'size' : 'normal',
-							'tabindex' : this.@com.pyx4j.widgets.client.CaptchaCompositeV2::tabindex
+							'tabindex' : this.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV2::tabindex
 						});
     }-*/;
 
@@ -185,7 +185,7 @@ public class CaptchaCompositeV2 extends CaptchaCompositeAbstract implements HasV
     private native String getValueResponseImpl()
     /*-{
 		return $wnd.grecaptcha
-				.getResponse(this.@com.pyx4j.widgets.client.CaptchaCompositeV2::captchaWidgetId);
+				.getResponse(this.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV2::captchaWidgetId);
     }-*/;
 
     @Override
@@ -203,7 +203,7 @@ public class CaptchaCompositeV2 extends CaptchaCompositeAbstract implements HasV
     public native void createNewChallengeImpl()
     /*-{
 		$wnd.grecaptcha
-				.reset(this.@com.pyx4j.widgets.client.CaptchaCompositeV2::captchaWidgetId);
+				.reset(this.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV2::captchaWidgetId);
     }-*/;
 
     @Override

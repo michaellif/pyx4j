@@ -17,7 +17,7 @@
  * Created on Jan 26, 2010
  * @author vlads
  */
-package com.pyx4j.widgets.client;
+package com.pyx4j.widgets.client.captcha;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +40,8 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.AjaxJSLoader;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.ImageFactory;
+import com.pyx4j.widgets.client.StringBox;
 
 /**
  * This class Injects reCAPTCHA Client API code.
@@ -48,11 +50,11 @@ import com.pyx4j.i18n.shared.I18n;
  * @see <a href="http://code.google.com/apis/recaptcha/docs/customization.html">Customization</a>
  *
  */
-public class CaptchaComposite extends CaptchaCompositeAbstract {
+public class CaptchaCompositeV1 extends AbstractCaptchaComposite {
 
-    private static Logger log = LoggerFactory.getLogger(CaptchaComposite.class);
+    private static Logger log = LoggerFactory.getLogger(CaptchaCompositeV1.class);
 
-    private static final I18n i18n = I18n.get(CaptchaComposite.class);
+    private static final I18n i18n = I18n.get(CaptchaCompositeV1.class);
 
     private static int instanceId = 0;
 
@@ -74,7 +76,7 @@ public class CaptchaComposite extends CaptchaCompositeAbstract {
 
     private static String javaScriptURL = "www.google.com/recaptcha/api/js/recaptcha_ajax.js";
 
-    public CaptchaComposite() {
+    public CaptchaCompositeV1() {
         instanceId++;
         divName = "recaptcha_div" + String.valueOf(instanceId);
 
@@ -279,11 +281,11 @@ public class CaptchaComposite extends CaptchaCompositeAbstract {
     /*-{
 		$wnd.Recaptcha
 				.create(
-						@com.pyx4j.widgets.client.CaptchaCompositeAbstract::publicKey,
-						this.@com.pyx4j.widgets.client.CaptchaComposite::divName,
+						@com.pyx4j.widgets.client.captcha.AbstractCaptchaComposite::publicKey,
+						this.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV1::divName,
 						{
 							theme : "custom",
-							custom_theme_widget : this.@com.pyx4j.widgets.client.CaptchaComposite::divName
+							custom_theme_widget : this.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV1::divName
 						});
     }-*/;
 
