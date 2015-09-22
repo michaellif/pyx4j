@@ -23,7 +23,6 @@ import java.net.HttpURLConnection;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -50,16 +49,6 @@ public class ReCaptchaV2APIClient {
 
     private static final I18n i18n = I18n.get(ReCaptchaV2APIClient.class);
 
-    static class GoogleVerificationRequest {
-
-        public String secret;
-
-        public String response;
-
-        public String remoteip;
-
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
     static class GoogleVerificationResponse {
 
@@ -76,7 +65,7 @@ public class ReCaptchaV2APIClient {
 
     private String privateKey;
 
-    private final boolean enableLogging = false;
+    private final boolean enableLogging = true;
 
     private ReCaptchaV2APIClient() {
         ClientConfig clientConfig = new ClientConfig();
@@ -100,13 +89,11 @@ public class ReCaptchaV2APIClient {
     }
 
     public void assertCaptcha(String userResponseToken) {
-        GoogleVerificationRequest request = new GoogleVerificationRequest();
-        request.response = userResponseToken;
-        request.secret = privateKey;
-        request.remoteip = ServerContext.getRequestRemoteAddr();
-
         Response response = webTarget.path("siteverify")//
-                .request(MediaType.APPLICATION_JSON).post(Entity.json(request));
+                .queryParam("response", userResponseToken) //
+                .queryParam("secret", privateKey) //
+                .queryParam("remoteip", ServerContext.getRequestRemoteAddr()) //
+                .request(MediaType.APPLICATION_JSON).get();
         if (response.getStatus() != HttpURLConnection.HTTP_OK) {
             throw new RuntimeExceptionSerializable(i18n.tr("reCAPTCHA Connection Failed"));
         }
