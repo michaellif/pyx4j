@@ -19,11 +19,6 @@
  */
 package com.pyx4j.essentials.server;
 
-import net.tanesha.recaptcha.ReCaptcha;
-import net.tanesha.recaptcha.ReCaptchaException;
-import net.tanesha.recaptcha.ReCaptchaFactory;
-import net.tanesha.recaptcha.ReCaptchaResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +27,11 @@ import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18n;
+
+import net.tanesha.recaptcha.ReCaptcha;
+import net.tanesha.recaptcha.ReCaptchaException;
+import net.tanesha.recaptcha.ReCaptchaFactory;
+import net.tanesha.recaptcha.ReCaptchaResponse;
 
 public class ReCaptchaAntiBot extends LoginAttemptsCountAntiBot {
 
@@ -44,8 +44,17 @@ public class ReCaptchaAntiBot extends LoginAttemptsCountAntiBot {
         if (CommonsStringUtils.isEmpty(challenge) || CommonsStringUtils.isEmpty(response)) {
             throw new UserRuntimeException(i18n.tr("Captcha code is required"));
         }
-        String privateKey = ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPrivateKey();
-        String publicKey = ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey();
+        if (challenge.equals("reCAPTCHA-v2")) {
+            ReCaptchaV2APIClient.instance().assertCaptcha(response);
+        } else {
+            assertCaptchaV1(challenge, response);
+        }
+        log.debug("CAPTCHA Ok");
+    }
+
+    public void assertCaptchaV1(String challenge, String response) {
+        String privateKey = ServerSideConfiguration.instance(EssentialsServerSideConfiguration.class).getReCaptchaPrivateKey();
+        String publicKey = ServerSideConfiguration.instance(EssentialsServerSideConfiguration.class).getReCaptchaPublicKey();
         ReCaptcha rc = ReCaptchaFactory.newReCaptcha(publicKey, privateKey, false);
         ReCaptchaResponse captchaResponse;
         try {
@@ -61,7 +70,6 @@ public class ReCaptchaAntiBot extends LoginAttemptsCountAntiBot {
                 throw new RuntimeExceptionSerializable(captchaResponse.getErrorMessage());
             }
         }
-        log.debug("CAPTCHA Ok");
     }
 
 }
