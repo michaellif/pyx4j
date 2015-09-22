@@ -17,7 +17,7 @@
  * Created on Sep 10, 2015
  * @author vlads
  */
-package com.pyx4j.widgets.client;
+package com.pyx4j.widgets.client.captcha;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,10 +33,12 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.widgets.client.IFocusWidget;
+import com.pyx4j.widgets.client.IWatermarkWidget;
 
-public abstract class CaptchaCompositeAbstract extends SimplePanel implements IFocusWidget, IWatermarkWidget {
+public abstract class AbstractCaptchaComposite extends SimplePanel implements IFocusWidget, IWatermarkWidget {
 
-    private static Logger log = LoggerFactory.getLogger(CaptchaCompositeAbstract.class);
+    private static Logger log = LoggerFactory.getLogger(AbstractCaptchaComposite.class);
 
     protected static String publicKey;
 
@@ -47,7 +49,7 @@ public abstract class CaptchaCompositeAbstract extends SimplePanel implements IF
      */
     public static void setPublicKey(String publicKey) {
         log.debug("reCAPTCHA key set [{}]", publicKey);
-        CaptchaComposite.publicKey = publicKey;
+        CaptchaCompositeV1.publicKey = publicKey;
     }
 
     public static boolean isPublicKeySet() {

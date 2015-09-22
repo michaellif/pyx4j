@@ -25,24 +25,24 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.widgets.client.CaptchaComposite;
-import com.pyx4j.widgets.client.CaptchaCompositeAbstract;
-import com.pyx4j.widgets.client.CaptchaCompositeV2;
+import com.pyx4j.widgets.client.captcha.CaptchaCompositeV1;
+import com.pyx4j.widgets.client.captcha.AbstractCaptchaComposite;
+import com.pyx4j.widgets.client.captcha.CaptchaCompositeV2;
 
-public class NCaptcha extends NFocusField<Pair<String, String>, CaptchaCompositeAbstract, CCaptcha, CaptchaCompositeAbstract>
+public class NCaptcha extends NFocusField<Pair<String, String>, AbstractCaptchaComposite, CCaptcha, AbstractCaptchaComposite>
         implements INativeFocusField<Pair<String, String>> {
 
     public static enum StyleDependent implements IStyleDependent {
         invalid
     }
 
-    private final CaptchaCompositeAbstract captchaComposite;
+    private final AbstractCaptchaComposite captchaComposite;
 
     public NCaptcha(final CCaptcha component) {
         super(component);
 
         if (false) {
-            captchaComposite = new CaptchaComposite();
+            captchaComposite = new CaptchaCompositeV1();
         } else {
             captchaComposite = new CaptchaCompositeV2();
         }
@@ -90,12 +90,12 @@ public class NCaptcha extends NFocusField<Pair<String, String>, CaptchaComposite
     }
 
     @Override
-    protected CaptchaCompositeAbstract createEditor() {
+    protected AbstractCaptchaComposite createEditor() {
         return captchaComposite;
     }
 
     @Override
-    protected CaptchaCompositeAbstract createViewer() {
+    protected AbstractCaptchaComposite createViewer() {
         return captchaComposite;
     }
 
