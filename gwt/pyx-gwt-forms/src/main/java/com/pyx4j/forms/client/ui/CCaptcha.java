@@ -24,14 +24,14 @@ import com.pyx4j.commons.Pair;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 
-public class CCaptcha extends CFocusComponent<Pair<String, String>, NCaptcha> implements IAcceptsWatermark {
+public class CCaptcha extends CFocusComponent<Pair<String, String>, NCaptcha>implements IAcceptsWatermark {
 
     private static final I18n i18n = I18n.get(CCaptcha.class);
 
     private String watermark;
 
     public CCaptcha() {
-        setMandatoryValidationMessage(i18n.tr("Captcha code is required"));
+        setMandatoryValidationMessage(i18n.tr("Are you a robot?"));
         setNativeComponent(new NCaptcha(this));
     }
 
