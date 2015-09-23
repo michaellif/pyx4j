@@ -42,7 +42,7 @@ public class ReCaptchaAntiBot extends LoginAttemptsCountAntiBot {
     @Override
     public void assertCaptcha(String challenge, String response) {
         if (CommonsStringUtils.isEmpty(challenge) || CommonsStringUtils.isEmpty(response)) {
-            throw new UserRuntimeException(i18n.tr("Captcha code is required"));
+            throw new UserRuntimeException(i18n.tr("Are you a robot?"));
         }
         if (challenge.equals("reCAPTCHA-v2")) {
             ReCaptchaV2APIClient.instance().assertCaptcha(response);
