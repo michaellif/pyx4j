@@ -41,7 +41,6 @@ import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.server.contexts.ServerContext;
 
 public class ReCaptchaV2APIClient {
 
@@ -88,11 +87,11 @@ public class ReCaptchaV2APIClient {
         return SingletonHolder.INSTANCE;
     }
 
-    public void assertCaptcha(String userResponseToken) {
+    public void assertCaptcha(String userResponseToken, String remoteAddr) {
         Response response = webTarget.path("siteverify")//
                 .queryParam("response", userResponseToken) //
                 .queryParam("secret", privateKey) //
-                .queryParam("remoteip", ServerContext.getRequestRemoteAddr()) //
+                .queryParam("remoteip", remoteAddr) //
                 .request(MediaType.APPLICATION_JSON).get();
         if (response.getStatus() != HttpURLConnection.HTTP_OK) {
             throw new RuntimeExceptionSerializable(i18n.tr("reCAPTCHA Connection Failed"));
