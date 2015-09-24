@@ -64,7 +64,7 @@ public class ReCaptchaV2APIClient {
 
     private String privateKey;
 
-    private final boolean enableLogging = true;
+    private final boolean enableLogging = false;
 
     private ReCaptchaV2APIClient() {
         ClientConfig clientConfig = new ClientConfig();
