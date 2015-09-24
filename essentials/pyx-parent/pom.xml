@@ -148,12 +148,12 @@
 
         <jerseyVersion>2.21</jerseyVersion>
 
-        <jettyVersion>9.2.3.v20140905</jettyVersion>
+        <jettyVersion>9.3.3.v20150827</jettyVersion>
 
         <slf4jVersion>1.7.12</slf4jVersion>
 
         <jasperreportsVersion>6.1.1</jasperreportsVersion>
-        <dynamicreportsVersion>3.1.6</dynamicreportsVersion>
+        <dynamicreportsVersion>4.0.1</dynamicreportsVersion>
         <batikVersion>1.7</batikVersion>
 
         <!-- Used for speed up the GWT compiler for developers -->
@@ -339,7 +339,7 @@
             <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
-                <version>1.4.186</version>
+                <version>1.4.189</version>
             </dependency>
 
             <dependency>
@@ -630,7 +630,7 @@
             <dependency>
                 <groupId>com.allen-sauer.gwt.dnd</groupId>
                 <artifactId>gwt-dnd</artifactId>
-                <version>3.3.0</version>
+                <version>3.3.4</version>
             </dependency>
 
             <dependency>
@@ -642,7 +642,7 @@
             <dependency>
 				<groupId>org.jsoup</groupId>
 				<artifactId>jsoup</artifactId>
-				<version>1.7.2</version>
+				<version>1.8.3</version>
 			</dependency>
 
             <dependency>
@@ -897,13 +897,13 @@
                 <plugin>
                     <groupId>org.codehaus.cargo</groupId>
                     <artifactId>cargo-maven2-plugin</artifactId>
-                    <version>1.4.14</version>
+                    <version>1.4.16</version>
                 </plugin>
 
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
-                    <version>1.2.1</version>
+                    <version>1.4.0</version>
                 </plugin>
 
                 <plugin>
