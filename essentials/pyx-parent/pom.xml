@@ -539,9 +539,11 @@
                 <exclusions>
                     <!--exclusion><groupId>commons-collections</groupId><artifactId>commons-collections</artifactId></exclusion-->
                     <!--exclusion><groupId>commons-logging</groupId><artifactId>commons-logging</artifactId></exclusion-->
+                    <exclusion><groupId>org.codehaus.castor</groupId><artifactId>castor-xml</artifactId></exclusion>
                     <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
                     <exclusion><groupId>jfree</groupId><artifactId>jfreechart</artifactId></exclusion>
-                    <exclusion><groupId>jfree</groupId><artifactId>jcommon</artifactId></exclusion>
+                    <exclusion><groupId>org.jfree</groupId><artifactId>jfreechart</artifactId></exclusion>
+                    <exclusion><groupId>org.jfree</groupId><artifactId>jcommon</artifactId></exclusion>
                     <exclusion><groupId>org.apache.poi</groupId><artifactId>poi-ooxml</artifactId></exclusion>
                     <exclusion><groupId>org.codehaus.castor</groupId><artifactId>castor</artifactId></exclusion>
                     <exclusion><groupId>org.codehaus.jackson</groupId><artifactId>jackson-core-lgpl</artifactId></exclusion>
@@ -550,7 +552,10 @@
                     <exclusion><groupId>com.fasterxml.jackson.core</groupId><artifactId>jackson-databind</artifactId></exclusion>
                     <exclusion><groupId>com.fasterxml.jackson.core</groupId><artifactId>jackson-annotations</artifactId></exclusion>
                     <!--exclusion><groupId>commons-digester</groupId><artifactId>commons-digester</artifactId></exclusion-->
-                   <!--exclusion><groupId>org.apache.poi</groupId><artifactId>poi</artifactId></exclusion-->
+                    <!--exclusion><groupId>org.apache.poi</groupId><artifactId>poi</artifactId></exclusion-->
+                    <exclusion><groupId>org.apache.lucene</groupId><artifactId>lucene-core</artifactId></exclusion>
+                    <exclusion><groupId>org.apache.lucene</groupId><artifactId>lucene-analyzers-common</artifactId></exclusion>
+                    <exclusion><groupId>org.apache.lucene</groupId><artifactId>lucene-queryparser</artifactId></exclusion>
                 </exclusions>
             </dependency>
 
