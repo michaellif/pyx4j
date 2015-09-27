@@ -47,9 +47,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.WidgetDebugId;
 import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.IWidget;
+import com.pyx4j.widgets.client.WidgetDebugId;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CField<DATA_TYPE, ?>, VIEWER extends Widget> extends NComponent<DATA_TYPE, CCOMP>
@@ -243,7 +243,7 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
             return;
         }
 
-        assert (debugId != null) : "Unassigned DebugId in native component of " + getCComponent().shortDebugInfo();
+        assert(debugId != null) : "Unassigned DebugId in native component of " + getCComponent().shortDebugInfo();
         if (editor != null) {
             editor.setDebugId(debugId);
         }
@@ -474,7 +474,11 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
 
                     @Override
                     public void onClick(ClickEvent event) {
-                        navigationCommand.execute();
+                        if (event.isControlKeyDown() && navigationCommand instanceof ExtendedNavigationCommand) {
+                            ((ExtendedNavigationCommand) navigationCommand).execute(true);
+                        } else {
+                            navigationCommand.execute();
+                        }
 
                     }
                 }, ClickEvent.getType());
