@@ -93,7 +93,7 @@ public final class AppPlaceContorller {
             goTo(newPlace);
         } else {
             // latest pyx AppSite.getHostPageURL()
-            Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), true, newPlace), "_blank", "");
+            Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, newPlace), "_blank", "");
         }
     }
 
