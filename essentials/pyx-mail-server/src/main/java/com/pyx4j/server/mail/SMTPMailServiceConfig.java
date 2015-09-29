@@ -137,6 +137,11 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
         return forwardAllTo;
     }
 
+    // Added to retrieve default value when getForwardAllTo is overridden
+    public final String getDefaultForwardAllTo() {
+        return forwardAllTo;
+    }
+
     public String getBlockedMailForwardTo() {
         return blockedMailForwardTo;
     }
