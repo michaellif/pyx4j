@@ -37,7 +37,7 @@ public interface AuthenticationRequest extends IEntity {
     @I18n(strategy = I18n.I18nStrategy.IgnoreMember)
     IPrimitive<String> logoutApplicationUrl();
 
-    @Editor(type = EditorType.email)
+    @Editor(type = EditorType.validatingEmail)
     @NotNull
     IPrimitive<String> email();
 
