@@ -19,18 +19,11 @@
  */
 package com.pyx4j.essentials.server;
 
-import net.tanesha.recaptcha.ReCaptcha;
-import net.tanesha.recaptcha.ReCaptchaException;
-import net.tanesha.recaptcha.ReCaptchaFactory;
-import net.tanesha.recaptcha.ReCaptchaResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18n;
 
 public class ReCaptchaAntiBot extends LoginAttemptsCountAntiBot {
@@ -42,24 +35,12 @@ public class ReCaptchaAntiBot extends LoginAttemptsCountAntiBot {
     @Override
     public void assertCaptcha(String challenge, String response) {
         if (CommonsStringUtils.isEmpty(challenge) || CommonsStringUtils.isEmpty(response)) {
-            throw new UserRuntimeException(i18n.tr("Captcha code is required"));
+            throw new UserRuntimeException(i18n.tr("Are you a robot?"));
         }
-        String privateKey = ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPrivateKey();
-        String publicKey = ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey();
-        ReCaptcha rc = ReCaptchaFactory.newReCaptcha(publicKey, privateKey, false);
-        ReCaptchaResponse captchaResponse;
-        try {
-            captchaResponse = rc.checkAnswer(getRequestRemoteAddr(), challenge, response);
-        } catch (ReCaptchaException e) {
-            log.error("Error", e);
-            throw new RuntimeExceptionSerializable(i18n.tr("reCAPTCHA Connection Failed"));
-        }
-        if (!captchaResponse.isValid()) {
-            if ("incorrect-captcha-sol".equals(captchaResponse.getErrorMessage())) {
-                throw new UserRuntimeException(i18n.tr("The CAPTCHA Solution You Entered Was Incorrect"));
-            } else {
-                throw new RuntimeExceptionSerializable(captchaResponse.getErrorMessage());
-            }
+        if (challenge.equals("reCAPTCHA-v2")) {
+            ReCaptchaV2APIClient.instance().assertCaptcha(response, getRequestRemoteAddr());
+        } else {
+            ReCaptchaV1APIClient.assertCaptchaV1(challenge, response, getRequestRemoteAddr());
         }
         log.debug("CAPTCHA Ok");
     }

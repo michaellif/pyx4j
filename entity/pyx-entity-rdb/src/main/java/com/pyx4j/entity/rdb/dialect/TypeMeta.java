@@ -19,6 +19,8 @@
  */
 package com.pyx4j.entity.rdb.dialect;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
@@ -35,26 +37,28 @@ public class TypeMeta {
 
     int scale = -1;
 
-    String[] compatibleTypeNames;
+    Collection<String> compatibleTypeNames;
+
+    Collection<String> requireConversionTypeNames;
 
     private TreeMap<Integer, String> extendedTypes;
 
     public TypeMeta(Class<?> javaClass, String sqlType) {
         this.javaClass = javaClass;
-        this.sqlType = sqlType;
+        this.sqlType = sqlType.toLowerCase(Locale.ENGLISH);
         this.maxLength = 0;
     }
 
     public TypeMeta(Class<?> javaClass, String sqlType, String... compatibleTypeNames) {
         this.javaClass = javaClass;
-        this.sqlType = sqlType;
+        this.sqlType = sqlType.toLowerCase(Locale.ENGLISH);
         this.maxLength = 0;
-        this.compatibleTypeNames = compatibleTypeNames;
+        setCompatibleTypeNames(compatibleTypeNames);
     }
 
     public TypeMeta(Class<?> javaClass, String sqlType, int precision, int scale) {
         this.javaClass = javaClass;
-        this.sqlType = sqlType;
+        this.sqlType = sqlType.toLowerCase(Locale.ENGLISH);
         this.maxLength = 0;
         this.scale = scale;
         this.precision = precision;
@@ -62,7 +66,7 @@ public class TypeMeta {
 
     public TypeMeta(Class<?> javaClass, int maxLength, String sqlType) {
         this.javaClass = javaClass;
-        this.sqlType = sqlType;
+        this.sqlType = sqlType.toLowerCase(Locale.ENGLISH);
         this.maxLength = maxLength;
     }
 
@@ -133,24 +137,54 @@ public class TypeMeta {
     }
 
     public void setCompatibleTypeNames(String... compatibleTypeNames) {
-        this.compatibleTypeNames = compatibleTypeNames;
+        this.compatibleTypeNames = new HashSet<>();
+        for (String type : compatibleTypeNames) {
+            this.compatibleTypeNames.add(type.toLowerCase(Locale.ENGLISH));
+        }
+    }
+
+    public void requireConversion(String... typeNames) {
+        this.requireConversionTypeNames = new HashSet<>();
+        for (String type : typeNames) {
+            this.requireConversionTypeNames.add(type.toLowerCase(Locale.ENGLISH));
+        }
     }
 
     public boolean isCompatibleType(String typeName) {
-        if (sqlType.equalsIgnoreCase(typeName)) {
+        if (sqlType.equals(typeName)) {
             return true;
         }
         if (compatibleTypeNames != null) {
-            for (String name : compatibleTypeNames) {
-                if (name.equalsIgnoreCase(typeName)) {
-                    return true;
-                }
+            if (compatibleTypeNames.contains(typeName)) {
+                return true;
             }
         }
         if (extendedTypes != null) {
-            return extendedTypes.containsValue(typeName.toLowerCase(Locale.ENGLISH));
+            return extendedTypes.containsValue(typeName);
         }
         return false;
+    }
+
+    public boolean isPrimitiveTypeChanges(String typeName) {
+        if (sqlType.equals(typeName)) {
+            return false;
+        }
+        if (requireConversionTypeNames != null) {
+            if (requireConversionTypeNames.contains(typeName)) {
+                return true;
+            }
+        }
+        if (compatibleTypeNames != null) {
+            if (compatibleTypeNames.contains(typeName)) {
+                return false;
+            }
+        }
+        if (extendedTypes != null) {
+            if (extendedTypes.containsValue(typeName)) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

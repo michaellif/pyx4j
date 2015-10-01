@@ -80,8 +80,8 @@ public class TableModelExternal {
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
-            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
-            // Just in case, used for pooled connections 
+            stmt = persistenceContext.prepareStatement(sql.toString());
+            // Just in case, used for pooled connections
             stmt.setMaxRows(1);
 
             int parameterIndex = 1;

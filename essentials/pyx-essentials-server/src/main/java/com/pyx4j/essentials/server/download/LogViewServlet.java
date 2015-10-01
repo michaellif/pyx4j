@@ -24,7 +24,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -44,13 +49,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.server.contexts.ServerContext;
@@ -166,6 +171,9 @@ public class LogViewServlet extends HttpServlet {
         out.println("<!DOCTYPE html>");
         out.println("<html><head><title>LogView</title>");
         out.println("<META HTTP-EQUIV=\"PRAGMA\" CONTENT=\"NO-CACHE\">");
+
+        out.println(IOUtils.getTextResource("LogViewServlet.js", LogViewServlet.class));
+
         out.println("</head>");
         out.println("<body>");
 
@@ -203,10 +211,14 @@ public class LogViewServlet extends HttpServlet {
 
         out.println("</span>");
 
-        out.println("<form method=\"get\">");
+        out.println("<form name='fileList' method='get'>");
         out.println("<table>");
 
-        out.println("<tr><th></th><th align=\"left\">Name</th><th align=\"left\">Last Modified</th><th align=\"right\">Size</th></tr>");
+        out.println("<tr><th>");
+
+        out.println("<input name='toggle' type='checkbox' onClick=\"javascript:formCheckAll('fileList', this.checked);\" title='check/uncheck all'>");
+
+        out.println("</th><th align=\"left\">Name</th><th align=\"left\">Last Modified</th><th align=\"right\">Size</th></tr>");
 
         if (path.length() != 1) {
             out.println("<tr><td></td><td>");
@@ -250,20 +262,20 @@ public class LogViewServlet extends HttpServlet {
         for (File file : files) {
             out.println("<tr><td>");
 
-            if (file.isFile()) {
-                out.println("<input name=\"download\" id=\"" + (idx++) + "\" type=\"checkbox\" value=\"" + file.getName() + "\">");
-            }
-
-            out.println("</td><td>");
-
-            out.print("<a href=\"");
-            out.print(urlPrefix);
             String name;
             if (file.getParentFile() == dir) {
                 name = file.getName();
             } else {
                 name = Paths.get(dir.toURI()).relativize(Paths.get(file.toURI())).toString().replace('\\', '/');
             }
+
+            out.println("<input name='download' id='" + (idx++) + "' type='checkbox' value='" + name + "' onClick='javascript:setCheckbox(this, event);'>");
+
+            out.println("</td><td>");
+
+            out.print("<a href=\"");
+            out.print(urlPrefix);
+
             if (file.isDirectory()) {
                 name += "/";
             }
@@ -285,6 +297,11 @@ public class LogViewServlet extends HttpServlet {
         out.println("</table>");
 
         out.println("<br/>");
+
+        out.println("<a onClick=\"javascript:formCheckAll('fileList', true);\" href='javascript:void();'>check all</a>");
+        out.println("<a onClick=\"javascript:formCheckAll('fileList', false);\" href='javascript:void();'>uncheck all</a>");
+
+        out.println("<br/><br/>");
 
         out.println("<input type=\"submit\" value=\"Download Selected as zip\" />");
 
@@ -378,39 +395,36 @@ public class LogViewServlet extends HttpServlet {
         }
     }
 
-    private void sendFilesZip(String path, HttpServletResponse response, String[] fileNameArrays) throws ServletException, IOException {
-        List<String> filesNames = Arrays.asList(fileNameArrays);
-        File dir = getSpecialPath(path);
-        File[] files = dir.listFiles();
+    private void sendFilesZip(String path, HttpServletResponse response, String[] filesNames) throws ServletException, IOException {
+        final File dir = getSpecialPath(path);
+
+        String zipName = dir.getName();
+        if (zipName.length() == 0) {
+            zipName = "logs";
+        }
 
         response.setContentType("application/zip");
-        response.setHeader("Content-Disposition", "attachment; filename=\"logs.zip\"");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + zipName + ".zip\"");
 
         ServletOutputStream out = response.getOutputStream();
-        ZipOutputStream zip = new ZipOutputStream(out);
+        final ZipOutputStream zip = new ZipOutputStream(out);
         try {
-            for (File file : files) {
-                if (!filesNames.contains(file.getName())) {
+            for (String fileName : filesNames) {
+                File file = new File(dir, fileName);
+                if (!file.canRead()) {
                     continue;
                 }
-                ZipEntry ze = new ZipEntry(file.getName());
-                ze.setTime(file.lastModified());
-                zip.putNextEntry(ze);
-
-                FileInputStream is = null;
-                DataInputStream in = null;
-                byte[] bbuf = new byte[1024];
-                try {
-                    in = new DataInputStream(is = new FileInputStream(file));
-                    int length;
-                    while ((in != null) && ((length = in.read(bbuf)) != -1)) {
-                        zip.write(bbuf, 0, length);
-                    }
-                } finally {
-                    IOUtils.closeQuietly(in);
-                    IOUtils.closeQuietly(is);
+                if (file.isFile()) {
+                    addFileToZip(file, dir, zip);
+                } else if (file.isDirectory()) {
+                    Files.walkFileTree(file.toPath(), new SimpleFileVisitor<Path>() {
+                        @Override
+                        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                            addFileToZip(file.toFile(), dir, zip);
+                            return FileVisitResult.CONTINUE;
+                        }
+                    });
                 }
-                zip.closeEntry();
             }
             zip.close();
             out.flush();
@@ -418,6 +432,28 @@ public class LogViewServlet extends HttpServlet {
             IOUtils.closeQuietly(zip);
             IOUtils.closeQuietly(out);
         }
+    }
+
+    private void addFileToZip(File file, File relativeTo, ZipOutputStream zip) throws IOException {
+        Path pathRelative = relativeTo.toPath().relativize(file.toPath());
+        ZipEntry ze = new ZipEntry(pathRelative.toString());
+        ze.setTime(file.lastModified());
+        zip.putNextEntry(ze);
+
+        FileInputStream is = null;
+        DataInputStream in = null;
+        byte[] bbuf = new byte[1024];
+        try {
+            in = new DataInputStream(is = new FileInputStream(file));
+            int length;
+            while ((in != null) && ((length = in.read(bbuf)) != -1)) {
+                zip.write(bbuf, 0, length);
+            }
+        } finally {
+            IOUtils.closeQuietly(in);
+            IOUtils.closeQuietly(is);
+        }
+        zip.closeEntry();
     }
 
     protected void setFileResponseHeaders(File file, HttpServletResponse response) {

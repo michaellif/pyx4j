@@ -110,16 +110,15 @@ class SMTPMailServiceImpl implements IMailService {
         config = config.selectConfigurationInstance(mailMessage);
 
         Properties mailProperties = new Properties();
+        for (Map.Entry<String, String> me : config.getProperties()) {
+            mailProperties.put(me.getKey(), me.getValue());
+        }
+
         mailProperties.put("mail.smtp.host", config.getHost());
         mailProperties.put("mail.smtp.port", String.valueOf(config.getPort()));
 
-        if (null != config.getConnectionTimeout()) {
-            mailProperties.put("mail.smtp.connectiontimeout", config.getConnectionTimeout());
-        }
-
-        if (null != config.getTimeout()) {
-            mailProperties.put("mail.smtp.timeout", config.getTimeout());
-        }
+        mailProperties.put("mail.smtp.connectiontimeout", config.getConnectionTimeout());
+        mailProperties.put("mail.smtp.timeout", config.getTimeout());
 
         // Enable SSL connection
         if (config.isStarttls()) {
