@@ -103,7 +103,7 @@ public class SimpleMessageFormatTest extends TestCase {
         assertMessageFormat("As {0}e", "A's {0}e", "B");
         assertMessageFormat("As '{0}'e", "A's ''{0}''e", "B");
 
-        assertMessageFormat("java.lang.IllegalArgumentException: number expected instead of class java.lang.String", "{0,number}", "NotNumber");
+        assertMessageFormat("{0,number} java.lang.IllegalArgumentException: number expected instead of class java.lang.String", "{0,number}", "NotNumber");
     }
 
     public void testNumberFormat() {
@@ -231,13 +231,7 @@ public class SimpleMessageFormatTest extends TestCase {
     }
 
     public void testIndexOutOfBound() {
-        boolean hasException = false;
-        try {
-            SimpleMessageFormat.format("{0} {2}", "A");
-        } catch (AssertionError | ArrayIndexOutOfBoundsException ok) {
-            hasException = true;
-        }
-        Assert.assertTrue("ArrayIndexOutOfBoundsException should have been thrown in format", hasException);
+        assertMessageFormat("A {0} {2} java.lang.AssertionError: ArrayIndexOutOfBoundsException 2 in format 2", "{0} {2}", "A");
     }
 
     /**

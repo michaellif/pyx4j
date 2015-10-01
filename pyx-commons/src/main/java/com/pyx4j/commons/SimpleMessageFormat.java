@@ -154,7 +154,7 @@ public class SimpleMessageFormat {
             return result.toString();
         } catch (Throwable e) {
             log.error("error in message format pattern '{}'", format, e);
-            return e.toString();
+            return format + " " + e.toString();
         }
     }
 
