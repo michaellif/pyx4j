@@ -21,10 +21,15 @@ package com.pyx4j.commons;
 
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Minimal implementation of java.text.MessageFormat to get going in GWT and null safe on server.
  */
 public class SimpleMessageFormat {
+
+    private static final Logger log = LoggerFactory.getLogger(SimpleMessageFormat.class);
 
     private static final char DELIM_START = '{';
 
@@ -62,79 +67,95 @@ public class SimpleMessageFormat {
      * format pattern when calling argFormat.
      */
     public String format(Object... arguments) {
-        StringBuilder result = new StringBuilder();
-        StringBuilder formatPattern = new StringBuilder();
-        boolean done = false;
+        try {
+            StringBuilder result = new StringBuilder();
+            StringBuilder formatPattern = new StringBuilder();
+            boolean done = false;
 
-        QuotedString quotedString = null;
+            QuotedString quotedString = null;
 
-        char c;
-        nextChar: for (; scanPos < format.length(); scanPos++) {
-            c = format.charAt(scanPos);
-            if (quotedString != null) {
-                switch (quotedString) {
-                case Start:
-                    if (c == '\'') {
-                        result.append(c);
-                        quotedString = null;
-                    } else {
-                        result.append(c);
-                        quotedString = QuotedString.Continue;
-                    }
-                    continue nextChar;
-                case Continue:
-                    if (c == '\'') {
-                        quotedString = QuotedString.Ending;
-                    } else {
-                        result.append(c);
-                    }
-                    continue nextChar;
-                case Ending:
-                    if (c == '\'') {
-                        // Double quote inside the string
-                        result.append(c);
-                        quotedString = QuotedString.Continue;
+            char c;
+            nextChar: for (; scanPos < format.length(); scanPos++) {
+                c = format.charAt(scanPos);
+                if (quotedString != null) {
+                    switch (quotedString) {
+                    case Start:
+                        if (c == '\'') {
+                            result.append(c);
+                            quotedString = null;
+                        } else {
+                            result.append(c);
+                            quotedString = QuotedString.Continue;
+                        }
                         continue nextChar;
-                    } else {
-                        quotedString = null;
+                    case Continue:
+                        if (c == '\'') {
+                            quotedString = QuotedString.Ending;
+                        } else {
+                            result.append(c);
+                        }
+                        continue nextChar;
+                    case Ending:
+                        if (c == '\'') {
+                            // Double quote inside the string
+                            result.append(c);
+                            quotedString = QuotedString.Continue;
+                            continue nextChar;
+                        } else {
+                            quotedString = null;
+                        }
+                        break;
                     }
+                }
+
+                switch (c) {
+                case '\'':
+                    quotedString = QuotedString.Start;
+                    break;
+                case DELIM_START:
+                    scanPos++;
+                    recursionLevel++;
+                    String res = format(arguments);
+                    recursionLevel--;
+                    if (recursionLevel == 0) {
+                        result.append(res);
+                    } else {
+                        formatPattern.append(res);
+                    }
+                    break;
+                case DELIM_STOP:
+                    if (formatPattern.length() == 0) {
+                        if (recursionLevel != 0) {
+                            // Empty pattern {}
+                            result.append("{}");
+                            done = true;
+                        } else {
+                            // Stand along end  }
+                            result.append("}");
+                        }
+                    } else {
+                        result.append(argFormat(formatPattern.toString(), arguments));
+                        done = true;
+                    }
+                    break;
+                default:
+                    if (recursionLevel == 0) {
+                        result.append(c);
+                    } else {
+                        formatPattern.append(c);
+                    }
+                    break;
+                }
+                if (done) {
                     break;
                 }
             }
 
-            switch (c) {
-            case '\'':
-                quotedString = QuotedString.Start;
-                break;
-            case DELIM_START:
-                scanPos++;
-                recursionLevel++;
-                String res = format(arguments);
-                recursionLevel--;
-                if (recursionLevel == 0) {
-                    result.append(res);
-                } else {
-                    formatPattern.append(res);
-                }
-                break;
-            case DELIM_STOP:
-                result.append(argFormat(formatPattern.toString(), arguments));
-                done = true;
-                break;
-            default:
-                if (recursionLevel == 0) {
-                    result.append(c);
-                } else {
-                    formatPattern.append(c);
-                }
-                break;
-            }
-            if (done) {
-                break;
-            }
+            return result.toString();
+        } catch (Throwable e) {
+            log.error("error in message format pattern '{}'", format, e);
+            return format + " " + e.toString();
         }
-
-        return result.toString();
     }
 
     /*
