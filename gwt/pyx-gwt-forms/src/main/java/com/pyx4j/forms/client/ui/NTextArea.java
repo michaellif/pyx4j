@@ -40,7 +40,8 @@ public class NTextArea extends NValueBoxBase<String, TextArea, CTextArea> {
     public void setNativeValue(String value) {
         String newValue = value == null ? "" : value;
         if (isViewable()) {
-            getViewer().setText(newValue);
+            newValue = newValue.replaceAll("(\r\n|\n)", "<br />");
+            getViewer().setHTML(newValue);
         } else {
             if (!newValue.equals(getEditor().getValue())) {
                 getEditor().setValue(newValue);

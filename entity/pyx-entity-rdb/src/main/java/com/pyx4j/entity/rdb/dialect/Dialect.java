@@ -106,16 +106,22 @@ public abstract class Dialect {
         typeNames.put(typeMeta.javaClass, typeMeta);
     }
 
-    protected void addTypeMeta(Class<?> javaClass, String sqlType) {
-        typeNames.put(javaClass, new TypeMeta(javaClass, sqlType));
+    protected TypeMeta addTypeMeta(Class<?> javaClass, String sqlType) {
+        TypeMeta typeMeta = new TypeMeta(javaClass, sqlType);
+        typeNames.put(javaClass, typeMeta);
+        return typeMeta;
     }
 
-    protected void addTypeMeta(Class<?> javaClass, String sqlType, String... compatibleTypeNames) {
-        typeNames.put(javaClass, new TypeMeta(javaClass, sqlType, compatibleTypeNames));
+    protected TypeMeta addTypeMeta(Class<?> javaClass, String sqlType, String... compatibleTypeNames) {
+        TypeMeta typeMeta = new TypeMeta(javaClass, sqlType, compatibleTypeNames);
+        typeNames.put(javaClass, typeMeta);
+        return typeMeta;
     }
 
-    protected void addTypeMeta(Class<?> javaClass, String sqlType, int precision, int scale) {
-        typeNames.put(javaClass, new TypeMeta(javaClass, sqlType, precision, scale));
+    protected TypeMeta addTypeMeta(Class<?> javaClass, String sqlType, int precision, int scale) {
+        TypeMeta typeMeta = new TypeMeta(javaClass, sqlType, precision, scale);
+        typeNames.put(javaClass, typeMeta);
+        return typeMeta;
     }
 
     public String getGeneratedIdColumnString() {
@@ -164,6 +170,14 @@ public abstract class Dialect {
             throw new RuntimeException("Undefined SQL type for class " + getType(klass).getName());
         }
         return typeMeta.isCompatibleType(typeName);
+    }
+
+    public boolean isPrimitiveTypeChanges(Class<?> klass, int length, String typeName) {
+        TypeMeta typeMeta = typeNames.get(getType(klass));
+        if (typeMeta == null) {
+            throw new RuntimeException("Undefined SQL type for class " + getType(klass).getName());
+        }
+        return typeMeta.isPrimitiveTypeChanges(typeName);
     }
 
     public int getTargetSqlType(Class<?> valueClass) {
@@ -336,6 +350,10 @@ public abstract class Dialect {
 
     public LimitOffsetSyntax limitCriteriaType() {
         throw new Error("Dialect does not support limit");
+    }
+
+    public String sqlForUpdateWait(int seconds) {
+        return "";
     }
 
     public String sqlSortNulls(boolean descending) {

@@ -74,6 +74,10 @@ public class EssentialsServerSideConfiguration extends ServerSideConfiguration {
         return new ReCaptchaAntiBot();
     }
 
+    public int getReCaptchaVersion() {
+        return 2;
+    }
+
     public String getReCaptchaPrivateKey() {
         return null;
     }

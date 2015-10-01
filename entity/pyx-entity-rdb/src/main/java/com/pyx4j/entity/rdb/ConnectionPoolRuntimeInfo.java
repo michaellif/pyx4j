@@ -27,4 +27,8 @@ public interface ConnectionPoolRuntimeInfo {
 
     public long getNumFailedCheckouts();
 
+    public String getInfo();
+
+    public String getStatementCacheInfo();
+
 }

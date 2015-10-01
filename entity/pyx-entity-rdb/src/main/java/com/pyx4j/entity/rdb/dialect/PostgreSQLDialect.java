@@ -36,10 +36,10 @@ public class PostgreSQLDialect extends Dialect {
         super(DatabaseType.PostgreSQL, namingConvention, multitenancyType);
         addTypeMeta(Byte.class, "smallint", "int2");
         addTypeMeta(Short.class, "smallint", "int2");
-        addTypeMeta(Integer.class, "integer", "int4");
-        addTypeMeta(Long.class, "bigint", "int8");
-        addTypeMeta(Float.class, "real", "float4");
-        addTypeMeta(Double.class, "double precision", "float8");
+        addTypeMeta(Integer.class, "integer", "int4", "int2", "int8").requireConversion("int2", "int8");
+        addTypeMeta(Long.class, "bigint", "int8", "int2", "int4").requireConversion("int2", "int4");
+        addTypeMeta(Float.class, "real", "float4", "float8").requireConversion("float8");
+        addTypeMeta(Double.class, "double precision", "float8", "float4").requireConversion("float4");
         addTypeMeta(Boolean.class, "bool");
 
         // We use annotation @MemberColumn to override scale
