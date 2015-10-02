@@ -102,7 +102,7 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
                 if (signature.agree().getValue(false)) {
                     switch (signature.signatureFormat().getValue()) {
                     case AgreeBox:
-                        getViewer().setText(null);
+                        getViewer().setText(i18n.tr("Yes"));
                         break;
                     case AgreeBoxAndFullName:
                     case FullName:
@@ -115,7 +115,14 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
                         break;
                     }
                 } else {
-                    getViewer().setText(null);
+                    switch (signature.signatureFormat().getValue()) {
+                    case AgreeBox:
+                        getViewer().setText(i18n.tr("No"));
+                        break;
+                    default:
+                        getViewer().setText(null);
+                        break;
+                    }
                 }
             }
             getEditor().init(signature.signatureFormat().getValue());
