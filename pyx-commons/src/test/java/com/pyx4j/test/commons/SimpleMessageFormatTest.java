@@ -21,13 +21,13 @@ package com.pyx4j.test.commons;
 
 import java.util.Date;
 
-import junit.framework.TestCase;
-
 import org.junit.Assert;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.IStringView;
 import com.pyx4j.commons.SimpleMessageFormat;
+
+import junit.framework.TestCase;
 
 public class SimpleMessageFormatTest extends TestCase {
 
@@ -37,7 +37,7 @@ public class SimpleMessageFormatTest extends TestCase {
 
         @Override
         public String toString() {
-            // this is to ensure the implementation doesn't compare enums the wrong way 
+            // this is to ensure the implementation doesn't compare enums the wrong way
             return "The " + this.name().toLowerCase();
         };
 
@@ -91,15 +91,19 @@ public class SimpleMessageFormatTest extends TestCase {
         assertMessageFormat("A{}e", "A'{}'e");
     }
 
+    public void testNoPlaceHoldersPattern() {
+        assertMessageFormat("A {} e", "A {} e");
+        assertMessageFormat("A {} x Z {}e", "A {} x {0} {}e", "Z");
+        assertMessageFormat("A}B", "A}B");
+    }
+
     public void testErrorParents() {
-        try {
-            assertMessageFormat("n/a", "A{}B");
-            fail("Error expected");
-        } catch (Throwable ok) {
-        }
+        assertMessageFormat("A{}B", "A{}B");
         assertMessageFormat("As Be", "A's' {0}e", "B");
         assertMessageFormat("As {0}e", "A's {0}e", "B");
         assertMessageFormat("As '{0}'e", "A's ''{0}''e", "B");
+
+        assertMessageFormat("{0,number} java.lang.IllegalArgumentException: number expected instead of class java.lang.String", "{0,number}", "NotNumber");
     }
 
     public void testNumberFormat() {
@@ -227,13 +231,7 @@ public class SimpleMessageFormatTest extends TestCase {
     }
 
     public void testIndexOutOfBound() {
-        boolean hasException = false;
-        try {
-            SimpleMessageFormat.format("{0} {2}", "A");
-        } catch (AssertionError | ArrayIndexOutOfBoundsException ok) {
-            hasException = true;
-        }
-        Assert.assertTrue("ArrayIndexOutOfBoundsException should have been thrown in format", hasException);
+        assertMessageFormat("A {0} {2} java.lang.AssertionError: ArrayIndexOutOfBoundsException 2 in format 2", "{0} {2}", "A");
     }
 
     /**
