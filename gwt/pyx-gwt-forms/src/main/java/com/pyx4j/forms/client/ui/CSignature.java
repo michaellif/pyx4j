@@ -50,29 +50,13 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
             public BasicValidationError isValid() {
                 ISignature value = getCComponent().getValue();
                 if (value != null) {
-                    SignatureFormat signatureFormat = value.signatureFormat().isNull() ? SignatureFormat.None : value.signatureFormat().getValue();
-                    switch (signatureFormat) {
-                    case None:
-                        break;
-                    case AgreeBox:
-                        if (!value.agree().getValue(false)) {
-                            return new BasicValidationError(getCComponent(), i18n.tr("You must agree to the Terms to continue"));
-                        }
-                        break;
+                    switch (value.signatureFormat().getValue(SignatureFormat.None)) {
                     case AgreeBoxAndFullName:
-                        if (!value.agree().getValue(false)) {
-                            return new BasicValidationError(getCComponent(), i18n.tr("You must agree to the Terms to continue"));
-                        }
-                    case FullName:
-                        if (value.fullName().getValue() == null || value.fullName().getValue().trim().equals("")) {
-                            return new BasicValidationError(getCComponent(),
-                                    i18n.tr("You must agree to the Terms by typing your First and Last name to continue"));
+                        if (value.agree().getValue(false) && value.fullName().getValue("").trim().equals("")) {
+                            return new BasicValidationError(getCComponent(), i18n.tr("Please type in your First and Last name"));
                         }
                         break;
-                    case Initials:
-                        if (value.initials().getValue() == null || value.initials().getValue().trim().equals("")) {
-                            return new BasicValidationError(getCComponent(), i18n.tr("You must agree to the Terms by typing your Initials to continue"));
-                        }
+                    default:
                         break;
                     }
                 }
@@ -80,6 +64,34 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
             }
         });
 
+    }
+
+    @Override
+    public boolean isValueEmpty() {
+        // for mandatory validator
+        return super.isValueEmpty() || (getValue().signatureFormat().getValue() != SignatureFormat.None && !getValue().agree().getValue(false));
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        // set mandatory messages based on the signature format
+        if (isMandatory()) {
+            String mandatoryMessage = null;
+            switch (getValue().signatureFormat().getValue(SignatureFormat.None)) {
+            case FullName:
+                mandatoryMessage = i18n.tr("Please type in your First and Last name to continue");
+                break;
+            case Initials:
+                mandatoryMessage = i18n.tr("Please type in your Initials to continue");
+                break;
+            default:
+                mandatoryMessage = i18n.tr("You must agree to continue");
+                break;
+            }
+            setMandatoryValidationMessage(mandatoryMessage);
+        }
     }
 
     @Override
