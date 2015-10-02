@@ -146,7 +146,7 @@
         <gaeVersion.kindleit.deploy>1.8.8</gaeVersion.kindleit.deploy>
         <gae.version>${gaeVersion}</gae.version>
 
-        <jerseyVersion>2.21</jerseyVersion>
+        <jerseyVersion>2.22</jerseyVersion>
 
         <jettyVersion>9.3.3.v20150827</jettyVersion>
 
