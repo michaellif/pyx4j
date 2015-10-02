@@ -113,6 +113,10 @@ public class ServerContext extends Context {
         return new InheritableUserContext(getVisit());
     }
 
+    public static InheritableUserContext getInheritableUserContext(Visit abstractVisit) {
+        return new InheritableUserContext(abstractVisit);
+    }
+
     /**
      * TODO remove public.
      *
