@@ -34,6 +34,8 @@ public interface IReportsService<R extends ReportTemplate> extends IService {
 
     void generateReportAsync(AsyncCallback<String> callback, R reportMetadata);
 
+    void abort(AsyncCallback<VoidSerializable> callback, String deferredCorrelationId);
+
     void getReport(AsyncCallback<Serializable> callback);
 
     void export(AsyncCallback<String> callback, R reportMetadata);
