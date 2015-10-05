@@ -212,7 +212,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     }
 
     public void onAdopt(CContainer<?, ?, ?> parent) {
-        assert (this.parent == null) : "Component " + this.getClass().getName() + " is already bound to " + this.parent;
+        assert(this.parent == null) : "Component " + this.getClass().getName() + " is already bound to " + this.parent;
         this.parent = parent;
         setContainerAccessRules(true);
 
@@ -648,7 +648,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
             boolean wasEmpty = isValueEmpty();
             boolean wasVisited = isVisited();
             editingInProgress = false;
-            setVisited(true);
+            visited = true;
             DATA_TYPE editorValue;
             try {
                 editorValue = getEditorValue();
