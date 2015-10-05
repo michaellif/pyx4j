@@ -74,7 +74,6 @@ public abstract class AbstractReportsService<R extends ReportTemplate> implement
 
         @Override
         public void started() {
-            log.error("TODO", new Error("migrate to AbstractDeferredProcess"));
         }
 
         @Override
@@ -256,12 +255,21 @@ public abstract class AbstractReportsService<R extends ReportTemplate> implement
     }
 
     @Override
+    public void abort(AsyncCallback<VoidSerializable> callback, String deferredCorrelationId) {
+        IDeferredProcess process = DeferredProcessRegistry.get(deferredCorrelationId);
+        if (process != null) {
+            process.cancel();
+        }
+        callback.onSuccess(null);
+    }
+
+    @Override
     public void export(AsyncCallback<String> callback, R reportMetadata) {
         @SuppressWarnings("unchecked")
         Class<? extends ReportTemplate> reportMetadataClass = (Class<? extends ReportTemplate>) reportMetadata.getInstanceValueClass();
         ReportGenerator reportGenerator = reportGeneratorFactory.getReportGenerator(reportMetadataClass);
-        callback.onSuccess(DeferredProcessRegistry.fork(new ExportReportDeferredProcess(reportGenerator, reportMetadata),
-                DeferredProcessRegistry.THREAD_POOL_DOWNLOADS));
+        callback.onSuccess(
+                DeferredProcessRegistry.fork(new ExportReportDeferredProcess(reportGenerator, reportMetadata), DeferredProcessRegistry.THREAD_POOL_DOWNLOADS));
     }
 
     @Override
