@@ -20,7 +20,10 @@
 package com.pyx4j.entity.server;
 
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.server.contexts.InheritableUserContext;
+import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
+import com.pyx4j.server.contexts.ServerContext;
 
 public final class Executables {
 
@@ -65,6 +68,22 @@ public final class Executables {
                 return new UnitOfWork(transactionScopeOption).execute(task);
             }
         });
+    }
+
+    public static <R, E extends Throwable> Executable<R, E> wrapInCurrentUserContext(final Executable<R, E> task) {
+        final InheritableUserContext inheritableUserContext = ServerContext.getInheritableUserContext();
+        return new Executable<R, E>() {
+
+            @Override
+            public R execute() throws E {
+                try {
+                    Lifecycle.inheritUserContext(inheritableUserContext);
+                    return task.execute();
+                } finally {
+                    Lifecycle.endContext();
+                }
+            }
+        };
     }
 
 }
