@@ -19,9 +19,9 @@
  */
 package com.pyx4j.test.commons;
 
-import junit.framework.TestCase;
-
 import com.pyx4j.commons.ValidationUtils;
+
+import junit.framework.TestCase;
 
 public class ValidationUtilsTest extends TestCase {
 
@@ -58,5 +58,12 @@ public class ValidationUtilsTest extends TestCase {
 //        assertFalse("Invalid Email: .web is not a valid top level domain", ValidationUtils.isValidEmail("email@domain.web"));
 //        assertFalse("Invalid Email: Invalid IP format", ValidationUtils.isValidEmail("email@111.222.333.44444"));
         assertFalse("Invalid Email: Multiple dot in the domain portion is invalid", ValidationUtils.isValidEmail("email@domain..com"));
+
+        // ****************************
+
+        // Validate slash char
+        assertFalse("Invalid Email: Slash char '\\' is not valid ", ValidationUtils.isValidEmail("bob/123@gmail.com"));
+        assertFalse("Invalid Email: Slash char '\\' is not valid ", ValidationUtils.isValidEmail("bob./123@gmail.com"));
+        assertFalse("Invalid Email: Slash char '\\' is not valid ", ValidationUtils.isValidEmail("bob/124.surname/123@gmail.com"));
     }
 }
