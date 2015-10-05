@@ -21,7 +21,7 @@ package com.pyx4j.forms.client.validators;
 
 import java.util.ArrayList;
 
-import com.pyx4j.forms.client.ui.CEmailField;
+import com.pyx4j.commons.ValidationUtils;
 
 public class EmailListTextBoxValidator extends AbstractComponentValidator<String> {
 
@@ -127,7 +127,7 @@ public class EmailListTextBoxValidator extends AbstractComponentValidator<String
                     }
 
                     EmailAddress a = new EmailAddress();
-                    a.valid = value.matches(CEmailField.EMAIL_REGEXPR);
+                    a.valid = ValidationUtils.isValidEmail(value);
                     if (a.valid) {
                         a.email = value;
                     } else {
@@ -150,7 +150,7 @@ public class EmailListTextBoxValidator extends AbstractComponentValidator<String
             }
 
             if (a.email != null) {
-                a.valid = a.email.matches(CEmailField.EMAIL_REGEXPR);
+                a.valid = ValidationUtils.isValidEmail(a.email);
                 if (!a.valid) {
                     a.message = "{" + a.email + "} not a valid e-mail";
                 }
