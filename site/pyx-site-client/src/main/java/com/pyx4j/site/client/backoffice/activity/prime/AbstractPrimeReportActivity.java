@@ -58,8 +58,8 @@ import com.pyx4j.site.rpc.customization.ICustomizationPersistenceService;
 import com.pyx4j.site.rpc.reports.IReportsService;
 import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
-public abstract class AbstractPrimeReportActivity<R extends ReportTemplate> extends AbstractPrimeActivity<IPrimeReportView<?>> implements
-        IPrimeReportPresenter<R> {
+public abstract class AbstractPrimeReportActivity<R extends ReportTemplate> extends AbstractPrimeActivity<IPrimeReportView<?>>
+        implements IPrimeReportPresenter<R> {
 
     private static final I18n i18n = I18n.get(AbstractPrimeReportActivity.class);
 
@@ -70,6 +70,8 @@ public abstract class AbstractPrimeReportActivity<R extends ReportTemplate> exte
     private final ICustomizationPersistenceService<ReportTemplate> reportsSettingsPersistenceService;
 
     private ReportSettingsManagementVizorController reportSettingsManagementVizorController;
+
+    private String deferredCorrelationId;
 
     private final String downloadServletPath;
 
@@ -132,10 +134,12 @@ public abstract class AbstractPrimeReportActivity<R extends ReportTemplate> exte
         reportsService.generateReportAsync(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String deferredProcessId) {
+                AbstractPrimeReportActivity.this.deferredCorrelationId = deferredProcessId;
                 getView().startReportGenerationProgress(deferredProcessId, new DeferredProgressListener() {
 
                     @Override
                     public void onDeferredSuccess(DeferredProcessProgressResponse result) {
+                        AbstractPrimeReportActivity.this.deferredCorrelationId = null;
                         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                             @Override
                             public void execute() {
@@ -173,7 +177,9 @@ public abstract class AbstractPrimeReportActivity<R extends ReportTemplate> exte
 
     @Override
     public void abortReportGeneration() {
-//TODO implement
+        if (deferredCorrelationId != null) {
+            reportsService.abort(null, deferredCorrelationId);
+        }
     }
 
     @Override
@@ -243,9 +249,8 @@ public abstract class AbstractPrimeReportActivity<R extends ReportTemplate> exte
             @Override
             public void onFailure(Throwable caught) {
                 if (caught instanceof CustomizationOverwriteAttemptException) {
-                    getView().onReportMetadataSaveFailed(
-                            i18n.tr("Please choose a different name: a report settings preset named \"{0}\" already exists", getView().getReportSettings()
-                                    .reportTemplateName().getValue()));
+                    getView().onReportMetadataSaveFailed(i18n.tr("Please choose a different name: a report settings preset named \"{0}\" already exists",
+                            getView().getReportSettings().reportTemplateName().getValue()));
                 } else if (caught instanceof UserRuntimeException) {
                     getView().onReportMetadataSaveFailed(((UserRuntimeException) caught).getMessage());
                 } else {
