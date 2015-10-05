@@ -29,7 +29,7 @@ import java.lang.annotation.Target;
 public @interface Editor {
 
     public static enum EditorType {
-        text, password, passwordCreator, textarea, richtextarea, combo, captcha, monthyearpicker, yearpicker, timepicker, email, validatingEmail, phone, money, percentage, radiogroup, entityselector, label, color, hue, moneylabel, percentagelabel
+        text, password, passwordCreator, textarea, richtextarea, combo, captcha, monthyearpicker, yearpicker, timepicker, email, phone, money, percentage, radiogroup, entityselector, label, color, hue, moneylabel, percentagelabel
     }
 
     /**
