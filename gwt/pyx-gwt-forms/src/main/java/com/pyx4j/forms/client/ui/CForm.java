@@ -227,7 +227,7 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
     @Override
     @SuppressWarnings("unchecked")
     protected void onValuePropagation(E value, boolean fireEvent, boolean populate) {
-        assert (value == null) || proto().isAssignableFrom(value.getInstanceValueClass()) : "Trying to set value of a wrong type, expected "
+        assert(value == null) || proto().isAssignableFrom(value.getInstanceValueClass()) : "Trying to set value of a wrong type, expected "
                 + proto().getValueClass() + ", got " + value.getInstanceValueClass() + " in form " + getTitle();
         if (populate) {
             assert value != null : "Entity Editor should not be populated with null. Use reset() instead";
@@ -255,20 +255,20 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
                 Path memberPath = binding.get(component);
 
                 if (entity.isInstanceOf(memberPath.getRootEntityClass())) {
-                    IObject<?> m = entity.getMember(memberPath);
+                    IObject<?> member = entity.getMember(memberPath);
                     try {
-                        if (m instanceof IEntity) {
-                            component.setValue(((IEntity) m).cast(), fireEvent, populate);
-                        } else if (m instanceof ICollection) {
-                            component.setValue(m, fireEvent, populate);
+                        if (member instanceof IEntity) {
+                            component.setValue(((IEntity) member).cast(), fireEvent, populate);
+                        } else if (member instanceof ICollection) {
+                            component.setValue(member, fireEvent, populate);
                         } else {
-                            component.setValue(m.getValue(), fireEvent, populate);
+                            component.setValue(member.getValue(), fireEvent, populate);
                         }
                     } catch (ClassCastException e) {
-                        log.error("Invalid property access {} valueClass: {}", memberPath, m.getMeta().getValueClass());
+                        log.error("Invalid property access {} valueClass: {}", memberPath, member.getMeta().getValueClass());
                         log.error("Error", e);
-                        throw new UnrecoverableClientError("Invalid property access " + memberPath + "; valueClass:" + m.getMeta().getValueClass() + " error:"
-                                + e.getMessage());
+                        throw new UnrecoverableClientError(
+                                "Invalid property access " + memberPath + "; valueClass:" + member.getMeta().getValueClass() + " error:" + e.getMessage());
                     }
                 }
                 component.applyAccessibilityRules();
