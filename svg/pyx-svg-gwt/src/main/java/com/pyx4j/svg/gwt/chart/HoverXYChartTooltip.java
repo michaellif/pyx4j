@@ -19,7 +19,7 @@
  */
 package com.pyx4j.svg.gwt.chart;
 
-import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
@@ -29,14 +29,14 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.svg.chart.XYChart;
 
-public class HoverXYChartTooltip extends VerticalPanel implements MouseMoveHandler, MouseOutHandler, MouseOverHandler {
+public class HoverXYChartTooltip extends FlowPanel implements MouseMoveHandler, MouseOutHandler, MouseOverHandler {
 
     private Widget chartPanel;
 
@@ -57,14 +57,28 @@ public class HoverXYChartTooltip extends VerticalPanel implements MouseMoveHandl
         chartPanel.addDomHandler(this, MouseOutEvent.getType());
         chartPanel.addDomHandler(this, MouseOverEvent.getType());
 
-        Style s = this.getElement().getStyle();
-        s.setPosition(Position.ABSOLUTE);
+        chartPanel.getElement().getStyle().setPadding(50, Unit.PX);
+        chartPanel.getElement().getStyle().setMargin(0, Unit.PX);
 
-        s.setBorderStyle(BorderStyle.SOLID);
-        s.setBorderWidth(1, Unit.PX);
-        s.setBorderColor("#666");
-        s.setProperty("borderRadius", "10px");
-        s.setProperty("background", "rgba(255,255,255,0.8)");
+        chartPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+        chartPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
+        chartPanel.getElement().getStyle().setBorderColor("#070");
+
+        Element target = ((Widget) chart.asSvgElement()).getElement();
+        target.getStyle().setBorderStyle(BorderStyle.DOTTED);
+        target.getStyle().setBorderWidth(5, Unit.PX);
+        target.getStyle().setBorderColor("#700");
+
+        target.getStyle().setPadding(50, Unit.PX);
+        target.getStyle().setMargin(0, Unit.PX);
+
+        this.getElement().getStyle().setPosition(Position.ABSOLUTE);
+
+        this.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+        this.getElement().getStyle().setBorderWidth(1, Unit.PX);
+        this.getElement().getStyle().setBorderColor("#666");
+        this.getElement().getStyle().setProperty("borderRadius", "10px");
+        this.getElement().getStyle().setProperty("background", "rgba(255,255,255,0.8)");
 
         container.add(this);
 
@@ -73,9 +87,8 @@ public class HoverXYChartTooltip extends VerticalPanel implements MouseMoveHandl
     }
 
     protected void positionLabels(int x, int y) {
-        Style s = this.getElement().getStyle();
-        s.setTop(y + 18, Unit.PX);
-        s.setLeft(x - 25, Unit.PX);
+        this.getElement().getStyle().setTop(y + 18, Unit.PX);
+        this.getElement().getStyle().setLeft(x - 25, Unit.PX);
     }
 
     @Override
@@ -95,7 +108,20 @@ public class HoverXYChartTooltip extends VerticalPanel implements MouseMoveHandl
         int y = chartPanel.getAbsoluteTop() + event.getY();
         System.out.println("X:" + x /* + " Y:" + event.getY() */);
         positionLabels(x, y);
-        labelX.setHTML(formatLabelX(chart, chart.getXValue(x)));
+
+        Element target = ((Widget) chart.asSvgElement()).getElement();
+
+        int xr = event.getRelativeX(target);
+        int yr = event.getRelativeY(target);
+
+        labelX.setHTML("event X :" + event.getX() + " event Y :" + event.getY() + " <br/>" //
+                + "event Xr:" + xr + ", event Yr:" + yr + "  " + "<br/>" //
+                + "Absolute X:" + x + ", Absolute Y:" + y + "  " + "<br/>" //
+                + "now X: " + chart.nowPosition + "<br/>" //
+        );
+
+        //labelX.setHTML("eX:" + event.getX() + "  " + formatLabelX(chart, chart.getXValue(x)));
+        labelY.setHTML("c " + formatLabelX(chart, chart.getXValue(x)));
         //labelY.setHTML(formatLabelY(chart, chart.getYValue(event.getY())));
     }
 

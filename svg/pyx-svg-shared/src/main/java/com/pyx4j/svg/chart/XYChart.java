@@ -105,6 +105,8 @@ public class XYChart extends GridBase implements IsSvgElement {
         }
     }
 
+    public int nowPosition;
+
     private void drawBasics() {
         calculateMinMax();
 
@@ -184,6 +186,11 @@ public class XYChart extends GridBase implements IsSvgElement {
                     Text lbl = factory.createText(valueRepr, scaledPosition, ystart + PADDING);
                     lbl.setAttribute("font-size", String.valueOf(DEFAULT_FONT_SIZE));
                     lbl.setAttribute("text-anchor", "middle");
+                    if (valueRepr == "now") {
+                        System.out.println("scaledPosition now: " + scaledPosition);
+                        nowPosition = scaledPosition;
+                    }
+
                     container.add(lbl);
                     if (configurator.getGridType() == GridType.Both || configurator.getGridType() == GridType.Metric) {
                         xGL += "M" + scaledPosition + "," + ystart + "L" + scaledPosition + "," + yend;
