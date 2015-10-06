@@ -13,7 +13,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Created on 2011-05-04
  * @author Vlad
  */
@@ -56,6 +56,8 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
     private int tabIndex;
 
     private boolean mayStop;
+
+    private boolean discarded = false;
 
     public AbstractPrimeEditorActivity(Class<E> entityClass, CrudAppPlace place, IPrimeEditorView<E> view, AbstractCrudService<E> service) {
         super(view, place);
@@ -121,6 +123,7 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
     }
 
     protected void onDiscard() {
+        discarded = true;
         getView().reset();
         getView().setPresenter(null);
     }
@@ -146,8 +149,10 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
                     service.init(new DefaultAsyncCallback<E>() {
                         @Override
                         public void onSuccess(E result) {
-                            setEntityParent(result, false);
-                            onPopulateSuccess(result);
+                            if (!discarded) {
+                                setEntityParent(result, false);
+                                onPopulateSuccess(result);
+                            }
                         }
                     }, result);
                 }
@@ -156,7 +161,9 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
             service.retrieve(new DefaultAsyncCallback<E>() {
                 @Override
                 public void onSuccess(E result) {
-                    onPopulateSuccess(result);
+                    if (!discarded) {
+                        onPopulateSuccess(result);
+                    }
                 }
             }, entityId, AbstractCrudService.RetrieveOperation.Edit);
         }
@@ -168,7 +175,9 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
             service.retrieve(new DefaultAsyncCallback<E>() {
                 @Override
                 public void onSuccess(E result) {
-                    onPopulateSuccess(result);
+                    if (!discarded) {
+                        onPopulateSuccess(result);
+                    }
                 }
             }, entityId, RetrieveOperation.Edit);
         }
@@ -191,7 +200,7 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
 
     /**
      * Descendants may override this method to supply some initialization info.
-     * 
+     *
      */
     protected void obtainInitializationData(AsyncCallback<InitializationData> callback) {
         if (getPlace().getInitializationData() != null) {
