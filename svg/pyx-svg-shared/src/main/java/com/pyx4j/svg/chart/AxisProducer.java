@@ -39,6 +39,8 @@ public interface AxisProducer {
 
     double getValuePosition(double value);
 
+    double getValue(int position);
+
     String formatLabel(double value);
 
     int getMaxLabelLength();

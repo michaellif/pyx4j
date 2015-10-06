@@ -35,7 +35,7 @@ public class BasicTickProducer implements TickProducer {
         this.fixedMajorStep = fixedMajorStep;
     }
 
-    // This is Stupido!  the value returned can be only on  Ticks. 
+    // This is Stupido!  the value returned can be only on  Ticks.
     @Override
     public double getValuePosition(double value) {
         double position = 0;
@@ -50,6 +50,11 @@ public class BasicTickProducer implements TickProducer {
             }
         }
         return position;
+    }
+
+    @Override
+    public double getValue(int position) {
+        return (position - fromValue) * scaleFactor;
     }
 
     @Override

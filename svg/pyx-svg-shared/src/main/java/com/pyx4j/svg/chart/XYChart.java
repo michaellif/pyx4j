@@ -74,6 +74,10 @@ public class XYChart extends GridBase implements IsSvgElement {
         drawChart();
     }
 
+    public XYChartConfigurator configurator() {
+        return configurator;
+    }
+
     @Override
     public SvgElement asSvgElement() {
         return container;
@@ -246,6 +250,16 @@ public class XYChart extends GridBase implements IsSvgElement {
             container.add(yAsix);
         }
 
+    }
+
+    public double getXValue(int x) {
+        System.out.println("xstart:" + canvas.getX());
+        System.out.println("x(0):" + xAxisProducer.getValuePosition(0));
+        return xAxisProducer.getValue(-canvas.getX() + x);
+    }
+
+    public double getYValue(int y) {
+        return yAxisProducer.getValue(canvas.getY() - y);
     }
 
     protected final void drawChart() {

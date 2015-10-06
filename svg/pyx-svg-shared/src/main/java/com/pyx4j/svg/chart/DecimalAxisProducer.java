@@ -75,6 +75,11 @@ public class DecimalAxisProducer implements AxisProducer {
     }
 
     @Override
+    public double getValue(int position) {
+        return tickProducer.getValue(position);
+    }
+
+    @Override
     public int getMaxLabelLength() {
         return String.valueOf(toValue / postfix.getFactor()).length();
     }

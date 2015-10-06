@@ -108,6 +108,11 @@ public class DurationAxisProducer implements AxisProducer {
     }
 
     @Override
+    public double getValue(int position) {
+        return tickProducer.getValue(position);
+    }
+
+    @Override
     public int getMaxLabelLength() {
         return String.valueOf(toValue).length();
     }
