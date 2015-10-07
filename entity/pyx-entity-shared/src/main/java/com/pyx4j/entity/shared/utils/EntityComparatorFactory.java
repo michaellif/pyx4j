@@ -66,22 +66,19 @@ public class EntityComparatorFactory {
     }
 
     /**
-     * Compare two full entities
+     * Creates comparator to check if two entities are equals
      *
-     * @param ignoreTransientMembers
-     * @return 0 if entity values are equals; 1 otherwise.
+     * @param options
+     * @return 0 if entity values are equals; -1 otherwise.
      */
-    public static <E extends IEntity> Comparator<E> createFullEntityEqualsComparator(final boolean ignoreTransientMembers) {
+    public static <E extends IEntity> Comparator<E> createFullEntityEqualsComparator(final EntityGraphEqualOptions options) {
         return new Comparator<E>() {
             @Override
             public int compare(E paramT1, E paramT2) {
-                EntityGraphEqualOptions options = new EntityGraphEqualOptions();
-                options.ignoreTransient = ignoreTransientMembers;
-
                 if (EntityGraph.fullyEqual(paramT1, paramT2, options)) {
                     return 0;
                 } else {
-                    return 1;
+                    return -1;
                 }
             }
         };
