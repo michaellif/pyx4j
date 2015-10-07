@@ -68,15 +68,17 @@ public class HoverXYChartTooltip extends FlowPanel implements MouseMoveHandler, 
 
         container.add(this);
 
-        this.add(labelX = new HTML(""));
         this.add(labelY = new HTML(""));
+        this.add(labelX = new HTML(""));
         labelX.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        labelX.getElement().getStyle().setWidth(100, Unit.PCT);
         labelY.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        labelY.getElement().getStyle().setWidth(100, Unit.PCT);
     }
 
     protected void positionLabels(int x, int y) {
-        this.getElement().getStyle().setTop(y + 18, Unit.PX);
-        this.getElement().getStyle().setLeft(x - 25, Unit.PX);
+        this.getElement().getStyle().setTop(y + 30, Unit.PX);
+        this.getElement().getStyle().setLeft(x - this.getOffsetWidth() / 2 + 10, Unit.PX);
     }
 
     @Override
@@ -91,8 +93,11 @@ public class HoverXYChartTooltip extends FlowPanel implements MouseMoveHandler, 
 
     @Override
     public void onMouseMove(MouseMoveEvent event) {
-        int x = chartPanel.getAbsoluteLeft() + event.getX();
-        int y = chartPanel.getAbsoluteTop() + event.getY();
+//        int x = Window.getScrollLeft() + event.getClientX();// chartPanel.getAbsoluteLeft() + event.getX() - chartPanel.getOffsetWidth();
+//        int y = Window.getScrollTop() + event.getClientY();// chartPanel.getOffsetHeight() + chartPanel.getAbsoluteTop() + event.getY();
+
+        int x = event.getRelativeX(this.getParent().getElement());
+        int y = event.getRelativeY(this.getParent().getElement());
 
         positionLabels(x, y);
 
@@ -101,11 +106,11 @@ public class HoverXYChartTooltip extends FlowPanel implements MouseMoveHandler, 
     }
 
     public String formatLabelX(XYChart chart, double x) {
-        return "x:" + chart.configurator().getXAxisProducer().formatLabel(x);
+        return "x: " + chart.configurator().getXAxisProducer().formatLabel(x);
     }
 
     public String formatLabelY(XYChart chart, double y) {
-        return "y:" + chart.configurator().getYAxisProducer().formatLabel(y);
+        return "y: " + chart.configurator().getYAxisProducer().formatLabel(y);
     }
 
 }

@@ -56,7 +56,7 @@ public class BasicTickProducer implements TickProducer {
 
     @Override
     public double getValue(int position) {
-        return (position + fromValue) / scale;
+        return fromValue + 1.0 * position / scale;
     }
 
     @Override
