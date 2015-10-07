@@ -25,6 +25,7 @@ import com.pyx4j.commons.CompareHelper;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.shared.utils.EntityGraph.EntityGraphEqualOptions;
 
 public class EntityComparatorFactory {
 
@@ -59,6 +60,28 @@ public class EntityComparatorFactory {
                     return valueMember.getStringView();
                 } else {
                     return valueMember.getStringView();
+                }
+            }
+        };
+    }
+
+    /**
+     * Compare two full entities
+     *
+     * @param ignoreTransientMembers
+     * @return 0 if entity values are equals; 1 otherwise.
+     */
+    public static <E extends IEntity> Comparator<E> createFullEntityEqualsComparator(final boolean ignoreTransientMembers) {
+        return new Comparator<E>() {
+            @Override
+            public int compare(E paramT1, E paramT2) {
+                EntityGraphEqualOptions options = new EntityGraphEqualOptions();
+                options.ignoreTransient = ignoreTransientMembers;
+
+                if (EntityGraph.fullyEqual(paramT1, paramT2, options)) {
+                    return 0;
+                } else {
+                    return 1;
                 }
             }
         };
