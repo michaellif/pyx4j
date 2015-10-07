@@ -11,6 +11,8 @@ public class BasicTickProducer implements TickProducer {
 
     private ArrayList<Tick> ticks;
 
+    private double scale;
+
     private double fromValue;
 
     private double toValue;
@@ -54,7 +56,7 @@ public class BasicTickProducer implements TickProducer {
 
     @Override
     public double getValue(int position) {
-        return (position - fromValue) * scaleFactor;
+        return (position + fromValue) / scale;
     }
 
     @Override
@@ -72,6 +74,7 @@ public class BasicTickProducer implements TickProducer {
             this.plotSize = plotSize;
             recalcTicks = true;
         }
+        scale = 1.0 * plotSize / (toValue - fromValue);
 
         int prevMajorStep = majorStep;
 
@@ -139,7 +142,7 @@ public class BasicTickProducer implements TickProducer {
         return ticks;
     }
 
-    protected synchronized void calcTicks() {
+    private void calcTicks() {
         int step = microStep != 0 ? microStep : minorStep != 0 ? minorStep : majorStep;
 
         double firstValue;
@@ -171,7 +174,7 @@ public class BasicTickProducer implements TickProducer {
         }
     }
 
-    void scaleTicks(int plotSize) {
+    private void scaleTicks(int plotSize) {
         for (Tick tick : ticks) {
             tick.scale(plotSize);
         }

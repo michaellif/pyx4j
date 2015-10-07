@@ -22,7 +22,6 @@ package com.pyx4j.svg.demo.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -49,15 +48,7 @@ public class SVGDemo implements EntryPoint {
 
         VerticalPanel content = new VerticalPanel();
 
-        boolean move = true;
-        if (!move) {
-            RootPanel.get().add(content);
-        } else {
-            HorizontalPanel moved = new HorizontalPanel();
-            moved.add(new HTML("stuff"));
-            moved.add(content);
-            RootPanel.get().add(moved);
-        }
+        RootPanel.get().add(content);
 
         SvgFactory svgFactory = new SvgFactoryForGwt();
 
@@ -77,7 +68,7 @@ public class SVGDemo implements EntryPoint {
             config.setTitle("XYChart");
             config.setGridType(GridType.Both);
             config.setZeroBased(true);
-            config.setZeroBasedY(true);
+            //config.setZeroBasedY(true);
             config.setChartColors(ChartTheme.bright);
 
             XYChart lchart = new XYChart(config);
@@ -93,7 +84,7 @@ public class SVGDemo implements EntryPoint {
         }
         //=========================================//
 
-        boolean testOnlyXYTimeChartEvents = true;
+        boolean testOnlyXYTimeChartEvents = false;
 
         if (testOnlyXYTimeChartEvents) {
             SvgRoot svgChartPanel = svgFactory.getSvgRoot();
