@@ -233,7 +233,8 @@ public class PropertyCriterion implements Criterion {
     }
 
     public boolean isValid() {
-        return (getPropertyPath() != null && getRestriction() != null && (getValue() != null || (getRestriction() == Restriction.EQUAL || getRestriction() == Restriction.NOT_EQUAL)));
+        return (getPropertyPath() != null && getRestriction() != null
+                && (getValue() != null || (getRestriction() == Restriction.EQUAL || getRestriction() == Restriction.NOT_EQUAL)));
     }
 
     @Override
