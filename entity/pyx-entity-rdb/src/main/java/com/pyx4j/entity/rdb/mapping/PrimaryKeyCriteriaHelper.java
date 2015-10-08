@@ -41,7 +41,7 @@ class PrimaryKeyCriteriaHelper {
     PrimaryKeyCriteriaHelper(EntityQueryCriteria<?> criteria) {
         this.criteria = criteria;
         Object criteriaPrimaryKeys = null;
-        for (PropertyCriterion pkCriteria : criteria.getCriterions(criteria.proto().id())) {
+        for (PropertyCriterion pkCriteria : criteria.getPropertyCriterions(criteria.proto().id())) {
             if ((EnumSet.of(Restriction.EQUAL, Restriction.IN).contains(pkCriteria.getRestriction()))) {
                 Serializable value = pkCriteria.getValue();
                 if (value instanceof Collection) {

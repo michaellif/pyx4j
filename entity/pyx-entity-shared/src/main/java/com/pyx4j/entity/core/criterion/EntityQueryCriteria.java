@@ -208,25 +208,13 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
         return ((filters != null) && (filters.size() > 0)) || ((sorts != null) && (sorts.size() > 0));
     }
 
-    public PropertyCriterion getCriterion(IObject<?> member) {
-        if (getFilters() == null) {
-            return null;
-        } else {
-            for (Criterion citerion : getFilters()) {
-                if ((citerion instanceof PropertyCriterion) && (member.getPath().equals(((PropertyCriterion) citerion).getPropertyPath()))) {
-                    return (PropertyCriterion) citerion;
-                }
-            }
-        }
-        return null;
-    }
-
-    public List<PropertyCriterion> getCriterions(IObject<?> member) {
+    @SuppressWarnings("unchecked")
+    public <T extends Criterion> List<T> getCriterionsOfType(Class<T> clazz) {
         if (getFilters() != null) {
-            List<PropertyCriterion> criterions = new ArrayList<>();
+            List<T> criterions = new ArrayList<>();
             for (Criterion citerion : getFilters()) {
-                if ((citerion instanceof PropertyCriterion) && (member.getPath().equals(((PropertyCriterion) citerion).getPropertyPath()))) {
-                    criterions.add((PropertyCriterion) citerion);
+                if (clazz.equals(citerion.getClass())) {
+                    criterions.add((T) citerion);
                 }
             }
             return criterions;
@@ -235,7 +223,38 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
         }
     }
 
-    public void removeAllCriterions(IObject<?> member) {
+    public void removeAllCriterionsOfType(Class<? extends Criterion> clazz) {
+        if (getFilters() != null) {
+            Iterator<Criterion> it = getFilters().iterator();
+            while (it.hasNext()) {
+                Criterion citerion = it.next();
+                if (clazz.equals(citerion.getClass())) {
+                    it.remove();
+                }
+            }
+        }
+    }
+
+    public PropertyCriterion getFirstPropertyCriterion(IObject<?> member) {
+        List<PropertyCriterion> propertyCriterions = getPropertyCriterions(member);
+        if (propertyCriterions.size() > 0) {
+            return propertyCriterions.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public List<PropertyCriterion> getPropertyCriterions(IObject<?> member) {
+        List<PropertyCriterion> criterions = new ArrayList<>();
+        for (Criterion citerion : getCriterionsOfType(PropertyCriterion.class)) {
+            if ((citerion instanceof PropertyCriterion) && (member.getPath().equals(((PropertyCriterion) citerion).getPropertyPath()))) {
+                criterions.add((PropertyCriterion) citerion);
+            }
+        }
+        return criterions;
+    }
+
+    public void removeAllPropertyCriterions(IObject<?> member) {
         if (getFilters() != null) {
             Iterator<Criterion> it = getFilters().iterator();
             while (it.hasNext()) {
