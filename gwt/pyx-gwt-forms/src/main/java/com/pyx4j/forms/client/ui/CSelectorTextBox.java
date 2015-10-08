@@ -19,14 +19,21 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.google.gwt.user.client.Command;
+
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.widgets.client.selector.IOptionsGrabber;
 
 public class CSelectorTextBox<E extends IEntity> extends CAbstractSelectorBox<E, E, NSelectorTextBox<E>> {
 
-    public CSelectorTextBox(IOptionsGrabber<E> optionsGrabber) {
+    public CSelectorTextBox(IOptionsGrabber<E> optionsGrabber, Command navigationCommand) {
         super(optionsGrabber);
         setNativeComponent(new NSelectorTextBox<E>(this));
+        setNavigationCommand(navigationCommand);
+    }
+
+    public CSelectorTextBox(IOptionsGrabber<E> optionsGrabber) {
+        this(optionsGrabber, null);
     }
 
 }

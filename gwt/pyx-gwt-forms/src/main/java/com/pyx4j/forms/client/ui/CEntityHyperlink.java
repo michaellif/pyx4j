@@ -29,9 +29,9 @@ public class CEntityHyperlink<E extends IEntity> extends CEntityLabel<E> {
         this(null);
     }
 
-    public CEntityHyperlink(Command command) {
+    public CEntityHyperlink(Command navigationCommand) {
         super();
-        setNavigationCommand(command);
+        setNavigationCommand(navigationCommand);
     }
 
     /**
