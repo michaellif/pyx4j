@@ -210,4 +210,17 @@ public abstract class FiltersBuilder {
         isNull(criteria_proto_member.toDate());
         isNull(criteria_proto_member.fromDate());
     }
+
+    public static boolean isEmpty(Collection<Criterion> filters) {
+        if (filters == null || filters.isEmpty()) {
+            return true;
+        } else {
+            for (Criterion filter : filters) {
+                if (!filter.isEmpty()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
 }

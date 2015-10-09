@@ -78,6 +78,11 @@ public class OrCriterion extends FiltersBuilder implements Criterion {
     }
 
     @Override
+    public boolean isEmpty() {
+        return isEmpty(getFilters());
+    }
+
+    @Override
     public int hashCode() {
         int hashCode = 0;
         if (this.filters != null) {

@@ -166,7 +166,7 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
                 {
                     OrCriterion or = new OrCriterion();
                     or.and().eq(criteria.proto().firstName(), emp1.firstName().getValue())//
-                    .eq(criteria.proto().workAddress(), setId);
+                            .eq(criteria.proto().workAddress(), setId);
                     or.eq(criteria.proto().workAddress(), setId);
 
                     criteria.add(or);
@@ -175,7 +175,7 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
                 {
                     OrCriterion or = criteria.or();
                     or.and().eq(criteria.proto().id(), emp1.id().getValue()) //
-                    .eq(criteria.proto().workAddress(), setId);
+                            .eq(criteria.proto().workAddress(), setId);
                     or.eq(criteria.proto().id(), emp2.id().getValue());
                 }
             }
@@ -671,9 +671,9 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
 
             OrCriterion or = criteria.or();
             or.and().eq(criteria.proto().associations().$().departments(), department1)//
-            .eq(criteria.proto().associations().$().testId(), setId);
+                    .eq(criteria.proto().associations().$().testId(), setId);
             or.and().eq(criteria.proto().associations().$().organizations().$().departments(), department1) //
-            .eq(criteria.proto().associations().$().testId(), setId);
+                    .eq(criteria.proto().associations().$().testId(), setId);
 
             List<Employee2> retrived = srv.query(criteria);
             Assert.assertEquals("result set size", 1, retrived.size());
@@ -717,9 +717,9 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
 
             OrCriterion or = criteria.or();
             or.and().eq(criteria.proto().associations().$().departments(), department2)//
-            .eq(criteria.proto().associations().$().testId(), setId);
+                    .eq(criteria.proto().associations().$().testId(), setId);
             or.and().eq(criteria.proto().associations().$().organizations().$().departments(), department2) //
-            .eq(criteria.proto().associations().$().testId(), setId);
+                    .eq(criteria.proto().associations().$().testId(), setId);
 
             List<Employee2> retrived = srv.query(criteria);
             Assert.assertEquals("result set size", 1, retrived.size());
@@ -773,6 +773,29 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
 
             List<Employee> empsRetrived = srv.query(criteria);
             Assert.assertEquals("result set size", 1, empsRetrived.size());
+        }
+    }
+
+    public void testCriterionAndEmptyIgnored() {
+        String setId = uniqueString();
+        Employee emp1 = EntityFactory.create(Employee.class);
+        emp1.firstName().setValue(uniqueString());
+        emp1.workAddress().streetName().setValue(setId);
+        srv.persist(emp1);
+
+        Employee emp2 = EntityFactory.create(Employee.class);
+        emp2.firstName().setValue(uniqueString());
+        emp2.workAddress().streetName().setValue(setId);
+        srv.persist(emp2);
+
+        {
+            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+            criteria.eq(criteria.proto().workAddress().streetName(), setId);
+
+            AndCriterion emptyAnd = criteria.and();
+
+            List<Employee> empsRetrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, empsRetrived.size());
         }
     }
 
