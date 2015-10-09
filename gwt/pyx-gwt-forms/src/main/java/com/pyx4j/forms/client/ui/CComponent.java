@@ -212,7 +212,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     }
 
     public void onAdopt(CContainer<?, ?, ?> parent) {
-        assert(this.parent == null) : "Component " + this.getClass().getName() + " is already bound to " + this.parent;
+        assert (this.parent == null) : "Component " + this.getClass().getName() + " is already bound to " + this.parent;
         this.parent = parent;
         setContainerAccessRules(true);
 
@@ -516,6 +516,12 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         this.value = null;
         this.populated = false;
         setEditorValue(null);
+
+        //TODO this should probably be called in clear() as well.
+        if (asyncValidator != null) {
+            asyncValidator.setValidationError(null);
+        }
+
         if (getParent() != null) {
             getParent().updateContainer(this);
         }
