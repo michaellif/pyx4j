@@ -88,7 +88,7 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
         return new EntityQueryCriteriaBinder<BO, TO>(binder);
     }
 
-    public EntityQueryCriteriaBinder(EntityBinder<BO, TO> binder) {
+    private EntityQueryCriteriaBinder(EntityBinder<BO, TO> binder) {
         this.binder = binder;
         this.toProto = EntityFactory.getEntityPrototype(binder.toClass());
     }
@@ -231,8 +231,8 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
             return criterion;
         } else if (toCriterion instanceof RangeCriterion) {
             AndCriterion criterion = new AndCriterion();
-            boCriteria.addAll(convertFilters(boCriteria, ((RangeCriterion) toCriterion).getFilters()));
-            return null;
+            criterion.addAll(convertFilters(boCriteria, ((RangeCriterion) toCriterion).getFilters()));
+            return criterion;
         } else {
             throw new IllegalArgumentException("Can't convert " + toCriterion.getClass() + " criteria");
         }
