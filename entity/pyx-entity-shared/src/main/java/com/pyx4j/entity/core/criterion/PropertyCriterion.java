@@ -260,4 +260,9 @@ public class PropertyCriterion implements Criterion {
         builder.append(propertyPath).append(' ').append(restriction).append(' ').append(value);
         return builder.toString();
     }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
 }

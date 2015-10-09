@@ -69,4 +69,9 @@ public class RangeCriterion implements Criterion {
     public Serializable getToValue() {
         return toValue;
     }
+
+    @Override
+    public boolean isEmpty() {
+        return fromValue == null && toValue == null;
+    }
 }
