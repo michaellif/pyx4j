@@ -174,6 +174,9 @@ public class QueryBuilder<T extends IEntity> {
             boolean required) {
         boolean operandAdded = false;
         for (Criterion criterion : filters) {
+            if (criterion.isEmpty()) {
+                continue;
+            }
             if (!firstInSentence) {
                 criterionSql.append(" AND ");
             }
@@ -223,8 +226,8 @@ public class QueryBuilder<T extends IEntity> {
         }
     }
 
-    private void appendPropertyCriterion(StringBuilder criterionSql, QueryJoinBuilder joinBuilder, PropertyCriterion propertyCriterion,
-            boolean firstInSentence, boolean required) {
+    private void appendPropertyCriterion(StringBuilder criterionSql, QueryJoinBuilder joinBuilder, PropertyCriterion propertyCriterion, boolean firstInSentence,
+            boolean required) {
         if (firstInSentence) {
             firstInSentence = false;
         } else {
@@ -241,7 +244,7 @@ public class QueryBuilder<T extends IEntity> {
         if (propertyCriterion.getPropertyPath().toString().endsWith(IndexAdapter.SECONDARY_PRROPERTY_SUFIX)) {
             // TODO create index binders and value adapters
             criterionSql.append(mainTableSqlAlias).append('.')
-            .append(dialect.getNamingConvention().sqlFieldName(propertyCriterion.getPropertyPath().toString()));
+                    .append(dialect.getNamingConvention().sqlFieldName(propertyCriterion.getPropertyPath().toString()));
         } else {
             boolean leftJoin = false;
             if (!required) {
@@ -258,8 +261,8 @@ public class QueryBuilder<T extends IEntity> {
             }
             QueryMember queryMember = joinBuilder.buildQueryMember(propertyCriterion.getPropertyPath(), leftJoin, false);
             if (queryMember == null) {
-                throw new RuntimeException("Unknown member " + propertyCriterion.getPropertyPath() + " in "
-                        + joinBuilder.operationsMeta.entityMeta().getEntityClass().getName());
+                throw new RuntimeException(
+                        "Unknown member " + propertyCriterion.getPropertyPath() + " in " + joinBuilder.operationsMeta.entityMeta().getEntityClass().getName());
             }
             bindHolder.adapter = queryMember.memberOper.getValueAdapter().getQueryValueBindAdapter(propertyCriterion.getRestriction(), bindHolder.bindValue);
 
@@ -386,8 +389,8 @@ public class QueryBuilder<T extends IEntity> {
                                 IEntity entityProto = EntityFactory.getEntityPrototype(((IEntity) item).getInstanceValueClass());
 
                                 secondColumnBindHolder = new BindHolder();
-                                secondColumnBindHolder.adapter = ((ValueAdapterEntityPolymorphic) bindHolder.adapter).getQueryValueBindAdapter(
-                                        propertyCriterion.getRestriction(), entityProto);
+                                secondColumnBindHolder.adapter = ((ValueAdapterEntityPolymorphic) bindHolder.adapter)
+                                        .getQueryValueBindAdapter(propertyCriterion.getRestriction(), entityProto);
 
                                 secondColumnBindHolder.bindValue = entityProto;
                             }

@@ -56,6 +56,11 @@ public class TextSearchCriterion implements Criterion {
     }
 
     @Override
+    public boolean isEmpty() {
+        return CommonsStringUtils.isEmpty(textQuery);
+    }
+
+    @Override
     public String toString() {
         return "TextSearchCriterion [textQuery=" + textQuery + "]";
     }

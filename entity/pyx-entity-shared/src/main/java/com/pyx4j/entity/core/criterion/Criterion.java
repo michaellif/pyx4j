@@ -23,9 +23,11 @@ import java.io.Serializable;
 
 /**
  * Representation of a query criterion.
- * 
+ *
  * Translates to org.hibernate.criterion.Criterion in RDBMS or Query.FilterOperator in GAE
  */
 public interface Criterion extends Serializable {
+
+    public boolean isEmpty();
 
 }
