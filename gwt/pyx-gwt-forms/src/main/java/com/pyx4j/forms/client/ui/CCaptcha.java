@@ -24,7 +24,7 @@ import com.pyx4j.commons.Pair;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 
-public class CCaptcha extends CFocusComponent<Pair<String, String>, NCaptcha>implements IAcceptsWatermark {
+public class CCaptcha extends CFocusComponent<Pair<String, String>, NCaptcha> implements IAcceptsWatermark {
 
     private static final I18n i18n = I18n.get(CCaptcha.class);
 

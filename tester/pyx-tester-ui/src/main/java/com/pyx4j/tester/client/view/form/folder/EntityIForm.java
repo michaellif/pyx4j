@@ -156,6 +156,7 @@ public class EntityIForm extends CForm<EntityI> {
     static class EntityIVFolder extends CFolder<EntityIV> {
 
         public static final ArrayList<FolderColumnDescriptor> COLUMNS = new ArrayList<FolderColumnDescriptor>();
+
         static {
             EntityIV proto = EntityFactory.getEntityPrototype(EntityIV.class);
             COLUMNS.add(new FolderColumnDescriptor(proto.stringMember(), "15em"));

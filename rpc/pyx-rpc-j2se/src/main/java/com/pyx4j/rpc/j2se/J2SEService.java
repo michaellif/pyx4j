@@ -359,7 +359,8 @@ public class J2SEService {
     }
 
     @SuppressWarnings("unchecked")
-    public <I extends Serializable, O extends Serializable> O execute(final Class<? extends Service<I, O>> serviceInterface, I request) throws RuntimeException {
+    public <I extends Serializable, O extends Serializable> O execute(final Class<? extends Service<I, O>> serviceInterface, I request)
+            throws RuntimeException {
         logConnectingOnce();
         HttpURLConnection conn = null;
         OutputStream out = null;

@@ -74,8 +74,8 @@ class JoinTableInformation extends JoinInformation {
                 sqlValueName = dialect.getNamingConvention().sqlIdColumnName();
                 joinTableSameAsTarget = true;
             } else {
-                sqlValueName = dialect.getNamingConvention().sqlFieldName(
-                        EntityOperationsMeta.memberPersistenceName(findValueMember(joinEntityMeta, entityClass)));
+                sqlValueName = dialect.getNamingConvention()
+                        .sqlFieldName(EntityOperationsMeta.memberPersistenceName(findValueMember(joinEntityMeta, entityClass)));
                 joinTableSameAsTarget = false;
             }
             sqlOwnerName = dialect.getNamingConvention().sqlFieldName(EntityOperationsMeta.memberPersistenceName(ownerMemberMeta));

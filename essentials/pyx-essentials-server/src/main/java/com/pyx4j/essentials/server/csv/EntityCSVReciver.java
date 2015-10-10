@@ -510,8 +510,8 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReceiver {
                         @SuppressWarnings("rawtypes")
                         IPrimitive primitive = (IPrimitive<?>) entity.getMember(path);
                         if (primitive.isNull() && (primitive.getMeta().getAnnotation(NotNull.class) != null)) {
-                            throw new UserRuntimeException(i18n.tr("Missing required value for column ''{0}'' in row {1}", primitive.getMeta().getCaption(),
-                                    getCurrentRow()));
+                            throw new UserRuntimeException(
+                                    i18n.tr("Missing required value for column ''{0}'' in row {1}", primitive.getMeta().getCaption(), getCurrentRow()));
                         }
                     }
                 }

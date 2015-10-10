@@ -98,9 +98,8 @@ public class UncaughtHandler implements UncaughtExceptionHandler {
 
                         if (!skipLogStackTrace) {
                             if (GWT.isScript()) {
-                                log.error(
-                                        UNEXPECTED_ERROR_MESSAGE + ((errorCode != null) ? "[" + errorCode + "] " : " ") + ";\n Href "
-                                                + Window.Location.getHref() + ";\n UserAgent " + userAgent(), cause);
+                                log.error(UNEXPECTED_ERROR_MESSAGE + ((errorCode != null) ? "[" + errorCode + "] " : " ") + ";\n Href "
+                                        + Window.Location.getHref() + ";\n UserAgent " + userAgent(), cause);
                             } else {
                                 log.error(UNEXPECTED_ERROR_MESSAGE, cause);
                             }

@@ -40,9 +40,10 @@ public class POFileWriterWrapTest extends TestCase {
     }
 
     public void testMultiLineOutput() {
-        assertWrap("\"\"\n" //
-                + "\"Here is an example of how one might continue a very long string\\n\"\n" //
-                + "\"for the common case the string represents multi-line output.\\n\"\n", //
+        assertWrap(
+                "\"\"\n" //
+                        + "\"Here is an example of how one might continue a very long string\\n\"\n" //
+                        + "\"for the common case the string represents multi-line output.\\n\"\n", //
                 "Here is an example of how one might continue a very long string\nfor the common case the string represents multi-line output.\n");
     }
 

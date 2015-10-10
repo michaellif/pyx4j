@@ -222,7 +222,8 @@ class QueryJoinBuilder {
         }
     }
 
-    private JoinDef createJoinBackReference(String accessPath, MemberExternalOperationsMeta memberOper, String fromAlias, boolean leftJoin, boolean usedInSort) {
+    private JoinDef createJoinBackReference(String accessPath, MemberExternalOperationsMeta memberOper, String fromAlias, boolean leftJoin,
+            boolean usedInSort) {
         JoinDef memberJoin = getMemberJoin(accessPath, memberOper.getMemberPath());
         if (memberJoin == null) {
             memberJoin = new JoinDef(memberOper, "jbr" + nextJoinAliaseId(), leftJoin);
@@ -281,7 +282,8 @@ class QueryJoinBuilder {
         return memberJoin;
     }
 
-    private JoinDef createJoinViaJoinTable(String accessPath, MemberCollectionOperationsMeta memberOper, String fromAlias, boolean leftJoin, boolean usedInSort) {
+    private JoinDef createJoinViaJoinTable(String accessPath, MemberCollectionOperationsMeta memberOper, String fromAlias, boolean leftJoin,
+            boolean usedInSort) {
         JoinDef collectionJoin = createJoinBackReference(accessPath, memberOper, fromAlias, leftJoin, usedInSort);
         String path = memberOper.getMemberPath() + Path.COLLECTION_SEPARATOR;
         JoinDef memberJoin = getMemberJoin(accessPath, path);

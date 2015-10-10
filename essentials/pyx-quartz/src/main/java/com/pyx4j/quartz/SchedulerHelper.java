@@ -112,8 +112,8 @@ public class SchedulerHelper {
 
         quartzProperties.put(StdSchedulerFactory.PROP_SCHED_INSTANCE_ID, LoggerConfig.getContextName());
         quartzProperties.put(StdSchedulerFactory.PROP_SCHED_THREAD_NAME, LoggerConfig.getContextName() + "_DefaultQuartzSchedulerThread");
-        quartzProperties.put(StdSchedulerFactory.PROP_THREAD_POOL_PREFIX + ".threadNamePrefix", LoggerConfig.getContextName()
-                + "_DefaultQuartzSchedulerWorkerThread");
+        quartzProperties.put(StdSchedulerFactory.PROP_THREAD_POOL_PREFIX + ".threadNamePrefix",
+                LoggerConfig.getContextName() + "_DefaultQuartzSchedulerWorkerThread");
 
         String dataSourceName = "main";
         quartzProperties.put(StdSchedulerFactory.PROP_JOB_STORE_PREFIX + ".dataSource", dataSourceName);

@@ -88,8 +88,8 @@ public class XMLEntityModelWriter {
         write(entity, name, null, null, new HashSet<IEntity>());
     }
 
-    private void write(IEntity entity, String name, Map<String, String> attributes, @SuppressWarnings("rawtypes") Class<? extends IObject> declaredObjectClass,
-            Set<IEntity> processed) {
+    private void write(IEntity entity, String name, Map<String, String> attributes, @SuppressWarnings("rawtypes")
+    Class<? extends IObject> declaredObjectClass, Set<IEntity> processed) {
         Map<String, String> entityAttributes = new LinkedHashMap<String, String>();
         if (attributes != null) {
             entityAttributes.putAll(attributes);

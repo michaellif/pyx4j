@@ -34,8 +34,8 @@ public class MemberVersionDataOperationsMeta extends MemberExternalOperationsMet
     public MemberVersionDataOperationsMeta(Dialect dialect, EntityMemberAccess memberAccess, ValueAdapter valueAdapter, String sqlName, MemberMeta memberMeta,
             String memberPath, Class<? extends IEntity> joinTableClass, boolean joinTableSameAsTarget, String sqlOwnerName, ValueAdapter ownerValueAdapter,
             String sqlValueName, String sqlChildJoinContition) {
-        super(memberAccess, valueAdapter, sqlName, memberMeta, memberPath, joinTableClass, joinTableSameAsTarget, sqlOwnerName, ownerValueAdapter,
-                sqlValueName, sqlChildJoinContition);
+        super(memberAccess, valueAdapter, sqlName, memberMeta, memberPath, joinTableClass, joinTableSameAsTarget, sqlOwnerName, ownerValueAdapter, sqlValueName,
+                sqlChildJoinContition);
 
         @SuppressWarnings("unchecked")
         Class<? extends IVersionData<?>> versionDataEntityClass = (Class<IVersionData<?>>) memberMeta.getValueClass();

@@ -83,7 +83,8 @@ public class WriteEntityNames {
         switch (param) {
         case persistable:
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-            return (!meta.isTransient() && (entityClass.getAnnotation(AbstractEntity.class) == null) && (entityClass.getAnnotation(EmbeddedEntity.class) == null));
+            return (!meta.isTransient() && (entityClass.getAnnotation(AbstractEntity.class) == null)
+                    && (entityClass.getAnnotation(EmbeddedEntity.class) == null));
         case all:
             return true;
         default:

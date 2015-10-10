@@ -139,8 +139,9 @@ public final class AppPlaceContorller {
                 }
             };
 
-            MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Are you sure you want to navigate away from this page?\n" + "{0}\n\n"
-                    + "Press Yes to continue, or No to stay on the current page.", warning), confirmDecline);
+            MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr(
+                    "Are you sure you want to navigate away from this page?\n" + "{0}\n\n" + "Press Yes to continue, or No to stay on the current page.",
+                    warning), confirmDecline);
         } else {
             sureGoTo(newPlace);
         }

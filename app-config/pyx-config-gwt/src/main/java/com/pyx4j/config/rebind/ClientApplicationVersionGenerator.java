@@ -108,8 +108,8 @@ public class ClientApplicationVersionGenerator extends Generator {
             try {
                 prop = context.getPropertyOracle().getConfigurationProperty(BUILD_FORCE_RPC_VERSION);
             } catch (BadPropertyValueException e) {
-                logger.log(TreeLogger.ERROR, "The configuration property " + BUILD_FORCE_RPC_VERSION
-                        + " was not defined. Is com.pyx4j.config.Config.gwt.xml inherited?");
+                logger.log(TreeLogger.ERROR,
+                        "The configuration property " + BUILD_FORCE_RPC_VERSION + " was not defined. Is com.pyx4j.config.Config.gwt.xml inherited?");
                 throw new UnableToCompleteException();
             }
             String value = prop.getValues().get(0);

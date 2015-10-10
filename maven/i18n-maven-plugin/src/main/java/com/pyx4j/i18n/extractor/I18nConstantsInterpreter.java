@@ -80,7 +80,8 @@ abstract class I18nConstantsInterpreter extends BasicInterpreter {
     protected abstract void reportError(int lineNr, Value arg);
 
     @Override
-    public BasicValue naryOperation(AbstractInsnNode insn, @SuppressWarnings("rawtypes") List values) throws AnalyzerException {
+    public BasicValue naryOperation(AbstractInsnNode insn, @SuppressWarnings("rawtypes")
+    List values) throws AnalyzerException {
         if (insn.getOpcode() == INVOKEVIRTUAL) {
             MethodInsnNode methodInsn = (MethodInsnNode) insn;
             if (I18N_CLASS.equals(methodInsn.owner)) {

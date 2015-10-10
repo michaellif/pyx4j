@@ -19,7 +19,6 @@
  */
 package com.pyx4j.widgets.client.svg;
 
-
 public class Group extends ContainerElement {
 
     public Group() {

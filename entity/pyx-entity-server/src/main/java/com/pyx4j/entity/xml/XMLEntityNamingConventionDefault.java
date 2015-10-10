@@ -26,7 +26,8 @@ import com.pyx4j.entity.xml.XMLEntityNamingConvention;
 public class XMLEntityNamingConventionDefault implements XMLEntityNamingConvention {
 
     @Override
-    public String getXMLName(@SuppressWarnings("rawtypes") Class<? extends IObject> memberClass) {
+    public String getXMLName(@SuppressWarnings("rawtypes")
+    Class<? extends IObject> memberClass) {
         return EnglishGrammar.deCapitalize(memberClass.getSimpleName());
     }
 

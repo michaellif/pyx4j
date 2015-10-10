@@ -47,16 +47,16 @@ public abstract class IServiceBase implements IService {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected final void execute(String serviceMethodId, int serviceMethodSignature, AsyncCallback<? extends Serializable> callback, Serializable... args) {
         log.trace("RPC CALL {} #{}", getServiceClassId() + "." + serviceMethodId, ++rpcCallCount);
-        RPCManager.execute((Class<? extends Service<IServiceRequest, Serializable>>) IServiceAdapter.class, new IServiceRequest(getServiceClassId(),
-                serviceMethodId, serviceMethodSignature, args, rpcCallCount), (AsyncCallback) callback);
+        RPCManager.execute((Class<? extends Service<IServiceRequest, Serializable>>) IServiceAdapter.class,
+                new IServiceRequest(getServiceClassId(), serviceMethodId, serviceMethodSignature, args, rpcCallCount), (AsyncCallback) callback);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected final void execute(ServiceExecutionInfo info, String serviceMethodId, int serviceMethodSignature, AsyncCallback<? extends Serializable> callback,
             Serializable... args) {
         log.trace("RPC CALL {} #{}", getServiceClassId() + "." + serviceMethodId, ++rpcCallCount);
-        RPCManager.execute(info, (Class<? extends Service<IServiceRequest, Serializable>>) IServiceAdapter.class, new IServiceRequest(getServiceClassId(),
-                serviceMethodId, serviceMethodSignature, args, rpcCallCount), (AsyncCallback) callback);
+        RPCManager.execute(info, (Class<? extends Service<IServiceRequest, Serializable>>) IServiceAdapter.class,
+                new IServiceRequest(getServiceClassId(), serviceMethodId, serviceMethodSignature, args, rpcCallCount), (AsyncCallback) callback);
     }
 
     public abstract String getServiceClassId();

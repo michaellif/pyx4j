@@ -55,8 +55,9 @@ public class GradientProperty extends Property {
         String noSupport = "background:" + color1 + ";";
         String ie = "background:-ms-linear-gradient(" + direction + ",  " + color1 + ",  " + color2 + ");";
         String ff = "background:-moz-linear-gradient(" + direction + ",  " + color1 + ",  " + color2 + ");";
-        String other = direction.equals(GradientDirection.top) ? "background:-webkit-gradient(linear, left top, left bottom, from(" + color1 + "), to("
-                + color2 + "));" : "background:-webkit-gradient(linear, left top, right top, from(" + color1 + "), to(" + color2 + "));";
+        String other = direction.equals(GradientDirection.top)
+                ? "background:-webkit-gradient(linear, left top, left bottom, from(" + color1 + "), to(" + color2 + "));"
+                : "background:-webkit-gradient(linear, left top, right top, from(" + color1 + "), to(" + color2 + "));";
         return noSupport + "\n" + ie + "\n" + ff + "\n" + other;
     }
 }

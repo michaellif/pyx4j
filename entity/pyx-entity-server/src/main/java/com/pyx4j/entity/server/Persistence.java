@@ -185,8 +185,8 @@ public class Persistence {
             if (cursor.hasNext()) {
                 enttity = cursor.next();
                 if (cursor.hasNext()) {
-                    throw new UniqueConstraintUserRuntimeException(SimpleMessageFormat.format("More then one {0} found matching search criteria {1}", criteria
-                            .proto().getEntityMeta().getCaption(), criteria.toStringForUser()), criteria.proto());
+                    throw new UniqueConstraintUserRuntimeException(SimpleMessageFormat.format("More then one {0} found matching search criteria {1}",
+                            criteria.proto().getEntityMeta().getCaption(), criteria.toStringForUser()), criteria.proto());
                 }
             }
             return enttity;

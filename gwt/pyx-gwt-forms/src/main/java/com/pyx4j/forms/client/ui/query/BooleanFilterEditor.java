@@ -64,8 +64,8 @@ public class BooleanFilterEditor extends FilterEditorBase<IBooleanCondition> {
 
     @Override
     public void populate() {
-        booleanGroup.setValue(getCondition().booleanValue().isNull() ? Arrays.asList(new Boolean[] { Boolean.FALSE, Boolean.TRUE }) : Arrays
-                .asList(new Boolean[] { getCondition().booleanValue().getValue() }));
+        booleanGroup.setValue(getCondition().booleanValue().isNull() ? Arrays.asList(new Boolean[] { Boolean.FALSE, Boolean.TRUE })
+                : Arrays.asList(new Boolean[] { getCondition().booleanValue().getValue() }));
     }
 
     @Override

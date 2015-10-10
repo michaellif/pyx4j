@@ -202,7 +202,7 @@ public class CaptchaCompositeV1 extends AbstractCaptchaComposite {
 
     public native void setFocus()
     /*-{
-		$wnd.Recaptcha.focus_response_field();
+    	$wnd.Recaptcha.focus_response_field();
     }-*/;
 
     @Override
@@ -218,22 +218,22 @@ public class CaptchaCompositeV1 extends AbstractCaptchaComposite {
     @Override
     public native String getValueChallenge()
     /*-{
-		return $wnd.Recaptcha.get_challenge();
+    	return $wnd.Recaptcha.get_challenge();
     }-*/;
 
     private native void switchToImage()
     /*-{
-		$wnd.Recaptcha.switch_type('image');
+    	$wnd.Recaptcha.switch_type('image');
     }-*/;
 
     private native void switchToAudio()
     /*-{
-		$wnd.Recaptcha.switch_type('audio');
+    	$wnd.Recaptcha.switch_type('audio');
     }-*/;
 
     private native void showhelp()
     /*-{
-		$wnd.Recaptcha.showhelp();
+    	$wnd.Recaptcha.showhelp();
     }-*/;
 
     /**
@@ -244,7 +244,7 @@ public class CaptchaCompositeV1 extends AbstractCaptchaComposite {
     }
 
     private void createChallenge() {
-        assert(publicKey != null) : "Captcha public key was not set";
+        assert (publicKey != null) : "Captcha public key was not set";
 
         if (ApplicationMode.offlineDevelopment) {
             assigneRecaptchaId();
@@ -254,8 +254,8 @@ public class CaptchaCompositeV1 extends AbstractCaptchaComposite {
 
             @Override
             public native boolean isLoaded() /*-{
-		return typeof $wnd.Recaptcha != "undefined";
-    }-*/;
+                                             return typeof $wnd.Recaptcha != "undefined";
+                                             }-*/;
 
         }, new AsyncCallback<Void>() {
 
@@ -279,19 +279,19 @@ public class CaptchaCompositeV1 extends AbstractCaptchaComposite {
 
     private native void createChallengeImpl()
     /*-{
-		$wnd.Recaptcha
-				.create(
-						@com.pyx4j.widgets.client.captcha.AbstractCaptchaComposite::publicKey,
-						this.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV1::divName,
-						{
-							theme : "custom",
-							custom_theme_widget : this.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV1::divName
-						});
+    	$wnd.Recaptcha
+    			.create(
+    					@com.pyx4j.widgets.client.captcha.AbstractCaptchaComposite::publicKey,
+    					this.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV1::divName,
+    					{
+    						theme : "custom",
+    						custom_theme_widget : this.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV1::divName
+    					});
     }-*/;
 
     private native void destroyCaptcha()
     /*-{
-		$wnd.Recaptcha.destroy();
+    	$wnd.Recaptcha.destroy();
     }-*/;
 
     @Override
@@ -304,7 +304,7 @@ public class CaptchaCompositeV1 extends AbstractCaptchaComposite {
 
     public native void createNewChallengeImpl()
     /*-{
-		$wnd.Recaptcha.reload();
+    	$wnd.Recaptcha.reload();
     }-*/;
 
     @Override

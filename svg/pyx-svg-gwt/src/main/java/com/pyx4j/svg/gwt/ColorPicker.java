@@ -45,8 +45,8 @@ public class ColorPicker implements IsSvgElement {
 
     private final Group container;
 
-    private final Widget content; 
-    
+    private final Widget content;
+
     private final int xStart;
 
     private final int yStart;
@@ -54,112 +54,115 @@ public class ColorPicker implements IsSvgElement {
     private final static int RIM_WIDTH = 25;
 
     protected final static int PADDING = 15;
-    
+
     protected final static int RED_COLOR = 0xFF0000;
-    
+
     private final int radius;
-       
+
     private Rect rect;
-    
+
     private Text text;
 
     private int inputColor;
-    
+
     private double saturation = 1;
-    
+
     private double lightness = 0.5;
 
     private float markerSize;
-    
+
     private int color;
-    
+
     private Circle circleIn;
-    
+
     private Circle circleOut;
-    
+
     private int currentMarkerX;
-    
+
     private int currentMarkerY;
 
     public static enum PickerType {
-        Hue,
-        Color
+        Hue, Color
     }
+
     private PickerType pickerType;
-    
+
     public ColorPicker(SvgFactory svgfactory, Widget content, PickerType pickerType, int radius, int color) {
         this.svgFactory = svgfactory;
         container = svgFactory.createGroup();
-        this.radius = radius; 
+        this.radius = radius;
         inputColor = color;
-        if(pickerType == PickerType.Hue) {
-          	this.inputColor = ColorUtil.hslToRgb((Utils.degree2radian(color) / (Math.PI*2) + 1) % 1, saturation, lightness);
+        if (pickerType == PickerType.Hue) {
+            this.inputColor = ColorUtil.hslToRgb((Utils.degree2radian(color) / (Math.PI * 2) + 1) % 1, saturation, lightness);
         } else {
-        	this.inputColor = (color == 0) ? RED_COLOR : color;
+            this.inputColor = (color == 0) ? RED_COLOR : color;
         }
         this.pickerType = pickerType;
         this.content = content;
-        xStart = radius + PADDING + RIM_WIDTH/2;
-        yStart = radius + RIM_WIDTH/2;
+        xStart = radius + PADDING + RIM_WIDTH / 2;
+        yStart = radius + RIM_WIDTH / 2;
         drawColorWheel();
     }
 
     public int getColor() {
-    	return color;
+        return color;
     }
-    
+
     private class ColorPickerDragDrop extends MouseEventHandler {
         protected boolean inMotion = false;
+
         protected boolean circleDrag = false;
+
         private int X1, X2, Y1, Y2;
+
         private double hueRadian;
-   	
+
         public ColorPickerDragDrop(Widget dragHandle) {
-          super(dragHandle);
+            super(dragHandle);
         }
 
         public void onMouseUp(MouseUpEvent event) {
             super.onMouseUp(event);
             inMotion = false;
             circleDrag = false;
-          }
+        }
 
         public void onMouseDown(MouseDownEvent event) {
             super.onMouseDown(event);
-        	hueRadian = Math.atan2(yStart - event.getY(),xStart - event.getX() - PADDING) + Math.PI/2;
-            X1 = (int) Math.round(xStart - PADDING - Math.sin(hueRadian) * (radius-RIM_WIDTH/2));
-            Y1 = (int) Math.round(yStart + Math.cos(hueRadian) * (radius-RIM_WIDTH/2));
-            X2 = (int) Math.round(xStart - PADDING - Math.sin(hueRadian) * (radius+RIM_WIDTH/2));
-            Y2 = (int) Math.round(yStart + Math.cos(hueRadian) * (radius+RIM_WIDTH/2));
-            if(event.getX()>=Math.min(X1, X2)&&event.getX()<=Math.max(X1, X2)&&event.getY()>=Math.min(Y1, Y2)&&event.getY()<=Math.max(Y1, Y2)) {
-               	circleDrag = true;
+            hueRadian = Math.atan2(yStart - event.getY(), xStart - event.getX() - PADDING) + Math.PI / 2;
+            X1 = (int) Math.round(xStart - PADDING - Math.sin(hueRadian) * (radius - RIM_WIDTH / 2));
+            Y1 = (int) Math.round(yStart + Math.cos(hueRadian) * (radius - RIM_WIDTH / 2));
+            X2 = (int) Math.round(xStart - PADDING - Math.sin(hueRadian) * (radius + RIM_WIDTH / 2));
+            Y2 = (int) Math.round(yStart + Math.cos(hueRadian) * (radius + RIM_WIDTH / 2));
+            if (event.getX() >= Math.min(X1, X2) && event.getX() <= Math.max(X1, X2) && event.getY() >= Math.min(Y1, Y2) && event.getY() <= Math.max(Y1, Y2)) {
+                circleDrag = true;
             }
-         	
+
             if (circleDrag) {
-           	    drawMarkers(hueRadian, -1);
-            } 
-          }
+                drawMarkers(hueRadian, -1);
+            }
+        }
 
         @Override
         public void handleDrag(int dragEndX, int dragEndY) {
-        	hueRadian = Math.atan2(yStart - dragEndY,xStart - dragEndX - PADDING) + Math.PI/2;
-         	if(!inMotion) {
-                X1 = (int) Math.round(xStart - PADDING - Math.sin(hueRadian) * (radius-RIM_WIDTH/2));
-                Y1 = (int) Math.round(yStart + Math.cos(hueRadian) * (radius-RIM_WIDTH/2));
-                X2 = (int) Math.round(xStart - PADDING - Math.sin(hueRadian) * (radius+RIM_WIDTH/2));
-                Y2 = (int) Math.round(yStart + Math.cos(hueRadian) * (radius+RIM_WIDTH/2));
-                if(dragEndX>=Math.min(X1, X2)&&dragEndX<=Math.max(X1, X2)&&dragEndY>=Math.min(Y1, Y2)&&dragEndY<=Math.max(Y1, Y2)) {
-                	circleDrag = true;
+            hueRadian = Math.atan2(yStart - dragEndY, xStart - dragEndX - PADDING) + Math.PI / 2;
+            if (!inMotion) {
+                X1 = (int) Math.round(xStart - PADDING - Math.sin(hueRadian) * (radius - RIM_WIDTH / 2));
+                Y1 = (int) Math.round(yStart + Math.cos(hueRadian) * (radius - RIM_WIDTH / 2));
+                X2 = (int) Math.round(xStart - PADDING - Math.sin(hueRadian) * (radius + RIM_WIDTH / 2));
+                Y2 = (int) Math.round(yStart + Math.cos(hueRadian) * (radius + RIM_WIDTH / 2));
+                if (dragEndX >= Math.min(X1, X2) && dragEndX <= Math.max(X1, X2) && dragEndY >= Math.min(Y1, Y2) && dragEndY <= Math.max(Y1, Y2)) {
+                    circleDrag = true;
                 }
-            	inMotion = true;
-         	}
-         	
+                inMotion = true;
+            }
+
             if (circleDrag) {
-           	    drawMarkers(hueRadian, -1);
-            } 
+                drawMarkers(hueRadian, -1);
+            }
         }
-    }   
-    
+    }
+
     protected void drawColorWheel() {
 
         int nSegments = 90;
@@ -171,7 +174,7 @@ public class ColorPicker implements IsSvgElement {
         double hue1 = 0, hue2;
         String color1, color2;
         float x1, x2, y1, y2;
-        
+
         double r1 = (double) (radius + RIM_WIDTH / 2) / radius;
         double r2 = (double) (radius - RIM_WIDTH / 2) / radius;
 
@@ -186,7 +189,7 @@ public class ColorPicker implements IsSvgElement {
             y1 = (float) (-Math.cos(angle1));
             x2 = (float) Math.sin(angle2);
             y2 = (float) (-Math.cos(angle2));
-            
+
             // Midpoint chosen so that the endpoints are tangent to the circle.
             am = (angle1 + angle2) / 2;
             tan = 1 / Math.cos((angle2 - angle1) / 2);
@@ -198,11 +201,11 @@ public class ColorPicker implements IsSvgElement {
                 double corr = (1 + Math.min(Math.abs(Math.tan(angle1)), Math.abs(Math.tan(Math.PI / 2 - angle1)))) / nSegments;
                 color1 = ColorUtil.rgbToHex(ColorUtil.hslToRgb(hue1 - 0.15 * corr, saturation, lightness));
                 color2 = ColorUtil.rgbToHex(ColorUtil.hslToRgb(hue2 + 0.15 * corr, saturation, lightness));
-                
+
                 float a = (float) Utils.round(xStart - x1 * radius, 2);
                 float b = (float) Utils.round(yStart - y1 * radius, 2);
                 float c = (float) Utils.round(xStart - x2 * radius, 2);
-                float d = (float) Utils.round(yStart - y2 * radius, 2);                
+                float d = (float) Utils.round(yStart - y2 * radius, 2);
                 LinearGradient linear = svgFactory.createLinearGradient(a, b, c, d);
                 linear.setAttribute("gradientUnits", "userSpaceOnUse");
                 Stop stopStart = svgFactory.createStop();
@@ -238,19 +241,18 @@ public class ColorPicker implements IsSvgElement {
 
         int yCoord = yStart + radius + RIM_WIDTH;
         int xCoord = (pickerType == PickerType.Hue) ? (xStart - 10) : (xStart - 25);
-        rect = svgFactory.createRect(xStart-radius, yCoord, radius*2, 20, 0, 0);
+        rect = svgFactory.createRect(xStart - radius, yCoord, radius * 2, 20, 0, 0);
         container.add(rect);
-        
-        text = svgFactory.createText("", xCoord , yCoord + 16);
+
+        text = svgFactory.createText("", xCoord, yCoord + 16);
         text.setFont("Verdana");
         text.setFontSize("16");
         container.add(text);
-        
-        new ColorPickerDragDrop( content );
-       	float[] hsb = ColorUtil.rgbToHsb(inputColor);
-       	drawMarkers(Utils.degree2radian((int) Math.round((hsb[0]*360))),inputColor);
-       	
-       	
+
+        new ColorPickerDragDrop(content);
+        float[] hsb = ColorUtil.rgbToHsb(inputColor);
+        drawMarkers(Utils.degree2radian((int) Math.round((hsb[0] * 360))), inputColor);
+
         return;
     }
 
@@ -260,59 +262,59 @@ public class ColorPicker implements IsSvgElement {
         int innerRadius = Math.round(markerSize - innerWidth + 1);
         currentMarkerX = (int) Math.round(xStart - Math.sin(hueValue) * radius);
         currentMarkerY = (int) Math.round(yStart + Math.cos(hueValue) * radius);
-        
-        if(inputColor == -1) {
-        	color=ColorUtil.hslToRgb((hueValue / (Math.PI*2) + 1) % 1, saturation, lightness);
+
+        if (inputColor == -1) {
+            color = ColorUtil.hslToRgb((hueValue / (Math.PI * 2) + 1) % 1, saturation, lightness);
         } else {
-        	color=inputColor;
+            color = inputColor;
         }
         String colorStr = ColorUtil.rgbToHex(color);
         rect.setFill(colorStr);
-    	int hue = (int) Math.round(Utils.radian2degree(hueValue));
-    	if(hue < 0) {
-    		hue+=360;
-    	}
-    	if(hue>=200 && hue<=300) {
-    		text.setFill("white");    		
-    	} else {
-    		text.setFill("black");
-    	}
-
-        if(pickerType==PickerType.Hue) {
-            text.setTextValue(Integer.toString(hue));        	       	
+        int hue = (int) Math.round(Utils.radian2degree(hueValue));
+        if (hue < 0) {
+            hue += 360;
+        }
+        if (hue >= 200 && hue <= 300) {
+            text.setFill("white");
         } else {
-            text.setTextValue(colorStr);        	
+            text.setFill("black");
         }
 
-        if(inputColor != -1) {        	
+        if (pickerType == PickerType.Hue) {
+            text.setTextValue(Integer.toString(hue));
+        } else {
+            text.setTextValue(colorStr);
+        }
+
+        if (inputColor != -1) {
             circleIn = svgFactory.createCircle(currentMarkerX, currentMarkerY, innerRadius);
             circleIn.setFill("none");
             circleIn.setStroke("#000");
             circleIn.setStrokeWidth(Integer.toString((int) (innerWidth + 1)));
             circleIn.setTransform("matrix(1,0,0,1,0,0)");
             container.add(circleIn);
-            circleOut = svgFactory.createCircle( currentMarkerX, currentMarkerY, Math.round(markerSize));
+            circleOut = svgFactory.createCircle(currentMarkerX, currentMarkerY, Math.round(markerSize));
             circleOut.setFill("none");
             circleOut.setStroke("#fff");
             circleOut.setStrokeWidth(Integer.toString((int) innerWidth));
             circleOut.setTransform("matrix(1,0,0,1,0,0)");
-            container.add(circleOut);  
+            container.add(circleOut);
         } else {
-        	circleIn.setAttribute("cx", String.valueOf(currentMarkerX));
-        	circleIn.setAttribute("cy", String.valueOf(currentMarkerY));
-           	circleOut.setAttribute("cx", String.valueOf(currentMarkerX));
-        	circleOut.setAttribute("cy", String.valueOf(currentMarkerY));
-       }
+            circleIn.setAttribute("cx", String.valueOf(currentMarkerX));
+            circleIn.setAttribute("cy", String.valueOf(currentMarkerY));
+            circleOut.setAttribute("cx", String.valueOf(currentMarkerX));
+            circleOut.setAttribute("cy", String.valueOf(currentMarkerY));
+        }
     }
 
     public static float[] rgbToHsl(int rgb) {
         int r = (rgb >> 16) & 0xFF;
         int g = (rgb >> 8) & 0xFF;
         int b = (rgb >> 0) & 0xFF;
-        float r1 = (float)((r) / 255.0f);
-        float g1 = (float)((g) / 255.0f);
-        float b1 = (float)((b) / 255.0f);
-        
+        float r1 = (float) ((r) / 255.0f);
+        float g1 = (float) ((g) / 255.0f);
+        float b1 = (float) ((b) / 255.0f);
+
         float max = (r1 > g1) ? r1 : g1;
         if (b1 > max)
             max = b1;
@@ -320,21 +322,20 @@ public class ColorPicker implements IsSvgElement {
         if (b1 < min)
             min = b1;
 
-        
-        float hue,saturation;
+        float hue, saturation;
         float lightness = (max + min) / 2;
-        
-        if(max == min){
+
+        if (max == min) {
             hue = saturation = 0;
-        }else{
+        } else {
             float d = max - min;
             saturation = lightness > 0.5 ? d / (2 - max - min) : d / (max + min);
-            if(max == r1) {
-            	hue = (g1 - b1) / d + (g1 < b1 ? 6 : 0);
-            } else if(max == g1) {
-            	hue = (b1 - r1) / d + 2;
+            if (max == r1) {
+                hue = (g1 - b1) / d + (g1 < b1 ? 6 : 0);
+            } else if (max == g1) {
+                hue = (b1 - r1) / d + 2;
             } else {
-            	hue = (r1 - g1) / d + 4;
+                hue = (r1 - g1) / d + 4;
             }
             hue /= 6;
         }
@@ -343,8 +344,8 @@ public class ColorPicker implements IsSvgElement {
         hslvals[1] = saturation;
         hslvals[2] = lightness;
         return hslvals;
-    }   
-    
+    }
+
     @Override
     public SvgElement asSvgElement() {
         return container;

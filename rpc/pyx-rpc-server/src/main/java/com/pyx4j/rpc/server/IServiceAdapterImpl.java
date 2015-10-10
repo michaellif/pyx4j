@@ -216,7 +216,8 @@ public class IServiceAdapterImpl implements IServiceAdapter {
             throw new UnRecoverableRuntimeException(i18n.tr("Fatal system error"));
         } catch (InvocationTargetException e) {
             if (RemoteServiceImpl.logStakTrace(e)) {
-                log.error("Service call error\n{}\n for user: {}", Trace.clickableClassLocation(serviceInstance.getClass()), ServerContext.getVisit(), e.getCause());
+                log.error("Service call error\n{}\n for user: {}", Trace.clickableClassLocation(serviceInstance.getClass()), ServerContext.getVisit(),
+                        e.getCause());
             }
             if (e.getCause() instanceof RuntimeExceptionSerializable) {
                 if ((e.getCause() != null) && (e.getCause() != e)) {

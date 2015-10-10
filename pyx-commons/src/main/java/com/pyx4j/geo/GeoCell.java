@@ -336,8 +336,8 @@ public class GeoCell {
 
             int[] xy = subdivXY(cell.charAt(i));
 
-            box = new GeoBox(box.getSouth() + subcellLatSpan * (xy[1] + 1), box.getWest() + subcellLngSpan * (xy[0] + 1), box.getSouth() + subcellLatSpan
-                    * xy[1], box.getWest() + subcellLngSpan * xy[0]);
+            box = new GeoBox(box.getSouth() + subcellLatSpan * (xy[1] + 1), box.getWest() + subcellLngSpan * (xy[0] + 1),
+                    box.getSouth() + subcellLatSpan * xy[1], box.getWest() + subcellLngSpan * xy[0]);
         }
         return box;
     }

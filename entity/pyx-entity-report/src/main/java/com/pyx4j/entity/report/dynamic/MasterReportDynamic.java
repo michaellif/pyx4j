@@ -19,9 +19,8 @@
  */
 package com.pyx4j.entity.report.dynamic;
 
-
-public class MasterReportDynamic extends DynamicReport{
-    public MasterReportDynamic(){
+public class MasterReportDynamic extends DynamicReport {
+    public MasterReportDynamic() {
         super("logo.png", "Master Report");
     }
 

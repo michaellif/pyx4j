@@ -342,7 +342,7 @@ public class PersistenceContext {
     }
 
     private void savepointRelease() {
-        assert(savepoints > 0) : " Inconsistent Transaction end";
+        assert (savepoints > 0) : " Inconsistent Transaction end";
         savepoints--;
         if (options().enableSavepointAsNestedTransactions) {
             TransactionContext tc = transactionContexts.pop();

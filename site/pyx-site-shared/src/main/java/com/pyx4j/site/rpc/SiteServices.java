@@ -19,7 +19,6 @@
  */
 package com.pyx4j.site.rpc;
 
-
 public interface SiteServices {
 
     //    public interface Save extends Service<IEntity, IEntity> {

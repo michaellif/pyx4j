@@ -92,8 +92,8 @@ public class DeploymentContextTest {
 
     @Test
     public void testHostAndContextAndApp() {
-        HttpServletRequest r = request("http://localhost:8080/warContext/appContext/srvc").forwardedHost("pyx4j.com")
-                .forwardedContext("/warContext/appContext").build();
+        HttpServletRequest r = request("http://localhost:8080/warContext/appContext/srvc").forwardedHost("pyx4j.com").forwardedContext("/warContext/appContext")
+                .build();
         Assert.assertEquals("/warContext", r.getContextPath());
         Assert.assertEquals("/warContext/appContext/srvc", r.getRequestURI());
         Assert.assertEquals("/appContext/srvc", r.getServletPath());

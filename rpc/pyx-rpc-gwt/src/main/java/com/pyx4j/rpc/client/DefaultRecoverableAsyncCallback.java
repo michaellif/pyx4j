@@ -19,7 +19,6 @@
  */
 package com.pyx4j.rpc.client;
 
-
 public abstract class DefaultRecoverableAsyncCallback<E> extends DefaultAsyncCallback<E> implements RecoverableCall {
 
 }

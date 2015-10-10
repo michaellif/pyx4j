@@ -53,7 +53,7 @@ public class CreateReportTest extends TestCase {
             Assert.assertTrue("Report created and is not empty", repData.length > 5 * 1024);
         }
     }
-    
+
     public void testPdfReport() {
         ByteArrayOutputStream xslTransformationBuffer = new ByteArrayOutputStream();
         // Create reusable XSL

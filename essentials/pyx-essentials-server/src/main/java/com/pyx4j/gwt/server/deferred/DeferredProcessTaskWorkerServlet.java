@@ -95,8 +95,8 @@ public class DeferredProcessTaskWorkerServlet extends HttpServlet {
         byte[] payload = serialize(process);
 
         Queue queue = QueueFactory.getQueue("internal");
-        TaskHandle handle = queue.add(TaskOptions.Builder.withUrl("/internal/worker").method(Method.POST)
-                .payload(payload, Downloadable.getContentType(DownloadFormat.JAVA_SERIALIZED)));
+        TaskHandle handle = queue.add(TaskOptions.Builder.withUrl("/internal/worker").method(Method.POST).payload(payload,
+                Downloadable.getContentType(DownloadFormat.JAVA_SERIALIZED)));
 
         log.debug("task {} deferred; eta {}", process.getClass().getName(), System.currentTimeMillis() - handle.getEtaMillis());
     }

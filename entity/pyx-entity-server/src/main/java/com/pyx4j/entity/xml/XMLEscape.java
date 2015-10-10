@@ -26,15 +26,15 @@ public class XMLEscape {
 
     private final static String[] XML_ENTITIES = {
 
-    ">", "&gt;",
+            ">", "&gt;",
 
-    "<", "&lt;",
+            "<", "&lt;",
 
-    "&", "&amp;",
+            "&", "&amp;",
 
-    "\"", "&quot;",
+            "\"", "&quot;",
 
-    "'", "&apos;"
+            "'", "&apos;"
 
     };
 

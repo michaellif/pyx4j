@@ -94,8 +94,8 @@ public class ServicePolicy {
         } else if ((realServiceName == null) && (servicePolicy != null) && ApplicationMode.isDevelopment()) {
             return serviceClassId;
         } else if ((ServerSideConfiguration.instance().allowToBypassRpcServiceManifest()) // 
-                || ((ServerSideConfiguration.instance().getEnvironmentType() == ServerSideConfiguration.EnvironmentType.GAEDevelopment) && (ServerSideConfiguration
-                        .instance().isDevelopmentBehavior()))) {
+                || ((ServerSideConfiguration.instance().getEnvironmentType() == ServerSideConfiguration.EnvironmentType.GAEDevelopment)
+                        && (ServerSideConfiguration.instance().isDevelopmentBehavior()))) {
             log.warn("Using development service name {}", serviceClassId);
             return serviceClassId;
         } else {

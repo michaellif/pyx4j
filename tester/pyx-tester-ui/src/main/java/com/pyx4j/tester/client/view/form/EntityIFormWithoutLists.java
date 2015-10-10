@@ -69,8 +69,10 @@ public class EntityIFormWithoutLists extends CForm<EntityI> {
         formPanel.h1(i18n.tr("Main Form"));
 
         // Personal Identity
-        formPanel.append(Location.Left, proto().personalId(),
-                new CPersonalIdentityField<IPersonalIdentity>(IPersonalIdentity.class, new PersonalIdentityFormatter("XXX-XXX-xxx;XX-XX-xxxx"))).decorate();
+        formPanel
+                .append(Location.Left, proto().personalId(),
+                        new CPersonalIdentityField<IPersonalIdentity>(IPersonalIdentity.class, new PersonalIdentityFormatter("XXX-XXX-xxx;XX-XX-xxxx")))
+                .decorate();
 
         Anchor anchor = new Anchor(i18n.tr("Terms and Conditions"), new Command() {
 

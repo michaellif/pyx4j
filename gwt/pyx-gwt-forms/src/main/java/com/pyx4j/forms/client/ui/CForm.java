@@ -227,7 +227,7 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
     @Override
     @SuppressWarnings("unchecked")
     protected void onValuePropagation(E value, boolean fireEvent, boolean populate) {
-        assert(value == null) || proto().isAssignableFrom(value.getInstanceValueClass()) : "Trying to set value of a wrong type, expected "
+        assert (value == null) || proto().isAssignableFrom(value.getInstanceValueClass()) : "Trying to set value of a wrong type, expected "
                 + proto().getValueClass() + ", got " + value.getInstanceValueClass() + " in form " + getTitle();
         if (populate) {
             assert value != null : "Entity Editor should not be populated with null. Use reset() instead";

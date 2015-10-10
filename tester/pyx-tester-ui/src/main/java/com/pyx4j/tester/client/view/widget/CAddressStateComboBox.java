@@ -41,8 +41,8 @@ import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.StringBox;
 import com.pyx4j.widgets.client.TextBox;
 
-public abstract class CAddressStateComboBox<E, OPTION extends IEntity> extends CFocusComponent<E, NAddressStateBox<E, OPTION>> implements
-        HasOptionsChangeHandlers<List<OPTION>>, HasNativeValueChangeHandlers<E>, AsyncOptionsReadyCallback<OPTION> {
+public abstract class CAddressStateComboBox<E, OPTION extends IEntity> extends CFocusComponent<E, NAddressStateBox<E, OPTION>>
+        implements HasOptionsChangeHandlers<List<OPTION>>, HasNativeValueChangeHandlers<E>, AsyncOptionsReadyCallback<OPTION> {
 
     private static final I18n i18n = I18n.get(CAddressStateComboBox.class);
 

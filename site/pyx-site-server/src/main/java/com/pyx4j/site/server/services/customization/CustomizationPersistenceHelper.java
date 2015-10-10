@@ -119,8 +119,8 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
                         readOnlyViolation = true;
                     }
                     if (readOnlyViolation) {
-                        throw new Error(SimpleMessageFormat.format("not allowed to overwrite readonly property {0} of {1}", memberName, oldVersion
-                                .getInstanceValueClass().getSimpleName()));
+                        throw new Error(SimpleMessageFormat.format("not allowed to overwrite readonly property {0} of {1}", memberName,
+                                oldVersion.getInstanceValueClass().getSimpleName()));
                     }
                 }
             }
@@ -152,7 +152,8 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
     }
 
     public E load(String id, E proto) {
-        assert proto != null || (proto == null & baseClass != null) : "please intantiate CustomizationPersistenceHolder with base class in order to use polymorphic load";
+        assert proto != null
+                || (proto == null & baseClass != null) : "please intantiate CustomizationPersistenceHolder with base class in order to use polymorphic load";
         EntityQueryCriteria<? extends CustomizationHolder> criteria = EntityQueryCriteria.create(customizationHolderEntityClass);
         if (baseClass != null) {
             criteria.add(PropertyCriterion.eq(criteria.proto().baseClass(), baseClass.getSimpleName()));

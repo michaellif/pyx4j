@@ -29,18 +29,20 @@ import com.pyx4j.entity.report.dynamic.DynamicReport;
 
 public class DynamicReportFactoryTest {
     private static final Logger log = LoggerFactory.getLogger(DynamicReport.class);
+
     private DynamicReport report;
 
 //test doesn't work on server : doesn't find file created himself
     @Test
     public void testCreateReport() throws IOException {
-       /* report = new DynamicReport("/com/pyx4j/entity/report/dynamic/test/logo.png", "Dynamic Report Test");
-        Path tmpDir = Files.createTempDirectory("dynamic-report-test");
-        report.export(ExportTo.PDF, tmpDir.toString());
-        Path pdf = Paths.get(tmpDir.toString(), "Dynamic Report Test.pdf");
-        //assertTrue(Files.exists(pdf));
-        Files.delete(pdf);
-        Files.delete(tmpDir);
-        */
+        /*
+         * report = new DynamicReport("/com/pyx4j/entity/report/dynamic/test/logo.png", "Dynamic Report Test");
+         * Path tmpDir = Files.createTempDirectory("dynamic-report-test");
+         * report.export(ExportTo.PDF, tmpDir.toString());
+         * Path pdf = Paths.get(tmpDir.toString(), "Dynamic Report Test.pdf");
+         * //assertTrue(Files.exists(pdf));
+         * Files.delete(pdf);
+         * Files.delete(tmpDir);
+         */
     }
 }

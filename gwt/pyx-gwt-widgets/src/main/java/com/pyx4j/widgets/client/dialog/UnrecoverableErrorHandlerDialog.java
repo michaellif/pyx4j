@@ -129,9 +129,10 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
 
     @Override
     protected void showThrottle() {
-        MessageDialog.show(i18n.tr("We're Sorry"), i18n
-                .tr("We're Sorry But Your Requests Look Similar To Automated Requests Initiated By Computer Virus Or Spyware Applications. "
-                        + "To Protect Our Users, We Can't Process Your Request At This Time"), Type.Error, new ShowOnceDialogOptions());
+        MessageDialog.show(i18n.tr("We're Sorry"),
+                i18n.tr("We're Sorry But Your Requests Look Similar To Automated Requests Initiated By Computer Virus Or Spyware Applications. "
+                        + "To Protect Our Users, We Can't Process Your Request At This Time"),
+                Type.Error, new ShowOnceDialogOptions());
     }
 
     @Override

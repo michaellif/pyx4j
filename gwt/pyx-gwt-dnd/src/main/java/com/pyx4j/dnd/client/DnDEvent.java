@@ -30,8 +30,8 @@ abstract class DnDEvent<H extends EventHandler> extends DomEvent<H> {
     };
 
     private static native DataTransfer getDataTransferN(NativeEvent event) /*-{
-        return event.dataTransfer;
-    }-*/;
+                                                                           return event.dataTransfer;
+                                                                           }-*/;
 
     @Override
     public String toDebugString() {

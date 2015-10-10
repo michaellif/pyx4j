@@ -94,7 +94,8 @@ public class ListerViewImpl extends ScrollPanel implements ListerView {
         }
 
         @Override
-        public AsyncLoadingHandler obtain(EntityQueryCriteria<ListerDataItem> criteria, final AsyncCallback<EntitySearchResult<ListerDataItem>> handlingCallback) {
+        public AsyncLoadingHandler obtain(EntityQueryCriteria<ListerDataItem> criteria,
+                final AsyncCallback<EntitySearchResult<ListerDataItem>> handlingCallback) {
             EntitySearchResult<ListerDataItem> result = new EntitySearchResult<ListerDataItem>();
             // use data to populate result
             int dataSize = data.size();

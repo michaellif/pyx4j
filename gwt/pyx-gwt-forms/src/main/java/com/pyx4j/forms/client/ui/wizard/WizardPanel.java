@@ -37,8 +37,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.form.FormDecoratorTheme;
 
-public class WizardPanel extends DeckPanel implements HasWidgets, IndexedPanel.ForIsWidget, HasBeforeSelectionHandlers<WizardStep>,
-        HasSelectionHandlers<WizardStep> {
+public class WizardPanel extends DeckPanel
+        implements HasWidgets, IndexedPanel.ForIsWidget, HasBeforeSelectionHandlers<WizardStep>, HasSelectionHandlers<WizardStep> {
 
     public WizardPanel() {
         setStyleName(FormDecoratorTheme.StyleName.FormDecoratorPanel.name());

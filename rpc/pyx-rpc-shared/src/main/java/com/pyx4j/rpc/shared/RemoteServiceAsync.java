@@ -30,6 +30,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface RemoteServiceAsync {
 
-    public void execute(String serviceInterfaceClassName, Serializable serviceRequest, String userVisitHashCode, AsyncCallback<? extends Serializable> callback);
+    public void execute(String serviceInterfaceClassName, Serializable serviceRequest, String userVisitHashCode,
+            AsyncCallback<? extends Serializable> callback);
 
 }

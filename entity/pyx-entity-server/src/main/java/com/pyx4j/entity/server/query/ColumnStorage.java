@@ -106,8 +106,8 @@ class ColumnStorage {
                 .create(persistableEntityClass);
         criteria.eq(criteria.proto().queryClass(), criteriaClass.getName());
 
-        List<AbstractQueryColumnStorage> columns = Executables.wrapInEntityNamespace(persistableEntityClass,
-                new Executable<List<AbstractQueryColumnStorage>, RuntimeException>() {
+        List<AbstractQueryColumnStorage> columns = Executables
+                .wrapInEntityNamespace(persistableEntityClass, new Executable<List<AbstractQueryColumnStorage>, RuntimeException>() {
                     @Override
                     public List<AbstractQueryColumnStorage> execute() {
                         return Persistence.service().query(criteria);

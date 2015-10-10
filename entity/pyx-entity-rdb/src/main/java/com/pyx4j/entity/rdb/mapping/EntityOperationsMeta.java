@@ -155,9 +155,9 @@ public class EntityOperationsMeta {
             {
                 MemberMeta memberMeta = entityMeta.getMemberMeta(IEntity.CONCRETE_TYPE_DATA_ATTR);
                 ValueAdapter valueAdapter = new ValueAdapterEntityPolymorphic(dialect, entityMeta.getEntityClass());
-                MemberOperationsMeta member = new MemberOperationsMeta(new EntityMemberDirectAccess(IEntity.CONCRETE_TYPE_DATA_ATTR), valueAdapter, dialect
-                        .getNamingConvention().sqlIdColumnName(), memberMeta, path + Path.PATH_SEPARATOR + IEntity.CONCRETE_TYPE_DATA_ATTR
-                        + Path.PATH_SEPARATOR);
+                MemberOperationsMeta member = new MemberOperationsMeta(new EntityMemberDirectAccess(IEntity.CONCRETE_TYPE_DATA_ATTR), valueAdapter,
+                        dialect.getNamingConvention().sqlIdColumnName(), memberMeta,
+                        path + Path.PATH_SEPARATOR + IEntity.CONCRETE_TYPE_DATA_ATTR + Path.PATH_SEPARATOR);
                 membersByPath.put(member.getMemberPath(), member);
             }
 
@@ -169,8 +169,8 @@ public class EntityOperationsMeta {
         {
             MemberMeta memberMeta = entityMeta.getMemberMeta(IEntity.PRIMARY_KEY);
             ValueAdapter valueAdapter = createValueAdapter(dialect, memberMeta);
-            pkMember = new MemberOperationsMeta(new EntityMemberDirectAccess(IEntity.PRIMARY_KEY), valueAdapter, dialect.getNamingConvention()
-                    .sqlIdColumnName(), memberMeta, path + Path.PATH_SEPARATOR + IEntity.PRIMARY_KEY + Path.PATH_SEPARATOR);
+            pkMember = new MemberOperationsMeta(new EntityMemberDirectAccess(IEntity.PRIMARY_KEY), valueAdapter,
+                    dialect.getNamingConvention().sqlIdColumnName(), memberMeta, path + Path.PATH_SEPARATOR + IEntity.PRIMARY_KEY + Path.PATH_SEPARATOR);
             membersByPath.put(pkMember.getMemberPath(), pkMember);
         }
 
@@ -421,8 +421,8 @@ public class EntityOperationsMeta {
                             sqlName = namingConvention.sqlFieldName(indexedPropertyName);
                         }
 
-                        indexMembers.add(new MemberOperationsMeta(memberAccess, null, sqlName, memberMeta, null, adapterClass, adapter.getIndexValueClass(),
-                                false));
+                        indexMembers.add(
+                                new MemberOperationsMeta(memberAccess, null, sqlName, memberMeta, null, adapterClass, adapter.getIndexValueClass(), false));
                     }
                 }
 

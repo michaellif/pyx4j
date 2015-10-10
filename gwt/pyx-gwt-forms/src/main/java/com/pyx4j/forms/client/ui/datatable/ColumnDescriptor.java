@@ -284,14 +284,14 @@ public class ColumnDescriptor {
                             Object memberValue = value.getMember(member.getPath());
                             if (memberValue == null) {
                             } else if (memberValue instanceof Collection<?>) {
-                                builder.appendHtmlConstant(ConverterUtils.convertCollection((Collection<IEntity>) memberValue,
-                                        new ToStringConverter<IEntity>() {
+                                builder.appendHtmlConstant(
+                                        ConverterUtils.convertCollection((Collection<IEntity>) memberValue, new ToStringConverter<IEntity>() {
 
-                                            @Override
-                                            public String toString(IEntity value) {
-                                                return value.getStringView();
-                                            }
-                                        }));
+                                    @Override
+                                    public String toString(IEntity value) {
+                                        return value.getStringView();
+                                    }
+                                }));
                             } else {
                                 builder.appendHtmlConstant(memberValue.toString());
                             }
@@ -333,8 +333,8 @@ public class ColumnDescriptor {
                                     SafeHtmlBuilder builder = new SafeHtmlBuilder();
                                     Date memberValue = (Date) ((IPrimitive<?>) value.getMember(member.getPath())).getValue();
                                     if (memberValue != null) {
-                                        builder.appendHtmlConstant(DateTimeFormat.getFormat(
-                                                Context.userPreferences(IUserPreferences.class).logicalDateFormat().getValue()).format(memberValue));
+                                        builder.appendHtmlConstant(DateTimeFormat
+                                                .getFormat(Context.userPreferences(IUserPreferences.class).logicalDateFormat().getValue()).format(memberValue));
                                     }
                                     return builder.toSafeHtml();
                                 }
@@ -349,8 +349,8 @@ public class ColumnDescriptor {
                                     SafeHtmlBuilder builder = new SafeHtmlBuilder();
                                     Date memberValue = (Date) ((IPrimitive<?>) value.getMember(member.getPath())).getValue();
                                     if (memberValue != null) {
-                                        builder.appendHtmlConstant(DateTimeFormat.getFormat(
-                                                Context.userPreferences(IUserPreferences.class).dateTimeFormat().getValue()).format(memberValue));
+                                        builder.appendHtmlConstant(DateTimeFormat
+                                                .getFormat(Context.userPreferences(IUserPreferences.class).dateTimeFormat().getValue()).format(memberValue));
                                     }
                                     return builder.toSafeHtml();
                                 }

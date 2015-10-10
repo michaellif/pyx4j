@@ -84,7 +84,8 @@ public class CacheService {
     private static boolean readMultitenancyConfig() {
         IPersistenceConfiguration cfg = ServerSideConfiguration.instance().getPersistenceConfiguration();
         if (cfg == null) {
-            throw new RuntimeException("Persistence Configuration is not defined (is null) in class " + ServerSideConfiguration.instance().getClass().getName());
+            throw new RuntimeException(
+                    "Persistence Configuration is not defined (is null) in class " + ServerSideConfiguration.instance().getClass().getName());
         }
         if (cfg instanceof com.pyx4j.entity.rdb.cfg.Configuration) {
             return ((com.pyx4j.entity.rdb.cfg.Configuration) cfg).getMultitenancyType() != MultitenancyType.SingleTenant;

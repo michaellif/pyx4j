@@ -31,8 +31,8 @@ public class ProvinceReferenceAdapter implements ReferenceAdapter<Province> {
     @Override
     public EntityQueryCriteria<Province> getMergeCriteria(Province newEntity) {
         EntityQueryCriteria<Province> c = EntityQueryCriteria.create(Province.class);
-        c.add(new PropertyCriterion(c.proto().name().getFieldName() + IndexAdapter.SECONDARY_PRROPERTY_SUFIX, Restriction.EQUAL, newEntity.name().getValue()
-                .toLowerCase()));
+        c.add(new PropertyCriterion(c.proto().name().getFieldName() + IndexAdapter.SECONDARY_PRROPERTY_SUFIX, Restriction.EQUAL,
+                newEntity.name().getValue().toLowerCase()));
         return c;
     }
 
