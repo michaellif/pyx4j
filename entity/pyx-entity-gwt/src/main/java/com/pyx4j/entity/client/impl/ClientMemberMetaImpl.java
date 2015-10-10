@@ -62,10 +62,10 @@ public class ClientMemberMetaImpl implements MemberMeta {
      * Generic constructor
      */
     public ClientMemberMetaImpl(String fieldName, String captionNL, String caption, String description, String watermark, Class<?> valueClass,
-            @SuppressWarnings("rawtypes") Class<? extends IObject> objectClass, ObjectClassType objectClassType, boolean valueClassIsNumber,
-            boolean persistenceTransient, boolean rpcTransient, boolean logTransient, AttachLevel attachLevel, boolean ownedRelationships,
-            boolean cascadePersist, boolean owner, boolean embedded, boolean indexed, int stringLength, String format, boolean useMessageFormat,
-            String nullString, boolean isToStringMember) {
+            @SuppressWarnings("rawtypes")
+    Class<? extends IObject> objectClass, ObjectClassType objectClassType, boolean valueClassIsNumber, boolean persistenceTransient, boolean rpcTransient,
+            boolean logTransient, AttachLevel attachLevel, boolean ownedRelationships, boolean cascadePersist, boolean owner, boolean embedded, boolean indexed,
+            int stringLength, String format, boolean useMessageFormat, String nullString, boolean isToStringMember) {
         super();
         this.data = new MemberMetaData();
         this.data.valueClass = valueClass;
@@ -97,7 +97,8 @@ public class ClientMemberMetaImpl implements MemberMeta {
         this.data.isToStringMember = isToStringMember;
     }
 
-    public ClientMemberMetaImpl(String fieldName, String captionNL, String caption, String description, String watermark, boolean indexed, MemberMetaData data) {
+    public ClientMemberMetaImpl(String fieldName, String captionNL, String caption, String description, String watermark, boolean indexed,
+            MemberMetaData data) {
         this.fieldName = fieldName;
         this.captionNL = captionNL;
         this.caption = caption;

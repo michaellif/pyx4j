@@ -60,23 +60,23 @@ public class AppenderConsoleIE8 implements Appender {
 
     // this detects IE
     private static native boolean supported() /*-{
-        return ($doc.body.insertAdjacentHTML != null) && $wnd.console != null && $wnd.console.assert;
-    }-*/;
+                                              return ($doc.body.insertAdjacentHTML != null) && $wnd.console != null && $wnd.console.assert;
+                                              }-*/;
 
     private native void debug(String message) /*-{
-        $wnd.console.log(message);
-    }-*/;
+                                              $wnd.console.log(message);
+                                              }-*/;
 
     private native void info(String message) /*-{
-        $wnd.console.info(message);
-    }-*/;
+                                             $wnd.console.info(message);
+                                             }-*/;
 
     private native void warn(String message) /*-{
-        $wnd.console.warn(message);
-    }-*/;
+                                             $wnd.console.warn(message);
+                                             }-*/;
 
     private native void error(String message) /*-{
-        $wnd.console.error(message);
-    }-*/;
+                                              $wnd.console.error(message);
+                                              }-*/;
 
 }

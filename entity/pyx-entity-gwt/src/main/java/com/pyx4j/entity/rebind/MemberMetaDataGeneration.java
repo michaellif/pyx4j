@@ -31,35 +31,35 @@ public class MemberMetaDataGeneration extends MemberMetaData {
     public boolean isDataEquals(MemberMetaData other) {
         return ((persistenceTransient == other.persistenceTransient)
 
-        && (rpcTransient == other.rpcTransient)
+                && (rpcTransient == other.rpcTransient)
 
-        && (logTransient == other.logTransient)
+                && (logTransient == other.logTransient)
 
-        && (attachLevel == other.attachLevel)
+                && (attachLevel == other.attachLevel)
 
-        && (ownedRelationships == other.ownedRelationships)
+                && (ownedRelationships == other.ownedRelationships)
 
-        && (cascadePersist == other.cascadePersist)
+                && (cascadePersist == other.cascadePersist)
 
-        && (owner == other.owner)
+                && (owner == other.owner)
 
-        && (embedded == other.embedded)
+                && (embedded == other.embedded)
 
-        && (stringLength == other.stringLength)
+                && (stringLength == other.stringLength)
 
-        && (objectClassSourceName.equals(other.objectClass.getName()))
+                && (objectClassSourceName.equals(other.objectClass.getName()))
 
-        && (useMessageFormat == other.useMessageFormat)
+                && (useMessageFormat == other.useMessageFormat)
 
-        && (CommonsStringUtils.equals(format, other.format))
+                && (CommonsStringUtils.equals(format, other.format))
 
-        && (CommonsStringUtils.equals(nullString, other.nullString))
+                && (CommonsStringUtils.equals(nullString, other.nullString))
 
-        && (isToStringMember == other.isToStringMember)
+                && (isToStringMember == other.isToStringMember)
 
-        && (valueClassIsNumber == other.valueClassIsNumber)
+                && (valueClassIsNumber == other.valueClassIsNumber)
 
-        && (isSameClass(valueClassSourceName, other.valueClass)));
+                && (isSameClass(valueClassSourceName, other.valueClass)));
 
     }
 

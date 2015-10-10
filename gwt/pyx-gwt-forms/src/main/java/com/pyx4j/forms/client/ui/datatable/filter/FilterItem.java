@@ -104,9 +104,12 @@ public class FilterItem implements Comparable<FilterItem> {
         } else if (criterion instanceof RangeCriterion) {
             Serializable fromValue = ((RangeCriterion) criterion).getFromValue();
             Serializable toValue = ((RangeCriterion) criterion).getToValue();
-            return columnDescriptor.getColumnTitle() + ": '" + ((fromValue == null && toValue == null) ? i18n.tr("All") : //
-                    ((fromValue == null ? "" : fromValue) + ((fromValue != null && toValue != null) ? "'-'" : "") + //
-                    (toValue == null ? "" : toValue))) + "'";
+            return columnDescriptor.getColumnTitle() + ": '"
+                    + ((fromValue == null && toValue == null) ? i18n.tr("All")
+                            : //
+                            ((fromValue == null ? "" : fromValue) + ((fromValue != null && toValue != null) ? "'-'" : "") + //
+                                    (toValue == null ? "" : toValue)))
+                    + "'";
         } else {
             return columnDescriptor.getColumnTitle();
         }

@@ -19,7 +19,6 @@
  */
 package com.pyx4j.essentials.server.download;
 
-
 public interface FileSearchProgressCallback {
 
     public void onVisitDirectory();

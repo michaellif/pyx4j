@@ -19,7 +19,6 @@
  */
 package com.pyx4j.site.shared.domain;
 
-
 public interface Link {
 
     String html();

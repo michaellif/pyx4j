@@ -538,9 +538,8 @@ public class ExtractMojo extends AbstractMojo {
                 catalog.loadCatalog(translationCatalog);
             }
             POFile poTransl = po.cloneForTranslation();
-            getLog().info(
-                    "Translating " + sourceLanguage + " -> " + lang + " ; entries to translate " + poTransl.entries.size() + ", use Local catalog "
-                            + catalog.size());
+            getLog().info("Translating " + sourceLanguage + " -> " + lang + " ; entries to translate " + poTransl.entries.size() + ", use Local catalog "
+                    + catalog.size());
 
             int translated = 0;
             final AtomicInteger apiCalls = new AtomicInteger();

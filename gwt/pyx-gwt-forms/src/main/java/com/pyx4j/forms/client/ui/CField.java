@@ -30,8 +30,8 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 
-public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TYPE>> extends
-        CComponent<CField<DATA_TYPE, WIDGET_TYPE>, DATA_TYPE, WIDGET_TYPE, IFieldDecorator> {
+public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TYPE>>
+        extends CComponent<CField<DATA_TYPE, WIDGET_TYPE>, DATA_TYPE, WIDGET_TYPE, IFieldDecorator> {
 
     private Command navigationCommand;
 

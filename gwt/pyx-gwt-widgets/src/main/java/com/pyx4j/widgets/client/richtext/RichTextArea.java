@@ -98,21 +98,21 @@ public class RichTextArea extends com.google.gwt.user.client.ui.RichTextArea {
      * @param win
      */
     private native void saveSelectionAndRange(JavaScriptObject win) /*-{
-
-		var selection = win.getSelection();
-		this.@com.pyx4j.widgets.client.richtext.RichTextArea::storedSelection = selection;
-
-		var range = null;
-		if (selection != null) {
-			try {
-				range = selection.getRangeAt(0);
-				this.@com.pyx4j.widgets.client.richtext.RichTextArea::storedRange = range;
-			} catch (e) {
-				alert("saveSelectionAndRange: " + e);
-			}
-		}
-
-    }-*/;
+                                                                    
+                                                                    var selection = win.getSelection();
+                                                                    this.@com.pyx4j.widgets.client.richtext.RichTextArea::storedSelection = selection;
+                                                                    
+                                                                    var range = null;
+                                                                    if (selection != null) {
+                                                                    try {
+                                                                    range = selection.getRangeAt(0);
+                                                                    this.@com.pyx4j.widgets.client.richtext.RichTextArea::storedRange = range;
+                                                                    } catch (e) {
+                                                                    alert("saveSelectionAndRange: " + e);
+                                                                    }
+                                                                    }
+                                                                    
+                                                                    }-*/;
 
     /**
      * Restore previous selection and range; useful for fixing IE9 selection/range issues
@@ -120,17 +120,17 @@ public class RichTextArea extends com.google.gwt.user.client.ui.RichTextArea {
      * @param win
      */
     private native void restoreSelectionAndRange(JavaScriptObject win) /*-{
-
-		try {
-			var selection = win.getSelection();
-			selection.removeAllRanges();
-			selection
-					.addRange(this.@com.pyx4j.widgets.client.richtext.RichTextArea::storedRange);
-		} catch (e) {
-			alert("restoreSelectionAndRange: " + e);
-		}
-
-    }-*/;
+                                                                       
+                                                                       try {
+                                                                       var selection = win.getSelection();
+                                                                       selection.removeAllRanges();
+                                                                       selection
+                                                                       .addRange(this.@com.pyx4j.widgets.client.richtext.RichTextArea::storedRange);
+                                                                       } catch (e) {
+                                                                       alert("restoreSelectionAndRange: " + e);
+                                                                       }
+                                                                       
+                                                                       }-*/;
 
     public void restoreSelectionAndRange() {
 
@@ -169,18 +169,18 @@ public class RichTextArea extends com.google.gwt.user.client.ui.RichTextArea {
     }
 
     private static native JavaScriptObject getWindow(IFrameElement iFrame) /*-{
-		try {
-
-			var iFrameWin = iFrame.contentWindow || iFrame.contentDocument;
-
-			if (!iFrameWin.document) {
-				iFrameWin = iFrameWin.getParentNode();
-			}
-			return iFrameWin;
-		} catch (e) {
-			return null;
-		}
-    }-*/;
+                                                                           try {
+                                                                           
+                                                                           var iFrameWin = iFrame.contentWindow || iFrame.contentDocument;
+                                                                           
+                                                                           if (!iFrameWin.document) {
+                                                                           iFrameWin = iFrameWin.getParentNode();
+                                                                           }
+                                                                           return iFrameWin;
+                                                                           } catch (e) {
+                                                                           return null;
+                                                                           }
+                                                                           }-*/;
 
     private static boolean isInternetExplorerUser() {
         String ua = Window.Navigator.getUserAgent();

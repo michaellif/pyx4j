@@ -28,10 +28,10 @@ public class JsFile extends JavaScriptObject {
     }
 
     public final native String getName() /*-{
-		return this.name;
-    }-*/;
+                                         return this.name;
+                                         }-*/;
 
     public final native JsDate getLastModifiedDate() /*-{
-		return this.lastModifiedDate;
-    }-*/;
+                                                     return this.lastModifiedDate;
+                                                     }-*/;
 }

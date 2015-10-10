@@ -38,8 +38,8 @@ public class LocalService {
         Class<?>[] allInterfaces = new Class[serviceClass.getInterfaces().length + 1];
         allInterfaces[0] = serviceClass;
         System.arraycopy(serviceClass.getInterfaces(), 0, allInterfaces, 1, serviceClass.getInterfaces().length);
-        return serviceClass.cast(Proxy
-                .newProxyInstance(Thread.currentThread().getContextClassLoader(), allInterfaces, new ServiceInvocationProxy(serviceClass)));
+        return serviceClass
+                .cast(Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), allInterfaces, new ServiceInvocationProxy(serviceClass)));
     }
 
 }

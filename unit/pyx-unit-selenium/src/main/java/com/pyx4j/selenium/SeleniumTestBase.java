@@ -285,7 +285,8 @@ public class SeleniumTestBase extends TestCase {
         MemberMeta mm = member.getMeta();
         if (mm.getValueClass().isEnum()) {
             assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getEnumValue(formDebugId, (IPrimitive<Enum>) member));
-        } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class)) || (mm.getValueClass().equals(LogicalDate.class))) {
+        } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))
+                || (mm.getValueClass().equals(LogicalDate.class))) {
             // CDatePicker, CMonthYearPicker
             assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getDateValue(formDebugId, (IPrimitive<Date>) member));
         } else if (mm.getValueClass().equals(Boolean.class)) {
@@ -325,7 +326,8 @@ public class SeleniumTestBase extends TestCase {
             selenium.setEnumValue(DebugIdBuilder.id(formDebugId, member), (Enum<?>) member.getValue());
         } else if (mm.getValueClass().equals(Boolean.class)) {
             selenium.setValue(DebugIdBuilder.id(formDebugId, member), (Boolean) member.getValue());
-        } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class)) || (mm.getValueClass().equals(LogicalDate.class))) {
+        } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))
+                || (mm.getValueClass().equals(LogicalDate.class))) {
             selenium.setDateValue(DebugIdBuilder.id(formDebugId, member), (Date) member.getValue(), mm.getFormat());
         } else {
             selenium.setValue(DebugIdBuilder.id(formDebugId, member), member.getStringView());

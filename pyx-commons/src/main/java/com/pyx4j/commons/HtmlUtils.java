@@ -40,19 +40,19 @@ public class HtmlUtils {
 
     private final static String[] HTML_ENTITIES = {
 
-    ">", "&gt;",
+            ">", "&gt;",
 
-    "<", "&lt;",
+            "<", "&lt;",
 
-    "&", "&amp;",
+            "&", "&amp;",
 
-    "\"", "&quot;",
+            "\"", "&quot;",
 
-    "\u20AC", "&euro;",
+            "\u20AC", "&euro;",
 
-    "\u00A3", "&pound;",
+            "\u00A3", "&pound;",
 
-    "\u00A9", "&copy;" };
+            "\u00A9", "&copy;" };
 
     private static Map<Character, String> htmlEntityTableEncode;
 

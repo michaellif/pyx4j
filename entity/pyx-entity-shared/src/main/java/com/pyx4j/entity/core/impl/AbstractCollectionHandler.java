@@ -42,7 +42,8 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
 
     private final Class<TYPE> valueClass;
 
-    protected AbstractCollectionHandler(@SuppressWarnings("rawtypes") Class<? extends IObject> clazz, Class<TYPE> valueClass, IEntity parent, String fieldName) {
+    protected AbstractCollectionHandler(@SuppressWarnings("rawtypes")
+    Class<? extends IObject> clazz, Class<TYPE> valueClass, IEntity parent, String fieldName) {
         super(clazz, parent, fieldName);
         this.valueClass = valueClass;
     }

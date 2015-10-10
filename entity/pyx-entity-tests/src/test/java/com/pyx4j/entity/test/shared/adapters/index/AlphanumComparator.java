@@ -30,5 +30,4 @@ public class AlphanumComparator implements Comparator<String> {
         return AlphanumIndexAdapter.alphanum(o1).compareTo(AlphanumIndexAdapter.alphanum(o2));
     }
 
-
 }

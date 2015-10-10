@@ -107,8 +107,8 @@ public class BackupServicesImpl implements BackupServices {
             PreparedQuery preparedQuery = datastore.prepare(query);
             QueryResultIterable<Entity> iterable;
             if (request.getEncodedCursorReference() != null) {
-                iterable = preparedQuery.asQueryResultIterable(FetchOptions.Builder.withStartCursor(Cursor.fromWebSafeString(request
-                        .getEncodedCursorReference())));
+                iterable = preparedQuery
+                        .asQueryResultIterable(FetchOptions.Builder.withStartCursor(Cursor.fromWebSafeString(request.getEncodedCursorReference())));
             } else {
                 iterable = preparedQuery.asQueryResultIterable();
             }

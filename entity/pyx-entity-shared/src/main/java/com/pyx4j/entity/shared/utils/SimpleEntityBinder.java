@@ -81,7 +81,8 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
             this.valueConverter = valueConverter;
         }
 
-        Binding(IObject<?> dtoMember, IObject<?> dboMember, @SuppressWarnings("rawtypes") SimpleEntityBinder binder) {
+        Binding(IObject<?> dtoMember, IObject<?> dboMember, @SuppressWarnings("rawtypes")
+        SimpleEntityBinder binder) {
             this(dtoMember, dboMember);
             this.binder = binder;
         }

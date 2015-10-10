@@ -84,8 +84,8 @@ public abstract class AbstractAntiBot {
         if (challengeRresponse == null) {
             throw new UserRuntimeException(GENERIC_LOGIN_FAILED_MESSAGE);
         }
-        ServerSideConfiguration.instance(EssentialsServerSideConfiguration.class).getAntiBot()
-                .assertCaptcha(challengeRresponse.getA(), challengeRresponse.getB());
+        ServerSideConfiguration.instance(EssentialsServerSideConfiguration.class).getAntiBot().assertCaptcha(challengeRresponse.getA(),
+                challengeRresponse.getB());
     }
 
     /**

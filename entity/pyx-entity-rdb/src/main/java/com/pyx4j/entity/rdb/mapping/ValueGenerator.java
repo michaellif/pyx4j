@@ -32,7 +32,8 @@ public class ValueGenerator {
         case randomUUID:
             return UUID.randomUUID().toString();
         default:
-            throw new IllegalArgumentException("Unsupported @GeneratedValue.type '" + generatedValue.type() + "' on member '" + memberMeta.getFieldName() + "'");
+            throw new IllegalArgumentException(
+                    "Unsupported @GeneratedValue.type '" + generatedValue.type() + "' on member '" + memberMeta.getFieldName() + "'");
         }
     }
 }

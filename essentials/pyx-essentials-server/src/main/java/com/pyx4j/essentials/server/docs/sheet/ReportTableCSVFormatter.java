@@ -45,7 +45,7 @@ public class ReportTableCSVFormatter implements ReportTableFormatter {
     protected String charsetSerial;
 
     private boolean forceQuote;
-    
+
     private boolean emitUTF8BOM = true;
 
     private int rowCount = 0;
@@ -76,7 +76,7 @@ public class ReportTableCSVFormatter implements ReportTableFormatter {
     public void setForceQuote(boolean forceQuote) {
         this.forceQuote = forceQuote;
     }
-    
+
     public boolean isEmitUTF8BOM() {
         return emitUTF8BOM;
     }

@@ -75,15 +75,15 @@ public class CaptchaCompositeV2 extends AbstractCaptchaComposite implements HasV
     }
 
     private void createChallenge() {
-        assert(publicKey != null) : "Captcha public key was not set";
+        assert (publicKey != null) : "Captcha public key was not set";
 
         AjaxJSLoader.load(javaScriptURL, new AjaxJSLoader.IsJSLoaded() {
 
             @Override
             public native boolean isLoaded()
             /*-{
-		return typeof $wnd.grecaptcha != "undefined";
-    }-*/;
+            return typeof $wnd.grecaptcha != "undefined";
+            }-*/;
 
         }, new AsyncCallback<Void>() {
 
@@ -108,21 +108,21 @@ public class CaptchaCompositeV2 extends AbstractCaptchaComposite implements HasV
 
     private native int createChallengeImpl()
     /*-{
-		var thisComposite = this;
-		var verifyCallback = function(val) {
-			thisComposite.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV2::successfulCAPTCHAcallback(Ljava/lang/String;)(val);
-		};
-
-		return $wnd.grecaptcha
-				.render(
-						this.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV2::divName,
-						{
-							'sitekey' : @com.pyx4j.widgets.client.captcha.AbstractCaptchaComposite::publicKey,
-							'callback' : verifyCallback,
-							'theme' : 'light',
-							'size' : 'normal',
-							'tabindex' : this.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV2::tabindex
-						});
+    	var thisComposite = this;
+    	var verifyCallback = function(val) {
+    		thisComposite.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV2::successfulCAPTCHAcallback(Ljava/lang/String;)(val);
+    	};
+    
+    	return $wnd.grecaptcha
+    			.render(
+    					this.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV2::divName,
+    					{
+    						'sitekey' : @com.pyx4j.widgets.client.captcha.AbstractCaptchaComposite::publicKey,
+    						'callback' : verifyCallback,
+    						'theme' : 'light',
+    						'size' : 'normal',
+    						'tabindex' : this.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV2::tabindex
+    					});
     }-*/;
 
     private void successfulCAPTCHAcallback(String response) {
@@ -184,8 +184,8 @@ public class CaptchaCompositeV2 extends AbstractCaptchaComposite implements HasV
 
     private native String getValueResponseImpl()
     /*-{
-		return $wnd.grecaptcha
-				.getResponse(this.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV2::captchaWidgetId);
+    	return $wnd.grecaptcha
+    			.getResponse(this.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV2::captchaWidgetId);
     }-*/;
 
     @Override
@@ -202,8 +202,8 @@ public class CaptchaCompositeV2 extends AbstractCaptchaComposite implements HasV
 
     public native void createNewChallengeImpl()
     /*-{
-		$wnd.grecaptcha
-				.reset(this.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV2::captchaWidgetId);
+    	$wnd.grecaptcha
+    			.reset(this.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV2::captchaWidgetId);
     }-*/;
 
     @Override

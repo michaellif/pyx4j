@@ -118,7 +118,7 @@ public class SomeSerializableData implements Serializable {
         }
         return longValue == ((SomeSerializableData) other).longValue
 
-        && EqualsHelper.equals(name, ((SomeSerializableData) other).name);
+                && EqualsHelper.equals(name, ((SomeSerializableData) other).name);
     }
 
 }

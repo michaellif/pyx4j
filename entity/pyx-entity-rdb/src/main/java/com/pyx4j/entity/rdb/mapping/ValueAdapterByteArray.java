@@ -47,8 +47,8 @@ class ValueAdapterByteArray extends ValueAdapterPrimitive {
             if (maxLength > 0) {
                 int size = Array.getLength(value);
                 if (size > maxLength) {
-                    throw new RuntimeException("Member size violation member '" + memberMeta.getFieldName() + "' size " + size
-                            + " is greater than max allowed " + maxLength);
+                    throw new RuntimeException(
+                            "Member size violation member '" + memberMeta.getFieldName() + "' size " + size + " is greater than max allowed " + maxLength);
                 }
             }
             stmt.setBytes(parameterIndex, (byte[]) value);

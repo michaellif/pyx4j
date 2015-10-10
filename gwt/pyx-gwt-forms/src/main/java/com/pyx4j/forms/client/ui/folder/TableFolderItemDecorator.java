@@ -117,16 +117,16 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
     @Override
     public void onSetDebugId(IDebugId parentDebugId) {
         this.parentDebugId = parentDebugId;
-        validationMessageHolder.ensureDebugId(new CompositeDebugId(parentDebugId, new CompositeDebugId(DecoratorDebugIds.TableFolderItemDecorator,
-                DecoratorDebugIds.Label)).debugId());
+        validationMessageHolder.ensureDebugId(
+                new CompositeDebugId(parentDebugId, new CompositeDebugId(DecoratorDebugIds.TableFolderItemDecorator, DecoratorDebugIds.Label)).debugId());
     }
 
     @Override
     public void adoptItemActionsBar() {
         ItemActionsBar actionsBar = getFolderItem().getItemActionsBar();
         actionsPanelHolder.setWidget(actionsBar);
-        actionsBar.ensureDebugId(new CompositeDebugId(parentDebugId, new CompositeDebugId(DecoratorDebugIds.TableFolderItemDecorator,
-                DecoratorDebugIds.ActionPanel)).debugId());
+        actionsBar.ensureDebugId(
+                new CompositeDebugId(parentDebugId, new CompositeDebugId(DecoratorDebugIds.TableFolderItemDecorator, DecoratorDebugIds.ActionPanel)).debugId());
         addDomHandler(new MouseOverHandler() {
             @Override
             public void onMouseOver(MouseOverEvent event) {

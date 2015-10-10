@@ -128,7 +128,8 @@ public class AddressEditorViewImpl extends ScrollPanel implements AddressEditorV
                 super(TestCountry.class, (NotInOptionsPolicy) null, new EntityDataSource<TestCountry>() {
 
                     @Override
-                    public AsyncLoadingHandler obtain(EntityQueryCriteria<TestCountry> criteria, AsyncCallback<EntitySearchResult<TestCountry>> handlingCallback) {
+                    public AsyncLoadingHandler obtain(EntityQueryCriteria<TestCountry> criteria,
+                            AsyncCallback<EntitySearchResult<TestCountry>> handlingCallback) {
                         EntitySearchResult<TestCountry> result = new EntitySearchResult<>();
                         for (TestCountry c : DomainFactory.getCountries()) {
                             result.add(c);

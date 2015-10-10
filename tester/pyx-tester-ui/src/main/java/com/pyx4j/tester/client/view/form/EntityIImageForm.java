@@ -52,8 +52,8 @@ public class EntityIImageForm extends CForm<EntityI> {
 
         formPanel.h2(i18n.tr("CImage is here"));
 
-        CImageSlider<TFile> cGallery = new CImageSlider<TFile>(TFile.class, GWT.<TFileUploadService> create(TFileUploadService.class), new ImageFileURLBuilder(
-                false)) {
+        CImageSlider<TFile> cGallery = new CImageSlider<TFile>(TFile.class, GWT.<TFileUploadService> create(TFileUploadService.class),
+                new ImageFileURLBuilder(false)) {
             @Override
             public FolderImages getFolderIcons() {
                 return Images.INSTANCE;

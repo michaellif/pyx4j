@@ -27,7 +27,7 @@ package com.pyx4j.essentials.rpc;
  * 
  */
 //@SuppressWarnings("serial")
-public class RPCSerializationHack /* implements java.io.Serializable */{
+public class RPCSerializationHack /* implements java.io.Serializable */ {
 
     // removed in next GWT version 2.6.1, Loogs like works fine
     // public Criterion[] criterionArray;

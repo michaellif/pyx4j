@@ -28,8 +28,8 @@ import com.pyx4j.forms.client.events.HasNativeValueChangeHandlers;
 import com.pyx4j.forms.client.events.NativeValueChangeEvent;
 import com.pyx4j.forms.client.events.NativeValueChangeHandler;
 
-public abstract class CTextFieldBase<DATA, WIDGET extends INativeValueBox<DATA>> extends CTextComponent<DATA, WIDGET> implements IAcceptsText,
-        HasNativeValueChangeHandlers<String> {
+public abstract class CTextFieldBase<DATA, WIDGET extends INativeValueBox<DATA>> extends CTextComponent<DATA, WIDGET>
+        implements IAcceptsText, HasNativeValueChangeHandlers<String> {
 
     public CTextFieldBase() {
         super();

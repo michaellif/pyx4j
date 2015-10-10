@@ -229,8 +229,8 @@ public class PasswordBox extends FlowPanel implements IValueBoxWidget<String> {
         }
 
         public void ratePassword() {
-            setValue(passwordStrengthRule != null ? passwordStrengthRule.getPasswordVerdict(textBox.isWatermarkShown() ? "" : textBox.getTextBoxWidget()
-                    .getText()) : null);
+            setValue(passwordStrengthRule != null
+                    ? passwordStrengthRule.getPasswordVerdict(textBox.isWatermarkShown() ? "" : textBox.getTextBoxWidget().getText()) : null);
         }
 
     }

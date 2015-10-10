@@ -225,7 +225,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
         if (persistenceContext == null) {
             createTransactionContext(persistenceContext, TransactionType.SingelAPICallAutoCommit, ConnectionTarget.Web);
         } else {
-            assert(!persistenceContext.isSingelAPICallTransaction()) : "PersistenceContext leftover detected, Context open from "
+            assert (!persistenceContext.isSingelAPICallTransaction()) : "PersistenceContext leftover detected, Context open from "
                     + persistenceContext.getContextOpenFrom();
         }
     }
@@ -377,7 +377,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
     @Override
     public void endTransaction() {
         PersistenceContext persistenceContext = getPersistenceContext();
-        assert(persistenceContext != null) : "Transaction Context was not started";
+        assert (persistenceContext != null) : "Transaction Context was not started";
 
         if (PersistenceTrace.traceTransaction) {
             log.info("{} endTransaction\n\tfrom:{}\t", persistenceContext.txId(), PersistenceTrace.getCallOrigin());
@@ -1450,7 +1450,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
         case ToStringMembers:
             return retrieve(entityMember, attachLevel, false);
         case Detached:
-            assert(entityMember.getOwner().getPrimaryKey() != null);
+            assert (entityMember.getOwner().getPrimaryKey() != null);
             startCallContext(ConnectionReason.forRead);
             boolean retrieved;
             try {
@@ -1497,7 +1497,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
 
         case CollectionSizeOnly:
         case Detached:
-            assert(collectionMember.getOwner().getPrimaryKey() != null);
+            assert (collectionMember.getOwner().getPrimaryKey() != null);
             startCallContext(ConnectionReason.forRead);
             try {
                 TableModel tm = tableModel(collectionMember.getOwner().getEntityMeta());

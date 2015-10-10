@@ -63,23 +63,23 @@ public class AppenderFirebug implements Appender {
     }
 
     private static native boolean supported() /*-{
-		return $wnd.console != null && $wnd.console.firebug != null;
-    }-*/;
+                                              return $wnd.console != null && $wnd.console.firebug != null;
+                                              }-*/;
 
     private native void debug(String message) /*-{
-		$wnd.console.debug(message);
-    }-*/;
+                                              $wnd.console.debug(message);
+                                              }-*/;
 
     private native void info(String message) /*-{
-		$wnd.console.info(message);
-    }-*/;
+                                             $wnd.console.info(message);
+                                             }-*/;
 
     private native void warn(String message) /*-{
-		$wnd.console.warn(message);
-    }-*/;
+                                             $wnd.console.warn(message);
+                                             }-*/;
 
     private native void error(String message) /*-{
-		$wnd.console.error(message);
-    }-*/;
+                                              $wnd.console.error(message);
+                                              }-*/;
 
 }

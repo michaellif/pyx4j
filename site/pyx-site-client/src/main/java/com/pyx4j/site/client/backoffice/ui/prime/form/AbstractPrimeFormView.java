@@ -29,8 +29,8 @@ import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView.IPrimeFormP
 import com.pyx4j.widgets.client.HasSecureConcern;
 import com.pyx4j.widgets.client.SecureConcernsHolder;
 
-public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends IPrimeFormPresenter> extends AbstractPrimePaneView<PRESENTER> implements
-        IPrimeFormView<E, PRESENTER> {
+public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends IPrimeFormPresenter> extends AbstractPrimePaneView<PRESENTER>
+        implements IPrimeFormView<E, PRESENTER> {
 
     private PrimeEntityForm<E> form;
 

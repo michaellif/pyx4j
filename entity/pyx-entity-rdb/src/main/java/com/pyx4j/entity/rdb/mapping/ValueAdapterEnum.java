@@ -32,7 +32,8 @@ class ValueAdapterEnum extends ValueAdapterPrimitive {
     @SuppressWarnings("rawtypes")
     protected Class<Enum> valueClass;
 
-    protected ValueAdapterEnum(Dialect dialect, @SuppressWarnings("rawtypes") Class<Enum> valueClass) {
+    protected ValueAdapterEnum(Dialect dialect, @SuppressWarnings("rawtypes")
+    Class<Enum> valueClass) {
         super(dialect, valueClass);
         this.valueClass = valueClass;
     }

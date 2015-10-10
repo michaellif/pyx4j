@@ -68,12 +68,12 @@ public class DomDebug {
      * Force garbage collector in Internet Explorer.
      */
     private static native void collectGarbageNative() /*-{
-        CollectGarbage();
-    }-*/;
+                                                      CollectGarbage();
+                                                      }-*/;
 
     public static native boolean isCollectGarbagePresent() /*-{
-        return ("CollectGarbage" in $wnd)
-    }-*/;
+                                                           return ("CollectGarbage" in $wnd)
+                                                           }-*/;
 
     public static void attachedPanel() {
         attachedPanelsCount++;

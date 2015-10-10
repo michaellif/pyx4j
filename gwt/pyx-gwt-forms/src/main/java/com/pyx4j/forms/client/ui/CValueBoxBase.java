@@ -32,8 +32,8 @@ import com.pyx4j.forms.client.events.NativeValueChangeHandler;
 import com.pyx4j.forms.client.validators.ValueBoxParserValidator;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 
-public abstract class CValueBoxBase<DATA, WIDGET extends INativeValueBox<DATA>> extends CFocusComponent<DATA, WIDGET> implements IAcceptsText,
-        HasNativeValueChangeHandlers<String>, IAcceptsWatermark {
+public abstract class CValueBoxBase<DATA, WIDGET extends INativeValueBox<DATA>> extends CFocusComponent<DATA, WIDGET>
+        implements IAcceptsText, HasNativeValueChangeHandlers<String>, IAcceptsWatermark {
 
     private IFormatter<DATA, String> formatter;
 

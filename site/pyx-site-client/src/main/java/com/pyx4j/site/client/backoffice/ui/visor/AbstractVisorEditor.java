@@ -27,7 +27,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class AbstractVisorEditor<E extends IEntity> extends AbstractVisorForm<E>implements IVisorEditor<E> {
+public abstract class AbstractVisorEditor<E extends IEntity> extends AbstractVisorForm<E> implements IVisorEditor<E> {
 
     private static final I18n i18n = I18n.get(AbstractVisorEditor.class);
 

@@ -131,9 +131,8 @@ public class PageNavigBar extends Toolbar {
                 if (lastActionCommand != null) {
                     lastActionCommand.execute();
                 } else {
-                    actionsBar.getDataTablePanel().populate(
-                            (actionsBar.getDataTablePanel().getDataTableModel().getTotalRows() - 1)
-                                    / actionsBar.getDataTablePanel().getDataTableModel().getPageSize());
+                    actionsBar.getDataTablePanel().populate((actionsBar.getDataTablePanel().getDataTableModel().getTotalRows() - 1)
+                            / actionsBar.getDataTablePanel().getDataTableModel().getPageSize());
                 }
             }
         });

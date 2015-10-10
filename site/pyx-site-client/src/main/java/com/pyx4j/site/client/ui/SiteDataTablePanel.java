@@ -107,9 +107,8 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
     protected void editNew(Class<? extends CrudAppPlace> openPlaceClass) {
         if (canCreateNewItem()) {
             if (getDataSource().getParentEntityClass() != null) {
-                AppSite.getPlaceController().goTo(
-                        AppSite.getHistoryMapper().createPlace(openPlaceClass)
-                                .formNewItemPlace(getDataSource().getParentEntityId(), getDataSource().getParentEntityClass()));
+                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(getDataSource().getParentEntityId(),
+                        getDataSource().getParentEntityClass()));
             } else {
                 AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(getDataSource().getParentEntityId()));
             }
@@ -134,12 +133,11 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
     protected void onItemNew() {
         if (canCreateNewItem()) {
             if (getDataSource().getParentEntityClass() != null) {
-                AppSite.getPlaceController().goTo(
-                        AppSite.getHistoryMapper().createPlace(getItemOpenPlaceClass())
-                                .formNewItemPlace(getDataSource().getParentEntityId(), getDataSource().getParentEntityClass()));
+                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(getItemOpenPlaceClass())
+                        .formNewItemPlace(getDataSource().getParentEntityId(), getDataSource().getParentEntityClass()));
             } else {
-                AppSite.getPlaceController().goTo(
-                        AppSite.getHistoryMapper().createPlace(getItemOpenPlaceClass()).formNewItemPlace(getDataSource().getParentEntityId()));
+                AppSite.getPlaceController()
+                        .goTo(AppSite.getHistoryMapper().createPlace(getItemOpenPlaceClass()).formNewItemPlace(getDataSource().getParentEntityId()));
             }
         }
     }

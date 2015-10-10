@@ -68,7 +68,8 @@ public class PreloadCrmDemo extends AbstractDataPreloader {
                 0.0);
         createCustomer("Corben Garnet", "112 Cayuga Ave", "Toronto", Province.ON, "905-785-1222", 43.6785793, -79.4792064, "sFjyj3QuReGVP6mIuTYZyw", 0.0);
         createCustomer("Madison Ronen", "16 Estoril St", "Richmond Hill", Province.ON, "905-785-0099", 43.8559356, -79.4250644, "Qdcvg04dx-4DfW3kGb7R5g", 0.0);
-        createCustomer("Hannah Kim", "3438 Africa Crescent", "Mississauga", Province.ON, "905-112-6563", 43.5801851, -79.6409809, "c5EMP1IvQ1-uHrocBtMGqA", 0.0);
+        createCustomer("Hannah Kim", "3438 Africa Crescent", "Mississauga", Province.ON, "905-112-6563", 43.5801851, -79.6409809, "c5EMP1IvQ1-uHrocBtMGqA",
+                0.0);
         createCustomer("Cayli Lee", "412 Beresford Ave", "Toronto", Province.ON, "905-789-1020", 43.656315, -79.4799619, "HZ6wBO2_FpSCuKXwxPqyxw", 0.0);
         createCustomer("Josh Shin", "6 Ivy Lea Crescent", "Toronto", Province.ON, "905-671-0923", 43.6425977, -79.4971738, "NzxoTRzFT_JNZaceVgNNaQ", 0.0);
         createCustomer("Ben Lifshits", "48 Aitken Cir", "Markham", Province.ON, "905-678-2137", 43.8756108, -79.3160648, "lrmp9Wb7URLcgw5y6DftZw", 0.0);
@@ -78,7 +79,8 @@ public class PreloadCrmDemo extends AbstractDataPreloader {
                 0.0);
         createCustomer("Daniel Charron", "64 Tanbark Crescent", "Toronto", Province.ON, " 905-913-7833", 43.7439792, -79.362369, "U9zfxMN3gDLDAvP5f49K9A", 0.0);
         createCustomer("Melanie Collins", "56 Ellis Park Rd", "Toronto", Province.ON, "905-673-1372", 43.648012, -79.4712705, "EsR6iSjPKtf2H3oSBalGUQ", 0.0);
-        createCustomer("Jack Cukier", "1730 Featherston Ct", "Mississauga", Province.ON, " 905-881-7973", 43.5508894, -79.668833, "gpalQquOfU-HC7srs11TrA", 0.0);
+        createCustomer("Jack Cukier", "1730 Featherston Ct", "Mississauga", Province.ON, " 905-881-7973", 43.5508894, -79.668833, "gpalQquOfU-HC7srs11TrA",
+                0.0);
         createCustomer("Mike Mudryk", "2 Appian Dr", "Toronto", Province.ON, "905-893-7224", 43.7830531, -79.3712206, "pkpx5IK7m-8OuX2v01STaA", 0.0);
         createCustomer("Ina Tavroges", "122 S Kingsway", "Toronto", Province.ON, "905-783-7833", 43.641344, -79.4792224, "EwOHbtQNXH_TwU7xQQ-b8A", 0.0);
         createCustomer("Sally Pludwinsky", "130 Thistle Down Blvd", "Toronto", Province.ON, "905-871-0034", 43.7391628, -79.5520249, "pePSHj3PIIfnBB6rQNEZiQ",
@@ -101,9 +103,11 @@ public class PreloadCrmDemo extends AbstractDataPreloader {
         createCustomer("Farid Goldstein", "4 Greene Dr", "Brampton", Province.ON, "905-864-8644", 43.7045061, -79.7578686, "sgq8J7iL-4rCApLzO7ULhg", 0.0);
         createCustomer("Nikol Laszio", "22 Crewe Ave", "Toronto", Province.ON, "905-867-8634", 43.6936504, -79.3083712, "Zy6UWTQZWSh5IMUyTUlGqg", 0.0);
         createCustomer("Mikayla Drummond", "16 Mountview Ave", "Toronto", Province.ON, "905-864-6636", 43.6547416, -79.4611492, "GgQzQdzwdJ8DmCZEK5Qfog", 0.0);
-        createCustomer("Tarryn Romm", "2644 Burnford Trail", "Mississauga", Province.ON, "905-864-8611", 43.5643042, -79.7216129, "F2bpjMw0yen-N2BGW2gJ0g", 0.0);
+        createCustomer("Tarryn Romm", "2644 Burnford Trail", "Mississauga", Province.ON, "905-864-8611", 43.5643042, -79.7216129, "F2bpjMw0yen-N2BGW2gJ0g",
+                0.0);
         createCustomer("Faith Katsnelson", "84 Ascolda Blvd", "Toronto", Province.ON, "905-783-7644", 43.7470193, -79.2366832, "-V9V76INSU0E_Cmh9nz3Hw", 0.0);
-        createCustomer("Vlad Gotkin", "4706 Mississauga Rd", "Mississauga", Province.ON, "905-864-7642", 43.5688283, -79.6963535, "e6iFPzjnuPfO8-bCk1Zuxg", 0.0);
+        createCustomer("Vlad Gotkin", "4706 Mississauga Rd", "Mississauga", Province.ON, "905-864-7642", 43.5688283, -79.6963535, "e6iFPzjnuPfO8-bCk1Zuxg",
+                0.0);
         createCustomer("Sergei Einstoss", "34 Stanford Rd", "Markham", Province.ON, "905-864-3211", 43.8685385, -79.3081106, "G6nxy32MSFBxFDzyqBFd3w", 0.0);
         createCustomer("Denis Gerstein", "10 Minford Ave", "Toronto", Province.ON, "905-891-0024", 43.7373197, -79.2901801, "wYYf15QWO-j8Mc88K-zfjQ", 0.0);
         createCustomer("Jake Krebs", "76 Havelock Gate", "Markham", Province.ON, "905-002-7326", 43.8543271, -79.245133, "gChNRWoIKEf7cXewYUErLw", 0.0);

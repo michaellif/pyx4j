@@ -43,12 +43,12 @@ public class PopupWindow {
         }
 
         public final native boolean isClosed() /*-{
-			return this.closed;
-        }-*/;
+                                               return this.closed;
+                                               }-*/;
 
         public final native String getName() /*-{
-			return this.name;
-        }-*/;
+                                             return this.name;
+                                             }-*/;
 
     }
 
@@ -57,20 +57,20 @@ public class PopupWindow {
     }
 
     public static native int windowScreenLeft() /*-{
-		return $wnd.screenLeft != undefined ? $wnd.screenLeft : $wnd.screenX;
-    }-*/;
+                                                return $wnd.screenLeft != undefined ? $wnd.screenLeft : $wnd.screenX;
+                                                }-*/;
 
     public static native int windowScreenTop() /*-{
-		return $wnd.screenTop != undefined ? $wnd.screenTop : $wnd.screenY;
-    }-*/;
+                                               return $wnd.screenTop != undefined ? $wnd.screenTop : $wnd.screenY;
+                                               }-*/;
 
     public static native String windowName() /*-{
-		return $wnd.name;
-    }-*/;
+                                             return $wnd.name;
+                                             }-*/;
 
     public static native PopupWindowHandle openPopupWindow(String url, String name, String features) /*-{
-		return $wnd.open(url, name, features);
-    }-*/;
+                                                                                                     return $wnd.open(url, name, features);
+                                                                                                     }-*/;
 
     /**
      * Opens Popup in the center of parent browser
@@ -100,14 +100,14 @@ public class PopupWindow {
     }
 
     public native static String getUserAgent() /*-{
-		return $wnd.navigator.userAgent;
-    }-*/;
+                                               return $wnd.navigator.userAgent;
+                                               }-*/;
 
     private static native void registerCallbacks() /*-{
-		$wnd.popupWindowSelectionMade = function(sel) {
-			@com.pyx4j.widgets.client.PopupWindow::popupWindowSelectionMade(Ljava/lang/String;)(sel);
-		}
-    }-*/;
+                                                   $wnd.popupWindowSelectionMade = function(sel) {
+                                                   @com.pyx4j.widgets.client.PopupWindow::popupWindowSelectionMade(Ljava/lang/String;)(sel);
+                                                   }
+                                                   }-*/;
 
     private static void popupWindowSelectionMade(String selectionValue) {
         if (eventBus != null) {

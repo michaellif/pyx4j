@@ -27,10 +27,10 @@ public class JsFileList extends JavaScriptObject {
     }
 
     public final native JsFile get(int index) /*-{
-		return this[index];
-    }-*/;
+                                              return this[index];
+                                              }-*/;
 
     public final native int length() /*-{
-		return this.length;
-    }-*/;
+                                     return this.length;
+                                     }-*/;
 }

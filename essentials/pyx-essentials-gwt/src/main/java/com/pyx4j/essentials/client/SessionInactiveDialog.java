@@ -77,9 +77,8 @@ public class SessionInactiveDialog implements SessionInactiveHandler {
         if (!timeout) {
             reasonMessage += "\n" + i18n.tr("Please Open Another Browser Window If You Want To Keep Multiple Sessions Active");
         } else {
-            reasonMessage += "\n"
-                    + i18n.tr("Session Duration {0}, Inactive For {1}", TimeUtils.minutesSince(SessionMonitor.getSessionStartTime()),
-                            TimeUtils.minutesSince(SessionMonitor.getSessionInactiveTime()));
+            reasonMessage += "\n" + i18n.tr("Session Duration {0}, Inactive For {1}", TimeUtils.minutesSince(SessionMonitor.getSessionStartTime()),
+                    TimeUtils.minutesSince(SessionMonitor.getSessionInactiveTime()));
         }
 
         MessageDialog.show(title, reasonMessage, MessageDialog.Type.Info, new ShowOnceDialogOptions());

@@ -57,7 +57,7 @@ public class DataSource {
     public void setSeriesDescription(List<String> seriesDescription) {
         this.seriesDescription = seriesDescription;
     }
-    
+
     public void addSeriesDescription(String seriesDescription) {
         this.seriesDescription.add(seriesDescription);
     }

@@ -96,8 +96,8 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
                 mandatoryImage.setTitle("This field is mandatory");
                 mandatoryImage.setVisible(false);
 
-                mandatoryImage.ensureDebugId(new CompositeDebugId(DecoratorDebugIds.TableFolderDecorator, column.getObject().getMeta().getFieldName() + "-"
-                        + DecoratorDebugIds.Mandatory).debugId());
+                mandatoryImage.ensureDebugId(new CompositeDebugId(DecoratorDebugIds.TableFolderDecorator,
+                        column.getObject().getMeta().getFieldName() + "-" + DecoratorDebugIds.Mandatory).debugId());
 
                 headerLabelPanel.add(mandatoryImage);
                 headerLabelPanel.setCellWidth(mandatoryImage, "1px");

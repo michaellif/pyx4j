@@ -199,8 +199,8 @@ public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E>
         @Override
         public SafeHtml getValue(E value) {
             SafeHtml formattedValue = optionFormatter.format(value);
-            return query.equals("") ? formattedValue : OptionQueryHighlighter.highlight(formattedValue, query,
-                    SimplePickerPanel.this.optionsGrabber.getSelectType());
+            return query.equals("") ? formattedValue
+                    : OptionQueryHighlighter.highlight(formattedValue, query, SimplePickerPanel.this.optionsGrabber.getSelectType());
         }
     }
 }

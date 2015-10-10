@@ -401,9 +401,8 @@ public class GwtCompileMojo extends AbstractGWTMojo {
             }
         }
 
-        getLog().info(
-                "Max Memory " + (Runtime.getRuntime().maxMemory() / (1024 * 1024)) + " MB, Free Memory " + (Runtime.getRuntime().freeMemory() / (1024 * 1024))
-                        + " MB");
+        getLog().info("Max Memory " + (Runtime.getRuntime().maxMemory() / (1024 * 1024)) + " MB, Free Memory "
+                + (Runtime.getRuntime().freeMemory() / (1024 * 1024)) + " MB");
         getLog().info("Args " + argList);
 
         List<String> gwtModules = new Vector<String>();
