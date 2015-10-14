@@ -64,6 +64,11 @@ public abstract class AbstractDeferredProcess implements IDeferredProcess {
     }
 
     @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
+
+    @Override
     public DeferredProcessProgressResponse status() {
         DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
         r.setProgress(progress.progress.get());

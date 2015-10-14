@@ -48,17 +48,18 @@ class DeferredProcessWorkThread implements Runnable {
         try {
             Lifecycle.inheritUserContext(inheritableUserContext);
             if (!info.process.status().isCanceled()) {
+                log.debug("process {} starting", info.process);
                 info.process.started();
                 do {
                     info.process.execute();
                 } while (!info.process.status().isCompleted());
-                log.debug("process completed");
+                log.debug("process {} completed", info.process);
             }
         } catch (UserRuntimeException e) {
-            log.error("processor error", e);
+            log.error("processor {} error", info.process, e);
             info.setProcessErrorWithStatusMessage(e.getMessage());
         } catch (Throwable e) {
-            log.error("processor error", e);
+            log.error("processor {} error", info.process, e);
             if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
                 info.setProcessErrorWithStatusMessage(e.getClass().getName() + " " + e.getMessage());
             } else {
