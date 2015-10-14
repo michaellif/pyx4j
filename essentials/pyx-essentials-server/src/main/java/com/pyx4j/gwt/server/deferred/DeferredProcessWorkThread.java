@@ -34,12 +34,15 @@ class DeferredProcessWorkThread implements Runnable {
 
     private final static Logger log = LoggerFactory.getLogger(DeferredProcessWorkThread.class);
 
+    private final String deferredCorrelationId;
+
     private final DeferredProcessInfo info;
 
     InheritableUserContext inheritableUserContext;
 
-    DeferredProcessWorkThread(DeferredProcessInfo info) {
+    DeferredProcessWorkThread(String deferredCorrelationId, DeferredProcessInfo info) {
         this.info = info;
+        this.deferredCorrelationId = deferredCorrelationId;
         inheritableUserContext = ServerContext.getInheritableUserContext();
     }
 
@@ -48,18 +51,18 @@ class DeferredProcessWorkThread implements Runnable {
         try {
             Lifecycle.inheritUserContext(inheritableUserContext);
             if (!info.process.status().isCanceled()) {
-                log.debug("process {} starting", info.process);
+                log.debug("process {} {} starting", deferredCorrelationId, info.process);
                 info.process.started();
                 do {
                     info.process.execute();
                 } while (!info.process.status().isCompleted());
-                log.debug("process {} completed", info.process);
+                log.debug("process {} {} completed", deferredCorrelationId, info.process);
             }
         } catch (UserRuntimeException e) {
-            log.error("processor {} error", info.process, e);
+            log.error("processor {} {} error", deferredCorrelationId, info.process, e);
             info.setProcessErrorWithStatusMessage(e.getMessage());
         } catch (Throwable e) {
-            log.error("processor {} error", info.process, e);
+            log.error("processor {} {} error", deferredCorrelationId, info.process, e);
             if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
                 info.setProcessErrorWithStatusMessage(e.getClass().getName() + " " + e.getMessage());
             } else {

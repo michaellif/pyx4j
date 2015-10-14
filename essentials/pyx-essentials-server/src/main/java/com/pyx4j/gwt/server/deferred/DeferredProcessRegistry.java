@@ -21,6 +21,7 @@
 package com.pyx4j.gwt.server.deferred;
 
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 
 import org.slf4j.Logger;
@@ -43,8 +44,8 @@ public class DeferredProcessRegistry {
         if (ServerContext.getSession() == null) {
             Lifecycle.beginAnonymousSession();
         }
-        HashMap<String, DeferredProcessInfo> m = (HashMap<String, DeferredProcessInfo>) ServerContext.getSession().getAttribute(
-                DEFERRED_PROCESS_SESSION_ATTRIBUTE);
+        HashMap<String, DeferredProcessInfo> m = (HashMap<String, DeferredProcessInfo>) ServerContext.getSession()
+                .getAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE);
         if (m == null) {
             m = new HashMap<String, DeferredProcessInfo>();
             ServerContext.getSession().setAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE, m);
@@ -60,22 +61,22 @@ public class DeferredProcessRegistry {
     }
 
     /**
-     * 
+     *
      * @return DeferredCorrelationId to be used by client to query for status
      */
     public static synchronized String register(IDeferredProcess process) {
         HashMap<String, DeferredProcessInfo> map = getMap();
-        String deferredCorrelationId = String.valueOf(System.currentTimeMillis());
+        String deferredCorrelationId = UUID.randomUUID().toString();
         map.put(deferredCorrelationId, new DeferredProcessInfo(process));
         saveMap();
-        log.debug("process created {}", deferredCorrelationId);
+        log.debug("process registered {}", deferredCorrelationId);
         return deferredCorrelationId;
     }
 
     /**
      * Implementation dependent fork. For now just creates a new Thread.
      * In future we may move this execution to another server.
-     * 
+     *
      * @return DeferredCorrelationId to be used by client to query for status
      */
     public static synchronized String fork(IDeferredProcess process, String threadPoolName) {
@@ -84,7 +85,7 @@ public class DeferredProcessRegistry {
         DeferredProcessInfo info = getMap().get(deferredCorrelationId);
 
         ExecutorService executorService = DeferredProcessExecutors.instance().getExecutorService(threadPoolName);
-        executorService.submit(new DeferredProcessWorkThread(info));
+        executorService.submit(new DeferredProcessWorkThread(deferredCorrelationId, info));
 
         return deferredCorrelationId;
     }
@@ -93,7 +94,7 @@ public class DeferredProcessRegistry {
         DeferredProcessInfo info = getMap().get(deferredCorrelationId);
 
         ExecutorService executorService = DeferredProcessExecutors.instance().getExecutorService(threadPoolName);
-        executorService.submit(new DeferredProcessWorkThread(info));
+        executorService.submit(new DeferredProcessWorkThread(deferredCorrelationId, info));
     }
 
     public static synchronized IDeferredProcess get(String deferredCorrelationId) {
