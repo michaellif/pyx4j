@@ -733,7 +733,7 @@ public class TableModel {
             int parameterIndex = 1;
             if (classModel != ModelType.regular) {
                 DiscriminatorValue discriminator = entity.getValueClass().getAnnotation(DiscriminatorValue.class);
-                assert(discriminator != null) : "Can't persist Abstract " + entity.getValueClass();
+                assert (discriminator != null) : "Can't persist Abstract " + entity.getValueClass();
                 stmt.setString(parameterIndex, discriminator.value());
                 parameterIndex++;
             }
@@ -999,13 +999,13 @@ public class TableModel {
 
     public void retrieveMember(PersistenceContext persistenceContext, IEntity entity, IEntity entityMember) {
         MemberOperationsMeta member = entityOperationsMeta.getMember(new Path(entity.getValueClass(), entityMember.getFieldName()).toString());
-        assert(member != null) : "Member " + entityMember.getFieldName() + " not found";
+        assert (member != null) : "Member " + entityMember.getFieldName() + " not found";
         TableModelExternal.retrieve(persistenceContext, entity, (MemberExternalOperationsMeta) member);
     }
 
     public void retrieveMember(PersistenceContext persistenceContext, IEntity entity, ICollection<?, ?> collectionMember) {
         MemberOperationsMeta member = entityOperationsMeta.getMember(new Path(entity.getValueClass(), collectionMember.getFieldName()).toString());
-        assert(member != null) : "Member " + collectionMember.getFieldName() + " not found";
+        assert (member != null) : "Member " + collectionMember.getFieldName() + " not found";
         TableModelCollections.retrieve(persistenceContext, entity, (MemberCollectionOperationsMeta) member);
     }
 
@@ -1028,7 +1028,7 @@ public class TableModel {
                 sql.append(" FOR UPDATE");
                 switch (lockForUpdate) {
                 case NoWait:
-                    sql.append(" NOWAIT");
+                    sql.append(dialect.sqlForUpdateNoWait());
                     break;
                 case Wait:
                     sql.append(dialect.sqlForUpdateWait(persistenceContext.getConnectionTimeout()));

@@ -141,6 +141,12 @@ public class HSQLDialect extends Dialect {
     }
 
     @Override
+    public String sqlForUpdateNoWait() {
+        // Still not supported as of 2.3.3 version
+        return "";
+    }
+
+    @Override
     public boolean isUniqueConstraintException(SQLException e) {
         return false;
     }
