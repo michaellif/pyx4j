@@ -21,6 +21,7 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
@@ -38,6 +39,8 @@ import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
+
+import javafx.scene.layout.FlowPane;
 
 public class CTabbedEntityForm<E extends IEntity> extends CForm<E> {
 
@@ -135,7 +138,7 @@ public class CTabbedEntityForm<E extends IEntity> extends CForm<E> {
         //Traverse tabs of TabPanel
         //for enabled - create Caption + body
         //Expand all collapsed containers and folder items
-        VerticalPanel printWidget = new VerticalPanel();
+        FlowPanel printWidget = new FlowPanel();
         printWidget.setWidth("100%");
         for (final Tab tab : tabPanel.getTabs()) {
             if (!tab.isTabEnabled()) {
