@@ -78,6 +78,7 @@ public abstract class FormPanelTheme extends Theme {
 
         style = new Style(".", StyleName.FluidPanelBlock, "-", StyleDependent.dual);
         style.addProperty("width", "100%");
+        style.addProperty("display", "block");
         style.addProperty("text-align", "center");
         addStyle(style);
 
