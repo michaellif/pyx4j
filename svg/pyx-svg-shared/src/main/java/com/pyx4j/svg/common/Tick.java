@@ -1,14 +1,10 @@
 package com.pyx4j.svg.common;
 
-//import com.google.gwt.i18n.client.NumberFormat;;
-
 public class Tick {
 
     public enum Rank {
         MAJOR, MINOR, MICRO
     }
-
-//    private static final NumberFormat format = new NumberFormat("#.###");
 
     private final double value;
 
@@ -28,10 +24,6 @@ public class Tick {
     public double getValue() {
         return value;
     }
-
-//    public String getLabel() {
-//         return format.format(value);
-//    }
 
     public Rank getRank() {
         return rank;
