@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2013 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,33 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Mar 24, 2014
+ * Created on Oct 13, 2015
  * @author vlads
  */
-package com.pyx4j.svg.chart;
+package com.pyx4j.unit.server;
 
-import java.util.List;
+import com.pyx4j.entity.core.IEntity;
 
-import com.pyx4j.svg.basic.TickProducer;
-import com.pyx4j.svg.common.Tick;
+public class AsyncCallbackGetAssertion<E extends IEntity> extends AsyncCallbackAssertion<E> {
 
-public interface AxisProducer {
+    private E storeResult;
 
-    void setTickProducer(TickProducer tickProducer);
+    public AsyncCallbackGetAssertion(E storeResult) {
+        this.storeResult = storeResult;
+    }
 
-    void setLabelFormatter(LabelFormatter labelFormatter);
+    @Override
+    public void onSuccess(E result) {
+        storeResult.set(result);
+    }
 
-    void setValueRange(double from, double to);
-
-    void setPlotSize(int plotSize);
-
-    List<Tick> getTicks();
-
-    double getValuePosition(double value);
-
-    double getValue(int position);
-
-    String formatLabel(double value);
-
-    int getMaxLabelLength();
 }
