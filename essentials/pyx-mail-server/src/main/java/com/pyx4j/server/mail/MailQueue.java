@@ -74,10 +74,9 @@ public class MailQueue implements Runnable {
     public static void initialize(IMailServiceConfigConfiguration config, Class<? extends AbstractOutgoingMailQueue> persistableEntityClass) {
         persistableEntities.put(config.configurationId(), persistableEntityClass);
         configurations.put(config.configurationId(), config);
-        init();
     }
 
-    private static synchronized void init() {
+    private static synchronized void start() {
         if (instance == null) {
             instance = new MailQueue();
             Thread caseWatch = new Thread(instance, LoggerConfig.getContextName() + "_MailQueueDeliveryThread");
@@ -89,7 +88,7 @@ public class MailQueue implements Runnable {
     public static synchronized void setActive(boolean active) {
         if (active) {
             if (!isRunning()) {
-                init();
+                start();
             }
         } else {
             shutdown();
