@@ -189,8 +189,8 @@ public class XMLEntityWriter {
         write(entity, name, null, null, new VerticalGraph());
     }
 
-    private void write(IEntity entity, String name, Map<String, String> attributes, @SuppressWarnings("rawtypes") Class<? extends IObject> declaredObjectClass,
-            VerticalGraph graph) {
+    private void write(IEntity entity, String name, Map<String, String> attributes, @SuppressWarnings("rawtypes")
+    Class<? extends IObject> declaredObjectClass, VerticalGraph graph) {
         if (!isEmitXmlTransient() && entity.getEntityMeta().getAnnotation(XmlTransient.class) != null) {
             return;
         }

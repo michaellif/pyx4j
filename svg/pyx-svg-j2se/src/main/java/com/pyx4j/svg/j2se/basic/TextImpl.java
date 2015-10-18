@@ -39,10 +39,10 @@ public class TextImpl extends ShapeImpl implements Text {
     public String getTextValue() {
         return text;
     }
-    
+
     public void setTextValue(String text) {
-    	SVGElement txt = (SVGElement)getElement().getOwnerDocument().getElementById(getId());
-     	txt.setTextContent(text);
-     	this.text = text;
+        SVGElement txt = (SVGElement) getElement().getOwnerDocument().getElementById(getId());
+        txt.setTextContent(text);
+        this.text = text;
     }
 }

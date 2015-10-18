@@ -38,8 +38,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
 
-public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends IEntity> extends AbstractListServiceDtoImpl<BO, TO> implements
-        AbstractCrudService<TO> {
+public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends IEntity> extends AbstractListServiceDtoImpl<BO, TO>
+        implements AbstractCrudService<TO> {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractCrudServiceDtoImpl.class);
 

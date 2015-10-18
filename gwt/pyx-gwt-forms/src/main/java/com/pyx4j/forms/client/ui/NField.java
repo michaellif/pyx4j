@@ -106,7 +106,7 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
     public void setActionButton(Button actionButton) {
         this.actionButton = actionButton;
         if (viewerPanel != null) {
-            viewerPanel.setActionButton();
+            viewerPanel.initActionButton();
         }
     }
 
@@ -114,7 +114,7 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
     public void setNavigationCommand(Command navigationCommand) {
         this.navigationCommand = navigationCommand;
         if (viewerPanel != null) {
-            viewerPanel.setNavigationCommand();
+            viewerPanel.initNavigationCommand();
         }
     }
 
@@ -437,9 +437,9 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
             actionButtonHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             add(actionButtonHolder);
 
-            setActionButton();
+            initActionButton();
 
-            setNavigationCommand();
+            initNavigationCommand();
 
         }
 
@@ -453,7 +453,7 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
             super.onLoad();
         }
 
-        public void setNavigationCommand() {
+        public void initNavigationCommand() {
             if (navigationCommandHandlerRegistration != null) {
                 navigationCommandHandlerRegistration.removeHandler();
             }
@@ -479,7 +479,7 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
             }
         }
 
-        public void setActionButton() {
+        public void initActionButton() {
             if (actionButtonHolder != null) {
                 actionButtonHolder.clear();
             }

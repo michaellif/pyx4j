@@ -61,6 +61,7 @@ import com.pyx4j.svg.chart.XYSeries;
 public class SvgTestFactory {
 
     private static DataSource Data_Source = new DataSource();
+
     static {
 
         List<Double> values = new ArrayList<Double>(5);
@@ -402,7 +403,7 @@ public class SvgTestFactory {
  * pchartModel.addSegment(new PieChartSegment(7, "p3", "green"));
  * pchartModel.addSegment(new PieChartSegment(9, "p4", "yellow"));
  * pchartModel.addSegment(new PieChartSegment(11, "p5", "grey"))
- */     ;
+ */ ;
         PieChart pchart = new PieChart(factory, pchartModel, 60);
         g.add(pchart);
         g.setTransform("translate(" + x + "," + y + ")");

@@ -310,8 +310,8 @@ public class EntityMetaWriter {
     }
 
     //----------
-    static int writeEntityMemberMetaImpl(TreeLogger logger, ContextHelper contextHelper, SourceWriter writer, List<JMethod> allMethods, JClassType interfaceType)
-            throws UnableToCompleteException {
+    static int writeEntityMemberMetaImpl(TreeLogger logger, ContextHelper contextHelper, SourceWriter writer, List<JMethod> allMethods,
+            JClassType interfaceType) throws UnableToCompleteException {
         writer.println();
         writer.println("@Override");
         writer.println("protected MemberMeta createMemberMeta(String memberName) {");
@@ -354,16 +354,16 @@ public class EntityMetaWriter {
                 data.objectClassType = ObjectClassType.PrimitiveSet;
             } else if (type.isAssignableTo(contextHelper.iSetInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
-                    throw new RuntimeException("ISet " + method.getName() + " type should be ParameterizedType in interface '"
-                            + interfaceType.getQualifiedSourceName() + "'");
+                    throw new RuntimeException(
+                            "ISet " + method.getName() + " type should be ParameterizedType in interface '" + interfaceType.getQualifiedSourceName() + "'");
                 }
                 valueClass = ((JParameterizedType) type).getTypeArgs()[0];
                 data.valueClassSourceName = valueClass.getErasedType().getQualifiedSourceName();
                 data.objectClassType = ObjectClassType.EntitySet;
             } else if (type.isAssignableTo(contextHelper.iListInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
-                    throw new RuntimeException("IList " + method.getName() + " type should be ParameterizedType in interface '"
-                            + interfaceType.getQualifiedSourceName() + "'");
+                    throw new RuntimeException(
+                            "IList " + method.getName() + " type should be ParameterizedType in interface '" + interfaceType.getQualifiedSourceName() + "'");
                 }
                 valueClass = ((JParameterizedType) type).getTypeArgs()[0];
 

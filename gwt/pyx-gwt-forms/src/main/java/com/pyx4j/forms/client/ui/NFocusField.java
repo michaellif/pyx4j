@@ -31,8 +31,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.IFocusWidget;
 
-public abstract class NFocusField<DATA, EDITOR extends IFocusWidget, CCOMP extends CFocusComponent<DATA, ?>, VIEWER extends Widget> extends
-        NField<DATA, EDITOR, CCOMP, VIEWER> implements INativeFocusField<DATA> {
+public abstract class NFocusField<DATA, EDITOR extends IFocusWidget, CCOMP extends CFocusComponent<DATA, ?>, VIEWER extends Widget>
+        extends NField<DATA, EDITOR, CCOMP, VIEWER> implements INativeFocusField<DATA> {
 
     public NFocusField(CCOMP cComponent) {
         super(cComponent);

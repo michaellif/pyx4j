@@ -37,37 +37,37 @@ import org.slf4j.LoggerFactory;
 public class DynamicReport {
 
     private static final Logger log = LoggerFactory.getLogger(DynamicReport.class);
+
     private final JasperReportBuilder dynamicReport;
+
     private final String name;
 
-    public DynamicReport(String logo, String title){
+    public DynamicReport(String logo, String title) {
 
         dynamicReport = report().title(ReportTemplate.reportTitleBuilder(logo, title))
-                        .pageFooter(cmp.horizontalList(cmp.hListCell(cmp.text("Page " + cmp.pageNumber().toString() + " of " + cmp.totalPages()))));
+                .pageFooter(cmp.horizontalList(cmp.hListCell(cmp.text("Page " + cmp.pageNumber().toString() + " of " + cmp.totalPages()))));
         this.name = title;
         dynamicReport.build();
     }
 
-
-    public JasperReportBuilder getReport(){
+    public JasperReportBuilder getReport() {
         return dynamicReport;
     }
-    public void setData(List<String> columns, List<Object> data)
-    {
+
+    public void setData(List<String> columns, List<Object> data) {
 
         DRDataSource dataSource = new DRDataSource(columns.toArray(new String[columns.size()]));
-        for(Object entry: data){
+        for (Object entry : data) {
             dataSource.add(entry);
         }
         dynamicReport.setDataSource(dataSource);
     }
 
-    public void export(ExportTo format, String exportPath)
-    {
-        try{
-            switch(format){
+    public void export(ExportTo format, String exportPath) {
+        try {
+            switch (format) {
             case PDF:
-                dynamicReport.toPdf(export.pdfExporter(exportPath + "\\" + name +".pdf"));
+                dynamicReport.toPdf(export.pdfExporter(exportPath + "\\" + name + ".pdf"));
                 break;
             case RTF:
                 dynamicReport.toRtf(export.rtfExporter(exportPath + "\\" + dynamicReport.getReport().getReportName() + ".rtf"));
@@ -102,9 +102,9 @@ public class DynamicReport {
             default:
                 dynamicReport.toJrXml(new FileOutputStream(exportPath + "\\" + dynamicReport.getReport().getReportName() + ".jrxml"));
             }
-        }catch(IOException ioe){
+        } catch (IOException ioe) {
             log.error("IOException occurred during report export : Exception {}", ioe.getStackTrace().toString());
-        }catch (DRException dre){
+        } catch (DRException dre) {
             log.error("DRException occurred during report export : Exception {}", dre.getStackTrace().toString());
         }
     }

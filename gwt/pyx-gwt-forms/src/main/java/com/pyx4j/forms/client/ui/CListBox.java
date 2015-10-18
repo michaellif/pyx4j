@@ -40,8 +40,8 @@ import com.pyx4j.forms.client.validators.HasRequiredValueValidationMessage;
 /**
  * A Multi-select collection box has two selection modes - single panel Classic style and two-panel Add-Remove style
  */
-public class CListBox<E> extends CFocusComponent<List<E>, NListBox<E>> implements HasOptionsChangeHandlers<List<E>>, HasSelectionHandlers<E>,
-        HasRequiredValueValidationMessage<E> {
+public class CListBox<E> extends CFocusComponent<List<E>, NListBox<E>>
+        implements HasOptionsChangeHandlers<List<E>>, HasSelectionHandlers<E>, HasRequiredValueValidationMessage<E> {
 
     public enum SelectionMode {
         SINGLE_PANEL, TWO_PANEL

@@ -41,7 +41,7 @@ import com.pyx4j.widgets.client.IFocusWidget;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
-public class SelectorListBox<E> extends AbstractSelectorWidget<E>implements HasValueChangeHandlers<Collection<E>>, IFocusWidget, IWatermarkWidget {
+public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements HasValueChangeHandlers<Collection<E>>, IFocusWidget, IWatermarkWidget {
 
     protected final ArrayList<E> value;
 

@@ -113,6 +113,12 @@ public class ServerContext extends Context {
         return new InheritableUserContext(getVisit());
     }
 
+    public static InheritableUserContext getInheritableUserContext(UserVisit userVisit) {
+        Visit visit = new Visit(null);
+        visit.beginSession(userVisit, null);
+        return new InheritableUserContext(visit);
+    }
+
     /**
      * TODO remove public.
      *

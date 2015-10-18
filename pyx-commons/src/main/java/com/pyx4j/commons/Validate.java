@@ -25,36 +25,36 @@ public class Validate {
 
     public static void isTrue(Boolean expression, String messageFormat, Object... arguments) {
         if (!expression) {
-            throw new IllegalArgumentException(SimpleMessageFormat.format("expected [true]\n actual: [{0}]\n", expression)
-                    + SimpleMessageFormat.format(messageFormat, arguments));
+            throw new IllegalArgumentException(
+                    SimpleMessageFormat.format("expected [true]\n actual: [{0}]\n", expression) + SimpleMessageFormat.format(messageFormat, arguments));
         }
     }
 
     public static void isFalse(Boolean expression, String messageFormat, Object... arguments) {
         if (expression) {
-            throw new IllegalArgumentException(SimpleMessageFormat.format("expected [false]\n actual: [{0}]\n", expression)
-                    + SimpleMessageFormat.format(messageFormat, arguments));
+            throw new IllegalArgumentException(
+                    SimpleMessageFormat.format("expected [false]\n actual: [{0}]\n", expression) + SimpleMessageFormat.format(messageFormat, arguments));
         }
     }
 
     public static void notNull(Object object, String messageFormat, Object... arguments) {
         if (object == null) {
-            throw new IllegalArgumentException(SimpleMessageFormat.format("expected [not null]\n actual: [{0}]\n", object)
-                    + SimpleMessageFormat.format(messageFormat, arguments));
+            throw new IllegalArgumentException(
+                    SimpleMessageFormat.format("expected [not null]\n actual: [{0}]\n", object) + SimpleMessageFormat.format(messageFormat, arguments));
         }
     }
 
     static public void isEquals(Object expected, Object actual, String messageFormat, Object... arguments) {
         if (!EqualsHelper.equals(expected, actual)) {
-            throw new IllegalArgumentException(SimpleMessageFormat.format("expected [{0}]\n actual: [{1}]\n", expected, actual)
-                    + SimpleMessageFormat.format(messageFormat, arguments));
+            throw new IllegalArgumentException(
+                    SimpleMessageFormat.format("expected [{0}]\n actual: [{1}]\n", expected, actual) + SimpleMessageFormat.format(messageFormat, arguments));
         }
     }
 
     static public <T> void contains(Collection<T> expected, T actual, String messageFormat, Object... arguments) {
         if (!expected.contains(actual)) {
-            throw new IllegalArgumentException(SimpleMessageFormat.format("expected [{0}]\n actual: [{1}]\n", expected, actual)
-                    + SimpleMessageFormat.format(messageFormat, arguments));
+            throw new IllegalArgumentException(
+                    SimpleMessageFormat.format("expected [{0}]\n actual: [{1}]\n", expected, actual) + SimpleMessageFormat.format(messageFormat, arguments));
         }
     }
 }

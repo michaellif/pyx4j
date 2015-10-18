@@ -36,8 +36,8 @@ import com.pyx4j.forms.client.events.NativeValueChangeEvent;
 import com.pyx4j.widgets.client.IValueBoxWidget;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 
-public abstract class NValueBoxBase<DATA, WIDGET extends IValueBoxWidget<DATA>, CCOMP extends CValueBoxBase<DATA, ?>> extends
-        NFocusField<DATA, WIDGET, CCOMP, HTML> implements INativeValueBox<DATA> {
+public abstract class NValueBoxBase<DATA, WIDGET extends IValueBoxWidget<DATA>, CCOMP extends CValueBoxBase<DATA, ?>>
+        extends NFocusField<DATA, WIDGET, CCOMP, HTML> implements INativeValueBox<DATA> {
 
     public NValueBoxBase(CCOMP cComponent) {
         super(cComponent);

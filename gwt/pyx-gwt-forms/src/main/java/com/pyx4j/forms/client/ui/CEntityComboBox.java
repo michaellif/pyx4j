@@ -45,8 +45,8 @@ import com.pyx4j.forms.client.validators.IValidator;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 import com.pyx4j.i18n.shared.I18n;
 
-public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements HasAsyncValue<E>, HasAsyncValueChangeHandlers<E>, IAcceptsText,
-        AsyncOptionsReadyCallback<E> {
+public class CEntityComboBox<E extends IEntity> extends CComboBox<E>
+        implements HasAsyncValue<E>, HasAsyncValueChangeHandlers<E>, IAcceptsText, AsyncOptionsReadyCallback<E> {
 
     private static final I18n i18n = I18n.get(CEntityComboBox.class);
 

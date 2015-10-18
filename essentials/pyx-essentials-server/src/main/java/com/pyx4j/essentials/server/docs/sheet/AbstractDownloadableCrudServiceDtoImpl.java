@@ -38,8 +38,8 @@ import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.rpc.shared.DeferredCorrelationId;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-public abstract class AbstractDownloadableCrudServiceDtoImpl<BO extends IEntity, TO extends IEntity> extends AbstractCrudServiceDtoImpl<BO, TO> implements
-        DocCreationService, DownloadableService {
+public abstract class AbstractDownloadableCrudServiceDtoImpl<BO extends IEntity, TO extends IEntity> extends AbstractCrudServiceDtoImpl<BO, TO>
+        implements DocCreationService, DownloadableService {
 
     protected AbstractDownloadableCrudServiceDtoImpl(Class<BO> entityClass, Class<TO> dtoClass) {
         super(entityClass, dtoClass);
@@ -77,8 +77,9 @@ public abstract class AbstractDownloadableCrudServiceDtoImpl<BO extends IEntity,
             String fileName = EntityFactory.getEntityMeta(toClass).getCaption() + "."
                     + DownloadFormat.fromSheetFormat(sheetCreationRequest.getSheetFormat()).getExtension();
 
-            return new DeferredCorrelationId(DeferredProcessRegistry.fork(new SheetCreationDeferredProcess<TO>(criteria, cursorSource, formatter,
-                    entityFormatter, fileName), DeferredProcessRegistry.THREAD_POOL_DOWNLOADS));
+            return new DeferredCorrelationId(
+                    DeferredProcessRegistry.fork(new SheetCreationDeferredProcess<TO>(criteria, cursorSource, formatter, entityFormatter, fileName),
+                            DeferredProcessRegistry.THREAD_POOL_DOWNLOADS));
         } else {
             throw new IllegalArgumentException();
         }

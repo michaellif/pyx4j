@@ -22,8 +22,8 @@ package com.pyx4j.entity.server;
 import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
 
-public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntity<?>> extends AbstractVersionedCrudServiceDtoImpl<E, E> implements
-        AbstractVersionedCrudService<E> {
+public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntity<?>> extends AbstractVersionedCrudServiceDtoImpl<E, E>
+        implements AbstractVersionedCrudService<E> {
 
     public AbstractVersionedCrudServiceImpl(Class<E> entityClass) {
         super(entityClass, entityClass);

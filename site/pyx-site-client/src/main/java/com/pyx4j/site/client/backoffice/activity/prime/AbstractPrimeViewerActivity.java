@@ -13,7 +13,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Created on 2011-05-17
  * @author Vlad
  */
@@ -50,6 +50,8 @@ public abstract class AbstractPrimeViewerActivity<E extends IEntity> extends Abs
     private int tabIndex;
 
     private E populatedValue;
+
+    private boolean discarded = false;
 
     public AbstractPrimeViewerActivity(Class<E> entityClass, CrudAppPlace place, IPrimeViewerView<E> view, AbstractCrudService<E> service) {
         super(view, place);
@@ -112,6 +114,7 @@ public abstract class AbstractPrimeViewerActivity<E extends IEntity> extends Abs
     protected void onDiscard() {
         MementoManager.saveState(getView(), getPlace());
         this.populatedValue = null;
+        this.discarded = true;
         getView().reset();
         getView().setPresenter(null);
         getView().hideVisor();
@@ -134,7 +137,9 @@ public abstract class AbstractPrimeViewerActivity<E extends IEntity> extends Abs
         service.retrieve(new DefaultAsyncCallback<E>() {
             @Override
             public void onSuccess(E result) {
-                onPopulateSuccess(result);
+                if (!discarded) {
+                    onPopulateSuccess(result);
+                }
             }
         }, entityId, AbstractCrudService.RetrieveOperation.View);
     }
@@ -144,7 +149,9 @@ public abstract class AbstractPrimeViewerActivity<E extends IEntity> extends Abs
         service.retrieve(new DefaultAsyncCallback<E>() {
             @Override
             public void onSuccess(E result) {
-                onPopulateSuccess(result);
+                if (!discarded) {
+                    onPopulateSuccess(result);
+                }
             }
         }, entityId, AbstractCrudService.RetrieveOperation.View);
     }

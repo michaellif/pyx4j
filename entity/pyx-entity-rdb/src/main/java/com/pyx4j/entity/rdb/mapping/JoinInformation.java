@@ -60,15 +60,16 @@ abstract class JoinInformation {
     static JoinInformation build(Dialect dialect, EntityMeta rootEntityMeta, EntityMeta entityMeta, MemberMeta memberMeta) {
         if (memberMeta.getAnnotation(ManagedColumn.class) != null) {
             if (!IVersionData.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                throw new Error("Only versioned ManagedColumn are supported '" + memberMeta.getFieldName() + "' in table "
-                        + entityMeta.getEntityClass().getName());
+                throw new Error(
+                        "Only versioned ManagedColumn are supported '" + memberMeta.getFieldName() + "' in table " + entityMeta.getEntityClass().getName());
             }
             return new JoinVersionDataInformation(dialect, rootEntityMeta, entityMeta, memberMeta);
         }
 
         if (memberMeta.getAnnotation(JoinTable.class) != null) {
-            assert ((memberMeta.getAnnotation(Owner.class) == null) && (memberMeta.getAnnotation(Owned.class) == null)) : "Incompatible @JoinTable and @Owned/@Owner on '"
-                    + memberMeta.getFieldName() + "' in table " + entityMeta.getEntityClass().getName();
+            assert ((memberMeta.getAnnotation(Owner.class) == null)
+                    && (memberMeta.getAnnotation(Owned.class) == null)) : "Incompatible @JoinTable and @Owned/@Owner on '" + memberMeta.getFieldName()
+                            + "' in table " + entityMeta.getEntityClass().getName();
             return new JoinTableInformation(dialect, rootEntityMeta, entityMeta, memberMeta);
         }
 

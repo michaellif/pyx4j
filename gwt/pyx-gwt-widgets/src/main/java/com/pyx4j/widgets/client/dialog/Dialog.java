@@ -498,8 +498,8 @@ public class Dialog implements ProvidesResize, IsWidget {
     }
 
     public final native Element getDocumentActiveElement() /*-{
-		return $doc.activeElement;
-    }-*/;
+                                                           return $doc.activeElement;
+                                                           }-*/;
 
     public static void closeOpenDialogs() {
         for (int i = 0; i < openDialogs.size(); i++) {

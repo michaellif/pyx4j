@@ -233,7 +233,8 @@ public class PropertyCriterion implements Criterion {
     }
 
     public boolean isValid() {
-        return (getPropertyPath() != null && getRestriction() != null && (getValue() != null || (getRestriction() == Restriction.EQUAL || getRestriction() == Restriction.NOT_EQUAL)));
+        return (getPropertyPath() != null && getRestriction() != null
+                && (getValue() != null || (getRestriction() == Restriction.EQUAL || getRestriction() == Restriction.NOT_EQUAL)));
     }
 
     @Override
@@ -258,5 +259,10 @@ public class PropertyCriterion implements Criterion {
         StringBuilder builder = new StringBuilder();
         builder.append(propertyPath).append(' ').append(restriction).append(' ').append(value);
         return builder.toString();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
     }
 }

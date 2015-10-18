@@ -19,7 +19,6 @@
  */
 package com.pyx4j.svg.basic;
 
-
 public interface LinearGradient extends ContainerElement {
 
     public String getId();

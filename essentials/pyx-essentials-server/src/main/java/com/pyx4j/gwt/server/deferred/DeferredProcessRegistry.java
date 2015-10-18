@@ -44,8 +44,8 @@ public class DeferredProcessRegistry {
         if (ServerContext.getSession() == null) {
             Lifecycle.beginAnonymousSession();
         }
-        HashMap<String, DeferredProcessInfo> m = (HashMap<String, DeferredProcessInfo>) ServerContext.getSession().getAttribute(
-                DEFERRED_PROCESS_SESSION_ATTRIBUTE);
+        HashMap<String, DeferredProcessInfo> m = (HashMap<String, DeferredProcessInfo>) ServerContext.getSession()
+                .getAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE);
         if (m == null) {
             m = new HashMap<>();
             ServerContext.getSession().setAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE, m);

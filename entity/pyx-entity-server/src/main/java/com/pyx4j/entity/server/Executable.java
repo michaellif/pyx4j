@@ -22,5 +22,5 @@ package com.pyx4j.entity.server;
 public interface Executable<R, E extends Throwable> {
 
     R execute() throws E;
-    
+
 }

@@ -201,7 +201,8 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
         Assert.assertEquals("main value", main.ownedEntity().name().getValue(), mainR.ownedEntity().name().getValue());
         Assert.assertFalse("is retrieved", mainR.ownedEntity().detachedEntity().isValueDetached());
         Assert.assertFalse("did retrieve value", mainR.ownedEntity().detachedEntity().name().isNull());
-        Assert.assertEquals("did retrieve value", main.ownedEntity().detachedEntity().name().getValue(), mainR.ownedEntity().detachedEntity().name().getValue());
+        Assert.assertEquals("did retrieve value", main.ownedEntity().detachedEntity().name().getValue(),
+                mainR.ownedEntity().detachedEntity().name().getValue());
     }
 
     public void testDetachedMemberInOwnedObjectPersist() {
@@ -248,13 +249,13 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
 
         Assert.assertFalse("is retrieved", mainR.ownedEntity().detachedEntities().get(0).isValueDetached());
         Assert.assertFalse("did retrieve value", mainR.ownedEntity().detachedEntities().get(0).name().isNull());
-        Assert.assertEquals("did retrieve value", main.ownedEntity().detachedEntities().get(0).name().getValue(), mainR.ownedEntity().detachedEntities().get(0)
-                .name().getValue());
+        Assert.assertEquals("did retrieve value", main.ownedEntity().detachedEntities().get(0).name().getValue(),
+                mainR.ownedEntity().detachedEntities().get(0).name().getValue());
 
         Assert.assertFalse("is retrieved", mainR.ownedEntity().detachedEntities().get(1).isValueDetached());
         Assert.assertFalse("did retrieve value", mainR.ownedEntity().detachedEntities().get(1).name().isNull());
-        Assert.assertEquals("did retrieve value", main.ownedEntity().detachedEntities().get(1).name().getValue(), mainR.ownedEntity().detachedEntities().get(1)
-                .name().getValue());
+        Assert.assertEquals("did retrieve value", main.ownedEntity().detachedEntities().get(1).name().getValue(),
+                mainR.ownedEntity().detachedEntities().get(1).name().getValue());
     }
 
     public void testDetachedMemberInListInOwnedObjectPersist() {

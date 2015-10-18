@@ -516,6 +516,12 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         this.value = null;
         this.populated = false;
         setEditorValue(null);
+
+        //TODO this should probably be called in clear() as well.
+        if (asyncValidator != null) {
+            asyncValidator.setValidationError(null);
+        }
+
         if (getParent() != null) {
             getParent().updateContainer(this);
         }
@@ -648,7 +654,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
             boolean wasEmpty = isValueEmpty();
             boolean wasVisited = isVisited();
             editingInProgress = false;
-            setVisited(true);
+            visited = true;
             DATA_TYPE editorValue;
             try {
                 editorValue = getEditorValue();

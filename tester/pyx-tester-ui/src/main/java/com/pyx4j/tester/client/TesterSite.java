@@ -97,12 +97,12 @@ public class TesterSite extends AppSite {
                 } else {
                     ClientContext.authenticate(GWT.<AuthenticationService> create(TesterAuthenticationService.class), null,
                             new DefaultAsyncCallback<Boolean>() {
-                                @Override
-                                public void onSuccess(Boolean result) {
-                                    TesterSite.getHistoryHandler().handleCurrentHistory();
+                        @Override
+                        public void onSuccess(Boolean result) {
+                            TesterSite.getHistoryHandler().handleCurrentHistory();
 
-                                }
-                            });
+                        }
+                    });
                 }
             }
         });

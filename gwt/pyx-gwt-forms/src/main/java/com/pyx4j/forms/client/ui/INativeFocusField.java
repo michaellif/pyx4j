@@ -21,7 +21,6 @@ package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.widgets.client.IFocusWidget;
 
-
 public interface INativeFocusField<E> extends INativeField<E>, IFocusWidget {
 
 }

@@ -27,14 +27,14 @@ public class SvgDOM extends DOM {
     public static final String SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 
     public static native Element createElementNS(final String ns, final String name)/*-{
-        return document.createElementNS(ns, name);
-    }-*/;
+                                                                                    return document.createElementNS(ns, name);
+                                                                                    }-*/;
 
     public static void setAttributeNS(Element elem, String attr, String value) {
         setAttributeNS(null, elem, attr, value);
     }
 
     public static native void setAttributeNS(String uri, Element elem, String attr, String value) /*-{
-        elem.setAttributeNS(uri, attr, value);
-    }-*/;
+                                                                                                  elem.setAttributeNS(uri, attr, value);
+                                                                                                  }-*/;
 }

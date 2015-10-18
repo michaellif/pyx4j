@@ -33,7 +33,7 @@ public interface RootEnity extends IEntity {
 
     @Owned
     Task otherEntity();
-    
+
     @Owned
     IList<OwnedLeaf> ownedLeafs();
 

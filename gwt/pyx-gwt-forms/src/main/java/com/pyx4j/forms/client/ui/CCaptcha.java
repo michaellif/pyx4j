@@ -31,7 +31,7 @@ public class CCaptcha extends CFocusComponent<Pair<String, String>, NCaptcha> im
     private String watermark;
 
     public CCaptcha() {
-        setMandatoryValidationMessage(i18n.tr("Captcha code is required"));
+        setMandatoryValidationMessage(i18n.tr("Are you a robot?"));
         setNativeComponent(new NCaptcha(this));
     }
 

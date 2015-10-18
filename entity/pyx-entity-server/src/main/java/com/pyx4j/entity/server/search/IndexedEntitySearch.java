@@ -161,8 +161,8 @@ public class IndexedEntitySearch<E extends IEntity> {
                             inMemoryFilters.add(new StringInMemoryFilter(path, key));
                         } else {
                             if (index.global() != 0) {
-                                queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, String.valueOf(index
-                                        .global()) + key));
+                                queryCriteria.add(
+                                        new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, String.valueOf(index.global()) + key));
                             } else {
                                 queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, key));
                             }
@@ -215,8 +215,8 @@ public class IndexedEntitySearch<E extends IEntity> {
                         inMemoryFilters.add(new DayRangeInMemoryFilter(path, from, to));
                         if (!hasInequalityFilter) {
                             if (from != null) {
-                                queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.GREATER_THAN_OR_EQUAL, TimeUtils
-                                        .dayStart(from)));
+                                queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.GREATER_THAN_OR_EQUAL,
+                                        TimeUtils.dayStart(from)));
                                 hasInequalityFilter = true;
                             }
                             if (to != null) {
@@ -309,8 +309,8 @@ public class IndexedEntitySearch<E extends IEntity> {
                         queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.IN, values));
                         inMemoryFilters.add(new PrimitiveInCollectionInMemoryFilter(path, (Collection<?>) value));
                     } else {
-                        queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, String.valueOf(index.global())
-                                + ((Enum<?>) value).name()));
+                        queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL,
+                                String.valueOf(index.global()) + ((Enum<?>) value).name()));
                         // Add in case index criteria is dropped by search
                         if (IPrimitiveSet.class.isAssignableFrom(mm.getObjectClass())) {
                             inMemoryFilters.add(new PrimitiveSetInMemoryFilter(path, value));

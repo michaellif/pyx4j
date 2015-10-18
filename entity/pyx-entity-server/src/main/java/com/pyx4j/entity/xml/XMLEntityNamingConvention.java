@@ -23,6 +23,7 @@ import com.pyx4j.entity.core.IObject;
 
 public interface XMLEntityNamingConvention {
 
-    public String getXMLName(@SuppressWarnings("rawtypes") Class<? extends IObject> memberClass);
+    public String getXMLName(@SuppressWarnings("rawtypes")
+    Class<? extends IObject> memberClass);
 
 }

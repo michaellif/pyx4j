@@ -42,10 +42,13 @@ import com.pyx4j.svg.basic.Shape;
 public abstract class MouseEventHandler implements MouseMoveHandler, MouseUpHandler, MouseDownHandler {
 
     protected boolean dragging = false;
+
     protected Widget dragHandle;
+
     protected int dragStartX;
+
     protected int dragStartY;
-    
+
     public MouseEventHandler(Widget dragHandle) {
         this.dragHandle = dragHandle;
         dragHandle.addDomHandler(this, MouseDownEvent.getType());
@@ -56,24 +59,24 @@ public abstract class MouseEventHandler implements MouseMoveHandler, MouseUpHand
     public abstract void handleDrag(int absX, int absY);
 
     public void onMouseDown(MouseDownEvent event) {
-     	dragging = true;
+        dragging = true;
         DOM.setCapture(dragHandle.getElement());
         dragStartX = event.getX();
         dragStartY = event.getY();
         DOM.eventPreventDefault(DOM.eventGetCurrentEvent());
-      }
-   
-      public void onMouseMove(MouseMoveEvent event) {
-    	  
-          if (dragging) {
-              handleDrag(event.getX(), event.getY());
-              dragStartX = event.getX();
-              dragStartY = event.getY();
-          }
-      }
-      
-      public void onMouseUp(MouseUpEvent event) {
+    }
+
+    public void onMouseMove(MouseMoveEvent event) {
+
+        if (dragging) {
+            handleDrag(event.getX(), event.getY());
+            dragStartX = event.getX();
+            dragStartY = event.getY();
+        }
+    }
+
+    public void onMouseUp(MouseUpEvent event) {
         dragging = false;
         DOM.releaseCapture(dragHandle.getElement());
-      }
+    }
 }

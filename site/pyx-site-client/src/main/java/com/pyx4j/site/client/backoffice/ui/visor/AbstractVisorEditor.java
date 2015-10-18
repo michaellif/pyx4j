@@ -57,6 +57,7 @@ public abstract class AbstractVisorEditor<E extends IEntity> extends AbstractVis
         Anchor btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
             @Override
             public void execute() {
+                onCancel();
                 getController().hide();
             }
         });
@@ -95,6 +96,9 @@ public abstract class AbstractVisorEditor<E extends IEntity> extends AbstractVis
     @Override
     public boolean isDirty() {
         return getForm().isDirty();
+    }
+
+    protected void onCancel() {
     }
 
     protected void showValidationDialog() {

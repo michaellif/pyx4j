@@ -19,7 +19,6 @@
  */
 package com.pyx4j.svg.chart;
 
-
 public interface ChartColors extends Iterable<String> {
 
 }

@@ -33,7 +33,7 @@ import java.lang.annotation.Target;
  * @see com.google.gwt.user.client.rpc.GwtTransient
  * 
  */
-@Target( { ElementType.TYPE, ElementType.METHOD })
+@Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RpcTransient {
 

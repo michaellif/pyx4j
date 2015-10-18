@@ -81,8 +81,8 @@ public class DateOffsetFilterEditor extends FilterEditorBase<IDateOffsetConditio
 
     @Override
     public void populate() {
-        offsetTypeBox.setSelectedIndex(getCondition().dateOffsetType().getValue() == null ? DateOffset.Days.ordinal() : getCondition().dateOffsetType()
-                .getValue().ordinal());
+        offsetTypeBox.setSelectedIndex(
+                getCondition().dateOffsetType().getValue() == null ? DateOffset.Days.ordinal() : getCondition().dateOffsetType().getValue().ordinal());
         offsetBox.setValue(getCondition().dateOffsetValue().getValue());
     }
 

@@ -19,7 +19,6 @@
  */
 package com.pyx4j.widgets.client.dialog;
 
-
 public interface ConfirmDecline {
 
     void onConfirmed();

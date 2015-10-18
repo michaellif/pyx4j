@@ -281,7 +281,7 @@ public class OutOfMemorySimulationServlet extends HttpServlet {
         ClassWriter cw = new ClassWriter(0);
 
         cw.visit(Opcodes.V1_4, Opcodes.ACC_PUBLIC + Opcodes.ACC_ABSTRACT + Opcodes.ACC_INTERFACE,
-        // class name
+                // class name
                 name.replace('.', '/'),
                 // signature
                 null,

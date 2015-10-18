@@ -56,8 +56,8 @@ import com.pyx4j.rpc.client.IServiceBase;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public class UploadPanel<U extends IEntity, B extends AbstractIFileBlob> extends SimplePanel implements FormPanel.SubmitCompleteHandler,
-FormPanel.SubmitHandler, DeferredProgressListener {
+public class UploadPanel<U extends IEntity, B extends AbstractIFileBlob> extends SimplePanel
+        implements FormPanel.SubmitCompleteHandler, FormPanel.SubmitHandler, DeferredProgressListener {
 
     private final static Logger log = LoggerFactory.getLogger(UploadPanel.class);
 

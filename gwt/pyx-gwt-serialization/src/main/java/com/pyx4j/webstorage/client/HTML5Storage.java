@@ -69,20 +69,20 @@ public final class HTML5Storage extends JavaScriptObject {
     }
 
     private static final native boolean isSupportedNative() /*-{
-		return typeof $wnd.localStorage != "undefined";
-    }-*/;
+                                                            return typeof $wnd.localStorage != "undefined";
+                                                            }-*/;
 
     public static final native HTML5Storage getLocalStorage() /*-{
-		return $wnd.localStorage;
-    }-*/;
+                                                              return $wnd.localStorage;
+                                                              }-*/;
 
     public static final native HTML5Storage getSessionStorage() /*-{
-		return $wnd.sessionStorage;
-    }-*/;
+                                                                return $wnd.sessionStorage;
+                                                                }-*/;
 
     public final native int getLength() /*-{
-		return this.length;
-    }-*/;
+                                        return this.length;
+                                        }-*/;
 
     /**
      * The getItem(key) method return a structured clone of the current value associated
@@ -93,12 +93,12 @@ public final class HTML5Storage extends JavaScriptObject {
      * @return current value or null if key does not exist.
      */
     public final native String getItem(String key) /*-{
-		return this.getItem(key);
-    }-*/;
+                                                   return this.getItem(key);
+                                                   }-*/;
 
     public final native String key(int index) /*-{
-		return this.key(index);
-    }-*/;
+                                              return this.key(index);
+                                              }-*/;
 
     /**
      * New key/value pair added to the list, with the given key and with its value set to
@@ -111,28 +111,28 @@ public final class HTML5Storage extends JavaScriptObject {
      * @param data
      */
     public final native void setItem(String key, String data) /*-{
-		this.setItem(key, data);
-    }-*/;
+                                                              this.setItem(key, data);
+                                                              }-*/;
 
     public final native void removeItem(String key) /*-{
-		this.removeItem(key);
-    }-*/;
+                                                    this.removeItem(key);
+                                                    }-*/;
 
     public final native void clear() /*-{
-		this.clear();
-    }-*/;
+                                     this.clear();
+                                     }-*/;
 
     private static native void initEventDispatcher() /*-{
-        @com.pyx4j.webstorage.client.HTML5Storage::dispatchStorageEvent = $entry(function(e) {
-        if (!e) { e = $wnd.event; }
-            @com.pyx4j.webstorage.client.HTML5Storage::fireEvent(Lcom/pyx4j/webstorage/client/StorageEvent$NativeStorageEvent;) (e);
-        });
-        if ($wnd.addEventListener) {
-            $wnd.addEventListener("storage", @com.pyx4j.webstorage.client.HTML5Storage::dispatchStorageEvent, true);
-        } else {
-            $doc.attachEvent("onstorage", @com.pyx4j.webstorage.client.HTML5Storage::dispatchStorageEvent);
-        }
-    }-*/;
+                                                     @com.pyx4j.webstorage.client.HTML5Storage::dispatchStorageEvent = $entry(function(e) {
+                                                     if (!e) { e = $wnd.event; }
+                                                     @com.pyx4j.webstorage.client.HTML5Storage::fireEvent(Lcom/pyx4j/webstorage/client/StorageEvent$NativeStorageEvent;) (e);
+                                                     });
+                                                     if ($wnd.addEventListener) {
+                                                     $wnd.addEventListener("storage", @com.pyx4j.webstorage.client.HTML5Storage::dispatchStorageEvent, true);
+                                                     } else {
+                                                     $doc.attachEvent("onstorage", @com.pyx4j.webstorage.client.HTML5Storage::dispatchStorageEvent);
+                                                     }
+                                                     }-*/;
 
     private final static void fireEvent(NativeStorageEvent nativeEvent) {
         if (eventBus != null) {

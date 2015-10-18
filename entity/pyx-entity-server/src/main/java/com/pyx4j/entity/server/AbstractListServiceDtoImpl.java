@@ -220,7 +220,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         }
 
         EntityListCriteria<BO> criteria = criteriaBinder.convertListCriteria(toCriteria);
-        result.setTotalRows(Persistence.service().count(criteria));
+        result.setTotalRows(Persistence.secureCount(criteria));
 
         return result;
     }

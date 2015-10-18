@@ -184,8 +184,8 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
 
     @Override
     public ValueBindAdapter getQueryValueBindAdapter(Restriction restriction, Object value) {
-        assert (singlePkRoot || (value == null) || (value instanceof Collection) || (value instanceof IEntity)) : "Can't query by polymorphic member using value of class "
-                + value.getClass();
+        assert (singlePkRoot || (value == null) || (value instanceof Collection)
+                || (value instanceof IEntity)) : "Can't query by polymorphic member using value of class " + value.getClass();
 
         if ((value instanceof IEntity) && (((IEntity) value).isPrototype() || (((IEntity) value).getPrimaryKey() == null))) {
             return new DiscriminatorQueryValueBindAdapter();

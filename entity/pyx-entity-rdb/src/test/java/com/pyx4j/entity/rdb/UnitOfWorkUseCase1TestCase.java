@@ -217,7 +217,7 @@ public abstract class UnitOfWorkUseCase1TestCase extends DatastoreTestBase {
 
     private void executeUseCase1(final String setId, final List<String> compensationHandlerOrder, TransactionScopeOption extTransactionScopeOption,
             final TransactionScopeOption int1TransactionScopeOption, final TransactionScopeOption int2TransactionScopeOption, final String... exceptionPoints)
-            throws ServerNotActiveException {
+                    throws ServerNotActiveException {
 
         final Executable<Void, ServerNotActiveException> exec2 = new Executable<Void, ServerNotActiveException>() {
 

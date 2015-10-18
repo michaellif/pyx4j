@@ -52,13 +52,10 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
     //================================================ Unidirectional One-to-One =========================================================//
 
     public void testUnidirectionalOneToOneTable() {
-        Assert.assertTrue(
-                "UnidirectionalOneToOneParent table should exist",
-                testColumnExists(UnidirectionalOneToOneParent.class, EntityFactory.getEntityPrototype(UnidirectionalOneToOneParent.class).name().getFieldName()));
-        Assert.assertTrue(
-                "Child column should exist",
-                testColumnExists(UnidirectionalOneToOneParent.class, EntityFactory.getEntityPrototype(UnidirectionalOneToOneParent.class).child()
-                        .getFieldName()));
+        Assert.assertTrue("UnidirectionalOneToOneParent table should exist", testColumnExists(UnidirectionalOneToOneParent.class,
+                EntityFactory.getEntityPrototype(UnidirectionalOneToOneParent.class).name().getFieldName()));
+        Assert.assertTrue("Child column should exist", testColumnExists(UnidirectionalOneToOneParent.class,
+                EntityFactory.getEntityPrototype(UnidirectionalOneToOneParent.class).child().getFieldName()));
     }
 
     public void testUnidirectionalOneToOnePersist() {
@@ -300,8 +297,8 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
     public void testBidirectionalOneToOneTable() {
         Assert.assertTrue("BidirectionalOneToOneParent table should exist",
                 testColumnExists(BidirectionalOneToOneParent.class, EntityFactory.getEntityPrototype(BidirectionalOneToOneParent.class).name().getFieldName()));
-        Assert.assertTrue("Child column should exist",
-                testColumnExists(BidirectionalOneToOneParent.class, EntityFactory.getEntityPrototype(BidirectionalOneToOneParent.class).child().getFieldName()));
+        Assert.assertTrue("Child column should exist", testColumnExists(BidirectionalOneToOneParent.class,
+                EntityFactory.getEntityPrototype(BidirectionalOneToOneParent.class).child().getFieldName()));
         Assert.assertFalse("Parent column should exist",
                 testColumnExists(BidirectionalOneToOneChild.class, EntityFactory.getEntityPrototype(BidirectionalOneToOneChild.class).parent().getFieldName()));
 
@@ -447,18 +444,12 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
     public void testBidirectionalOneToOneInversedTable() {
         resetTables(BidirectionalOneToOneInversedChild.class, BidirectionalOneToOneInversedParent.class);
 
-        Assert.assertTrue(
-                "BidirectionalOneToOneParent table should exist",
-                testColumnExists(BidirectionalOneToOneInversedParent.class, EntityFactory.getEntityPrototype(BidirectionalOneToOneInversedParent.class).name()
-                        .getFieldName()));
-        Assert.assertFalse(
-                "Child column should not exist",
-                testColumnExists(BidirectionalOneToOneInversedParent.class, EntityFactory.getEntityPrototype(BidirectionalOneToOneInversedParent.class).child()
-                        .getFieldName()));
-        Assert.assertTrue(
-                "Parent column should exist",
-                testColumnExists(BidirectionalOneToOneInversedChild.class, EntityFactory.getEntityPrototype(BidirectionalOneToOneInversedChild.class).parent()
-                        .getFieldName()));
+        Assert.assertTrue("BidirectionalOneToOneParent table should exist", testColumnExists(BidirectionalOneToOneInversedParent.class,
+                EntityFactory.getEntityPrototype(BidirectionalOneToOneInversedParent.class).name().getFieldName()));
+        Assert.assertFalse("Child column should not exist", testColumnExists(BidirectionalOneToOneInversedParent.class,
+                EntityFactory.getEntityPrototype(BidirectionalOneToOneInversedParent.class).child().getFieldName()));
+        Assert.assertTrue("Parent column should exist", testColumnExists(BidirectionalOneToOneInversedChild.class,
+                EntityFactory.getEntityPrototype(BidirectionalOneToOneInversedChild.class).parent().getFieldName()));
 
     }
 
@@ -734,14 +725,10 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
     //================================================ Unidirectional One-to-Many =========================================================//
 
     public void testUnidirectionalOneToManyTable() {
-        Assert.assertTrue(
-                UnidirectionalOneToManyParent.class.getName() + " table should exist",
-                testColumnExists(UnidirectionalOneToManyParent.class, EntityFactory.getEntityPrototype(UnidirectionalOneToManyParent.class).name()
-                        .getFieldName()));
-        Assert.assertTrue(
-                "Child column should not exist",
-                !testColumnExists(UnidirectionalOneToManyParent.class, EntityFactory.getEntityPrototype(UnidirectionalOneToManyParent.class).children()
-                        .getFieldName()));
+        Assert.assertTrue(UnidirectionalOneToManyParent.class.getName() + " table should exist", testColumnExists(UnidirectionalOneToManyParent.class,
+                EntityFactory.getEntityPrototype(UnidirectionalOneToManyParent.class).name().getFieldName()));
+        Assert.assertTrue("Child column should not exist", !testColumnExists(UnidirectionalOneToManyParent.class,
+                EntityFactory.getEntityPrototype(UnidirectionalOneToManyParent.class).children().getFieldName()));
     }
 
     public void testUnidirectionalOneToManyPersist() {
@@ -846,19 +833,15 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
     public void testBidirectionalOneToManyTable() {
         resetTables(BidirectionalOneToManyChild.class, BidirectionalOneToManyParent.class);
 
-        Assert.assertTrue(
-                BidirectionalOneToManyParent.class.getName() + " table should exist",
-                testColumnExists(BidirectionalOneToManyParent.class, EntityFactory.getEntityPrototype(BidirectionalOneToManyParent.class).name().getFieldName()));
+        Assert.assertTrue(BidirectionalOneToManyParent.class.getName() + " table should exist", testColumnExists(BidirectionalOneToManyParent.class,
+                EntityFactory.getEntityPrototype(BidirectionalOneToManyParent.class).name().getFieldName()));
 
         //TODO this is wrong test for collection table :(
-        Assert.assertTrue(
-                "Child column should not exist",
-                !testColumnExists(BidirectionalOneToManyParent.class, EntityFactory.getEntityPrototype(BidirectionalOneToManyParent.class).children()
-                        .getFieldName()));
+        Assert.assertTrue("Child column should not exist", !testColumnExists(BidirectionalOneToManyParent.class,
+                EntityFactory.getEntityPrototype(BidirectionalOneToManyParent.class).children().getFieldName()));
 
-        Assert.assertTrue(
-                "Parent column should exist",
-                testColumnExists(BidirectionalOneToManyChild.class, EntityFactory.getEntityPrototype(BidirectionalOneToManyChild.class).parent().getFieldName()));
+        Assert.assertTrue("Parent column should exist", testColumnExists(BidirectionalOneToManyChild.class,
+                EntityFactory.getEntityPrototype(BidirectionalOneToManyChild.class).parent().getFieldName()));
 
     }
 
@@ -1137,8 +1120,8 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
 
         // Get Child and see that child is retrieved, then verify values
         {
-            BidirectionalOneToManyUnmaintainedOrderChild child = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderChild.class, o.children().get(0)
-                    .getPrimaryKey());
+            BidirectionalOneToManyUnmaintainedOrderChild child = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderChild.class,
+                    o.children().get(0).getPrimaryKey());
             Assert.assertNotNull("data retrieved ", child);
             Assert.assertEquals("correct data retrieved", o.children().get(0).name(), child.name());
         }
@@ -1161,8 +1144,8 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
 
         // Get Child and see that child is retrieved, then verify values
         {
-            BidirectionalOneToManyUnmaintainedOrderChild child = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderChild.class, o.children().get(1)
-                    .getPrimaryKey());
+            BidirectionalOneToManyUnmaintainedOrderChild child = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderChild.class,
+                    o.children().get(1).getPrimaryKey());
             Assert.assertNotNull("data retrieved ", child);
             Assert.assertEquals("correct data retrieved", o.children().get(1).name(), child.name());
         }
@@ -1239,13 +1222,13 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         // Get Child, change and save independently
         {
             BidirectionalOneToManyUnmaintainedOrderParent parent = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderParent.class, o.getPrimaryKey());
-            BidirectionalOneToManyUnmaintainedOrderChild child = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderChild.class, parent.children().get(1)
-                    .getPrimaryKey());
+            BidirectionalOneToManyUnmaintainedOrderChild child = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderChild.class,
+                    parent.children().get(1).getPrimaryKey());
             child.name().setValue(uniqueString());
             srvSave(child, testCaseMethod);
 
-            BidirectionalOneToManyUnmaintainedOrderChild childR1 = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderChild.class, parent.children().get(1)
-                    .getPrimaryKey());
+            BidirectionalOneToManyUnmaintainedOrderChild childR1 = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderChild.class,
+                    parent.children().get(1).getPrimaryKey());
             Assert.assertEquals("child update", child.name(), childR1.name());
 
             BidirectionalOneToManyUnmaintainedOrderParent parentR1 = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderParent.class, o.getPrimaryKey());
@@ -1308,15 +1291,11 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
     //================================================ Bidirectional One-to-Many (Join Table) =========================================================//
 
     public void testBidirectionalOneToManyAutoTable() {
-        Assert.assertTrue(
-                BidirectionalOneToManyAutoParent.class.getName() + " table should exist",
-                testColumnExists(BidirectionalOneToManyAutoParent.class, EntityFactory.getEntityPrototype(BidirectionalOneToManyAutoParent.class).name()
-                        .getFieldName()));
+        Assert.assertTrue(BidirectionalOneToManyAutoParent.class.getName() + " table should exist", testColumnExists(BidirectionalOneToManyAutoParent.class,
+                EntityFactory.getEntityPrototype(BidirectionalOneToManyAutoParent.class).name().getFieldName()));
 
-        Assert.assertFalse(
-                "Parent column should not exist",
-                testColumnExists(BidirectionalOneToManyAutoChild.class, EntityFactory.getEntityPrototype(BidirectionalOneToManyAutoChild.class).parent()
-                        .getFieldName()));
+        Assert.assertFalse("Parent column should not exist", testColumnExists(BidirectionalOneToManyAutoChild.class,
+                EntityFactory.getEntityPrototype(BidirectionalOneToManyAutoChild.class).parent().getFieldName()));
     }
 
     public void testBidirectionalOneToManyAutoPersist() {

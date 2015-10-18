@@ -182,8 +182,8 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         if (BrowserType.isIE7()) {
             actionsBar.getElement().getStyle().setMarginRight(40, Unit.PX);
         }
-        actionsBar.ensureDebugId(new CompositeDebugId(parentDebugId,
-                new CompositeDebugId(DecoratorDebugIds.BoxFolderItemToolbar, DecoratorDebugIds.ActionPanel)).debugId());
+        actionsBar.ensureDebugId(
+                new CompositeDebugId(parentDebugId, new CompositeDebugId(DecoratorDebugIds.BoxFolderItemToolbar, DecoratorDebugIds.ActionPanel)).debugId());
 
         addDomHandler(new MouseOverHandler() {
             @Override

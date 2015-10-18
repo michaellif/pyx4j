@@ -45,7 +45,8 @@ public class NamingConventionOracle implements NamingConvention {
         this(identifierMaximumLength, shortWords, forceShortWords, true, '_');
     }
 
-    public NamingConventionOracle(int identifierMaximumLength, ShortWords shortWords, boolean forceShortWords, boolean mustBeginWithLetter, char childSeparator) {
+    public NamingConventionOracle(int identifierMaximumLength, ShortWords shortWords, boolean forceShortWords, boolean mustBeginWithLetter,
+            char childSeparator) {
         this.identifierMaximumLength = identifierMaximumLength;
         this.shortWords = shortWords;
         this.forceShortWords = forceShortWords;

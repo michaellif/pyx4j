@@ -17,21 +17,16 @@
  * Created on Jan 26, 2010
  * @author vlads
  */
-package com.pyx4j.widgets.client;
+package com.pyx4j.widgets.client.captcha;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -40,31 +35,30 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.AjaxJSLoader;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.ImageFactory;
+import com.pyx4j.widgets.client.StringBox;
 
 /**
  * This class Injects reCAPTCHA Client API code.
- * 
+ *
  * @see <a href="http://code.google.com/apis/recaptcha/intro.html">for more information</a>
  * @see <a href="http://code.google.com/apis/recaptcha/docs/customization.html">Customization</a>
- * 
+ *
  */
-public class CaptchaComposite extends SimplePanel implements IFocusWidget, IWatermarkWidget {
+public class CaptchaCompositeV1 extends AbstractCaptchaComposite {
 
-    private static Logger log = LoggerFactory.getLogger(CaptchaComposite.class);
+    private static Logger log = LoggerFactory.getLogger(CaptchaCompositeV1.class);
 
-    private static final I18n i18n = I18n.get(CaptchaComposite.class);
+    private static final I18n i18n = I18n.get(CaptchaCompositeV1.class);
 
     private static int instanceId = 0;
 
     private final String divName;
-
-    private static String publicKey;
 
     private boolean created = false;
 
@@ -82,7 +76,7 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget, IWate
 
     private static String javaScriptURL = "www.google.com/recaptcha/api/js/recaptcha_ajax.js";
 
-    public CaptchaComposite() {
+    public CaptchaCompositeV1() {
         instanceId++;
         divName = "recaptcha_div" + String.valueOf(instanceId);
 
@@ -201,20 +195,6 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget, IWate
         responseInternal.getElement().setId(divName + "_response_field");
     }
 
-    /**
-     * Use https://www.google.com/recaptcha/admin/create to create your key
-     * 
-     * @param publicKey
-     */
-    public static void setPublicKey(String publicKey) {
-        log.debug("reCAPTCHA key set [{}]", publicKey);
-        CaptchaComposite.publicKey = publicKey;
-    }
-
-    public static boolean isPublicKeySet() {
-        return CommonsStringUtils.isStringSet(publicKey);
-    }
-
     @Override
     public void setFocus(boolean focused) {
         response.setFocus(focused);
@@ -222,35 +202,38 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget, IWate
 
     public native void setFocus()
     /*-{
-		$wnd.Recaptcha.focus_response_field();
+    	$wnd.Recaptcha.focus_response_field();
     }-*/;
 
+    @Override
     public String getValueResponse() {
         return response.getValue();
     }
 
+    @Override
     public HandlerRegistration addResponseValueChangeHandler(ValueChangeHandler<String> handler) {
         return response.addValueChangeHandler(handler);
     }
 
+    @Override
     public native String getValueChallenge()
     /*-{
-		return $wnd.Recaptcha.get_challenge();
+    	return $wnd.Recaptcha.get_challenge();
     }-*/;
 
     private native void switchToImage()
     /*-{
-		$wnd.Recaptcha.switch_type('image');
+    	$wnd.Recaptcha.switch_type('image');
     }-*/;
 
     private native void switchToAudio()
     /*-{
-		$wnd.Recaptcha.switch_type('audio');
+    	$wnd.Recaptcha.switch_type('audio');
     }-*/;
 
     private native void showhelp()
     /*-{
-		$wnd.Recaptcha.showhelp();
+    	$wnd.Recaptcha.showhelp();
     }-*/;
 
     /**
@@ -271,8 +254,8 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget, IWate
 
             @Override
             public native boolean isLoaded() /*-{
-		return typeof $wnd.Recaptcha != "undefined";
-    }-*/;
+                                             return typeof $wnd.Recaptcha != "undefined";
+                                             }-*/;
 
         }, new AsyncCallback<Void>() {
 
@@ -296,21 +279,22 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget, IWate
 
     private native void createChallengeImpl()
     /*-{
-		$wnd.Recaptcha
-				.create(
-						@com.pyx4j.widgets.client.CaptchaComposite::publicKey,
-						this.@com.pyx4j.widgets.client.CaptchaComposite::divName,
-						{
-							theme : "custom",
-							custom_theme_widget : this.@com.pyx4j.widgets.client.CaptchaComposite::divName
-						});
+    	$wnd.Recaptcha
+    			.create(
+    					@com.pyx4j.widgets.client.captcha.AbstractCaptchaComposite::publicKey,
+    					this.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV1::divName,
+    					{
+    						theme : "custom",
+    						custom_theme_widget : this.@com.pyx4j.widgets.client.captcha.CaptchaCompositeV1::divName
+    					});
     }-*/;
 
     private native void destroyCaptcha()
     /*-{
-		$wnd.Recaptcha.destroy();
+    	$wnd.Recaptcha.destroy();
     }-*/;
 
+    @Override
     public void createNewChallenge() {
         response.setValue(null);
         if (isVisible() && created) {
@@ -320,7 +304,7 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget, IWate
 
     public native void createNewChallengeImpl()
     /*-{
-		$wnd.Recaptcha.reload();
+    	$wnd.Recaptcha.reload();
     }-*/;
 
     @Override
@@ -359,61 +343,5 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget, IWate
     public String getWatermark() {
         return response.getWatermark();
     };
-
-    @Override
-    public void setEnabled(boolean enabled) {
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-    @Override
-    public void setEditable(boolean editable) {
-    }
-
-    @Override
-    public boolean isEditable() {
-        return true;
-    }
-
-    @Override
-    public int getTabIndex() {
-        return 0;
-    }
-
-    @Override
-    public void setAccessKey(char key) {
-    }
-
-    @Override
-    public void setTabIndex(int index) {
-    }
-
-    @Override
-    public HandlerRegistration addFocusHandler(FocusHandler handler) {
-        return null;
-    }
-
-    @Override
-    public HandlerRegistration addBlurHandler(BlurHandler handler) {
-        return null;
-    }
-
-    @Override
-    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
-        return null;
-    }
-
-    @Override
-    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
-        return null;
-    }
-
-    @Override
-    public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
-        return null;
-    }
 
 }

@@ -19,7 +19,6 @@
  */
 package com.pyx4j.entity.test.env;
 
-
 public class ConfigureTestsEnv {
 
     public static void configure() {

@@ -116,8 +116,8 @@ public class BasicFlexFormPanel extends FlexTable implements IValidatable {
         setHX(row, col, span, null, caption, actionWidget, imageStyle, labelStyle, headerStyle);
     }
 
-    private void setHX(int row, int col, int span, ImageResource imageResource, String caption, Widget actionWidget, StyleName imageStyle,
-            StyleName labelStyle, StyleName headerStyle) {
+    private void setHX(int row, int col, int span, ImageResource imageResource, String caption, Widget actionWidget, StyleName imageStyle, StyleName labelStyle,
+            StyleName headerStyle) {
         getFlexCellFormatter().setColSpan(row, col, span);
         FlowPanel header = new FlowPanel();
         header.setStyleName(headerStyle.name());

@@ -59,23 +59,23 @@ public class AppenderConsoleMozilla implements Appender {
     }
 
     private static native boolean supported() /*-{
-		return (typeof console != "undefined");
-    }-*/;
+                                              return (typeof console != "undefined");
+                                              }-*/;
 
     private native void debug(String message) /*-{
-		console.log(message);
-    }-*/;
+                                              console.log(message);
+                                              }-*/;
 
     private native void info(String message) /*-{
-		console.info(message);
-    }-*/;
+                                             console.info(message);
+                                             }-*/;
 
     private native void warn(String message) /*-{
-		console.warn(message);
-    }-*/;
+                                             console.warn(message);
+                                             }-*/;
 
     private native void error(String message) /*-{
-		console.error(message);
-    }-*/;
+                                              console.error(message);
+                                              }-*/;
 
 }

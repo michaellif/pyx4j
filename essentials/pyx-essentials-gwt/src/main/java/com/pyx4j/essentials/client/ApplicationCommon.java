@@ -35,8 +35,8 @@ public class ApplicationCommon {
             public void onRPCStatusChange(RPCStatusChangeEvent event) {
                 if (!event.isExecuteBackground()) {
                     if (event.getWhen() == When.START) {
-                        GlassPanel.show(event.isBlockingServiceCall() ? GlassStyle.SemiTransparent : GlassStyle.Transparent, event.getServiceExecutionInfo()
-                                .waitCaption());
+                        GlassPanel.show(event.isBlockingServiceCall() ? GlassStyle.SemiTransparent : GlassStyle.Transparent,
+                                event.getServiceExecutionInfo().waitCaption());
                     } else {
                         GlassPanel.hide();
                     }

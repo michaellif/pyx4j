@@ -47,16 +47,16 @@ public class DataTransfer extends JavaScriptObject {
     }
 
     private native String getDropEffectN() /*-{
-		return this.dropEffect;
-    }-*/;
+                                           return this.dropEffect;
+                                           }-*/;
 
     public final void setDropEffect(DropEffect dropEffect) {
         setDropEffectN(dropEffect.name());
     }
 
     private native void setDropEffectN(String dropEffect) /*-{
-		this.dropEffect = dropEffect;
-    }-*/;
+                                                          this.dropEffect = dropEffect;
+                                                          }-*/;
 
     public final DragEffect getEffectAllowed() {
         String ea;
@@ -73,16 +73,16 @@ public class DataTransfer extends JavaScriptObject {
     }
 
     private native String getEffectAllowedN() /*-{
-		return this.effectAllowed;
-    }-*/;
+                                              return this.effectAllowed;
+                                              }-*/;
 
     public final void setEffectAllowed(DragEffect effectAllowed) {
         setEffectAllowedN(effectAllowed.name());
     }
 
     private native void setEffectAllowedN(String effectAllowed) /*-{
-		this.effectAllowed = effectAllowed;
-    }-*/;
+                                                                this.effectAllowed = effectAllowed;
+                                                                }-*/;
 
     public final String[] getTypes() {
         JsArrayString a = jsGetTypes();
@@ -97,36 +97,36 @@ public class DataTransfer extends JavaScriptObject {
      * Warning: This method is not supported in IE!
      */
     public final native JsArrayString jsGetTypes() /*-{
-		var a = new Array();
-		for ( var i = 0; i < this.types.length; i++) {
-			a[i] = this.types[i];
-		}
-		return a;
-    }-*/;
+                                                   var a = new Array();
+                                                   for ( var i = 0; i < this.types.length; i++) {
+                                                   a[i] = this.types[i];
+                                                   }
+                                                   return a;
+                                                   }-*/;
 
     public final native String getData(String format) /*-{
-		return this.getData(format);
-    }-*/;
+                                                      return this.getData(format);
+                                                      }-*/;
 
     public final native void setData(String format, String data) /*-{
-		this.setData(format, data);
-    }-*/;
+                                                                 this.setData(format, data);
+                                                                 }-*/;
 
     public final native void clearData(String format) /*-{
-		this.clearData(format);
-    }-*/;
+                                                      this.clearData(format);
+                                                      }-*/;
 
     public final void setDragImage(Image image, int x, int y) {
         setDragImageN(image.getElement(), x, y);
     }
 
     public final native void setDragImageN(Element elt, int x, int y) /*-{
-		this.setDragImage(elt, x, y);
-    }-*/;
+                                                                      this.setDragImage(elt, x, y);
+                                                                      }-*/;
 
     public final native JsFileList files() /*-{
-		return this.files;
-    }-*/;
+                                           return this.files;
+                                           }-*/;
 
     public final String toDebugString() {
         StringBuilder b = new StringBuilder();

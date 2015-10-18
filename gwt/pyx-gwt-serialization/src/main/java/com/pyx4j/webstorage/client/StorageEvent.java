@@ -40,8 +40,8 @@ public class StorageEvent extends GwtEvent<StorageEventHandler> {
          * @see <a href="http://www.w3.org/TR/webstorage/#dom-storageevent-key">W3C Web Storage - StorageEvent.key</a>
          */
         public final native String getKey() /*-{
-			return this.key;
-        }-*/;
+                                            return this.key;
+                                            }-*/;
 
         /**
          * Returns the old value of the key being changed.
@@ -50,8 +50,8 @@ public class StorageEvent extends GwtEvent<StorageEventHandler> {
          * @see <a href="http://www.w3.org/TR/webstorage/#dom-storageevent-oldvalue">W3C Web Storage - StorageEvent.oldValue</a>
          */
         public final native String getOldValue() /*-{
-			return this.oldValue;
-        }-*/;
+                                                 return this.oldValue;
+                                                 }-*/;
 
         /**
          * Returns the new value of the key being changed.
@@ -60,8 +60,8 @@ public class StorageEvent extends GwtEvent<StorageEventHandler> {
          * @see <a href="http://www.w3.org/TR/webstorage/#dom-storageevent-newvalue">W3C Web Storage - StorageEvent.newValue</a>
          */
         public final native String getNewValue() /*-{
-			return this.newValue;
-        }-*/;
+                                                 return this.newValue;
+                                                 }-*/;
 
         /**
          * Returns the address of the document whose key changed.
@@ -70,8 +70,8 @@ public class StorageEvent extends GwtEvent<StorageEventHandler> {
          * @see <a href="http://www.w3.org/TR/webstorage/#dom-storageevent-url">W3C Web Storage - StorageEvent.url</a>
          */
         public final native String getUrl() /*-{
-			return this.url;
-        }-*/;
+                                            return this.url;
+                                            }-*/;
 
         /**
          * Returns the Storage object that was affected.
@@ -80,8 +80,8 @@ public class StorageEvent extends GwtEvent<StorageEventHandler> {
          * @see <a href="http://www.w3.org/TR/webstorage/#dom-storageevent-storagearea">W3C Web Storage - StorageEvent.storageArea</a>
          */
         public final native HTML5Storage getStorageArea() /*-{
-			return this.storageArea;
-        }-*/;
+                                                          return this.storageArea;
+                                                          }-*/;
     }
 
     StorageEvent(NativeStorageEvent nativeEvent) {

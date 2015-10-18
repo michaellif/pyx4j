@@ -88,8 +88,8 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
 
             @Override
             public void onClick(ClickEvent event) {
-                MessageDialog
-                        .info("Very_Long_Message_Dialog_Very_Long_Message_Dialog_Very_Long_Message_Dialog_Very_Long_Message_Dialog<br>Very_Long_Message_Dialog_Very_Long_Message_Dialog_Very_Long_Message");
+                MessageDialog.info(
+                        "Very_Long_Message_Dialog_Very_Long_Message_Dialog_Very_Long_Message_Dialog_Very_Long_Message_Dialog<br>Very_Long_Message_Dialog_Very_Long_Message_Dialog_Very_Long_Message");
             }
         });
 
@@ -102,9 +102,8 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
 
                 @Override
                 public void addPhotoCommand() {
-                    getPhotoAlbumModel().addPhoto(
-                            new Photo("http://lh4.ggpht.com/_FD9tLNw_5yE/SzyrjJGfFYI/AAAAAAAAC_4/XxxueqfTri0/s128/IMG_4122.JPG",
-                                    "http://lh6.ggpht.com/_FD9tLNw_5yE/SzyrboXbN3I/AAAAAAAAC_g/kcLqFd20EoM/s800/IMG_4117.JPG", "Photo#"));
+                    getPhotoAlbumModel().addPhoto(new Photo("http://lh4.ggpht.com/_FD9tLNw_5yE/SzyrjJGfFYI/AAAAAAAAC_4/XxxueqfTri0/s128/IMG_4122.JPG",
+                            "http://lh6.ggpht.com/_FD9tLNw_5yE/SzyrboXbN3I/AAAAAAAAC_g/kcLqFd20EoM/s800/IMG_4117.JPG", "Photo#"));
                 }
 
                 @Override
