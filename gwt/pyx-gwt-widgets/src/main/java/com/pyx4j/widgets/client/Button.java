@@ -24,6 +24,8 @@ import java.util.List;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
@@ -144,6 +146,8 @@ public class Button extends ButtonBase {
 
         private final SecureConcernsHolder secureConcerns = new SecureConcernsHolder();
 
+        private boolean controlKeyDown = false;
+
         public ButtonMenuBar() {
             super(true);
             setAutoOpen(true);
@@ -183,6 +187,20 @@ public class Button extends ButtonBase {
                 }
             }
             return empty;
+        }
+
+        public boolean isControlKeyDown() {
+            return controlKeyDown;
+        }
+
+        @Override
+        public void onBrowserEvent(Event event) {
+            if ((DOM.eventGetType(event) == Event.ONCLICK) && (event.getCtrlKey())) {
+                controlKeyDown = true;
+            } else {
+                controlKeyDown = false;
+            }
+            super.onBrowserEvent(event);
         }
 
         @Override

@@ -464,7 +464,11 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
 
                     @Override
                     public void onClick(ClickEvent event) {
-                        navigationCommand.execute();
+                        if (event.isControlKeyDown() && navigationCommand instanceof ExtendedNavigationCommand) {
+                            ((ExtendedNavigationCommand) navigationCommand).execute(true);
+                        } else {
+                            navigationCommand.execute();
+                        }
 
                     }
                 }, ClickEvent.getType());

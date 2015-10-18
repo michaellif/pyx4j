@@ -12,4 +12,5 @@ public interface TickProducer {
 
     double getValuePosition(double value);
 
+    double getValue(int position);
 }

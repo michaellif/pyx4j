@@ -93,10 +93,12 @@ public class ServicePolicy {
             return realServiceName;
         } else if ((realServiceName == null) && (servicePolicy != null) && ApplicationMode.isDevelopment()) {
             return serviceClassId;
-        } else if ((ServerSideConfiguration.instance().allowToBypassRpcServiceManifest()) // 
+        } else if ((ServerSideConfiguration.instance().allowToBypassRpcServiceManifest()) //
                 || ((ServerSideConfiguration.instance().getEnvironmentType() == ServerSideConfiguration.EnvironmentType.GAEDevelopment)
                         && (ServerSideConfiguration.instance().isDevelopmentBehavior()))) {
-            log.warn("Using development service name {}", serviceClassId);
+            if (!ServerSideConfiguration.isStartedUnderUnitTest()) {
+                log.warn("Using development service name {}", serviceClassId);
+            }
             return serviceClassId;
         } else {
             log.error("unable to find service-manifest for {}", serviceClassId);
