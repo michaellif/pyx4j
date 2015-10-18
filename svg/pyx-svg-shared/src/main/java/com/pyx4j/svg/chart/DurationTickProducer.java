@@ -98,4 +98,9 @@ public class DurationTickProducer implements TickProducer {
         return (value - fromValue) * scale;
     }
 
+    @Override
+    public double getValue(int position) {
+        return fromValue + 1.0 * position / scale;
+    }
+
 }

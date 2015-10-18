@@ -36,6 +36,7 @@ import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.widgets.client.PopupPanel;
@@ -86,6 +87,14 @@ public final class AppPlaceContorller {
         showNotification(notification, null);
     }
 
+    public void open(AppPlace newPlace, boolean openInNewWindow) {
+        if (!openInNewWindow || !newPlace.isStable()) {
+            goTo(newPlace);
+        } else {
+            Window.open(AppPlaceInfo.absoluteUrl(AppSite.getHostPageURL(), false, newPlace), "_blank", "");
+        }
+    }
+
     public void goTo(final AppPlace newPlace, final boolean withConfirm) {
         log.debug("requested to go to: " + newPlace);
         AppPlace result = dispatcher.forwardTo(newPlace);
@@ -134,7 +143,7 @@ public final class AppPlaceContorller {
                 @Override
                 public void onDeclined() {
                     // In case we pressed a back or forward while navigating inside the application we need to restore the history token
-                    // We should not fire event since application state change did not happened 
+                    // We should not fire event since application state change did not happened
                     AppSite.getHistoryHandler().restoreStableHistoryToken();
                 }
             };
