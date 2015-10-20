@@ -25,11 +25,19 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.svg.basic.Group;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
+import com.pyx4j.svg.chart.ChartTheme;
+import com.pyx4j.svg.chart.DurationAxisProducer;
+import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
+import com.pyx4j.svg.chart.XYChart;
+import com.pyx4j.svg.chart.XYChartConfigurator;
+import com.pyx4j.svg.chart.XYChartConfigurator.ChartType;
 import com.pyx4j.svg.gwt.ColorPicker;
 import com.pyx4j.svg.gwt.basic.SvgFactoryForGwt;
+import com.pyx4j.svg.gwt.chart.HoverXYChartTooltip;
 import com.pyx4j.svg.test.SvgTestFactory;
 
 public class SVGDemo implements EntryPoint {
@@ -48,9 +56,65 @@ public class SVGDemo implements EntryPoint {
         content.add(new HTML("<h5>SVG Demo</h5>"));
 
         //=========================================//
-        boolean testSingel = false;
+        boolean testOnlyXYChartEvents = false;
 
-        if (testSingel) {
+        if (testOnlyXYChartEvents) {
+            SvgRoot svgChartPanel = svgFactory.getSvgRoot();
+            Group g = svgFactory.createGroup();
+
+            XYChartConfigurator config = new XYChartConfigurator(svgFactory, ChartType.Line, SvgTestFactory.xySeries, 600, 400);
+            config.setLegend(true);
+            config.setTitle("XYChart");
+            config.setGridType(GridType.Both);
+            config.setZeroBased(true);
+            //config.setZeroBasedY(true);
+            config.setChartColors(ChartTheme.bright);
+
+            XYChart lchart = new XYChart(config);
+            g.add(lchart);
+            svgChartPanel.add(g);
+            ((Widget) svgChartPanel).setSize("600px", "400px");
+            content.add((Widget) svgChartPanel);
+
+            // This is how events are added to UI.
+            HoverXYChartTooltip.inject(content, (Widget) svgChartPanel, lchart);
+
+            return;
+        }
+        //=========================================//
+
+        boolean testOnlyXYTimeChartEvents = false;
+
+        if (testOnlyXYTimeChartEvents) {
+            SvgRoot svgChartPanel = svgFactory.getSvgRoot();
+
+            XYChartConfigurator config = new XYChartConfigurator(svgFactory, ChartType.Line, SvgTestFactory.timeSeries, 1000, 500);
+            config.setLegend(true);
+            config.setTitle("Time Chart");
+            config.setGridType(GridType.Both);
+            config.setZeroBased(true);
+            config.setZeroBasedY(true);
+            config.setChartColors(ChartTheme.bright);
+
+            DurationAxisProducer xaxis = new DurationAxisProducer();
+            xaxis.setFixedValueRange(0, Consts.HOURS2MIN * 12);
+            config.setXAxisProducer(xaxis);
+
+            XYChart lchart = new XYChart(config);
+            svgChartPanel.add(lchart);
+            ((Widget) svgChartPanel).setSize("1000px", "500px");
+            content.add((Widget) svgChartPanel);
+
+            // This is how events are added to UI.
+            HoverXYChartTooltip.inject(content, (Widget) svgChartPanel, lchart);
+
+            return;
+        }
+
+        //=========================================//
+        boolean testOnlyCharts = false;
+
+        if (testOnlyCharts) {
             svgPanel = SvgTestFactory.createXYBarChart2DTest(svgFactory, 0, 0, true);
             ((Widget) svgPanel).setSize("600px", "400px");
             content.add((Widget) svgPanel);
@@ -62,10 +126,6 @@ public class SVGDemo implements EntryPoint {
             svgPanel = SvgTestFactory.createBarChart2DTest(svgFactory, 0, 0);
             ((Widget) svgPanel).setSize("600px", "400px");
             content.add((Widget) svgPanel);
-
-        }
-
-        if (testSingel) {
             return;
         }
 

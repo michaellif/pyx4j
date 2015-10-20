@@ -20,6 +20,7 @@
 package com.pyx4j.gwt.server.deferred;
 
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 
 import org.slf4j.Logger;
@@ -68,10 +69,10 @@ public class DeferredProcessRegistry {
      */
     public static synchronized String register(IDeferredProcess process) {
         HashMap<String, DeferredProcessInfo> map = getMap();
-        String deferredCorrelationId = String.valueOf(System.currentTimeMillis());
+        String deferredCorrelationId = UUID.randomUUID().toString();
         map.put(deferredCorrelationId, new DeferredProcessInfo(process));
         saveMap();
-        log.debug("process {} created in session {}", deferredCorrelationId, ServerContext.getSessionId());
+        log.debug("process {} registered in session {}", deferredCorrelationId, ServerContext.getSessionId());
         return deferredCorrelationId;
     }
 
@@ -87,7 +88,7 @@ public class DeferredProcessRegistry {
         DeferredProcessInfo info = getMap().get(deferredCorrelationId);
 
         ExecutorService executorService = DeferredProcessExecutors.instance().getExecutorService(threadPoolName);
-        executorService.submit(new DeferredProcessWorkThread(info));
+        executorService.submit(new DeferredProcessWorkThread(deferredCorrelationId, info));
 
         return deferredCorrelationId;
     }
@@ -96,7 +97,7 @@ public class DeferredProcessRegistry {
         DeferredProcessInfo info = getMap().get(deferredCorrelationId);
 
         ExecutorService executorService = DeferredProcessExecutors.instance().getExecutorService(threadPoolName);
-        executorService.submit(new DeferredProcessWorkThread(info));
+        executorService.submit(new DeferredProcessWorkThread(deferredCorrelationId, info));
     }
 
     public static synchronized IDeferredProcess get(String deferredCorrelationId) {

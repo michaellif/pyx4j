@@ -19,10 +19,9 @@
  */
 package com.pyx4j.site.client.backoffice.ui.prime;
 
-import com.google.gwt.user.client.Command;
-
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CEntityHyperlink;
+import com.pyx4j.forms.client.ui.ExtendedNavigationCommand;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -30,13 +29,19 @@ public class CEntityCrudHyperlink<E extends IEntity> extends CEntityHyperlink<E>
 
     public CEntityCrudHyperlink(final CrudAppPlace place) {
         super();
-        setNavigationCommand(new Command() {
+        setNavigationCommand(new ExtendedNavigationCommand() {
             @Override
             public void execute() {
+                execute(false);
+            }
+
+            @Override
+            public void execute(boolean controlKeyDown) {
                 if (getValue().getPrimaryKey() != null) {
-                    assert (place != null);
-                    AppSite.getPlaceController().goTo(place.formViewerPlace(getValue().getPrimaryKey()));
+                    assert(place != null);
+                    AppSite.getPlaceController().open(place.formViewerPlace(getValue().getPrimaryKey()), controlKeyDown);
                 }
+
             }
         });
 

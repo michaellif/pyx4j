@@ -73,6 +73,10 @@ public class XYChart extends GridBase implements IsSvgElement {
         drawChart();
     }
 
+    public XYChartConfigurator configurator() {
+        return configurator;
+    }
+
     @Override
     public SvgElement asSvgElement() {
         return container;
@@ -112,6 +116,11 @@ public class XYChart extends GridBase implements IsSvgElement {
 
         yAxisProducer.setValueRange(min.y, max.y);
         xAxisProducer.setValueRange(min.x, max.x);
+
+        // adding following Rect just to set the boundary of SVG element (firefox)
+        Rect boundary = factory.createRect(0, 0, configurator.getWidth(), configurator.getHeight(), 0, 0);
+        boundary.setStroke("#FFF");
+        container.add(boundary);
 
         int xstart = 0;
         int ystart = configurator.getHeight();
@@ -245,6 +254,14 @@ public class XYChart extends GridBase implements IsSvgElement {
             container.add(yAsix);
         }
 
+    }
+
+    public double getXValue(int x) {
+        return xAxisProducer.getValue(-canvas.getX() + x);
+    }
+
+    public double getYValue(int y) {
+        return yAxisProducer.getValue(canvas.getY() - y);
     }
 
     protected final void drawChart() {
