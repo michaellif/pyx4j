@@ -1012,7 +1012,7 @@ public class TableModel {
                 sql.append(" FOR UPDATE");
                 switch (lockForUpdate) {
                 case NoWait:
-                    sql.append(" NOWAIT");
+                    sql.append(dialect.sqlForUpdateNoWait());
                     break;
                 case Wait:
                     sql.append(dialect.sqlForUpdateWait(persistenceContext.getConnectionTimeout()));

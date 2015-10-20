@@ -40,6 +40,12 @@ public abstract class AbstractDeferredProcess implements IDeferredProcess {
             progressStatusMessage.set(message);
         }
 
+        public final AtomicReference<String> completionMessage = new AtomicReference<>();
+
+        public final void setCompletionMessage(String message) {
+            completionMessage.set(message);
+        }
+
     }
 
     protected volatile boolean started = false;
@@ -63,6 +69,11 @@ public abstract class AbstractDeferredProcess implements IDeferredProcess {
     }
 
     @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
+
+    @Override
     public DeferredProcessProgressResponse status() {
         return updateProgressResponse(createProgressResponse());
     }
@@ -76,6 +87,7 @@ public abstract class AbstractDeferredProcess implements IDeferredProcess {
         r.setProgressMaximum(progress.progressMaximum.get());
         if (completed) {
             r.setCompleted();
+            r.setMessage(progress.completionMessage.get());
         } else if (canceled) {
             r.setCanceled();
         } else if (!started) {

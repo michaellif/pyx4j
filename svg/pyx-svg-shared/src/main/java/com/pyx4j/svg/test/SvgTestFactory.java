@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.svg.basic.Circle;
 import com.pyx4j.svg.basic.Ellipse;
 import com.pyx4j.svg.basic.Group;
@@ -150,6 +151,27 @@ public class SvgTestFactory {
         c.add(7.2, 30);
         c.add(8.6, 21);
         c.add(9.3, 39);
+    }
+
+    public static List<XYSeries> timeSeries = new ArrayList<>();
+
+    static {
+        XYSeries a = new XYSeries("Time Series");
+        timeSeries.add(a);
+        int m = Consts.HOURS2MIN;
+        a.add(0 * m, 20);
+        a.add(1 * m, 23);
+        a.add(2 * m, 14);
+        a.add(3 * m, 15);
+        a.add(4 * m, 24);
+        a.add(5 * m, 34);
+        a.add(6 * m, 36);
+        a.add(7 * m, 22);
+        a.add(8 * m, 45);
+        a.add(9.5 * m, 43);
+        a.add(10 * m, 17);
+        a.add(11 * m, 29);
+        a.add(12 * m, 25);
     }
 
     public static SvgRoot createPieChart2DTest(SvgFactory factory, int x, int y) {

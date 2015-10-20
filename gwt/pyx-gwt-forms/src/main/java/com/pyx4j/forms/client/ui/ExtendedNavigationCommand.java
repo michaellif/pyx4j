@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2013 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,33 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Mar 24, 2014
+ * Created on Sep 27, 2015
  * @author vlads
  */
-package com.pyx4j.svg.chart;
+package com.pyx4j.forms.client.ui;
 
-import java.util.List;
+import com.google.gwt.user.client.Command;
 
-import com.pyx4j.svg.basic.TickProducer;
-import com.pyx4j.svg.common.Tick;
+public interface ExtendedNavigationCommand extends Command {
 
-public interface AxisProducer {
+    void execute(boolean controlKeyDown);
 
-    void setTickProducer(TickProducer tickProducer);
-
-    void setLabelFormatter(LabelFormatter labelFormatter);
-
-    void setValueRange(double from, double to);
-
-    void setPlotSize(int plotSize);
-
-    List<Tick> getTicks();
-
-    double getValuePosition(double value);
-
-    double getValue(int position);
-
-    String formatLabel(double value);
-
-    int getMaxLabelLength();
 }
