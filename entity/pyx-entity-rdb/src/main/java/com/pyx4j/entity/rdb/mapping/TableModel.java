@@ -1083,11 +1083,19 @@ public class TableModel {
     public <T extends IEntity> List<T> query(PersistenceContext persistenceContext, EntityQueryCriteria<T> criteria, int limit, AttachLevel attachLevel) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        String sql = null;
+        StringBuilder sql = new StringBuilder();
         try {
             QueryBuilder<T> qb = new QueryBuilder<T>(persistenceContext, mappings, "m1", entityOperationsMeta, criteria);
-            sql = "SELECT " + (qb.addDistinct() ? "DISTINCT" : "") + " m1.*" + qb.getColumnsSQL() + " FROM " + qb.getSQL(getFullTableName());
-            //log.info("query {}", sql);
+            sql.append("SELECT ");
+            if (qb.addDistinct()) {
+                sql.append("DISTINCT");
+            }
+            String queryHint = this.mappings.getConfiguration().tableQueryHint(getTableName());
+            if (queryHint != null) {
+                sql.append(queryHint);
+            }
+
+            sql.append(" m1.*").append(qb.getColumnsSQL()).append(" FROM ").append(qb.getSQL(getFullTableName()));
             int offset = 0;
             boolean addLimit = false;
             if (criteria instanceof EntityListCriteria) {
@@ -1100,13 +1108,13 @@ public class TableModel {
                         limit = c.getPageSize();
                     }
                     addLimit = true;
-                    sql = dialect.applyLimitCriteria(sql);
+                    sql = new StringBuilder(dialect.applyLimitCriteria(sql.toString()));
                 }
             }
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
-            stmt = persistenceContext.prepareStatement(sql);
+            stmt = persistenceContext.prepareStatement(sql.toString());
             if (limit > 0) {
                 stmt.setMaxRows(limit);
             } else {

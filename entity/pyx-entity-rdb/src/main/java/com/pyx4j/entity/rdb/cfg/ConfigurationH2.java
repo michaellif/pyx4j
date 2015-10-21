@@ -115,6 +115,11 @@ public abstract class ConfigurationH2 implements Configuration {
     }
 
     @Override
+    public String tableQueryHint(String tableName) {
+        return null;
+    }
+
+    @Override
     public String sharedSequencesSchema() {
         return null;
     }
