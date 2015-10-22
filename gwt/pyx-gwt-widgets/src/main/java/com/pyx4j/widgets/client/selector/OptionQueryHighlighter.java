@@ -149,6 +149,8 @@ public class OptionQueryHighlighter {
             int end = start + query.length();
             ret.append(inputText.substring(0, start)).append("<b>").append(inputText.substring(start, end)).append("</b>")
                     .append(inputText.subSequence(end, inputText.length()));
+        } else {
+            ret.append(inputText);
         }
         return ret.toString();
 
