@@ -92,6 +92,7 @@ public class RichTextTheme extends Theme {
 
         style = new Style(new AtRule(AtKeyword.media, "print"), ".", StyleName.ReachTextViewer);
         style.addProperty("max-height", "none");
+        style.addProperty("height", "auto");
         addStyle(style);
 
         style = new Style(".", StyleName.RteToolbarTop);
