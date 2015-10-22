@@ -357,15 +357,18 @@ public class ColumnDescriptor {
                             };
                         }
                     }
-                    formatter = new IFormatter<IEntity, SafeHtml>() {
 
-                        @Override
-                        public SafeHtml format(IEntity value) {
-                            SafeHtmlBuilder builder = new SafeHtmlBuilder();
-                            builder.appendHtmlConstant(((IPrimitive<?>) value.getMember(member.getPath())).getStringView());
-                            return builder.toSafeHtml();
-                        }
-                    };
+                    if (formatter == null) {
+                        formatter = new IFormatter<IEntity, SafeHtml>() {
+
+                            @Override
+                            public SafeHtml format(IEntity value) {
+                                SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                                builder.appendHtmlConstant(((IPrimitive<?>) value.getMember(member.getPath())).getStringView());
+                                return builder.toSafeHtml();
+                            }
+                        };
+                    }
                 } else {
                     formatter = new IFormatter<IEntity, SafeHtml>() {
 
