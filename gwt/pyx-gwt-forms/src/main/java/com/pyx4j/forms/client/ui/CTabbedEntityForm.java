@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -39,8 +38,6 @@ import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
-
-import javafx.scene.layout.FlowPane;
 
 public class CTabbedEntityForm<E extends IEntity> extends CForm<E> {
 
