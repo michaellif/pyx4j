@@ -48,12 +48,12 @@ public class PrintManager {
 
     public static void print(Element element) {
         fillIframe(element);
-        printIframe(instance().iframe);
+        printIframe();
     }
 
     public static void preview(Element element) {
         fillIframe(element);
-        previewIframe(instance().iframe);
+        previewIframe();
     }
 
     private static String createHead() {
@@ -64,6 +64,14 @@ public class PrintManager {
             }
         }
         return headClone.toString();
+    }
+
+    private static void printIframe() {
+        printIframe(instance().iframe);
+    }
+
+    private static void previewIframe() {
+        previewIframe(instance().iframe);
     }
 
     private static void fillIframe(Element element) {
