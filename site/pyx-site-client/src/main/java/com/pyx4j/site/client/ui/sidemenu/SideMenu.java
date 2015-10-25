@@ -22,9 +22,11 @@ package com.pyx4j.site.client.ui.sidemenu;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.HasSecureConcern;
 
-public class SideMenu extends ScrollPanel {
+public class SideMenu extends ScrollPanel implements HasSecureConcern {
 
     private final SideMenuList root;
 
@@ -47,5 +49,10 @@ public class SideMenu extends ScrollPanel {
                     && (widget.getAbsoluteTop() + widget.getOffsetHeight()) < (getAbsoluteTop() + getOffsetHeight());
         }
         return false;
+    }
+
+    @Override
+    public void setSecurityContext(AccessControlContext context) {
+        root.setSecurityContext(context);
     }
 }

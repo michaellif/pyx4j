@@ -26,13 +26,18 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.HasSecureConcern;
+import com.pyx4j.widgets.client.SecureConcernsHolder;
 
-public class SideMenuList implements ISideMenuNode {
+public class SideMenuList implements ISideMenuNode, HasSecureConcern {
 
     private final ContentPanel contentPanel;
 
     private final List<SideMenuItem> items;
+
+    private final SecureConcernsHolder secureConcerns = new SecureConcernsHolder();
 
     private int indentation = 0;
 
@@ -53,15 +58,29 @@ public class SideMenuList implements ISideMenuNode {
         contentPanel.addNavigItem(menuItem);
         menuItem.setIndentation(indentation);
         menuItem.setParent(this);
+        secureConcerns.add(menuItem);
+        if (getParent() != null) {
+            getParent().setVisible(true);
+        }
     }
 
     public void clear() {
         items.clear();
         contentPanel.clear();
+        secureConcerns.clear();
+    }
+
+    @Override
+    public void setSecurityContext(AccessControlContext context) {
+        secureConcerns.setSecurityContext(context);
     }
 
     public List<SideMenuItem> getMenuItems() {
         return items;
+    }
+
+    public boolean isVisible() {
+        return contentPanel.isVisible();
     }
 
     public void setVisible(boolean visible) {
