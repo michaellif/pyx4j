@@ -86,6 +86,11 @@ public class OracleDialect extends Dialect {
     }
 
     @Override
+    public boolean isFunctionIndexesSupported() {
+        return true;
+    }
+
+    @Override
     public String sqlDBSystemDate() {
         return "SELECT TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS') FROM DUAL";
     }
