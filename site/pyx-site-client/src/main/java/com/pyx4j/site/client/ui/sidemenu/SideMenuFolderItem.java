@@ -21,6 +21,7 @@ package com.pyx4j.site.client.ui.sidemenu;
 
 import com.google.gwt.user.client.ui.Image;
 
+import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.site.client.resources.SiteImages;
 import com.pyx4j.site.rpc.AppPlace;
@@ -106,4 +107,21 @@ public class SideMenuFolderItem extends SideMenuItem {
             submenu.select(appPlace);
         }
     }
+
+    @Override
+    public void setSecurityContext(AccessControlContext context) {
+        super.setSecurityContext(context);
+        if (submenu != null) {
+            submenu.setSecurityContext(context);
+            boolean anyVisible = false;
+            for (SideMenuItem submenu : submenu.getMenuItems()) {
+                if (submenu.isVisible()) {
+                    anyVisible = true;
+                    break;
+                }
+            }
+            setVisible(anyVisible);
+        }
+    }
+
 }
