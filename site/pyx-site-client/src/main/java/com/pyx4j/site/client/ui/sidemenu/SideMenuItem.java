@@ -39,13 +39,15 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.gwt.commons.layout.LayoutType;
+import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.Permission;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.HasSecureConcern;
+import com.pyx4j.widgets.client.SecureConcern;
 import com.pyx4j.widgets.client.images.ButtonImages;
 
-public class SideMenuItem implements ISideMenuNode {
+public class SideMenuItem implements ISideMenuNode, HasSecureConcern {
 
     private final ContentPanel contentPanel;
 
@@ -63,7 +65,7 @@ public class SideMenuItem implements ISideMenuNode {
 
     private SideMenuList parent;
 
-    private Permission[] permission;
+    private final SecureConcern visible = new SecureConcern();
 
     public SideMenuItem(final SideMenuCommand command, String caption, final ButtonImages images, Permission... permission) {
         super();
@@ -120,10 +122,6 @@ public class SideMenuItem implements ISideMenuNode {
         label.setStyleName(SideMenuTheme.StyleName.SideMenuLabel.name());
         itemPanel.add(label);
 
-        // java varargs creates empty arrays,  so consider it as no permissions set
-        if (permission == null || permission.length == 0) {
-            permission = null;
-        }
         setPermission(permission);
     }
 
@@ -166,12 +164,29 @@ public class SideMenuItem implements ISideMenuNode {
         return selected;
     }
 
+    protected void setVisibleImpl() {
+        contentPanel.setVisible(this.visible.getDecision());
+    }
+
+    public boolean isVisible() {
+        return contentPanel.isVisible();
+    }
+
     public void setVisible(boolean visible) {
-        contentPanel.setVisible(visible && ((permission == null) || SecurityController.check(permission)));
+        this.visible.setDecision(visible);
+        if (this.visible.hasDecision()) {
+            setVisibleImpl();
+        }
+    }
+
+    @Override
+    public void setSecurityContext(AccessControlContext context) {
+        visible.setContext(context);
+        setVisibleImpl();
     }
 
     public void setPermission(Permission... permission) {
-        this.permission = permission;
+        visible.setPermission(permission);
         setVisible(contentPanel.isVisible());
     }
 
