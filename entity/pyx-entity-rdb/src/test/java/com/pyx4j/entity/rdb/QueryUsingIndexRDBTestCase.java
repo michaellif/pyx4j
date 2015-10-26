@@ -35,7 +35,7 @@ public abstract class QueryUsingIndexRDBTestCase extends DatastoreTestBase {
         super.setUp();
     }
 
-    public void testIngleIndexSingleValue() {
+    public void testIndexedSingleValue() {
         //TODO make this work
         //Assume.assumeTrue(((EntityPersistenceServiceRDB) srv).getDialect().isFunctionIndexesSupported());
 
