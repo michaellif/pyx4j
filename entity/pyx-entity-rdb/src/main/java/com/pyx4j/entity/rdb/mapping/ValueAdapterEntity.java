@@ -33,7 +33,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 
-class ValueAdapterEntity implements ValueAdapter {
+class ValueAdapterEntity extends ValueBindAdapterAbstract implements ValueAdapter {
 
     protected int sqlTypeKey;
 
@@ -94,17 +94,12 @@ class ValueAdapterEntity implements ValueAdapter {
         }
     }
 
-    static class QueryByEntityValueBindAdapter implements ValueBindAdapter {
+    static class QueryByEntityValueBindAdapter extends ValueBindAdapterAbstract {
 
         private final int sqlTypeKey;
 
         QueryByEntityValueBindAdapter(int sqlTypeKey) {
             this.sqlTypeKey = sqlTypeKey;
-        }
-
-        @Override
-        public List<String> getColumnNames(String memberSqlName) {
-            return Arrays.asList(memberSqlName);
         }
 
         @Override
@@ -124,6 +119,7 @@ class ValueAdapterEntity implements ValueAdapter {
             }
             return 1;
         }
+
     }
 
     @Override
