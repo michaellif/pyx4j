@@ -23,12 +23,13 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.rdb.PersistenceContext;
@@ -40,9 +41,16 @@ class ValueAdapterString extends ValueAdapterPrimitive {
 
     private final MemberMeta memberMeta;
 
+    private final boolean ignoreCaseIndex;
+
     protected ValueAdapterString(Dialect dialect, MemberMeta memberMeta) {
         super(dialect, String.class);
         this.memberMeta = memberMeta;
+        if (memberMeta.isIndexed() && dialect.isFunctionIndexesSupported() && memberMeta.getAnnotation(Indexed.class).ignoreCase()) {
+            ignoreCaseIndex = true;
+        } else {
+            ignoreCaseIndex = false;
+        }
     }
 
     @Override
@@ -106,12 +114,7 @@ class ValueAdapterString extends ValueAdapterPrimitive {
      *
      */
 
-    private class QueryStringValueBindAdapter implements ValueBindAdapter {
-
-        @Override
-        public List<String> getColumnNames(String memberSqlName) {
-            return Arrays.asList(memberSqlName);
-        }
+    private class QueryStringValueBindAdapter extends ValueBindAdapterAbstract {
 
         @Override
         public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
@@ -127,6 +130,28 @@ class ValueAdapterString extends ValueAdapterPrimitive {
                 }
             }
             return 1;
+        }
+
+        @Override
+        public List<String> querySQLFunctionOnColumn(Dialect dialect, Restriction restriction, List<String> columnNames) {
+            if (ignoreCaseIndex) {
+                List<String> columnSql = new ArrayList<>();
+                for (String columnName : columnNames) {
+                    columnSql.add("LOWER(" + columnName + ')');
+                }
+                return columnSql;
+            } else {
+                return columnNames;
+            }
+        }
+
+        @Override
+        public String querySqlFunctionOnValue(Dialect dialect, Restriction restriction, String argumentPlaceHolder) {
+            if (ignoreCaseIndex) {
+                return "LOWER(" + argumentPlaceHolder + ')';
+            } else {
+                return argumentPlaceHolder;
+            }
         }
 
     }

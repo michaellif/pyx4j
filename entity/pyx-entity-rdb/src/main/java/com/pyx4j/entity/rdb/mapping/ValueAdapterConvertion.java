@@ -71,6 +71,16 @@ class ValueAdapterConvertion implements ValueAdapter {
         return valueAdapter.toSqlValue(null, columnName, argumentPlaceHolder);
     }
 
+    @Override
+    public List<String> querySQLFunctionOnColumn(Dialect dialect, Restriction restriction, List<String> columnNames) {
+        return valueAdapter.querySQLFunctionOnColumn(dialect, restriction, columnNames);
+    }
+
+    @Override
+    public String querySqlFunctionOnValue(Dialect dialect, Restriction restriction, String argumentPlaceHolder) {
+        return valueAdapter.querySqlFunctionOnValue(dialect, restriction, argumentPlaceHolder);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {

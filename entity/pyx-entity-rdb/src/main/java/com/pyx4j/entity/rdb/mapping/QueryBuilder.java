@@ -236,15 +236,34 @@ public class QueryBuilder<T extends IEntity> {
         appendPropertyCriterion(criterionSql, joinBuilder, propertyCriterion, required);
     }
 
+    public String sqlOperator(Restriction restriction) {
+        switch (restriction) {
+        case LESS_THAN:
+            return "<";
+        case LESS_THAN_OR_EQUAL:
+            return "<=";
+        case GREATER_THAN:
+            return ">";
+        case GREATER_THAN_OR_EQUAL:
+            return ">=";
+        case EQUAL:
+            return "=";
+        case NOT_EQUAL:
+            return "!=";
+        default:
+            throw new RuntimeException("Unsupported Operator " + restriction);
+        }
+    }
+
     private void appendPropertyCriterion(StringBuilder criterionSql, QueryJoinBuilder joinBuilder, PropertyCriterion propertyCriterion, boolean required) {
         BindHolder bindHolder = new BindHolder();
         bindHolder.bindValue = propertyCriterion.getValue();
 
-        String secondPersistenceName = null;
+        List<String> sqlColumnNames = new ArrayList<>();
+
         if (propertyCriterion.getPropertyPath().toString().endsWith(IndexAdapter.SECONDARY_PRROPERTY_SUFIX)) {
             // TODO create index binders and value adapters
-            criterionSql.append(mainTableSqlAlias).append('.')
-                    .append(dialect.getNamingConvention().sqlFieldName(propertyCriterion.getPropertyPath().toString()));
+            sqlColumnNames.add(mainTableSqlAlias + '.' + dialect.getNamingConvention().sqlFieldName(propertyCriterion.getPropertyPath().toString()));
         } else {
             boolean leftJoin = false;
             if (!required) {
@@ -266,43 +285,10 @@ public class QueryBuilder<T extends IEntity> {
             }
             bindHolder.adapter = queryMember.memberOper.getValueAdapter().getQueryValueBindAdapter(propertyCriterion.getRestriction(), bindHolder.bindValue);
 
-            // TODO P3. support more then two columns
-            boolean firstValue = true;
-            for (String name : bindHolder.adapter.getColumnNames(queryMember.memberSqlName)) {
-                if (firstValue) {
-                    criterionSql.append(name);
-                    firstValue = false;
-                } else {
-                    secondPersistenceName = name;
-                }
-            }
-
+            sqlColumnNames.addAll(bindHolder.adapter.getColumnNames(queryMember.memberSqlName));
         }
 
         if (bindHolder.bindValue instanceof Path) {
-            switch (propertyCriterion.getRestriction()) {
-            case LESS_THAN:
-                criterionSql.append(" < ");
-                break;
-            case LESS_THAN_OR_EQUAL:
-                criterionSql.append(" <= ");
-                break;
-            case GREATER_THAN:
-                criterionSql.append(" > ");
-                break;
-            case GREATER_THAN_OR_EQUAL:
-                criterionSql.append(" >= ");
-                break;
-            case EQUAL:
-                criterionSql.append(" = ");
-                break;
-            case NOT_EQUAL:
-                criterionSql.append(" != ");
-                break;
-            default:
-                throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction() + " for PathReference");
-            }
-
             Path property2Path = (Path) bindHolder.bindValue;
 
             boolean leftJoin = false;
@@ -313,128 +299,140 @@ public class QueryBuilder<T extends IEntity> {
             if (queryMember2 == null) {
                 throw new RuntimeException("Unknown member " + property2Path + " in " + joinBuilder.operationsMeta.entityMeta().getEntityClass().getName());
             }
-            ValueBindAdapter adapter = queryMember2.memberOper.getValueAdapter().getQueryValueBindAdapter(propertyCriterion.getRestriction(),
+            ValueBindAdapter adapter2 = queryMember2.memberOper.getValueAdapter().getQueryValueBindAdapter(propertyCriterion.getRestriction(),
                     bindHolder.bindValue);
+            List<String> sqlColumnNames2 = adapter2.getColumnNames(queryMember2.memberSqlName);
 
-            // TODO P3. support more then two columns
-            boolean firstValue = true;
-            for (String name : adapter.getColumnNames(queryMember2.memberSqlName)) {
-                if (firstValue) {
-                    criterionSql.append(name);
-                    firstValue = false;
-                } else {
-                    secondPersistenceName = name;
-                    throw new Error("TODO support more then two columns in value join");
+            for (int i = 0; i < sqlColumnNames.size(); i++) {
+                if (i >= sqlColumnNames2.size()) {
+                    break;
                 }
+                if (i > 0) {
+                    criterionSql.append(" AND ");
+                }
+                criterionSql.append(sqlColumnNames.get(i)).append(' ');
+                criterionSql.append(sqlOperator(propertyCriterion.getRestriction())).append(' ');
+                criterionSql.append(sqlColumnNames2.get(i));
             }
-
         } else if (bindHolder.bindValue == null) {
+            String sqlOperator;
             switch (propertyCriterion.getRestriction()) {
             case NOT_EXISTS:
             case EQUAL:
-                criterionSql.append(" IS NULL ");
+                sqlOperator = "IS NULL";
                 break;
             case NOT_EQUAL:
-                criterionSql.append(" IS NOT NULL ");
+                sqlOperator = "IS NOT NULL";
                 break;
             default:
                 throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction() + " for NULL value");
             }
+            for (int i = 0; i < sqlColumnNames.size(); i++) {
+                if (i > 0) {
+                    criterionSql.append(" AND ");
+                }
+                criterionSql.append(sqlColumnNames.get(i)).append(' ').append(sqlOperator).append(' ');
+            }
+        } else if (propertyCriterion.getRestriction() == Restriction.IN) {
+            appendINcriterion(criterionSql, sqlColumnNames, bindHolder);
         } else {
             String sqlOperator;
             switch (propertyCriterion.getRestriction()) {
             case LESS_THAN:
-                sqlOperator = " < ? ";
-                break;
             case LESS_THAN_OR_EQUAL:
-                sqlOperator = " <= ? ";
-                break;
             case GREATER_THAN:
-                sqlOperator = " > ? ";
-                break;
             case GREATER_THAN_OR_EQUAL:
-                sqlOperator = " >= ? ";
-                break;
             case EQUAL:
-                sqlOperator = " = ? ";
-                break;
             case NOT_EQUAL:
-                sqlOperator = " != ? ";
+                sqlOperator = sqlOperator(propertyCriterion.getRestriction());
                 break;
-            case IN:
-                Collection<?> items;
-                if (bindHolder.bindValue.getClass().isArray()) {
-                    items = Arrays.asList((Object[]) bindHolder.bindValue);
-                } else if (bindHolder.bindValue instanceof Collection) {
-                    items = (Collection<?>) bindHolder.bindValue;
-                } else {
-                    throw new RuntimeException("Unsupported Type for IN " + bindHolder.bindValue.getClass().getName());
-                }
-                if (items.isEmpty()) {
-                    criterionSql.append(" = 0 AND ").append(dialect.falseCondition());
-                } else {
-                    criterionSql.append(" IN (");
-                    boolean first = true;
-                    ValueBindAdapter itemsAdapter = bindHolder.adapter;
-                    BindHolder secondColumnBindHolder = null;
-                    for (Object item : items) {
-                        if (first) {
-
-                            if (bindHolder.adapter instanceof ValueAdapterEntityPolymorphic) {
-                                // Replace the adapter for values.
-                                itemsAdapter = new ValueAdapterEntity.QueryByEntityValueBindAdapter(dialect.getTargetSqlType(Long.class));
-
-                                // Prepare  Discriminator parameter
-                                // TODO make a better access to DiscriminatorQueryValueBindAdapter
-                                IEntity entityProto = EntityFactory.getEntityPrototype(((IEntity) item).getInstanceValueClass());
-
-                                secondColumnBindHolder = new BindHolder();
-                                secondColumnBindHolder.adapter = ((ValueAdapterEntityPolymorphic) bindHolder.adapter)
-                                        .getQueryValueBindAdapter(propertyCriterion.getRestriction(), entityProto);
-
-                                secondColumnBindHolder.bindValue = entityProto;
-                            }
-
-                            first = false;
-                        } else {
-                            criterionSql.append(",");
-                        }
-                        criterionSql.append(" ? ");
-
-                        BindHolder itemBindHolder = new BindHolder();
-                        itemBindHolder.adapter = itemsAdapter;
-                        itemBindHolder.bindValue = item;
-                        bindParams.add(itemBindHolder);
-                    }
-                    criterionSql.append(")");
-
-                    if (secondColumnBindHolder != null) {
-                        criterionSql.append(" AND ").append(secondPersistenceName).append(" = ? ");
-                        bindParams.add(secondColumnBindHolder);
-                    }
-                }
-                return;
             case RDB_LIKE:
                 if (bindHolder.bindValue != null) {
                     bindHolder.bindValue = dialect.likeQueryBindValue(bindHolder.bindValue);
                 }
-                sqlOperator = " " + dialect.likeOperator() + " ? ";
+                sqlOperator = dialect.likeOperator();
                 break;
             case TEXT_SEARCH:
                 bindHolder.bindValue = dialect.textSearchQueryBindValue(bindHolder.bindValue);
-                sqlOperator = " " + dialect.textSearchOperator() + " " + dialect.textSearchToSqlQueryValue("?") + " ";
+                sqlOperator = dialect.textSearchOperator();
                 break;
             default:
                 throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction());
             }
 
-            criterionSql.append(sqlOperator);
+            if (bindHolder.adapter != null) {
+                sqlColumnNames = bindHolder.adapter.querySQLFunctionOnColumn(dialect, propertyCriterion.getRestriction(), sqlColumnNames);
+            }
 
-            if (secondPersistenceName != null) {
-                criterionSql.append(" AND ").append(secondPersistenceName).append(sqlOperator);
+            for (int i = 0; i < sqlColumnNames.size(); i++) {
+                if (i > 0) {
+                    criterionSql.append(" AND ");
+                }
+                criterionSql.append(sqlColumnNames.get(i)).append(' ').append(sqlOperator).append(' ');
+                if (bindHolder.adapter != null) {
+                    criterionSql.append(bindHolder.adapter.querySqlFunctionOnValue(dialect, propertyCriterion.getRestriction(), "?"));
+                } else {
+                    criterionSql.append("?");
+                }
             }
 
             bindParams.add(bindHolder);
+        }
+
+    }
+
+    private void appendINcriterion(StringBuilder criterionSql, List<String> sqlColumnNames, BindHolder bindHolder) {
+        Collection<?> items;
+        if (bindHolder.bindValue.getClass().isArray()) {
+            items = Arrays.asList((Object[]) bindHolder.bindValue);
+        } else if (bindHolder.bindValue instanceof Collection) {
+            items = (Collection<?>) bindHolder.bindValue;
+        } else {
+            throw new RuntimeException("Unsupported Type for IN " + bindHolder.bindValue.getClass().getName());
+        }
+        if (items.isEmpty()) {
+            criterionSql.append(dialect.falseCondition());
+        } else {
+            criterionSql.append(sqlColumnNames.get(0));
+            criterionSql.append(" IN (");
+            boolean first = true;
+            ValueBindAdapter itemsAdapter = bindHolder.adapter;
+            BindHolder secondColumnBindHolder = null;
+            for (Object item : items) {
+                if (first) {
+
+                    if (bindHolder.adapter instanceof ValueAdapterEntityPolymorphic) {
+                        // Replace the adapter for values.
+                        itemsAdapter = new ValueAdapterEntity.QueryByEntityValueBindAdapter(dialect.getTargetSqlType(Long.class));
+
+                        // Prepare  Discriminator parameter
+                        // TODO make a better access to DiscriminatorQueryValueBindAdapter
+                        IEntity entityProto = EntityFactory.getEntityPrototype(((IEntity) item).getInstanceValueClass());
+
+                        secondColumnBindHolder = new BindHolder();
+                        secondColumnBindHolder.adapter = ((ValueAdapterEntityPolymorphic) bindHolder.adapter).getQueryValueBindAdapter(Restriction.IN,
+                                entityProto);
+
+                        secondColumnBindHolder.bindValue = entityProto;
+                    }
+
+                    first = false;
+                } else {
+                    criterionSql.append(",");
+                }
+                criterionSql.append(" ? ");
+
+                BindHolder itemBindHolder = new BindHolder();
+                itemBindHolder.adapter = itemsAdapter;
+                itemBindHolder.bindValue = item;
+                bindParams.add(itemBindHolder);
+            }
+            criterionSql.append(")");
+
+            if (secondColumnBindHolder != null) {
+                criterionSql.append(" AND ").append(sqlColumnNames.get(1)).append(" = ? ");
+                bindParams.add(secondColumnBindHolder);
+            }
         }
     }
 

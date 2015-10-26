@@ -26,7 +26,7 @@ import java.util.List;
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 
-abstract class ValueAdapterPrimitive implements ValueAdapter {
+abstract class ValueAdapterPrimitive extends ValueBindAdapterAbstract implements ValueAdapter {
 
     protected final Class<?> valueClass;
 

@@ -40,7 +40,7 @@ import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 
-public class ValueAdapterEntityPolymorphic implements ValueAdapter {
+public class ValueAdapterEntityPolymorphic extends ValueBindAdapterAbstract implements ValueAdapter {
 
     protected int sqlTypeKey;
 
@@ -127,6 +127,11 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
     }
 
     @Override
+    public String querySqlFunctionOnValue(Dialect dialect, Restriction restriction, String argumentPlaceHolder) {
+        return argumentPlaceHolder;
+    }
+
+    @Override
     public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
         IEntity childEntity = (IEntity) value;
         Key primaryKey = childEntity.getPrimaryKey();
@@ -164,7 +169,12 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
         }
     }
 
-    private class DiscriminatorQueryValueBindAdapter implements ValueBindAdapter {
+    private class DiscriminatorQueryValueBindAdapter extends ValueBindAdapterAbstract {
+
+        @Override
+        public List<String> getColumnNames(String memberSqlName) {
+            return Arrays.asList(memberSqlName + discriminatorColumnNameSufix);
+        }
 
         @Override
         public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
@@ -176,10 +186,6 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
             return 1;
         }
 
-        @Override
-        public List<String> getColumnNames(String memberSqlName) {
-            return Arrays.asList(memberSqlName + discriminatorColumnNameSufix);
-        }
     }
 
     @Override

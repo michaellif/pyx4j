@@ -36,7 +36,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 
-class ValueAdapterEntityVersioned implements ValueAdapter {
+class ValueAdapterEntityVersioned extends ValueBindAdapterAbstract implements ValueAdapter {
 
     private static String FOR_DATE_COLUNM_NAME_SUFIX = "_for";
 
@@ -131,12 +131,7 @@ class ValueAdapterEntityVersioned implements ValueAdapter {
         if (value instanceof IEntity) {
             return this;
         } else {
-            return new ValueBindAdapter() {
-
-                @Override
-                public List<String> getColumnNames(String memberSqlName) {
-                    return Arrays.asList(memberSqlName);
-                }
+            return new ValueBindAdapterAbstract() {
 
                 @Override
                 public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
