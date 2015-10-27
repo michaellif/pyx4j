@@ -16,7 +16,6 @@
  *
  * Created on 2011-02-20
  * @author vlads
- * @version $Id$
  */
 package com.pyx4j.server.mail;
 
@@ -192,23 +191,35 @@ class SMTPMailServiceImpl implements IMailService {
                 content.addBodyPart(bodyPart);
                 message.setContent(content);
             } else {
-                content = new MimeMultipart("alternative");
-                message.setHeader("Content-Type", content.getContentType());
+                // Consider using  http://commons.apache.org/proper/commons-email/
+                content = new MimeMultipart("mixed");
+                //message.setHeader("Content-Type", content.getContentType());
 
+                MimeMultipart messageTextMultipart = new MimeMultipart("alternative");
+
+                // Set text/plain part
+                MimeBodyPart textPart = new MimeBodyPart();
                 if (!CommonsStringUtils.isEmpty(mailMessage.getTextBody())) {
-                    MimeBodyPart textPart = new MimeBodyPart();
                     textPart.setText(mailMessage.getTextBody());
-                    textPart.setHeader("MIME-Version", "1.0");
-                    textPart.setHeader("Content-Type", "text/plain; charset=\"utf-8\"");
-                    content.addBodyPart(textPart);
+                } else {
+                    textPart.setText(HtmlUtils.getPlainTextFromHtml(mailMessage.getHtmlBody()), "utf-8");
                 }
 
+                textPart.setHeader("MIME-Version", "1.0");
+                textPart.setHeader("Content-Type", "text/plain; charset=\"utf-8\"");
+                textPart.setHeader("Content-Transfer-Encoding", "quoted-printable");
+                messageTextMultipart.addBodyPart(textPart);
+
+                // Set text/html part
                 MimeBodyPart htmlPart = new MimeBodyPart();
                 htmlPart.setContent(mailMessage.getHtmlBody(), "text/html");
                 htmlPart.setHeader("MIME-Version", "1.0");
                 htmlPart.setHeader("Content-Type", "text/html; charset=\"utf-8\"");
+                messageTextMultipart.addBodyPart(htmlPart);
 
-                content.addBodyPart(htmlPart);
+                MimeBodyPart htmlAndTextBodyPart = new MimeBodyPart();
+                htmlAndTextBodyPart.setContent(messageTextMultipart);
+                content.addBodyPart(htmlAndTextBodyPart);
                 message.setContent(content);
             }
 
@@ -281,4 +292,5 @@ class SMTPMailServiceImpl implements IMailService {
             }
         }
     }
+
 }
