@@ -61,6 +61,7 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
     public NamingConvention namingConvention() {
         ShortWords shortWords = new ShortWords();
         shortWords.add("TEST", "T");
+        shortWords.add("TESTS", "TS");
         shortWords.add("BASE", "B");
         shortWords.add("ASSOCIATION2", "ASC2");
         shortWords.add("ORGANIZATION", "ORG");
@@ -121,7 +122,14 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
         shortWords.add("LIST", "LS");
         shortWords.add("VALUE", "VL");
         shortWords.add("AMOUNT", "AMT");
-
+        shortWords.add("QUERY", "QR");
+        shortWords.add("CLASS", "CLS");
+        shortWords.add("CRITERIA", "CR");
+        shortWords.add("CONDITION", "CND");
+        shortWords.add("COLUMN", "CLM");
+        shortWords.add("STORAGE", "STG");
+        shortWords.add("OFFSET", "OFS");
+        shortWords.add("SELF", "S");
         return new NamingConventionOracle(30, shortWords);
     }
 }

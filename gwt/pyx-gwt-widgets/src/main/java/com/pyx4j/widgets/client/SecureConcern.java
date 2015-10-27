@@ -59,6 +59,10 @@ public class SecureConcern {
         }
     }
 
+    public void setSecurityContext(AccessControlContext context) {
+        setContext(context);
+    }
+
     public void setContext(AccessControlContext context) {
         if ((context == null) || (permissions == null)) {
             resetDecision();

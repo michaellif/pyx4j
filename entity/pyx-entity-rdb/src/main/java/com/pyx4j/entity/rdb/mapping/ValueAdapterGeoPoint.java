@@ -31,7 +31,7 @@ import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.geo.GeoPoint;
 
-class ValueAdapterGeoPoint implements ValueAdapter {
+class ValueAdapterGeoPoint extends ValueBindAdapterAbstract implements ValueAdapter {
 
     protected int sqlType;
 

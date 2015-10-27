@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
 
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.rdb.PersistenceContext;
@@ -57,17 +55,17 @@ public class ValueAdapterTextSearchDocument extends ValueAdapterPrimitive {
         return 1;
     }
 
-    static class TextSearchQueryValueBindAdapter implements ValueBindAdapter {
-
-        @Override
-        public List<String> getColumnNames(String memberSqlName) {
-            return Arrays.asList(memberSqlName);
-        }
+    static class TextSearchQueryValueBindAdapter extends ValueBindAdapterAbstract {
 
         @Override
         public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
             stmt.setString(parameterIndex, value.toString());
             return 1;
+        }
+
+        @Override
+        public String querySqlFunctionOnValue(Dialect dialect, Restriction restriction, String argumentPlaceHolder) {
+            return dialect.textSearchToSqlQueryValue(argumentPlaceHolder);
         }
 
     }
