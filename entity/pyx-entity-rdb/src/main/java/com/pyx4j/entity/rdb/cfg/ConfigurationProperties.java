@@ -22,6 +22,8 @@ package com.pyx4j.entity.rdb.cfg;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.collections4.map.CaseInsensitiveMap;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.PropertiesConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolConfiguration;
@@ -67,6 +69,8 @@ public class ConfigurationProperties {
     public final Map<String, Integer> tableIdentityOffset = new HashMap<>();
 
     public final Map<String, String> tableCreateOptions = new HashMap<>();
+
+    public final Map<String, String> tableQueryHint = new CaseInsensitiveMap<>();
 
     ConfigurationProperties() {
         for (ConnectionPoolType connectionType : ConnectionPoolType.poolable()) {
@@ -118,6 +122,7 @@ public class ConfigurationProperties {
 
         this.tableIdentityOffset.putAll(c.getIntegerValues("tableIdentityOffset"));
         this.tableCreateOptions.putAll(c.getValues("tableCreateOption"));
+        this.tableQueryHint.putAll(c.getValues("tableQueryHint"));
 
         this.ddl = c.getEnumValue("ddl", Ddl.class, ddl);
     }

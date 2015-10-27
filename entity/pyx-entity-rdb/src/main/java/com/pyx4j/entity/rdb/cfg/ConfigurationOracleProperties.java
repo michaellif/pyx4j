@@ -139,6 +139,11 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
     }
 
     @Override
+    public String tableQueryHint(String tableName) {
+        return properties.tableQueryHint.get(tableName);
+    }
+
+    @Override
     public boolean createForeignKeys() {
         return properties.createForeignKeys;
     }
