@@ -203,9 +203,11 @@ class SMTPMailServiceImpl implements IMailService {
                 content.addBodyPart(bodyPart);
                 message.setContent(content);
             } else {
+                // Consider using  http://commons.apache.org/proper/commons-email/
+                content = new MimeMultipart("mixed");
+                //message.setHeader("Content-Type", content.getContentType());
 
-                content = new MimeMultipart("alternative");
-                message.setHeader("Content-Type", content.getContentType());
+                MimeMultipart messageTextMultipart = new MimeMultipart("alternative");
 
                 // Set text/plain part
                 MimeBodyPart textPart = new MimeBodyPart();
@@ -218,15 +220,18 @@ class SMTPMailServiceImpl implements IMailService {
                 textPart.setHeader("MIME-Version", "1.0");
                 textPart.setHeader("Content-Type", "text/plain; charset=\"utf-8\"");
                 textPart.setHeader("Content-Transfer-Encoding", "quoted-printable");
-                content.addBodyPart(textPart);
+                messageTextMultipart.addBodyPart(textPart);
 
                 // Set text/html part
                 MimeBodyPart htmlPart = new MimeBodyPart();
                 htmlPart.setContent(mailMessage.getHtmlBody(), "text/html");
                 htmlPart.setHeader("MIME-Version", "1.0");
                 htmlPart.setHeader("Content-Type", "text/html; charset=\"utf-8\"");
+                messageTextMultipart.addBodyPart(htmlPart);
 
-                content.addBodyPart(htmlPart);
+                MimeBodyPart htmlAndTextBodyPart = new MimeBodyPart();
+                htmlAndTextBodyPart.setContent(messageTextMultipart);
+                content.addBodyPart(htmlAndTextBodyPart);
                 message.setContent(content);
             }
 

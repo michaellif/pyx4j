@@ -97,6 +97,11 @@ public abstract class ConfigurationPostgreSQL implements Configuration {
     }
 
     @Override
+    public String tableQueryHint(String tableName) {
+        return null;
+    }
+
+    @Override
     public String sharedSequencesSchema() {
         return null;
     }
