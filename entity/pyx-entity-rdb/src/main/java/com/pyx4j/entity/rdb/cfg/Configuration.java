@@ -203,6 +203,8 @@ public interface Configuration extends IPersistenceConfiguration {
 
     public String tableCreateOption(String entityShortName);
 
+    public String tableQueryHint(String tableName);
+
     public boolean sequencesBaseIdentity();
 
     /**
