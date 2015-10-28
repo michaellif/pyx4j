@@ -144,6 +144,13 @@ public class MailMessage implements Serializable {
         this.to.addAll(getAddressList(comaSeparatedAddresses));
     }
 
+    public void addTo(List<String> addresses) {
+        if (this.to == null) {
+            this.to = new ArrayList<>();
+        }
+        this.to.addAll(addresses);
+    }
+
     public Collection<String> getCc() {
         if (this.cc == null) {
             return Collections.emptyList();
@@ -154,6 +161,13 @@ public class MailMessage implements Serializable {
 
     public void setCc(Collection<String> cc) {
         this.cc = cc;
+    }
+
+    public void addCc(List<String> addresses) {
+        if (this.cc == null) {
+            this.cc = new ArrayList<>();
+        }
+        this.cc.addAll(addresses);
     }
 
     public void addCcList(String comaSeparatedAddresses) {
