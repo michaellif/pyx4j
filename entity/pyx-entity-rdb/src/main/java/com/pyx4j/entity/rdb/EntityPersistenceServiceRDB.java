@@ -510,6 +510,16 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
     }
 
     @Override
+    public void executeSql(String sql) throws SQLException {
+        startCallContext(ConnectionReason.forUpdate);
+        try {
+            SQLUtils.execute(this.getPersistenceContext().getConnection(), sql);
+        } finally {
+            endCallContext();
+        }
+    }
+
+    @Override
     public boolean isTableExists(Class<? extends IEntity> entityClass) {
         startCallContext(ConnectionReason.forRead);
         try {
