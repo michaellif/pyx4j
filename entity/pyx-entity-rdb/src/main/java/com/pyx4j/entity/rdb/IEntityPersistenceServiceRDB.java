@@ -19,6 +19,8 @@
  */
 package com.pyx4j.entity.rdb;
 
+import java.sql.SQLException;
+
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
@@ -40,5 +42,8 @@ public interface IEntityPersistenceServiceRDB extends IEntityPersistenceService,
     public boolean isTableExists(Class<? extends IEntity> entityClass);
 
     public void dropTable(Class<? extends IEntity> entityClass);
+
+    // Execute SQL statements in current transaction context
+    public void executeSql(String sql) throws SQLException;
 
 }
