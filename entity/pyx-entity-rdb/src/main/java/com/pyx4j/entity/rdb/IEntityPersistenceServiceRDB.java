@@ -37,13 +37,13 @@ public interface IEntityPersistenceServiceRDB extends IEntityPersistenceService,
 
     public void ensureSchemaModel(Iterable<Class<? extends IEntity>> classes);
 
+    // Execute SQL statements in current transaction context
+    public void executeSql(String sql) throws SQLException;
+
     public void resetMapping();
 
     public boolean isTableExists(Class<? extends IEntity> entityClass);
 
     public void dropTable(Class<? extends IEntity> entityClass);
-
-    // Execute SQL statements in current transaction context
-    public void executeSql(String sql) throws SQLException;
 
 }
