@@ -115,7 +115,7 @@ public class DataDump {
 
     @SuppressWarnings("unchecked")
     private static void dumpAny(String baseDirectory, String type, Object item, DataType dataType) {
-        if ((item == null) || (!ServerSideConfiguration.instance().isDevelopmentBehavior())) {
+        if ((item == null) || (!ServerSideConfiguration.instance().allowDataDump())) {
             return;
         }
         long id = ++debugCount;

@@ -138,6 +138,10 @@ public class ServerSideConfiguration {
         return false;
     }
 
+    public boolean allowDataDump() {
+        return isDevelopmentBehavior();
+    }
+
     /**
      * Enable temporary to allow hosted mode on production environment.
      */
