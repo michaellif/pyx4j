@@ -22,6 +22,7 @@ package com.pyx4j.entity.shared.utils;
 import java.util.Comparator;
 
 import com.pyx4j.commons.CompareHelper;
+import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.Path;
@@ -42,6 +43,22 @@ public class EntityComparatorFactory {
             @Override
             public int compare(E paramT1, E paramT2) {
                 return CompareHelper.compareTo(paramT1.getPrimaryKey(), paramT2.getPrimaryKey());
+            }
+        };
+    }
+
+    /**
+     * @see BusinessEqualValue
+     */
+    public static <E extends IEntity> Comparator<E> createBusinessEqualComparator() {
+        return new Comparator<E>() {
+            @Override
+            public int compare(E paramT1, E paramT2) {
+                if (paramT1.businessEquals(paramT2)) {
+                    return 0;
+                } else {
+                    return -1;
+                }
             }
         };
     }
