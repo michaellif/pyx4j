@@ -382,6 +382,10 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         return mandatoryValidationMessage;
     }
 
+    public boolean hasAsyncValidation() {
+        return (asyncValidator != null);
+    }
+
     public void setAsyncValidationErrorMessage(String message) {
         if (asyncValidator == null) {
             addComponentValidator(asyncValidator = new AsyncValidator<>());
