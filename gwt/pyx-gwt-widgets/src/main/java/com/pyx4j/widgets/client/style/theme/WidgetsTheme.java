@@ -19,6 +19,8 @@
  */
 package com.pyx4j.widgets.client.style.theme;
 
+import com.pyx4j.commons.css.AtRule;
+import com.pyx4j.commons.css.AtRule.AtKeyword;
 import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
@@ -331,6 +333,10 @@ public class WidgetsTheme extends Theme {
         Style style = new Style(".", StyleName.Toolbar);
         style.addProperty("white-space", "nowrap");
         style.addProperty("display", "inline-block");
+        addStyle(style);
+
+        style = new Style(new AtRule(AtKeyword.media, "print"), ".", StyleName.Toolbar);
+        style.addProperty("display", "none");
         addStyle(style);
 
         style = new Style(".", StyleName.ToolbarItem);
