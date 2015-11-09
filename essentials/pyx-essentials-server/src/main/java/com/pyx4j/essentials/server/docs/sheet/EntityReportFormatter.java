@@ -19,6 +19,7 @@
  */
 package com.pyx4j.essentials.server.docs.sheet;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
@@ -184,7 +186,12 @@ public class EntityReportFormatter<E extends IEntity> {
             if (memberMeta.isEntity()) {
                 formatter.cell(((IEntity) entity.getMember(memberPath)).getStringView());
             } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                formatter.cell(memberValue(entity.getMember(memberPath)));
+                if (memberMeta.getEditorType() == EditorType.percentage && (formatter instanceof ReportTableXLSXFormatter)) {
+                    ((ReportTableXLSXFormatter) formatter).cellPercentage((BigDecimal) memberValue(entity.getMember(memberPath)));
+                } else {
+                    formatter.cell(memberValue(entity.getMember(memberPath)));
+                }
+
             }
         }
         reportEntityEnds(formatter, entity);

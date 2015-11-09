@@ -25,6 +25,7 @@ import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -102,6 +103,8 @@ public class ReportDialog extends DeferredProcessDialog {
     public void start(DocCreationService reportService, DocCreationRequest docCreationRequest) {
         if (reportService instanceof DownloadableService) {
             this.reportService = (DownloadableService) reportService;
+        } else if (this.reportService == null) {
+            this.reportService = GWT.<DownloadableService> create(DownloadableService.class);
         }
 
         show();
