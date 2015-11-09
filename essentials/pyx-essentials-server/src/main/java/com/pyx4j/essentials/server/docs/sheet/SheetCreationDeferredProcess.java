@@ -59,6 +59,12 @@ public class SheetCreationDeferredProcess<E extends IEntity> extends AbstractDef
         this.fileName = fileName;
     }
 
+    public static <T extends IEntity> SheetCreationDeferredProcess<T> create(Class<T> entityClass, CursorSource<T> cursorSource, String fileName) {
+        EntityReportFormatter<T> entityFormatter = new EntityReportFormatter<T>(entityClass);
+        ReportTableFormatter formatter = new ReportTableXLSXFormatter();
+        return new SheetCreationDeferredProcess<T>(EntityListCriteria.create(entityClass), cursorSource, formatter, entityFormatter, fileName);
+    }
+
     @Override
     public void execute() {
         entityFormatter.createHeader(formatter);
