@@ -144,18 +144,18 @@ public class TabTheme extends Theme {
         style.addProperty("margin", "3px");
         addStyle(style);
 
-        style = new Style((IStyleName) StyleName.TabList);
+        style = new Style(".", StyleName.TabList);
         style.addProperty("background-color", "white");
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColor.foreground, 0.6);
         addStyle(style);
 
-        style = new Style((IStyleName) StyleName.TabListItem);
+        style = new Style(".", StyleName.TabListItem);
         style.addProperty("color", "black");
         style.addProperty("padding", "4px 14px 4px 1px");
         addStyle(style);
 
-        style = new Style(StyleName.TabListItem, StyleDependent.hover);
+        style = new Style(".", StyleName.TabListItem, "-", StyleDependent.hover);
         style.addProperty("background", ThemeColor.foreground, 0.5);
         style.addProperty("color", ThemeColor.foreground, 0);
         addStyle(style);
