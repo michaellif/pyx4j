@@ -93,28 +93,12 @@ public class SchedulerHelper {
         quartzProperties.put(StdSchedulerFactory.PROP_JOB_STORE_CLASS, JobStoreTX.class.getName());
 
         String delegateProperty = StdSchedulerFactory.PROP_JOB_STORE_PREFIX + ".driverDelegateClass";
-        Configuration rdbConfiguration = (Configuration) ServerSideConfiguration.instance().getPersistenceConfiguration();
-        switch (rdbConfiguration.databaseType()) {
-        case HSQLDB:
-            quartzProperties.put(delegateProperty, HSQLDBDelegate.class.getName());
-            break;
-        case MySQL:
-            quartzProperties.put(delegateProperty, StdJDBCDelegate.class.getName());
-            break;
-        case Oracle:
-            quartzProperties.put(delegateProperty, OracleDelegate.class.getName());
-            break;
-        case PostgreSQL:
-            quartzProperties.put(delegateProperty, PostgreSQLDelegate.class.getName());
-            break;
-        default:
-            throw new Error("Unsupported databaseType " + rdbConfiguration.databaseType());
-        }
+        quartzProperties.put(delegateProperty, getDelegateClassName());
 
         quartzProperties.put(StdSchedulerFactory.PROP_SCHED_INSTANCE_ID, LoggerConfig.getContextName());
         quartzProperties.put(StdSchedulerFactory.PROP_SCHED_THREAD_NAME, LoggerConfig.getContextName() + "_DefaultQuartzSchedulerThread");
-        quartzProperties.put(StdSchedulerFactory.PROP_THREAD_POOL_PREFIX + ".threadNamePrefix", LoggerConfig.getContextName()
-                + "_DefaultQuartzSchedulerWorkerThread");
+        quartzProperties.put(StdSchedulerFactory.PROP_THREAD_POOL_PREFIX + ".threadNamePrefix",
+                LoggerConfig.getContextName() + "_DefaultQuartzSchedulerWorkerThread");
 
         String dataSourceName = "main";
         quartzProperties.put(StdSchedulerFactory.PROP_JOB_STORE_PREFIX + ".dataSource", dataSourceName);
@@ -122,7 +106,7 @@ public class SchedulerHelper {
 
         quartzProperties.put(dsConfigPrefix + StdSchedulerFactory.PROP_CONNECTION_PROVIDER_CLASS, QuartzPoolingConnectionProvider.class.getName());
 
-        log.debug("use DB configuration {}", rdbConfiguration);
+        log.debug("use DB configuration {}", ServerSideConfiguration.instance().getPersistenceConfiguration());
         log.debug("quartzProperties {}", quartzProperties);
 
         schedulerFactory = new StdSchedulerFactory(quartzProperties);
@@ -278,6 +262,22 @@ public class SchedulerHelper {
 
     public static Scheduler getScheduler() {
         return instance.scheduler;
+    }
+
+    public static String getDelegateClassName() {
+        Configuration rdbConfiguration = (Configuration) ServerSideConfiguration.instance().getPersistenceConfiguration();
+        switch (rdbConfiguration.databaseType()) {
+        case HSQLDB:
+            return HSQLDBDelegate.class.getName();
+        case MySQL:
+            return StdJDBCDelegate.class.getName();
+        case Oracle:
+            return OracleDelegate.class.getName();
+        case PostgreSQL:
+            return PostgreSQLDelegate.class.getName();
+        default:
+            throw new Error("Unsupported databaseType " + rdbConfiguration.databaseType());
+        }
     }
 
 }
