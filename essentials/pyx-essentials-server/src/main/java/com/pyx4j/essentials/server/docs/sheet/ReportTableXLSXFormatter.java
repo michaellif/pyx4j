@@ -85,6 +85,8 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
 
     protected final CellStyle cellStyleDouble;
 
+    protected final CellStyle cellStylePercentage;
+
     private Stack<GroupStart> groupRows = null;
 
     private int columnsCount;
@@ -161,6 +163,10 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         this.cellStyleDouble = this.workbook.createCellStyle();
         this.cellStyleDouble.setFont(font);
         this.cellStyleDouble.setDataFormat((short) BuiltinFormats.getBuiltinFormat("0.00"));
+
+        this.cellStylePercentage = this.workbook.createCellStyle();
+        this.cellStylePercentage.setFont(font);
+        this.cellStylePercentage.setDataFormat(format.getFormat("0.00%"));
     }
 
     public boolean isAutosize() {
@@ -331,6 +337,15 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         }
     }
 
+    public void cellPercentage(BigDecimal value) {
+        Cell cell = createCell();
+        //cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+        cell.setCellStyle(this.cellStylePercentage);
+        if (value != null) {
+            cell.setCellValue(value.doubleValue());
+        }
+    }
+
     public void cell(double value) {
         Cell cell = createCell();
         cell.setCellStyle(this.cellStyleDouble);
@@ -446,7 +461,7 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
     }
 
     /*
-     * 
+     *
      * @see http://jakarta.apache.org/poi/hssf/quick-guide.html#Outlining
      */
     public void groupRowStart(boolean collapsed) {
