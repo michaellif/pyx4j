@@ -242,7 +242,12 @@ public class MailQueue implements Runnable {
                                 Executable<IMailServiceConfigConfiguration, RuntimeException> selectConfiguration = new Executable<IMailServiceConfigConfiguration, RuntimeException>() {
                                     @Override
                                     public IMailServiceConfigConfiguration execute() {
-                                        return origConfig.selectConfigurationInstance(mailMessage);
+                                        IMailServiceConfigConfiguration configByInstance = origConfig.selectConfigurationInstance(mailMessage);
+                                        if (configByInstance != null) {
+                                            return configByInstance;
+                                        } else {
+                                            return origConfig;
+                                        }
                                     }
                                 };
 
