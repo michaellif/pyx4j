@@ -61,6 +61,16 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
 
     private static final I18n i18n = I18n.get(AuthenticationServiceImpl.class);
 
+    public enum LoginFailedFlow {
+
+        UserNotFound,
+
+        UserAccountDisabled,
+
+        WrongPassword
+
+    }
+
     protected void assertClientSystemInfo(ClientSystemInfo clientSystemInfo) {
         String serverVersion = ApplicationVersion.getBuildLabel();
         if (clientSystemInfo == null) {
