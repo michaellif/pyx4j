@@ -148,6 +148,7 @@ public class MailQueue implements Runnable {
         if (callbackClass != null) {
             persistable.statusCallbackClass().setValue(callbackClass.getName());
         }
+        persistable.sender().setValue(mailMessage.getSender());
         Collection<String> sendTo = CollectionUtils.union(CollectionUtils.union(mailMessage.getTo(), mailMessage.getCc()), mailMessage.getBcc());
         if (sendTo.isEmpty()) {
             if (mailMessage.getKeywords().contains("bulk")) {
