@@ -273,6 +273,10 @@ public abstract class Dialect {
         return argumentPlaceHolder;
     }
 
+    public String textSearchToBindValue(String value) {
+        return value;
+    }
+
     public String textSearchQueryBindValue(Object searchValue) {
         StringBuilder query = new StringBuilder();
         String value = searchValue.toString();

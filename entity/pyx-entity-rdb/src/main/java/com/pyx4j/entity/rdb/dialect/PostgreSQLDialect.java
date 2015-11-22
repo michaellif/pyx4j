@@ -88,6 +88,15 @@ public class PostgreSQLDialect extends Dialect {
     }
 
     @Override
+    public String textSearchToBindValue(String value) {
+        if (value != null) {
+            return value.replaceAll("[^A-Za-z0-9 ]", " ");
+        } else {
+            return value;
+        }
+    }
+
+    @Override
     public String textSearchOperator() {
         if (enableTextSearchSupport) {
             return "@@";
@@ -100,7 +109,7 @@ public class PostgreSQLDialect extends Dialect {
     public String textSearchQueryBindValue(Object searchValue) {
         if (enableTextSearchSupport) {
             StringBuilder query = new StringBuilder();
-            String value = searchValue.toString().replaceAll("[^A-Za-z0-9 ]", "");
+            String value = searchValue.toString().replaceAll("[^A-Za-z0-9 ]", " ");
             for (String str : value.split(" ")) {
                 if (CommonsStringUtils.isEmpty(str)) {
                     continue;
