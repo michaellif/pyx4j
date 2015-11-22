@@ -50,7 +50,7 @@ public class ValueAdapterTextSearchDocument extends ValueAdapterPrimitive {
         if (doc == null || doc.getText() == null) {
             stmt.setNull(parameterIndex, sqlType);
         } else {
-            stmt.setString(parameterIndex, doc.getText());
+            stmt.setString(parameterIndex, persistenceContext.getDialect().textSearchToBindValue(doc.getText()));
         }
         return 1;
     }
