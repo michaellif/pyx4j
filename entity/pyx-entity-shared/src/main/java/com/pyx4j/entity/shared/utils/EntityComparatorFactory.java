@@ -64,14 +64,24 @@ public class EntityComparatorFactory {
         };
     }
 
-    public static <E extends IEntity> Comparator<E> createMemberComparator(final Path path) {
+    public static <E extends IEntity> Comparator<E> createMemberComparator(IObject<?>... protoValues) {
+        return createMemberComparator(Path.asPath(protoValues).toArray(new Path[protoValues.length]));
+    }
+
+    public static <E extends IEntity> Comparator<E> createMemberComparator(final Path... paths) {
         return new Comparator<E>() {
             @Override
             public int compare(E paramT1, E paramT2) {
-                return getValue(paramT1).compareTo(getValue(paramT2));
+                for (Path path : paths) {
+                    int cmp = getValue(path, paramT1).compareTo(getValue(path, paramT2));
+                    if (cmp != 0) {
+                        return cmp;
+                    }
+                }
+                return 0;
             }
 
-            String getValue(E entity) {
+            String getValue(Path path, E entity) {
                 IObject<?> valueMember = entity.getMember(path);
                 if (valueMember instanceof IEntity) {
                     return valueMember.getStringView();
