@@ -48,6 +48,10 @@ public class XMLEntityConverter {
         writer.writeRoot(entity, null);
     }
 
+    public static IEntity parse(XMLEntityFactory factory, Element node) {
+        return new XMLEntityParser(factory).parse(node);
+    }
+
     public static IEntity parse(Element node) {
         return new XMLEntityParser().parse(node);
     }
