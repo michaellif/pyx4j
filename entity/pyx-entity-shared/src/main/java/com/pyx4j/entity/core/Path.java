@@ -30,7 +30,7 @@ import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.ICloneable;
 import com.pyx4j.commons.IDebugId;
 
-public class Path implements Serializable, IDebugId, ICloneable {
+public class Path implements Serializable, IDebugId, ICloneable<Path> {
 
     private static final long serialVersionUID = -1723967141846287126L;
 
@@ -45,6 +45,15 @@ public class Path implements Serializable, IDebugId, ICloneable {
     private transient Class<? extends IEntity> rootEntityClass;
 
     private transient List<String> pathMembers;
+
+    public static List<Path> asPath(IObject<?>... protoValues) {
+        // TODO use Lists.transform
+        List<Path> paths = new ArrayList<>();
+        for (IObject<?> protoValue : protoValues) {
+            paths.add(protoValue.getPath());
+        }
+        return paths;
+    }
 
     protected Path() {
     }

@@ -76,6 +76,9 @@ public interface AbstractOutgoingMailQueue extends IEntity {
     @Length(4000)
     IPrimitive<String> sendTo();
 
+    @Length(4000)
+    IPrimitive<String> sender();
+
     IPrimitive<String> keywords();
 
     IPrimitive<String> sentDate();
