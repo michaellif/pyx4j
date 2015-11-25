@@ -62,8 +62,6 @@ public class ReCaptchaV2APIClient {
 
     private WebTarget webTarget;
 
-    private String privateKey;
-
     private ReCaptchaV2APIClient() {
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.register(JsonProcessingFeature.class);
@@ -73,8 +71,6 @@ public class ReCaptchaV2APIClient {
         }
         client = ClientBuilder.newClient(clientConfig);
         webTarget = client.target("https://www.google.com/recaptcha/api");
-
-        privateKey = ServerSideConfiguration.instance(EssentialsServerSideConfiguration.class).getReCaptchaPrivateKey();
     }
 
     private static class SingletonHolder {
@@ -86,6 +82,7 @@ public class ReCaptchaV2APIClient {
     }
 
     public void assertCaptcha(String userResponseToken, String remoteAddr) {
+        String privateKey = ServerSideConfiguration.instance(EssentialsServerSideConfiguration.class).getReCaptchaPrivateKey();
         Response response = webTarget.path("siteverify")//
                 .queryParam("response", userResponseToken) //
                 .queryParam("secret", privateKey) //
