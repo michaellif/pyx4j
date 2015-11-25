@@ -126,6 +126,10 @@ public class Button extends ButtonBase {
         }
     }
 
+    public ButtonMenuBar getMenu() {
+        return menu;
+    }
+
     @Override
     public void setSecurityContext(AccessControlContext context) {
         super.setSecurityContext(context);
