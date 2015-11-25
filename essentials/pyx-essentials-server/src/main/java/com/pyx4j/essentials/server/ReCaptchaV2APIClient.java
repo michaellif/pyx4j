@@ -62,21 +62,15 @@ public class ReCaptchaV2APIClient {
 
     private WebTarget webTarget;
 
-    private String privateKey;
-
-    private final boolean enableLogging = false;
-
     private ReCaptchaV2APIClient() {
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.register(JsonProcessingFeature.class);
         clientConfig.register(JacksonFeature.class);
-        if (enableLogging) {
+        if (ServerSideConfiguration.instance().getConfigProperties().getBooleanValue("recaptcha.debug", true)) {
             clientConfig.register(new LoggingFilter(java.util.logging.Logger.getLogger(ReCaptchaV2APIClient.class.getName()), true));
         }
         client = ClientBuilder.newClient(clientConfig);
         webTarget = client.target("https://www.google.com/recaptcha/api");
-
-        privateKey = ServerSideConfiguration.instance(EssentialsServerSideConfiguration.class).getReCaptchaPrivateKey();
     }
 
     private static class SingletonHolder {
@@ -88,6 +82,7 @@ public class ReCaptchaV2APIClient {
     }
 
     public void assertCaptcha(String userResponseToken, String remoteAddr) {
+        String privateKey = ServerSideConfiguration.instance(EssentialsServerSideConfiguration.class).getReCaptchaPrivateKey();
         Response response = webTarget.path("siteverify")//
                 .queryParam("response", userResponseToken) //
                 .queryParam("secret", privateKey) //
@@ -100,6 +95,8 @@ public class ReCaptchaV2APIClient {
         if (!rc.success) {
             if (rc.errorCodes != null) {
                 log.error("reCAPTCHAv2 configuration error {}", (Object) rc.errorCodes);
+            } else {
+                log.warn("reCAPTCHAv2 Incorrect; userResponseToken {}, remoteAddr = {}, privateKey = {}", userResponseToken, remoteAddr, privateKey);
             }
             throw new UserRuntimeException(i18n.tr("The CAPTCHA Solution You Entered Was Incorrect"));
         }
