@@ -31,6 +31,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -55,6 +56,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 import com.pyx4j.widgets.client.memento.IMementoAware;
 import com.pyx4j.widgets.client.memento.IMementoInput;
@@ -249,6 +251,24 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     }
 
     protected void onItemsDelete(Collection<E> items) {
+    }
+
+    public void addExportAction(String text, Command command) {
+        if (exportButton == null) {
+            exportButton = new Button(i18n.tr("Export"), command);
+            topActionsBar.getToolbar().insertItem(exportButton, 0);
+        } else {
+            ButtonMenuBar exportMenuBar = exportButton.getMenu();
+            if (exportMenuBar == null) {
+                // Move the Command to Menu of the Same Button
+                exportMenuBar = new ButtonMenuBar();
+                exportButton.setMenu(exportMenuBar);
+                exportMenuBar.addItem(new MenuItem(exportButton.getCaption(), exportButton.getCommand()));
+                exportButton.setTitle(i18n.tr("Export"));
+                exportButton.setCommand(null);
+            }
+            exportMenuBar.addItem(new MenuItem(text, command));
+        }
     }
 
     public void setExportActionEnabled(boolean enabled) {

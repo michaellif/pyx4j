@@ -33,6 +33,10 @@ public class BindingCursorSource<BO extends IEntity, TO extends IEntity> impleme
 
     protected final EntityBinder<BO, TO> binder;
 
+    public static <BO extends IEntity, TO extends IEntity> BindingCursorSource<BO, TO> create(EntityListCriteria<BO> criteria, EntityBinder<BO, TO> binder) {
+        return new BindingCursorSource<BO, TO>(criteria, binder);
+    }
+
     public BindingCursorSource(EntityListCriteria<BO> criteria, EntityBinder<BO, TO> binder) {
         this.binder = binder;
         this.criteria = criteria;
