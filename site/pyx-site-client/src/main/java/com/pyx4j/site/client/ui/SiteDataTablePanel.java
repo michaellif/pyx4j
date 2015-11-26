@@ -36,6 +36,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
+import com.pyx4j.entity.rpc.DocCreationService;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.entity.shared.IntegrityConstraintUserRuntimeException;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
@@ -86,18 +87,36 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
             }
         });
 
-        setDataSource(new ListerDataSource<E>(entityClass, service) {
-            @Override
-            protected void export() {
-                // TODO This should be EntityQueryCriteria or Filters
-                EntityListCriteria<E> criteria = EntityListCriteria.create(getEntityClass());
-                criteria.setSorts(getDataTableModel().getSortCriteria());
-                updateCriteria(SiteDataTablePanel.this.updateCriteria(criteria));
-                DataTableDocCreation.createExcelExport(getDataSource().getDocCreationService(), criteria, getDataTable().getColumnDescriptors());
-            }
-        });
+        setDataSource(new ListerDataSource<E>(entityClass, service));
+
+        if (getDataSource().getDocCreationService() != null) {
+            addExportAction(i18n.tr("Export"), new ExportCommand(getDataSource().getDocCreationService()));
+        }
 
         setExportActionEnabled(getDataSource().getDocCreationService() != null);
+    }
+
+    private class ExportCommand implements Command {
+
+        private DocCreationService service;
+
+        ExportCommand(DocCreationService service) {
+            this.service = service;
+        }
+
+        @Override
+        public void execute() {
+            // TODO This should be EntityQueryCriteria or Filters
+            EntityListCriteria<E> criteria = EntityListCriteria.create(getEntityClass());
+            criteria.setSorts(getDataTableModel().getSortCriteria());
+            updateCriteria(SiteDataTablePanel.this.updateCriteria(criteria));
+            DataTableDocCreation.createExcelExport(service, criteria, getDataTable().getColumnDescriptors());
+        }
+
+    }
+
+    public void addExportAction(String text, DocCreationService service) {
+        addExportAction(text, new ExportCommand(service));
     }
 
     protected void view(Class<? extends CrudAppPlace> openPlaceClass, Key itemID) {
