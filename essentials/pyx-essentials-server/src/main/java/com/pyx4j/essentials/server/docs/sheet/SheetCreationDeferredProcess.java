@@ -45,17 +45,17 @@ public class SheetCreationDeferredProcess<E extends IEntity> extends AbstractDef
 
     private final ReportTableFormatter formatter;
 
-    private final EntityReportFormatter<E> entityFormatter;
+    private final ReportModelFormatter<E> modelFormatter;
 
     private final String fileName;
 
     public SheetCreationDeferredProcess(EntityListCriteria<E> criteria, CursorSource<E> cursorSource, ReportTableFormatter formatter,
-            EntityReportFormatter<E> entityFormatter, String fileName) {
+            ReportModelFormatter<E> modelFormatter, String fileName) {
         super();
         this.criteria = criteria;
         this.cursorSource = cursorSource;
         this.formatter = formatter;
-        this.entityFormatter = entityFormatter;
+        this.modelFormatter = modelFormatter;
         this.fileName = fileName;
     }
 
@@ -67,7 +67,7 @@ public class SheetCreationDeferredProcess<E extends IEntity> extends AbstractDef
 
     @Override
     public void execute() {
-        entityFormatter.createHeader(formatter);
+        modelFormatter.createHeader(formatter);
         Executable<Void, RuntimeException> task = new Executable<Void, RuntimeException>() {
             @Override
             public Void execute() throws RuntimeException {
@@ -76,7 +76,7 @@ public class SheetCreationDeferredProcess<E extends IEntity> extends AbstractDef
                     cursor = cursorSource.getTOCursor(null, criteria, AttachLevel.Attached);
                     while (cursor.hasNext()) {
                         E model = cursor.next();
-                        entityFormatter.reportEntity(formatter, model);
+                        modelFormatter.reportEntity(formatter, model);
 
                         progress.progress.addAndGet(1);
 
@@ -94,6 +94,8 @@ public class SheetCreationDeferredProcess<E extends IEntity> extends AbstractDef
         task = Executables.wrapInEntityNamespace(criteria.getEntityClass(), task);
 
         new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(task);
+
+        modelFormatter.createFooter(formatter);
 
         if (!canceled) {
             Downloadable d = new Downloadable(formatter.getBinaryData(), formatter.getContentType());
