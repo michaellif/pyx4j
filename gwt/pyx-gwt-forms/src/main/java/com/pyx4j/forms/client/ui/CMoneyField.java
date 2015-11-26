@@ -23,13 +23,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
 
-import com.google.gwt.i18n.client.NumberFormat;
-
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
-import com.pyx4j.i18n.annotations.I18nContext;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.MoneyFormat;
 
 public class CMoneyField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>> {
 
@@ -42,25 +39,6 @@ public class CMoneyField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>
         setFormatter(new MoneyFormat());
         setParser(new MoneyParser());
         setNativeComponent(new NTextBox<BigDecimal>(this));
-    }
-
-    public static class MoneyFormat implements IFormatter<BigDecimal, String> {
-
-        final NumberFormat nf;
-
-        @I18nContext(javaFormatFlag = true)
-        public MoneyFormat() {
-            nf = NumberFormat.getFormat(i18n.tr("#,##0.00"));
-        }
-
-        @Override
-        public String format(BigDecimal value) {
-            if (value == null) {
-                return "";
-            } else {
-                return symbol + nf.format(value);
-            }
-        }
     }
 
     public static class MoneyParser extends MoneyFormat implements IParser<BigDecimal> {
