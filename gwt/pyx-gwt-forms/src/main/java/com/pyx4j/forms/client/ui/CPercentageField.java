@@ -22,12 +22,10 @@ package com.pyx4j.forms.client.ui;
 import java.math.BigDecimal;
 import java.text.ParseException;
 
-import com.google.gwt.i18n.client.NumberFormat;
-
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.PercentageFormat;
 
 public class CPercentageField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>> {
 
@@ -43,28 +41,6 @@ public class CPercentageField extends CTextFieldBase<BigDecimal, NTextBox<BigDec
 
     public void setPercentageFormat(String pattern) {
         setFormatter(new PercentageFormat(pattern));
-    }
-
-    public static class PercentageFormat implements IFormatter<BigDecimal, String> {
-
-        private final NumberFormat nf;
-
-        public PercentageFormat() {
-            this("#.##");
-        }
-
-        public PercentageFormat(String pattern) {
-            nf = NumberFormat.getFormat(pattern);
-        }
-
-        @Override
-        public String format(BigDecimal value) {
-            if (value == null) {
-                return "";
-            } else {
-                return nf.format(value.multiply(new BigDecimal("100"))) + "%";
-            }
-        }
     }
 
     public static class PercentageParser implements IParser<BigDecimal> {

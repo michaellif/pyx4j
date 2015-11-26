@@ -21,7 +21,7 @@ package com.pyx4j.forms.client.ui;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.forms.client.ui.CMoneyField.MoneyFormat;
+import com.pyx4j.rpc.shared.MoneyFormat;
 
 public class CMoneyLabel extends CLabel<BigDecimal> {
 
