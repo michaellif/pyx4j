@@ -90,20 +90,6 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
                 }
                 return comp;
             }
-            case basepoint: {
-                CBasePointField comp = new CBasePointField();
-                if (mm.getFormat() != null) {
-                    comp.setBasePointFormat(mm.getFormat());
-                }
-                return comp;
-            }
-            case basepointlabel: {
-                CBasePointLabel comp = new CBasePointLabel();
-                if (mm.getFormat() != null) {
-                    comp.setBasePointFormat(mm.getFormat());
-                }
-                return comp;
-            }
             case money:
                 return new CMoneyField();
             case moneylabel:
