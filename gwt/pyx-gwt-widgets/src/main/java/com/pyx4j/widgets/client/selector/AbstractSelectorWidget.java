@@ -74,7 +74,7 @@ public abstract class AbstractSelectorWidget<E> extends Composite implements ISe
 
     }
 
-    protected String getQuery() {
+    public String getQuery() {
         return query;
     }
 
