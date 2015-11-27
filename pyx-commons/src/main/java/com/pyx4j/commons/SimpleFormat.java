@@ -26,21 +26,25 @@ import java.util.Date;
  */
 public class SimpleFormat {
 
-    public static String simpleNumberFormat(Number date, String pattern) {
-        return SimpleNumberFormatImpl.format(pattern, date);
+    public static String numberFormat(Number value, String pattern) {
+        return SimpleNumberFormatImpl.format(pattern, value);
+    }
+
+    public static Number numberParse(String text, String pattern) throws NumberFormatException {
+        return SimpleNumberFormatImpl.parse(text, pattern);
     }
 
     /**
      * Date formatter base on java.text.SimpleDateFormat for non time critical functions
      */
-    public static String simpleDateFormat(Date date, String pattern) {
+    public static String dateFormat(Date date, String pattern) {
         return SimpleDateFormatImpl.format(pattern, date);
     }
 
     /**
      * Date parser base on java.text.SimpleDateFormat for non time critical functions
      */
-    public static Date simpleDateParse(String text, String pattern) throws IllegalArgumentException {
+    public static Date dateParse(String text, String pattern) throws IllegalArgumentException {
         return SimpleDateFormatImpl.parse(text, pattern);
     }
 

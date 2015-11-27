@@ -24,8 +24,8 @@ import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IParser;
+import com.pyx4j.commons.formatters.PercentageFormat;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.PercentageFormat;
 
 public class CPercentageField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>> {
 

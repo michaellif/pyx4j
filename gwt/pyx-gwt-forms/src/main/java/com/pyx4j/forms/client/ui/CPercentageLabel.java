@@ -21,7 +21,7 @@ package com.pyx4j.forms.client.ui;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.rpc.shared.PercentageFormat;
+import com.pyx4j.commons.formatters.PercentageFormat;
 
 public class CPercentageLabel extends CLabel<BigDecimal> {
 
