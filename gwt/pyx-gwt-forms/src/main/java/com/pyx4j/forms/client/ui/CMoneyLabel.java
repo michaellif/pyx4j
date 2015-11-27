@@ -21,13 +21,13 @@ package com.pyx4j.forms.client.ui;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.forms.client.ui.CMoneyField.MoneyFormat;
+import com.pyx4j.rpc.context.UserMoneyFormat;
 
 public class CMoneyLabel extends CLabel<BigDecimal> {
 
     public CMoneyLabel() {
         super();
-        setFormatter(new MoneyFormat());
+        setFormatter(new UserMoneyFormat());
     }
 
 }

@@ -20,6 +20,7 @@
 package com.pyx4j.commons;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 
 class SimpleNumberFormatImpl {
 
@@ -31,6 +32,15 @@ class SimpleNumberFormatImpl {
             fmt = new DecimalFormat(pattern);
         }
         return fmt.format(number);
+    }
+
+    public static Number parse(String text, String pattern) throws NumberFormatException {
+        DecimalFormat fmt = new DecimalFormat(pattern);
+        try {
+            return fmt.parse(text);
+        } catch (ParseException e) {
+            throw new NumberFormatException(e.getMessage());
+        }
     }
 
 }
