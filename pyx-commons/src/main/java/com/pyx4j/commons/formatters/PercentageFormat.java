@@ -18,24 +18,23 @@
  * @author ernestog
  * @version $Id: code-templates.xml 12647 2013-05-01 18:01:19Z vlads $
  */
-package com.pyx4j.rpc.shared;
+package com.pyx4j.commons.formatters;
 
 import java.math.BigDecimal;
 
-import com.google.gwt.i18n.client.NumberFormat;
-
 import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.SimpleFormat;
 
 public class PercentageFormat implements IFormatter<BigDecimal, String> {
 
-    private final NumberFormat nf;
+    private final String pattern;
 
     public PercentageFormat() {
         this("#.##");
     }
 
     public PercentageFormat(String pattern) {
-        nf = NumberFormat.getFormat(pattern);
+        this.pattern = pattern;
     }
 
     @Override
@@ -43,7 +42,7 @@ public class PercentageFormat implements IFormatter<BigDecimal, String> {
         if (value == null) {
             return "";
         } else {
-            return nf.format(value.multiply(new BigDecimal("100"))) + "%";
+            return SimpleFormat.numberFormat(value.multiply(new BigDecimal("100")), pattern) + "%";
         }
     }
 }

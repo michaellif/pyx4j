@@ -18,27 +18,28 @@
  * @author ernestog
  * @version $Id: code-templates.xml 12647 2013-05-01 18:01:19Z vlads $
  */
-package com.pyx4j.rpc.shared;
+package com.pyx4j.commons.formatters;
 
 import java.math.BigDecimal;
 
-import com.google.gwt.i18n.client.NumberFormat;
-
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.i18n.annotations.I18nContext;
-import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.commons.SimpleFormat;
 
+/**
+ * This should be used in user context to get default local money format
+ */
 public class MoneyFormat implements IFormatter<BigDecimal, String> {
 
-    static final I18n i18n = I18n.get(MoneyFormat.class);
+    private final String pattern;
 
-    public static final String symbol = i18n.tr("$");
+    private final String prefix;
 
-    protected final NumberFormat nf;
+    private final String suffix;
 
-    @I18nContext(javaFormatFlag = true)
-    public MoneyFormat() {
-        nf = NumberFormat.getFormat(i18n.tr("#,##0.00"));
+    public MoneyFormat(String pattern, String prefix, String suffix) {
+        this.pattern = pattern;
+        this.prefix = prefix;
+        this.suffix = suffix;
     }
 
     @Override
@@ -46,7 +47,7 @@ public class MoneyFormat implements IFormatter<BigDecimal, String> {
         if (value == null) {
             return "";
         } else {
-            return symbol + nf.format(value);
+            return prefix + SimpleFormat.numberFormat(value, pattern) + suffix;
         }
     }
 }
