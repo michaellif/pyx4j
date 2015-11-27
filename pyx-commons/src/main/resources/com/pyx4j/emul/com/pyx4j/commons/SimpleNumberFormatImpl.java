@@ -32,4 +32,9 @@ public class SimpleNumberFormatImpl {
         }
         return fmt.format(number);   
     }
+    
+    public static Number parse(String text, String pattern) {
+        NumberFormat fmt = NumberFormat.getFormat(pattern);
+        return fmt.parse(text);
+    }
 }
