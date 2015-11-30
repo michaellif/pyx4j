@@ -44,7 +44,7 @@ import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.shared.utils.EntityMetaUtils;
 import com.pyx4j.essentials.rpc.report.ReportColumn;
 
-public class EntityReportFormatter<E extends IEntity> {
+public class EntityReportFormatter<E extends IEntity> implements ReportModelFormatter<E> {
 
     private final Class<? extends E> entityClass;
 
@@ -145,6 +145,7 @@ public class EntityReportFormatter<E extends IEntity> {
         formatter.newRow();
     }
 
+    @Override
     public void createHeader(ReportTableFormatter formatter) {
         if (selectedMemberNames == null) {
             selectMemebers();
@@ -163,6 +164,11 @@ public class EntityReportFormatter<E extends IEntity> {
         createHeaderEnds(formatter);
     }
 
+    @Override
+    public void createFooter(ReportTableFormatter formatter) {
+
+    }
+
     protected boolean reportMember(E entity, Path memberPath, MemberMeta memberMeta) {
         return true;
     }
@@ -177,6 +183,7 @@ public class EntityReportFormatter<E extends IEntity> {
         }
     }
 
+    @Override
     public void reportEntity(ReportTableFormatter formatter, E entity) {
         if (selectedMemberNames == null) {
             selectMemebers();

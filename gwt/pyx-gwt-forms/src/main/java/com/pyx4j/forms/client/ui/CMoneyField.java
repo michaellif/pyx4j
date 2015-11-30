@@ -23,59 +23,45 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
 
-import com.google.gwt.i18n.client.NumberFormat;
-
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
+import com.pyx4j.commons.SimpleFormat;
 import com.pyx4j.i18n.annotations.I18nContext;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.context.UserMoneyFormat;
 
 public class CMoneyField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>> {
 
     static final I18n i18n = I18n.get(CMoneyField.class);
 
-    public static final String symbol = i18n.tr("$");
+    private static final String symbol = i18n.tr("$");
 
     public CMoneyField() {
         super();
-        setFormatter(new MoneyFormat());
+        setFormatter(new UserMoneyFormat());
         setParser(new MoneyParser());
         setNativeComponent(new NTextBox<BigDecimal>(this));
     }
 
-    public static class MoneyFormat implements IFormatter<BigDecimal, String> {
+    //TODO move to UserMoneyFormat
+    public static class MoneyParser implements IParser<BigDecimal> {
 
-        final NumberFormat nf;
+        private String symbol = i18n.tr("$");
 
         @I18nContext(javaFormatFlag = true)
-        public MoneyFormat() {
-            nf = NumberFormat.getFormat(i18n.tr("#,##0.00"));
-        }
-
-        @Override
-        public String format(BigDecimal value) {
-            if (value == null) {
-                return "";
-            } else {
-                return symbol + nf.format(value);
-            }
-        }
-    }
-
-    public static class MoneyParser extends MoneyFormat implements IParser<BigDecimal> {
-
         @Override
         public BigDecimal parse(String string) throws ParseException {
             if (CommonsStringUtils.isEmpty(string)) {
                 return null; // empty value case
             }
             try {
+                String moneyFormat = i18n.tr("#,##0.00");
+
                 string = string.trim();
-                if (string.startsWith(CMoneyField.symbol)) {
+                if (string.startsWith(symbol)) {
                     string = string.substring(1);
                 }
-                return new BigDecimal(nf.parse(string)).setScale(2, RoundingMode.HALF_UP);
+                return new BigDecimal(SimpleFormat.numberParse(string, moneyFormat).doubleValue()).setScale(2, RoundingMode.HALF_UP);
             } catch (NumberFormatException e) {
                 throw new ParseException(i18n.tr("Invalid money format. Enter valid number"), 0);
             }

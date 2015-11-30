@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,20 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Sep 11, 2013
- * @author VladL
+ * Created on Nov 25, 2015
+ * @author vlads
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.essentials.server.docs.sheet;
 
-import java.math.BigDecimal;
+public interface ReportModelFormatter<Model> {
 
-import com.pyx4j.rpc.context.UserMoneyFormat;
+    public void createHeader(ReportTableFormatter formatter);
 
-public class CMoneyLabel extends CLabel<BigDecimal> {
+    public void reportEntity(ReportTableFormatter formatter, Model entity);
 
-    public CMoneyLabel() {
-        super();
-        setFormatter(new UserMoneyFormat());
-    }
+    public void createFooter(ReportTableFormatter formatter);
 
 }

@@ -39,13 +39,13 @@ public class ConditionTranslationDateOffset extends AbstractConditionTranslation
             Date date = SystemDateManager.getDate();
             switch (condition.dateOffsetType().getValue()) {
             case Days:
-                date = DateUtils.addDays(date, condition.dateOffsetValue().getValue());
+                date = DateUtils.addDays(date, -condition.dateOffsetValue().getValue());
                 break;
             case Weeks:
-                date = DateUtils.addWeeks(date, condition.dateOffsetValue().getValue());
+                date = DateUtils.addWeeks(date, -condition.dateOffsetValue().getValue());
                 break;
             case Month:
-                date = DateUtils.addMonths(date, condition.dateOffsetValue().getValue());
+                date = DateUtils.addMonths(date, -condition.dateOffsetValue().getValue());
                 break;
             }
             Date fromDate = com.pyx4j.gwt.server.DateUtils.dayStart(date);
