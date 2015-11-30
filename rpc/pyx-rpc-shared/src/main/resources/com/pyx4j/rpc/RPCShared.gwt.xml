@@ -6,6 +6,7 @@
     <inherits name='com.pyx4j.security.SecurityShared'/>
 	
 	<source path="shared"/>
+    <source path="context"/>
 	
 	<extend-configuration-property name="rpc.blacklist" value="com.pyx4j.rpc.shared.RemoteService" />
 </module>

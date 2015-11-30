@@ -56,6 +56,8 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
 
     private final SecureConcern visible = new SecureConcern();
 
+    private String captionText;
+
     protected ButtonBase(ButtonFacesHandler facesHandler, String text, Command command, Permission... permission) {
         this.facesHandler = (facesHandler == null ? new ButtonFacesHandler() : facesHandler);
         this.command = command;
@@ -103,6 +105,10 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
         this.command = command;
     }
 
+    public Command getCommand() {
+        return this.command;
+    }
+
     /**
      * @deprecated Use setCommand(new Command(){}) , conve
      */
@@ -121,6 +127,7 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
     }
 
     public void setTextLabel(String label) {
+        captionText = label;
         textLabel.setHTML(label);
         textLabel.setVisible(label != null);
     }
@@ -130,7 +137,12 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
     }
 
     public void setCaption(String text) {
+        captionText = text;
         textLabel.setText(text);
+    }
+
+    public String getCaption() {
+        return captionText;
     }
 
     public void setTooltip(String text) {
