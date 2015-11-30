@@ -184,7 +184,7 @@ public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E>
         if (selectionModel.getSelectedObject() != null) {
             return selectionModel.getSelectedObject();
         } else if (table.getKeyboardSelectedRow() >= 0) {
-            return suggestions == null ? null : suggestions.get(table.getKeyboardSelectedRow());
+            return suggestions != null && suggestions.size() != 0 ? suggestions.get(table.getKeyboardSelectedRow()) : null;
         } else {
             return null;
         }
