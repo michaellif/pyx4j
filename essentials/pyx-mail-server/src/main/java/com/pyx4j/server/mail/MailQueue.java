@@ -135,7 +135,11 @@ public class MailQueue implements Runnable {
     }
 
     static void queue(MailMessage mailMessage, Class<? extends MailDeliveryCallback> callbackClass, IMailServiceConfigConfiguration mailConfig) {
-        final AbstractOutgoingMailQueue persistable = EntityFactory.create(persistableEntities.get(mailConfig.configurationId()));
+        Class<? extends AbstractOutgoingMailQueue> persistableClass = persistableEntities.get(mailConfig.configurationId());
+        if (persistableClass == null) {
+            persistableClass = ((SMTPMailServiceConfig) mailConfig).persistableQueueEntityClass();
+        }
+        final AbstractOutgoingMailQueue persistable = EntityFactory.create(persistableClass);
         if (persistable == null) {
             throw new Error("MailQueue Persistence not configured for '" + mailConfig.configurationId() + "'");
         }
@@ -235,9 +239,12 @@ public class MailQueue implements Runnable {
                             persistableUpdate.status().setValue(persistable.status().getValue());
                             persistableUpdate.updated().setValue(SystemDateManager.getDate());
 
-                            IMailServiceConfigConfiguration mailConfig = configurations.get(persistable.configurationId().getValue());
                             final MailMessage mailMessage = (MailMessage) SerializationUtils.deserialize(persistable.data().getValue());
 
+                            IMailServiceConfigConfiguration mailConfig = configurations.get(persistable.configurationId().getValue());
+                            if (mailConfig == null) {
+                                mailConfig = ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
+                            }
                             if (mailConfig instanceof SMTPMailServiceConfig) {
                                 final SMTPMailServiceConfig origConfig = (SMTPMailServiceConfig) mailConfig;
                                 Executable<IMailServiceConfigConfiguration, RuntimeException> selectConfiguration = new Executable<IMailServiceConfigConfiguration, RuntimeException>() {
