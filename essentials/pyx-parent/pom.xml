@@ -141,7 +141,7 @@
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm z</maven.build.timestamp.format>
         <timestamp>${maven.build.timestamp}</timestamp>
 
-        <gwtVersion>2.7.0</gwtVersion>
+        <gwtVersion>2.8.0-beta1</gwtVersion>
         <gaeVersion>1.9.26</gaeVersion>
         <gaeVersion.kindleit.deploy>1.8.8</gaeVersion.kindleit.deploy>
         <gae.version>${gaeVersion}</gae.version>

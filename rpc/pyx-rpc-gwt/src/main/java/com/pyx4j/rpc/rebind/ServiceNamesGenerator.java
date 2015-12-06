@@ -290,7 +290,7 @@ public class ServiceNamesGenerator extends Generator {
             }
 
             for (JClassType serviceClass : serviceClasses) {
-                writer.print("result[@com.google.gwt.core.client.impl.Impl::getHashCode(Ljava/lang/Object;)(@");
+                writer.print("result[@javaemul.internal.HashCodes::getIdentityHashCode(Ljava/lang/Object;)(@");
                 writer.print(serviceClass.getQualifiedSourceName() + "::class)] = ");
                 writer.print("'" + namesMap.get(serviceClass) + "'");
                 writer.println(";");

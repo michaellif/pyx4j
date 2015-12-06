@@ -24,13 +24,14 @@ import java.util.List;
 
 import com.google.gwt.core.client.JsonUtils;
 import com.google.gwt.user.client.rpc.SerializationException;
+import com.google.gwt.user.client.rpc.impl.AbstractSerializationStreamAccess;
 import com.google.gwt.user.client.rpc.impl.AbstractSerializationStreamWriter;
 import com.google.gwt.user.client.rpc.impl.Serializer;
 
 /**
- * 
+ *
  * @see com.google.gwt.user.server.rpc.impl.ServerSerializationStreamWriter#escapeString(String)
- * 
+ *
  */
 public class SymmetricClientSerializationStreamWriter extends AbstractSerializationStreamWriter {
 
@@ -79,7 +80,7 @@ public class SymmetricClientSerializationStreamWriter extends AbstractSerializat
     public void writeLong(long value) {
         StringBuilder sb = new StringBuilder();
         sb.append('\'');
-        sb.append(com.google.gwt.lang.LongLib.toBase64(value));
+        sb.append(AbstractSerializationStreamAccess.longToBase64(value));
         sb.append('\'');
         append(sb.toString());
     }
