@@ -17,15 +17,15 @@
  * Created on Feb 2, 2015
  * @author vlads
  */
-package com.pyx4j.entity.server;
+package com.pyx4j.entity.server.cursor;
 
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 
-public interface CursorSource<T extends IEntity> {
+public interface CursorSource<E extends IEntity> {
 
-    public ICursorIterator<T> getTOCursor(String encodedCursorReference, EntityListCriteria<T> criteria, AttachLevel attachLevel);
+    public ICursorIterator<E> getCursor(String encodedCursorReference, EntityQueryCriteria<E> criteria, AttachLevel attachLevel);
 
 }
