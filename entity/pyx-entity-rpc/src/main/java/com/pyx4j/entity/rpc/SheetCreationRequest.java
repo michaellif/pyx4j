@@ -21,11 +21,12 @@ package com.pyx4j.entity.rpc;
 
 import java.util.Vector;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityColumnDescriptor;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 
 @SuppressWarnings("serial")
-public class SheetCreationRequest extends DocCreationRequest {
+public class SheetCreationRequest<E extends IEntity> extends DocCreationRequest {
 
     public enum SheetFormat {
 
@@ -37,7 +38,7 @@ public class SheetCreationRequest extends DocCreationRequest {
 
     private SheetFormat sheetFormat;
 
-    private EntityQueryCriteria<?> qeueryCriteria;
+    private EntityQueryCriteria<E> qeueryCriteria;
 
     private Vector<EntityColumnDescriptor> columnDescriptors;
 
@@ -61,11 +62,11 @@ public class SheetCreationRequest extends DocCreationRequest {
         this.columnDescriptors = descriptors;
     }
 
-    public EntityQueryCriteria<?> getQeueryCriteria() {
+    public EntityQueryCriteria<E> getQeueryCriteria() {
         return qeueryCriteria;
     }
 
-    public void setQeueryCriteria(EntityQueryCriteria<?> qeueryCriteria) {
+    public void setQeueryCriteria(EntityQueryCriteria<E> qeueryCriteria) {
         this.qeueryCriteria = qeueryCriteria;
     }
 
