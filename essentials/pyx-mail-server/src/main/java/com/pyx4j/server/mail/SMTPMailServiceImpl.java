@@ -85,6 +85,11 @@ class SMTPMailServiceImpl implements IMailService {
             return true;
         }
         IMailServiceConfigConfiguration config = (mailConfig != null) ? mailConfig : ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
+        if (config instanceof SMTPMailServiceConfig) {
+            SMTPMailServiceConfig origConfig = (SMTPMailServiceConfig) config;
+            config = origConfig.selectConfigurationInstance(mailMessage);
+        }
+
         try {
             mailMessage = filter(mailMessage, config);
         } catch (AddressException e) {
