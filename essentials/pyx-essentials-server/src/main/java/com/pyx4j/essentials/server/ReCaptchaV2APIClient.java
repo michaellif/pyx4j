@@ -66,7 +66,7 @@ public class ReCaptchaV2APIClient {
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.register(JsonProcessingFeature.class);
         clientConfig.register(JacksonFeature.class);
-        if (ServerSideConfiguration.instance().getConfigProperties().getBooleanValue("recaptcha.debug", true)) {
+        if (ServerSideConfiguration.instance().getConfigProperties().getBooleanValue("recaptcha.debug", false)) {
             clientConfig.register(new LoggingFilter(java.util.logging.Logger.getLogger(ReCaptchaV2APIClient.class.getName()), true));
         }
         client = ClientBuilder.newClient(clientConfig);

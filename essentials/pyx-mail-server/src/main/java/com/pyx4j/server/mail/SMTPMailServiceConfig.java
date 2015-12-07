@@ -26,6 +26,7 @@ import java.util.Set;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.PropertiesConfiguration;
+import com.pyx4j.entity.shared.AbstractOutgoingMailQueue;
 
 public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfiguration {
 
@@ -98,6 +99,10 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
 
     public boolean isStarttls() {
         return starttls;
+    }
+
+    public Class<? extends AbstractOutgoingMailQueue> persistableQueueEntityClass() {
+        return null;
     }
 
     @Override
