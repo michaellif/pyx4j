@@ -79,6 +79,8 @@ public class SchedulerHelper {
             IOUtils.closeQuietly(propIn);
         }
 
+        String schedulerInstanceId = null;
+
         // TODO other default quartz configurations.
 
         if (ServerSideConfiguration.instance() instanceof ServerSideConfigurationWithQuartz) {
@@ -87,6 +89,14 @@ public class SchedulerHelper {
             if (quartzConfiguration.threadPoolThreadCount() != null) {
                 quartzProperties.put(StdSchedulerFactory.PROP_THREAD_POOL_PREFIX + ".threadCount", String.valueOf(quartzConfiguration.threadPoolThreadCount()));
             }
+            schedulerInstanceId = quartzConfiguration.schedulerInstanceId();
+            if (quartzConfiguration.isClustered()) {
+                quartzProperties.put(StdSchedulerFactory.PROP_JOB_STORE_PREFIX + ".isClustered", "true");
+            }
+        }
+
+        if (schedulerInstanceId == null) {
+            schedulerInstanceId = LoggerConfig.getContextName();
         }
 
         quartzProperties.put(StdSchedulerFactory.PROP_SCHED_SKIP_UPDATE_CHECK, Boolean.TRUE.toString());
@@ -95,7 +105,7 @@ public class SchedulerHelper {
         String delegateProperty = StdSchedulerFactory.PROP_JOB_STORE_PREFIX + ".driverDelegateClass";
         quartzProperties.put(delegateProperty, getDelegateClassName());
 
-        quartzProperties.put(StdSchedulerFactory.PROP_SCHED_INSTANCE_ID, LoggerConfig.getContextName());
+        quartzProperties.put(StdSchedulerFactory.PROP_SCHED_INSTANCE_ID, schedulerInstanceId);
         quartzProperties.put(StdSchedulerFactory.PROP_SCHED_THREAD_NAME, LoggerConfig.getContextName() + "_DefaultQuartzSchedulerThread");
         quartzProperties.put(StdSchedulerFactory.PROP_THREAD_POOL_PREFIX + ".threadNamePrefix",
                 LoggerConfig.getContextName() + "_DefaultQuartzSchedulerWorkerThread");

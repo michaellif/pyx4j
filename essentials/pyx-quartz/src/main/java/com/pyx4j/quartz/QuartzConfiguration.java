@@ -26,4 +26,8 @@ public interface QuartzConfiguration {
 
     Integer threadPoolThreadCount();
 
+    boolean isClustered();
+
+    String schedulerInstanceId();
+
 }
