@@ -53,20 +53,18 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<BO extends IVersionedE
     }
 
     @Override
-    protected TO init(InitializationData initializationData) {
-        TO duplicate = super.init(initializationData);
+    protected TO duplicate(DuplicateData duplicateData) {
+        TO duplicate = super.duplicate(duplicateData);
 
-        if (initializationData.isInstanceOf(DuplicateData.class)) {
-            duplicate.versions().clear();
+        duplicate.versions().clear();
 
-            duplicate.version().versionNumber().setValue(null);
+        duplicate.version().versionNumber().setValue(null);
 
-            duplicate.version().fromDate().setValue(null);
-            duplicate.version().toDate().setValue(null);
+        duplicate.version().fromDate().setValue(null);
+        duplicate.version().toDate().setValue(null);
 
-            duplicate.version().createdByUserKey().setValue(null);
-            duplicate.version().createdByUser().setValue(null);
-        }
+        duplicate.version().createdByUserKey().setValue(null);
+        duplicate.version().createdByUser().setValue(null);
 
         return duplicate;
     }
