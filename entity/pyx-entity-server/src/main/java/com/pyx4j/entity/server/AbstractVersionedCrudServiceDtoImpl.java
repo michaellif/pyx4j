@@ -53,6 +53,26 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEn
     }
 
     @Override
+    protected TO init(InitializationData initializationData) {
+        TO duplicate = super.init(initializationData);
+
+        if (initializationData.isInstanceOf(DuplicateData.class)) {
+            duplicate.versions().clear();
+
+            duplicate.version().versionNumber().setValue(null);
+
+            duplicate.version().fromDate().setValue(null);
+            duplicate.version().toDate().setValue(null);
+
+            duplicate.version().createdByUserKey().setValue(null);
+            duplicate.version().createdByUser().setValue(null);
+        }
+
+        return duplicate;
+
+    }
+
+    @Override
     protected E retrieve(Key entityId, RetrieveOperation retrieveOperation) {
         // Force draft for edit
         E bo;
