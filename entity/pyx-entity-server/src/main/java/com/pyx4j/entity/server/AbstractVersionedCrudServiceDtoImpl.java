@@ -37,18 +37,18 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEntity<?>, TO extends IVersionedEntity<?>>
-        extends AbstractCrudServiceDtoImpl<E, TO> implements AbstractVersionedCrudService<TO> {
+public abstract class AbstractVersionedCrudServiceDtoImpl<BO extends IVersionedEntity<?>, TO extends IVersionedEntity<?>>
+        extends AbstractCrudServiceDtoImpl<BO, TO> implements AbstractVersionedCrudService<TO> {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractVersionedCrudServiceDtoImpl.class);
 
     private static final I18n i18n = I18n.get(AbstractVersionedCrudServiceDtoImpl.class);
 
-    protected AbstractVersionedCrudServiceDtoImpl(Class<E> entityClass, Class<TO> dtoClass) {
+    protected AbstractVersionedCrudServiceDtoImpl(Class<BO> entityClass, Class<TO> dtoClass) {
         super(entityClass, dtoClass);
     }
 
-    protected AbstractVersionedCrudServiceDtoImpl(EntityBinder<E, TO> binder) {
+    protected AbstractVersionedCrudServiceDtoImpl(EntityBinder<BO, TO> binder) {
         super(binder);
     }
 
@@ -69,13 +69,12 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEn
         }
 
         return duplicate;
-
     }
 
     @Override
-    protected E retrieve(Key entityId, RetrieveOperation retrieveOperation) {
+    protected BO retrieve(Key entityId, RetrieveOperation retrieveOperation) {
         // Force draft for edit
-        E bo;
+        BO bo;
         if ((retrieveOperation == RetrieveOperation.Edit) || (entityId.isDraft())) {
             bo = Persistence.secureRetrieveDraftForEdit(boClass, entityId);
         } else {
@@ -89,10 +88,10 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEn
     }
 
     @Override
-    protected E retrieveForSave(TO to) {
+    protected BO retrieveForSave(TO to) {
         Key boKey = getBOKey(to);
         Validate.isTrue(boKey.getVersion() == Key.VERSION_DRAFT);
-        E bo = super.retrieveForSave(to);
+        BO bo = super.retrieveForSave(to);
         if (bo.version().isNull()) {
             to.setPrimaryKey(to.getPrimaryKey().asCurrentKey());
             bo = super.retrieveForSave(to);
@@ -102,14 +101,14 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEn
         return bo;
     }
 
-    protected void saveAsFinal(E entity) {
+    protected void saveAsFinal(BO entity) {
         Persistence.secureSave(entity);
     }
 
     @Override
     public void approveFinal(AsyncCallback<VoidSerializable> callback, Key toId) {
         TO to = EntityFactory.createIdentityStub(toClass, toId);
-        E bo = Persistence.secureRetrieve(boClass, getBOKey(to).asDraftKey());
+        BO bo = Persistence.secureRetrieve(boClass, getBOKey(to).asDraftKey());
         if (bo.version().isNull()) {
             throw new Error("There are no draft version to finalize");
         }
