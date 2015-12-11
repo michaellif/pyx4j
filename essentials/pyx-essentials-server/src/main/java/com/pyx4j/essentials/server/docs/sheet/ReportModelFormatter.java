@@ -19,11 +19,11 @@
  */
 package com.pyx4j.essentials.server.docs.sheet;
 
-public interface ReportModelFormatter<Model> {
+public interface ReportModelFormatter<MODEL> {
 
     public void createHeader(ReportTableFormatter formatter);
 
-    public void reportEntity(ReportTableFormatter formatter, Model entity);
+    public void reportEntity(ReportTableFormatter formatter, MODEL entity);
 
     public void createFooter(ReportTableFormatter formatter);
 
